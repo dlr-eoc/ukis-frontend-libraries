@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+.content-area {
+    background:#444;
+}
+
+button:focus {
+  outline: none; }
+
+
+@media screen and (min-width: 768px) {
+  
+.content-container {
+
+    &.reverse {
+       flex-direction: row-reverse; 
+    }
+
+    &.floating {
+
+
+        display:block;
+            position:relative;
+
+        .content-area {
+            position:absolute;
+            width:100%;
+            height:100%
+        }
+        .clr-vertical-nav {
+            position:absolute;
+            margin:10px;
+            max-height: calc(100% - 20px);
+        }
+
+        &.reverse {
+            .clr-vertical-nav {
+                right:0
+            }
+    }
+
+    }
+
+}
+  }
