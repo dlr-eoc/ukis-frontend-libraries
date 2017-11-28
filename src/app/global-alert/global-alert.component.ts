@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'ukis-global-alert',
@@ -13,11 +13,11 @@ export class GlobalAlertComponent implements OnInit {
   @Input() alert: any;
 
   @Output() alertChange = new EventEmitter();
-  
-   close() {
-      this.alert = null;
-      this.alertChange.emit(this.alert);
-    }
+
+  close() {
+    this.alert = null;
+    this.alertChange.emit(this.alert);
+  }
 
   ngOnInit() {
   }
