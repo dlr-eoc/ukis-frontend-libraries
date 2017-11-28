@@ -8,13 +8,13 @@
   </nav>-->
 
 
-  <div class="content-container floating"> <!-- reverse-->
+  <div class="content-container" [ngClass]="{'floating':ui.floating}"> <!-- reverse-->
     <div class="content-area">
 
     </div>
 
 
-    <clr-vertical-nav clrVerticalNavCollapsible="false" [clr-nav-level]="2">
+    <clr-vertical-nav clrVerticalNavCollapsible="false" [clr-nav-level]="1">
         <clr-vertical-nav-group
                 routerLinkActive="active">
             <clr-icon shape="user" clrVerticalNavIcon></clr-icon>
@@ -80,9 +80,9 @@
             alert-danger
         </a>
         <div class="nav-divider"></div>
-        <a clrVerticalNavLink>
-            <clr-icon shape="certificate" clrVerticalNavIcon></clr-icon>
-            Credit
+        <a clrVerticalNavLink (click)="ui.floating = !ui.floating">
+            <clr-icon [attr.shape]="ui.floating?'resize-up':'resize-down'" clrVerticalNavIcon></clr-icon>
+            {{ui.floating?'attach':'detach'}}
         </a>
     </clr-vertical-nav>
 

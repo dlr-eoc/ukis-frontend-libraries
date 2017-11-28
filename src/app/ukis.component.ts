@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 
-import '@webcomponents/custom-elements';
-import 'clarity-icons';
+// import '@webcomponents/custom-elements';
+// import 'clarity-icons';
 
 // import 'clarity-icons/shapes/all-shapes';
 // import 'clarity-icons/shapes/commerce-shapes';
@@ -25,6 +25,11 @@ export class UkisComponent {
   title = 'ukis';
 
   alert;
+
+  ui = {
+    floating:true,
+    flipped:false
+  }
 
 
   setAlert = (type: string = 'info') => {
