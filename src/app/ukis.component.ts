@@ -27,13 +27,57 @@ export class UkisComponent {
   alert;
 
   ui = {
-    floating:true,
-    flipped:false
-  }
+    floating: true,
+    flipped: false
+  };
+
+  layers = [
+    {
+      'type': 'Baselayers',
+      //'selected': true,
+      'expanded': false,
+      'layers': [
+        {
+          'name': 'Light',
+          'enable': true
+        },
+        {
+          'name': 'Dark',
+          'enable': false
+        },
+        {
+          'name': 'Street',
+          'enable': false
+        }
+      ]
+    },
+    {
+      'type': 'Overlays',
+      'selected': true,
+      'expanded': false,
+      'layers': [
+        {
+          'name': 'Modis',
+          'enable': true
+        },
+        {
+          'name': 'GUF 90',
+          'enable': false
+        },
+        {
+          'name': 'NDVI',
+          'enable': true
+        },
+        {
+          'name': 'Sentinel 2',
+          'enable': false
+        }
+      ]
+    }
+  ];
 
 
   setAlert = (type: string = 'info') => {
-    console.log(type);
     // structure of (app-level) alert
     // TODO use shared service
     this.alert = {

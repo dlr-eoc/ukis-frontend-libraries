@@ -1,93 +1,89 @@
-<clr-main-container >
+<clr-main-container>
 
-  <ukis-global-alert *ngIf="alert" [(alert)]="alert"></ukis-global-alert>
+    <ukis-global-alert *ngIf="alert" [(alert)]="alert"></ukis-global-alert>
 
-  <ukis-header></ukis-header>
+    <ukis-header></ukis-header>
 
-  <!--<nav class="subnav">
+    <!--<nav class="subnav">
   </nav>-->
 
 
-  <div class="content-container" [ngClass]="{'floating':ui.floating}"> <!-- reverse-->
-    <div class="content-area">
+    <div class="content-container" [ngClass]="{'floating':ui.floating}">
+        <!-- reverse-->
+        <div class="content-area">
+
+        </div>
+
+
+        <clr-vertical-nav clrVerticalNavCollapsible="false" [clr-nav-level]="1">
+            <clr-vertical-nav-group>
+                <clr-icon shape="layers" clrVerticalNavIcon></clr-icon>
+                Layers
+                <clr-vertical-nav-group-children>
+                    
+
+
+    <ng-template clrIfExpanded="false">
+        <clr-tree-node *ngFor="let type of layers" [(clrSelected)]="type.selected">
+            {{type.type}}
+            <ng-template [(clrIfExpanded)]="type.expanded">
+                <clr-tree-node *ngFor="let layer of type.layers" [(clrSelected)]="layer.enable">
+                    {{layer.name}}
+                </clr-tree-node>
+            </ng-template>
+        </clr-tree-node>
+    </ng-template>
+
+
+
+                </clr-vertical-nav-group-children>
+            </clr-vertical-nav-group>
+            <clr-vertical-nav-group>
+                <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>
+                Fire
+                <clr-vertical-nav-group-children>
+                    <a clrVerticalNavLink>
+                        Charmander
+                    </a>
+                    <a clrVerticalNavLink>
+                        Charizard
+                    </a>
+                </clr-vertical-nav-group-children>
+            </clr-vertical-nav-group>
+            <clr-vertical-nav-group>
+                <clr-icon shape="bolt" clrVerticalNavIcon></clr-icon>
+                Electric
+                <clr-vertical-nav-group-children>
+                    <a clrVerticalNavLink>
+                        Pikachu
+                    </a>
+                    <a clrVerticalNavLink>
+                        Raichu
+                    </a>
+                </clr-vertical-nav-group-children>
+            </clr-vertical-nav-group>
+            <div class="nav-divider"></div>
+            <a clrVerticalNavLink (click)="setAlert('info')">
+                <clr-icon shape="info-circle" clrVerticalNavIcon></clr-icon>
+                alert-info
+            </a>
+            <a clrVerticalNavLink (click)="setAlert('warning')">
+                <clr-icon shape="exclamation-triangle" clrVerticalNavIcon></clr-icon>
+                alert-warning
+            </a>
+            <a clrVerticalNavLink (click)="setAlert('danger')">
+                <clr-icon shape="exclamation-circle" clrVerticalNavIcon></clr-icon>
+                alert-danger
+            </a>
+            <div class="nav-divider"></div>
+            <a clrVerticalNavLink (click)="ui.floating=!ui.floating">
+                <clr-icon [attr.shape]="ui.floating?'resize-up':'resize-down'" clrVerticalNavIcon></clr-icon>
+                {{ui.floating?'attach':'detach'}}
+            </a>
+        </clr-vertical-nav>
+
+
+
 
     </div>
-
-
-    <clr-vertical-nav clrVerticalNavCollapsible="false" [clr-nav-level]="1">
-        <clr-vertical-nav-group
-                routerLinkActive="active">
-            <clr-icon shape="user" clrVerticalNavIcon></clr-icon>
-            Normal
-            <clr-vertical-nav-group-children>
-                <a clrVerticalNavLink
-                   routerLink="./normal/pidgey"
-                   routerLinkActive="active">
-                    Pidgey
-                </a>
-                <a clrVerticalNavLink
-                   routerLink="./normal/snorlax"
-                   routerLinkActive="active">
-                    Snorlax
-                </a>
-            </clr-vertical-nav-group-children>
-        </clr-vertical-nav-group>
-        <clr-vertical-nav-group
-                routerLinkActive="active">
-            <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>
-            Fire
-            <clr-vertical-nav-group-children>
-                <a clrVerticalNavLink
-                   routerLink="./fire/charmander"
-                   routerLinkActive="active">
-                    Charmander
-                </a>
-                <a clrVerticalNavLink
-                   routerLink="./fire/charizard"
-                   routerLinkActive="active">
-                    Charizard
-                </a>
-            </clr-vertical-nav-group-children>
-        </clr-vertical-nav-group>
-        <clr-vertical-nav-group
-                routerLinkActive="active">
-            <clr-icon shape="bolt" clrVerticalNavIcon></clr-icon>
-            Electric
-            <clr-vertical-nav-group-children>
-                <a clrVerticalNavLink
-                   routerLink="./electric/pikachu"
-                   routerLinkActive="active">
-                    Pikachu
-                </a>
-                <a clrVerticalNavLink
-                   routerLink="./electric/raichu"
-                   routerLinkActive="active">
-                    Raichu
-                </a>
-            </clr-vertical-nav-group-children>
-        </clr-vertical-nav-group>
-        <div class="nav-divider"></div>
-        <a clrVerticalNavLink (click)="setAlert('info')">
-            <clr-icon shape="info-circle" clrVerticalNavIcon></clr-icon>
-            alert-info
-        </a>
-        <a clrVerticalNavLink (click)="setAlert('warning')">
-            <clr-icon shape="exclamation-triangle" clrVerticalNavIcon></clr-icon>
-            alert-warning
-        </a>
-        <a clrVerticalNavLink (click)="setAlert('danger')">
-            <clr-icon shape="exclamation-circle" clrVerticalNavIcon></clr-icon>
-            alert-danger
-        </a>
-        <div class="nav-divider"></div>
-        <a clrVerticalNavLink (click)="ui.floating = !ui.floating">
-            <clr-icon [attr.shape]="ui.floating?'resize-up':'resize-down'" clrVerticalNavIcon></clr-icon>
-            {{ui.floating?'attach':'detach'}}
-        </a>
-    </clr-vertical-nav>
-
-    
-    
-   
-  </div>
 </clr-main-container>
