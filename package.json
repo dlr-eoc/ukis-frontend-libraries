@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --base-href /",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
     "@webcomponents/custom-elements": "^1.0.0",
+    "bootstrap": "^4.0.0-alpha.5",
     "clarity-angular": "^0.10.15",
     "clarity-icons": "^0.10.15",
     "clarity-ui": "^0.10.15",

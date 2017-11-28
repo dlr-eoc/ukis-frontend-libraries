@@ -1,5 +1,19 @@
 import { Component } from '@angular/core';
 
+
+import '@webcomponents/custom-elements';
+import 'clarity-icons';
+
+// import 'clarity-icons/shapes/all-shapes';
+// import 'clarity-icons/shapes/commerce-shapes';
+import 'clarity-icons/shapes/core-shapes';
+import 'clarity-icons/shapes/essential-shapes';
+// import 'clarity-icons/shapes/media-shapes';
+// import 'clarity-icons/shapes/social-shapes';
+import 'clarity-icons/shapes/technology-shapes';
+import 'clarity-icons/shapes/travel-shapes';
+import './icons/ukis';
+
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
 @Component({
