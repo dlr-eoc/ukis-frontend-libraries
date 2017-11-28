@@ -8,6 +8,20 @@
 button:focus {
   outline: none; }
 
+.main-container:not([class*="open-overflow-menu"]):not([class*="open-hamburger-menu"]) .clr-vertical-nav.is-collapsed .nav-icon {
+
+    margin-left: 0.5rem;
+}
+
+.clr-vertical-nav .nav-icon {
+    height: 1rem;
+    width: 1rem;
+}
+
+.clr-vertical-nav .nav-group-trigger .nav-group-trigger-icon {
+    display: none;
+}
+
 
 @media screen and (min-width: 768px) {
   
