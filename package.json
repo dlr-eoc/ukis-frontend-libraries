@@ -8,7 +8,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "gitDependencies": "node node_modules/npm-git-dependencies",
+    "_postinstall": "npm run gitDependencies"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +25,10 @@
     "@angular/router": "^5.0.0",
     "@webcomponents/custom-elements": "^1.0.0",
     "bootstrap": "^4.0.0-alpha.5",
+    "@ukis/datatypes": "git+http://git.ukis.eoc.dlr.de/scm/mofro/datatypes.git",
+    "@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git",
+    "@ukis/mapcontrol": "git+http://git.ukis.eoc.dlr.de/scm/mofro/mapcontrol.git",
+    "@ukis/ol-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_ol4.git",
     "clarity-angular": "^0.10.15",
     "clarity-icons": "^0.10.15",
     "clarity-ui": "^0.10.15",
@@ -44,6 +50,7 @@
     "karma-chrome-launcher": "~2.1.1",
     "karma-cli": "~1.0.1",
     "karma-coverage-istanbul-reporter": "^1.2.1",
+    "npm-git-dependencies": "git+http://git.ukis.eoc.dlr.de/scm/admin/npm-git-dependencies.git",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",

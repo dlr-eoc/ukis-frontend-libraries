@@ -6,6 +6,7 @@
 
 .content-area {
     background:#444;
+
 }
 
 button:focus {
@@ -65,11 +66,11 @@ button:focus {
 
 
 @media screen and (min-width: 768px) {
-  
+
 .content-container {
 
     &.reverse {
-       flex-direction: row-reverse; 
+       flex-direction: row-reverse;
     }
 
     &.floating {
