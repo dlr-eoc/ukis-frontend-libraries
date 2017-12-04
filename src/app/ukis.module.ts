@@ -10,7 +10,7 @@ import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
 import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { HeaderComponent } from './header/header.component';
-import { LayerComponent } from './layer/layer.component';
+import { LayerlistComponent } from './layerlist/layerlist.component';
 
 
 @NgModule({
@@ -18,7 +18,7 @@ import { LayerComponent } from './layer/layer.component';
     UkisComponent,
     GlobalAlertComponent,
     HeaderComponent,
-    LayerComponent
+    LayerlistComponent
   ],
   imports: [
     BrowserModule,
