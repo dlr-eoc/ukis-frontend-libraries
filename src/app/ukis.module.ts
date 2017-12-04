@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from 'clarity-angular';
 
 import {MapstateServiceModule} from '@ukis/services/src/app/mapstate/mapstate.module';
-import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module'
+import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
 
 
 import { UkisComponent } from './ukis.component';
