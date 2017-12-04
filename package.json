@@ -26,6 +26,7 @@
     "@webcomponents/custom-elements": "^1.0.0",
     "bootstrap": "^4.0.0-alpha.5",
     "@ukis/datatypes": "git+http://git.ukis.eoc.dlr.de/scm/mofro/datatypes.git",
+    "@ukis/baseLayers": "git+http://git.ukis.eoc.dlr.de/scm/mofro/baselayers.git",
     "@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git",
     "@ukis/mapcontrol": "git+http://git.ukis.eoc.dlr.de/scm/mofro/mapcontrol.git",
     "@ukis/ol-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_ol4.git",

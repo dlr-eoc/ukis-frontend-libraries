@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-
+import {Component, Inject} from '@angular/core';
+import { NgModel } from '@angular/forms';
+import {NgForm} from '@angular/forms';
 
 // import '@webcomponents/custom-elements';
 // import 'clarity-icons';
@@ -14,6 +15,13 @@ import 'clarity-icons/shapes/technology-shapes';
 import 'clarity-icons/shapes/travel-shapes';
 import './icons/ukis';
 
+import { Layer } from '@ukis/datatypes/Layer';
+import { LayersService } from '@ukis/services/src/app/layers/layers.service';
+
+import { google_earth, google_hybrid, google_maps, osm } from '@ukis/baseLayers/rasterBaseLayers';
+import {Subscription} from 'rxjs/Subscription';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
 @Component({
@@ -26,6 +34,8 @@ export class UkisComponent {
 
   alert;
 
+  baseLayersSubscription: Subscription;
+
   ui = {
     floating: true,
     flipped: false
@@ -35,45 +45,39 @@ export class UkisComponent {
     {
       'name': 'Baselayers',
       'inputtype': 'radio',
-      'layers': [
-        {
-          'name': 'Light',
-          'enabled': true
-        },
-        {
-          'name': 'Dark',
-          'enabled': false
-        },
-        {
-          'name': 'Street',
-          'enabled': false
-        }
-      ]
+      'layers': []
     },
     {
       'name': 'Overlays',
       'inputtype': 'checkbox',
       'layers': [
-        {
-          'name': 'Modis',
-          'enabled': true
-        },
-        {
-          'name': 'GUF 90',
-          'enabled': false
-        },
-        {
-          'name': 'NDVI',
-          'enabled': true
-        },
-        {
-          'name': 'Sentinel 2',
-          'enabled': false
-        }
+        google_maps, osm
       ]
     }
   ];
 
+  private layergroupSubj = new BehaviorSubject(this.layergroups);
+
+
+  constructor(@Inject(LayersService)private layerSvc: LayersService) {
+
+    google_earth.visible = true;
+    this.layerSvc.addRasterBaseLayer(google_earth);
+    this.layerSvc.addRasterBaseLayer(google_hybrid);
+    this.layerSvc.addRasterBaseLayer(google_maps);
+    this.layerSvc.addRasterBaseLayer(osm);
+
+    this.baseLayersSubscription = this.layerSvc.getRasterBaseLayers().subscribe(baseLayers => {
+      this.layergroups[0].layers = baseLayers;
+      console.log(this.layergroups[0].layers)
+    });
+
+
+  }
+
+  baseLayerSwitch(layer){
+    console.log(layer)
+  }
 
   setAlert = (type: string = 'info') => {
     // structure of (app-level) alert
