@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from 'clarity-angular';
 
-import {MapstateServiceModule} from '@ukis/services/src/app/mapstate/mapstate.module';
+import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
+import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol.module';
 import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
 
 
@@ -25,7 +26,8 @@ import { LayerlistComponent } from './layerlist/layerlist.component';
     BrowserAnimationsModule,
     ClarityModule.forRoot(),
     MapstateServiceModule.forRoot(),
-    OlMapModule
+    OlMapModule,
+    MapcontrolModule
   ],
   providers: [],
   bootstrap: [UkisComponent]

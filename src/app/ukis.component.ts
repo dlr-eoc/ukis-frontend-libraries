@@ -19,7 +19,7 @@ const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritat
 @Component({
   selector: 'ukis-root',
   templateUrl: './ukis.component.html',
-  styleUrls: ['./ukis.component.css']
+  styleUrls: []
 })
 export class UkisComponent {
   title = 'ukis';
