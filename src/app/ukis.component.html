@@ -19,7 +19,25 @@
         <clr-vertical-nav clrVerticalNavCollapsible="false" [clr-nav-level]="1">
 
 
-            <ukis-layerlist [(layers)]="layers"></ukis-layerlist>
+            <!--<ukis-layerlist [(layers)]="layers"></ukis-layerlist>-->
+
+            <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true">
+                <clr-icon shape="layers" clrVerticalNavIcon></clr-icon>
+                Layers
+                <clr-vertical-nav-group-children class="padding">
+
+                    <div *ngFor="let group of layergroups; index as i; first as isFirst">
+                        <div class="nav-divider" *ngIf="!isFirst"></div>
+                        <h5>{{group.name}}</h5>
+                        <div *ngFor="let layer of group.layers; index as j" [class]="group.inputtype || 'checkbox'">
+                            <input [type]="group.inputtype || 'checkbox'" [name]="'layer'+i" [id]="'layer'+i + '_' + j" [checked]="layer.enabled">
+                            <label [for]="'layer'+i + '_' + j">{{layer.name}}</label>
+                        </div>
+                    </div>
+
+                </clr-vertical-nav-group-children>
+
+            </clr-vertical-nav-group>
 
 
             <clr-vertical-nav-group>

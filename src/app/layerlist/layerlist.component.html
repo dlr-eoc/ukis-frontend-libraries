@@ -6,7 +6,7 @@
 
 
     <ng-template clrIfExpanded="false">
-      <clr-tree-node *ngFor="let type of layers" [(clrSelected)]="type.selected">
+      <clr-tree-node *ngFor="let type of layers" [(clrSelected)]="type.selected" [clrIndeterminate]="type.selected === undefined">
         {{type.type}}
         <ng-template [(clrIfExpanded)]="type.expanded">
           <clr-tree-node *ngFor="let layer of type.layers" [(clrSelected)]="layer.enable">

@@ -31,46 +31,44 @@ export class UkisComponent {
     flipped: false
   };
 
-  layers = [
+  layergroups = [
     {
-      'type': 'Baselayers',
-      'selected': true,
-      'expanded': false,
+      'name': 'Baselayers',
+      'inputtype': 'radio',
       'layers': [
         {
           'name': 'Light',
-          'enable': true
+          'enabled': true
         },
         {
           'name': 'Dark',
-          'enable': false
+          'enabled': false
         },
         {
           'name': 'Street',
-          'enable': false
+          'enabled': false
         }
       ]
     },
     {
-      'type': 'Overlays',
-      'selected': true,
-      'expanded': false,
+      'name': 'Overlays',
+      'inputtype': 'checkbox',
       'layers': [
         {
           'name': 'Modis',
-          'enable': true
+          'enabled': true
         },
         {
           'name': 'GUF 90',
-          'enable': false
+          'enabled': false
         },
         {
           'name': 'NDVI',
-          'enable': true
+          'enabled': true
         },
         {
           'name': 'Sentinel 2',
-          'enable': false
+          'enabled': false
         }
       ]
     }
