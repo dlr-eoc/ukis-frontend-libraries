@@ -16,28 +16,8 @@
 
 
         <clr-vertical-nav clrVerticalNavCollapsible="false" [clr-nav-level]="1">
-            <clr-vertical-nav-group>
-                <clr-icon shape="layers" clrVerticalNavIcon></clr-icon>
-                Layers
-                <clr-vertical-nav-group-children>
-                    
-
-
-    <ng-template clrIfExpanded="false">
-        <clr-tree-node *ngFor="let type of layers" [(clrSelected)]="type.selected">
-            {{type.type}}
-            <ng-template [(clrIfExpanded)]="type.expanded">
-                <clr-tree-node *ngFor="let layer of type.layers" [(clrSelected)]="layer.enable">
-                    {{layer.name}}
-                </clr-tree-node>
-            </ng-template>
-        </clr-tree-node>
-    </ng-template>
-
-
-
-                </clr-vertical-nav-group-children>
-            </clr-vertical-nav-group>
+            <ukis-layer></ukis-layer>
+            
             <clr-vertical-nav-group>
                 <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>
                 Fire

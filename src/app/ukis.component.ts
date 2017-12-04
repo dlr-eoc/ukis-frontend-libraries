@@ -34,7 +34,7 @@ export class UkisComponent {
   layers = [
     {
       'type': 'Baselayers',
-      //'selected': true,
+      'selected': true,
       'expanded': false,
       'layers': [
         {
