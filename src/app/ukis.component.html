@@ -12,12 +12,12 @@
         <!-- reverse-->
 
         <div class="content-area">
-          <ukis-ol-map></ukis-ol-map>
+            <ukis-ol-map class="map"></ukis-ol-map>
         </div>
 
 
         <clr-vertical-nav clrVerticalNavCollapsible="false" [clr-nav-level]="1">
-<<<<<<< HEAD
+
             <clr-vertical-nav-group>
                 <clr-icon shape="layers" clrVerticalNavIcon></clr-icon>
                 Layers
@@ -25,25 +25,25 @@
 
 
 
-    <ng-template clrIfExpanded="false">
-        <clr-tree-node *ngFor="let type of layers" [(clrSelected)]="type.selected">
-            {{type.type}}
-            <ng-template [(clrIfExpanded)]="type.expanded">
-                <clr-tree-node *ngFor="let layer of type.layers" [(clrSelected)]="layer.enable">
-                    {{layer.name}}
-                </clr-tree-node>
-            </ng-template>
-        </clr-tree-node>
-    </ng-template>
+                    <ng-template clrIfExpanded="false">
+                        <clr-tree-node *ngFor="let type of layers" [(clrSelected)]="type.selected">
+                            {{type.type}}
+                            <ng-template [(clrIfExpanded)]="type.expanded">
+                                <clr-tree-node *ngFor="let layer of type.layers" [(clrSelected)]="layer.enable">
+                                    {{layer.name}}
+                                </clr-tree-node>
+                            </ng-template>
+                        </clr-tree-node>
+                    </ng-template>
 
 
 
                 </clr-vertical-nav-group-children>
             </clr-vertical-nav-group>
-=======
+
             <ukis-layer></ukis-layer>
-            
->>>>>>> 2d1306fa750bdb2b0c8df24e39822e187acbb4fb
+
+
             <clr-vertical-nav-group>
                 <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>
                 Fire
