@@ -5,7 +5,7 @@ import { ClarityModule } from 'clarity-angular';
 
 import {MapstateServiceModule} from '@ukis/services/src/app/mapstate/mapstate.module';
 import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
-
+import { AppStoreService } from './shared/app-store.service';
 
 import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
@@ -27,7 +27,7 @@ import { LayerlistComponent } from './layerlist/layerlist.component';
     MapstateServiceModule.forRoot(),
     OlMapModule
   ],
-  providers: [],
+  providers: [AppStoreService],
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }

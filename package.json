@@ -29,6 +29,7 @@
     "@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git",
     "@ukis/mapcontrol": "git+http://git.ukis.eoc.dlr.de/scm/mofro/mapcontrol.git",
     "@ukis/ol-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_ol4.git",
+    "@ukis/baseLayers": "git+http://git.ukis.eoc.dlr.de/scm/mofro/baselayers.git",
     "clarity-angular": "^0.10.15",
     "clarity-icons": "^0.10.15",
     "clarity-ui": "^0.10.15",

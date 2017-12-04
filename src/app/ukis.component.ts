@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AppStoreService} from './shared/app-store.service'
 
 
 // import '@webcomponents/custom-elements';
@@ -73,6 +74,11 @@ export class UkisComponent {
       ]
     }
   ];
+
+
+  constructor(private AppStoreService: AppStoreService) {
+    console.log(AppStoreService)
+  }
 
 
   setAlert = (type: string = 'info') => {
