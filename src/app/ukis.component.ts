@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import {AppStoreService} from './shared/app-store.service'
-
+import {Component, Inject} from '@angular/core';
+import { NgModel } from '@angular/forms';
+import {NgForm} from '@angular/forms';
+import { RadioControlValueAccessor } from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 
 // import '@webcomponents/custom-elements';
 // import 'clarity-icons';
@@ -15,17 +17,27 @@ import 'clarity-icons/shapes/technology-shapes';
 import 'clarity-icons/shapes/travel-shapes';
 import './icons/ukis';
 
+import { Layer } from '@ukis/datatypes/Layer';
+import { LayersService } from '@ukis/services/src/app/layers/layers.service';
+
+import { google_earth, google_hybrid, google_maps, osm } from '@ukis/baseLayers/rasterBaseLayers';
+import {Subscription} from 'rxjs/Subscription';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
 @Component({
   selector: 'ukis-root',
   templateUrl: './ukis.component.html',
-  styleUrls: ['./ukis.component.css']
+  styleUrls: []
 })
 export class UkisComponent {
   title = 'ukis';
 
   alert;
+
+  baseLayersSubscription: Subscription;
+  overlaysSubscription: Subscription;
 
   ui = {
     floating: true,
@@ -36,50 +48,58 @@ export class UkisComponent {
     {
       'name': 'Baselayers',
       'inputtype': 'radio',
-      'layers': [
-        {
-          'name': 'Light',
-          'enabled': true
-        },
-        {
-          'name': 'Dark',
-          'enabled': false
-        },
-        {
-          'name': 'Street',
-          'enabled': false
-        }
-      ]
+      'removable': false,
+      'layers': []
     },
     {
       'name': 'Overlays',
       'inputtype': 'checkbox',
-      'layers': [
-        {
-          'name': 'Modis',
-          'enabled': true
-        },
-        {
-          'name': 'GUF 90',
-          'enabled': false
-        },
-        {
-          'name': 'NDVI',
-          'enabled': true
-        },
-        {
-          'name': 'Sentinel 2',
-          'enabled': false
-        }
-      ]
+      'removable': true,
+      'layers': []
     }
   ];
 
 
-  constructor(private AppStoreService: AppStoreService) {
-    console.log(AppStoreService)
+  private layergroupSubj = new BehaviorSubject(this.layergroups);
+
+
+  constructor(@Inject(LayersService)private layerSvc: LayersService) {
+
+    google_earth.visible = true;
+    this.layerSvc.addBaseLayer(google_earth);
+    this.layerSvc.addBaseLayer(google_maps);
+
+
+    this.layerSvc.addOverlay(google_hybrid);
+    this.layerSvc.addOverlay(osm);
+
+
+    this.baseLayersSubscription = this.layerSvc.getBaseLayers().subscribe(baseLayers => {
+      this.layergroups[0].layers = baseLayers;
+      console.log(this.layergroups[0].layers)
+    });
+
+    this.overlaysSubscription = this.layerSvc.getOverlays().subscribe(overlays => {
+      this.layergroups[1].layers = overlays;
+      console.log(this.layergroups[1].layers)
+    });
+
+
   }
 
+  showHideLayerSwitch = (group, selectedLayer) => {
+    if (group.inputtype=="checkbox") {
+      selectedLayer.visible = !selectedLayer.visible;
+      this.layerSvc.setOverlays(group.layers);
+    }
+
+    if (group.inputtype=="radio") {
+      for (let layer of group.layers) {
+        layer.visible = layer === selectedLayer;
+      }
+      this.layerSvc.setBaseLayers(group.layers);
+    }
+  };
 
   setAlert = (type: string = 'info') => {
     // structure of (app-level) alert
