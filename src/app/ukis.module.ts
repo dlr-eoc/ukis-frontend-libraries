@@ -10,13 +10,12 @@ import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module
 import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol.module';
 //import {  } from '@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module';
 import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
-
+import { AppStoreService } from './shared/app-store.service';
 
 import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { HeaderComponent } from './header/header.component';
 import { LayerlistComponent } from './layerlist/layerlist.component';
-
 
 @NgModule({
   declarations: [
@@ -35,7 +34,7 @@ import { LayerlistComponent } from './layerlist/layerlist.component';
     OlMapModule,
     MapcontrolModule
   ],
-  providers: [],
+  providers: [AppStoreService],
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }
