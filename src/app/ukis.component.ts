@@ -19,6 +19,7 @@ import './icons/ukis';
 
 import { Layer } from '@ukis/datatypes/Layer';
 import { LayersService } from '@ukis/services/src/app/layers/layers.service';
+import {AppStoreService} from './shared/app-store.service'
 
 import { google_earth, google_hybrid, google_maps, osm } from '@ukis/baseLayers/rasterBaseLayers';
 import {Subscription} from 'rxjs/Subscription';
@@ -63,12 +64,11 @@ export class UkisComponent {
   private layergroupSubj = new BehaviorSubject(this.layergroups);
 
 
-  constructor(@Inject(LayersService)private layerSvc: LayersService) {
+  constructor(@Inject(LayersService)private layerSvc: LayersService, private AppStoreService: AppStoreService) {
 
     google_earth.visible = true;
     this.layerSvc.addBaseLayer(google_earth);
     this.layerSvc.addBaseLayer(google_maps);
-
 
     this.layerSvc.addOverlay(google_hybrid);
     this.layerSvc.addOverlay(osm);

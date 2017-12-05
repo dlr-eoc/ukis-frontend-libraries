@@ -16,7 +16,6 @@ import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { HeaderComponent } from './header/header.component';
 import { LayerlistComponent } from './layerlist/layerlist.component';
 
-
 @NgModule({
   declarations: [
     UkisComponent,
