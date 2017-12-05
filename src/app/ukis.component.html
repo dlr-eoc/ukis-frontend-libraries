@@ -76,11 +76,23 @@
         <clr-icon shape="exclamation-circle" clrVerticalNavIcon></clr-icon>
         alert-danger
       </a>
+
+      <div class="nav-divider"></div>
+
+      <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="false">
+        <clr-icon shape="map-marker" class="is-solid" clrVerticalNavIcon></clr-icon>
+        Map state
+        <clr-vertical-nav-group-children class="padding">
+          <ukis-mapnavigator></ukis-mapnavigator>
+        </clr-vertical-nav-group-children>
+      </clr-vertical-nav-group>
+
       <div class="nav-divider"></div>
       <a clrVerticalNavLink (click)="ui.floating=!ui.floating">
         <clr-icon [attr.shape]="ui.floating?'resize-up':'resize-down'" clrVerticalNavIcon></clr-icon>
         {{ui.floating?'attach':'detach'}}
       </a>
+
     </clr-vertical-nav>
 
   </div>

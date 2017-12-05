@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import {MapstateServiceModule} from '@ukis/services/src/app/mapstate/mapstate.module';
 import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
 import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol.module';
+import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module';
 import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
 import { AppStoreService } from './shared/app-store.service';
 
@@ -31,7 +32,8 @@ import { LayerlistComponent } from './layerlist/layerlist.component';
     MapstateServiceModule.forRoot(),
     LayersServiceModule.forRoot(),
     OlMapModule,
-    MapcontrolModule
+    MapcontrolModule,
+    MapnavigatorModule
   ],
   providers: [AppStoreService],
   bootstrap: [UkisComponent]
