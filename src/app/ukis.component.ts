@@ -1,6 +1,8 @@
 import {Component, Inject} from '@angular/core';
 import { NgModel } from '@angular/forms';
 import {NgForm} from '@angular/forms';
+import { RadioControlValueAccessor } from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 
 // import '@webcomponents/custom-elements';
 // import 'clarity-icons';
@@ -35,6 +37,7 @@ export class UkisComponent {
   alert;
 
   baseLayersSubscription: Subscription;
+  overlaysSubscription: Subscription;
 
   ui = {
     floating: true,
@@ -45,16 +48,17 @@ export class UkisComponent {
     {
       'name': 'Baselayers',
       'inputtype': 'radio',
+      'removable': false,
       'layers': []
     },
     {
       'name': 'Overlays',
       'inputtype': 'checkbox',
-      'layers': [
-        google_maps, osm
-      ]
+      'removable': true,
+      'layers': []
     }
   ];
+
 
   private layergroupSubj = new BehaviorSubject(this.layergroups);
 
@@ -62,22 +66,40 @@ export class UkisComponent {
   constructor(@Inject(LayersService)private layerSvc: LayersService) {
 
     google_earth.visible = true;
-    this.layerSvc.addRasterBaseLayer(google_earth);
-    this.layerSvc.addRasterBaseLayer(google_hybrid);
-    this.layerSvc.addRasterBaseLayer(google_maps);
-    this.layerSvc.addRasterBaseLayer(osm);
+    this.layerSvc.addBaseLayer(google_earth);
+    this.layerSvc.addBaseLayer(google_maps);
 
-    this.baseLayersSubscription = this.layerSvc.getRasterBaseLayers().subscribe(baseLayers => {
+
+    this.layerSvc.addOverlay(google_hybrid);
+    this.layerSvc.addOverlay(osm);
+
+
+    this.baseLayersSubscription = this.layerSvc.getBaseLayers().subscribe(baseLayers => {
       this.layergroups[0].layers = baseLayers;
       console.log(this.layergroups[0].layers)
+    });
+
+    this.overlaysSubscription = this.layerSvc.getOverlays().subscribe(overlays => {
+      this.layergroups[1].layers = overlays;
+      console.log(this.layergroups[1].layers)
     });
 
 
   }
 
-  baseLayerSwitch(layer){
-    console.log(layer)
-  }
+  showHideLayerSwitch = (group, selectedLayer) => {
+    if (group.inputtype=="checkbox") {
+      selectedLayer.visible = !selectedLayer.visible;
+      this.layerSvc.setOverlays(group.layers);
+    }
+
+    if (group.inputtype=="radio") {
+      for (let layer of group.layers) {
+        layer.visible = layer === selectedLayer;
+      }
+      this.layerSvc.setBaseLayers(group.layers);
+    }
+  };
 
   setAlert = (type: string = 'info') => {
     // structure of (app-level) alert
