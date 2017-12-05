@@ -63,6 +63,10 @@ button:focus {
     position: relative;
 }
 
+.iconButton:hover {
+  cursor:pointer;
+}
+
 @media screen and (min-width: 768px) {
     .content-container {
         &.reverse {

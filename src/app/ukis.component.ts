@@ -59,10 +59,6 @@ export class UkisComponent {
     }
   ];
 
-
-  private layergroupSubj = new BehaviorSubject(this.layergroups);
-
-
   constructor(@Inject(LayersService)private layerSvc: LayersService) {
 
     google_earth.visible = true;
@@ -76,12 +72,12 @@ export class UkisComponent {
 
     this.baseLayersSubscription = this.layerSvc.getBaseLayers().subscribe(baseLayers => {
       this.layergroups[0].layers = baseLayers;
-      console.log(this.layergroups[0].layers)
+      //console.log(this.layergroups[0].layers)
     });
 
     this.overlaysSubscription = this.layerSvc.getOverlays().subscribe(overlays => {
       this.layergroups[1].layers = overlays;
-      console.log(this.layergroups[1].layers)
+      //console.log(this.layergroups[1].layers)
     });
 
 
@@ -92,13 +88,17 @@ export class UkisComponent {
       selectedLayer.visible = !selectedLayer.visible;
       this.layerSvc.setOverlays(group.layers);
     }
-
     if (group.inputtype=="radio") {
       for (let layer of group.layers) {
         layer.visible = layer === selectedLayer;
       }
       this.layerSvc.setBaseLayers(group.layers);
     }
+  };
+
+  removeLayer = (group, selectedLayer) => {
+    //console.log("delete "+selectedLayer.name)
+    this.layerSvc.removeLayer(selectedLayer, group.name);
   };
 
   setAlert = (type: string = 'info') => {
