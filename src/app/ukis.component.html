@@ -31,9 +31,117 @@
             <div class="nav-divider" *ngIf="!isFirst"></div>
             <h5>{{group.name}}</h5>
             <div *ngFor="let layer of group.layers; index as j" [class]="group.inputtype || 'checkbox'">
+
+
+
+
+
               <input [type]="group.inputtype || 'checkbox'" [name]="'layer'+i" [id]="'layer'+i + '_' + j" [checked]="layer.visible" (change)="showHideLayerSwitch(group, layer)">
               <label [for]="'layer'+i + '_' + j">{{layer.name}}</label>
-                <clr-icon *ngIf="group.removable" shape="trash" [class]="'float-md-right iconButton'" (click)="removeLayer(group, layer)" title="Remove layer"></clr-icon>
+
+              <div class="float-sm-right">
+                <clr-icon *ngIf="group.removable" shape="trash" [class]="'iconButton'" (click)="removeLayer(group, layer)" title="Remove layer"></clr-icon>
+                <!--clr-icon *ngIf="group.removable" shape="cog" size="16" [class]="'float-md-right'"></clr-icon-->
+
+
+                <clr-dropdown *ngIf="group.removable" [clrCloseMenuOnItemClick]="false">
+                  <button type="button" clrDropdownTrigger>
+                  <clr-icon shape="cog" size="16"></clr-icon>
+                  <clr-icon shape="caret down"></clr-icon>
+                </button>
+
+                  <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right" class="lproperties">
+                    <div>
+                      <clr-tabs>
+                        <clr-tab>
+                          <button clrTabLink id="link1">
+                            <clr-icon shape="wrench" size="16"></clr-icon>
+                          </button>
+                          <clr-tab-content id="layer_preferences" *clrIfActive="true">
+                            <label [for]="'layer_transparency_slider'+i + '_' + j">Opacity: {{layer.opacity}}</label>
+                            <br>
+                            <input *ngIf="group.removable" [id]="'layer_transparency_slider'+i + '_' + j"
+                                   type="range" name="points" [value]="layer.opacity" [min]="0.0" [max]="1.0" [step]="0.1"
+                                   (change)="changeOpacity(group, layer)"
+                                   [(ngModel)]="layer.opacity" />
+                          </clr-tab-content>
+                        </clr-tab>
+                        <clr-tab>
+                          <button clrTabLink>
+                            <clr-icon shape="info-standard"></clr-icon>
+                          </button>
+                          <clr-tab-content id="layer_info" *clrIfActive>
+                              <p>short layer description goes here</p>
+                          </clr-tab-content>
+                        </clr-tab>
+                      </clr-tabs>
+                    </div>
+                  </clr-dropdown-menu>
+                </clr-dropdown>
+
+              </div>
+
+
+
+
+              <!--clr-icon-- shape="cog"></clr-icon-->
+              <!--div *ngIf="group.removable">
+
+               <div *ngIf="group.removable" [class]="'float-md-right'">
+
+              </div>
+
+                      <label [for]="'layer_transparency_slider'+i + '_' + j">Opacity: {{layer.opacity}}</label>
+                      <input *ngIf="group.removable" [id]="'layer_transparency_slider'+i + '_' + j"
+                             type="range" name="points" [value]="layer.opacity" min="0.0" max="1.0" step="0.1"
+                             (change)="changeOpacity(group, layer)"
+                             [(ngModel)]="layer.opacity" />
+              </div-->
+
+
+                <!--clr-dropdown *ngIf="group.removable" [clrCloseMenuOnItemClick]="false">
+                  <button type="button" clrDropdownTrigger>
+
+                    <clr-icon shape="caret down" size="16"></clr-icon>
+                  </button>
+
+                  <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+                    <div>
+
+                    </div>
+
+                    <clr-tabs>
+                      <clr-tab>
+                        <button clrTabLink id="link1">
+                          <clr-icon shape="cog" size="16"></clr-icon>
+                        </button>
+                        <clr-tab-content id="layer_preferences" *clrIfActive="true">
+
+                        </clr-tab-content>
+                      </clr-tab>
+                      <clr-tab>
+                        <button clrTabLink>
+                          <clr-icon shape="info-standard"></clr-icon>
+                        </button>
+                        <clr-tab-content id="layer_info" *clrIfActive>
+                          <p>Layer description goes here</p>
+                        </clr-tab-content>
+                      </clr-tab>
+                    </clr-tabs>
+
+
+
+
+                  </clr-dropdown-menu>
+                </clr-dropdown!-->
+
+
+
+
+
+
+
+
             </div>
           </div>
         </clr-vertical-nav-group-children>

@@ -96,6 +96,18 @@ export class UkisComponent {
     }
   };
 
+  changeOpacity = (group, selectedLayer) => {
+    if (group.inputtype=="checkbox") {
+      this.layerSvc.setOverlays(group.layers);
+    }
+    if (group.inputtype=="radio") {
+      this.layerSvc.setBaseLayers(group.layers);
+    }
+
+    //console.log(selectedLayer);
+  };
+
+
   removeLayer = (group, selectedLayer) => {
     //console.log("delete "+selectedLayer.name)
     this.layerSvc.removeLayer(selectedLayer, group.name);

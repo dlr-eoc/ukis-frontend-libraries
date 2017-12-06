@@ -67,6 +67,11 @@ button:focus {
   cursor:pointer;
 }
 
+.lproperties {
+  width: 100%;
+  overflow-x: scroll;
+}
+
 @media screen and (min-width: 768px) {
     .content-container {
         &.reverse {
