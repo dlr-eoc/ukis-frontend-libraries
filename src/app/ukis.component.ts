@@ -76,7 +76,7 @@ export class UkisComponent {
         data: FeatureCollection
       })
       console.log(testGeoJsonLayer)
-      //this.layerSvc.addOverlay(testGeoJsonLayer);
+      this.layerSvc.addOverlay(testGeoJsonLayer);
 
     });
 
