@@ -17,7 +17,7 @@ import 'clarity-icons/shapes/technology-shapes';
 import 'clarity-icons/shapes/travel-shapes';
 import './icons/ukis';
 
-import { Layer } from '@ukis/datatypes/Layer';
+import { Layer, RasterLayer } from '@ukis/datatypes/Layer';
 import { LayersService } from '@ukis/services/src/app/layers/layers.service';
 import {AppStoreService} from './shared/app-store.service'
 
@@ -25,6 +25,7 @@ import { google_earth, google_hybrid, google_maps, osm } from '@ukis/baseLayers/
 import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
+import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
 @Component({
@@ -60,7 +61,7 @@ export class UkisComponent {
     }
   ];
 
-  constructor(@Inject(LayersService)private layerSvc: LayersService, private AppStoreService: AppStoreService) {
+  constructor(private authService: AuthService, @Inject(LayersService)private layerSvc: LayersService, private AppStoreService: AppStoreService) {
 
     google_earth.visible = true;
     this.layerSvc.addBaseLayer(google_earth);
@@ -96,6 +97,7 @@ export class UkisComponent {
     }
   };
 
+
   changeOpacity = (group, selectedLayer) => {
     if (group.inputtype=="checkbox") {
       this.layerSvc.setOverlays(group.layers);
@@ -107,6 +109,19 @@ export class UkisComponent {
     //console.log(selectedLayer);
   };
 
+  layerUpdate = (event, group, layer) => {
+
+    layer = event.layer;
+
+    if (group.inputtype=="checkbox") {
+      this.layerSvc.setOverlays(group.layers);
+    }
+    if (group.inputtype=="radio") {
+      this.layerSvc.setBaseLayers(group.layers);
+    }
+
+    //console.log(selectedLayer);
+  };
 
   removeLayer = (group, selectedLayer) => {
     //console.log("delete "+selectedLayer.name)
