@@ -19,7 +19,8 @@ import './icons/ukis';
 
 import { Layer } from '@ukis/datatypes/Layer';
 import { LayersService } from '@ukis/services/src/app/layers/layers.service';
-import {AppStoreService} from './shared/app-store.service'
+import {AppStoreService} from './shared/app-store.service';
+import {RestService} from '@ukis/services/src/app/rest/rest.service';
 
 import { google_earth, google_hybrid, google_maps, osm } from '@ukis/baseLayers/rasterBaseLayers';
 import {Subscription} from 'rxjs/Subscription';
@@ -60,7 +61,10 @@ export class UkisComponent {
     }
   ];
 
-  constructor(@Inject(LayersService)private layerSvc: LayersService, private AppStoreService: AppStoreService) {
+  constructor(@Inject(LayersService)private layerSvc: LayersService, @Inject(RestService)private restSvc: RestService, private AppStoreService: AppStoreService) {
+    this.restSvc.http.get('https://api.github.com/users/seeschweiler').subscribe(data => {
+      console.log(data);
+    });
 
     google_earth.visible = true;
     this.layerSvc.addBaseLayer(google_earth);

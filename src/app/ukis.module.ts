@@ -11,6 +11,7 @@ import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol
 import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module';
 import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
 import { AppStoreService } from './shared/app-store.service';
+import { RestModule } from '@ukis/services/src/app/rest/rest.module';
 
 import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
@@ -31,6 +32,7 @@ import { LayerlistComponent } from './layerlist/layerlist.component';
     ClarityModule.forRoot(),
     MapstateServiceModule.forRoot(),
     LayersServiceModule.forRoot(),
+    RestModule.forRoot(),
     OlMapModule,
     MapcontrolModule,
     MapnavigatorModule
