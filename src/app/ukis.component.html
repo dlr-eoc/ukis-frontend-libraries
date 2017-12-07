@@ -15,6 +15,18 @@
       <ukis-ol-map class="map" [store]="AppStoreService" [layers]="layerSvc"></ukis-ol-map>
     </div>
 
+    <clr-modal [(clrModalOpen)]="AppStoreService.showModal">
+    <h3 class="modal-title">I have a nice title</h3>
+    <div class="modal-body">
+        <p>But not much to say...</p>
+        <p>showModal: {{AppStoreService.showModal}}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="AppStoreService.showModal = false;">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="AppStoreService.showModal = false;">Ok</button>
+    </div>
+    </clr-modal>
+
     <ukis-mapcontrol class="top-right"></ukis-mapcontrol>
 
 
@@ -183,6 +195,10 @@
       <a clrVerticalNavLink (click)="setAlert('danger')">
         <clr-icon shape="exclamation-circle" clrVerticalNavIcon></clr-icon>
         alert-danger
+      </a>
+      <a clrVerticalNavLink (click)="AppStoreService.showModal = !AppStoreService.showModal;">
+        <clr-icon shape="help-info" clrVerticalNavIcon></clr-icon>
+        show Modal
       </a>
 
       <div class="nav-divider"></div>
