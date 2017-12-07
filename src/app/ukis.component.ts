@@ -17,11 +17,12 @@ import 'clarity-icons/shapes/technology-shapes';
 import 'clarity-icons/shapes/travel-shapes';
 import './icons/ukis';
 
-import { Layer, RasterLayer } from '@ukis/datatypes/Layer';
+import { Layer, RasterLayer, VectorLayer } from '@ukis/datatypes/Layer';
 import { LayersService } from '@ukis/services/src/app/layers/layers.service';
-import {AppStoreService} from './shared/app-store.service'
+import {AppStoreService} from './shared/app-store.service';
+import {RestService} from '@ukis/services/src/app/rest/rest.service';
 
-import { google_earth, google_hybrid, google_maps, osm } from '@ukis/baseLayers/rasterBaseLayers';
+import { google_earth, google_hybrid, google_maps, osm, eoc_litemap } from '@ukis/baseLayers/rasterBaseLayers';
 import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
@@ -61,14 +62,37 @@ export class UkisComponent {
     }
   ];
 
-  constructor(private authService: AuthService, @Inject(LayersService)private layerSvc: LayersService, private AppStoreService: AppStoreService) {
+
+  constructor(private authService: AuthService, @Inject(LayersService)private layerSvc: LayersService, @Inject(RestService)private restSvc: RestService, private AppStoreService: AppStoreService) {
+
+    this.restSvc.http.get('https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_populated_places_simple.geojson').subscribe(FeatureCollection => {
+
+
+      let testGeoJsonLayer = new VectorLayer({
+        name: 'Test Json',
+        ukisID: 'Test_Json',
+        visible: false,
+        type: 'geojson',
+        attribution: '&copy, <a href="https://www.google.de/maps">Google</a> contributors',
+        continuousWorld: false,
+        opacity: 1,
+        data: FeatureCollection
+      });
+      console.log(testGeoJsonLayer)
+      //this.layerSvc.addOverlay(testGeoJsonLayer);
+
+    });
+
 
     google_earth.visible = true;
     this.layerSvc.addBaseLayer(google_earth);
     this.layerSvc.addBaseLayer(google_maps);
+    this.layerSvc.addBaseLayer(eoc_litemap);
 
     this.layerSvc.addOverlay(google_hybrid);
     this.layerSvc.addOverlay(osm);
+
+
 
 
     this.baseLayersSubscription = this.layerSvc.getBaseLayers().subscribe(baseLayers => {

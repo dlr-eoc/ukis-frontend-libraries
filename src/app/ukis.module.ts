@@ -13,7 +13,7 @@ import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
 import { AppStoreService } from './shared/app-store.service';
 import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
 import { UserServiceModule } from '@ukis/services/src/app/user/user.module';
-
+import { RestModule } from '@ukis/services/src/app/rest/rest.module';
 
 import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
@@ -36,6 +36,7 @@ import { LayerpropertyComponent } from './layerlist/layerproperty/layerproperty.
     ClarityModule.forRoot(),
     MapstateServiceModule.forRoot(),
     LayersServiceModule.forRoot(),
+    RestModule.forRoot(),
     OlMapModule,
     MapcontrolModule,
     MapnavigatorModule,
