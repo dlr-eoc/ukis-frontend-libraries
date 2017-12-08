@@ -26,6 +26,7 @@ import { google_earth, google_hybrid, google_maps, osm, eoc_litemap } from '@uki
 import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
+import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
 @Component({
@@ -61,7 +62,9 @@ export class UkisComponent {
     }
   ];
 
-  constructor(@Inject(LayersService)private layerSvc: LayersService, @Inject(RestService)private restSvc: RestService, private AppStoreService: AppStoreService) {
+
+  constructor(private authService: AuthService, @Inject(LayersService)private layerSvc: LayersService, @Inject(RestService)private restSvc: RestService, private AppStoreService: AppStoreService) {
+
     this.restSvc.http.get('https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_populated_places_simple.geojson').subscribe(FeatureCollection => {
 
 
@@ -74,11 +77,12 @@ export class UkisComponent {
         continuousWorld: false,
         opacity: 1,
         data: FeatureCollection
-      })
+      });
       console.log(testGeoJsonLayer)
       this.layerSvc.addOverlay(testGeoJsonLayer);
 
     });
+
 
     google_earth.visible = true;
     this.layerSvc.addBaseLayer(google_earth);
@@ -117,6 +121,7 @@ export class UkisComponent {
     }
   };
 
+
   changeOpacity = (group, selectedLayer) => {
     if (group.inputtype=="checkbox") {
       this.layerSvc.setOverlays(group.layers);
@@ -128,6 +133,19 @@ export class UkisComponent {
     //console.log(selectedLayer);
   };
 
+  layerUpdate = (event, group, layer) => {
+
+    layer = event.layer;
+
+    if (group.inputtype=="checkbox") {
+      this.layerSvc.setOverlays(group.layers);
+    }
+    if (group.inputtype=="radio") {
+      this.layerSvc.setBaseLayers(group.layers);
+    }
+
+    //console.log(selectedLayer);
+  };
 
   removeLayer = (group, selectedLayer) => {
     //console.log("delete "+selectedLayer.name)
