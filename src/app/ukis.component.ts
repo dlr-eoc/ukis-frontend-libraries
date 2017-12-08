@@ -69,6 +69,7 @@ export class UkisComponent {
 
 
       let testGeoJsonLayer = new VectorLayer({
+        displayName: '',
         name: 'Test Json',
         ukisID: 'Test_Json',
         visible: false,
@@ -78,9 +79,8 @@ export class UkisComponent {
         opacity: 1,
         data: FeatureCollection
       });
-      console.log(testGeoJsonLayer)
+      //console.log(testGeoJsonLayer)
       this.layerSvc.addOverlay(testGeoJsonLayer);
-
     });
 
 
