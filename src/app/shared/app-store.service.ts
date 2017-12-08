@@ -9,9 +9,15 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/of';
 import 'rxjs/Rx';
 
+/**
+ * Interface definition for a GeoJSON Feature
+ */
 export interface GeoJSONFeature {
+    /** Name of feature */
     type: string;
+    /** geometry definition with type and array of coordinates */
     geometry: { type: string, coordinates: Array<number> }
+    /** any properties */
     properties: any
 }
 

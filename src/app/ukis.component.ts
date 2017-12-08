@@ -27,6 +27,9 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
+/**
+ * root component
+ */
 @Component({
   selector: 'ukis-root',
   templateUrl: './ukis.component.html',
