@@ -21,6 +21,9 @@ import { HeaderComponent } from './header/header.component';
 import { LayerlistComponent } from './layerlist/layerlist.component';
 import { LayerpropertyComponent } from './layerlist/layerproperty/layerproperty.component';
 
+/**
+ * Main App Module in which all Modules and services are plugged into
+ */
 @NgModule({
   declarations: [
     UkisComponent,

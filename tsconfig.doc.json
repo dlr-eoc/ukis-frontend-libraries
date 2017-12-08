@@ -1,0 +1,16 @@
+{
+   
+    "include": [
+    
+      "src/**/*.ts",
+      "doc_modules/@ukis/**/*.ts"
+    ],
+    "exclude": [
+      "test.ts",
+      "**/*.spec.ts",
+      "node_modules/@ukis/**/*.spec.ts",
+      "doc_modules/@ukis/**/app.module.ts",
+      "doc_modules/@ukis/**/app.component.ts"     
+    ]
+}
+  

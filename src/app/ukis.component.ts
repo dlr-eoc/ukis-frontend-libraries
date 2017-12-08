@@ -29,6 +29,9 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
+/**
+ * root component
+ */
 @Component({
   selector: 'ukis-root',
   templateUrl: './ukis.component.html',
