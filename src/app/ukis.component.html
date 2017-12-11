@@ -77,7 +77,6 @@
                 <label [for]="'layer'+i + '_' + j">{{layer.name}}</label>
               </div>
 
-
               <div *ngIf="group.name==='Overlays'">
 
                 <ukis-layerentry [layerSvc]="layerSvc" [layer]="layer" [group]="group" (update)="layerUpdate($event, group, layer)">
