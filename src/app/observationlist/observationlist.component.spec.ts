@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LayerpropertyComponent } from './layerproperty.component';
+import { ObservationlistComponent } from './observationlist.component';
 
-describe('LayerpropertyComponent', () => {
-  let component: LayerpropertyComponent;
-  let fixture: ComponentFixture<LayerpropertyComponent>;
+describe('ObservationlistComponent', () => {
+  let component: ObservationlistComponent;
+  let fixture: ComponentFixture<ObservationlistComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LayerpropertyComponent ]
+      declarations: [ ObservationlistComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LayerpropertyComponent);
+    fixture = TestBed.createComponent(ObservationlistComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -19,7 +19,8 @@ import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { HeaderComponent } from './header/header.component';
 import { LayerlistComponent } from './layerlist/layerlist.component';
-import { LayerpropertyComponent } from './layerlist/layerproperty/layerproperty.component';
+import { ObservationlistComponent } from './observationlist/observationlist.component';
+import { LayerentryComponent } from './layerlist/layerentry/layerentry.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { LayerpropertyComponent } from './layerlist/layerproperty/layerproperty.
     GlobalAlertComponent,
     HeaderComponent,
     LayerlistComponent,
-    LayerpropertyComponent
+    ObservationlistComponent,
+    LayerentryComponent
   ],
   imports: [
     BrowserModule,

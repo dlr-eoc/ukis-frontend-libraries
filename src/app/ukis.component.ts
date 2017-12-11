@@ -39,6 +39,8 @@ export class UkisComponent {
 
   alert;
 
+  obsListOpen = false;
+
   baseLayersSubscription: Subscription;
   overlaysSubscription: Subscription;
 
@@ -87,7 +89,7 @@ export class UkisComponent {
     google_earth.visible = true;
     this.layerSvc.addBaseLayer(google_earth);
     this.layerSvc.addBaseLayer(google_maps);
-    this.layerSvc.addBaseLayer(eoc_litemap);
+    //this.layerSvc.addBaseLayer(eoc_litemap);
 
     this.layerSvc.addOverlay(google_hybrid);
     this.layerSvc.addOverlay(osm);
@@ -108,21 +110,19 @@ export class UkisComponent {
 
   }
 
-  showHideLayerSwitch = (group, selectedLayer) => {
-    if (group.inputtype=="checkbox") {
-      selectedLayer.visible = !selectedLayer.visible;
-      this.layerSvc.setOverlays(group.layers);
-    }
-    if (group.inputtype=="radio") {
-      for (let layer of group.layers) {
-        layer.visible = layer === selectedLayer;
-      }
-      this.layerSvc.setBaseLayers(group.layers);
-    }
+
+
+  test = (val) => {
+    console.log(val);
   };
 
+  showObsList = () => {
+    this.obsListOpen = true;
 
-  changeOpacity = (group, selectedLayer) => {
+    console.log(this.obsListOpen);
+  };
+
+  /*changeOpacity = (group, selectedLayer) => {
     if (group.inputtype=="checkbox") {
       this.layerSvc.setOverlays(group.layers);
     }
@@ -131,7 +131,7 @@ export class UkisComponent {
     }
 
     //console.log(selectedLayer);
-  };
+  }; */
 
   layerUpdate = (event, group, layer) => {
 
@@ -147,10 +147,7 @@ export class UkisComponent {
     //console.log(selectedLayer);
   };
 
-  removeLayer = (group, selectedLayer) => {
-    //console.log("delete "+selectedLayer.name)
-    this.layerSvc.removeLayer(selectedLayer, group.name);
-  };
+
 
   setAlert = (type: string = 'info') => {
     // structure of (app-level) alert
