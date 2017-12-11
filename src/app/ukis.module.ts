@@ -22,6 +22,9 @@ import { LayerlistComponent } from './layerlist/layerlist.component';
 import { ObservationlistComponent } from './observationlist/observationlist.component';
 import { LayerentryComponent } from './layerlist/layerentry/layerentry.component';
 
+/**
+ * Main App Module in which all Modules and services are plugged into
+ */
 @NgModule({
   declarations: [
     UkisComponent,

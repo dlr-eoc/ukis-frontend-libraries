@@ -29,6 +29,9 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
+/**
+ * root component
+ */
 @Component({
   selector: 'ukis-root',
   templateUrl: './ukis.component.html',
@@ -71,6 +74,7 @@ export class UkisComponent {
 
 
       let testGeoJsonLayer = new VectorLayer({
+        displayName: '',
         name: 'Test Json',
         ukisID: 'Test_Json',
         visible: false,
@@ -80,9 +84,8 @@ export class UkisComponent {
         opacity: 1,
         data: FeatureCollection
       });
-      console.log(testGeoJsonLayer)
-      //this.layerSvc.addOverlay(testGeoJsonLayer);
-
+      //console.log(testGeoJsonLayer)
+      this.layerSvc.addOverlay(testGeoJsonLayer);
     });
 
 
