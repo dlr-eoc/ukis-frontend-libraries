@@ -31,6 +31,7 @@
     "@ukis/datatypes": "git+http://git.ukis.eoc.dlr.de/scm/mofro/datatypes.git",
     "@ukis/mapcontrol": "git+http://git.ukis.eoc.dlr.de/scm/mofro/mapcontrol.git",
     "@ukis/ol-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_ol4.git",
+    "@ukis/www-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_www0.git",
     "@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git",
     "@ukis/user-info": "git+http://git.ukis.eoc.dlr.de/scm/mofro/user-info.git",
     "classlist.js": "1.1.20150312",

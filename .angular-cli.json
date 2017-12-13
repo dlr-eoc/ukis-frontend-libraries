@@ -9,7 +9,8 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        { "glob": "**/*", "input": "../node_modules/@nasaworldwind/worldwind/build/dist/images", "output": "./images/" }
       ],
       "index": "index.html",
       "main": "main.ts",

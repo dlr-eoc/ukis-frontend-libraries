@@ -10,6 +10,7 @@ import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module
 import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol.module';
 import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module';
 import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
+import { WWWMapModule } from '@ukis/www-map/src/app/www-map/www-map.module';
 import { AppStoreService } from './shared/app-store.service';
 import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
 import { UserServiceModule } from '@ukis/services/src/app/user/user.module';
@@ -43,6 +44,7 @@ import { LayerentryComponent } from './layerlist/layerentry/layerentry.component
     LayersServiceModule.forRoot(),
     RestModule.forRoot(),
     OlMapModule,
+    WWWMapModule,
     MapcontrolModule,
     MapnavigatorModule,
     UserServiceModule.forRoot(),
