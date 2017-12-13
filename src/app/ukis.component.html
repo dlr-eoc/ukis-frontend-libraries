@@ -52,7 +52,7 @@
     <div class="content-area">
       <ukis-ol-map class="map" [store]="AppStoreService" [layers]="layerSvc"></ukis-ol-map>
 
-      <!--ukis-www-map></ukis-www-map-->
+      <!--ukis-www-map [store]="AppStoreService" [layers]="layerSvc"></ukis-www-map-->
     </div>
 
 
@@ -74,18 +74,9 @@
             </h6>
             <div *ngFor="let layer of group.layers; index as j" [class]="group.inputtype || 'checkbox'">
 
-              <div *ngIf="group.name==='Baselayers'">
-                <input [type]="group.inputtype || 'checkbox'" [name]="'layer'+i" [id]="'layer'+i + '_' + j" [checked]="layer.visible" (change)="showHideLayerSwitch(group, layer)">
-                <label [for]="'layer'+i + '_' + j">{{layer.name}}</label>
-              </div>
-
-              <div *ngIf="group.name==='Overlays'">
-
                 <ukis-layerentry [layerSvc]="layerSvc" [layer]="layer" [group]="group" (update)="layerUpdate($event, group, layer)">
 
                 </ukis-layerentry>
-
-              </div>
 
             </div>
           </div>

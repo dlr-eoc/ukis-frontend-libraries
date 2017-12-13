@@ -3,7 +3,7 @@
   <label [for]="layer.name" [title]="layer.name">{{layer.name}}</label>
   <div class="float-sm-right">
     <clr-icon *ngIf="group.removable" shape="trash" [class]="'iconButton'" (click)="removeLayer(group, layer)" title="Remove layer"></clr-icon>
-    <clr-icon shape="angle-double" [ngClass]="{'iconButton': true, 'iconButton-drpDwn': !openProperties, 'iconButton-drpDwn-active': openProperties}" (click)="showProperties()" title="Details" ></clr-icon>
+    <clr-icon *ngIf="group.name==='Overlays'" shape="angle-double" [ngClass]="{'iconButton': true, 'iconButton-drpDwn': !openProperties, 'iconButton-drpDwn-active': openProperties}" (click)="showProperties()" title="Details" ></clr-icon>
   </div>
   <div *ngIf="openProperties" class="lproperties">
     <div>
