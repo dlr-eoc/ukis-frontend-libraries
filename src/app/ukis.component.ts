@@ -38,22 +38,6 @@ export class UkisComponent {
     footer:false
   };
 
-  layergroups = [
-    {
-      'name': 'Baselayers',
-      'inputtype': 'radio',
-      'removable': false,
-      'layers': []
-    },
-    {
-      'name': 'Overlays',
-      'inputtype': 'checkbox',
-      'removable': true,
-      'layers': []
-    }
-  ];
-
-
   constructor() {
 
 
