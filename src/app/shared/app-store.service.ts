@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as ol from 'openlayers'
-import { osm } from '@ukis/baseLayers/rasterBaseLayers';
-
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Observable } from 'rxjs/Observable';

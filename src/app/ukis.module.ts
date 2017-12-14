@@ -4,24 +4,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from 'clarity-angular';
 import { FormsModule } from '@angular/forms';
 
-import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
-import {MapstateServiceModule} from '@ukis/services/src/app/mapstate/mapstate.module';
-import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
-import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol.module';
-import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module';
-import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
-import { WWWMapModule } from '@ukis/www-map/src/app/www-map/www-map.module';
-import { AppStoreService } from './shared/app-store.service';
-import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
-import { UserServiceModule } from '@ukis/services/src/app/user/user.module';
-import { RestModule } from '@ukis/services/src/app/rest/rest.module';
-
 import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { HeaderComponent } from './header/header.component';
-import { LayerlistComponent } from './layerlist/layerlist.component';
-import { ObservationlistComponent } from './observationlist/observationlist.component';
-import { LayerentryComponent } from './layerlist/layerentry/layerentry.component';
 
 /**
  * Main App Module in which all Modules and services are plugged into
@@ -30,27 +15,15 @@ import { LayerentryComponent } from './layerlist/layerentry/layerentry.component
   declarations: [
     UkisComponent,
     GlobalAlertComponent,
-    HeaderComponent,
-    LayerlistComponent,
-    ObservationlistComponent,
-    LayerentryComponent
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    ClarityModule.forRoot(),
-    MapstateServiceModule.forRoot(),
-    LayersServiceModule.forRoot(),
-    RestModule.forRoot(),
-    OlMapModule,
-    WWWMapModule,
-    MapcontrolModule,
-    MapnavigatorModule,
-    UserServiceModule.forRoot(),
-    UserinfoModule
+    ClarityModule.forRoot()
   ],
-  providers: [AuthService, AppStoreService],
+  providers: [],
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }
