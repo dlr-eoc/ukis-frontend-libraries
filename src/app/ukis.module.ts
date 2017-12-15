@@ -8,9 +8,18 @@ import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { HeaderComponent } from './header/header.component';
 
-import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
+//for map
 import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
-import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
+import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
+import { OlMapModule } from '@ukis/ol-map/src/app/ol-map/ol-map.module';
+
+//for Mapcontrol
+//import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
+import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol.module';
+
+//for Mapnavigator
+//import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
+import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module';
 
 /**
  * Main App Module in which all Modules and services are plugged into
@@ -28,7 +37,9 @@ import { OlMapModule } from '@ukis/ol-map//src/app/ol-map/ol-map.module';
     ClarityModule.forRoot(),
     MapstateServiceModule.forRoot(),
     LayersServiceModule.forRoot(),
-    OlMapModule
+    OlMapModule,
+    MapcontrolModule,
+    MapnavigatorModule
   ],
   providers: [],
   bootstrap: [UkisComponent]

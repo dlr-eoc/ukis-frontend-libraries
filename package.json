@@ -35,7 +35,9 @@
     "rxjs": "5.5.2",
     "zone.js": "0.8.14",
     "@ukis/ol-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_ol4.git",
-    "@ukis/baseLayers": "git+http://git.ukis.eoc.dlr.de/scm/mofro/baselayers.git"
+    "@ukis/baseLayers": "git+http://git.ukis.eoc.dlr.de/scm/mofro/baselayers.git",
+    "@ukis/mapcontrol": "git+http://git.ukis.eoc.dlr.de/scm/mofro/mapcontrol.git",
+    "@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git"
   },
   "devDependencies": {
     "@angular/cli": "1.5.4",

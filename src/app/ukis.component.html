@@ -43,10 +43,10 @@
     <!-- reverse-->
 
     <div class="content-area">
-      <ukis-ol-map class="map" [store]="AppStoreService" [layers]="layerSvc"></ukis-ol-map>
+      <ukis-ol-map class="map" [layers]="layerSvc"></ukis-ol-map>
     </div>
 
-
+    <ukis-mapcontrol class="top-right"></ukis-mapcontrol>
     <!-- <nav class="sidenav"> -->
     <clr-vertical-nav clrVerticalNavCollapsible="false" [clr-nav-level]="1">
 
@@ -110,41 +110,6 @@
 
   </div>
   <footer class="footer" *ngIf="ui.footer">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Decimal</th>
-          <th>Hexadecimal</th>
-          <th>Binary</th>
-          <th>Roman Numeral</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>1</td>
-          <td>I</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>5</td>
-          <td>101</td>
-          <td>V</td>
-        </tr>
-        <tr>
-          <td>10</td>
-          <td>A</td>
-          <td>1010</td>
-          <td>X</td>
-        </tr>
-        <tr>
-          <td>15</td>
-          <td>F</td>
-          <td>1111</td>
-          <td>XV</td>
-        </tr>
-      </tbody>
-    </table>
+    <ukis-mapnavigator></ukis-mapnavigator>
   </footer>
 </clr-main-container>
