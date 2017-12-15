@@ -14,6 +14,9 @@ import 'clarity-icons/shapes/technology-shapes';
 import 'clarity-icons/shapes/travel-shapes';
 import './icons/ukis';
 
+import { google_earth, google_hybrid, google_maps, osm, eoc_litemap } from '@ukis/baseLayers/rasterBaseLayers';
+import { LayersService } from '@ukis/services/src/app/layers/layers.service';
+
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
@@ -38,8 +41,10 @@ export class UkisComponent {
     footer:false
   };
 
-  constructor() {
+  constructor(@Inject(LayersService)private layerSvc: LayersService) {
 
+    google_earth.visible = true;
+    this.layerSvc.addBaseLayer(google_earth);
 
   }
 
