@@ -21,6 +21,10 @@ import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol
 //import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
 import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module';
 
+//for layerentry
+//import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
+import { LayerentryModule } from '@ukis/mapcontrol/src/app/layerentry/layerentry.module';
+
 /**
  * Main App Module in which all Modules and services are plugged into
  */
@@ -39,7 +43,8 @@ import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnav
     LayersServiceModule.forRoot(),
     OlMapModule,
     MapcontrolModule,
-    MapnavigatorModule
+    MapnavigatorModule,
+    LayerentryModule
   ],
   providers: [],
   bootstrap: [UkisComponent]
