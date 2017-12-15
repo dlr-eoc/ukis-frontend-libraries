@@ -18,6 +18,8 @@ import { google_earth, google_hybrid, google_maps, osm, eoc_litemap } from '@uki
 import { LayersService } from '@ukis/services/src/app/layers/layers.service';
 import {Subscription} from 'rxjs/Subscription';
 
+import { Ol4MapSvc, IOl4MapSvc } from '@ukis/ol-map/src/app/ol-map/ol-map.service';
+
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
@@ -61,7 +63,8 @@ export class UkisComponent {
   ];
 
   constructor(
-    @Inject(LayersService)private layerSvc: LayersService) {
+    @Inject(LayersService)private layerSvc: LayersService,
+    @Inject(Ol4MapSvc)private mapSvc: IOl4MapSvc) {
 
       google_earth.visible = true;
       this.layerSvc.addBaseLayer(google_earth);
@@ -82,6 +85,10 @@ export class UkisComponent {
     });
 
 
+  }
+
+  zoom(value:'-' | '+'){
+    this.mapSvc.zoomInOut(value)
   }
 
   layerUpdate = (event, group, layer) => {

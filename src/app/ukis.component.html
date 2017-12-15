@@ -129,5 +129,7 @@
   </div>
   <footer class="footer" *ngIf="ui.footer">
     <ukis-mapnavigator></ukis-mapnavigator>
+    <button class="btn btn-outline" (click)="zoom('+')">+</button>
+    <button class="btn btn-outline" (click)="zoom('-')">-</button>
   </footer>
 </clr-main-container>
