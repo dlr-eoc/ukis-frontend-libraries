@@ -43,7 +43,8 @@
     <!-- reverse-->
 
     <div class="content-area">
-      <ukis-ol-map class="map" [layers]="layerSvc"></ukis-ol-map>
+      <!--  <ukis-ol-map class="map" [layers]="layerSvc"></ukis-ol-map> -->
+      <ukis-www-map [layers]="layerSvc"></ukis-www-map>
     </div>
 
     <ukis-mapcontrol class="top-right"></ukis-mapcontrol>
@@ -60,9 +61,9 @@
                 <clr-icon *ngIf="group.name==='Overlays'" class="float-sm-right iconButton" shape="plus-circle" size="18" (click)="showObsList()"></clr-icon>
             </h6>
             <div *ngFor="let layer of group.layers; index as j" [class]="group.inputtype || 'checkbox'">
-                <ukis-layerentry [layerSvc]="layerSvc" [layer]="layer" [group]="group" (update)="layerUpdate($event, group, layer)">
+              <ukis-layerentry [layerSvc]="layerSvc" [layer]="layer" [group]="group" (update)="layerUpdate($event, group, layer)">
 
-                </ukis-layerentry>
+              </ukis-layerentry>
             </div>
           </div>
         </clr-vertical-nav-group-children>
@@ -128,8 +129,36 @@
 
   </div>
   <footer class="footer" *ngIf="ui.footer">
-    <ukis-mapnavigator></ukis-mapnavigator>
-    <button class="btn btn-outline" (click)="zoom('+')">+</button>
-    <button class="btn btn-outline" (click)="zoom('-')">-</button>
+
+    <div style="float: left; width: 700px;">
+      <table class="table">
+        <thead>
+          <tr><th>Distribution</th><th>SPEI-1</th><th>SPEI-2</th><th>SPEI-3</th><th>SPEI-6</th><th>SPEI-9</th><th>SPEI-12</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>K–S</td><td>A–D</td><td>S–W</td><td>K–S</td><td>A–D</td><td>S–W</td><td>K–S</td></tr>
+          <tr><td>Gen</td><td>Logistic</td><td>5.80</td><td>6.27</td><td>6.78</td><td>5.44</td><td>11.43</td></tr>
+          <tr><td>GEV</td><td>5.13</td><td>4.47</td><td>2.92</td><td>5.16</td><td>4.61</td><td>19.43</td> </tr>
+          <tr><td>Pearson</td><td>III</td><td>6.43</td><td>6.67</td><td>6.83</td><td>6.72</td><td>6.43</td></tr>
+          <tr><td>Normal</td><td>15.76</td><td>20.67</td><td>31.04</td><td>11.32</td><td>15.09</td><td>13.43</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="float: left; width: 300px; margin-top: 1.5em; margin-left: 3em;">
+      <ukis-mapnavigator></ukis-mapnavigator>
+      <!--
+<button class="btn btn-outline" (click)="zoom('+')">+</button>
+<button class="btn btn-outline" (click)="zoom('-')">-</button>
+-->
+
+    </div>
+
+    <div style="float: right;display: table-footer-group;">
+      <h2 style="margin-top: 0;">Legend</h2>
+      <img src="http://sedac.ciesin.columbia.edu/geoserver/wms?request=GetLegendGraphic&service=wms&layer=ndh:ndh-drought-hazard-frequency-distribution&version=1.1.1&format=image/png" alt="">
+    </div>
+
+
   </footer>
 </clr-main-container>

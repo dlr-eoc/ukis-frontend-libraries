@@ -37,7 +37,8 @@
     "@ukis/ol-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_ol4.git",
     "@ukis/baseLayers": "git+http://git.ukis.eoc.dlr.de/scm/mofro/baselayers.git",
     "@ukis/mapcontrol": "git+http://git.ukis.eoc.dlr.de/scm/mofro/mapcontrol.git",
-    "@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git"
+    "@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git",
+    "@ukis/www-map": "git+http://@git.ukis.eoc.dlr.de/scm/mofro/map_www0.git"
   },
   "devDependencies": {
     "@angular/cli": "1.5.4",
