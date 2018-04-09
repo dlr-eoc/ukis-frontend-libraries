@@ -1,0 +1,1218 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>UKIS Client</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	    <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">UKIS Client</a>
+            <button type="button" class="btn btn-default btn-menu fa fa-bars" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+            <div id="book-search-input" role="search">
+                <input type="text" placeholder="Type to search">
+            </div>
+            <nav>
+            
+                <ul class="list">
+            
+                    <li class="title">
+                        <a href="../index.html">UKIS Client</a>
+                    </li>
+            
+                    <li class="divider"></li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                        <ul class="links">
+                                <li class="link">
+                                    <a 
+                                        
+                                         href="../overview.html" 
+                                         href="../overview.html" 
+                                        >
+                                        <span class="fa fa-th"></span>Overview
+                                    </a>
+                                </li>
+                                <li class="link">
+                                  <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../modules.html" >
+                            <div class="menu-toggler linked" data-toggle="collapse"
+                                    data-target="#xs-modules-links"
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
+                        </a>
+                        <ul class="links collapse "
+                                id="xs-modules-links"
+                            >
+                                <li class="link">
+                                    <a href="../modules/LayerentryModule.html" >LayerentryModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/LayersServiceModule.html" >LayersServiceModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapcontrolModule.html" >MapcontrolModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapnavigatorModule.html" >MapnavigatorModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapstateServiceModule.html" >MapstateServiceModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/OlMapModule.html" >OlMapModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/RestModule.html" >RestModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/UkisModule.html" >UkisModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/UserServiceModule.html" >UserServiceModule</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
+                            <span class="fa fa-cogs"></span>
+                            <span>Components</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-components-links"
+                            >
+                                <li class="link">
+                                    <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/LayerentryComponent.html"  data-type="entity-link" class="active" >LayerentryComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MapcontrolComponent.html" >MapcontrolComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MapnavigatorComponent.html" >MapnavigatorComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/OlMapComponent.html" >OlMapComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/UkisComponent.html" >UkisComponent</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
+                            <span class="fa fa-long-arrow-down"></span>
+                            <span>Injectables</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-injectables-links"
+                            >
+                                <li class="link">
+                                    <a href="../injectables/AppStoreService.html" >AppStoreService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/AuthService.html" >AuthService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/LayersService.html" >LayersService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/MapstateService.html" >MapstateService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/Ol4MapSvc.html" >Ol4MapSvc</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/RestService.html" >RestService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/UserService.html" >UserService</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-interfaces-links"
+                            >
+                            <span class="fa fa-info"></span>
+                            <span>Interfaces</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-interfaces-links"
+                            >
+                                <li class="link">
+                                    <a href="../interfaces/IAppStoreService.html" >IAppStoreService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IOl4MapSvc.html" >IOl4MapSvc</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                    </li>
+            
+                    <li class="divider"></li>
+                    <li class="copyright">
+                            Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                        <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                            </a>
+                    </li>
+            
+                </ul>
+            
+            </nav>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <nav>
+                   
+                       <ul class="list">
+                   
+                           <li class="title">
+                               <a href="../index.html">UKIS Client</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                   
+                               <div id="book-search-input" role="search">
+                                   <input type="text" placeholder="Type to search">
+                               </div>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                               <ul class="links">
+                                       <li class="link">
+                                           <a 
+                                               
+                                                href="../overview.html" 
+                                                href="../overview.html" 
+                                               >
+                                               <span class="fa fa-th"></span>Overview
+                                           </a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../modules.html" >
+                                   <div class="menu-toggler linked" data-toggle="collapse"
+                                           data-target="#modules-links"
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
+                               </a>
+                               <ul class="links collapse "
+                                       id="modules-links"
+                   >
+                                       <li class="link">
+                                           <a href="../modules/LayerentryModule.html" >LayerentryModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/LayersServiceModule.html" >LayersServiceModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapcontrolModule.html" >MapcontrolModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapnavigatorModule.html" >MapnavigatorModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapstateServiceModule.html" >MapstateServiceModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/OlMapModule.html" >OlMapModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/RestModule.html" >RestModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/UkisModule.html" >UkisModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/UserServiceModule.html" >UserServiceModule</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
+                                   <span class="fa fa-cogs"></span>
+                                   <span>Components</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="components-links"
+                   >
+                                       <li class="link">
+                                           <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/LayerentryComponent.html"  data-type="entity-link" class="active" >LayerentryComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MapcontrolComponent.html" >MapcontrolComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MapnavigatorComponent.html" >MapnavigatorComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/OlMapComponent.html" >OlMapComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/UkisComponent.html" >UkisComponent</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
+                                   <span class="fa fa-long-arrow-down"></span>
+                                   <span>Injectables</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="injectables-links"
+                   >
+                                       <li class="link">
+                                           <a href="../injectables/AppStoreService.html" >AppStoreService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/AuthService.html" >AuthService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/LayersService.html" >LayersService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/MapstateService.html" >MapstateService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/Ol4MapSvc.html" >Ol4MapSvc</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/RestService.html" >RestService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/UserService.html" >UserService</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#interfaces-links"
+                   >
+                                   <span class="fa fa-info"></span>
+                                   <span>Interfaces</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="interfaces-links"
+                   >
+                                       <li class="link">
+                                           <a href="../interfaces/IAppStoreService.html" >IAppStoreService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IOl4MapSvc.html" >IOl4MapSvc</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                           <li class="copyright">
+                                   Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                               <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                                   </a>
+                           </li>
+                   
+                       </ul>
+                   
+                   </nav>
+               </div>
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>LayerentryComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active">
+        <a href="#info" id="info-tab" role="tab" data-toggle="tab" data-link="info">Info</a>
+    </li>
+
+    <li>
+        <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+    </li>
+
+    <li>
+        <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+    </li>
+    <li>
+        <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>ukis-layerentry</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>layerentry.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./layerentry.component.html</code></td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+        <h3 id="index">Index</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#activeTabs">activeTabs</a>
+                            </li>
+                            <li>
+                                <a href="#changeOpacity">changeOpacity</a>
+                            </li>
+                            <li>
+                                <a href="#openProperties">openProperties</a>
+                            </li>
+                            <li>
+                                <a href="#removeLayer">removeLayer</a>
+                            </li>
+                            <li>
+                                <a href="#showHideLayerSwitch">showHideLayerSwitch</a>
+                            </li>
+                            <li>
+                                <a href="#showProperties">showProperties</a>
+                            </li>
+                            <li>
+                                <a href="#switchTab">switchTab</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#group">group</a>
+                            </li>
+                            <li>
+                                <a href="#layer">layer</a>
+                            </li>
+                            <li>
+                                <a href="#layerSvc">layerSvc</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Outputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#update">update</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3 id="constructor">Constructor</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>constructor()</code>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:22</a></div>
+                                </td>
+                            </tr>
+    
+                </tbody>
+            </table>
+    </section>
+
+    <section>
+        <h3 id="inputs">Inputs</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2">
+                            <a name="group"></a>
+                            <code>group</code>
+                        </td>
+                        <td class="col-md-10">
+                              <p>
+                                <em>Type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                              </p>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:12</a></div>
+                                </td>
+                            </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2">
+                            <a name="layer"></a>
+                            <code>layer</code>
+                        </td>
+                        <td class="col-md-10">
+                              <p>
+                                <em>Type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                              </p>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:11</a></div>
+                                </td>
+                            </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2">
+                            <a name="layerSvc"></a>
+                            <code>layerSvc</code>
+                        </td>
+                        <td class="col-md-10">
+                              <p>
+                                <em>Type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                              </p>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:10</a></div>
+                                </td>
+                            </tr>
+                </tbody>
+            </table>
+    </section>
+
+    <section>
+        <h3 id="outputs">Outputs</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2">
+                            <a name="update"></a>
+                            <code>update</code>
+                        </td>
+                        <td class="col-md-10">
+                            <em><code>$event</code> type:</em>    <code><a href="https://angular.io/api/core/EventEmitter" target="_blank" >EventEmitter</a></code>
+
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:16</a></div>
+                                </td>
+                            </tr>
+                </tbody>
+            </table>
+    </section>
+
+
+
+    <section>
+        
+            <h3 id="methods">
+                Methods
+            </h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="ngOnInit"></a>
+                            <span class="name">
+                                <b>
+                                ngOnInit
+                                </b>
+                                <a href="#ngOnInit"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>ngOnInit()</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:28</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+    
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </section>
+
+    <section>
+        
+            <h3 id="inputs">
+                Properties
+            </h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="activeTabs"></a>
+                            <span class="name">
+                                <b>
+                                activeTabs
+                                </b>
+                                <a href="#activeTabs"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>activeTabs:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>{
+        &#x27;settings&#x27;: true,
+        &#x27;description&#x27;: false
+      }</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:19</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="changeOpacity"></a>
+                            <span class="name">
+                                <b>
+                                changeOpacity
+                                </b>
+                                <a href="#changeOpacity"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>changeOpacity:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>(group, selectedLayer) &#x3D;&gt; {
+        if (group.inputtype&#x3D;&#x3D;&quot;checkbox&quot;) {
+          this.layerSvc.setOverlays(group.layers);
+        }
+        if (group.inputtype&#x3D;&#x3D;&quot;radio&quot;) {
+          this.layerSvc.setBaseLayers(group.layers);
+        }
+    
+        this.update.emit({
+          layer: this.layer
+        });
+        //console.log(selectedLayer);
+      }</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:32</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="openProperties"></a>
+                            <span class="name">
+                                <b>
+                                openProperties
+                                </b>
+                                <a href="#openProperties"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>openProperties:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>false</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:14</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="removeLayer"></a>
+                            <span class="name">
+                                <b>
+                                removeLayer
+                                </b>
+                                <a href="#removeLayer"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>removeLayer:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>(group, selectedLayer) &#x3D;&gt; {
+        //console.log(&quot;delete &quot;+selectedLayer.name)
+        this.layerSvc.removeLayer(selectedLayer, group.name);
+      }</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:64</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="showHideLayerSwitch"></a>
+                            <span class="name">
+                                <b>
+                                showHideLayerSwitch
+                                </b>
+                                <a href="#showHideLayerSwitch"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>showHideLayerSwitch:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>(group, selectedLayer) &#x3D;&gt; {
+        if (group.inputtype&#x3D;&#x3D;&quot;checkbox&quot;) {
+          selectedLayer.visible &#x3D; !selectedLayer.visible;
+        }
+        if (group.inputtype&#x3D;&#x3D;&quot;radio&quot;) {
+          for (let layer of group.layers) {
+            layer.visible &#x3D; layer &#x3D;&#x3D;&#x3D; selectedLayer;
+          }
+        }
+        this.update.emit({
+          layer: this.layer
+        });
+      }</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:46</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="showProperties"></a>
+                            <span class="name">
+                                <b>
+                                showProperties
+                                </b>
+                                <a href="#showProperties"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>showProperties:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>() &#x3D;&gt; {
+        this.openProperties &#x3D; !this.openProperties;
+      }</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:60</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="switchTab"></a>
+                            <span class="name">
+                                <b>
+                                switchTab
+                                </b>
+                                <a href="#switchTab"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>switchTab:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>(tabName: string) &#x3D;&gt; {
+        for (let key of Object.keys(this.activeTabs)) {
+          this.activeTabs[key]&#x3D; tabName &#x3D;&#x3D;&#x3D; key;
+        }
+      }</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">doc_modules/@ukis/mapcontrol/src/app/layerentry/layerentry.component.ts:69</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+    </section>
+
+</div>
+
+
+    <div class="tab-pane fade tab-source-code" id="c-source">
+        <pre class="line-numbers"><code class="language-typescript">import {Component, EventEmitter, Input, OnInit, Output} from &#x27;@angular/core&#x27;;
+
+@Component({
+  selector: &#x27;ukis-layerentry&#x27;,
+  templateUrl: &#x27;./layerentry.component.html&#x27;,
+  styleUrls: [&#x27;./layerentry.component.scss&#x27;]
+})
+export class LayerentryComponent implements OnInit {
+
+  @Input(&#x27;layerSvc&#x27;) layerSvc: any;
+  @Input(&#x27;layer&#x27;) layer: any;
+  @Input(&#x27;group&#x27;) group: any;
+
+  openProperties &#x3D; false;
+
+  @Output() update &#x3D; new EventEmitter&lt;any&gt;();
+
+
+  activeTabs &#x3D; {
+    &#x27;settings&#x27;: true,
+    &#x27;description&#x27;: false
+  };
+
+  constructor() {
+    
+  }
+
+  ngOnInit() {
+  }
+
+
+  changeOpacity &#x3D; (group, selectedLayer) &#x3D;&gt; {
+    if (group.inputtype&#x3D;&#x3D;&quot;checkbox&quot;) {
+      this.layerSvc.setOverlays(group.layers);
+    }
+    if (group.inputtype&#x3D;&#x3D;&quot;radio&quot;) {
+      this.layerSvc.setBaseLayers(group.layers);
+    }
+
+    this.update.emit({
+      layer: this.layer
+    });
+    //console.log(selectedLayer);
+  };
+
+  showHideLayerSwitch &#x3D; (group, selectedLayer) &#x3D;&gt; {
+    if (group.inputtype&#x3D;&#x3D;&quot;checkbox&quot;) {
+      selectedLayer.visible &#x3D; !selectedLayer.visible;
+    }
+    if (group.inputtype&#x3D;&#x3D;&quot;radio&quot;) {
+      for (let layer of group.layers) {
+        layer.visible &#x3D; layer &#x3D;&#x3D;&#x3D; selectedLayer;
+      }
+    }
+    this.update.emit({
+      layer: this.layer
+    });
+  };
+
+  showProperties &#x3D; () &#x3D;&gt; {
+    this.openProperties &#x3D; !this.openProperties;
+  };
+
+  removeLayer &#x3D; (group, selectedLayer) &#x3D;&gt; {
+    //console.log(&quot;delete &quot;+selectedLayer.name)
+    this.layerSvc.removeLayer(selectedLayer, group.name);
+  };
+
+  switchTab &#x3D; (tabName: string) &#x3D;&gt; {
+    for (let key of Object.keys(this.activeTabs)) {
+      this.activeTabs[key]&#x3D; tabName &#x3D;&#x3D;&#x3D; key;
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade" id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div&gt;
+  &lt;input class&#x3D;&quot;float-sm-left&quot; [type]&#x3D;&quot;group.inputtype || &#x27;checkbox&#x27;&quot; [name]&#x3D;&quot;&#x27;layer&#x27;+i&quot; [id]&#x3D;&quot;layer.name&quot; [checked]&#x3D;&quot;layer.visible&quot; (change)&#x3D;&quot;showHideLayerSwitch(group, layer)&quot;&gt;
+  &lt;label [for]&#x3D;&quot;layer.name&quot; [title]&#x3D;&quot;layer.name&quot;&gt;{{layer.name}}&lt;/label&gt;
+  &lt;div class&#x3D;&quot;float-sm-right&quot;&gt;
+    &lt;clr-icon *ngIf&#x3D;&quot;group.removable&quot; shape&#x3D;&quot;trash&quot; [class]&#x3D;&quot;&#x27;iconButton&#x27;&quot; (click)&#x3D;&quot;removeLayer(group, layer)&quot; title&#x3D;&quot;Remove layer&quot;&gt;&lt;/clr-icon&gt;
+    &lt;clr-icon *ngIf&#x3D;&quot;group.name&#x3D;&#x3D;&#x3D;&#x27;Overlays&#x27;&quot; shape&#x3D;&quot;angle-double&quot; [ngClass]&#x3D;&quot;{&#x27;iconButton&#x27;: true, &#x27;iconButton-drpDwn&#x27;: !openProperties, &#x27;iconButton-drpDwn-active&#x27;: openProperties}&quot; (click)&#x3D;&quot;showProperties()&quot; title&#x3D;&quot;Details&quot; &gt;&lt;/clr-icon&gt;
+  &lt;/div&gt;
+  &lt;div *ngIf&#x3D;&quot;openProperties&quot; class&#x3D;&quot;lproperties&quot;&gt;
+    &lt;div&gt;
+      &lt;clr-icon title&#x3D;&quot;Layer settings&quot; shape&#x3D;&quot;cog&quot; size&#x3D;&quot;16&quot; [ngClass]&#x3D;&quot;{&#x27;iconButton&#x27;: true, &#x27;is-solid&#x27;: activeTabs[&#x27;settings&#x27;]}&quot; (click)&#x3D;&quot;switchTab(&#x27;settings&#x27;)&quot;&gt;&lt;/clr-icon&gt;
+      &lt;clr-icon title&#x3D;&quot;Layer info&quot; shape&#x3D;&quot;info-standard&quot; size&#x3D;&quot;16&quot; [ngClass]&#x3D;&quot;{&#x27;iconButton&#x27;: true, &#x27;is-solid&#x27;: activeTabs[&#x27;description&#x27;]}&quot; (click)&#x3D;&quot;switchTab(&#x27;description&#x27;)&quot;&gt;&lt;/clr-icon&gt;
+    &lt;/div&gt;
+    &lt;hr&gt;
+    &lt;div *ngIf&#x3D;&quot;activeTabs[&#x27;settings&#x27;]&quot;&gt;
+      &lt;label [for]&#x3D;&quot;&#x27;layer_transparency_slider_&#x27;+layer.name&quot;&gt;Opacity: {{&quot; &quot;}}&lt;/label&gt;
+      &lt;input [id]&#x3D;&quot;&#x27;layer_transparency_slider_&#x27;+layer.name&quot;
+             type&#x3D;&quot;range&quot; name&#x3D;&quot;points&quot; [value]&#x3D;&quot;layer.opacity&quot; [min]&#x3D;&quot;0.0&quot; [max]&#x3D;&quot;1.0&quot; [step]&#x3D;&quot;0.1&quot;
+             (change)&#x3D;&quot;changeOpacity(layer)&quot;
+             [(ngModel)]&#x3D;&quot;layer.opacity&quot; /&gt;
+      {{&quot; &quot;+layer.opacity}}
+    &lt;/div&gt;
+    &lt;div *ngIf&#x3D;&quot;activeTabs[&#x27;description&#x27;]&quot;&gt;
+      &lt;p&gt;short layer description and legend goes here&lt;/p&gt;
+      &lt;p&gt;{{layer.name}}&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade" id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div>  <input class="float-sm-left" [type]="group.inputtype || \'checkbox\'" [name]="\'layer\'+i" [id]="layer.name" [checked]="layer.visible" (change)="showHideLayerSwitch(group, layer)">  <label [for]="layer.name" [title]="layer.name">{{layer.name}}</label>  <div class="float-sm-right">    <clr-icon *ngIf="group.removable" shape="trash" [class]="\'iconButton\'" (click)="removeLayer(group, layer)" title="Remove layer"></clr-icon>    <clr-icon *ngIf="group.name===\'Overlays\'" shape="angle-double" [ngClass]="{\'iconButton\': true, \'iconButton-drpDwn\': !openProperties, \'iconButton-drpDwn-active\': openProperties}" (click)="showProperties()" title="Details" ></clr-icon>  </div>  <div *ngIf="openProperties" class="lproperties">    <div>      <clr-icon title="Layer settings" shape="cog" size="16" [ngClass]="{\'iconButton\': true, \'is-solid\': activeTabs[\'settings\']}" (click)="switchTab(\'settings\')"></clr-icon>      <clr-icon title="Layer info" shape="info-standard" size="16" [ngClass]="{\'iconButton\': true, \'is-solid\': activeTabs[\'description\']}" (click)="switchTab(\'description\')"></clr-icon>    </div>    <hr>    <div *ngIf="activeTabs[\'settings\']">      <label [for]="\'layer_transparency_slider_\'+layer.name">Opacity: {{" "}}</label>      <input [id]="\'layer_transparency_slider_\'+layer.name"             type="range" name="points" [value]="layer.opacity" [min]="0.0" [max]="1.0" [step]="0.1"             (change)="changeOpacity(layer)"             [(ngModel)]="layer.opacity" />      {{" "+layer.opacity}}    </div>    <div *ngIf="activeTabs[\'description\']">      <p>short layer description and legend goes here</p>      <p>{{layer.name}}</p>    </div>  </div></div></div>'
+    var COMPONENTS = [{'name': 'GlobalAlertComponent', 'selector': 'ukis-global-alert'},{'name': 'HeaderComponent', 'selector': 'ukis-header'},{'name': 'LayerentryComponent', 'selector': 'ukis-layerentry'},{'name': 'MapcontrolComponent', 'selector': 'ukis-mapcontrol'},{'name': 'MapnavigatorComponent', 'selector': 'ukis-mapnavigator'},{'name': 'OlMapComponent', 'selector': 'ukis-ol-map'},{'name': 'UkisComponent', 'selector': 'ukis-root'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'LayerentryComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+           </div>
+       </div>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script>var COMPODOC_CURRENT_PAGE_DEPTH = 1;</script>
+
+       <script src="../js/search/search.js"></script>
+       <script src="../js/search/lunr.min.js"></script>
+       <script src="../js/search/search-lunr.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+       <script src="../js/search/search_index.js"></script>
+
+    </body>
+</html>

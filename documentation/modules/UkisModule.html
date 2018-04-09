@@ -1,0 +1,774 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>UKIS Client</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	    <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">UKIS Client</a>
+            <button type="button" class="btn btn-default btn-menu fa fa-bars" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+            <div id="book-search-input" role="search">
+                <input type="text" placeholder="Type to search">
+            </div>
+            <nav>
+            
+                <ul class="list">
+            
+                    <li class="title">
+                        <a href="../index.html">UKIS Client</a>
+                    </li>
+            
+                    <li class="divider"></li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                        <ul class="links">
+                                <li class="link">
+                                    <a 
+                                        
+                                         href="../overview.html" 
+                                         href="../overview.html" 
+                                        >
+                                        <span class="fa fa-th"></span>Overview
+                                    </a>
+                                </li>
+                                <li class="link">
+                                  <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../modules.html" >
+                            <div class="menu-toggler linked" data-toggle="collapse"
+                                    data-target="#xs-modules-links"
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
+                        </a>
+                        <ul class="links collapse "
+                                id="xs-modules-links"
+                            >
+                                <li class="link">
+                                    <a href="../modules/LayerentryModule.html" >LayerentryModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/LayersServiceModule.html" >LayersServiceModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapcontrolModule.html" >MapcontrolModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapnavigatorModule.html" >MapnavigatorModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapstateServiceModule.html" >MapstateServiceModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/OlMapModule.html" >OlMapModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/RestModule.html" >RestModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/UkisModule.html"  data-type="entity-link" class="active" >UkisModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/UserServiceModule.html" >UserServiceModule</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
+                            <span class="fa fa-cogs"></span>
+                            <span>Components</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-components-links"
+                            >
+                                <li class="link">
+                                    <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/LayerentryComponent.html" >LayerentryComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MapcontrolComponent.html" >MapcontrolComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MapnavigatorComponent.html" >MapnavigatorComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/OlMapComponent.html" >OlMapComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/UkisComponent.html" >UkisComponent</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
+                            <span class="fa fa-long-arrow-down"></span>
+                            <span>Injectables</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-injectables-links"
+                            >
+                                <li class="link">
+                                    <a href="../injectables/AppStoreService.html" >AppStoreService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/AuthService.html" >AuthService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/LayersService.html" >LayersService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/MapstateService.html" >MapstateService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/Ol4MapSvc.html" >Ol4MapSvc</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/RestService.html" >RestService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/UserService.html" >UserService</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-interfaces-links"
+                            >
+                            <span class="fa fa-info"></span>
+                            <span>Interfaces</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-interfaces-links"
+                            >
+                                <li class="link">
+                                    <a href="../interfaces/IAppStoreService.html" >IAppStoreService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IOl4MapSvc.html" >IOl4MapSvc</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                    </li>
+            
+                    <li class="divider"></li>
+                    <li class="copyright">
+                            Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                        <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                            </a>
+                    </li>
+            
+                </ul>
+            
+            </nav>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <nav>
+                   
+                       <ul class="list">
+                   
+                           <li class="title">
+                               <a href="../index.html">UKIS Client</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                   
+                               <div id="book-search-input" role="search">
+                                   <input type="text" placeholder="Type to search">
+                               </div>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                               <ul class="links">
+                                       <li class="link">
+                                           <a 
+                                               
+                                                href="../overview.html" 
+                                                href="../overview.html" 
+                                               >
+                                               <span class="fa fa-th"></span>Overview
+                                           </a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../modules.html" >
+                                   <div class="menu-toggler linked" data-toggle="collapse"
+                                           data-target="#modules-links"
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
+                               </a>
+                               <ul class="links collapse "
+                                       id="modules-links"
+                   >
+                                       <li class="link">
+                                           <a href="../modules/LayerentryModule.html" >LayerentryModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/LayersServiceModule.html" >LayersServiceModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapcontrolModule.html" >MapcontrolModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapnavigatorModule.html" >MapnavigatorModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapstateServiceModule.html" >MapstateServiceModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/OlMapModule.html" >OlMapModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/RestModule.html" >RestModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/UkisModule.html"  data-type="entity-link" class="active" >UkisModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/UserServiceModule.html" >UserServiceModule</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
+                                   <span class="fa fa-cogs"></span>
+                                   <span>Components</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="components-links"
+                   >
+                                       <li class="link">
+                                           <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/LayerentryComponent.html" >LayerentryComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MapcontrolComponent.html" >MapcontrolComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MapnavigatorComponent.html" >MapnavigatorComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/OlMapComponent.html" >OlMapComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/UkisComponent.html" >UkisComponent</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
+                                   <span class="fa fa-long-arrow-down"></span>
+                                   <span>Injectables</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="injectables-links"
+                   >
+                                       <li class="link">
+                                           <a href="../injectables/AppStoreService.html" >AppStoreService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/AuthService.html" >AuthService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/LayersService.html" >LayersService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/MapstateService.html" >MapstateService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/Ol4MapSvc.html" >Ol4MapSvc</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/RestService.html" >RestService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/UserService.html" >UserService</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#interfaces-links"
+                   >
+                                   <span class="fa fa-info"></span>
+                                   <span>Interfaces</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="interfaces-links"
+                   >
+                                       <li class="link">
+                                           <a href="../interfaces/IAppStoreService.html" >IAppStoreService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IOl4MapSvc.html" >IOl4MapSvc</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                           <li class="copyright">
+                                   Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                               <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                                   </a>
+                           </li>
+                   
+                       </ul>
+                   
+                   </nav>
+               </div>
+               <div class="content module">
+                   <div class="content-data">
+
+
+
+<ol class="breadcrumb">
+  <li>Modules</li>
+  <li>UkisModule</li>
+</ol>
+
+      <div class="text-center module-graph-container">
+          <div id="module-graph-svg">
+              <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: dependencies Pages: 1 -->
+<svg width="1031pt" height="284pt"
+ viewBox="0.00 0.00 1031.00 284.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 280)">
+<title>dependencies</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-280 1027,-280 1027,4 -4,4"/>
+<text text-anchor="start" x="490.5091" y="-42.4" font-family="sans-serif" font-weight="bold" font-size="14.00" fill="#000000">Legend</text>
+<polygon fill="#ffffb3" stroke="transparent" points="277.5,-10 277.5,-30 297.5,-30 297.5,-10 277.5,-10"/>
+<text text-anchor="start" x="301.129" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Declarations</text>
+<polygon fill="#8dd3c7" stroke="transparent" points="390.5,-10 390.5,-30 410.5,-30 410.5,-10 390.5,-10"/>
+<text text-anchor="start" x="414.2251" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Module</text>
+<polygon fill="#80b1d3" stroke="transparent" points="476.5,-10 476.5,-30 496.5,-30 496.5,-10 476.5,-10"/>
+<text text-anchor="start" x="500.2812" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Bootstrap</text>
+<polygon fill="#fdb462" stroke="transparent" points="573.5,-10 573.5,-30 593.5,-30 593.5,-10 573.5,-10"/>
+<text text-anchor="start" x="597.1732" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Providers</text>
+<polygon fill="#fb8072" stroke="transparent" points="669.5,-10 669.5,-30 689.5,-30 689.5,-10 669.5,-10"/>
+<text text-anchor="start" x="693.2258" y="-15.4" font-family="sans-serif" font-size="14.00" fill="#000000"> &#160;Exports</text>
+<g id="clust1" class="cluster">
+<title>cluster_UkisModule</title>
+<polygon fill="none" stroke="#000000" stroke-dasharray="1,5" points="8,-70 8,-268 1015,-268 1015,-70 8,-70"/>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_UkisModule_declarations</title>
+<polygon fill="none" stroke="#000000" points="577,-78 577,-130 1007,-130 1007,-78 577,-78"/>
+</g>
+<g id="clust6" class="cluster">
+<title>cluster_UkisModule_imports</title>
+<polygon fill="none" stroke="#000000" points="16,-78 16,-130 569,-130 569,-78 16,-78"/>
+</g>
+<g id="clust8" class="cluster">
+<title>cluster_UkisModule_bootstrap</title>
+<polygon fill="none" stroke="#000000" points="447,-208 447,-260 575,-260 575,-208 447,-208"/>
+</g>
+<!-- UkisComponent -->
+<g id="node1" class="node">
+<title>UkisComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="998.7744,-122 891.2256,-122 891.2256,-86 998.7744,-86 998.7744,-122"/>
+<text text-anchor="middle" x="945" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">UkisComponent</text>
+</g>
+<!-- UkisModule -->
+<g id="node4" class="node">
+<title>UkisModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="553.9916,-187 550.9916,-191 529.9916,-191 526.9916,-187 468.0084,-187 468.0084,-151 553.9916,-151 553.9916,-187"/>
+<text text-anchor="middle" x="511" y="-164.8" font-family="Times,serif" font-size="14.00" fill="#000000">UkisModule</text>
+</g>
+<!-- UkisComponent&#45;&gt;UkisModule -->
+<g id="edge1" class="edge">
+<title>UkisComponent&#45;&gt;UkisModule</title>
+<path fill="none" stroke="#000000" d="M945,-122.2921C945,-144.2057 945,-178 945,-178 945,-178 564.2003,-178 564.2003,-178"/>
+<polygon fill="#000000" stroke="#000000" points="564.2003,-174.5001 554.2003,-178 564.2002,-181.5001 564.2003,-174.5001"/>
+</g>
+<!-- GlobalAlertComponent -->
+<g id="node2" class="node">
+<title>GlobalAlertComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="873.1979,-122 724.8021,-122 724.8021,-86 873.1979,-86 873.1979,-122"/>
+<text text-anchor="middle" x="799" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">GlobalAlertComponent</text>
+</g>
+<!-- GlobalAlertComponent&#45;&gt;UkisModule -->
+<g id="edge2" class="edge">
+<title>GlobalAlertComponent&#45;&gt;UkisModule</title>
+<path fill="none" stroke="#000000" d="M799,-122.1061C799,-141.3391 799,-169 799,-169 799,-169 564.1165,-169 564.1165,-169"/>
+<polygon fill="#000000" stroke="#000000" points="564.1165,-165.5001 554.1165,-169 564.1165,-172.5001 564.1165,-165.5001"/>
+</g>
+<!-- HeaderComponent -->
+<g id="node3" class="node">
+<title>HeaderComponent</title>
+<polygon fill="#ffffb3" stroke="#000000" points="706.7437,-122 585.2563,-122 585.2563,-86 706.7437,-86 706.7437,-122"/>
+<text text-anchor="middle" x="646" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">HeaderComponent</text>
+</g>
+<!-- HeaderComponent&#45;&gt;UkisModule -->
+<g id="edge3" class="edge">
+<title>HeaderComponent&#45;&gt;UkisModule</title>
+<path fill="none" stroke="#000000" d="M646,-122.027C646,-138.3976 646,-160 646,-160 646,-160 564.086,-160 564.086,-160"/>
+<polygon fill="#000000" stroke="#000000" points="564.0861,-156.5001 554.086,-160 564.086,-163.5001 564.0861,-156.5001"/>
+</g>
+<!-- UkisComponent  -->
+<g id="node9" class="node">
+<title>UkisComponent </title>
+<polygon fill="#80b1d3" stroke="#000000" points="566.7745,-252 455.2255,-252 455.2255,-216 566.7745,-216 566.7745,-252"/>
+<text text-anchor="middle" x="511" y="-229.8" font-family="Times,serif" font-size="14.00" fill="#000000">UkisComponent </text>
+</g>
+<!-- UkisModule&#45;&gt;UkisComponent  -->
+<g id="edge8" class="edge">
+<title>UkisModule&#45;&gt;UkisComponent </title>
+<path fill="none" stroke="#000000" stroke-dasharray="1,5" d="M511,-187.1061C511,-187.1061 511,-205.991 511,-205.991"/>
+<polygon fill="#000000" stroke="#000000" points="507.5001,-205.9909 511,-215.991 514.5001,-205.991 507.5001,-205.9909"/>
+</g>
+<!-- OlMapModule -->
+<g id="node5" class="node">
+<title>OlMapModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="560.7064,-122 557.7064,-126 536.7064,-126 533.7064,-122 461.2936,-122 461.2936,-86 560.7064,-86 560.7064,-122"/>
+<text text-anchor="middle" x="511" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">OlMapModule</text>
+</g>
+<!-- OlMapModule&#45;&gt;UkisModule -->
+<g id="edge4" class="edge">
+<title>OlMapModule&#45;&gt;UkisModule</title>
+<path fill="none" stroke="#000000" d="M511,-122.1061C511,-122.1061 511,-140.991 511,-140.991"/>
+<polygon fill="#000000" stroke="#000000" points="507.5001,-140.9909 511,-150.991 514.5001,-140.991 507.5001,-140.9909"/>
+</g>
+<!-- MapcontrolModule -->
+<g id="node6" class="node">
+<title>MapcontrolModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="443.3655,-122 440.3655,-126 419.3655,-126 416.3655,-122 318.6345,-122 318.6345,-86 443.3655,-86 443.3655,-122"/>
+<text text-anchor="middle" x="381" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">MapcontrolModule</text>
+</g>
+<!-- MapcontrolModule&#45;&gt;UkisModule -->
+<g id="edge5" class="edge">
+<title>MapcontrolModule&#45;&gt;UkisModule</title>
+<path fill="none" stroke="#000000" d="M381,-122.027C381,-138.3976 381,-160 381,-160 381,-160 457.7119,-160 457.7119,-160"/>
+<polygon fill="#000000" stroke="#000000" points="457.7119,-163.5001 467.7119,-160 457.7118,-156.5001 457.7119,-163.5001"/>
+</g>
+<!-- MapnavigatorModule -->
+<g id="node7" class="node">
+<title>MapnavigatorModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="301.08,-122 298.08,-126 277.08,-126 274.08,-122 162.92,-122 162.92,-86 301.08,-86 301.08,-122"/>
+<text text-anchor="middle" x="232" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">MapnavigatorModule</text>
+</g>
+<!-- MapnavigatorModule&#45;&gt;UkisModule -->
+<g id="edge6" class="edge">
+<title>MapnavigatorModule&#45;&gt;UkisModule</title>
+<path fill="none" stroke="#000000" d="M232,-122.1061C232,-141.3391 232,-169 232,-169 232,-169 457.7124,-169 457.7124,-169"/>
+<polygon fill="#000000" stroke="#000000" points="457.7124,-172.5001 467.7124,-169 457.7123,-165.5001 457.7124,-172.5001"/>
+</g>
+<!-- LayerentryModule -->
+<g id="node8" class="node">
+<title>LayerentryModule</title>
+<polygon fill="#8dd3c7" stroke="#000000" points="144.458,-122 141.458,-126 120.458,-126 117.458,-122 23.542,-122 23.542,-86 144.458,-86 144.458,-122"/>
+<text text-anchor="middle" x="84" y="-99.8" font-family="Times,serif" font-size="14.00" fill="#000000">LayerentryModule</text>
+</g>
+<!-- LayerentryModule&#45;&gt;UkisModule -->
+<g id="edge7" class="edge">
+<title>LayerentryModule&#45;&gt;UkisModule</title>
+<path fill="none" stroke="#000000" d="M84,-122.2921C84,-144.2057 84,-178 84,-178 84,-178 457.7071,-178 457.7071,-178"/>
+<polygon fill="#000000" stroke="#000000" points="457.7071,-181.5001 467.7071,-178 457.7071,-174.5001 457.7071,-181.5001"/>
+</g>
+</g>
+</svg>
+
+          </div>
+          <i id="fullscreen" class="fa fa-expand module-graph-fullscreen-btn" aria-hidden="true"></i>
+          <div class="btn-group">
+              <button id="zoom-in" class="btn btn-default btn-sm">Zoom in</button>
+              <button id="reset" class="btn btn-default btn-sm">Reset</button>
+              <button id="zoom-out" class="btn btn-default btn-sm">Zoom out</button>
+          </div>
+      </div>
+      <script src="../js/libs/svg-pan-zoom.min.js"></script>
+      <script src="../js/svg-pan-zoom.controls.js"></script>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active">
+        <a href="#info" id="info-tab" role="tab" data-toggle="tab" data-link="info">Info</a>
+    </li>
+
+
+    <li>
+        <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/ukis.module.ts</code>
+        </p>
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>Main App Module in which all Modules and services are plugged into</p>
+
+            </p>
+
+        <div class="container-fluid module">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h3>Declarations<a href="https://angular.io/api/core/NgModule#declarations" target="_blank" title="Official documentation about module declarations"><span class="fa fa-info-circle"></span></a></h3>
+                    <ul class="list-group">
+                            <li class="list-group-item">
+                                <a href="../components/UkisComponent.html">UkisComponent</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="../components/GlobalAlertComponent.html">GlobalAlertComponent</a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="../components/HeaderComponent.html">HeaderComponent</a>
+                            </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    <h3>Imports<a href="https://angular.io/api/core/NgModule#imports" target="_blank" title="Official documentation about module imports"><span class="fa fa-info-circle"></a></h3>
+                    <ul class="list-group">
+                            <li class="list-group-item">
+                                    <a href="../modules/OlMapModule.html" >OlMapModule</a>
+                            </li>
+                            <li class="list-group-item">
+                                    <a href="../modules/MapcontrolModule.html" >MapcontrolModule</a>
+                            </li>
+                            <li class="list-group-item">
+                                    <a href="../modules/MapnavigatorModule.html" >MapnavigatorModule</a>
+                            </li>
+                            <li class="list-group-item">
+                                    <a href="../modules/LayerentryModule.html" >LayerentryModule</a>
+                            </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3">
+                    <h3>Bootstrap<a href="https://angular.io/api/core/NgModule#bootstrap" target="_blank" title="Official documentation about module bootstrap"><span class="fa fa-info-circle"></a></h3>
+                    <ul class="list-group">
+                            <li class="list-group-item">
+                                <a href="../components/UkisComponent.html" >UkisComponent</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tab-pane fade tab-source-code" id="c-source">
+        <pre class="line-numbers"><code class="language-typescript">import { BrowserModule } from &#x27;@angular/platform-browser&#x27;;
+import { NgModule } from &#x27;@angular/core&#x27;;
+import { BrowserAnimationsModule } from &#x27;@angular/platform-browser/animations&#x27;;
+import { ClarityModule } from &#x27;clarity-angular&#x27;;
+import { FormsModule } from &#x27;@angular/forms&#x27;;
+
+import { UkisComponent } from &#x27;./ukis.component&#x27;;
+import { GlobalAlertComponent } from &#x27;./global-alert/global-alert.component&#x27;;
+import { HeaderComponent } from &#x27;./header/header.component&#x27;;
+
+//for map
+import { MapstateServiceModule } from &#x27;@ukis/services/src/app/mapstate/mapstate.module&#x27;;
+import { LayersServiceModule } from &#x27;@ukis/services/src/app/layers/layers.module&#x27;;
+import { OlMapModule } from &#x27;@ukis/ol-map/src/app/ol-map/ol-map.module&#x27;;
+
+//for Mapcontrol
+//import { MapstateServiceModule } from &#x27;@ukis/services/src/app/mapstate/mapstate.module&#x27;;
+import { MapcontrolModule } from &#x27;@ukis/mapcontrol/src/app/mapcontrol/mapcontrol.module&#x27;;
+
+//for Mapnavigator
+//import { MapstateServiceModule } from &#x27;@ukis/services/src/app/mapstate/mapstate.module&#x27;;
+import { MapnavigatorModule } from &#x27;@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module&#x27;;
+
+//for layerentry
+//import { LayersServiceModule } from &#x27;@ukis/services/src/app/layers/layers.module&#x27;;
+import { LayerentryModule } from &#x27;@ukis/mapcontrol/src/app/layerentry/layerentry.module&#x27;;
+
+/**
+ * Main App Module in which all Modules and services are plugged into
+ */
+@NgModule({
+  declarations: [
+    UkisComponent,
+    GlobalAlertComponent,
+    HeaderComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ClarityModule.forRoot(),
+    MapstateServiceModule.forRoot(),
+    LayersServiceModule.forRoot(),
+    OlMapModule,
+    MapcontrolModule,
+    MapnavigatorModule,
+    LayerentryModule
+  ],
+  providers: [],
+  bootstrap: [UkisComponent]
+})
+export class UkisModule { }
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+           </div>
+       </div>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script>var COMPODOC_CURRENT_PAGE_DEPTH = 1;</script>
+
+       <script src="../js/search/search.js"></script>
+       <script src="../js/search/lunr.min.js"></script>
+       <script src="../js/search/search-lunr.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+       <script src="../js/search/search_index.js"></script>
+
+    </body>
+</html>
