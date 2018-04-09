@@ -91,6 +91,9 @@
                                 <li class="link">
                                     <a href="../modules/UserServiceModule.html" >UserServiceModule</a>
                                 </li>
+                                <li class="link">
+                                    <a href="../modules/WWWMapModule.html" >WWWMapModule</a>
+                                </li>
                         </ul>
                     </li>
             
@@ -126,10 +129,38 @@
                                 <li class="link">
                                     <a href="../components/UkisComponent.html" >UkisComponent</a>
                                 </li>
+                                <li class="link">
+                                    <a href="../components/WWWMapComponent.html" >WWWMapComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/WwwProjectionSwitchComponent.html" >WwwProjectionSwitchComponent</a>
+                                </li>
                         </ul>
                     </li>
             
             
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-classes-links"
+                            >
+                            <span class="fa fa-file-code-o"></span>
+                            <span>Classes</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-classes-links"
+                            >
+                                <li class="link">
+                                    <a href="../classes/UkisGeoJsonLayer.html" >UkisGeoJsonLayer</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UkisWMSLayer.html" >UkisWMSLayer</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UkisXYZLayer.html" >UkisXYZLayer</a>
+                                </li>
+                        </ul>
+                    </li>
             
                     <li class="chapter">
                         <div class="simple menu-toggler" data-toggle="collapse"
@@ -163,6 +194,9 @@
                                 <li class="link">
                                     <a href="../injectables/UserService.html" >UserService</a>
                                 </li>
+                                <li class="link">
+                                    <a href="../injectables/WWWMapSvc.html" >WWWMapSvc</a>
+                                </li>
                         </ul>
                     </li>
             
@@ -183,6 +217,9 @@
                                 </li>
                                 <li class="link">
                                     <a href="../interfaces/IOl4MapSvc.html" >IOl4MapSvc</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IWWWMapSvc.html" >IWWWMapSvc</a>
                                 </li>
                         </ul>
                     </li>
@@ -298,6 +335,9 @@
                                        <li class="link">
                                            <a href="../modules/UserServiceModule.html" >UserServiceModule</a>
                                        </li>
+                                       <li class="link">
+                                           <a href="../modules/WWWMapModule.html" >WWWMapModule</a>
+                                       </li>
                                </ul>
                            </li>
                    
@@ -333,10 +373,38 @@
                                        <li class="link">
                                            <a href="../components/UkisComponent.html" >UkisComponent</a>
                                        </li>
+                                       <li class="link">
+                                           <a href="../components/WWWMapComponent.html" >WWWMapComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/WwwProjectionSwitchComponent.html" >WwwProjectionSwitchComponent</a>
+                                       </li>
                                </ul>
                            </li>
                    
                    
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#classes-links"
+                   >
+                                   <span class="fa fa-file-code-o"></span>
+                                   <span>Classes</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="classes-links"
+                   >
+                                       <li class="link">
+                                           <a href="../classes/UkisGeoJsonLayer.html" >UkisGeoJsonLayer</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UkisWMSLayer.html" >UkisWMSLayer</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UkisXYZLayer.html" >UkisXYZLayer</a>
+                                       </li>
+                               </ul>
+                           </li>
                    
                            <li class="chapter">
                                <div class="simple menu-toggler" data-toggle="collapse"
@@ -370,6 +438,9 @@
                                        <li class="link">
                                            <a href="../injectables/UserService.html" >UserService</a>
                                        </li>
+                                       <li class="link">
+                                           <a href="../injectables/WWWMapSvc.html" >WWWMapSvc</a>
+                                       </li>
                                </ul>
                            </li>
                    
@@ -390,6 +461,9 @@
                                        </li>
                                        <li class="link">
                                            <a href="../interfaces/IOl4MapSvc.html" >IOl4MapSvc</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IWWWMapSvc.html" >IWWWMapSvc</a>
                                        </li>
                                </ul>
                            </li>
@@ -1165,7 +1239,7 @@ export class LayerentryComponent implements OnInit {
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
         var COMPONENT_TEMPLATE = '<div><div>  <input class="float-sm-left" [type]="group.inputtype || \'checkbox\'" [name]="\'layer\'+i" [id]="layer.name" [checked]="layer.visible" (change)="showHideLayerSwitch(group, layer)">  <label [for]="layer.name" [title]="layer.name">{{layer.name}}</label>  <div class="float-sm-right">    <clr-icon *ngIf="group.removable" shape="trash" [class]="\'iconButton\'" (click)="removeLayer(group, layer)" title="Remove layer"></clr-icon>    <clr-icon *ngIf="group.name===\'Overlays\'" shape="angle-double" [ngClass]="{\'iconButton\': true, \'iconButton-drpDwn\': !openProperties, \'iconButton-drpDwn-active\': openProperties}" (click)="showProperties()" title="Details" ></clr-icon>  </div>  <div *ngIf="openProperties" class="lproperties">    <div>      <clr-icon title="Layer settings" shape="cog" size="16" [ngClass]="{\'iconButton\': true, \'is-solid\': activeTabs[\'settings\']}" (click)="switchTab(\'settings\')"></clr-icon>      <clr-icon title="Layer info" shape="info-standard" size="16" [ngClass]="{\'iconButton\': true, \'is-solid\': activeTabs[\'description\']}" (click)="switchTab(\'description\')"></clr-icon>    </div>    <hr>    <div *ngIf="activeTabs[\'settings\']">      <label [for]="\'layer_transparency_slider_\'+layer.name">Opacity: {{" "}}</label>      <input [id]="\'layer_transparency_slider_\'+layer.name"             type="range" name="points" [value]="layer.opacity" [min]="0.0" [max]="1.0" [step]="0.1"             (change)="changeOpacity(layer)"             [(ngModel)]="layer.opacity" />      {{" "+layer.opacity}}    </div>    <div *ngIf="activeTabs[\'description\']">      <p>short layer description and legend goes here</p>      <p>{{layer.name}}</p>    </div>  </div></div></div>'
-    var COMPONENTS = [{'name': 'GlobalAlertComponent', 'selector': 'ukis-global-alert'},{'name': 'HeaderComponent', 'selector': 'ukis-header'},{'name': 'LayerentryComponent', 'selector': 'ukis-layerentry'},{'name': 'MapcontrolComponent', 'selector': 'ukis-mapcontrol'},{'name': 'MapnavigatorComponent', 'selector': 'ukis-mapnavigator'},{'name': 'OlMapComponent', 'selector': 'ukis-ol-map'},{'name': 'UkisComponent', 'selector': 'ukis-root'}];
+    var COMPONENTS = [{'name': 'GlobalAlertComponent', 'selector': 'ukis-global-alert'},{'name': 'HeaderComponent', 'selector': 'ukis-header'},{'name': 'LayerentryComponent', 'selector': 'ukis-layerentry'},{'name': 'MapcontrolComponent', 'selector': 'ukis-mapcontrol'},{'name': 'MapnavigatorComponent', 'selector': 'ukis-mapnavigator'},{'name': 'OlMapComponent', 'selector': 'ukis-ol-map'},{'name': 'UkisComponent', 'selector': 'ukis-root'},{'name': 'WWWMapComponent', 'selector': 'ukis-www-map'},{'name': 'WwwProjectionSwitchComponent', 'selector': 'ukis-www-projection-switch'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'LayerentryComponent'};
 </script>

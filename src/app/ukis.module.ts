@@ -12,6 +12,7 @@ import { HeaderComponent } from './header/header.component';
 import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
 import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
 import { OlMapModule } from '@ukis/ol-map/src/app/ol-map/ol-map.module';
+import { WWWMapModule } from '@ukis/www-map/src/app/www-map/www-map.module';
 
 //for Mapcontrol
 //import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
@@ -42,6 +43,7 @@ import { LayerentryModule } from '@ukis/mapcontrol/src/app/layerentry/layerentry
     MapstateServiceModule.forRoot(),
     LayersServiceModule.forRoot(),
     OlMapModule,
+    WWWMapModule,
     MapcontrolModule,
     MapnavigatorModule,
     LayerentryModule

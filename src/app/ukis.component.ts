@@ -1,22 +1,23 @@
-import {Component, Inject} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { NgModel, NgForm, RadioControlValueAccessor, FormControl, FormGroup } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
-// import '@webcomponents/custom-elements';
-// import 'clarity-icons';
-// import 'clarity-icons/shapes/all-shapes';
-// import 'clarity-icons/shapes/commerce-shapes';
+import '@webcomponents/custom-elements';
+import 'clarity-icons';
+import 'clarity-icons/shapes/all-shapes';
+import 'clarity-icons/shapes/commerce-shapes';
 import 'clarity-icons/shapes/core-shapes';
 import 'clarity-icons/shapes/essential-shapes';
-// import 'clarity-icons/shapes/media-shapes';
-// import 'clarity-icons/shapes/social-shapes';
+import 'clarity-icons/shapes/media-shapes';
+import 'clarity-icons/shapes/social-shapes';
 import 'clarity-icons/shapes/technology-shapes';
 import 'clarity-icons/shapes/travel-shapes';
 import './icons/ukis';
 
 import { google_earth, google_hybrid, google_maps, osm, eoc_litemap } from '@ukis/baseLayers/rasterBaseLayers';
+import { RasterLayer } from '@ukis/datatypes/Layer';
 import { LayersService } from '@ukis/services/src/app/layers/layers.service';
-import {Subscription} from 'rxjs/Subscription';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Ol4MapSvc, IOl4MapSvc } from '@ukis/ol-map/src/app/ol-map/ol-map.service';
 
@@ -32,7 +33,7 @@ const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritat
   styleUrls: []
 })
 export class UkisComponent {
-  title = 'UKIS UI';
+  title = 'Drought Distribution';
 
   alert;
 
@@ -41,7 +42,7 @@ export class UkisComponent {
   ui = {
     floating: true,
     flipped: false,
-    footer:false
+    footer: false
   };
 
 
@@ -63,18 +64,33 @@ export class UkisComponent {
   ];
 
   constructor(
-    @Inject(LayersService)private layerSvc: LayersService,
-    @Inject(Ol4MapSvc)private mapSvc: IOl4MapSvc) {
+    @Inject(LayersService) private layerSvc: LayersService,
+    @Inject(Ol4MapSvc) private mapSvc: IOl4MapSvc) {
 
-      google_earth.visible = true;
-      this.layerSvc.addBaseLayer(google_earth);
-      this.layerSvc.addBaseLayer(google_maps);
-      //this.layerSvc.addBaseLayer(eoc_litemap);
+    var layer_cloud = new RasterLayer({
+      name: 'Drought Frequency',
+      ukisID: 'Drought_Frequency',
+      visible: true,
+      type: 'wms',
+      url: 'http://sedac.ciesin.columbia.edu/geoserver/wms',
+      options: {
+        layers: 'ndh:ndh-drought-hazard-frequency-distribution',
+        format: 'image/png',
+        transparent: true,
+        attribution: "Â© sedac",
+        zIndex: 1
+      },
+      continuousWorld: false,
+      opacity: 1
+    })
 
-      this.layerSvc.addOverlay(google_hybrid);
-      this.layerSvc.addOverlay(osm);
+    google_earth.visible = true;
+    this.layerSvc.addBaseLayer(google_earth);
+    this.layerSvc.addBaseLayer(eoc_litemap);
 
-      this.baseLayersSubscription = this.layerSvc.getBaseLayers().subscribe(baseLayers => {
+    this.layerSvc.addOverlay(layer_cloud);
+
+    this.baseLayersSubscription = this.layerSvc.getBaseLayers().subscribe(baseLayers => {
       this.layergroups[0].layers = baseLayers;
       //console.log(this.layergroups[0].layers)
     });
@@ -87,7 +103,7 @@ export class UkisComponent {
 
   }
 
-  zoom(value:'-' | '+'){
+  zoom(value: '-' | '+') {
     this.mapSvc.zoomInOut(value)
   }
 
@@ -95,10 +111,10 @@ export class UkisComponent {
 
     layer = event.layer;
 
-    if (group.inputtype=="checkbox") {
+    if (group.inputtype == "checkbox") {
       this.layerSvc.setOverlays(group.layers);
     }
-    if (group.inputtype=="radio") {
+    if (group.inputtype == "radio") {
       this.layerSvc.setBaseLayers(group.layers);
     }
   };

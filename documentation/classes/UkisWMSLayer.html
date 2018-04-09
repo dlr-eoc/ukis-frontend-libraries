@@ -154,7 +154,7 @@
                                     <a href="../classes/UkisGeoJsonLayer.html" >UkisGeoJsonLayer</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../classes/UkisWMSLayer.html" >UkisWMSLayer</a>
+                                    <a href="../classes/UkisWMSLayer.html"  data-type="entity-link" class="active" >UkisWMSLayer</a>
                                 </li>
                                 <li class="link">
                                     <a href="../classes/UkisXYZLayer.html" >UkisXYZLayer</a>
@@ -180,7 +180,7 @@
                                     <a href="../injectables/AuthService.html" >AuthService</a>
                                 </li>
                                 <li class="link">
-                                    <a href="../injectables/LayersService.html"  data-type="entity-link" class="active" >LayersService</a>
+                                    <a href="../injectables/LayersService.html" >LayersService</a>
                                 </li>
                                 <li class="link">
                                     <a href="../injectables/MapstateService.html" >MapstateService</a>
@@ -398,7 +398,7 @@
                                            <a href="../classes/UkisGeoJsonLayer.html" >UkisGeoJsonLayer</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../classes/UkisWMSLayer.html" >UkisWMSLayer</a>
+                                           <a href="../classes/UkisWMSLayer.html"  data-type="entity-link" class="active" >UkisWMSLayer</a>
                                        </li>
                                        <li class="link">
                                            <a href="../classes/UkisXYZLayer.html" >UkisXYZLayer</a>
@@ -424,7 +424,7 @@
                                            <a href="../injectables/AuthService.html" >AuthService</a>
                                        </li>
                                        <li class="link">
-                                           <a href="../injectables/LayersService.html"  data-type="entity-link" class="active" >LayersService</a>
+                                           <a href="../injectables/LayersService.html" >LayersService</a>
                                        </li>
                                        <li class="link">
                                            <a href="../injectables/MapstateService.html" >MapstateService</a>
@@ -502,7 +502,7 @@
                    
                    </nav>
                </div>
-               <div class="content injectable">
+               <div class="content class">
                    <div class="content-data">
 
 
@@ -510,9 +510,12 @@
 
 
 
+
+
+
 <ol class="breadcrumb">
-  <li>Injectables</li>
-  <li>LayersService</li>
+  <li>Classes</li>
+  <li>UkisWMSLayer</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -532,8 +535,10 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>doc_modules/@ukis/services/src/app/layers/layers.service.ts</code>
+            <code>doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts</code>
         </p>
+
+
 
 
 
@@ -550,12 +555,70 @@
                             <td class="col-md-4">
                                 <ul class="index-list">
                                     <li>
-                                            <span class="modifier">Private</span>
-                                        <a href="#baseLayers">baseLayers</a>
+                                        <a href="#attribution">attribution</a>
                                     </li>
                                     <li>
-                                            <span class="modifier">Private</span>
-                                        <a href="#overlays">overlays</a>
+                                        <a href="#cachePath">cachePath</a>
+                                    </li>
+                                    <li>
+                                        <a href="#coordinateSystem">coordinateSystem</a>
+                                    </li>
+                                    <li>
+                                        <a href="#crossOrigin">crossOrigin</a>
+                                    </li>
+                                    <li>
+                                        <a href="#destCanvas">destCanvas</a>
+                                    </li>
+                                    <li>
+                                        <a href="#destContext">destContext</a>
+                                    </li>
+                                    <li>
+                                        <a href="#detailControl">detailControl</a>
+                                    </li>
+                                    <li>
+                                        <a href="#displayName">displayName</a>
+                                    </li>
+                                    <li>
+                                        <a href="#enabled">enabled</a>
+                                    </li>
+                                    <li>
+                                        <a href="#imageFormat">imageFormat</a>
+                                    </li>
+                                    <li>
+                                        <a href="#imageSize">imageSize</a>
+                                    </li>
+                                    <li>
+                                        <a href="#layerNames">layerNames</a>
+                                    </li>
+                                    <li>
+                                        <a href="#mapSizeForLevel">mapSizeForLevel</a>
+                                    </li>
+                                    <li>
+                                        <a href="#opacity">opacity</a>
+                                    </li>
+                                    <li>
+                                        <a href="#parseTimeDimensions">parseTimeDimensions</a>
+                                    </li>
+                                    <li>
+                                        <a href="#pickEnabled">pickEnabled</a>
+                                    </li>
+                                    <li>
+                                        <a href="#timeString">timeString</a>
+                                    </li>
+                                    <li>
+                                        <a href="#topLevelTiles">topLevelTiles</a>
+                                    </li>
+                                    <li>
+                                        <a href="#ukisID">ukisID</a>
+                                    </li>
+                                    <li>
+                                        <a href="#urlBuilder">urlBuilder</a>
+                                    </li>
+                                    <li>
+                                        <a href="#version">version</a>
+                                    </li>
+                                    <li>
+                                        <a href="#zIndex">zIndex</a>
                                     </li>
                                 </ul>
                             </td>
@@ -569,31 +632,10 @@
                             <td class="col-md-4">
                                 <ul class="index-list">
                                     <li>
-                                        <a href="#addBaseLayer">addBaseLayer</a>
+                                        <a href="#setOpacity">setOpacity</a>
                                     </li>
                                     <li>
-                                        <a href="#addOverlay">addOverlay</a>
-                                    </li>
-                                    <li>
-                                        <a href="#getBaseLayers">getBaseLayers</a>
-                                    </li>
-                                    <li>
-                                        <a href="#getOverlays">getOverlays</a>
-                                    </li>
-                                    <li>
-                                        <a href="#removeBaseLayer">removeBaseLayer</a>
-                                    </li>
-                                    <li>
-                                        <a href="#removeLayer">removeLayer</a>
-                                    </li>
-                                    <li>
-                                        <a href="#removeOverlay">removeOverlay</a>
-                                    </li>
-                                    <li>
-                                        <a href="#setBaseLayers">setBaseLayers</a>
-                                    </li>
-                                    <li>
-                                        <a href="#setOverlays">setOverlays</a>
+                                        <a href="#setVisible">setVisible</a>
                                     </li>
                                 </ul>
                             </td>
@@ -608,15 +650,43 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <code>constructor()</code>
+                                    <code>constructor(l: IRasterLayer)</code>
                                 </td>
                             </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:11</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:25</a></div>
                                         </td>
                                     </tr>
             
+                            <tr>
+                                <td class="col-md-4">
+                                        <div>
+                                                <b>Parameters :</b>
+                                                <table class="params">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Name</td>
+                                                            <td>Type</td>
+                                                            <td>Optional</td>
+                                                            <td>Description</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            <tr>
+                                                              <td>l</td>
+                                                              <td>
+                                                                        <code>IRasterLayer</code>
+                                                              </td>
+                                                              <td>
+                                                              </td>
+                                                              <td></td>
+                                                            </tr>
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
             </section>
@@ -630,25 +700,25 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <a name="addBaseLayer"></a>
+                                    <a name="setOpacity"></a>
                                     <span class="name">
                                         <b>
-                                        addBaseLayer
+                                        setOpacity
                                         </b>
-                                        <a href="#addBaseLayer"><span class="fa fa-link"></span></a>
+                                        <a href="#setOpacity"><span class="fa fa-link"></span></a>
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-            <code>addBaseLayer(layer: ILayer)</code>
+            <code>setOpacity(value: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
                                 </td>
                             </tr>
             
             
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:41</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="124" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:124</a></div>
                                         </td>
                                     </tr>
             
@@ -668,9 +738,9 @@
                                                     </thead>
                                                     <tbody>
                                                             <tr>
-                                                              <td>layer</td>
+                                                              <td>value</td>
                                                               <td>
-                                                                      <code>ILayer</code>
+                                                                      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
                                                               </td>
                                                               <td>
                                                               </td>
@@ -696,25 +766,25 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <a name="addOverlay"></a>
+                                    <a name="setVisible"></a>
                                     <span class="name">
                                         <b>
-                                        addOverlay
+                                        setVisible
                                         </b>
-                                        <a href="#addOverlay"><span class="fa fa-link"></span></a>
+                                        <a href="#setVisible"><span class="fa fa-link"></span></a>
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-            <code>addOverlay(layer: ILayer)</code>
+            <code>setVisible(value: )</code>
                                 </td>
                             </tr>
             
             
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:53</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="120" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:120</a></div>
                                         </td>
                                     </tr>
             
@@ -734,422 +804,8 @@
                                                     </thead>
                                                     <tbody>
                                                             <tr>
-                                                              <td>layer</td>
+                                                              <td>value</td>
                                                               <td>
-                                                                      <code>ILayer</code>
-                                                              </td>
-                                                              <td>
-                                                              </td>
-                                                              <td></td>
-                                                            </tr>
-                                                    </tbody>
-                                                </table>
-                                        </div>
-                                        <div>
-                                        </div>
-                                        <div class="io-description">
-                                            <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-            
-                                        </div>
-                                            <div class="io-description">
-                                                
-                                            </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                            <tr>
-                                <td class="col-md-4">
-                                    <a name="getBaseLayers"></a>
-                                    <span class="name">
-                                        <b>
-                                        getBaseLayers
-                                        </b>
-                                        <a href="#getBaseLayers"><span class="fa fa-link"></span></a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-4">
-            <code>getBaseLayers()</code>
-                                </td>
-                            </tr>
-            
-            
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:29</a></div>
-                                        </td>
-                                    </tr>
-            
-                            <tr>
-                                <td class="col-md-4">
-            
-                                        <div class="io-description">
-                                            <b>Returns : </b>    <code>Observable&lt;[]&gt;</code>
-            
-                                        </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                            <tr>
-                                <td class="col-md-4">
-                                    <a name="getOverlays"></a>
-                                    <span class="name">
-                                        <b>
-                                        getOverlays
-                                        </b>
-                                        <a href="#getOverlays"><span class="fa fa-link"></span></a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-4">
-            <code>getOverlays()</code>
-                                </td>
-                            </tr>
-            
-            
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:34</a></div>
-                                        </td>
-                                    </tr>
-            
-                            <tr>
-                                <td class="col-md-4">
-            
-                                        <div class="io-description">
-                                            <b>Returns : </b>    <code>Observable&lt;[]&gt;</code>
-            
-                                        </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                            <tr>
-                                <td class="col-md-4">
-                                    <a name="removeBaseLayer"></a>
-                                    <span class="name">
-                                        <b>
-                                        removeBaseLayer
-                                        </b>
-                                        <a href="#removeBaseLayer"><span class="fa fa-link"></span></a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-4">
-            <code>removeBaseLayer(layer: ILayer)</code>
-                                </td>
-                            </tr>
-            
-            
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:46</a></div>
-                                        </td>
-                                    </tr>
-            
-                            <tr>
-                                <td class="col-md-4">
-            
-                                        <div class="io-description">
-                                                <b>Parameters :</b>
-                                                <table class="params">
-                                                    <thead>
-                                                        <tr>
-                                                            <td>Name</td>
-                                                            <td>Type</td>
-                                                            <td>Optional</td>
-                                                            <td>Description</td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                            <tr>
-                                                              <td>layer</td>
-                                                              <td>
-                                                                      <code>ILayer</code>
-                                                              </td>
-                                                              <td>
-                                                              </td>
-                                                              <td></td>
-                                                            </tr>
-                                                    </tbody>
-                                                </table>
-                                        </div>
-                                        <div>
-                                        </div>
-                                        <div class="io-description">
-                                            <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-            
-                                        </div>
-                                            <div class="io-description">
-                                                
-                                            </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                            <tr>
-                                <td class="col-md-4">
-                                    <a name="removeLayer"></a>
-                                    <span class="name">
-                                        <b>
-                                        removeLayer
-                                        </b>
-                                        <a href="#removeLayer"><span class="fa fa-link"></span></a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-4">
-            <code>removeLayer(layer: ILayer, type: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
-                                </td>
-                            </tr>
-            
-            
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:64</a></div>
-                                        </td>
-                                    </tr>
-            
-                            <tr>
-                                <td class="col-md-4">
-            
-                                        <div class="io-description">
-                                                <b>Parameters :</b>
-                                                <table class="params">
-                                                    <thead>
-                                                        <tr>
-                                                            <td>Name</td>
-                                                            <td>Type</td>
-                                                            <td>Optional</td>
-                                                            <td>Description</td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                            <tr>
-                                                              <td>layer</td>
-                                                              <td>
-                                                                      <code>ILayer</code>
-                                                              </td>
-                                                              <td>
-                                                              </td>
-                                                              <td></td>
-                                                            </tr>
-                                                            <tr>
-                                                              <td>type</td>
-                                                              <td>
-                                                                      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                                              </td>
-                                                              <td>
-                                                              </td>
-                                                              <td></td>
-                                                            </tr>
-                                                    </tbody>
-                                                </table>
-                                        </div>
-                                        <div>
-                                        </div>
-                                        <div class="io-description">
-                                            <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-            
-                                        </div>
-                                            <div class="io-description">
-                                                
-                                            </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                            <tr>
-                                <td class="col-md-4">
-                                    <a name="removeOverlay"></a>
-                                    <span class="name">
-                                        <b>
-                                        removeOverlay
-                                        </b>
-                                        <a href="#removeOverlay"><span class="fa fa-link"></span></a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-4">
-            <code>removeOverlay(layer: ILayer)</code>
-                                </td>
-                            </tr>
-            
-            
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:59</a></div>
-                                        </td>
-                                    </tr>
-            
-                            <tr>
-                                <td class="col-md-4">
-            
-                                        <div class="io-description">
-                                                <b>Parameters :</b>
-                                                <table class="params">
-                                                    <thead>
-                                                        <tr>
-                                                            <td>Name</td>
-                                                            <td>Type</td>
-                                                            <td>Optional</td>
-                                                            <td>Description</td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                            <tr>
-                                                              <td>layer</td>
-                                                              <td>
-                                                                      <code>ILayer</code>
-                                                              </td>
-                                                              <td>
-                                                              </td>
-                                                              <td></td>
-                                                            </tr>
-                                                    </tbody>
-                                                </table>
-                                        </div>
-                                        <div>
-                                        </div>
-                                        <div class="io-description">
-                                            <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-            
-                                        </div>
-                                            <div class="io-description">
-                                                
-                                            </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                            <tr>
-                                <td class="col-md-4">
-                                    <a name="setBaseLayers"></a>
-                                    <span class="name">
-                                        <b>
-                                        setBaseLayers
-                                        </b>
-                                        <a href="#setBaseLayers"><span class="fa fa-link"></span></a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-4">
-            <code>setBaseLayers(layers: ILayer[])</code>
-                                </td>
-                            </tr>
-            
-            
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:19</a></div>
-                                        </td>
-                                    </tr>
-            
-                            <tr>
-                                <td class="col-md-4">
-            
-                                        <div class="io-description">
-                                                <b>Parameters :</b>
-                                                <table class="params">
-                                                    <thead>
-                                                        <tr>
-                                                            <td>Name</td>
-                                                            <td>Type</td>
-                                                            <td>Optional</td>
-                                                            <td>Description</td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                            <tr>
-                                                              <td>layers</td>
-                                                              <td>
-                                                                      <code>ILayer[]</code>
-                                                              </td>
-                                                              <td>
-                                                              </td>
-                                                              <td></td>
-                                                            </tr>
-                                                    </tbody>
-                                                </table>
-                                        </div>
-                                        <div>
-                                        </div>
-                                        <div class="io-description">
-                                            <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-            
-                                        </div>
-                                            <div class="io-description">
-                                                
-                                            </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-sm table-bordered">
-                        <tbody>
-                            <tr>
-                                <td class="col-md-4">
-                                    <a name="setOverlays"></a>
-                                    <span class="name">
-                                        <b>
-                                        setOverlays
-                                        </b>
-                                        <a href="#setOverlays"><span class="fa fa-link"></span></a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-4">
-            <code>setOverlays(layers: ILayer[])</code>
-                                </td>
-                            </tr>
-            
-            
-                                    <tr>
-                                        <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:24</a></div>
-                                        </td>
-                                    </tr>
-            
-                            <tr>
-                                <td class="col-md-4">
-            
-                                        <div class="io-description">
-                                                <b>Parameters :</b>
-                                                <table class="params">
-                                                    <thead>
-                                                        <tr>
-                                                            <td>Name</td>
-                                                            <td>Type</td>
-                                                            <td>Optional</td>
-                                                            <td>Description</td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                            <tr>
-                                                              <td>layers</td>
-                                                              <td>
-                                                                      <code>ILayer[]</code>
                                                               </td>
                                                               <td>
                                                               </td>
@@ -1173,6 +829,7 @@
                     </table>
             </section>
 
+
             <section>
                 
                     <h3 id="inputs">
@@ -1182,30 +839,30 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <a name="baseLayers"></a>
+                                    <a name="attribution"></a>
                                     <span class="name">
                                         <b>
-                                            <span class="modifier">Private</span>
-                                        baseLayers
+                                        attribution
                                         </b>
-                                        <a href="#baseLayers"><span class="fa fa-link"></span></a>
+                                        <a href="#attribution"><span class="fa fa-link"></span></a>
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <span class="modifier-icon fa fa-reset"></span><code>baseLayers:     <code></code>
+                                    <code>attribution:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
             </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <i>Default value : </i><code>new BehaviorSubject(Array&lt;ILayer&gt;())</code>
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
                                     </td>
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:9</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:13</a></div>
                                         </td>
                                     </tr>
             
@@ -1216,30 +873,719 @@
                         <tbody>
                             <tr>
                                 <td class="col-md-4">
-                                    <a name="overlays"></a>
+                                    <a name="cachePath"></a>
                                     <span class="name">
                                         <b>
-                                            <span class="modifier">Private</span>
-                                        overlays
+                                        cachePath
                                         </b>
-                                        <a href="#overlays"><span class="fa fa-link"></span></a>
+                                        <a href="#cachePath"><span class="fa fa-link"></span></a>
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <span class="modifier-icon fa fa-reset"></span><code>overlays:     <code></code>
+                                    <code>cachePath:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
             </code>
                                 </td>
                             </tr>
                                 <tr>
                                     <td class="col-md-4">
-                                        <i>Default value : </i><code>new BehaviorSubject(Array&lt;ILayer&gt;())</code>
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
                                     </td>
                                 </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">doc_modules/@ukis/services/src/app/layers/layers.service.ts:11</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:20</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="coordinateSystem"></a>
+                                    <span class="name">
+                                        <b>
+                                        coordinateSystem
+                                        </b>
+                                        <a href="#coordinateSystem"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>coordinateSystem:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:23</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="crossOrigin"></a>
+                                    <span class="name">
+                                        <b>
+                                        crossOrigin
+                                        </b>
+                                        <a href="#crossOrigin"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>crossOrigin:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>&#x27;anonymous&#x27;</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:16</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="destCanvas"></a>
+                                    <span class="name">
+                                        <b>
+                                        destCanvas
+                                        </b>
+                                        <a href="#destCanvas"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>destCanvas:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:10</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="destContext"></a>
+                                    <span class="name">
+                                        <b>
+                                        destContext
+                                        </b>
+                                        <a href="#destContext"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>destContext:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:11</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="detailControl"></a>
+                                    <span class="name">
+                                        <b>
+                                        detailControl
+                                        </b>
+                                        <a href="#detailControl"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>detailControl:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>1.2</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:25</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="displayName"></a>
+                                    <span class="name">
+                                        <b>
+                                        displayName
+                                        </b>
+                                        <a href="#displayName"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>displayName:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>&#x27;WMS Layer&#x27;</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:6</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="enabled"></a>
+                                    <span class="name">
+                                        <b>
+                                        enabled
+                                        </b>
+                                        <a href="#enabled"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>enabled:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>false</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:15</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="imageFormat"></a>
+                                    <span class="name">
+                                        <b>
+                                        imageFormat
+                                        </b>
+                                        <a href="#imageFormat"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>imageFormat:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>&quot;image/png&quot;</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:8</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="imageSize"></a>
+                                    <span class="name">
+                                        <b>
+                                        imageSize
+                                        </b>
+                                        <a href="#imageSize"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>imageSize:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>256</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="7" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:7</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="layerNames"></a>
+                                    <span class="name">
+                                        <b>
+                                        layerNames
+                                        </b>
+                                        <a href="#layerNames"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>layerNames:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:22</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="mapSizeForLevel"></a>
+                                    <span class="name">
+                                        <b>
+                                        mapSizeForLevel
+                                        </b>
+                                        <a href="#mapSizeForLevel"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>mapSizeForLevel:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>function (levelNumber) {
+                return 256 &lt;&lt; (levelNumber + 1);
+              }</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="116" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:116</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="opacity"></a>
+                                    <span class="name">
+                                        <b>
+                                        opacity
+                                        </b>
+                                        <a href="#opacity"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>opacity:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:19</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="parseTimeDimensions"></a>
+                                    <span class="name">
+                                        <b>
+                                        parseTimeDimensions
+                                        </b>
+                                        <a href="#parseTimeDimensions"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>parseTimeDimensions:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>function (wmsLayerCapabilities) {
+                var dimensions &#x3D; wmsLayerCapabilities.extents || wmsLayerCapabilities.dimensions,
+                  parsedDimensions &#x3D; null;
+                if (dimensions) {
+                  parsedDimensions &#x3D; [];
+                  for (var i &#x3D; 0; i &lt; dimensions.length; i++) {
+                    var dimension &#x3D; dimensions[i];
+                    if (dimension.name.toLowerCase() &#x3D;&#x3D;&#x3D; &quot;time&quot; &amp;&amp;
+                      (!dimension.units || dimension.units.toLowerCase() &#x3D;&#x3D;&#x3D; &quot;iso8601&quot;)) {
+                      var individualDimensions &#x3D; dimension.content.split(&quot;,&quot;);
+                      for (var j &#x3D; 0; j &lt; individualDimensions.length; j++) {
+                        var individualDimension &#x3D; individualDimensions[j],
+                          splitDimension &#x3D; individualDimension.split(&quot;/&quot;);
+                        if (splitDimension.length &#x3D;&#x3D;&#x3D; 1) {
+                          parsedDimensions.push(new Date(individualDimension));
+                        } else if (splitDimension.length &#x3D;&#x3D;&#x3D; 3) {
+                          parsedDimensions.push(new WorldWind.PeriodicTimeSequence(individualDimension));
+                        }
+                      }
+                    }
+                  }
+                }
+                return parsedDimensions;
+              }</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="83" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:83</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="pickEnabled"></a>
+                                    <span class="name">
+                                        <b>
+                                        pickEnabled
+                                        </b>
+                                        <a href="#pickEnabled"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>pickEnabled:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>false</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:9</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="timeString"></a>
+                                    <span class="name">
+                                        <b>
+                                        timeString
+                                        </b>
+                                        <a href="#timeString"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>timeString:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:21</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="topLevelTiles"></a>
+                                    <span class="name">
+                                        <b>
+                                        topLevelTiles
+                                        </b>
+                                        <a href="#topLevelTiles"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>topLevelTiles:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:14</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="ukisID"></a>
+                                    <span class="name">
+                                        <b>
+                                        ukisID
+                                        </b>
+                                        <a href="#ukisID"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>ukisID:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:18</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="urlBuilder"></a>
+                                    <span class="name">
+                                        <b>
+                                        urlBuilder
+                                        </b>
+                                        <a href="#urlBuilder"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>urlBuilder:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:12</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="version"></a>
+                                    <span class="name">
+                                        <b>
+                                        version
+                                        </b>
+                                        <a href="#version"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>version:     <code></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Default value : </i><code>&#x27;1.3.0&#x27;</code>
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:17</a></div>
+                                        </td>
+                                    </tr>
+            
+            
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-4">
+                                    <a name="zIndex"></a>
+                                    <span class="name">
+                                        <b>
+                                        zIndex
+                                        </b>
+                                        <a href="#zIndex"><span class="fa fa-link"></span></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <code>zIndex:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+            </code>
+                                </td>
+                            </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+            
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">doc_modules/@ukis/www-map/src/app/www-map/ukis_wms_layer.ts:24</a></div>
                                         </td>
                                     </tr>
             
@@ -1252,89 +1598,137 @@
 
 
     <div class="tab-pane fade tab-source-code" id="c-source">
-        <pre class="line-numbers"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
-import { ILayer } from &#x27;@ukis/datatypes/Layer&#x27;
-import {BehaviorSubject} from &#x27;rxjs/BehaviorSubject&#x27;;
-import {Observable} from &#x27;rxjs/Observable&#x27;;
+        <pre class="line-numbers"><code class="language-typescript">import * as WorldWind from &#x27;@nasaworldwind/worldwind&#x27;;
+import {IRasterLayer} from &#x27;@ukis/datatypes/Layer&#x27;;
 
-@Injectable()
-export class LayersService {
+export class UkisWMSLayer extends WorldWind.TiledImageLayer {
 
-  private baseLayers &#x3D; new BehaviorSubject(Array&lt;ILayer&gt;());
+  displayName &#x3D; &#x27;WMS Layer&#x27;;
+  imageSize &#x3D; 256;
+  imageFormat &#x3D; &quot;image/png&quot;;
+  pickEnabled &#x3D; false;
+  destCanvas: any;
+  destContext: any;
+  urlBuilder: any;
+  attribution: any;
+  topLevelTiles: any;
+  enabled &#x3D; false;
+  crossOrigin &#x3D; &#x27;anonymous&#x27;;
+  version &#x3D; &#x27;1.3.0&#x27;;
+  ukisID: any;
+  opacity: number;
+  cachePath: any;
+  timeString: any;
+  layerNames: any;
+  coordinateSystem;
+  zIndex: number;
+  detailControl &#x3D; 1.2;
 
-  private overlays &#x3D; new BehaviorSubject(Array&lt;ILayer&gt;());
+  constructor(l: IRasterLayer) {
 
-  constructor() {
+    super(new WorldWind.Sector(-85.05, 85.05, -180, 180), new WorldWind.Location(85.05, 180), 24, &quot;image/png&quot;, l.name, 256, 256);
 
-  }
-
-
-  //set all layers in category
-  setBaseLayers(layers: ILayer[]){
-    this.baseLayers.next(layers);
-  }
-
-
-  setOverlays(layers: ILayer[]){
-    this.overlays.next(layers);
-  }
-
-    //get layers
-  getBaseLayers(): Observable&lt;ILayer[]&gt; {
-    return this.baseLayers.asObservable();
-  }
-
-
-  getOverlays(): Observable&lt;ILayer[]&gt; {
-    return this.overlays.asObservable();
-  }
-
-
-
-  //add layers
-  addBaseLayer(layer: ILayer) {
-    this.baseLayers.getValue().push(layer)
-    this.baseLayers.next(this.baseLayers.getValue());
-  }
-
-  removeBaseLayer(layer: ILayer) {
-
-    this.baseLayers.next(this.baseLayers.getValue().filter(l &#x3D;&gt; l!&#x3D;&#x3D;layer));
-
-  }
-
-
-  addOverlay(layer: ILayer) {
-    this.overlays.getValue().push(layer)
-    this.overlays.next(this.overlays.getValue());
-  }
-
-
-  removeOverlay(layer: ILayer) {
-    this.overlays.next(this.overlays.getValue().filter(l &#x3D;&gt; l!&#x3D;&#x3D;layer));
-  }
-
-
-  removeLayer(layer: ILayer, type: string) {
-
-    if (type &#x3D;&#x3D;&#x3D; &quot;Overlays&quot;) {
-
-      this.removeOverlay(layer);
+    this.displayName &#x3D; l.displayName;
+    if (l[&#x27;params&#x27;][&#x27;VERSION&#x27;]) {
+      this.version &#x3D; l[&#x27;params&#x27;][&#x27;VERSION&#x27;];
     }
 
-    if (type &#x3D;&#x3D;&#x3D; &quot;Baselayers&quot;) {
-
-      this.removeBaseLayer(layer);
+    if (l.time) {
+      this.timeString &#x3D; l.time;
     }
+
+    if (l.zIndex) {
+      this.zIndex&#x3D;l.zIndex;
+    }
+
+
+    if (l[&#x27;params&#x27;][&#x27;VERSION&#x27;] &#x3D;&#x3D; &#x27;1.3.0&#x27;) {
+      this.coordinateSystem &#x3D; l[&#x27;params&#x27;][&#x27;CRS&#x27;];
+    } else {
+      this.coordinateSystem &#x3D; l[&#x27;params&#x27;][&#x27;SRS&#x27;]
+    }
+
+    this.layerNames &#x3D; l[&#x27;params&#x27;][&#x27;LAYERS&#x27;];
+
+    this.cachePath &#x3D; l.url + this.layerNames;
+    if (this.timeString) {
+      this.cachePath &#x3D; this.cachePath + this.timeString;
+    }
+
+    this.pickEnabled &#x3D; false;
+    // Create a canvas we can use when unprojecting retrieved images.
+    this.destCanvas &#x3D; document.createElement(&quot;canvas&quot;);
+    this.destContext &#x3D; this.destCanvas.getContext(&quot;2d&quot;);
+    this.urlBuilder &#x3D; new WorldWind.WmsUrlBuilder(l.url, this.layerNames, &quot;&quot;, this.version, this.timeString);
+
+    if (this.coordinateSystem) {
+      this.urlBuilder.crs &#x3D; this.coordinateSystem;
+    }
+
+    this.enabled &#x3D; l.visible;
+
+    this.ukisID &#x3D; l.ukisID;
+
+    this.attribution &#x3D; l.attribution;
+
   }
 
-}
+ /* doRender &#x3D; function (dc) {
+    WorldWind.MercatorTiledImageLayer.prototype.doRender.call(this, dc);
+    if (this.inCurrentFrame) {
+      dc.screenCreditController.addStringCredit(&quot;Tiles Courtesy of MapQuest&quot;, WorldWind.Color.DARK_GRAY);
+    }
+  }; */
+
+  parseTimeDimensions &#x3D; function (wmsLayerCapabilities) {
+    var dimensions &#x3D; wmsLayerCapabilities.extents || wmsLayerCapabilities.dimensions,
+      parsedDimensions &#x3D; null;
+    if (dimensions) {
+      parsedDimensions &#x3D; [];
+      for (var i &#x3D; 0; i &lt; dimensions.length; i++) {
+        var dimension &#x3D; dimensions[i];
+        if (dimension.name.toLowerCase() &#x3D;&#x3D;&#x3D; &quot;time&quot; &amp;&amp;
+          (!dimension.units || dimension.units.toLowerCase() &#x3D;&#x3D;&#x3D; &quot;iso8601&quot;)) {
+          var individualDimensions &#x3D; dimension.content.split(&quot;,&quot;);
+          for (var j &#x3D; 0; j &lt; individualDimensions.length; j++) {
+            var individualDimension &#x3D; individualDimensions[j],
+              splitDimension &#x3D; individualDimension.split(&quot;/&quot;);
+            if (splitDimension.length &#x3D;&#x3D;&#x3D; 1) {
+              parsedDimensions.push(new Date(individualDimension));
+            } else if (splitDimension.length &#x3D;&#x3D;&#x3D; 3) {
+              parsedDimensions.push(new WorldWind.PeriodicTimeSequence(individualDimension));
+            }
+          }
+        }
+      }
+    }
+    return parsedDimensions;
+  };
+
+  /*createTopLevelTiles &#x3D; function (dc) {
+    this.topLevelTiles &#x3D; [];
+    this.topLevelTiles.push(this.createTile(null, this.levels.firstLevel(), 0, 0));
+    this.topLevelTiles.push(this.createTile(null, this.levels.firstLevel(), 0, 1));
+    this.topLevelTiles.push(this.createTile(null, this.levels.firstLevel(), 1, 0));
+    this.topLevelTiles.push(this.createTile(null, this.levels.firstLevel(), 1, 1));
+  }; */
+
+  mapSizeForLevel &#x3D; function (levelNumber) {
+    return 256 &lt;&lt; (levelNumber + 1);
+  };
+
+  setVisible(value) {
+    this.enabled &#x3D; value;
+  }
+
+  setOpacity(value: number) {
+    this.opacity &#x3D; value;
+  }
+
+};
 </code></pre>
     </div>
 </div>
-
-
-
 
 
 
