@@ -26,6 +26,11 @@ import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnav
 //import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
 import { LayerentryModule } from '@ukis/mapcontrol/src/app/layerentry/layerentry.module';
 
+//for User
+import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
+import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
+import { UserServiceModule } from '@ukis/services/src/app/user/user.module';
+
 /**
  * Main App Module in which all Modules and services are plugged into
  */
@@ -46,9 +51,11 @@ import { LayerentryModule } from '@ukis/mapcontrol/src/app/layerentry/layerentry
     WWWMapModule,
     MapcontrolModule,
     MapnavigatorModule,
-    LayerentryModule
+    LayerentryModule,
+    UserServiceModule.forRoot(),
+    UserinfoModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }

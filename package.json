@@ -33,6 +33,7 @@
     "@ukis/ol-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_ol4.git",
     "@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git",
     "@ukis/www-map": "git+http://@git.ukis.eoc.dlr.de/scm/mofro/map_www0.git",
+    "@ukis/user-info": "git+http://@git.ukis.eoc.dlr.de/scm/mofro/user-info.git",
     "@webcomponents/custom-elements": "1.0.0",
     "bootstrap": "4.0.0-alpha.5",
     "classlist.js": "1.1.20150312",

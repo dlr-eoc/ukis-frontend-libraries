@@ -20,6 +20,9 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Ol4MapSvc, IOl4MapSvc } from '@ukis/ol-map/src/app/ol-map/ol-map.service';
 
+//for User
+import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
+
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
@@ -64,7 +67,8 @@ export class UkisComponent {
 
   constructor(
     @Inject(LayersService) private layerSvc: LayersService,
-    @Inject(Ol4MapSvc) private mapSvc: IOl4MapSvc) {
+    @Inject(Ol4MapSvc) private mapSvc: IOl4MapSvc,
+    private authService: AuthService) {
 
     var layer_cloud = new RasterLayer({
       name: 'Drought Frequency',

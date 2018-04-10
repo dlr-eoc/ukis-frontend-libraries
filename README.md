@@ -5,6 +5,7 @@ includes:
 - mapcontrol and mapnavigator
 - layerentry and a layertree
 - test to use Ol4MapSvc directly in the app.component
+- user-info module
 
 All UKIS dependencies are listed in package.json and are stored in node_modules. 
 
