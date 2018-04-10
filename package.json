@@ -25,9 +25,9 @@
     "@angular/platform-browser": "5.2.9",
     "@angular/platform-browser-dynamic": "5.2.9",
     "@angular/router": "5.2.9",
-    "core-js": "2.4.1",
-    "rxjs": "5.5.6",
-    "zone.js": "0.8.19",
+    "@clr/angular": "0.11.12",
+    "@clr/icons": "0.11.12",
+    "@clr/ui": "0.11.12",
     "@ukis/baseLayers": "git+http://git.ukis.eoc.dlr.de/scm/mofro/baselayers.git",
     "@ukis/mapcontrol": "git+http://git.ukis.eoc.dlr.de/scm/mofro/mapcontrol.git",
     "@ukis/ol-map": "git+http://git.ukis.eoc.dlr.de/scm/mofro/map_ol4.git",
@@ -35,10 +35,10 @@
     "@ukis/www-map": "git+http://@git.ukis.eoc.dlr.de/scm/mofro/map_www0.git",
     "@webcomponents/custom-elements": "1.0.0",
     "bootstrap": "4.0.0-alpha.5",
-    "clarity-angular": "0.10.15",
-    "clarity-icons": "0.10.15",
-    "clarity-ui": "0.10.15",
-    "classlist.js": "1.1.20150312"
+    "classlist.js": "1.1.20150312",
+    "core-js": "2.4.1",
+    "rxjs": "5.5.6",
+    "zone.js": "0.8.19"
   },
   "devDependencies": {
     "@angular/cli": "1.7.4",
