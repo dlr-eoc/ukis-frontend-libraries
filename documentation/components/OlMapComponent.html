@@ -1,0 +1,1668 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>UKIS Client</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	    <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">UKIS Client</a>
+            <button type="button" class="btn btn-default btn-menu fa fa-bars" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+            <div id="book-search-input" role="search">
+                <input type="text" placeholder="Type to search">
+            </div>
+            <nav>
+            
+                <ul class="list">
+            
+                    <li class="title">
+                        <a href="../index.html">UKIS Client</a>
+                    </li>
+            
+                    <li class="divider"></li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                        <ul class="links">
+                                <li class="link">
+                                    <a 
+                                        
+                                         href="../overview.html" 
+                                         href="../overview.html" 
+                                        >
+                                        <span class="fa fa-th"></span>Overview
+                                    </a>
+                                </li>
+                                <li class="link">
+                                  <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../modules.html" >
+                            <div class="menu-toggler linked" data-toggle="collapse"
+                                    data-target="#xs-modules-links"
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
+                        </a>
+                        <ul class="links collapse "
+                                id="xs-modules-links"
+                            >
+                                <li class="link">
+                                    <a href="../modules/LayerentryModule.html" >LayerentryModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/LayersServiceModule.html" >LayersServiceModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapcontrolModule.html" >MapcontrolModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapnavigatorModule.html" >MapnavigatorModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/MapstateServiceModule.html" >MapstateServiceModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/OlMapModule.html" >OlMapModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/RestModule.html" >RestModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/UkisModule.html" >UkisModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/UserServiceModule.html" >UserServiceModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/WWWMapModule.html" >WWWMapModule</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
+                            <span class="fa fa-cogs"></span>
+                            <span>Components</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-components-links"
+                            >
+                                <li class="link">
+                                    <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/LayerentryComponent.html" >LayerentryComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MapcontrolComponent.html" >MapcontrolComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/MapnavigatorComponent.html" >MapnavigatorComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/OlMapComponent.html"  data-type="entity-link" class="active" >OlMapComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/UkisComponent.html" >UkisComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/WWWMapComponent.html" >WWWMapComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/WwwProjectionSwitchComponent.html" >WwwProjectionSwitchComponent</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-classes-links"
+                            >
+                            <span class="fa fa-file-code-o"></span>
+                            <span>Classes</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-classes-links"
+                            >
+                                <li class="link">
+                                    <a href="../classes/UkisGeoJsonLayer.html" >UkisGeoJsonLayer</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UkisWMSLayer.html" >UkisWMSLayer</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../classes/UkisXYZLayer.html" >UkisXYZLayer</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
+                            <span class="fa fa-long-arrow-down"></span>
+                            <span>Injectables</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-injectables-links"
+                            >
+                                <li class="link">
+                                    <a href="../injectables/AppStoreService.html" >AppStoreService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/AuthService.html" >AuthService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/LayersService.html" >LayersService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/MapstateService.html" >MapstateService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/Ol4MapSvc.html" >Ol4MapSvc</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/RestService.html" >RestService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/UserService.html" >UserService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../injectables/WWWMapSvc.html" >WWWMapSvc</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-interfaces-links"
+                            >
+                            <span class="fa fa-info"></span>
+                            <span>Interfaces</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-interfaces-links"
+                            >
+                                <li class="link">
+                                    <a href="../interfaces/IAppStoreService.html" >IAppStoreService</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IOl4MapSvc.html" >IOl4MapSvc</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../interfaces/IWWWMapSvc.html" >IWWWMapSvc</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                    </li>
+            
+                    <li class="divider"></li>
+                    <li class="copyright">
+                            Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                        <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                            </a>
+                    </li>
+            
+                </ul>
+            
+            </nav>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <nav>
+                   
+                       <ul class="list">
+                   
+                           <li class="title">
+                               <a href="../index.html">UKIS Client</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                   
+                               <div id="book-search-input" role="search">
+                                   <input type="text" placeholder="Type to search">
+                               </div>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                               <ul class="links">
+                                       <li class="link">
+                                           <a 
+                                               
+                                                href="../overview.html" 
+                                                href="../overview.html" 
+                                               >
+                                               <span class="fa fa-th"></span>Overview
+                                           </a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../modules.html" >
+                                   <div class="menu-toggler linked" data-toggle="collapse"
+                                           data-target="#modules-links"
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
+                               </a>
+                               <ul class="links collapse "
+                                       id="modules-links"
+                   >
+                                       <li class="link">
+                                           <a href="../modules/LayerentryModule.html" >LayerentryModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/LayersServiceModule.html" >LayersServiceModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapcontrolModule.html" >MapcontrolModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapnavigatorModule.html" >MapnavigatorModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/MapstateServiceModule.html" >MapstateServiceModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/OlMapModule.html" >OlMapModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/RestModule.html" >RestModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/UkisModule.html" >UkisModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/UserServiceModule.html" >UserServiceModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/WWWMapModule.html" >WWWMapModule</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
+                                   <span class="fa fa-cogs"></span>
+                                   <span>Components</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="components-links"
+                   >
+                                       <li class="link">
+                                           <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/LayerentryComponent.html" >LayerentryComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MapcontrolComponent.html" >MapcontrolComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/MapnavigatorComponent.html" >MapnavigatorComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/OlMapComponent.html"  data-type="entity-link" class="active" >OlMapComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/UkisComponent.html" >UkisComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/WWWMapComponent.html" >WWWMapComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/WwwProjectionSwitchComponent.html" >WwwProjectionSwitchComponent</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#classes-links"
+                   >
+                                   <span class="fa fa-file-code-o"></span>
+                                   <span>Classes</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="classes-links"
+                   >
+                                       <li class="link">
+                                           <a href="../classes/UkisGeoJsonLayer.html" >UkisGeoJsonLayer</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UkisWMSLayer.html" >UkisWMSLayer</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../classes/UkisXYZLayer.html" >UkisXYZLayer</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
+                                   <span class="fa fa-long-arrow-down"></span>
+                                   <span>Injectables</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="injectables-links"
+                   >
+                                       <li class="link">
+                                           <a href="../injectables/AppStoreService.html" >AppStoreService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/AuthService.html" >AuthService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/LayersService.html" >LayersService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/MapstateService.html" >MapstateService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/Ol4MapSvc.html" >Ol4MapSvc</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/RestService.html" >RestService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/UserService.html" >UserService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../injectables/WWWMapSvc.html" >WWWMapSvc</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#interfaces-links"
+                   >
+                                   <span class="fa fa-info"></span>
+                                   <span>Interfaces</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="interfaces-links"
+                   >
+                                       <li class="link">
+                                           <a href="../interfaces/IAppStoreService.html" >IAppStoreService</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IOl4MapSvc.html" >IOl4MapSvc</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../interfaces/IWWWMapSvc.html" >IWWWMapSvc</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                           <li class="copyright">
+                                   Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                               <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                                   </a>
+                           </li>
+                   
+                       </ul>
+                   
+                   </nav>
+               </div>
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>OlMapComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active">
+        <a href="#info" id="info-tab" role="tab" data-toggle="tab" data-link="info">Info</a>
+    </li>
+
+    <li>
+        <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+    </li>
+
+    <li>
+        <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+    </li>
+    <li>
+        <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                <code><a href="https://angular.io/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+            <tr>
+                <td class="col-md-3">encapsulation</td>
+                <td class="col-md-9"><code>ViewEncapsulation.None</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>ukis-ol-map</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>ol-map.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./ol-map.component.html</code></td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+        <h3 id="index">Index</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#baselayersAddRemoveOn">baselayersAddRemoveOn</a>
+                            </li>
+                            <li>
+                                <a href="#baselayersPropOn">baselayersPropOn</a>
+                            </li>
+                            <li>
+                                <a href="#center">center</a>
+                            </li>
+                            <li>
+                                <a href="#layersAddRemoveOn">layersAddRemoveOn</a>
+                            </li>
+                            <li>
+                                <a href="#layersPropOn">layersPropOn</a>
+                            </li>
+                            <li>
+                                <a href="#map">map</a>
+                            </li>
+                            <li>
+                                <a href="#mapOn">mapOn</a>
+                            </li>
+                            <li>
+                                <a href="#mapState">mapState</a>
+                            </li>
+                            <li>
+                                <a href="#mapStateOn">mapStateOn</a>
+                            </li>
+                            <li>
+                                <a href="#view">view</a>
+                            </li>
+                            <li>
+                                <a href="#viewSubj">viewSubj</a>
+                            </li>
+                            <li>
+                                <a href="#zoom">zoom</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#initMap">initMap</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewChecked">ngAfterViewChecked</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy">ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#layers">layers</a>
+                            </li>
+                            <li>
+                                <a href="#store">store</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3 id="constructor">Constructor</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>constructor(mapStateSvc: <a href="../injectables/MapstateService.html">MapstateService</a>, mapSvc: <a href="../injectables/Ol4MapSvc.html">Ol4MapSvc</a>)</code>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:41</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div>
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>mapStateSvc</td>
+                                                      <td>
+                                                                <code><a href="../injectables/MapstateService.html" target="_self" >MapstateService</a></code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td>mapSvc</td>
+                                                      <td>
+                                                                <code><a href="../injectables/Ol4MapSvc.html" target="_self" >Ol4MapSvc</a></code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </section>
+
+    <section>
+        <h3 id="inputs">Inputs</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2">
+                            <a name="layers"></a>
+                            <code>layers</code>
+                        </td>
+                        <td class="col-md-10">
+                              <p>
+                                <em>Type:</em>    <code><a href="../injectables/LayersService.html" target="_self" >LayersService</a></code>
+
+                              </p>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:25</a></div>
+                                </td>
+                            </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2">
+                            <a name="store"></a>
+                            <code>store</code>
+                        </td>
+                        <td class="col-md-10">
+                              <p>
+                                <em>Type:</em>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                              </p>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:24</a></div>
+                                </td>
+                            </tr>
+                </tbody>
+            </table>
+    </section>
+
+
+
+
+    <section>
+        
+            <h3 id="methods">
+                Methods
+            </h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="initMap"></a>
+                            <span class="name">
+                                <b>
+                                    <span class="modifier">Private</span>
+                                initMap
+                                </b>
+                                <a href="#initMap"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <span class="modifier-icon fa fa-reset"></span>
+                            <code>initMap()</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="78" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:78</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+    
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="ngAfterViewChecked"></a>
+                            <span class="name">
+                                <b>
+                                ngAfterViewChecked
+                                </b>
+                                <a href="#ngAfterViewChecked"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>ngAfterViewChecked()</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:64</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-description"><p>is  </p>
+    </div>
+    
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="ngOnDestroy"></a>
+                            <span class="name">
+                                <b>
+                                ngOnDestroy
+                                </b>
+                                <a href="#ngOnDestroy"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>ngOnDestroy()</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:68</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+    
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="ngOnInit"></a>
+                            <span class="name">
+                                <b>
+                                ngOnInit
+                                </b>
+                                <a href="#ngOnInit"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>ngOnInit()</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="59" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:59</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+    
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </section>
+
+    <section>
+        
+            <h3 id="inputs">
+                Properties
+            </h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="baselayersAddRemoveOn"></a>
+                            <span class="name">
+                                <b>
+                                baselayersAddRemoveOn
+                                </b>
+                                <a href="#baselayersAddRemoveOn"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>baselayersAddRemoveOn:     <code>Subscription</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>Subscription</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:39</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="baselayersPropOn"></a>
+                            <span class="name">
+                                <b>
+                                baselayersPropOn
+                                </b>
+                                <a href="#baselayersPropOn"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>baselayersPropOn:     <code>Subscription</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>Subscription</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:40</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="center"></a>
+                            <span class="name">
+                                <b>
+                                center
+                                </b>
+                                <a href="#center"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>center:     <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:33</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="layersAddRemoveOn"></a>
+                            <span class="name">
+                                <b>
+                                layersAddRemoveOn
+                                </b>
+                                <a href="#layersAddRemoveOn"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>layersAddRemoveOn:     <code>Subscription</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>Subscription</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:37</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="layersPropOn"></a>
+                            <span class="name">
+                                <b>
+                                layersPropOn
+                                </b>
+                                <a href="#layersPropOn"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>layersPropOn:     <code>Subscription</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>Subscription</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:38</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="map"></a>
+                            <span class="name">
+                                <b>
+                                map
+                                </b>
+                                <a href="#map"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>map:     <code>ol.Map</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>ol.Map</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:27</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="mapOn"></a>
+                            <span class="name">
+                                <b>
+                                mapOn
+                                </b>
+                                <a href="#mapOn"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>mapOn:     <code>ol.EventsListenerFunctionType</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>ol.EventsListenerFunctionType</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:41</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="mapState"></a>
+                            <span class="name">
+                                <b>
+                                mapState
+                                </b>
+                                <a href="#mapState"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>mapState:     <code>MapState</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>MapState</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:35</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="mapStateOn"></a>
+                            <span class="name">
+                                <b>
+                                mapStateOn
+                                </b>
+                                <a href="#mapStateOn"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>mapStateOn:     <code>Subscription</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>Subscription</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:36</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="view"></a>
+                            <span class="name">
+                                <b>
+                                view
+                                </b>
+                                <a href="#view"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>view:     <code>ol.View</code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code>ol.View</code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:28</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="viewSubj"></a>
+                            <span class="name">
+                                <b>
+                                viewSubj
+                                </b>
+                                <a href="#viewSubj"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>viewSubj:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>new BehaviorSubject(this.view)</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:30</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="zoom"></a>
+                            <span class="name">
+                                <b>
+                                zoom
+                                </b>
+                                <a href="#zoom"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>zoom:     <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Type : </i>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+    
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">doc_modules/@ukis/ol-map/src/app/ol-map/ol-map.component.ts:32</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+    </section>
+
+</div>
+
+
+    <div class="tab-pane fade tab-source-code" id="c-source">
+        <pre class="line-numbers"><code class="language-typescript">import { Component, OnInit, Inject, ViewEncapsulation, OnDestroy, AfterViewChecked, Input } from &#x27;@angular/core&#x27;;
+
+import { MapState } from &#x27;@ukis/datatypes/MapState&#x27;;
+import { MapstateService } from &#x27;@ukis/services/src/app/mapstate/mapstate.service&#x27;;
+import { Subscription } from &#x27;rxjs/Subscription&#x27;;
+import { Ol4MapSvc, IOl4MapSvc } from &#x27;./ol-map.service&#x27;;
+import { LayersService } from &#x27;@ukis/services/src/app/layers/layers.service&#x27;;
+import { ILayer, IRasterLayer, IVectorLayer } from &#x27;@ukis/datatypes&#x27;;
+
+
+import * as ol from &#x27;openlayers&#x27;
+import { Observable, BehaviorSubject } from &#x27;rxjs&#x27;;
+import { ArgumentType } from &#x27;@angular/compiler/src/core&#x27;;
+import { Subject } from &#x27;rxjs/Subject&#x27;;
+import &#x27;rxjs/add/operator/mergeMap&#x27;
+
+@Component({
+  selector: &#x27;ukis-ol-map&#x27;,
+  templateUrl: &#x27;./ol-map.component.html&#x27;,
+  styleUrls: [&#x27;./ol-map.component.scss&#x27;],
+  encapsulation: ViewEncapsulation.None
+})
+export class OlMapComponent implements OnInit, OnDestroy {
+  @Input(&#x27;store&#x27;) store: any; //Array of GeoJSON fetures
+  @Input(&#x27;layers&#x27;) layers: LayersService;
+
+  map: ol.Map;
+  view: ol.View;
+
+  viewSubj &#x3D; new BehaviorSubject(this.view);
+
+  zoom: number; //default value
+  center: any //default value
+
+  mapState: MapState;
+  mapStateOn: Subscription;
+  layersAddRemoveOn: Subscription;
+  layersPropOn: Subscription;
+  baselayersAddRemoveOn: Subscription;
+  baselayersPropOn: Subscription;
+  mapOn: ol.EventsListenerFunctionType;
+
+  constructor( @Inject(MapstateService) private mapStateSvc: MapstateService, @Inject(Ol4MapSvc) private mapSvc: Ol4MapSvc) {
+    this.zoom &#x3D; 3;
+    this.center &#x3D; {
+      lat: 0,
+      lon: 0
+    };
+    //console.log(this.mapSvc)
+    let ms &#x3D; new MapState(this.zoom, this.center);
+    this.mapState &#x3D; ms;
+    this.mapStateSvc.setMapState(ms);
+    ///define initial center and zoom
+
+  }
+
+ 
+
+  ngOnInit() {
+    this.initMap();
+  }
+
+  /** is  */
+  ngAfterViewChecked() {
+    this.map.updateSize();
+  }
+
+  ngOnDestroy() {
+    this.mapStateOn.unsubscribe();
+    this.layersAddRemoveOn.unsubscribe();
+    this.layersPropOn.unsubscribe();
+    this.baselayersAddRemoveOn.unsubscribe();
+    this.baselayersPropOn.unsubscribe();
+    this.map.un(&#x27;moveend&#x27;, this.mapOn)
+  }
+
+
+  private initMap() {
+    var _EPSG &#x3D; this.mapSvc.EPSG;
+
+    var _baselayers &#x3D; [];
+    var _baselayerGroup &#x3D; new ol.layer.Group(&lt;any&gt;{
+      title: &#x27;Base maps&#x27;,
+      type: &#x27;baselayers&#x27;,
+      layers: _baselayers
+    })
+
+    //---------------------------------------------------------------------------------------------------
+    //var _overlays &#x3D; this.store.overlays;
+    var _overlays &#x3D; [];
+
+    var _overlayGroup &#x3D; new ol.layer.Group(&lt;any&gt;{
+      title: &#x27;Overlays&#x27;,
+      type: &#x27;overlays&#x27;,
+      layers: _overlays
+    })
+
+    var _view &#x3D; new ol.View({
+      center: ol.proj.transform([this.center.lon, this.center.lat], &#x27;EPSG:4326&#x27;, _EPSG),
+      zoom: this.zoom,
+      projection: _EPSG
+    })
+
+    //controls
+    /*
+    var _fullscreen &#x3D; new ol.control.FullScreen({ className: &#x27;custom-full-screen&#x27; });
+    var scaleLineControl &#x3D; new ol.control.ScaleLine();
+    var attribution &#x3D; new ol.control.Attribution({
+      //collapsible: false,
+      collapsed: false
+    });
+    */
+
+    var _map &#x3D; new ol.Map({
+      layers: [_baselayerGroup, _overlayGroup],
+      view: _view,
+      controls: [],
+      //target: _target
+      target: &#x27;map&#x27;,
+    });
+
+    this.map &#x3D; _map;
+    this.mapSvc.map &#x3D; _map;
+    this.view &#x3D; this.map.getView();
+
+
+    //add Control only if this functions is defined
+    /*
+    _map.addControl(attribution)
+    _map.addControl(scaleLineControl)
+    */
+
+
+    //add events
+    /*
+    _map.on(&quot;click&quot;, (evt) &#x3D;&gt; {
+      this.$rootScope.$emit(&#x27;ol.map.click&#x27;, evt);
+      this.markerLayerOnClick(evt, _map);
+    })
+
+    _map.on(&quot;moveend&quot;, (evt) &#x3D;&gt; {
+      console.log(evt)
+      this.$rootScope.$emit(&#x27;ol.map.change.view&#x27;, evt);
+    })
+
+    _map.on(&#x27;pointermove&#x27;, (evt) &#x3D;&gt; {
+      this.$rootScope.$emit(&#x27;ol.map.mousemove&#x27;, evt);
+      this.showMousePointerOnFeature(evt, _map);
+    })
+    */
+    //----------------------
+    //add/remove layers
+    this.baselayersAddRemoveOn &#x3D; this.layers.getBaseLayers().subscribe(layers &#x3D;&gt; {
+      if (layers.length !&#x3D; this.mapSvc.getLayers(&#x27;overlays&#x27;).length) {
+        this.mapSvc.setBaseLayers(layers)
+      }
+    });
+
+    //change layer visibility
+    this.baselayersPropOn &#x3D; this.layers.getBaseLayers().mergeMap(layers &#x3D;&gt; layers).subscribe(layer &#x3D;&gt; {
+      let bllayer &#x3D; this.mapSvc.getLayerByKey({ key: &#x27;id&#x27;, value: layer.ukisID }, &#x27;baselayers&#x27;);
+      //console.log(layer, ollayer, this.mapSvc.map.getLayers())
+      if (bllayer) {
+        bllayer.setVisible(layer.visible);
+        layer.visible !&#x3D; layer.visible;
+      }
+    });
+
+
+    //add/remove layers
+    this.layersAddRemoveOn &#x3D; this.layers.getOverlays().subscribe(layers &#x3D;&gt; {
+      if (layers.length !&#x3D; this.mapSvc.getLayers(&#x27;overlays&#x27;).length) {
+        this.mapSvc.setOverlays(layers)
+      }
+    });
+
+    //change layer visibility and opacity
+    this.layersPropOn &#x3D; this.layers.getOverlays().mergeMap(layers &#x3D;&gt; layers).subscribe(layer &#x3D;&gt; {
+      let ollayer &#x3D; this.mapSvc.getLayerByKey({ key: &#x27;id&#x27;, value: layer.ukisID }, &#x27;overlays&#x27;);
+      if (ollayer) {
+        ollayer.setVisible(layer.visible);
+        ollayer.setOpacity(layer.opacity);
+        layer.opacity !&#x3D; layer.opacity;
+        layer.visible !&#x3D; layer.visible;
+      }
+    });
+
+
+    this.mapStateOn &#x3D; this.mapStateSvc.getMapState().subscribe(mapState &#x3D;&gt; {
+      this.mapState &#x3D; mapState;
+      //console.log(mapState)
+      this.mapSvc.setZoom(mapState.zoom, mapState.options.notifier);
+      this.mapSvc.setCenter([mapState.center.lon, mapState.center.lat]);
+    });
+
+
+    this.mapOn &#x3D; (evt) &#x3D;&gt; {
+      //console.log(this.mapState.zoom,this.mapState.center, this.mapState.options)
+      let zoom &#x3D; Math.round(this.view.getZoom());
+      let center &#x3D; {
+        lat: this.view.getCenter()[1],
+        lon: this.view.getCenter()[0]
+      };
+      let ms &#x3D; new MapState(zoom, center, { notifier: &#x27;map&#x27; });
+      this.mapState &#x3D; ms;
+      this.mapStateSvc.setMapState(ms);
+    }
+    this.map.on(&#x27;moveend&#x27;, this.mapOn);
+
+
+
+
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade" id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div id&#x3D;&quot;map&quot; ref&#x3D;&quot;map&quot; class&#x3D;&quot;map&quot;&gt;&lt;/div&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade" id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div id="map" ref="map" class="map"></div></div>'
+    var COMPONENTS = [{'name': 'GlobalAlertComponent', 'selector': 'ukis-global-alert'},{'name': 'HeaderComponent', 'selector': 'ukis-header'},{'name': 'LayerentryComponent', 'selector': 'ukis-layerentry'},{'name': 'MapcontrolComponent', 'selector': 'ukis-mapcontrol'},{'name': 'MapnavigatorComponent', 'selector': 'ukis-mapnavigator'},{'name': 'OlMapComponent', 'selector': 'ukis-ol-map'},{'name': 'UkisComponent', 'selector': 'ukis-root'},{'name': 'WWWMapComponent', 'selector': 'ukis-www-map'},{'name': 'WwwProjectionSwitchComponent', 'selector': 'ukis-www-projection-switch'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'OlMapComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+           </div>
+       </div>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script>var COMPODOC_CURRENT_PAGE_DEPTH = 1;</script>
+
+       <script src="../js/search/search.js"></script>
+       <script src="../js/search/lunr.min.js"></script>
+       <script src="../js/search/search-lunr.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+       <script src="../js/search/search_index.js"></script>
+
+    </body>
+</html>
