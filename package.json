@@ -25,15 +25,15 @@
     "@angular/platform-browser": "5.2.9",
     "@angular/platform-browser-dynamic": "5.2.9",
     "@angular/router": "5.2.9",
-    "core-js": "2.4.1",
-    "rxjs": "5.5.6",
-    "zone.js": "0.8.19",
-    "@webcomponents/custom-elements": "1.0.0",
+    "@clr/angular": "0.11.12",
+    "@clr/icons": "0.11.12",
+    "@clr/ui": "0.11.12",
+    "@webcomponents/custom-elements": "^1.0.0",
     "bootstrap": "4.0.0-alpha.5",
     "classlist.js": "1.1.20150312",
-    "clarity-angular": "0.10.15",
-    "clarity-icons": "0.10.15",
-    "clarity-ui": "0.10.15"
+    "core-js": "2.4.1",
+    "rxjs": "5.5.6",
+    "zone.js": "0.8.19"
   },
   "devDependencies": {
     "@angular/cli": "1.7.4",

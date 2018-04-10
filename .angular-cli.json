@@ -9,8 +9,7 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico",
-        { "glob": "**/*", "input": "../node_modules/@nasaworldwind/worldwind/build/dist/images", "output": "./images/" }
+        "favicon.ico"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -24,7 +23,7 @@
       ],
       "scripts": [
         "../node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-        "../node_modules/clarity-icons/clarity-icons.min.js"
+        "../node_modules/@clr/icons/clr-icons.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
