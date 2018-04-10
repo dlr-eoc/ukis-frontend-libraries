@@ -3,15 +3,14 @@ import { NgModel, NgForm, RadioControlValueAccessor, FormControl, FormGroup } fr
 import { NgIf } from '@angular/common';
 
 import '@webcomponents/custom-elements';
-import 'clarity-icons';
-import 'clarity-icons/shapes/all-shapes';
-import 'clarity-icons/shapes/commerce-shapes';
-import 'clarity-icons/shapes/core-shapes';
-import 'clarity-icons/shapes/essential-shapes';
-import 'clarity-icons/shapes/media-shapes';
-import 'clarity-icons/shapes/social-shapes';
-import 'clarity-icons/shapes/technology-shapes';
-import 'clarity-icons/shapes/travel-shapes';
+import '@clr/icons/shapes/all-shapes';
+import '@clr/icons/shapes/commerce-shapes';
+import '@clr/icons/shapes/core-shapes';
+import '@clr/icons/shapes/essential-shapes';
+import '@clr/icons/shapes/media-shapes';
+import '@clr/icons/shapes/social-shapes';
+import '@clr/icons/shapes/technology-shapes';
+import '@clr/icons/shapes/travel-shapes';
 import './icons/ukis';
 
 import { google_earth, google_hybrid, google_maps, osm, eoc_litemap } from '@ukis/baseLayers/rasterBaseLayers';
