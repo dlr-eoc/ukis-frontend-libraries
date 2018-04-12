@@ -19,7 +19,7 @@ pipeline {
                 sh """
                     echo $WORKSPACE
                     mkdir dist
-                    docker run -e USERNAME=$USER -e UserID=$UID -v $WORKSPACE/dist:/static ukis:mofro
+                    docker run -e USERNAME=jenkins-node -e UserID=1002 -v $WORKSPACE/dist:/static ukis:mofro
                 """
             }
         }
