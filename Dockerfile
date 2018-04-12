@@ -12,7 +12,7 @@ RUN apk update && \
     node_modules/@angular/cli/bin/ng build && \
     mkdir /static
 
-COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./scripts/jenkins/docker-entrypoint.sh /docker-entrypoint.sh
 
 # static files
 VOLUME [ "/static" ]
