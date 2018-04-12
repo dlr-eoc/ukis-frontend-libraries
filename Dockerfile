@@ -14,6 +14,7 @@ RUN apk update && \
 
 COPY ./scripts/jenkins/docker-entrypoint.sh /docker-entrypoint.sh
 
+
 # static files
 VOLUME [ "/static" ]
 

@@ -1,10 +1,13 @@
 #!/bin/sh
+#add user for which the files need to be accessible later 
+echo $USERNAME
+adduser -D -u $UserID $USERNAME
 
 # deploy static files to a mountable volumne
 rsync -av /frontend/dist/ /static
-find /static -type d -exec chmod 0655 {} \;
+find /static -type d -exec chmod 0755 {} \;
 find /static -type f -exec chmod 0644 {} \;
-chown -R jenkins-node /static
+chown -R $USERNAME /static
 # no server to start, so this container just waits
 #sleep infinity # not available on busybox
 #while :; do sleep 2073600; done
