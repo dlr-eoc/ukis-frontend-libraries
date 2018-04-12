@@ -17,8 +17,9 @@ pipeline {
         stage('Copy out dist') {
             steps {
                 sh """
+                    echo $WORKSPACE
                     mkdir dist
-                    docker run -v dist:/static ukis:mofro
+                    docker run -v $WORKSPACE/dist:/static ukis:mofro
                 """
             }
         }
@@ -43,7 +44,7 @@ pipeline {
         failure {
             // notify users when the Pipeline fails
             mail to: 'verena.jaspersen@dlr.de',
-                subject: "UKIS ukis_mofro. Failed Pipeline: ${currentBuild.fullDisplayName}",
+                subject: "UKIS Jenkins: Failed Pipeline: ${currentBuild.fullDisplayName}",
                 body: "Something is wrong with ${env.BUILD_URL}"
         }
     }
