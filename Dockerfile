@@ -1,7 +1,7 @@
 FROM node:9.5-alpine
 
-COPY *.* /frontend/
-COPY src /frontend/
+COPY ../../. /frontend/
+COPY ../../src /frontend/
 
 
 RUN apk update && \
