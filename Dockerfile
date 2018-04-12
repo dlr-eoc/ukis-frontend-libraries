@@ -1,11 +1,11 @@
 FROM node:9.5-alpine
 
-COPY ../../. /frontend/
-COPY ../../src /frontend/
+COPY . /frontend/
+COPY src /frontend/
 
 
 RUN apk update && \
-    apk add rsync && \
+    apk add git rsync && \
     cd /frontend && \
     sed -i '/<base href=/c\<base href="/">' src/index.html && \
     npm install --unsafe-perm && \
