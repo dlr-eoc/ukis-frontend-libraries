@@ -10,6 +10,7 @@ RUN apk update && \
     sed -i '/<base href=/c\<base href="/">' src/index.html && \
     npm install --unsafe-perm && \
     node_modules/@angular/cli/bin/ng build && \
+    npm run compodoc && \
     mkdir /static
 
 COPY ./scripts/jenkins/docker-entrypoint.sh /docker-entrypoint.sh

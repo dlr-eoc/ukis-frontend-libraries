@@ -4,7 +4,11 @@ echo $USERNAME
 adduser -D -u $UserID $USERNAME
 
 # deploy static files to a mountable volumne
-rsync -av /frontend/dist/ /static
+mkdir /static/dist
+rsync -av /frontend/dist/ /static/dist
+mkdir /static/documentation
+rsync -av /frontend/documentation/ /static/documentation
+
 find /static -type d -exec chmod 0755 {} \;
 find /static -type f -exec chmod 0644 {} \;
 chown -R $USERNAME /static
