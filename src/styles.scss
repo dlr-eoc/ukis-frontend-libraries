@@ -12,11 +12,15 @@ button:focus {
 }
 
 .header {
+    color:inherit;
     .branding {
         .title {
             padding-left: 1rem;
             font-size: 1rem;
         }
+    }
+    .nav-link {
+        color:inherit;
     }
 }
 
@@ -30,7 +34,6 @@ button:focus {
 
 .clr-vertical-nav {
     border-radius: 1px;
-    width: 15rem;
     .nav-trigger-icon {
         color: #aaa;
         width: 1.2rem;
@@ -109,6 +112,15 @@ button:focus {
 }
 .title-ellipsis {
 
+}
+
+
+@media screen and (min-width: 320px) and (max-width: 374px) {
+
+.main-container.open-hamburger-menu .header-hamburger-trigger {
+    left: -26px;
+    left: calc((100% - 12rem)/2 - 0.5rem - 30px ); // center
+}
 }
 
 @media screen and (min-width: 768px) {
