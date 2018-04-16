@@ -4,7 +4,7 @@
 
 ## Getting started
 - Check if [Git](https://git-scm.com/) is installed.
-- Clone the repo: `git clone http://git.ukis.eoc.dlr.de/scm/frontend/ukis-ri-view.git`
+- Clone the repo: `git clone http://git.ukis.eoc.dlr.de/scm/mofro/ui-core.git`
 - Check if [Node.js](https://nodejs.org/) and npm is installed.
 - Install dependencies: `npm install`
 
