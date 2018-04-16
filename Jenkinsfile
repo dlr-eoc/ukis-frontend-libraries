@@ -3,6 +3,9 @@ pipeline {
     agent {
         label 'garibaldi.eoc.dlr.de'
     }
+    options {
+       checkoutToSubdirectory('gitdir')
+    }
 
     stages {
    
