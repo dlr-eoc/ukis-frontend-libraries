@@ -3,7 +3,11 @@
   <ukis-global-alert *ngIf="alert" [(alert)]="alert"></ukis-global-alert>
 
   <ukis-header [ukis-title]="title">
-    <clr-dropdown>
+
+    <a href="javascript://" class="active nav-link nav-text header-nav-el">Route 1</a>
+    <a href="javascript://" class="nav-link nav-text header-nav-el">Route 2</a>
+
+    <clr-dropdown class="header-action-el">
       <button class="nav-icon" clrDropdownTrigger>
         <clr-icon shape="cog"></clr-icon>
         <clr-icon shape="caret down"></clr-icon>
@@ -15,7 +19,7 @@
       </clr-dropdown-menu>
     </clr-dropdown>
 
-    <clr-dropdown>
+    <clr-dropdown class="header-action-el">
       <button class="nav-icon" clrDropdownTrigger>
         <clr-icon shape="help-info"></clr-icon>
         <clr-icon shape="caret down"></clr-icon>
@@ -24,6 +28,7 @@
         <a href="..." clrDropdownItem>About</a>
       </clr-dropdown-menu>
     </clr-dropdown>
+
   </ukis-header>
 
 
@@ -62,13 +67,13 @@
           </p>
         </div>
       </div>
- 
+
 
     </div>
 
 
     <!-- <nav class="sidenav"> -->
-    <clr-vertical-nav clrVerticalNavCollapsible="true" [clr-nav-level]="1">
+    <clr-vertical-nav clrVerticalNavCollapsible="true" [clr-nav-level]="2">
 
       <clr-vertical-nav-group>
         <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>
@@ -126,6 +131,8 @@
 
     </clr-vertical-nav>
     <!-- </nav> -->
+
+
 
 
   </div>
