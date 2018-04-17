@@ -1,0 +1,51 @@
+<div class="content-area">
+  MAP
+</div>
+
+<clr-vertical-nav clrVerticalNavCollapsible="true" [clr-nav-level]="2">
+  <clr-vertical-nav-group>
+    <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>
+    vertical nav group
+    <clr-vertical-nav-group-children>
+      <div class="toggle-switch" clrVerticalNavLink>
+        <input type="checkbox" id="toggle_1">
+        <label for="toggle_1">Toggles turn on and off</label>
+      </div>
+      <div class="radio" clrVerticalNavLink>
+        <input type="radio" name="gridRadios" id="checkrads_9">
+        <label for="checkrads_9">Radio option 1</label>
+      </div>
+      <div class="checkbox" clrVerticalNavLink>
+        <input type="checkbox" id="checkrads_2" checked>
+        <label for="checkrads_2">Checkbox 2</label>
+      </div>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group>
+    <clr-icon shape="bolt" clrVerticalNavIcon></clr-icon>
+    vertical nav group
+    <clr-vertical-nav-group-children>
+      <a clrVerticalNavLink>
+        Vertical Nav Link
+      </a>
+      <a clrVerticalNavLink>
+        Vertical Nav Link
+      </a>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <div class="nav-divider"></div>
+  <a clrVerticalNavLink (click)="fireAlert('info')">
+    <clr-icon shape="info-circle" clrVerticalNavIcon></clr-icon>
+    alert-info
+  </a>
+  <a clrVerticalNavLink (click)="fireAlert('warning')">
+    <clr-icon shape="exclamation-triangle" clrVerticalNavIcon></clr-icon>
+    alert-warning
+  </a>
+  <a clrVerticalNavLink (click)="fireAlert('danger')">
+    <clr-icon shape="exclamation-circle" clrVerticalNavIcon></clr-icon>
+    alert-danger
+  </a>
+  <div class="nav-divider"></div>
+
+</clr-vertical-nav>

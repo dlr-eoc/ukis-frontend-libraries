@@ -4,8 +4,8 @@
 
   <ukis-header [ukis-title]="title">
 
-    <a href="javascript://" class="active nav-link nav-text header-nav-el">Route 1</a>
-    <a href="javascript://" class="nav-link nav-text header-nav-el">Route 2</a>
+    <a routerLink="/vertical_nav" routerLinkActive="active" class="nav-link nav-text header-nav-el">VerticalNav</a>
+    <a routerLink="/another_route" routerLinkActive="active" class="nav-link nav-text header-nav-el">Another Route</a>
 
     <clr-dropdown class="header-action-el">
       <button class="nav-icon" clrDropdownTrigger>
@@ -31,110 +31,8 @@
 
   </ukis-header>
 
-
-  <!--
-  <nav class="subnav">
-      <ul class="nav">
-          <li class="nav-item">
-              <a class="nav-link active" href="#">Dashboard</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="#">Management</a>
-          </li>
-      </ul>
-  </nav>
--->
   <div class="content-container" [ngClass]="{'floating':ui.floating}">
-    <!-- reverse-->
-
-    <div class="content-area">
-
-
-      <div class="card" style="width: 20%;   margin-left: 40%;   margin-top: 15%;">
-        <div class="card-img">
-          <img src="https://vmware.github.io/clarity/clarity_logo.21dda15557a6ebf26fce.svg">
-        </div>
-        <div class="card-block">
-          <p class="card-text">
-            <a href="https://vmware.github.io/clarity/documentation" target="_blank">
-              Check out the clarity documentation for components and icons
-            </a>
-          </p>
-          <p class="card-text">
-            <a href="https://vmware.github.io/clarity/documentation/app-layout" target="_blank">
-              Check out the clarity documentation for application layout
-            </a>
-          </p>
-        </div>
-      </div>
-
-
-    </div>
-
-
-    <!-- <nav class="sidenav"> -->
-    <clr-vertical-nav clrVerticalNavCollapsible="true" [clr-nav-level]="2">
-
-      <clr-vertical-nav-group>
-        <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>
-        vertical nav group
-        <clr-vertical-nav-group-children>
-          <div class="toggle-switch" clrVerticalNavLink>
-            <input type="checkbox" id="toggle_1">
-            <label for="toggle_1">Toggles turn on and off</label>
-          </div>
-          <div class="radio" clrVerticalNavLink>
-            <input type="radio" name="gridRadios" id="checkrads_9">
-            <label for="checkrads_9">Radio option 1</label>
-          </div>
-          <div class="checkbox" clrVerticalNavLink>
-            <input type="checkbox" id="checkrads_2" checked>
-            <label for="checkrads_2">Checkbox 2</label>
-          </div>
-        </clr-vertical-nav-group-children>
-      </clr-vertical-nav-group>
-      <clr-vertical-nav-group>
-        <clr-icon shape="bolt" clrVerticalNavIcon></clr-icon>
-        vertical nav group
-        <clr-vertical-nav-group-children>
-          <a clrVerticalNavLink>
-            Vertical Nav Link
-          </a>
-          <a clrVerticalNavLink>
-            Vertical Nav Link
-          </a>
-        </clr-vertical-nav-group-children>
-      </clr-vertical-nav-group>
-      <div class="nav-divider"></div>
-      <a clrVerticalNavLink (click)="setAlert('info')">
-        <clr-icon shape="info-circle" clrVerticalNavIcon></clr-icon>
-        alert-info
-      </a>
-      <a clrVerticalNavLink (click)="setAlert('warning')">
-        <clr-icon shape="exclamation-triangle" clrVerticalNavIcon></clr-icon>
-        alert-warning
-      </a>
-      <a clrVerticalNavLink (click)="setAlert('danger')">
-        <clr-icon shape="exclamation-circle" clrVerticalNavIcon></clr-icon>
-        alert-danger
-      </a>
-      <div class="nav-divider"></div>
-      <a clrVerticalNavLink (click)="ui.floating=!ui.floating">
-        <clr-icon [attr.shape]="ui.floating?'resize-up':'resize-down'" clrVerticalNavIcon></clr-icon>
-        {{ui.floating?'attach':'detach'}}
-      </a>
-      <div class="nav-divider"></div>
-      <a clrVerticalNavLink (click)="ui.footer=!ui.footer">
-        <clr-icon shape="angle-double" [attr.dir]="ui.footer?'down':'up'" clrVerticalNavIcon></clr-icon>
-        {{ui.footer?'hide':'show'}}
-      </a>
-
-    </clr-vertical-nav>
-    <!-- </nav> -->
-
-
-
-
+    <router-outlet></router-outlet>
   </div>
   <footer class="footer" *ngIf="ui.footer">
     <table class="table">

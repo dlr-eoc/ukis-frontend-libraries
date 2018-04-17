@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { NgModel, NgForm, RadioControlValueAccessor, FormControl, FormGroup } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
@@ -15,6 +15,9 @@ import '@clr/icons/shapes/travel-shapes';
 import './icons/ukis';
 
 
+import { AlertService } from './alert.service';
+
+
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
 
 /**
@@ -23,7 +26,8 @@ const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritat
 @Component({
   selector: 'ukis-root',
   templateUrl: './ukis.component.html',
-  styleUrls: []
+  styleUrls: [],
+  providers: []
 })
 export class UkisComponent {
   title = 'UKIS UI';
@@ -35,14 +39,15 @@ export class UkisComponent {
   ui = {
     floating: true,
     flipped: false,
-    footer:false
+    footer: false
   };
 
-  constructor() {
-
-
+  constructor(private alertService: AlertService) {
+    alertService.alert$.subscribe((ev) => {
+      console.log("test");
+      this.setAlert(ev)
+    });
   }
-
 
   setAlert = (type: string = 'info') => {
     // structure of (app-level) alert
