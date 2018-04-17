@@ -14,28 +14,8 @@ import { RouteVerticalNavComponent } from './route-vertical-nav/route-vertical-n
 import { RouteHomeComponent } from './route-home/route-home.component';
 import { AlertService } from './alert.service';
 
-//for map
-import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
-import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
-import { OlMapModule } from '@ukis/ol-map/src/app/ol-map/ol-map.module';
-import { WWWMapModule } from '@ukis/www-map/src/app/www-map/www-map.module';
-
-//for Mapcontrol
-//import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
-import { MapcontrolModule } from '@ukis/mapcontrol/src/app/mapcontrol/mapcontrol.module';
-
-//for Mapnavigator
-//import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
-import { MapnavigatorModule } from '@ukis/mapcontrol/src/app/mapnavigator/mapnavigator.module';
-
-//for layerentry
-//import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
-import { LayerentryModule } from '@ukis/mapcontrol/src/app/layerentry/layerentry.module';
-
 //for User
-import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
 import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
-import { UserServiceModule } from '@ukis/services/src/app/user/user.module';
 
 /**
  * Main App Module in which all Modules and services are plugged into
@@ -55,17 +35,9 @@ import { UserServiceModule } from '@ukis/services/src/app/user/user.module';
     BrowserAnimationsModule,
     FormsModule,
     ClarityModule.forRoot(),
-    MapstateServiceModule.forRoot(),
-    LayersServiceModule.forRoot(),
-    OlMapModule,
-    WWWMapModule,
-    MapcontrolModule,
-    MapnavigatorModule,
-    LayerentryModule,
-    UserServiceModule.forRoot(),
     UserinfoModule
   ],
-  providers: [AuthService, AlertService],  
+  providers: [AlertService],  
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }

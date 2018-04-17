@@ -13,17 +13,9 @@ import '@clr/icons/shapes/technology-shapes';
 import '@clr/icons/shapes/travel-shapes';
 import './icons/ukis';
 
-import { google_earth, google_hybrid, google_maps, osm, eoc_litemap } from '@ukis/baseLayers/rasterBaseLayers';
-import { RasterLayer } from '@ukis/datatypes/Layer';
-import { LayersService } from '@ukis/services/src/app/layers/layers.service';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Ol4MapSvc, IOl4MapSvc } from '@ukis/ol-map/src/app/ol-map/ol-map.service';
-
 //for User
-import { AuthService } from '@ukis/services/src/app/user/dummy-auth.service';
-
-
 import { AlertService } from './alert.service';
 
 

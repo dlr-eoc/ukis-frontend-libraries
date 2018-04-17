@@ -28,7 +28,7 @@
         <a href="..." clrDropdownItem>About</a>
       </clr-dropdown-menu>
     </clr-dropdown>
-    <clr-dropdown>
+    <clr-dropdown class="header-action-el">
       <button class="nav-icon" clrDropdownTrigger>
         <clr-icon shape="user"></clr-icon>
         <clr-icon shape="caret down"></clr-icon>
@@ -39,13 +39,11 @@
     </clr-dropdown>
   </ukis-header>
 
-  </ukis-header>
-
   <div class="content-container" [ngClass]="{'floating':ui.floating}">
     <router-outlet></router-outlet>
   </div>
   <footer class="footer" *ngIf="ui.footer">
-
+<!--
     <div style="float: left; width: 700px;">
       <table class="table">
         <thead>
@@ -62,12 +60,8 @@
     </div>
 
     <div style="float: left; width: 300px; margin-top: 1.5em; margin-left: 3em;">
-      <ukis-mapnavigator></ukis-mapnavigator>
-      <!--
-<button class="btn btn-outline" (click)="zoom('+')">+</button>
-<button class="btn btn-outline" (click)="zoom('-')">-</button>
--->
-
+     
+   
     </div>
 
     <div style="float: right;display: table-footer-group;">
@@ -75,6 +69,6 @@
       <img src="http://sedac.ciesin.columbia.edu/geoserver/wms?request=GetLegendGraphic&service=wms&layer=ndh:ndh-drought-hazard-frequency-distribution&version=1.1.1&format=image/png" alt="">
     </div>
 
-
+  -->
   </footer>
 </clr-main-container>
