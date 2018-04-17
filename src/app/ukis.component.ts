@@ -16,6 +16,8 @@ import './icons/ukis';
 import { Subscription } from 'rxjs/Subscription';
 
 //for User
+import { BasicAuthService } from '@ukis/services/src/app/auth/basic-auth.service';
+
 import { AlertService } from './alert.service';
 
 
@@ -43,7 +45,7 @@ export class UkisComponent {
     footer: false
   };
 
-  constructor(private alertService: AlertService) {
+  constructor(private alertService: AlertService, private authService:BasicAuthService) {
     alertService.alert$.subscribe((ev) => {
       console.log("test");
       this.setAlert(ev)

@@ -15,7 +15,10 @@ import { RouteHomeComponent } from './route-home/route-home.component';
 import { AlertService } from './alert.service';
 
 //for User
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '@ukis/services/src/app/auth/token.interceptor';
 import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
+import { BasicAuthService } from '@ukis/services/src/app/auth/basic-auth.service';
 
 /**
  * Main App Module in which all Modules and services are plugged into
@@ -37,7 +40,14 @@ import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module
     ClarityModule.forRoot(),
     UserinfoModule
   ],
-  providers: [AlertService],  
+  providers: [
+    AlertService,
+    BasicAuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }],  
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }
