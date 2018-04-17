@@ -3,9 +3,6 @@ pipeline {
     agent {
         label 'garibaldi.eoc.dlr.de'
     }
-    options {
-       checkoutToSubdirectory('gitdir')
-    }
 
     stages {
    
@@ -13,7 +10,7 @@ pipeline {
        
             steps {
                 sh """
-                    docker build -t ukis:mofro .
+                    docker build -t ukis:mofro gitdir/.
                 """
             }
         }
@@ -28,8 +25,7 @@ pipeline {
         }
         stage('bundle build') {
             steps {
-                sh 'tar cfz ukis-mofro-doc.tar.gz output/documentation'
-                sh 'tar cfz ukis-mofro-dist.tar.gz output/dist'
+                sh 'scripts/jenkins/bundle.sh'
             }
         }
     }
