@@ -12,11 +12,15 @@ button:focus {
 }
 
 .header {
+    color:inherit;
     .branding {
         .title {
             padding-left: 1rem;
             font-size: 1rem;
         }
+    }
+    .nav-link {
+        color:inherit;
     }
 }
 
@@ -30,7 +34,6 @@ button:focus {
 
 .clr-vertical-nav {
     border-radius: 1px;
-    width: 15rem;
     .nav-trigger-icon {
         color: #aaa;
         width: 1.2rem;
@@ -111,11 +114,45 @@ button:focus {
 
 }
 
+
+@media screen and (min-width: 320px) and (max-width: 374px) {
+    // doesn't work with left aligned context menu
+    .main-container.open-overflow-menu{
+        .header-overflow-trigger {
+            right: -26px;
+            right: calc((100% - 12rem)/2 - 0.5rem - 30px ); // center
+        }
+    }
+}
+
 @media screen and (min-width: 768px) {
     .content-container {
-        &.reverse {
+        
+
+        &:not(.left) {
+
             flex-direction: row-reverse;
+            .clr-vertical-nav.clr-nav-level-2 .nav-trigger {
+                
+                margin-right: auto;
+                margin-left: 0.125rem;
+                
+                clr-icon {
+                margin-left: .2rem;
+                margin-right: auto;
+
+                &[dir=right] svg {
+                    transform: rotate(270deg);
+                }
+                &[dir=left] svg {
+                    transform: rotate(90deg);
+                }
+            }
         }
+
+        }
+        
+
         &.floating {
             display: block;
             position: relative;
@@ -128,10 +165,14 @@ button:focus {
                 position: absolute;
                 margin: 1rem;
                 max-height: calc(100% - 2rem);
+                right: 0
             }
-            &.reverse {
+            
+
+            &.left {
                 .clr-vertical-nav {
-                    right: 0
+                    right: auto;
+                    left:0;
                 }
             }
         }
