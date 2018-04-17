@@ -4,9 +4,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 
+import { RouterModule, Routes } from '@angular/router';
+import { UkisRoutingModule, AnotherRoute } from './ukis-routing.module';
+
 import { UkisComponent } from './ukis.component';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { HeaderComponent } from './header/header.component';
+import { RouteVerticalNavComponent } from './route-vertical-nav/route-vertical-nav.component';
+import { RouteHomeComponent } from './route-home/route-home.component';
+import { AlertService } from './alert.service';
 
 //for map
 import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
@@ -38,9 +44,13 @@ import { UserServiceModule } from '@ukis/services/src/app/user/user.module';
   declarations: [
     UkisComponent,
     GlobalAlertComponent,
-    HeaderComponent
+    HeaderComponent,
+    AnotherRoute,
+    RouteVerticalNavComponent,
+    RouteHomeComponent 
   ],
   imports: [
+    UkisRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -55,7 +65,7 @@ import { UserServiceModule } from '@ukis/services/src/app/user/user.module';
     UserServiceModule.forRoot(),
     UserinfoModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, AlertService],  
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }

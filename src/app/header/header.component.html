@@ -1,33 +1,30 @@
 <clr-header class="header-1">
-    <div class="branding">
-      <a  class="nav-link">
-        <clr-icon shape="dlr" class="is-solid" size="48"></clr-icon>
-        <span class="title">{{title}}</span>
-      </a>
-    </div>
+  <div class="branding">
+    <a class="nav-link" routerLink="/" routerLinkActive="active">
+      <clr-icon shape="dlr" class="is-solid" size="48"></clr-icon>
+      <span class="title">{{title}}</span>
+    </a>
+  </div>
+  <div class="header-nav" [clr-nav-level]="1">
+    <ng-content select=".header-nav-el"></ng-content>
+    
+    <a href="http://ukis.eoc.dlr.de/" class="nav-link nav-icon">
+      <clr-icon shape="ukis" class="is-solid" size="36"></clr-icon>
+    </a>
+
     <form class="search">
       <label for="search_input">
         <input id="search_input" type="text" placeholder="Search for keywords...">
       </label>
     </form>
-    <div class="header-actions">
 
-      <a href="http://ukis.eoc.dlr.de/" class="nav-link nav-icon">
-          <clr-icon shape="ukis" class="is-solid"  size="36"></clr-icon>
-      </a>
+  </div>
 
-      <!--clr-dropdown>
-        <button class="nav-icon" clrDropdownTrigger>
-          <clr-icon shape="cog"></clr-icon>
-          <clr-icon shape="caret down"></clr-icon>
-        </button>
-        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-          <a href="..." clrDropdownItem>About</a>
-          <a href="..." clrDropdownItem>Preferences</a>
-          <a href="..." clrDropdownItem>Log out</a>
-        </clr-dropdown-menu>
-      </clr-dropdown-->
-        <ng-content></ng-content>
+  <ng-content></ng-content>
 
-    </div>
-  </clr-header>
+  <div class="header-actions">
+
+    <ng-content select=".header-action-el"></ng-content>
+
+  </div>
+</clr-header>
