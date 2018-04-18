@@ -25,7 +25,10 @@ pipeline {
         }
         stage('bundle build') {
             steps {
-                sh 'scripts/jenkins/bundle.sh'
+                sh """
+                    tar cfz ukis-mofro-doc.tar.gz output/documentation
+                    tar cfz ukis-mofro-dist.tar.gz output/dist
+                """
             }
         }
     }
