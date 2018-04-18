@@ -10,7 +10,7 @@ pipeline {
        
             steps {
                 sh """
-                    docker build -t ukis:mofro gitdir/.
+                    docker build -t ukis:mofro .
                 """
             }
         }
