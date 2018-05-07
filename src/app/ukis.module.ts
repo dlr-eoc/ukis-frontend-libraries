@@ -12,7 +12,7 @@ import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { HeaderComponent } from './header/header.component';
 import { RouteVerticalNavComponent } from './route-vertical-nav/route-vertical-nav.component';
 import { RouteHomeComponent } from './route-home/route-home.component';
-import { AlertService } from './alert.service';
+import { AlertService } from './global-alert/alert.service';
 
 //for User
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
