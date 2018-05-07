@@ -1,6 +1,6 @@
 {
-  "name": "ui",
-  "version": "0.0.0",
+  "name": "ukis-frontend",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -13,6 +13,10 @@
     "_postinstall": "npm run gitDependencies",
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && ./node_modules/.bin/compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "./node_modules/.bin/compodoc -r 8081 -s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.ukis.eoc.dlr.de/scm/mofro/frontend.git"
   },
   "private": true,
   "dependencies": {
