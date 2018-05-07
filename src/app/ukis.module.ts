@@ -18,7 +18,7 @@ import { AlertService } from './alert.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '@ukis/services/src/app/auth/token.interceptor';
 import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
-import { BasicAuthService } from '@ukis/services/src/app/auth/basic-auth.service';
+import { AuthModule } from '@ukis/services/src/app/auth/auth.module';
 
 /**
  * Main App Module in which all Modules and services are plugged into
@@ -38,11 +38,11 @@ import { BasicAuthService } from '@ukis/services/src/app/auth/basic-auth.service
     BrowserAnimationsModule,
     FormsModule,
     ClarityModule.forRoot(),
-    UserinfoModule
+    UserinfoModule,
+    AuthModule.forRoot()
   ],
   providers: [
     AlertService,
-    BasicAuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
