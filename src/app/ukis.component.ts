@@ -33,7 +33,7 @@ const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritat
   providers: []
 })
 export class UkisComponent {
-  title = 'Drought Distribution';
+  title = 'UKIS Frontend';
 
   alert;
 
