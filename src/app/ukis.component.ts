@@ -11,7 +11,7 @@ import '@clr/icons/shapes/media-shapes';
 import '@clr/icons/shapes/social-shapes';
 import '@clr/icons/shapes/technology-shapes';
 import '@clr/icons/shapes/travel-shapes';
-import './icons/ukis';
+import './components/icons/ukis';
 
 import { Subscription } from 'rxjs/Subscription';
 
