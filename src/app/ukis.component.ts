@@ -33,7 +33,7 @@ const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritat
   providers: []
 })
 export class UkisComponent {
-  title = 'UKIS Frontend';
+  title = '';
 
   alert;
 
@@ -45,9 +45,16 @@ export class UkisComponent {
     footer: false
   };
 
-  constructor(private alertService: AlertService, private authService:BasicAuthService) {
+  constructor(private alertService: AlertService, private authService: BasicAuthService) {
+    this.getHtmlMeta(['title','version','description']);
+
+    if (this['TITLE']) {
+      this.title = this['TITLE'];
+    }
+
+    console.log(this)
+
     alertService.alert$.subscribe((ev) => {
-      console.log("test");
       this.setAlert(ev)
     });
   }
@@ -67,6 +74,17 @@ export class UkisComponent {
           }
         }]
     };
+  }
+
+  getHtmlMeta(names:string[]) {
+    var _ref = document.getElementsByTagName('meta');
+    for (let _i = 0, _len = _ref.length; _i < _len; _i++) {
+      let meta = _ref[_i];
+      let name = meta.getAttribute('name');
+      if (names.includes(name)) {
+        this[name.toUpperCase()] = meta.getAttribute('content') || eval(meta.getAttribute('value'));
+      }
+    }
   }
 
 
