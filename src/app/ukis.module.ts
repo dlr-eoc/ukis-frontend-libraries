@@ -8,11 +8,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { UkisRoutingModule, AnotherRoute } from './ukis-routing.module';
 
 import { UkisComponent } from './ukis.component';
-import { GlobalAlertComponent } from './global-alert/global-alert.component';
-import { HeaderComponent } from './header/header.component';
-import { RouteVerticalNavComponent } from './route-vertical-nav/route-vertical-nav.component';
-import { RouteHomeComponent } from './route-home/route-home.component';
-import { AlertService } from './global-alert/alert.service';
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
+import { HeaderComponent } from './components/header/header.component';
+import { RouteVerticalNavComponent } from './route-components/route-vertical-nav/route-vertical-nav.component';
+import { RouteHomeComponent } from './route-components/route-home/route-home.component';
+import { AlertService } from './components/global-alert/alert.service';
 
 //for User
 import { HTTP_INTERCEPTORS } from '@angular/common/http';

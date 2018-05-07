@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertService } from '../global-alert/alert.service';
+import { AlertService } from '../../components/global-alert/alert.service';
 
 @Component({
   selector: 'ukis-route-vertical-nav',

@@ -4,8 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { Component } from '@angular/core';
 
-import { RouteHomeComponent } from './route-home/route-home.component'
-import { RouteVerticalNavComponent } from './route-vertical-nav/route-vertical-nav.component'
+import { RouteHomeComponent } from './route-components/route-home/route-home.component'
+import { RouteVerticalNavComponent } from './route-components/route-vertical-nav/route-vertical-nav.component'
 
 
 @Component({

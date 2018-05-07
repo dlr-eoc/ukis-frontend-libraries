@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs/Subscription';
 //for User
 import { BasicAuthService } from '@ukis/services/src/app/auth/basic-auth.service';
 
-import { AlertService } from './global-alert/alert.service';
+import { AlertService } from './components/global-alert/alert.service';
 
 
 const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
