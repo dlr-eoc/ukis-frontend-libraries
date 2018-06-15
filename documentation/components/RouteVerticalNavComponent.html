@@ -1,0 +1,744 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>UKIS Client</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	    <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">UKIS Client</a>
+            <button type="button" class="btn btn-default btn-menu fa fa-bars" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+            <div id="book-search-input" role="search">
+                <input type="text" placeholder="Type to search">
+            </div>
+            <nav>
+            
+                <ul class="list">
+            
+                    <li class="title">
+                        <a href="../index.html">UKIS Client</a>
+                    </li>
+            
+                    <li class="divider"></li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                        <ul class="links">
+                                <li class="link">
+                                    <a 
+                                        
+                                         href="../overview.html" 
+                                         href="../overview.html" 
+                                        >
+                                        <span class="fa fa-th"></span>Overview
+                                    </a>
+                                </li>
+                                <li class="link">
+                                  <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../modules.html" >
+                            <div class="menu-toggler linked" data-toggle="collapse"
+                                    data-target="#xs-modules-links"
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
+                        </a>
+                        <ul class="links collapse "
+                                id="xs-modules-links"
+                            >
+                                <li class="link">
+                                    <a href="../modules/UkisModule.html" >UkisModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/UkisRoutingModule.html" >UkisRoutingModule</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
+                            <span class="fa fa-cogs"></span>
+                            <span>Components</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-components-links"
+                            >
+                                <li class="link">
+                                    <a href="../components/AnotherRoute.html" >AnotherRoute</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/RouteHomeComponent.html" >RouteHomeComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/RouteVerticalNavComponent.html"  data-type="entity-link" class="active" >RouteVerticalNavComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/UkisComponent.html" >UkisComponent</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
+                            <span class="fa fa-long-arrow-down"></span>
+                            <span>Injectables</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-injectables-links"
+                            >
+                                <li class="link">
+                                    <a href="../injectables/AlertService.html" >AlertService</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
+                    </li>
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                    </li>
+            
+                    <li class="divider"></li>
+                    <li class="copyright">
+                            Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                        <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                            </a>
+                    </li>
+            
+                </ul>
+            
+            </nav>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <nav>
+                   
+                       <ul class="list">
+                   
+                           <li class="title">
+                               <a href="../index.html">UKIS Client</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                   
+                               <div id="book-search-input" role="search">
+                                   <input type="text" placeholder="Type to search">
+                               </div>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                               <ul class="links">
+                                       <li class="link">
+                                           <a 
+                                               
+                                                href="../overview.html" 
+                                                href="../overview.html" 
+                                               >
+                                               <span class="fa fa-th"></span>Overview
+                                           </a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../modules.html" >
+                                   <div class="menu-toggler linked" data-toggle="collapse"
+                                           data-target="#modules-links"
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
+                               </a>
+                               <ul class="links collapse "
+                                       id="modules-links"
+                   >
+                                       <li class="link">
+                                           <a href="../modules/UkisModule.html" >UkisModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/UkisRoutingModule.html" >UkisRoutingModule</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
+                                   <span class="fa fa-cogs"></span>
+                                   <span>Components</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="components-links"
+                   >
+                                       <li class="link">
+                                           <a href="../components/AnotherRoute.html" >AnotherRoute</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/RouteHomeComponent.html" >RouteHomeComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/RouteVerticalNavComponent.html"  data-type="entity-link" class="active" >RouteVerticalNavComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/UkisComponent.html" >UkisComponent</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
+                                   <span class="fa fa-long-arrow-down"></span>
+                                   <span>Injectables</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="injectables-links"
+                   >
+                                       <li class="link">
+                                           <a href="../injectables/AlertService.html" >AlertService</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
+                           </li>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                           <li class="copyright">
+                                   Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                               <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                                   </a>
+                           </li>
+                   
+                       </ul>
+                   
+                   </nav>
+               </div>
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>RouteVerticalNavComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active">
+        <a href="#info" id="info-tab" role="tab" data-toggle="tab" data-link="info">Info</a>
+    </li>
+
+    <li>
+        <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+    </li>
+
+    <li>
+        <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+    </li>
+    <li>
+        <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/route-components/route-vertical-nav/route-vertical-nav.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>ukis-route-vertical-nav</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>route-vertical-nav.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./route-vertical-nav.component.html</code></td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+        <h3 id="index">Index</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#fireAlert">fireAlert</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3 id="constructor">Constructor</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>constructor(alertService: <a href="../injectables/AlertService.html">AlertService</a>)</code>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/route-components/route-vertical-nav/route-vertical-nav.component.ts:10</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div>
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>alertService</td>
+                                                      <td>
+                                                                <code><a href="../injectables/AlertService.html" target="_self" >AlertService</a></code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </section>
+
+
+
+
+
+    <section>
+        
+            <h3 id="methods">
+                Methods
+            </h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="fireAlert"></a>
+                            <span class="name">
+                                <b>
+                                fireAlert
+                                </b>
+                                <a href="#fireAlert"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>fireAlert(ev: )</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="17" class="link-to-prism">src/app/route-components/route-vertical-nav/route-vertical-nav.component.ts:17</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+    
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>ev</td>
+                                                      <td>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                                    <div class="io-description">
+                                        
+                                    </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="ngOnInit"></a>
+                            <span class="name">
+                                <b>
+                                ngOnInit
+                                </b>
+                                <a href="#ngOnInit"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>ngOnInit()</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/route-components/route-vertical-nav/route-vertical-nav.component.ts:21</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+    
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </section>
+
+
+</div>
+
+
+    <div class="tab-pane fade tab-source-code" id="c-source">
+        <pre class="line-numbers"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { AlertService } from &#x27;../../components/global-alert/alert.service&#x27;;
+
+@Component({
+  selector: &#x27;ukis-route-vertical-nav&#x27;,
+  templateUrl: &#x27;./route-vertical-nav.component.html&#x27;,
+  styleUrls: [&#x27;./route-vertical-nav.component.scss&#x27;],
+  providers: []
+})
+export class RouteVerticalNavComponent implements OnInit {
+
+
+  constructor(private alertService:AlertService) {
+
+  }
+
+  fireAlert(ev) {
+    this.alertService.alert(ev);
+  }
+
+  ngOnInit() {
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade" id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;content-area&quot;&gt;
+  MAP
+&lt;/div&gt;
+
+&lt;clr-vertical-nav clrVerticalNavCollapsible&#x3D;&quot;true&quot; [clr-nav-level]&#x3D;&quot;2&quot;&gt;
+  &lt;clr-vertical-nav-group&gt;
+    &lt;clr-icon shape&#x3D;&quot;flame&quot; clrVerticalNavIcon&gt;&lt;/clr-icon&gt;
+    vertical nav group
+    &lt;clr-vertical-nav-group-children&gt;
+      &lt;div class&#x3D;&quot;toggle-switch&quot; clrVerticalNavLink&gt;
+        &lt;input type&#x3D;&quot;checkbox&quot; id&#x3D;&quot;toggle_1&quot;&gt;
+        &lt;label for&#x3D;&quot;toggle_1&quot;&gt;Toggles turn on and off&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;radio&quot; clrVerticalNavLink&gt;
+        &lt;input type&#x3D;&quot;radio&quot; name&#x3D;&quot;gridRadios&quot; id&#x3D;&quot;checkrads_9&quot;&gt;
+        &lt;label for&#x3D;&quot;checkrads_9&quot;&gt;Radio option 1&lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class&#x3D;&quot;checkbox&quot; clrVerticalNavLink&gt;
+        &lt;input type&#x3D;&quot;checkbox&quot; id&#x3D;&quot;checkrads_2&quot; checked&gt;
+        &lt;label for&#x3D;&quot;checkrads_2&quot;&gt;Checkbox 2&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/clr-vertical-nav-group-children&gt;
+  &lt;/clr-vertical-nav-group&gt;
+  &lt;clr-vertical-nav-group&gt;
+    &lt;clr-icon shape&#x3D;&quot;bolt&quot; clrVerticalNavIcon&gt;&lt;/clr-icon&gt;
+    vertical nav group
+    &lt;clr-vertical-nav-group-children&gt;
+      &lt;a clrVerticalNavLink&gt;
+        Vertical Nav Link
+      &lt;/a&gt;
+      &lt;a clrVerticalNavLink&gt;
+        Vertical Nav Link
+      &lt;/a&gt;
+    &lt;/clr-vertical-nav-group-children&gt;
+  &lt;/clr-vertical-nav-group&gt;
+  &lt;div class&#x3D;&quot;nav-divider&quot;&gt;&lt;/div&gt;
+  &lt;a clrVerticalNavLink (click)&#x3D;&quot;fireAlert(&#x27;info&#x27;)&quot;&gt;
+    &lt;clr-icon shape&#x3D;&quot;info-circle&quot; clrVerticalNavIcon&gt;&lt;/clr-icon&gt;
+    alert-info
+  &lt;/a&gt;
+  &lt;a clrVerticalNavLink (click)&#x3D;&quot;fireAlert(&#x27;warning&#x27;)&quot;&gt;
+    &lt;clr-icon shape&#x3D;&quot;exclamation-triangle&quot; clrVerticalNavIcon&gt;&lt;/clr-icon&gt;
+    alert-warning
+  &lt;/a&gt;
+  &lt;a clrVerticalNavLink (click)&#x3D;&quot;fireAlert(&#x27;danger&#x27;)&quot;&gt;
+    &lt;clr-icon shape&#x3D;&quot;exclamation-circle&quot; clrVerticalNavIcon&gt;&lt;/clr-icon&gt;
+    alert-danger
+  &lt;/a&gt;
+  &lt;div class&#x3D;&quot;nav-divider&quot;&gt;&lt;/div&gt;
+
+&lt;/clr-vertical-nav&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade" id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="content-area">  MAP</div><clr-vertical-nav clrVerticalNavCollapsible="true" [clr-nav-level]="2">  <clr-vertical-nav-group>    <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>    vertical nav group    <clr-vertical-nav-group-children>      <div class="toggle-switch" clrVerticalNavLink>        <input type="checkbox" id="toggle_1">        <label for="toggle_1">Toggles turn on and off</label>      </div>      <div class="radio" clrVerticalNavLink>        <input type="radio" name="gridRadios" id="checkrads_9">        <label for="checkrads_9">Radio option 1</label>      </div>      <div class="checkbox" clrVerticalNavLink>        <input type="checkbox" id="checkrads_2" checked>        <label for="checkrads_2">Checkbox 2</label>      </div>    </clr-vertical-nav-group-children>  </clr-vertical-nav-group>  <clr-vertical-nav-group>    <clr-icon shape="bolt" clrVerticalNavIcon></clr-icon>    vertical nav group    <clr-vertical-nav-group-children>      <a clrVerticalNavLink>        Vertical Nav Link      </a>      <a clrVerticalNavLink>        Vertical Nav Link      </a>    </clr-vertical-nav-group-children>  </clr-vertical-nav-group>  <div class="nav-divider"></div>  <a clrVerticalNavLink (click)="fireAlert(\'info\')">    <clr-icon shape="info-circle" clrVerticalNavIcon></clr-icon>    alert-info  </a>  <a clrVerticalNavLink (click)="fireAlert(\'warning\')">    <clr-icon shape="exclamation-triangle" clrVerticalNavIcon></clr-icon>    alert-warning  </a>  <a clrVerticalNavLink (click)="fireAlert(\'danger\')">    <clr-icon shape="exclamation-circle" clrVerticalNavIcon></clr-icon>    alert-danger  </a>  <div class="nav-divider"></div></clr-vertical-nav></div>'
+    var COMPONENTS = [{'name': 'AnotherRoute', 'selector': ''},{'name': 'GlobalAlertComponent', 'selector': 'ukis-global-alert'},{'name': 'HeaderComponent', 'selector': 'ukis-header'},{'name': 'RouteHomeComponent', 'selector': 'ukis-route-home'},{'name': 'RouteVerticalNavComponent', 'selector': 'ukis-route-vertical-nav'},{'name': 'UkisComponent', 'selector': 'ukis-root'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'RouteVerticalNavComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+           </div>
+       </div>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script>var COMPODOC_CURRENT_PAGE_DEPTH = 1;</script>
+
+       <script src="../js/search/search.js"></script>
+       <script src="../js/search/lunr.min.js"></script>
+       <script src="../js/search/search-lunr.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+       <script src="../js/search/search_index.js"></script>
+
+    </body>
+</html>

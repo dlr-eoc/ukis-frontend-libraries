@@ -1,0 +1,1006 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>UKIS Client</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	    <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">UKIS Client</a>
+            <button type="button" class="btn btn-default btn-menu fa fa-bars" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+            <div id="book-search-input" role="search">
+                <input type="text" placeholder="Type to search">
+            </div>
+            <nav>
+            
+                <ul class="list">
+            
+                    <li class="title">
+                        <a href="../index.html">UKIS Client</a>
+                    </li>
+            
+                    <li class="divider"></li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                        <ul class="links">
+                                <li class="link">
+                                    <a 
+                                        
+                                         href="../overview.html" 
+                                         href="../overview.html" 
+                                        >
+                                        <span class="fa fa-th"></span>Overview
+                                    </a>
+                                </li>
+                                <li class="link">
+                                  <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../modules.html" >
+                            <div class="menu-toggler linked" data-toggle="collapse"
+                                    data-target="#xs-modules-links"
+                            >
+                                <span class="fa fa-archive"></span>
+                                <span class="link-name">Modules</span>
+                                <span class="fa fa-angle-down"></span>
+                            </div>
+                        </a>
+                        <ul class="links collapse "
+                                id="xs-modules-links"
+                            >
+                                <li class="link">
+                                    <a href="../modules/UkisModule.html" >UkisModule</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../modules/UkisRoutingModule.html" >UkisRoutingModule</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-components-links"
+                            >
+                            <span class="fa fa-cogs"></span>
+                            <span>Components</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-components-links"
+                            >
+                                <li class="link">
+                                    <a href="../components/AnotherRoute.html" >AnotherRoute</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/RouteHomeComponent.html" >RouteHomeComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/RouteVerticalNavComponent.html" >RouteVerticalNavComponent</a>
+                                </li>
+                                <li class="link">
+                                    <a href="../components/UkisComponent.html"  data-type="entity-link" class="active" >UkisComponent</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-injectables-links"
+                            >
+                            <span class="fa fa-long-arrow-down"></span>
+                            <span>Injectables</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-injectables-links"
+                            >
+                                <li class="link">
+                                    <a href="../injectables/AlertService.html" >AlertService</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+            
+            
+            
+                    <li class="chapter">
+                        <div class="simple menu-toggler" data-toggle="collapse"
+                                data-target="#xs-miscellaneous-links"
+                            >
+                            <span class="fa fa-cubes"></span>
+                            <span>Miscellaneous</span>
+                            <span class="fa fa-angle-down"></span>
+                        </div>
+                        <ul class="links collapse "
+                                id="xs-miscellaneous-links"
+                            >
+                                <li class="link">
+                                  <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                </li>
+                        </ul>
+                    </li>
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
+                    </li>
+            
+                    <li class="chapter">
+                        <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                    </li>
+            
+                    <li class="divider"></li>
+                    <li class="copyright">
+                            Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                        <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                            </a>
+                    </li>
+            
+                </ul>
+            
+            </nav>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <nav>
+                   
+                       <ul class="list">
+                   
+                           <li class="title">
+                               <a href="../index.html">UKIS Client</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                   
+                               <div id="book-search-input" role="search">
+                                   <input type="text" placeholder="Type to search">
+                               </div>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../index.html"><span class="fa fa-home"></span>Getting started</a>
+                               <ul class="links">
+                                       <li class="link">
+                                           <a 
+                                               
+                                                href="../overview.html" 
+                                                href="../overview.html" 
+                                               >
+                                               <span class="fa fa-th"></span>Overview
+                                           </a>
+                                       </li>
+                                       <li class="link">
+                                         <a href="../index.html" ><span class="fa fa-file-text-o"></span>README</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../modules.html" >
+                                   <div class="menu-toggler linked" data-toggle="collapse"
+                                           data-target="#modules-links"
+                                   >
+                                       <span class="fa fa-archive"></span>
+                                       <span class="link-name">Modules</span>
+                                       <span class="fa fa-angle-down"></span>
+                                   </div>
+                               </a>
+                               <ul class="links collapse "
+                                       id="modules-links"
+                   >
+                                       <li class="link">
+                                           <a href="../modules/UkisModule.html" >UkisModule</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../modules/UkisRoutingModule.html" >UkisRoutingModule</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#components-links"
+                   >
+                                   <span class="fa fa-cogs"></span>
+                                   <span>Components</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="components-links"
+                   >
+                                       <li class="link">
+                                           <a href="../components/AnotherRoute.html" >AnotherRoute</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/GlobalAlertComponent.html" >GlobalAlertComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/HeaderComponent.html" >HeaderComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/RouteHomeComponent.html" >RouteHomeComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/RouteVerticalNavComponent.html" >RouteVerticalNavComponent</a>
+                                       </li>
+                                       <li class="link">
+                                           <a href="../components/UkisComponent.html"  data-type="entity-link" class="active" >UkisComponent</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#injectables-links"
+                   >
+                                   <span class="fa fa-long-arrow-down"></span>
+                                   <span>Injectables</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="injectables-links"
+                   >
+                                       <li class="link">
+                                           <a href="../injectables/AlertService.html" >AlertService</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                   
+                   
+                   
+                           <li class="chapter">
+                               <div class="simple menu-toggler" data-toggle="collapse"
+                                       data-target="#miscellaneous-links"
+                   >
+                                   <span class="fa fa-cubes"></span>
+                                   <span>Miscellaneous</span>
+                                   <span class="fa fa-angle-down"></span>
+                               </div>
+                               <ul class="links collapse "
+                                       id="miscellaneous-links"
+                   >
+                                       <li class="link">
+                                         <a href="../miscellaneous/variables.html" data-type="entity-link" >Variables</a>
+                                       </li>
+                               </ul>
+                           </li>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../routes.html" ><span class="fa fa-code-fork"></span>Routes</a>
+                           </li>
+                   
+                           <li class="chapter">
+                               <a data-type="chapter-link" href="../coverage.html" ><span class="fa fa-tasks"></span>Documentation coverage</a>
+                           </li>
+                   
+                           <li class="divider"></li>
+                           <li class="copyright">
+                                   Documentation generated using <a href="https://compodoc.github.io/website/" target="_blank">
+                                               <img src="..//images/compodoc-vectorise.svg" class="img-responsive">
+                                   </a>
+                           </li>
+                   
+                       </ul>
+                   
+                   </nav>
+               </div>
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>UkisComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active">
+        <a href="#info" id="info-tab" role="tab" data-toggle="tab" data-link="info">Info</a>
+    </li>
+
+    <li>
+        <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+    </li>
+
+    <li>
+        <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+    </li>
+    <li>
+        <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/app.component.ts</code>
+</p>
+
+
+
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>ukis-root</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>app.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./app.component.html</code></td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+        <h3 id="index">Index</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#alert">alert</a>
+                            </li>
+                            <li>
+                                <a href="#obsListOpen">obsListOpen</a>
+                            </li>
+                            <li>
+                                <a href="#setAlert">setAlert</a>
+                            </li>
+                            <li>
+                                <a href="#title">title</a>
+                            </li>
+                            <li>
+                                <a href="#ui">ui</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getHtmlMeta">getHtmlMeta</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h3 id="constructor">Constructor</h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>constructor(alertService: <a href="../injectables/AlertService.html">AlertService</a>, authService: BasicAuthService)</code>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/app/app.component.ts:41</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+                                <div>
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>alertService</td>
+                                                      <td>
+                                                                <code><a href="../injectables/AlertService.html" target="_self" >AlertService</a></code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td>authService</td>
+                                                      <td>
+                                                                <code>BasicAuthService</code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </section>
+
+
+
+
+
+    <section>
+        
+            <h3 id="methods">
+                Methods
+            </h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="getHtmlMeta"></a>
+                            <span class="name">
+                                <b>
+                                getHtmlMeta
+                                </b>
+                                <a href="#getHtmlMeta"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+    <code>getHtmlMeta(names: string[])</code>
+                        </td>
+                    </tr>
+    
+    
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/app.component.ts:77</a></div>
+                                </td>
+                            </tr>
+    
+                    <tr>
+                        <td class="col-md-4">
+    
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Type</td>
+                                                    <td>Optional</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                      <td>names</td>
+                                                      <td>
+                                                              <code>string[]</code>
+                                                      </td>
+                                                      <td>
+                                                      </td>
+                                                      <td></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+    
+                                </div>
+                                    <div class="io-description">
+                                        
+                                    </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+    </section>
+
+    <section>
+        
+            <h3 id="inputs">
+                Properties
+            </h3>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="alert"></a>
+                            <span class="name">
+                                <b>
+                                alert
+                                </b>
+                                <a href="#alert"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>alert:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/app.component.ts:33</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="obsListOpen"></a>
+                            <span class="name">
+                                <b>
+                                obsListOpen
+                                </b>
+                                <a href="#obsListOpen"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>obsListOpen:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>false</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/app.component.ts:35</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="setAlert"></a>
+                            <span class="name">
+                                <b>
+                                setAlert
+                                </b>
+                                <a href="#setAlert"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>setAlert:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>(type: string &#x3D; &#x27;info&#x27;) &#x3D;&gt; {
+        // structure of (app-level) alert
+        // TODO use shared service
+        this.alert &#x3D; {
+          type: type || &#x27;info&#x27;,
+          text: &#x60;&lt;strong&gt;Alert-Type: ${type.toUpperCase()}&lt;/strong&gt; ${lorem}&#x60;,
+          closeable: true,
+          actions: [
+            {
+              title: &#x27;ACTION&#x27;,
+              callback: () &#x3D;&gt; {
+                console.log(&#x27;received click&#x27;);
+              }
+            }]
+        };
+      }</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/app/app.component.ts:60</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="title"></a>
+                            <span class="name">
+                                <b>
+                                title
+                                </b>
+                                <a href="#title"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>title:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>&#x27;&#x27;</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/app.component.ts:31</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+            <table class="table table-sm table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <a name="ui"></a>
+                            <span class="name">
+                                <b>
+                                ui
+                                </b>
+                                <a href="#ui"><span class="fa fa-link"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <code>ui:     <code></code>
+    </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <i>Default value : </i><code>{
+        floating: true,
+        flipped: false,
+        footer: false
+      }</code>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/app.component.ts:37</a></div>
+                                </td>
+                            </tr>
+    
+    
+                </tbody>
+            </table>
+    </section>
+
+</div>
+
+
+    <div class="tab-pane fade tab-source-code" id="c-source">
+        <pre class="line-numbers"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+
+
+import &#x27;@webcomponents/custom-elements&#x27;;
+import &#x27;@clr/icons/shapes/all-shapes&#x27;;
+import &#x27;@clr/icons/shapes/commerce-shapes&#x27;;
+import &#x27;@clr/icons/shapes/core-shapes&#x27;;
+import &#x27;@clr/icons/shapes/essential-shapes&#x27;;
+import &#x27;@clr/icons/shapes/media-shapes&#x27;;
+import &#x27;@clr/icons/shapes/social-shapes&#x27;;
+import &#x27;@clr/icons/shapes/technology-shapes&#x27;;
+import &#x27;@clr/icons/shapes/travel-shapes&#x27;;
+import &#x27;./components/icons/ukis&#x27;;
+
+import { Subscription } from &#x27;rxjs/Subscription&#x27;;
+
+//for User
+import { BasicAuthService } from &#x27;@ukis/services/src/app/auth/basic-auth.service&#x27;;
+
+import { AlertService } from &#x27;./components/global-alert/alert.service&#x27;;
+
+
+const lorem &#x3D; &#x27;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?&#x27;;
+
+@Component({
+  selector: &#x27;ukis-root&#x27;,
+  templateUrl: &#x27;./app.component.html&#x27;,
+  styleUrls: [&#x27;./app.component.scss&#x27;]
+})
+export class UkisComponent {
+  title &#x3D; &#x27;&#x27;;
+
+  alert;
+
+  obsListOpen &#x3D; false;
+
+  ui &#x3D; {
+    floating: true,
+    flipped: false,
+    footer: false
+  };
+
+  constructor(
+    private alertService: AlertService, 
+    private authService: BasicAuthService
+  ) {
+    this.getHtmlMeta([&#x27;title&#x27;, &#x27;version&#x27;, &#x27;description&#x27;]);
+
+    if (this[&#x27;TITLE&#x27;]) {
+      this.title &#x3D; this[&#x27;TITLE&#x27;];
+    }
+
+    console.log(this)
+
+    alertService.alert$.subscribe((ev) &#x3D;&gt; {
+      this.setAlert(ev)
+    });
+  }
+
+  setAlert &#x3D; (type: string &#x3D; &#x27;info&#x27;) &#x3D;&gt; {
+    // structure of (app-level) alert
+    // TODO use shared service
+    this.alert &#x3D; {
+      type: type || &#x27;info&#x27;,
+      text: &#x60;&lt;strong&gt;Alert-Type: ${type.toUpperCase()}&lt;/strong&gt; ${lorem}&#x60;,
+      closeable: true,
+      actions: [
+        {
+          title: &#x27;ACTION&#x27;,
+          callback: () &#x3D;&gt; {
+            console.log(&#x27;received click&#x27;);
+          }
+        }]
+    };
+  }
+
+  getHtmlMeta(names: string[]) {
+    var _ref &#x3D; document.getElementsByTagName(&#x27;meta&#x27;);
+    for (let _i &#x3D; 0, _len &#x3D; _ref.length; _i &lt; _len; _i++) {
+      let meta &#x3D; _ref[_i];
+      let name &#x3D; meta.getAttribute(&#x27;name&#x27;);
+      if (names.includes(name)) {
+        this[name.toUpperCase()] &#x3D; meta.getAttribute(&#x27;content&#x27;) || eval(meta.getAttribute(&#x27;value&#x27;));
+      }
+    }
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade" id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;clr-main-container&gt;
+
+  &lt;ukis-global-alert *ngIf&#x3D;&quot;alert&quot; [(alert)]&#x3D;&quot;alert&quot;&gt;&lt;/ukis-global-alert&gt;
+
+  &lt;ukis-header [ukis-title]&#x3D;&quot;title&quot;&gt;
+
+    &lt;a routerLink&#x3D;&quot;/vertical_nav&quot; routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link nav-text header-nav-el&quot;&gt;VerticalNav&lt;/a&gt;
+    &lt;a routerLink&#x3D;&quot;/another_route&quot; routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link nav-text header-nav-el&quot;&gt;Another Route&lt;/a&gt;
+
+    &lt;clr-dropdown class&#x3D;&quot;header-action-el&quot;&gt;
+      &lt;button class&#x3D;&quot;nav-icon&quot; clrDropdownTrigger&gt;
+        &lt;clr-icon shape&#x3D;&quot;cog&quot;&gt;&lt;/clr-icon&gt;
+        &lt;clr-icon shape&#x3D;&quot;caret down&quot;&gt;&lt;/clr-icon&gt;
+      &lt;/button&gt;
+      &lt;clr-dropdown-menu *clrIfOpen clrPosition&#x3D;&quot;bottom-right&quot;&gt;
+        &lt;a href&#x3D;&quot;...&quot; clrDropdownItem&gt;About&lt;/a&gt;
+        &lt;a href&#x3D;&quot;...&quot; clrDropdownItem&gt;Preferences&lt;/a&gt;
+        &lt;a href&#x3D;&quot;...&quot; clrDropdownItem&gt;Log out&lt;/a&gt;
+      &lt;/clr-dropdown-menu&gt;
+    &lt;/clr-dropdown&gt;
+
+    &lt;clr-dropdown class&#x3D;&quot;header-action-el&quot;&gt;
+      &lt;button class&#x3D;&quot;nav-icon&quot; clrDropdownTrigger&gt;
+        &lt;clr-icon shape&#x3D;&quot;help-info&quot;&gt;&lt;/clr-icon&gt;
+        &lt;clr-icon shape&#x3D;&quot;caret down&quot;&gt;&lt;/clr-icon&gt;
+      &lt;/button&gt;
+      &lt;clr-dropdown-menu *clrIfOpen clrPosition&#x3D;&quot;bottom-right&quot;&gt;
+        &lt;a href&#x3D;&quot;...&quot; clrDropdownItem&gt;About&lt;/a&gt;
+      &lt;/clr-dropdown-menu&gt;
+    &lt;/clr-dropdown&gt;
+    &lt;clr-dropdown class&#x3D;&quot;header-action-el&quot;&gt;
+      &lt;button class&#x3D;&quot;nav-icon&quot; clrDropdownTrigger&gt;
+        &lt;clr-icon shape&#x3D;&quot;user&quot;&gt;&lt;/clr-icon&gt;
+        &lt;clr-icon shape&#x3D;&quot;caret down&quot;&gt;&lt;/clr-icon&gt;
+      &lt;/button&gt;
+      &lt;clr-dropdown-menu *clrIfOpen clrPosition&#x3D;&quot;bottom-right&quot;&gt;
+        &lt;ukis-userinfo [authService]&#x3D;&quot;authService&quot;&gt;&lt;/ukis-userinfo&gt;
+      &lt;/clr-dropdown-menu&gt;
+    &lt;/clr-dropdown&gt;
+  &lt;/ukis-header&gt;
+
+  &lt;div class&#x3D;&quot;content-container&quot; [ngClass]&#x3D;&quot;{&#x27;floating&#x27;:ui.floating}&quot;&gt;
+    &lt;router-outlet&gt;&lt;/router-outlet&gt;
+  &lt;/div&gt;
+  &lt;footer class&#x3D;&quot;footer&quot; *ngIf&#x3D;&quot;ui.footer&quot;&gt;
+&lt;!--
+    &lt;div style&#x3D;&quot;float: left; width: 700px;&quot;&gt;
+      &lt;table class&#x3D;&quot;table&quot;&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;&lt;th&gt;Distribution&lt;/th&gt;&lt;th&gt;SPEI-1&lt;/th&gt;&lt;th&gt;SPEI-2&lt;/th&gt;&lt;th&gt;SPEI-3&lt;/th&gt;&lt;th&gt;SPEI-6&lt;/th&gt;&lt;th&gt;SPEI-9&lt;/th&gt;&lt;th&gt;SPEI-12&lt;/th&gt;&lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;tr&gt;&lt;td&gt;K–S&lt;/td&gt;&lt;td&gt;A–D&lt;/td&gt;&lt;td&gt;S–W&lt;/td&gt;&lt;td&gt;K–S&lt;/td&gt;&lt;td&gt;A–D&lt;/td&gt;&lt;td&gt;S–W&lt;/td&gt;&lt;td&gt;K–S&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;Gen&lt;/td&gt;&lt;td&gt;Logistic&lt;/td&gt;&lt;td&gt;5.80&lt;/td&gt;&lt;td&gt;6.27&lt;/td&gt;&lt;td&gt;6.78&lt;/td&gt;&lt;td&gt;5.44&lt;/td&gt;&lt;td&gt;11.43&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;GEV&lt;/td&gt;&lt;td&gt;5.13&lt;/td&gt;&lt;td&gt;4.47&lt;/td&gt;&lt;td&gt;2.92&lt;/td&gt;&lt;td&gt;5.16&lt;/td&gt;&lt;td&gt;4.61&lt;/td&gt;&lt;td&gt;19.43&lt;/td&gt; &lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;Pearson&lt;/td&gt;&lt;td&gt;III&lt;/td&gt;&lt;td&gt;6.43&lt;/td&gt;&lt;td&gt;6.67&lt;/td&gt;&lt;td&gt;6.83&lt;/td&gt;&lt;td&gt;6.72&lt;/td&gt;&lt;td&gt;6.43&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;Normal&lt;/td&gt;&lt;td&gt;15.76&lt;/td&gt;&lt;td&gt;20.67&lt;/td&gt;&lt;td&gt;31.04&lt;/td&gt;&lt;td&gt;11.32&lt;/td&gt;&lt;td&gt;15.09&lt;/td&gt;&lt;td&gt;13.43&lt;/td&gt;&lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+
+    &lt;div style&#x3D;&quot;float: left; width: 300px; margin-top: 1.5em; margin-left: 3em;&quot;&gt;
+     
+   
+    &lt;/div&gt;
+
+    &lt;div style&#x3D;&quot;float: right;display: table-footer-group;&quot;&gt;
+      &lt;h2 style&#x3D;&quot;margin-top: 0;&quot;&gt;Legend&lt;/h2&gt;
+      &lt;img src&#x3D;&quot;http://sedac.ciesin.columbia.edu/geoserver/wms?request&#x3D;GetLegendGraphic&amp;service&#x3D;wms&amp;layer&#x3D;ndh:ndh-drought-hazard-frequency-distribution&amp;version&#x3D;1.1.1&amp;format&#x3D;image/png&quot; alt&#x3D;&quot;&quot;&gt;
+    &lt;/div&gt;
+
+  --&gt;
+  &lt;/footer&gt;
+&lt;/clr-main-container&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade" id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><clr-main-container>  <ukis-global-alert *ngIf="alert" [(alert)]="alert"></ukis-global-alert>  <ukis-header [ukis-title]="title">    <a routerLink="/vertical_nav" routerLinkActive="active" class="nav-link nav-text header-nav-el">VerticalNav</a>    <a routerLink="/another_route" routerLinkActive="active" class="nav-link nav-text header-nav-el">Another Route</a>    <clr-dropdown class="header-action-el">      <button class="nav-icon" clrDropdownTrigger>        <clr-icon shape="cog"></clr-icon>        <clr-icon shape="caret down"></clr-icon>      </button>      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">        <a href="..." clrDropdownItem>About</a>        <a href="..." clrDropdownItem>Preferences</a>        <a href="..." clrDropdownItem>Log out</a>      </clr-dropdown-menu>    </clr-dropdown>    <clr-dropdown class="header-action-el">      <button class="nav-icon" clrDropdownTrigger>        <clr-icon shape="help-info"></clr-icon>        <clr-icon shape="caret down"></clr-icon>      </button>      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">        <a href="..." clrDropdownItem>About</a>      </clr-dropdown-menu>    </clr-dropdown>    <clr-dropdown class="header-action-el">      <button class="nav-icon" clrDropdownTrigger>        <clr-icon shape="user"></clr-icon>        <clr-icon shape="caret down"></clr-icon>      </button>      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">        <ukis-userinfo [authService]="authService"></ukis-userinfo>      </clr-dropdown-menu>    </clr-dropdown>  </ukis-header>  <div class="content-container" [ngClass]="{\'floating\':ui.floating}">    <router-outlet></router-outlet>  </div>  <footer class="footer" *ngIf="ui.footer"><!--    <div style="float: left; width: 700px;">      <table class="table">        <thead>          <tr><th>Distribution</th><th>SPEI-1</th><th>SPEI-2</th><th>SPEI-3</th><th>SPEI-6</th><th>SPEI-9</th><th>SPEI-12</th></tr>        </thead>        <tbody>          <tr><td>K–S</td><td>A–D</td><td>S–W</td><td>K–S</td><td>A–D</td><td>S–W</td><td>K–S</td></tr>          <tr><td>Gen</td><td>Logistic</td><td>5.80</td><td>6.27</td><td>6.78</td><td>5.44</td><td>11.43</td></tr>          <tr><td>GEV</td><td>5.13</td><td>4.47</td><td>2.92</td><td>5.16</td><td>4.61</td><td>19.43</td> </tr>          <tr><td>Pearson</td><td>III</td><td>6.43</td><td>6.67</td><td>6.83</td><td>6.72</td><td>6.43</td></tr>          <tr><td>Normal</td><td>15.76</td><td>20.67</td><td>31.04</td><td>11.32</td><td>15.09</td><td>13.43</td></tr>        </tbody>      </table>    </div>    <div style="float: left; width: 300px; margin-top: 1.5em; margin-left: 3em;">            </div>    <div style="float: right;display: table-footer-group;">      <h2 style="margin-top: 0;">Legend</h2>      <img src="http://sedac.ciesin.columbia.edu/geoserver/wms?request=GetLegendGraphic&service=wms&layer=ndh:ndh-drought-hazard-frequency-distribution&version=1.1.1&format=image/png" alt="">    </div>  -->  </footer></clr-main-container></div>'
+    var COMPONENTS = [{'name': 'AnotherRoute', 'selector': ''},{'name': 'GlobalAlertComponent', 'selector': 'ukis-global-alert'},{'name': 'HeaderComponent', 'selector': 'ukis-header'},{'name': 'RouteHomeComponent', 'selector': 'ukis-route-home'},{'name': 'RouteVerticalNavComponent', 'selector': 'ukis-route-vertical-nav'},{'name': 'UkisComponent', 'selector': 'ukis-root'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'UkisComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+           </div>
+       </div>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script>var COMPODOC_CURRENT_PAGE_DEPTH = 1;</script>
+
+       <script src="../js/search/search.js"></script>
+       <script src="../js/search/lunr.min.js"></script>
+       <script src="../js/search/search-lunr.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+       <script src="../js/search/search_index.js"></script>
+
+    </body>
+</html>

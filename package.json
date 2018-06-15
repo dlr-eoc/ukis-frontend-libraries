@@ -10,8 +10,8 @@
     "e2e": "ng e2e",
     "gitDependencies": "node node_modules/npm-git-dependencies",
     "_postinstall": "npm run gitDependencies",
-    "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && ./node_modules/.bin/compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
-    "compodoc-serve": "./node_modules/.bin/compodoc -r 8081 -s"
+    "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
+    "compodoc-serve": "compodoc -r 8081 -s"
   },
   "private": true,
   "dependencies": {
@@ -55,6 +55,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.3.0",
     "ts-node": "~5.0.1",
-    "tslint": "~5.9.1"
+    "tslint": "~5.9.1",
+    "@compodoc/compodoc": "1.0.5"
   }
 }
