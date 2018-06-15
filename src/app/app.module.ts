@@ -1,18 +1,48 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UkisRoutingModule, AnotherRoute } from './app-routing.module';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { ClarityModule } from '@clr/angular';
+import { FormsModule } from '@angular/forms';
+
+import { UkisComponent } from './app.component';
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
+import { HeaderComponent } from './components/header/header.component';
+import { RouteVerticalNavComponent } from './route-components/route-vertical-nav/route-vertical-nav.component';
+import { RouteHomeComponent } from './route-components/route-home/route-home.component';
+
+//for User
+import { TokenInterceptor } from '@ukis/services/src/app/auth/token.interceptor';
+import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
+import { AuthModule } from '@ukis/services/src/app/auth/auth.module';
+import { AlertService } from './components/global-alert/alert.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
-    AppComponent
+    UkisComponent,
+    GlobalAlertComponent,
+    HeaderComponent,
+    AnotherRoute,
+    RouteVerticalNavComponent,
+    RouteHomeComponent 
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    BrowserAnimationsModule,
+    UkisRoutingModule,
+    FormsModule,
+    ClarityModule,
+    UserinfoModule,
+    AuthModule.forRoot()
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [AlertService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }],
+  bootstrap: [UkisComponent]
 })
-export class AppModule { }
+export class UkisModule { }

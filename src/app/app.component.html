@@ -1,21 +1,74 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<clr-main-container>
 
-<router-outlet></router-outlet>
+  <ukis-global-alert *ngIf="alert" [(alert)]="alert"></ukis-global-alert>
+
+  <ukis-header [ukis-title]="title">
+
+    <a routerLink="/vertical_nav" routerLinkActive="active" class="nav-link nav-text header-nav-el">VerticalNav</a>
+    <a routerLink="/another_route" routerLinkActive="active" class="nav-link nav-text header-nav-el">Another Route</a>
+
+    <clr-dropdown class="header-action-el">
+      <button class="nav-icon" clrDropdownTrigger>
+        <clr-icon shape="cog"></clr-icon>
+        <clr-icon shape="caret down"></clr-icon>
+      </button>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="..." clrDropdownItem>About</a>
+        <a href="..." clrDropdownItem>Preferences</a>
+        <a href="..." clrDropdownItem>Log out</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+
+    <clr-dropdown class="header-action-el">
+      <button class="nav-icon" clrDropdownTrigger>
+        <clr-icon shape="help-info"></clr-icon>
+        <clr-icon shape="caret down"></clr-icon>
+      </button>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="..." clrDropdownItem>About</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+    <clr-dropdown class="header-action-el">
+      <button class="nav-icon" clrDropdownTrigger>
+        <clr-icon shape="user"></clr-icon>
+        <clr-icon shape="caret down"></clr-icon>
+      </button>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <ukis-userinfo [authService]="authService"></ukis-userinfo>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+  </ukis-header>
+
+  <div class="content-container" [ngClass]="{'floating':ui.floating}">
+    <router-outlet></router-outlet>
+  </div>
+  <footer class="footer" *ngIf="ui.footer">
+<!--
+    <div style="float: left; width: 700px;">
+      <table class="table">
+        <thead>
+          <tr><th>Distribution</th><th>SPEI-1</th><th>SPEI-2</th><th>SPEI-3</th><th>SPEI-6</th><th>SPEI-9</th><th>SPEI-12</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>K–S</td><td>A–D</td><td>S–W</td><td>K–S</td><td>A–D</td><td>S–W</td><td>K–S</td></tr>
+          <tr><td>Gen</td><td>Logistic</td><td>5.80</td><td>6.27</td><td>6.78</td><td>5.44</td><td>11.43</td></tr>
+          <tr><td>GEV</td><td>5.13</td><td>4.47</td><td>2.92</td><td>5.16</td><td>4.61</td><td>19.43</td> </tr>
+          <tr><td>Pearson</td><td>III</td><td>6.43</td><td>6.67</td><td>6.83</td><td>6.72</td><td>6.43</td></tr>
+          <tr><td>Normal</td><td>15.76</td><td>20.67</td><td>31.04</td><td>11.32</td><td>15.09</td><td>13.43</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="float: left; width: 300px; margin-top: 1.5em; margin-left: 3em;">
+     
+   
+    </div>
+
+    <div style="float: right;display: table-footer-group;">
+      <h2 style="margin-top: 0;">Legend</h2>
+      <img src="http://sedac.ciesin.columbia.edu/geoserver/wms?request=GetLegendGraphic&service=wms&layer=ndh:ndh-drought-hazard-frequency-distribution&version=1.1.1&format=image/png" alt="">
+    </div>
+
+  -->
+  </footer>
+</clr-main-container>

@@ -5,8 +5,13 @@
     "module": "es2015",
     "types": []
   },
+  "include": [
+    "./**/*",
+    "../node_modules/@ukis/**/*.ts"
+  ],
   "exclude": [
     "src/test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "../node_modules/@ukis/**/*.spec.ts"
   ]
 }

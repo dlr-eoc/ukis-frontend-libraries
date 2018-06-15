@@ -1,1 +1,177 @@
-/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files *//* You can add global styles to this file, and also import other style files */
+
+@import '~@clr/icons/clr-icons.min.css';
+@import 'app/clr_overwrites';
+@import '~@clr/ui/src/main';
+.content-area {
+    background: #444;
+}
+
+button:focus {
+    outline: none;
+}
+
+.header {
+    color:inherit;
+    .branding {
+        .title {
+            padding-left: 1rem;
+            font-size: 1rem;
+        }
+    }
+    .nav-link {
+        color:inherit;
+    }
+}
+
+.footer {
+    background-color: #eee;
+    padding: .2rem 1rem;
+    p {
+        margin: 0;
+    }
+}
+
+.clr-vertical-nav {
+    border-radius: 1px;
+    .nav-trigger-icon {
+        color: #aaa;
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-right: .2rem;
+    }
+    .nav-icon {
+        height: 1rem;
+        width: 1rem;
+        flex: 0 0 1rem;
+    }
+    $spacing_left: .8rem;
+    .nav-group-text,
+    .nav-link {
+        padding-left: $spacing_left;
+    }
+    .nav-group-content .nav-icon {
+        margin-left: $spacing_left;
+    }
+    &.is-collapsed {
+        .nav-icon {
+            margin-left: 0.5rem !important;
+        }
+        .nav-group-trigger .nav-group-trigger-icon {
+            display: none;
+        }
+    }
+    .clr-tree-node-content-container {
+        margin-left: .5rem;
+    }
+    .nav-group-children .padding {
+      padding-top: .2rem;
+      padding-right: .1rem;
+      padding-left: 1rem;
+      padding-bottom: .2rem;
+    }
+    h5 {
+        margin-top: .2rem;
+    }
+}
+
+.content-container {
+    position: relative;
+}
+
+.iconButton:hover {
+  cursor:pointer;
+  color: #d10008;
+}
+
+.iconButton-drpDwn {
+  cursor:pointer;
+  transform: rotate(180deg);
+}
+
+.iconButton-drpDwn-active {
+  cursor:pointer;
+  color: #d10008;
+}
+
+.headerButton:hover {
+  cursor:pointer;
+}
+
+
+.lproperties {
+  //width: 100%;
+  //background: #f2f2f2;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-color: #c0c0c0;
+  border-style: solid;
+  border-width: 0px 0px 1px 1px;
+  overflow-x: auto;
+}
+
+
+@media screen and (min-width: 320px) and (max-width: 374px) {
+    // doesn't work with left aligned context menu
+    .main-container.open-overflow-menu{
+        .header-overflow-trigger {
+            right: -26px;
+            right: calc((100% - 12rem)/2 - 0.5rem - 30px ); // center
+        }
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .content-container {
+        
+
+        &:not(.left) {
+
+            flex-direction: row-reverse;
+            .clr-vertical-nav.clr-nav-level-2 .nav-trigger {
+                
+                margin-right: auto;
+                margin-left: 0.125rem;
+                
+                clr-icon {
+                margin-left: .2rem;
+                margin-right: auto;
+
+                &[dir=right] svg {
+                    transform: rotate(270deg);
+                }
+                &[dir=left] svg {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+
+        }
+        
+
+        &.floating {
+            display: block;
+            position: relative;
+            .content-area {
+                position: absolute;
+                width: 100%;
+                height: 100%
+            }
+            .clr-vertical-nav {
+                position: absolute;
+                margin: 1rem;
+                max-height: calc(100% - 2rem);
+                right: 0
+            }
+            
+
+            &.left {
+                .clr-vertical-nav {
+                    right: auto;
+                    left:0;
+                }
+            }
+        }
+    }
+}
