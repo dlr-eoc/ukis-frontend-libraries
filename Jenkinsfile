@@ -34,7 +34,7 @@ pipeline {
     }
     post {
         always {
-            echo 'One way or another, I have finished'
+            echo 'Post step always: gathering artiofacts and delete workspace'
             archiveArtifacts artifacts: 'ukis-mofro-*.tar.gz', fingerprint: true
             deleteDir() /* clean up our workspace */
         }

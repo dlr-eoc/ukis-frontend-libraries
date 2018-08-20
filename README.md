@@ -29,7 +29,7 @@ This repository consists of branches:
      git push -u origin project-XXX
 ```
 - Check if [Node.js](https://nodejs.org/) and npm is installed.
-- Install dependencies: `npm install`
+- Install dependencies: `npm install --registry http://hofer.eoc.dlr.de/nexus/content/groups/npm-all/`
 - Start development server: `npm start`
 - Check `localhost:4200/index.html`
 
