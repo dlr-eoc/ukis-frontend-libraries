@@ -9,7 +9,7 @@ RUN apk update && \
     cd /frontend && \
     sed -i '/<base href=/c\<base href="/">' src/index.html && \
     npm install --unsafe-perm && \
-    node_modules/@angular/cli/bin/ng build && \
+    node_modules/.bin/ng build && \
     npm run compodoc && \
     mkdir /static
 
