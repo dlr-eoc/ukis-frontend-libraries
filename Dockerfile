@@ -8,6 +8,7 @@ RUN apk update && \
     apk add git rsync && \
     cd /frontend && \
     sed -i '/<base href=/c\<base href="/">' src/index.html && \
+    rm package-lock.json && \
     npm install --unsafe-perm && \
     npm run build && \
     npm run compodoc && \
