@@ -9,7 +9,7 @@ RUN apk update && \
     cd /frontend && \
     sed -i '/<base href=/c\<base href="/">' src/index.html && \
     rm package-lock.json && \
-    npm install --unsafe-perm && \
+    npm install --unsafe-perm --registry http://hofer.eoc.dlr.de/nexus/content/groups/npm-all/ && \
     npm run build && \
     npm run compodoc && \
     mkdir /static
