@@ -16,6 +16,9 @@ This repository consists of branches:
 - project-mariss: branch based on master used for the mariss project. 
 
 
+## Issues
+ http://jira.ukis.eoc.dlr.de/issues/?jql=project%20%3D%20UKISDEV%20AND%20Component%20%3D%20Frontend%20AND%20Labels%20%3D%20master
+
 ## Getting started to develop
 - Check if [Git](https://git-scm.com/) is installed.
 - Clone the repo: `git clone http://git.ukis.eoc.dlr.de/scm/mofro/frontend.git` . 
