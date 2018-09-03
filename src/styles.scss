@@ -1,103 +1,242 @@
-/* You can add global styles to this file, and also import other style files *//* You can add global styles to this file, and also import other style files */
-
+/* You can add global styles to this file, and also import other style files */
+// Clarity Component SCSS
 @import '~@clr/icons/clr-icons.min.css';
 @import 'app/clr_overwrites';
 @import '~@clr/ui/src/main';
 .content-area {
-    background: #444;
+  background: #444;
 }
 
 button:focus {
-    outline: none;
+  outline: none;
 }
 
 .header {
-    color:inherit;
-    .branding {
-        .title {
-            padding-left: 1rem;
-            font-size: 1rem;
-        }
+  .branding {
+    flex: 0 1 auto;
+    a {
+      min-width: 100px;
+      color: #313131;
     }
-    .nav-link {
-        color:inherit;
+    .title {
+      padding-left: 1rem;
+      font-size: 1rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
+  }
 }
 
 .footer {
-    background-color: #eee;
-    padding: .2rem 1rem;
-    p {
-        margin: 0;
-    }
+  background-color: #eee;
+  padding: .2rem 1rem;
+  p {
+    margin: 0;
+  }
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: $clr-lighter-midtone-gray;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background:$clr-light-midtone-gray;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: $clr-lighter-midtone-gray;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  margin:8px 0;
+  width: 100%;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  height: 20px;
+  width: 10px;
+  background: $clr-dark-midtone-gray;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -6px;
+}
+input[type=range]::-moz-range-thumb {
+  height: 20px;
+  width: 10px;
+  background: $clr-dark-midtone-gray;
+  cursor: pointer;
 }
 
 .clr-vertical-nav {
-    border-radius: 1px;
-    .nav-trigger-icon {
-        color: #aaa;
-        width: 1.2rem;
-        height: 1.2rem;
-        margin-right: .2rem;
-    }
+  width: 12rem;
+  border-radius: 1px;
+  .nav-trigger-icon {
+    color: #aaa;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: .2rem;
+  }
+  .nav-icon {
+    height: 1rem;
+    width: 1rem;
+    flex: 0 0 1rem;
+  }
+  .nav-group-text,
+  .nav-link,
+  .nav-group-children .padding {
+    padding: 0 .4rem;
+  }
+  .nav-group-content .nav-icon {
+    margin: 0 .4rem;
+  }
+  .nav-content>*:not(:last-child) {
+    border-bottom: $clr-lighter-midtone-gray solid 1px !important;
+  }
+  &.is-collapsed {
     .nav-icon {
+      margin-left: 0.5rem !important;
+    }
+    .nav-group-trigger .nav-group-trigger-icon {
+      display: none;
+    }
+    .nav-content>* {
+      border-bottom: none;
+    }
+  }
+  .layers {
+    padding-bottom: 2px;
+    .nav-divider {
+      border-width: 1px 0 0 0;
+      margin: .3rem 0;
+    }
+    .layer,
+    .layergroup {
+      margin-left: .2rem;
+      .iconButton {
         height: 1rem;
-        width: 1rem;
-        flex: 0 0 1rem;
-    }
-    $spacing_left: .8rem;
-    .nav-group-text,
-    .nav-link {
-        padding-left: $spacing_left;
-    }
-    .nav-group-content .nav-icon {
-        margin-left: $spacing_left;
-    }
-    &.is-collapsed {
-        .nav-icon {
-            margin-left: 0.5rem !important;
+        margin: 0 1px;
+        &.disabled {
+          pointer-events: none;
+          color: $clr-light-midtone-gray;
+          cursor: default;
         }
-        .nav-group-trigger .nav-group-trigger-icon {
-            display: none;
+        &.active {
+
+          color: $clr-action-blue;
         }
-    }
-    .clr-tree-node-content-container {
-        margin-left: .5rem;
-    }
-    .nav-group-children .padding {
-      padding-top: .2rem;
-      padding-right: .1rem;
-      padding-left: 1rem;
-      padding-bottom: .2rem;
+      }
+      .head {
+        display: flex;
+        input.hide {
+          display: none;
+          &+label {
+            position: static;
+            display: inline;
+            min-height: auto;
+            padding-left: 0;
+            &:before,
+            &:after {
+              content: none; //margin-left: 4px;
+            }
+          }
+        }
+        .title {
+          margin-left: .2rem;
+          flex: 1 1 0;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+      .body {
+        border-left: 1px solid $clr-light-midtone-gray;
+        padding-left: 0;
+        margin: 0 0 .3rem 8px;
+        .tools {
+          display:flex;
+          justify-content: flex-end;
+          border-radius: 1px;
+          padding-left: .1rem;
+
+          span {
+            flex: 1 1 0;
+          }
+        }
+
+        .sublayers, .tabsbody {
+          border-radius:2px;
+          padding: .2rem;
+          margin-right: -.2rem;
+          border: 1px solid $clr-light-midtone-gray;
+          border-left-width: 0;
+
+        }
+
+
+        .layersettings {
+          .form-group {
+            display:flex;
+            label {
+              padding-right:.4rem
+            }
+            input {
+              flex: 1 1 0
+            }
+            span {
+              min-width: 1.5rem;
+              text-align: center
+            }
+          }
+        }
+      }
     }
     h5 {
-        margin-top: .2rem;
+      font-size: 14px;
+      margin: 0 0 4px 4px;
+      font-weight:700;
+      cursor: pointer;
+      .iconButton {
+        margin-top: 3px;
+      }
+      &.active,
+      &:hover {
+        color: $clr-action-blue;
+      }
     }
+  }
 }
 
 .content-container {
-    position: relative;
+  position: relative;
 }
 
 .iconButton:hover {
-  cursor:pointer;
-  color: #d10008;
+  cursor: pointer;
+  color: $clr-action-blue;
 }
 
 .iconButton-drpDwn {
-  cursor:pointer;
+  cursor: pointer;
   transform: rotate(180deg);
 }
 
 .iconButton-drpDwn-active {
-  cursor:pointer;
-  color: #d10008;
+  cursor: pointer;
+  color: $clr-action-blue;
 }
 
 .headerButton:hover {
-  cursor:pointer;
+  cursor: pointer;
 }
-
 
 .lproperties {
   //width: 100%;
@@ -111,67 +250,58 @@ button:focus {
   overflow-x: auto;
 }
 
-
 @media screen and (min-width: 320px) and (max-width: 374px) {
-    // doesn't work with left aligned context menu
-    .main-container.open-overflow-menu{
-        .header-overflow-trigger {
-            right: -26px;
-            right: calc((100% - 12rem)/2 - 0.5rem - 30px ); // center
-        }
+  // doesn't work with left aligned context menu
+  .main-container.open-overflow-menu {
+    .header-overflow-trigger {
+      right: -26px;
+      right: calc((100% - 12rem)/2 - 0.5rem - 30px); // center
     }
+  }
 }
 
 @media screen and (min-width: 768px) {
-    .content-container {
-        
-
-        &:not(.left) {
-
-            flex-direction: row-reverse;
-            .clr-vertical-nav.clr-nav-level-2 .nav-trigger {
-                
-                margin-right: auto;
-                margin-left: 0.125rem;
-                
-                clr-icon {
-                margin-left: .2rem;
-                margin-right: auto;
-
-                &[dir=right] svg {
-                    transform: rotate(270deg);
-                }
-                &[dir=left] svg {
-                    transform: rotate(90deg);
-                }
-            }
+  .header .branding a {
+    color: #fff;
+  }
+  .content-container {
+    &:not(.left) {
+      flex-direction: row-reverse;
+      .clr-vertical-nav.clr-nav-level-2 .nav-trigger {
+        margin-right: auto;
+        margin-left: 0.125rem;
+        clr-icon {
+          margin-left: .2rem;
+          margin-right: auto;
+          &[dir=right] svg {
+            transform: rotate(270deg);
+          }
+          &[dir=left] svg {
+            transform: rotate(90deg);
+          }
         }
-
-        }
-        
-
-        &.floating {
-            display: block;
-            position: relative;
-            .content-area {
-                position: absolute;
-                width: 100%;
-                height: 100%
-            }
-            .clr-vertical-nav {
-                position: absolute;
-                margin: 1rem;
-                max-height: calc(100% - 2rem);
-                right: 0
-            }
-            
-
-            &.left {
-                .clr-vertical-nav {
-                    right: auto;
-                    left:0;
-                }
-            }
-        }
+      }
     }
+    &.floating {
+      display: block;
+      position: relative;
+      .content-area {
+        position: absolute;
+        width: 100%;
+        height: 100%
+      }
+      .clr-vertical-nav {
+        position: absolute;
+        margin: 1rem;
+        max-height: calc(100% - 2rem);
+        right: 0
+      }
+      &.left {
+        .clr-vertical-nav {
+          right: auto;
+          left: 0;
+        }
+      }
+    }
+  }
 }
