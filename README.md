@@ -84,6 +84,6 @@ Compodoc use Typescript AST parser and it's internal APIs, so the comments have 
 
 ## Continuous Integration: Jenkins TODO
 
-The [jenkins pipeline ukis-mofro_project-demo](http://torres.eoc.dlr.de/job/ukis-mofro_project-demo/) is defined for the branch project-demo to automatically build it. Then, it is automatically deployed to [duarte]() 
+The [jenkins pipeline ukis-mofro_master](http://torres.eoc.dlr.de/job/ukis-mofro_master/) is defined for the branch master to automatically build it. Then, it is automatically deployed to [duarte](//duarte.eoc.dlr.de/master/) 
 
 For all project branches such a pipeline can be created to ensure that breaking changes are discovered early.

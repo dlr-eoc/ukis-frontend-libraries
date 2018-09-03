@@ -7,17 +7,17 @@ import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 
 import { UkisComponent } from './app.component';
-import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
 import { HeaderComponent } from './components/header/header.component';
+
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
+import { AlertService } from './components/global-alert/alert.service';
+
+import { GlobalFooterComponent } from './components/global-footer/global-footer.component';
+import { FooterService } from './components/global-footer/footer.service';
+
 import { RouteVerticalNavComponent } from './route-components/route-vertical-nav/route-vertical-nav.component';
 import { RouteHomeComponent } from './route-components/route-home/route-home.component';
 
-//for User
-import { TokenInterceptor } from '@ukis/services/src/app/auth/token.interceptor';
-import { UserinfoModule } from '@ukis/user-info/src/app/userinfo/userinfo.module';
-import { AuthModule } from '@ukis/services/src/app/auth/auth.module';
-import { AlertService } from './components/global-alert/alert.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,23 +26,17 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     HeaderComponent,
     AnotherRoute,
     RouteVerticalNavComponent,
-    RouteHomeComponent 
+    RouteHomeComponent,
+    GlobalFooterComponent 
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     UkisRoutingModule,
     FormsModule,
-    ClarityModule,
-    UserinfoModule,
-    AuthModule.forRoot()
+    ClarityModule
   ],
-  providers: [AlertService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    }],
+  providers: [AlertService, FooterService],
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }

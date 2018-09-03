@@ -1,1 +1,0 @@
-var ROUTES_INDEX = {"name":"<root>","kind":"module","className":"UkisModule","children":[{"name":"routes","filename":"src/app/app-routing.module.ts","module":"UkisRoutingModule","children":[{"path":"","component":"RouteHomeComponent"},{"path":"vertical_nav","component":"RouteVerticalNavComponent"},{"path":"another_route","component":"AnotherRoute"}],"kind":"module"}]}

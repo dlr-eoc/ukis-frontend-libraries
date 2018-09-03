@@ -47,5 +47,13 @@
     alert-danger
   </a>
   <div class="nav-divider"></div>
+  <a clrVerticalNavLink (click)="showFooter(true)">
+    <clr-icon shape="eye" clrVerticalNavIcon></clr-icon>
+    show Footer
+  </a>
+  <a clrVerticalNavLink (click)="showFooter(false)">
+    <clr-icon shape="eye-hide" clrVerticalNavIcon></clr-icon>
+    hide Footer
+  </a>
 
 </clr-vertical-nav>

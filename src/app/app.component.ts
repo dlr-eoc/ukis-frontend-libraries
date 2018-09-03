@@ -12,15 +12,8 @@ import '@clr/icons/shapes/technology-shapes';
 import '@clr/icons/shapes/travel-shapes';
 import './components/icons/ukis';
 
-import { Subscription } from 'rxjs/Subscription';
-
-//for User
-import { BasicAuthService } from '@ukis/services/src/app/auth/basic-auth.service';
-
-import { AlertService } from './components/global-alert/alert.service';
-
-
-const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis enim aliquid mollitia odio?';
+import { AlertService, IAlert } from './components/global-alert/alert.service';
+import { FooterService } from './components/global-footer/footer.service';
 
 @Component({
   selector: 'ukis-root',
@@ -28,7 +21,7 @@ const lorem = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritat
   styleUrls: ['./app.component.scss']
 })
 export class UkisComponent {
-  title = '';
+  title = 'Master';
 
   alert;
 
@@ -41,8 +34,8 @@ export class UkisComponent {
   };
 
   constructor(
-    private alertService: AlertService, 
-    private authService: BasicAuthService
+    private footerService: FooterService,
+    private alertService: AlertService,
   ) {
     this.getHtmlMeta(['title', 'version', 'description']);
 
@@ -50,19 +43,26 @@ export class UkisComponent {
       this.title = this['TITLE'];
     }
 
-    console.log(this)
-
     alertService.alert$.subscribe((ev) => {
       this.setAlert(ev)
     });
+
+    footerService.footer$.subscribe((ev) => {
+      this.showFooter(ev)
+    });
   }
 
-  setAlert = (type: string = 'info') => {
+  showFooter = (show: boolean) =>{
+    console.log('show')
+    this.ui.footer = show;
+  }
+
+  setAlert = (alert: IAlert) => {
     // structure of (app-level) alert
-    // TODO use shared service
+    /*
     this.alert = {
       type: type || 'info',
-      text: `<strong>Alert-Type: ${type.toUpperCase()}</strong> ${lorem}`,
+      text: `<strong></strong>`,
       closeable: true,
       actions: [
         {
@@ -72,6 +72,8 @@ export class UkisComponent {
           }
         }]
     };
+    */
+    this.alert = alert;
   }
 
   getHtmlMeta(names: string[]) {

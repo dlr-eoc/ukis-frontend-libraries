@@ -27,7 +27,6 @@
     "@clr/angular": "^0.11.29",
     "@clr/icons": "^0.11.29",
     "@clr/ui": "^0.11.29",
-    "@ukis/user-info": "0.0.0",
     "@webcomponents/custom-elements": "^1.1.1",
     "bootstrap": "4.0.0-alpha.5",
     "core-js": "^2.5.4",
