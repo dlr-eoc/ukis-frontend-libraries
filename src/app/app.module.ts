@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UkisRoutingModule, AnotherRoute } from './app-routing.module';
+import { UkisRoutingModule } from './app-routing.module';
 
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,8 @@ import { FooterService } from './components/global-footer/footer.service';
 
 import { RouteVerticalNavComponent } from './route-components/route-vertical-nav/route-vertical-nav.component';
 import { RouteHomeComponent } from './route-components/route-home/route-home.component';
+import { RoutePrivacyComponent } from './route-components/route-privacy/route-privacy.component';
+import { RouteLegalNoticeComponent } from './route-components/route-legal-notice/route-legal-notice.component';
 
 
 @NgModule({
@@ -24,10 +26,11 @@ import { RouteHomeComponent } from './route-components/route-home/route-home.com
     UkisComponent,
     GlobalAlertComponent,
     HeaderComponent,
-    AnotherRoute,
     RouteVerticalNavComponent,
     RouteHomeComponent,
-    GlobalFooterComponent 
+    GlobalFooterComponent,
+    RoutePrivacyComponent,
+    RouteLegalNoticeComponent 
   ],
   imports: [
     BrowserModule,

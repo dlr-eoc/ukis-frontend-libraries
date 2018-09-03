@@ -4,8 +4,9 @@
 
   <ukis-header [ukis-title]="title">
 
-    <a routerLink="/vertical_nav" routerLinkActive="active" class="nav-link nav-text header-nav-el">VerticalNav</a>
-    <a routerLink="/another_route" routerLinkActive="active" class="nav-link nav-text header-nav-el">Another Route</a>
+    <a routerLink="/vertical-nav" routerLinkActive="active" class="nav-link nav-text header-nav-el">VerticalNav</a>
+    <a routerLink="/legal-notice" routerLinkActive="active" class="nav-link nav-text header-nav-el">Legal Notice</a>
+    <a routerLink="/privacy" routerLinkActive="active" class="nav-link nav-text header-nav-el">Privacy</a>
 
     <clr-dropdown class="header-action-el">
       <button class="nav-icon" clrDropdownTrigger>
@@ -13,9 +14,8 @@
         <clr-icon shape="caret down"></clr-icon>
       </button>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="..." clrDropdownItem>About</a>
         <a href="..." clrDropdownItem>Preferences</a>
-        <a href="..." clrDropdownItem>Log out</a>
+        <a href="..." clrDropdownItem>Settings</a>
       </clr-dropdown-menu>
     </clr-dropdown>
 
@@ -25,7 +25,7 @@
         <clr-icon shape="caret down"></clr-icon>
       </button>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="..." clrDropdownItem>About</a>
+        <a href="..." clrDropdownItem>Info</a>
       </clr-dropdown-menu>
     </clr-dropdown>
   </ukis-header>
