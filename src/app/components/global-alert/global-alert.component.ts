@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { IAlert } from './alert.service';
 
 @Component({
   selector: 'ukis-global-alert',
@@ -6,7 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./global-alert.component.scss']
 })
 export class GlobalAlertComponent implements OnInit {
-  @Input() alert: any;
+  @Input() alert: null | IAlert;
   @Output() alertChange = new EventEmitter();
   constructor() { }
 
