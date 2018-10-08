@@ -51,13 +51,16 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "serve": {
+              "extractCss": true
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ukis-frontend:build"
+            "browserTarget": "ukis-frontend:build:serve"
           },
           "configurations": {
             "production": {

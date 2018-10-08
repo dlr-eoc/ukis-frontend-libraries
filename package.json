@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --source-map",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
@@ -56,5 +56,9 @@
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
     "@compodoc/compodoc": "1.0.5"
+  },
+  "engines": {
+    "node": ">=8.0.0",
+    "npm" : ">=5.0.0"
   }
 }
