@@ -1,8 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-// Clarity Component SCSS
-@import '~@clr/icons/clr-icons.min.css';
+
+// overwrite Clarity variables
 @import 'app/clr_overwrites';
-@import '~@clr/ui/src/main';
+// Clarity Icons
+@import '@clr/icons/clr-icons.min.css';
+// Clarity Dependency SCSS and Clarity Component SCSS
+@import '@clr/ui/src/main';
+
 .content-area {
   background: #444;
 }
