@@ -13,7 +13,10 @@ This repository consists of branches:
     - layerentry and a layertree
     - test to use Ol4MapSvc directly in the app.component
     - user-info module
-- project-mariss: branch based on master used for the mariss project. 
+- project-mariss: branch based on master used for the mariss project.
+- project-planetary: simple map-client (based on master) to show planetary data from Ceres.
+- project-riesgos-demo: simple map-client (based on project-planetary) to data from Riesgos Project.
+
 
 
 ## Issues
@@ -35,6 +38,7 @@ This repository consists of branches:
 - Install dependencies: `npm install --registry http://hofer.eoc.dlr.de/nexus/content/groups/npm-all/`
 - Start development server: `npm start`
 - Check `localhost:4200/index.html`
+- [see development documentation](DEVELOPMENT.md)
 
 ## Merge changes from one branch to another
 It is often the case that some features need to be merged from one branch to another (master is considered to be a branch).
