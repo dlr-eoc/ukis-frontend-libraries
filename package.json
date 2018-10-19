@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "gitDependencies": "node node_modules/npm-git-dependencies",
-    "_postinstall": "npm run gitDependencies",
+    "postinstall": "npm dedupe #This command resolves nested packages dependencies",
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s"
   },
