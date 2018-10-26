@@ -9,7 +9,7 @@
     <a routerLink="/privacy" routerLinkActive="active" class="nav-link nav-text header-nav-el">Privacy</a>
 
     <clr-dropdown class="header-action-el">
-      <button class="nav-icon" clrDropdownTrigger>
+      <button class="nav-icon" aria-label="dropdown" clrDropdownTrigger>
         <clr-icon shape="cog"></clr-icon>
         <clr-icon shape="caret down"></clr-icon>
       </button>
@@ -20,7 +20,7 @@
     </clr-dropdown>
 
     <clr-dropdown class="header-action-el">
-      <button class="nav-icon" clrDropdownTrigger>
+      <button class="nav-icon" aria-label="dropdown" clrDropdownTrigger>
         <clr-icon shape="help-info"></clr-icon>
         <clr-icon shape="caret down"></clr-icon>
       </button>
@@ -29,11 +29,10 @@
       </clr-dropdown-menu>
     </clr-dropdown>
   </ukis-header>
-
   <div class="content-container" [ngClass]="{'floating':ui.floating}">
-    <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
   </div>
-  <ukis-global-footer *ngIf="ui.footer"> 
+  <ukis-global-footer *ngIf="ui.footer">
     <div style="float: left; width: 700px;">
       <table class="table">
         <thead>

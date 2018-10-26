@@ -19,6 +19,8 @@ import { RouteVerticalNavComponent } from './route-components/route-vertical-nav
 import { RouteHomeComponent } from './route-components/route-home/route-home.component';
 import { RoutePrivacyComponent } from './route-components/route-privacy/route-privacy.component';
 import { RouteLegalNoticeComponent } from './route-components/route-legal-notice/route-legal-notice.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -37,7 +39,8 @@ import { RouteLegalNoticeComponent } from './route-components/route-legal-notice
     BrowserAnimationsModule,
     UkisRoutingModule,
     FormsModule,
-    ClarityModule
+    ClarityModule,
+    //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [AlertService, FooterService],
   bootstrap: [UkisComponent]
