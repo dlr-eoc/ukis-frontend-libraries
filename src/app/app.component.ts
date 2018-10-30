@@ -14,6 +14,7 @@ import './components/icons/ukis';
 
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { FooterService } from './components/global-footer/footer.service';
+import { ProgressService, IProgress } from './components/global-progress/progress.service';
 
 @Component({
   selector: 'ukis-root',
@@ -23,19 +24,18 @@ import { FooterService } from './components/global-footer/footer.service';
 export class UkisComponent {
   title = 'Master';
 
-  alert;
-
-  obsListOpen = false;
-
   ui = {
     floating: true,
     flipped: false,
-    footer: false
+    footer: false,
+    alert: null,
+    progress: null
   };
 
   constructor(
     private footerService: FooterService,
     private alertService: AlertService,
+    private progressService: ProgressService
   ) {
     this.getHtmlMeta(['title', 'version', 'description']);
 
@@ -50,9 +50,17 @@ export class UkisComponent {
     footerService.footer$.subscribe((ev) => {
       this.showFooter(ev)
     });
+
+    progressService.progress$.subscribe((ev) => {
+      this.showProgress(ev)
+    })
   }
 
-  showFooter = (show: boolean) =>{
+  showProgress = (progress: IProgress) => {
+    this.ui.progress = progress;
+  }
+
+  showFooter = (show: boolean) => {
     console.log('show')
     this.ui.footer = show;
   }
@@ -73,7 +81,7 @@ export class UkisComponent {
         }]
     };
     */
-    this.alert = alert;
+    this.ui.alert = alert;
   }
 
   getHtmlMeta(names: string[]) {

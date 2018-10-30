@@ -1,6 +1,7 @@
 <clr-main-container>
 
-  <ukis-global-alert *ngIf="alert" [(alert)]="alert"></ukis-global-alert>
+  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
+  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
 
   <ukis-header [ukis-title]="title">
 

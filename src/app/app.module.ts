@@ -11,6 +11,7 @@ import { HeaderComponent } from './components/header/header.component';
 
 import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
 import { AlertService } from './components/global-alert/alert.service';
+import { ProgressService } from './components/global-progress/progress.service';
 
 import { GlobalFooterComponent } from './components/global-footer/global-footer.component';
 import { FooterService } from './components/global-footer/footer.service';
@@ -21,6 +22,7 @@ import { RoutePrivacyComponent } from './route-components/route-privacy/route-pr
 import { RouteLegalNoticeComponent } from './route-components/route-legal-notice/route-legal-notice.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { environment } from '../environments/environment';
     RouteHomeComponent,
     GlobalFooterComponent,
     RoutePrivacyComponent,
-    RouteLegalNoticeComponent 
+    RouteLegalNoticeComponent,
+    GlobalProgressComponent 
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,7 @@ import { environment } from '../environments/environment';
     ClarityModule,
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [AlertService, FooterService],
+  providers: [AlertService, FooterService, ProgressService],
   bootstrap: [UkisComponent]
 })
 export class UkisModule { }
