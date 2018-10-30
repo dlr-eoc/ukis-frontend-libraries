@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { RouteHomeComponent } from './route-components/route-home/route-home.component';
 import { RouteVerticalNavComponent } from './route-components/route-vertical-nav/route-vertical-nav.component';
 import { RoutePrivacyComponent } from './route-components/route-privacy/route-privacy.component';
@@ -26,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true})],
+  imports: [RouterModule.forRoot(routes, {useHash: true, preloadingStrategy: PreloadAllModules})],
   exports: [RouterModule]
 })
 export class UkisRoutingModule { }

@@ -32,6 +32,56 @@ or
 ng generate component route-components/awesome-route
 ```
 
+## Application structure and layout
+to use clarity in full functionality, try to layout the application like clarity does:
+
+**app-component**
+```
+<clr-main-container>
+  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
+  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+
+  <ukis-header [ukis-title]="title">
+  </ukis-header>
+
+  <router-outlet></router-outlet>
+
+  <ukis-global-footer *ngIf="ui.footer">
+    <router-outlet name="footer"></router-outlet>
+  </ukis-global-footer>
+
+</clr-main-container>
+```
+
+**route-components**
+```
+<main class="content-area">
+
+</main>
+<nav class="sidenav">
+
+</nav>
+```
+
+and set the class 'content-container' to the route component itself
+```
+@Component({
+  selector: 'ukis-route-vertical-nav',
+  ...
+  host: {
+    "[class.content-container]": "true"
+  }
+})
+
+```
+
+So the header and it's navigation is global for the App and the sidenav can be customised in each route.
+
+Furthermore try to us [semantic's](https://developer.mozilla.org/en-US/docs/Glossary/Semantics) and [ARIA
+](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)
+
+
+
 # Development of UKIS-Modules
 [git Cheat Sheet](https://wiki.dlr.de/display/DFDGZS/Git+Cheat+Sheet)
 

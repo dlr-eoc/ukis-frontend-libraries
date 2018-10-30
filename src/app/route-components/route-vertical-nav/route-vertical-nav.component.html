@@ -1,7 +1,6 @@
-<div class="content-area">
-  MAP
-</div>
-
+<main class="content-area">
+  <div>Map</div>
+</main>
 <clr-vertical-nav clrVerticalNavCollapsible="true" [clr-nav-level]="2">
   <clr-vertical-nav-group>
     <clr-icon shape="flame" clrVerticalNavIcon></clr-icon>
@@ -49,11 +48,19 @@
   <div class="nav-divider"></div>
   <a clrVerticalNavLink (click)="showFooter(true)">
     <clr-icon shape="eye" clrVerticalNavIcon></clr-icon>
-    show Footer
+    Show Footer
   </a>
   <a clrVerticalNavLink (click)="showFooter(false)">
     <clr-icon shape="eye-hide" clrVerticalNavIcon></clr-icon>
-    hide Footer
+    Hide Footer
   </a>
-
+  <div class="nav-divider"></div>
+  <a clrVerticalNavLink (click)="showProgress(true)">
+    <clr-icon shape="eye" clrVerticalNavIcon></clr-icon>
+    Show Progress
+  </a>
+  <a clrVerticalNavLink (click)="showProgress(false)">
+    <clr-icon shape="eye-hide" clrVerticalNavIcon></clr-icon>
+    Hide Progress
+  </a>
 </clr-vertical-nav>

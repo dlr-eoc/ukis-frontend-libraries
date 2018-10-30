@@ -1,18 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertService, IAlert } from '../../components/global-alert/alert.service';
 import { FooterService } from '../../components/global-footer/footer.service';
+import { ProgressService } from 'src/app/components/global-progress/progress.service';
 
 @Component({
   selector: 'ukis-route-vertical-nav',
   templateUrl: './route-vertical-nav.component.html',
   styleUrls: ['./route-vertical-nav.component.scss'],
-  providers: []
+  providers: [],
+  host: {
+    "[class.content-container]": "true"
+  }
 })
 export class RouteVerticalNavComponent implements OnInit {
-
-
+  ui: {
+    footer: boolean;
+  }
   constructor(private alertService: AlertService,
-    private footerService: FooterService) {
+    private footerService: FooterService,
+    private progressService: ProgressService) {
+    this.ui = {
+      footer: false
+    }
   }
 
   fireAlert(ev) {
@@ -31,8 +40,18 @@ export class RouteVerticalNavComponent implements OnInit {
     this.alertService.alert(alert);
   }
 
-  showFooter(val) { 
+  showFooter(val) {
+    this.ui.footer != this.ui.footer;
     this.footerService.show(val);
+  }
+
+  showProgress(val) {
+    if (!val) {
+      this.progressService.progress(null)
+    } else {
+      let progress = { indeterminate: true };
+      this.progressService.progress(progress)
+    }
   }
 
   ngOnInit() {
