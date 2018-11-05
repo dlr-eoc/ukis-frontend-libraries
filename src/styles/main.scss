@@ -17,12 +17,12 @@
   .branding {
     flex: 0 1 auto;
     a {
-      min-width: 100px;
       clr-icon {
         color: #565656;
       }
     }
     .title {
+      min-width: 100px;
       padding-left: 1rem;
       font-size: 1rem;
       text-overflow: ellipsis;
@@ -42,7 +42,6 @@
     }
   }
 }
-
 
 /** FOOTER -------------------------------------------------------------- */
 .footer {
