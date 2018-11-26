@@ -92,4 +92,62 @@ when developing UKIS-Modules like [ol-map](http://git.ukis.eoc.dlr.de/projects/M
 
 every Module should have a branch named publish which is register on the Jenkins Pipeline to publish packages on Hofer
 
+1. Clone the master Repository and install dependencies
+```
+git clone http://<username>@git.ukis.eoc.dlr.de/scm/mofro/frontend.git
+
+cd frontend
+
+npm install
+```
+
+2. Generate a library
+```
+ng g library <module-name> --prefix=ukis --skipInstall=true
+```
+
+3. Set Postinstall Script for next install
+```
+//install dependencies of the module and run the build
+"postinstall": "npm i --prefix projects/<module-name> projects/<module-name> & ng build <module-name>
+```
+
+4. Add the library module to the test project
+```
+//in  src/app/app.module.ts
+
+import { <module-name> } from 'projects/<module-name>';
+
+imports: [
+    ...
+    <module-name>
+  ],
+//
+```
+
+then you should can use components and services from the module.
+
+
+5. Create a new repository and push the Module 
+
+create a repository at http://git.ukis.eoc.dlr.de/projects/MOFRO/<module-name>
+```
+git remote set-url origin http://git.ukis.eoc.dlr.de/projects/MOFRO/<module-name>
+git add .
+git commit -m "<message>
+```
+
+## Publish the Module/library to hofer
+1. Create a Project on Jenkins like [@ukis/cookie-alert](http://torres.eoc.dlr.de/view/Packaging/job/mofro-cookie-alert/)
+
+```
+//configure a shell task
+
+# publish to internal npm registry
+cd dist/@ukis/<module-name> && $CI_SCRIPTS/packaging/upload-npm-package.bash .
+```
+
+2. Create a new branch named `publish` and push it to the git 
+
+
 
