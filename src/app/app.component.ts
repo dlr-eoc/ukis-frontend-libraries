@@ -43,15 +43,15 @@ export class UkisComponent {
       this.title = this['TITLE'];
     }
 
-    alertService.alert$.subscribe((ev) => {
+    this.alertService.alert$.subscribe((ev) => {
       this.setAlert(ev)
     });
 
-    footerService.footer$.subscribe((ev) => {
+    this.footerService.footer$.subscribe((ev) => {
       this.showFooter(ev)
     });
 
-    progressService.progress$.subscribe((ev) => {
+    this.progressService.progress$.subscribe((ev) => {
       this.showProgress(ev)
     })
   }
@@ -61,26 +61,10 @@ export class UkisComponent {
   }
 
   showFooter = (show: boolean) => {
-    console.log('show')
     this.ui.footer = show;
   }
 
   setAlert = (alert: IAlert) => {
-    // structure of (app-level) alert
-    /*
-    this.alert = {
-      type: type || 'info',
-      text: `<strong></strong>`,
-      closeable: true,
-      actions: [
-        {
-          title: 'ACTION',
-          callback: () => {
-            console.log('received click');
-          }
-        }]
-    };
-    */
     this.ui.alert = alert;
   }
 

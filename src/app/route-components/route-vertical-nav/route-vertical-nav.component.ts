@@ -57,4 +57,8 @@ export class RouteVerticalNavComponent implements OnInit {
   ngOnInit() {
   }
 
+  onToggle(evt) {
+    console.log('Toggle has focus', evt);
+  }
+
 }
