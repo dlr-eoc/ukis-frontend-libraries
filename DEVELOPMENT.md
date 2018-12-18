@@ -104,6 +104,16 @@ npm install
 2. Generate a library
 ```
 ng g library <module-name> --prefix=ukis --skipInstall=true
+
+//add main to the library package.json
+"main": "src/public_api",
+
+//develop the module in
+- <module-name>.component.ts
+- <module-name>.component.html
+- <module-name>.component.scss
+- <module-name>.service.ts
+- <module-name>.module.ts
 ```
 
 3. Set Postinstall Script for next install
