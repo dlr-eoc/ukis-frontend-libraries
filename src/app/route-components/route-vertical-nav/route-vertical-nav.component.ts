@@ -16,6 +16,10 @@ export class RouteVerticalNavComponent implements OnInit {
   ui: {
     footer: boolean;
   }
+
+  showProgressValue:boolean;
+  showFooterValue:boolean;
+
   constructor(private alertService: AlertService,
     private footerService: FooterService,
     private progressService: ProgressService) {
