@@ -22,7 +22,7 @@ import Zoom from 'ol/control/Zoom';
   encapsulation: ViewEncapsulation.None
 })
 export class MapOlComponent implements OnInit, OnDestroy {
-  @Input('layers') layersSvc: LayersService;
+  @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapStateSvc: MapStateService;
   @Input('controlls') controlls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
 
