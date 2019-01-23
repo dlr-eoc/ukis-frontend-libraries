@@ -112,6 +112,14 @@
       "@ukis/map-navigator/*": [
         "dist/map-navigator/*",
         "projects/map-navigator/*"
+      ],
+      "@ukis/cookie-alert": [
+        "dist/cookie-alert",
+        "projects/cookie-alert"
+      ],
+      "@ukis/cookie-alert/*": [
+        "dist/cookie-alert/*",
+        "projects/cookie-alert/*"
       ]
     }
   }

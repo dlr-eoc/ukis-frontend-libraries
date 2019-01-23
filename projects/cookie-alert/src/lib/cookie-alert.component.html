@@ -1,0 +1,8 @@
+<div class="alert-dismissible text-center cookiealert" [ngClass]="{'show':alert}" role="alert">
+    <div class="cookiealert-container">
+        <span>{{text}} </span><span><a [href]="link" aria-label="Close">Privacy Policy</a></span>
+        <button type="button" class="btn btn-primary acceptcookies" aria-label="Close" (click)="remove()">
+            OK, I agree
+        </button>
+    </div>
+</div>

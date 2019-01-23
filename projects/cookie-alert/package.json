@@ -1,0 +1,10 @@
+{
+  "name": "@ukis/cookie-alert",
+  "version": "1.0.0",
+  "main": "src/public_api.ts",
+  "peerDependencies": {
+    "@angular/common": "^7.1.0",
+    "@angular/core": "^7.1.0",
+    "@ukis/services-util-store": "^1.0.0"
+  }
+}
