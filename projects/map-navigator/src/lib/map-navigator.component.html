@@ -1,0 +1,29 @@
+<div class="body">
+  <table>
+    <tr>
+      <td>
+        <label for="latField" class="form-group col">Lat</label>
+      </td>
+      <td>
+        <input class="form-group" [(ngModel)]="this.mapstate.center.lat" type="number" step=".01" id="latField"
+          (ngModelChange)="stateChange($event)">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="lonField">Lon</label>
+      </td>
+      <td>
+        <input id="lonField" [(ngModel)]="this.mapstate.center.lon" type="number" step=".01" (ngModelChange)="stateChange($event)">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="zoomField">Zoom</label>
+      </td>
+      <td>
+        <input id="zoomField" type="number" [(ngModel)]="this.mapstate.zoom" (ngModelChange)="stateChange($event)">
+      </td>
+    </tr>
+  </table>
+</div>

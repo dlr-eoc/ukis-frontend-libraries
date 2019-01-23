@@ -1,0 +1,11 @@
+{
+  "name": "map-navigator",
+  "version": "1.0.0",
+  "main": "src/public_api",
+  "peerDependencies": {
+    "@angular/common": "^7.1.0",
+    "@angular/core": "^7.1.0",
+    "@ukis/services-map-state": "^1.0.0",
+    "@ukis/datatypes-map-state": "^1.0.0"
+  }
+}

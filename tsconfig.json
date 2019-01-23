@@ -104,6 +104,14 @@
       "@ukis/layer-control/*": [
         "dist/layer-control/*",
         "projects/layer-control/*"
+      ],
+      "@ukis/map-navigator": [
+        "dist/map-navigator",
+        "projects/map-navigator"
+      ],
+      "@ukis/map-navigator/*": [
+        "dist/map-navigator/*",
+        "projects/map-navigator/*"
       ]
     }
   }
