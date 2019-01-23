@@ -1,0 +1,23 @@
+<div *ngIf="bboxfilter" class="form-group" (click)="filterOnBbox =!filterOnBbox; customFilter(filterOnBbox);">
+  <button type="button" class="btn btn-icon btn-sm">
+    <clr-icon shape="filter" [ngClass]="{'is-solid': filterOnBbox }"></clr-icon>
+  </button>
+  <label> Filter on Map Extent</label>
+</div>
+
+
+<clr-datagrid [clrDgSelected]="observationSelected" (clrDgSelectedChange)="selectionChanged($event)">
+  <clr-dg-placeholder>We couldn't find any observations!</clr-dg-placeholder>
+
+  <clr-dg-column *ngFor="let attribute of observationProperties" [clrDgField]="'properties.customAttributes.'+attribute">{{attribute}}</clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let observation of filteredobservations" [clrDgItem]="observation">
+    <clr-dg-cell *ngFor="let attribute of observationProperties">{{observation.properties.customAttributes[attribute]}}</clr-dg-cell>
+  </clr-dg-row>
+
+  <clr-dg-footer *ngIf="filteredobservations">
+    <clr-dg-pagination #pagination [clrDgPageSize]="10">
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} observations
+    </clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>

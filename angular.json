@@ -602,6 +602,41 @@
           }
         }
       }
+    },
+    "observation-explorer": {
+      "root": "projects/observation-explorer",
+      "sourceRoot": "projects/observation-explorer/src",
+      "projectType": "library",
+      "prefix": "ukis",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/observation-explorer/tsconfig.lib.json",
+            "project": "projects/observation-explorer/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/observation-explorer/src/test.ts",
+            "tsConfig": "projects/observation-explorer/tsconfig.spec.json",
+            "karmaConfig": "projects/observation-explorer/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/observation-explorer/tsconfig.lib.json",
+              "projects/observation-explorer/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ukis-frontend"
