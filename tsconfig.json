@@ -15,6 +15,40 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@ukis/datatypes-layers": [
+        "dist/datatypes-layers",
+        "projects/datatypes-layers"
+      ],
+      "@ukis/datatypes-layers/*": [
+        "dist/datatypes-layers/*",
+        "projects/datatypes-layers/*"
+      ],
+      "@ukis/datatypes-map-state": [
+        "dist/datatypes-map-state",
+        "projects/datatypes-map-state"
+      ],
+      "@ukis/datatypes-map-state/*": [
+        "dist/datatypes-map-state/*",
+        "projects/datatypes-map-state/*"
+      ],
+      "@ukis/datatypes-owc-json": [
+        "dist/datatypes-owc-json",
+        "projects/datatypes-owc-json"
+      ],
+      "@ukis/datatypes-owc-json/*": [
+        "dist/datatypes-owc-json/*",
+        "projects/datatypes-owc-json/*"
+      ],
+      "@ukis/datatypes-user-info": [
+        "dist/datatypes-user-info",
+        "projects/datatypes-user-info"
+      ],
+      "@ukis/datatypes-user-info/*": [
+        "dist/datatypes-user-info/*",
+        "projects/datatypes-user-info/*"
+      ]
+    }
   }
 }

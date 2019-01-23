@@ -1,0 +1,8 @@
+{
+  "name": "@ukis/datatypes-owc-json",
+  "version": "1.0.0",
+  "main": "src/public_api",
+  "peerDependencies": {
+    "@types/geojson": "^7946.0.4"
+  }
+}

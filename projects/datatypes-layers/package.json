@@ -1,0 +1,6 @@
+{
+  "name": "@ukis/datatypes-layers",
+  "version": "1.0.0",
+  "main": "src/public_api",
+  "peerDependencies": {}
+}
