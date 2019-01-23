@@ -80,6 +80,12 @@
       "@ukis/services-util-store/*": [
         "dist/services-util-store/*",
         "projects/services-util-store/*"
+      ],
+      "@ukis/map-ol": [
+        "dist/map-ol", "projects/map-ol"
+      ],
+      "@ukis/map-ol/*": [
+        "dist/map-ol/*", "projects/map-ol/*"
       ]
     }
   }
