@@ -1,0 +1,9 @@
+{
+  "name": "@ukis/user-info",
+  "version": "1.0.0",
+  "main": "src/public_api",
+  "peerDependencies": {
+    "@angular/common": "^7.1.0",
+    "@angular/core": "^7.1.0"
+  }
+}

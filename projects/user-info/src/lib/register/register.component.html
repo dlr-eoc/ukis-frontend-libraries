@@ -1,0 +1,38 @@
+<div>
+  <form [formGroup]="usrInfoForm" (ngSubmit)="register()" [hidden]="submitted">
+    <div class="login-group">
+      <label for="login_username" aria-haspopup="true" role="tooltip" class="input tooltip tooltip-validation tooltip-sm tooltip-top-left"
+        [class.invalid]="usrInfoForm.get('usrName').invalid
+            && (usrInfoForm.get('usrName').dirty || usrInfoForm.get('usrName').touched)">
+        <input class="username" type="text" id="login_username" placeholder="Username" [formControl]="usrInfoForm.get('usrName')">
+        <span class="tooltip-content">
+          Username is required.
+        </span>
+      </label>
+
+      <label for="login_password" aria-haspopup="true" role="tooltip" class="input tooltip tooltip-validation tooltip-sm tooltip-top-left"
+        [class.invalid]="usrInfoForm.get('usrPass').invalid
+          && (usrInfoForm.get('usrPass').dirty || usrInfoForm.get('usrPass').touched)">
+        <input class="password" type="password" id="login_password" placeholder="Password" [formControl]="usrInfoForm.get('usrPass')">
+        <span class="tooltip-content">
+          Password is required.
+        </span>
+      </label>
+
+      <input class="firstName" type="text" id="login_firstName" placeholder="First Name" [formControl]="usrInfoForm.get('firstName')">
+      <input class="lastName" type="text" id="login_lastName" placeholder="Last Name" [formControl]="usrInfoForm.get('lastName')">
+
+
+      <label for="login_email" aria-haspopup="true" role="tooltip" class="input tooltip tooltip-validation tooltip-sm tooltip-top-left"
+        [class.invalid]="usrInfoForm.get('email').invalid
+          && (usrInfoForm.get('email').dirty || usrInfoForm.get('email').touched)">
+        <input class="email" type="email" id="login_email" placeholder="Email" [formControl]="usrInfoForm.get('email')">
+        <span class="tooltip-content">
+          Enter a valid email.
+        </span>
+      </label>
+
+      <button type="button" class="btn btn-primary" [disabled]="usrInfoForm.invalid" (click)="register()">Register</button>
+    </div>
+  </form>
+</div>

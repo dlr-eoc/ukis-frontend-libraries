@@ -136,6 +136,14 @@
       "@ukis/dataset-explorer/*": [
         "dist/dataset-explorer/*",
         "projects/dataset-explorer/*"
+      ],
+      "@ukisuser-info": [
+        "dist/user-info",
+        "projects/user-info"
+      ],
+      "@ukisuser-info/*": [
+        "dist/user-info/*",
+        "projects/user-info/*"
       ]
     }
   }
