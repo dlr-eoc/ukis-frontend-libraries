@@ -48,6 +48,38 @@
       "@ukis/datatypes-user-info/*": [
         "dist/datatypes-user-info/*",
         "projects/datatypes-user-info/*"
+      ],
+      "@ukis/services-layers": [
+        "dist/services-layers",
+        "projects/services-layers"
+      ],
+      "@ukis/services-layers/*": [
+        "dist/services-layers/*",
+        "projects/services-layers/*"
+      ],
+      "@ukis/services-map-state": [
+        "dist/services-map-state",
+        "projects/services-map-state"
+      ],
+      "@ukis/services-map-state/*": [
+        "dist/services-map-state/*",
+        "projects/services-map-state/*"
+      ],
+      "@ukis/services-owc-json": [
+        "dist/services-owc-json",
+        "projects/services-owc-json"
+      ],
+      "@ukis/services-owc-json/*": [
+        "dist/services-owc-json/*",
+        "projects/services-owc-json/*"
+      ],
+      "@ukis/services-util-store": [
+        "dist/services-util-store",
+        "projects/services-util-store"
+      ],
+      "@ukis/services-util-store/*": [
+        "dist/services-util-store/*",
+        "projects/services-util-store/*"
       ]
     }
   }
