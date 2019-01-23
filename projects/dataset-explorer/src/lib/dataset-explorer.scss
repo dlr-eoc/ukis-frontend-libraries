@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  overflow: hidden;
+}
+
+.badge,
+.label {
+  &.clickable {
+    cursor: pointer;
+  }
+}
+
+.label {
+  margin: 0.3rem 0.25rem 0 0;
+
+  &.lasting {
+
+    border-color: #0079b8;
+    background: rgba(0, 121, 184, .2);
+
+    &:hover {
+      background: rgba(0, 121, 184, .3);
+    }
+
+    &.active {
+      background: rgba(0, 121, 184, .5);
+    }
+  }
+
+  &:hover {
+
+    background: #ddd;
+
+    .badge {
+      background: #0079b8;
+    }
+  }
+}
+
+#dynamicfilters {
+  margin: 0 0 .5rem 0;
+
+  h4 {
+    margin-top: .5rem;
+    margin-left: -0.5rem;
+  }
+
+  .label {
+    &.disabled {
+      opacity: .5;
+      cursor: default;
+      background: transparent;
+    }
+  }
+}
+
+.datagrid {
+  .datagrid-cell .download {
+    text-align: center;
+  }
+}
