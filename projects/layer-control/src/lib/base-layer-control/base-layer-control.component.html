@@ -1,0 +1,7 @@
+<div class="list-item" *ngFor="let group of layergroups | reverse;">
+  <ukis-layerentry-group *ngIf="isLayerGroup(group)" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [group]="group"
+    [layerGroups]="layergroups"></ukis-layerentry-group>
+
+  <ukis-layerentry *ngIf="!isLayerGroup(group)" [layerGroups]="layergroups" [expanded]="false" [layersSvc]="layersSvc"
+    [mapState]="mapStateSvc" [layer]="group" [group]="null"></ukis-layerentry>
+</div>

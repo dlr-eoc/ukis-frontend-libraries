@@ -1,0 +1,40 @@
+<div class="layergroup">
+  <div class="head">
+    <clr-icon [attr.shape]="openProperties?'folder-open':'folder'" class="iconButton" (click)="showProperties()" title="{{openProperties?'Close':'Open'}}"></clr-icon>
+    <div class="title" (click)="showProperties()" [title]="group.name">{{group.name}}</div>
+
+    <!-- setLayerGroupIndex // for reversed layergroups on ngFor up is down -->
+    <span *ngIf="layerGroups.length>1">
+      <clr-icon class="iconButton move-item" [ngClass]="{'disabled':isLast(group)}" shape="arrow" (click)="setLayerGroupIndex(group, 'down')"
+        title="up"></clr-icon>
+      <clr-icon class="iconButton move-item" [ngClass]="{'disabled':isFirst(group)}" shape="arrow" (click)="setLayerGroupIndex(group, 'up')"
+        title="down" dir="down"></clr-icon>
+    </span>
+
+    <!-- setGroupLayersVisibility -->
+    <span *ngIf="!checkBaselayer(group)">
+      <input class="hide" [type]="'checkbox'" [checked]="visible" [name]="group.name" [id]="group.name" (change)="setGroupLayersVisibility()">
+      <label [for]="group.name">
+        <clr-icon class="iconButton" [ngClass]="{'is-solid':visible}" [attr.shape]="visible?'eye':'eye-hide'" title="{{visible?'Hide observation layers':'Show observation layers'}}"></clr-icon>
+      </label>
+    </span>
+  </div>
+
+  <div *ngIf="openProperties" class="body">
+    <!-- tools: zoomTo, remove, open all Tabs -->
+    <div class="tools">
+      <span></span>
+      <clr-icon shape="info-standard" class="iconButton" [ngClass]="{'is-solid':openAllLayersProperties}" (click)="showHideAllDetails()"
+        title="{{!openAllLayersProperties?'Show all layers details': 'Hide all layers details'}}"></clr-icon>
+      <clr-icon *ngIf="canZoomToGroup" shape="zoom-in" class="iconButton" (click)="zoomTo(group)" title="Zoom to group"></clr-icon>
+      <clr-icon *ngIf="group.removable" shape="trash" class="iconButton" (click)="removeLayerGroup(group)" title="Remove group"></clr-icon>
+    </div>
+
+    <div cdkDropList (cdkDropListDropped)="drop($event)" (cdkDropListSorted)="sort($event)">
+      <div class="sublayers" *ngFor="let layer of group.layers | reverse;" cdkDragLockAxis="y" cdkDrag>
+        <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState" [layer]="layer"
+          [group]="group" (update)="layerUpdate($event, group)"></ukis-layerentry>
+      </div>
+    </div>
+  </div>
+</div>

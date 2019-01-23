@@ -1,0 +1,65 @@
+<div class="layer">
+  <div class="head">
+    <clr-icon shape="angle" [dir]="openProperties?'down':'right'" class="iconButton" [ngClass]="{'disabled': is_expandable()}"
+      (click)="showProperties()" title="Details"></clr-icon>
+
+    <div *ngIf="is_expandable(); else notExpandable" class="title" [title]="getLayerName(layer)">{{getLayerName(layer)}}</div>
+    <ng-template #notExpandable>
+      <div class="title" (click)="showProperties()" [title]="getLayerName(layer)">{{getLayerName(layer)}}</div>
+    </ng-template>
+
+    <!-- setLayerIndex // for reversed layergroups on ngFor up is down -->
+    <span *ngIf="!checkBaselayer(layer,group)">
+      <clr-icon [hidden]="layerGroups && layerGroups.length == 1" class="iconButton move-item" shape="arrow" [ngClass]="{'disabled': isLast(layer)}"
+        (click)="setLayerIndex(layer, 'down', group)" title="up"></clr-icon>
+      <clr-icon [hidden]="layerGroups && layerGroups.length == 1" class="iconButton move-item" shape="arrow" [ngClass]="{'disabled': isFirst(layer)}"
+        (click)="setLayerIndex(layer, 'up', group)" title="down" dir="down"></clr-icon>
+    </span>
+
+    <!-- setLayerVisibility -->
+    <input class="hide" [type]="(checkBaselayer(layer,group))?'radio':'checkbox'" [name]="'layer'" [id]="layer.id"
+      [checked]="layer.visible" (change)="setLayerVisibility(layer, group)">
+    <label [for]="layer.id">
+      <clr-icon *ngIf="checkBaselayer(layer,group); else notBaselayer" class="iconButton" [ngClass]="{'is-solid':layer.visible}"
+        [attr.shape]="'eye'" title="{{layer.visible?'Hide layer':'Show layer'}}"></clr-icon>
+      <ng-template #notBaselayer>
+        <clr-icon class="iconButton" [ngClass]="{'is-solid':layer.visible}" [attr.shape]="(layer.visible)?'eye':'eye-hide'"
+          title="{{layer.visible?'Hide layer':'Show layer'}}"></clr-icon>
+      </ng-template>
+    </label>
+
+  </div>
+  <div *ngIf="openProperties && expandable" class="body">
+    <!-- tools: zoomTo, remove, switch Tab -->
+    <div class="tools">
+      <clr-icon title="Layer settings" shape="cog" class="iconButton" [ngClass]="{'active': activeTabs['settings']}"
+        (click)="switchTab('settings')"></clr-icon>
+      <clr-icon *ngIf="layer.legendImg" title="Layer Legend" shape="image" class="iconButton" [ngClass]="{'active': activeTabs['legend']}"
+        (click)="switchTab('legend')"></clr-icon>
+      <clr-icon *ngIf="layer.description" title="Layer info" shape="info-standard" class="iconButton" [ngClass]="{'active': activeTabs['description']}"
+        (click)="switchTab('description')"></clr-icon>
+      <span></span>
+      <clr-icon *ngIf="canZoomToLayer" shape="zoom-in" class="iconButton" title="Zoom to layer" (click)="zoomTo(layer)"></clr-icon>
+      <clr-icon *ngIf="layer.removable" shape="trash" class="iconButton" (click)="removeLayer(group, layer)" title="Remove layer"></clr-icon>
+    </div>
+    <div class="tabsbody">
+      <div *ngIf="activeTabs['settings']" class="layersettings">
+        <!-- setLayerOpacity -->
+        <div class="form-group">
+          <label [for]="'layer_transparency_slider_'+layer.id">Opacity:</label>
+          <input [id]="'layer_transparency_slider_'+layer.id" type="range" name="points" [value]="layer.opacity" [min]="0.0"
+            [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)" [(ngModel)]="layer.opacity" />
+          <span>{{" "+layer.opacity}}</span>
+        </div>
+      </div>
+      <!-- show Legend -->
+      <div *ngIf="activeTabs['legend'] && layer.legendImg">
+        <img [src]="layer.legendImg" />
+      </div>
+      <!-- show Description -->
+      <div *ngIf="activeTabs['description'] && layer.description">
+        <span [innerHTML]="layer.description"></span>
+      </div>
+    </div>
+  </div>
+</div>

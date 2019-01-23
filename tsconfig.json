@@ -96,6 +96,14 @@
       "@ukis/base-layers-raster/*": [
         "dist/base-layers-raster/*",
         "projects/base-layers-raster/*"
+      ],
+      "@ukis/layer-control": [
+        "dist/layer-control",
+        "projects/layer-control"
+      ],
+      "@ukis/layer-control/*": [
+        "dist/layer-control/*",
+        "projects/layer-control/*"
       ]
     }
   }
