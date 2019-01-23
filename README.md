@@ -18,14 +18,26 @@ and a few routing views:
 
 and a the following modules as angular libraries:
 - datatypes
+     - layers
+     - map-state
+     - owc-json
+     - user-info
 - services
-- baseLayers
-- map_ol4
+     - layers
+     - map-state
+     - owc-json
+     - util-store
+- base-layers
+     - raster
+- map-ol
 - layer-control
 - map-navigator
 - observation-explorer
+- dataset-explorer
 - user-info
 - cookie-alert
+
+
 
 
 ## Issues
