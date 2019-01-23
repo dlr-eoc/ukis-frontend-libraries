@@ -462,6 +462,41 @@
           }
         }
       }
+    },
+    "base-layers-raster": {
+      "root": "projects/base-layers-raster",
+      "sourceRoot": "projects/base-layers-raster/src",
+      "projectType": "library",
+      "prefix": "ukis",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/base-layers-raster/tsconfig.lib.json",
+            "project": "projects/base-layers-raster/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/base-layers-raster/src/test.ts",
+            "tsConfig": "projects/base-layers-raster/tsconfig.spec.json",
+            "karmaConfig": "projects/base-layers-raster/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/base-layers-raster/tsconfig.lib.json",
+              "projects/base-layers-raster/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ukis-frontend"

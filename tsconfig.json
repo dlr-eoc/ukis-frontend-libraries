@@ -82,10 +82,20 @@
         "projects/services-util-store/*"
       ],
       "@ukis/map-ol": [
-        "dist/map-ol", "projects/map-ol"
+        "dist/map-ol",
+        "projects/map-ol"
       ],
       "@ukis/map-ol/*": [
-        "dist/map-ol/*", "projects/map-ol/*"
+        "dist/map-ol/*",
+        "projects/map-ol/*"
+      ],
+      "@ukis/base-layers-raster": [
+        "dist/base-layers-raster",
+        "projects/base-layers-raster"
+      ],
+      "@ukis/base-layers-raster/*": [
+        "dist/base-layers-raster/*",
+        "projects/base-layers-raster/*"
       ]
     }
   }
