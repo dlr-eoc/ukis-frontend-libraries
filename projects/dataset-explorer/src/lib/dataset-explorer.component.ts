@@ -50,6 +50,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   datasets: IOwsResource[];
   datasetsFiltered: IOwsResource[] = [];
   datasetSelected: IOwsResource[] = [];
+  
   datasetSelectedIDs: string[] = [];
 
   mapLayers: Layer[] = [];
@@ -179,27 +180,26 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   selectionChanged(sel) {
+
     //console.log('-----------change')
+    console.log("datasets selected after selectionChanged: ", this.datasetSelected)
     let newIds = [];
 
     //console.log('newIds', newIds)
     //console.log('oldIds', this.oldIds)
 
     sel.forEach(s => {
-      if (newIds.indexOf(s.id) == -1) {
+     
         newIds.push(s.id)
-
         this.addDataset(s);
-      } else {
-        this.layersSvc.removeLayerOrGroupById(s.id);
-      }
+    
     })
 
 
     //remove old layers
     this.oldIds.forEach(id => {
       if (newIds.indexOf(id) == -1) {
-        this.layersSvc.removeLayerOrGroupById(id);
+        //this.layersSvc.removeLayerOrGroupById(id);
       }
     });
 
@@ -208,7 +208,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
     if (newIds.length == 0) {
       this.oldIds.forEach(id => {
-        this.layersSvc.removeLayerOrGroupById(id);
+        //this.layersSvc.removeLayerOrGroupById(id);
       })
     }
 
