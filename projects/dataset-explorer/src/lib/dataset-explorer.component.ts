@@ -50,7 +50,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   datasets: IOwsResource[];
   datasetsFiltered: IOwsResource[] = [];
   datasetSelected: IOwsResource[] = [];
-  datasetSelectedIDs: string[] = [];
+  datasetSelectedCache: IOwsResource[] = [];
 
   mapLayers: Layer[] = [];
   layerIDs: string[] = [];
@@ -104,16 +104,29 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   filterAdd(node, i) {
+    /**
+     * save selected Array - clarity issue 2342 Datagrid clears the selection on filter or source change
+     */
+    if (this.datasetSelected.length != 0) {
+      this.datasetSelectedCache = clone(this.datasetSelected)
+    }
+
     this.filtersFiltered[i].selected = node;
     this.filtersFiltered[i].children = node.children;
     this.applyFilters();
-
   }
+
   filterRemove(i) {
     this.filtersFiltered[i].selected = null;
     this.filtersFiltered[i].children = clone(this.filters[i].children);
     this.applyFilters();
 
+    /**
+     * restore selected Array - clarity issue 2342 Datagrid clears the selection on filter or source change
+     */
+    if (this.datasetSelectedCache.length > 0) {
+      this.datasetSelected = this.datasetSelectedCache;
+    }
   }
 
   applyFilters() {
@@ -125,12 +138,11 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     }, []);
 
     if (filterterms.length) { // filter the datasets
-
-      this.datasetsFiltered = clone(this.datasets).filter(d =>
+      this.datasetsFiltered = this.datasets.filter(d =>
         filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
       );
     } else { // if there are no filterterms reseed the datasets in the table
-      this.datasetsFiltered = clone(this.datasets);
+      this.datasetsFiltered = this.datasets;
     }
 
     // get a count of available datasets for each term
@@ -153,9 +165,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   subscribeToLayerSvc() {
     this.layersSubscription = this.layersSvc.getOverlays().subscribe(layers => {
       this.mapLayers = layers;
-      //console.log('subscribe', layers, this.datasetSelected)
       this.layerIDs = this.mapLayers.map(l => l.id + "")
-      //console.log('datasetSelectedIDs', this.datasetSelectedIDs)
       //console.log('oldIds', this.oldIds)
       //console.log('layerIDs', this.layerIDs)
 
