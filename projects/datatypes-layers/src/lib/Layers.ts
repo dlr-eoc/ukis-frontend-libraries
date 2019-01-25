@@ -113,5 +113,6 @@ export class CustomLayer extends Layer implements ICustomLayerOptions {
   custom_layer: any = {};
   constructor(options: ICustomLayerOptions) {
     super(options);
+    Object.assign(this, options);
   }
 }
