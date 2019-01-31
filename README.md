@@ -1,22 +1,10 @@
-# Frontend (MONO) for UKIS Map Applications
+# Frontend Libraries for UKIS (Map) Applications
 
-This is an mono repository that hosts all stuff from the UKIS Frontend like our Clarity-Layout and all the components, services, pipes...
+This is a repository that hosts all libraries that are imported into project specific UKIS Frontend Applications. 
 It uses [angular](https://angular.io/) and the [Clarity Design System](https://vmware.github.io/clarity/).
 The dependencies to the needed modules are defined in package.json and are stored in node_modules.  
 
-This repository contains a few core components:
-- global-alert
-- global-footer
-- global-progress-
-- header
-
-and a few routing views:
-- route-home
-- route-legal-notice
-- route-privacy
-- route-vertical-nav
-
-and a the following modules as angular libraries:
+This repository contains the following modules as angular libraries:
 - datatypes
      - layers
      - map-state
@@ -37,15 +25,28 @@ and a the following modules as angular libraries:
 - user-info
 - cookie-alert
 
+To use the libraries in your frontend application, you need to add the dependency to every single library in your package.json and state the version you want: 
+```bash
+...
+"dependencies": {
+    ...
+    "@ukis/base-layers-raster": "^1.0.0",
+    "@ukis/dataset-explorer": "^1.0.0",
+    "@ukis/datatypes-layers": "^1.0.0",
+    "@ukis/datatypes-owc-json": "^1.0.0",
+    "@ukis/layer-control": "^1.0.0",
+    "@ukis/map-ol": "^1.0.0",
+    ...
+```
 
-
+To further develop the libraries, [see development documentation](DEVELOPMENT.md) for instructions.
 
 ## Issues
  http://jira.ukis.eoc.dlr.de/issues/?jql=project%20%3D%20UKISDEV%20AND%20Component%20%3D%20Frontend%20AND%20Labels%20%3D%20master
 
 ## Getting started to develop
 - Check if [Git](https://git-scm.com/) is installed.
-- Clone the repo: `git clone http://git.ukis.eoc.dlr.de/scm/mofro/frontend.git` . 
+- Clone the repo: `git clone http://git.ukis.eoc.dlr.de/scm/mofro/frontend-libraries.git` . 
 - Create your own branch for your project based on master: 
 ```bash
      # go to cloned repo
@@ -67,7 +68,7 @@ and a the following modules as angular libraries:
 - all versions in package.json should be fixed! 
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies. (similar to hardware upgrades)
 
-## Usage of compodoc to generate documentation
+## Usage of compodoc to generate documentation (outdated)
 [compodoc](https://github.com/compodoc/compodoc) is used to collect and render documentation from code for angular projects. 
 
 ### How compodoc works 
@@ -81,7 +82,7 @@ and a the following modules as angular libraries:
 Compodoc use Typescript AST parser and it's internal APIs, so the comments have to be JSDoc comments. 
 
 
-## Continuous Integration: Jenkins TODO
+## Continuous Integration: Jenkins (in progress)
 
 The [jenkins pipeline ukis-mofro_master](http://torres.eoc.dlr.de/job/ukis-mofro_master/) is defined for the branch master to automatically build it. Then, it is automatically deployed to [duarte](//duarte.eoc.dlr.de/master/) 
 
