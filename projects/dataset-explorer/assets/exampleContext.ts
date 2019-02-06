@@ -1,11 +1,15 @@
-export const testContext = {
+import { IOwsContext } from "@ukis/datatypes-owc-json/src/public_api";
+
+export const exampleContext: IOwsContext = {
     "features": [
            {
                "type": "Feature",
                "id": "https://geoservice.code-de.org/Sentinel1/wms/S1_SAR_L1_GRD",
                "title": "Sentinel-1 SAR - Level 1 (Ground Range Detected)",
+               "geometry": null,
                "properties": {
-                   "active": "false",
+                   "title": "TODO: add a title",
+                   "active": false,
                    "offerings": [
                        {
                            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
@@ -39,10 +43,13 @@ export const testContext = {
            },   
            {
                "type": "Feature",
+               "geometry": null,
                "id": "S2_MSI_L1C",
                "title": "Sentinel-2 MSI - Level 1C (Top-of-Atmosphere Reflectance)",
                "properties": {
-                   "active": "true",
+                   "title": "TODO: add a title",
+                   "updated": "", 
+                   "active": true,
                    "offerings": [
                        {
                            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
@@ -94,7 +101,7 @@ export const testContext = {
            }
            
        ],
-       "Properties": {
+       "properties": {
            "links": null,
            "lang": "en",
            "title": "CODE-DE Sentinel 1 and 2",
@@ -116,7 +123,7 @@ export const testContext = {
                    ]
        },
        "type": "FeatureCollection",
-       "bbox": [],
+       "bbox": [0, 0, 10, 10],
        "projections": [{
            "code": "EPSG:3035",
            "extent": [],
