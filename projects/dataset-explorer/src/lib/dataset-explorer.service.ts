@@ -36,19 +36,12 @@ export class DatasetExplorerService {
     return this.http.get(url).pipe(map((response: IOwsContext) => response));
   }
 
+  /* 
+  * this function name is misleading: it should be createLayer, as it creates a Vector or RasterLayer and returns it to the caller
+  */
   addObservation(observation: IOwsResource) {
     let offerings = observation.properties.offerings;
 
-
-
-    /*
-    this.layersSvc.addLayerGroup(layerGroup);
-
-    //zoomTo added observation
-    if (this.mapState && layerGroup.bbox && layerGroup.bbox.length >= 4) {
-      this.mapState.setExtent(layerGroup.bbox);
-    }
-    */
 
     for (let offering of offerings) {
       let code = this.getOfferingCode(offering.code);
@@ -66,25 +59,55 @@ export class DatasetExplorerService {
     }
 
   }
-  /*
-  removeObservation(observation: IOwsResource) {
-    this.layersSvc.removeLayerGroupByID(observation.properties.title);
+  /**
+   * Helper function to extract legendURL from project specific ows Context
+   * @param offering layer offering
+   */
+  getLegendUrl(offering: IOwsOffering) {
+    let legendUrl = "";
+    if(offering.hasOwnProperty("customAttributes")){
+      if (offering.customAttributes.legendUrl) {        
+        legendUrl = offering.customAttributes.legendUrl;
+      }
+    }
+    return legendUrl;
   }
-  */
+
+  getIconUrl(offering: IOwsOffering) {
+    let iconUrl = "";
+    if(offering.hasOwnProperty("customAttributes")){
+      if (offering.customAttributes.iconUrl) {        
+        iconUrl = offering.customAttributes.iconUrl;
+      }
+    }
+    return iconUrl;
+  }
+  getDisplayName(offering: IOwsOffering, observation: IOwsResource) {
+    let displayName = "";
+    if(offering.hasOwnProperty("customAttributes")){
+      if (offering.customAttributes.title) {        
+        displayName = offering.customAttributes.title;
+      } else { 
+        displayName = observation.properties.title
+      }
+    }
+    return displayName;
+  }
+
+  isActive(observation: IOwsResource) { 
+    let active = true;
+    if(observation.properties.active){
+      console.log("active: ", observation.properties.active);
+      active = observation.properties.active;
+    }
+    return true;
+  }
 
   createVectorLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
-    let legendUrl = "";
-    let iconUrl = "";
+    let legendUrl = this.getLegendUrl(offering);
+    let iconUrl = this.getIconUrl(offering);
+   
 
-    if (offering.customAttributes.legendUrl) {
-      legendUrl = offering.customAttributes.legendUrl;
-    }
-
-    if (offering.customAttributes.iconUrl) {
-      iconUrl = offering.customAttributes.iconUrl;
-    }
-
-    //let layerUrl = observation.id + offering.operations[0].href;
     let layerUrl = offering.operations[0].href;
     let params = this.getJsonFromUrl(offering.operations[0].href);
     let lName = params['typeName'];
@@ -101,12 +124,12 @@ export class DatasetExplorerService {
     return layer;
   }
 
-  createVectorLayer(lName, offering: IOwsOffering, observation, layerUrl?, legendUrl?, iconUrl?) {
+  createVectorLayer(lName, offering: IOwsOffering, observation, layerUrl?, legendUrl?, iconUrl?, isActive?) {
     let layeroptions = new VectorLayer({
       name: observation.properties.title,
       id: observation.id,
-      displayName: offering.customAttributes.title,
-      visible: true,
+      displayName: this.getDisplayName(offering, observation),
+      visible: this.isActive(observation),
       type: 'geojson',
       removable: true,
       attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
@@ -120,29 +143,27 @@ export class DatasetExplorerService {
     if (legendUrl) {
       layeroptions.legendImg = legendUrl;
     }
+   
     return layeroptions;
   }
 
   createRasterLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
-    let legendUrl = "";
-    let iconUrl = "";
+    let legendUrl = this.getLegendUrl(offering);
+    let iconUrl = this.getIconUrl(offering);
 
-    if (offering.customAttributes.legendUrl) {
-      //legendUrl = observation.id + offering.customAttributes.legendUrl;
-      legendUrl = offering.customAttributes.legendUrl;
-    }
-
-    if (offering.customAttributes.iconUrl) {
-      iconUrl = offering.customAttributes.iconUrl;
+    // check if customAttributes is set, and retrieve information (this is for project-coastalx)
+    if(offering.hasOwnProperty("customAttributes")){
+      
+      if (!offering.customAttributes.title) {
+        offering.customAttributes.title = observation.properties.title;
+      }
     }
 
     //let layerUrl = observation.id + offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
     let layerUrl = offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
     let params = this.getJsonFromUrl(offering.operations[0].href);
     let lName = params['LAYERS'];
-    if (!offering.customAttributes.title) {
-      offering.customAttributes.title = observation.properties.title;
-    }
+    
 
     let layeroptins = this.createRasterLayer(lName, offering, layerUrl, observation, legendUrl);
     let layer = new RasterLayer(layeroptins);
@@ -157,8 +178,8 @@ export class DatasetExplorerService {
     let rasterOptions: IRasterLayerOptions = {
       name: observation.properties.title,
       id: observation.id,
-      displayName: offering.customAttributes.title,
-      visible: true,
+      displayName: this.getDisplayName(offering, observation),
+      visible: this.isActive(observation),
       type: 'wms',
       removable: true,
       params: {
@@ -173,6 +194,7 @@ export class DatasetExplorerService {
       legendImg: legendUrl,
       opacity: 1
     }
+   
     return rasterOptions;
   }
 
@@ -190,4 +212,5 @@ export class DatasetExplorerService {
     let code = offeringCode.substr(offeringCode.lastIndexOf("/") + 1);
     return code;
   }
+
 }
