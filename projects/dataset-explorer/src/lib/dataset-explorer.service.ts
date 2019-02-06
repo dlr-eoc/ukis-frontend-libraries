@@ -96,11 +96,10 @@ export class DatasetExplorerService {
 
   isActive(observation: IOwsResource) { 
     let active = true;
-    if(observation.properties.active){
-      console.log("active: ", observation.properties.active);
+    if(observation.properties.hasOwnProperty("active")){      
       active = observation.properties.active;
     }
-    return true;
+    return active;
   }
 
   createVectorLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
