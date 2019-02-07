@@ -65,7 +65,14 @@ export class DatasetExplorerService {
    */
   getLegendUrl(offering: IOwsOffering) {
     let legendUrl = "";
-    if(offering.hasOwnProperty("customAttributes")){
+    
+    if (offering.hasOwnProperty("styles")) {
+      let defaultStyle = offering.styles.filter(style => style.default);
+      if(defaultStyle.length > 0){
+        console.log(defaultStyle[0].legendURL);
+        return defaultStyle[0].legendURL;
+      } 
+    } else if(offering.hasOwnProperty("customAttributes")){
       if (offering.customAttributes.legendUrl) {        
         legendUrl = offering.customAttributes.legendUrl;
       }
@@ -73,6 +80,10 @@ export class DatasetExplorerService {
     return legendUrl;
   }
 
+  /**
+   * retrieve iconUrl based on IOwsOffering
+   * @param offering 
+   */
   getIconUrl(offering: IOwsOffering) {
     let iconUrl = "";
     if(offering.hasOwnProperty("customAttributes")){
@@ -82,6 +93,11 @@ export class DatasetExplorerService {
     }
     return iconUrl;
   }
+  /**
+   * retrieve display name of layer, based on IOwsResource and IOwsOffering
+   * @param offering 
+   * @param observation 
+   */
   getDisplayName(offering: IOwsOffering, observation: IOwsResource) {
     let displayName = "";
     if(offering.hasOwnProperty("customAttributes")){
@@ -94,6 +110,10 @@ export class DatasetExplorerService {
     return displayName;
   }
 
+  /**
+   * retrieve layer status active / inactove based on IOwsResource
+   * @param observation 
+   */
   isActive(observation: IOwsResource) { 
     let active = true;
     if(observation.properties.hasOwnProperty("active")){      
@@ -150,14 +170,6 @@ export class DatasetExplorerService {
     let legendUrl = this.getLegendUrl(offering);
     let iconUrl = this.getIconUrl(offering);
 
-    // check if customAttributes is set, and retrieve information (this is for project-coastalx)
-    if(offering.hasOwnProperty("customAttributes")){
-      
-      if (!offering.customAttributes.title) {
-        offering.customAttributes.title = observation.properties.title;
-      }
-    }
-
     //let layerUrl = observation.id + offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
     let layerUrl = offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
     let params = this.getJsonFromUrl(offering.operations[0].href);
@@ -197,6 +209,10 @@ export class DatasetExplorerService {
     return rasterOptions;
   }
 
+  /**
+   * helper to pack parameter of a url into a JSON
+   * @param url any url with parameter
+   */
   getJsonFromUrl(url: string) {
     var query = url.substr(0);
     var result = {};
@@ -207,6 +223,10 @@ export class DatasetExplorerService {
     return result;
   }
 
+  /**
+   * helper function to retrieve the offering code
+   * @param offeringCode url poiting to service type: wms, wfs, wmts etc
+   */
   getOfferingCode(offeringCode: string): string {
     let code = offeringCode.substr(offeringCode.lastIndexOf("/") + 1);
     return code;
