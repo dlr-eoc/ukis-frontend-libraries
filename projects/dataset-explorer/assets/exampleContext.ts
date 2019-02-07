@@ -5,10 +5,9 @@ export const exampleContext: IOwsContext = {
            {
                "type": "Feature",
                "id": "https://geoservice.code-de.org/Sentinel1/wms/S1_SAR_L1_GRD",
-               "title": "Sentinel-1 SAR - Level 1 (Ground Range Detected)",
                "geometry": null,
                "properties": {
-                   "title": "TODO: add a title",
+                   "title": "Sentinel-1 SAR - Level 1 (Ground Range Detected)",
                    "active": false,
                    "offerings": [
                        {
@@ -45,9 +44,8 @@ export const exampleContext: IOwsContext = {
                "type": "Feature",
                "geometry": null,
                "id": "S2_MSI_L1C",
-               "title": "Sentinel-2 MSI - Level 1C (Top-of-Atmosphere Reflectance)",
                "properties": {
-                   "title": "TODO: add a title",
+                   "title": "Sentinel-2 MSI - Level 1C (Top-of-Atmosphere Reflectance)",
                    "updated": "", 
                    "active": true,
                    "offerings": [

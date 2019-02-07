@@ -164,8 +164,8 @@ export class DatasetExplorerService {
     let lName = params['LAYERS'];
     
 
-    let layeroptins = this.createRasterLayer(lName, offering, layerUrl, observation, legendUrl);
-    let layer = new RasterLayer(layeroptins);
+    let layeroptions = this.createRasterLayer(lName, offering, layerUrl, observation, legendUrl);
+    let layer = new RasterLayer(layeroptions);
     if (observation.bbox) {
       layer.bbox = <[number, number, number, number]>observation.bbox;
     }
@@ -198,7 +198,7 @@ export class DatasetExplorerService {
   }
 
   getJsonFromUrl(url: string) {
-    var query = url.substr(0);
+    var query = url.substr(url.lastIndexOf("?") + 1);
     var result = {};
     query.split("&").forEach(function (part) {
       var item = part.split("=");
