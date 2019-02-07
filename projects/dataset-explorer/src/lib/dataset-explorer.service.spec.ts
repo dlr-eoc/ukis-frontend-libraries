@@ -2,10 +2,12 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { DatasetExplorerService } from './dataset-explorer.service';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { exampleContext } from '../../assets/exampleContext';
-import { IOwsOffering, IOwsResource, IOwsOperation } from '@ukis/datatypes-owc-json/src/lib/owc-json';
-import { IRasterLayerOptions, VectorLayer, RasterLayer } from '@ukis/datatypes-layers/src/lib/Layers';
-import { toBase64String } from '@angular/compiler/src/output/source_map';
+import { IOwsOffering, IOwsResource, IOwsOperation, IOwsContext } from '@ukis/datatypes-owc-json/src/lib/owc-json';
+import { RasterLayer, VectorLayer } from '@ukis/datatypes-layers/src/lib/Layers';
 
+
+// All tests run on all the owc-json files in this array. TODO: add more example files to this array!
+let allTestContexts = [exampleContext];
 
 
 
@@ -34,18 +36,18 @@ describe('DatasetExplorerService: obtaining data', () => {
 
   it('#getObservations should actually get observations', () => {
 
-    //setup data
-    const fakeContext = exampleContext;
-    const url = "testUrl/rest/owc/";
+    for(const context of allTestContexts) {
+      // call url
+      const url = "testUrl/rest/owc/";
+      datasetExplorer.getObservations(url).subscribe((data) => {
+        expect(data).toBe(context);
+      });
+      
+      // setup receiver of and answer to http-request
+      const request = httpMock.expectOne(url);
+      request.flush(context);
+    }
 
-    // actually call url
-    datasetExplorer.getObservations(url).subscribe((data) => {
-      expect(data).toBe(fakeContext);
-    });
-    
-    // setup receiver of and answer to http-request
-    const request = httpMock.expectOne(url);
-    request.flush(fakeContext);
   });
 
 });
@@ -79,33 +81,54 @@ describe('DatasetExplorerService: transforming data', () => {
 
 
   it('#getOfferingCode should return the correct type of offering', () => {
-    let firstObservation: IOwsResource = exampleContext.features[0];
-    let firstOffering: IOwsOffering = firstObservation.properties.offerings[0];
-    let realCode = firstOffering.code.split("/").pop();
+    for(const context of allTestContexts) {
+      for(let observation of context.features) {
+        for(let offering of observation.properties.offerings) {
+          
+          let realCode = offering.code.split("/").pop();
+      
+          let code = datasetExplorer.getOfferingCode(offering.code);
+      
+          expect(code).toBe(realCode);
 
-    let code = datasetExplorer.getOfferingCode(firstOffering.code);
-
-    expect(code).toBe(realCode);
+        }
+      }
+    }
   });
 
 
   it('#addObservation should create an appropriate configuration object for a layer', () => {
-    let firstObservation: IOwsResource = exampleContext.features[0];
-    let firstOffering: IOwsOffering = firstObservation.properties.offerings[0];
-    let firstOperation: IOwsOperation = firstOffering.operations[0];
-    let layerUrl = firstOperation.href.substr(0, firstOperation.href.lastIndexOf("?"));
+    for(const context of allTestContexts) {
+      for(let observation of context.features) {
+        for(let offering of observation.properties.offerings) {
+          for(let operation of offering.operations) {
 
-    let layerOptions: RasterLayer | VectorLayer = datasetExplorer.addObservation(firstObservation);
-console.log(layerOptions);
-    expect(layerOptions.name).toBe(firstObservation.properties.title);
-    expect(layerOptions.id as string).toBe(firstObservation.id as string);
-    expect(layerOptions.opacity).toBe(1); // opacity is not encoded in owc-json per default. Allways falling back to 1. 
-    expect(layerOptions.visible).toBe(firstObservation.properties.active);
-    expect(layerOptions.removable).toBe(true); // "removable" is not encoded in owc-json; falling back to "true"
-    expect(layerOptions.filtertype).toBe("Overlays"); // all data in owc-json will - for now - be an overlay. Might be changed in the future. 
-    expect(layerOptions.type).toBe(firstOffering.code.split("/").pop());
-    expect(layerOptions.url).toBe(layerUrl);
-    expect(layerOptions.visible).toBe(firstObservation.properties.active);
+            let layerOptions: RasterLayer | VectorLayer = datasetExplorer.addObservation(observation);
+        
+            expect(layerOptions.name).toBe(observation.properties.title);
+            expect(layerOptions.id as string).toBe(observation.id as string);
+            expect(layerOptions.opacity).toBe(1); // opacity is not encoded in owc-json per default. Allways falling back to 1. 
+            expect(layerOptions.visible).toBe(observation.properties.active);
+            expect(layerOptions.removable).toBe(true); // "removable" is not encoded in owc-json; falling back to "true"
+            expect(layerOptions.filtertype).toBe("Overlays"); // all data in owc-json will - for now - be an overlay. Might be changed in the future. 
+            expect(layerOptions.type).toBe(offering.code.split("/").pop());
+            expect(layerOptions.url).toBe(operation.href.substr(0, operation.href.lastIndexOf("?")));
+            //expect(layerOptions.params)
+          
+          }
+        }
+      }
+    }
+  });
+
+
+  it('#getLegendUrl', () => {
+    for(const context of allTestContexts) {
+      let firstObservation: IOwsResource = context.features[0];
+      let firstOffering: IOwsOffering = firstObservation.properties.offerings[0];
+
+      let legendUrl = datasetExplorer.getLegendUrl(firstOffering);
+    }
   });
 
 });

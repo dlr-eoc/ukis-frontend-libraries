@@ -68,3 +68,10 @@ here is an example how to integrate it in modal form:
 
 ObservationExplorer will build the table automatically, based on attributes in the observations[0].properties.customAttributes section
 
+
+## Testing 
+
+To run the jasmine tests, simply execute 
+```
+ng test dataset-explorer
+```
