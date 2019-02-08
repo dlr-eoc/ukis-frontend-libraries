@@ -63,10 +63,9 @@ export class DatasetExplorerService {
 
   }
 
-  createVectorLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
+  private createVectorLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
     let layer = this.owcSvc.createVectorLayerFromOffering(offering, observation);
     if(layer.url) {
-      // @TODO: does this make sense? is a wfs not expected to return a FeatureCollection? IOwsContext seems too specific!
       this.http.get(layer.url).pipe(map((response: IOwsContext) => response)).subscribe(data => {
         layer.data = data;
         //this.layersSvc.updateLayerGroup(layerGroup, true);
@@ -75,7 +74,7 @@ export class DatasetExplorerService {
     return layer;
   }
 
-  createRasterLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
+  private createRasterLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
     return this.owcSvc.createRasterLayerFromOffering(offering, observation);
   } 
 
@@ -83,7 +82,7 @@ export class DatasetExplorerService {
    * helper function to retrieve the offering code
    * @param offeringCode url poiting to service type: wms, wfs, wmts etc
    */
-  getOfferingCode(offeringCode: string): string {
+  private getOfferingCode(offeringCode: string): string {
     let code = offeringCode.substr(offeringCode.lastIndexOf("/") + 1);
     return code;
   }
