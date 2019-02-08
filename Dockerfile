@@ -6,6 +6,7 @@ COPY . /frontend-libraries/
 
 RUN apk update && \
     apk add git rsync && \
+    apk add chromium && \
     cd /frontend-libraries && \
     rm package-lock.json && \
     npm install --unsafe-perm --registry http://hofer.eoc.dlr.de/nexus/content/groups/npm-all/ && \
