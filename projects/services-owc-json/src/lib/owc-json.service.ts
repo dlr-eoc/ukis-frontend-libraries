@@ -69,30 +69,19 @@ export class OwcJsonService {
     return (resource.properties.offerings) ? resource.properties.offerings : null;
   }
 
-  /** Offering --------------------------------------------------- */
-  getOfferingCode(offering: IOwsOffering) {
-    return offering.code.split('/').pop().toLowerCase();
-  }
-
-  checkIfServiceOffering(offering: IOwsOffering) {
-    return (!offering.contents && offering.operations) ? true : false;
-  }
-
-  checkIfDataOffering(offering: IOwsOffering) {
-    return (offering.contents && !offering.operations) ? true : false;
-  }
-
-  getOfferingContents(offering: IOwsOffering) {
-    if (this.checkIfServiceOffering(offering)) {
-      return offering.operations;
-    } else if (this.checkIfDataOffering(offering)) {
-      return offering.contents;
+  /**
+   * retrieve layer status active / inactove based on IOwsResource
+   * @param resource 
+   */
+  isActive(resource: IOwsResource) { 
+    let active = true;
+    if(resource.properties.hasOwnProperty("active")){      
+      active = resource.properties.active;
     }
+    return active;
   }
-
 
   //https://github.com/Terradue/ows-context-demo/blob/master/src/main/demo/index.html#L245:2
-
   //create ukis layers ----------------------------------------------------------------------
   layerGroupFromResource(resource: IOwsResource): ILayerGroupOptions {
     let layerGroupOptions: ILayerGroupOptions = {
@@ -128,4 +117,63 @@ export class OwcJsonService {
 
     return layerOptions;
   }
+
+
+  /** Offering --------------------------------------------------- */
+  getOfferingCode(offering: IOwsOffering) {
+    return offering.code.split('/').pop().toLowerCase();
+  }
+
+  checkIfServiceOffering(offering: IOwsOffering) {
+    return (!offering.contents && offering.operations) ? true : false;
+  }
+
+  checkIfDataOffering(offering: IOwsOffering) {
+    return (offering.contents && !offering.operations) ? true : false;
+  }
+
+  getOfferingContents(offering: IOwsOffering) {
+    if (this.checkIfServiceOffering(offering)) {
+      return offering.operations;
+    } else if (this.checkIfDataOffering(offering)) {
+      return offering.contents;
+    }
+  }
+
+    /**
+     * Helper function to extract legendURL from project specific ows Context
+     * @param offering layer offering
+     */
+  getLegendUrl(offering: IOwsOffering) {
+    let legendUrl = "";
+    
+    if (offering.hasOwnProperty("styles")) {
+      let defaultStyle = offering.styles.filter(style => style.default);
+      if(defaultStyle.length > 0){
+        console.log(defaultStyle[0].legendURL);
+        return defaultStyle[0].legendURL;
+      } 
+    } else if(offering.hasOwnProperty("customAttributes")){
+      if (offering.customAttributes.legendUrl) {        
+        legendUrl = offering.customAttributes.legendUrl;
+      }
+    }
+    return legendUrl;
+  }
+
+   /**
+    * retrieve iconUrl based on IOwsOffering
+    * @param offering 
+    */
+  getIconUrl(offering: IOwsOffering) {
+    let iconUrl = "";
+    if(offering.hasOwnProperty("customAttributes")){
+      if (offering.customAttributes.iconUrl) {        
+        iconUrl = offering.customAttributes.iconUrl;
+      }
+    }
+    return iconUrl;
+  }
+
+
 }

@@ -2,6 +2,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { OwcJsonService } from './owc-json.service';
 import { IOwsContext } from '@ukis/datatypes-owc-json';
+import { barebonesContext, basicContext } from '../../assets/exampleContext';
+
+
+let allTestContexts = [barebonesContext, basicContext];
+
 
 describe('OwcJsonService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
@@ -28,4 +33,24 @@ describe('OwcJsonService', () => {
     }
     expect(service.checkContext(context)).toBeTruthy();
   });
+
+  it('#layerGroupFromResource should properly create a LayerGroup-configuration', () => {
+    for(const context of allTestContexts) {
+      const service: OwcJsonService = TestBed.get(OwcJsonService);
+      for(const resource of service.getResources(context)){
+
+        const layergroup = service.layerGroupFromResource(resource);
+
+        expect(layergroup.filtertype).toBe("Overlays"); // type is always "overlays" per default - though this might change in the future. 
+        expect(layergroup.id).toBe(resource.id as string);
+        expect(layergroup.name).toBe(resource.properties.title);
+        expect(layergroup.removable).toBe(true); // default
+        expect(layergroup.layerRemovable).toBe(false); // default
+        expect(layergroup.layers).toEqual([]); // layers initially not set. @TODO: is this deliberate?
+      }
+    }
+  });
+
+  // @TODO: this method seems to be a stub. Shouldn't it return an array of ILayerOptions?
+  //it('#getlayersFromResource should properly create an array of ILayerOptions?', () => {});
 });

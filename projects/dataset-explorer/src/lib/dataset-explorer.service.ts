@@ -5,6 +5,7 @@ import { LayerGroup, VectorLayer, RasterLayer, IRasterLayerOptions, Layer } from
 import { IOwsContext, IOwsResource, IOwsOffering } from '@ukis/datatypes-owc-json';
 import { LayersService } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
+import { OwcJsonService } from '@ukis/services-owc-json';
 
 import { HttpClient } from '@angular/common/http';
 
@@ -24,7 +25,9 @@ export class DatasetExplorerService {
   layergroups: Array<LayerGroup>
   layerGroupsSubscription: Subscription;
 
-  constructor(public http: HttpClient) {
+  constructor(
+    public http: HttpClient,
+    private owcSvc: OwcJsonService) {
     /*
     this.layerGroupsSubscription = this.layersSvc.getLayerGroups().subscribe(layergroups => {
       this.layergroups = layergroups;
@@ -59,40 +62,10 @@ export class DatasetExplorerService {
     }
 
   }
-  /**
-   * Helper function to extract legendURL from project specific ows Context
-   * @param offering layer offering
-   */
-  getLegendUrl(offering: IOwsOffering) {
-    let legendUrl = "";
-    
-    if (offering.hasOwnProperty("styles")) {
-      let defaultStyle = offering.styles.filter(style => style.default);
-      if(defaultStyle.length > 0){
-        console.log(defaultStyle[0].legendURL);
-        return defaultStyle[0].legendURL;
-      } 
-    } else if(offering.hasOwnProperty("customAttributes")){
-      if (offering.customAttributes.legendUrl) {        
-        legendUrl = offering.customAttributes.legendUrl;
-      }
-    }
-    return legendUrl;
-  }
 
-  /**
-   * retrieve iconUrl based on IOwsOffering
-   * @param offering 
-   */
-  getIconUrl(offering: IOwsOffering) {
-    let iconUrl = "";
-    if(offering.hasOwnProperty("customAttributes")){
-      if (offering.customAttributes.iconUrl) {        
-        iconUrl = offering.customAttributes.iconUrl;
-      }
-    }
-    return iconUrl;
-  }
+
+ 
+
   /**
    * retrieve display name of layer, based on IOwsResource and IOwsOffering
    * @param offering 
@@ -110,21 +83,10 @@ export class DatasetExplorerService {
     return displayName;
   }
 
-  /**
-   * retrieve layer status active / inactove based on IOwsResource
-   * @param observation 
-   */
-  isActive(observation: IOwsResource) { 
-    let active = true;
-    if(observation.properties.hasOwnProperty("active")){      
-      active = observation.properties.active;
-    }
-    return active;
-  }
 
   createVectorLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
-    let legendUrl = this.getLegendUrl(offering);
-    let iconUrl = this.getIconUrl(offering);
+    let legendUrl = this.owcSvc.getLegendUrl(offering);
+    let iconUrl = this.owcSvc.getIconUrl(offering);
    
 
     let layerUrl = offering.operations[0].href;
@@ -148,7 +110,7 @@ export class DatasetExplorerService {
       name: observation.properties.title,
       id: observation.id,
       displayName: this.getDisplayName(offering, observation),
-      visible: this.isActive(observation),
+      visible: this.owcSvc.isActive(observation),
       type: 'geojson',
       removable: true,
       attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
@@ -167,8 +129,8 @@ export class DatasetExplorerService {
   }
 
   createRasterLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
-    let legendUrl = this.getLegendUrl(offering);
-    let iconUrl = this.getIconUrl(offering);
+    let legendUrl = this.owcSvc.getLegendUrl(offering);
+    let iconUrl = this.owcSvc.getIconUrl(offering);
 
     //let layerUrl = observation.id + offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
     let layerUrl = offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
@@ -190,7 +152,7 @@ export class DatasetExplorerService {
       name: observation.properties.title,
       id: observation.id,
       displayName: this.getDisplayName(offering, observation),
-      visible: this.isActive(observation),
+      visible: this.owcSvc.isActive(observation),
       type: 'wms',
       removable: true,
       params: {
