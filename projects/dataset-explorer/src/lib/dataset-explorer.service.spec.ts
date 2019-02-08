@@ -73,9 +73,9 @@ describe('DatasetExplorerService: transforming data', () => {
     
     let params = datasetExplorer.getJsonFromUrl(url);
     
-    expect(params["service"]).toBe("WMS");
-    expect(params["version"]).toBe("1.1.0");
-    expect(params["request"]).toBe("GetMap");
+    expect(params["SERVICE"]).toBe("WMS");
+    expect(params["VERSION"]).toBe("1.1.0");
+    expect(params["REQUEST"]).toBe("GetMap");
     expect(params["TRANSPARENT"]).toBe("TRUE");
   });
 
