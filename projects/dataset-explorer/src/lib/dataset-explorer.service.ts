@@ -20,13 +20,13 @@ export class DatasetExplorerService {
   // @Input('layers') layers: LayersService;
   //@Input('mapState') mapState: MapStateService;
   observations: Array<any>;
-  observationProperties: Array<any>
+  observationProperties: Array<any>;
 
-  layergroups: Array<LayerGroup>
+  layergroups: Array<LayerGroup>;
   layerGroupsSubscription: Subscription;
 
   constructor(
-    public http: HttpClient,
+    private http: HttpClient,
     private owcSvc: OwcJsonService) {
     /*
     this.layerGroupsSubscription = this.layersSvc.getLayerGroups().subscribe(layergroups => {
@@ -36,7 +36,7 @@ export class DatasetExplorerService {
   }
 
   getObservations(url: string): Observable<IOwsContext> {
-    return this.http.get(url).pipe(map((response: IOwsContext) => response));
+    return this.owcSvc.getContextFromServer(url);
   }
 
   /* 
@@ -63,29 +63,16 @@ export class DatasetExplorerService {
 
   }
 
-
- 
-
-  /**
-   * retrieve display name of layer, based on IOwsResource and IOwsOffering
-   * @param offering 
-   * @param observation 
-   */
-  getDisplayName(offering: IOwsOffering, observation: IOwsResource) {
-    let displayName = "";
-    if(offering.hasOwnProperty("customAttributes")){
-      if (offering.customAttributes.title) {        
-        displayName = offering.customAttributes.title;
-      } else { 
-        displayName = observation.properties.title
-      }
-    }
-    return displayName;
-  }
-
-
   createVectorLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
-    return this.owcSvc.createVectorLayerFromOffering(offering, observation);
+    let layer = this.owcSvc.createVectorLayerFromOffering(offering, observation);
+    if(layer.url) {
+      // @TODO: does this make sense? is a wfs not expected to return a FeatureCollection? IOwsContext seems too specific!
+      this.http.get(layer.url).pipe(map((response: IOwsContext) => response)).subscribe(data => {
+        layer.data = data;
+        //this.layersSvc.updateLayerGroup(layerGroup, true);
+      });
+    }
+    return layer;
   }
 
   createRasterLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {

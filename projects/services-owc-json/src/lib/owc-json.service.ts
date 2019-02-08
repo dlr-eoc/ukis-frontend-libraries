@@ -7,7 +7,10 @@
 
 import { Injectable } from '@angular/core';
 import { IOwsContext, IOwsResource, IOwsOffering } from '@ukis/datatypes-owc-json';
-import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer } from '@ukis/datatypes-layers';
+import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions } from '@ukis/datatypes-layers';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -15,11 +18,18 @@ import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, Ra
 })
 export class OwcJsonService {
 
-  constructor() {
+  constructor(
+    private http: HttpClient
+  ) {
     //http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truegeojson-encoding-2
   }
 
   /** Context --------------------------------------------------- */
+  getContextFromServer(url: string): Observable<IOwsContext> {
+    return this.http.get(url).pipe(map((response: IOwsContext) => response));
+  }
+
+
   checkContext(context: IOwsContext) {
     var isContect_1_0;
     if (!Array.isArray(context.properties.links)) {
@@ -175,78 +185,50 @@ export class OwcJsonService {
     return iconUrl;
   }
 
-  createVectorLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
-    let legendUrl = this.owcSvc.getLegendUrl(offering);
-    let iconUrl = this.owcSvc.getIconUrl(offering);
-   
 
-    let layerUrl = offering.operations[0].href;
-    let params = this.getJsonFromUrl(offering.operations[0].href);
-    let lName = params['typeName'];
-    let layeroptins = this.createVectorLayer(lName, offering, observation, layerUrl, legendUrl, iconUrl)
-    let layer = new VectorLayer(layeroptins);
-    if (observation.bbox) {
-      layer.bbox = <[number, number, number, number]>observation.bbox;
-    }
-    this.http.get(layerUrl).pipe(map((response: IOwsContext) => response)).subscribe(data => {
-      layer.data = data;
-
-      //this.layersSvc.updateLayerGroup(layerGroup, true);
-    });
-    return layer;
-  }
-
-
-
-  createRasterLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
-    let legendUrl = this.getLegendUrl(offering);
+  createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource): VectorLayer {
     let iconUrl = this.getIconUrl(offering);
-
-    //let layerUrl = observation.id + offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
-    let layerUrl = offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
-    let urlParams = this.getJsonFromUrl(offering.operations[0].href);
-   
+    let layerUrl = this.getUrlFromUri(offering.operations[0].href);
+    let params = this.getJsonFromUri(offering.operations[0].href);
+    let legendUrl = this.getLegendUrl(offering);
     
-
-    let layeroptions = this.createRasterLayer(urlParams, offering, layerUrl, observation, legendUrl);
-    let layer = new RasterLayer(layeroptions);
-    if (observation.bbox) {
-      layer.bbox = <[number, number, number, number]>observation.bbox;
-    }
-    return layer;
-
-  }
-
-  private createVectorLayer(lName, offering: IOwsOffering, observation, layerUrl?, legendUrl?, iconUrl?, isActive?) {
-    let layeroptions = new VectorLayer({
-      name: observation.properties.title,
-      id: observation.id,
-      displayName: this.getDisplayName(offering, observation),
-      visible: this.isActive(observation),
+    let layerOptions: IVectorLayerOptions = {
+      id: resource.id as string,
+      name: this.getResourceTitle(resource),
+      displayName: this.getDisplayName(offering, resource),
+      visible: this.isActive(resource),
       type: 'geojson',
       removable: true,
       attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
       continuousWorld: false,
-      opacity: 1
-    });
+      opacity: 1, 
+      url: layerUrl ? layerUrl : null,
+      legendImg: legendUrl ? legendUrl : null
+    };
 
-    if (layerUrl) {
-      layeroptions.url = layerUrl;
+
+    let layer = new VectorLayer(layerOptions);
+
+    if (resource.bbox) {
+      layer.bbox = <[number, number, number, number]>resource.bbox;
     }
-    if (legendUrl) {
-      layeroptions.legendImg = legendUrl;
-    }
-   
-    return layeroptions;
+    
+    return layer;
   }
+  
+  
 
 
-  private createRasterLayer(urlParams, offering: IOwsOffering, layerUrl, observation, legendUrl?) {
-    let rasterOptions: IRasterLayerOptions = {
-      name: observation.properties.title,
-      id: observation.id,
-      displayName: this.getDisplayName(offering, observation),
-      visible: this.isActive(observation),
+  createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource): RasterLayer {
+    //let iconUrl = this.getIconUrl(offering);
+    let layerUrl = this.getUrlFromUri(offering.operations[0].href);
+    let urlParams = this.getJsonFromUri(offering.operations[0].href);
+
+    let layerOptions: IRasterLayerOptions = {
+      id: resource.id as string,
+      name: this.getResourceTitle(resource), 
+      displayName: this.getDisplayName(offering, resource),
+      visible: this.isActive(resource),
       type: 'wms',
       removable: true,
       params: {
@@ -261,28 +243,59 @@ export class OwcJsonService {
       url: layerUrl,
       attribution: '&copy, <a href="dlr.de/eoc">DLR</a>',
       continuousWorld: false,
-      legendImg: legendUrl,
+      legendImg: this.getLegendUrl(offering),
       opacity: 1
     }
-   
-    return rasterOptions;
+
+    let layer: RasterLayer = new RasterLayer(layerOptions);
+    
+    if (resource.bbox) {
+      layer.bbox = <[number, number, number, number]>resource.bbox;
+    }
+
+    return layer;
   }
 
 
 
+
+
   /** Misc --------------------------------------------------- */
+
+  private getUrlFromUri(uri: string) {
+    return uri.substring(0, uri.indexOf("?"));
+  }
+
   /**
-   * helper to pack parameter of a url into a JSON
-   * @param url any url with parameter
+   * helper to pack query-parameters of a uri into a JSON
+   * @param uri any uri with query-parameters
    */
-  getJsonFromUrl(url: string) {
-    var query = url.substr(url.lastIndexOf("?") + 1);
+  private getJsonFromUri(uri: string) {
+    var query = uri.substr(uri.lastIndexOf("?") + 1);
     var result = {};
     query.split("&").forEach(function (part) {
       var item = part.split("=");
       result[item[0].toUpperCase()] = decodeURIComponent(item[1]);
     });
     return result;
+  }
+
+
+  /**
+   * retrieve display name of layer, based on IOwsResource and IOwsOffering
+   * @param offering 
+   * @param resource 
+   */
+  private getDisplayName(offering: IOwsOffering, resource: IOwsResource) {
+    let displayName = "";
+    if(offering.hasOwnProperty("customAttributes")){
+      if (offering.customAttributes.title) {        
+        displayName = offering.customAttributes.title;
+      } else { 
+        displayName = this.getResourceTitle(resource);
+      }
+    }
+    return displayName;
   }
 
 }

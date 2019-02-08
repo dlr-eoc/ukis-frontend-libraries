@@ -13,10 +13,10 @@
     "polyfills.ts"
   ],
   "include": [
+    "../projects/**/*.spec.ts",
     "**/*.spec.ts",
-    "**/*.d.ts",
-    "../node_modules/@ukis/**/*.ts",
-    "../projects/**/*.spec.ts"
+    "**/*.d.ts"
+    
   ],
   "exclude": [
 

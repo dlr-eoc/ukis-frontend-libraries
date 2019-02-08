@@ -9,8 +9,8 @@ RUN apk update && \
     cd /frontend-libraries && \
     rm package-lock.json && \
     npm install --unsafe-perm --registry http://hofer.eoc.dlr.de/nexus/content/groups/npm-all/ && \
-    npm run build && \
-    ng test dataset-explorer && \
+    npm run test -- --watch=false --progress=true --browsers=ChromeHeadless  && \
+    npm run build && \    
     mkdir /static
 
 COPY ./scripts/jenkins/docker-entrypoint.sh /docker-entrypoint.sh
