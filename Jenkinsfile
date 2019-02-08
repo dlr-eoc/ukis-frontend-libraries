@@ -26,8 +26,8 @@ pipeline {
         stage('bundle build') {
             steps {
                 sh """
-                    tar cfz ukis-mofro-doc.tar.gz output/documentation
-                    tar cfz ukis-mofro-dist.tar.gz output/dist
+                   
+                    tar cfz ukis-mofro-libraries-dist.tar.gz output/dist
                 """
             }
         }
@@ -35,7 +35,7 @@ pipeline {
     post {
         always {
             echo 'Post step always: gathering artifacts and delete workspace'
-            archiveArtifacts artifacts: 'ukis-mofro-*.tar.gz', fingerprint: true
+            archiveArtifacts artifacts: 'ukis-mofro-libraries*.tar.gz', fingerprint: true
             deleteDir() /* clean up our workspace */
         }
         success {

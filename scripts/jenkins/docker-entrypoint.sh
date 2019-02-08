@@ -6,8 +6,7 @@ adduser -D -u $UserID $USERNAME
 # deploy static files to a mountable volumne
 mkdir /static/dist
 rsync -av /frontend-libraries/dist/ /static/dist
-mkdir /static/documentation
-rsync -av /frontend-libraries/documentation/ /static/documentation
+
 
 find /static -type d -exec chmod 0755 {} \;
 find /static -type f -exec chmod 0644 {} \;
