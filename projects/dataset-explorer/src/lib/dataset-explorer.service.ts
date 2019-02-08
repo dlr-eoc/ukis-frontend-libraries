@@ -217,7 +217,7 @@ export class DatasetExplorerService {
    * @param url any url with parameter
    */
   getJsonFromUrl(url: string) {
-    var query = url.substr(0);
+    var query = url.substr(url.lastIndexOf("?") + 1);
     var result = {};
     query.split("&").forEach(function (part) {
       var item = part.split("=");
