@@ -2,7 +2,6 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { DatasetExplorerService } from './dataset-explorer.service';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { exampleContext } from '../../assets/exampleContext';
-import { IOwsOffering, IOwsResource, IOwsOperation, IOwsContext } from '@ukis/datatypes-owc-json/src/lib/owc-json';
 import { RasterLayer, VectorLayer } from '@ukis/datatypes-layers/src/lib/Layers';
 
 
@@ -68,18 +67,6 @@ describe('DatasetExplorerService: transforming data', () => {
   });
 
 
-  it('#getJsonFromUrl should properly read parameters from url', () => {
-    let url = "https://geoservice.code-de.org/Sentinel1/wms?service=WMS&version=1.1.0&request=GetMap&TRANSPARENT=TRUE&LAYERS=S1_SAR_L1_GRD&FORMAT=image/vnd.jpeg-png&TILEF=true";
-    
-    let params = datasetExplorer.getJsonFromUrl(url);
-    
-    expect(params["SERVICE"]).toBe("WMS");
-    expect(params["VERSION"]).toBe("1.1.0");
-    expect(params["REQUEST"]).toBe("GetMap");
-    expect(params["TRANSPARENT"]).toBe("TRUE");
-  });
-
-
   it('#getOfferingCode should return the correct type of offering', () => {
     for(const context of allTestContexts) {
       for(let observation of context.features) {
@@ -118,16 +105,6 @@ describe('DatasetExplorerService: transforming data', () => {
           }
         }
       }
-    }
-  });
-
-
-  it('#getLegendUrl', () => {
-    for(const context of allTestContexts) {
-      let firstObservation: IOwsResource = context.features[0];
-      let firstOffering: IOwsOffering = firstObservation.properties.offerings[0];
-
-      let legendUrl = datasetExplorer.getLegendUrl(firstOffering);
     }
   });
 
