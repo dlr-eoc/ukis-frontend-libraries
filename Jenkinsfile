@@ -10,7 +10,7 @@ pipeline {
        
             steps {
                 sh """
-                    docker build -t ukis:mofro .
+                    docker build -t ukis:mofro-libraries .
                 """
             }
         }
@@ -19,23 +19,23 @@ pipeline {
                 sh """
                     echo $WORKSPACE
                     mkdir output
-                    docker run -e USERNAME=jenkins-node -e UserID=1002 -v $WORKSPACE/output:/static ukis:mofro
+                    docker run -e USERNAME=jenkins-node -e UserID=1002 -v $WORKSPACE/output:/static ukis:mofro-libraries
                 """
             }
         }
         stage('bundle build') {
             steps {
                 sh """
-                    tar cfz ukis-mofro-doc.tar.gz output/documentation
-                    tar cfz ukis-mofro-dist.tar.gz output/dist
+                   
+                    tar cfz ukis-mofro-libraries-dist.tar.gz output/dist
                 """
             }
         }
     }
     post {
         always {
-            echo 'Post step always: gathering artiofacts and delete workspace'
-            archiveArtifacts artifacts: 'ukis-mofro-*.tar.gz', fingerprint: true
+            echo 'Post step always: gathering artifacts and delete workspace'
+            archiveArtifacts artifacts: 'ukis-mofro-libraries*.tar.gz', fingerprint: true
             deleteDir() /* clean up our workspace */
         }
         success {

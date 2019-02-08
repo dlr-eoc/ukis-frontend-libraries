@@ -134,12 +134,12 @@ export class DatasetExplorerService {
 
     //let layerUrl = observation.id + offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
     let layerUrl = offering.operations[0].href.substr(0, offering.operations[0].href.lastIndexOf("?"));
-    let params = this.getJsonFromUrl(offering.operations[0].href);
-    let lName = params['LAYERS'];
+    let urlParams = this.getJsonFromUrl(offering.operations[0].href);
+   
     
 
-    let layeroptions = this.createRasterLayer(lName, offering, layerUrl, observation, legendUrl);
-    let layer = new RasterLayer(layeroptions);
+    let layeroptins = this.createRasterLayer(urlParams, offering, layerUrl, observation, legendUrl);
+    let layer = new RasterLayer(layeroptins);
     if (observation.bbox) {
       layer.bbox = <[number, number, number, number]>observation.bbox;
     }
@@ -147,7 +147,7 @@ export class DatasetExplorerService {
 
   }
 
-  createRasterLayer(lName, offering: IOwsOffering, layerUrl, observation, legendUrl?) {
+  createRasterLayer(urlParams, offering: IOwsOffering, layerUrl, observation, legendUrl?) {
     let rasterOptions: IRasterLayerOptions = {
       name: observation.properties.title,
       id: observation.id,
@@ -156,10 +156,13 @@ export class DatasetExplorerService {
       type: 'wms',
       removable: true,
       params: {
-        layers: lName,
-        format: 'image/png',
-        transparent: true,
-        attribution: "",
+        layers: urlParams['LAYERS'],
+        format: urlParams['FORMAT'],
+        time: urlParams['TIME'],
+        version: urlParams['VERSION'],
+        tiled: urlParams['TILED'],
+        transparent: true
+        
       },
       url: layerUrl,
       attribution: '&copy, <a href="dlr.de/eoc">DLR</a>',
@@ -180,7 +183,7 @@ export class DatasetExplorerService {
     var result = {};
     query.split("&").forEach(function (part) {
       var item = part.split("=");
-      result[item[0]] = decodeURIComponent(item[1]);
+      result[item[0].toUpperCase()] = decodeURIComponent(item[1]);
     });
     return result;
   }

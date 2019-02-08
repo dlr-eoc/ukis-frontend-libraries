@@ -1,17 +1,16 @@
 FROM node:9.5-alpine
 
-COPY . /frontend/
-COPY src /frontend/
+COPY . /frontend-libraries/
+
 
 
 RUN apk update && \
     apk add git rsync && \
-    cd /frontend && \
-    sed -i '/<base href=/c\<base href="/">' src/index.html && \
+    cd /frontend-libraries && \
     rm package-lock.json && \
     npm install --unsafe-perm --registry http://hofer.eoc.dlr.de/nexus/content/groups/npm-all/ && \
     npm run build && \
-    npm run compodoc && \
+    ng test dataset-explorer && \
     mkdir /static
 
 COPY ./scripts/jenkins/docker-entrypoint.sh /docker-entrypoint.sh
