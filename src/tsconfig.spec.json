@@ -15,7 +15,8 @@
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts",
-    "../node_modules/@ukis/**/*.ts"
+    "../node_modules/@ukis/**/*.ts",
+    "../projects/**/*.spec.ts"
   ],
   "exclude": [
 
