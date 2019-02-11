@@ -3,8 +3,8 @@ import { Injectable, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LayerGroup, VectorLayer, RasterLayer, IRasterLayerOptions, Layer } from '@ukis/datatypes-layers';
 import { IOwsContext, IOwsResource, IOwsOffering } from '@ukis/datatypes-owc-json';
-import { LayersService } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
+
+
 import { OwcJsonService } from '@ukis/services-owc-json';
 
 import { HttpClient } from '@angular/common/http';
@@ -47,7 +47,7 @@ export class DatasetExplorerService {
 
 
     for (let offering of offerings) {
-      let code = this.getOfferingCode(offering.code);
+      let code = this.owcSvc.getOfferingCode(offering);
 
       switch (code) {
         case "wms": {
@@ -78,13 +78,5 @@ export class DatasetExplorerService {
     return this.owcSvc.createRasterLayerFromOffering(offering, observation);
   } 
 
-  /**
-   * helper function to retrieve the offering code
-   * @param offeringCode url poiting to service type: wms, wfs, wmts etc
-   */
-  private getOfferingCode(offeringCode: string): string {
-    let code = offeringCode.substr(offeringCode.lastIndexOf("/") + 1);
-    return code;
-  }
-
+  
 }

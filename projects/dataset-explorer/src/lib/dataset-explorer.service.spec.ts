@@ -67,23 +67,6 @@ describe('DatasetExplorerService: transforming data', () => {
   });
 
 
-  it('#getOfferingCode should return the correct type of offering', () => {
-    for(const context of allTestContexts) {
-      for(let observation of context.features) {
-        for(let offering of observation.properties.offerings) {
-          
-          let realCode = offering.code.split("/").pop();
-      
-          let code = datasetExplorer.getOfferingCode(offering.code);
-      
-          expect(code).toBe(realCode);
-
-        }
-      }
-    }
-  });
-
-
   it('#addObservation should create an appropriate configuration object for a layer', () => {
     for(const context of allTestContexts) {
       for(let observation of context.features) {
