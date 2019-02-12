@@ -31,7 +31,7 @@ module.exports = function (config) {
     // the default configuration
     junitReporter: {
       outputDir: '../test-junit/', // results will be saved as $outputDir/$browserName.xml
-      outputFile: 'service-map-state', // if included, results will be saved as $outputDir/$browserName/$outputFile
+      outputFile: 'service-map-state.xml, // if included, results will be saved as $outputDir/$browserName/$outputFile
       suite: 'service-map-state', // suite will become the package name attribute in xml testsuite element
       useBrowserName: true, // add browser name to report and classes names
       nameFormatter: undefined, // function (browser, result) to customize the name attribute in xml testcase element
