@@ -12,6 +12,7 @@
     "@ukis/services-layers": "^1.0.0",
     "@ukis/services-map-state": "^1.0.0",
     "@ukis/datatypes-owc-json": "^1.0.0",
-    "@ukis/datatypes-layers": "^1.0.0"
+    "@ukis/datatypes-layers": "^1.0.0",
+    "@ukis/services-owc-json": "^1.0.0"
   }
 }
