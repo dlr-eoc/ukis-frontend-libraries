@@ -131,7 +131,11 @@ export class OwcJsonService {
 
   /** Offering --------------------------------------------------- */
   getOfferingCode(offering: IOwsOffering) {
-    return offering.code.split('/').pop().toLowerCase();
+    for (let entry of offering.code.split('/')) {
+      if(["wms","wfs","wmts"].includes(entry.toLowerCase())) {
+        return entry
+      }
+    }
   }
 
   checkIfServiceOffering(offering: IOwsOffering) {
