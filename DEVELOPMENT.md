@@ -10,3 +10,5 @@
 - if using required dependencies add it to ng-package.json/whitelistedNonPeerDependencies
 - or lit it as peerDependencies
 - build lib `ng build < name >`
+
+2. update README and CHANGELOG
