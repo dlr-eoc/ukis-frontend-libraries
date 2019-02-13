@@ -52,7 +52,9 @@ export class DatasetExplorerService {
       switch (code) {
         case "wms": {
           return this.createRasterLayerFromOffering(offering, observation);
-
+        }
+        case "wmts":  {
+          return this.createRasterLayerFromOffering(offering, observation);
         }
         case "wfs": {
           return this.createVectorLayerFromOffering(offering, observation);
