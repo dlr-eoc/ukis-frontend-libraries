@@ -352,17 +352,15 @@ export class MapOlService {
       matrixIds: matrixIds
     });
 
-    let wmtsVersion = l.params.version || "1.0.0";
-
     let wmts_options: any = {
       url: l.url,
       layer: l.id,
-      version: wmtsVersion,
       matrixSet: matrixSet,
       tileGrid: tileGrid,
       projection: projection,
+      version: l.params.version || "1.0.0",
+      format:l.params.format || 'image/png',
       attributions: [l.attribution],
-      format: 'image/png',
       wrapX: l.continuousWorld,
     };
 

@@ -144,6 +144,12 @@
       "@ukisuser-info/*": [
         "dist/user-info/*",
         "projects/user-info/*"
+      ],
+      "owc-control": [
+        "dist/owc-control"
+      ],
+      "owc-control/*": [
+        "dist/owc-control/*"
       ]
     }
   }
