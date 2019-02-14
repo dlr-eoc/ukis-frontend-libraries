@@ -130,10 +130,10 @@ export class OwcJsonService {
 
 
   /** Offering --------------------------------------------------- */
-  getOfferingCode(offering: IOwsOffering) {
-    for (let entry of offering.code.split('/')) {
-      if(["wms","wfs","wmts"].includes(entry.toLowerCase())) {
-        return entry
+  getOfferingCode(offering: IOwsOffering): "wms" | "wmts" | "wfs" {
+    for (let part of offering.code.split('/')) {
+      if(["wms", "wfs", "wmts"].includes(part.toLowerCase())) {
+        return part as "wms" | "wmts" | "wfs";
       }
     }
   }
@@ -224,31 +224,36 @@ export class OwcJsonService {
 
 
   createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource): RasterLayer {
-    //let iconUrl = this.getIconUrl(offering);
-    let layerUrl = this.getUrlFromUri(offering.operations[0].href);
-    let urlParams = this.getJsonFromUri(offering.operations[0].href);
+    let offeringCode = this.getOfferingCode(offering);
+
+    let customParams; 
+    switch(offeringCode as "wms" | "wmts" | "xyz" | "geojson" | "custom") {
+      case "xyz":
+      case "wms": 
+      case "geojson":
+      case "custom":
+        customParams = this.getWmsSpecificParamsFromOffering(offering, resource);
+        break;
+      case "wmts":
+        customParams = this.getWmtsSpecifiParamsFromOffering(offering, resource);
+        break;
+      default: 
+        throw new Error("A service of type ${offeringCode} cannot be converted to a RasterLayer object.");
+    }
 
     let layerOptions: IRasterLayerOptions = {
       id: resource.id as string,
+      type: offeringCode as "wms" | "wmts" | "xyz" | "geojson" | "custom",
+      removable: true,
+      continuousWorld: false,
+      opacity: 1,
       name: this.getResourceTitle(resource), 
       displayName: this.getDisplayName(offering, resource),
       visible: this.isActive(resource),
-      type: 'wms',
-      removable: true,
-      params: {
-        layers: urlParams['LAYERS'],
-        format: urlParams['FORMAT'],
-        time: urlParams['TIME'],
-        version: urlParams['VERSION'],
-        tiled: urlParams['TILED'],
-        transparent: true
-        
-      },
-      url: layerUrl,
+      url: this.getUrlFromUri(offering.operations[0].href),
       attribution: '&copy, <a href="dlr.de/eoc">DLR</a>',
-      continuousWorld: false,
       legendImg: this.getLegendUrl(offering),
-      opacity: 1
+      params: customParams,
     }
 
     let layer: RasterLayer = new RasterLayer(layerOptions);
@@ -258,6 +263,42 @@ export class OwcJsonService {
     }
 
     return layer;
+  }
+
+  private getWmtsSpecifiParamsFromOffering(offering: IOwsOffering, resource: IOwsResource) {
+
+    let urlParams = this.getJsonFromUri(offering.operations[0].href);
+
+    let params = {
+      layers: urlParams['LAYERS'],
+      format: urlParams['FORMAT'],
+      time: urlParams['TIME'],
+      version: urlParams['VERSION'],
+      tiled: urlParams['TILED'],
+      transparent: true,
+      "operations": offering.operations,
+      "styles": offering.styles
+    };
+
+    return params;
+    
+  }
+
+
+  private getWmsSpecificParamsFromOffering(offering: IOwsOffering, resource: IOwsResource) {
+
+    let urlParams = this.getJsonFromUri(offering.operations[0].href);
+
+    let params= {
+      layers: urlParams['LAYERS'],
+      format: urlParams['FORMAT'],
+      time: urlParams['TIME'],
+      version: urlParams['VERSION'],
+      tiled: urlParams['TILED'],
+      transparent: true
+    }
+
+    return params;
   }
 
 

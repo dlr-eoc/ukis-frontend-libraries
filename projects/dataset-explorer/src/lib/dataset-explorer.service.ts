@@ -50,15 +50,16 @@ export class DatasetExplorerService {
       let code = this.owcSvc.getOfferingCode(offering);
 
       switch (code) {
-        case "wms": {
-          return this.createRasterLayerFromOffering(offering, observation);
-        }
+        case "wms":
         case "wmts":  {
-          return this.createRasterLayerFromOffering(offering, observation);
+          return this.owcSvc.createRasterLayerFromOffering(offering, observation);
         }
         case "wfs": {
           return this.createVectorLayerFromOffering(offering, observation);
 
+        }
+        default: {
+          throw new Error("This type of service ${code} has not yet been implemented.");
         }
       }
     }
@@ -76,9 +77,6 @@ export class DatasetExplorerService {
     return layer;
   }
 
-  private createRasterLayerFromOffering(offering: IOwsOffering, observation: IOwsResource) {
-    return this.owcSvc.createRasterLayerFromOffering(offering, observation);
-  } 
 
   
 }

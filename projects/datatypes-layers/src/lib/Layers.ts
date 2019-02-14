@@ -8,7 +8,7 @@ export interface ILayerOptions {
   name: string
   id: string
   //id: string
-  type: "wms" | "xyz" | "geojson" | "custom"
+  type: "wms" | "wmts" | "xyz" | "geojson" | "custom"
 
   filtertype?: 'Overlays' | 'Baselayers' | string;
   opacity?: number
@@ -56,7 +56,7 @@ export interface ICustomLayerOptions extends ILayerOptions {
 export class Layer implements ILayerOptions {
   name: string = '';
   id: string = '';
-  type: "wms" | "xyz" | "geojson" | "custom";
+  type: "wms" | "wmts" | "xyz" | "geojson" | "custom";
   opacity: number = 1;
   visible: boolean = true;
   removable: boolean = false;
