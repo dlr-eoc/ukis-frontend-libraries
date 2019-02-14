@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+
+// overwrite Clarity variables
+@import "clr_overwrites";
+// Clarity Icons
+@import "@clr/icons/clr-icons.min.css";
+// Clarity Dependency SCSS and Clarity Component SCSS
+@import "@clr/ui/src/main";
+
+@import "inputs";
+
+@import "vertival.nav";
+@import "ukis.layer.nav";
+
+/** HEADER -------------------------------------------------------------- */
+.header {
+  .branding {
+    flex: 0 1 auto;
+    a {
+      clr-icon {
+        color: #565656;
+      }
+    }
+    .title {
+      min-width: 100px;
+      padding-left: 1rem;
+      font-size: 1rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .header {
+    .branding {
+      a {
+        clr-icon {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+/** FOOTER -------------------------------------------------------------- */
+.footer {
+  background-color: #eee;
+  padding: 0.2rem 1rem;
+  p {
+    margin: 0;
+  }
+}
+
+/** CONTENT -------------------------------------------------------------- */
+.content-area {
+  background: #fff;
+  color: #444;
+}
