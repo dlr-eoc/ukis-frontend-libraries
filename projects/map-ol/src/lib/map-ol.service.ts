@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Version } from '@angular/core';
 
 
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup } from '@ukis/datatypes-layers';
@@ -282,11 +282,11 @@ export class MapOlService {
   }
 
   private create_wms_layer(l: RasterLayer) {
-    //console.log(l);
+
     let tile_options: any = {
       attributions: [l.attribution],
       wrapX: l.continuousWorld,
-      params: l.params
+      params: this.keysToUppercase(l.params)
     };
 
     if (l['crossOrigin']) {
@@ -352,9 +352,12 @@ export class MapOlService {
       matrixIds: matrixIds
     });
 
+    let wmtsVersion = l.params.version || "1.0.0";
+
     let wmts_options: any = {
       url: l.url,
       layer: l.id,
+      version: wmtsVersion,
       matrixSet: matrixSet,
       tileGrid: tileGrid,
       projection: projection,
@@ -926,5 +929,13 @@ export class MapOlService {
     } else {
       //console.log('projection code is undefined');
     }
+  }
+
+  private keysToUppercase(obj: Object) {
+    let newObj = {};
+    for(let key in obj) {
+      newObj[key.toUpperCase()] = obj[key];
+    }
+    return newObj;
   }
 }

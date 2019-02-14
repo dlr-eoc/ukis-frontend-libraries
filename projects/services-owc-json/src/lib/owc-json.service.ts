@@ -289,13 +289,13 @@ export class OwcJsonService {
 
     let urlParams = this.getJsonFromUri(offering.operations[0].href);
 
-    let params= {
-      layers: urlParams['LAYERS'],
-      format: urlParams['FORMAT'],
-      time: urlParams['TIME'],
-      version: urlParams['VERSION'],
-      tiled: urlParams['TILED'],
-      transparent: true
+    let params = {
+      LAYERS: urlParams['LAYERS'],
+      FORMAT: urlParams['FORMAT'],
+      TIME: urlParams['TIME'],
+      VERSION: urlParams['VERSION'],
+      TILED: urlParams['TILED'],
+      TRANSPARENT: true
     }
 
     return params;
