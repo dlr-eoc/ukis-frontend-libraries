@@ -96,7 +96,7 @@ export class OwcJsonService {
   layerGroupFromResource(resource: IOwsResource): ILayerGroupOptions {
 
     throw new Error("This method has not been implemented yet.");
-    
+
     let layerGroupOptions: ILayerGroupOptions = {
       filtertype: 'Overlays',
       id: resource.id.toString(),
@@ -147,6 +147,28 @@ export class OwcJsonService {
     return opacity;
   }
 
+  getResourceAttribution(resource: IOwsResource): string {
+    let attribution = '&copy, <a href="dlr.de/eoc">DLR</a>';
+
+    if(resource.hasOwnProperty("customAttributes")) {
+      let customAttributes = resource["customAttributes"];
+      if(customAttributes.hasOwnProperty("attribution")) {
+        attribution = customAttributes.attribution;
+      }
+    }
+
+    return attribution;
+  }
+
+  getResourceShards(resource: IOwsResource): string {
+    if(resource.hasOwnProperty("customAttributes")) {
+      let customAttributes = resource["customAttributes"];
+      if(customAttributes.hasOwnProperty("shards")) {
+        return customAttributes.shards;
+      }
+    }
+  }
+
 
   /** Offering --------------------------------------------------- */
   getOfferingCode(offering: IOwsOffering): "wms" | "wmts" | "wfs" {
@@ -173,10 +195,10 @@ export class OwcJsonService {
     }
   }
 
-    /**
-     * Helper function to extract legendURL from project specific ows Context
-     * @param offering layer offering
-     */
+  /**
+   * Helper function to extract legendURL from project specific ows Context
+   * @param offering layer offering
+   */
   getLegendUrl(offering: IOwsOffering) {
     let legendUrl = "";
     
@@ -222,7 +244,7 @@ export class OwcJsonService {
       visible: this.isActive(resource),
       type: 'geojson',
       removable: true,
-      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
+      attribution: this.getResourceAttribution(resource),
       continuousWorld: false,
       opacity: this.getResourceOpacity(resource), 
       url: layerUrl ? layerUrl : null,
@@ -270,7 +292,7 @@ export class OwcJsonService {
       displayName: this.getDisplayName(offering, resource),
       visible: this.isActive(resource),
       url: this.getUrlFromUri(offering.operations[0].href),
-      attribution: '&copy, <a href="dlr.de/eoc">DLR</a>',
+      attribution: this.getResourceAttribution(resource),
       legendImg: this.getLegendUrl(offering),
       params: customParams,
     }
