@@ -65,6 +65,7 @@ describe('OwcJsonService', () => {
   });
 
 
+  // @TODO: this method seems to be a stub.
   it('#layerGroupFromResource should properly create a LayerGroup-configuration', () => {
     const service: OwcJsonService = TestBed.get(OwcJsonService);
     for(const context of allTestContexts) {

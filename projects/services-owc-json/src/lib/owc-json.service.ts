@@ -94,6 +94,9 @@ export class OwcJsonService {
   //https://github.com/Terradue/ows-context-demo/blob/master/src/main/demo/index.html#L245:2
   //create ukis layers ----------------------------------------------------------------------
   layerGroupFromResource(resource: IOwsResource): ILayerGroupOptions {
+
+    throw new Error("This method has not been implemented yet.");
+    
     let layerGroupOptions: ILayerGroupOptions = {
       filtertype: 'Overlays',
       id: resource.id.toString(),
@@ -111,6 +114,9 @@ export class OwcJsonService {
   }
 
   getlayersFromResource(resource: IOwsResource): ILayerOptions {
+
+    throw new Error("This method has not been implemented yet.");
+
     let layers: ILayerOptions[] = [];
     let offerings = this.getResourceOfferings(resource);
 
@@ -126,6 +132,19 @@ export class OwcJsonService {
     }
 
     return layerOptions;
+  }
+
+  getResourceOpacity(resource: IOwsResource): number {
+    let opacity = 1;
+
+    if(resource.hasOwnProperty("customAttributes")) {
+      let customAttributes = resource["customAttributes"];
+      if(customAttributes.hasOwnProperty("opacity")) {
+        opacity = customAttributes.opacity;
+      }
+    }
+
+    return opacity;
   }
 
 
@@ -205,7 +224,7 @@ export class OwcJsonService {
       removable: true,
       attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
       continuousWorld: false,
-      opacity: 1, 
+      opacity: this.getResourceOpacity(resource), 
       url: layerUrl ? layerUrl : null,
       legendImg: legendUrl ? legendUrl : null
     };
@@ -246,7 +265,7 @@ export class OwcJsonService {
       type: offeringCode as "wms" | "wmts" | "xyz" | "geojson" | "custom",
       removable: true,
       continuousWorld: false,
-      opacity: 1,
+      opacity: this.getResourceOpacity(resource),
       name: this.getResourceTitle(resource), 
       displayName: this.getDisplayName(offering, resource),
       visible: this.isActive(resource),
