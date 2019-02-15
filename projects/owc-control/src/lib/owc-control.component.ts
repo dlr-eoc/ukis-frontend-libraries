@@ -13,8 +13,8 @@ import { IOwsContext } from '@ukis/datatypes-owc-json/src/public_api';
 export class OwcControlComponent implements OnInit {
 
   @Input() layerSvc: LayersService;
-  private baselayers: Layer[];
-  private overlays: Layer[];
+  private baselayers: Layer[] = [];
+  private overlays: Layer[] = [];
 
   constructor(
     private owcSvc: OwcJsonService
@@ -30,13 +30,13 @@ export class OwcControlComponent implements OnInit {
   }
 
   onClickExport() {
-    console.log("Export!");
     let owc = this.convertCurrentStateToOwc();
+    console.log(owc);
     // @TODO: make file available for download
   }
 
   private convertCurrentStateToOwc() {
-    let owc: IOwsContext = this.owcSvc.generateOwcFrom(this.baselayers, this.overlays);
+    let owc: IOwsContext = this.owcSvc.generateOwsContextFrom("sampleId", this.baselayers, this.overlays);
   }
 
 }

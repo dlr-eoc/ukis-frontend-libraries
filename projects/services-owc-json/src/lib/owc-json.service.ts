@@ -10,7 +10,6 @@ import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation } from '@ukis/da
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Layer } from '@ukis/datatypes-layers';
 
 
 @Injectable({
