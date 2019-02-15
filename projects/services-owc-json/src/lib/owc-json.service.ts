@@ -433,30 +433,178 @@ export class OwcJsonService {
   }
 
   getOfferingCodeFromLayer(layer: Layer): string {
-    let offeringCode;
+
     switch(layer.type) {
       case "wms":
-        offeringCode = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
-        break;
+        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
       case "wmts":
-        offeringCode = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
-        break;
+        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
       case "geojson":
-        offeringCode = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
-        break;
+        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
+      case "xyz":
+        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
       default:
-        throw new Error("This type of service has not been implemented yet.");
+        throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
     }
 
-    return offeringCode;
   }
 
   getOperationsFromLayer(layer: Layer): IOwsOperation[] {
-    let operations: IOwsOperation[];
-
-    switch(layer.type) {
-      //@TODO
+    if (layer instanceof RasterLayer) {
+      switch(layer.type) {
+        case "wms":
+          return this.getWmsOperationsFromLayer(layer);
+        case "wmts": 
+          return this.getWmtsOperationsFromLayer(layer);
+        case "xyz":
+          return this.getXyzOperationsFromLayer(layer);
+        default: 
+          throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
+        }
+      }
+      
+      else if (layer instanceof VectorLayer) {
+        switch(layer.type) {
+          // case "wfs":
+          //   return this.getWfsOperationsFromLayer(layer);
+          case "geojson":
+            return this.getGeojsonOperationsFromLayer(layer);
+          default: 
+            throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
+      }
     }
+
+  }
+
+  getGeojsonOperationsFromLayer(layer: VectorLayer): IOwsOperation[] {
+    throw new Error("Method not implemented.");
+  }
+
+
+  getWfsOperationsFromLayer(layer: VectorLayer): IOwsOperation[] {
+
+    let url = layer.url;
+    let layerName = layer.name;
+    
+    
+    let DescribeFeatureType: IOwsOperation = {
+      "code": "DescribeFeatureType",
+      "method": "GET",
+      "type": "application/xml",
+      "href": `${url}/wfs?service=WFS&&request=DescribeFeatureType`
+    };
+
+    let GetCapabilities: IOwsOperation = null;
+
+    let GetPropertyValue: IOwsOperation = null;
+
+    let GetFeature: IOwsOperation = null;
+
+    let GetFeatureWithLock: IOwsOperation = null;
+
+    let LockFeature: IOwsOperation = null;
+
+    let Transaction: IOwsOperation = null;
+
+    let CreateStoredQuery: IOwsOperation = null;
+
+    let DropStoredQuery: IOwsOperation = null;
+
+    let ListStoredQueries: IOwsOperation = null;
+
+    let DescribeStoredQueries: IOwsOperation = null;
+
+    let operations = [
+      GetCapabilities,
+      DescribeFeatureType,
+      GetPropertyValue,
+      GetFeature,
+      GetFeatureWithLock,
+      LockFeature,
+      Transaction,
+      CreateStoredQuery,
+      DropStoredQuery,
+      ListStoredQueries,
+      DescribeStoredQueries
+    ];
+
+    return operations;
+  }
+
+  getXyzOperationsFromLayer(layer: Layer): IOwsOperation[] {
+    // xyz servers are simple fileservers without any capabilities
+    return [];
+  }
+
+  getWmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
+    
+    let url = layer.url;
+    let wmsVersion = layer.params.VERSION;
+    let layerName = layer.name;
+    
+    let getMap: IOwsOperation = {
+      "code": "GetMap",
+      "method": "GET",
+      "type": "image/vnd.jpeg-png",
+      "href": `${url}/wms?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerName}&FORMAT=image/vnd.jpeg-png&TILED=true`
+    };
+
+    let getCapabilities: IOwsOperation = {
+      "code": "GetCapabilities",
+      "method": "GET",
+      "type": "application/xml",
+      "href": `${url}/wms?service=WMS&version=${wmsVersion}&request=GetCapabilities`
+    }
+
+    let getFeatureInfo: IOwsOperation = {
+      "code": "GetFeatureInfo",
+      "method": "GET",
+      "type": "text/html",
+      "href": `${url}/wms?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerName}&FORMAT=image/vnd.jpeg-png`
+    }
+
+    let operations: IOwsOperation[] = [
+      getMap,
+      getCapabilities,
+      getFeatureInfo
+    ];
+
+    return operations;
+  }
+
+  getWmtsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
+    
+    let url = layer.url;
+    let wmtsVersion = layer.params.version;
+    let layerName = layer.name;
+    
+    let getTile: IOwsOperation = {
+      "code": "GetTile",
+      "href": `${url}/wmts?SERVICE=WMTS&REQUEST=GetTile&FORMAT=image%2Fpng&LAYER=${layerName}&VERSION=${wmtsVersion}`,
+      "method": "GET",
+      "type": "image/png"
+    };
+
+    let getCapabilities: IOwsOperation = {
+      "code": "GetCapabilities",
+      "href": `${url}/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
+      "method": "GET",
+      "type": "application/xml"
+    }
+
+    // Note: we deliberately use the WMS protocol here instead of WMTS. Reason: WMTS delivers RGB-values, wheras WMS delivers the actual value that was used to create a tile. 
+    let getFeatureInfo: IOwsOperation = {
+      "code": "GetFeatureInfo",
+      "href": `${url}/wms?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
+      "method": "GET",
+      "type": "text/html"
+    }
+
+    let operations: IOwsOperation[] = [
+      getTile,
+      getCapabilities,
+      getFeatureInfo
+    ];
 
     return operations;
   }

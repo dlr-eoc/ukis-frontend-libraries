@@ -30,13 +30,16 @@ export class OwcControlComponent implements OnInit {
   }
 
   onClickExport() {
-    let owc = this.convertCurrentStateToOwc();
+    let owc = this.owcSvc.generateOwsContextFrom("sampleId", this.baselayers, this.overlays);
     console.log(owc);
-    // @TODO: make file available for download
+    //this.downloadFile(owc);
   }
 
-  private convertCurrentStateToOwc() {
-    let owc: IOwsContext = this.owcSvc.generateOwsContextFrom("sampleId", this.baselayers, this.overlays);
+  private downloadFile(data) {
+    const blob = new Blob([data], { type: 'text/json' });
+    const url = window.URL.createObjectURL(blob);
+    window.open(url);
   }
+
 
 }
