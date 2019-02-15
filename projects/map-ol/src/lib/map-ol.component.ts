@@ -24,7 +24,7 @@ import Zoom from 'ol/control/Zoom';
 export class MapOlComponent implements OnInit, OnDestroy {
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapStateSvc: MapStateService;
-  @Input('controlls') controlls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
+  @Input('controls') controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
 
   map: Map;
   view: View;
@@ -84,19 +84,19 @@ export class MapOlComponent implements OnInit, OnDestroy {
     this.view = _ol.view; //
 
     //add Control only if this functions is defined
-    if (this.controlls) {
-      if (this.controlls.attribution) {
+    if (this.controls) {
+      if (this.controls.attribution) {
         let attribution = new Attribution({
           //collapsible: false,
           collapsed: false
         });
         this.map.addControl(attribution)
       }
-      if (this.controlls.scaleLine) {
+      if (this.controls.scaleLine) {
         let scaleLineControl = new ScaleLine();
         this.map.addControl(scaleLineControl)
       }
-      if (this.controlls.zoom) {
+      if (this.controls.zoom) {
         let zoomControl = new Zoom();
         this.map.addControl(zoomControl)
       }

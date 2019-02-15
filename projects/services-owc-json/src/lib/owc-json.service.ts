@@ -135,7 +135,7 @@ export class OwcJsonService {
   }
 
   getResourceAttribution(resource: IOwsResource): string {
-    let attribution = '&copy, <a href="dlr.de/eoc">DLR</a>';
+    let attribution = '';
     if(resource.properties.hasOwnProperty("attribution")) {
       attribution = resource.properties.attribution;
     }
