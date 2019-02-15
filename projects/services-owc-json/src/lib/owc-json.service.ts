@@ -11,6 +11,7 @@ import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, Ra
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Layer } from '@ukis/datatypes-layers';
 
 
 @Injectable({
@@ -83,9 +84,9 @@ export class OwcJsonService {
    * retrieve layer status active / inactove based on IOwsResource
    * @param resource 
    */
-  isActive(resource: IOwsResource) { 
+  isActive(resource: IOwsResource) {
     let active = true;
-    if(resource.properties.hasOwnProperty("active")){      
+    if (resource.properties.hasOwnProperty("active")) {
       active = resource.properties.active;
     }
     return active;
@@ -160,7 +161,7 @@ export class OwcJsonService {
   /** Offering --------------------------------------------------- */
   getOfferingCode(offering: IOwsOffering): "wms" | "wmts" | "wfs" {
     for (let part of offering.code.split('/')) {
-      if(["wms", "wfs", "wmts"].includes(part.toLowerCase())) {
+      if (["wms", "wfs", "wmts"].includes(part.toLowerCase())) {
         return part as "wms" | "wmts" | "wfs";
       }
     }
@@ -188,10 +189,10 @@ export class OwcJsonService {
    */
   getLegendUrl(offering: IOwsOffering) {
     let legendUrl = "";
-    
+
     if (offering.hasOwnProperty("styles")) {
       let defaultStyle = offering.styles.filter(style => style.default);
-      if(defaultStyle.length > 0){
+      if (defaultStyle.length > 0) {
         console.log(defaultStyle[0].legendURL);
         return defaultStyle[0].legendURL;
       } 
@@ -201,10 +202,10 @@ export class OwcJsonService {
     return legendUrl;
   }
 
-   /**
-    * retrieve iconUrl based on IOwsOffering
-    * @param offering 
-    */
+  /**
+   * retrieve iconUrl based on IOwsOffering
+   * @param offering 
+   */
   getIconUrl(offering: IOwsOffering) {
     let iconUrl = "";
     if(offering.hasOwnProperty("iconUrl")){
@@ -219,7 +220,7 @@ export class OwcJsonService {
     let layerUrl = this.getUrlFromUri(offering.operations[0].href);
     let params = this.getJsonFromUri(offering.operations[0].href);
     let legendUrl = this.getLegendUrl(offering);
-    
+
     let layerOptions: IVectorLayerOptions = {
       id: resource.id as string,
       name: this.getResourceTitle(resource),
@@ -229,7 +230,7 @@ export class OwcJsonService {
       removable: true,
       attribution: this.getResourceAttribution(resource),
       continuousWorld: false,
-      opacity: this.getResourceOpacity(resource), 
+      opacity: this.getResourceOpacity(resource),
       url: layerUrl ? layerUrl : null,
       legendImg: legendUrl ? legendUrl : null
     };
@@ -240,20 +241,20 @@ export class OwcJsonService {
     if (resource.bbox) {
       layer.bbox = <[number, number, number, number]>resource.bbox;
     }
-    
+
     return layer;
   }
-  
-  
+
+
 
 
   createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource): RasterLayer {
     let offeringCode = this.getOfferingCode(offering);
 
-    let customParams; 
-    switch(offeringCode as "wms" | "wmts" | "xyz" | "geojson" | "custom") {
+    let customParams;
+    switch (offeringCode as "wms" | "wmts" | "xyz" | "geojson" | "custom") {
       case "xyz":
-      case "wms": 
+      case "wms":
       case "geojson":
       case "custom":
         customParams = this.getWmsSpecificParamsFromOffering(offering, resource);
@@ -261,7 +262,7 @@ export class OwcJsonService {
       case "wmts":
         customParams = this.getWmtsSpecifiParamsFromOffering(offering, resource);
         break;
-      default: 
+      default:
         throw new Error("A service of type ${offeringCode} cannot be converted to a RasterLayer object.");
     }
 
@@ -271,7 +272,7 @@ export class OwcJsonService {
       removable: true,
       continuousWorld: false,
       opacity: this.getResourceOpacity(resource),
-      name: this.getResourceTitle(resource), 
+      name: this.getResourceTitle(resource),
       displayName: this.getDisplayName(offering, resource),
       visible: this.isActive(resource),
       url: this.getUrlFromUri(offering.operations[0].href),
@@ -281,7 +282,7 @@ export class OwcJsonService {
     }
 
     let layer: RasterLayer = new RasterLayer(layerOptions);
-    
+
     if (resource.bbox) {
       layer.bbox = <[number, number, number, number]>resource.bbox;
     }
@@ -305,7 +306,7 @@ export class OwcJsonService {
     };
 
     return params;
-    
+
   }
 
 
@@ -325,9 +326,24 @@ export class OwcJsonService {
     return params;
   }
 
+  public getLayers(owc: IOwsContext): Layer[] {
+    let features = owc.features;
+    let layers = []
 
-
-
+    /** layer priority first wms then wms then wfs if multiple in the offerings */
+    for (let feature of features) {
+      let offerings = feature.properties.offerings;
+      for (let offering of offerings) {
+        let layer;
+        if (offering.code.toLocaleLowerCase().indexOf('wmts') != -1 || offering.code.toLocaleLowerCase().indexOf('wms') != -1) {
+          layers.push(this.createRasterLayerFromOffering(offering, feature))
+        } else if (offering.code.toLocaleLowerCase().indexOf('wfs') != -1 || offering.code.toLocaleLowerCase().indexOf('geojson') != -1) {
+          layers.push(this.createVectorLayerFromOffering(offering, feature))
+        }
+      }
+    }
+    return layers;
+  }
 
   /** Misc --------------------------------------------------- */
 
@@ -357,10 +373,10 @@ export class OwcJsonService {
    */
   private getDisplayName(offering: IOwsOffering, resource: IOwsResource) {
     let displayName = "";
-    if(offering.hasOwnProperty("customAttributes")){
-      if (offering.customAttributes.title) {        
+    if (offering.hasOwnProperty("customAttributes")) {
+      if (offering.customAttributes.title) {
         displayName = offering.customAttributes.title;
-      } else { 
+      } else {
         displayName = this.getResourceTitle(resource);
       }
     }
