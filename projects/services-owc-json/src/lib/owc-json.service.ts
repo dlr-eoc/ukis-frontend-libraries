@@ -136,36 +136,23 @@ export class OwcJsonService {
 
   getResourceOpacity(resource: IOwsResource): number {
     let opacity = 1;
-
-    if(resource.hasOwnProperty("customAttributes")) {
-      let customAttributes = resource["customAttributes"];
-      if(customAttributes.hasOwnProperty("opacity")) {
-        opacity = customAttributes.opacity;
-      }
+    if(resource.properties.hasOwnProperty("opacity")) {
+        opacity = resource.properties.opacity;
     }
-
     return opacity;
   }
 
   getResourceAttribution(resource: IOwsResource): string {
     let attribution = '&copy, <a href="dlr.de/eoc">DLR</a>';
-
-    if(resource.hasOwnProperty("customAttributes")) {
-      let customAttributes = resource["customAttributes"];
-      if(customAttributes.hasOwnProperty("attribution")) {
-        attribution = customAttributes.attribution;
-      }
+    if(resource.properties.hasOwnProperty("attribution")) {
+      attribution = resource.properties.attribution;
     }
-
     return attribution;
   }
 
   getResourceShards(resource: IOwsResource): string {
-    if(resource.hasOwnProperty("customAttributes")) {
-      let customAttributes = resource["customAttributes"];
-      if(customAttributes.hasOwnProperty("shards")) {
-        return customAttributes.shards;
-      }
+    if(resource.properties.hasOwnProperty("shards")) {
+      return resource.properties.shards;
     }
   }
 
@@ -208,10 +195,8 @@ export class OwcJsonService {
         console.log(defaultStyle[0].legendURL);
         return defaultStyle[0].legendURL;
       } 
-    } else if(offering.hasOwnProperty("customAttributes")){
-      if (offering.customAttributes.legendUrl) {        
-        legendUrl = offering.customAttributes.legendUrl;
-      }
+    } else if(offering.hasOwnProperty("legendUrl")){
+      legendUrl = offering.legendUrl;
     }
     return legendUrl;
   }
@@ -222,10 +207,8 @@ export class OwcJsonService {
     */
   getIconUrl(offering: IOwsOffering) {
     let iconUrl = "";
-    if(offering.hasOwnProperty("customAttributes")){
-      if (offering.customAttributes.iconUrl) {        
-        iconUrl = offering.customAttributes.iconUrl;
-      }
+    if(offering.hasOwnProperty("iconUrl")){
+        iconUrl = offering.iconUrl;
     }
     return iconUrl;
   }
