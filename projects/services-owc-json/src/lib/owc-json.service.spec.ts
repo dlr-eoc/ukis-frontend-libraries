@@ -13,36 +13,17 @@ describe('OwcJsonService', () => {
   const allTestContexts = [barebonesContext, basicContext];
   let injector: TestBed;
   let service: OwcJsonService;
-  let httpMock: HttpTestingController;
   
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
       providers: [OwcJsonService]
     });
     injector = getTestBed();
     service = injector.get(OwcJsonService);
-    httpMock = injector.get(HttpTestingController);
   });
 
   afterEach(() => {
-    // checking that there are no outstanding requests
-    httpMock.verify();
-  });
-    
-  
-  it('#getContextFromServer should actually get contexts', () => {
-    for(const context of allTestContexts) {
-      // call url
-      const url = "testUrl/rest/owc/";
-      service.getContextFromServer(url).subscribe((data) => {
-        expect(data).toBe(context);
-      });
-      
-      // setup receiver of and answer to http-request
-      const request = httpMock.expectOne(url);
-      request.flush(context);
-    }
   });
 
 

@@ -6,9 +6,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { IOwsContext, IOwsResource, IOwsOffering } from '@ukis/datatypes-owc-json';
-import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions } from '@ukis/datatypes-layers';
-import { HttpClient } from '@angular/common/http';
+import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation } from '@ukis/datatypes-owc-json';
+import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -18,15 +17,8 @@ import { map } from 'rxjs/operators';
 })
 export class OwcJsonService {
 
-  constructor(
-    private http: HttpClient
-  ) {
+  constructor() {
     //http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truegeojson-encoding-2
-  }
-
-  /** Context --------------------------------------------------- */
-  getContextFromServer(url: string): Observable<IOwsContext> {
-    return this.http.get(url).pipe(map((response: IOwsContext) => response));
   }
 
 
@@ -384,4 +376,90 @@ export class OwcJsonService {
     return displayName;
   }
 
+
+  /**  -----------------------------------------------------------------
+   * ------------ DATA TO FILE -----------------------------------------
+   * -----------------------------------------------------------------*/
+
+
+   /**
+    * @TODO:
+    *   - bounding box
+    *   - properties
+    */
+   generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[]): IOwsContext {
+     
+    let owc: IOwsContext = {
+      "id": id,
+      "type": "FeatureCollection",
+      "properties": null,
+      "features": []
+    };
+
+    for(let baselayer of baselayers) {
+      let resource: IOwsResource = this.generateResourceFromLayer(baselayer);
+      owc.features.push(resource);
+    }
+
+    for(let overlay of overlays) {
+      let resource: IOwsResource = this.generateResourceFromLayer(overlay);
+      owc.features.push(resource);
+    }
+
+     return owc;
+   }
+
+
+  generateResourceFromLayer(layer: Layer): IOwsResource {
+    let resource: IOwsResource = {
+      "id": layer.id, 
+      "properties": {
+        title: layer.name,
+        updated: null,
+        offerings: [this.generateOfferingFromLayer(layer)]
+      }, 
+      "type": "Feature", 
+      "geometry": null
+    }
+
+    return resource;
+  }
+
+  generateOfferingFromLayer(layer: Layer): IOwsOffering {
+    let offering: IOwsOffering = {
+      "code": this.getOfferingCodeFromLayer(layer),
+      "operations": this.getOperationsFromLayer(layer)
+    };
+
+    return offering;
+  }
+
+  getOfferingCodeFromLayer(layer: Layer): string {
+    let offeringCode;
+    switch(layer.type) {
+      case "wms":
+        offeringCode = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
+        break;
+      case "wmts":
+        offeringCode = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
+        break;
+      case "geojson":
+        offeringCode = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
+        break;
+      default:
+        throw new Error("This type of service has not been implemented yet.");
+    }
+
+    return offeringCode;
+  }
+
+  getOperationsFromLayer(layer: Layer): IOwsOperation[] {
+    let operations: IOwsOperation[];
+
+    switch(layer.type) {
+      //@TODO
+    }
+
+    return operations;
+  }
 }

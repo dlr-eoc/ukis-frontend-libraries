@@ -36,7 +36,7 @@ export class DatasetExplorerService {
   }
 
   getObservations(url: string): Observable<IOwsContext> {
-    return this.owcSvc.getContextFromServer(url);
+    return this.http.get(url).pipe(map((response: IOwsContext) => response));
   }
 
   /* 

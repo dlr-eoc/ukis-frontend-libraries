@@ -115,36 +115,36 @@ export const basicContext: IOwsContext = {
            }
            
        ],
-       "properties": {
-           "links": null,
-           "lang": "en",
-           "title": "CODE-DE Sentinel 1 and 2",
-           "abstract": "<strong>CODE-DE</strong> Sentinel1 and 2",
-           "updated": "2016-09-30T16:18:30Z", 
-           "authors": [{
-               "name": "Geoservice Manager",		
-               "email": "geoservice@dlr.de",
-               "role": "PoC" 
-           }],
-           "publisher": "German Aerospace Center (DLR)",
-           "categories": [
-                       {
-                           "term": "WMS"
-                       },
-                       {
-                           "term": "DLR"
-                       }
-                   ]
-       },
-       "type": "FeatureCollection",
-       "bbox": [0, 0, 10, 10],
-       "projections": [{
-           "code": "EPSG:3035",
-           "extent": [],
-           "unit": "m"
-       }],
-       "legendURL": "https://geoservice.dlr.de/static/logos/dlr.gif",
-       "descriptionURL": "https://code-de.org",
-       "id": "codede:sentinel:3035"
+    "properties": {
+        "links": null,
+        "lang": "en",
+        "title": "CODE-DE Sentinel 1 and 2",
+        "abstract": "<strong>CODE-DE</strong> Sentinel1 and 2",
+        "updated": "2016-09-30T16:18:30Z", 
+        "authors": [{
+            "name": "Geoservice Manager",		
+            "email": "geoservice@dlr.de",
+            "role": "PoC" 
+        }],
+        "publisher": "German Aerospace Center (DLR)",
+        "categories": [
+                    {
+                        "term": "WMS"
+                    },
+                    {
+                        "term": "DLR"
+                    }
+                ]
+    },
+    "type": "FeatureCollection",
+    "bbox": [0, 0, 10, 10],
+    "projections": [{
+        "code": "EPSG:3035",
+        "extent": [],
+        "unit": "m"
+    }],
+    "legendURL": "https://geoservice.dlr.de/static/logos/dlr.gif",
+    "descriptionURL": "https://code-de.org",
+    "id": "codede:sentinel:3035"
    };
 

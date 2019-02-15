@@ -23,6 +23,7 @@ import { RouteLegalNoticeComponent } from './route-components/route-legal-notice
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
+import { OwcControlComponent, OwcControlModule } from 'projects/owc-control/src/public_api';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { GlobalProgressComponent } from './components/global-progress/global-pro
     UkisRoutingModule,
     FormsModule,
     ClarityModule,
+    OwcControlModule
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [AlertService, FooterService, ProgressService],
