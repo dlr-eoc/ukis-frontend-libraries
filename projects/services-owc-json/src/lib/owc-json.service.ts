@@ -373,9 +373,9 @@ export class OwcJsonService {
    */
   private getDisplayName(offering: IOwsOffering, resource: IOwsResource) {
     let displayName = "";
-    if (offering.hasOwnProperty("customAttributes")) {
-      if (offering.customAttributes.title) {
-        displayName = offering.customAttributes.title;
+    if (offering.hasOwnProperty("title")) {
+      if (offering.title) {
+        displayName = offering.title;
       } else {
         displayName = this.getResourceTitle(resource);
       }
