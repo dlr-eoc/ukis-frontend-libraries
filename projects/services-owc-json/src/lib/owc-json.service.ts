@@ -10,6 +10,7 @@ import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation } from '@ukis/da
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { TGeoExtent } from '@ukis/datatypes-map-state/src/lib/map-state';
 
 
 @Injectable({
@@ -385,7 +386,7 @@ export class OwcJsonService {
     *   - bounding box
     *   - properties
     */
-   generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[]): IOwsContext {
+   generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent): IOwsContext {
      
     let owc: IOwsContext = {
       "id": id,
@@ -393,6 +394,10 @@ export class OwcJsonService {
       "properties": null,
       "features": []
     };
+
+    if(extent) {
+      owc["bbox"] = extent;
+    }
 
     for(let baselayer of baselayers) {
       let resource: IOwsResource = this.generateResourceFromLayer(baselayer);
@@ -457,7 +462,7 @@ export class OwcJsonService {
         case "wmts": 
           return this.getWmtsOperationsFromLayer(layer);
         case "xyz":
-          return this.getXyzOperationsFromLayer(layer);
+          return this.getTmsOperationsFromLayer(layer);
         default: 
           throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
         }
@@ -465,7 +470,7 @@ export class OwcJsonService {
       
       else if (layer instanceof VectorLayer) {
         switch(layer.type) {
-          // case "wfs":
+          // case "wfs": <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts 
           //   return this.getWfsOperationsFromLayer(layer);
           case "geojson":
             return this.getGeojsonOperationsFromLayer(layer);
@@ -477,7 +482,14 @@ export class OwcJsonService {
   }
 
   getGeojsonOperationsFromLayer(layer: VectorLayer): IOwsOperation[] {
-    throw new Error("Method not implemented.");
+    // A layer with layer.type == "geojson" is merely a *.geojson file; thus no operations are defined. 
+    return [];
+  }
+
+
+  getTmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
+    // @TODO: what operations are defined on TMS? https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification
+    return [];
   }
 
 
@@ -485,56 +497,44 @@ export class OwcJsonService {
 
     let url = layer.url;
     let layerName = layer.name;
+    let version = layer.options.version ? layer.options.version : "1.1.0";
     
-    
-    let DescribeFeatureType: IOwsOperation = {
-      "code": "DescribeFeatureType",
-      "method": "GET",
-      "type": "application/xml",
-      "href": `${url}/wfs?service=WFS&&request=DescribeFeatureType`
+
+    let GetFeature: IOwsOperation = {
+      "code": "GetFeature",
+      "method": "GET", 
+      "type": "application/json",
+      "href": `${url}?service=WFS&version=${version}&request=GetFeature`
     };
-
-    let GetCapabilities: IOwsOperation = null;
-
-    let GetPropertyValue: IOwsOperation = null;
-
-    let GetFeature: IOwsOperation = null;
-
-    let GetFeatureWithLock: IOwsOperation = null;
-
-    let LockFeature: IOwsOperation = null;
-
-    let Transaction: IOwsOperation = null;
-
-    let CreateStoredQuery: IOwsOperation = null;
-
-    let DropStoredQuery: IOwsOperation = null;
-
-    let ListStoredQueries: IOwsOperation = null;
-
-    let DescribeStoredQueries: IOwsOperation = null;
+    
+    // let DescribeFeatureType: IOwsOperation = null;
+    // let GetCapabilities: IOwsOperation = null;
+    // let GetPropertyValue: IOwsOperation = null;
+    // let GetFeatureWithLock: IOwsOperation = null;
+    // let LockFeature: IOwsOperation = null;
+    // let Transaction: IOwsOperation = null;
+    // let CreateStoredQuery: IOwsOperation = null;
+    // let DropStoredQuery: IOwsOperation = null;
+    // let ListStoredQueries: IOwsOperation = null;
+    // let DescribeStoredQueries: IOwsOperation = null;
 
     let operations = [
-      GetCapabilities,
-      DescribeFeatureType,
-      GetPropertyValue,
       GetFeature,
-      GetFeatureWithLock,
-      LockFeature,
-      Transaction,
-      CreateStoredQuery,
-      DropStoredQuery,
-      ListStoredQueries,
-      DescribeStoredQueries
+      // GetCapabilities,
+      // DescribeFeatureType,
+      // GetPropertyValue,
+      // GetFeatureWithLock,
+      // LockFeature,
+      // Transaction,
+      // CreateStoredQuery,
+      // DropStoredQuery,
+      // ListStoredQueries,
+      // DescribeStoredQueries
     ];
 
     return operations;
   }
-
-  getXyzOperationsFromLayer(layer: Layer): IOwsOperation[] {
-    // xyz servers are simple fileservers without any capabilities
-    return [];
-  }
+  
 
   getWmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
     
@@ -546,21 +546,21 @@ export class OwcJsonService {
       "code": "GetMap",
       "method": "GET",
       "type": "image/vnd.jpeg-png",
-      "href": `${url}/wms?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerName}&FORMAT=image/vnd.jpeg-png&TILED=true`
+      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerName}&FORMAT=image/vnd.jpeg-png&TILED=true`
     };
 
     let getCapabilities: IOwsOperation = {
       "code": "GetCapabilities",
       "method": "GET",
       "type": "application/xml",
-      "href": `${url}/wms?service=WMS&version=${wmsVersion}&request=GetCapabilities`
+      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetCapabilities`
     }
 
     let getFeatureInfo: IOwsOperation = {
       "code": "GetFeatureInfo",
       "method": "GET",
       "type": "text/html",
-      "href": `${url}/wms?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerName}&FORMAT=image/vnd.jpeg-png`
+      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerName}&FORMAT=image/vnd.jpeg-png`
     }
 
     let operations: IOwsOperation[] = [
@@ -580,22 +580,23 @@ export class OwcJsonService {
     
     let getTile: IOwsOperation = {
       "code": "GetTile",
-      "href": `${url}/wmts?SERVICE=WMTS&REQUEST=GetTile&FORMAT=image%2Fpng&LAYER=${layerName}&VERSION=${wmtsVersion}`,
+      "href": `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=image%2Fpng&LAYER=${layerName}&VERSION=${wmtsVersion}`,
       "method": "GET",
       "type": "image/png"
     };
 
     let getCapabilities: IOwsOperation = {
       "code": "GetCapabilities",
-      "href": `${url}/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
+      "href": `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
       "method": "GET",
       "type": "application/xml"
     }
 
-    // Note: we deliberately use the WMS protocol here instead of WMTS. Reason: WMTS delivers RGB-values, wheras WMS delivers the actual value that was used to create a tile. 
+    // Note: we deliberately use the WMS protocol here instead of WMTS.
+    // Reason: WMTS delivers RGB-values, wheras WMS delivers the actual value that was used to create a tile.
     let getFeatureInfo: IOwsOperation = {
       "code": "GetFeatureInfo",
-      "href": `${url}/wms?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
+      "href": `${url}?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
       "method": "GET",
       "type": "text/html"
     }

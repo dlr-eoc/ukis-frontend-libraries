@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { LayersService } from '@ukis/services-layers/src/public_api';
-import { Observable } from 'rxjs';
 import { Layer } from '@ukis/datatypes-layers/src/lib/Layers';
 import { OwcJsonService } from '@ukis/services-owc-json/src/lib/owc-json.service';
-import { IOwsContext } from '@ukis/datatypes-owc-json/src/public_api';
+import { TGeoExtent, MapState } from '@ukis/datatypes-map-state/src/lib/map-state';
+import { MapStateService } from '@ukis/services-map-state/src/lib/map-state.service';
 
 @Component({
   selector: 'ukis-owc-control',
@@ -13,8 +13,11 @@ import { IOwsContext } from '@ukis/datatypes-owc-json/src/public_api';
 export class OwcControlComponent implements OnInit {
 
   @Input() layerSvc: LayersService;
+  @Input() mapStateSvc: MapStateService;
   private baselayers: Layer[] = [];
   private overlays: Layer[] = [];
+  private extent: TGeoExtent;
+  private state: MapState;
 
   constructor(
     private owcSvc: OwcJsonService
@@ -27,18 +30,36 @@ export class OwcControlComponent implements OnInit {
     this.layerSvc.getOverlays().subscribe((olays: Layer[]) => {
       this.overlays = olays;
     });
+    this.mapStateSvc.getExtent().subscribe((extent: TGeoExtent) => {
+      this.extent = extent;
+    });
+    this.mapStateSvc.getMapState().subscribe((state: MapState) => {
+      this.state = state;
+    });
   }
 
   onClickExport() {
-    let owc = this.owcSvc.generateOwsContextFrom("sampleId", this.baselayers, this.overlays);
-    console.log(owc);
-    //this.downloadFile(owc);
+    let id = "myContext";
+    let owc = this.owcSvc.generateOwsContextFrom(id, this.baselayers, this.overlays, this.extent);
+    this.downloadFile(owc, `${id}.json`);
   }
 
-  private downloadFile(data) {
-    const blob = new Blob([data], { type: 'text/json' });
+  private downloadFile(data, fileName: string) {
+    const jsonData = JSON.stringify(data);
+    const blob = new Blob([jsonData], { type: 'text/json;charset=utf-8;' });
+    
+    //window.open(url) doesn't work here. Instead, we create a temporary link item and simulate a click on it. 
     const url = window.URL.createObjectURL(blob);
-    window.open(url);
+
+    var a = document.createElement('a');
+    document.body.appendChild(a);
+    a.style.display = "none";
+    a.href = url;
+    a.download = fileName;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   }
 
 
