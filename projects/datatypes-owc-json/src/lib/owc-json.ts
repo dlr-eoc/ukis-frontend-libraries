@@ -244,5 +244,8 @@ export type GeoTIFF_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/
 export type GMLJP2_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
 export type GMLCOV_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
 
-
+/** this is custom!! 
+* http://www.owscontext.org/owc_user_guide/C0_userGuide.html#trueextension-offerings
+*/
+export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 

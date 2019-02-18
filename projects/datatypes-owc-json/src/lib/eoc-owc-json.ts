@@ -9,5 +9,3 @@ export interface IEocOwsContext extends IOwsContext {
 export interface IEocOwsResource extends IOwsResource {
     
 }
-
-export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
