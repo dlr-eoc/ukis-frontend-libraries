@@ -74,39 +74,41 @@ export interface IOwsResource extends GeoJSON.Feature {
    * String type that SHALL contain a URI value
    */
   id: string | number;
-  properties: {
-    /** Title given to the Context resource */
-    title: string;
-    /** Date of the last update of the Context resource */
-    updated: DateString;
-    /** The purpose is to provide a generic description of the content in a format understandable by generic readers */
-    abstract?: string;
-    /** This element is optional and indicates the authors array of the Context resource */
-    authors?: IOwsAuthor[];
-    /** Entity responsible for making the Context resource available */
-    publisher?: string;
-    /** Information about rights held in and over the Context resource */
-    rights?: string;
-    /** Date or range of dates relevant to the Context resource */
-    date?: DateString;
-    /** This element is optional and can contain a number of offerings defined by the class OWC:Offering */
-    offerings?: IOwsOffering[];
-    /** Flag value indicating to the client if the Context resource should be displayed by default */
-    active?: boolean;
-    /** This array is optional and expresses a category related to the Context resource */
-    categories?: IOwsCategorie[];
-    /** Minimum scale for the display of the Context resource Double */
-    minscaledenominator?: number;
-    /** Maximum scale for the display of the Context resource Double */
-    maxscaledenominator?: number;
-    /** Definition of the folder in which the resource is placed 
-    * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
-    */
-    folder?: string;
-    /** TODO!!! links is defined as Object but in the examples as Array  */
-    links?: IOwsLinks[];
-    [k: string]: any;
-  };
+  properties: IOwsResourceProperties;
+  [k: string]: any;
+}
+
+export interface IOwsResourceProperties {
+  /** Title given to the Context resource */
+  title: string;
+  /** Date of the last update of the Context resource */
+  updated: DateString;
+  /** The purpose is to provide a generic description of the content in a format understandable by generic readers */
+  abstract?: string;
+  /** This element is optional and indicates the authors array of the Context resource */
+  authors?: IOwsAuthor[];
+  /** Entity responsible for making the Context resource available */
+  publisher?: string;
+  /** Information about rights held in and over the Context resource */
+  rights?: string;
+  /** Date or range of dates relevant to the Context resource */
+  date?: DateString;
+  /** This element is optional and can contain a number of offerings defined by the class OWC:Offering */
+  offerings?: IOwsOffering[];
+  /** Flag value indicating to the client if the Context resource should be displayed by default */
+  active?: boolean;
+  /** This array is optional and expresses a category related to the Context resource */
+  categories?: IOwsCategorie[];
+  /** Minimum scale for the display of the Context resource Double */
+  minscaledenominator?: number;
+  /** Maximum scale for the display of the Context resource Double */
+  maxscaledenominator?: number;
+  /** Definition of the folder in which the resource is placed 
+  * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
+  */
+  folder?: string;
+  /** TODO!!! links is defined as Object but in the examples as Array  */
+  links?: IOwsLinks[];
   [k: string]: any;
 }
 
@@ -131,7 +133,7 @@ export interface IOwsResource extends GeoJSON.Feature {
  */
 export interface IOwsOffering {
   /** Extension Offerings with type - string */
-  code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering | WMTS_Offering | GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering | GMLCOV_Offering | GeoJson_Offering | string;
+  code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering | WMTS_Offering | GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering | GMLCOV_Offering | string;
   /** Web Service Offerings provide their operations */
   operations?: IOwsOperation[];
   /** Content Offerings allow content to be embedded in an OWS Context document. */
@@ -243,9 +245,3 @@ export type KML_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml'
 export type GeoTIFF_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff';
 export type GMLJP2_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
 export type GMLCOV_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
-
-/** this is custom!! 
-* http://www.owscontext.org/owc_user_guide/C0_userGuide.html#trueextension-offerings
-*/
-export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
-

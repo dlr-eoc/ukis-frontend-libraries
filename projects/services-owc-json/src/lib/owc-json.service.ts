@@ -8,8 +8,6 @@
 import { Injectable } from '@angular/core';
 import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation } from '@ukis/datatypes-owc-json';
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { TGeoExtent } from '@ukis/datatypes-map-state/src/lib/map-state';
 
 
