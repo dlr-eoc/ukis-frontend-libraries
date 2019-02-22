@@ -17,6 +17,7 @@
       "dom"
     ],
     "paths": {
+      "*": ["types/*"],
       "@ukis/datatypes-layers": [
         "dist/datatypes-layers",
         "projects/datatypes-layers"
