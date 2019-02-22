@@ -125,7 +125,7 @@ export class MapOlComponent implements OnInit, OnDestroy {
             layers.forEach(l => l.visible = false);
             layers[0].visible = true
           }
-          
+
           this.mapSvc.setBaseLayers(layers)
         }
         //change baselayer visibility and opacity
@@ -232,9 +232,9 @@ export class MapOlComponent implements OnInit, OnDestroy {
       //console.log(this.mapState.zoom,this.mapState.center, this.mapState.options)
       //console.log("mapOn fired", evt)
       let zoom = Math.round(this.view.getZoom());
-
-      var center = this.mapSvc.getCenter(true);
-      let ms = new MapState(zoom, { lat: parseFloat(center[1].toFixed(6)), lon: parseFloat(center[0].toFixed(6)) }, { notifier: 'map' });
+      let center = this.mapSvc.getCenter(true);
+      let extent = this.mapSvc.getCurrentExtent(true);
+      let ms = new MapState(zoom, { lat: parseFloat(center[1].toFixed(6)), lon: parseFloat(center[0].toFixed(6)) }, { notifier: 'map' }, extent, null);
       this.mapState = ms;
       this.mapStateSvc.setMapState(ms);
     }
