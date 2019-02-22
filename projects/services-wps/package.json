@@ -1,0 +1,11 @@
+{
+  "name": "services-wps",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0"
+  },
+  "dependencies": {
+    "jsonix": "^2.4.1"
+  }
+}

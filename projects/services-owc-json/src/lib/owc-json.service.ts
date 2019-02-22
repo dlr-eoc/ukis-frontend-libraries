@@ -374,9 +374,7 @@ export class OwcJsonService {
   }
 
 
-  /**  -----------------------------------------------------------------
-   * ------------ DATA TO FILE -----------------------------------------
-   * -----------------------------------------------------------------*/
+  /**------------ DATA TO FILE -----------------------------------------*/
 
 
    /**
@@ -436,7 +434,6 @@ export class OwcJsonService {
   }
 
   getOfferingCodeFromLayer(layer: Layer): string {
-
     switch(layer.type) {
       case "wms":
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
@@ -449,7 +446,6 @@ export class OwcJsonService {
       default:
         throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
     }
-
   }
 
   getOperationsFromLayer(layer: Layer): IOwsOperation[] {

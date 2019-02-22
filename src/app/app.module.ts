@@ -24,6 +24,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { OwcControlComponent, OwcControlModule } from 'projects/owc-control/src/public_api';
+import { ServicesWpsComponent } from './projects/services-wps/services-wps.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { OwcControlComponent, OwcControlModule } from 'projects/owc-control/src/
     GlobalFooterComponent,
     RoutePrivacyComponent,
     RouteLegalNoticeComponent,
-    GlobalProgressComponent 
+    GlobalProgressComponent,
+    ServicesWpsComponent 
   ],
   imports: [
     BrowserModule,

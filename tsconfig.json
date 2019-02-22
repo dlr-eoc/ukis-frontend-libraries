@@ -150,6 +150,18 @@
       ],
       "owc-control/*": [
         "dist/owc-control/*"
+      ],
+      "services-wps": [
+        "dist/services-wps"
+      ],
+      "services-wps/*": [
+        "dist/services-wps/*"
+      ],
+      "datatypes-wps": [
+        "dist/datatypes-wps"
+      ],
+      "datatypes-wps/*": [
+        "dist/datatypes-wps/*"
       ]
     }
   }
