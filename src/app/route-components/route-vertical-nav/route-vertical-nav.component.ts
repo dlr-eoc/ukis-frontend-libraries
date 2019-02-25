@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertService, IAlert } from '../../components/global-alert/alert.service';
 import { FooterService } from '../../components/global-footer/footer.service';
-import { ProgressService } from 'src/app/components/global-progress/progress.service';
+import { ProgressService } from '../../components/global-progress/progress.service';
 
 @Component({
   selector: 'ukis-route-vertical-nav',

@@ -15,6 +15,8 @@ import './components/icons/ukis';
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { FooterService } from './components/global-footer/footer.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
+import { ServicesWpsService } from 'services-wps/src/lib/services-wps.service';
+import { IWpsCapabilities, IWpsProcess } from 'datatypes-wps/src/lib/datatypes-wps';
 
 @Component({
   selector: 'ukis-root',
@@ -35,7 +37,8 @@ export class UkisComponent {
   constructor(
     private footerService: FooterService,
     private alertService: AlertService,
-    private progressService: ProgressService
+    private progressService: ProgressService,
+    private wpsService: ServicesWpsService
   ) {
     this.getHtmlMeta(['title', 'version', 'description']);
 
@@ -54,6 +57,7 @@ export class UkisComponent {
     this.progressService.progress$.subscribe((ev) => {
       this.showProgress(ev)
     })
+
   }
 
   showProgress = (progress: IProgress) => {
@@ -77,5 +81,21 @@ export class UkisComponent {
         this[name.toUpperCase()] = meta.getAttribute('content') || eval(meta.getAttribute('value'));
       }
     }
+  }
+
+  ngOnInit() {
+    let wpsUrl = "http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService";
+    this.wpsService.getCapabilities(wpsUrl).subscribe((data: IWpsCapabilities) => {
+      console.log("capas", data);
+      let processes: IWpsProcess[] = data.value.processOfferings.process;
+      for(let process of processes) {
+        let id = process.title[0].value;
+        if(id.indexOf("org.n52") >= 0) {
+          this.wpsService.describeProcess(wpsUrl, process).subscribe((data) => {
+            console.log(`result for ${id}`, data);
+          });
+        }
+      }
+    });
   }
 }

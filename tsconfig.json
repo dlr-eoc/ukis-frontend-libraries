@@ -17,7 +17,9 @@
       "dom"
     ],
     "paths": {
-      "*": ["types/*"],
+      "*": [
+        "types/*"
+      ],
       "@ukis/datatypes-layers": [
         "dist/datatypes-layers",
         "projects/datatypes-layers"
@@ -147,21 +149,29 @@
         "projects/user-info/*"
       ],
       "owc-control": [
-        "dist/owc-control"
+        "dist/owc-control",
+        "projects/owc-control"
       ],
       "owc-control/*": [
-        "dist/owc-control/*"
+        "dist/owc-control/*",
+        "projects/owc-control/*"
       ],
       "services-wps": [
-        "dist/services-wps"
+        "dist/services-wps",
+        "projects/services-wps"
       ],
       "services-wps/*": [
-        "dist/services-wps/*"
+        "dist/services-wps/*",
+        "projects/services-wps/*"
       ],
       "datatypes-wps": [
+        "dist/datatypes-wps",
+        "projects/datatypes-wps",
         "dist/datatypes-wps"
       ],
       "datatypes-wps/*": [
+        "dist/datatypes-wps/*",
+        "projects/datatypes-wps/*",
         "dist/datatypes-wps/*"
       ]
     }

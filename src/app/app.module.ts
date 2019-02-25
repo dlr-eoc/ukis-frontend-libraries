@@ -23,8 +23,10 @@ import { RouteLegalNoticeComponent } from './route-components/route-legal-notice
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
-import { OwcControlComponent, OwcControlModule } from 'projects/owc-control/src/public_api';
-import { ServicesWpsComponent } from './projects/services-wps/services-wps.component';
+import { ServicesWpsModule } from 'services-wps/src/lib/services-wps.module';
+import { HttpClientModule } from '@angular/common/http';
+
+
 
 
 @NgModule({
@@ -37,8 +39,7 @@ import { ServicesWpsComponent } from './projects/services-wps/services-wps.compo
     GlobalFooterComponent,
     RoutePrivacyComponent,
     RouteLegalNoticeComponent,
-    GlobalProgressComponent,
-    ServicesWpsComponent 
+    GlobalProgressComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +47,8 @@ import { ServicesWpsComponent } from './projects/services-wps/services-wps.compo
     UkisRoutingModule,
     FormsModule,
     ClarityModule,
-    OwcControlModule
+    HttpClientModule,
+    ServicesWpsModule
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [AlertService, FooterService, ProgressService],
