@@ -392,7 +392,17 @@ export class LayersService {
    * filter Overlays from layergroups;
    */
   public getOverlays(): Observable<Layer[]> {
-    //this.overlays.next(this.filterOverlays());
+    return this.overlays.asObservable();
+  }
+
+  /**
+   * filter Overlays from layergroups and remove them;
+   */
+  public removeOverlays(): Observable<Layer[]> {
+    let overlays = this.filterOverlays();
+    overlays.forEach((ol) => {
+      this.removeLayerOrGroupById(ol.id)
+    })
     return this.overlays.asObservable();
   }
 
