@@ -25,21 +25,12 @@ This repository contains the following modules as angular libraries:
 - user-info
 - cookie-alert
 
-To use the libraries in your frontend application, you need to add the dependency to every single library in your package.json and state the version you want: 
-```bash
-...
-"dependencies": {
-    ...
-    "@ukis/base-layers-raster": "^1.0.0",
-    "@ukis/dataset-explorer": "^1.0.0",
-    "@ukis/datatypes-layers": "^1.0.0",
-    "@ukis/datatypes-owc-json": "^1.0.0",
-    "@ukis/layer-control": "^1.0.0",
-    "@ukis/map-ol": "^1.0.0",
-    ...
-```
+To use the libraries in your project specific application, you can ather use the npm modules or include this repository.
+- check the README of [project-frontend](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/project-frontend/browse/README.md)
+- Use the frontend-libraries as npm modules 
+- or Use the typescript modules for frontend-libraries instead of npm modules
 
-To further develop the libraries, [see development documentation](DEVELOPMENT.md) for instructions.
+
 
 ## Issues
  http://jira.ukis.eoc.dlr.de/issues/?jql=project%20%3D%20UKISDEV%20AND%20Component%20%3D%20Frontend%20AND%20Labels%20%3D%20master
@@ -47,20 +38,19 @@ To further develop the libraries, [see development documentation](DEVELOPMENT.md
 ## Getting started to develop
 - Check if [Git](https://git-scm.com/) is installed.
 - Clone the repo: `git clone http://git.ukis.eoc.dlr.de/scm/mofro/frontend-libraries.git` . 
-- Create your own branch for your project based on master: 
+- Check if [Node.js](https://nodejs.org/) and npm is installed.
+
+- Create your own branch for your project specific changes based on master: 
 ```bash
      # go to cloned repo
-     cd frontend
+     cd frontend-libraries
      # create local branch based on master
      git checkout -b project-XXX
      #push local branch to remote
      git push -u origin project-XXX
 ```
-- Check if [Node.js](https://nodejs.org/) and npm is installed.
 - Install dependencies: `npm install`
-- Start development server: `npm start`
-- Check `localhost:4200/index.html`
-- [see development documentation](DEVELOPMENT.md)
+- [see development documentation for further instructions](DEVELOPMENT.md)
 
 
 
