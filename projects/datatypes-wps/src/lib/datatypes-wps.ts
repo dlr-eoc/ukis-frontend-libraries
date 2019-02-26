@@ -177,15 +177,15 @@ export interface IWpsInput {
 }
 
 export interface IWpsData {
-    TYPE_NAME: "wps.DataType"
+    TYPE_NAME: "wps.DataType",
     complexData: IWpsComplexData
 }
 
 
 export interface IWpsComplexData {
-    TYPE_NAME: "wps.ComplexDataType"
-    content: any
-    mimeType: string
+    TYPE_NAME: "wps.ComplexDataType",
+    content: any,
+    mimeType: string,
     otherAttributes: Object
 }
 
@@ -255,15 +255,28 @@ export interface IWpsDocumentOutputDefinition {
   service: "WPS",
   version: "1.0.0",
   process: IWpsProcessBrief,
-  serviceInstance: string
+  processOutputs: IWpsExecuteResponseProcessOutputs,
+  serviceInstance: string,
   status: IWpsStatus,  
   statusLocation: string
  }
 
+export interface IWpsExecuteResponseProcessOutputs {
+  TYPE_NAME: "wps.ExecuteResponse.ProcessOutputs",
+  output: IWpsOutputData[]
+}
+
+export interface IWpsOutputData {
+  TYPE_NAME: "wps.OutputDataType",
+  data: IWpsData,
+  title: IWpsLanguageString[]
+}
+
 export interface IWpsStatus {
   TYPE_NAME: "wps.StatusType",
   creationTime: IWpsTime,
-  processAccepted?: string
+  processAccepted?: string,
+  processSucceeded?: string
 }
 
 export interface IWpsTime {
