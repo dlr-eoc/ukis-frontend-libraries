@@ -16,7 +16,7 @@ import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { FooterService } from './components/global-footer/footer.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
 import { ServicesWpsService } from 'services-wps/src/lib/services-wps.service';
-import { IWpsCapabilities, IWpsProcess } from 'datatypes-wps/src/lib/datatypes-wps';
+import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsProcessDescription, IWpsDataInputs, IWpsOutputDefinition, IWpsOutputDescription, IWpsResponseForm } from 'datatypes-wps/src/lib/datatypes-wps';
 
 @Component({
   selector: 'ukis-root',
@@ -86,13 +86,23 @@ export class UkisComponent {
   ngOnInit() {
     let wpsUrl = "http://geoprocessing.demo.52north.org:8080/wps/WebProcessingService";
     this.wpsService.getCapabilities(wpsUrl).subscribe((data: IWpsCapabilities) => {
-      console.log("capas", data);
-      let processes: IWpsProcess[] = data.value.processOfferings.process;
+      let processes: IWpsProcessBrief[] = data.value.processOfferings.process;
       for(let process of processes) {
         let id = process.title[0].value;
         if(id.indexOf("org.n52") >= 0) {
-          this.wpsService.describeProcess(wpsUrl, process).subscribe((data) => {
-            console.log(`result for ${id}`, data);
+          this.wpsService.describeProcess(wpsUrl, process).subscribe((data: IWpsProcessDescriptions) => {
+            let description: IWpsProcessDescription = data.value.processDescription[0];
+            // TODO: based on description, let user fill in actual values for inputs and responseforms.
+            let inputs: IWpsDataInputs = {
+              TYPE_NAME: "wps.DataInputsType",
+              input: []
+            }
+            let responseForm: IWpsResponseForm = {
+              TYPE_NAME: "wps.ResponseFormType"
+            }
+            this.wpsService.executeProcess(wpsUrl, process, description, inputs, responseForm).subscribe((data) => {
+              console.log("executeResponse", data);
+            });
           });
         }
       }

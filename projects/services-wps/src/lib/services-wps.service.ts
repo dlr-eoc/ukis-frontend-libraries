@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { wps } from './jsonixMappings/wps';
 //var Jsonix = require('jsonix').Jsonix;
 import { Jsonix } from '@boundlessgeo/jsonix';
-import { IWpsCapabilities, IWpsProcess, IWpsProcessDescriptions } from 'datatypes-wps/src/lib/datatypes-wps';
+import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsResponseForm, IWpsCode, IWpsDataInputs, IWpsOutputDefinition, IWpsInput, IWpsProcessDescription, IWpsOutputDescription } from 'datatypes-wps/src/lib/datatypes-wps';
 
 
 @Injectable({
@@ -13,13 +13,17 @@ import { IWpsCapabilities, IWpsProcess, IWpsProcessDescriptions } from 'datatype
 })
 export class ServicesWpsService {
   
-  unmarshaller: any;
+  unmarshallerXmlToJson: any;
+  marshallerJsonToXml: any;
 
   constructor(
     private http: HttpClient
   ) {
-    let jsonixContext = new Jsonix.Context([wps]);
-    this.unmarshaller = jsonixContext.createUnmarshaller();
+    let jsonixContext = new Jsonix.Context([wps], {
+      namespacePrefixes: []
+    });
+    this.unmarshallerXmlToJson = jsonixContext.createUnmarshaller();
+    this.marshallerJsonToXml = jsonixContext.createMarshaller();
   }
 
  
@@ -40,7 +44,7 @@ export class ServicesWpsService {
 
     return this.http.get(wpsUrl, {headers: headers, responseType: 'text'}).pipe(
       map((response: string): IWpsCapabilities => {
-        return this.unmarshaller.unmarshalString(response);
+        return this.unmarshallerXmlToJson.unmarshalString(response);
       })
     );
   }
@@ -48,7 +52,7 @@ export class ServicesWpsService {
   /**
    * http://geoprocessing.info/wpsdoc/serv?request=HYPERLINKED&schema=wps:ProcessDescription
    */
-  describeProcess(url: string, process: IWpsProcess): Observable<IWpsProcessDescriptions> {
+  describeProcess(url: string, process: IWpsProcessBrief): Observable<IWpsProcessDescriptions> {
 
     let identifier = process.title[0].value;
 
@@ -65,15 +69,20 @@ export class ServicesWpsService {
 
     return this.http.get(wpsUrl, {headers: headers, responseType: 'text'}).pipe(
       map((response: string): IWpsProcessDescriptions => {
-        return this.unmarshaller.unmarshalString(response);
+        return this.unmarshallerXmlToJson.unmarshalString(response);
       })
     );
   }
 
-
-  executeProcess(url:string, process: IWpsProcess, body, responseFormType) {
+  /**
+   * http://geoprocessing.info/wpsdoc/1x0Execute
+   */
+  executeProcess(url:string, process: IWpsProcessBrief, processDescription: IWpsProcessDescription, inputs: IWpsDataInputs, responseForm: IWpsResponseForm) {
 
     let identifier = process.title[0].value;
+
+    let body = this.generateExecuteProcessBody(processDescription, inputs, responseForm);
+    let bodyString = this.marshallerJsonToXml.marshalString(body);
 
     var wpsQueryParams = {
         service: 'WPS',
@@ -81,16 +90,65 @@ export class ServicesWpsService {
         request: 'Execute',
         identifier: identifier
     };
-
     let wpsUrl = url + this.objectToUriParameters(wpsQueryParams);
 
-    // @TODO: body needs a type and needs to be marshalled from js to xml
-
     let headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
+    return this.http.post(wpsUrl, bodyString, {headers: headers, responseType: 'text'});
+  }
 
-    return this.http.post(wpsUrl, body, {headers: headers, responseType: 'text'});
-}
 
+  dismissProcess(url:string) {
+
+  }
+
+
+  requestStatus(url: string) {
+
+  }
+
+
+  getExecutionResult(url: string) {
+
+  }
+
+
+  private generateExecuteProcessBody(processDescription: IWpsProcessDescription, inputs: IWpsDataInputs, responseForm: IWpsResponseForm): IWpsExecuteProcessBody {
+
+    this.ensureInputsSuitProcess(processDescription, inputs);
+    this.ensureResponseFormSuitsProcess(processDescription, responseForm);
+
+    let bodyName: IWpsExecuteProcessBodyName = {
+      key: "{http://www.opengis.net/wps/1.0.0}Execute",
+      localPart: "Execute",
+      namespaceURI: "http://www.opengis.net/wps/1.0.0",
+      prefix: "wps",
+      string: "{http://www.opengis.net/wps/1.0.0}wps:Execute"
+    };
+
+    let bodyValue: IWpsExecuteProcessBodyValue = {
+      TYPE_NAME: "wps.Execute",
+      dataInputs: inputs,
+      identifier: processDescription.identifier,
+      responseForm: responseForm,
+      service: "WPS",
+      version: "1.0.0"
+    };
+    
+    let body: IWpsExecuteProcessBody = {
+      name: bodyName,
+      value: bodyValue
+    };
+
+    return body;
+  }
+
+  private ensureResponseFormSuitsProcess(processDescription: IWpsProcessDescription, responseForm: IWpsResponseForm) {
+    // TODO
+  }
+
+  private ensureInputsSuitProcess(processDescription: IWpsProcessDescription, inputs: IWpsDataInputs) {
+    // TODO
+  }
 
   private objectToUriParameters(obj: Object) : string {
     var query = "?";
