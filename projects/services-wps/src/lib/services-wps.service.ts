@@ -5,8 +5,14 @@ import { map } from 'rxjs/operators';
 import { wps } from './jsonixMappings/wps';
 //var Jsonix = require('jsonix').Jsonix;
 import { Jsonix } from '@boundlessgeo/jsonix';
-import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsResponseForm, IWpsCode, IWpsDataInputs, IWpsOutputDefinition, IWpsInput, IWpsProcessDescription, IWpsOutputDescription, IWpsExecuteResponse } from 'datatypes-wps/src/lib/datatypes-wps';
+import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsResponseForm, IWpsCode, IWpsDataInputs, IWpsOutputDefinition, IWpsInput, IWpsProcessDescription, IWpsOutputDescription, IWpsExecuteResponse } from '../../../datatypes-wps/src/lib/datatypes-wps';
 
+
+
+/**
+ * This service exposes an interface to talk to any WPS.
+ * It does not contain any state that is specific to any single WPS, so it can be used to talk to more than one WPS.
+ */
 
 
 @Injectable({
@@ -17,12 +23,8 @@ export class ServicesWpsService {
   unmarshallerXmlToJson: any;
   marshallerJsonToXml: any;
 
-  constructor(
-    private http: HttpClient
-  ) {
-    let jsonixContext = new Jsonix.Context([wps], {
-      namespacePrefixes: []
-    });
+  constructor(private http: HttpClient) {
+    let jsonixContext = new Jsonix.Context([wps], {namespacePrefixes: []});
     this.unmarshallerXmlToJson = jsonixContext.createUnmarshaller();
     this.marshallerJsonToXml = jsonixContext.createMarshaller();
   }
@@ -157,11 +159,21 @@ export class ServicesWpsService {
     return body;
   }
 
-  private ensureResponseFormSuitsProcess(processDescription: IWpsProcessDescription, responseForm: IWpsResponseForm) {
+  /**
+   * This method is not part of the WPS specification.
+   * @param processDescription 
+   * @param responseForm 
+   */
+  ensureResponseFormSuitsProcess(processDescription: IWpsProcessDescription, responseForm: IWpsResponseForm) {
     // TODO
   }
 
-  private ensureInputsSuitProcess(processDescription: IWpsProcessDescription, inputs: IWpsDataInputs) {
+  /**
+   * This method is not part of the WPS specification.
+   * @param processDescription 
+   * @param inputs 
+   */
+  ensureInputsSuitProcess(processDescription: IWpsProcessDescription, inputs: IWpsDataInputs) {
     // TODO
   }
 

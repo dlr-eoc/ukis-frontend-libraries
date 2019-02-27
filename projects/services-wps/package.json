@@ -6,6 +6,6 @@
     "@angular/core": "^7.0.0"
   },
   "dependencies": {
-    "jsonix": "^2.4.1"
+    "@boundlessgeo/jsonix": "^2.4.3"
   }
 }
