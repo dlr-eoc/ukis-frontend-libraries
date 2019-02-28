@@ -163,7 +163,9 @@ export class LayerentryComponent implements OnInit {
   }
 
   showProperties() {
-    this.openProperties = !this.openProperties;
+    if (!this.is_expandable()) {
+      this.openProperties = !this.openProperties;
+    }
   };
 
   switchTab(tabName: string) {

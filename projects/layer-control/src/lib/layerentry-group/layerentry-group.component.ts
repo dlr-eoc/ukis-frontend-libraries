@@ -41,6 +41,14 @@ export class LayerentryGroupComponent implements OnInit {
     }
   }
 
+  getLayerName(group: LayerGroup) {
+    if (group.displayName) {
+      return group.displayName;
+    } else {
+      return group.name;
+    }
+  }
+
   checkGroupLayersVisibility() {
     let visibleLayerNum = 0;
     for (let l of this.group.layers) {
