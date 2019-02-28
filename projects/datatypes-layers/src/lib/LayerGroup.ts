@@ -7,6 +7,8 @@ export interface ILayerGroupOptions {
     id: string;
     name: string;
     layers: Layer[];
+
+    displayName?: string;
     filtertype?: 'Overlays' | 'Baselayers' | string;
     removable?: boolean
     layerRemovable?: boolean
@@ -21,6 +23,7 @@ export class LayerGroup {
     name: string;
     layers: Layer[];
 
+    displayName?: string;
     filtertype?: 'Overlays' | 'Baselayers' | string = 'Overlays';
     removable?: boolean = true;
     layerRemovable?: boolean = true;
