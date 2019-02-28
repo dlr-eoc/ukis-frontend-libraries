@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { LayersService } from '@ukis/services-layers/src/public_api';
-import { Layer } from '@ukis/datatypes-layers/src/lib/Layers';
-import { OwcJsonService } from '@ukis/services-owc-json/src/lib/owc-json.service';
-import { TGeoExtent, MapState } from '@ukis/datatypes-map-state/src/lib/map-state';
-import { MapStateService } from '@ukis/services-map-state/src/lib/map-state.service';
+import { LayersService } from '@ukis/services-layers';
+import { Layer } from '@ukis/datatypes-layers';
+import { OwcJsonService } from '@ukis/services-owc-json';
+import { TGeoExtent, MapState } from '@ukis/datatypes-map-state';
+import { MapStateService } from '@ukis/services-map-state';
 
 @Component({
   selector: 'ukis-owc-control',
@@ -47,7 +47,7 @@ export class OwcControlComponent implements OnInit {
   private downloadFile(data, fileName: string) {
     const jsonData = JSON.stringify(data);
     const blob = new Blob([jsonData], { type: 'text/json;charset=utf-8;' });
-    
+
     //window.open(url) doesn't work here. Instead, we create a temporary link item and simulate a click on it. 
     const url = window.URL.createObjectURL(blob);
 

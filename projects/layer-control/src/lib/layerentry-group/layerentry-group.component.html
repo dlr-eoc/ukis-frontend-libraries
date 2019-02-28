@@ -10,7 +10,7 @@
       <ng-content></ng-content>
     </div>
     <span *ngIf="ref.children.length == 0" class="title" [title]="getLayerName(group)" (click)="showProperties()">
-      {{getLayerName(layer)}}
+      {{getLayerName(group)}}
     </span>
 
     <!-- setLayerGroupIndex // for reversed layergroups on ngFor up is down -->

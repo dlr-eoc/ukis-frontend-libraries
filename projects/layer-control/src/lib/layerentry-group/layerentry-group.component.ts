@@ -6,7 +6,6 @@ import { LayerGroup, Layer } from "@ukis/datatypes-layers";
 import { MapStateService } from '@ukis/services-map-state';
 import { LayersService } from '@ukis/services-layers';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-//import { LayersService } from 'tmp/project-services/projects/layers';
 
 @Component({
   selector: 'ukis-layerentry-group',

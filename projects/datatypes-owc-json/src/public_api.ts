@@ -3,3 +3,4 @@
  */
 
 export * from './lib/owc-json';
+export * from './lib/eoc-owc-json';

@@ -2,7 +2,7 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 import { DatasetExplorerService } from './dataset-explorer.service';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { exampleContext } from '../../assets/exampleContext';
-import { RasterLayer, VectorLayer } from '@ukis/datatypes-layers/src/lib/Layers';
+import { RasterLayer, VectorLayer } from '@ukis/datatypes-layers';
 
 
 // All tests run on all the owc-json files in this array. TODO: add more example files to this array!

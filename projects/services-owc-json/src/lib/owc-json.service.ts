@@ -6,9 +6,9 @@
  */
 
 import { Injectable } from '@angular/core';
-import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation } from '@ukis/datatypes-owc-json';
+import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent } from '@ukis/datatypes-owc-json';
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
-import { TGeoExtent } from '@ukis/datatypes-map-state/src/lib/map-state';
+import { TGeoExtent } from '@ukis/datatypes-map-state';
 
 
 @Injectable({
@@ -165,7 +165,7 @@ export class OwcJsonService {
     return (offering.contents && !offering.operations) ? true : false;
   }
 
-  getOfferingContents(offering: IOwsOffering) {
+  getOfferingContents(offering: IOwsOffering): IOwsOperation[] | IOwsContent[] {
     if (this.checkIfServiceOffering(offering)) {
       return offering.operations;
     } else if (this.checkIfDataOffering(offering)) {
