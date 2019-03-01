@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { wps } from './jsonixMappings/wps';
 //var Jsonix = require('jsonix').Jsonix;
 import { Jsonix } from '@boundlessgeo/jsonix';
-import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsResponseForm, IWpsCode, IWpsDataInputs, IWpsOutputDefinition, IWpsInput, IWpsProcessDescription, IWpsOutputDescription, IWpsExecuteResponse } from '../../../datatypes-wps/src/lib/datatypes-wps';
+import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsResponseForm, IWpsCode, IWpsDataInputs, IWpsOutputDefinition, IWpsInput, IWpsProcessDescription, IWpsOutputDescription, IWpsExecuteResponse } from '@ukis/datatypes-wps';
 
 
 

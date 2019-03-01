@@ -667,6 +667,76 @@
           }
         }
       }
+    },
+    "wps-node": {
+      "root": "projects/wps-node",
+      "sourceRoot": "projects/wps-node/src",
+      "projectType": "library",
+      "prefix": "ukis",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wps-node/tsconfig.lib.json",
+            "project": "projects/wps-node/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wps-node/src/test.ts",
+            "tsConfig": "projects/wps-node/tsconfig.spec.json",
+            "karmaConfig": "projects/wps-node/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wps-node/tsconfig.lib.json",
+              "projects/wps-node/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "wps-configuration": {
+      "root": "projects/wps-configuration",
+      "sourceRoot": "projects/wps-configuration/src",
+      "projectType": "library",
+      "prefix": "ukis",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wps-configuration/tsconfig.lib.json",
+            "project": "projects/wps-configuration/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wps-configuration/src/test.ts",
+            "tsConfig": "projects/wps-configuration/tsconfig.spec.json",
+            "karmaConfig": "projects/wps-configuration/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wps-configuration/tsconfig.lib.json",
+              "projects/wps-configuration/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   }
 }
