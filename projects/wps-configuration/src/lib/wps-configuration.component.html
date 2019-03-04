@@ -1,10 +1,13 @@
-<clr-wizard [clrWizardOpen]=true clrWizardSize="md"  
+<clr-wizard
+clrWizardSize="md"  
+[clrWizardOpen]=true
+[clrWizardClosable]="false" 
 [clrWizardPreventModalAnimation]="true"
 class="clr-wizard--inline clr-wizard--no-shadow clr-wizard--no-title">
 
 <clr-wizard-title>Configure WPS</clr-wizard-title>
 
-<clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+<!-- <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button> -->
 <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
 <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
 <clr-wizard-button [type]="'finish'">Finish</clr-wizard-button>
@@ -20,9 +23,8 @@ class="clr-wizard--inline clr-wizard--no-shadow clr-wizard--no-title">
             <div class="form-group">
                 <label>Available processes:</label>
                 <div class="select">
-                    <select formControlName="processFormControl" (change)="onProcessSelected($event.target.value)">
-                        <option></option>
-                        <option *ngFor="let process of (availableProcesses | async)" [value]="process.title[0].value">{{process.title[0].value}}</option>
+                    <select formControlName="processFormControl" (change)="onProcessSelected($event)">
+                        <option *ngFor="let process of availableProcesses" [ngValue]="process">{{process.title[0].value}}</option>
                     </select>
                 </div>
             </div>
@@ -33,7 +35,7 @@ class="clr-wizard--inline clr-wizard--no-shadow clr-wizard--no-title">
 
 <clr-wizard-page [clrWizardPageNextDisabled]="!wps.description">
     <ng-template clrPageTitle>
-        {{ wps.description?.title[0].value || "Select process" }}
+        {{ wps.description?.title[0].value || "Select description" }}
     </ng-template>
     
     <section class="form-block">
@@ -42,9 +44,8 @@ class="clr-wizard--inline clr-wizard--no-shadow clr-wizard--no-title">
             <div class="form-group">
                 <label>Description</label>
                 <div class="select">
-                    <select formControlName="descriptionFormControl" (change)="onDescriptionSelected($event.target.value)">
-                        <option></option>
-                        <option *ngFor="let description of (availableDescriptions | async)" [value]="description.title[0].value">{{description.title[0].value}}</option>
+                    <select formControlName="descriptionFormControl" (change)="onDescriptionSelected($event)">
+                        <option *ngFor="let description of availableDescriptions" [ngValue]="description">{{description.title[0].value}}</option>
                     </select>
                 </div>
             </div>

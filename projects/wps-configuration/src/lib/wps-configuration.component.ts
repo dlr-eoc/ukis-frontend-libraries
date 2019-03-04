@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Wps } from '@ukis/services-wps';
 import { IWpsProcessBrief, IWpsProcessDescription } from '@ukis/datatypes-wps';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ClrWizard, ClrWizardPage } from '@clr/angular';
 
 
 /**
@@ -24,15 +25,18 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class WpsConfigurationComponent implements OnInit {
 
   @Input() wps: Wps;
-  availableProcesses: Observable<IWpsProcessBrief[]>;
-  availableDescriptions: Observable<IWpsProcessDescription[]>;
-  
+
+  availableProcesses: IWpsProcessBrief[];
+  availableDescriptions: IWpsProcessDescription[];
+
   wpsConfigurationForm: FormGroup;
 
   constructor() {}
 
   ngOnInit() {
-    this.availableProcesses = this.wps.getAvailableProcesses();
+    this.wps.getAvailableProcesses().subscribe((processes) => {
+      this.availableProcesses = processes;
+    });
 
     this.wpsConfigurationForm = new FormGroup({
       processFormControl: new FormControl(),
@@ -40,12 +44,18 @@ export class WpsConfigurationComponent implements OnInit {
     });
   }
 
-  onProcessSelected(processTitle: string) {
-    this.wps.process = this.wps.getProcessByTitle(processTitle);
-    this.availableDescriptions = this.wps.getAvailableDescriptions();
+  onProcessSelected(evt) {
+    let selectedProcess = this.wpsConfigurationForm.controls["processFormControl"].value;
+    this.wps.process = selectedProcess;
+    this.wps.getAvailableDescriptions().subscribe((descriptions) => {
+      this.availableDescriptions = descriptions;
+    });
   }
 
-  onDescriptionSelected(descriptionTitle: string) {
-    this.wps.description = this.wps.getDescriptionByTitle(descriptionTitle);
+  onDescriptionSelected(evt) {
+    let selectedDescription = this.wpsConfigurationForm.controls["descriptionFormControl"].value;
+    this.wps.description = selectedDescription;
   }
+
+ 
 }

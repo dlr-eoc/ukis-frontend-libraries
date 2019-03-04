@@ -70,9 +70,12 @@ export class Wps {
     }
 
     getAvailableDescriptions(): Observable<IWpsProcessDescription[]> {
+        // if data already cached, return it immediately
+        if(this._availableDescriptions) return of(this._availableDescriptions);
+
+        // Else: query server.
         return this.wpsSvc.describeProcess(this._wpsUrl, this._process).pipe(
             map((descriptions: IWpsProcessDescriptions) => {
-                console.log(descriptions.value.processDescription);
                 return descriptions.value.processDescription;
             }),
             tap((descriptions: IWpsProcessDescription[]) => {

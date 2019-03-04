@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, AfterViewInit, ContentChildren, Input } from '@angular/core';
+import { Component, OnInit, QueryList, AfterViewInit, ContentChildren, Input, AfterContentInit } from '@angular/core';
 import { StepperElementComponent } from '../stepper-element/stepper-element.component';
 import { IStepperClickHandler } from './stepper-click-handler';
 
@@ -14,7 +14,7 @@ import { IStepperClickHandler } from './stepper-click-handler';
   templateUrl: './stepper-menu.component.html',
   styleUrls: ['./stepper-menu.component.css']
 })
-export class StepperMenuComponent implements OnInit, AfterViewInit {
+export class StepperMenuComponent implements OnInit, AfterContentInit {
 
   @Input()
   clickHandler: IStepperClickHandler;
@@ -25,17 +25,17 @@ export class StepperMenuComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {}
 
-  ngAfterViewInit(): void {
+  ngAfterContentInit(): void {
 
     // subscribe to clicks
     this.children.forEach((child: StepperElementComponent) => {
-      child.observeClick().subscribe((clicked: boolean) => {
+      child.exposeClickEvent().subscribe((clicked: boolean) => {
         this.handleClick(child);
       });
     });
 
-    // set initial state
-    this.clickHandler.setInitialState(this.children.toArray());
+    // // set initial state <-- No! We cannot do this here. Causes ExpressionChangedAfterItHasBeenCheckedError.
+    this.clickHandler.setInitialStepperState(this.children.toArray());
   }
 
   private handleClick(clickedElement: StepperElementComponent) {

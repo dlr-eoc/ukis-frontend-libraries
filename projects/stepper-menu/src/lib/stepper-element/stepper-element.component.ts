@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { StepperElementState } from './stepper-element-state';
+import { identifierModuleUrl } from '@angular/compiler';
 
 @Component({
   selector: 'ukis-stepper-element',
@@ -9,6 +10,8 @@ import { StepperElementState } from './stepper-element-state';
 })
 export class StepperElementComponent implements OnInit {
 
+  @Input() public id;
+  private stateService: BehaviorSubject<StepperElementState> = new BehaviorSubject<StepperElementState>("available"); // Using stateService internally to avoid ExpressionChangedAfterItHasBeenCheckedError
   private state: StepperElementState;
   private clickSubject: Subject<boolean> = new Subject<boolean>();
 
@@ -20,7 +23,7 @@ export class StepperElementComponent implements OnInit {
     this.clickSubject.next(true);
   }
 
-  observeClick(): Observable<boolean> {
+  exposeClickEvent(): Observable<boolean> {
     return this.clickSubject.asObservable();
   }
 
@@ -29,6 +32,7 @@ export class StepperElementComponent implements OnInit {
   }
 
   setState(state: StepperElementState) {
-    this.state = state;
+    // this.state = state;
+    this.stateService.next(state);
   }
 }
