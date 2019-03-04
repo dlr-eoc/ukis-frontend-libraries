@@ -166,11 +166,11 @@
       ],
       "@ukis/wps-configuration": [
         "dist/wps-configuration",
-        "projects/wps-configuration/src/public_api",
+        "projects/wps-configuration/src/public_api"
       ],
       "@ukis/wps-configuration/*": [
         "dist/wps-configuration/*",
-        "projects/wps-configuration/*",
+        "projects/wps-configuration/*"
       ],
       "@ukisuser-info": [
         "dist/user-info",
@@ -179,6 +179,13 @@
       "@ukisuser-info/*": [
         "dist/user-info/*",
         "projects/user-info/*"
+      ],
+      "@ukis/stepper-menu": [
+        "dist/stepper-menu",
+        "projects/stepper-menu/src/public_api"
+      ],
+      "@ukis/stepper-menu/*": [
+        "dist/stepper-menu/*"
       ]
     }
   }
