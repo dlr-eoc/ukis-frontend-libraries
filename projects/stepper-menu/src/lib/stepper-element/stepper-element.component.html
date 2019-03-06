@@ -3,34 +3,25 @@
   <li class="nav-item">
     
     <button *ngSwitchCase="'forbidden'" class="btn" disabled>
-      <a class="nav-link" href="#">
-        <ng-content></ng-content>
-      </a>
+      <ng-content></ng-content>
+
     </button>
     
     <button *ngSwitchCase="'available'" class="btn btn-info"  (click)="clicked()">
-      <a class="nav-link" href="#">
-        <ng-content></ng-content>
-      </a>
+      <ng-content></ng-content>
     </button>
   
     <button *ngSwitchCase="'active'" class="btn btn-primary"  (click)="clicked()">
-      <a class="nav-link" href="#">
-        <ng-content></ng-content>
-      </a>
+      <ng-content></ng-content>
     </button>
   
     <button *ngSwitchCase="'completed'" class="btn btn-success"  (click)="clicked()">
-      <a class="nav-link" href="#">
-        <ng-content></ng-content>
-      </a>
+      <ng-content></ng-content>
     </button>
   
     <button *ngSwitchDefault class="btn btn-info"  (click)="clicked()">
-        <a class="nav-link" href="#">
-          <ng-content></ng-content>
-        </a>
-      </button>
+      <ng-content></ng-content>
+    </button>
   
       
   </li>

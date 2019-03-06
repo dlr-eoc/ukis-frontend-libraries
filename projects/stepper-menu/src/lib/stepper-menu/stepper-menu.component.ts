@@ -19,27 +19,28 @@ export class StepperMenuComponent implements OnInit, AfterContentInit {
   @Input()
   clickHandler: IStepperClickHandler;
   @ContentChildren(StepperElementComponent)
-  private children: QueryList<StepperElementComponent>;
+  private stepperElements: QueryList<StepperElementComponent>;
 
   constructor() {}
 
   ngOnInit() {}
 
   ngAfterContentInit(): void {
-
     // subscribe to clicks
-    this.children.forEach((child: StepperElementComponent) => {
+    this.stepperElements.forEach((child: StepperElementComponent) => {
       child.exposeClickEvent().subscribe((clicked: boolean) => {
         this.handleClick(child);
       });
     });
 
-    // // set initial state <-- No! We cannot do this here. Causes ExpressionChangedAfterItHasBeenCheckedError.
-    this.clickHandler.setInitialStepperState(this.children.toArray());
+    // set initial state
+    Promise.resolve(null).then(() => {
+      this.clickHandler.setInitialStepperState(this.stepperElements.toArray());
+    });
   }
 
   private handleClick(clickedElement: StepperElementComponent) {
-    this.clickHandler.handleStepperClick(clickedElement, this.children.toArray());
+    this.clickHandler.handleStepperClick(clickedElement, this.stepperElements.toArray());
   }
 
 }

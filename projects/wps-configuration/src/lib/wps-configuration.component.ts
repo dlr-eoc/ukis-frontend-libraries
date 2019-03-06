@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { Wps } from '@ukis/services-wps';
 import { IWpsProcessBrief, IWpsProcessDescription } from '@ukis/datatypes-wps';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ClrWizard, ClrWizardPage } from '@clr/angular';
 
 
 /**

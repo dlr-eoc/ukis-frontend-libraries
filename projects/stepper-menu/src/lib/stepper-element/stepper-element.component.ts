@@ -11,8 +11,7 @@ import { identifierModuleUrl } from '@angular/compiler';
 export class StepperElementComponent implements OnInit {
 
   @Input() public id;
-  private stateService: BehaviorSubject<StepperElementState> = new BehaviorSubject<StepperElementState>("available"); // Using stateService internally to avoid ExpressionChangedAfterItHasBeenCheckedError
-  private state: StepperElementState;
+  private state: BehaviorSubject<StepperElementState> = new BehaviorSubject<StepperElementState>("forbidden");
   private clickSubject: Subject<boolean> = new Subject<boolean>();
 
   constructor() {}
@@ -27,12 +26,11 @@ export class StepperElementComponent implements OnInit {
     return this.clickSubject.asObservable();
   }
 
-  getState(): StepperElementState {
+  getState(): Observable<StepperElementState> {
     return this.state;
   }
 
   setState(state: StepperElementState) {
-    // this.state = state;
-    this.stateService.next(state);
+    this.state.next(state);
   }
 }
