@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 //import { Layer, LayerGroup, RasterLayer } from './layers';
 import { Layer, LayerGroup, RasterLayer } from '@ukis/datatypes-layers'
 import { BehaviorSubject, Observable, from } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
-import { IfStmt } from '@angular/compiler';
+import _ from "lodash";
 
 @Injectable({
   providedIn: 'root'
@@ -129,6 +128,8 @@ export class LayersService {
           this.removeLayer(lg, lg.filtertype || "Overlays")
         }
       } else if (lg instanceof LayerGroup) {
+        console.log("LayerGroup: ", lg)
+        console.log("id", id)
         if (lg.id === id) {
           this.removeLayerGroup(lg);
         } else {
@@ -254,6 +255,13 @@ export class LayersService {
         console.log('remove layerGroup layers:', layer)
         this.removeLayerFromGroup(layer, layerGroup);
       }
+      let lgroups = this.layergroups.getValue();
+      
+      let filteredGroups = lgroups.filter(function(layer, index, arr){
+        return layer.id !== layerGroup.id;
+      });
+      
+      this.layergroups.next(filteredGroups)
     } else {
       console.log('layerGroup is not removable!')
     }
