@@ -1,6 +1,6 @@
 import { ServicesWpsService } from "./services-wps.service";
 import { Injectable } from "@angular/core";
-import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsProcessDescription, IWpsInputDescription, IWpsOutputDescription, IWpsExecuteResponse, IWpsCode, IWpsDataInputs, IWpsResponseForm } from '@ukis/datatypes-wps';
+import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsProcessDescription, IWpsInputDescription, IWpsOutputDescription, IWpsExecuteResponse, IOwsCode, IWpsDataInputs, IWpsResponseForm, IWpsProcessDescriptionDataInputs, IWpsProcessDescriptionProcessOutputs } from '@ukis/datatypes-wps';
 import { Observable, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
 
@@ -40,6 +40,9 @@ export class Wps {
 
         // Else: query server.
         return this.wpsSvc.getCapabilities(this._wpsUrl).pipe(
+            tap((capas)=> {
+                console.log(capas);
+            }),
             map((capas: IWpsCapabilities) => {
                 return capas.value.processOfferings.process;
             }),
@@ -56,7 +59,8 @@ export class Wps {
     }
 
     set process(process: IWpsProcessBrief) {
-        if(!this._availableProcesses.includes(process)) throw new Error(`The given process is not one of the available processes for the server ${this._wpsUrl}. Given process: ${JSON.stringify(process)}`);
+        // We abstain from checking if the process is even one of the provided processes, so that we can configure the Wps without making any Http-requests. 
+        // if(!this._availableProcesses.includes(process)) throw new Error(`The given process is not one of the available processes for the server ${this._wpsUrl}. Given process: ${JSON.stringify(process)}`);
         if(process == this._process) return;
         this._process = process;
         this._description = null;
@@ -91,7 +95,8 @@ export class Wps {
     }
 
     set description(description: IWpsProcessDescription) {
-        if(!this._availableDescriptions.includes(description)) throw new Error(`The given description is not one of the available descriptions for the server ${this._wpsUrl}. Given description: ${JSON.stringify(description)} `);
+        // We abstain from checking if the description is even one of the provided descriptions, so that we can configure the Wps without making any Http-requests. 
+        // if(!this._availableDescriptions.includes(description)) throw new Error(`The given description is not one of the available descriptions for the server ${this._wpsUrl}. Given description: ${JSON.stringify(description)} `);
         if(description == this._description) return;
         this._description = description;
         this._inputs = null;
@@ -112,7 +117,7 @@ export class Wps {
     }
 
     set inputs(inputs: IWpsDataInputs) {
-        this.wpsSvc.ensureInputsSuitProcess(this._description, inputs);
+        // this.wpsSvc.ensureInputsSuitProcess(this._description, inputs);
         this._inputs = inputs;
         this._response = null;
     }
@@ -122,7 +127,7 @@ export class Wps {
     }
 
     set responseForm(responseForm: IWpsResponseForm) {
-        this.wpsSvc.ensureResponseFormSuitsProcess(this._description, responseForm);
+        // this.wpsSvc.ensureResponseFormSuitsProcess(this._description, responseForm);
         this._responseForm = responseForm;
         this._response = null;
     }

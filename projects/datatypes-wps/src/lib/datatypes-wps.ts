@@ -15,7 +15,16 @@ export interface IWpsCapabilitiesName {
   string: "{http://www.opengis.net/wps/1.0.0}wps:Capabilities"
 }
 
+
+/**
+ * TODO: 
+ *  - languages
+ *  - operations-Metadata
+ *  - serviceIdentification
+ *  - serviceProvider
+ */
 export interface IWpsCapabilitesValue {
+  TYPE_NAME: "WPS_1_0_0.WPSCapabilitiesType",
   service: "WPS",
   serviceIdentification: Object,
   serviceProvider: Object,
@@ -24,18 +33,30 @@ export interface IWpsCapabilitesValue {
 }
 
 export interface IWpsProcesOfferings {
-  TYPE_NAME: "wps.ProcessOfferings",
+  TYPE_NAME: "WPS_1_0_0.ProcessOfferings",
   process: IWpsProcessBrief[]
 }
 
+/**
+ * TODO: 
+ *  - metatdata
+ *  - abstract
+ *  - profile
+ *  - WSDL
+ */
 export interface IWpsProcessBrief {
-  TYPE_NAME: "wps.ProcessBriefType",
-  processVersion: string,
-  title: IWpsLanguageString[]
+  TYPE_NAME: "WPS_1_0_0.ProcessBriefType",
+  title: IWpsLanguageString[],
+  identifier: IOwsCode,
+  processVersion?: string,
+  metadata?: Object,
+  abstract?: Object,
+  profile?: Object,
+  WSDL?: Object
 }
 
 export interface IWpsLanguageString {
-  TYPE_NAME: "wps.LanguageStringType",
+  TYPE_NAME: "WPS_1_0_0.LanguageStringType",
   value: string
 }
 
@@ -60,30 +81,30 @@ export interface IWpsProcessDescriptionsName {
 }
 
 export interface IWpsProcessDescriptionsValue {
-  TYPE_NAME: "wps.ProcessDescriptions",
+  TYPE_NAME: "WPS_1_0_0.ProcessDescriptions",
   service: "WPS",
   version: string,
   processDescription: IWpsProcessDescription[]
 }
 
 export interface IWpsProcessDescription {
-  TYPE_NAME: "wps.ProcessDescriptionType",
+  TYPE_NAME: "WPS_1_0_0.ProcessDescriptionType",
   processVersion: string,
   statusSupported: boolean,
   storeSupported: boolean,
-  identifier: IWpsCode,
+  identifier: IOwsCode,
   dataInputs: IWpsProcessDescriptionDataInputs,
   processOutputs: IWpsProcessDescriptionProcessOutputs,
   title: IWpsLanguageString[]
 }
 
 export interface IWpsProcessDescriptionDataInputs {
-  TYPE_NAME: "wps.ProcessDescriptionType.DataInputs",
+  TYPE_NAME: "WPS_1_0_0.ProcessDescriptionType.DataInputs",
   input: IWpsInputDescription[]
 }
 
 export interface IWpsInputDescription {
-    TYPE_NAME: "wps.InputDescriptionType",
+    TYPE_NAME: "WPS_1_0_0.InputDescriptionType",
     complexData: IWpsSupportedComplexDataInput
     maxOccurs: number,
     minOccurs: 0,
@@ -91,31 +112,31 @@ export interface IWpsInputDescription {
 }
 
 export interface IWpsSupportedComplexDataInput {
-    TYPE_NAME: "wps.SupportedComplexDataInputType", 
+    TYPE_NAME: "WPS_1_0_0.SupportedComplexDataInputType", 
     supported: IWpsComplexDataCombinations,
     _default: IWpsComplexDataCombination
 }
 
 export interface IWpsComplexDataCombinations {
-    TYPE_NAME: "wps.ComplexDataCombinationsType",
+    TYPE_NAME: "WPS_1_0_0.ComplexDataCombinationsType",
     format: IWpsomplexDataDescription[]
 }
 
 export interface IWpsComplexDataCombination {
-    TYPE_NAME: "wps.ComplexDataCombinationType",
+    TYPE_NAME: "WPS_1_0_0.ComplexDataCombinationType",
     format: IWpsomplexDataDescription
 }
 
 
 export interface IWpsomplexDataDescription {
-    TYPE_NAME: "wps.ComplexDataDescriptionType"
+    TYPE_NAME: "WPS_1_0_0.ComplexDataDescriptionType"
     encoding: string
     mimeType: string
     schema: string
 }
 
 export interface IWpsProcessDescriptionProcessOutputs {
-  TYPE_NAME: "wps.ProcessDescriptionType.ProcessOutputs",
+  TYPE_NAME: "WPS_1_0_0.ProcessDescriptionType.ProcessOutputs",
   output: IWpsOutputDescription[],
   processVersion: string
   statusSupported: boolean
@@ -124,13 +145,13 @@ export interface IWpsProcessDescriptionProcessOutputs {
 }
 
 export interface IWpsOutputDescription {
-    TYPE_NAME: "wps.OutputDescriptionType",
+    TYPE_NAME: "WPS_1_0_0.OutputDescriptionType",
     complexOutput: IWpsSupportedComplexData,
     title: IWpsLanguageString[]
 }
 
 export interface IWpsSupportedComplexData {
-    TYPE_NAME: "wps.SupportedComplexDataType",
+    TYPE_NAME: "WPS_1_0_0.SupportedComplexDataType",
     supported: IWpsComplexDataCombinations,
     _default: IWpsComplexDataCombination
 }
@@ -156,68 +177,76 @@ export interface IWpsExecuteProcessBodyName {
 }
 
 export interface IWpsExecuteProcessBodyValue {
-  TYPE_NAME: "wps.Execute",
+  TYPE_NAME: "WPS_1_0_0.Execute",
   dataInputs: IWpsDataInputs,
-  identifier: IWpsCode,
+  identifier: IOwsCode,
   responseForm: IWpsResponseForm,
   service: "WPS",
   version: "1.0.0"
 }
 
 export interface IWpsDataInputs {
-  TYPE_NAME: "wps.DataInputsType",
+  TYPE_NAME: "WPS_1_0_0.DataInputsType",
   input: IWpsInput[]
 }
 
 export interface IWpsInput {
-  TYPE_NAME: "wps.InputType",
+  TYPE_NAME: "WPS_1_0_0.InputType",
   title?: IWpsLanguageString,
   data?: IWpsData,
-  identifier: IWpsCode
+  identifier: IOwsCode
 }
 
 export interface IWpsData {
-    TYPE_NAME: "wps.DataType",
-    complexData: IWpsComplexData
+    TYPE_NAME: "WPS_1_0_0.DataType",
+    complexData?: IWpsComplexData,
+    literalData?: IWpsLiteralData
 }
 
+export type TWpsLiteralDataType = "double" | "string";
+
+export interface IWpsLiteralData {
+  TYPE_NAME: "WPS_1_0_0.LiteralDataType",
+  dataType: TWpsLiteralDataType,
+  defaultValue?: any
+}
 
 export interface IWpsComplexData {
-    TYPE_NAME: "wps.ComplexDataType",
+    TYPE_NAME: "WPS_1_0_0.ComplexDataType",
     content: any,
     mimeType: string,
     otherAttributes: Object
 }
 
-export interface IWpsCode {
-    TYPE_NAME: "wps.CodeType"
+export interface IOwsCode {
+    TYPE_NAME: "OWS_1_1_0.CodeType"
     value: string
 }
 
 export interface IWpsResponseForm {
-    TYPE_NAME: "wps.ResponseFormType",
+    TYPE_NAME: "WPS_1_0_0.ResponseFormType",
     rawDataOutput?: IWpsOutputDefinition,
     responseDocument?: IWpsResponseDocument
 }
 
 export interface IWpsResponseFormRaw extends IWpsResponseForm {
-    TYPE_NAME: "wps.ResponseFormType",
+    TYPE_NAME: "WPS_1_0_0.ResponseFormType",
     rawDataOutput: IWpsOutputDefinition
 }
 
 export interface IWpsResponseFormDoc extends IWpsResponseForm {
-    TYPE_NAME: "wps.ResponseFormType",
+    TYPE_NAME: "WPS_1_0_0.ResponseFormType",
     responseDocument: IWpsResponseDocument
 }
 
 export interface IWpsOutputDefinition {
-    TYPE_NAME: "wps.OutputDefinitionType",
-    identifier: IWpsCode,
+    TYPE_NAME: "WPS_1_0_0.OutputDefinitionType",
+    identifier: IOwsCode,
     mimeType: string
 }
 
 export interface IWpsResponseDocument {
-  TYPE_NAME: "wps.ResponseDocumentType",
+  TYPE_NAME: "WPS_1_0_0.ResponseDocumentType",
   lineage: boolean,
   status: boolean,
   storeExecuteResponse: boolean,
@@ -225,9 +254,9 @@ export interface IWpsResponseDocument {
 }
 
 export interface IWpsDocumentOutputDefinition {
-  TYPE_NAME: "wps.DocumentOutputDefinitionType",
+  TYPE_NAME: "WPS_1_0_0.DocumentOutputDefinitionType",
   asReference: boolean,
-  identifier: IWpsCode,
+  identifier: IOwsCode,
   mimeType: string
 }
 
@@ -250,7 +279,7 @@ export interface IWpsDocumentOutputDefinition {
  }
 
  export interface IWpsExecuteResponseValue {
-  TYPE_NAME: "wps.ExecuteResponse",
+  TYPE_NAME: "WPS_1_0_0.ExecuteResponse",
   lang: string,
   service: "WPS",
   version: "1.0.0",
@@ -262,18 +291,18 @@ export interface IWpsDocumentOutputDefinition {
  }
 
 export interface IWpsExecuteResponseProcessOutputs {
-  TYPE_NAME: "wps.ExecuteResponse.ProcessOutputs",
+  TYPE_NAME: "WPS_1_0_0.ExecuteResponse.ProcessOutputs",
   output: IWpsOutputData[]
 }
 
 export interface IWpsOutputData {
-  TYPE_NAME: "wps.OutputDataType",
+  TYPE_NAME: "WPS_1_0_0.OutputDataType",
   data: IWpsData,
   title: IWpsLanguageString[]
 }
 
 export interface IWpsStatus {
-  TYPE_NAME: "wps.StatusType",
+  TYPE_NAME: "WPS_1_0_0.StatusType",
   creationTime: IWpsTime,
   processAccepted?: string,
   processSucceeded?: string

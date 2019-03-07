@@ -2,16 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { wps } from './jsonixMappings/wps';
-//var Jsonix = require('jsonix').Jsonix;
 import { Jsonix } from '@boundlessgeo/jsonix';
-import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsResponseForm, IWpsCode, IWpsDataInputs, IWpsOutputDefinition, IWpsInput, IWpsProcessDescription, IWpsOutputDescription, IWpsExecuteResponse } from '@ukis/datatypes-wps';
+//var Jsonix = require('jsonix').Jsonix;
+//import * as Jsonix from "jsonix/jsonix";
+import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsResponseForm, IOwsCode, IWpsDataInputs, IWpsOutputDefinition, IWpsInput, IWpsProcessDescription, IWpsOutputDescription, IWpsExecuteResponse } from '@ukis/datatypes-wps';
+import * as W3cFactory from "w3c-schemas/lib/XLink_1_0";
+import * as OwsFactory from "ogc-schemas/lib/OWS_1_1_0";
+import * as Wps1Factory from "ogc-schemas/lib/WPS_1_0_0";
+import { WpsDataFactory } from './wpsDataFactory';
 
 
 
 /**
  * This service exposes an interface to talk to any WPS.
  * It does not contain any state that is specific to any single WPS, so it can be used to talk to more than one WPS.
+ * TODO: Differentiate between Version 1.0.0 and 2.0, possibly using generics. 
  */
 
 
@@ -24,7 +29,10 @@ export class ServicesWpsService {
   marshallerJsonToXml: any;
 
   constructor(private http: HttpClient) {
-    let jsonixContext = new Jsonix.Context([wps], {namespacePrefixes: []});
+    let xlink = W3cFactory["XLink_1_0"];
+    let ows11 = OwsFactory["OWS_1_1_0"];
+    let wps1 = Wps1Factory["WPS_1_0_0"];
+    let jsonixContext = new Jsonix.Context([xlink, ows11, wps1], {namespacePrefixes: []});
     this.unmarshallerXmlToJson = jsonixContext.createUnmarshaller();
     this.marshallerJsonToXml = jsonixContext.createMarshaller();
   }
@@ -57,13 +65,11 @@ export class ServicesWpsService {
    */
   describeProcess(url: string, process: IWpsProcessBrief): Observable<IWpsProcessDescriptions> {
 
-    let identifier = process.title[0].value;
-
     let wpsQueryParams = {
         service: 'WPS',
         version: '1.0.0',
         request: 'DescribeProcess',
-        identifier: identifier
+        identifier: process.identifier.value  
     };
 
     let wpsUrl = url + this.objectToUriParameters(wpsQueryParams);
@@ -82,16 +88,17 @@ export class ServicesWpsService {
    */
   executeProcess(url:string, process: IWpsProcessBrief, processDescription: IWpsProcessDescription, inputs: IWpsDataInputs, responseForm: IWpsResponseForm): Observable<IWpsExecuteResponse> {
 
-    let identifier = process.title[0].value;
+    this.ensureInputsSuitProcess(processDescription, inputs);
+    this.ensureResponseFormSuitsProcess(processDescription, responseForm);
 
-    let body = this.generateExecuteProcessBody(processDescription, inputs, responseForm);
+    let body = WpsDataFactory.generateExecuteProcessBody(processDescription, inputs, responseForm);
     let bodyString = this.marshallerJsonToXml.marshalString(body);
 
     var wpsQueryParams = {
         service: 'WPS',
         version: '1.0.0',
         request: 'Execute',
-        identifier: identifier
+        identifier: process.identifier.value
     };
     let wpsUrl = url + this.objectToUriParameters(wpsQueryParams);
 
@@ -118,46 +125,6 @@ export class ServicesWpsService {
 
   }
 
-
-  private generateExecuteProcessBody(processDescription: IWpsProcessDescription, inputs: IWpsDataInputs, responseForm: IWpsResponseForm): IWpsExecuteProcessBody {
-
-    this.ensureInputsSuitProcess(processDescription, inputs);
-    this.ensureResponseFormSuitsProcess(processDescription, responseForm);
-
-    let bodyName: IWpsExecuteProcessBodyName = {
-      key: "{http://www.opengis.net/wps/1.0.0}Execute",
-      localPart: "Execute",
-      namespaceURI: "http://www.opengis.net/wps/1.0.0",
-      prefix: "wps",
-      string: "{http://www.opengis.net/wps/1.0.0}wps:Execute"
-    };
-
-    let identifier: IWpsCode;
-    if(processDescription.identifier) {
-      identifier = processDescription.identifier;
-    } else {
-      identifier = {
-        TYPE_NAME: "wps.CodeType",
-        value: processDescription.title[0].value
-      };
-    }
-
-    let bodyValue: IWpsExecuteProcessBodyValue = {
-      TYPE_NAME: "wps.Execute",
-      dataInputs: inputs,
-      identifier: identifier,
-      responseForm: responseForm,
-      service: "WPS",
-      version: "1.0.0"
-    };
-    
-    let body: IWpsExecuteProcessBody = {
-      name: bodyName,
-      value: bodyValue
-    };
-
-    return body;
-  }
 
   /**
    * This method is not part of the WPS specification.
