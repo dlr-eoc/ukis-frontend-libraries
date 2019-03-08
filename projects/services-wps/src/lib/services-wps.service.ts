@@ -9,7 +9,7 @@ import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecut
 import * as W3cFactory from "w3c-schemas/lib/XLink_1_0";
 import * as OwsFactory from "ogc-schemas/lib/OWS_1_1_0";
 import * as Wps1Factory from "ogc-schemas/lib/WPS_1_0_0";
-import { WpsDataFactory } from './wpsDataFactory';
+import { WpsDataFactory } from '@ukis/datatypes-wps';
 
 
 
@@ -91,7 +91,7 @@ export class ServicesWpsService {
     this.ensureInputsSuitProcess(processDescription, inputs);
     this.ensureResponseFormSuitsProcess(processDescription, responseForm);
 
-    let body = WpsDataFactory.generateExecuteProcessBody(processDescription, inputs, responseForm);
+    let body = WpsDataFactory.executeProcessBody(processDescription, inputs, responseForm);
     let bodyString = this.marshallerJsonToXml.marshalString(body);
 
     var wpsQueryParams = {
@@ -152,7 +152,7 @@ export class ServicesWpsService {
     //TODO: uri encode proposed in RFC not working with Django-AS
     query = query.substr(0, query.length - 1);
     return query;
-}
+  }
 
 }
 

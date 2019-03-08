@@ -117,7 +117,7 @@ export class Wps {
     }
 
     set inputs(inputs: IWpsDataInputs) {
-        // this.wpsSvc.ensureInputsSuitProcess(this._description, inputs);
+        this.wpsSvc.ensureInputsSuitProcess(this._description, inputs);
         this._inputs = inputs;
         this._response = null;
     }
@@ -127,7 +127,7 @@ export class Wps {
     }
 
     set responseForm(responseForm: IWpsResponseForm) {
-        // this.wpsSvc.ensureResponseFormSuitsProcess(this._description, responseForm);
+        this.wpsSvc.ensureResponseFormSuitsProcess(this._description, responseForm);
         this._responseForm = responseForm;
         this._response = null;
     }
