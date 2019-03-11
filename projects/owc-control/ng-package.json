@@ -3,5 +3,13 @@
   "dest": "../../dist/owc-control",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib",
+    "@ukis/services-layers",
+    "@ukis/datatypes-layers",
+    "@ukis/services-owc-json",
+    "@ukis/datatypes-map-state",
+    "@ukis/services-map-state"
+  ]
 }
