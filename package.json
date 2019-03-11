@@ -1,6 +1,6 @@
 {
   "name": "ukis-frontend",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -14,7 +14,9 @@
     "test": "ng test --watch=false",
     "lint": "echo TODO:ng lint",
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
-    "compodoc-serve": "compodoc -r 8081 -s"
+    "compodoc-serve": "compodoc -r 8081 -s",
+    "list-projects": "node scripts/projetsVersion.js -l",
+    "set-versions-for-build": "node scripts/projetsVersion.js -s"
   },
   "private": true,
   "dependencies": {
@@ -72,6 +74,7 @@
     "karma-junit-reporter": "^1.2.0",
     "ng-packagr": "^4.2.0",
     "protractor": "~5.4.0",
+    "replace": "^1.1.0",
     "terser": "^3.14.1",
     "ts-node": "~7.0.0",
     "tsickle": ">=0.29.0",
