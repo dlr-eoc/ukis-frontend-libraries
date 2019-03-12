@@ -15,8 +15,7 @@
     "lint": "echo TODO:ng lint",
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s",
-    "list-projects": "node scripts/projetsVersion.js -l",
-    "set-versions-for-build": "node scripts/projetsVersion.js -s"
+    "list-projects": "node scripts/libraryProjets.js -l"
   },
   "private": true,
   "dependencies": {

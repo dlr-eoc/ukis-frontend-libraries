@@ -15,21 +15,20 @@ const CWD = process.cwd();
 const PLACEHOLDER = "0.0.0-PLACEHOLDER";
 const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
 const ANGULARJSON = require(PATH.join(CWD, 'angular.json'));
-const PROJECTSPATH = PATH.join(CWD, 'projects');
 
 var setVersionsOfProjects = () => {
+    let projectsPaths = getProjects().map(item => item.package);
     let errors = listAllProjects(true);
     if (errors.length < 1 && MAINPACKAGE.version) {
-        /*
+        console.log(projectsPaths)
         replace({
             regex: PLACEHOLDER,
             replacement: MAINPACKAGE.version,
-            paths: [PROJECTSPATH],
+            paths: projectsPaths,
             recursive: true,
             silent: true,
             include: "package.json"
         })
-        */
         console.log(`replaced all ${PLACEHOLDER} with ${MAINPACKAGE.version}`);
     } else {
         console.log(`check main package.json version and projects for errors!`)
@@ -37,10 +36,25 @@ var setVersionsOfProjects = () => {
     }
 }
 
-var listAllProjects = (silent) => {
-    let projects = [], errors = [];
+var getProjects = () => {
+    let projects = [];
+
     Object.keys(ANGULARJSON.projects).forEach((project) => {
-        let projectPackage = require(PATH.join(CWD, ANGULARJSON.projects[project].root, 'package.json'));
+        let _project = {
+            name: project,
+            path: PATH.join(CWD, ANGULARJSON.projects[project].root),
+            package: PATH.join(CWD, ANGULARJSON.projects[project].root, 'package.json')
+        };
+        projects.push(_project);
+    })
+    return projects;
+}
+
+var listAllProjects = (silent) => {
+    let projects = [], errors = [], projectsPaths = getProjects();
+
+    projectsPaths.forEach((project) => {
+        let projectPackage = require(project.package);
         let _project = {
             name: projectPackage.name,
             version: projectPackage.version,
