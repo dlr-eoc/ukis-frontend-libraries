@@ -1,15 +1,21 @@
+
+import { Injectable } from '@angular/core';
+import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, IEocOwsContext, IEocOwsResource, IEocOwsOffering } from '@ukis/datatypes-owc-json';
+import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
+import { TGeoExtent } from '@ukis/datatypes-map-state';
+
 /**
  * OWS Context Service 
  * OGC OWS Context Geo Encoding Standard Version: 1.0
  * http://docs.opengeospatial.org/is/14-055r2/14-055r2.html
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html
+ * 
+ * This service allows you to read and write OWC-data. 
+ * We have added some custom fields to the OWC standard. 
+ *   - accepts the OWC-standard-datatypes as function inputs (so as to be as general as possible)
+ *   - returns our extended OWC-datatypes as function outputs (so as to be as information-rich as possible)
+ *   
  */
-
-import { Injectable } from '@angular/core';
-import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent } from '@ukis/datatypes-owc-json';
-import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
-import { TGeoExtent } from '@ukis/datatypes-map-state';
-
 
 @Injectable({
   providedIn: 'root'
@@ -388,9 +394,9 @@ export class OwcJsonService {
    *   - bounding box
    *   - properties
    */
-  generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent): IOwsContext {
+  generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent): IEocOwsContext {
 
-    let owc: IOwsContext = {
+    let owc: IEocOwsContext = {
       "id": id,
       "type": "FeatureCollection",
       "properties": null,
@@ -402,12 +408,12 @@ export class OwcJsonService {
     }
 
     for (let baselayer of baselayers) {
-      let resource: IOwsResource = this.generateResourceFromLayer(baselayer);
+      let resource: IEocOwsResource = this.generateResourceFromLayer(baselayer);
       owc.features.push(resource);
     }
 
     for (let overlay of overlays) {
-      let resource: IOwsResource = this.generateResourceFromLayer(overlay);
+      let resource: IEocOwsResource = this.generateResourceFromLayer(overlay);
       owc.features.push(resource);
     }
 
@@ -415,27 +421,30 @@ export class OwcJsonService {
   }
 
 
-  generateResourceFromLayer(layer: Layer): IOwsResource {
-    let resource: IOwsResource = {
+  generateResourceFromLayer(layer: Layer): IEocOwsResource {
+    let resource: IEocOwsResource = {
       "id": layer.id,
       "properties": {
         title: layer.name,
         updated: null,
-        offerings: [this.generateOfferingFromLayer(layer)]
+        offerings: [this.generateOfferingFromLayer(layer)],
+        opacity: layer.opacity,
+        attribution: layer.attribution
       },
       "type": "Feature",
       "geometry": null
     }
-
     return resource;
   }
 
-  generateOfferingFromLayer(layer: Layer): IOwsOffering {
-    let offering: IOwsOffering = {
+  generateOfferingFromLayer(layer: Layer, legendUrl?: string, iconUrl?: string): IEocOwsOffering {
+    let offering: IEocOwsOffering = {
       "code": this.getOfferingCodeFromLayer(layer),
-      "operations": this.getOperationsFromLayer(layer)
+      "operations": this.getOperationsFromLayer(layer),
+      "title": layer.name
     };
-
+    if(legendUrl) offering.legendUrl = legendUrl;
+    if(iconUrl) offering.iconUrl = iconUrl;
     return offering;
   }
 
