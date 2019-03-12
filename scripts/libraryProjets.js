@@ -11,10 +11,61 @@
 
 const replace = require("replace");
 const PATH = require('path');
+const NG = require('@angular/cli');
+
 const CWD = process.cwd();
 const PLACEHOLDER = "0.0.0-PLACEHOLDER";
 const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
 const ANGULARJSON = require(PATH.join(CWD, 'angular.json'));
+
+var getProjects = () => {
+    let projects = [];
+
+    Object.keys(ANGULARJSON.projects).forEach((project) => {
+        let _project = {
+            name: project,
+            path: PATH.join(CWD, ANGULARJSON.projects[project].root),
+            package: PATH.join(CWD, ANGULARJSON.projects[project].root, 'package.json')
+        };
+        projects.push(_project);
+    })
+    return projects;
+}
+
+var runTests = (offset = 0) => {
+    let projects = getProjects().map(item => item.name);
+    let project = projects[offset];
+    let options = {
+        cliArgs: ['test', '--watch=false', project]
+    };
+
+    if (project) {
+        console.info(`>>> run ng test ${project}`)
+        NG.default(options).then((result) => {
+            offset++
+            runTests(offset);
+        })
+    }
+}
+
+var runBuilds = (offset = 0) => {
+    let projects = getProjects().map(item => item.name);
+    let project = projects[offset];
+
+    let options = {
+        cliArgs: ['build', '--watch=false', project]
+    };
+
+    if (project) {
+        console.info(`>>> run ng build ${project}`)
+        //TODO: check if all deps build before
+        NG.default(options).then((result) => {
+            offset++
+            runTests(offset);
+        })
+    }
+}
+
 
 var setVersionsOfProjects = () => {
     let projectsPaths = getProjects().map(item => item.package);
@@ -34,20 +85,6 @@ var setVersionsOfProjects = () => {
         console.log(`check main package.json version and projects for errors!`)
         console.table(errors)
     }
-}
-
-var getProjects = () => {
-    let projects = [];
-
-    Object.keys(ANGULARJSON.projects).forEach((project) => {
-        let _project = {
-            name: project,
-            path: PATH.join(CWD, ANGULARJSON.projects[project].root),
-            package: PATH.join(CWD, ANGULARJSON.projects[project].root, 'package.json')
-        };
-        projects.push(_project);
-    })
-    return projects;
 }
 
 var listAllProjects = (silent) => {
@@ -108,6 +145,9 @@ process.argv.slice(2).forEach((arg) => {
     }
     if (arg == '-s' || arg == '--set') {
         setVersionsOfProjects();
+    }
+    if (arg == '-t' || arg == '--test') {
+        runTests();
     }
 });
 
