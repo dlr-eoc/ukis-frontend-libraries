@@ -16,14 +16,7 @@
             "project": "projects/datatypes-layers/ng-package.json"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/datatypes-layers/src/test.ts",
-            "tsConfig": "projects/datatypes-layers/tsconfig.spec.json",
-            "karmaConfig": "projects/datatypes-layers/karma.conf.js"
-          }
-        },
+        
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -51,14 +44,7 @@
             "project": "projects/datatypes-map-state/ng-package.json"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/datatypes-map-state/src/test.ts",
-            "tsConfig": "projects/datatypes-map-state/tsconfig.spec.json",
-            "karmaConfig": "projects/datatypes-map-state/karma.conf.js"
-          }
-        },
+       
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -86,14 +72,7 @@
             "project": "projects/datatypes-owc-json/ng-package.json"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/datatypes-owc-json/src/test.ts",
-            "tsConfig": "projects/datatypes-owc-json/tsconfig.spec.json",
-            "karmaConfig": "projects/datatypes-owc-json/karma.conf.js"
-          }
-        },
+       
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -121,14 +100,7 @@
             "project": "projects/datatypes-user-info/ng-package.json"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/datatypes-user-info/src/test.ts",
-            "tsConfig": "projects/datatypes-user-info/tsconfig.spec.json",
-            "karmaConfig": "projects/datatypes-user-info/karma.conf.js"
-          }
-        },
+       
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
