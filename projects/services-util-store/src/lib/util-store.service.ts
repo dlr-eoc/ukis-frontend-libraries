@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-//import md5 from 'md5';
-
-var md5 = require('md5');
+import md5 from 'md5';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +21,6 @@ export class UtilStoreService {
     }
     //sor key as md5
     key = md5(key);
-
 
     // Check for native support
     if (typeof (Storage) !== "undefined") {
