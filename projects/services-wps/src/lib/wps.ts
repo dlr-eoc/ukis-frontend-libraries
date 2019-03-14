@@ -1,6 +1,6 @@
 import { ServicesWpsService } from "./services-wps.service";
 import { Injectable } from "@angular/core";
-import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsProcessDescription, IWpsInputDescription, IWpsOutputDescription, IWpsExecuteResponse, IOwsCode, IWpsDataInputs, IWpsResponseForm, IWpsProcessDescriptionDataInputs, IWpsProcessDescriptionProcessOutputs } from '@ukis/datatypes-wps';
+import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsProcessDescription, IWpsInputDescription, IWpsOutputDescription, IWpsExecuteResponse, IOwsCode, IWpsDataInputs, IWpsResponseForm, IWpsProcessDescriptionDataInputs, IWpsProcessDescriptionProcessOutputs, IWpsInput } from '@ukis/datatypes-wps';
 import { Observable, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
 

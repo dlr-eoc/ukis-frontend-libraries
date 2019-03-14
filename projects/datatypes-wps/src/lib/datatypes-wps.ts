@@ -1,4 +1,4 @@
-export type TMimeType = "application/vnd.geo+json" |  "text/xml";
+export type TMimeType = "application/vnd.geo+json" |  "text/xml" | "application/WMS" | "image/tiff";
 
 
 /****************************************************************************
@@ -29,14 +29,10 @@ export interface IOwsAnyValue {
   TYPE_NAME: "OWS_1_1_0.AnyValue"
 }
 
-/**
- * TODO: 
- * refrence = type "xs:double" | "xs:string" | ...
- */
 export interface IOwsDomainMetadata {
   TYPE_NAME: "OWS_1_1_0.DomainMetadataType",
-  reference: string,
-  value: string
+  reference?: string,
+  value: TWpsLiteralDataType
 }
 
 /****************************************************************************
@@ -153,6 +149,14 @@ export interface IWpsInputDescription {
     complexData?: IWpsSupportedComplexDataInput,
     literalData?: IWpsLiteralInput,
     boundingBoxData?: any
+}
+
+export interface IWpsLiteralInputDescription extends IWpsInputDescription {
+  literalData: IWpsLiteralInput
+}
+
+export interface IWpsComplexInputDescription extends IWpsInputDescription {
+  complexData: IWpsSupportedComplexDataInput
 }
 
 /**
@@ -391,8 +395,9 @@ export interface IWpsExecuteResponseProcessOutputs {
 
 export interface IWpsOutputData {
   TYPE_NAME: "WPS_1_0_0.OutputDataType",
-  data: IWpsData,
-  title: IOwsLanguageString[]
+  title: IOwsLanguageString[],
+  identifier: IOwsCode,
+  data: IWpsData
 }
 
 export interface IWpsStatus {

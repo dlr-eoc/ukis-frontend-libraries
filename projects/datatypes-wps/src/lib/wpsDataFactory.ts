@@ -1,4 +1,4 @@
-import { IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsProcessBrief, IWpsProcessDescription, IWpsProcessDescriptionDataInputs, IWpsProcessDescriptionProcessOutputs, IOwsCode, IOwsLanguageString, IWpsInput, IWpsComplexData, IWpsLiteralData, TWpsLiteralDataType, IWpsData, IWpsDataInputs, IWpsResponseForm, IWpsExecuteProcessBody, IWpsOutputDescription, IWpsSupportedComplexData, TMimeType, IWpsComplexDataCombination, IWpsComplexDataCombinations, IWpsComplexDataDescription, IWpsInputDescription, IWpsLiteralInput, IWpsResponseFormDoc } from "./datatypes-wps";
+import { IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsProcessBrief, IWpsProcessDescription, IWpsProcessDescriptionDataInputs, IWpsProcessDescriptionProcessOutputs, IOwsCode, IOwsLanguageString, IWpsInput, IWpsComplexData, IWpsLiteralData, TWpsLiteralDataType, IWpsData, IWpsDataInputs, IWpsResponseForm, IWpsExecuteProcessBody, IWpsOutputDescription, IWpsSupportedComplexData, TMimeType, IWpsComplexDataCombination, IWpsComplexDataCombinations, IWpsComplexDataDescription, IWpsInputDescription, IWpsLiteralInput, IWpsResponseFormDoc, IWpsLiteralInputDescription, IWpsComplexInputDescription, IWpsSupportedComplexDataInput } from "./datatypes-wps";
 
 
 /**
@@ -15,18 +15,18 @@ export class WpsDataFactory {
      *  input.ValuesReference
         input.allowedValues
         input.anyValue
-        input.dataType
      */
-    static literalInput(defaultValue?): IWpsLiteralInput {
+    static literalInput(defaultValue?, dataType? : TWpsLiteralDataType): IWpsLiteralInput {
         let input: IWpsLiteralInput = {
             TYPE_NAME: "WPS_1_0_0.LiteralInputType"
         };
         if(defaultValue) input.defaultValue = defaultValue;
+        if(dataType) input.dataType = {TYPE_NAME: "OWS_1_1_0.DomainMetadataType", value: dataType};
         return input;
     }
 
-    static literalInputDescription(inputIdentifier: string, inputTitle: string, literalInput: IWpsLiteralInput, minOccurs: number = 1,  maxOccurs: number = 1): IWpsInputDescription {
-        let description: IWpsInputDescription = {
+    static literalInputDescription(inputIdentifier: string, inputTitle: string, literalInput: IWpsLiteralInput, minOccurs: number = 1,  maxOccurs: number = 1): IWpsLiteralInputDescription {
+        let description: IWpsLiteralInputDescription = {
             TYPE_NAME: "WPS_1_0_0.InputDescriptionType",
             identifier: this.codeFromString(inputIdentifier),
             title: this.titleFromString(inputTitle),
@@ -34,6 +34,41 @@ export class WpsDataFactory {
             maxOccurs: maxOccurs,
             literalData: literalInput
         };
+        return description;
+    }
+
+    static complexInput(mimeType: TMimeType, schema?: string, encoding?: string): IWpsSupportedComplexDataInput {
+        let defaultFormat: IWpsComplexDataDescription = {
+            TYPE_NAME: "WPS_1_0_0.ComplexDataDescriptionType",
+            mimeType: mimeType,
+            schema: schema,
+            encoding: encoding
+        };
+        let deflt: IWpsComplexDataCombination = {
+            TYPE_NAME: "WPS_1_0_0.ComplexDataCombinationType",
+            format: defaultFormat
+        };
+        let options: IWpsComplexDataCombinations = {
+            TYPE_NAME: "WPS_1_0_0.ComplexDataCombinationsType",
+            format: [defaultFormat]
+        };
+        let input: IWpsSupportedComplexDataInput = {
+            TYPE_NAME: "WPS_1_0_0.SupportedComplexDataInputType",
+            supported: options,
+            _default: deflt
+        };
+        return input;
+    }
+
+    static complexInputDescription(inputIdentifier: string, inputTitle: string, complexInput: IWpsSupportedComplexDataInput, minOccurs: number = 1,  maxOccurs: number = 1): IWpsComplexInputDescription {
+        let description: IWpsComplexInputDescription = {
+            TYPE_NAME: "WPS_1_0_0.InputDescriptionType",
+            identifier: this.codeFromString(inputIdentifier),
+            title: this.titleFromString(inputTitle),
+            minOccurs: minOccurs,
+            maxOccurs: maxOccurs,
+            complexData: complexInput
+        }
         return description;
     }
 
@@ -105,7 +140,7 @@ export class WpsDataFactory {
     }
 
 
-    static documentResponseForm(processDescriptionOutputId: string): IWpsResponseForm {
+    static documentResponseForm(processDescriptionOutputId: string, asReference: boolean, mimeType?: TMimeType, schema?: string, encoding?: string): IWpsResponseForm {
         let form: IWpsResponseFormDoc = {
             TYPE_NAME: "WPS_1_0_0.ResponseFormType",
             responseDocument: {
@@ -113,11 +148,18 @@ export class WpsDataFactory {
                 output: [{
                     TYPE_NAME: "WPS_1_0_0.DocumentOutputDefinitionType",
                     identifier: this.codeFromString(processDescriptionOutputId),
-                    asReference: false
+                    asReference: asReference, 
+                    mimeType: mimeType,
+                    schema: schema, 
+                    encoding: encoding
                 }]
             }
         };
         return form;
+    }
+
+    static getSingleInputDescription(inputId: string, description: IWpsProcessDescription): IWpsInputDescription {
+        return description.dataInputs.input.find(inpt => inpt.identifier.value == inputId);
     }
 
     /****************************************************************************
