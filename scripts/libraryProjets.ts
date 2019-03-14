@@ -1,10 +1,8 @@
+import { RecursiveTreeNodeModel } from "@clr/angular/data/tree-view/models/recursive-tree-node.model";
+import { never } from "rxjs";
 
 /**
 * Get and set Version of Library projects from frontend-libraries
-*
-* arguments
-* -l | --list 
-* -s | --set
 *
 * node scripts/projetsVersion.js -l
 */
@@ -19,6 +17,8 @@ const PLACEHOLDER = "0.0.0-PLACEHOLDER";
 const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
 const ANGULARJSON = require(PATH.join(CWD, 'angular.json'));
 
+const toposort = require('toposort');
+
 var getProjects = () => {
     let projects = [];
 
@@ -31,52 +31,38 @@ var getProjects = () => {
         projects.push(_project);
     })
     return projects;
-}
+};
 
 var dependencyGraph = () => {
-    let projects = getProjects(), nodes: Map<string, any> = new Map();
+    let projects = getProjects(), nodesmap: Map<string, any> = new Map(), edges: [string, string][] = [], nodes: string[] = [];
     projects.forEach((project) => {
         let projectPackage = require(project.package);
-        let projectName = projectPackage.name;
+        let projectName = projectPackage.name.replace(UKIS_SCOPE, '');
+        nodes.push(projectName)
         if (projectPackage.dependencies) {
-            let projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(UKIS_SCOPE) != -1);
+            let projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(UKIS_SCOPE) != -1).map(key => key.replace(UKIS_SCOPE, ''));
             if (projectDeps.length > 0) {
                 let _obj: Map<string, any> = new Map();
                 projectDeps.forEach((_dep) => {
-                    if (nodes.has(_dep)) {
-                        _obj.set(_dep, nodes.get(_dep));
+                    if (nodesmap.has(_dep)) {
+                        _obj.set(_dep, nodesmap.get(_dep));
                     } else {
                         _obj.set(_dep, null);
                     }
+                    edges.push([_dep, projectName])
                 })
-                nodes.set(projectName, _obj);
+                nodesmap.set(projectName, _obj);
             }
         } else {
-            nodes.set(projectName, null)
+            nodesmap.set(projectName, null)
         }
     });
-
-
-    let flattGraph = [], deps = [];
-    nodes.forEach((value, key) => {
-        if (value == null) {
-            flattGraph.push(key)
-        } else {
-            //TODO check if in flattGraph and order 
-            deps.push(key)
-        }
-    });
-    flattGraph.push(deps)
-    console.log(flattGraph)
-
-
-    return nodes;
-}
+    return { edges, nodes, nodesmap };
+};
 
 
 
-var runTests = (offset = 0) => {
-    let projects = getProjects().map(item => item.name);
+var runTests = (offset = 0, projects) => {
     let project = projects[offset];
     let options = {
         cliArgs: ['test', '--watch=false', project]
@@ -86,15 +72,18 @@ var runTests = (offset = 0) => {
         console.info(`>>> run ng test ${project}`)
         NG.default(options).then((result) => {
             offset++
-            runTests(offset);
+            runTests(offset, projects);
         })
     }
-}
+};
 
-var runBuild2 = (offset = 0) => {
-    let projects = getProjects().map(item => item.name), project;
-    project = projects[offset];
+var testAll = () => {
+    let flattdeps = getProjects().map(item => item.name);
+    runTests(0, flattdeps);
+};
 
+var runBuilds = (offset = 0, projects) => {
+    let project = projects[offset];
 
     let options = {
         cliArgs: ['build', '--watch=false', project]
@@ -105,26 +94,17 @@ var runBuild2 = (offset = 0) => {
         //TODO: check if all deps build before
         NG.default(options).then((result) => {
             offset++
-            runBuild2(offset);
-
+            runBuilds(offset, projects);
         })
     }
-}
-
-var buildProject = (project) => {
-    let options = {
-        cliArgs: ['build', '--watch=false', project]
-    };
-    console.info(`>>> run ng build ${project}`)
-    //TODO: check if all deps build before
-    return NG.default(options)
-}
+};
 
 
-var runBuilds = () => {
+var buildAll = () => {
     let deps = dependencyGraph();
-}
-
+    let flattdeps = toposort.array(deps.nodes, deps.edges);
+    runBuilds(0, flattdeps);
+};
 
 var setVersionsOfProjects = () => {
     let projectsPaths = getProjects().map(item => item.package);
@@ -144,7 +124,7 @@ var setVersionsOfProjects = () => {
         console.log(`check main package.json version and projects for errors!`)
         console.table(errors)
     }
-}
+};
 
 var listAllProjects = (silent = false) => {
     let projects = [], errors = [], projectsPaths = getProjects();
@@ -198,9 +178,9 @@ var listAllProjects = (silent = false) => {
     }
 
     return errors;
-}
+};
 
-process.argv.slice(2).forEach((arg) => {
+process.argv.slice(2).forEach((arg: any) => {
     if (arg == '-l' || arg == '--list') {
         listAllProjects();
     }
@@ -208,15 +188,27 @@ process.argv.slice(2).forEach((arg) => {
         setVersionsOfProjects();
     }
     if (arg == '-t' || arg == '--test') {
-        runTests();
+        testAll();
     }
-    if (arg == '-g' || arg == '--dg') {
+    if (arg == '-g' || arg == '--depGraph') {
         dependencyGraph();
     }
     if (arg == '-b' || arg == '--build') {
-        runBuilds();
+        buildAll();
     }
-});
+    if (arg == '-h' || arg == '--help') {
+        console.log(`
+Syntax:   node libraryProjets [options]
+
+Options:
+-h, --help              Print this message.
+-l, --list              List all project in a table                    
+-s, --set               Set versions of all projects
+-g, --depGraph          Show a dependency graph
+-t, --test              Run ng test for all projects
+-b, --build             Run ng build fal all projects with toposort dependencies`)
+    }
+})
 
 
 

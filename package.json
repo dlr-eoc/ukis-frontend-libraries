@@ -15,7 +15,7 @@
     "lint": "echo TODO:ng lint",
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s",
-    "libraryProjets:build": "tsc -p scripts/libraryProjets.ts -w",
+    "libraryProjets:build": "tsc -p scripts/tsconfig.script.json -w",
     "list-projects": "node scripts/libraryProjets.js -l"
   },
   "private": true,
@@ -76,6 +76,7 @@
     "protractor": "~5.4.0",
     "replace": "^1.1.0",
     "terser": "^3.14.1",
+    "toposort": "^2.0.2",
     "ts-node": "~7.0.0",
     "tsickle": ">=0.29.0",
     "tslib": "^1.9.0",
