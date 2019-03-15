@@ -23,7 +23,9 @@ const depcheck = require('depcheck');
 interface Iprojects {
     name: string,
     path: string,
-    package: string
+    package: string,
+    testable: boolean
+    buildable: boolean
 }
 
 interface Idep {
@@ -32,21 +34,24 @@ interface Idep {
     project: string
 }
 
-var getProjects = () => {
+function getProjects() {
     let projects: Iprojects[] = [];
 
     Object.keys(ANGULARJSON.projects).forEach((project) => {
+        let __project = ANGULARJSON.projects[project];
         let _project = {
             name: project,
-            path: PATH.join(CWD, ANGULARJSON.projects[project].root),
-            package: PATH.join(CWD, ANGULARJSON.projects[project].root, 'package.json')
+            path: PATH.join(CWD, __project.root),
+            package: PATH.join(CWD, __project.root, 'package.json'),
+            testable: (__project.architect && __project.architect.test) ? true : false,
+            buildable: (__project.architect && __project.architect.build) ? true : false,
         };
         projects.push(_project);
     })
     return projects;
 };
 
-var dependencyGraph = () => {
+function dependencyGraph() {
     let projects = getProjects(), nodesmap: Map<string, any> = new Map(), edges: [string, string][] = [], nodes: string[] = [];
     projects.forEach((project) => {
         let projectPackage = require(project.package);
@@ -72,6 +77,10 @@ var dependencyGraph = () => {
     });
     return { edges, nodes, nodesmap };
 };
+
+function runDependencyGraph() {
+    console.log(dependencyGraph().nodesmap);
+}
 
 function checkDeps() {
     console.log(`>>> run check dependencies for projects`)
@@ -180,11 +189,11 @@ function runTests(offset = 0, projects) {
 };
 
 function testAll() {
-    let flattdeps = getProjects().map(item => item.name);
+    let flattdeps = getProjects().filter(item => item.testable).map(item => item.name);
     runTests(0, flattdeps);
 };
 
-var runBuilds = (offset = 0, projects) => {
+function runBuilds(offset = 0, projects) {
     let project = projects[offset];
 
     let options = {
@@ -202,7 +211,7 @@ var runBuilds = (offset = 0, projects) => {
 };
 
 
-var buildAll = () => {
+function buildAll() {
     checkDeps().then((result) => {
         /** build ony if there are no missing deps */
         if (result) {
@@ -215,7 +224,7 @@ var buildAll = () => {
     })
 };
 
-var setVersionsOfProjects = () => {
+function setVersionsOfProjects() {
     let projectsPaths = getProjects().map(item => item.package);
     let errors = listAllProjects(true);
     if (errors.length < 1 && MAINPACKAGE.version) {
@@ -235,7 +244,7 @@ var setVersionsOfProjects = () => {
     }
 };
 
-var listAllProjects = (silent = false) => {
+function listAllProjects(silent = false) {
     let projects: { name: string, version: string, error: boolean, dependencies: string }[] = [],
         errors: { project: string, error: string }[] = [],
         projectsPaths = getProjects();
@@ -312,7 +321,7 @@ Options:
         setVersionsOfProjects();
     }
     if (arg == '-g' || arg == '--graph') {
-        dependencyGraph();
+        runDependencyGraph();
     }
     if (arg == '-c' || arg == '--check') {
         runCheckDeps();
