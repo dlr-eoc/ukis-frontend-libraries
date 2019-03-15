@@ -4,6 +4,9 @@
   "main": "src/public_api",
   "peerDependencies": {
     "@angular/common": "^7.1.0",
-    "@angular/core": "^7.1.0"
+    "@angular/core": "^7.1.0",
+    "@angular/forms": "^7.1.0",
+    "@clr/angular": "^0.13.7",
+    "rxjs": "^6.0.0"
   }
 }

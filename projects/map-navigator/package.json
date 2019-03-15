@@ -4,7 +4,8 @@
   "main": "src/public_api",
   "peerDependencies": {
     "@angular/common": "^7.1.0",
-    "@angular/core": "^7.1.0"
+    "@angular/core": "^7.1.0",
+    "@angular/forms": "^7.1.0"
   },
   "dependencies": {
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
