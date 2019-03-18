@@ -137,19 +137,19 @@
         "dist/dataset-explorer/*",
         "projects/dataset-explorer/*"
       ],
-      "@ukisuser-info": [
+      "@ukis/user-info": [
         "dist/user-info",
         "projects/user-info"
       ],
-      "@ukisuser-info/*": [
+      "@ukis/user-info/*": [
         "dist/user-info/*",
         "projects/user-info/*"
       ],
-      "owc-control": [
+      "@ukis/owc-control": [
         "dist/owc-control",
         "projects/owc-control"
       ],
-      "owc-control/*": [
+      "@ukis/owc-control/*": [
         "dist/owc-control/*",
         "projects/owc-control/*"
       ]
