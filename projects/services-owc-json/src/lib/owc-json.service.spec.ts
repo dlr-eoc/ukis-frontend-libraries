@@ -2,15 +2,16 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { OwcJsonService } from './owc-json.service';
 import { IOwsContext, IOwsResource, IOwsOffering } from '@ukis/datatypes-owc-json';
-import { barebonesContext, basicContext } from '../../assets/exampleContext';
+import { barebonesContext, basicContext, exampleContext } from '../../assets/exampleContext';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { optimizeGroupPlayer } from '@angular/animations/browser/src/render/shared';
 
+import { coastalXTestContext } from '../../assets/coastalx.test.context';
 
 
 
 describe('OwcJsonService', () => {
-  const allTestContexts = [barebonesContext, basicContext];
+  const allTestContexts = [barebonesContext, basicContext, exampleContext, coastalXTestContext];
   let injector: TestBed;
   let service: OwcJsonService;
   
@@ -71,6 +72,7 @@ describe('OwcJsonService', () => {
 
   it('#createRasterLayerFromOffering should return an IRasterLayerOptions instance', () => {
     for(const context of allTestContexts) {
+      console.log("======= context: ", context.id)
       for(const resource of service.getResources(context)) {
         for(const offering of resource.properties.offerings) {
           if(service.checkIfServiceOffering(offering)) {
@@ -78,14 +80,23 @@ describe('OwcJsonService', () => {
             const operation = offering.operations[0];
             expect(operation).toBeTruthy();
             const rlayerOptions = service.createRasterLayerFromOffering(offering, resource);
-  
             expect(rlayerOptions.name).toBe(resource.properties.title);
             expect(rlayerOptions.id as string).toBe(resource.id as string);
             expect(rlayerOptions.opacity).toBe(1); // opacity is not encoded in owc-json per default. Allways falling back to 1. 
-            expect(rlayerOptions.visible).toBe(resource.properties.active);
+            console.log("======= check visible: ", resource.properties.active);
+            // if active is not set in conext file, then it must default to true
+            expect(rlayerOptions.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active);
+
+            console.log("======= check removeable: ", rlayerOptions.removable);
             expect(rlayerOptions.removable).toBe(true); // "removable" is not encoded in owc-json; falling back to "true"
+            console.log("======= check filtertype == Overlays: ", rlayerOptions.filtertype);
             expect(rlayerOptions.filtertype).toBe("Overlays"); // all data in owc-json will - for now - be an overlay. Might be changed in the future. 
-            expect(rlayerOptions.type).toBe(offering.code.split("/").pop());
+
+            console.log("======= check serviceType: ", rlayerOptions.type);
+
+      
+            expect(rlayerOptions.type).toBe("wms");
+            console.log("======= check url: ", operation.href.substr(0, operation.href.indexOf("?")));
             expect(rlayerOptions.url).toBe(operation.href.substr(0, operation.href.indexOf("?")));
   
             // @TODO: checke hier auch noch die rlayerOptions.params
@@ -108,8 +119,9 @@ describe('OwcJsonService', () => {
   
             expect(vlayerOptions.name).toBe(resource.properties.title);
             expect(vlayerOptions.id as string).toBe(resource.id as string);
-            expect(vlayerOptions.opacity).toBe(1); // opacity is not encoded in owc-json per default. Allways falling back to 1. 
-            expect(vlayerOptions.visible).toBe(resource.properties.active);
+            expect(vlayerOptions.opacity).toBe(1); // opacity is not encoded in owc-json per default. Allways falling back to 1.
+            // if active is not set in conext file, then it must default to true 
+            expect(vlayerOptions.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active); 
             expect(vlayerOptions.removable).toBe(true); // "removable" is not encoded in owc-json; falling back to "true"
             expect(vlayerOptions.filtertype).toBe("Overlays"); // all data in owc-json will - for now - be an overlay. Might be changed in the future. 
             expect(vlayerOptions.type).toBe("geojson"); // default
@@ -126,10 +138,12 @@ describe('OwcJsonService', () => {
   it('#getLegendUrl should return a proper url', () => {
     const service: OwcJsonService = TestBed.get(OwcJsonService);
     for(const context of allTestContexts) {
+      console.log("======= context: ", context.id)
       for(const resource of service.getResources(context)) {
         for(const offering of resource.properties.offerings) {
-
+          console.log("====== offering: ", offering);
           let legendUrl = service.getLegendUrl(offering);
+          console.log("====== legendUrl: ", legendUrl);
           let legendUrlS: string = legendUrl as string;
           expect(legendUrlS.lastIndexOf("//")).toBeTruthy();
 
