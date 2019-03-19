@@ -1,3 +1,8 @@
+### Bug Fixes
+* **@ukis/observation-explorer:** Datasetexplorer is not removing layers from service ([#UKISDEV-738
+](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-738)) ([f5a98f5c9be](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/f5a98f5c9be12df6840a7361657ad860d2d0221a))
+
+
 # [2.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.0.0) (2019-03-15)
 
 ### Breaking Changes
