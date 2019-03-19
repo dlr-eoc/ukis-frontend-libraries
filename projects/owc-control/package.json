@@ -2,8 +2,8 @@
   "name": "@ukis/owc-control",
   "version": "0.0.0-PLACEHOLDER",
   "peerDependencies": {
-    "@angular/common": "^7.0.0",
-    "@angular/core": "^7.0.0"
+    "@angular/common": "^7.2.0",
+    "@angular/core": "^7.2.0"
   },
   "dependencies": {
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",
