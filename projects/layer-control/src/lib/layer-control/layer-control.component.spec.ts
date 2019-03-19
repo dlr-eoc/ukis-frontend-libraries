@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { ObjTypePipe } from '../obj-type.pipe'
 import { LayersService } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
+import { ReversePipe } from '../array-reverse.pipe';
 
 describe('LayerControlComponent', () => {
   let component: LayerControlComponent;
@@ -19,7 +20,7 @@ describe('LayerControlComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule, FormsModule],
-      declarations: [LayerControlComponent, LayerentryGroupComponent, LayerentryComponent, ObjTypePipe],
+      declarations: [LayerControlComponent, LayerentryGroupComponent, LayerentryComponent, ObjTypePipe, ReversePipe],
       providers: [LayersService, MapStateService]
     })
       .compileComponents();
@@ -28,6 +29,7 @@ describe('LayerControlComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LayerControlComponent);
     component = fixture.componentInstance;
+    component.layersSvc = new LayersService();
     //component.layers = new LayersService();
     fixture.detectChanges();
   });

@@ -94,27 +94,29 @@ describe('LayersService', () => {
 
     let layergroup = new LayerGroup({
       name: 'baslayer Group',
-      type: 'Baselayers',
+      //type: 'baselayers',
       id: 'baslayer_group',
       layers: []
     });
 
     service.addLayerGroup(layergroup)
     expect(service.getLayerGroupsCount()).toEqual(1)
+    //clean up
+    service.removeLayerOrGroupById('baslayer_group')
   }));
 
   it('should remove a layerGroup by ID', async(() => {
     const service: LayersService = TestBed.get(LayersService);
     let layergroup = new LayerGroup({
       name: 'removable Group',
-      type: 'Overlays',
+      //type: 'Overlays',
       id: 'removable_group',
       layers: []
     });
     service.addLayerGroup(layergroup)
-    expect(service.getLayerGroupsCount()).toEqual(1)
-
-    service.removeLayerGroupByID('removable_group')
+    
+    service.removeLayerOrGroupById('removable_group')   
+    
     expect(service.getLayerGroupsCount()).toEqual(0)
   }));
 });

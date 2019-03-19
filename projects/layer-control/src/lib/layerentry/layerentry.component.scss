@@ -1,4 +1,7 @@
-/** style for drag and drop */
-.move-item {
-  cursor: move;
+.title {
+  cursor: pointer;
+}
+
+.item-title-replacement:empty {
+  display: none;
 }

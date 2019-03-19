@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CookieAlertComponent } from './cookie-alert.component';
+import { UtilStoreService } from '@ukis/services-util-store/src/public_api';
 
 describe('CookieAlertComponent', () => {
   let component: CookieAlertComponent;
@@ -8,7 +9,8 @@ describe('CookieAlertComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CookieAlertComponent ]
+      declarations: [ CookieAlertComponent ],
+      providers: [UtilStoreService]
     })
     .compileComponents();
   }));

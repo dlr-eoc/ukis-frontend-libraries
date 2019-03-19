@@ -1,17 +1,20 @@
 {
   "name": "@ukis/observation-explorer",
-  "version": "1.0.0",
+  "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "peerDependencies": {
-    "@angular/common": "^7.1.0",
-    "@angular/core": "^7.1.0",
-    "@clr/angular": "^0.13.7",
-    "@clr/icons": "^0.13.7",
-    "@clr/ui": "^0.13.6",
-    "rxjs": "^6.0.0",
-    "@ukis/services-layers": "^1.0.0",
-    "@ukis/services-map-state": "^1.0.0",
-    "@ukis/datatypes-owc-json": "^1.0.0",
-    "@ukis/datatypes-layers": "^1.0.0"
+    "@angular/common": "^7.2.0",
+    "@angular/core": "^7.2.0",
+    "@angular/platform-browser": "^7.2.0",
+    "@clr/angular": "^1.0.4",
+    "@clr/icons": "^1.0.4",
+    "@clr/ui": "^1.0.4",
+    "rxjs": "^6.3.3"
+  },
+  "dependencies": {
+    "@ukis/services-layers": "0.0.0-PLACEHOLDER",
+    "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
+    "@ukis/datatypes-owc-json": "0.0.0-PLACEHOLDER",
+    "@ukis/datatypes-layers": "0.0.0-PLACEHOLDER"
   }
 }

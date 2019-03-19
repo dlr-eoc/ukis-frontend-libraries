@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Version } from '@angular/core';
 
 
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup } from '@ukis/datatypes-layers';
@@ -17,6 +17,8 @@ import olVectorTileLayer from 'ol/layer/VectorTile';
 
 import olXYZ from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
+import olWMTS from 'ol/source/WMTS';
+import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olVectorSource from 'ol/source/Vector';
 import olTileJSON from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
@@ -28,7 +30,7 @@ import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olProjection from 'ol/proj/Projection.js';
 import { transformExtent, get, transform } from 'ol/proj.js';
-import { extend as olExtend } from 'ol/extent.js';
+import { extend as olExtend, getWidth, getTopLeft} from 'ol/extent.js';
 import { easeOut } from 'ol/easing.js'
 import olCoordinate from 'ol/coordinate'
 
@@ -204,8 +206,6 @@ export class MapOlService {
       this.removeAllLayers('overlays');
     } else {
       layers.forEach((layer) => {
-        //console.log(layer)
-
         let _layer;
         switch (layer.type) {
           case 'xyz':
@@ -213,6 +213,9 @@ export class MapOlService {
             break;
           case 'wms':
             _layer = this.create_wms_layer(<RasterLayer>layer)
+            break;
+          case "wmts":
+            _layer = this.create_wmts_layer(<RasterLayer>layer);
             break;
           case 'geojson':
             _layer = this.create_geojson_layer(<VectorLayer>layer)
@@ -279,11 +282,11 @@ export class MapOlService {
   }
 
   private create_wms_layer(l: RasterLayer) {
-    //console.log(l);
+
     let tile_options: any = {
       attributions: [l.attribution],
       wrapX: l.continuousWorld,
-      params: l.params
+      params: this.keysToUppercase(l.params)
     };
 
     if (l['crossOrigin']) {
@@ -321,6 +324,83 @@ export class MapOlService {
 
     return new olTileLayer(_layeroptions)
   }
+
+  public getProjection() {
+    return this.map.getView().getProjection();
+  }
+
+
+  private create_wmts_layer(l: RasterLayer) {
+
+    // TODO: here we create a standard-tilegrid. While this will be enough for most of our wmts, it would be more rigorous to make a getCapabilites-request to the server instead. 
+    // https://openlayers.org/en/latest/examples/wmts-layer-from-capabilities.html?q=wmts 
+
+    let projection = this.getProjection();
+    let matrixSet = projection.getCode();
+    let projectionExtent = projection.getExtent();
+    let UnitsPerPixLargestTile = getWidth(projectionExtent) / 256;
+    let resolutions = new Array(14);
+    let matrixIds = new Array(14);
+    for (let z = 0; z < 14; ++z) {
+      resolutions[z] = UnitsPerPixLargestTile / Math.pow(2, z);
+      matrixIds[z] = matrixSet + ":" + z;  
+    }
+
+    let tileGrid = new olWMTSTileGrid({
+      origin: getTopLeft(projectionExtent),
+      resolutions: resolutions,
+      matrixIds: matrixIds
+    });
+
+    let wmts_options: any = {
+      url: l.url,
+      layer: l.id,
+      matrixSet: matrixSet,
+      tileGrid: tileGrid,
+      projection: projection,
+      version: l.params.version || "1.0.0",
+      format:l.params.format || 'image/png',
+      attributions: [l.attribution],
+      wrapX: l.continuousWorld,
+    };
+
+    if (l['crossOrigin']) {
+      wmts_options.crossOrigin = l['crossOrigin'];
+    }
+
+    let _source = new olWMTS(wmts_options);
+
+
+    if (l.subdomains) {
+      let _urls = l.subdomains.map((item) => { return l.url.replace('{s}', `${item}`) });
+      _source.setUrls(_urls)
+
+    } else {
+      _source.setUrl(l.url)
+    }
+
+    let _layeroptions: any = {
+      type: 'wmts',
+      name: l.name,
+      id: l.id,
+      visible: l.visible,
+      legendImg: l.legendImg,
+      opacity: l.opacity || 1,
+      zIndex: l.zIndex || 1,
+      source: _source
+    };
+
+    if (l.popup) {
+      _layeroptions.popup = l.popup;
+    }
+
+    if (l.bbox) {
+      _layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+    }
+
+    return new olTileLayer(_layeroptions);
+  }
+
 
   private create_geojson_layer(l: VectorLayer) {
     let _source;
@@ -847,5 +927,13 @@ export class MapOlService {
     } else {
       //console.log('projection code is undefined');
     }
+  }
+
+  private keysToUppercase(obj: Object) {
+    let newObj = {};
+    for(let key in obj) {
+      newObj[key.toUpperCase()] = obj[key];
+    }
+    return newObj;
   }
 }
