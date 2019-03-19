@@ -191,14 +191,14 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   selectionChanged(sel) {
 
     //console.log('-----------change')
-    console.log("datasets selected after selectionChanged: ", this.datasetSelected)
+    console.log("datasets selected after selectionChanged: ", this.datasetSelected, this.datasetSelectedCache)
     let newIds = [];
 
     //console.log('newIds', newIds)
     //console.log('oldIds', this.oldIds)
 
     sel.forEach(s => {
-     
+
         newIds.push(s.id)
         this.addDataset(s);
     
@@ -208,7 +208,12 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     //remove old layers
     this.oldIds.forEach(id => {
       if (newIds.indexOf(id) == -1) {
-        //this.layersSvc.removeLayerOrGroupById(id);
+        //console.log('this.oldIds', this.oldIds)
+        /**
+         * Workaround to prevent removal of datasets in layer list due to clarity issue 2342: is fixed now???
+         * http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/874bd84dadbde8afffa5ca79e2482eb092b24481#projects/dataset-explorer/src/lib/dataset-explorer.component.ts
+         */
+        this.layersSvc.removeLayerOrGroupById(id);
       }
     });
 
@@ -217,7 +222,8 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
     if (newIds.length == 0) {
       this.oldIds.forEach(id => {
-        //this.layersSvc.removeLayerOrGroupById(id);
+        //console.log('this.oldIds',this.oldIds)
+        this.layersSvc.removeLayerOrGroupById(id);
       })
     }
 
