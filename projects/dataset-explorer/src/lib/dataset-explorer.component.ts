@@ -237,9 +237,12 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
     this.layersSvc.addLayer(layer, 'Overlays');
 
-    //zoomTo added dataset
+    //zoomTo added dataset    
     if (this.mapStateSvc && layer.bbox && layer.bbox.length >= 4) {
       this.mapStateSvc.setExtent(layer.bbox);
+    } else {
+      console.info("MapStateService: " + this.mapStateSvc + " && layer.bbox:" + layer.bbox + " && (layer.bbox.length >= 4):" + (layer.bbox.length >= 4) 
+                   + ": zoom to layer cannot be conducted due to missing input" );
     }
   }
   removeDataset(dataset) {
