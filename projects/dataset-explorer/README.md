@@ -1,72 +1,107 @@
-# ObservationExplorer
+# Dataset Explorer
 
 This module allows to visualize list of observations/layers in tabular form. User can select observations/layers and add the on the map.
+Main use case is the Coastal Explorer.
 
 ## Getting started
 
-to integrate the Module in the [UI-Project](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/ui-core/browse) add this dependencies in the package.json
+to integrate the Module in the [UI-Project](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/project-frontend) add this dependencies in the package.json
 
 ```
-"@ukis/services": "git+http://git.ukis.eoc.dlr.de/scm/mofro/services.git",
-"@ukis/datatypes": "git+http://git.ukis.eoc.dlr.de/scm/mofro/datatypes.git",
+"@ukis/dataset-explorer": "2.0.0",
 ```
 
-and Import this in the app Module (ukis.module.ts)
+and Import this in the app Module (app.module.ts)
 ```
-import { LayersServiceModule } from '@ukis/services/src/app/layers/layers.module';
-import { MapstateServiceModule } from '@ukis/services/src/app/mapstate/mapstate.module';
+
+import { DatasetExplorerModule } from '@ukis/dataset-explorer';
 
 
 imports: [
-    MapstateServiceModule.forRoot(),
-    LayersServiceModule.forRoot(),
+     DatasetExplorerModule,
     ...
   ],
 ```
 
-In the route-map (folder route-map with route-map.component.html, route-map.component.ts, route-map.component.scss) or in any other component where ObservationExplorer must be integrated, it is necessary to make following import:
+In the route-map (folder route-map with route-map.component.html, route-map.component.ts, route-map.component.scss) or in any other component where DatasetExplorer must be integrated, it is necessary to make following import:
 
 ```
-import { RestService } from "@ukis/services/src/app/rest/rest.service";
+import { DataGridDescriptor, DatasetExplorerService } from '@ukis/dataset-explorer';
 ```
 then in constructor of component add this:
 ```
     constructor(
     ...
-    private obsRestSvc: RestService,
+    @Inject(DatasetExplorerService) public datasetSvc: DatasetExplorerService,
     ...
     ){
-     obsRestSvc.init("url.com/rest");
+     
     }
 
 ```
 
-Imported "RestService" populates two methods that are used in ObservationExplorer:
-
-1) getData() - which returns Observable of IOwsContext (geojson_ows)
-2) getDataFromUrl(url:string) - which used to get data from given url (e.g. for fetching geojson from wfs)
-
-
-Then, in [route-map].component.html, add 
+The Dataset Explorer grid can be configured depending on th DataGridDescriptor and also filter poperties:
 ```
-<ukis-observationexplorer [obsRestSvc]="obsRestSvc"></ukis-observationexplorer>
+  // class variables
+  tableProps: DataGridDescriptor;
+  filterProps: any[];
+
+  /**
+   * configure the table for dataset explorer
+   */
+  addObservations() {
+    this.tableProps = {
+      rowclass: "properties.customAttributes.type", rowdetail: "properties.customAttributes.description",
+      columns: [{ title: "Type", prop: "properties.customAttributes.type", type: "image", hidden: true },
+      { title: "Title", prop: "properties.title", bind: true, type: "test" },
+      {
+        title: "Download", prop: { href: "properties.download.href", title: "properties.title", status: "properties.download.status" },
+        bind: true, type: "download", hidden: window.innerWidth < 500
+      }]
+    };
+    this.filterProps = [{ title: "Themes", prop: "themes" }, { title: "Datatypes", prop: "dataTypes" }];
+
+    // call the owc service;
+    this.datasetSvc.getObservations("http://129.247.184.155/rest/owc").subscribe(
+      data => { this.testOwsContext = data; }
+    );
+  }
 ```
 
-here is an example how to integrate it in modal form:
+The injected "DatasetExplorerService" retrieves a OWC with the fucntion getObservations() which returns an Observable of IOwsContext.
 
+
+Then, in [route-map].component.html, add the <ukis-dataset-explorer> with inputs of LayerService, IOwsContext, DataGridDescriptor
 ```
-<clr-modal *ngIf="user.loggedIn" [(clrModalOpen)]="obsListOpen" [clrModalStaticBackdrop]="false">
-  <h3 class="modal-title">Observation explorer</h3>
-  <div class="modal-body">
-    <ukis-observationexplorer [obsRestSvc]="obsRestSvc"></ukis-observationexplorer>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="obsListOpen = false">Ok</button>
-  </div>
-</clr-modal>
+<ukis-dataset-explorer [layers-svc]="layerSvc" [ows-context]="testOwsContext" [table-props]="tableProps" [filter-props]="filterProps"></ukis-dataset-explorer>
 ```
 
-ObservationExplorer will build the table automatically, based on attributes in the observations[0].properties.customAttributes section
+Here is an example how to integrate it in modal form:
+
+```
+<clr-modal *ngIf="testOwsContext" [(clrModalOpen)]="modalOpen" [clrModalSize]="'xl'" [clrModalStaticBackdrop]="false">
+
+            <h3 class="modal-title">Dataset Explorer</h3>
+            <div class="modal-body">
+                <ukis-dataset-explorer [layers-svc]="layerSvc" [ows-context]="testOwsContext" [table-props]="tableProps" [filter-props]="filterProps"></ukis-dataset-explorer>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="modalOpen = false">Ok</button>
+            </div>
+
+        </clr-modal>
+```
+
+Dataset Explorer will build the table automatically, based on the DataGridDescriptor.
+
+## Customisation
+Grid Layout: 
+To customize the grid, you need to adapt the tableProps in your route-map.component.ts in the project-frontend branch. 
+Filtering:
+Furthermore, filter can be adapted by modifying the filterProps array. Have a look into assets/coastalx.test.context.ts for an example OWC that shows the structure of a thesaurus mapping to customAttributes.categoryIds in the layer offerings. The OWC Properties are extended by themes and dataTypes, which define the keywords for the filter mechanism in the Dataset Explorer. 
+Icons:
+Currently, there is an image icon array defined in dataset-explorer.component.ts. This array holds relative paths to icons placed in the project-frontend path, so the icons need to be located in /assets/icons in the project specific angular app, and not within the dataset explorer library. Issue with packagr: https://github.com/ng-packagr/ng-packagr/issues/1092
+
 
 
 ## Testing 
