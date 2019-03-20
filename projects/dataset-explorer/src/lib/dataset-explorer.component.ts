@@ -151,7 +151,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
       d.properties.customAttributes.categoryIds.forEach((t) => count[t] = count[t] ? count[t] + 1 : 1);
     });
 
-    console.log(count);
+    //console.log(count);
     // add the count as a property to each of the current active filterterms 
     this.filtersFiltered.forEach((fd) => {
       fd.children.forEach((c) => {
@@ -199,9 +199,9 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
     sel.forEach(s => {
 
-        newIds.push(s.id)
-        this.addDataset(s);
-    
+      newIds.push(s.id)
+      this.addDataset(s);
+
     })
 
 
@@ -248,16 +248,15 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     this.layersSvc.removeLayer(dataset, 'Overlays');
   }
 
-  /*
-   customFilter(active: boolean) {
-     if (this.bboxfilter) {
-       if (active) {
-         this.datasetsFiltered = this.datasets.filter(this.bboxfilter)
-       } else {
-         this.datasetsFiltered = this.datasets;
-       }
-     }
-   }*/
+  customFilter(active: boolean) {
+    if (this.bboxfilter) {
+      if (active) {
+        this.datasetsFiltered = this.datasets.filter(this.bboxfilter)
+      } else {
+        this.datasetsFiltered = this.datasets;
+      }
+    }
+  }
 
   pick(o: any, s: string) {
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
