@@ -1,15 +1,7 @@
-<!--<div *ngIf="bboxfilter" class="form-group" (click)="filterOnBbox =!filterOnBbox; customFilter(filterOnBbox);">
-  <button type="button" class="btn btn-icon btn-sm">
-    <clr-icon shape="filter" [ngClass]="{'is-solid': filterOnBbox }"></clr-icon>
-  </button>
-  <label> Filter on Map Extent</label>
-</div>-->
-
-
 <clr-alert [clrAlertType]="'warning'" class="alert-sm">
   <clr-alert-item>
     <span class="alert-text">
-      <strong>map-extend</strong> and <strong>time-range</strong> are only a mock-up and not implemented yet...
+      <strong>time-range</strong> are only a mock-up and not implemented yet...
     </span>
   </clr-alert-item>
 </clr-alert>
@@ -17,9 +9,9 @@
 <div id="filters" class="clr-row">
   <h4 style="margin: 0.25rem 0.6rem;">Filters:</h4>
 
-  <span class="label clickable lasting" [ngClass]="{'active':filterMapExtend}" (click)="filterMapExtend=true">
+  <span class="label clickable lasting" [ngClass]="{'active':filterMapExtend}" (click)="filterMapExtend=true; customFilter(filterMapExtend);">
     map-extend
-    <span *ngIf="filterMapExtend" class="badge" (click)="filterMapExtend=false; $event.stopPropagation();">x</span>
+    <span *ngIf="bboxfilter && filterMapExtend" class="badge" (click)="filterMapExtend=false; customFilter(filterMapExtend); $event.stopPropagation();">x</span>
   </span>
   <span class="label clickable lasting" [ngClass]="{'active':filterTimeRange}" (click)="filterTimeRange=true">
     time-range
@@ -42,7 +34,8 @@
     <h4>{{filter.title}}<span *ngIf="filter.selected"> - {{filter.selected.name}}</span></h4>
 
     <div class="clr-row">
-      <span *ngFor="let n of filter.children" class="label" [ngClass]="{clickable:n.count,disabled:!n.count}" (click)="n.count?filterAdd(n,i):null">
+      <span *ngFor="let n of filter.children" class="label" [ngClass]="{clickable:n.count,disabled:!n.count}"
+        (click)="n.count?filterAdd(n,i):null">
         {{n.name}}
         <span *ngIf="n.count" class="badge">{{n.count}}</span>
       </span>
@@ -54,7 +47,8 @@
 
 
 
-<clr-datagrid [(clrDgSelected)]="datasetSelected" (clrDgSelectedChange)="selectionChanged($event)" class="datagrid datagrid-compact">
+<clr-datagrid [(clrDgSelected)]="datasetSelected" (clrDgSelectedChange)="selectionChanged($event)"
+  class="datagrid datagrid-compact">
   <clr-dg-placeholder>We couldn't find any datasets!</clr-dg-placeholder>
 
   <clr-dg-column *ngFor="let col of columns" [clrDgField]="col.bind?col.prop:undefined">
@@ -70,8 +64,8 @@
       <img class="image" *ngSwitchCase="'image'" [src]="imagesForDatatypes[pick(d, col.prop)]">
 
       <div class="download" *ngSwitchCase="'download'">
-        <a *ngIf="pick(d, col.prop.href) || pick(d, col.prop.status)" [attr.href]="pick(d, col.prop.href)" [attr.title]="pick(d, col.prop.title)"
-          target="_blank" download>
+        <a *ngIf="pick(d, col.prop.href) || pick(d, col.prop.status)" [attr.href]="pick(d, col.prop.href)"
+          [attr.title]="pick(d, col.prop.title)" target="_blank" download>
           <clr-icon shape="download" [ngClass]="pick(d, col.prop.status)?'has-alert':false"></clr-icon>
         </a>
       </div>
