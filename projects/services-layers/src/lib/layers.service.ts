@@ -406,8 +406,11 @@ export class LayersService {
   /**
    * filter Overlays from layergroups and remove them;
    */
-  public removeOverlays(): Observable<Layer[]> {
+  public removeOverlays(filter?:(value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
     let overlays = this.filterOverlays();
+    if(filter){
+      overlays = overlays.filter(filter)
+    }
     overlays.forEach((ol) => {
       this.removeLayerOrGroupById(ol.id)
     })
