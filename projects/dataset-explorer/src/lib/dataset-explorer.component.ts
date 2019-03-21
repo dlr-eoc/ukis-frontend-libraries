@@ -78,12 +78,12 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.imagesForDatatypes = {
-      "raster": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/raster.png",
-      "point": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/point.png",
-      "line": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/line.png",
-      "polygon": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/polygon.png",
-      "literature": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/literature.png",
-      "statistics": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/statistics.png"
+      "raster": "/assets/icons/raster.png",
+      "point": "/assets/icons/point.png",
+      "line": "/assets/icons/line.png",
+      "polygon": "/assets/icons/polygon.png",
+      "literature": "/assets/icons/literature.png",
+      "statistics": "/assets/icons/statistics.png"
     }
 
     this.subscribeToLayerSvc();
@@ -240,9 +240,12 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
     this.layersSvc.addLayer(layer, 'Overlays');
 
-    //zoomTo added dataset
+    //zoomTo added dataset    
     if (this.mapStateSvc && layer.bbox && layer.bbox.length >= 4) {
       this.mapStateSvc.setExtent(layer.bbox);
+    } else {
+      console.info("MapStateService: " + this.mapStateSvc + " && layer.bbox:" + layer.bbox + " && (layer.bbox.length >= 4):" + (layer.bbox.length >= 4) 
+                   + ": zoom to layer cannot be conducted due to missing input" );
     }
   }
   removeDataset(dataset) {
