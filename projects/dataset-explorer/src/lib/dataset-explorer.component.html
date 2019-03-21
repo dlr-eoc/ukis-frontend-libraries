@@ -1,17 +1,11 @@
-<clr-alert [clrAlertType]="'warning'" class="alert-sm">
-  <clr-alert-item>
-    <span class="alert-text">
-      <strong>time-range</strong> are only a mock-up and not implemented yet...
-    </span>
-  </clr-alert-item>
-</clr-alert>
-
 <div id="filters" class="clr-row">
   <h4 style="margin: 0.25rem 0.6rem;">Filters:</h4>
 
-  <span class="label clickable lasting" [ngClass]="{'active':filterMapExtend}" (click)="filterMapExtend=true; customFilter(filterMapExtend);">
+  <span class="label clickable lasting" [ngClass]="{'active':filterMapExtend}"
+    (click)="filterMapExtend=true; customFilter(filterMapExtend);">
     map-extend
-    <span *ngIf="bboxfilter && filterMapExtend" class="badge" (click)="filterMapExtend=false; customFilter(filterMapExtend); $event.stopPropagation();">x</span>
+    <span *ngIf="bboxfilter && filterMapExtend" class="badge"
+      (click)="filterMapExtend=false; customFilter(filterMapExtend); $event.stopPropagation();">x</span>
   </span>
   <span class="label clickable lasting" [ngClass]="{'active':filterTimeRange}" (click)="filterTimeRange=true">
     time-range
@@ -47,8 +41,7 @@
 
 
 
-<clr-datagrid [(clrDgSelected)]="datasetSelected" (clrDgSelectedChange)="selectionChanged($event)"
-  class="datagrid datagrid-compact">
+<clr-datagrid [(clrDgSelected)]="datasetSelected" (clrDgSelectedChange)="selectionChanged($event)" class="datagrid-compact">
   <clr-dg-placeholder>We couldn't find any datasets!</clr-dg-placeholder>
 
   <clr-dg-column *ngFor="let col of columns" [clrDgField]="col.bind?col.prop:undefined">

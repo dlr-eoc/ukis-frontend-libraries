@@ -32,7 +32,10 @@ const clone = function (o) {
 @Component({
   selector: 'ukis-dataset-explorer',
   templateUrl: './dataset-explorer.component.html',
-  styleUrls: ["./dataset-explorer.scss"]
+  styleUrls: ["./dataset-explorer.scss"],
+  host: {
+    "[class.dataset-explorer]": "true"
+  }
 })
 export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   @Input('layers-svc') layersSvc: LayersService;
