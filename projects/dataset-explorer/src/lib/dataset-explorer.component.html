@@ -52,7 +52,7 @@
 
   <clr-dg-row *clrDgItems="let d of datasetsFiltered" [clrDgItem]="d" [ngClass]="pick(d, tableProps.rowclass)">
     <clr-dg-cell *ngFor="let col of columns" [ngSwitch]="col.type">
-      <a class="link" *ngSwitchCase="'link'" [attr.href]="pick(d, col.prop)">{{pick(d,
+      <a class="link" *ngSwitchCase="'link'" [attr.href]="pick(d, col.prop)"  data-type="{{col.type}}">{{pick(d,
         col.prop)}}</a>
       <img class="image" *ngSwitchCase="'image'" [src]="imagesForDatatypes[pick(d, col.prop)]">
 

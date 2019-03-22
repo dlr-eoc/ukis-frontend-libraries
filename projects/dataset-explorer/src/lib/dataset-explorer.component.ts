@@ -45,6 +45,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   @Input('bbox-filter') bboxfilter?: (value: IOwsResource, index: number, array: IOwsResource[]) => any;
   @Input('table-props') tableProps?: { rowdetail: string, rowclass: string, columns: ColumnDescriptor[] };
   @Input('filter-props') filterProps?: any[];
+  @Input('is-active') isactive?: boolean;
 
   @ViewChild('treeroot') treeroot;
 
@@ -53,10 +54,10 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   datasets: IOwsResource[];
   datasetsFiltered: IOwsResource[] = [];
   datasetSelected: IOwsResource[] = [];
-  datasetSelectedCache: IOwsResource[] = [];
+  selectedMap: Map<string, IOwsResource> = new Map();
 
   mapLayers: Layer[] = [];
-  layerIDs: string[] = [];
+  //layerIDs: string[] = [];
 
   oldIds: string[] = [];
 
@@ -104,15 +105,39 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
       this.applyFilters();
     }
+
+    if (changes.isactive) {
+      //console.log('modal open', changes.isactive, this.mapLayers)
+      this.getDatasetsForLayers(this.mapLayers)
+      //console.log(this.datasetSelected)
+    }
   }
+
+  /*
+  * not used due to clarity issue 2342
+  saveSelections() {
+    if (this.datasetSelected.length != 0) {
+      this.datasetSelected.forEach((d) => {
+        let key = d.id.toString();
+        if (!this.selectedMap.has(key)) {
+          this.selectedMap.set(key, d);
+        }
+      })
+    }
+  }
+
+  restoreSelections() {
+    if (this.selectedMap.size > 0) {
+      this.datasetSelected = Array.from(this.selectedMap.values())
+    }
+  }
+  */
 
   filterAdd(node, i) {
     /**
      * save selected Array - clarity issue 2342 Datagrid clears the selection on filter or source change
      */
-    if (this.datasetSelected.length != 0) {
-      this.datasetSelectedCache = clone(this.datasetSelected)
-    }
+    //this.saveSelections(); * not used due to clarity issue 2342
 
     this.filtersFiltered[i].selected = node;
     this.filtersFiltered[i].children = node.children;
@@ -127,9 +152,8 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * restore selected Array - clarity issue 2342 Datagrid clears the selection on filter or source change
      */
-    if (this.datasetSelectedCache.length > 0) {
-      this.datasetSelected = this.datasetSelectedCache;
-    }
+    //this.restoreSelections() * not used due to clarity issue 2342
+    this.getDatasetsForLayers(this.mapLayers)
   }
 
   applyFilters() {
@@ -164,16 +188,34 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  getLayerFromDatasets(layer: Layer) {
+    return this.datasets.filter(d => d.id == layer.id)[0];
+  }
+
+  getDatasetsForLayers(layers: Layer[]) {
+    layers.forEach((l) => {
+      let d = this.getLayerFromDatasets(l);
+      if (d && this.datasetSelected.indexOf(d) == -1) {
+        this.datasetSelected.push(d)
+      }
+    })
+  }
+
   //TODO fix subsribe remove 
   subscribeToLayerSvc() {
     this.layersSubscription = this.layersSvc.getOverlays().subscribe(layers => {
       this.mapLayers = layers;
-      this.layerIDs = this.mapLayers.map(l => l.id + "")
+
+      //this.layerIDs = this.mapLayers.map(l => l.id + "")
+      //console.log('sub to layers', this.mapLayers)
       //console.log('oldIds', this.oldIds)
       //console.log('layerIDs', this.layerIDs)
 
       //remove old layers
       // reverse loop for remove items from Array while iterating over it
+      /*
+      * not used due to clarity issue 2342
+      *
       for (let i = this.oldIds.length - 1; i >= 0; --i) {
         let id = this.oldIds[i]
         if (this.layerIDs.indexOf(id) == -1) {
@@ -188,47 +230,51 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
           }
         }
       }
+      */
     });
   }
 
   selectionChanged(sel) {
 
     //console.log('-----------change')
-    console.log("datasets selected after selectionChanged: ", this.datasetSelected, this.datasetSelectedCache)
-    let newIds = [];
+    //console.log("datasets selected after selectionChanged: ", this.datasetSelected, this.selectedMap)
+    //let newIds = []; * not used due to clarity issue 2342
 
     //console.log('newIds', newIds)
     //console.log('oldIds', this.oldIds)
 
     sel.forEach(s => {
-
-      newIds.push(s.id)
+      //newIds.push(s.id) * not used due to clarity issue 2342
       this.addDataset(s);
-
     })
 
 
     //remove old layers
+    /*
+    * * not used due to clarity issue 2342
     this.oldIds.forEach(id => {
       if (newIds.indexOf(id) == -1) {
-        //console.log('this.oldIds', this.oldIds)
-        /**
-         * Workaround to prevent removal of datasets in layer list due to clarity issue 2342: is fixed now???
-         * http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/874bd84dadbde8afffa5ca79e2482eb092b24481#projects/dataset-explorer/src/lib/dataset-explorer.component.ts
-         */
+        console.log('this.oldIds', this.oldIds, newIds)
+        // we can not remove layers on selectionChanged due to clarity issue 2342 -> selectionChanged is triggered from datagrid if data or filter changes
+        //http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/874bd84dadbde8afffa5ca79e2482eb092b24481#projects/dataset-explorer/src/lib/dataset-explorer.component.ts
+         
         this.layersSvc.removeLayerOrGroupById(id);
       }
     });
+    */
 
     //set old to new
-    this.oldIds = newIds;
+    //this.oldIds = newIds; * not used due to clarity issue 2342
 
+    /*
+    * not used due to clarity issue 2342
     if (newIds.length == 0) {
       this.oldIds.forEach(id => {
-        //console.log('this.oldIds',this.oldIds)
+        console.log('this.oldIds',this.oldIds)
         this.layersSvc.removeLayerOrGroupById(id);
       })
     }
+    */
 
     //console.log('newIds', newIds)
     //console.log('oldIds', this.oldIds)
@@ -236,7 +282,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   addDataset(dataset) {
     let layer = this.obsSvc.addObservation(dataset);
-    //console.log(">", layer)
+    //console.log(">", layer, dataset)
 
     this.layersSvc.addLayer(layer, 'Overlays');
 
@@ -244,8 +290,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     if (this.mapStateSvc && layer.bbox && layer.bbox.length >= 4) {
       this.mapStateSvc.setExtent(layer.bbox);
     } else {
-      console.info("MapStateService: " + this.mapStateSvc + " && layer.bbox:" + layer.bbox + " && (layer.bbox.length >= 4):" + (layer.bbox.length >= 4) 
-                   + ": zoom to layer cannot be conducted due to missing input" );
+      //console.info("MapStateService: " + this.mapStateSvc + " && layer.bbox:" + layer.bbox + " && (layer.bbox.length >= 4):" + (layer.bbox.length >= 4) + ": zoom to layer cannot be conducted due to missing input");
     }
   }
   removeDataset(dataset) {
