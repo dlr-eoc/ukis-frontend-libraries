@@ -3,6 +3,12 @@ import { Injectable } from '@angular/core';
 import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, IEocOwsContext, IEocOwsResource, IEocOwsOffering } from '@ukis/datatypes-owc-json';
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
 import { TGeoExtent } from '@ukis/datatypes-map-state';
+import { ReplaceSource } from 'webpack-sources';
+
+const OmsTypes = ["wms", "wmts", "xyz", "geojson", "wfs", "custom"];
+export type TOmsType = "wms" | "wmts" | "xyz" | "geojson" | "wfs" | "custom";
+
+
 
 /**
  * OWS Context Service 
@@ -155,10 +161,10 @@ export class OwcJsonService {
 
 
   /** Offering --------------------------------------------------- */
-  getOfferingCode(offering: IOwsOffering): "wms" | "wmts" | "wfs" {
+  getOfferingCode(offering: IOwsOffering): TOmsType {
     for (let part of offering.code.split('/')) {
-      if (["wms", "wfs", "wmts"].includes(part.toLowerCase())) {
-        return part as "wms" | "wmts" | "wfs";
+      if (OmsTypes.includes(part.toLowerCase())) {
+        return part as TOmsType;
       }
     }
   }
@@ -248,10 +254,13 @@ export class OwcJsonService {
 
   createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): RasterLayer {
     let offeringCode = this.getOfferingCode(offering);
-
+console.log("-----------offering----------------", offering)
+console.log("-----------resource---------------", resource)
+for(let key in resource.properties.offerings){
+  console.log(key, resource.properties.offerings[key])
+}
     let customParams;
-    switch (offeringCode as "wms" | "wmts" | "xyz" | "geojson" | "custom") {
-      case "xyz":
+    switch (offeringCode) {
       case "wms":
       case "geojson":
       case "custom":
@@ -260,13 +269,16 @@ export class OwcJsonService {
       case "wmts":
         customParams = this.getWmtsSpecifiParamsFromOffering(offering, resource);
         break;
+      case "xyz":
+        // xyz and wts are simple, pure rest services with no "operations" . 
+        break;
       default:
-        throw new Error("A service of type ${offeringCode} cannot be converted to a RasterLayer object.");
+        throw new Error(`A service of type ${offeringCode} cannot be converted to a RasterLayer object.`);
     }
 
     let layerOptions: IRasterLayerOptions = {
       id: resource.id as string,
-      type: offeringCode as "wms" | "wmts" | "xyz" | "geojson" | "custom",
+      type: offeringCode,
       removable: true,
       continuousWorld: false,
       opacity: this.getResourceOpacity(resource),
@@ -334,11 +346,24 @@ export class OwcJsonService {
     for (let feature of features) {
       let offerings = feature.properties.offerings;
       for (let offering of offerings) {
-        let layer;
-        if (offering.code.toLocaleLowerCase().indexOf('wmts') != -1 || offering.code.toLocaleLowerCase().indexOf('wms') != -1) {
-          layers.push(this.createRasterLayerFromOffering(offering, feature, owc))
+        let code = this.getOfferingCode(offering);
+        switch(code) {
+          case "wms":
+          case "wmts": 
+          case "xyz": 
+            layers.push(this.createRasterLayerFromOffering(offering, feature, owc));
+            break;
+          case "wfs": 
+          case "geojson": 
+            layers.push(this.createVectorLayerFromOffering(offering, feature, owc));
+            break;
+          default:
+            throw new Error(`This type of service (${code}) has not been implemented yet.`);
+
+        }
+        // @TODO: this is a very insecure check! Can we not do better?
+        if (offering.code.toLocaleLowerCase().indexOf('wmts') != -1 || offering.code.toLocaleLowerCase().indexOf('wms') != -1 || offering.code.toLocaleLowerCase().indexOf('xyz') != -1) {
         } else if (offering.code.toLocaleLowerCase().indexOf('wfs') != -1 || offering.code.toLocaleLowerCase().indexOf('geojson') != -1) {
-          layers.push(this.createVectorLayerFromOffering(offering, feature, owc))
         }
       }
     }
@@ -391,7 +416,6 @@ export class OwcJsonService {
 
   /**
    * @TODO:
-   *   - bounding box
    *   - properties
    */
   generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent): IEocOwsContext {
@@ -460,7 +484,7 @@ export class OwcJsonService {
       case "xyz":
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
       default:
-        throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
+        throw new Error(`This type of service (${layer.type}) has not been implemented yet.`);
     }
 
   }
@@ -473,9 +497,9 @@ export class OwcJsonService {
         case "wmts":
           return this.getWmtsOperationsFromLayer(layer);
         case "xyz":
-          return this.getTmsOperationsFromLayer(layer);
+          return this.getXyzOperationsFromLayer(layer);
         default:
-          throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
+          throw new Error(`This type of service (${layer.type}) has not been implemented yet.`);
       }
     }
 
@@ -486,7 +510,7 @@ export class OwcJsonService {
         case "geojson":
           return this.getGeojsonOperationsFromLayer(layer);
         default:
-          throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
+          throw new Error(`This type of service (${layer.type}) has not been implemented yet.`);
       }
     }
 
@@ -497,6 +521,21 @@ export class OwcJsonService {
     return [];
   }
 
+
+  getXyzOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
+    let restCall: IOwsOperation = {
+      "code": "REST",
+      "method": "GET",
+      "type": "text/html",
+      "href": `${layer.url}`
+    }
+
+    let operations: IOwsOperation[] = [
+      restCall
+    ];
+
+    return operations;
+  }
 
   getTmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
     // @TODO: what operations are defined on TMS? https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification
