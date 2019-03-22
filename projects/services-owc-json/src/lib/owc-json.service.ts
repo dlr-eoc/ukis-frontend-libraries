@@ -254,11 +254,6 @@ export class OwcJsonService {
 
   createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): RasterLayer {
     let offeringCode = this.getOfferingCode(offering);
-console.log("-----------offering----------------", offering)
-console.log("-----------resource---------------", resource)
-for(let key in resource.properties.offerings){
-  console.log(key, resource.properties.offerings[key])
-}
     let customParams;
     switch (offeringCode) {
       case "wms":
@@ -591,12 +586,15 @@ for(let key in resource.properties.offerings){
     let url = layer.url;
     let wmsVersion = layer.params.VERSION;
     let layerName = layer.name;
+    let layerId = layer.id;
+    let format = "image/vnd.jpeg-png";
+    if (layer.params && layer.params.FORMAT) format = layer.params.FORMAT;
 
     let getMap: IOwsOperation = {
       "code": "GetMap",
       "method": "GET",
-      "type": "image/vnd.jpeg-png",
-      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerName}&FORMAT=image/vnd.jpeg-png&TILED=true`
+      "type": format,
+      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}&TILED=true`
     };
 
     let getCapabilities: IOwsOperation = {
@@ -610,7 +608,7 @@ for(let key in resource.properties.offerings){
       "code": "GetFeatureInfo",
       "method": "GET",
       "type": "text/html",
-      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerName}&FORMAT=image/vnd.jpeg-png`
+      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}`
     }
 
     let operations: IOwsOperation[] = [
@@ -627,12 +625,15 @@ for(let key in resource.properties.offerings){
     let url = layer.url;
     let wmtsVersion = layer.params.version;
     let layerName = layer.name;
+    let layerId = layer.id;
+    let format = "image/vnd.jpeg-png";
+    if (layer.params && layer.params.FORMAT) format = layer.params.FORMAT;
 
     let getTile: IOwsOperation = {
       "code": "GetTile",
-      "href": `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=image%2Fpng&LAYER=${layerName}&VERSION=${wmtsVersion}`,
+      "href": `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=${format}&LAYER=${layerId}&VERSION=${wmtsVersion}`,
       "method": "GET",
-      "type": "image/png"
+      "type": format
     };
 
     let getCapabilities: IOwsOperation = {
