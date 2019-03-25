@@ -1,16 +1,19 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { OwcJsonService } from './owc-json.service';
-import { IOwsContext, IOwsResource, IOwsOffering } from '@ukis/datatypes-owc-json';
+import { IOwsContext,  } from '@ukis/datatypes-owc-json';
 import { barebonesContext, basicContext, exampleContext } from '../../assets/exampleContext';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { optimizeGroupPlayer } from '@angular/animations/browser/src/render/shared';
 
 import { coastalXTestContext } from '../../assets/coastalx.test.context';
+import { iterateListLike } from '@angular/core/src/change_detection/change_detection_util';
+import { osm } from '@ukis/base-layers-raster/src/public_api';
+import { LayersService } from '@ukis/services-layers';
 
 
 
-describe('OwcJsonService', () => {
+describe('OwcJsonService: reading data from owc', () => {
   const allTestContexts = [barebonesContext, basicContext, exampleContext, coastalXTestContext];
   let injector: TestBed;
   let service: OwcJsonService;
@@ -152,4 +155,38 @@ describe('OwcJsonService', () => {
     }
   });
 
+
+});
+
+describe('OwcJsonService: writing data into owc', () => {
+  const allTestContexts = [barebonesContext, basicContext, exampleContext, coastalXTestContext];
+  let injector: TestBed;
+  let service: OwcJsonService;
+  
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [],
+      providers: [OwcJsonService, LayersService]
+    });
+    injector = getTestBed();
+    service = injector.get(OwcJsonService);
+  });
+
+  afterEach(() => {
+  });
+
+  it('#getLayers should properly restore a selection of layers from owc format created with #generateOwsContextFrom', () => {
+    const service: OwcJsonService = TestBed.get(OwcJsonService);
+    const layersService: LayersService = TestBed.get(LayersService);
+    const osm_layer = new osm(<any>{
+      visible: true,
+      legendImg: null
+    });
+    layersService.addLayer(osm_layer, 'Baselayers');
+    layersService.getBaseLayers().subscribe(baselayers => {
+      const owc = service.generateOwsContextFrom("someid", baselayers, [], [-190, -90, 190, 90]);
+      const layers = service.getLayers(owc);
+      expect(layers.length).toBeTruthy();
+    })
+  });
 });
