@@ -24,6 +24,24 @@ export interface DataGridDescriptor {
   columns: ColumnDescriptor[]
 }
 
+export interface Ifilter {
+  children: Ifilter[]
+  criterionType: "Topic"
+  id: string
+  leaf: boolean
+  name: string
+  parent: null | string
+  siblings: Ifilter[]
+  count?: number
+}
+
+export interface Ifilters {
+  children: Ifilter[]
+  prop: string
+  title: string
+  selected?: Ifilter
+}
+
 const clone = function (o) {
   return JSON.parse(JSON.stringify(o))
 }
@@ -61,9 +79,10 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   oldIds: string[] = [];
 
-  filters: any[];
-  filtersFiltered: any[];
+  filters: Ifilters[];
+  filtersFiltered: Ifilters[];
   filterSelected: boolean = false;
+  activeFilters: Ifilter[][] = [];
 
   columns: ColumnDescriptor[] = [];
   layersSubscription: Subscription;
@@ -132,21 +151,35 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   */
-
-  filterAdd(node, i) {
+  filterAdd(node: Ifilter, i) {
     /**
      * save selected Array - clarity issue 2342 Datagrid clears the selection on filter or source change
      */
     //this.saveSelections(); * not used due to clarity issue 2342
 
+    //store last filters in Array to get parrent if a filter is removed
+    if (!this.activeFilters[i]) {
+      this.activeFilters[i] = [];
+    }
+    this.activeFilters[i].push(node);
     this.filtersFiltered[i].selected = node;
     this.filtersFiltered[i].children = node.children;
+
     this.applyFilters();
   }
 
   filterRemove(i) {
-    this.filtersFiltered[i].selected = null;
-    this.filtersFiltered[i].children = clone(this.filters[i].children);
+    let activeFilters = this.activeFilters[i];
+    activeFilters.pop();
+    if (activeFilters.length > 0) {
+      let parrent = activeFilters.slice(-1);
+      this.filtersFiltered[i].children = clone(parrent[0].children);
+      this.filtersFiltered[i].selected = parrent[0];
+    } else {
+      this.filtersFiltered[i].selected = null;
+      this.filtersFiltered[i].children = clone(this.filters[i].children);
+    }
+
     this.applyFilters();
 
     /**
