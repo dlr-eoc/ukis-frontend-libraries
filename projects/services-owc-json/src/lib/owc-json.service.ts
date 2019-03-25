@@ -413,12 +413,21 @@ export class OwcJsonService {
    * @TODO:
    *   - properties
    */
-  generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent): IEocOwsContext {
+  generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent, properties?): IEocOwsContext {
+
+    if(!properties) {
+      properties = {
+        lang: "",
+        links: [], 
+        title: "", 
+        updated: ""
+      };
+    }
 
     let owc: IEocOwsContext = {
       "id": id,
       "type": "FeatureCollection",
-      "properties": null,
+      "properties": properties,
       "features": []
     };
 
@@ -512,8 +521,19 @@ export class OwcJsonService {
   }
 
   getGeojsonOperationsFromLayer(layer: VectorLayer): IOwsOperation[] {
-    // A layer with layer.type == "geojson" is merely a *.geojson file; thus no operations are defined. 
-    return [];
+    // A layer with layer.type == "geojson" is merely a *.geojson file; thus no operations other than simply fetching the file are defined. 
+    let fileCall: IOwsOperation = {
+      "code": "REST",
+      "method": "GET",
+      "type": "text/html",
+      "href": `${layer.url}`
+    }
+
+    let operations: IOwsOperation[] = [
+      fileCall
+    ];
+
+    return operations;
   }
 
 
