@@ -32,7 +32,15 @@
     .badge {
       background: #0079b8;
     }
+
+    .badge.multi {
+      background: #737373;
+    }
   }
+}
+
+.label > .badge.multi {
+  margin: 0 -0.15rem 0 0.25rem;
 }
 
 #dynamicfilters {
