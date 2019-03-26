@@ -71,6 +71,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   datasets: IOwsResource[];
   datasetsFiltered: IOwsResource[] = [];
+  datasetsFilteredLength: number;
   datasetSelected: IOwsResource[] = [];
   selectedMap: Map<string, IOwsResource> = new Map();
 
@@ -128,6 +129,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.isactive) {
       //console.log('modal open', changes.isactive, this.mapLayers)
       this.getDatasetsForLayers(this.mapLayers)
+      this.applyFilters();
       //console.log(this.datasetSelected)
     }
   }
@@ -197,12 +199,19 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
       return acc;
     }, []);
 
-    if (filterterms.length) { // filter the datasets
-      this.datasetsFiltered = this.datasets.filter(d =>
+    if (this.bboxfilter && this.filterMapExtend) {
+      this.datasetsFiltered = this.datasets.filter(this.bboxfilter);
+      //console.log(this.datasetsFiltered.length)
+    } else {
+      this.datasetsFiltered = this.datasets;
+    }
+
+    if (filterterms.length) { // filter the datasets //this.datasets 
+      this.datasetsFiltered = this.datasetsFiltered.filter(d =>
         filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
       );
     } else { // if there are no filterterms reseed the datasets in the table
-      this.datasetsFiltered = this.datasets;
+      this.datasetsFiltered = this.datasetsFiltered; //this.datasets;
     }
 
     // get a count of available datasets for each term
@@ -219,6 +228,8 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
         c.count = count[c.id];
       })
     });
+
+    this.datasetsFilteredLength = this.datasetsFiltered.length;
   }
 
   getLayerFromDatasets(layer: Layer) {
@@ -332,6 +343,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     this.layersSvc.removeLayer(dataset, 'Overlays');
   }
 
+  /*
   customFilter(active: boolean) {
     if (this.bboxfilter) {
       if (active) {
@@ -341,6 +353,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
+  */
 
   pick(o: any, s: string) {
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
