@@ -14,6 +14,7 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
     opacity?: number;
     attribution?: string;
     shards?: string;
+    customAttributes?: Object;
 }
 
 export interface IEocOwsOffering extends IOwsOffering {

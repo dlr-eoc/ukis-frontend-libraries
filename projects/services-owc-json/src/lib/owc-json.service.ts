@@ -222,6 +222,11 @@ export class OwcJsonService {
     let layerUrl = this.getUrlFromUri(offering.operations[0].href);
     let params = this.getJsonFromUri(offering.operations[0].href);
     let legendUrl = this.getLegendUrl(offering);
+    let data, options;
+    if(resource.properties.customAttributes) {
+      if(resource.properties.customAttributes.data) data = resource.properties.customAttributes.data;
+      if(resource.properties.customAttributes.options) options = resource.properties.customAttributes.options;
+    }
 
     let layerOptions: IVectorLayerOptions = {
       id: resource.id as string,
@@ -234,7 +239,9 @@ export class OwcJsonService {
       continuousWorld: false,
       opacity: this.getResourceOpacity(resource),
       url: layerUrl ? layerUrl : null,
-      legendImg: legendUrl ? legendUrl : null
+      legendImg: legendUrl ? legendUrl : null,
+      data: data,
+      options: options
     };
 
 
@@ -457,12 +464,26 @@ export class OwcJsonService {
         updated: null,
         offerings: [this.generateOfferingFromLayer(layer)],
         opacity: layer.opacity,
-        attribution: layer.attribution
+        attribution: layer.attribution,
+        customAttributes: this.generateCustomAttributesForResource(layer)
       },
       "type": "Feature",
       "geometry": null
     }
     return resource;
+  }
+
+  generateCustomAttributesForResource(layer: Layer): Object {
+    let attrs = {};
+    if(layer instanceof VectorLayer) {
+      switch(layer.type) {
+        case "geojson":
+          attrs["data"] = layer.data;
+          attrs["options"] = layer.options;
+          break;
+      }
+    }
+    return attrs;
   }
 
   generateOfferingFromLayer(layer: Layer, legendUrl?: string, iconUrl?: string): IEocOwsOffering {
