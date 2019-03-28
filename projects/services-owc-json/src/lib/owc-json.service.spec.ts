@@ -238,7 +238,7 @@ describe('OwcJsonService: writing data into owc', () => {
     // enconding and deconding
     let context = service.generateOwsContextFrom("testcontext", [], [geojsonLayer], [-190, -90, 190, 90]);
     let recoveredLayers = service.getLayers(context);
-    let recoveredLayer = recoveredLayers[0];
+    let recoveredLayer = recoveredLayers[0] as VectorLayer;
 
     // testing
     expect(recoveredLayer.id).toEqual(geojsonLayer.id);
