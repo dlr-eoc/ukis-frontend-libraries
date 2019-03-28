@@ -10,7 +10,7 @@ import { coastalXTestContext } from '../../assets/coastalx.test.context';
 import { iterateListLike } from '@angular/core/src/change_detection/change_detection_util';
 import { osm } from '@ukis/base-layers-raster';
 import { LayersService } from '@ukis/services-layers';
-import { VectorLayer } from '@ukis/datatypes-layers';
+import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@ukis/datatypes-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 
 
@@ -120,19 +120,23 @@ describe('OwcJsonService: reading data from owc', () => {
 
             const operation = offering.operations[0];
             expect(operation).toBeTruthy();
-            const vlayerOptions = service.createVectorLayerFromOffering(offering, resource);
-  
-            expect(vlayerOptions.name).toBe(resource.properties.title);
-            expect(vlayerOptions.id as string).toBe(resource.id as string);
-            expect(vlayerOptions.opacity).toBe(1); // opacity is not encoded in owc-json per default. Allways falling back to 1.
-            // if active is not set in conext file, then it must default to true 
-            expect(vlayerOptions.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active); 
-            expect(vlayerOptions.removable).toBe(true); // "removable" is not encoded in owc-json; falling back to "true"
-            expect(vlayerOptions.filtertype).toBe("Overlays"); // all data in owc-json will - for now - be an overlay. Might be changed in the future. 
-            expect(vlayerOptions.type).toBe("geojson"); // default
-            expect(vlayerOptions.url).toBe(operation.href.substr(0, operation.href.indexOf("?")));
-  
-            // @TODO: checke hier auch noch die vlayerOptions.params
+            let layertype = service.getLayertypeFromOfferingCode(offering);
+            if (layertype == WfsLayertype || layertype == GeojsonLayertype) {
+
+              const vlayerOptions = service.createVectorLayerFromOffering(offering, resource);
+    
+              expect(vlayerOptions.name).toBe(resource.properties.title);
+              expect(vlayerOptions.id as string).toBe(resource.id as string);
+              expect(vlayerOptions.opacity).toBe(1); // opacity is not encoded in owc-json per default. Allways falling back to 1.
+              // if active is not set in conext file, then it must default to true 
+              expect(vlayerOptions.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active); 
+              expect(vlayerOptions.removable).toBe(true); // "removable" is not encoded in owc-json; falling back to "true"
+              expect(vlayerOptions.filtertype).toBe("Overlays"); // all data in owc-json will - for now - be an overlay. Might be changed in the future. 
+              expect(vlayerOptions.type).toBe("geojson"); // default
+              expect(vlayerOptions.url).toBe(operation.href.substr(0, operation.href.indexOf("?")));
+    
+              // @TODO: checke hier auch noch die vlayerOptions.params
+            }
           }
         }
       }
@@ -230,7 +234,7 @@ describe('OwcJsonService: writing data into owc', () => {
     let geojsonLayer = new VectorLayer({
       name: "GeojsonLayer",
       id: "GeojsonLayer",
-      type: "geojson",
+      type: GeojsonLayertype,
       data: featureCollection,
       options: options
     });
@@ -242,8 +246,8 @@ describe('OwcJsonService: writing data into owc', () => {
 
     // testing
     expect(recoveredLayer.id).toEqual(geojsonLayer.id);
-    expect(recoveredLayer.data).toEqual(geojsonLayer.data);
-    expect(recoveredLayer.options).toEqual(geojsonLayer.options);
+    expect(JSON.parse(recoveredLayer.data)).toEqual(geojsonLayer.data);
+    // expect(recoveredLayer.options).toEqual(geojsonLayer.options); // we dont encode style.
 
   });
 });

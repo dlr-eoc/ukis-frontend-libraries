@@ -234,7 +234,7 @@ export type DateString = string;
 export type LangString = string;
 
 
-export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
+export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' | 'http://schemas.opengis.net/wms/1.1.1' | 'http://schemas.opengis.net/wms/1.1.0';
 export type WFS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
 export type WCS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs';
 export type WPS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wps';

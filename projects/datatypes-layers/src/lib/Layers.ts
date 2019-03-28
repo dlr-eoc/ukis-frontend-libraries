@@ -5,23 +5,28 @@ export type popup = {
 }
 
 
-export type TWmsLayertype = "wms";
-export type TWmtsLayertype = "wmts";
-export type TXyzLayertype = "xyz";
-export type TGeojsonLayertype = "geojson";
-export type TWfsLayertype = "wfs";
-export type TCustomLayertype = "custom";
-export type TOmsVectorLayertype = TGeojsonLayertype | TWfsLayertype | TCustomLayertype;
-export function isOmsVectorLayertype(inpt: string): inpt is TOmsType {
-  return ["geojson", "wfs", "custom"].includes(inpt);
+export const WmsLayertype = "wms";
+export const WmtsLayertype = "wmts";
+export const XyzLayertype = "xyz";
+export const GeojsonLayertype = "geojson";
+export const WfsLayertype = "wfs";
+export const CustomLayertype = "custom";
+export type TVectorLayertype = "geojson" | "wfs" | "custom";
+export type TRasterLayertype = "wms" | "wmts" | "xyz" | "custom";
+export type TLayertype = TRasterLayertype | TVectorLayertype | string;
+
+
+
+export function isVectorLayertype(inpt: string): inpt is TVectorLayertype {
+  return [GeojsonLayertype, WfsLayertype, CustomLayertype].includes(inpt);
 };
-export type TOmsRasterLayertype = TWmsLayertype | TWmtsLayertype | TXyzLayertype | TCustomLayertype;
-export function isOmsRasterLayertype(inpt: string): inpt is TOmsType {
-  return ["wms", "wmts", "xyz", "custom"].includes(inpt);
+
+export function isRasterLayertype(inpt: string): inpt is TRasterLayertype {
+  return [WmsLayertype, WmtsLayertype, XyzLayertype, CustomLayertype].includes(inpt);
 };
-export type TOmsType = TWmsLayertype | TWmtsLayertype | TXyzLayertype | TGeojsonLayertype | TWfsLayertype | TCustomLayertype;
-export function isOmsType(inpt: string): inpt is TOmsType {
-  return ["wms", "wmts", "xyz", "geojson", "wfs", "custom"].includes(inpt);
+
+export function isLayertype(inpt: string): inpt is TLayertype {
+  return (isRasterLayertype(inpt) || isVectorLayertype(inpt));
 };
 
  
@@ -32,7 +37,7 @@ export interface ILayerOptions {
   name: string
   id: string
   //id: string
-  type: TOmsType
+  type: TLayertype
 
   filtertype?: 'Overlays' | 'Baselayers' | string;
   opacity?: number
@@ -58,7 +63,7 @@ export interface IRasterLayerOptions extends ILayerOptions {
   subdomains?: Array<string>;
   /** raster params like wms params -> time, layers... depends on the map-library */
   params?: any;
-  type: TOmsRasterLayertype;
+  type: TRasterLayertype;
 }
 
 export interface IVectorLayerOptions extends ILayerOptions {
@@ -69,7 +74,7 @@ export interface IVectorLayerOptions extends ILayerOptions {
   options?: any
   /** true if show popup or set Array with keys of properties to show in popup  */
   cluster?: any;
-  type: TOmsVectorLayertype;
+  type: TVectorLayertype;
 }
 
 export interface ICustomLayerOptions extends ILayerOptions {
@@ -82,7 +87,7 @@ export interface ICustomLayerOptions extends ILayerOptions {
 export class Layer implements ILayerOptions {
   name: string = '';
   id: string = '';
-  type: TOmsType;
+  type: TLayertype;
   opacity: number = 1;
   visible: boolean = true;
   removable: boolean = false;
@@ -109,7 +114,7 @@ export class Layer implements ILayerOptions {
 }
 
 export class RasterLayer extends Layer implements IRasterLayerOptions {
-  type: TOmsRasterLayertype;
+  type: TRasterLayertype;
   url: string;
   subdomains?: Array<string>;
   /** raster params like wms params -> time, layers... depends on the map-library */
@@ -121,7 +126,7 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
 }
 
 export class VectorLayer extends Layer implements IVectorLayerOptions {
-  type: TOmsVectorLayertype;
+  type: TVectorLayertype;
   data?: any;
   url?: string;
   subdomains?: Array<string>;
