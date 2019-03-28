@@ -5,11 +5,13 @@ import { IOwsContext,  } from '@ukis/datatypes-owc-json';
 import { barebonesContext, basicContext, exampleContext } from '../../assets/exampleContext';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { optimizeGroupPlayer } from '@angular/animations/browser/src/render/shared';
-
+import { Fill, Stroke, Style } from 'ol/style.js';
 import { coastalXTestContext } from '../../assets/coastalx.test.context';
 import { iterateListLike } from '@angular/core/src/change_detection/change_detection_util';
-import { osm } from '@ukis/base-layers-raster/src/public_api';
+import { osm } from '@ukis/base-layers-raster';
 import { LayersService } from '@ukis/services-layers';
+import { VectorLayer } from '@ukis/datatypes-layers';
+import { Feature, Polygon, FeatureCollection } from 'geojson';
 
 
 
@@ -188,5 +190,61 @@ describe('OwcJsonService: writing data into owc', () => {
       const layers = service.getLayers(owc);
       expect(layers.length).toBeTruthy();
     })
+  });
+
+  it('#generateOwcContextFrom should properly store and restore a geojson-layer', () => {
+
+    // creating test-layer
+    interface Props {
+      "name": string,
+      "id": string
+    };
+    let features: Feature<Polygon, Props>[] = [{
+      type: "Feature",
+      properties: {
+        name: "Testfeature",
+        id: "testfeatureId"
+      },
+      geometry: {
+        type: "Polygon",
+        coordinates: [[[0, 1], [0, 3]], [[2, 3], [2, 1]]]
+      }
+    }];
+    let featureCollection: FeatureCollection<Polygon, Props> = {
+      type: "FeatureCollection",
+      features: features
+    }
+
+    let options = {
+      style: new Style({
+        stroke: new Stroke({
+          color: 'rgb(214, 102, 27)',
+          width: 3
+        }),
+        fill: new Fill({
+          color: 'rgba(226, 123, 54, 0.1)'
+        })
+      })
+    };
+
+    let geojsonLayer = new VectorLayer({
+      name: "GeojsonLayer",
+      id: "GeojsonLayer",
+      type: "geojson",
+      data: featureCollection,
+      options: options
+    });
+
+    // enconding and deconding
+    let context = service.generateOwsContextFrom("testcontext", [], [geojsonLayer], [-190, -90, 190, 90]);
+    let recoveredLayers = service.getLayers(context);
+    let recoveredLayer = recoveredLayers[0];
+
+    // testing
+    expect(recoveredLayer.id).toEqual(geojsonLayer.id);
+    expect(recoveredLayer.data).toEqual(geojsonLayer.data);
+    expect(recoveredLayer.options).toEqual(geojsonLayer.options);
+    console.log("recovered", recoveredLayer)
+
   });
 });
