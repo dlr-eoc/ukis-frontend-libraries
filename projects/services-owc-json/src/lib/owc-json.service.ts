@@ -1,12 +1,11 @@
 
 import { Injectable } from '@angular/core';
 import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, IEocOwsContext, IEocOwsResource, IEocOwsOffering } from '@ukis/datatypes-owc-json';
-import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
+import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer, TOmsType, isOmsType } from '@ukis/datatypes-layers';
 import { TGeoExtent } from '@ukis/datatypes-map-state';
 import { ReplaceSource } from 'webpack-sources';
 
-const OmsTypes = ["wms", "wmts", "xyz", "geojson", "wfs", "custom"];
-export type TOmsType = "wms" | "wmts" | "xyz" | "geojson" | "wfs" | "custom";
+
 
 
 
@@ -163,7 +162,7 @@ export class OwcJsonService {
   /** Offering --------------------------------------------------- */
   getOfferingCode(offering: IOwsOffering): TOmsType {
     for (let part of offering.code.split('/')) {
-      if (OmsTypes.includes(part.toLowerCase())) {
+      if(isOmsType(part)){
         return part as TOmsType;
       }
     }
@@ -264,7 +263,6 @@ export class OwcJsonService {
     let customParams;
     switch (offeringCode) {
       case "wms":
-      case "geojson":
       case "custom":
         customParams = this.getWmsSpecificParamsFromOffering(offering, resource);
         break;

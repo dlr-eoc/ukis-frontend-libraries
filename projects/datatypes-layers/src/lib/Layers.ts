@@ -4,6 +4,27 @@ export type popup = {
   asyncPupup?: (popupobj: any, cb: Function) => void;
 }
 
+
+export type TWmsLayertype = "wms";
+export type TWmtsLayertype = "wmts";
+export type TXyzLayertype = "xyz";
+export type TGeojsonLayertype = "geojson";
+export type TWfsLayertype = "wfs";
+export type TCustomLayertype = "custom";
+export type TOmsVectorLayertype = TGeojsonLayertype | TWfsLayertype | TCustomLayertype;
+export function isOmsVectorLayertype(inpt: string): inpt is TOmsType {
+  return ["geojson", "wfs", "custom"].includes(inpt);
+};
+export type TOmsRasterLayertype = TWmsLayertype | TWmtsLayertype | TXyzLayertype | TCustomLayertype;
+export function isOmsRasterLayertype(inpt: string): inpt is TOmsType {
+  return ["wms", "wmts", "xyz", "custom"].includes(inpt);
+};
+export type TOmsType = TWmsLayertype | TWmtsLayertype | TXyzLayertype | TGeojsonLayertype | TWfsLayertype | TCustomLayertype;
+export function isOmsType(inpt: string): inpt is TOmsType {
+  return ["wms", "wmts", "xyz", "geojson", "wfs", "custom"].includes(inpt);
+};
+
+ 
 /** geographic coordinates */
 export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
 
@@ -11,7 +32,7 @@ export interface ILayerOptions {
   name: string
   id: string
   //id: string
-  type: "wms" | "wmts" | "xyz" | "geojson" | "custom"
+  type: TOmsType
 
   filtertype?: 'Overlays' | 'Baselayers' | string;
   opacity?: number
@@ -36,17 +57,19 @@ export interface IRasterLayerOptions extends ILayerOptions {
   url: string;
   subdomains?: Array<string>;
   /** raster params like wms params -> time, layers... depends on the map-library */
-  params?: any
+  params?: any;
+  type: TOmsRasterLayertype;
 }
 
 export interface IVectorLayerOptions extends ILayerOptions {
   data?: any
   url?: string;
   subdomains?: Array<string>;
-  /** vektor options like style, pointToLayer... depends on the map-library */
+  /** vector options like style, pointToLayer... depends on the map-library */
   options?: any
   /** true if show popup or set Array with keys of properties to show in popup  */
-  cluster?: any
+  cluster?: any;
+  type: TOmsVectorLayertype;
 }
 
 export interface ICustomLayerOptions extends ILayerOptions {
@@ -59,7 +82,7 @@ export interface ICustomLayerOptions extends ILayerOptions {
 export class Layer implements ILayerOptions {
   name: string = '';
   id: string = '';
-  type: "wms" | "wmts" | "xyz" | "geojson" | "custom";
+  type: TOmsType;
   opacity: number = 1;
   visible: boolean = true;
   removable: boolean = false;
@@ -86,6 +109,7 @@ export class Layer implements ILayerOptions {
 }
 
 export class RasterLayer extends Layer implements IRasterLayerOptions {
+  type: TOmsRasterLayertype;
   url: string;
   subdomains?: Array<string>;
   /** raster params like wms params -> time, layers... depends on the map-library */
@@ -97,6 +121,7 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
 }
 
 export class VectorLayer extends Layer implements IVectorLayerOptions {
+  type: TOmsVectorLayertype;
   data?: any;
   url?: string;
   subdomains?: Array<string>;

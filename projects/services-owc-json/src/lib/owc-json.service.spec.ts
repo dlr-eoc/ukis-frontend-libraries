@@ -244,7 +244,6 @@ describe('OwcJsonService: writing data into owc', () => {
     expect(recoveredLayer.id).toEqual(geojsonLayer.id);
     expect(recoveredLayer.data).toEqual(geojsonLayer.data);
     expect(recoveredLayer.options).toEqual(geojsonLayer.options);
-    console.log("recovered", recoveredLayer)
 
   });
 });
