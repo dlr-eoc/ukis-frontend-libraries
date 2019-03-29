@@ -37,3 +37,12 @@ run ``ng generate library < name > --prefix ukis``
 ### 4. update README and CHANGELOG
 - add your library to the README
 - add important/Breaking changes to the CHANGELOG
+
+
+# How to publish a new version
+ - make sure you have updated README and CHANGELOG
+ - if you were working on a branch, first merge your changes back into the master. 
+ - run `node scripts/libraryProjets.js -c` to check if all dependencies are present. 
+ - update the `version` parameter in the package.json in the root-directory (*not* in a single libraries package.json!)
+ - push a tag to origin
+ - the jenkins-job `packaging-frontend-libraries` will discover the presence of a new tag. It will then build the package and publish it to nexus.
