@@ -1,3 +1,13 @@
+# [2.0.1] 
+
+### Bugfixes
+* **@ukis/datatypes-layers:** vector-layers can no longer have type "wms", "wmts" or "xyz", raster-layers can no longer have type "geojson" or "wfs".
+* **@ukis/datatypes-owc-json** , **@ukis/services-owc-json:** in marshalling to and from owc to layer, the layertype is now explicitly checked for compliance with **@ukis/datatypes-layers:**
+
+### Features
+* **@ukis/datatypes-owc-json** , **@ukis/services-owc-json:** implemented support for geojson-layers: storing geojson-data in a data-offering
+
+
 # [2.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.0.0) (2019-03-15)
 
 ### Breaking Changes
