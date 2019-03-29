@@ -213,7 +213,7 @@ export class OwcJsonService {
     let layerType = this.getLayertypeFromOfferingCode(offering);
     
     if(!isVectorLayertype(layerType)){
-      console.log(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a Vectorlayer`); 
+      console.error(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a Vectorlayer`); 
       return null; 
     }
 
@@ -266,7 +266,7 @@ export class OwcJsonService {
     let layerType = this.getLayertypeFromOfferingCode(offering);
     
     if(!isRasterLayertype(layerType)) {
-      console.log(`This type of offering '${offering.code}' cannot be converted into a rasterlayer.`);
+      console.error(`This type of offering '${offering.code}' cannot be converted into a rasterlayer.`);
       return null;
     }
 
@@ -366,7 +366,7 @@ export class OwcJsonService {
         } else if(isVectorLayertype(layerType)) {
           layers.push(this.createVectorLayerFromOffering(offering, feature, owc));
         } else {
-          console.log(`This type of service (${layerType}) has not been implemented yet.`);
+          console.error(`This type of service (${layerType}) has not been implemented yet.`);
         }
       }
     }
@@ -501,7 +501,7 @@ export class OwcJsonService {
       case XyzLayertype:
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
       default:
-        console.log(`This type of layer (${layer.type}) has not been implemented yet.`);
+        console.error(`This type of layer (${layer.type}) has not been implemented yet.`);
         return null;
     }
 
@@ -518,7 +518,7 @@ export class OwcJsonService {
         contents.push(content);
       break;
       default: 
-        console.log(`Cannot get contents for this type of vectorlayer: (${layer.type})`);
+        console.error(`Cannot get contents for this type of vectorlayer: (${layer.type})`);
     }
     return contents;
   }
@@ -533,7 +533,7 @@ export class OwcJsonService {
         case XyzLayertype:
           return this.getXyzOperationsFromLayer(layer);
         default:
-          console.log(`Cannot get operations for this type of layer: (${layer.type})`);
+          console.error(`Cannot get operations for this type of layer: (${layer.type})`);
           return [];
       }
     }
@@ -543,7 +543,7 @@ export class OwcJsonService {
         // case "wfs": <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts 
         //   return this.getWfsOperationsFromLayer(layer);
         default:
-          console.log(`This type of service (${layer.type}) has not been implemented yet.`);
+          console.error(`This type of service (${layer.type}) has not been implemented yet.`);
           return [];
       }
     }

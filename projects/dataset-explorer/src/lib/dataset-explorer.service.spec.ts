@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { DatasetExplorerService } from './dataset-explorer.service';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { IOwsContext } from "@ukis/datatypes-owc-json/src/public_api";
+import { IOwsContext } from "@ukis/datatypes-owc-json";
 
 
 

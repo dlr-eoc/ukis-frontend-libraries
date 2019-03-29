@@ -1,4 +1,4 @@
-import { IOwsContext } from "@ukis/datatypes-owc-json/src/public_api";
+import { IOwsContext } from "@ukis/datatypes-owc-json";
 
 
 export const barebonesContext: IOwsContext = {
