@@ -399,7 +399,6 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
     //console.log('newIds', newIds)
     //console.log('oldIds', this.oldIds)
-
     sel.forEach(s => {
       //newIds.push(s.id) * not used due to clarity issue 2342
       this.addDataset(s);
@@ -439,6 +438,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   addDataset(dataset) {
     let layer = this.obsSvc.addObservation(dataset);
+    layer.visible = true;
     //console.log(">", layer, dataset)
 
     this.layersSvc.addLayer(layer, 'Overlays');

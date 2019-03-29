@@ -14,6 +14,7 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
     opacity?: number;
     attribution?: string;
     shards?: string;
+    customAttributes?: Object;
 }
 
 export interface IEocOwsOffering extends IOwsOffering {
@@ -36,3 +37,4 @@ export interface IEocOwsWmtsMatrixSet {
 * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#trueextension-offerings
 */
 export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
+export type Xyz_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
