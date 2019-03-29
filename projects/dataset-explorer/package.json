@@ -9,7 +9,8 @@
     "@clr/angular": "^1.0.4",
     "@clr/icons": "^1.0.4",
     "@clr/ui": "^1.0.4",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.3.3",
+    "dayjs": "^1.8.11"
   },
   "dependencies": {
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",

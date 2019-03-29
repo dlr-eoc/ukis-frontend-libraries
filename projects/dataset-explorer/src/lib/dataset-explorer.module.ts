@@ -5,16 +5,19 @@ import { CommonModule } from "@angular/common";
 import { HttpClientModule } from '@angular/common/http';
 import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FormsModule } from "@angular/forms";
+import { DateRangeComponent } from './date-range/date-range.component'
 
 @NgModule({
-  declarations: [DatasetExplorerComponent],
+  declarations: [DatasetExplorerComponent, DateRangeComponent],
   imports: [
     CommonModule,
     HttpClientModule,
     ClarityModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule
   ],
-  exports: [DatasetExplorerComponent],
+  exports: [DatasetExplorerComponent, DateRangeComponent],
   providers: [DatasetExplorerService]
 })
 export class DatasetExplorerModule { }

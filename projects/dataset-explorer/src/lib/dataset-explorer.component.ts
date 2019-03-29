@@ -1,7 +1,7 @@
 import { Component, Input, Inject, OnChanges, OnDestroy, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { IOwsContext, IOwsResource } from '@ukis/datatypes-owc-json';
+import { IOwsContext, IEocOwsResource } from '@ukis/datatypes-owc-json';
 import { Layer } from '@ukis/datatypes-layers';
 
 import { DatasetExplorerService } from "./dataset-explorer.service";
@@ -9,6 +9,7 @@ import { LayersService } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 
 import { Subscription } from 'rxjs';
+import * as dayjs from 'dayjs';
 
 export interface ColumnDescriptor {
   title: string,
@@ -45,7 +46,19 @@ export interface Ifilters {
 const clone = function (o) {
   return JSON.parse(JSON.stringify(o))
 }
+const DATEFORMAT = 'YYYY-MM-DD';
 
+const minMaxDate = function (dates: Date[]) {
+  var sorted = dates.sort((a, b) => {
+    return a.getTime() - b.getTime();
+  });
+  var minDate = sorted[0];
+  var maxDate = sorted[sorted.length - 1];
+  return {
+    min: minDate,
+    max: maxDate
+  }
+}
 
 @Component({
   selector: 'ukis-dataset-explorer',
@@ -60,7 +73,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   @Input('map-state-svc') mapStateSvc: MapStateService;
   @Input('ows-context') owsContext: IOwsContext;
 
-  @Input('bbox-filter') bboxfilter?: (value: IOwsResource, index: number, array: IOwsResource[]) => any;
+  @Input('bbox-filter') bboxfilter?: (value: IEocOwsResource) => any;
   @Input('table-props') tableProps?: { rowdetail: string, rowclass: string, columns: ColumnDescriptor[] };
   @Input('filter-props') filterProps?: any[];
   @Input('is-active') isactive?: boolean;
@@ -69,11 +82,12 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
 
 
-  datasets: IOwsResource[];
-  datasetsFiltered: IOwsResource[] = [];
+  datasets: IEocOwsResource[];
+  datasetsFiltered: IEocOwsResource[] = [];
+  datasetsFilteredCache: IEocOwsResource[] = [];
   datasetsFilteredLength: number;
-  datasetSelected: IOwsResource[] = [];
-  selectedMap: Map<string, IOwsResource> = new Map();
+  datasetSelected: IEocOwsResource[] = [];
+  selectedMap: Map<string, IEocOwsResource> = new Map();
 
   mapLayers: Layer[] = [];
   //layerIDs: string[] = [];
@@ -83,7 +97,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   filters: Ifilters[];
   filtersFiltered: Ifilters[];
   filterSelected: boolean = false;
-  activeFilters: Ifilter[][] = [];
+  activeFilters: Array<Ifilter[]> = [];
 
   columns: ColumnDescriptor[] = [];
   layersSubscription: Subscription;
@@ -92,9 +106,29 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   //mock-up
   filterMapExtend: boolean = false;
   filterTimeRange: boolean = false;
+  /**
+   * A date range of the OWC Data with a min and a max and the chosen values valuemin and valuemax in format 'YYYY-MM-DD'
+   */
+  daterange: { min: string, max: string, valuemin: string, valuemax: string };
 
   constructor(@Inject(DatasetExplorerService) private obsSvc: DatasetExplorerService) {
     //this.filterOnBbox = false;
+    this.daterange = {
+      min: dayjs().format(DATEFORMAT), //.formt(DATEFORMAT)//moment().format(DATEFORMAT),
+      max: dayjs().format(DATEFORMAT),//moment().format(DATEFORMAT),
+      valuemin: dayjs().format(DATEFORMAT),//moment().format(DATEFORMAT),
+      valuemax: dayjs().format(DATEFORMAT)//moment().format(DATEFORMAT)
+    }
+  }
+
+  onDateChange(event) {
+    if (!dayjs(this.daterange.valuemin).isValid()) {
+      this.daterange.valuemin = this.daterange.min;
+    }
+    if (!dayjs(this.daterange.valuemax).isValid()) {
+      this.daterange.valuemax = this.daterange.max;
+    }
+    this.applyFilters('date');
   }
 
   ngOnInit() {
@@ -112,25 +146,31 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes) {
     if (changes.owsContext) {
-
-
+      console.log('owsContext Changes')
       this.datasets = this.owsContext.features;
-
       this.columns = this.tableProps.columns;
+
+      let dataDateRange = this.getMinAndMaxDate(this.datasets);
+      this.daterange.min = dataDateRange.min;
+      this.daterange.max = dataDateRange.max;
+      this.daterange.valuemin = dataDateRange.min; //dayjs().format(DATEFORMAT);
+      this.daterange.valuemax = dataDateRange.max;
 
       // rename property to "children" in the root 
       this.filters = this.filterProps.map(f => { f.children = this.owsContext.properties[f.prop]; return f });
       // work only on the clone and keep original data unmodified
       this.filtersFiltered = clone(this.filters);
-
-      this.applyFilters();
     }
 
     if (changes.isactive) {
-      //console.log('modal open', changes.isactive, this.mapLayers)
+      console.log('Modal isactive Changes')
       this.getDatasetsForLayers(this.mapLayers)
-      this.applyFilters();
-      //console.log(this.datasetSelected)
+    }
+
+    //try to only apply filter once
+    if (changes.isactive || changes.owsContext) {
+      console.log('Modal isactive or owsContext Changes')
+      this.applyFilters('ngChanges');
     }
   }
 
@@ -167,12 +207,12 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     this.filtersFiltered[i].selected = node;
     this.filtersFiltered[i].children = node.children;
 
-    this.applyFilters();
+    this.applyFilters(node.id);
   }
 
   filterRemove(i) {
     let activeFilters = this.activeFilters[i];
-    activeFilters.pop();
+    let removed = activeFilters.pop();
     if (activeFilters.length > 0) {
       let parrent = activeFilters.slice(-1);
       this.filtersFiltered[i].children = clone(parrent[0].children);
@@ -182,7 +222,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
       this.filtersFiltered[i].children = clone(this.filters[i].children);
     }
 
-    this.applyFilters();
+    this.applyFilters(removed.id);
 
     /**
      * restore selected Array - clarity issue 2342 Datagrid clears the selection on filter or source change
@@ -191,28 +231,101 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     this.getDatasetsForLayers(this.mapLayers)
   }
 
-  applyFilters() {
+  isBboxFilter() {
+    return this.bboxfilter && this.filterMapExtend;
+  }
 
-    // flatten to a simple array of filterterms
-    var filterterms = this.filtersFiltered.reduce((acc, val) => {
-      if (val.selected) acc.push(val.selected.id);
-      return acc;
-    }, []);
+  isTimeFilter() {
+    return this.filterTimeRange;
+  }
 
-    if (this.bboxfilter && this.filterMapExtend) {
+  isPropsFilter() {
+    return this.activeFilters.map((value) => {
+      return (value.length > 0) ? 1 : 0;
+    }).includes(1);
+  }
+
+  isAnyFilter() {
+    let allActiveFilter = [];
+    if (this.isBboxFilter())
+      allActiveFilter.push('bbox');
+    if (this.isTimeFilter())
+      allActiveFilter.push('time');
+    if (this.isPropsFilter())
+      allActiveFilter.push('props');
+    return {
+      filters: allActiveFilter,
+      is: this.isBboxFilter() || this.isTimeFilter() || this.isPropsFilter()
+    }
+  }
+
+
+
+
+  applyFilters(triggerer?) {
+    if (triggerer) {
+      console.log(triggerer)
+    }
+    // filter bbox
+    if (this.isBboxFilter() && !this.isPropsFilter() && !this.isTimeFilter()) {
       this.datasetsFiltered = this.datasets.filter(this.bboxfilter);
-      //console.log(this.datasetsFiltered.length)
-    } else {
+    } else if (this.isBboxFilter() && !this.isPropsFilter() || !this.isTimeFilter()) {
+      this.datasetsFiltered = this.datasetsFiltered.filter(this.bboxfilter);
+    }
+
+
+    // filter time 
+    if (this.isTimeFilter() && !this.isPropsFilter() && !this.isBboxFilter()) {
+      this.datasetsFiltered = this.datasets.filter(this.timeRangeFilter);
+    }
+    else if (this.isTimeFilter() && !this.isPropsFilter() || !this.isBboxFilter()) {
+      this.datasetsFiltered = this.datasetsFiltered.filter(this.timeRangeFilter);
+    }
+
+    // filter on properties if the are selected by filter
+    if (this.isPropsFilter()) {
+      //get all ids from activefilters array to filter on child parent relationship - UKISDEV-758
+      let filterterms = this.activeFilters.reduce((acc: any, val) => {
+        let ids = val.map(f => f.id);
+        // acc.push(ids) -> [[100,200],[vector]]
+        // spread array of ids in the initial array acc e.g [] = [[100,200],[vector]]
+        return [...acc, ...[...ids]];
+      }, []);
+      //console.log(filterterms)
+
+      if (filterterms.length && !this.isBboxFilter() && !this.isTimeFilter()) {
+        this.datasetsFiltered = this.datasets.filter(resource => {
+          //categoryIds = ["100", "170", "172", "ASCAT", "raster", "remotesensingproduct"]
+          //return filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
+          let hasTerms = filterterms.reduce((re, ft) => {
+            let hasId = re && resource.properties.customAttributes.categoryIds.indexOf(ft) != -1;
+            //if (hasId) console.log(resource)
+            return hasId;
+          }, true)
+          return hasTerms;
+        });
+      }
+      if (filterterms.length && this.isTimeFilter() || this.isBboxFilter()) {
+        this.datasetsFiltered = this.datasetsFiltered.filter(resource => {
+          //categoryIds = ["100", "170", "172", "ASCAT", "raster", "remotesensingproduct"]
+          //return filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
+          let hasTerms = filterterms.reduce((re, ft) => {
+            let hasId = re && resource.properties.customAttributes.categoryIds.indexOf(ft) != -1;
+            //if (hasId) console.log(resource)
+            return hasId;
+          }, true)
+          return hasTerms;
+        });
+      }
+
+    }
+
+    // if there are no filterterms reseed the datasets in the table
+    if (!this.isAnyFilter().is) {
       this.datasetsFiltered = this.datasets;
     }
 
-    if (filterterms.length) { // filter the datasets //this.datasets 
-      this.datasetsFiltered = this.datasetsFiltered.filter(d =>
-        filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
-      );
-    } else { // if there are no filterterms reseed the datasets in the table
-      this.datasetsFiltered = this.datasetsFiltered; //this.datasets;
-    }
+    //this.datasetsFilteredCache = clone(this.datasetsFiltered)
 
     // get a count of available datasets for each term
     let count = {};
@@ -228,7 +341,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
         c.count = count[c.id];
       })
     });
-
+    console.log(`Filters applyed`);
     this.datasetsFilteredLength = this.datasetsFiltered.length;
   }
 
@@ -339,21 +452,54 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   }
   removeDataset(dataset) {
     //this.obsSvc.removeDataset(dataset);
-    console.log("remove <", dataset.id)
+    //console.log("remove <", dataset.id)
     this.layersSvc.removeLayer(dataset, 'Overlays');
   }
 
-  /*
-  customFilter(active: boolean) {
-    if (this.bboxfilter) {
-      if (active) {
-        this.datasetsFiltered = this.datasets.filter(this.bboxfilter)
-      } else {
-        this.datasetsFiltered = this.datasets;
-      }
+  timeRangeFilter = (resource: IEocOwsResource) => {
+    let endDate = resource.properties.customAttributes.endDate,
+      startDate = resource.properties.customAttributes.startDate;
+    if (this.dateIsBetween(startDate, this.daterange.valuemin, this.daterange.valuemax) || this.dateIsBetween(endDate, this.daterange.valuemin, this.daterange.valuemax)) {
+      return resource;
     }
   }
-  */
+
+  /**
+   * end and start are includet
+   */
+  dateIsBetween(date, min, max) {
+    let minDate, maxDate, cDate;
+    let _date = dayjs(date).format(DATEFORMAT);
+
+    minDate = Date.parse(min);
+    maxDate = Date.parse(max);
+    cDate = Date.parse(_date);
+    //console.log(`date: ${test} - min: ${min} - max: ${max}`, cDate >= minDate && cDate <= maxDate);
+    if (cDate >= minDate && cDate <= maxDate) {
+      return true;
+    }
+    return false;
+  }
+
+  getMinAndMaxDate(array: IEocOwsResource[]) {
+    let dates = array.reduce((a, r) => {
+      if (a.indexOf(r.properties.customAttributes.endDate) == -1) {
+        a.push(r.properties.customAttributes.endDate)
+      }
+      if (a.indexOf(r.properties.customAttributes.startDate) == -1) {
+        a.push(r.properties.customAttributes.startDate)
+      }
+      return a;
+    }, []);
+
+    dates = dates.map(value => dayjs(value).toDate())
+    let range = {
+      min: dayjs(minMaxDate(dates).min).format(DATEFORMAT),
+      max: dayjs(minMaxDate(dates).max).format(DATEFORMAT)
+    }
+    return range;
+  }
+
 
   pick(o: any, s: string) {
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
@@ -371,8 +517,10 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  convertToDate(s: string) {
-    return new Date(s);
+  convertToDate(s: string, format?: string) {
+    //return new Date(s);
+    let _format = format || DATEFORMAT;
+    return dayjs(s).format(_format);
   }
 
   ngOnDestroy() {

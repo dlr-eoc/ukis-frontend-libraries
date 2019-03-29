@@ -1,20 +1,29 @@
 <div id="filters" class="clr-row">
   <h4 style="margin: 0.25rem 0.6rem;">Filters:</h4>
-  
+
   <!-- map extent-->
-  <span class="label lasting" [ngClass]="{'active':filterMapExtend, 'clickable':!filterMapExtend}" (click)="filterMapExtend=true; applyFilters();">
+  <span class="label lasting" [ngClass]="{'active':filterMapExtend, 'clickable':!filterMapExtend}"
+    (click)="filterMapExtend=true; applyFilters('bbox');">
     map-extend
     <span *ngIf="bboxfilter && filterMapExtend" class="badge multi">{{this.datasetsFilteredLength}}</span>
     <span *ngIf="bboxfilter && filterMapExtend" class="badge clickable"
-      (click)="filterMapExtend=false; applyFilters(); $event.stopPropagation();">x</span>
+      (click)="filterMapExtend=false; applyFilters('bbox'); $event.stopPropagation();">x</span>
   </span>
 
 
   <!-- time extent -->
-  <span class="label lasting" [ngClass]="{'active':filterTimeRange, 'clickable':!filterTimeRange}"
-    (click)="filterTimeRange=true">
+  <span *ngIf="!filterTimeRange" class="label lasting"
+    [ngClass]="{'active':filterTimeRange, 'clickable':!filterTimeRange}"
+    (click)="filterTimeRange=true; applyFilters('time');">
     time-range
-    <span *ngIf="filterTimeRange" class="badge clickable" (click)="filterTimeRange=false; $event.stopPropagation();">x</span>
+  </span>
+  <span *ngIf="filterTimeRange" class="label lasting"
+    [ngClass]="{'active':filterTimeRange, 'clickable':!filterTimeRange}">
+    <span>
+      <ukis-date-range [(date-range)]="daterange" (change)="onDateChange($event)"></ukis-date-range>
+    </span>
+    <span class="badge clickable"
+      (click)="filterTimeRange=false; applyFilters('time'); $event.stopPropagation();">x</span>
   </span>
 
   <!-- dynamic filters -->
@@ -70,7 +79,7 @@
       </div>
 
       <div class="time" *ngSwitchCase="'date'">
-        {{ convertToDate(pick(d, col.prop)) | date }}
+        {{ convertToDate(pick(d, col.prop))}}
       </div>
 
       <span *ngSwitchDefault>{{pick(d, col.prop)}}</span>
