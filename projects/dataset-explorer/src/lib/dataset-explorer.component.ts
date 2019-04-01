@@ -9,7 +9,7 @@ import { LayersService } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 
 import { Subscription } from 'rxjs';
-import * as dayjs from 'dayjs';
+import * as dayjsImported from 'dayjs'; const dayjs = dayjsImported; //https://github.com/ng-packagr/ng-packagr/issues/217
 
 export interface ColumnDescriptor {
   title: string,
