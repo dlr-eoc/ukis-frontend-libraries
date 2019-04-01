@@ -5,25 +5,28 @@ It uses [angular](https://angular.io/) and the [Clarity Design System](https://v
 The dependencies to the needed modules are defined in package.json and are stored in node_modules.  
 
 This repository contains the following modules as angular libraries:
-- datatypes
-     - layers
-     - map-state
-     - owc-json
-     - user-info
-- services
-     - layers
-     - map-state
-     - owc-json
-     - util-store
-- base-layers
-     - raster
+- datatypes-layers
+- datatypes-map-state
+- datatypes-owc-json
+- datatypes-user-info
+
+- services-layers
+- services-map-state
+- services-owc-json
+- services-util-store
+
 - map-ol
+- base-layers-raster
 - layer-control
 - map-navigator
+- cookie-alert
 - observation-explorer
 - dataset-explorer
 - user-info
-- cookie-alert
+- owc-control
+
+
+you can check this with the script `node scripts/libraryProjets.js -l`;
 
 To use the libraries in your project specific application, you can ather use the npm modules or include this repository.
 - check the README of [project-frontend](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/project-frontend/browse/README.md)
