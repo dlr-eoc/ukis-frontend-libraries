@@ -7,8 +7,6 @@
     <input clrInput placeholder="Start Date" type="date" name="valuemin" [min]="daterange.min" [max]="daterange.max"
       [(ngModel)]="daterange.valuemin" (ngModelChange)="onDateRangeChange($event)" />
 
-    <div class="dropdown-divider"></div>
-
     <input clrInput placeholder="End Datet" type="date" name="valuemax" [min]="daterange.min" [max]="daterange.max"
       [(ngModel)]="daterange.valuemax" (ngModelChange)="onDateRangeChange($event)" />
 

@@ -69,7 +69,7 @@
     <clr-dg-cell *ngFor="let col of columns" [ngSwitch]="col.type">
       <a class="link" *ngSwitchCase="'link'" [attr.href]="pick(d, col.prop)" data-type="{{col.type}}">{{pick(d,
         col.prop)}}</a>
-      <img class="image" *ngSwitchCase="'image'" [src]="imagesForDatatypes[pick(d, col.prop)]">
+      <img class="image" *ngSwitchCase="'image'" [src]="imagesForDatatypes[pick(d, col.prop)] || ''">
 
       <div class="download" *ngSwitchCase="'download'">
         <a *ngIf="pick(d, col.prop.href) || pick(d, col.prop.status)" [attr.href]="pick(d, col.prop.href)"

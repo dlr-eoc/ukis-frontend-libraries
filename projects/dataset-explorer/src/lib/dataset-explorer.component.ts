@@ -84,7 +84,6 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   datasets: IEocOwsResource[];
   datasetsFiltered: IEocOwsResource[] = [];
-  datasetsFilteredCache: IEocOwsResource[] = [];
   datasetsFilteredLength: number;
   datasetSelected: IEocOwsResource[] = [];
   selectedMap: Map<string, IEocOwsResource> = new Map();
@@ -260,72 +259,37 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-
-
   applyFilters(triggerer?) {
-    if (triggerer) {
-      console.log(triggerer)
-    }
-    // filter bbox
-    if (this.isBboxFilter() && !this.isPropsFilter() && !this.isTimeFilter()) {
-      this.datasetsFiltered = this.datasets.filter(this.bboxfilter);
-    } else if (this.isBboxFilter() && !this.isPropsFilter() || !this.isTimeFilter()) {
-      this.datasetsFiltered = this.datasetsFiltered.filter(this.bboxfilter);
-    }
-
-
-    // filter time 
-    if (this.isTimeFilter() && !this.isPropsFilter() && !this.isBboxFilter()) {
-      this.datasetsFiltered = this.datasets.filter(this.timeRangeFilter);
-    }
-    else if (this.isTimeFilter() && !this.isPropsFilter() || !this.isBboxFilter()) {
-      this.datasetsFiltered = this.datasetsFiltered.filter(this.timeRangeFilter);
-    }
-
-    // filter on properties if the are selected by filter
-    if (this.isPropsFilter()) {
-      //get all ids from activefilters array to filter on child parent relationship - UKISDEV-758
-      let filterterms = this.activeFilters.reduce((acc: any, val) => {
-        let ids = val.map(f => f.id);
-        // acc.push(ids) -> [[100,200],[vector]]
-        // spread array of ids in the initial array acc e.g [] = [[100,200],[vector]]
-        return [...acc, ...[...ids]];
-      }, []);
-      //console.log(filterterms)
-
-      if (filterterms.length && !this.isBboxFilter() && !this.isTimeFilter()) {
-        this.datasetsFiltered = this.datasets.filter(resource => {
-          //categoryIds = ["100", "170", "172", "ASCAT", "raster", "remotesensingproduct"]
-          //return filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
-          let hasTerms = filterterms.reduce((re, ft) => {
-            let hasId = re && resource.properties.customAttributes.categoryIds.indexOf(ft) != -1;
-            //if (hasId) console.log(resource)
-            return hasId;
-          }, true)
-          return hasTerms;
-        });
-      }
-      if (filterterms.length && this.isTimeFilter() || this.isBboxFilter()) {
-        this.datasetsFiltered = this.datasetsFiltered.filter(resource => {
-          //categoryIds = ["100", "170", "172", "ASCAT", "raster", "remotesensingproduct"]
-          //return filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
-          let hasTerms = filterterms.reduce((re, ft) => {
-            let hasId = re && resource.properties.customAttributes.categoryIds.indexOf(ft) != -1;
-            //if (hasId) console.log(resource)
-            return hasId;
-          }, true)
-          return hasTerms;
-        });
+    this.datasetsFiltered = this.datasets;
+    if (this.isAnyFilter().is) {
+      let filterterms;
+      if (this.isPropsFilter()) {
+        //get all ids from activefilters array to filter on child parent relationship - UKISDEV-758
+        filterterms = this.activeFilters.reduce((acc: any, val) => {
+          let ids = val.map(f => f.id);
+          // acc.push(ids) -> [[100,200],[vector]]
+          // spread array of ids in the initial array acc e.g [] = [[100,200],[vector]]
+          return [...acc, ...[...ids]];
+        }, []);
       }
 
+      if (this.isBboxFilter()) {
+        this.datasetsFiltered = this.datasetsFiltered.filter(this.bboxfilter);
+      }
+
+      if (this.isTimeFilter()) {
+        this.datasetsFiltered = this.datasetsFiltered.filter(this.timeRangeFilter);
+      }
+
+      if (this.isPropsFilter() && filterterms.length) {
+        this.datasetsFiltered = this.datasetsFiltered.filter(resource => this.propsFilter(resource, filterterms));
+      }
     }
 
     // if there are no filterterms reseed the datasets in the table
     if (!this.isAnyFilter().is) {
       this.datasetsFiltered = this.datasets;
     }
-
-    //this.datasetsFilteredCache = clone(this.datasetsFiltered)
 
     // get a count of available datasets for each term
     let count = {};
@@ -341,7 +305,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
         c.count = count[c.id];
       })
     });
-    console.log(`Filters applyed`);
+    console.log(`Filters applyed`, this.filtersFiltered);
     this.datasetsFilteredLength = this.datasetsFiltered.length;
   }
 
@@ -350,6 +314,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getDatasetsForLayers(layers: Layer[]) {
+    this.datasetSelected = [];
     layers.forEach((l) => {
       let d = this.getLayerFromDatasets(l);
       if (d && this.datasetSelected.indexOf(d) == -1) {
@@ -358,11 +323,9 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     })
   }
 
-  //TODO fix subsribe remove 
   subscribeToLayerSvc() {
     this.layersSubscription = this.layersSvc.getOverlays().subscribe(layers => {
       this.mapLayers = layers;
-
       //this.layerIDs = this.mapLayers.map(l => l.id + "")
       //console.log('sub to layers', this.mapLayers)
       //console.log('oldIds', this.oldIds)
@@ -392,7 +355,6 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   selectionChanged(sel) {
-
     //console.log('-----------change')
     //console.log("datasets selected after selectionChanged: ", this.datasetSelected, this.selectedMap)
     //let newIds = []; * not used due to clarity issue 2342
@@ -462,6 +424,16 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
     if (this.dateIsBetween(startDate, this.daterange.valuemin, this.daterange.valuemax) || this.dateIsBetween(endDate, this.daterange.valuemin, this.daterange.valuemax)) {
       return resource;
     }
+  }
+
+  propsFilter = (resource: IEocOwsResource, filterterms) => {
+    //categoryIds = ["100", "170", "172", "ASCAT", "raster", "remotesensingproduct"]
+    //return filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
+    let hasTerms = filterterms.reduce((re, ft) => {
+      let hasId = re && resource.properties.customAttributes.categoryIds.indexOf(ft) != -1;
+      return hasId;
+    }, true)
+    return hasTerms;
   }
 
   /**
