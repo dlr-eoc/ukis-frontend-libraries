@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ClarityModule } from '@clr/angular';
+import { FormsModule } from '@angular/forms';
 import { DateRangeComponent } from './date-range.component';
 
 describe('DateRangeComponent', () => {
@@ -8,14 +9,20 @@ describe('DateRangeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DateRangeComponent ]
+      declarations: [DateRangeComponent],
+      imports: [ClarityModule, FormsModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DateRangeComponent);
     component = fixture.componentInstance;
+
+    component.daterange = {
+      min: new Date().toISOString(), max: new Date().toISOString(),
+      valuemin: new Date().toISOString(), valuemax: new Date().toISOString()
+    }
     fixture.detectChanges();
   });
 
