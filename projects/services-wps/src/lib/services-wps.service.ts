@@ -9,14 +9,14 @@ import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecut
 import * as W3cFactory from "w3c-schemas/lib/XLink_1_0";
 import * as OwsFactory from "ogc-schemas/lib/OWS_1_1_0";
 import * as Wps1Factory from "ogc-schemas/lib/WPS_1_0_0";
+import * as Wps2Factory from "ogc-schemas/lib/WPS_2_0";
 import { WpsDataFactory } from '@ukis/datatypes-wps';
 
 
 
 /**
  * This service exposes an interface to talk to any WPS.
- * It does not contain any state that is specific to any single WPS, so it can be used to talk to more than one WPS.
- * TODO: Differentiate between Version 1.0.0 and 2.0, possibly using generics. 
+ * It does not contain any state that is specific to any single WPS, so it can be used to talk to more than one WPS. 
  */
 
 
@@ -25,14 +25,18 @@ import { WpsDataFactory } from '@ukis/datatypes-wps';
 })
 export class ServicesWpsService {
   
+  wpsVersion;
   unmarshallerXmlToJson: any;
   marshallerJsonToXml: any;
 
-  constructor(private http: HttpClient) {
-    let xlink = W3cFactory["XLink_1_0"];
-    let ows11 = OwsFactory["OWS_1_1_0"];
-    let wps1 = Wps1Factory["WPS_1_0_0"];
-    let jsonixContext = new Jsonix.Context([xlink, ows11, wps1], {namespacePrefixes: []});
+  constructor(wpsVersion: "1.0.0" | "2.0", private http: HttpClient) {
+    this.wpsVersion = wpsVersion;
+    let xlinkMapping = W3cFactory["XLink_1_0"];
+    let owsMapping = OwsFactory["OWS_1_1_0"];
+    let wpsMapping;
+    if(this.wpsVersion == "1.0.0") wpsMapping = Wps1Factory["WPS_1_0_0"];
+    else wpsMapping = Wps2Factory["WPS_2_0"];
+    let jsonixContext = new Jsonix.Context([xlinkMapping, owsMapping, wpsMapping], {namespacePrefixes: []});
     this.unmarshallerXmlToJson = jsonixContext.createUnmarshaller();
     this.marshallerJsonToXml = jsonixContext.createMarshaller();
   }

@@ -148,7 +148,7 @@ export interface IWpsInputDescription {
     minOccurs: number,
     complexData?: IWpsSupportedComplexDataInput,
     literalData?: IWpsLiteralInput,
-    boundingBoxData?: any
+    boundingBoxData?: IWpsBoundingBoxInput
 }
 
 export interface IWpsLiteralInputDescription extends IWpsInputDescription {
@@ -157,6 +157,10 @@ export interface IWpsLiteralInputDescription extends IWpsInputDescription {
 
 export interface IWpsComplexInputDescription extends IWpsInputDescription {
   complexData: IWpsSupportedComplexDataInput
+}
+
+export interface IWpsBoundingBoxInputDescription extends IWpsInputDescription {
+  boundingBoxData: IWpsBoundingBoxInput
 }
 
 /**
@@ -172,6 +176,9 @@ export interface IWpsLiteralInput {
   allowedValues?: IOwsAllowedValues
 }
 
+export interface IWpsBoundingBoxInput {
+  
+}
 
 export interface IWpsSupportedComplexDataInput {
     TYPE_NAME: "WPS_1_0_0.SupportedComplexDataInputType", 

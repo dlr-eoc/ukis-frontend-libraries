@@ -72,6 +72,8 @@ export class WpsDataFactory {
         return description;
     }
 
+    static bboxInputDescription(): IWpsBbox
+
     static inputsDescriptionFromArray(inputArray: IWpsInputDescription[]): IWpsProcessDescriptionDataInputs {
         let inputs: IWpsProcessDescriptionDataInputs = {
             TYPE_NAME: "WPS_1_0_0.ProcessDescriptionType.DataInputs",
