@@ -181,11 +181,19 @@ export class UtilStoreService {
    * @param  value     Contents of the store
    * @param  exp       Expiration - creation defaults to 30 days
    */
-  createCookie(key, value, exp) {
+  createCookie(key, value, exp = 30) {
     var date = new Date();
     date.setTime(date.getTime() + (exp * 24 * 60 * 60 * 1000));
     var expires = "; expires=" + date.toUTCString();
+    if (value == null && exp < 0) {
+      value = this.readCookie(key);
+    }
     document.cookie = key + "=" + value + expires + "; path=/";
+  }
+
+
+  removeCookie(key) {
+    this.createCookie(key, null, -1);
   }
 
   /**
