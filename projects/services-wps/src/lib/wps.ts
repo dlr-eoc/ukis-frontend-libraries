@@ -4,7 +4,6 @@ import { Observable, of } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { IWpsProcessBrief, IWpsProcessDescription, IWpsDataInputs, IWpsResponseForm, IWpsExecuteResponse, IWpsCapabilities, IWpsProcessDescriptions, IWpsInputDescription, IWpsOutputDescription } from "@ukis/datatypes-ogc";
 
-
 /**
  * This interface represents one single WPS. 
  * WPS-processes may be asynchronous. For this reason we need a mechanism to capture the current state of the WPS. That is what this class represents. 

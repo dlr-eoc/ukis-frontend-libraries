@@ -62,7 +62,7 @@
       ],
       "@ukis/datatypes-ogc": [
         "dist/datatypes-ogc",
-        "projects/datatypes-ogc/src/public_api"
+        "projects/datatypes-ogc"
       ],
       "@ukis/datatypes-ogc/*": [
         "dist/datatypes-ogc/*",
@@ -203,6 +203,12 @@
       "@ukis/process-control/*": [
         "dist/process-control/*",
         "projects/process-control/*"
+      ],
+      "datatypes-ogc": [
+        "dist/datatypes-ogc"
+      ],
+      "datatypes-ogc/*": [
+        "dist/datatypes-ogc/*"
       ]
     }
   }

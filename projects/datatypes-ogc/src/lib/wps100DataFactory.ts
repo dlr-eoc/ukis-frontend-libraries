@@ -1,5 +1,5 @@
-import { WPS_100_LiteralDataType, WPS_100_LiteralInputType, WPS_100__LiteralDataType, WPS_100__LiteralInputType } from "./xmlns/www.opengis.net/wps/1.0.0";
-import { TWpsLiteralDataType, IWpsLiteralInput, IWpsLiteralInputDescription, TMimeType, IWpsSupportedComplexDataInput, IWpsComplexDataDescription, IWpsComplexDataCombination, IWpsComplexDataCombinations, IWpsComplexInputDescription, IWpsInputDescription, IWpsProcessDescriptionDataInputs, IWpsProcessDescriptionProcessOutputs, IWpsSupportedComplexData, IWpsOutputDescription, IWpsProcessDescription, IWpsResponseForm, IWpsResponseFormDoc, IWpsData, IWpsLiteralData, IWpsComplexData, IWpsInput, IWpsDataInputs, IWpsProcessBrief, IOwsCode, IOwsLanguageString, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue } from "@ukis/datatypes-ogc";
+import { TWpsLiteralDataType, IWpsLiteralInput, IWpsLiteralInputDescription, TMimeType, IWpsSupportedComplexDataInput, IWpsComplexDataDescription, IWpsComplexDataCombination, IWpsComplexDataCombinations, IWpsComplexInputDescription, IWpsInputDescription, IWpsProcessDescriptionDataInputs, IWpsProcessDescriptionProcessOutputs, IWpsSupportedComplexData, IWpsOutputDescription, IWpsProcessDescription, IWpsResponseForm, IWpsResponseFormDoc, IWpsData, IWpsLiteralData, IWpsComplexData, IWpsInput, IWpsDataInputs, IWpsProcessBrief, IOwsCode, IOwsLanguageString, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue } from "./xmlns/www.opengis.net/wps/1.0.0_custom";
+
 
 
 /**
@@ -159,8 +159,11 @@ export class Wps100DataFactory {
         return form;
     }
 
-    static getSingleInputDescription(inputId: string, description: IWpsProcessDescription): IWpsInputDescription {
-        return description.dataInputs.input.find(inpt => inpt.identifier.value == inputId);
+    static getSingleInputDescription(inputId, description: IWpsProcessDescription): IWpsInputDescription {
+        let singleDescr =  description.dataInputs.input.find(function(inpt){
+            return (inpt.identifier.value == inputId);
+        });
+        return singleDescr;
     }
 
     /****************************************************************************
