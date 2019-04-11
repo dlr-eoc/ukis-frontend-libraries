@@ -60,6 +60,14 @@
         "dist/datatypes-user-info/*",
         "projects/datatypes-user-info/*"
       ],
+      "@ukis/datatypes-ogc": [
+        "dist/datatypes-ogc",
+        "projects/datatypes-ogc/src/public_api"
+      ],
+      "@ukis/datatypes-ogc/*": [
+        "dist/datatypes-ogc/*",
+        "projects/datatypes-ogc/*"
+      ],
       "@ukis/services-layers": [
         "dist/services-layers",
         "projects/services-layers/src/public_api"
@@ -186,6 +194,12 @@
       ],
       "@ukis/stepper-menu/*": [
         "dist/stepper-menu/*"
+      ],
+      "datatypes-ogc": [
+        "dist/datatypes-ogc"
+      ],
+      "datatypes-ogc/*": [
+        "dist/datatypes-ogc/*"
       ]
     }
   }

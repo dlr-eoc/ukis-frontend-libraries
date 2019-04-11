@@ -3,14 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Jsonix } from '@boundlessgeo/jsonix';
-//var Jsonix = require('jsonix').Jsonix;
-//import * as Jsonix from "jsonix/jsonix";
-import { IWpsCapabilities, IWpsProcessBrief, IWpsProcessDescriptions, IWpsExecuteProcessBody, IWpsExecuteProcessBodyName, IWpsExecuteProcessBodyValue, IWpsResponseForm, IOwsCode, IWpsDataInputs, IWpsOutputDefinition, IWpsInput, IWpsProcessDescription, IWpsOutputDescription, IWpsExecuteResponse } from '@ukis/datatypes-wps';
 import * as W3cFactory from "w3c-schemas/lib/XLink_1_0";
 import * as OwsFactory from "ogc-schemas/lib/OWS_1_1_0";
 import * as Wps1Factory from "ogc-schemas/lib/WPS_1_0_0";
 import * as Wps2Factory from "ogc-schemas/lib/WPS_2_0";
-import { WpsDataFactory } from '@ukis/datatypes-wps';
+import { IWpsCapabilities, IWpsProcessDescription, IWpsProcessBrief, IWpsDataInputs, IWpsResponseForm, IWpsExecuteResponse, Wps100DataFactory, IWpsProcessDescriptions } from '@ukis/datatypes-ogc';
 
 
 
@@ -23,19 +20,15 @@ import { WpsDataFactory } from '@ukis/datatypes-wps';
 @Injectable({
   providedIn: 'root'
 })
-export class ServicesWpsService {
+export class ServicesWps100Service {
   
-  wpsVersion;
   unmarshallerXmlToJson: any;
   marshallerJsonToXml: any;
 
-  constructor(wpsVersion: "1.0.0" | "2.0", private http: HttpClient) {
-    this.wpsVersion = wpsVersion;
+  constructor(private http: HttpClient) {
     let xlinkMapping = W3cFactory["XLink_1_0"];
     let owsMapping = OwsFactory["OWS_1_1_0"];
-    let wpsMapping;
-    if(this.wpsVersion == "1.0.0") wpsMapping = Wps1Factory["WPS_1_0_0"];
-    else wpsMapping = Wps2Factory["WPS_2_0"];
+    let wpsMapping = Wps1Factory["WPS_1_0_0"];
     let jsonixContext = new Jsonix.Context([xlinkMapping, owsMapping, wpsMapping], {namespacePrefixes: []});
     this.unmarshallerXmlToJson = jsonixContext.createUnmarshaller();
     this.marshallerJsonToXml = jsonixContext.createMarshaller();
@@ -95,7 +88,7 @@ export class ServicesWpsService {
     this.ensureInputsSuitProcess(processDescription, inputs);
     this.ensureResponseFormSuitsProcess(processDescription, responseForm);
 
-    let body = WpsDataFactory.executeProcessBody(processDescription, inputs, responseForm);
+    let body = Wps100DataFactory.executeProcessBody(processDescription, inputs, responseForm);
     let bodyString = this.marshallerJsonToXml.marshalString(body);
 
     var wpsQueryParams = {

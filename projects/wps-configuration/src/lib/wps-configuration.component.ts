@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Wps } from '@ukis/services-wps';
-import { IWpsProcessBrief, IWpsProcessDescription } from '@ukis/datatypes-wps';
 import { FormGroup, FormControl } from '@angular/forms';
+import { IWpsProcessBrief, IWpsProcessDescription } from '@ukis/datatypes-ogc';
 
 
 /**
@@ -10,7 +10,7 @@ import { FormGroup, FormControl } from '@angular/forms';
  * It obtains from the user configuration data and gives it to the wps.
  * The wps returns results, which this component serves to the user. 
  * 
- * user --> data --> component --> wps --> results --> component --> user
+ * user --> data --> WpsConfigurationComponent --> wps --> results --> WpsConfigurationComponent --> user
  * 
  * The component also makes sure all the steps in the configuration of the wps are done in the correct order. 
  * This is acchieved by relying on clarities "wizard" component. 
@@ -45,7 +45,7 @@ export class WpsConfigurationComponent implements OnInit {
 
   onProcessSelected(evt) {
     let selectedProcess = this.wpsConfigurationForm.controls["processFormControl"].value;
-    this.wps.process = selectedProcess;
+    this.wps.setProcess(selectedProcess);
     this.wps.getAvailableDescriptions().subscribe((descriptions) => {
       this.availableDescriptions = descriptions;
     });
@@ -53,7 +53,7 @@ export class WpsConfigurationComponent implements OnInit {
 
   onDescriptionSelected(evt) {
     let selectedDescription = this.wpsConfigurationForm.controls["descriptionFormControl"].value;
-    this.wps.description = selectedDescription;
+    this.wps.setDescription(selectedDescription);
   }
 
  

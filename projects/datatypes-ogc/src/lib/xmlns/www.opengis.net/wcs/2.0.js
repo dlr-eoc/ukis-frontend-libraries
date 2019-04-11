@@ -1,0 +1,88 @@
+var cxml = require("cxml");
+var Primitive = require('../../xml-primitives');
+var gml = require('../gml/3.2');
+var gmlcov = require('../gmlcov/1.0');
+var ows = require('../ows/2.0');
+var swe = require('../swe/2.0');
+
+cxml.register('http://www.opengis.net/wcs/2.0', exports, [
+	[Primitive, ['any', 'string'], []],
+	[gmlcov, ['AbstractCoverageType', 'MetadataType'], ['AbstractCoverage', 'metadata', 'rangeType']],
+	[ows, ['BoundingBoxType', 'CapabilitiesBaseType', 'ContentsBaseType', 'DescriptionType', 'GetCapabilitiesType', 'MetadataType', 'ServiceType', 'WGS84BoundingBoxType'], ['BoundingBox', 'Metadata', 'WGS84BoundingBox']],
+	[gml, ['AbstractFeatureType', 'CoverageFunctionType', 'DomainSetType'], ['AbstractFeature', 'AbstractObject', 'coverageFunction', 'domainSet']],
+	[swe, ['DataRecordPropertyType'], []]
+], [
+	'CapabilitiesType',
+	'ContentsType',
+	'CoverageDescriptionsType',
+	'CoverageDescriptionType',
+	'CoverageOfferingsType',
+	'CoverageSubtypeParentType',
+	'CoverageSummaryType',
+	'DescribeCoverageType',
+	'DimensionSliceType',
+	'DimensionSubsetType',
+	'DimensionTrimType',
+	'ExtensionType',
+	'GetCapabilitiesType',
+	'GetCoverageType',
+	'OfferedCoverageType',
+	'RequestBaseType',
+	'ServiceMetadataType',
+	'ServiceParametersType',
+	'VersionStringType'
+], [
+	[0, 0, [[12, 0], [13, 0], [14, 0], [15, 0], [16, 0], [17, 0], [18, 0], [19, 0], [20, 0], [21, 0], [23, 0], [24, 0], [25, 0], [26, 0], [29, 0], [30, 0], [33, 0], [36, 0], [37, 0]], []],
+	[0, 6, [[13, 1], [36, 1]], []],
+	[0, 7, [[20, 3], [26, 1]], []],
+	[0, 0, [[14, 3]], []],
+	[0, 13, [[9, 1], [16, 0], [10, 0], [2, 3], [3, 0], [37, 0]], []],
+	[0, 0, [[33, 3], [36, 0]], []],
+	[0, 0, [[18, 0], [19, 1]], []],
+	[0, 8, [[4, 3], [16, 0], [18, 0], [19, 1], [5, 3], [6, 3]], []],
+	[0, 32, [[16, 2]], []],
+	[0, 26, [[38, 0]], []],
+	[0, 0, [[22, 0]], []],
+	[0, 26, [[39, 1], [40, 1]], []],
+	[0, 0, [[11, 3]], []],
+	[0, 9, [], [[34, 0]]],
+	[0, 32, [[16, 0], [24, 3], [27, 1], [31, 1]], []],
+	[0, 0, [[1, 0], [37, 0]], []],
+	[0, 0, [[26, 1]], [[35, 0], [41, 0]]],
+	[0, 0, [[26, 1], [28, 2]], []],
+	[0, 0, [[18, 0], [19, 1], [26, 1], [32, 0]], []],
+	[3, 2, [], []],
+	[0, 0, [[23, 1], [25, 1]], []]
+], [
+	['*', [1], 4],
+	['Capabilities', [17], 0],
+	['Contents', [18], 0],
+	['CoverageDescription', [20], 0, 7],
+	['CoverageDescriptions', [19], 0],
+	['CoverageId', [2], 0],
+	['CoverageOfferings', [21], 0],
+	['CoverageSubtype', [2], 0],
+	['CoverageSubtypeParent', [22], 0],
+	['CoverageSummary', [23], 0],
+	['DescribeCoverage', [24], 0],
+	['Dimension', [2], 0],
+	['DimensionSlice', [25], 0, 24],
+	['DimensionSubset', [26], 3],
+	['DimensionTrim', [27], 0, 24],
+	['Extension', [28], 0],
+	['format', [2], 0],
+	['formatSupported', [2], 0],
+	['GetCapabilities', [29], 0],
+	['GetCoverage', [30], 0],
+	['mediaType', [2], 0],
+	['nativeFormat', [2], 0],
+	['OfferedCoverage', [31], 0],
+	['service', [11], 0],
+	['service', [2], 0],
+	['ServiceMetadata', [33], 0],
+	['ServiceParameters', [34], 0],
+	['SlicePoint', [2], 0],
+	['TrimHigh', [2], 0],
+	['TrimLow', [2], 0],
+	['version', [35], 0]
+]);

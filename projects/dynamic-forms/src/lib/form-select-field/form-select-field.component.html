@@ -1,0 +1,10 @@
+<div [formGroup]="parentFormGroup" >
+  <clr-input-container>
+    <label>
+      {{parameter.name}}:
+      <select [formControlName]="parameter.id" clrSelect >
+        <option *ngFor="let option of parameter.options" [value]="option">{{option}}</option>
+      </select>
+    </label>
+  </clr-input-container>
+</div>
