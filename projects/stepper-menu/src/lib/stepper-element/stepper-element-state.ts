@@ -1,1 +1,0 @@
-export type StepperElementState = "forbidden" | "available" | "active" | "completed";

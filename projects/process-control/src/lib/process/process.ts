@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { Process as WfProcess, ProductId } from 'workflowcontrol';
 import { tap, map } from 'rxjs/operators';
-import { Parameter } from 'projects/dynamic-forms/src/public-api';
+import { Parameter } from '@ukis/dynforms';
 
 
 

@@ -188,18 +188,21 @@
         "dist/user-info/*",
         "projects/user-info/*"
       ],
-      "@ukis/stepper-menu": [
-        "dist/stepper-menu",
-        "projects/stepper-menu/src/public_api"
+      "@ukis/dynforms": [
+        "dist/dynforms",
+        "projects/dynforms"
       ],
-      "@ukis/stepper-menu/*": [
-        "dist/stepper-menu/*"
+      "@ukis/dynforms/*": [
+        "dist/dynforms/*",
+        "projects/dynforms/*"
       ],
-      "datatypes-ogc": [
-        "dist/datatypes-ogc"
+      "@ukis/process-control": [
+        "dist/process-control",
+        "projects/process-control"
       ],
-      "datatypes-ogc/*": [
-        "dist/datatypes-ogc/*"
+      "@ukis/process-control/*": [
+        "dist/process-control/*",
+        "projects/process-control/*"
       ]
     }
   }

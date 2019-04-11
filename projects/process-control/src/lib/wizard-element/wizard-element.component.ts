@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Process } from '../process/process';
 import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ProcessService } from '../process/process.service';
-import { Parameter } from 'projects/dynamic-forms/src/public-api';
+import { Parameter } from '@ukis/dynforms';
 
 
 

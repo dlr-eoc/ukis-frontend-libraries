@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { FormComponent } from './form/form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormStringFieldComponent } from './form-string-field/form-string-field.component';
-import { FormSelectFieldComponent } from './form-select-field/form-select-field.component';
 import { FormBboxFieldComponent } from './form-bbox-field/form-bbox-field.component';
-import { ClarityModule } from '@clr/angular';
+import { FormSelectFieldComponent } from './form-select-field/form-select-field.component';
+import { FormStringFieldComponent } from './form-string-field/form-string-field.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClarityModule } from '@clr/angular';
 
 @NgModule({
   declarations: [
@@ -22,4 +22,4 @@ import { BrowserModule } from '@angular/platform-browser';
   ],
   exports: [FormComponent]
 })
-export class DynamicFormsModule { }
+export class DynformsModule { }
