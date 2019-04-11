@@ -7,6 +7,8 @@ import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 import { Layer, LayerGroup } from '@ukis/datatypes-layers';
 
+import { ReversePipe } from '../array-reverse.pipe';
+
 describe('LayerentryGroupComponent', () => {
   let component: LayerentryGroupComponent;
   let fixture: ComponentFixture<LayerentryGroupComponent>;
@@ -14,7 +16,7 @@ describe('LayerentryGroupComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule, FormsModule],
-      declarations: [LayerentryGroupComponent, LayerentryComponent]
+      declarations: [LayerentryGroupComponent, LayerentryComponent, ReversePipe]
     })
       .compileComponents();
   }));

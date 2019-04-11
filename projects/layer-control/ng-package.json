@@ -5,6 +5,10 @@
     "entryFile": "src/public_api.ts"
   },
   "whitelistedNonPeerDependencies": [
-    "tslib"
+    "tslib",
+    "@ukis/datatypes-layers",
+    "@ukis/services-map-state",
+    "@ukis/services-layers",
+    "@angular/cdk"
   ]
 }

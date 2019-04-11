@@ -22,7 +22,6 @@ export class UtilStoreService {
     //sor key as md5
     key = md5(key);
 
-
     // Check for native support
     if (typeof (Storage) !== "undefined") {
       lsSupport = true;

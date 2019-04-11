@@ -166,7 +166,7 @@
       ],
       "@ukis/owc-control": [
         "dist/owc-control",
-        "projects/owc-control/src/public_api"
+        "projects/owc-control"
       ],
       "@ukis/owc-control/*": [
         "dist/owc-control/*",
@@ -184,7 +184,7 @@
         "dist/user-info",
         "projects/user-info/src/public_api"
       ],
-      "@ukisuser-info/*": [
+      "@ukis/user-info/*": [
         "dist/user-info/*",
         "projects/user-info/*"
       ],

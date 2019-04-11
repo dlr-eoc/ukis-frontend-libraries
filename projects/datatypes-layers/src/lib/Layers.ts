@@ -4,6 +4,9 @@ export type popup = {
   asyncPupup?: (popupobj: any, cb: Function) => void;
 }
 
+/** geographic coordinates */
+export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
+
 export interface ILayerOptions {
   name: string
   id: string
@@ -24,7 +27,7 @@ export interface ILayerOptions {
   maxResolution?: number
   legendImg?: string
   /** geographic coordinates */
-  bbox?: [number, number, number, number]
+  bbox?: TGeoExtent
   /** true if show popup or set properties or popup-function  */
   popup?: boolean | Array<string> | popup
 }
@@ -73,7 +76,7 @@ export class Layer implements ILayerOptions {
   legendImg?: string;
 
   /** geographic coordinates */
-  bbox?: [number, number, number, number]
+  bbox?: TGeoExtent
   /** true if show popup or set properties or popup-function  */
   popup?: boolean | Array<string> | popup
 

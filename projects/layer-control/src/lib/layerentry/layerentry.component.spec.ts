@@ -4,6 +4,7 @@ import { LayerentryComponent } from './layerentry.component';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 import { Layer, LayerGroup } from '@ukis/datatypes-layers';
+import { LayersService } from '@ukis/services-layers';
 
 describe('LayerentryComponent', () => {
   let component: LayerentryComponent;
@@ -12,7 +13,8 @@ describe('LayerentryComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule, FormsModule],
-      declarations: [LayerentryComponent]
+      declarations: [LayerentryComponent],
+      providers: [LayersService]
     })
       .compileComponents();
   }));
@@ -20,6 +22,7 @@ describe('LayerentryComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LayerentryComponent);
     component = fixture.componentInstance;
+    component.layersSvc = new LayersService();
     component.layer = new Layer({
       type: 'wms',
       name: 'test layer',

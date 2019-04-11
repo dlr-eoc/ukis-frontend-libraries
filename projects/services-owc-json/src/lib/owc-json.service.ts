@@ -1,15 +1,21 @@
+
+import { Injectable } from '@angular/core';
+import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, IEocOwsContext, IEocOwsResource, IEocOwsOffering } from '@ukis/datatypes-owc-json';
+import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
+import { TGeoExtent } from '@ukis/datatypes-map-state';
+
 /**
  * OWS Context Service 
  * OGC OWS Context Geo Encoding Standard Version: 1.0
  * http://docs.opengeospatial.org/is/14-055r2/14-055r2.html
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html
+ * 
+ * This service allows you to read and write OWC-data. 
+ * We have added some custom fields to the OWC standard. 
+ *   - accepts the OWC-standard-datatypes as function inputs (so as to be as general as possible)
+ *   - returns our extended OWC-datatypes as function outputs (so as to be as information-rich as possible)
+ *   
  */
-
-import { Injectable } from '@angular/core';
-import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation } from '@ukis/datatypes-owc-json';
-import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
-import { TGeoExtent } from '@ukis/datatypes-map-state/src/lib/map-state';
-
 
 @Injectable({
   providedIn: 'root'
@@ -127,22 +133,22 @@ export class OwcJsonService {
 
   getResourceOpacity(resource: IOwsResource): number {
     let opacity = 1;
-    if(resource.properties.hasOwnProperty("opacity")) {
-        opacity = resource.properties.opacity;
+    if (resource.properties.hasOwnProperty("opacity")) {
+      opacity = resource.properties.opacity;
     }
     return opacity;
   }
 
   getResourceAttribution(resource: IOwsResource): string {
     let attribution = '';
-    if(resource.properties.hasOwnProperty("attribution")) {
+    if (resource.properties.hasOwnProperty("attribution")) {
       attribution = resource.properties.attribution;
     }
     return attribution;
   }
 
   getResourceShards(resource: IOwsResource): string {
-    if(resource.properties.hasOwnProperty("shards")) {
+    if (resource.properties.hasOwnProperty("shards")) {
       return resource.properties.shards;
     }
   }
@@ -165,7 +171,7 @@ export class OwcJsonService {
     return (offering.contents && !offering.operations) ? true : false;
   }
 
-  getOfferingContents(offering: IOwsOffering) {
+  getOfferingContents(offering: IOwsOffering): IOwsOperation[] | IOwsContent[] {
     if (this.checkIfServiceOffering(offering)) {
       return offering.operations;
     } else if (this.checkIfDataOffering(offering)) {
@@ -185,8 +191,8 @@ export class OwcJsonService {
       if (defaultStyle.length > 0) {
         console.log(defaultStyle[0].legendURL);
         return defaultStyle[0].legendURL;
-      } 
-    } else if(offering.hasOwnProperty("legendUrl")){
+      }
+    } else if (offering.hasOwnProperty("legendUrl")) {
       legendUrl = offering.legendUrl;
     }
     return legendUrl;
@@ -198,14 +204,14 @@ export class OwcJsonService {
    */
   getIconUrl(offering: IOwsOffering) {
     let iconUrl = "";
-    if(offering.hasOwnProperty("iconUrl")){
-        iconUrl = offering.iconUrl;
+    if (offering.hasOwnProperty("iconUrl")) {
+      iconUrl = offering.iconUrl;
     }
     return iconUrl;
   }
 
 
-  createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource): VectorLayer {
+  createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): VectorLayer {
     let iconUrl = this.getIconUrl(offering);
     let layerUrl = this.getUrlFromUri(offering.operations[0].href);
     let params = this.getJsonFromUri(offering.operations[0].href);
@@ -229,7 +235,9 @@ export class OwcJsonService {
     let layer = new VectorLayer(layerOptions);
 
     if (resource.bbox) {
-      layer.bbox = <[number, number, number, number]>resource.bbox;
+      layer.bbox = resource.bbox;
+    } else if (context && context.bbox) {
+      layer.bbox = context.bbox;
     }
 
     return layer;
@@ -238,7 +246,7 @@ export class OwcJsonService {
 
 
 
-  createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource): RasterLayer {
+  createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): RasterLayer {
     let offeringCode = this.getOfferingCode(offering);
 
     let customParams;
@@ -274,7 +282,9 @@ export class OwcJsonService {
     let layer: RasterLayer = new RasterLayer(layerOptions);
 
     if (resource.bbox) {
-      layer.bbox = <[number, number, number, number]>resource.bbox;
+      layer.bbox = resource.bbox;
+    } else if (context && context.bbox) {
+      layer.bbox = context.bbox;
     }
 
     return layer;
@@ -326,9 +336,9 @@ export class OwcJsonService {
       for (let offering of offerings) {
         let layer;
         if (offering.code.toLocaleLowerCase().indexOf('wmts') != -1 || offering.code.toLocaleLowerCase().indexOf('wms') != -1) {
-          layers.push(this.createRasterLayerFromOffering(offering, feature))
+          layers.push(this.createRasterLayerFromOffering(offering, feature, owc))
         } else if (offering.code.toLocaleLowerCase().indexOf('wfs') != -1 || offering.code.toLocaleLowerCase().indexOf('geojson') != -1) {
-          layers.push(this.createVectorLayerFromOffering(offering, feature))
+          layers.push(this.createVectorLayerFromOffering(offering, feature, owc))
         }
       }
     }
@@ -377,64 +387,68 @@ export class OwcJsonService {
   /**------------ DATA TO FILE -----------------------------------------*/
 
 
-   /**
-    * @TODO:
-    *   - bounding box
-    *   - properties
-    */
-   generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent): IOwsContext {
-     
-    let owc: IOwsContext = {
+  /**
+   * @TODO:
+   *   - bounding box
+   *   - properties
+   */
+  generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent): IEocOwsContext {
+
+    let owc: IEocOwsContext = {
       "id": id,
       "type": "FeatureCollection",
       "properties": null,
       "features": []
     };
 
-    if(extent) {
+    if (extent) {
       owc["bbox"] = extent;
     }
 
-    for(let baselayer of baselayers) {
-      let resource: IOwsResource = this.generateResourceFromLayer(baselayer);
+    for (let baselayer of baselayers) {
+      let resource: IEocOwsResource = this.generateResourceFromLayer(baselayer);
       owc.features.push(resource);
     }
 
-    for(let overlay of overlays) {
-      let resource: IOwsResource = this.generateResourceFromLayer(overlay);
+    for (let overlay of overlays) {
+      let resource: IEocOwsResource = this.generateResourceFromLayer(overlay);
       owc.features.push(resource);
     }
 
-     return owc;
-   }
+    return owc;
+  }
 
 
-  generateResourceFromLayer(layer: Layer): IOwsResource {
-    let resource: IOwsResource = {
-      "id": layer.id, 
+  generateResourceFromLayer(layer: Layer): IEocOwsResource {
+    let resource: IEocOwsResource = {
+      "id": layer.id,
       "properties": {
         title: layer.name,
         updated: null,
-        offerings: [this.generateOfferingFromLayer(layer)]
-      }, 
-      "type": "Feature", 
+        offerings: [this.generateOfferingFromLayer(layer)],
+        opacity: layer.opacity,
+        attribution: layer.attribution
+      },
+      "type": "Feature",
       "geometry": null
     }
-
     return resource;
   }
 
-  generateOfferingFromLayer(layer: Layer): IOwsOffering {
-    let offering: IOwsOffering = {
+  generateOfferingFromLayer(layer: Layer, legendUrl?: string, iconUrl?: string): IEocOwsOffering {
+    let offering: IEocOwsOffering = {
       "code": this.getOfferingCodeFromLayer(layer),
-      "operations": this.getOperationsFromLayer(layer)
+      "operations": this.getOperationsFromLayer(layer),
+      "title": layer.name
     };
-
+    if(legendUrl) offering.legendUrl = legendUrl;
+    if(iconUrl) offering.iconUrl = iconUrl;
     return offering;
   }
 
   getOfferingCodeFromLayer(layer: Layer): string {
-    switch(layer.type) {
+
+    switch (layer.type) {
       case "wms":
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
       case "wmts":
@@ -450,26 +464,26 @@ export class OwcJsonService {
 
   getOperationsFromLayer(layer: Layer): IOwsOperation[] {
     if (layer instanceof RasterLayer) {
-      switch(layer.type) {
+      switch (layer.type) {
         case "wms":
           return this.getWmsOperationsFromLayer(layer);
-        case "wmts": 
+        case "wmts":
           return this.getWmtsOperationsFromLayer(layer);
         case "xyz":
           return this.getTmsOperationsFromLayer(layer);
-        default: 
+        default:
           throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
-        }
       }
-      
-      else if (layer instanceof VectorLayer) {
-        switch(layer.type) {
-          // case "wfs": <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts 
-          //   return this.getWfsOperationsFromLayer(layer);
-          case "geojson":
-            return this.getGeojsonOperationsFromLayer(layer);
-          default: 
-            throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
+    }
+
+    else if (layer instanceof VectorLayer) {
+      switch (layer.type) {
+        // case "wfs": <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts 
+        //   return this.getWfsOperationsFromLayer(layer);
+        case "geojson":
+          return this.getGeojsonOperationsFromLayer(layer);
+        default:
+          throw new Error("This type of service (" + layer.type + ") has not been implemented yet.");
       }
     }
 
@@ -492,15 +506,15 @@ export class OwcJsonService {
     let url = layer.url;
     let layerName = layer.name;
     let version = layer.options.version ? layer.options.version : "1.1.0";
-    
+
 
     let GetFeature: IOwsOperation = {
       "code": "GetFeature",
-      "method": "GET", 
+      "method": "GET",
       "type": "application/json",
       "href": `${url}?service=WFS&version=${version}&request=GetFeature`
     };
-    
+
     // let DescribeFeatureType: IOwsOperation = null;
     // let GetCapabilities: IOwsOperation = null;
     // let GetPropertyValue: IOwsOperation = null;
@@ -528,14 +542,14 @@ export class OwcJsonService {
 
     return operations;
   }
-  
+
 
   getWmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
-    
+
     let url = layer.url;
     let wmsVersion = layer.params.VERSION;
     let layerName = layer.name;
-    
+
     let getMap: IOwsOperation = {
       "code": "GetMap",
       "method": "GET",
@@ -567,11 +581,11 @@ export class OwcJsonService {
   }
 
   getWmtsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
-    
+
     let url = layer.url;
     let wmtsVersion = layer.params.version;
     let layerName = layer.name;
-    
+
     let getTile: IOwsOperation = {
       "code": "GetTile",
       "href": `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=image%2Fpng&LAYER=${layerName}&VERSION=${wmtsVersion}`,

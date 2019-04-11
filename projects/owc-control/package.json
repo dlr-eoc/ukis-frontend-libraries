@@ -1,8 +1,15 @@
 {
   "name": "@ukis/owc-control",
-  "version": "0.0.1",
+  "version": "0.0.0-PLACEHOLDER",
   "peerDependencies": {
-    "@angular/common": "^7.0.0",
-    "@angular/core": "^7.0.0"
+    "@angular/common": "^7.2.0",
+    "@angular/core": "^7.2.0"
+  },
+  "dependencies": {
+    "@ukis/services-layers": "0.0.0-PLACEHOLDER",
+    "@ukis/datatypes-layers": "0.0.0-PLACEHOLDER",
+    "@ukis/services-owc-json": "0.0.0-PLACEHOLDER",
+    "@ukis/datatypes-map-state": "0.0.0-PLACEHOLDER",
+    "@ukis/services-map-state": "0.0.0-PLACEHOLDER"
   }
 }

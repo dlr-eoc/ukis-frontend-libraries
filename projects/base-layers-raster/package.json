@@ -1,10 +1,9 @@
 {
   "name": "@ukis/base-layers-raster",
-  "version": "1.0.0",
+  "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
-  "peerDependencies": {
-    "@angular/common": "^7.1.0",
-    "@angular/core": "^7.1.0",
-    "@ukis/datatypes-layers": "^1.0.0"
+  "peerDependencies": {},
+  "dependencies": {
+    "@ukis/datatypes-layers": "0.0.0-PLACEHOLDER"
   }
 }
