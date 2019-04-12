@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserService, UserDetails } from '../user.service';
+import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+import { UserService, IUserinfo, IUser } from '../user.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -8,41 +8,61 @@ import { Subscription } from 'rxjs';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnDestroy {
 
   usrInfoForm = new FormGroup({
     usrName: new FormControl('', Validators.required),
-    usrPass: new FormControl('', Validators.required),
-    remember: new FormControl(true)
-  });
+    usrPass: new FormControl('', [Validators.required, Validators.minLength(4)]),
+    remember: new FormControl(false)
+  }, { updateOn: 'blur' });
 
   usrSubsription: Subscription;
-  user: UserDetails;
-  submitted:boolean
+  user: IUser;
+  submitted: boolean
 
   constructor(@Inject(UserService) public usrSvc: UserService) {
-    this.usrSubsription = this.usrSvc.getUser().subscribe((user) => {
-      this.user = user;
+    this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
+      this.user = userinfo.current_user;
     }, (error) => {
       console.log(error);
     });
   }
 
-  ngOnInit() {
-
-  }
-
-  ngOnDestroy(){
-    this.usrSubsription.unsubscribe();
-  }
-
   login() {
-    console.log(this.usrSvc)
-    this.usrSvc.login(this.usrInfoForm.get("usrName").value, this.usrInfoForm.get("usrPass").value, this.usrInfoForm.get("remember").value);
+    console.log(this.usrInfoForm)
+    let user: IUser = {
+      userName: this.usrInfoForm.get("usrName").value,
+      password: this.usrInfoForm.get("usrPass").value,
+      remember: this.usrInfoForm.get("remember").value
+    }
+    this.usrSvc.login(user);
+  }
+
+  getFormError(key) {
+    let error = '';
+    const controlErrors: ValidationErrors = this.usrInfoForm.get(key).errors;
+    if (controlErrors != null) {
+      Object.keys(controlErrors).forEach((keyError, index) => {
+        let _error = keyError;
+        if (keyError !== 'required') {
+          _error = JSON.stringify(this.usrInfoForm.get(key).errors[keyError]);
+        }
+        if (index == 0) {
+          error += `${_error}`
+        } else {
+          error += ` and ${_error}`
+        }
+      });
+    }
+    return error;
   }
 
   logout() {
-    this.usrSvc.logout()
+    this.usrSvc.logout();
+  }
+
+  ngOnDestroy() {
+    this.usrSubsription.unsubscribe();
   }
 
 }

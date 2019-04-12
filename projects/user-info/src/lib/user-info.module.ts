@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { LoginViewComponent } from './login-view/login-view.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
 import { CommonModule } from '@angular/common';
@@ -9,7 +8,7 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [LoginViewComponent, LoginComponent, RegisterComponent, UserDetailsComponent],
+  declarations: [LoginComponent, RegisterComponent, UserDetailsComponent],
   imports: [
     CommonModule,
     ClarityModule,
@@ -17,6 +16,6 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  exports: [LoginViewComponent, LoginComponent, RegisterComponent, UserDetailsComponent]
+  exports: [LoginComponent, RegisterComponent, UserDetailsComponent]
 })
 export class UserInfoModule { }

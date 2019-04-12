@@ -1,38 +1,36 @@
-<div>
-  <form [formGroup]="usrInfoForm" (ngSubmit)="register()" [hidden]="submitted">
+<div class="login-wrapper">
+  <form class="login" [formGroup]="usrInfoForm" (ngSubmit)="register()">
     <div class="login-group">
-      <label for="login_username" aria-haspopup="true" role="tooltip" class="input tooltip tooltip-validation tooltip-sm tooltip-top-left"
-        [class.invalid]="usrInfoForm.get('usrName').invalid
-            && (usrInfoForm.get('usrName').dirty || usrInfoForm.get('usrName').touched)">
-        <input class="username" type="text" id="login_username" placeholder="Username" [formControl]="usrInfoForm.get('usrName')">
-        <span class="tooltip-content">
-          Username is required.
-        </span>
-      </label>
-
-      <label for="login_password" aria-haspopup="true" role="tooltip" class="input tooltip tooltip-validation tooltip-sm tooltip-top-left"
-        [class.invalid]="usrInfoForm.get('usrPass').invalid
-          && (usrInfoForm.get('usrPass').dirty || usrInfoForm.get('usrPass').touched)">
-        <input class="password" type="password" id="login_password" placeholder="Password" [formControl]="usrInfoForm.get('usrPass')">
-        <span class="tooltip-content">
-          Password is required.
-        </span>
-      </label>
-
-      <input class="firstName" type="text" id="login_firstName" placeholder="First Name" [formControl]="usrInfoForm.get('firstName')">
-      <input class="lastName" type="text" id="login_lastName" placeholder="Last Name" [formControl]="usrInfoForm.get('lastName')">
+      <clr-input-container>
+        <input type="text" name="usrName" clrInput placeholder="Username" [formControl]="usrInfoForm.get('usrName')" />
+        <clr-control-error>Username is {{getFormError('usrName')}}</clr-control-error>
+      </clr-input-container>
+      <clr-password-container>
+        <input type="password" name="usrPass" clrPassword placeholder="Password"
+          [formControl]="usrInfoForm.get('usrPass')" />
+        <clr-control-error>Password is {{getFormError('usrPass')}}</clr-control-error>
+      </clr-password-container>
 
 
-      <label for="login_email" aria-haspopup="true" role="tooltip" class="input tooltip tooltip-validation tooltip-sm tooltip-top-left"
-        [class.invalid]="usrInfoForm.get('email').invalid
-          && (usrInfoForm.get('email').dirty || usrInfoForm.get('email').touched)">
-        <input class="email" type="email" id="login_email" placeholder="Email" [formControl]="usrInfoForm.get('email')">
-        <span class="tooltip-content">
-          Enter a valid email.
-        </span>
-      </label>
+      <clr-input-container>
+        <input type="text" name="firstName" clrInput placeholder="First Name"
+          [formControl]="usrInfoForm.get('firstName')" />
+        <clr-control-error>First Name is {{getFormError('firstName')}}</clr-control-error>
+      </clr-input-container>
 
-      <button type="button" class="btn btn-primary" [disabled]="usrInfoForm.invalid" (click)="register()">Register</button>
+      <clr-input-container>
+        <input type="text" name="lastName" clrInput placeholder="Last Name"
+          [formControl]="usrInfoForm.get('lastName')" />
+        <clr-control-error>Last Name is {{getFormError('lastName')}}</clr-control-error>
+      </clr-input-container>
+
+      <clr-input-container>
+        <input type="email" name="email" clrInput placeholder="Email" [formControl]="usrInfoForm.get('email')" />
+        <clr-control-error>Is not a {{getFormError('email')}}</clr-control-error>
+      </clr-input-container>
+
+      <button type="submit" class="btn btn-primary" [disabled]="usrInfoForm.invalid"
+        (click)="register()">Register</button>
     </div>
   </form>
 </div>

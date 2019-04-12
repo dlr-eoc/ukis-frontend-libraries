@@ -1,28 +1,23 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserDetails, UserService } from '../user.service';
+import { UserService, IUser } from '../user.service';
 
 @Component({
   selector: 'ukis-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss']
 })
-export class UserDetailsComponent implements OnInit, OnDestroy {
+export class UserDetailsComponent implements OnDestroy {
 
   usrSubsription: Subscription;
-  user: UserDetails;
+  user: IUser;
 
   constructor(@Inject(UserService) public usrSvc: UserService) {
-    this.usrSubsription = this.usrSvc.getUser().subscribe((user) => {
-      console.log(user)
-      this.user = user;
+    this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
+      this.user = userinfo.current_user;
     }, (error) => {
       console.log(error);
     });
-  }
-
-  ngOnInit() {
-
   }
 
   logout() {
@@ -32,5 +27,4 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.usrSubsription.unsubscribe();
   }
-
 }

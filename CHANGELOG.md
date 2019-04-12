@@ -1,3 +1,12 @@
+### Breaking Changes
+* **@ukis/user-info:** component ukis-login-view removed - create your view e.g. in a route with the provided components! 
+* **@ukis/user-info:** user.service.ts api changes
+
+
+### Features
+* **@ukis/services-util-store:** remove cookie method ([ca3b11fecac](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/ca3b11fecacb1a1f0372226ae3e5f7e29157a557))
+
+
 # [2.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.1.0) (2019-04-01)
 
 ### Features
