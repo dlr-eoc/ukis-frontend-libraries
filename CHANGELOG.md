@@ -1,3 +1,5 @@
+# [3.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.0) (2019-04-15)
+
 ### Breaking Changes
 * **@ukis/user-info:** component ukis-login-view removed - create your view e.g. in a route with the provided components! 
 * **@ukis/user-info:** user.service.ts api changes
