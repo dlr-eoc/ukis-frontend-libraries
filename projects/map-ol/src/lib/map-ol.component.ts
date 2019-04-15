@@ -114,7 +114,7 @@ export class MapOlComponent implements OnInit, OnDestroy {
     //add/remove layers
     if (this.layersSvc) {
       this.baselayersAddRemoveOn = this.layersSvc.getBaseLayers().subscribe(layers => {
-        console.log("Baselayer add or remove", layers)
+        //console.log("Baselayer add or remove", layers)
         if (layers.length != this.mapSvc.getLayers('baselayers').length) {
 
           //set only one visible at start
@@ -140,7 +140,7 @@ export class MapOlComponent implements OnInit, OnDestroy {
                 bllayer.setVisible(layer.visible);
               }
               if (bllayer.getZIndex() != layers.indexOf(layer)) {
-                console.log('setZIndex', layer.name, layers.indexOf(layer), bllayer.getZIndex());
+                //console.log('setZIndex', layer.name, layers.indexOf(layer), bllayer.getZIndex());
                 bllayer.setZIndex(layers.indexOf(layer));
               }
               if (bllayer.getOpacity() != layer.opacity) {
@@ -158,14 +158,14 @@ export class MapOlComponent implements OnInit, OnDestroy {
       this.layersAddRemoveOn = this.layersSvc.getOverlays().subscribe(layers => {
         let _baselayerslength = this.mapSvc.getLayers('baselayers').length;
         if (layers.length != this.mapSvc.getLayers('overlays').length) {
-          console.log("Layer add or remove", layers)
+          //console.log("Layer add or remove", layers)
           this.mapSvc.setOverlays(layers)
           //if baslayers set zIndex on add layer
           if (_baselayerslength > 0) {
             for (let layer of layers) {
               let ollayer = this.mapSvc.getLayerByKey({ key: 'id', value: layer.id }, 'overlays');
               if (ollayer) {
-                console.log("layer.zIndex", layer.zIndex)
+                //console.log("layer.zIndex", layer.zIndex)
                 if (ollayer.getZIndex() != layers.indexOf(layer) + _baselayerslength) {
                   //console.log('setZIndex', layer.name, layers.indexOf(layer), ollayer.getZIndex());
                   ollayer.setZIndex(layers.indexOf(layer) + _baselayerslength);
