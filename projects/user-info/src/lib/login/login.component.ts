@@ -29,7 +29,7 @@ export class LoginComponent implements OnDestroy {
   }
 
   login() {
-    console.log(this.usrInfoForm)
+    //console.log(this.usrInfoForm)
     let user: IUser = {
       userName: this.usrInfoForm.get("usrName").value,
       password: this.usrInfoForm.get("usrPass").value,
