@@ -125,6 +125,7 @@ export abstract class BasicProcess implements MutableProcess, SortableProcess {
     }
 
     execute(inputs: Product[]): Observable<Product[]> {
+        // @TODO: ensure that all configuration has been properly set.
         this.state = "running";
         return this.process(inputs).pipe(
             map(results => {

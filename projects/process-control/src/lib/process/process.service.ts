@@ -21,6 +21,7 @@ export interface IProcessService {
 
 /**
  *  This implementation of IProcessService makes use of the WorkflowControl-module to achieve its requirements. 
+ * @TODO: maybe make it abstract class ProcessService<T extends BasicProcess> ?
  */
 
 export abstract class ProcessService implements IProcessService {
