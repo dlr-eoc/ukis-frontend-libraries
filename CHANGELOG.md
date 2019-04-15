@@ -1,3 +1,8 @@
+
+### Bug Fixes
+* **@ukis/dataset-explorer:** data type icons path to polygon, raster, line etc. was given absolute, therefore could not be found in deployed environments ([#UKISDEV-771
+](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-771))
+
 # [2.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.1.0) (2019-04-01)
 
 ### Features
