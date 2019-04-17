@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserDetailsComponent } from './user-details.component';
 import { HttpClient } from '@angular/common/http';
-import { UserService } from '@ukisuser-info/src/lib/user.service';
+import { UserService } from '@ukis/user-info/src/lib/user.service';
 
 /*
 describe('UserDetailsComponent', () => {

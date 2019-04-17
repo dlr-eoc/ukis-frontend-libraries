@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OwcControlComponent } from './owc-control.component';
-import { LayersService } from '@ukis/services-layers/src/public_api';
-import { MapStateService } from '@ukis/services-map-state/src/public_api';
+import { LayersService } from '@ukis/services-layers';
+import { MapStateService } from '@ukis/services-map-state';
 
 describe('OwcControlComponent', () => {
   let component: OwcControlComponent;

@@ -5,12 +5,12 @@ import { ReversePipe } from '../array-reverse.pipe';
 import { LayersService } from '@ukis/services-layers';
 
 
-import { MapStateService } from '@ukis/services-map-state/src/public_api';
+import { MapStateService } from '@ukis/services-map-state';
 import { Component, Input } from '@angular/core';
 import { of } from 'rxjs';
 import { RasterLayer } from '@ukis/datatypes-layers/src/lib/Layers';
 import { LayerentryGroupComponent } from '@ukis/layer-control/src/lib/layerentry-group/layerentry-group.component';
-import { LayerGroup } from '@ukis/datatypes-layers/src/public_api';
+import { LayerGroup } from '@ukis/datatypes-layers';
 
 /**
  * this service extends the LayersService to mimik its behaviour. The getLayerGroups function is overwritten to 

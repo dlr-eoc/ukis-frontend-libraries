@@ -1,7 +1,7 @@
 import { Component, Input, Inject, OnChanges, OnDestroy, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { IOwsContext, IOwsResource } from '@ukis/datatypes-owc-json';
+import { IOwsContext, IEocOwsResource } from '@ukis/datatypes-owc-json';
 import { Layer } from '@ukis/datatypes-layers';
 
 import { DatasetExplorerService } from "./dataset-explorer.service";
@@ -9,6 +9,7 @@ import { LayersService } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 
 import { Subscription } from 'rxjs';
+import * as dayjsImported from 'dayjs'; const dayjs = dayjsImported; //https://github.com/ng-packagr/ng-packagr/issues/217
 
 export interface ColumnDescriptor {
   title: string,
@@ -24,42 +25,78 @@ export interface DataGridDescriptor {
   columns: ColumnDescriptor[]
 }
 
+export interface Ifilter {
+  children: Ifilter[]
+  criterionType: "Topic"
+  id: string
+  leaf: boolean
+  name: string
+  parent: null | string
+  siblings: Ifilter[]
+  count?: number
+}
+
+export interface Ifilters {
+  children: Ifilter[]
+  prop: string
+  title: string
+  selected?: Ifilter
+}
+
 const clone = function (o) {
   return JSON.parse(JSON.stringify(o))
 }
+const DATEFORMAT = 'YYYY-MM-DD';
 
+const minMaxDate = function (dates: Date[]) {
+  var sorted = dates.sort((a, b) => {
+    return a.getTime() - b.getTime();
+  });
+  var minDate = sorted[0];
+  var maxDate = sorted[sorted.length - 1];
+  return {
+    min: minDate,
+    max: maxDate
+  }
+}
 
 @Component({
   selector: 'ukis-dataset-explorer',
   templateUrl: './dataset-explorer.component.html',
-  styleUrls: ["./dataset-explorer.scss"]
+  styleUrls: ["./dataset-explorer.scss"],
+  host: {
+    "[class.dataset-explorer]": "true"
+  }
 })
 export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   @Input('layers-svc') layersSvc: LayersService;
   @Input('map-state-svc') mapStateSvc: MapStateService;
   @Input('ows-context') owsContext: IOwsContext;
 
-  @Input('bbox-filter') bboxfilter?: (value: IOwsResource, index: number, array: IOwsResource[]) => any;
+  @Input('bbox-filter') bboxfilter?: (value: IEocOwsResource) => any;
   @Input('table-props') tableProps?: { rowdetail: string, rowclass: string, columns: ColumnDescriptor[] };
   @Input('filter-props') filterProps?: any[];
+  @Input('is-active') isactive?: boolean;
 
   @ViewChild('treeroot') treeroot;
 
 
 
-  datasets: IOwsResource[];
-  datasetsFiltered: IOwsResource[] = [];
-  datasetSelected: IOwsResource[] = [];
-  datasetSelectedCache: IOwsResource[] = [];
+  datasets: IEocOwsResource[];
+  datasetsFiltered: IEocOwsResource[] = [];
+  datasetsFilteredLength: number;
+  datasetSelected: IEocOwsResource[] = [];
+  selectedMap: Map<string, IEocOwsResource> = new Map();
 
   mapLayers: Layer[] = [];
-  layerIDs: string[] = [];
+  //layerIDs: string[] = [];
 
   oldIds: string[] = [];
 
-  filters: any[];
-  filtersFiltered: any[];
+  filters: Ifilters[];
+  filtersFiltered: Ifilters[];
   filterSelected: boolean = false;
+  activeFilters: Array<Ifilter[]> = [];
 
   columns: ColumnDescriptor[] = [];
   layersSubscription: Subscription;
@@ -68,19 +105,39 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   //mock-up
   filterMapExtend: boolean = false;
   filterTimeRange: boolean = false;
+  /**
+   * A date range of the OWC Data with a min and a max and the chosen values valuemin and valuemax in format 'YYYY-MM-DD'
+   */
+  daterange: { min: string, max: string, valuemin: string, valuemax: string };
 
   constructor(@Inject(DatasetExplorerService) private obsSvc: DatasetExplorerService) {
     //this.filterOnBbox = false;
+    this.daterange = {
+      min: dayjs().format(DATEFORMAT), //.formt(DATEFORMAT)//moment().format(DATEFORMAT),
+      max: dayjs().format(DATEFORMAT),//moment().format(DATEFORMAT),
+      valuemin: dayjs().format(DATEFORMAT),//moment().format(DATEFORMAT),
+      valuemax: dayjs().format(DATEFORMAT)//moment().format(DATEFORMAT)
+    }
+  }
+
+  onDateChange(event) {
+    if (!dayjs(this.daterange.valuemin).isValid()) {
+      this.daterange.valuemin = this.daterange.min;
+    }
+    if (!dayjs(this.daterange.valuemax).isValid()) {
+      this.daterange.valuemax = this.daterange.max;
+    }
+    this.applyFilters('date');
   }
 
   ngOnInit() {
     this.imagesForDatatypes = {
-      "raster": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/raster.png",
-      "point": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/point.png",
-      "line": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/line.png",
-      "polygon": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/polygon.png",
-      "literature": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/literature.png",
-      "statistics": "https://wisdom.eoc.dlr.de/Elvis/img/ListGrid/statistics.png"
+      "raster": "assets/icons/raster.png",
+      "point": "assets/icons/point.png",
+      "line": "assets/icons/line.png",
+      "polygon": "assets/icons/polygon.png",
+      "literature": "assets/icons/literature.png",
+      "statistics": "assets/icons/statistics.png"
     }
 
     this.subscribeToLayerSvc();
@@ -88,60 +145,149 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes) {
     if (changes.owsContext) {
-
-
+      console.log('owsContext Changes')
       this.datasets = this.owsContext.features;
-
       this.columns = this.tableProps.columns;
+
+      let dataDateRange = this.getMinAndMaxDate(this.datasets);
+      this.daterange.min = dataDateRange.min;
+      this.daterange.max = dataDateRange.max;
+      this.daterange.valuemin = dataDateRange.min; //dayjs().format(DATEFORMAT);
+      this.daterange.valuemax = dataDateRange.max;
 
       // rename property to "children" in the root 
       this.filters = this.filterProps.map(f => { f.children = this.owsContext.properties[f.prop]; return f });
       // work only on the clone and keep original data unmodified
       this.filtersFiltered = clone(this.filters);
+    }
 
-      this.applyFilters();
+    if (changes.isactive) {
+      console.log('Modal isactive Changes')
+      this.getDatasetsForLayers(this.mapLayers)
+    }
+
+    //try to only apply filter once
+    if (changes.isactive || changes.owsContext) {
+      console.log('Modal isactive or owsContext Changes')
+      this.applyFilters('ngChanges');
     }
   }
 
-  filterAdd(node, i) {
+  /*
+  * not used due to clarity issue 2342
+  saveSelections() {
+    if (this.datasetSelected.length != 0) {
+      this.datasetSelected.forEach((d) => {
+        let key = d.id.toString();
+        if (!this.selectedMap.has(key)) {
+          this.selectedMap.set(key, d);
+        }
+      })
+    }
+  }
+
+  restoreSelections() {
+    if (this.selectedMap.size > 0) {
+      this.datasetSelected = Array.from(this.selectedMap.values())
+    }
+  }
+  */
+  filterAdd(node: Ifilter, i) {
     /**
      * save selected Array - clarity issue 2342 Datagrid clears the selection on filter or source change
      */
-    if (this.datasetSelected.length != 0) {
-      this.datasetSelectedCache = clone(this.datasetSelected)
-    }
+    //this.saveSelections(); * not used due to clarity issue 2342
 
+    //store last filters in Array to get parrent if a filter is removed
+    if (!this.activeFilters[i]) {
+      this.activeFilters[i] = [];
+    }
+    this.activeFilters[i].push(node);
     this.filtersFiltered[i].selected = node;
     this.filtersFiltered[i].children = node.children;
-    this.applyFilters();
+
+    this.applyFilters(node.id);
   }
 
   filterRemove(i) {
-    this.filtersFiltered[i].selected = null;
-    this.filtersFiltered[i].children = clone(this.filters[i].children);
-    this.applyFilters();
+    let activeFilters = this.activeFilters[i];
+    let removed = activeFilters.pop();
+    if (activeFilters.length > 0) {
+      let parrent = activeFilters.slice(-1);
+      this.filtersFiltered[i].children = clone(parrent[0].children);
+      this.filtersFiltered[i].selected = parrent[0];
+    } else {
+      this.filtersFiltered[i].selected = null;
+      this.filtersFiltered[i].children = clone(this.filters[i].children);
+    }
+
+    this.applyFilters(removed.id);
 
     /**
      * restore selected Array - clarity issue 2342 Datagrid clears the selection on filter or source change
      */
-    if (this.datasetSelectedCache.length > 0) {
-      this.datasetSelected = this.datasetSelectedCache;
+    //this.restoreSelections() * not used due to clarity issue 2342
+    this.getDatasetsForLayers(this.mapLayers)
+  }
+
+  isBboxFilter() {
+    return this.bboxfilter && this.filterMapExtend;
+  }
+
+  isTimeFilter() {
+    return this.filterTimeRange;
+  }
+
+  isPropsFilter() {
+    return this.activeFilters.map((value) => {
+      return (value.length > 0) ? 1 : 0;
+    }).includes(1);
+  }
+
+  isAnyFilter() {
+    let allActiveFilter = [];
+    if (this.isBboxFilter())
+      allActiveFilter.push('bbox');
+    if (this.isTimeFilter())
+      allActiveFilter.push('time');
+    if (this.isPropsFilter())
+      allActiveFilter.push('props');
+    return {
+      filters: allActiveFilter,
+      is: this.isBboxFilter() || this.isTimeFilter() || this.isPropsFilter()
     }
   }
 
-  applyFilters() {
 
-    // flatten to a simple array of filterterms
-    var filterterms = this.filtersFiltered.reduce((acc, val) => {
-      if (val.selected) acc.push(val.selected.id);
-      return acc;
-    }, []);
+  applyFilters(triggerer?) {
+    this.datasetsFiltered = this.datasets;
+    if (this.isAnyFilter().is) {
+      let filterterms;
+      if (this.isPropsFilter()) {
+        //get all ids from activefilters array to filter on child parent relationship - UKISDEV-758
+        filterterms = this.activeFilters.reduce((acc: any, val) => {
+          let ids = val.map(f => f.id);
+          // acc.push(ids) -> [[100,200],[vector]]
+          // spread array of ids in the initial array acc e.g [] = [[100,200],[vector]]
+          return [...acc, ...[...ids]];
+        }, []);
+      }
 
-    if (filterterms.length) { // filter the datasets
-      this.datasetsFiltered = this.datasets.filter(d =>
-        filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
-      );
-    } else { // if there are no filterterms reseed the datasets in the table
+      if (this.isBboxFilter()) {
+        this.datasetsFiltered = this.datasetsFiltered.filter(this.bboxfilter);
+      }
+
+      if (this.isTimeFilter()) {
+        this.datasetsFiltered = this.datasetsFiltered.filter(this.timeRangeFilter);
+      }
+
+      if (this.isPropsFilter() && filterterms.length) {
+        this.datasetsFiltered = this.datasetsFiltered.filter(resource => this.propsFilter(resource, filterterms));
+      }
+    }
+
+    // if there are no filterterms reseed the datasets in the table
+    if (!this.isAnyFilter().is) {
       this.datasetsFiltered = this.datasets;
     }
 
@@ -151,7 +297,7 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
       d.properties.customAttributes.categoryIds.forEach((t) => count[t] = count[t] ? count[t] + 1 : 1);
     });
 
-    console.log(count);
+    //console.log(count);
     // add the count as a property to each of the current active filterterms 
     this.filtersFiltered.forEach((fd) => {
       fd.children.forEach((c) => {
@@ -159,18 +305,37 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
         c.count = count[c.id];
       })
     });
+    console.log(`Filters applyed`, this.filtersFiltered);
+    this.datasetsFilteredLength = this.datasetsFiltered.length;
   }
 
-  //TODO fix subsribe remove 
+  getLayerFromDatasets(layer: Layer) {
+    return this.datasets.filter(d => d.id == layer.id)[0];
+  }
+
+  getDatasetsForLayers(layers: Layer[]) {
+    this.datasetSelected = [];
+    layers.forEach((l) => {
+      let d = this.getLayerFromDatasets(l);
+      if (d && this.datasetSelected.indexOf(d) == -1) {
+        this.datasetSelected.push(d)
+      }
+    })
+  }
+
   subscribeToLayerSvc() {
     this.layersSubscription = this.layersSvc.getOverlays().subscribe(layers => {
       this.mapLayers = layers;
-      this.layerIDs = this.mapLayers.map(l => l.id + "")
+      //this.layerIDs = this.mapLayers.map(l => l.id + "")
+      //console.log('sub to layers', this.mapLayers)
       //console.log('oldIds', this.oldIds)
       //console.log('layerIDs', this.layerIDs)
 
       //remove old layers
       // reverse loop for remove items from Array while iterating over it
+      /*
+      * not used due to clarity issue 2342
+      *
       for (let i = this.oldIds.length - 1; i >= 0; --i) {
         let id = this.oldIds[i]
         if (this.layerIDs.indexOf(id) == -1) {
@@ -185,41 +350,49 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
           }
         }
       }
+      */
     });
   }
 
   selectionChanged(sel) {
-
     //console.log('-----------change')
-    console.log("datasets selected after selectionChanged: ", this.datasetSelected)
-    let newIds = [];
+    //console.log("datasets selected after selectionChanged: ", this.datasetSelected, this.selectedMap)
+    //let newIds = []; * not used due to clarity issue 2342
 
     //console.log('newIds', newIds)
     //console.log('oldIds', this.oldIds)
-
     sel.forEach(s => {
-     
-        newIds.push(s.id)
-        this.addDataset(s);
-    
+      //newIds.push(s.id) * not used due to clarity issue 2342
+      this.addDataset(s);
     })
 
 
     //remove old layers
+    /*
+    * * not used due to clarity issue 2342
     this.oldIds.forEach(id => {
       if (newIds.indexOf(id) == -1) {
-        //this.layersSvc.removeLayerOrGroupById(id);
+        console.log('this.oldIds', this.oldIds, newIds)
+        // we can not remove layers on selectionChanged due to clarity issue 2342 -> selectionChanged is triggered from datagrid if data or filter changes
+        //http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/874bd84dadbde8afffa5ca79e2482eb092b24481#projects/dataset-explorer/src/lib/dataset-explorer.component.ts
+         
+        this.layersSvc.removeLayerOrGroupById(id);
       }
     });
+    */
 
     //set old to new
-    this.oldIds = newIds;
+    //this.oldIds = newIds; * not used due to clarity issue 2342
 
+    /*
+    * not used due to clarity issue 2342
     if (newIds.length == 0) {
       this.oldIds.forEach(id => {
-        //this.layersSvc.removeLayerOrGroupById(id);
+        console.log('this.oldIds',this.oldIds)
+        this.layersSvc.removeLayerOrGroupById(id);
       })
     }
+    */
 
     //console.log('newIds', newIds)
     //console.log('oldIds', this.oldIds)
@@ -227,31 +400,78 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   addDataset(dataset) {
     let layer = this.obsSvc.addObservation(dataset);
-    //console.log(">", layer)
+    layer.visible = true;
+    //console.log(">", layer, dataset)
 
     this.layersSvc.addLayer(layer, 'Overlays');
 
-    //zoomTo added dataset
+    //zoomTo added dataset    
     if (this.mapStateSvc && layer.bbox && layer.bbox.length >= 4) {
       this.mapStateSvc.setExtent(layer.bbox);
+    } else {
+      //console.info("MapStateService: " + this.mapStateSvc + " && layer.bbox:" + layer.bbox + " && (layer.bbox.length >= 4):" + (layer.bbox.length >= 4) + ": zoom to layer cannot be conducted due to missing input");
     }
   }
   removeDataset(dataset) {
     //this.obsSvc.removeDataset(dataset);
-    console.log("remove <", dataset.id)
+    //console.log("remove <", dataset.id)
     this.layersSvc.removeLayer(dataset, 'Overlays');
   }
 
-  /*
-   customFilter(active: boolean) {
-     if (this.bboxfilter) {
-       if (active) {
-         this.datasetsFiltered = this.datasets.filter(this.bboxfilter)
-       } else {
-         this.datasetsFiltered = this.datasets;
-       }
-     }
-   }*/
+  timeRangeFilter = (resource: IEocOwsResource) => {
+    let endDate = resource.properties.customAttributes.endDate,
+      startDate = resource.properties.customAttributes.startDate;
+    if (this.dateIsBetween(startDate, this.daterange.valuemin, this.daterange.valuemax) || this.dateIsBetween(endDate, this.daterange.valuemin, this.daterange.valuemax)) {
+      return resource;
+    }
+  }
+
+  propsFilter = (resource: IEocOwsResource, filterterms) => {
+    //categoryIds = ["100", "170", "172", "ASCAT", "raster", "remotesensingproduct"]
+    //return filterterms.reduce((re, ft) => re && d.properties.customAttributes.categoryIds.indexOf(ft) != -1, true)
+    let hasTerms = filterterms.reduce((re, ft) => {
+      let hasId = re && resource.properties.customAttributes.categoryIds.indexOf(ft) != -1;
+      return hasId;
+    }, true)
+    return hasTerms;
+  }
+
+  /**
+   * end and start are includet
+   */
+  dateIsBetween(date, min, max) {
+    let minDate, maxDate, cDate;
+    let _date = dayjs(date).format(DATEFORMAT);
+
+    minDate = Date.parse(min);
+    maxDate = Date.parse(max);
+    cDate = Date.parse(_date);
+    //console.log(`date: ${test} - min: ${min} - max: ${max}`, cDate >= minDate && cDate <= maxDate);
+    if (cDate >= minDate && cDate <= maxDate) {
+      return true;
+    }
+    return false;
+  }
+
+  getMinAndMaxDate(array: IEocOwsResource[]) {
+    let dates = array.reduce((a, r) => {
+      if (a.indexOf(r.properties.customAttributes.endDate) == -1) {
+        a.push(r.properties.customAttributes.endDate)
+      }
+      if (a.indexOf(r.properties.customAttributes.startDate) == -1) {
+        a.push(r.properties.customAttributes.startDate)
+      }
+      return a;
+    }, []);
+
+    dates = dates.map(value => dayjs(value).toDate())
+    let range = {
+      min: dayjs(minMaxDate(dates).min).format(DATEFORMAT),
+      max: dayjs(minMaxDate(dates).max).format(DATEFORMAT)
+    }
+    return range;
+  }
+
 
   pick(o: any, s: string) {
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
@@ -269,8 +489,10 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  convertToDate(s: string) {
-    return new Date(s);
+  convertToDate(s: string, format?: string) {
+    //return new Date(s);
+    let _format = format || DATEFORMAT;
+    return dayjs(s).format(_format);
   }
 
   ngOnDestroy() {

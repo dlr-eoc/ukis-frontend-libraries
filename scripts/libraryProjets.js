@@ -197,7 +197,7 @@ function buildAll() {
 ;
 function setVersionsOfProjects() {
     let projectsPaths = getProjects().map(item => item.package);
-    let errors = listAllProjects(true);
+    let errors = projectsAndDependencies(true);
     if (errors.length < 1 && MAINPACKAGE.version) {
         //console.log(projectsPaths)
         replace({
@@ -216,7 +216,14 @@ function setVersionsOfProjects() {
     }
 }
 ;
-function listAllProjects(silent = false) {
+function listAllProjects() {
+    let projectsPaths = getProjects();
+    let list = projectsPaths.reduce((p, n) => {
+        return p + '- ' + n.name + '\n';
+    }, '');
+    console.log(list);
+}
+function projectsAndDependencies(silent = false) {
     let projects = [], errors = [], projectsPaths = getProjects();
     projectsPaths.forEach((project) => {
         let projectPackage = require(project.package);
@@ -264,36 +271,47 @@ function listAllProjects(silent = false) {
     return errors;
 }
 ;
-process.argv.slice(2).forEach((arg) => {
-    if (arg == '-h' || arg == '--help') {
-        console.log(`
+function showHelp() {
+    console.log(`
 Syntax:   node libraryProjets [options]
 
 Options:
 -h, --help              Print this message.
--l, --list              List all project in a table                    
+-l, --list              List all projects
+-d, --deps              List all projects in a table with dependencies                   
 -s, --set               Set versions of all projects
 -g, --graph             Show a dependency graph
 -c, --check             Check if all dependencies are listed in the package.json of the project
 -t, --test              Run ng test for all projects
 -b, --build             Run ng build fal all projects with toposort dependencies`);
+}
+let args = process.argv.slice(2);
+args.forEach((arg) => {
+    if (arg == '-h' || arg == '--help') {
+        showHelp();
     }
-    if (arg == '-l' || arg == '--list') {
+    else if (arg == '-l' || arg == '--list') {
         listAllProjects();
     }
-    if (arg == '-s' || arg == '--set') {
+    else if (arg == '-d' || arg == '--deps') {
+        projectsAndDependencies();
+    }
+    else if (arg == '-s' || arg == '--set') {
         setVersionsOfProjects();
     }
-    if (arg == '-g' || arg == '--graph') {
+    else if (arg == '-g' || arg == '--graph') {
         runDependencyGraph();
     }
-    if (arg == '-c' || arg == '--check') {
+    else if (arg == '-c' || arg == '--check') {
         runCheckDeps();
     }
-    if (arg == '-t' || arg == '--test') {
+    else if (arg == '-t' || arg == '--test') {
         testAll();
     }
-    if (arg == '-b' || arg == '--build') {
+    else if (arg == '-b' || arg == '--build') {
         buildAll();
     }
 });
+if (!args.length) {
+    showHelp();
+}

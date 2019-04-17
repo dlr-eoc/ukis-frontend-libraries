@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CookieAlertComponent } from './cookie-alert.component';
-import { UtilStoreService } from '@ukis/services-util-store/src/public_api';
+import { UtilStoreService } from '@ukis/services-util-store';
 
 describe('CookieAlertComponent', () => {
   let component: CookieAlertComponent;

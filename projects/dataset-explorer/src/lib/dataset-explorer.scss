@@ -14,47 +14,53 @@
   margin: 0.3rem 0.25rem 0 0;
 
   &.lasting {
-
     border-color: #0079b8;
-    background: rgba(0, 121, 184, .2);
+    background: rgba(0, 121, 184, 0.2);
 
     &:hover {
-      background: rgba(0, 121, 184, .3);
+      background: rgba(0, 121, 184, 0.3);
     }
 
     &.active {
-      background: rgba(0, 121, 184, .5);
+      background: rgba(0, 121, 184, 0.5);
     }
   }
 
   &:hover {
-
     background: #ddd;
 
     .badge {
       background: #0079b8;
     }
+
+    .badge.multi {
+      background: #737373;
+    }
   }
 }
 
+.label > .badge.multi {
+  margin: 0 -0.15rem 0 0.25rem;
+}
+
 #dynamicfilters {
-  margin: 0 0 .5rem 0;
+  margin: 0 0 0.5rem 0;
 
   h4 {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     margin-left: -0.5rem;
   }
 
   .label {
     &.disabled {
-      opacity: .5;
+      opacity: 0.5;
       cursor: default;
       background: transparent;
     }
   }
 }
 
-.datagrid {
+.datagrid-compact {
   .datagrid-cell .download {
     text-align: center;
   }

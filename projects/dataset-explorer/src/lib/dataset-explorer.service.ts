@@ -47,7 +47,7 @@ export class DatasetExplorerService {
 
 
     for (let offering of offerings) {
-      let code = this.owcSvc.getOfferingCode(offering);
+      let code = this.owcSvc.getLayertypeFromOfferingCode(offering);
 
       switch (code) {
         case "wms":

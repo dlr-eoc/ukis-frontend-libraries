@@ -1,4 +1,4 @@
-# Ho to create a new Project library
+# Ho to create a new Project library (UKIS-Module)
 
 ### 1. Generate a new library with the cli
 run ``ng generate library < name > --prefix ukis``
@@ -6,6 +6,7 @@ run ``ng generate library < name > --prefix ukis``
 - rename lib package: "name": "@ukis/< name >"
 - set version to: "version": "0.0.0-PLACEHOLDER"
 - set lib package: "main": "src/public_api",
+- add path mapping to paths in the main tsconfig.json
 
 ### 2. Add and create Files
 - create components and or services in the lib wit the cli 
@@ -22,18 +23,24 @@ run ``ng generate library < name > --prefix ukis``
 - create specs and run `ng test < name >`
 
 
-### 5. Build your library
-- build lib `ng build < name >`
+### 5. Build your library locally
+- build lib `ng build < name >` (the full build is done with a jenkins-job see below)
 
-- rename lib package: "name": "@ukis/< name >"
-- set lib package: "main": "src/public_api",
-- create/develop services in the lib 
-- add missing exports to public_api.ts
-- create specs and run `ng test layers`
-- if using required dependencies add it to ng-package.json/whitelistedNonPeerDependencies
-- or lit it as peerDependencies
-- build lib `ng build < name >`
 
 ### 4. update README and CHANGELOG
 - add your library to the README
 - add important/Breaking changes to the CHANGELOG
+
+
+# How to publish a new version of all projects
+- make sure you have updated README and CHANGELOG and commit all your stuff.
+- run `node scripts/libraryProjets.js -c` to check if all dependencies are present. (node_modules must be installed for this)
+- run `node scripts/libraryProjets.js -t` to test all projects. (node_modules must be installed for this)
+- run `node scripts/libraryProjets.js -b` to test all projects are building locally. (node_modules must be installed for this)
+- update the `version` parameter in the package.json in the root-directory (*not* in a single libraries package.json!) according to [Semantic Versioning](https://semver.org/)
+- create a tag with the same version e.g `git tag -a v2.1.0 -m 'Version after Sprint CoastalX II'` and push it to origin
+- the jenkins-job `packaging-frontend-libraries` will discover the presence of a new tag. It will then build the packages and publish them with the new version to nexus.
+- if everything is ok and you have worked on a branch, then merge your changes back into the master.
+
+
+
