@@ -6,8 +6,7 @@
     "@angular/core": "^7.0.0"
   },
   "dependencies": {
-    "@boundlessgeo/jsonix": "^2.4.3",
-    "w3c-schemas": "^1.4.0",
+    "jsonix": "^3.0.0",
     "ogc-schemas": "^2.6.1"
   }
 }
