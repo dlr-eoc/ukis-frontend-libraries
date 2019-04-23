@@ -5,13 +5,13 @@ import { WpsVerion, WpsInput, WpsOutputDescription, WpsLiteralInput, WpsComplexO
 
 describe(`Testing wps-client version 1 functionality`, () => {
 
-    test("Wps-client should init correctly", () =>  {
+    it("Wps-client should init correctly", () =>  {
         let c = new WpsClient("https://riesgos.52north.org/wps/WebProcessingService", "1.0.0");
         expect(c).toBeTruthy();
     });
     
 
-    test("getCapabilities should work", (done) => {
+    it("getCapabilities should work", (done) => {
         let c = new WpsClient("https://riesgos.52north.org/wps/WebProcessingService", "1.0.0");
         c.getCapabilities().subscribe(list => {
             expect(list.length).toBeGreaterThan(0);
@@ -20,12 +20,12 @@ describe(`Testing wps-client version 1 functionality`, () => {
     });
 
 
-    test("describeProcess should work", (done) => {
+    it("describeProcess should work", (done) => {
         done()
     })
 
 
-    test("execute should work", (done) => {
+    it("execute should work", (done) => {
         let c = new WpsClient("https://riesgos.52north.org/wps/WebProcessingService", "1.0.0");
         let algId = "org.n52.wps.python.algorithm.QuakeMLProcess";
         let inputs: WpsLiteralInput[] = [
@@ -53,11 +53,11 @@ describe(`Testing wps-client version 1 functionality`, () => {
         });
     }, 30000);
 
-    test("getStatus should work", (done) => {
+    it("getStatus should work", (done) => {
         done()
     })
 
-    test("dismiss should work", (done) => {
+    it("dismiss should work", (done) => {
         done()
     })
 
