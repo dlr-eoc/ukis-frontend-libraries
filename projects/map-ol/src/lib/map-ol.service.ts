@@ -41,6 +41,10 @@ import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
+import {DragBox, Select} from 'ol/interaction';
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -104,6 +108,31 @@ export class MapOlService {
       map: this.map,
       view: this.view
     }
+  }
+
+  /**
+   * See this example: 
+   * https://openlayers.org/en/latest/examples/box-selection.html
+   * @param conditionForDrawing 
+   * @param onBoxStart 
+   * @param onBoxEnd 
+   */
+  public addBboxSelection( conditionForDrawing: (evt: any) => boolean,  onBoxStart: () => void, onBoxEnd: (any) => void) {
+    
+    let dragBox = new DragBox({
+      condition: conditionForDrawing 
+    });
+
+    dragBox.on('boxstart', function() {
+      onBoxStart();
+    });
+    
+    dragBox.on('boxend', function() {
+      var extent = dragBox.getGeometry().getExtent();
+      onBoxEnd(extent);
+    });
+
+    this.map.addInteraction(dragBox);
   }
 
   public getLayers(type: 'overlays' | 'baselayers') {

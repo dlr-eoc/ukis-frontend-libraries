@@ -1,3 +1,13 @@
-<p>
-  form-bbox-field works!
-</p>
+<div [formGroup]="parentFormGroup" >
+  <span class="display: table-cell">
+    <clr-input-container>
+      <label>
+        {{parameter.name}}:
+        <input [attr.disabled]="true" type="text" [formControlName]="parameter.id" clrInput />
+      </label>
+    </clr-input-container>
+  </span>
+  <span class="display: table-cell">
+    <button type="button" (click)="onSelectButtonClicked()" class="btn btn-outline"><clr-icon shape="cursor-arrow"></clr-icon></button>
+  </span>
+</div>

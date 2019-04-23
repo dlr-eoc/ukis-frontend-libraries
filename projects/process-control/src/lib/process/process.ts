@@ -51,7 +51,7 @@ export interface ConfigurableProcess extends Process {
 interface MutableProcess extends ConfigurableProcess {
     available(): void;
     unavailable(): void;
-    execute(inputs: Product[]): Observable<Product[]>;
+    execute(inputProducts: Product[], configParas: Parameter[]): Observable<Product[]>;
 }
 
 /**
@@ -69,6 +69,7 @@ interface ProductContext {
  */
 export interface SortableProcess extends WfProcess {
     fetchInputsFromContext(context: ProductContext): Product[];
+    getProductsFromContext(context: ProductContext): Product[];
 }
 
 
@@ -113,21 +114,33 @@ export abstract class BasicProcess implements MutableProcess, SortableProcess {
     }
 
     fetchInputsFromContext(context: ProductContext): Product[] {
-        let output: Product[] = [];
+        let inputs: Product[] = [];
         for(let pId of this.requiresProducts()) {
             let val = context.getProduct(pId);
-            output.push({
+            inputs.push({
                 id: pId,
                 value: val
             });
         }
-        return output;
+        return inputs;
     }
 
-    execute(inputs: Product[]): Observable<Product[]> {
+    getProductsFromContext(context: ProductContext): Product[] {
+        let outputs: Product[] = [];
+        for(let pId of this.providesProducts()) {
+            let val = context.getProduct(pId);
+            outputs.push({
+                id: pId,
+                value: val
+            });
+        }
+        return outputs;
+    }
+
+    execute(inputProducts: Product[], configParas: Parameter[]): Observable<Product[]> {
         // @TODO: ensure that all configuration has been properly set.
         this.state = "running";
-        return this.process(inputs).pipe(
+        return this.process(inputProducts, configParas).pipe(
             map(results => {
                 let outputs: Product[] = [];
                 for(let productId of this.outputs) {
@@ -146,10 +159,10 @@ export abstract class BasicProcess implements MutableProcess, SortableProcess {
         );
     }
 
-    protected abstract process(inputs: Product[]): Observable<Product[]> 
+    protected abstract process(inputProducts: Product[], configParas: Parameter[]): Observable<Product[]> 
 
     configure(values): void {
-        for(let key of values) {
+        for(let key in values) {
             let val = values[key];
             this.setParameterValue(key, val);
         }

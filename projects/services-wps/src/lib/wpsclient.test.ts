@@ -5,13 +5,13 @@ import { WpsVerion, WpsInput, WpsOutputDescription, WpsLiteralInput, WpsComplexO
 
 describe(`Testing wps-client version 1 functionality`, () => {
 
-    it("Wps-client should init correctly", () =>  {
+    test("Wps-client should init correctly", () =>  {
         let c = new WpsClient("https://riesgos.52north.org/wps/WebProcessingService", "1.0.0");
         expect(c).toBeTruthy();
     });
     
 
-    it("getCapabilities should work", (done) => {
+    test("getCapabilities should work", (done) => {
         let c = new WpsClient("https://riesgos.52north.org/wps/WebProcessingService", "1.0.0");
         c.getCapabilities().subscribe(list => {
             expect(list.length).toBeGreaterThan(0);
@@ -20,27 +20,27 @@ describe(`Testing wps-client version 1 functionality`, () => {
     });
 
 
-    it("describeProcess should work", (done) => {
+    test("describeProcess should work", (done) => {
         done()
     })
 
 
-    it("execute should work", (done) => {
+    test("execute should work", (done) => {
         let c = new WpsClient("https://riesgos.52north.org/wps/WebProcessingService", "1.0.0");
         let algId = "org.n52.wps.python.algorithm.QuakeMLProcess";
         let inputs: WpsLiteralInput[] = [
-            { type: "literal", id: "lonmin", data: 282,                 datatype: "double"},
-            { type: "literal", id: "lonmax", data: 292,                 datatype: "double"},
-            { type: "literal", id: "latmin", data: -70,                 datatype: "double"},
-            { type: "literal", id: "latmax", data: -10,                 datatype: "double"},
-            { type: "literal", id: "mmin",   data: 6.6,                 datatype: "double"},
-            { type: "literal", id: "mmax",   data: 8.5,                 datatype: "double"},
-            { type: "literal", id: "zmin",   data: 5,                   datatype: "double"},
-            { type: "literal", id: "zmax",   data: 140,                 datatype: "double"},
-            { type: "literal", id: "p",      data: 0.1,                 datatype: "double"},
-            { type: "literal", id: "etype",  data: "deaggregation",     datatype: "string"},
-            { type: "literal", id: "tlon",   data: -71.5730623712764,   datatype: "double"},
-            { type: "literal", id: "tlat",   data: -33.1299174879672,   datatype: "double"}
+            { inputtype: "literal", id: "lonmin", data: 282,                 datatype: "double"},
+            { inputtype: "literal", id: "lonmax", data: 292,                 datatype: "double"},
+            { inputtype: "literal", id: "latmin", data: -70,                 datatype: "double"},
+            { inputtype: "literal", id: "latmax", data: -10,                 datatype: "double"},
+            { inputtype: "literal", id: "mmin",   data: 6.6,                 datatype: "double"},
+            { inputtype: "literal", id: "mmax",   data: 8.5,                 datatype: "double"},
+            { inputtype: "literal", id: "zmin",   data: 5,                   datatype: "double"},
+            { inputtype: "literal", id: "zmax",   data: 140,                 datatype: "double"},
+            { inputtype: "literal", id: "p",      data: 0.1,                 datatype: "double"},
+            { inputtype: "literal", id: "etype",  data: "deaggregation",     datatype: "string"},
+            { inputtype: "literal", id: "tlon",   data: -71.5730623712764,   datatype: "double"},
+            { inputtype: "literal", id: "tlat",   data: -33.1299174879672,   datatype: "double"}
         ];
         let output: WpsComplexOutputDescription = {
             type: "complex",
@@ -53,11 +53,11 @@ describe(`Testing wps-client version 1 functionality`, () => {
         });
     }, 30000);
 
-    it("getStatus should work", (done) => {
+    test("getStatus should work", (done) => {
         done()
     })
 
-    it("dismiss should work", (done) => {
+    test("dismiss should work", (done) => {
         done()
     })
 

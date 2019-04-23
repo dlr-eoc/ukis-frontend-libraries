@@ -3,5 +3,8 @@
   "dest": "../../dist/process-control",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@ukis/dynforms", "workflowcontrol", "rxjs"
+  ]
 }

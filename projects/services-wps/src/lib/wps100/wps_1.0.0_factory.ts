@@ -1,5 +1,6 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription } from "../wps_marshaller";
+import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult } from "../wps_marshaller";
 import { WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType, InputType, ResponseFormType, DataType, IWpsExecuteResponse } from "./wps_1.0.0";
+import { Product } from "@ukis/process-control/src/public_api";
 
 
 export class WpsFactory100 implements WpsMarshaller {
@@ -25,10 +26,13 @@ export class WpsFactory100 implements WpsMarshaller {
         return out;
     }
 
-    unmarshalExecuteResponse(responseJson: IWpsExecuteResponse) {
-        let out = [];
+    unmarshalExecuteResponse(responseJson: IWpsExecuteResponse): WpsResult[] {
+        let out: WpsResult[] = [];
         for(let output of responseJson.value.processOutputs.output) {
-            out.push(output.data);
+            out.push({
+                id: "",
+                value: output.data 
+            });
         }
         return out;
     }
@@ -81,7 +85,7 @@ export class WpsFactory100 implements WpsMarshaller {
         for(let inp of inputArr) {
     
             let data: DataType;
-            switch(inp.type) {
+            switch(inp.inputtype) {
                 case "literal":
                 data = {
                     literalData: {

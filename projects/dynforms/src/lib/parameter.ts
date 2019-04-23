@@ -1,26 +1,28 @@
 
-export interface Parameter {
+export interface BasicParameter {
     id: string;
     name: string;
     description: string;
-    type: "string" | "bbox" | "select";
     defaultValue: any;
     value: any;
 }
 
-export interface StringParameter extends Parameter {
-    type: "string";
+export interface StringParameter extends BasicParameter {
+    parametertype: "string";
     defaultValue: string;
     value: string;
+    datatype: "double" | "string"
 }
 
-export interface BboxParameter extends Parameter {
-    type: "bbox";
+export interface BboxParameter extends BasicParameter {
+    parametertype: "bbox";
 }
 
-export interface SelectParameter extends Parameter {
-    type: "select"; 
+export interface SelectParameter extends BasicParameter {
+    parametertype: "select"; 
     options: string[];
     defaultValue: string;
     value: string;
 }
+
+export type Parameter = StringParameter | BboxParameter | SelectParameter;

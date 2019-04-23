@@ -46,15 +46,9 @@ export class MapOlComponent implements OnInit, OnDestroy {
     @Inject(MapOlService) private mapSvc: MapOlService
   ) {
     this.zoom = 3;
-    this.center = {
-      lat: 0,
-      lon: 0
-    };
-    //console.log(this.mapSvc)
+    this.center = { lat: 0, lon: 0 };
     let ms = new MapState(this.zoom, this.center);
     this.mapState = ms;
-    ///define initial center and zoom
-    //this.initMap();
 
   }
 

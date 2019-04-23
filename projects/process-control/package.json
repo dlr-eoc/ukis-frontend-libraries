@@ -2,8 +2,15 @@
   "name": "@ukis/process-control",
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
+  "dependencies": {
+    "@ukis/dynforms": "0.0.0-PLACEHOLDER",
+    "workflowcontrol": "^1.0.0",
+    "rxjs": "^6.4.0"
+  },
   "peerDependencies": {
     "@angular/common": "^7.0.0",
-    "@angular/core": "^7.0.0"
+    "@angular/core": "^7.0.0",
+    "@angular/forms": "^7.0.0",
+    "@clr/angular": "^1.1.2"
   }
 }

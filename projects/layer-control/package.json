@@ -15,6 +15,6 @@
     "@ukis/datatypes-layers": "0.0.0-PLACEHOLDER",
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",
-    "@angular/cdk": "^7.2.1"
+    "@angular/cdk": "^7.3.7"
   }
 }

@@ -50,7 +50,7 @@ export class ProcessWizardComponent implements OnInit {
   }
 
   onConfigSubmitted(data) {
-    this.processService.configure(data.process, data.values);
+    this.processService.configureAndRun(data.process, data.values);
   }
 
   focusOnNext(process) {
