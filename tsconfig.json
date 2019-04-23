@@ -22,7 +22,7 @@
       ],
       "@ukis/datatypes-layers": [
         "dist/datatypes-layers",
-        "projects/datatypes-layers/src/public_api"
+        "projects/datatypes-layers"
       ],
       "@ukis/datatypes-layers/*": [
         "dist/datatypes-layers/*",
@@ -30,7 +30,7 @@
       ],
       "@ukis/datatypes-map-state": [
         "dist/datatypes-map-state",
-        "projects/datatypes-map-state/src/public_api"
+        "projects/datatypes-map-state"
       ],
       "@ukis/datatypes-map-state/*": [
         "dist/datatypes-map-state/*",
@@ -38,7 +38,7 @@
       ],
       "@ukis/datatypes-owc-json": [
         "dist/datatypes-owc-json",
-        "projects/datatypes-owc-json/src/public_api"
+        "projects/datatypes-owc-json"
       ],
       "@ukis/datatypes-owc-json/*": [
         "dist/datatypes-owc-json/*",
@@ -46,7 +46,7 @@
       ],
       "@ukis/datatypes-wps": [
         "dist/datatypes-wps",
-        "projects/datatypes-wps/src/public_api"
+        "projects/datatypes-wps"
       ],
       "@ukis/datatypes-wps/*": [
         "dist/datatypes-wps/*",
@@ -54,7 +54,7 @@
       ],
       "@ukis/datatypes-user-info": [
         "dist/datatypes-user-info",
-        "projects/datatypes-user-info/src/public_api"
+        "projects/datatypes-user-info"
       ],
       "@ukis/datatypes-user-info/*": [
         "dist/datatypes-user-info/*",
@@ -70,7 +70,7 @@
       ],
       "@ukis/services-layers": [
         "dist/services-layers",
-        "projects/services-layers/src/public_api"
+        "projects/services-layers"
       ],
       "@ukis/services-layers/*": [
         "dist/services-layers/*",
@@ -78,7 +78,7 @@
       ],
       "@ukis/services-map-state": [
         "dist/services-map-state",
-        "projects/services-map-state/src/public_api"
+        "projects/services-map-state"
       ],
       "@ukis/services-map-state/*": [
         "dist/services-map-state/*",
@@ -86,7 +86,7 @@
       ],
       "@ukis/services-owc-json": [
         "dist/services-owc-json",
-        "projects/services-owc-json/src/public_api"
+        "projects/services-owc-json"
       ],
       "@ukis/services-owc-json/*": [
         "dist/services-owc-json/*",
@@ -94,7 +94,7 @@
       ],
       "@ukis/services-util-store": [
         "dist/services-util-store",
-        "projects/services-util-store/src/public_api"
+        "projects/services-util-store"
       ],
       "@ukis/services-util-store/*": [
         "dist/services-util-store/*",
@@ -102,7 +102,7 @@
       ],
       "@ukis/services-wps": [
         "dist/services-wps",
-        "projects/services-wps/src/public_api"
+        "projects/services-wps"
       ],
       "@ukis/services-wps/*": [
         "dist/services-wps/*",
@@ -110,7 +110,7 @@
       ],
       "@ukis/map-ol": [
         "dist/map-ol",
-        "projects/map-ol/src/public_api"
+        "projects/map-ol"
       ],
       "@ukis/map-ol/*": [
         "dist/map-ol/*",
@@ -118,7 +118,7 @@
       ],
       "@ukis/base-layers-raster": [
         "dist/base-layers-raster",
-        "projects/base-layers-raster/src/public_api"
+        "projects/base-layers-raster"
       ],
       "@ukis/base-layers-raster/*": [
         "dist/base-layers-raster/*",
@@ -126,7 +126,7 @@
       ],
       "@ukis/layer-control": [
         "dist/layer-control",
-        "projects/layer-control/src/public_api"
+        "projects/layer-control"
       ],
       "@ukis/layer-control/*": [
         "dist/layer-control/*",
@@ -134,7 +134,7 @@
       ],
       "@ukis/map-navigator": [
         "dist/map-navigator",
-        "projects/map-navigator/src/public_api"
+        "projects/map-navigator"
       ],
       "@ukis/map-navigator/*": [
         "dist/map-navigator/*",
@@ -142,7 +142,7 @@
       ],
       "@ukis/cookie-alert": [
         "dist/cookie-alert",
-        "projects/cookie-alert/src/public_api"
+        "projects/cookie-alert"
       ],
       "@ukis/cookie-alert/*": [
         "dist/cookie-alert/*",
@@ -150,7 +150,7 @@
       ],
       "@ukis/observation-explorer": [
         "dist/observation-explorer",
-        "projects/observation-explorer/src/public_api"
+        "projects/observation-explorer"
       ],
       "@ukis/observation-explorer/*": [
         "dist/observation-explorer/*",
@@ -158,7 +158,7 @@
       ],
       "@ukis/dataset-explorer": [
         "dist/dataset-explorer",
-        "projects/dataset-explorer/src/public_api"
+        "projects/dataset-explorer"
       ],
       "@ukis/dataset-explorer/*": [
         "dist/dataset-explorer/*",
@@ -174,15 +174,15 @@
       ],
       "@ukis/wps-configuration": [
         "dist/wps-configuration",
-        "projects/wps-configuration/src/public_api"
+        "projects/wps-configuration"
       ],
       "@ukis/wps-configuration/*": [
         "dist/wps-configuration/*",
         "projects/wps-configuration/*"
       ],
-      "@ukisuser-info": [
+      "@ukis/user-info": [
         "dist/user-info",
-        "projects/user-info/src/public_api"
+        "projects/user-info"
       ],
       "@ukis/user-info/*": [
         "dist/user-info/*",
@@ -203,12 +203,6 @@
       "@ukis/process-control/*": [
         "dist/process-control/*",
         "projects/process-control/*"
-      ],
-      "datatypes-ogc": [
-        "dist/datatypes-ogc"
-      ],
-      "datatypes-ogc/*": [
-        "dist/datatypes-ogc/*"
       ]
     }
   }

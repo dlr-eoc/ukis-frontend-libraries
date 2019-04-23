@@ -1,6 +1,13 @@
-export type BoundingBoxType = any;
+
 export type ExceptionReport = any;
 
+
+export interface BoundingBoxType {
+   lowerCorner: number[],
+   upperCorner: number[],
+   crs?: string,
+   dimensions?: number,
+}
 
 export interface CodeType {
    value: string
@@ -17,8 +24,6 @@ export interface AllowedValuesType {
 export interface ValueType {
    value: string
 }
-
-
 
 export interface DomainMetadataType {
    reference?: string,
@@ -317,8 +322,9 @@ export interface OutputDefinitionType {
 }
 
 export interface OutputDataType {
+   identifier?: CodeType;
    reference?: string;
-   data: DataType;
+   data?: DataType;
 }
 
 export interface InputType {

@@ -1,5 +1,5 @@
 import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult } from "../wps_marshaller";
-import { WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType, InputType, ResponseFormType, DataType, IWpsExecuteResponse } from "./wps_1.0.0";
+import { WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType, InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType } from "./wps_1.0.0";
 import { Product } from "@ukis/process-control/src/public_api";
 
 
@@ -30,11 +30,19 @@ export class WpsFactory100 implements WpsMarshaller {
         let out: WpsResult[] = [];
         for(let output of responseJson.value.processOutputs.output) {
             out.push({
-                id: "",
-                value: output.data 
+                id: output.identifier.value,
+                value: this.unmarshalOutputData(output.data)
             });
         }
         return out;
+    }
+
+    unmarshalOutputData(data: DataType): any {
+        if(data.complexData) {
+            return data.complexData.content.map(cont => JSON.parse(cont));
+            // @TODO: handle case where format is not json
+        }
+        throw new Error(`Not yet implemented: ${data}`);
     }
 
     marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutputDescription): IWpsExecuteProcessBody {
@@ -67,11 +75,18 @@ export class WpsFactory100 implements WpsMarshaller {
 
 
     marshalResponseForm(output: WpsOutputDescription): ResponseFormType {
+
+        let defType: DocumentOutputDefinitionType;
+        if(output.type == "complex") {
+            defType = {
+                identifier: { value: output.id },
+                mimeType: output.outputFormat
+            };
+        }
+
         let form: ResponseFormType = {
             responseDocument: {
-                output: [{
-                    identifier: {value: output.id}
-                }]
+                output: [defType]
             }
         };
         return form;
@@ -87,24 +102,31 @@ export class WpsFactory100 implements WpsMarshaller {
             let data: DataType;
             switch(inp.inputtype) {
                 case "literal":
-                data = {
-                    literalData: {
-                        value: String(inp.data)
-                    }
-                };
-                break;
+                    data = {
+                        literalData: { value: String(inp.data) }
+                    };
+                    break;
+                case "bbox": 
+                    data = {
+                        boundingBoxData: {
+                            lowerCorner: [inp.data[0], inp.data[1]],
+                            upperCorner: [inp.data[2], inp.data[3]]
+                        }
+                    };
+                    break;
+                case "complex":
+                    data = {
+                        complexData: {
+                            content: inp.data
+                        }
+                    };
+                    break;
             }
 
             theInputs.push({
-                identifier: {
-                    value: inp.id
-                },
-                title: {
-                    value: inp.id
-                }, 
-                _abstract: {
-                    value: ""
-                }, 
+                identifier: { value: inp.id },
+                title: { value: inp.id }, 
+                _abstract: { value: "" }, 
                 data: data, 
             })
         }

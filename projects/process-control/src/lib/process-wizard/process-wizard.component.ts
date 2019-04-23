@@ -53,8 +53,9 @@ export class ProcessWizardComponent implements OnInit {
     this.processService.configureAndRun(data.process, data.values);
   }
 
-  focusOnNext(process) {
-    this.focusOn(this.processService.getNext());
+  focusOnNext(evt) {
+    let next = this.processService.getNext()
+    if(next) this.focusOn(next);
   }
 
   onReconfigureClicked(process) {

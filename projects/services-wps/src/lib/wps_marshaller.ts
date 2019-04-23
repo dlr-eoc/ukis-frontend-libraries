@@ -21,15 +21,21 @@ export interface WpsBboxInput extends WpsBasicInput {
 
 export type WpsInput = WpsLiteralInput | WpsBboxInput | WpsComplexInput;
 
-export interface WpsOutputDescription {
+export interface BasicWpsOutputDescription {
     type: "literal" | "complex",
     id: string
 }
 
-export interface WpsComplexOutputDescription extends WpsOutputDescription {
+export interface WpsLiteralOutputDescription extends BasicWpsOutputDescription {
+    type: "literal"
+}
+
+export interface WpsComplexOutputDescription extends BasicWpsOutputDescription {
     type: "complex", 
     outputFormat: string
 }
+
+export type WpsOutputDescription = WpsLiteralOutputDescription | WpsComplexOutputDescription;
 
 export interface WpsResult {
     id: string, 
