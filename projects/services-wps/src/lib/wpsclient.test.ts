@@ -1,5 +1,5 @@
 import { WpsClient } from "./wpsclient";
-import { WpsVerion, WpsInput, WpsOutputDescription, WpsLiteralInput, WpsComplexOutputDescription } from "./wps_marshaller";
+import { WpsVerion, WpsInput, WpsOutput, WpsLiteralInput, WpsComplexOutputDescription } from "./wps_marshaller";
 
 
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Process } from '../process/process';
+import { ImmutableProcess } from '../process/process';
 import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ProcessService } from '../process/process.service';
 import { Parameter } from '@ukis/dynforms';
 
 
@@ -14,9 +13,9 @@ import { Parameter } from '@ukis/dynforms';
 export class WizardElementComponent implements OnInit {
 
   @Output() configSubmitted: EventEmitter<any> = new EventEmitter<any>();
-  @Output() nextClicked: EventEmitter<Process> = new EventEmitter<Process>();
-  @Output() reconfigureClicked: EventEmitter<Process> = new EventEmitter<Process>();
-  @Input() process: Process;
+  @Output() nextClicked: EventEmitter<ImmutableProcess> = new EventEmitter<ImmutableProcess>();
+  @Output() reconfigureClicked: EventEmitter<ImmutableProcess> = new EventEmitter<ImmutableProcess>();
+  @Input() process: ImmutableProcess;
   private paras: Parameter[];
   processForm: FormGroup;
 

@@ -1,11 +1,11 @@
-import { BasicProcess, Process, Product } from './process';
+import { ImmutableProcess, Product, ConfigurableProcess } from './process';
 import { WorkflowControl } from 'workflowcontrol';
 import { Observable, of } from 'rxjs';
 
 
 
 /**
- * The task of the IProcessService is 
+ * The task of the ProcessService is 
  *  - to expose (immutable) processes (in the correct order),
  *  - to decide which process is to be handled next;
  *  - Only this service is allowed to mutate (configure, execute, change state) processes.
@@ -18,90 +18,97 @@ import { Observable, of } from 'rxjs';
  * this is a UI-decission and handled by the ProcessWizardComponent.
  * However this service *does* decide which process is the next that needs completion.
  * 
- * Use this interface if you do not want to rely on the WorkflowControl module to order processes.  
- * 
  */
+
 export interface IProcessService {
-  getProcesses(): Process[], 
-  getNext(): Process, 
-  observeActiveProcess(): Observable<Process>,
-  getProducts(processId?: string): Observable<Product[]>,
-  configureAndRun(process: Process, values),
-  restartFrom(process: Process)
+  getProcesses(): ImmutableProcess[],
+  getNext(): ImmutableProcess,
+  configure(process: ImmutableProcess, values), 
+  run(process: ImmutableProcess),
+  restartFrom(process: ImmutableProcess),
+  getInputs(processId: string): Product[],
+  getProducts(processId: string): Product[],
+  observeActiveProcess(): Observable<ImmutableProcess>,
+  observeProcessOutput(processId: string): Observable<Product[]>
 }
 
-/**
- *  This implementation of IProcessService makes use of the WorkflowControl-module to achieve its requirements. 
- * @TODO: maybe make it abstract class ProcessService<T extends BasicProcess> ?
- */
-
-export abstract class ProcessService implements IProcessService {
+export abstract class ProcessService<T extends ConfigurableProcess> {
   
-  protected workflowControl: WorkflowControl<BasicProcess>;
-  protected processes: BasicProcess[] = [];
+  protected workflowControl: WorkflowControl<T>;
+  protected processes: T[] = []; // @TODO: it might be better to just retrieve the processes from workflowcontrol instead of storing them here.
   
-  constructor(processes: BasicProcess[]) {
+  constructor(processes: T[]) {
     this.processes = processes;
-    this.workflowControl = new WorkflowControl<BasicProcess>(processes);
+    this.workflowControl = new WorkflowControl<T>(processes);
     let nextProc = this.workflowControl.nextProcess();
-    if(nextProc) nextProc.available();
+    if(nextProc) nextProc.setState("available");
   }
   
-  getProcesses(): Process[] {
+  getProcesses(): ImmutableProcess[] {
     return this.processes;
   }
 
-  getNext(): Process {
+  getNext(): ImmutableProcess {
     return this.workflowControl.nextProcess();
   }
 
-  observeActiveProcess(): Observable<Process> {
-    return of(this.getNext());
+  configure(process: ImmutableProcess, values) {
+    let proc = this.getProcessById(process.processId());
+    proc.configure(values);
   }
   
-  configureAndRun(process: Process, values) {
-
-    let proc = this.getProcessById(process.getId());
-
-    proc.configure(values);
-  
-    let inputs = proc.fetchInputsFromContext(this.workflowControl);
+  run(process: ImmutableProcess) {
+    let proc = this.getProcessById(process.processId());
+    let inputs = this.getInputs(process.processId());
     let configs = proc.getParameters();
+
+    proc.setState("running");
 
     proc.execute(inputs, configs).subscribe(outputs => {
       outputs.forEach(output => {
         this.workflowControl.setProduct(output.id, output.value);
       });
+      proc.setState("completedSuccessfully");
       let nextProc = this.workflowControl.nextProcess();
-      if(nextProc) nextProc.available();
+      if(nextProc) nextProc.setState("available");
     });
 
     // @TODO: proc.execute: on error, pass error to some error-handler. 
   }
 
-  restartFrom(process: Process) {
+  restartFrom(process: ImmutableProcess) {
     throw new Error("Method not implemented.");
   }
 
-  getProducts(processId?: string): Observable<Product[]> {
-    if(processId) return this.getProductsByProcessId(processId);
-    return this.getAllProducts();
+  getInputs(processId: string): Product[] {
+    let proc = this.getProcessById(processId);
+    return proc.requiresProducts().map(prodId => {
+      let val = this.workflowControl.getProduct(prodId);
+      let prod: Product = { id: prodId,  value: val };
+      return prod;
+    })
   }
 
-  protected getAllProducts(): Observable<Product[]> {
-    return of(this.processes
-      .map(proc => proc.getProductsFromContext(this.workflowControl))
-      .reduce((carry, currprod) => {return carry.concat(currprod)}, []));
+  getProducts(processId: string): Product[] {
+    let proc = this.getProcessById(processId);
+    return proc.providesProducts().map(prodId => {
+      let val = this.workflowControl.getProduct(prodId);
+      let prod: Product = { id: prodId,  value: val };
+      return prod;
+    })
   }
 
-  protected getProductsByProcessId(processId: string): Observable<Product[]> {
-    let process = this.getProcessById(processId);
-    return of(process.getProductsFromContext(this.workflowControl));
+  observeActiveProcess(): Observable<ImmutableProcess> {
+    return of(this.getNext());
   }
 
-  protected getProcessById(procId: string): BasicProcess {
+  observeProcessOutput(processId: string): Observable<Product[]> {
+    return of(this.getProducts(processId));
+  }
+  
+  protected getProcessById(procId: string): T {
     for(let p of this.processes) {
-      if (p.getId() == procId) {
+      if (p.processId() == procId) {
         return p;
       }
     }

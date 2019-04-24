@@ -1,4 +1,4 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsVerion, WpsResult } from "./wps_marshaller";
+import { WpsMarshaller, WpsInput, WpsOutput, WpsVerion, WpsResult } from "./wps_marshaller";
 import { WpsFactory100 } from "./wps100/wps_1.0.0_factory";
 import { WpsFactory200 } from "./wps200/wps_2.0_factory";
 import { Observable } from 'rxjs';
@@ -21,11 +21,11 @@ import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; let WPS_2_0 = WPS_2_
  */
 export class WpsClient {
     
-    private wpsmarshaller: WpsMarshaller;
-    private version: WpsVerion;
     private url: string;
+    private version: WpsVerion;
     private xmlmarshaller;
     private xmlunmarshaller;
+    private wpsmarshaller: WpsMarshaller;
 
     constructor(url: string, version: WpsVerion, private webclient: HttpClient) {
         this.url = url;
@@ -55,7 +55,7 @@ export class WpsClient {
         throw new Error("Not implemented yet")
     }
 
-    execute(processId: string, inputs: WpsInput[], output: WpsOutputDescription): Observable<WpsResult[]> {
+    execute(processId: string, inputs: WpsInput[], output: WpsOutput): Observable<WpsResult[]> {
         
         let url = this.wpsmarshaller.executeUrl(this.url, processId);
         let execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, output);

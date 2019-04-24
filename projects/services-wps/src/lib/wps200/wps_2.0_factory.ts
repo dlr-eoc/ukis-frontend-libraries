@@ -1,4 +1,4 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult } from "../wps_marshaller";
+import { WpsMarshaller, WpsInput, WpsOutput, WpsResult } from "../wps_marshaller";
 import { WPSCapabilitiesType } from "./wps_2.0";
 
 
@@ -30,7 +30,7 @@ export class WpsFactory200 implements WpsMarshaller {
         return [];
     }
     
-    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutputDescription) {
+    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutput) {
         throw new Error("Method not implemented.");
         return null;
     }

@@ -1,4 +1,4 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult } from "../wps_marshaller";
+import { WpsMarshaller, WpsInput, WpsOutput, WpsResult } from "../wps_marshaller";
 import { WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType, InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType } from "./wps_1.0.0";
 import { Product } from "@ukis/process-control/src/public_api";
 
@@ -45,7 +45,7 @@ export class WpsFactory100 implements WpsMarshaller {
         throw new Error(`Not yet implemented: ${data}`);
     }
 
-    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutputDescription): IWpsExecuteProcessBody {
+    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutput): IWpsExecuteProcessBody {
 
         let wps1Inputs = this.marshalInputs(inputs);
         let wps1ResponseForm = this.marshalResponseForm(output);
@@ -74,14 +74,24 @@ export class WpsFactory100 implements WpsMarshaller {
     }
 
 
-    marshalResponseForm(output: WpsOutputDescription): ResponseFormType {
+    marshalResponseForm(output: WpsOutput): ResponseFormType {
 
         let defType: DocumentOutputDefinitionType;
-        if(output.type == "complex") {
-            defType = {
-                identifier: { value: output.id },
-                mimeType: output.outputFormat
-            };
+        switch(output.type) {
+            case "reference":
+                defType = {
+                    identifier: { value: output.id },
+                    asReference: true // @TODO
+                };
+                break;
+            case "value":
+                defType = {
+                    identifier: { value: output.id },
+                    mimeType: output.outputFormat
+                };
+                break;
+            default: 
+                throw new Error(`This Wps-outputtype has not been implemented yet! ${output} `);
         }
 
         let form: ResponseFormType = {
@@ -114,7 +124,7 @@ export class WpsFactory100 implements WpsMarshaller {
                         }
                     };
                     break;
-                case "complex":
+                case "select":
                     data = {
                         complexData: {
                             content: inp.data

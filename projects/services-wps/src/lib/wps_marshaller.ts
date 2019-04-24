@@ -1,9 +1,9 @@
 export type WpsVerion = "1.0.0" | "2.0.0";
 
-export interface WpsBasicInput {
+interface WpsBasicInput {
     id: string;
     data?: any;
-    reference?: string
+    reference?: string;
 }
 
 export interface WpsLiteralInput extends WpsBasicInput {
@@ -21,21 +21,23 @@ export interface WpsBboxInput extends WpsBasicInput {
 
 export type WpsInput = WpsLiteralInput | WpsBboxInput | WpsComplexInput;
 
-export interface BasicWpsOutputDescription {
-    type: "literal" | "complex",
-    id: string
+
+interface WpsBasicOutput {
+    id: string;
 }
 
-export interface WpsLiteralOutputDescription extends BasicWpsOutputDescription {
-    type: "literal"
-}
-
-export interface WpsComplexOutputDescription extends BasicWpsOutputDescription {
-    type: "complex", 
+export interface WpsReferenceOutput extends WpsBasicOutput {
+    type: "reference",
     outputFormat: string
 }
 
-export type WpsOutputDescription = WpsLiteralOutputDescription | WpsComplexOutputDescription;
+export interface WpsValueOutput extends WpsBasicOutput {
+    type: "value", 
+    outputFormat: string
+}
+
+export type WpsOutput = WpsReferenceOutput | WpsValueOutput;
+
 
 export interface WpsResult {
     id: string, 
@@ -46,7 +48,7 @@ export interface WpsResult {
 export interface WpsMarshaller {
     unmarshalCapabilities(capabilitiesJson: any): any;
     unmarshalExecuteResponse(responseJson: any): WpsResult[];
-    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutputDescription): any;
+    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutput): any;
     getCapabilitiesUrl(baseurl: string): string;
     executeUrl(url: string, processId: string): string;
 }

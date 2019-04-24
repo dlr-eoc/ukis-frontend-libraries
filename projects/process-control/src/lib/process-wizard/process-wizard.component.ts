@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ProcessService } from '../process/process.service';
-import { Process } from '../process/process';
+import { IProcessService } from '../process/process.service';
+import { ImmutableProcess } from '../process/process';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
 })
 export class ProcessWizardComponent implements OnInit {
 
-  @Input() processService: ProcessService;
+  @Input() processService: IProcessService;
   private focussedProcessId: BehaviorSubject<string>;
   
 
@@ -28,19 +28,19 @@ export class ProcessWizardComponent implements OnInit {
   ngOnInit() {
     let firstProcessId = "";
     this.processService.getProcesses().forEach(process => {
-      if(process.getState() == "available") firstProcessId = process.getId();
+      if(process.getState() == "available") firstProcessId = process.processId();
     })
     this.focussedProcessId = new BehaviorSubject<string>(firstProcessId);
   }
 
-  focusOn(process: Process) {
-    this.focussedProcessId.next(process.getId());
+  focusOn(process: ImmutableProcess) {
+    this.focussedProcessId.next(process.processId());
   }
 
-  hasFocus(process: Process): Observable<boolean> {
+  hasFocus(process: ImmutableProcess): Observable<boolean> {
     return this.getFocussedProcessId().pipe(
       map((procId: string) => {
-        return (procId == process.getId())
+        return (procId == process.processId())
       })
     );
   }
@@ -50,7 +50,8 @@ export class ProcessWizardComponent implements OnInit {
   }
 
   onConfigSubmitted(data) {
-    this.processService.configureAndRun(data.process, data.values);
+    this.processService.configure(data.process, data.values);
+    this.processService.run(data.process);
   }
 
   focusOnNext(evt) {
