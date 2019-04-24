@@ -31,13 +31,15 @@ export class WpsFactory100 implements WpsMarshaller {
         for(let output of responseJson.value.processOutputs.output) {
             out.push({
                 id: output.identifier.value,
-                value: this.unmarshalOutputData(output.data)
+                data: this.unmarshalOutputData(output.data),
+                reference: output.reference.href ? true : false,
+                type: output.data.literalData ? "literal" : output.data.complexData ? "complex" : "bbox"
             });
         }
         return out;
     }
 
-    unmarshalOutputData(data: DataType): any {
+    protected unmarshalOutputData(data: DataType): any {
         if(data.complexData) {
             return data.complexData.content.map(cont => JSON.parse(cont));
             // @TODO: handle case where format is not json
@@ -74,20 +76,20 @@ export class WpsFactory100 implements WpsMarshaller {
     }
 
 
-    marshalResponseForm(output: WpsOutput): ResponseFormType {
+    protected marshalResponseForm(output: WpsOutput): ResponseFormType {
 
         let defType: DocumentOutputDefinitionType;
         switch(output.type) {
-            case "reference":
+            case "literal":
                 defType = {
                     identifier: { value: output.id },
-                    asReference: true // @TODO
+                    asReference: output.reference
                 };
                 break;
-            case "value":
+            case "complex":
                 defType = {
                     identifier: { value: output.id },
-                    mimeType: output.outputFormat
+                    mimeType: output.format
                 };
                 break;
             default: 
@@ -103,14 +105,14 @@ export class WpsFactory100 implements WpsMarshaller {
     }
 
 
-    marshalInputs(inputArr: WpsInput[]) {
+    protected marshalInputs(inputArr: WpsInput[]) {
         
         let theInputs: InputType[] = [];
         
         for(let inp of inputArr) {
     
             let data: DataType;
-            switch(inp.inputtype) {
+            switch(inp.type) {
                 case "literal":
                     data = {
                         literalData: { value: String(inp.data) }
@@ -124,7 +126,7 @@ export class WpsFactory100 implements WpsMarshaller {
                         }
                     };
                     break;
-                case "select":
+                case "complex":
                     data = {
                         complexData: {
                             content: inp.data

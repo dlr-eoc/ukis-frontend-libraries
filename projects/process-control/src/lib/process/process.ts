@@ -1,6 +1,5 @@
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Process as WfProcess, ProductId, WorkflowControl } from 'workflowcontrol';
-import { tap, map } from 'rxjs/operators';
 import { Parameter } from '@ukis/dynforms';
 
 
@@ -30,14 +29,13 @@ export interface ImmutableProcess extends WfProcess {
     getDescription(): string;
     getState(): ProcessState;
     observeState(): Observable<ProcessState>;
-    getParameters(): Parameter[];
+    requiresParameters(): Parameter[];
 }
 
 /**
- * Configurable Process: a *mutable* process that can be configured and executed.
+ * MutableProcess: can be configured and executed.
  */
-export interface ConfigurableProcess extends ImmutableProcess {
-    configure(values: any);
+export interface MutableProcess extends ImmutableProcess {
     setState(state: ProcessState): void;
     execute(inputProducts: Product[], configParas: Parameter[]): Observable<Product[]>;
 }

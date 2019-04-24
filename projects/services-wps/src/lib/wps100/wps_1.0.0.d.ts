@@ -1,4 +1,3 @@
-
 export type ExceptionReport = any;
 
 
@@ -322,9 +321,9 @@ export interface OutputDefinitionType {
 }
 
 export interface OutputDataType {
-   identifier?: CodeType;
-   reference?: string;
-   data?: DataType;
+   identifier: CodeType;
+   reference: OutputReferenceType;
+   data: DataType;
 }
 
 export interface InputType {

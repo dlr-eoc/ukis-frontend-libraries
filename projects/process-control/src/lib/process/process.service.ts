@@ -1,18 +1,39 @@
-import { ImmutableProcess, Product, ConfigurableProcess } from './process';
+import { ImmutableProcess, Product, MutableProcess } from './process';
 import { WorkflowControl } from 'workflowcontrol';
 import { Observable, of } from 'rxjs';
+import { Parameter } from '@ukis/dynforms';
 
+
+class ConfigContext {
+
+  private config: Map<string, Parameter[]>;
+
+  constructor(processes: ImmutableProcess[]) {
+    this.config = new Map<string, Parameter[]>();
+    for(let process of processes) {
+      this.setConfig(process.processId(), process.requiresParameters());
+    }
+  }
+
+  setConfig(processId: string, input: {[key: string]: any}): void {
+    let processConfiguration = this.getConfig(processId);
+    processConfiguration.map(para => para.value = input[para.id]);
+    this.config.set(processId, processConfiguration);
+  }
+
+  getConfig(processId: string): Parameter[] {
+    return this.config.get(processId);
+  }
+
+}
 
 
 /**
  * The task of the ProcessService is 
- *  - to expose (immutable) processes (in the correct order),
+ *  - to expose immutable processes in the correct order,
  *  - to decide which process is to be handled next;
  *  - Only this service is allowed to mutate (configure, execute, change state) processes.
  *  - to expose the products of the processes.
- *
- * We assume that the amount of processes is fixed, which is why they are returned directly,
- * whereas the products are obtained gradually over time, whis is why they are returned as observable.
  * 
  * Note that this service does *not* decide what process currently has focus in the UI; 
  * this is a UI-decission and handled by the ProcessWizardComponent.
@@ -23,24 +44,30 @@ import { Observable, of } from 'rxjs';
 export interface IProcessService {
   getProcesses(): ImmutableProcess[],
   getNext(): ImmutableProcess,
+  
   configure(process: ImmutableProcess, values), 
   run(process: ImmutableProcess),
   restartFrom(process: ImmutableProcess),
+
   getInputs(processId: string): Product[],
+  getConfig(processId: string): Parameter[],
   getProducts(processId: string): Product[],
+
   observeActiveProcess(): Observable<ImmutableProcess>,
   observeProcessOutput(processId: string): Observable<Product[]>
 }
 
-export abstract class ProcessService<T extends ConfigurableProcess> {
+export abstract class ProcessService<Proc extends MutableProcess> {
   
-  protected workflowControl: WorkflowControl<T>;
-  protected processes: T[] = []; // @TODO: it might be better to just retrieve the processes from workflowcontrol instead of storing them here.
+  protected processContext: WorkflowControl<Proc>;
+  protected configContext: ConfigContext;
+  protected processes: Proc[] = []; 
   
-  constructor(processes: T[]) {
+  constructor(processes: Proc[]) {
     this.processes = processes;
-    this.workflowControl = new WorkflowControl<T>(processes);
-    let nextProc = this.workflowControl.nextProcess();
+    this.processContext = new WorkflowControl<Proc>(processes);
+    this.configContext = new ConfigContext(processes);
+    let nextProc = this.processContext.nextProcess();
     if(nextProc) nextProc.setState("available");
   }
   
@@ -49,27 +76,28 @@ export abstract class ProcessService<T extends ConfigurableProcess> {
   }
 
   getNext(): ImmutableProcess {
-    return this.workflowControl.nextProcess();
+    return this.processContext.nextProcess();
   }
 
-  configure(process: ImmutableProcess, values) {
-    let proc = this.getProcessById(process.processId());
-    proc.configure(values);
+  configure(process: ImmutableProcess, values: {[k: string]: any}): void {
+    this.configContext.setConfig(process.processId(), values);
   }
   
   run(process: ImmutableProcess) {
     let proc = this.getProcessById(process.processId());
     let inputs = this.getInputs(process.processId());
-    let configs = proc.getParameters();
+    let configs = this.getConfig(process.processId());
 
     proc.setState("running");
 
     proc.execute(inputs, configs).subscribe(outputs => {
       outputs.forEach(output => {
-        this.workflowControl.setProduct(output.id, output.value);
+        this.processContext.setProduct(output.id, output.value);
       });
+
       proc.setState("completedSuccessfully");
-      let nextProc = this.workflowControl.nextProcess();
+      let nextProc = this.processContext.nextProcess();
+
       if(nextProc) nextProc.setState("available");
     });
 
@@ -83,16 +111,20 @@ export abstract class ProcessService<T extends ConfigurableProcess> {
   getInputs(processId: string): Product[] {
     let proc = this.getProcessById(processId);
     return proc.requiresProducts().map(prodId => {
-      let val = this.workflowControl.getProduct(prodId);
+      let val = this.processContext.getProduct(prodId);
       let prod: Product = { id: prodId,  value: val };
       return prod;
     })
   }
 
+  getConfig(processId: string): Parameter[] {
+    return this.configContext.getConfig(processId);
+  }
+
   getProducts(processId: string): Product[] {
     let proc = this.getProcessById(processId);
     return proc.providesProducts().map(prodId => {
-      let val = this.workflowControl.getProduct(prodId);
+      let val = this.processContext.getProduct(prodId);
       let prod: Product = { id: prodId,  value: val };
       return prod;
     })
@@ -106,7 +138,7 @@ export abstract class ProcessService<T extends ConfigurableProcess> {
     return of(this.getProducts(processId));
   }
   
-  protected getProcessById(procId: string): T {
+  protected getProcessById(procId: string): Proc {
     for(let p of this.processes) {
       if (p.processId() == procId) {
         return p;
