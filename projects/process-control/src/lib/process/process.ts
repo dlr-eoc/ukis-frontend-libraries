@@ -33,7 +33,7 @@ export interface ImmutableProcess extends WfProcess {
 }
 
 /**
- * MutableProcess: can be configured and executed.
+ * MutableProcess: allows change of state and execution.
  */
 export interface MutableProcess extends ImmutableProcess {
     setState(state: ProcessState): void;

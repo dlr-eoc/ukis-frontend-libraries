@@ -11,7 +11,7 @@ class ConfigContext {
   constructor(processes: ImmutableProcess[]) {
     this.config = new Map<string, Parameter[]>();
     for(let process of processes) {
-      this.setConfig(process.processId(), process.requiresParameters());
+      this.config.set(process.processId(), process.requiresParameters());
     }
   }
 

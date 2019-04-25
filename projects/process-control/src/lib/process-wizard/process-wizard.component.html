@@ -1,9 +1,9 @@
 <clr-tabs>
   <clr-tab *ngFor="let process of processService.getProcesses()">
 
-    <ng-container *ngIf="process.observeState() | async as state">
-      
-      <button clrTabLink>
+    
+    <button clrTabLink>
+      <ng-container *ngIf="process.observeState() | async as state">
         <ng-container [ngSwitch]="state">
           <div *ngSwitchCase="'unavailable'"           > <clr-icon shape="dot-circle"                       ></clr-icon> {{process.getName()}} </div>
           <div *ngSwitchCase="'available'"             > <clr-icon shape="dot-circle" class="is-highlight"  ></clr-icon> {{process.getName()}} </div>
@@ -11,6 +11,7 @@
           <div *ngSwitchCase="'completedSuccessfully'" > <clr-icon shape="dot-circle" class="is-success"    ></clr-icon> {{process.getName()}} </div>
           <div *ngSwitchDefault                        > <clr-icon shape="dot-circle"                       ></clr-icon> {{process.getName()}} </div>
         </ng-container>
+      </ng-container>
       </button>
   
       <clr-tab-content *clrIfActive="hasFocus(process) | async">
@@ -22,7 +23,6 @@
         ></ukis-wizard-element>
       </clr-tab-content>
       
-    </ng-container>
 
   </clr-tab>
 
