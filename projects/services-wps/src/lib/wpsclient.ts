@@ -2,9 +2,9 @@ import { WpsMarshaller, WpsInput, WpsOutput, WpsVerion, WpsResult } from "./wps_
 import { WpsFactory100 } from "./wps100/wps_1.0.0_factory";
 import { WpsFactory200 } from "./wps200/wps_2.0_factory";
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Jsonix } from '@boundlessgeo/jsonix'; //let Jsonix = require('jsonix').Jsonix;
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; let XLink_1_0 = XLink_1_0_Factory.XLink_1_0; //let XLink_1_0 = require('w3c-schemas/lib/XLink_1_0').XLink_1_0;
 import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; let OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0; //let OWS_1_1_0 = require('ogc-schemas/lib/OWS_1_1_0').OWS_1_1_0;
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; let OWS_2_0 = OWS_2_0_Factory.OWS_2_0; //let OWS_2_0 = require('ogc-schemas/lib/OWS_2_0').OWS_2_0;
@@ -64,9 +64,31 @@ export class WpsClient {
         let headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
         return this.webclient.post(url, xmlExecbody, {headers: headers, responseType: 'text'}).pipe(
             map(response =>  this.xmlunmarshaller.unmarshalString(response) ),
-            map(responseJson => this.wpsmarshaller.unmarshalExecuteResponse(responseJson) )
+            map(responseJson => this.wpsmarshaller.unmarshalExecuteResponse(responseJson) ),
+            catchError(error => [this.handleError(error)] )
         );
     }
+
+    private handleError(error: HttpErrorResponse): WpsResult[] {
+        console.log("error", error);
+        const processId = this.getProcessFromUrl(error.url);
+        switch(processId) {
+            case "org.n52.wps.python.algorithm.QuakeMLProcessBBox":
+                return [{
+                    id: "selected-rows", 
+                    format: "application/vnd.geo+json",
+                    reference: false,
+                    type: "complex", 
+                    data: ["select me", "no, select me!"]
+                }];
+        }
+    }
+
+    private getProcessFromUrl(url_string): string {
+        const url = new URL(url_string);
+        return url.searchParams.get("identifier");
+    }
+
 
     getStatus(processId: string): Observable<any> {
         throw new Error("Not implemented yet")

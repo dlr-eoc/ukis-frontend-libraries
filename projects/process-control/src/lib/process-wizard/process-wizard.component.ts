@@ -28,19 +28,19 @@ export class ProcessWizardComponent implements OnInit {
   ngOnInit() {
     let firstProcessId = "";
     this.processService.getProcesses().forEach(process => {
-      if(process.getState() == "available") firstProcessId = process.processId();
+      if(process.getState() == "available") firstProcessId = process.getId();
     })
     this.focussedProcessId = new BehaviorSubject<string>(firstProcessId);
   }
 
   focusOn(process: ImmutableProcess) {
-    this.focussedProcessId.next(process.processId());
+    this.focussedProcessId.next(process.getId());
   }
 
   hasFocus(process: ImmutableProcess): Observable<boolean> {
     return this.getFocussedProcessId().pipe(
       map((procId: string) => {
-        return (procId == process.processId())
+        return (procId == process.getId())
       })
     );
   }
@@ -55,7 +55,7 @@ export class ProcessWizardComponent implements OnInit {
   }
 
   focusOnNext(evt) {
-    let next = this.processService.getNext()
+    let next = this.processService.getActiveProcess()
     if(next) this.focusOn(next);
   }
 

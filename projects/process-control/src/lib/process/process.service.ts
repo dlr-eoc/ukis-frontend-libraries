@@ -1,31 +1,30 @@
 import { ImmutableProcess, Product, MutableProcess } from './process';
-import { WorkflowControl } from 'workflowcontrol';
 import { Observable, of } from 'rxjs';
 import { Parameter } from '@ukis/dynforms';
 
 
-class ConfigContext {
+// class ConfigContext {
 
-  private config: Map<string, Parameter[]>;
+//   private config: Map<string, Parameter[]>;
 
-  constructor(processes: ImmutableProcess[]) {
-    this.config = new Map<string, Parameter[]>();
-    for(let process of processes) {
-      this.config.set(process.processId(), process.requiresParameters());
-    }
-  }
+//   constructor(processes: ImmutableProcess[]) {
+//     this.config = new Map<string, Parameter[]>();
+//     for(let process of processes) {
+//       this.config.set(process.processId(), process.requiresParameters());
+//     }
+//   }
 
-  setConfig(processId: string, input: {[key: string]: any}): void {
-    let processConfiguration = this.getConfig(processId);
-    processConfiguration.map(para => para.value = input[para.id]);
-    this.config.set(processId, processConfiguration);
-  }
+//   setConfig(processId: string, input: {[key: string]: any}): void {
+//     let processConfiguration = this.getConfig(processId);
+//     processConfiguration.map(para => para.value = input[para.id]);
+//     this.config.set(processId, processConfiguration);
+//   }
 
-  getConfig(processId: string): Parameter[] {
-    return this.config.get(processId);
-  }
+//   getConfig(processId: string): Parameter[] {
+//     return this.config.get(processId);
+//   }
 
-}
+// }
 
 
 /**
@@ -43,15 +42,15 @@ class ConfigContext {
 
 export interface IProcessService {
   getProcesses(): ImmutableProcess[],
-  getNext(): ImmutableProcess,
+  getActiveProcess(): ImmutableProcess,
   
   configure(process: ImmutableProcess, values), 
   run(process: ImmutableProcess),
   restartFrom(process: ImmutableProcess),
 
-  getInputs(processId: string): Product[],
-  getConfig(processId: string): Parameter[],
-  getProducts(processId: string): Product[],
+  // getInputs(processId: string): Product[],
+  // getConfig(processId: string): Parameter[],
+  // getProducts(processId: string): Product[],
 
   observeActiveProcess(): Observable<ImmutableProcess>,
   observeProcessOutput(processId: string): Observable<Product[]>
@@ -59,15 +58,13 @@ export interface IProcessService {
 
 export abstract class ProcessService<Proc extends MutableProcess> {
   
-  protected processContext: WorkflowControl<Proc>;
-  protected configContext: ConfigContext;
+  protected activeProcessIndex: number;
   protected processes: Proc[] = []; 
   
   constructor(processes: Proc[]) {
     this.processes = processes;
-    this.processContext = new WorkflowControl<Proc>(processes);
-    this.configContext = new ConfigContext(processes);
-    let nextProc = this.processContext.nextProcess();
+    this.activeProcessIndex = 0;
+    let nextProc = this.processes[0];
     if(nextProc) nextProc.setState("available");
   }
   
@@ -75,29 +72,49 @@ export abstract class ProcessService<Proc extends MutableProcess> {
     return this.processes;
   }
 
-  getNext(): ImmutableProcess {
-    return this.processContext.nextProcess();
+  getActiveProcess(): ImmutableProcess {
+    return this.processes[this.activeProcessIndex];
   }
 
+  /**
+   * @TODO: rewrite this to provideConfig(para: Parameter)
+   */
   configure(process: ImmutableProcess, values: {[k: string]: any}): void {
-    this.configContext.setConfig(process.processId(), values);
+    let mutableProcess = this.getProcessById(process.getId());
+    let configs = mutableProcess.requiresParameters();
+    configs.map(para => para.value = values[para.id]);
+    configs.forEach(config => {
+      mutableProcess.setConfig(config);
+    })
+  }
+
+  provideProduct(product: Product): void {
+    this.processes.forEach(process => {
+      let requiredProdIds = process.requiresProducts().map(prod => prod.id);
+      if (requiredProdIds.includes(product.id)) {
+        process.setInput(product);
+      }
+    })
   }
   
   run(process: ImmutableProcess) {
-    let proc = this.getProcessById(process.processId());
-    let inputs = this.getInputs(process.processId());
-    let configs = this.getConfig(process.processId());
+    let mutableProcess = this.getProcessById(process.getId());
 
-    proc.setState("running");
+    /**
+     * Note that we do not call proc.setConfig and proc.setInput.
+     * The reason is that we have already done that eagerly once inputs and configs were available. 
+     * This eagerness is neccessary so that processes can mutate inputs and configs as soon as they become available.
+     */
 
-    proc.execute(inputs, configs).subscribe(outputs => {
-      outputs.forEach(output => {
-        this.processContext.setProduct(output.id, output.value);
-      });
+    mutableProcess.setState("running");
 
-      proc.setState("completedSuccessfully");
-      let nextProc = this.processContext.nextProcess();
+    mutableProcess.execute().subscribe(outputs => {
+      outputs.forEach(output => this.provideProduct(output) );
 
+      mutableProcess.setState("completedSuccessfully");
+
+      this.activeProcessIndex += 1;
+      let nextProc = this.processes[this.activeProcessIndex];
       if(nextProc) nextProc.setState("available");
     });
 
@@ -108,39 +125,13 @@ export abstract class ProcessService<Proc extends MutableProcess> {
     throw new Error("Method not implemented.");
   }
 
-  getInputs(processId: string): Product[] {
-    let proc = this.getProcessById(processId);
-    return proc.requiresProducts().map(prodId => {
-      let val = this.processContext.getProduct(prodId);
-      let prod: Product = { id: prodId,  value: val };
-      return prod;
-    })
-  }
-
-  getConfig(processId: string): Parameter[] {
-    return this.configContext.getConfig(processId);
-  }
-
-  getProducts(processId: string): Product[] {
-    let proc = this.getProcessById(processId);
-    return proc.providesProducts().map(prodId => {
-      let val = this.processContext.getProduct(prodId);
-      let prod: Product = { id: prodId,  value: val };
-      return prod;
-    })
-  }
-
   observeActiveProcess(): Observable<ImmutableProcess> {
-    return of(this.getNext());
-  }
-
-  observeProcessOutput(processId: string): Observable<Product[]> {
-    return of(this.getProducts(processId));
+    return of(this.getActiveProcess());
   }
   
   protected getProcessById(procId: string): Proc {
     for(let p of this.processes) {
-      if (p.processId() == procId) {
+      if (p.getId() == procId) {
         return p;
       }
     }
