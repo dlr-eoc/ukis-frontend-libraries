@@ -9,6 +9,11 @@
 * **@ukis/services-util-store:** method to remove cookies ([ca3b11fecac](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/ca3b11fecacb1a1f0372226ae3e5f7e29157a557))
 
 
+### Bug Fixes
+* **@ukis/map-ol:** imports ol.css in bundel ([#UKISDEV-766
+](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-766)) ([5809fdb9df4](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/5809fdb9df433ab5523eb21197ef1b48cc4bef94))
+
+
 # [2.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.1.0) (2019-04-01) (SPRINT-costalx II)
 
 ### Features
