@@ -85,7 +85,7 @@
       <span *ngSwitchDefault>{{pick(d, col.prop)}}</span>
     </clr-dg-cell>
     <clr-dg-row-detail *clrIfExpanded>
-      <div [innerHTML]="pick(d, tableProps.rowdetail)"></div>
+      <div [innerHTML]="pick(d, tableProps.rowdetail)" class="preview"></div>
     </clr-dg-row-detail>
   </clr-dg-row>
 
