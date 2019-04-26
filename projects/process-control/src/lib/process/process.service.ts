@@ -1,5 +1,5 @@
 import { ImmutableProcess, Product, MutableProcess } from './process';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { Parameter } from '@ukis/dynforms';
 
 
@@ -59,6 +59,7 @@ export interface IProcessService {
 export abstract class ProcessService<Proc extends MutableProcess> {
   
   protected activeProcessIndex: number;
+  protected activeProcess: BehaviorSubject<Proc>;
   protected processes: Proc[] = []; 
   
   constructor(processes: Proc[]) {
@@ -66,6 +67,7 @@ export abstract class ProcessService<Proc extends MutableProcess> {
     this.activeProcessIndex = 0;
     let nextProc = this.processes[0];
     if(nextProc) nextProc.setState("available");
+    this.activeProcess = new BehaviorSubject<Proc>(nextProc);
   }
   
   getProcesses(): ImmutableProcess[] {
@@ -81,7 +83,7 @@ export abstract class ProcessService<Proc extends MutableProcess> {
    */
   configure(process: ImmutableProcess, values: {[k: string]: any}): void {
     let mutableProcess = this.getProcessById(process.getId());
-    let configs = mutableProcess.requiresParameters();
+    let configs = mutableProcess.getParameters();
     configs.map(para => para.value = values[para.id]);
     configs.forEach(config => {
       mutableProcess.setConfig(config);
@@ -90,7 +92,7 @@ export abstract class ProcessService<Proc extends MutableProcess> {
 
   provideProduct(product: Product): void {
     this.processes.forEach(process => {
-      let requiredProdIds = process.requiresProducts().map(prod => prod.id);
+      let requiredProdIds = process.getInputs().map(prod => prod.id);
       if (requiredProdIds.includes(product.id)) {
         process.setInput(product);
       }
@@ -116,6 +118,7 @@ export abstract class ProcessService<Proc extends MutableProcess> {
       this.activeProcessIndex += 1;
       let nextProc = this.processes[this.activeProcessIndex];
       if(nextProc) nextProc.setState("available");
+      this.activeProcess.next(nextProc);
     });
 
     // @TODO: proc.execute: on error, pass error to some error-handler. 
@@ -126,7 +129,7 @@ export abstract class ProcessService<Proc extends MutableProcess> {
   }
 
   observeActiveProcess(): Observable<ImmutableProcess> {
-    return of(this.getActiveProcess());
+    return this.activeProcess;
   }
   
   protected getProcessById(procId: string): Proc {

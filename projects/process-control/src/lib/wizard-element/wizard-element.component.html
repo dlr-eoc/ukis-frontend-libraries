@@ -13,7 +13,7 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'available'">
-        <ukis-form [fg]="processForm" [parameters]="process.requiresParameters()" (formSubmitted)="onSubmit($event)"></ukis-form>
+        <ukis-form [fg]="processForm" [parameters]="process.getParameters()" (formSubmitted)="onSubmit($event)"></ukis-form>
     </ng-container>
     
     

@@ -28,10 +28,11 @@ export interface ImmutableProcess {
     getName(): string;
     getDescription(): string;
     getState(): ProcessState;
-    requiresProducts(): Product[];
-    requiresParameters(): Parameter[];
-    providesProducts(): Product[];
+    getInputs(): Product[];
+    getParameters(): Parameter[];
+    getOutputs(): Product[];
     observeState(): Observable<ProcessState>;
+    observeInput(): Observable<Product[]>;
     observeOutput(): Observable<Product[]>;
 }
 

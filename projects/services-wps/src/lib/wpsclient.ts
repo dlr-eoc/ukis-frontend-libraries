@@ -81,6 +81,16 @@ export class WpsClient {
                     type: "complex", 
                     data: ["select me", "no, select me!"]
                 }];
+            case "org.n52.wps.python.algorithm.ShakemapProcess":
+                return [{
+                    id: "shakemap-output", 
+                    type: "literal", 
+                    reference: true,
+                    format: "wms", // @TODO
+                    data: "http://ows.mundialis.de/services/service?"
+                }];
+            default: 
+                throw error;
         }
     }
 

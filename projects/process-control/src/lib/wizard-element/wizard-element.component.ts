@@ -22,7 +22,7 @@ export class WizardElementComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.paras = this.process.requiresParameters();
+    this.paras = this.process.getParameters();
     let formControls = {};
     this.paras.forEach((para: Parameter) => {
       let fc = new FormControl(para.defaultValue, [Validators.required]);
