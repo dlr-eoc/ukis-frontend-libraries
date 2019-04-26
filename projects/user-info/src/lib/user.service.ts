@@ -10,11 +10,11 @@ export interface IUrls {
 }
 
 export interface IRegisterUser {
-  userName: string,
-  password: string,
-  email?: string,
-  firstName?: string,
-  lastName?: string
+  userName: string;
+  password: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface IUserDetails {
@@ -39,13 +39,15 @@ export interface ITokenUser extends IUserDetails {
   token: string;
 }
 
-export type IUser = IBasicUser | ITokenUser
+export type IUser = IBasicUser | ITokenUser;
+
 export interface IUserinfo {
-  current_user: IUser
-  urls: IUrls | null
+  current_user: IUser;
+  urls: IUrls | null;
 }
 
 export interface IAuthService {
+  loginmethode: 'oauth_pass' | 'oauth_code' | 'ukis_cas';
   login(user: IUser): Observable<IUserinfo>;
   logout(user?: IUser): Observable<IUserinfo>;
   getUserInfo(user?: IUser): Observable<IUserinfo>;
@@ -55,7 +57,6 @@ export interface IAuthService {
   checkSession?();
   checkAuthorization?(permissions: string[], user?: IUser): Observable<boolean>;
   register?(user: IRegisterUser): Observable<IUserinfo>;
-  loginmethode: 'oauth_pass' | 'oauth_code' | 'ukis_cas';
 }
 
 
@@ -86,7 +87,7 @@ export class UserService {
 
   register(user: IRegisterUser) {
     console.log('TODO: inject Service to handle register');
-    //this.mockLoginService(username, password, email, firstName, lastName);
+    // this.mockLoginService(username, password, email, firstName, lastName);
   }
 
   setAuthService(authService) {
