@@ -1,15 +1,13 @@
 # [3.0.2](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.2) (2019-04-26) (costalx-fixes)
 
 ### Bug Fixes
-* **@ukis/dataset-explorer:** data type icons path to polygon, raster, line etc. was given absolute, therefore could not be found in deployed environments ([#UKISDEV-771
-](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-771))
+* **@ukis/dataset-explorer:** data type icons path to polygon, raster, line etc. was given absolute, therefore could not be found in deployed environments ([#UKISDEV-771](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-771))
 
 
 # [3.0.1](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.1) (2019-04-26) (costalx-fixes)
 
 ### Bug Fixes
-* **@ukis/map-ol:** imports ol.css in bundel not working on linux build ([#UKISDEV-766
-](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-766)) ([896f15ab39e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/896f15ab39ef67325c9684dd3fd0d6a0ce795c06))
+* **@ukis/map-ol:** imports ol.css in bundel not working on linux build ([#UKISDEV-766](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-766)) ([896f15ab39e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/896f15ab39ef67325c9684dd3fd0d6a0ce795c06))
 
 
 # [3.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.0) (2019-04-15) (FEATURE-planetary and costalx-fixes)
@@ -24,8 +22,7 @@
 
 
 ### Bug Fixes
-* **@ukis/map-ol:** imports ol.css in bundel ([#UKISDEV-766
-](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-766)) ([5809fdb9df4](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/5809fdb9df433ab5523eb21197ef1b48cc4bef94))
+* **@ukis/map-ol:** imports ol.css in bundel ([#UKISDEV-766](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-766)) ([5809fdb9df4](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/5809fdb9df433ab5523eb21197ef1b48cc4bef94))
 
 
 # [2.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.1.0) (2019-04-01)
@@ -37,8 +34,7 @@
 
 
 ### Bug Fixes
-* **@ukis/dataset-explorer:** Datasetexplorer is not removing layers from service ([#UKISDEV-738
-](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-738)) ([f5a98f5c9be](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/f5a98f5c9be12df6840a7361657ad860d2d0221a))
+* **@ukis/dataset-explorer:** Datasetexplorer is not removing layers from service ([#UKISDEV-738](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-738)) ([f5a98f5c9be](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/f5a98f5c9be12df6840a7361657ad860d2d0221a))
 * **@ukis/datatypes-layers:** vector-layers can no longer have type "wms", "wmts" or "xyz", raster-layers can no longer have type "geojson" or "wfs".
 * **@ukis/datatypes-owc-json** , **@ukis/services-owc-json:** in marshalling to and from owc to layer, the layertype is now explicitly checked for compliance with **@ukis/datatypes-layers:**
 
@@ -51,8 +47,7 @@
 
 
 ### Bug Fixes
-* **@ukis/layer-control:** opacity slider not working with dragging ([#UKISDEV-673
-](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-673)) ([caba7bc876c](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/caba7bc876cc3ee4f94e4172eddf90d6c91c401f))
+* **@ukis/layer-control:** opacity slider not working with dragging ([#UKISDEV-673](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-673)) ([caba7bc876c](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/caba7bc876cc3ee4f94e4172eddf90d6c91c401f))
 
 
 ### Features
@@ -66,8 +61,7 @@
 * "@angular/core": "~7.2.0"
 
 ### Bug Fixes
-* **repo:** remove not used files and  ([#UKISDEV-668
-](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-668)) ([7f4378ad74b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/7f4378ad74b81a8b702607de55261467e08c56c6))
+* **repo:** remove not used files and  ([#UKISDEV-668](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-668)) ([7f4378ad74b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/7f4378ad74b81a8b702607de55261467e08c56c6))
 
 
 ### Features
