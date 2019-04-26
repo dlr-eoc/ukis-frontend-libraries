@@ -132,12 +132,12 @@ export class DatasetExplorerComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.imagesForDatatypes = {
-      "raster": "/assets/icons/raster.png",
-      "point": "/assets/icons/point.png",
-      "line": "/assets/icons/line.png",
-      "polygon": "/assets/icons/polygon.png",
-      "literature": "/assets/icons/literature.png",
-      "statistics": "/assets/icons/statistics.png"
+      "raster": "assets/icons/raster.png",
+      "point": "assets/icons/point.png",
+      "line": "assets/icons/line.png",
+      "polygon": "assets/icons/polygon.png",
+      "literature": "assets/icons/literature.png",
+      "statistics": "assets/icons/statistics.png"
     }
 
     this.subscribeToLayerSvc();
