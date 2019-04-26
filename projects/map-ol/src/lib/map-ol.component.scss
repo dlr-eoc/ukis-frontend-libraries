@@ -1,4 +1,5 @@
-@import url("~ol/ol.css");
+//@import url("~ol/ol.css");
+@import '~ol/ol.css'; //fix css not included in bundles
 
 .map {
   width: 100%;

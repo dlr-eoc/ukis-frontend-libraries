@@ -1,4 +1,4 @@
-# [3.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.0) (2019-04-15) (FEATURE-planetary)
+# [3.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.0) (2019-04-15) (FEATURE-planetary and costalx-fixes)
 
 ### Breaking Changes
 * **@ukis/user-info:** component ukis-login-view removed - create your view e.g. in a route with the provided components! ([#UKISDEV-767](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-767)) ([5c3001e6f6d](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/5c3001e6f6d87e41f808d06bf6b29dbe3fb83a03))
@@ -6,7 +6,7 @@
 
 
 ### Features
-* **@ukis/services-util-store:** remove cookie method ([ca3b11fecac](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/ca3b11fecacb1a1f0372226ae3e5f7e29157a557))
+* **@ukis/services-util-store:** method to remove cookies ([ca3b11fecac](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/ca3b11fecacb1a1f0372226ae3e5f7e29157a557))
 
 
 # [2.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.1.0) (2019-04-01) (SPRINT-costalx II)
