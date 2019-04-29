@@ -64,35 +64,10 @@ export class WpsClient {
         let headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
         return this.webclient.post(url, xmlExecbody, {headers: headers, responseType: 'text'}).pipe(
             map(response =>  this.xmlunmarshaller.unmarshalString(response) ),
-            map(responseJson => this.wpsmarshaller.unmarshalExecuteResponse(responseJson) ),
-            catchError(error => [this.handleError(error)] )
+            map(responseJson => this.wpsmarshaller.unmarshalExecuteResponse(responseJson) )
         );
     }
 
-    private handleError(error: HttpErrorResponse): WpsResult[] {
-        console.log("error", error);
-        const processId = this.getProcessFromUrl(error.url);
-        switch(processId) {
-            case "org.n52.wps.python.algorithm.QuakeMLProcessBBox":
-                return [{
-                    id: "selected-rows", 
-                    format: "application/vnd.geo+json",
-                    reference: false,
-                    type: "complex", 
-                    data: ["select me", "no, select me!"]
-                }];
-            case "org.n52.wps.python.algorithm.ShakemapProcess":
-                return [{
-                    id: "shakemap-output", 
-                    type: "literal", 
-                    reference: true,
-                    format: "wms", // @TODO
-                    data: "http://ows.mundialis.de/services/service?"
-                }];
-            default: 
-                throw error;
-        }
-    }
 
     private getProcessFromUrl(url_string): string {
         const url = new URL(url_string);

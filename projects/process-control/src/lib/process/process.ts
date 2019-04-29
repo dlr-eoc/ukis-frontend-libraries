@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { Parameter } from '@ukis/dynforms';
+import { Process } from "workflowcontrol";
 
 
 
@@ -17,23 +18,18 @@ export interface Product {
     value: any;
 }
 
+export type ConfigurationProduct = Product & Parameter;
+
 
 export type ProcessState = "unavailable" | "available" | "running"  | "completedSuccessfully";
 
 /**
  * Basic process interface.
  */
-export interface ImmutableProcess {
-    getId(): string;
+export interface ImmutableProcess extends Process {
     getName(): string;
     getDescription(): string;
     getState(): ProcessState;
-    getInputs(): Product[];
-    getParameters(): Parameter[];
-    getOutputs(): Product[];
-    observeState(): Observable<ProcessState>;
-    observeInput(): Observable<Product[]>;
-    observeOutput(): Observable<Product[]>;
 }
 
 /**
@@ -41,8 +37,6 @@ export interface ImmutableProcess {
  */
 export interface MutableProcess extends ImmutableProcess {
     setState(state: ProcessState): void;
-    setInput(inputProduct: Product): void;
-    setConfig(configPara: Parameter): void; 
-    execute(): Observable<Product[]>;
+    execute(inputs: Product[]): Observable<Product[]>;
 }
 

@@ -29,11 +29,20 @@ export class WpsFactory100 implements WpsMarshaller {
     unmarshalExecuteResponse(responseJson: IWpsExecuteResponse): WpsResult[] {
         let out: WpsResult[] = [];
         for(let output of responseJson.value.processOutputs.output) {
+            let isReference = output.reference ? true : false;
+            let datatype;
+            if(isReference) {
+                datatype = "literal";
+            } else {
+                if(output.data.literalData) datatype = "literal";
+                else if(output.data.complexData) datatype = "complex";
+                else datatype = "bbox";
+            }
             out.push({
                 id: output.identifier.value,
                 data: this.unmarshalOutputData(output.data),
-                reference: output.reference.href ? true : false,
-                type: output.data.literalData ? "literal" : output.data.complexData ? "complex" : "bbox"
+                reference: isReference,
+                type: datatype
             });
         }
         return out;
@@ -83,12 +92,14 @@ export class WpsFactory100 implements WpsMarshaller {
             case "literal":
                 defType = {
                     identifier: { value: output.id },
-                    asReference: output.reference
+                    asReference: output.reference,
+                    mimeType: output.format
                 };
                 break;
             case "complex":
                 defType = {
                     identifier: { value: output.id },
+                    asReference: output.reference,
                     mimeType: output.format
                 };
                 break;

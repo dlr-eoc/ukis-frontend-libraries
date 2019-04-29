@@ -322,8 +322,8 @@ export interface OutputDefinitionType {
 
 export interface OutputDataType {
    identifier: CodeType;
-   reference: OutputReferenceType;
-   data: DataType;
+   reference?: OutputReferenceType;
+   data?: DataType;
 }
 
 export interface InputType {
