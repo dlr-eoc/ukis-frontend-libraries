@@ -1,0 +1,25 @@
+<clr-header class="header-1">
+  <div class="branding">
+    <a href="https://www.dlr.de" target="_blank" alt="link to dlr">
+      <clr-icon shape="dlr" class="is-solid" size="48" alt="dlr icon"></clr-icon>
+    </a>
+    <a href="https://www.dlr.de/eoc" target="_blank" alt="link to dlr eoc">
+      <clr-icon shape="eoc" class="is-solid" size="75" alt="eoc icon"></clr-icon>
+    </a>
+    <a href="https://www.dlr.de/eoc/desktopdefault.aspx/tabid-5413/10560_read-21914" target="_blank" alt="link to dlr ukis">
+      <clr-icon shape="ukis" class="is-solid" size="33" alt="ukis icon"></clr-icon>
+    </a>
+    <a class="nav-link" routerLink="/" routerLinkActive="active">
+      <span class="title">{{title}}</span>
+    </a>
+  </div>
+  <div class="header-nav" [clr-nav-level]="1">
+    <ng-content select=".header-nav-el"></ng-content>
+  </div>
+
+  <ng-content></ng-content>
+
+  <div class="header-actions">
+    <ng-content select=".header-action-el"></ng-content>
+  </div>
+</clr-header>
