@@ -566,6 +566,7 @@
         }
       }
     },
+
     "demo-user-info": {
       "root": "projects/demo-user-info/",
       "sourceRoot": "projects/demo-user-info/src",
@@ -694,6 +695,143 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "projects/demo-user-info-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+
+
+    "demo-maps": {
+      "root": "projects/demo-maps/",
+      "sourceRoot": "projects/demo-maps/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/demo-maps",
+            "index": "projects/demo-maps/src/index.html",
+            "main": "projects/demo-maps/src/main.ts",
+            "polyfills": "projects/demo-maps/src/polyfills.ts",
+            "tsConfig": "projects/demo-maps/tsconfig.app.json",
+            "assets": [
+              "projects/demo-maps/src/favicon.ico",
+              "projects/demo-maps/src/assets"
+            ],
+            "styles": [
+              "projects/demo-maps/src/styles/main.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules"
+              ]
+            },
+            "scripts": [
+              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
+              "node_modules/@clr/icons/clr-icons.min.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/demo-maps/src/environments/environment.ts",
+                  "with": "projects/demo-maps/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "demo-maps:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "demo-maps:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "demo-maps:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/demo-maps/src/test.ts",
+            "polyfills": "projects/demo-maps/src/polyfills.ts",
+            "tsConfig": "projects/demo-maps/tsconfig.spec.json",
+            "karmaConfig": "projects/demo-maps/karma.conf.js",
+            "styles": [
+              "projects/demo-maps/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/demo-maps/src/favicon.ico",
+              "projects/demo-maps/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/demo-maps/tsconfig.app.json",
+              "projects/demo-maps/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "demo-maps-e2e": {
+      "root": "projects/demo-maps-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/demo-maps-e2e/protractor.conf.js",
+            "devServerTarget": "demo-maps:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "demo-maps:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/demo-maps-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]

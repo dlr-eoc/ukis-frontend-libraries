@@ -1,0 +1,14 @@
+<clr-main-container >
+
+  <ukis-header [ukis-title]="'Demo maps'">
+    <a routerLink="landingpage" routerLinkActive="active" class="nav-link nav-text header-nav-el">Landing page</a>
+    <a routerLink="map" routerLinkActive="active" class="nav-link nav-text header-nav-el">Map</a>
+  </ukis-header>
+
+  <router-outlet></router-outlet>
+
+  <ukis-global-footer>
+    <p>This is the Footer</p>
+  </ukis-global-footer>
+
+</clr-main-container>
