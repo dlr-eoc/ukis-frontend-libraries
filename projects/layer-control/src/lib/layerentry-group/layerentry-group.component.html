@@ -6,7 +6,7 @@
 
 
     <!-- layer title -->
-    <div #ref class="item-title-replacement title" (click)="showProperties()">
+    <div #ref class="item-title-replacement title" (click)="showProperties()" [title]="getLayerName(group)">
       <ng-content></ng-content>
     </div>
     <span *ngIf="ref.children.length == 0" class="title" [title]="getLayerName(group)" (click)="showProperties()">

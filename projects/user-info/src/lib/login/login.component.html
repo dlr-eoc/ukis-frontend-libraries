@@ -1,35 +1,20 @@
-<div class="login-view">
-  <form [formGroup]="usrInfoForm" (ngSubmit)="login()" [hidden]="submitted">
+<div class="login-wrapper">
+  <form class="login" [formGroup]="usrInfoForm" (ngSubmit)="login()">
     <div class="login-group">
-
-      <label for="login_username" aria-haspopup="true" role="tooltip" class="input tooltip tooltip-validation tooltip-sm tooltip-top-left"
-        [class.invalid]="usrInfoForm.get('usrName').invalid
-            && (usrInfoForm.get('usrName').dirty || usrInfoForm.get('usrName').touched)">
-        <input class="username" type="text" id="login_username" placeholder="Username" [formControl]="usrInfoForm.get('usrName')">
-        <span class="tooltip-content">
-          Username is required.
-        </span>
-      </label>
-
-
-      <label for="login_password" aria-haspopup="true" role="tooltip" class="input tooltip tooltip-validation tooltip-sm tooltip-top-left"
-        [class.invalid]="usrInfoForm.get('usrPass').invalid
-          && (usrInfoForm.get('usrPass').dirty || usrInfoForm.get('usrPass').touched)">
-        <input class="password" type="password" id="login_password" placeholder="Password" [formControl]="usrInfoForm.get('usrPass')">
-        <span class="tooltip-content">
-          Password is required.
-        </span>
-      </label>
-
-
-      <div class="checkbox">
-        <input type="checkbox" id="remember" [formControl]="usrInfoForm.get('remember')">
-        <label for="remember">Remember me</label>
-      </div>
-
-      <button type="button" class="btn btn-primary" [disabled]="usrInfoForm.invalid" (click)="login()">
-        Login
-      </button>
+      <clr-input-container>
+        <input type="text" name="usrName" clrInput placeholder="Username" [formControl]="usrInfoForm.get('usrName')" />
+        <clr-control-error>Username is {{getFormError('usrName')}}</clr-control-error>
+      </clr-input-container>
+      <clr-password-container>
+        <input type="password" name="usrPass" clrPassword placeholder="Password"
+          [formControl]="usrInfoForm.get('usrPass')" />
+        <clr-control-error>Password is {{getFormError('usrPass')}}</clr-control-error>
+      </clr-password-container>
+      <clr-checkbox-wrapper>
+        <label>Remember me</label>
+        <input type="checkbox" name="rememberMe" clrCheckbox [formControl]="usrInfoForm.get('remember')" />
+      </clr-checkbox-wrapper>
+      <button type="submit" class="btn btn-primary" [disabled]="usrInfoForm.invalid" (click)="login()">Login</button>
     </div>
   </form>
 </div>

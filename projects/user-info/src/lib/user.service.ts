@@ -3,143 +3,95 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
+export interface IUrls {
+  login: string;
+  logout: string;
+  register: string;
+}
+
+export interface IRegisterUser {
+  userName: string;
+  password: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+export interface IUserDetails {
+  userID?: string;
+  loggedIn?: boolean;
+  isAuthorized?: boolean;
+  remember?: boolean;
+  permissions?: Array<string>;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
+
+/** oauth_pass */
+export interface IBasicUser extends IUserDetails {
+  userName: string;
+  password: string;
+}
+
+/** oauth_code */
+export interface ITokenUser extends IUserDetails {
+  token: string;
+}
+
+export type IUser = IBasicUser | ITokenUser;
+
+export interface IUserinfo {
+  current_user: IUser;
+  urls: IUrls | null;
+}
+
+export interface IAuthService {
+  loginmethode: 'oauth_pass' | 'oauth_code' | 'ukis_cas';
+  login(user: IUser): Observable<IUserinfo>;
+  logout(user?: IUser): Observable<IUserinfo>;
+  getUserInfo(user?: IUser): Observable<IUserinfo>;
+  /** confirming the user is logged in and valid  */
+  isloggedIn(): boolean;
+  /** check if the user has access rights/privilege */
+  checkSession?();
+  checkAuthorization?(permissions: string[], user?: IUser): Observable<boolean>;
+  register?(user: IRegisterUser): Observable<IUserinfo>;
+}
+
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private user = new BehaviorSubject(new UserDetails());
+  private authService: IAuthService;
 
-  constructor(public http: HttpClient) {
-    let user = new UserDetails();
-    user.loggedIn = false;
-    this.user.next(user);
-    this.mockCheckAuthentication(user);
+  constructor() { }
+
+  getUserInfo() {
+    return this.authService.getUserInfo();
   }
 
-  getUser(): Observable<UserDetails> {
-    return this.user.asObservable();
+  login(user: IUser) {
+    return this.authService.login(user);
   }
 
-  setUser(user: UserDetails) {
-    this.user.next(user);
+  isloggedIn() {
+    return this.authService.isloggedIn();
   }
 
-  setLoginError(error: String) {
-    this.user.error(error);
+  logout(user?: IUser) {
+    return this.authService.logout();
   }
 
-  removeUser() {
-    this.user = null;
-  }
-
-  sessionRestore() {
-    console.log('TODO: inject Service to handle sessionRestore');
-    //this.authService.checkLogin();
-  }
-
-  /**
-   * 
-   * Basic Login with name and password
-   */
-  login(username: string, password: string, remember: boolean) {
-    console.log('TODO: inject Service to handle login');
-    this.mockLoginService(username, password);
-    //this.authService.login(username, password, remember);
-  }
-
-  /**
-   * 
-   */
-  logout() {
-    console.log('TODO: inject Service to handle logout');
-    //this.authService.logout();
-    this.mockLogoutService()
-  }
-
-
-  /**
-  * Register user on Backend
-  */
-  register(username: string, password: string, email: string, firstName?: string, lastName?: string) {
+  register(user: IRegisterUser) {
     console.log('TODO: inject Service to handle register');
-    this.mockLoginService(username, password, email, firstName, lastName);
+    // this.mockLoginService(username, password, email, firstName, lastName);
   }
 
-  //TODO: only abstract implemented
-  getUserInfo(url: string) {
-    return this.http.get(url).pipe(map((response: any) => response));
-
+  setAuthService(authService) {
+    this.authService = authService;
   }
 
-  //TODO: only abstract implemented
-  checkAuthorization(permissions: string[], _user?: UserDetails) {
-    let user = this.user.getValue()
-    if (_user) {
-      user = _user;
-    }
-    let boolPermissions = permissions.map((p) => user.permissions.includes(p))
-    if (boolPermissions.includes(false)) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  //TODO: only abstract implemented
-  checkAuthentication(_user?: UserDetails) {
-    let user = this.user.getValue()
-    if (_user) {
-      user = _user;
-    }
-    if (user.loggedIn) {
-      return true;
-    }
-  }
-
-  mockCheckAuthentication(_user?: UserDetails) {
-    if (_user && this.mockCheckUser()) {
-      _user.loggedIn = true;
-      _user.userName = this.mockCheckUser()
-      this.user.next(_user);
-    }
-  }
-
-  mockLoginService(username: string, password?: string, email?: string, firstName?: string, lastName?: string) {
-    let user = new UserDetails();
-    user.userName = username;
-    user.password = password;
-    user.email = email;
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.loggedIn = true;
-    this.setUser(user);
-    window.localStorage.setItem('mock-user', username);
-  }
-
-  mockLogoutService() {
-    let user = new UserDetails();
-    user.loggedIn = false;
-    this.setUser(user);
-    window.localStorage.removeItem('mock-user');
-  }
-
-  mockCheckUser() {
-    return window.localStorage.getItem('mock-user')
-  }
-
-}
-
-export class UserDetails {
-  userName: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  userID: string;
-  loggedIn: boolean = false;
-  restored: boolean = false;
-  permissions: Array<string>;
-  constructor() {
-
-  }
 }

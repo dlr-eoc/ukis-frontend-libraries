@@ -5,7 +5,7 @@
       [ngClass]="{'disabled': is_expandable()}" (click)="showProperties()" title="Details"></clr-icon>
 
     <!-- layer title -->
-    <div #ref class="item-title-replacement title" (click)="showProperties()">
+    <div #ref class="item-title-replacement title" (click)="showProperties()" [title]="getLayerName(layer)">
       <ng-content></ng-content>
     </div>
     <span *ngIf="ref.children.length == 0" class="title" [title]="getLayerName(layer)" (click)="showProperties()">

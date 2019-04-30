@@ -26,7 +26,7 @@ export class BaseLayerControlComponent implements OnInit {
   ngOnInit() {
     this.layerGroupsSubscription = this.layersSvc.getLayerGroups().subscribe(layergroups => {
       this.layergroups = layergroups.filter((group) => group.filtertype === 'Baselayers' || group.filtertype === 'Baselayers');
-      console.log(this.layergroups)
+      //console.log(this.layergroups)
     });
   }
 

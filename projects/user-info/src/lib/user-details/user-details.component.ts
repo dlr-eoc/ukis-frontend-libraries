@@ -1,36 +1,30 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserDetails, UserService } from '../user.service';
+import { UserService, IUser} from '../user.service';
 
 @Component({
   selector: 'ukis-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss']
 })
-export class UserDetailsComponent implements OnInit, OnDestroy {
+export class UserDetailsComponent implements OnDestroy {
 
   usrSubsription: Subscription;
-  user: UserDetails;
+  user: any;//IUser; //angular language service error: https://github.com/angular/angular/issues/17953
 
   constructor(@Inject(UserService) public usrSvc: UserService) {
-    this.usrSubsription = this.usrSvc.getUser().subscribe((user) => {
-      console.log(user)
-      this.user = user;
+    this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
+        this.user = userinfo.current_user;
     }, (error) => {
       console.log(error);
     });
   }
 
-  ngOnInit() {
-
-  }
-
   logout() {
-    this.usrSvc.logout()
+    this.usrSvc.logout();
   }
 
   ngOnDestroy() {
     this.usrSubsription.unsubscribe();
   }
-
 }

@@ -65,3 +65,13 @@
     text-align: center;
   }
 }
+
+::ng-deep {
+  .preview {
+    img {
+      padding-right: 0.5rem;
+      max-height: 6rem;
+      float: left;
+    }
+  }
+}
