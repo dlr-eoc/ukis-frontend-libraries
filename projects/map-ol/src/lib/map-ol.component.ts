@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy } from '@angular/core';
 
 
-import { MapState } from '@ukis/datatypes-map-state';
+import { MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
 import { Subscription, BehaviorSubject } from 'rxjs';
-import { mergeAll, flatMap, map, concatAll, concatMap } from 'rxjs/operators';
 import { MapOlService } from './map-ol.service';
 import { LayersService } from '@ukis/services-layers';
 
@@ -118,8 +117,8 @@ export class MapOlComponent implements OnInit, OnDestroy {
         if (layers.length != this.mapSvc.getLayers('baselayers').length) {
 
           //set only one visible at start
-          let visiblelayers = layers.filter(l => l.visible == true);
-          if (visiblelayers.length == 0) {
+          let visiblelayers = layers.filter(l => l.visible === true);
+          if (visiblelayers.length === 0) {
             layers[0].visible = true
           } else if (visiblelayers.length > 1) {
             layers.forEach(l => l.visible = false);
@@ -151,10 +150,7 @@ export class MapOlComponent implements OnInit, OnDestroy {
           }
         }
       });
-    }
 
-    //add/remove layers
-    if (this.layersSvc) {
       this.layersAddRemoveOn = this.layersSvc.getOverlays().subscribe(layers => {
         let _baselayerslength = this.mapSvc.getLayers('baselayers').length;
         if (layers.length != this.mapSvc.getLayers('overlays').length) {
@@ -188,7 +184,7 @@ export class MapOlComponent implements OnInit, OnDestroy {
                 ollayer.setOpacity(layer.opacity);
               }
               if (_baselayerslength > 0) {
-                console.log("layer.zIndex", layer.zIndex)
+                //console.log("layer.zIndex", layer.zIndex)
                 if (ollayer.getZIndex() != layers.indexOf(layer) + _baselayerslength) {
                   //console.log('setZIndex', layer.name, layers.indexOf(layer), ollayer.getZIndex());
                   ollayer.setZIndex(layers.indexOf(layer) + _baselayerslength);

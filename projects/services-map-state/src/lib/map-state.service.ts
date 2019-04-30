@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from "rxjs";
 import { filter, map } from 'rxjs/operators';
-import { MapState, TGeoExtent, IMapStateOptions, IMapState } from '@ukis/datatypes-map-state';
+import { MapState, TGeoExtent, IMapStateOptions, IMapState } from './types/map-state';
 import { state } from '@angular/animations';
 
 @Injectable({

@@ -1,5 +1,6 @@
 import { TestBed, async } from '@angular/core/testing';
-import { LayerGroup, RasterLayer } from '@ukis/datatypes-layers';
+import { RasterLayer } from './types/Layers';
+import { LayerGroup } from './types/LayerGroup';
 import { LayersService } from './layers.service';
 
 describe('LayersService', () => {
@@ -114,9 +115,9 @@ describe('LayersService', () => {
       layers: []
     });
     service.addLayerGroup(layergroup)
-    
-    service.removeLayerOrGroupById('removable_group')   
-    
+
+    service.removeLayerOrGroupById('removable_group')
+
     expect(service.getLayerGroupsCount()).toEqual(0)
   }));
 });

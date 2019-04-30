@@ -1,7 +1,7 @@
-import { Injectable, Version } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup } from '@ukis/datatypes-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup } from '@ukis/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';

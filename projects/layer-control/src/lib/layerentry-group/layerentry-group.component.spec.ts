@@ -5,7 +5,7 @@ import { LayerentryComponent } from '../layerentry/layerentry.component';
 
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
-import { Layer, LayerGroup } from '@ukis/datatypes-layers';
+import { Layer, LayerGroup } from '@ukis/services-layers';
 
 import { ReversePipe } from '../array-reverse.pipe';
 

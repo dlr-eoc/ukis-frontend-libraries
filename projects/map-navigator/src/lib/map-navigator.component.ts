@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { MapStateService } from '@ukis/services-map-state';
-import { MapState } from '@ukis/datatypes-map-state';
+import { MapState } from '@ukis/services-map-state';
 import { Subscription } from 'rxjs';
 
 @Component({

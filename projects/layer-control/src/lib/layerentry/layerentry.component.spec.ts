@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LayerentryComponent } from './layerentry.component';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
-import { Layer, LayerGroup } from '@ukis/datatypes-layers';
+import { Layer, LayerGroup } from '@ukis/services-layers';
 import { LayersService } from '@ukis/services-layers';
 
 describe('LayerentryComponent', () => {

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 
 //imports only for typings...
-import { LayerGroup, Layer } from "@ukis/datatypes-layers";
+import { LayerGroup, Layer } from "@ukis/services-layers";
 import { MapStateService } from '@ukis/services-map-state';
 import { LayersService } from '@ukis/services-layers';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
