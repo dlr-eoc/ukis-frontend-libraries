@@ -2,8 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapOlComponent } from './map-ol.component';
 import { LayersService } from '@ukis/services-layers';
-import { RasterLayer } from '@ukis/datatypes-layers';
-import { LayerGroup } from '@ukis/datatypes-layers';
+import { RasterLayer } from '@ukis/services-layers';
+import { LayerGroup } from '@ukis/services-layers';
 import { of } from 'rxjs';
 import { MapStateService } from '@ukis/services-map-state';
 

@@ -1,7 +1,6 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { OwcJsonService } from './owc-json.service';
-import { IOwsContext,  } from '@ukis/datatypes-owc-json';
 import { barebonesContext, basicContext, exampleContext } from '../../assets/exampleContext';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { optimizeGroupPlayer } from '@angular/animations/browser/src/render/shared';
@@ -10,8 +9,9 @@ import { coastalXTestContext } from '../../assets/coastalx.test.context';
 import { iterateListLike } from '@angular/core/src/change_detection/change_detection_util';
 import { osm } from '@ukis/base-layers-raster';
 import { LayersService } from '@ukis/services-layers';
-import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@ukis/datatypes-layers';
+import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@ukis/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
+import { IOwsContext } from './types/owc-json';
 
 
 

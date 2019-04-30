@@ -6,6 +6,6 @@
   },
   "whitelistedNonPeerDependencies": [
     "tslib",
-    "@ukis/datatypes-layers"
+    "@ukis/services-layers"
   ]
 }

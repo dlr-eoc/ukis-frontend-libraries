@@ -1,8 +1,8 @@
 import { Injectable, Input } from '@angular/core';
 
 import { Subscription } from 'rxjs';
-import { LayerGroup, VectorLayer, RasterLayer, IRasterLayerOptions, IVectorLayerOptions, Layer } from '@ukis/datatypes-layers';
-import { IOwsContext, IOwsResource, IOwsOffering } from '@ukis/datatypes-owc-json';
+import { LayerGroup, VectorLayer, RasterLayer, IRasterLayerOptions, IVectorLayerOptions, Layer } from '@ukis/services-layers';
+import { IOwsContext, IOwsResource, IOwsOffering } from '@ukis/services-owc-json';
 
 import { HttpClient } from '@angular/common/http';
 

@@ -7,9 +7,9 @@
   "whitelistedNonPeerDependencies": [
     "tslib",
     "@ukis/services-layers",
-    "@ukis/datatypes-layers",
+    "@ukis/services-layers",
     "@ukis/services-owc-json",
-    "@ukis/datatypes-map-state",
+    "@ukis/services-map-state",
     "@ukis/services-map-state"
   ]
 }

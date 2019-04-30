@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { LayersService } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
-import { LayerGroup, Layer } from '@ukis/datatypes-layers';
+import { LayerGroup, Layer } from '@ukis/services-layers';
 import { Subscription } from 'rxjs';
 
 @Component({

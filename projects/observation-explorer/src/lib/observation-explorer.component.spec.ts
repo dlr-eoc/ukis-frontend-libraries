@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ObservationExplorerModule } from './observation-explorer.module';
 import { ObservationExplorerComponent } from './observation-explorer.component';
-import { IOwsResource } from '@ukis/datatypes-owc-json';
-import { Layer, LayerGroup } from '@ukis/datatypes-layers';
+import { IOwsResource } from '@ukis/services-owc-json';
+import { Layer, LayerGroup } from '@ukis/services-layers';
 
 describe('ObservationExplorerComponent', () => {
   let component: ObservationExplorerComponent;

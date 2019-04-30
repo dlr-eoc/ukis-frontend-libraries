@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { RasterLayer } from '@ukis/datatypes-layers';
+import { RasterLayer } from '@ukis/services-layers';
 
 import { osm } from './raster-layers';
 

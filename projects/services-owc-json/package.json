@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@types/geojson": "^7946.0.4",
-    "@ukis/datatypes-owc-json": "0.0.0-PLACEHOLDER",
-    "@ukis/datatypes-layers": "0.0.0-PLACEHOLDER"
+    "@ukis/services-layers": "0.0.0-PLACEHOLDER"
   }
 }

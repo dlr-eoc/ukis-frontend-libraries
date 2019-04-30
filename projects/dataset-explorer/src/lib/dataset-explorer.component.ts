@@ -1,8 +1,8 @@
 import { Component, Input, Inject, OnChanges, OnDestroy, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import { IOwsContext, IEocOwsResource } from '@ukis/datatypes-owc-json';
-import { Layer } from '@ukis/datatypes-layers';
+import { IOwsContext, IEocOwsResource } from '@ukis/services-owc-json';
+import { Layer } from '@ukis/services-layers';
 
 import { DatasetExplorerService } from "./dataset-explorer.service";
 import { LayersService } from '@ukis/services-layers';
