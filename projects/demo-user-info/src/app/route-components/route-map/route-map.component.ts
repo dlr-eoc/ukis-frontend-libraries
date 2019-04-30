@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject, AfterViewInit, OnDestroy } from '@angular/core';
 import { LayersService } from '@ukis/services-layers';
-import { LayerGroup } from '@ukis/datatypes-layers';
+import { LayerGroup } from '@ukis/services-layers';
 import { osm, eoc_litemap } from '@ukis/base-layers-raster';
 import { Subscription } from 'rxjs';
 import { MapStateService } from '@ukis/services-map-state';
-import { MapState } from '@ukis/datatypes-map-state';
+import { MapState } from '@ukis/services-map-state';
 import { MapOlService } from '@ukis/map-ol';
 
 import { HttpClient } from '@angular/common/http';
