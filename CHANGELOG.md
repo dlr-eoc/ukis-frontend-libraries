@@ -1,3 +1,12 @@
+### Breaking Changes
+
+**move all datatypes to there services** ([UKISDEV-787](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-787) [1f9f3c748ec](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/1f9f3c748ec48abd5c123a7ed45539f109078904))
+* **@ukis/datatypes-layers:** exports moved to @ukis/services-layers
+* **@ukis/datatypes-map-state:** exports moved to @ukis/services-map-state
+* **@ukis/datatypes-owc-json:** exports moved to @ukis/services-owc-json
+* **@ukis/datatypes-user-info:** removed! already in @ukis/user-info
+
+
 # [3.0.2](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.2) (2019-04-26) (costalx-fixes)
 
 ### Bug Fixes
