@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ImmutableProcess } from '../process/process';
 import { Form, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Parameter } from '@ukis/dynforms';
+import { IProcessService } from '../process/process.service';
 
 
 
@@ -13,8 +14,8 @@ import { Parameter } from '@ukis/dynforms';
 export class WizardElementComponent implements OnInit {
 
   @Output() configSubmitted: EventEmitter<any> = new EventEmitter<any>();
-  @Output() nextClicked: EventEmitter<ImmutableProcess> = new EventEmitter<ImmutableProcess>();
-  @Output() reconfigureClicked: EventEmitter<ImmutableProcess> = new EventEmitter<ImmutableProcess>();
+  @Output() nextClicked: EventEmitter<string> = new EventEmitter<string>();
+  @Output() reconfigureClicked: EventEmitter<string> = new EventEmitter<string>();
   @Input() process: ImmutableProcess;
   private paras: Parameter[];
   processForm: FormGroup;
@@ -22,8 +23,8 @@ export class WizardElementComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.paras = this.process.getParameters();
     let formControls = {};
+    this.paras = this.process.getConfig();
     this.paras.forEach((para: Parameter) => {
       let fc = new FormControl(para.defaultValue, [Validators.required]);
       formControls[para.id] = fc;
@@ -32,15 +33,17 @@ export class WizardElementComponent implements OnInit {
   }
 
   onSubmit(data) {
-    this.configSubmitted.emit({process: this.process, values: this.processForm.value})
+    let vals = this.processForm.value;
+    this.paras.forEach(para => para.value = vals[para.id]);
+    this.configSubmitted.emit({processId: this.process.getId(), values: this.paras})
   }
 
   onNextClicked() {
-    this.nextClicked.emit(this.process);
+    this.nextClicked.emit(this.process.getId());
   } 
 
   onReconfigureClicked () {
-    this.reconfigureClicked.emit(this.process);
+    this.reconfigureClicked.emit(this.process.getId());
   }
 
 }

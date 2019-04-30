@@ -3,7 +3,7 @@
 
     
     <button clrTabLink>
-      <ng-container *ngIf="process.observeState() | async as state">
+      <ng-container *ngIf="process.getState() | async as state">
         <ng-container [ngSwitch]="state">
           <div *ngSwitchCase="'unavailable'"           > <clr-icon shape="dot-circle"                       ></clr-icon> {{process.getName()}} </div>
           <div *ngSwitchCase="'available'"             > <clr-icon shape="dot-circle" class="is-highlight"  ></clr-icon> {{process.getName()}} </div>
@@ -15,10 +15,10 @@
       </button>
   
       <clr-tab-content *clrIfActive="hasFocus(process) | async">
-        <ukis-wizard-element 
+        <ukis-wizard-element
           [process]="process" 
           (configSubmitted)="onConfigSubmitted($event)" 
-          (nextClicked)="focusOnNext($event)" 
+          (nextClicked)="onNextClicked($event)" 
           (reconfigureClicked)="onReconfigureClicked($event)"
         ></ukis-wizard-element>
       </clr-tab-content>

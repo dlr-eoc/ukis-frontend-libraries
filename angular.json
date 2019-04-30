@@ -16,7 +16,6 @@
             "project": "projects/datatypes-layers/ng-package.json"
           }
         },
-        
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -44,7 +43,6 @@
             "project": "projects/datatypes-map-state/ng-package.json"
           }
         },
-       
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -72,7 +70,6 @@
             "project": "projects/datatypes-owc-json/ng-package.json"
           }
         },
-       
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -100,7 +97,6 @@
             "project": "projects/datatypes-user-info/ng-package.json"
           }
         },
-       
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -808,6 +804,133 @@
               "projects/process-control/tsconfig.lib.json",
               "projects/process-control/tsconfig.spec.json"
             ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "demo-process-control": {
+      "root": "projects/demo-process-control/",
+      "sourceRoot": "projects/demo-process-control/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/demo-process-control",
+            "index": "projects/demo-process-control/src/index.html",
+            "main": "projects/demo-process-control/src/main.ts",
+            "polyfills": "projects/demo-process-control/src/polyfills.ts",
+            "tsConfig": "projects/demo-process-control/tsconfig.app.json",
+            "assets": [
+              "projects/demo-process-control/src/favicon.ico",
+              "projects/demo-process-control/src/assets"
+            ],
+            "styles": [
+              "projects/demo-process-control/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/demo-process-control/src/environments/environment.ts",
+                  "with": "projects/demo-process-control/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "demo-process-control:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "demo-process-control:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "demo-process-control:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/demo-process-control/src/test.ts",
+            "polyfills": "projects/demo-process-control/src/polyfills.ts",
+            "tsConfig": "projects/demo-process-control/tsconfig.spec.json",
+            "karmaConfig": "projects/demo-process-control/karma.conf.js",
+            "styles": [
+              "projects/demo-process-control/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/demo-process-control/src/favicon.ico",
+              "projects/demo-process-control/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/demo-process-control/tsconfig.app.json",
+              "projects/demo-process-control/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "demo-process-control-e2e": {
+      "root": "projects/demo-process-control-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/demo-process-control-e2e/protractor.conf.js",
+            "devServerTarget": "demo-process-control:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "demo-process-control:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/demo-process-control-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]

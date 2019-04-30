@@ -6,14 +6,14 @@
     {{process.getDescription()}}
 </p>
 
-<ng-container [ngSwitch]="process.observeState() | async">
+<ng-container [ngSwitch]="process.getState() | async">
 
     <ng-container *ngSwitchCase="'unavailable'">
         This process can not be configured yet.  
     </ng-container>
 
     <ng-container *ngSwitchCase="'available'">
-        <ukis-form [fg]="processForm" [parameters]="process.getParameters()" (formSubmitted)="onSubmit($event)"></ukis-form>
+        <ukis-form [fg]="processForm" [parameters]="process.getConfig()" (formSubmitted)="onSubmit($event)"></ukis-form>
     </ng-container>
     
     

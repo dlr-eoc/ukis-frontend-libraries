@@ -23,14 +23,12 @@ export class ProcessWizardComponent implements OnInit {
   private focussedProcessId: BehaviorSubject<string>;
   
 
-  constructor() { }
+  constructor() {
+    this.focussedProcessId = new BehaviorSubject<string>(null);
+  }
 
   ngOnInit() {
-    let firstProcessId = "";
-    this.processService.getProcesses().forEach(process => {
-      if(process.getState() == "available") firstProcessId = process.getId();
-    })
-    this.focussedProcessId = new BehaviorSubject<string>(firstProcessId);
+    this.processService.getActiveProcess().subscribe(proc => this.focusOn(proc));
   }
 
   focusOn(process: ImmutableProcess) {
@@ -50,13 +48,12 @@ export class ProcessWizardComponent implements OnInit {
   }
 
   onConfigSubmitted(data) {
-    this.processService.configure(data.process, data.values);
-    this.processService.run(data.process);
+    this.processService.configure(data.processId, data.values);
+    this.processService.run(data.processId);
   }
 
-  focusOnNext(evt) {
-    let next = this.processService.getActiveProcess()
-    if(next) this.focusOn(next);
+  onNextClicked(evt) {
+    let next = this.processService.getActiveProcess().subscribe(next => this.focusOn(next));
   }
 
   onReconfigureClicked(process) {
