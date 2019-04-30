@@ -1,10 +1,6 @@
-<h3>
-    {{process.getName()}}
-</h3>
+<h3>{{process.getName()}}</h3>
 
-<p>
-    {{process.getDescription()}}
-</p>
+<p>{{process.getDescription()}}</p>
 
 <ng-container [ngSwitch]="process.getState() | async">
 

@@ -1,18 +1,24 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { BboxParameter } from '../parameter';
-import { FormGroup, Form } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MapOlService } from '@ukis/map-ol';
 
 @Component({
   selector: 'ukis-form-bbox-field',
   templateUrl: './form-bbox-field.component.html',
-  styleUrls: ['./form-bbox-field.component.css']
+  styleUrls: ['./form-bbox-field.component.css'], 
+  providers: [{ 
+    provide: NG_VALUE_ACCESSOR,
+    multi: true,
+    useExisting: forwardRef(() => FormBboxFieldComponent),
+  }]
 })
-export class FormBboxFieldComponent implements OnInit {
+export class FormBboxFieldComponent implements OnInit, ControlValueAccessor {
 
   @Input() parameter: BboxParameter;
-  @Input() parentFormGroup: FormGroup;
   selectionActive: boolean = false;
+  public bbox; 
+  private changeFunction; 
 
   constructor(
     private olService: MapOlService
@@ -24,8 +30,10 @@ export class FormBboxFieldComponent implements OnInit {
   }
 
   onEndBoxSelection(extent) { 
-    this.parentFormGroup.controls[this.parameter.id].setValue(extent);
+    console.log("calling changefunciton with ", extent);
     this.selectionActive = false;
+    this.bbox = extent;
+    this.changeFunction(extent);
   }
 
   onStartBoxSelection() {
@@ -37,6 +45,22 @@ export class FormBboxFieldComponent implements OnInit {
 
   onSelectButtonClicked() {
     this.selectionActive = true;
+  }
+
+  writeValue(obj: any): void {
+    console.log(`${this.parameter.id} writeValue`, obj);
+    this.bbox = obj;
+  }
+
+  registerOnChange(fn: any): void {
+    this.changeFunction = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    console.log(`${this.parameter.id} registerOnTouched`, fn);
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
   }
 
 }

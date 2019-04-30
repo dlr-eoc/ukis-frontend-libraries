@@ -1,6 +1,6 @@
 import { MutableProcess, ProcessState, Product } from "@ukis/process-control";
 import { Observable, of, BehaviorSubject } from "rxjs";
-import { Parameter, StringParameter } from "@ukis/dynforms/src/public_api";
+import { Parameter, StringParameter, BboxParameter, SelectParameter } from "@ukis/dynforms/src/public_api";
 
 
 export class DemoProcess implements MutableProcess {
@@ -21,13 +21,13 @@ export class DemoProcess implements MutableProcess {
     }
 
     getConfig(): Parameter[] {
-        let conf: StringParameter = {
+        let conf: SelectParameter = {
             id: `${this.id}_config`, 
-            datatype: "string", 
-            defaultValue: "fill me in", 
             description: "description", 
             name: `${this.id}_config`,
-            parametertype: "string", 
+            defaultValue: "a", 
+            options: ["a", "b", "c"],
+            parametertype: "select",
             value: null
         };
         return [conf];

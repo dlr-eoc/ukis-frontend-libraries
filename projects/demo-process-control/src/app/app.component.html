@@ -2,5 +2,7 @@
   Demo process-control
 </h1>
 
-<ukis-process-wizard [processService]="demoProcessService"></ukis-process-wizard>
-<ukis-map-ol [layersSvc]="layersService" [mapState]="mapStateService" [controls]="controls" ></ukis-map-ol>
+<div id="wizardAndMap">
+  <ukis-process-wizard [processService]="demoProcessService" id="ProcessWizard"></ukis-process-wizard>
+  <!-- <ukis-map-ol [layersSvc]="layersService" [mapState]="mapStateService" [controls]="controls" id="OlMap"></ukis-map-ol> -->
+</div>

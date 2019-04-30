@@ -1,8 +1,8 @@
-<div [formGroup]="parentFormGroup" >
+<div >
   <clr-input-container>
     <label>
       {{parameter.name}}:
-      <input type="text" [formControlName]="parameter.id" clrInput />
+      <input type="text" clrInput value="{{value}}" (change)="onChange($event.target.value)" [attr.disabled]="disabled ? '' : null"/>
     </label>
   </clr-input-container>
 </div>

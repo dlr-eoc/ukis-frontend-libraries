@@ -3,6 +3,8 @@ import { DemoProcessService } from './services/process/demo-process.service';
 import { LayersService } from '@ukis/services-layers/src/public_api';
 import { MapStateService } from '@ukis/services-map-state/src/public_api';
 import { DemoProcess } from './services/process/demo-process';
+import { StringParameter, Parameter } from '@ukis/dynforms/src/public_api';
+import { FormGroup, Form, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +12,7 @@ import { DemoProcess } from './services/process/demo-process';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  
+
   public controls = {};
   public demoProcessService: DemoProcessService;
 

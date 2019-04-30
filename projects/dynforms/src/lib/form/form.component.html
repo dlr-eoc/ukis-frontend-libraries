@@ -3,10 +3,10 @@
     <div *ngFor="let parameter of parameters">
 
         <ng-container [ngSwitch]="parameter.parametertype">
-            <div *ngSwitchCase="'string'"  ><ukis-form-string-field   [parameter]="parameter" [parentFormGroup]="fg"></ukis-form-string-field></div>
-            <div *ngSwitchCase="'select'"  ><ukis-form-select-field   [parameter]="parameter" [parentFormGroup]="fg"></ukis-form-select-field></div>
-            <div *ngSwitchCase="'bbox'"    ><ukis-form-bbox-field     [parameter]="parameter" [parentFormGroup]="fg"></ukis-form-bbox-field></div>
-            <div *ngSwitchDefault          ><ukis-form-string-field   [parameter]="parameter" [parentFormGroup]="fg"></ukis-form-string-field></div>
+            <div *ngSwitchCase="'string'"  ><ukis-form-string-field   [parameter]="parameter" [formControlName]="parameter.id"></ukis-form-string-field></div>
+            <div *ngSwitchCase="'select'"  ><ukis-form-select-field   [parameter]="parameter" [formControlName]="parameter.id"></ukis-form-select-field></div>
+            <div *ngSwitchCase="'bbox'"    ><ukis-form-bbox-field     [parameter]="parameter" [formControlName]="parameter.id"></ukis-form-bbox-field></div>
+            <div *ngSwitchDefault          ><ukis-form-string-field   [parameter]="parameter" [formControlName]="parameter.id"></ukis-form-string-field></div>
         </ng-container>
 
         <p>{{parameter.description}}</p>

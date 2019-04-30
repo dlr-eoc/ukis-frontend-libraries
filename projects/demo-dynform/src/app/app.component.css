@@ -1,12 +1,12 @@
-#wizardAndMap {
+#formAndMap {
     display: flex;
     flex-direction: row;
 }
 
-#ProcessWizard {
+#dynForm {
     flex-grow: 1;
 }
 
-#OlMap {
+#olMap {
     flex-grow: 2;
 }

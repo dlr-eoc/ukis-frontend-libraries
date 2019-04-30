@@ -1,9 +1,10 @@
-<div [formGroup]="parentFormGroup" >
+<div  >
   <clr-input-container>
     <label>
       {{parameter.name}}:
-      <select [formControlName]="parameter.id" clrSelect >
-        <option *ngFor="let option of parameter.options" [value]="option">{{option}}</option>
+      <select clrSelect  [attr.disabled]="disabled ? '' : null"  (change)="onChange($event.target.value)">
+        <option [value]="activeOption" selected>{{activeOption}}</option>
+        <option *ngFor="let option of options" [value]="option">{{option}}</option>
       </select>
     </label>
   </clr-input-container>

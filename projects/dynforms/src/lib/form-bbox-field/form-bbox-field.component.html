@@ -1,9 +1,9 @@
-<div [formGroup]="parentFormGroup" >
+<div >
   <span class="display: table-cell">
     <clr-input-container>
       <label>
         {{parameter.name}}:
-        <input [attr.disabled]="true" type="text" [formControlName]="parameter.id" clrInput />
+        <input value="{{bbox}}"  [attr.disabled]="true" type="text" clrInput />
       </label>
     </clr-input-container>
   </span>
