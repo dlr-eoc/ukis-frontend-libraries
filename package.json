@@ -5,13 +5,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --source-map",
-    "build": "node scripts/libraryProjets.js --build",
+    "build": "node scripts/libraryProjects.js --build",
     "test": "ng test --watch=false",
     "lint": "echo TODO:ng lint",
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s",
-    "tsc:libraryProjets": "tsc -p scripts/tsconfig.script.json -w",
-    "list-projects": "node scripts/libraryProjets.js -l"
+    "tsc:libraryProjects": "tsc -p scripts/tsconfig.script.json -w",
+    "list-projects": "node scripts/libraryProjects.js -l"
   },
   "private": true,
   "dependencies": {

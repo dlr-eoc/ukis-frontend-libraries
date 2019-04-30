@@ -3,42 +3,42 @@
 *
 * node scripts/projetsVersion.js -l
 */
-const replace = require("replace");
+const replace = require('replace');
 const PATH = require('path');
 const NG = require('@angular/cli');
 const UKIS_SCOPE = '@ukis/';
 const CWD = process.cwd();
-const PLACEHOLDER = "0.0.0-PLACEHOLDER";
+const PLACEHOLDER = '0.0.0-PLACEHOLDER';
 const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
 const ANGULARJSON = require(PATH.join(CWD, 'angular.json'));
 const toposort = require('toposort');
 const depcheck = require('depcheck');
 function getProjects() {
-    let projects = [];
+    const projects = [];
     Object.keys(ANGULARJSON.projects).forEach((project) => {
-        let __project = ANGULARJSON.projects[project];
-        let _project = {
+        const __project = ANGULARJSON.projects[project];
+        const _project = {
             name: project,
             path: PATH.join(CWD, __project.root),
             package: PATH.join(CWD, __project.root, 'package.json'),
             testable: (__project.architect && __project.architect.test) ? true : false,
             buildable: (__project.architect && __project.architect.build) ? true : false,
+            type: __project.projectType
         };
         projects.push(_project);
     });
-    return projects;
+    return projects.filter(item => item.type === 'library');
 }
-;
 function dependencyGraph() {
-    let projects = getProjects(), nodesmap = new Map(), edges = [], nodes = [];
+    const projects = getProjects(), nodesmap = new Map(), edges = [], nodes = [];
     projects.forEach((project) => {
-        let projectPackage = require(project.package);
-        let projectName = projectPackage.name.replace(UKIS_SCOPE, '');
+        const projectPackage = require(project.package);
+        const projectName = projectPackage.name.replace(UKIS_SCOPE, '');
         nodes.push(projectName);
         if (projectPackage.dependencies) {
-            let projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(UKIS_SCOPE) != -1).map(key => key.replace(UKIS_SCOPE, ''));
+            const projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(UKIS_SCOPE) !== -1).map(key => key.replace(UKIS_SCOPE, ''));
             if (projectDeps.length > 0) {
-                let _obj = new Map();
+                const _obj = new Map();
                 projectDeps.forEach((_dep) => {
                     if (nodesmap.has(_dep)) {
                         _obj.set(_dep, nodesmap.get(_dep));
@@ -57,13 +57,12 @@ function dependencyGraph() {
     });
     return { edges, nodes, nodesmap };
 }
-;
 function runDependencyGraph() {
     console.log(dependencyGraph().nodesmap);
 }
 function checkDeps() {
     console.log(`>>> run check dependencies for projects`);
-    let projectsPaths = getProjects(), promises = [];
+    const projectsPaths = getProjects(), promises = [];
     const options = {
         ignoreBinPackage: false,
         skipMissing: false,
@@ -73,8 +72,8 @@ function checkDeps() {
         ignoreMatches: [ // ignore dependencies that matches these globs
         ],
         parsers: {
-            //'*.js': depcheck.parser.es6,
-            //'*.jsx': depcheck.parser.jsx
+            // '*.js': depcheck.parser.es6,
+            // '*.jsx': depcheck.parser.jsx
             '*.ts': depcheck.parser.typescript
         },
         detectors: [
@@ -87,11 +86,11 @@ function checkDeps() {
         ],
         json: true
     };
-    var filterFiles = (dep, project) => {
+    const filterFiles = (dep, project) => {
         let keys = Object.keys(dep), _dep;
         if (keys.length) {
-            for (let key of keys) {
-                let depsarray = dep[key].filter(item => item.indexOf('test.ts') == -1 && item.indexOf('.spec.ts') == -1);
+            for (const key of keys) {
+                const depsarray = dep[key].filter(item => item.indexOf('test.ts') === -1 && item.indexOf('.spec.ts') === -1);
                 if (depsarray.length) {
                     _dep = {
                         project: project,
@@ -106,22 +105,22 @@ function checkDeps() {
             }
         }
     };
-    var aysncdepcheck = (item) => {
+    const aysncdepcheck = (item) => {
         return new Promise((resolve, reject) => {
             depcheck(item.path, options, (unused) => {
-                let missing = filterFiles(unused.missing, item.name);
+                const missing = filterFiles(unused.missing, item.name);
                 if (!missing) {
                     resolve(missing);
                 }
                 else {
                     resolve(missing);
                 }
-                //console.log('unused.dependencies', unused.dependencies); // an array containing the unused dependencies
-                //console.log('unused.devDependencies', unused.devDependencies); // an array containing the unused devDependencies
-                //console.log('unused.missing', unused.missing); // a lookup containing the dependencies missing in `package.json` and where they are used
-                //console.log('unused.using', unused.using); // a lookup indicating each dependency is used by which files
-                //console.log('unused.invalidFiles', unused.invalidFiles); // files that cannot access or parse
-                //console.log('unused.invalidDirs', unused.invalidDirs); // directories that cannot access
+                // console.log('unused.dependencies', unused.dependencies); // an array containing the unused dependencies
+                // console.log('unused.devDependencies', unused.devDependencies); // an array containing the unused devDependencies
+                // console.log('unused.missing', unused.missing); // a lookup containing the dependencies missing in `package.json` and where they are used
+                // console.log('unused.using', unused.using); // a lookup indicating each dependency is used by which files
+                // console.log('unused.invalidFiles', unused.invalidFiles); // files that cannot access or parse
+                // console.log('unused.invalidDirs', unused.invalidDirs); // directories that cannot access
             });
         });
     };
@@ -129,7 +128,7 @@ function checkDeps() {
         promises.push(aysncdepcheck(item));
     });
     return Promise.all(promises).then(result => {
-        let _result = result.filter(item => item);
+        const _result = result.filter(item => item);
         if (_result.length) {
             return _result;
         }
@@ -139,7 +138,6 @@ function checkDeps() {
         }
     });
 }
-;
 function runCheckDeps() {
     checkDeps().then((result) => {
         if (result) {
@@ -148,8 +146,8 @@ function runCheckDeps() {
     });
 }
 function runTests(offset = 0, projects) {
-    let project = projects[offset];
-    let options = {
+    const project = projects[offset];
+    const options = {
         cliArgs: ['test', '--watch=false', project]
     };
     if (project) {
@@ -160,27 +158,24 @@ function runTests(offset = 0, projects) {
         });
     }
 }
-;
 function testAll() {
-    let flattdeps = getProjects().filter(item => item.testable).map(item => item.name);
+    const flattdeps = getProjects().filter(item => item.testable).map(item => item.name);
     runTests(0, flattdeps);
 }
-;
 function runBuilds(offset = 0, projects) {
-    let project = projects[offset];
-    let options = {
+    const project = projects[offset];
+    const options = {
         cliArgs: ['build', '--watch=false', project]
     };
     if (project) {
         console.info(`>>> run ng build ${project}`);
-        //TODO: check if all deps build before
+        // TODO: check if all deps build before
         NG.default(options).then((result) => {
             offset++;
             runBuilds(offset, projects);
         });
     }
 }
-;
 function buildAll() {
     checkDeps().then((result) => {
         /** build ony if there are no missing deps */
@@ -188,25 +183,24 @@ function buildAll() {
             throw new Error(`check for missing dependencies ${result}`);
         }
         else {
-            let deps = dependencyGraph();
-            let flattdeps = toposort.array(deps.nodes, deps.edges);
+            const deps = dependencyGraph();
+            const flattdeps = toposort.array(deps.nodes, deps.edges);
             runBuilds(0, flattdeps);
         }
     });
 }
-;
 function setVersionsOfProjects() {
-    let projectsPaths = getProjects().map(item => item.package);
-    let errors = projectsAndDependencies(true);
+    const projectsPaths = getProjects().map(item => item.package);
+    const errors = projectsAndDependencies(true);
     if (errors.length < 1 && MAINPACKAGE.version) {
-        //console.log(projectsPaths)
+        // console.log(projectsPaths)
         replace({
             regex: PLACEHOLDER,
             replacement: MAINPACKAGE.version,
             paths: projectsPaths,
             recursive: true,
             silent: true,
-            include: "package.json"
+            include: 'package.json'
         });
         console.log(`replaced all ${PLACEHOLDER} with ${MAINPACKAGE.version}`);
     }
@@ -215,34 +209,33 @@ function setVersionsOfProjects() {
         console.table(errors);
     }
 }
-;
 function listAllProjects() {
-    let projectsPaths = getProjects();
-    let list = projectsPaths.reduce((p, n) => {
+    const projectsPaths = getProjects();
+    const list = projectsPaths.reduce((p, n) => {
         return p + '- ' + n.name + '\n';
     }, '');
     console.log(list);
 }
 function projectsAndDependencies(silent = false) {
-    let projects = [], errors = [], projectsPaths = getProjects();
+    const projects = [], errors = [], projectsPaths = getProjects();
     projectsPaths.forEach((project) => {
-        let projectPackage = require(project.package);
-        let _project = {
+        const projectPackage = require(project.package);
+        const _project = {
             name: projectPackage.name,
             version: projectPackage.version,
             error: false,
             dependencies: null
         };
-        if (projectPackage.version != PLACEHOLDER) {
-            let error = `version of project: ${projectPackage.name} must be ${PLACEHOLDER} for build!`;
+        if (projectPackage.version !== PLACEHOLDER) {
+            const error = `version of project: ${projectPackage.name} must be ${PLACEHOLDER} for build!`;
             if (!silent) {
                 console.error(error);
             }
             _project.error = true;
             errors.push({ project: projectPackage.name, error: error });
         }
-        if (projectPackage.name.indexOf(UKIS_SCOPE) == -1) {
-            let error = `name of project: ${projectPackage.name} must be prefixed with the ${UKIS_SCOPE} namespace!`;
+        if (projectPackage.name.indexOf(UKIS_SCOPE) === -1) {
+            const error = `name of project: ${projectPackage.name} must be prefixed with the ${UKIS_SCOPE} namespace!`;
             if (!silent) {
                 console.error(error);
             }
@@ -252,9 +245,9 @@ function projectsAndDependencies(silent = false) {
         if (projectPackage.dependencies) {
             _project.dependencies = Object.keys(projectPackage.dependencies).join(',') || null;
             Object.keys(projectPackage.dependencies).forEach((key) => {
-                let dep = projectPackage.dependencies[key];
-                if (key.indexOf(UKIS_SCOPE) != -1 && dep != PLACEHOLDER) {
-                    let error = `version of dependency: ${key} in project: ${projectPackage.name} must be ${PLACEHOLDER} for build!`;
+                const dep = projectPackage.dependencies[key];
+                if (key.indexOf(UKIS_SCOPE) !== -1 && dep !== PLACEHOLDER) {
+                    const error = `version of dependency: ${key} in project: ${projectPackage.name} must be ${PLACEHOLDER} for build!`;
                     if (!silent) {
                         errors.push({ project: projectPackage.name, error: error });
                     }
@@ -270,7 +263,6 @@ function projectsAndDependencies(silent = false) {
     }
     return errors;
 }
-;
 function showHelp() {
     console.log(`
 Syntax:   node libraryProjets [options]
@@ -278,7 +270,7 @@ Syntax:   node libraryProjets [options]
 Options:
 -h, --help              Print this message.
 -l, --list              List all projects
--d, --deps              List all projects in a table with dependencies                   
+-d, --deps              List all projects in a table with dependencies
 -s, --set               Set versions of all projects
 -g, --graph             Show a dependency graph
 -c, --check             Check if all dependencies are listed in the package.json of the project
@@ -287,28 +279,28 @@ Options:
 }
 let args = process.argv.slice(2);
 args.forEach((arg) => {
-    if (arg == '-h' || arg == '--help') {
+    if (arg === '-h' || arg === '--help') {
         showHelp();
     }
-    else if (arg == '-l' || arg == '--list') {
+    else if (arg === '-l' || arg === '--list') {
         listAllProjects();
     }
-    else if (arg == '-d' || arg == '--deps') {
+    else if (arg === '-d' || arg === '--deps') {
         projectsAndDependencies();
     }
-    else if (arg == '-s' || arg == '--set') {
+    else if (arg === '-s' || arg === '--set') {
         setVersionsOfProjects();
     }
-    else if (arg == '-g' || arg == '--graph') {
+    else if (arg === '-g' || arg === '--graph') {
         runDependencyGraph();
     }
-    else if (arg == '-c' || arg == '--check') {
+    else if (arg === '-c' || arg === '--check') {
         runCheckDeps();
     }
-    else if (arg == '-t' || arg == '--test') {
+    else if (arg === '-t' || arg === '--test') {
         testAll();
     }
-    else if (arg == '-b' || arg == '--build') {
+    else if (arg === '-b' || arg === '--build') {
         buildAll();
     }
 });
