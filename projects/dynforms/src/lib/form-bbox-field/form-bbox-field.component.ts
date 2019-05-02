@@ -57,7 +57,7 @@ export class FormBboxFieldComponent implements OnInit, ControlValueAccessor {
   }
 
   registerOnTouched(fn: any): void {
-    console.log(`${this.parameter.id} registerOnTouched`, fn);
+    //console.log(`${this.parameter.id} registerOnTouched`, fn);
   }
 
   setDisabledState?(isDisabled: boolean): void {
