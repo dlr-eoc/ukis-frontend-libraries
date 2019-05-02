@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup } from '@ukis/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, IRasterLayerOptions, ICustomLayerOptions } from '@ukis/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -22,17 +22,17 @@ import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olVectorSource from 'ol/source/Vector';
 import olTileJSON from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
-//import ImageWMS from 'ol/source/ImageWMS';
-//import VectorTileSource from 'ol/source/VectorTile';
+// import ImageWMS from 'ol/source/ImageWMS';
+// import VectorTileSource from 'ol/source/VectorTile';
 import olFeature from 'ol/Feature';
 
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olProjection from 'ol/proj/Projection.js';
 import { transformExtent, get, transform } from 'ol/proj.js';
-import { extend as olExtend, getWidth, getTopLeft} from 'ol/extent.js';
-import { easeOut } from 'ol/easing.js'
-import olCoordinate from 'ol/coordinate'
+import { extend as olExtend, getWidth, getTopLeft } from 'ol/extent.js';
+import { easeOut } from 'ol/easing.js';
+import olCoordinate from 'ol/coordinate';
 
 
 import olStyle from 'ol/style/Style';
@@ -45,50 +45,50 @@ import olStroke from 'ol/style/Stroke';
   providedIn: 'root'
 })
 export class MapOlService {
-  public map: olMap; //ol.Map;
+  public map: olMap; // ol.Map;
   public view: olView;
   public temp: any;
   public EPSG: string;
   constructor() {
-    this.map = <any>{};
-    this.view = <any>{};
+    this.map = new olMap();
+    this.view = new olView();
     this.temp = {};
-    this.EPSG = 'EPSG:3857';//'EPSG:4326'; EPSG:3857
-    //this.createMap();
+    this.EPSG = 'EPSG:3857'; // 'EPSG:4326'; EPSG:3857
+    // this.createMap();
   }
 
   public createMap(target?) {
-    let _EPSG = this.EPSG;
-    let zoom = 3;
-    let center = {
+    const _EPSG = this.EPSG;
+    const zoom = 3;
+    const center = {
       lat: 0,
       lon: 0
     };
 
-    var _baselayers = [];
-    var _baselayerGroup = new olLayerGroup(<any>{
+    const _baselayers = [];
+    const _baselayerGroup = new olLayerGroup(<any>{
       title: 'Base maps',
       type: 'baselayers',
       layers: _baselayers
-    })
+    });
 
-    //---------------------------------------------------------------------------------------------------
-    //var _overlays = this.store.overlays;
-    var _overlays = [];
+    // ---------------------------------------------------------------------------------------------------
+    // var _overlays = this.store.overlays;
+    const _overlays = [];
 
-    var _overlayGroup = new olLayerGroup(<any>{
+    const _overlayGroup = new olLayerGroup(<any>{
       title: 'Overlays',
       type: 'overlays',
       layers: _overlays
-    })
+    });
 
-    var _view = new olView({
+    const _view = new olView({
       center: transform([center.lon, center.lat], 'EPSG:4326', _EPSG),
       zoom: zoom,
       projection: _EPSG
-    })
+    });
 
-    var _map = new olMap({
+    const _map = new olMap({
       layers: [_baselayerGroup, _overlayGroup],
       view: _view,
       controls: []
@@ -103,84 +103,90 @@ export class MapOlService {
     return {
       map: this.map,
       view: this.view
-    }
+    };
   }
 
   public getLayers(type: 'overlays' | 'baselayers') {
-    var layers;
+    let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
         layers = layerGroup.getLayers().getArray();
       }
-    })
+    });
     return layers;
   }
 
   public getLayerByKey(key: { key: string, value: string }, type: 'overlays' | 'baselayers') {
-    var layers = this.getLayers(type);
-    var _layer;
+    const layers = this.getLayers(type);
+    let _layer;
     layers.forEach((layer) => {
       if (layer.get(key.key) && layer.get(key.key) == key.value) {
-        _layer = layer
+        _layer = layer;
       }
-    })
+    });
     return _layer;
   }
 
   public addLayer(layer: any, type: 'overlays' | 'baselayers') {
-    var layers;
+    let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
         layers = layerGroup.getLayers().getArray();
         layers.push(layer);
-        layerGroup.setLayers(new olCollection(layers))
+        layerGroup.setLayers(new olCollection(layers));
       }
-    })
+    });
     return layers;
   }
 
   public addLayers(layers: olCollection<Layer>, type: 'overlays' | 'baselayers') {
-    var _layers;
-    //console.log(this.map)
+    let _layers;
+    // console.log(this.map)
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
         _layers = layers;
-        layerGroup.setLayers(new olCollection(_layers))
+        layerGroup.setLayers(new olCollection(_layers));
       }
-    })
+    });
     return layers;
   }
 
   public removeLayerByKey(key: { key: string, value: string }, type: 'overlays' | 'baselayers') {
-    var layer = this.getLayerByKey(key, type);
+    const layer = this.getLayerByKey(key, type);
     this.map.removeLayer(layer);
   }
 
   public removeAllLayers(type: 'overlays' | 'baselayers') {
-    var layers;
+    let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
-        layers = layerGroup.getLayers()
+        layers = layerGroup.getLayers();
         layers.clear();
       }
-    })
+    });
 
   }
 
   public setBaseLayers(layers: Array<Layer>) {
-    let _layers = <any>[];
+    const _layers = <any>[];
     layers.forEach((layer) => {
 
       let _layer;
       switch (layer.type) {
         case 'xyz':
-          _layer = this.create_xyz_layer(<RasterLayer>layer)
+          _layer = this.create_xyz_layer(<RasterLayer>layer);
           break;
         case 'wms':
-          _layer = this.create_wms_layer(<RasterLayer>layer)
+          _layer = this.create_wms_layer(<RasterLayer>layer);
+          break;
+        case 'wmts':
+          _layer = this.create_wmts_layer(<RasterLayer>layer);
+          break;
+        case 'geojson':
+          _layer = this.create_geojson_layer(<VectorLayer>layer);
           break;
         case 'custom':
-          _layer = this.create_custom_layer(<CustomLayer>layer)
+          _layer = this.create_custom_layer(<CustomLayer>layer);
           break;
         /*
       default:
@@ -191,17 +197,17 @@ export class MapOlService {
       }
       // check if layer not undefined
       if (_layer) {
-        _layers.push(_layer)
+        _layers.push(_layer);
       }
-    })
+    });
 
     if (_layers.length > 0) {
-      this.addLayers(_layers, 'baselayers')
+      this.addLayers(_layers, 'baselayers');
     }
   }
 
   public setOverlays(layers: Array<Layer>) {
-    let _layers = <any>[];
+    const _layers = <any>[];
     if (layers.length < 1) {
       this.removeAllLayers('overlays');
     } else {
@@ -209,30 +215,30 @@ export class MapOlService {
         let _layer;
         switch (layer.type) {
           case 'xyz':
-            _layer = this.create_xyz_layer(<RasterLayer>layer)
+            _layer = this.create_xyz_layer(<RasterLayer>layer);
             break;
           case 'wms':
-            _layer = this.create_wms_layer(<RasterLayer>layer)
+            _layer = this.create_wms_layer(<RasterLayer>layer);
             break;
-          case "wmts":
+          case 'wmts':
             _layer = this.create_wmts_layer(<RasterLayer>layer);
             break;
           case 'geojson':
-            _layer = this.create_geojson_layer(<VectorLayer>layer)
+            _layer = this.create_geojson_layer(<VectorLayer>layer);
             break;
           case 'custom':
-            _layer = this.create_custom_layer(<CustomLayer>layer)
+            _layer = this.create_custom_layer(<CustomLayer>layer);
             break;
         }
         // check if layer not undefined
         if (_layer) {
-          _layers.push(_layer)
+          _layers.push(_layer);
         }
-      })
+      });
     }
 
     if (_layers.length > 0) {
-      this.addLayers(_layers, 'overlays')
+      this.addLayers(_layers, 'overlays');
     }
   }
 
@@ -240,7 +246,7 @@ export class MapOlService {
    * define layer types
    */
   private create_xyz_layer(l: RasterLayer) {
-    let xyz_options: any = {
+    const xyz_options: any = {
       attributions: [l.attribution],
       wrapX: l.continuousWorld
     };
@@ -249,17 +255,17 @@ export class MapOlService {
       xyz_options.crossOrigin = l['crossOrigin'];
     }
 
-    let _source = new olXYZ(xyz_options);
+    const _source = new olXYZ(xyz_options);
 
     if (l.subdomains) {
-      let _urls = l.subdomains.map((item) => { return l.url.replace('{s}', `${item}`) });
-      _source.setUrls(_urls)
+      const _urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
+      _source.setUrls(_urls);
 
     } else {
-      _source.setUrl(l.url)
+      _source.setUrl(l.url);
     }
 
-    let _layeroptions: any = {
+    const _layeroptions: any = {
       type: 'xyz',
       name: l.name,
       id: l.id,
@@ -268,7 +274,7 @@ export class MapOlService {
       opacity: l.opacity || 1,
       zIndex: l.zIndex || 1,
       source: _source
-    }
+    };
 
     if (l.popup) {
       _layeroptions.popup = l.popup;
@@ -278,12 +284,12 @@ export class MapOlService {
       _layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
     }
 
-    return new olTileLayer(_layeroptions)
+    return new olTileLayer(_layeroptions);
   }
 
   private create_wms_layer(l: RasterLayer) {
 
-    let tile_options: any = {
+    const tile_options: any = {
       attributions: [l.attribution],
       wrapX: l.continuousWorld,
       params: this.keysToUppercase(l.params)
@@ -293,17 +299,17 @@ export class MapOlService {
       tile_options.crossOrigin = l['crossOrigin'];
     }
 
-    let _source = new olTileWMS(tile_options);
+    const _source = new olTileWMS(tile_options);
 
     if (l.subdomains) {
-      let _urls = l.subdomains.map((item) => { return l.url.replace('{s}', `${item}`) });
-      _source.setUrls(_urls)
+      const _urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
+      _source.setUrls(_urls);
 
     } else {
-      _source.setUrl(l.url)
+      _source.setUrl(l.url);
     }
 
-    let _layeroptions: any = {
+    const _layeroptions: any = {
       type: 'wms',
       name: l.name,
       id: l.id,
@@ -312,7 +318,7 @@ export class MapOlService {
       opacity: l.opacity || 1,
       zIndex: l.zIndex || 1,
       source: _source
-    }
+    };
 
     if (l.popup) {
       _layeroptions.popup = l.popup;
@@ -322,7 +328,7 @@ export class MapOlService {
       _layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
     }
 
-    return new olTileLayer(_layeroptions)
+    return new olTileLayer(_layeroptions);
   }
 
   public getProjection() {
@@ -332,34 +338,34 @@ export class MapOlService {
 
   private create_wmts_layer(l: RasterLayer) {
 
-    // TODO: here we create a standard-tilegrid. While this will be enough for most of our wmts, it would be more rigorous to make a getCapabilites-request to the server instead. 
-    // https://openlayers.org/en/latest/examples/wmts-layer-from-capabilities.html?q=wmts 
+    // TODO: here we create a standard-tilegrid. While this will be enough for most of our wmts, it would be more rigorous to make a getCapabilites-request to the server instead.
+    // https://openlayers.org/en/latest/examples/wmts-layer-from-capabilities.html?q=wmts
 
-    let projection = this.getProjection();
-    let matrixSet = projection.getCode();
-    let projectionExtent = projection.getExtent();
-    let UnitsPerPixLargestTile = getWidth(projectionExtent) / 256;
-    let resolutions = new Array(14);
-    let matrixIds = new Array(14);
+    const projection = this.getProjection();
+    const matrixSet = projection.getCode();
+    const projectionExtent = projection.getExtent();
+    const UnitsPerPixLargestTile = getWidth(projectionExtent) / 256;
+    const resolutions = new Array(14);
+    const matrixIds = new Array(14);
     for (let z = 0; z < 14; ++z) {
       resolutions[z] = UnitsPerPixLargestTile / Math.pow(2, z);
-      matrixIds[z] = matrixSet + ":" + z;  
+      matrixIds[z] = matrixSet + ':' + z;
     }
 
-    let tileGrid = new olWMTSTileGrid({
+    const tileGrid = new olWMTSTileGrid({
       origin: getTopLeft(projectionExtent),
       resolutions: resolutions,
       matrixIds: matrixIds
     });
 
-    let wmts_options: any = {
+    const wmts_options: any = {
       url: l.url,
-      layer: l.id,
-      matrixSet: matrixSet,
-      tileGrid: tileGrid,
+      layer: l.params.layer || l.params.LAYER,
+      matrixSet: matrixSet || l.params.matrixSet,
+      tileGrid: tileGrid || l.params.tileGrid,
       projection: projection,
-      version: l.params.version || "1.0.0",
-      format:l.params.format || 'image/png',
+      version: l.params.version || '1.0.0',
+      format: l.params.format || 'image/png',
       attributions: [l.attribution],
       wrapX: l.continuousWorld,
     };
@@ -368,18 +374,18 @@ export class MapOlService {
       wmts_options.crossOrigin = l['crossOrigin'];
     }
 
-    let _source = new olWMTS(wmts_options);
+    const _source = new olWMTS(wmts_options);
 
 
     if (l.subdomains) {
-      let _urls = l.subdomains.map((item) => { return l.url.replace('{s}', `${item}`) });
-      _source.setUrls(_urls)
+      const _urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
+      _source.setUrls(_urls);
 
     } else {
-      _source.setUrl(l.url)
+      _source.setUrl(l.url);
     }
 
-    let _layeroptions: any = {
+    const _layeroptions: any = {
       type: 'wmts',
       name: l.name,
       id: l.id,
@@ -417,7 +423,7 @@ export class MapOlService {
       });
     }
 
-    let _layeroptions = <any>{
+    const _layeroptions = <any>{
       type: 'geojson',
       name: l.name,
       id: l.id,
@@ -437,17 +443,17 @@ export class MapOlService {
     }
 
     if (l.cluster) {
-      let clusteroptions: any = {};
+      const clusteroptions: any = {};
       if (typeof l.cluster === 'object') {
         Object.assign(clusteroptions, l.cluster);
       }
-      clusteroptions.source = _source
-      let clusterSource = new olCluster(clusteroptions);
+      clusteroptions.source = _source;
+      const clusterSource = new olCluster(clusteroptions);
       _layeroptions.source = clusterSource;
-      let styleCache = {};
+      const styleCache = {};
       _layeroptions.style = (feature) => {
-        var size = feature.get('features').length;
-        var style = styleCache[size];
+        const size = feature.get('features').length;
+        let style = styleCache[size];
         if (!style) {
           style = new olStyle({
             image: new olCircleStyle({
@@ -469,7 +475,7 @@ export class MapOlService {
           styleCache[size] = style;
         }
         return style;
-      }
+      };
     }
 
     if (l.options) {
@@ -481,17 +487,17 @@ export class MapOlService {
 
   private create_custom_layer(l: CustomLayer) {
     if (l.custom_layer) {
-      let layer = l.custom_layer;
+      const layer = l.custom_layer;
 
-      let _source = layer.getSource();
+      const _source = layer.getSource();
       if (l.attribution) {
-        _source.setAttributions([l.attribution])
+        _source.setAttributions([l.attribution]);
       }
       if (l.continuousWorld) {
         _source.set('wrapX', l.continuousWorld);
       }
 
-      let _layeroptions = <any>{
+      const _layeroptions = <any>{
         type: 'custom',
         name: l.name,
         id: l.id,
@@ -516,7 +522,7 @@ export class MapOlService {
         _layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
       }
 
-      layer.setProperties(_layeroptions)
+      layer.setProperties(_layeroptions);
       delete l.custom_layer;
       return layer;
 
@@ -526,15 +532,15 @@ export class MapOlService {
   }
 
   public vector_on_click(evt) {
-    var FeaturesAtPixel = [];
+    const FeaturesAtPixel = [];
     this.map.forEachFeatureAtPixel(evt.pixel, (_layer, layer) => {
-      console.log(layer)
-      //console.log(evt, _layer, layer, layer.get('type'))
-      FeaturesAtPixel.push({ _layer: _layer, layer: layer })
+      // console.log(layer);
+      // console.log(evt, _layer, layer, layer.get('type'))
+      FeaturesAtPixel.push({ _layer: _layer, layer: layer });
     }, {
         layerFilter: (layer: olVectorLayer) => {
           if (layer instanceof olVectorLayer) {
-            let _source: olCluster | olVectorSource = layer.getSource();
+            const _source: olCluster | olVectorSource = layer.getSource();
             if (_source instanceof olCluster) {
               return (_source as any).getSource() instanceof olVectorSource;
             } else {
@@ -546,31 +552,31 @@ export class MapOlService {
       });
 
     FeaturesAtPixel.forEach((item, index) => {
-      let topFeature = 0;
+      const topFeature = 0;
       if (index == topFeature) {
-        let layer = item.layer, _layer = item._layer;
-        let layerpopup: popup = layer.get('popup');
+        const layer = item.layer, _layer = item._layer;
+        const layerpopup: popup = layer.get('popup');
         let _properties: any = {};
-
-        if (layer instanceof VectorLayer && layerpopup) {
-          let features = _layer.getProperties().features;
-          if (features && features.length == 1) {
-            let feature = features[0];
+        
+        if (layer instanceof olVectorLayer && layerpopup) {
+          const features = _layer.getProperties().features;
+          if (features && features.length === 1) {
+            const feature = features[0];
             _properties = feature.getProperties();
           } else if (features && features.length > 1) {
-            //zoom in TODO
-            //_layer.getProperties()
-            //_layer.getGeometry().getExtent()
-            var extent = this.getFeaturesExtent(_layer.getProperties().features);
-            //console.log(_layer, extent)
+            // zoom in TODO
+            // _layer.getProperties()
+            // _layer.getGeometry().getExtent()
+            const extent = this.getFeaturesExtent(_layer.getProperties().features);
+            // console.log(_layer, extent)
             this.setExtent(extent);
             return false;
           } else {
-            //type no cluster
+            // type no cluster
             _properties = _layer.getProperties();
           }
 
-          let args = {
+          const args = {
             modelName: _properties.id,
             properties: _properties,
             layer: _layer,
@@ -583,14 +589,14 @@ export class MapOlService {
 
           let popupproperties = Object.assign({}, _properties);
 
-          //console.log(popupproperties);
+          // console.log(popupproperties);
           if (layerpopup['properties']) {
             if (Array.isArray(Object.keys(layerpopup['properties']))) {
               popupproperties = Object.keys(popupproperties)
                 .filter(key => Object.keys(layerpopup['properties']).includes(key))
                 .reduce((obj, key) => {
-                  //obj[key] = popupproperties[key];
-                  let newKey = layerpopup['properties'][key];
+                  // obj[key] = popupproperties[key];
+                  const newKey = layerpopup['properties'][key];
                   obj[newKey] = popupproperties[key];
                   return obj;
                 }, {});
@@ -599,21 +605,20 @@ export class MapOlService {
           if (popupproperties.geometry) {
             delete popupproperties.geometry;
           }
-
           if (layerpopup.asyncPupup) {
             layerpopup.asyncPupup(popupproperties, (html) => {
-              this.addPopup(args, popupproperties, html)
-            })
+              this.addPopup(args, popupproperties, html);
+            });
           } else {
-            this.addPopup(args, popupproperties)
+            this.addPopup(args, popupproperties);
           }
         }
       }
-    })
+    });
   }
 
   public raster_on_click(evt, layer, color?) {
-    let layerpopup: popup = layer.get('popup');
+    const layerpopup: popup = layer.get('popup');
     let _properties: any = {};
 
     if (layerpopup) {
@@ -623,7 +628,7 @@ export class MapOlService {
         _properties.color = color;
       }
 
-      let args = {
+      const args = {
         modelName: _properties.id,
         properties: _properties,
         layer: layer,
@@ -636,14 +641,14 @@ export class MapOlService {
 
       let popupproperties = Object.assign({}, _properties);
 
-      //console.log(popupproperties);
+      // console.log(popupproperties);
       if (layerpopup['properties']) {
         if (Array.isArray(Object.keys(layerpopup['properties']))) {
           popupproperties = Object.keys(popupproperties)
             .filter(key => Object.keys(layerpopup['properties']).includes(key))
             .reduce((obj, key) => {
-              //obj[key] = popupproperties[key];
-              let newKey = layerpopup['properties'][key];
+              // obj[key] = popupproperties[key];
+              const newKey = layerpopup['properties'][key];
               obj[newKey] = popupproperties[key];
               return obj;
             }, {});
@@ -652,57 +657,57 @@ export class MapOlService {
       if (popupproperties.geometry) {
         delete popupproperties.geometry;
       }
-      console.log(popupproperties)
+      // console.log(popupproperties);
 
       if (layerpopup.asyncPupup) {
         layerpopup.asyncPupup(popupproperties, (html) => {
-          console.log(html);
-          this.addPopup(args, popupproperties, html)
-        })
+          // console.log(html);
+          this.addPopup(args, popupproperties, html);
+        });
       } else {
-        this.addPopup(args, popupproperties)
+        this.addPopup(args, popupproperties);
       }
     }
   }
 
   public layers_on_click(evt) {
-    //pixel, callback, opt_options
-    var LayersAtPixel = [];
+    // pixel, callback, opt_options
+    const LayersAtPixel = [];
     this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
-      LayersAtPixel.push({ layer: layer, color: color })
+      LayersAtPixel.push({ layer: layer, color: color });
     }, {
         layerFilter: (layer) => {
-          //try to catch CORS error in getImageData!!!
-          //layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
-          //console.log(layer)
+          // try to catch CORS error in getImageData!!!
+          // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
+          // console.log(layer)
           if (layer.get('popup')) {
             return true;
           }
         }
       });
     LayersAtPixel.forEach((item, index) => {
-      let topLayer = 0;
+      const topLayer = 0;
       if (index == topLayer) {
-        this.layer_on_click(evt, item.layer, item.color)
+        this.layer_on_click(evt, item.layer, item.color);
       }
-    })
+    });
   }
 
 
   public layer_on_click(evt, layer, color?) {
     if (layer instanceof olImageLayer) {
-      this.raster_on_click(evt, layer, color)
+      this.raster_on_click(evt, layer, color);
     } else if (layer instanceof olTileLayer) {
-      this.raster_on_click(evt, layer, color)
+      this.raster_on_click(evt, layer, color);
     } else if (layer instanceof olVectorLayer) {
-      this.vector_on_click(evt)
+      this.vector_on_click(evt);
     } else if (layer instanceof olVectorTileLayer) {
-      this.vector_on_click(evt)
+      this.vector_on_click(evt);
     }
   }
 
   public addPopup(args: any, popupObj: any, html?: string) {
-    let content = document.createElement('div');
+    const content = document.createElement('div');
     content.className = 'ol-popup-content';
 
     let popup_html = '';
@@ -715,10 +720,10 @@ export class MapOlService {
     }
     content.innerHTML = popup_html;
 
-    let closer = document.createElement('a');
+    const closer = document.createElement('a');
     closer.className = 'ol-popup-closer';
 
-    let container = document.createElement('div');
+    const container = document.createElement('div');
     container.className = 'ol-popup';
     container.id = `popup_${new Date().getTime()}`;
     container.style.display = 'block';
@@ -726,7 +731,7 @@ export class MapOlService {
     container.appendChild(closer);
     container.appendChild(content);
 
-    let overlayoptions = {
+    const overlayoptions = {
       element: container,
       autoPan: true,
       id: (args.layer && args.layer.ol_uid) ? args.layer.ol_uid : `popup_${new Date().getTime()}`,
@@ -738,7 +743,7 @@ export class MapOlService {
       insertFirst: false
     };
 
-    var overlay = new olOverlay(<any>overlayoptions);
+    const overlay = new olOverlay(<any>overlayoptions);
     overlay.set('type', 'popup');
 
     let coordinate;
@@ -749,17 +754,17 @@ export class MapOlService {
     }
 
     overlay.setPosition(coordinate);
-    let closeFunction = () => {
-      closer.removeEventListener('click', closeFunction, false)
+    const closeFunction = () => {
+      closer.removeEventListener('click', closeFunction, false);
       this.map.removeOverlay(overlay);
-    }
+    };
     closer.addEventListener('click', closeFunction, false);
 
     this.map.addOverlay(overlay);
   }
 
   public removeAllPopups() {
-    let popups = this.getPopups();
+    const popups = this.getPopups();
     popups.forEach((overlay) => {
       if (overlay.get('type') === 'popup') {
         this.map.removeOverlay(overlay);
@@ -768,19 +773,19 @@ export class MapOlService {
   }
 
   public createPopupHtml(obj: any) {
-    var htmlStr = '<table>';
-    for (var o in obj) {
+    let htmlStr = '<table>';
+    for (const o in obj) {
       if (obj.hasOwnProperty(o)) {
         htmlStr += '<tr><td style="vertical-align: top; padding-right: 7px;"><b>' + o + ': </b></td><td>' + obj[o] +
-          '</td></tr>'
+          '</td></tr>';
       }
     }
-    htmlStr = htmlStr + '</table>'
-    return htmlStr
+    htmlStr = htmlStr + '</table>';
+    return htmlStr;
   }
 
   public getPopups(): olOverlay[] {
-    let popups = [];
+    const popups = [];
     this.map.getOverlays().getArray().slice(0).forEach((overlay) => {
       if (overlay.get('type') === 'popup') {
         popups.push(overlay);
@@ -790,43 +795,43 @@ export class MapOlService {
   }
 
   public setExtent(extent: olExtend, geographic?: boolean, fitOptions?: any): any {
-    //var _extent = ol.extent.boundingExtent([destLoc,currentLoc]);
-    var projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
-    var transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
-    var _fitOptions = {
+    // var _extent = ol.extent.boundingExtent([destLoc,currentLoc]);
+    const projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
+    const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
+    const _fitOptions = {
       size: this.map.getSize(),
-      padding: [100, 200, 100, 100] //Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
-    }
+      padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
+    };
     if (fitOptions) {
-      Object.assign(_fitOptions, fitOptions)
+      Object.assign(_fitOptions, fitOptions);
     }
     this.map.getView().fit(transfomExtent, fitOptions);
     return transfomExtent;
   }
   /** ol.Coordinate xy */
   public setCenter(center: olCoordinate, geographic?: boolean) {
-    var projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
-    var transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
-    //console.log('set center in svc', transfomCenter)
-    //console.log(this.map.getView().getCenter())
+    const projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
+    const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
+    // console.log('set center in svc', transfomCenter)
+    // console.log(this.map.getView().getCenter())
     this.map.getView().setCenter(transfomCenter);
   }
 
   public getCenter(geographic?: boolean): any {
-    var dstProjection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
-    var srcProjection = get(this.map.getView().getProjection().getCode());
+    const dstProjection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
+    const srcProjection = get(this.map.getView().getProjection().getCode());
 
-    var transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
-    //console.log('set center in svc', transfomCenter)
-    //console.log(this.map.getView().getCenter())
-    //console.log(transfomCenter)
-    //console.log(srcProjection)
-    //console.log(dstProjection)
+    const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
+    // console.log('set center in svc', transfomCenter)
+    // console.log(this.map.getView().getCenter())
+    // console.log(transfomCenter)
+    // console.log(srcProjection)
+    // console.log(dstProjection)
     return transfomCenter;
   }
 
   public getFeaturesExtent(features: olFeature[]): any {
-    var extent: any = features[0].getGeometry().getExtent().slice(0);
+    const extent: any = features[0].getGeometry().getExtent().slice(0);
     features.forEach((feature) => {
       olExtend(extent, feature.getGeometry().getExtent());
     });
@@ -834,26 +839,26 @@ export class MapOlService {
   }
 
   public getCurrentExtent(geographic?: boolean): olExtend {
-    var projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
-    var extent = this.map.getView().calculateExtent();
-    var transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
+    const projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
+    const extent = this.map.getView().calculateExtent();
+    const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
     return transfomExtent;
   }
 
   public setZoom(zoom: number, notifier?: 'map' | 'user') {
-    var view = this.map.getView();
+    const view = this.map.getView();
     view.setZoom(zoom);
   }
 
   public zoomInOut(value: '-' | '+') {
-    var view = this.map.getView();
+    const view = this.map.getView();
     if (!view) {
       // the map does not have a view, so we can't act
       // upon it
       return;
     }
-    var delta = 1, newResolution, duration = 250;
-    var currentResolution = view.getResolution();
+    let delta = 1, newResolution, duration = 250;
+    const currentResolution = view.getResolution();
     if (currentResolution) {
       newResolution = view.constrainResolution(currentResolution, delta);
       if (value === '+') {
@@ -879,19 +884,19 @@ export class MapOlService {
   }
 
   public geoJsonToFeature(geojson: any): olFeature {
-    var GEOJSON = new olGeoJSON({
+    const GEOJSON = new olGeoJSON({
       defaultDataProjection: 'EPSG:4326',
       featureProjection: this.EPSG
     });
-    return GEOJSON.readFeature(geojson)
+    return GEOJSON.readFeature(geojson);
   }
 
   public geoJsonToFeatures(geojson: any): Array<olFeature> {
-    var GEOJSON = new olGeoJSON({
+    const GEOJSON = new olGeoJSON({
       defaultDataProjection: 'EPSG:4326',
       featureProjection: this.EPSG
     });
-    return GEOJSON.readFeatures(geojson)
+    return GEOJSON.readFeatures(geojson);
   }
 
   /**
@@ -907,7 +912,7 @@ export class MapOlService {
           extent: projection.getExtent(),
           zoom: this.map.getView().getZoom()
         });
-      } else if (typeof projection == 'string') {
+      } else if (typeof projection === 'string') {
         _view = new olView({
           projection: projection,
           center: this.map.getView().getCenter(),
@@ -915,23 +920,23 @@ export class MapOlService {
         });
       }
 
-      this.map.setView(_view)
+      this.map.setView(_view);
       this.EPSG = _view.getProjection().getCode();
 
-      //this.removeAllLayers('baselayers')
+      // this.removeAllLayers('baselayers')
       /*
       this.getLayers('baselayers').forEach((layer) => {
         this.addLayer(layer, 'baselayers')
       })
       */
     } else {
-      //console.log('projection code is undefined');
+      // console.log('projection code is undefined');
     }
   }
 
   private keysToUppercase(obj: Object) {
-    let newObj = {};
-    for(let key in obj) {
+    const newObj = {};
+    for (const key in obj) {
       newObj[key.toUpperCase()] = obj[key];
     }
     return newObj;
