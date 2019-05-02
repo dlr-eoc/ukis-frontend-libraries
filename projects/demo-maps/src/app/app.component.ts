@@ -1,8 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { MapOlService } from '@ukis/map-ol';
-import { osm } from '@ukis/base-layers-raster';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +6,11 @@ import { osm } from '@ukis/base-layers-raster';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  ui = {
+    floating: true,
+    flipped: false,
+    footer: false,
+    alert: null,
+    progress: null
+  };
 }

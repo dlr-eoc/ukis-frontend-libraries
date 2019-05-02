@@ -14,7 +14,7 @@ import { GlobalFooterComponent } from './components/global-footer/global-footer.
 
 
 const appRoutes: Routes = [
-    { path: '', redirectTo: 'landingpage', pathMatch: 'full', },  
+    { path: '', redirectTo: 'map', pathMatch: 'full', },  
     { path: 'landingpage', component: RouteLandingpageComponent  },
     { path: 'map', component: RouteMapComponent }
 ];
