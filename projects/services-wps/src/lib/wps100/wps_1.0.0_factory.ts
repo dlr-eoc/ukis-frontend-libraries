@@ -1,6 +1,6 @@
 import { WpsMarshaller, WpsInput, WpsOutput, WpsResult } from "../wps_marshaller";
 import { WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType, InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType } from "./wps_1.0.0";
-import { Product } from "@ukis/process-control/src/public_api";
+
 
 
 export class WpsFactory100 implements WpsMarshaller {
