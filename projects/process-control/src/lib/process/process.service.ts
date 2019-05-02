@@ -23,7 +23,7 @@ export interface IProcessService {
   getActiveProcess(): Observable<ImmutableProcess>,
   
   getConfig(processId: string): Parameter[],
-  configure(processId: string, values: Parameter[]), 
+  configure(processId: string, values: {[key: string]: any}), 
 
   run(processId: string): Observable<Success>,
   restartFrom(processId: string)

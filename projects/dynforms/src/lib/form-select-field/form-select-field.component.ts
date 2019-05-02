@@ -15,7 +15,6 @@ import { SelectParameter } from '../parameter';
 export class FormSelectFieldComponent implements OnInit, ControlValueAccessor {
 
   @Input() parameter: SelectParameter;
-  @Input() parentFormGroup: FormGroup;
   public disabled: boolean = false;
   public activeOption: any;
   public options; 
@@ -29,12 +28,12 @@ export class FormSelectFieldComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    console.log(`${this.parameter.id} writeValue`, obj);
+    //console.log(`${this.parameter.id} writeValue`, obj);
     this.activeOption = obj;
   }
 
   registerOnChange(fn: any): void {
-    console.log(`${this.parameter.id} registering change function `, fn);
+    //console.log(`${this.parameter.id} registering change function `, fn);
     this.changeFunction = fn;
   }
 
@@ -42,12 +41,12 @@ export class FormSelectFieldComponent implements OnInit, ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    console.log(`${this.parameter.id} setDisabledState`, isDisabled);
+    //console.log(`${this.parameter.id} setDisabledState`, isDisabled);
     this.disabled = isDisabled;
   }
 
   onChange(newVal) {
-    console.log("calling changefunciton with ", newVal);
+    //console.log("calling changefunciton with ", newVal);
     this.activeOption = newVal;
     this.changeFunction(newVal);
   }

@@ -4,7 +4,6 @@ export interface BasicParameter {
     name: string;
     description: string;
     defaultValue: any;
-    value: any;
 }
 
 export interface StringParameter extends BasicParameter {
@@ -22,7 +21,6 @@ export interface SelectParameter extends BasicParameter {
     parametertype: "select"; 
     options: string[];
     defaultValue: string;
-    value: string;
 }
 
 export type Parameter = StringParameter | BboxParameter | SelectParameter;

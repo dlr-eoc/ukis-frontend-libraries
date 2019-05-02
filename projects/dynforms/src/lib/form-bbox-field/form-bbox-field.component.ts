@@ -30,7 +30,7 @@ export class FormBboxFieldComponent implements OnInit, ControlValueAccessor {
   }
 
   onEndBoxSelection(extent) { 
-    console.log("calling changefunciton with ", extent);
+    //console.log("calling changefunciton with ", extent);
     this.selectionActive = false;
     this.bbox = extent;
     this.changeFunction(extent);
@@ -48,7 +48,7 @@ export class FormBboxFieldComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    console.log(`${this.parameter.id} writeValue`, obj);
+    //console.log(`${this.parameter.id} writeValue`, obj);
     this.bbox = obj;
   }
 

@@ -36,7 +36,7 @@ export interface ImmutableProcess {
  */
 export interface MutableProcess extends ImmutableProcess {
     setState(state: ProcessState): void;
-    setConig(paras: Parameter[]): void;
+    // setConfig(parameterId: string, value: any): void;
     execute(inputs: Product[]): Observable<Product[]>;
 }
 

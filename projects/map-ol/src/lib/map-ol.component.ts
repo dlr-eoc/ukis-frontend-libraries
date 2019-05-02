@@ -59,7 +59,7 @@ export class MapOlComponent implements OnInit, OnDestroy {
 
   /** is  */
   ngAfterViewChecked() {
-    this.map.updateSize();
+    //this.map.updateSize();
   }
 
   ngOnDestroy() {

@@ -34,8 +34,7 @@ export class WizardElementComponent implements OnInit {
 
   onSubmit(data) {
     let vals = this.processForm.value;
-    this.paras.forEach(para => para.value = vals[para.id]);
-    this.configSubmitted.emit({processId: this.process.getId(), values: this.paras})
+    this.configSubmitted.emit({processId: this.process.getId(), values: vals})
   }
 
   onNextClicked() {

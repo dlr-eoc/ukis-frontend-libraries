@@ -27,14 +27,9 @@ export class DemoProcess implements MutableProcess {
             name: `${this.id}_config`,
             defaultValue: "a", 
             options: ["a", "b", "c"],
-            parametertype: "select",
-            value: null
+            parametertype: "select"
         };
         return [conf];
-    }
-
-    setConig(paras: Parameter[]): void {
-
     }
     
     execute(inputs: Product[]): Observable<Product[]> {

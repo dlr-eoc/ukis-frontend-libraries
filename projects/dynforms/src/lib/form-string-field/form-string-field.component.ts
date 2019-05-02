@@ -25,7 +25,7 @@ export class FormStringFieldComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    console.log(`${this.parameter.id} writeValue`, obj);
+    //console.log(`${this.parameter.id} writeValue`, obj);
     this.value = obj;
   }
 
@@ -36,12 +36,12 @@ export class FormStringFieldComponent implements OnInit, ControlValueAccessor {
   registerOnTouched(fn: any): void {}
 
   setDisabledState?(isDisabled: boolean): void {
-    console.log(`${this.parameter.id} setDisabledState`, isDisabled);
+    //console.log(`${this.parameter.id} setDisabledState`, isDisabled);
     this.disabled = isDisabled;
   }
 
   onChange(event) {
-    console.log("calling change funciton with ", event);
+    //console.log("calling change funciton with ", event);
     this.changeFunction(event);
   }
 

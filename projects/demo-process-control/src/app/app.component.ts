@@ -5,6 +5,7 @@ import { MapStateService } from '@ukis/services-map-state/src/public_api';
 import { DemoProcess } from './services/process/demo-process';
 import { StringParameter, Parameter } from '@ukis/dynforms/src/public_api';
 import { FormGroup, Form, FormControl } from '@angular/forms';
+import { osm } from '@ukis/base-layers-raster/src/public_api';
 
 @Component({
   selector: 'app-root',
@@ -24,5 +25,8 @@ export class AppComponent {
         new DemoProcess("proc1", "Process 1", "descr", "available"),
         new DemoProcess("proc2", "Process 2", "descr", "unavailable"),
       ]);
+
+      let layer = new osm();
+      this.layersService.addLayer(layer, "Baselayers");
     }
 }
