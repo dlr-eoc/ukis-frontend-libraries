@@ -1,0 +1,114 @@
+.clr-vertical-nav {
+  .layers {
+    padding-bottom: 2px;
+    .nav-divider {
+      border-width: 1px 0 0 0;
+      margin: 0.3rem 0;
+    }
+    .layer,
+    .layergroup {
+      margin-left: 0.2rem;
+      .iconButton {
+        height: 1rem;
+        margin: 0 1px;
+        &.disabled {
+          pointer-events: none;
+          color: $clr-light-midtone-gray;
+          cursor: default;
+        }
+        &.active {
+          color: $clr-action-blue;
+        }
+      }
+      .head {
+        display: flex;
+        input.hide {
+          display: none;
+          & + label {
+            position: static;
+            display: inline;
+            min-height: auto;
+            padding-left: 0;
+            &:before,
+            &:after {
+              content: none; //margin-left: 4px;
+            }
+          }
+        }
+        .title {
+          margin-left: 0.2rem;
+          flex: 1 1 0;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+      .body {
+        border-left: 1px solid $clr-light-midtone-gray;
+        padding-left: 0;
+        margin: 0 0 0.3rem 8px;
+        .tools {
+          display: flex;
+          justify-content: flex-end;
+          border-radius: 1px;
+          padding-left: 0.1rem;
+
+          span {
+            flex: 1 1 0;
+          }
+        }
+
+        .sublayers,
+        .tabsbody {
+          border-radius: 2px;
+          padding: 0.2rem;
+          margin-right: -0.2rem;
+          border: 1px solid $clr-light-midtone-gray;
+          border-left-width: 0;
+          overflow: hidden;
+        }
+
+        .layersettings {
+          .form-group {
+            display: flex;
+            label {
+              padding-right: 0.4rem;
+            }
+            input {
+              flex: 1 1 0;
+            }
+            span {
+              min-width: 1.5rem;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+    h5 {
+      font-size: 14px;
+      margin: 0 0 4px 4px;
+      font-weight: 700;
+      cursor: pointer;
+      .iconButton {
+        margin-top: 3px;
+      }
+      &.active,
+      &:hover {
+        color: $clr-action-blue;
+      }
+    }
+  }
+
+  .lproperties {
+    //width: 100%;
+    //background: #f2f2f2;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-color: #c0c0c0;
+    border-style: solid;
+    border-width: 0px 0px 1px 1px;
+    overflow-x: auto;
+  }
+}

@@ -3,114 +3,6 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "datatypes-layers": {
-      "root": "projects/datatypes-layers",
-      "sourceRoot": "projects/datatypes-layers/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/datatypes-layers/tsconfig.lib.json",
-            "project": "projects/datatypes-layers/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/datatypes-layers/tsconfig.lib.json",
-              "projects/datatypes-layers/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "datatypes-map-state": {
-      "root": "projects/datatypes-map-state",
-      "sourceRoot": "projects/datatypes-map-state/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/datatypes-map-state/tsconfig.lib.json",
-            "project": "projects/datatypes-map-state/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/datatypes-map-state/tsconfig.lib.json",
-              "projects/datatypes-map-state/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "datatypes-owc-json": {
-      "root": "projects/datatypes-owc-json",
-      "sourceRoot": "projects/datatypes-owc-json/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/datatypes-owc-json/tsconfig.lib.json",
-            "project": "projects/datatypes-owc-json/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/datatypes-owc-json/tsconfig.lib.json",
-              "projects/datatypes-owc-json/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "datatypes-user-info": {
-      "root": "projects/datatypes-user-info",
-      "sourceRoot": "projects/datatypes-user-info/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/datatypes-user-info/tsconfig.lib.json",
-            "project": "projects/datatypes-user-info/ng-package.json"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/datatypes-user-info/tsconfig.lib.json",
-              "projects/datatypes-user-info/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "services-layers": {
       "root": "projects/services-layers",
       "sourceRoot": "projects/services-layers/src",
@@ -566,219 +458,10 @@
         }
       }
     },
-    "services-wps": {
-      "root": "projects/services-wps",
-      "sourceRoot": "projects/services-wps/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/services-wps/tsconfig.lib.json",
-            "project": "projects/services-wps/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/services-wps/src/test.ts",
-            "tsConfig": "projects/services-wps/tsconfig.spec.json",
-            "karmaConfig": "projects/services-wps/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/services-wps/tsconfig.lib.json",
-              "projects/services-wps/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "datatypes-wps": {
-      "root": "projects/datatypes-wps",
-      "sourceRoot": "projects/datatypes-wps/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/datatypes-wps/tsconfig.lib.json",
-            "project": "projects/datatypes-wps/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/datatypes-wps/src/test.ts",
-            "tsConfig": "projects/datatypes-wps/tsconfig.spec.json",
-            "karmaConfig": "projects/datatypes-wps/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/datatypes-wps/tsconfig.lib.json",
-              "projects/datatypes-wps/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "wps-node": {
-      "root": "projects/wps-node",
-      "sourceRoot": "projects/wps-node/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/wps-node/tsconfig.lib.json",
-            "project": "projects/wps-node/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/wps-node/src/test.ts",
-            "tsConfig": "projects/wps-node/tsconfig.spec.json",
-            "karmaConfig": "projects/wps-node/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/wps-node/tsconfig.lib.json",
-              "projects/wps-node/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "wps-configuration": {
-      "root": "projects/wps-configuration",
-      "sourceRoot": "projects/wps-configuration/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/wps-configuration/tsconfig.lib.json",
-            "project": "projects/wps-configuration/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/wps-configuration/src/test.ts",
-            "tsConfig": "projects/wps-configuration/tsconfig.spec.json",
-            "karmaConfig": "projects/wps-configuration/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/wps-configuration/tsconfig.lib.json",
-              "projects/wps-configuration/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "stepper-menu": {
-      "root": "projects/stepper-menu",
-      "sourceRoot": "projects/stepper-menu/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/stepper-menu/tsconfig.lib.json",
-            "project": "projects/stepper-menu/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/stepper-menu/src/test.ts",
-            "tsConfig": "projects/stepper-menu/tsconfig.spec.json",
-            "karmaConfig": "projects/stepper-menu/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/stepper-menu/tsconfig.lib.json",
-              "projects/stepper-menu/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "dynforms": {
-      "root": "projects/dynforms",
-      "sourceRoot": "projects/dynforms/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/dynforms/tsconfig.lib.json",
-            "project": "projects/dynforms/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/dynforms/src/test.ts",
-            "tsConfig": "projects/dynforms/tsconfig.spec.json",
-            "karmaConfig": "projects/dynforms/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/dynforms/tsconfig.lib.json",
-              "projects/dynforms/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "demo-dynform": {
-      "root": "projects/demo-dynform/",
-      "sourceRoot": "projects/demo-dynform/src",
+
+    "demo-user-info": {
+      "root": "projects/demo-user-info/",
+      "sourceRoot": "projects/demo-user-info/src",
       "projectType": "application",
       "prefix": "app",
       "schematics": {},
@@ -786,26 +469,34 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/demo-dynform",
-            "index": "projects/demo-dynform/src/index.html",
-            "main": "projects/demo-dynform/src/main.ts",
-            "polyfills": "projects/demo-dynform/src/polyfills.ts",
-            "tsConfig": "projects/demo-dynform/tsconfig.app.json",
+            "outputPath": "dist/demo-user-info",
+            "index": "projects/demo-user-info/src/index.html",
+            "main": "projects/demo-user-info/src/main.ts",
+            "polyfills": "projects/demo-user-info/src/polyfills.ts",
+            "tsConfig": "projects/demo-user-info/tsconfig.app.json",
             "assets": [
-              "projects/demo-dynform/src/favicon.ico",
-              "projects/demo-dynform/src/assets"
+              "projects/demo-user-info/src/favicon.ico",
+              "projects/demo-user-info/src/assets"
             ],
             "styles": [
-              "projects/demo-dynform/src/styles.css"
+              "projects/demo-user-info/src/styles/main.scss"
             ],
-            "scripts": []
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules"
+              ]
+            },
+            "scripts": [
+              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
+              "node_modules/@clr/icons/clr-icons.min.js"
+            ]
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/demo-dynform/src/environments/environment.ts",
-                  "with": "projects/demo-dynform/src/environments/environment.prod.ts"
+                  "replace": "projects/demo-user-info/src/environments/environment.ts",
+                  "with": "projects/demo-user-info/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -830,34 +521,34 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo-dynform:build"
+            "browserTarget": "demo-user-info:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "demo-dynform:build:production"
+              "browserTarget": "demo-user-info:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "demo-dynform:build"
+            "browserTarget": "demo-user-info:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/demo-dynform/src/test.ts",
-            "polyfills": "projects/demo-dynform/src/polyfills.ts",
-            "tsConfig": "projects/demo-dynform/tsconfig.spec.json",
-            "karmaConfig": "projects/demo-dynform/karma.conf.js",
+            "main": "projects/demo-user-info/src/test.ts",
+            "polyfills": "projects/demo-user-info/src/polyfills.ts",
+            "tsConfig": "projects/demo-user-info/tsconfig.spec.json",
+            "karmaConfig": "projects/demo-user-info/karma.conf.js",
             "styles": [
-              "projects/demo-dynform/src/styles.css"
+              "projects/demo-user-info/src/styles.css"
             ],
             "scripts": [],
             "assets": [
-              "projects/demo-dynform/src/favicon.ico",
-              "projects/demo-dynform/src/assets"
+              "projects/demo-user-info/src/favicon.ico",
+              "projects/demo-user-info/src/assets"
             ]
           }
         },
@@ -865,8 +556,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/demo-dynform/tsconfig.app.json",
-              "projects/demo-dynform/tsconfig.spec.json"
+              "projects/demo-user-info/tsconfig.app.json",
+              "projects/demo-user-info/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -875,27 +566,164 @@
         }
       }
     },
-    "demo-dynform-e2e": {
-      "root": "projects/demo-dynform-e2e/",
+    "demo-user-info-e2e": {
+      "root": "projects/demo-user-info-e2e/",
       "projectType": "application",
       "prefix": "",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/demo-dynform-e2e/protractor.conf.js",
-            "devServerTarget": "demo-dynform:serve"
+            "protractorConfig": "projects/demo-user-info-e2e/protractor.conf.js",
+            "devServerTarget": "demo-user-info:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "demo-dynform:serve:production"
+              "devServerTarget": "demo-user-info:serve:production"
             }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "projects/demo-dynform-e2e/tsconfig.e2e.json",
+            "tsConfig": "projects/demo-user-info-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+
+
+    "demo-maps": {
+      "root": "projects/demo-maps/",
+      "sourceRoot": "projects/demo-maps/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/demo-maps",
+            "index": "projects/demo-maps/src/index.html",
+            "main": "projects/demo-maps/src/main.ts",
+            "polyfills": "projects/demo-maps/src/polyfills.ts",
+            "tsConfig": "projects/demo-maps/tsconfig.app.json",
+            "assets": [
+              "projects/demo-maps/src/favicon.ico",
+              "projects/demo-maps/src/assets"
+            ],
+            "styles": [
+              "projects/demo-maps/src/styles/main.scss"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules"
+              ]
+            },
+            "scripts": [
+              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
+              "node_modules/@clr/icons/clr-icons.min.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/demo-maps/src/environments/environment.ts",
+                  "with": "projects/demo-maps/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "demo-maps:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "demo-maps:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "demo-maps:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/demo-maps/src/test.ts",
+            "polyfills": "projects/demo-maps/src/polyfills.ts",
+            "tsConfig": "projects/demo-maps/tsconfig.spec.json",
+            "karmaConfig": "projects/demo-maps/karma.conf.js",
+            "styles": [
+              "projects/demo-maps/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/demo-maps/src/favicon.ico",
+              "projects/demo-maps/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/demo-maps/tsconfig.app.json",
+              "projects/demo-maps/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "demo-maps-e2e": {
+      "root": "projects/demo-maps-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/demo-maps-e2e/protractor.conf.js",
+            "devServerTarget": "demo-maps:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "demo-maps:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/demo-maps-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]

@@ -26,7 +26,7 @@ This repository contains the following modules as angular libraries:
 - owc-control
 
 
-you can check this with the script `node scripts/libraryProjets.js -l`;
+you can check this with the script `node scripts/libraryProjects.js -l`;
 
 To use the libraries in your project specific application, you can ather use the npm modules or include this repository.
 - check the README of [project-frontend](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/project-frontend/browse/README.md)

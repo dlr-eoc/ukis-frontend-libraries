@@ -5,13 +5,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --source-map",
-    "build": "node scripts/libraryProjets.js --build",
+    "build": "node scripts/libraryProjects.js --build",
     "test": "ng test --watch=false",
     "lint": "echo TODO:ng lint",
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s",
-    "tsc:libraryProjets": "tsc -p scripts/tsconfig.script.json -w",
-    "list-projects": "node scripts/libraryProjets.js -l"
+    "tsc:libraryProjects": "tsc -p scripts/tsconfig.script.json -w",
+    "list-projects": "node scripts/libraryProjects.js -l"
   },
   "private": true,
   "dependencies": {
@@ -34,8 +34,9 @@
     "bootstrap": "4.0.0-alpha.5",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
-    "md5": "^2.2.1",
     "dayjs": "^1.8.11",
+    "md5": "^2.2.1",
+    "node-sass": "^4.12.0",
     "ol": "^5.3.0",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",

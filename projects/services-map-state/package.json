@@ -8,6 +8,5 @@
     "rxjs": "^6.3.3"
   },
   "dependencies": {
-    "@ukis/datatypes-map-state": "0.0.0-PLACEHOLDER"
   }
 }

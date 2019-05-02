@@ -1,5 +1,5 @@
 import { Component, Input, Inject, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import { IOwsContext, IOwsResource } from '@ukis/datatypes-owc-json';
+import { IOwsContext, IOwsResource } from '@ukis/services-owc-json';
 
 import { ObservationExplorerService } from "./observation-explorer.service";
 import { LayersService } from '@ukis/services-layers';

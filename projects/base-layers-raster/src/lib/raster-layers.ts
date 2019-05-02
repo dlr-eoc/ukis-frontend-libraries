@@ -1,4 +1,4 @@
-import { RasterLayer, IRasterLayerOptions } from '@ukis/datatypes-layers';
+import { RasterLayer, IRasterLayerOptions } from '@ukis/services-layers';
 
 export class google_earth extends RasterLayer {
   constructor(options?: IRasterLayerOptions) {

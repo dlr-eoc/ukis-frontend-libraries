@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MapNavigatorComponent } from './map-navigator.component';
 import { MapStateService } from '@ukis/services-map-state';
-import { MapState } from '@ukis/datatypes-map-state';
+import { MapState } from '@ukis/services-map-state';
 
 
 describe('MapNavigatorComponent', () => {

@@ -1,8 +1,9 @@
 
 import { Injectable } from '@angular/core';
-import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, IEocOwsContext, IEocOwsResource, IEocOwsOffering, WMS_Offering, WFS_Offering, WCS_Offering, CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering, GeoJson_Offering, Xyz_Offering } from '@ukis/datatypes-owc-json';
-import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype, TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype } from '@ukis/datatypes-layers';
-import { TGeoExtent } from '@ukis/datatypes-map-state';
+import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering, CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering } from './types/owc-json';
+import { IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering } from './types/eoc-owc-json';
+import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype, TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype } from '@ukis/services-layers';
+import { TGeoExtent } from '@ukis/services-map-state';
 import { ReplaceSource } from 'webpack-sources';
 
 
@@ -26,22 +27,22 @@ export function isWmtsOffering(str: string): str is WMTS_Offering {
 export function isGmlOffering(str: string): str is GML_Offering {
   return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
 }
-export function isKmlOffering(str:string): str is KML_Offering { 
+export function isKmlOffering(str: string): str is KML_Offering {
   return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml';
 }
-export function isGeoTIFFOffering(str:string): str is GeoTIFF_Offering { 
+export function isGeoTIFFOffering(str: string): str is GeoTIFF_Offering {
   return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff';
 }
-export function isGMLJP2Offering(str:string): str is GMLJP2_Offering { 
+export function isGMLJP2Offering(str: string): str is GMLJP2_Offering {
   return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
 }
-export function isGMLCOVOffering(str:string): str is GMLCOV_Offering { 
+export function isGMLCOVOffering(str: string): str is GMLCOV_Offering {
   return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
 }
 export function isXyzOffering(str: string): str is Xyz_Offering {
   return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
 }
-export function isGeoJsonOffering (str: string): str is GeoJson_Offering {
+export function isGeoJsonOffering(str: string): str is GeoJson_Offering {
   return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 }
 
@@ -154,11 +155,11 @@ export class OwcJsonService {
 
   /** Offering --------------------------------------------------- */
   getLayertypeFromOfferingCode(offering: IOwsOffering): TLayertype {
-    if(isWmsOffering(offering.code)) return WmsLayertype;
-    if(isWmtsOffering(offering.code)) return WmtsLayertype;
-    if(isWfsOffering(offering.code)) return WfsLayertype;
-    if(isGeoJsonOffering(offering.code)) return GeojsonLayertype;
-    if(isXyzOffering(offering.code)) return XyzLayertype;
+    if (isWmsOffering(offering.code)) return WmsLayertype;
+    if (isWmtsOffering(offering.code)) return WmtsLayertype;
+    if (isWfsOffering(offering.code)) return WfsLayertype;
+    if (isGeoJsonOffering(offering.code)) return GeojsonLayertype;
+    if (isXyzOffering(offering.code)) return XyzLayertype;
     else return offering.code; // an offering can also be any other string. 
   }
 
@@ -211,22 +212,22 @@ export class OwcJsonService {
 
   createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): VectorLayer {
     let layerType = this.getLayertypeFromOfferingCode(offering);
-    
-    if(!isVectorLayertype(layerType)){
-      console.error(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a Vectorlayer`); 
-      return null; 
+
+    if (!isVectorLayertype(layerType)) {
+      console.error(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a Vectorlayer`);
+      return null;
     }
 
     let iconUrl = this.getIconUrl(offering);
-    
+
     let layerUrl, params;
     // if we have a operations-offering (vs. a data-offering):
-    if(offering.operations) layerUrl = this.getUrlFromUri(offering.operations[0].href);
-    if(offering.operations) params = this.getJsonFromUri(offering.operations[0].href);
-    
+    if (offering.operations) layerUrl = this.getUrlFromUri(offering.operations[0].href);
+    if (offering.operations) params = this.getJsonFromUri(offering.operations[0].href);
+
     let data;
     // if we have a data-offering: 
-    if(offering.contents) {
+    if (offering.contents) {
       data = offering.contents[0].content;
     }
 
@@ -264,8 +265,8 @@ export class OwcJsonService {
 
   createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): RasterLayer {
     let layerType = this.getLayertypeFromOfferingCode(offering);
-    
-    if(!isRasterLayertype(layerType)) {
+
+    if (!isRasterLayertype(layerType)) {
       console.error(`This type of offering '${offering.code}' cannot be converted into a rasterlayer.`);
       return null;
     }
@@ -361,9 +362,9 @@ export class OwcJsonService {
         if (indx > 0) break;
         indx += 1;
         let layerType = this.getLayertypeFromOfferingCode(offering);
-        if(isRasterLayertype(layerType)) {
+        if (isRasterLayertype(layerType)) {
           layers.push(this.createRasterLayerFromOffering(offering, feature, owc));
-        } else if(isVectorLayertype(layerType)) {
+        } else if (isVectorLayertype(layerType)) {
           layers.push(this.createVectorLayerFromOffering(offering, feature, owc));
         } else {
           console.error(`This type of service (${layerType}) has not been implemented yet.`);
@@ -421,11 +422,11 @@ export class OwcJsonService {
    */
   generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent, properties?): IEocOwsContext {
 
-    if(!properties) {
+    if (!properties) {
       properties = {
         lang: "",
-        links: [], 
-        title: "", 
+        links: [],
+        title: "",
         updated: ""
       };
     }
@@ -476,15 +477,15 @@ export class OwcJsonService {
       "title": layer.name
     };
 
-    if(layer.type == GeojsonLayertype) {
+    if (layer.type == GeojsonLayertype) {
       offering.contents = this.getContentsFromLayer(layer as VectorLayer);
     } else {
       offering.operations = this.getOperationsFromLayer(layer);
     }
 
-    if(legendUrl) offering.legendUrl = legendUrl;
-    if(iconUrl) offering.iconUrl = iconUrl;
-    
+    if (legendUrl) offering.legendUrl = legendUrl;
+    if (iconUrl) offering.iconUrl = iconUrl;
+
     return offering;
   }
 
@@ -506,15 +507,15 @@ export class OwcJsonService {
 
   getContentsFromLayer(layer: VectorLayer): IOwsContent[] {
     let contents = [];
-    switch(layer.type) {
+    switch (layer.type) {
       case GeojsonLayertype:
         let content = {
           type: "FeatureCollection",
           content: JSON.stringify(layer.data)
         };
         contents.push(content);
-      break;
-      default: 
+        break;
+      default:
         console.error(`Cannot get contents for this type of vectorlayer: (${layer.type})`);
     }
     return contents;

@@ -17,57 +17,6 @@
       "dom"
     ],
     "paths": {
-      "*": [
-        "types/*"
-      ],
-      "@ukis/datatypes-layers": [
-        "dist/datatypes-layers",
-        "projects/datatypes-layers"
-      ],
-      "@ukis/datatypes-layers/*": [
-        "dist/datatypes-layers/*",
-        "projects/datatypes-layers/*"
-      ],
-      "@ukis/datatypes-map-state": [
-        "dist/datatypes-map-state",
-        "projects/datatypes-map-state"
-      ],
-      "@ukis/datatypes-map-state/*": [
-        "dist/datatypes-map-state/*",
-        "projects/datatypes-map-state/*"
-      ],
-      "@ukis/datatypes-owc-json": [
-        "dist/datatypes-owc-json",
-        "projects/datatypes-owc-json"
-      ],
-      "@ukis/datatypes-owc-json/*": [
-        "dist/datatypes-owc-json/*",
-        "projects/datatypes-owc-json/*"
-      ],
-      "@ukis/datatypes-wps": [
-        "dist/datatypes-wps",
-        "projects/datatypes-wps"
-      ],
-      "@ukis/datatypes-wps/*": [
-        "dist/datatypes-wps/*",
-        "projects/datatypes-wps/*"
-      ],
-      "@ukis/datatypes-user-info": [
-        "dist/datatypes-user-info",
-        "projects/datatypes-user-info"
-      ],
-      "@ukis/datatypes-user-info/*": [
-        "dist/datatypes-user-info/*",
-        "projects/datatypes-user-info/*"
-      ],
-      "@ukis/datatypes-ogc": [
-        "dist/datatypes-ogc",
-        "projects/datatypes-ogc"
-      ],
-      "@ukis/datatypes-ogc/*": [
-        "dist/datatypes-ogc/*",
-        "projects/datatypes-ogc/*"
-      ],
       "@ukis/services-layers": [
         "dist/services-layers",
         "projects/services-layers"

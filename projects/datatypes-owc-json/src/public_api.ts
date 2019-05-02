@@ -1,6 +1,0 @@
-/*
- * Public API Surface of owc-json
- */
-
-export * from './lib/owc-json';
-export * from './lib/eoc-owc-json';

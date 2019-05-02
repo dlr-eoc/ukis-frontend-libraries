@@ -1,4 +1,4 @@
-import { IEocOwsContext } from "@ukis/datatypes-owc-json";
+import { IEocOwsContext } from "../src/lib/types/eoc-owc-json";
 
 export const coastalXTestContext: IEocOwsContext = {
 

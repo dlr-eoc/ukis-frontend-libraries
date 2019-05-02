@@ -1,6 +1,6 @@
 import { TestBed, async } from '@angular/core/testing';
 import { MapStateService } from './map-state.service';
-import { MapState, TGeoExtent } from '@ukis/datatypes-map-state';
+import { MapState, TGeoExtent } from './types/map-state';
 
 describe('MapStateService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

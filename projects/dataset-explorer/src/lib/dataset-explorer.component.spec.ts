@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DatasetExplorerModule } from './dataset-explorer.module';
 import { DatasetExplorerComponent } from './dataset-explorer.component';
-import { IOwsResource } from '@ukis/datatypes-owc-json';
-import { Layer, LayerGroup } from '@ukis/datatypes-layers';
+import { IOwsResource } from '@ukis/services-owc-json';
+import { Layer, LayerGroup } from '@ukis/services-layers';
 
 describe('DatasetExplorerComponent', () => {
   let component: DatasetExplorerComponent;

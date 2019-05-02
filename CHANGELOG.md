@@ -1,3 +1,12 @@
+### Breaking Changes
+
+**move all datatypes to there services** ([UKISDEV-787](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-787) [1f9f3c748ec](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/1f9f3c748ec48abd5c123a7ed45539f109078904))
+* **@ukis/datatypes-layers:** exports moved to @ukis/services-layers
+* **@ukis/datatypes-map-state:** exports moved to @ukis/services-map-state
+* **@ukis/datatypes-owc-json:** exports moved to @ukis/services-owc-json
+* **@ukis/datatypes-user-info:** removed! already in @ukis/user-info
+
+
 # [3.0.2](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.2) (2019-04-26) (costalx-fixes)
 
 ### Bug Fixes
@@ -29,14 +38,14 @@
 
 ### Features
 * **@ukis/services-layers:** filter for remove overlays ([#UKISDEV-749](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-749)) ([a39b6fd7bf4](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/a39b6fd7bf406267d1587dce8c8af01e60342087))
-* **@ukis/datatypes-owc-json** , **@ukis/services-owc-json:** implemented support for geojson-layers: storing geojson-data in a data-offering
+* **@ukis/services-owc-json** , **@ukis/services-owc-json:** implemented support for geojson-layers: storing geojson-data in a data-offering
 * **@ukis/dataset-explorer:** filter for bbox and time ([#UKISDEV-604](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-604))
 
 
 ### Bug Fixes
 * **@ukis/dataset-explorer:** Datasetexplorer is not removing layers from service ([#UKISDEV-738](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-738)) ([f5a98f5c9be](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/f5a98f5c9be12df6840a7361657ad860d2d0221a))
-* **@ukis/datatypes-layers:** vector-layers can no longer have type "wms", "wmts" or "xyz", raster-layers can no longer have type "geojson" or "wfs".
-* **@ukis/datatypes-owc-json** , **@ukis/services-owc-json:** in marshalling to and from owc to layer, the layertype is now explicitly checked for compliance with **@ukis/datatypes-layers:**
+* **@ukis/services-layers:** vector-layers can no longer have type "wms", "wmts" or "xyz", raster-layers can no longer have type "geojson" or "wfs".
+* **@ukis/services-owc-json** , **@ukis/services-owc-json:** in marshalling to and from owc to layer, the layertype is now explicitly checked for compliance with **@ukis/services-layers:**
 
 
 # [2.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.0.0) (2019-03-15) (SPRINT-geoservice I)

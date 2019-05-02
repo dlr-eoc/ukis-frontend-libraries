@@ -7,7 +7,7 @@
   "whitelistedNonPeerDependencies": [
     "tslib",
     "@types/geojson",
-    "@ukis/datatypes-owc-json",
-    "@ukis/datatypes-layers"
+    "@ukis/services-owc-json",
+    "@ukis/services-layers"
   ]
 }
