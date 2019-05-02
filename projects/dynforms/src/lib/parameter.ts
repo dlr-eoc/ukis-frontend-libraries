@@ -9,7 +9,6 @@ export interface BasicParameter {
 export interface StringParameter extends BasicParameter {
     parametertype: "string";
     defaultValue: string;
-    value: string;
     datatype: "double" | "string"
 }
 

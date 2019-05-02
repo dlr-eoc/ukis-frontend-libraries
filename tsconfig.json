@@ -195,14 +195,6 @@
       "@ukis/dynforms/*": [
         "dist/dynforms/*",
         "projects/dynforms/*"
-      ],
-      "@ukis/process-control": [
-        "dist/process-control",
-        "projects/process-control"
-      ],
-      "@ukis/process-control/*": [
-        "dist/process-control/*",
-        "projects/process-control/*"
       ]
     }
   }
