@@ -132,8 +132,8 @@ export class WpsFactory100 implements WpsMarshaller {
                 case "bbox": 
                     data = {
                         boundingBoxData: {
-                            lowerCorner: [inp.data[0], inp.data[1]],
-                            upperCorner: [inp.data[2], inp.data[3]]
+                            lowerCorner: [inp.data[1], inp.data[0]],
+                            upperCorner: [inp.data[3], inp.data[2]]
                         }
                     };
                     break;
