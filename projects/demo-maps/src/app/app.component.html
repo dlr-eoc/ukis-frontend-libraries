@@ -1,8 +1,8 @@
 <clr-main-container [ngClass]="{'floating':ui.floating}">
 
   <ukis-header [ukis-title]="'Demo maps'">
-    <a routerLink="landingpage" routerLinkActive="active" class="nav-link nav-text header-nav-el">Landing page</a>
-    <a routerLink="map" routerLinkActive="active" class="nav-link nav-text header-nav-el">Map</a>
+    <a *ngFor="let route of routes" routerLink="/{{route.path}}" routerLinkActive="active"
+      class="nav-link nav-text header-nav-el">{{route.data.title}}</a>
   </ukis-header>
 
   <router-outlet></router-outlet>
