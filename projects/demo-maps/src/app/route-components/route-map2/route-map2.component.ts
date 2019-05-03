@@ -1,8 +1,12 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer } from '@ukis/services-layers/src/public_api';
-import { MapStateService } from '@ukis/services-map-state/src/public_api';
-import { MapOlService } from '@ukis/map-ol/src/public_api';
-import { osm, esri_world_imagery } from '@ukis/base-layers-raster/src/public_api';
+import { LayersService, RasterLayer, VectorLayer } from '@ukis/services-layers';
+import { MapStateService } from '@ukis/services-map-state';
+import { MapOlService } from '@ukis/map-ol';
+import { eoc_litemap } from '@ukis/base-layers-raster';
+
+import olProjection from 'ol/proj/Projection';
+import { register as olRegister } from 'ol/proj/proj4';
+import proj4 from 'proj4';
 
 @Component({
   selector: 'app-route-map2',
@@ -28,19 +32,41 @@ export class RouteMap2Component implements OnInit {
 
 
   ngOnInit(): void {
-    this.addOverlays();
+    const arcticPolarStereographic = {
+      code: `EPSG:3995`,
+      extent: [-5817.41, 3333128.95, 948.75, 543592.47],
+      worldExtent: [-180, -60, 180, 60],
+      proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
+    };
+
+    proj4.defs(arcticPolarStereographic.code, arcticPolarStereographic.proj4js);
+    olRegister(proj4);
+
+
+    const projection = new olProjection({
+      code: arcticPolarStereographic.code,
+      extent: arcticPolarStereographic.extent,
+      worldExtent: arcticPolarStereographic.worldExtent
+    });
 
     /** use the MapOlService for directly accessing the ol/Map or ol/View or bind popups to an event, set projections... */
-    this.mapSvc.setProjection('EPSG:4326');
-    // reprojection to WGS84 https://openlayers.org/en/latest/apidoc/module-ol_proj_Projection-Projection.html
+    this.mapSvc.setProjection(projection);
+    //this.mapSvc.setExtent(this.projExtent)
+    //this.mapSvc.setZoom(3)
+
+    this.addOverlays();
 
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
     this.mapStateSvc.setExtent([-14, 33, 40, 57]);
   }
 
   addOverlays() {
-    const osmLayer = new osm();
-    osmLayer.visible = true;
+    const eoc_litemap_layer = new eoc_litemap(<any>{
+      removable: true,
+      legendImg: null,
+      visible: true,
+      id: 'eoc_litemap_base'
+    });
 
     const guf_layer = new RasterLayer({
       type: 'wms',
@@ -97,11 +123,10 @@ export class RouteMap2Component implements OnInit {
           }
         ]
       },
-      visible: true,
-      popup: true
+      visible: true
     });
 
-    const overlays = [osmLayer, guf_layer, vector_Layer];
+    const overlays = [eoc_litemap_layer, guf_layer, vector_Layer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Overlays'));
   }
 
