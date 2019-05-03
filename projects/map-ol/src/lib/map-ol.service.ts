@@ -88,11 +88,17 @@ export class MapOlService {
       projection: _EPSG
     });
 
-    const _map = new olMap({
+    /* const _map = new olMap({
       layers: [_baselayerGroup, _overlayGroup],
       view: _view,
       controls: []
-    });
+    }); */
+
+    /** define map in constructor so it is created before to use it in projects onInit Method  */
+    const _map = this.map;
+    [_baselayerGroup, _overlayGroup].forEach(layer => _map.addLayer(layer));
+    _map.setView(_view);
+    _map.set('controls', []);
 
     if (target && !_map.getTarget()) {
       _map.setTarget(target);
@@ -557,7 +563,7 @@ export class MapOlService {
         const layer = item.layer, _layer = item._layer;
         const layerpopup: popup = layer.get('popup');
         let _properties: any = {};
-        
+
         if (layer instanceof olVectorLayer && layerpopup) {
           const features = _layer.getProperties().features;
           if (features && features.length === 1) {
