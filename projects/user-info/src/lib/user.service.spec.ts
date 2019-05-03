@@ -30,33 +30,5 @@ describe('UserService', () => {
     httpMock.verify();
   });
 
-  it('User loggedIn should be false', () => {
-    
-
-    service.getUser().subscribe(
-      x => expect(x.loggedIn).toBeFalsy,
-      err => console.log('Error. ' + err),
-      () => console.log('complete notification')
-    );
-  });
-
-  it('User info should be Max', () => {
-    
-    const dummyUser = [
-      {userName: 'maxm',
-      firstName: 'Max',
-      lastName: 'Mayer'}      
-    ]
-
-    service.getUserInfo("/user").subscribe(
-      x => {
-        console.log(x);
-        expect(x[0].userName).toBe('maxm');
-      }
-    )
-
-    const req = httpMock.expectOne('/user');
-    expect(req.request.method).toBe("GET");
-    req.flush(dummyUser);
-  });
+ 
 });
