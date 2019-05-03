@@ -34,11 +34,12 @@ run ``ng generate library < name > --prefix ukis``
 
 # How to publish a new version of all projects
 - make sure you have updated README and CHANGELOG and commit all your stuff.
+- run `git pull` to get the latest changes.
 - run `node scripts/libraryProjects.js -c` to check if all dependencies are present. (node_modules must be installed for this)
 - run `node scripts/libraryProjects.js -t` to test all projects. (node_modules must be installed for this)
 - run `node scripts/libraryProjects.js -b` to test all projects are building locally. (node_modules must be installed for this)
 - update the `version` parameter in the package.json in the root-directory (*not* in a single libraries package.json!) according to [Semantic Versioning](https://semver.org/)
-- create a tag with the same version e.g `git tag -a v2.1.0 -m 'Version after Sprint CoastalX II'` and push it to origin
+- create a tag with the same version e.g `git tag -a v2.1.0 -m "Version after Sprint CoastalX II"` and push it to origin `git push origin v2.1.0`
 - the jenkins-job `packaging-frontend-libraries` will discover the presence of a new tag. It will then build the packages and publish them with the new version to nexus.
 - if everything is ok and you have worked on a branch, then merge your changes back into the master.
 
