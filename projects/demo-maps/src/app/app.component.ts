@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { appRoutes } from './app.module';
 import { Routes, Router } from '@angular/router';
+import { ProgressService, IProgress } from './components/global-progress/progress.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +18,16 @@ export class AppComponent {
   };
 
   routes: Routes;
-  constructor(public router: Router) {
+  constructor(public router: Router,
+    private progressService: ProgressService) {
     this.routes = this.router.config.filter(r => r.data);
+
+    this.progressService.progress$.subscribe((ev) => {
+      this.showProgress(ev);
+    });
+  }
+
+  showProgress = (progress: IProgress) => {
+    this.ui.progress = progress;
   }
 }

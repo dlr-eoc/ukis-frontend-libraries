@@ -9,7 +9,10 @@ import { LayerControlModule } from '@ukis/layer-control';
 import { RouteMapComponent } from './route-components/route-map/route-map.component';
 import { HeaderComponent } from './components/header/header.component';
 import { GlobalFooterComponent } from './components/global-footer/global-footer.component';
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
+import { ProgressService } from './components/global-progress/progress.service';
 import { RouteMap2Component } from './route-components/route-map2/route-map2.component';
+import { RouteMap3Component } from './route-components/route-map3/route-map3.component';
 
 
 
@@ -26,6 +29,12 @@ export const appRoutes: Routes = [
     data: {
       title: 'Projection'
     }
+  },
+  {
+    path: 'map3', component: RouteMap3Component,
+    data: {
+      title: 'Events'
+    }
   }
 ];
 
@@ -36,7 +45,9 @@ export const appRoutes: Routes = [
     RouteMapComponent,
     HeaderComponent,
     GlobalFooterComponent,
-    RouteMap2Component
+    GlobalProgressComponent,
+    RouteMap2Component,
+    RouteMap3Component
   ],
   imports: [
     BrowserModule,
@@ -46,7 +57,7 @@ export const appRoutes: Routes = [
     MapOlModule,
     LayerControlModule
   ],
-  providers: [],
+  providers: [ProgressService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

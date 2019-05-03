@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
-import { MapOlService } from '@ukis/map-ol';
 import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas } from '@ukis/base-layers-raster';
+import { MapOlService } from '@ukis/map-ol';
 
 @Component({
   selector: 'app-route-map',
@@ -17,8 +17,7 @@ export class RouteMapComponent implements OnInit {
 
   constructor(
     public layersSvc: LayersService,
-    public mapStateSvc: MapStateService,
-    public mapSvc: MapOlService) {
+    public mapStateSvc: MapStateService) {
 
     this.controls = {
       attribution: true,
