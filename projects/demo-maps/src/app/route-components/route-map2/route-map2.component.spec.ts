@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RouteLandingpageComponent } from './route-landingpage.component';
+import { RouteMap2Component } from './route-map2.component';
 
-describe('RouteLandingpageComponent', () => {
-  let component: RouteLandingpageComponent;
-  let fixture: ComponentFixture<RouteLandingpageComponent>;
+describe('RouteMap2Component', () => {
+  let component: RouteMap2Component;
+  let fixture: ComponentFixture<RouteMap2Component>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RouteLandingpageComponent ]
+      declarations: [ RouteMap2Component ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RouteLandingpageComponent);
+    fixture = TestBed.createComponent(RouteMap2Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

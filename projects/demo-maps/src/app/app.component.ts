@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { appRoutes } from './app.module';
+import { Routes, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
   ui = {
     floating: true,
     flipped: false,
@@ -13,4 +16,9 @@ export class AppComponent {
     alert: null,
     progress: null
   };
+
+  routes: Routes;
+  constructor(public router: Router) {
+    this.routes = this.router.config.filter(r => r.data);
+  }
 }

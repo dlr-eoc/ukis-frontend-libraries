@@ -7,16 +7,26 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapOlModule } from '@ukis/map-ol';
 import { LayerControlModule } from '@ukis/layer-control';
 import { RouteMapComponent } from './route-components/route-map/route-map.component';
-import { RouteLandingpageComponent } from './route-components/route-landingpage/route-landingpage.component';
 import { HeaderComponent } from './components/header/header.component';
 import { GlobalFooterComponent } from './components/global-footer/global-footer.component';
+import { RouteMap2Component } from './route-components/route-map2/route-map2.component';
 
 
 
-const appRoutes: Routes = [
-    { path: '', redirectTo: 'map', pathMatch: 'full', },  
-    { path: 'landingpage', component: RouteLandingpageComponent  },
-    { path: 'map', component: RouteMapComponent }
+export const appRoutes: Routes = [
+  { path: '', redirectTo: 'map', pathMatch: 'full', },
+  {
+    path: 'map', component: RouteMapComponent,
+    data: {
+      title: 'Layers'
+    }
+  },
+  {
+    path: 'map2', component: RouteMap2Component,
+    data: {
+      title: 'Projection'
+    }
+  }
 ];
 
 
@@ -24,15 +34,15 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     RouteMapComponent,
-    RouteLandingpageComponent,
     HeaderComponent,
-    GlobalFooterComponent
+    GlobalFooterComponent,
+    RouteMap2Component
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     ClarityModule,
-    BrowserAnimationsModule, 
+    BrowserAnimationsModule,
     MapOlModule,
     LayerControlModule
   ],

@@ -22,48 +22,48 @@ export class LayersService {
    * add layer /add layer to group
    * remove layer /remove layer from group
    * update layer /update layer on grup
-   * 
+   *
    * add group
    * remove group
    * update group
-   * 
-   * 
+   *
+   *
    */
 
-  //----------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------------------
   /**
    * add's a ukis Layer or a LayerGroup to the Layerservice
    * if toGroup is true the layer is is not added to the list of Layers and LayerGroups only used  internal
-   * 
+   *
    * filtertype: "Overlays" | "Baselayers" | string
    */
-  public addLayer(layer: Layer, filtertype: "Overlays" | "Baselayers" | string, toGroup?: boolean) {
-    //console.log("layer.filtertype", layer.filtertype)
+  public addLayer(layer: Layer, filtertype: 'Overlays' | 'Baselayers' | string, toGroup?: boolean) {
+    // console.log("layer.filtertype", layer.filtertype)
     if (toGroup) {
-      let groups = this.layergroups.getValue();
+      const groups = this.layergroups.getValue();
 
-      if (filtertype === "Baselayers") {
-        this.baseLayers.next(this.filterBaseLayers())
+      if (filtertype === 'Baselayers') {
+        this.baseLayers.next(this.filterBaseLayers());
       }
-      if (filtertype === "Overlays") {
-        this.overlays.next(this.filterOverlays())
+      if (filtertype === 'Overlays') {
+        this.overlays.next(this.filterOverlays());
       }
     }
 
-    //this.layergroups.getValue();
-    //add single layer to layergroups!!!!!
+    // this.layergroups.getValue();
+    // add single layer to layergroups!!!!!
     if (!this.isInLayergroups(layer) && !toGroup) {
-      let groups = this.layergroups.getValue();
-      //add type to single layer for layer moving
+      const groups = this.layergroups.getValue();
+      // add type to single layer for layer moving
       layer.filtertype = filtertype;
       groups.push(layer);
-      //layer.zIndex = this.getZIndexForLayer(groups, layer, type)
+      // layer.zIndex = this.getZIndexForLayer(groups, layer, type)
       this.layergroups.next(groups);
-      if (filtertype === "Baselayers") {
-        this.baseLayers.next(this.filterBaseLayers())
+      if (filtertype === 'Baselayers') {
+        this.baseLayers.next(this.filterBaseLayers());
       }
-      if (filtertype === "Overlays") {
-        this.overlays.next(this.filterOverlays())
+      if (filtertype === 'Overlays') {
+        this.overlays.next(this.filterOverlays());
       }
     }
   }
@@ -71,12 +71,12 @@ export class LayersService {
   /**
   * filtertype: "Overlays" | "Baselayers" | string
   */
-  public removeLayer(layer: Layer, filtertype: "Overlays" | "Baselayers" | string) {
+  public removeLayer(layer: Layer, filtertype: 'Overlays' | 'Baselayers' | string) {
     if (this.isInLayergroups(layer)) {
-      console.log('remove single layer from layergroups!!!!!')
-      let groups = this.layergroups.getValue().filter((lg) => {
+      console.log('remove single layer from layergroups!!!!!');
+      const groups = this.layergroups.getValue().filter((lg) => {
         if (lg instanceof Layer) {
-          return lg.id != layer.id
+          return lg.id != layer.id;
         } else {
           return lg;
         }
@@ -84,11 +84,11 @@ export class LayersService {
       this.layergroups.next(groups);
     }
 
-    if (filtertype === "Overlays") {
-      this.overlays.next(this.filterOverlays())
+    if (filtertype === 'Overlays') {
+      this.overlays.next(this.filterOverlays());
     }
 
-    if (filtertype === "Baselayers") {
+    if (filtertype === 'Baselayers') {
       this.baseLayers.next(this.filterBaseLayers());
     }
   }
@@ -96,16 +96,16 @@ export class LayersService {
   /**
   * filtertype: "Overlays" | "Baselayers" | string
   */
-  public updateLayer(layer: Layer, filtertype: "Overlays" | "Baselayers" | string) {
-    if (filtertype === "Overlays") {
-      for (let l of this.filterOverlays()) {
+  public updateLayer(layer: Layer, filtertype: 'Overlays' | 'Baselayers' | string) {
+    if (filtertype === 'Overlays') {
+      for (const l of this.filterOverlays()) {
         if ((l.id === layer.id)) {
-          this.overlays.next(this.filterOverlays())
+          this.overlays.next(this.filterOverlays());
         }
       }
     }
-    if (filtertype === "Baselayers") {
-      for (let l of this.baseLayers.getValue()) {
+    if (filtertype === 'Baselayers') {
+      for (const l of this.baseLayers.getValue()) {
         if ((l.id === layer.id)) {
           this.baseLayers.next(this.filterBaseLayers());
         }
@@ -115,8 +115,8 @@ export class LayersService {
 
 
   /**
-   * TODO: remove layer from grup without grup id 
-   * 
+   * TODO: remove layer from grup without grup id
+   *
    * removes a ukis Layer or a LayerGroup from the Layerservice by the Layer.id or LayerGroup.id
    * if layerGroupId is set, then it removes the Layer from a LayerGroup
    */
@@ -124,20 +124,20 @@ export class LayersService {
     this.layergroups.getValue().filter((lg) => {
       if (lg instanceof Layer) {
         if (lg.id === id) {
-          this.removeLayer(lg, lg.filtertype || "Overlays")
+          this.removeLayer(lg, lg.filtertype || 'Overlays');
         }
       } else if (lg instanceof LayerGroup) {
-        console.log("LayerGroup: ", lg)
-        console.log("id", id)
+        console.log('LayerGroup: ', lg);
+        console.log('id', id);
         if (lg.id === id) {
           this.removeLayerGroup(lg);
         } else {
-          //this.removeLayerFromGroup
+          // this.removeLayerFromGroup
           lg.layers.forEach((_layer, index) => {
             if (_layer.id === id) {
-              this.removeLayerFromGroup(_layer, lg)
+              this.removeLayerFromGroup(_layer, lg);
             }
-          })
+          });
         }
       }
     });
@@ -146,11 +146,11 @@ export class LayersService {
   public addLayerToGroup(layer: Layer, layerGroup: LayerGroup) {
     /** convert filtertyle of layer to the same as the group */
     if (layer.filtertype != layerGroup.filtertype) {
-      layer.filtertype = layerGroup.filtertype
+      layer.filtertype = layerGroup.filtertype;
     }
 
-    layerGroup.layers.push(layer)
-    //this.updateLayer(layer, layerGroup)
+    layerGroup.layers.push(layer);
+    // this.updateLayer(layer, layerGroup)
 
     this.layergroups.getValue().forEach((lg) => {
       if (lg instanceof Layer) {
@@ -160,7 +160,7 @@ export class LayersService {
           lg.layers = layerGroup.layers;
         }
       }
-    })
+    });
 
     this.layergroups.next(this.layergroups.getValue());
     this.overlays.next(this.filterOverlays());
@@ -172,97 +172,97 @@ export class LayersService {
       if (lg instanceof LayerGroup && lg.id == GroupId) {
         this.addLayerToGroup(layer, lg);
       }
-    })
+    });
   }
 
   public removeLayerFromGroup(layer: Layer, layerGroup: LayerGroup) {
     layerGroup.layers = layerGroup.layers.filter(l => l.id !== layer.id);
-    this.removeLayer(layer, layerGroup.filtertype || 'Overlays')
+    this.removeLayer(layer, layerGroup.filtertype || 'Overlays');
 
     this.layergroups.getValue().forEach((lg) => {
       if (lg instanceof Layer) {
 
       } else if (lg instanceof LayerGroup) {
         if (lg.id == layerGroup.id) {
-          lg.layers = layerGroup.layers
+          lg.layers = layerGroup.layers;
           this.layergroups.next(this.layergroups.getValue());
         }
       }
-    })
+    });
 
-    //if no layers on the group remove it
+    // if no layers on the group remove it
     if (layerGroup.layers.length === 0) {
-      let _layergroups = this.layergroups.getValue().filter((lg) => {
+      const _layergroups = this.layergroups.getValue().filter((lg) => {
         if (lg instanceof Layer) {
           return lg;
         } else if (lg instanceof LayerGroup) {
-          return lg.id !== layerGroup.id
+          return lg.id !== layerGroup.id;
         }
-      })
+      });
       this.layergroups.next(_layergroups);
     }
   }
 
-  public setLayerIndexInGroup(layer: Layer, dir: "up" | "down", layerGroup: LayerGroup) {
-    //console.log("move layer in group " + dir);
-    //console.log(layerGroup);
-    let groupIndex = layerGroup.layers.indexOf(layer);
+  public setLayerIndexInGroup(layer: Layer, dir: 'up' | 'down', layerGroup: LayerGroup) {
+    // console.log("move layer in group " + dir);
+    // console.log(layerGroup);
+    const groupIndex = layerGroup.layers.indexOf(layer);
 
     switch (dir) {
-      case "up": {
+      case 'up': {
         if (groupIndex == 0) {
           break;
         } else {
-          this.arrayMove(layerGroup.layers, groupIndex, groupIndex - 1)
+          this.arrayMove(layerGroup.layers, groupIndex, groupIndex - 1);
         }
         break;
       }
-      case "down": {
+      case 'down': {
         if (groupIndex == layerGroup.layers.length - 1) {
           break;
         } else {
-          this.arrayMove(layerGroup.layers, groupIndex, groupIndex + 1)
+          this.arrayMove(layerGroup.layers, groupIndex, groupIndex + 1);
         }
         break;
       }
     }
-    this.updateLayer(layer, layerGroup.filtertype || 'Overlays')
+    this.updateLayer(layer, layerGroup.filtertype || 'Overlays');
   }
 
 
-  //----------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------------------
 
   public addLayerGroup(layerGroup: LayerGroup) {
-    //console.log("add LayerGroup", layerGroup);
+    // console.log("add LayerGroup", layerGroup);
     if (!this.isInLayergroups(layerGroup)) {
-      let lgroups = this.layergroups.getValue();
-      lgroups.push(layerGroup)
+      const lgroups = this.layergroups.getValue();
+      lgroups.push(layerGroup);
 
       this.layergroups.next(lgroups);
-      //add layers
-      for (let layer of layerGroup.layers) {
-        //console.log("layerGroup.filtertype", layerGroup.filtertype)
+      // add layers
+      for (const layer of layerGroup.layers) {
+        // console.log("layerGroup.filtertype", layerGroup.filtertype)
         this.addLayer(layer, layerGroup.filtertype || 'Overlays', true);
       }
     }
   }
 
   public removeLayerGroup(layerGroup: LayerGroup) {
-    //remove all layers of this group from the map
+    // remove all layers of this group from the map
     if (layerGroup.removable) {
-      for (let layer of layerGroup.layers) {
-        console.log('remove layerGroup layers:', layer)
+      for (const layer of layerGroup.layers) {
+        console.log('remove layerGroup layers:', layer);
         this.removeLayerFromGroup(layer, layerGroup);
       }
-      let lgroups = this.layergroups.getValue();
+      const lgroups = this.layergroups.getValue();
 
-      let filteredGroups = lgroups.filter(function (layer, index, arr) {
+      const filteredGroups = lgroups.filter(function (layer, index, arr) {
         return layer.id !== layerGroup.id;
       });
 
-      this.layergroups.next(filteredGroups)
+      this.layergroups.next(filteredGroups);
     } else {
-      console.log('layerGroup is not removable!')
+      console.log('layerGroup is not removable!');
     }
   }
 
@@ -270,7 +270,7 @@ export class LayersService {
     if (sort) {
       layerGroup = this.sortLayerGroup(layerGroup);
     }
-    for (let layer of layerGroup.layers) {
+    for (const layer of layerGroup.layers) {
       this.updateLayer(layer, layerGroup.filtertype || 'Overlays');
     }
   }
@@ -279,8 +279,9 @@ export class LayersService {
     array.splice((toIndex < 0 ? array.length + toIndex : toIndex), 0, array.splice(fromIndex, 1)[0]);
   }
 
-  public setGroupLayerIndex(group: Layer | LayerGroup, dir: "up" | "down", layerGroup?: LayerGroup) {
-    console.log("move group " + dir);
+  /** setGroup Or LayerIndex */
+  public setGroupLayerIndex(group: Layer | LayerGroup, dir: 'up' | 'down', layerGroup?: LayerGroup) {
+    console.log('move group ' + dir);
     let groupsCount;
     if (group instanceof Layer && group.filtertype) {
       groupsCount = this.getNumOfGroups(group.filtertype);
@@ -290,32 +291,32 @@ export class LayersService {
 
     if (groupsCount > 1) {
 
-      //get only groups ... check if move is working with single layers!!!!!!!!
-      let lgroups = this.layergroups.getValue(); //.filter(lg => lg instanceof LayerGroup);
+      // get only groups ... check if move is working with single layers!!!!!!!!
+      const lgroups = this.layergroups.getValue(); // .filter(lg => lg instanceof LayerGroup);
 
-      let groupIndex = lgroups.indexOf(group);
+      const groupIndex = lgroups.indexOf(group);
 
-      //console.log('groupIndex', group.name, groupIndex)
-      //console.log(lgroups)
+      // console.log('groupIndex', group.name, groupIndex)
+      // console.log(lgroups)
       switch (dir) {
-        case "up": {
+        case 'up': {
           if (this.isGroupFirst(group)) {
             break;
           } else {
-            this.arrayMove(lgroups, groupIndex, groupIndex - 1)
+            this.arrayMove(lgroups, groupIndex, groupIndex - 1);
           }
           break;
         }
-        case "down": {
+        case 'down': {
           if (this.isGroupLast(group)) {
             break;
           } else {
-            this.arrayMove(lgroups, groupIndex, groupIndex + 1)
+            this.arrayMove(lgroups, groupIndex, groupIndex + 1);
           }
           break;
         }
       }
-      console.log('groupIndex after', group.name, lgroups.indexOf(group))
+      console.log('groupIndex after', group.name, lgroups.indexOf(group));
       this.layergroups.next(lgroups);
       this.baseLayers.next(this.filterBaseLayers());
       this.overlays.next(this.filterOverlays());
@@ -325,40 +326,40 @@ export class LayersService {
   /**
   * filtertype: "Overlays" | "Baselayers" | string
   */
-  getNumOfGroups(filtertype: "Overlays" | "Baselayers" | string): number {
+  getNumOfGroups(filtertype: 'Overlays' | 'Baselayers' | string): number {
     let num = 0;
-    for (let lg of this.layergroups.getValue()) {
+    for (const lg of this.layergroups.getValue()) {
       if (lg.filtertype === filtertype) {
-        //console.log(lg.type, type)
+        // console.log(lg.type, type)
         num++;
       }
     }
     return num;
   }
 
-  isGroupFirst(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: "Overlays" | "Baselayers" | string): boolean {
+  isGroupFirst(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: 'Overlays' | 'Baselayers' | string): boolean {
     let value = false;
 
     let lgroups = this.layergroups.getValue();
     if (_lgroups) {
-      lgroups = _lgroups
+      lgroups = _lgroups;
     }
     if (filtertype) {
       lgroups = lgroups.filter(l => l.filtertype == filtertype);
     }
     if (lgroups.indexOf(group) == 0) {
-      //console.log(group.name, 'isFirst')
+      // console.log(group.name, 'isFirst')
       value = true;
     }
     return value;
   }
 
-  isGroupLast(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: "Overlays" | "Baselayers" | string): boolean {
+  isGroupLast(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: 'Overlays' | 'Baselayers' | string): boolean {
     let value = false;
 
     let lgroups = this.layergroups.getValue();
     if (_lgroups) {
-      lgroups = _lgroups
+      lgroups = _lgroups;
     }
     if (filtertype) {
       lgroups = lgroups.filter(l => l.filtertype == filtertype);
@@ -368,11 +369,11 @@ export class LayersService {
     }
     return value;
   }
-  //----------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------------------
 
   public isInLayergroups(layerGroup: Layer | LayerGroup): boolean {
-    let value = false;
-    for (let lg of this.layergroups.getValue()) {
+    const value = false;
+    for (const lg of this.layergroups.getValue()) {
       if (lg instanceof Layer && layerGroup instanceof Layer) {
         if (lg.id === layerGroup.id) {
           return true;
@@ -408,11 +409,11 @@ export class LayersService {
   public removeOverlays(filter?: (value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
     let overlays = this.filterOverlays();
     if (filter) {
-      overlays = overlays.filter(filter)
+      overlays = overlays.filter(filter);
     }
     overlays.forEach((ol) => {
-      this.removeLayerOrGroupById(ol.id)
-    })
+      this.removeLayerOrGroupById(ol.id);
+    });
     return this.overlays.asObservable();
   }
 
@@ -420,12 +421,12 @@ export class LayersService {
     return this.overlays.getValue().length;
   }
 
-  //all about layergroups
+  // all about layergroups
   public getLayerGroups(): Observable<Array<Layer | LayerGroup>> {
     return this.layergroups.asObservable();
   }
 
-  //all about layergroups
+  // all about layergroups
   public setLayerGroups(layergroups: Array<Layer | LayerGroup>): Observable<Array<Layer | LayerGroup>> {
     this.layergroups.next(layergroups);
     this.baseLayers.next(this.filterBaseLayers());
@@ -436,11 +437,11 @@ export class LayersService {
   public getLayerGroupsCount(): number {
     return this.layergroups.getValue().length;
   }
-  //----------------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------------------
 
 
   /**
-   * 
+   *
    * flatten array with layers and group.layers to get zIndex
    */
   flattenDeepArray(arr: Array<Layer | LayerGroup>): Layer[] {
@@ -450,82 +451,40 @@ export class LayersService {
   /**
   * filtertype: "Overlays" | "Baselayers" | string
   */
-  getZIndexForLayer(layerlist: Array<Layer | LayerGroup>, layer: Layer, filtertype: "Overlays" | "Baselayers" | string): number {
+  getZIndexForLayer(layerlist: Array<Layer | LayerGroup>, layer: Layer, filtertype: 'Overlays' | 'Baselayers' | string): number {
     let zIndex = null;
-    let baselayers = this.baseLayers.getValue();
+    const baselayers = this.baseLayers.getValue();
     let arr = [];
 
-    if (filtertype == "Overlays") {
-      let flattgroups = this.flattenDeepArray(layerlist);
+    if (filtertype == 'Overlays') {
+      const flattgroups = this.flattenDeepArray(layerlist);
       arr = arr.concat(baselayers).concat(flattgroups);
       zIndex = arr.indexOf(layer);
-    } else if (filtertype = "Baselayers") {
-      arr = arr.concat(baselayers)
+    } else if (filtertype = 'Baselayers') {
+      arr = arr.concat(baselayers);
       zIndex = arr.indexOf(layer);
     }
     return zIndex;
   }
 
-  //base and overlays ----------------------------------
-  /*
-  addBaseLayer(layer: Layer) {
-    let baseLayers = this.baseLayers.getValue();
-    baseLayers.push(layer)
-    this.baseLayers.next(baseLayers);
-  }
-
-  removeBaseLayer(layer: Layer) {
-    this.baseLayers.next(this.baseLayers.getValue().filter(l => l !== layer));
-  }
-
-  updateBaselayer(layer: Layer) {
-    //console.log("update base layer called");
-    let _baseLayers = this.baseLayers.getValue();
-    for (let idx = 0; idx < _baseLayers.length; idx++) {
-      if (_baseLayers[idx].id === layer.id) {
-        _baseLayers[idx] = layer;
-        this.baseLayers.next(_baseLayers);
-        break;
-      }
-    }
-  }
-  */
-
-  /*
-    addOverlay(layer: Layer) {
-      //console.log('add do nothing')
-      let overlays = this.overlays.getValue();
-      overlays.push(layer)
-      this.overlays.next(overlays);
-    }
-    */
-
-  /*
-  removeOverlay(layer: Layer) {
-    //console.log('remove do nothing')
-
-    this.overlays.next(this.overlays.getValue().filter(l => l.id !== layer.id));
-  }
-  */
-
   filterOverlays() {
-    let _groups = this.layergroups.getValue();
-    let _overlays = this.flattenDeepArray(_groups.filter((layer) => layer.filtertype == 'Overlays' || layer.filtertype == 'Overlays'));
+    const _groups = this.layergroups.getValue();
+    const _overlays = this.flattenDeepArray(_groups.filter((layer) => layer.filtertype == 'Overlays' || layer.filtertype == 'Overlays'));
     return _overlays;
   }
 
   filterBaseLayers() {
-    let _groups = this.layergroups.getValue();
-    let _baselayers = this.flattenDeepArray(_groups.filter((layer) => layer.filtertype == 'Baselayers' || layer.filtertype == 'Baselayers'));
+    const _groups = this.layergroups.getValue();
+    const _baselayers = this.flattenDeepArray(_groups.filter((layer) => layer.filtertype == 'Baselayers' || layer.filtertype == 'Baselayers'));
     return _baselayers;
   }
 
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
 
   sortLayerGroup(layerGroup: LayerGroup): LayerGroup {
 
-    //fisrt sort in order to put vectors first and then rasterlayers
+    // fisrt sort in order to put vectors first and then rasterlayers
     layerGroup.layers.sort((a, b) => {
       let comparison = 0;
       if (a instanceof RasterLayer) {
@@ -534,7 +493,7 @@ export class LayersService {
         comparison = -1;
       }
       return comparison;
-    })
+    });
     return layerGroup;
   }
 }

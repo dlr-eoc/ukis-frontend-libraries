@@ -1,13 +1,15 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer } from '@ukis/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { MapOlService } from '@ukis/map-ol';
-import { osm, esri_world_imagery } from '@ukis/base-layers-raster';
+import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas } from '@ukis/base-layers-raster';
 
 @Component({
   selector: 'app-route-map',
   templateUrl: './route-map.component.html',
-  styleUrls: ['./route-map.component.css']
+  styleUrls: ['./route-map.component.css'],
+  /** use differnt instances of the services only for testing with diffenr routs  */
+  providers: [LayersService, MapStateService, MapOlService]
 })
 export class RouteMapComponent implements OnInit {
   @HostBinding('class') class = 'content-container';
@@ -28,20 +30,13 @@ export class RouteMapComponent implements OnInit {
   ngOnInit(): void {
     this.addBaseLayers();
     this.addOverlays();
-
-    /** use the MapOlService for directly accessing the ol/Map or ol/View or bind popups to an event, set projections... */
-    this.mapSvc.setProjection('EPSG:4326');
-    // reprojection to WGS84 https://openlayers.org/en/latest/apidoc/module-ol_proj_Projection-Projection.html
-
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
-    // this.mapStateSvc.setExtent([-14, 33, 40, 57]);
+    this.mapStateSvc.setExtent([-14, 33, 40, 57]);
   }
 
   addBaseLayers() {
     const osmLayer = new osm();
     osmLayer.visible = true;
-
-    const esriImage = new esri_world_imagery();
 
     // not working in WGS84
     const world_relief = new RasterLayer({
@@ -59,11 +54,9 @@ export class RouteMapComponent implements OnInit {
       legendImg: ''
     });
 
-    const layers = [osmLayer, esriImage, world_relief];
-
+    const layers = [osmLayer, world_relief];
 
     /** add layers with the LayersService*/
-    // this.layersSvc.addLayer(osmLayer, 'Overlays');
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
   }
 
@@ -106,7 +99,7 @@ export class RouteMapComponent implements OnInit {
         "features": [
           {
             "type": "Feature",
-            "properties": {"title": "Polygon"},
+            "properties": { "title": "Polygon" },
             "geometry": {
               "type": "Polygon",
               "coordinates": [
@@ -141,7 +134,7 @@ export class RouteMapComponent implements OnInit {
           },
           {
             "type": "Feature",
-            "properties": {"title": "Rectangle"},
+            "properties": { "title": "Rectangle" },
             "geometry": {
               "type": "Polygon",
               "coordinates": [
@@ -172,7 +165,7 @@ export class RouteMapComponent implements OnInit {
           },
           {
             "type": "Feature",
-            "properties": {"title": "Line"},
+            "properties": { "title": "Line" },
             "geometry": {
               "type": "LineString",
               "coordinates": [
@@ -197,7 +190,7 @@ export class RouteMapComponent implements OnInit {
           },
           {
             "type": "Feature",
-            "properties": {"title": "Point"},
+            "properties": { "title": "Point" },
             "geometry": {
               "type": "Point",
               "coordinates": [
@@ -208,12 +201,51 @@ export class RouteMapComponent implements OnInit {
           }
         ]
       },
-      visible: true,
+      visible: false,
       popup: true
     });
 
-    const overlays = [guf_layer, TDM90_DEM_layer, vector_Layer];
-    overlays.map(layer => this.layersSvc.addLayer(layer, 'Overlays'));
+    const esri_Image_layer = new esri_world_imagery();
+
+    const esri_grey_layer = new esri_grey_canvas(<any>{
+      removable: true,
+      legendImg: null,
+    });
+
+    const esri_ocean_imagery_layer = new esri_ocean_imagery(<any>{
+      removable: true,
+      legendImg: null,
+      id: 'esri_ocean_base'
+    });
+
+    const eoc_litemap_layer = new eoc_litemap(<any>{
+      removable: true,
+      legendImg: null,
+      id: 'eoc_litemap_base'
+    });
+    /** add a Group of layers */
+
+
+    const group_layer = new LayerGroup({
+      id: 'group_1',
+      name: 'Test Group',
+      layers: [esri_ocean_imagery_layer, eoc_litemap_layer, esri_Image_layer]
+    });
+
+    const group_layer2 = new LayerGroup({
+      id: 'group_2',
+      name: 'Test Group 2',
+      layers: [TDM90_DEM_layer, esri_grey_layer]
+    });
+
+    const overlays = [guf_layer, group_layer2, vector_Layer, group_layer];
+    overlays.map(layer => {
+      if (layer instanceof Layer) {
+        this.layersSvc.addLayer(layer, 'Overlays');
+      } else if (layer instanceof LayerGroup) {
+        this.layersSvc.addLayerGroup(layer)
+      }
+    });
   }
 
 }
