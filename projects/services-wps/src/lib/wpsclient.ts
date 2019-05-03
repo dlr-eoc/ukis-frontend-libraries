@@ -63,8 +63,12 @@ export class WpsClient {
 
         let headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
         return this.webclient.post(url, xmlExecbody, {headers: headers, responseType: 'text'}).pipe(
-            map(response =>  this.xmlunmarshaller.unmarshalString(response) ),
-            map(responseJson => this.wpsmarshaller.unmarshalExecuteResponse(responseJson) )
+            map(response =>  {
+                return this.xmlunmarshaller.unmarshalString(response)
+            } ),
+            map(responseJson => {
+                return this.wpsmarshaller.unmarshalExecuteResponse(responseJson)
+            } )
         );
     }
 

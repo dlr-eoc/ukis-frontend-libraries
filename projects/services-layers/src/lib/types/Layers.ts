@@ -130,7 +130,7 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
   data?: any;
   url?: string;
   subdomains?: Array<string>;
-  /** vektor options like style, pointToLayer... depends on the map-library, e.g.:
+  /** vector options like style, pointToLayer... depends on the map-library, e.g.:
    * iconUrl: string - to specify icon for points
    * rotationPropName: string - property containing rotation angle in degrees
    * */
