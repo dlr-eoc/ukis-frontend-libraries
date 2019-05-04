@@ -35,12 +35,18 @@ export class WpsFactory100 implements WpsMarshaller {
             let data;
             let format; 
             if(isReference) {
-                datatype = "literal";
+                datatype = "complex";
                 data = output.reference.href;
                 format = output.reference.mimeType;
             } else {
-                if(output.data.literalData) datatype = "literal";
-                else if(output.data.complexData) datatype = "complex";
+                if(output.data.literalData) {
+                    datatype = "literal"; 
+                    format = output.data.literalData.dataType;
+                }
+                else if(output.data.complexData) {
+                    datatype = "complex";
+                    format = output.data.complexData.mimeType;
+                }
                 else datatype = "bbox";
                 data = this.unmarshalOutputData(output.data);
             }
@@ -58,8 +64,14 @@ export class WpsFactory100 implements WpsMarshaller {
 
     protected unmarshalOutputData(data: DataType): any {
         if(data.complexData) {
-            return data.complexData.content.map(cont => JSON.parse(cont));
-            // @TODO: handle case where format is not json
+            switch(data.complexData.mimeType){
+                case "application/vnd.geo+json": 
+                    return data.complexData.content.map(cont => JSON.parse(cont));
+                case "application/WMS":
+                    return data.complexData.content;
+                default: 
+                    throw new Error(`Cannot unmarshal data of format ${data.complexData.mimeType}`);
+            }
         }
         throw new Error(`Not yet implemented: ${data}`);
     }

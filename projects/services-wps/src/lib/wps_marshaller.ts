@@ -21,7 +21,7 @@ export interface WpsResult {
     type: "literal" | "complex" | "bbox";
     reference: boolean;
     data: any;
-    format?: string;
+    format: string;
 }
 
 export interface WpsCapability {
