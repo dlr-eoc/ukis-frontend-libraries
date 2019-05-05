@@ -1,13 +1,15 @@
 export type WpsVerion = "1.0.0" | "2.0.0";
 
 
-export interface WpsInput {
+export interface WpsData {
     id: string;
     type: "literal" | "complex" | "bbox";
     reference: boolean;
     data: any;
     format?: string;
 }
+
+export type WpsInput = WpsData;
 
 export interface WpsOutput {
     id: string;
@@ -16,13 +18,7 @@ export interface WpsOutput {
     format?: string;
 }
 
-export interface WpsResult {
-    id: string;
-    type: "literal" | "complex" | "bbox";
-    reference: boolean;
-    data: any;
-    format: string;
-}
+export type WpsResult = WpsData;
 
 export interface WpsCapability {
     id: string,
