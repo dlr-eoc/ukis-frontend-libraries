@@ -127,7 +127,7 @@ export class RouteMap2Component implements OnInit {
     });
 
     const overlays = [eoc_litemap_layer, guf_layer, vector_Layer];
-    overlays.map(layer => this.layersSvc.addLayer(layer, 'Overlays'));
+    overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 
 }

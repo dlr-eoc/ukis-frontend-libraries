@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
-import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas } from '@ukis/base-layers-raster';
+import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map } from '@ukis/base-layers-raster';
 import { MapOlService } from '@ukis/map-ol';
 
 @Component({
@@ -28,14 +28,18 @@ export class RouteMapComponent implements OnInit {
 
   ngOnInit(): void {
     this.addBaseLayers();
+    this.addLayers();
     this.addOverlays();
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
     this.mapStateSvc.setExtent([-14, 33, 40, 57]);
   }
 
   addBaseLayers() {
-    const osmLayer = new osm();
-    osmLayer.visible = true;
+    const eoc_litemap_layer = new eoc_litemap(<any>{
+      legendImg: null,
+      id: 'eoc_litemap_base',
+      visible: true
+    });
 
     // not working in WGS84
     const world_relief = new RasterLayer({
@@ -53,13 +57,13 @@ export class RouteMapComponent implements OnInit {
       legendImg: ''
     });
 
-    const layers = [osmLayer, world_relief];
+    const layers = [eoc_litemap_layer, world_relief];
 
     /** add layers with the LayersService*/
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
   }
 
-  addOverlays() {
+  addLayers() {
     const guf_layer = new RasterLayer({
       type: 'wms',
       url: 'https://geoservice.dlr.de/eoc/land/wms',
@@ -204,6 +208,50 @@ export class RouteMapComponent implements OnInit {
       popup: true
     });
 
+    const vector_Layer2 = new VectorLayer({
+      id: 'geojson_test_2',
+      name: 'Vector Layer in Group',
+      type: 'geojson',
+      data: {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": { "title": "Rectangle" },
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    10.986328125,
+                    43.89789239125797
+                  ],
+                  [
+                    11.755371093749998,
+                    43.89789239125797
+                  ],
+                  [
+                    11.755371093749998,
+                    44.41808794374846
+                  ],
+                  [
+                    10.986328125,
+                    44.41808794374846
+                  ],
+                  [
+                    10.986328125,
+                    43.89789239125797
+                  ]
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      visible: false,
+      popup: true
+    });
+
     const esri_Image_layer = new esri_world_imagery();
 
     const esri_grey_layer = new esri_grey_canvas(<any>{
@@ -217,34 +265,37 @@ export class RouteMapComponent implements OnInit {
       id: 'esri_ocean_base'
     });
 
-    const eoc_litemap_layer = new eoc_litemap(<any>{
-      removable: true,
-      legendImg: null,
-      id: 'eoc_litemap_base'
-    });
+    const osmLayer = new osm();
     /** add a Group of layers */
 
 
     const group_layer = new LayerGroup({
       id: 'group_1',
       name: 'Test Group',
-      layers: [esri_ocean_imagery_layer, eoc_litemap_layer, esri_Image_layer]
+      layers: [esri_ocean_imagery_layer, osmLayer, esri_Image_layer]
     });
 
     const group_layer2 = new LayerGroup({
       id: 'group_2',
       name: 'Test Group 2',
-      layers: [TDM90_DEM_layer, esri_grey_layer]
+      layers: [TDM90_DEM_layer, vector_Layer2, esri_grey_layer]
     });
 
     const overlays = [guf_layer, group_layer2, vector_Layer, group_layer];
     overlays.map(layer => {
       if (layer instanceof Layer) {
-        this.layersSvc.addLayer(layer, 'Overlays');
+        this.layersSvc.addLayer(layer, 'Layers');
       } else if (layer instanceof LayerGroup) {
-        this.layersSvc.addLayerGroup(layer)
+        this.layersSvc.addLayerGroup(layer);
       }
     });
+  }
+
+  addOverlays() {
+    const layer_on_topp_of_all = new esri_nav_charts();
+    const open_sea_map_on_topp = new open_sea_map();
+    this.layersSvc.addLayer(layer_on_topp_of_all, 'Overlays');
+    this.layersSvc.addLayer(open_sea_map_on_topp, 'Overlays');
   }
 
 }

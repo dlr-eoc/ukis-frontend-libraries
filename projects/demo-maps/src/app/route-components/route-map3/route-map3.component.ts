@@ -86,7 +86,7 @@ export class RouteMap3Component implements OnInit, OnDestroy {
     });
 
     const layers = [eoc_litemap_layer, event_layer];
-    layers.forEach(layer => this.layersSvc.addLayer(layer, 'Overlays'));
+    layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
 
   }
 
