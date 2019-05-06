@@ -39,7 +39,7 @@ export interface ILayerOptions {
   //id: string
   type: TLayertype
 
-  filtertype?: 'Overlays' | 'Baselayers' | string;
+  filtertype?: 'Baselayers' | 'Overlays' | 'Layers' ;
   opacity?: number
   visible?: boolean
   removable?: boolean
@@ -92,7 +92,7 @@ export class Layer implements ILayerOptions {
   visible: boolean = true;
   removable: boolean = false;
 
-  filtertype?: 'Overlays' | 'Baselayers' | string = 'Overlays';
+  filtertype?: 'Baselayers' | 'Overlays' | 'Layers'  = 'Layers';
   continuousWorld?: boolean = false;
   attribution?: string;
   displayName?: string;

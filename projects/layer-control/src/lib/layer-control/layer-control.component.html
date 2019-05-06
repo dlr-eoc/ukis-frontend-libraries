@@ -7,7 +7,6 @@
         {{group.displayName || group.name}}
       </span>
     </ukis-layerentry-group>
-
     <ukis-layerentry *ngIf="!isLayerGroup(group) && group.filtertype === layerfilter" [layerGroups]="layergroups"
       [expanded]="false" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [layer]="group" [group]="null">
       <span class="move-item" cdkDragHandle>

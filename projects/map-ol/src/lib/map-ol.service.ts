@@ -65,21 +65,24 @@ export class MapOlService {
       lon: 0
     };
 
-    const _baselayers = [];
     const _baselayerGroup = new olLayerGroup(<any>{
       title: 'Base maps',
       type: 'baselayers',
-      layers: _baselayers
+      layers: []
+    });
+
+
+    const _layersGroup = new olLayerGroup(<any>{
+      title: 'Layers',
+      type: 'layers',
+      layers: []
     });
 
     // ---------------------------------------------------------------------------------------------------
-    // var _overlays = this.store.overlays;
-    const _overlays = [];
-
     const _overlayGroup = new olLayerGroup(<any>{
       title: 'Overlays',
       type: 'overlays',
-      layers: _overlays
+      layers: []
     });
 
     const _view = new olView({
@@ -88,15 +91,9 @@ export class MapOlService {
       projection: _EPSG
     });
 
-    /* const _map = new olMap({
-      layers: [_baselayerGroup, _overlayGroup],
-      view: _view,
-      controls: []
-    }); */
-
     /** define map in constructor so it is created before to use it in projects onInit Method  */
     const _map = this.map;
-    [_baselayerGroup, _overlayGroup].forEach(layer => _map.addLayer(layer));
+    [_baselayerGroup, _layersGroup, _overlayGroup].forEach(layer => _map.addLayer(layer));
     _map.setView(_view);
     _map.set('controls', []);
 
@@ -112,7 +109,7 @@ export class MapOlService {
     };
   }
 
-  public getLayers(type: 'overlays' | 'baselayers') {
+  public getLayers(type: 'baselayers' | 'layers' | 'overlays') {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -122,7 +119,7 @@ export class MapOlService {
     return layers;
   }
 
-  public getLayerByKey(key: { key: string, value: string }, type: 'overlays' | 'baselayers') {
+  public getLayerByKey(key: { key: string, value: string }, type: 'baselayers' | 'layers' | 'overlays') {
     const layers = this.getLayers(type);
     let _layer;
     layers.forEach((layer) => {
@@ -133,7 +130,7 @@ export class MapOlService {
     return _layer;
   }
 
-  public addLayer(layer: any, type: 'overlays' | 'baselayers') {
+  public addLayer(layer: any, type: 'baselayers' | 'layers' | 'overlays') {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -145,7 +142,7 @@ export class MapOlService {
     return layers;
   }
 
-  public addLayers(layers: olCollection<Layer>, type: 'overlays' | 'baselayers') {
+  public addLayers(layers: olCollection<Layer>, type: 'baselayers' | 'layers' | 'overlays') {
     let _layers;
     // console.log(this.map)
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
@@ -157,12 +154,12 @@ export class MapOlService {
     return layers;
   }
 
-  public removeLayerByKey(key: { key: string, value: string }, type: 'overlays' | 'baselayers') {
+  public removeLayerByKey(key: { key: string, value: string }, type: 'baselayers' | 'layers' | 'overlays') {
     const layer = this.getLayerByKey(key, type);
     this.map.removeLayer(layer);
   }
 
-  public removeAllLayers(type: 'overlays' | 'baselayers') {
+  public removeAllLayers(type: 'baselayers' | 'layers' | 'overlays') {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -173,6 +170,7 @@ export class MapOlService {
 
   }
 
+  /*
   public setBaseLayers(layers: Array<Layer>) {
     const _layers = <any>[];
     layers.forEach((layer) => {
@@ -194,12 +192,6 @@ export class MapOlService {
         case 'custom':
           _layer = this.create_custom_layer(<CustomLayer>layer);
           break;
-        /*
-      default:
-        // Anweisungen werden ausgeführt,
-        // falls keine der case-Klauseln mit expression übereinstimmt
-        break;
-        */
       }
       // check if layer not undefined
       if (_layer) {
@@ -245,6 +237,44 @@ export class MapOlService {
 
     if (_layers.length > 0) {
       this.addLayers(_layers, 'overlays');
+    }
+  }
+  */
+
+  public setLayers(layers: Array<Layer>, type: 'baselayers' | 'layers' | 'overlays') {
+    const _layers = <any>[];
+    if (layers.length < 1 && type !== 'baselayers') {
+      this.removeAllLayers('overlays');
+      this.removeAllLayers('layers');
+    } else {
+      layers.forEach((layer) => {
+        let _layer;
+        switch (layer.type) {
+          case 'xyz':
+            _layer = this.create_xyz_layer(<RasterLayer>layer);
+            break;
+          case 'wms':
+            _layer = this.create_wms_layer(<RasterLayer>layer);
+            break;
+          case 'wmts':
+            _layer = this.create_wmts_layer(<RasterLayer>layer);
+            break;
+          case 'geojson':
+            _layer = this.create_geojson_layer(<VectorLayer>layer);
+            break;
+          case 'custom':
+            _layer = this.create_custom_layer(<CustomLayer>layer);
+            break;
+        }
+        // check if layer not undefined
+        if (_layer) {
+          _layers.push(_layer);
+        }
+      });
+    }
+
+    if (_layers.length > 0) {
+      this.addLayers(_layers, type);
     }
   }
 

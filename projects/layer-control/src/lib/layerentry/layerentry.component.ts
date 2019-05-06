@@ -82,7 +82,7 @@ export class LayerentryComponent implements OnInit {
         }
       } else {
         selectedLayer.visible = !selectedLayer.visible;
-        this.layersSvc.updateLayer(selectedLayer, selectedLayer.filtertype || 'Overlays'); // TODO check for baselayers!!!!!!
+        this.layersSvc.updateLayer(selectedLayer, selectedLayer.filtertype || 'Layers'); // TODO check for baselayers!!!!!!
       }
     } else {
       /** "radio" for Baselayers */
@@ -123,7 +123,7 @@ export class LayerentryComponent implements OnInit {
       this.layersSvc.removeLayerFromGroup(selectedLayer, group);
     } else {
       console.log('delete single layer');
-      this.layersSvc.removeLayer(selectedLayer, 'Overlays');
+      this.layersSvc.removeLayer(selectedLayer, selectedLayer.filtertype);
     }
   }
 
@@ -135,7 +135,7 @@ export class LayerentryComponent implements OnInit {
 
   setLayerOpacity(layer) {
     if (!this.group) {
-      this.layersSvc.updateLayer(layer, layer.filtertype || 'Overlays'); // TODO check for baselayers!!!!!!
+      this.layersSvc.updateLayer(layer, layer.filtertype || 'Layers'); // TODO check for baselayers!!!!!!
     } else {
       this.update.emit({
         layer: layer

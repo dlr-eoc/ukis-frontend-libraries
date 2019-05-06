@@ -15,7 +15,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class LayerControlComponent implements OnInit {
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapStateSvc') mapStateSvc?: MapStateService;
-  @Input('layerfilter') layerfilter?: string = 'Overlays';
+  @Input('layerfilter') layerfilter?: string = 'Layers';
 
   layerGroupsSubscription: Subscription;
   layersSubscription: Subscription;
@@ -29,15 +29,12 @@ export class LayerControlComponent implements OnInit {
   ngOnInit() {
     this.layerGroupsSubscription = this.layersSvc.getLayerGroups().subscribe(layergroups => {
       this.layergroups = layergroups;
-
       /**
        * filter only in template so reordering of layers with set layergroups is working
        */
       //this.layergroups = layergroups.filter((group) => group.filtertype === this.layerfilter || group.filtertype === this.layerfilter);
     });
   }
-
-
 
   isLayerGroup(group: Layer | LayerGroup) {
     if (group instanceof LayerGroup) {
