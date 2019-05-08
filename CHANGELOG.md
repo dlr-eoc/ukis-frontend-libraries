@@ -2,14 +2,6 @@
 * **@ukis/services-layers:** filtertype of Layers has changed from `'Baselayers' | 'Overlays' | string` to `'Baselayers' | 'Overlays' | 'Layers'` and default type is now 'Layers'. This is involving `@ukis/map-ol`, `@ukis/layer-control` and `@ukis/services-owc-json`
 
 
-* **@ukis/observation-explorer:** move observation-explorer to project-mariss! ([UKISDEV-790](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-790)) ([]())
-
-
-### Bug Fixes
-* **@ukis/layer-control:** layer opacity slider not working on drag in group item ([87d4b12179c](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/87d4b12179ca31be6da7b1037a21c39c962f79c1))
-* **@ukis/map-ol:** create ol map in constructor of service and add layers, view and controls later ([83c64c406ce](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/83c64c406cec321d4dbf177a5185b56bf0d8a582))
-
-
 # [4.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv4.0.0) (2019-05-03) (refactoring)
 
 ### Breaking Changes
@@ -20,11 +12,15 @@
 * **@ukis/datatypes-user-info:** removed! already in @ukis/user-info
 
 * **@ukis/dataset-explorer:** move dataset-explorer to project-coastalx! ([UKISDEV-789](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-789)) ([bf9d5e3649d](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/bf9d5e3649d4ff2ab6616d4687b26f1797c00155))
+* **@ukis/observation-explorer:** move observation-explorer to project-mariss! ([UKISDEV-790](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-790)) ([b3240e4344b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/b3240e4344be971bcc5380f37a9f4e3e9dd1ef05))
 
 
 ### Bug Fixes
 * **@ukis/layer-control:** layer in group ordering not working ([4ee6fd97384](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/4ee6fd97384da42e402b8a4a86178ce741ba94e7))
+* **@ukis/layer-control:** layer opacity slider not working on drag in group item ([87d4b12179c](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/87d4b12179ca31be6da7b1037a21c39c962f79c1))
+
 * **@ukis/map-ol:** popup not added for Vecorlayers ([10dd1791d3b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/10dd1791d3b573c78041d4855c0fb527c07c832c))
+* **@ukis/map-ol:** create ol map in constructor of service and add layers, view and controls later ([83c64c406ce](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/83c64c406cec321d4dbf177a5185b56bf0d8a582))
 
 
 ### Features
