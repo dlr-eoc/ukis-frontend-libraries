@@ -5,7 +5,7 @@ import { MapStateService } from '@ukis/services-map-state';
 import { LayerGroup, Layer } from '@ukis/services-layers';
 import { Subscription } from 'rxjs';
 
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'ukis-layer-control',
@@ -55,26 +55,14 @@ export class LayerControlComponent implements OnInit {
     //console.log(event)
     let previousI = this.layergroups.length - event.previousIndex - 1,
       currentI = this.layergroups.length - event.currentIndex - 1;
-    //console.log('Drop--------------------------', previousI, currentI)
-    moveItemInArray(this.layergroups, previousI, currentI);
+    // console.log('Drop--------------------------', previousI, currentI)
+    this.layersSvc.arrayMove(this.layergroups, previousI, currentI)
     this.layersSvc.setLayerGroups(this.layergroups);
     //console.log(this.layergroups)
   }
 
-  /*
-  sort(event) {
-    //console.log(event)
-    //console.log('Sort--------------------------') //event.previousIndex, event.currentIndex
-    let previousI = this.layergroups.length - event.previousIndex - 1,
-      currentI = this.layergroups.length - event.currentIndex - 1;
-    //console.log('previous', event.previousIndex, previousI)
-    //console.log('current', event.currentIndex, currentI)
-    //console.log(this.layergroups)
-  }
-  */
-
   checkBaselayer(layer: Layer, group?: LayerGroup) {
-    if (layer.filtertype == 'Baselayers' || group && group.filtertype == 'Baselayers') {
+    if (layer.filtertype === 'Baselayers' || group && group.filtertype === 'Baselayers') {
       return true;
     } else {
       return false;
