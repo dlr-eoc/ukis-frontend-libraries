@@ -1,4 +1,4 @@
-import {  async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { UserService } from './user.service';
@@ -15,9 +15,9 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],      
+      imports: [HttpClientTestingModule],
       providers: [
-         
+
         UserService
       ]
     });
@@ -30,5 +30,8 @@ describe('UserService', () => {
     httpMock.verify();
   });
 
- 
+  it('should be created', () => {
+    service = TestBed.get(UserService);
+    expect(service).toBeTruthy();
+  });
 });

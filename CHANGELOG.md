@@ -1,15 +1,3 @@
-### Breaking Changes
-* **@ukis/services-layers:** filtertype of Layers has changed from `'Baselayers' | 'Overlays' | string` to `'Baselayers' | 'Overlays' | 'Layers'` and default type is now 'Layers'. This is involving `@ukis/map-ol`, `@ukis/layer-control` and `@ukis/services-owc-json`
-
-
-* **@ukis/observation-explorer:** move observation-explorer to project-mariss! ([UKISDEV-790](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-790)) ([]())
-
-
-### Bug Fixes
-* **@ukis/layer-control:** layer opacity slider not working on drag in group item ([87d4b12179c](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/87d4b12179ca31be6da7b1037a21c39c962f79c1))
-* **@ukis/map-ol:** create ol map in constructor of service and add layers, view and controls later ([83c64c406ce](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/83c64c406cec321d4dbf177a5185b56bf0d8a582))
-
-
 # [4.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv4.0.0) (2019-05-03) (refactoring)
 
 ### Breaking Changes
@@ -20,17 +8,22 @@
 * **@ukis/datatypes-user-info:** removed! already in @ukis/user-info
 
 * **@ukis/dataset-explorer:** move dataset-explorer to project-coastalx! ([UKISDEV-789](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-789)) ([bf9d5e3649d](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/bf9d5e3649d4ff2ab6616d4687b26f1797c00155))
+* **@ukis/observation-explorer:** move observation-explorer to project-mariss! ([UKISDEV-790](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-790)) ([b3240e4344b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/b3240e4344be971bcc5380f37a9f4e3e9dd1ef05))
 
 
 ### Bug Fixes
 * **@ukis/layer-control:** layer in group ordering not working ([4ee6fd97384](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/4ee6fd97384da42e402b8a4a86178ce741ba94e7))
+* **@ukis/layer-control:** layer opacity slider not working on drag in group item ([87d4b12179c](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/87d4b12179ca31be6da7b1037a21c39c962f79c1))
+
 * **@ukis/map-ol:** popup not added for Vecorlayers ([10dd1791d3b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/10dd1791d3b573c78041d4855c0fb527c07c832c))
+* **@ukis/map-ol:** create ol map in constructor of service and add layers, view and controls later ([83c64c406ce](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/83c64c406cec321d4dbf177a5185b56bf0d8a582))
 
 
 ### Features
 * **demo-user-info:** create demo app for @ukis/user-info module ([UKISDEV-786](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-785)) ([814097ed357](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/814097ed3574450062d58999dd14c645eac01018))
 
 * **demo-maps:** create demo app for @ukis/map-ol module ([UKISDEV-785](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-786)) ([01636a24f83](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/01636a24f8398ea1a8f94542ba9e0b7f8434d85e)) ([116f4bf9316](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/116f4bf93168b18563155adc1d4c3cb4527e5def))
+
 
 
 # [3.0.2](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv3.0.2) (2019-04-26) (costalx-fixes)
@@ -60,7 +53,7 @@
 * **@ukis/map-ol:** imports ol.css in bundel ([#UKISDEV-766](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-766)) ([5809fdb9df4](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/5809fdb9df433ab5523eb21197ef1b48cc4bef94))
 
 
-# [2.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.1.0) (2019-04-01) (SPRINT-costalx II)
+# [2.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv2.1.0) (2019-04-01)
 
 ### Features
 * **@ukis/services-layers:** filter for remove overlays ([#UKISDEV-749](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-749)) ([a39b6fd7bf4](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/a39b6fd7bf406267d1587dce8c8af01e60342087))
