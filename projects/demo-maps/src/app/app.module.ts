@@ -13,6 +13,7 @@ import { GlobalProgressComponent } from './components/global-progress/global-pro
 import { ProgressService } from './components/global-progress/progress.service';
 import { RouteMap2Component } from './route-components/route-map2/route-map2.component';
 import { RouteMap3Component } from './route-components/route-map3/route-map3.component';
+import { RouteMap4Component } from './route-components/route-map4/route-map4.component';
 
 
 
@@ -35,6 +36,12 @@ export const appRoutes: Routes = [
     data: {
       title: 'Events'
     }
+  },
+  {
+    path: 'map4', component: RouteMap4Component,
+    data: {
+      title: 'Custom Layers'
+    }
   }
 ];
 
@@ -47,7 +54,8 @@ export const appRoutes: Routes = [
     GlobalFooterComponent,
     GlobalProgressComponent,
     RouteMap2Component,
-    RouteMap3Component
+    RouteMap3Component,
+    RouteMap4Component
   ],
   imports: [
     BrowserModule,
