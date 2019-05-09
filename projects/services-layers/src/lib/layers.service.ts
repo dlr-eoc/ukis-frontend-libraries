@@ -77,10 +77,10 @@ export class LayersService {
   */
   public removeLayer(layer: Layer, filtertype: 'Baselayers' | 'Overlays' | 'Layers') {
     if (this.isInLayergroups(layer)) {
-      console.log('remove single layer from layergroups!!!!!');
+      // console.log('remove single layer from layergroups!!!!!');
       const groups = this.layergroups.getValue().filter((lg) => {
         if (lg instanceof Layer) {
-          return lg.id != layer.id;
+          return lg.id !== layer.id;
         } else {
           return lg;
         }
@@ -141,8 +141,8 @@ export class LayersService {
           this.removeLayer(lg, lg.filtertype || 'Layers');
         }
       } else if (lg instanceof LayerGroup) {
-        console.log('LayerGroup: ', lg);
-        console.log('id', id);
+        // console.log('LayerGroup: ', lg);
+        // console.log('id', id);
         if (lg.id === id) {
           this.removeLayerGroup(lg);
         } else {
@@ -159,7 +159,7 @@ export class LayersService {
 
   public addLayerToGroup(layer: Layer, layerGroup: LayerGroup) {
     /** convert filtertyle of layer to the same as the group */
-    if (layer.filtertype != layerGroup.filtertype) {
+    if (layer.filtertype !== layerGroup.filtertype) {
       layer.filtertype = layerGroup.filtertype;
     }
 
@@ -170,7 +170,7 @@ export class LayersService {
       if (lg instanceof Layer) {
 
       } else if (lg instanceof LayerGroup) {
-        if (lg.id == layerGroup.id) {
+        if (lg.id === layerGroup.id) {
           lg.layers = layerGroup.layers;
         }
       }
@@ -183,7 +183,7 @@ export class LayersService {
 
   public addLayerToGroupById(layer: Layer, GroupId: string) {
     this.layergroups.getValue().forEach((lg) => {
-      if (lg instanceof LayerGroup && lg.id == GroupId) {
+      if (lg instanceof LayerGroup && lg.id === GroupId) {
         this.addLayerToGroup(layer, lg);
       }
     });
@@ -400,9 +400,9 @@ export class LayersService {
       lgroups = _lgroups;
     }
     if (filtertype) {
-      lgroups = lgroups.filter(l => l.filtertype == filtertype);
+      lgroups = lgroups.filter(l => l.filtertype === filtertype);
     }
-    if (lgroups.indexOf(group) == 0) {
+    if (lgroups.indexOf(group) === 0) {
       // console.log(group.name, 'isFirst')
       value = true;
     }
@@ -417,9 +417,9 @@ export class LayersService {
       lgroups = _lgroups;
     }
     if (filtertype) {
-      lgroups = lgroups.filter(l => l.filtertype == filtertype);
+      lgroups = lgroups.filter(l => l.filtertype === filtertype);
     }
-    if (lgroups.indexOf(group) == lgroups.length - 1) {
+    if (lgroups.indexOf(group) === lgroups.length - 1) {
       value = true;
     }
     return value;

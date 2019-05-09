@@ -81,8 +81,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
 
     /** if length of layers has changed add new layers */
-    if (layers.length != this.mapSvc.getLayers(type).length) {
-      // console.log("Layer add or remove", layers)
+    if (layers.length !== this.mapSvc.getLayers(type).length) {
       this.mapSvc.setLayers(layers, type);
       // if layers underneath add thhen to the zIndex of layer
       if (_otherlayerslength > 0) {
