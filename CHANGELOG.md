@@ -1,3 +1,7 @@
+### Breaking Changes
+* **@ukis/services-layers:** filtertype of Layers has changed from `'Baselayers' | 'Overlays' | string` to `'Baselayers' | 'Overlays' | 'Layers'` and default type is now 'Layers'. This is involving `@ukis/map-ol`, `@ukis/layer-control` and `@ukis/services-owc-json`
+
+
 # [4.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv4.0.0) (2019-05-03) (refactoring)
 
 ### Breaking Changes

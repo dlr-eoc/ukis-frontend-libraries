@@ -97,7 +97,7 @@ export class LayersService {
     }
 
     if (filtertype === 'Layers') {
-      this.baseLayers.next(this.filterBaseLayers());
+      this.layers.next(this.filterLayers());
     }
   }
 
@@ -130,12 +130,11 @@ export class LayersService {
 
 
   /**
-   * TODO: remove layer from grup without grup id
    *
    * removes a ukis Layer or a LayerGroup from the Layerservice by the Layer.id or LayerGroup.id
    * if layerGroupId is set, then it removes the Layer from a LayerGroup
    */
-  public removeLayerOrGroupById(id: string) {
+  public removeLayerOrGroupById(id: string, removeNullGroup?: boolean) {
     this.layergroups.getValue().filter((lg) => {
       if (lg instanceof Layer) {
         if (lg.id === id) {
@@ -150,7 +149,7 @@ export class LayersService {
           // this.removeLayerFromGroup
           lg.layers.forEach((_layer, index) => {
             if (_layer.id === id) {
-              this.removeLayerFromGroup(_layer, lg);
+              this.removeLayerFromGroup(_layer, lg, removeNullGroup);
             }
           });
         }
@@ -190,7 +189,11 @@ export class LayersService {
     });
   }
 
-  public removeLayerFromGroup(layer: Layer, layerGroup: LayerGroup) {
+  /** defaults if no layers on the group it will remove it */
+  public removeLayerFromGroup(layer: Layer, layerGroup: LayerGroup, removeNullGroup?: boolean) {
+    if (removeNullGroup === undefined || removeNullGroup === null) {
+      removeNullGroup = true;
+    }
     layerGroup.layers = layerGroup.layers.filter(l => l.id !== layer.id);
     this.removeLayer(layer, layerGroup.filtertype || 'Layers');
 
@@ -198,7 +201,7 @@ export class LayersService {
       if (lg instanceof Layer) {
 
       } else if (lg instanceof LayerGroup) {
-        if (lg.id == layerGroup.id) {
+        if (lg.id === layerGroup.id) {
           lg.layers = layerGroup.layers;
           this.layergroups.next(this.layergroups.getValue());
         }
@@ -206,7 +209,7 @@ export class LayersService {
     });
 
     // if no layers on the group remove it
-    if (layerGroup.layers.length === 0) {
+    if (layerGroup.layers.length === 0 && removeNullGroup) {
       const _layergroups = this.layergroups.getValue().filter((lg) => {
         if (lg instanceof Layer) {
           return lg;
@@ -218,6 +221,7 @@ export class LayersService {
     }
   }
 
+  /** down == + 1 and up == - 1*/
   public setLayerIndexInGroup(layer: Layer, dir: 'up' | 'down', layerGroup: LayerGroup) {
     // console.log("move layer in group " + dir);
     // console.log(layerGroup);
@@ -225,7 +229,7 @@ export class LayersService {
 
     switch (dir) {
       case 'up': {
-        if (groupIndex == 0) {
+        if (groupIndex === 0) {
           break;
         } else {
           this.arrayMove(layerGroup.layers, groupIndex, groupIndex - 1);
@@ -233,7 +237,7 @@ export class LayersService {
         break;
       }
       case 'down': {
-        if (groupIndex == layerGroup.layers.length - 1) {
+        if (groupIndex === layerGroup.layers.length - 1) {
           break;
         } else {
           this.arrayMove(layerGroup.layers, groupIndex, groupIndex + 1);
@@ -271,7 +275,7 @@ export class LayersService {
       }
       const lgroups = this.layergroups.getValue();
 
-      const filteredGroups = lgroups.filter(function (layer, index, arr) {
+      const filteredGroups = lgroups.filter(function (layer, index) {
         return layer.id !== layerGroup.id;
       });
 
@@ -290,11 +294,12 @@ export class LayersService {
     }
   }
 
-  arrayMove(array: Array<any>, fromIndex: number, toIndex: number) {
+  public arrayMove(array: Array<any>, fromIndex: number, toIndex: number) {
     array.splice((toIndex < 0 ? array.length + toIndex : toIndex), 0, array.splice(fromIndex, 1)[0]);
   }
 
-  /** setGroup Or LayerIndex */
+  /** set Group Or Layer Index - down == + 1 and up == - 1*/
+  /*
   public setGroupLayerIndex(group: Layer | LayerGroup, dir: 'up' | 'down', layerGroup?: LayerGroup) {
     console.log('move group ' + dir);
     let groupsCount;
@@ -329,6 +334,40 @@ export class LayersService {
             this.arrayMove(lgroups, groupIndex, groupIndex + 1);
           }
           break;
+        }
+      }
+      console.log('groupIndex after', group.name, lgroups.indexOf(group));
+      this.layergroups.next(lgroups);
+      this.baseLayers.next(this.filterBaseLayers());
+      this.layers.next(this.filterLayers());
+      this.overlays.next(this.filterOverlays());
+    }
+  }
+  */
+
+  /** set Group Or Layer Index: down == + 1 and up == - 1  */
+  public setGroupLayerIndex(group: Layer | LayerGroup, dir: number | 'up' | 'down', layerGroup?: LayerGroup) {
+    console.log('move group ' + dir);
+    let groupsCount;
+    if (group instanceof Layer && group.filtertype) {
+      groupsCount = this.getNumOfGroups(group.filtertype);
+    } else if (group instanceof LayerGroup) {
+      groupsCount = this.getNumOfGroups(group.filtertype);
+    }
+
+    if (groupsCount > 1) {
+      // get only groups ... check if move is working with single layers!!!!!!!!
+      const lgroups = this.layergroups.getValue(); // .filter(lg => lg instanceof LayerGroup);
+
+      const groupIndex = lgroups.indexOf(group);
+
+      if (!this.isGroupFirst(group) || !this.isGroupLast(group)) {
+        if (typeof dir === 'number') {
+          this.arrayMove(lgroups, groupIndex, dir);
+        } else if (dir === 'up') {
+          this.arrayMove(lgroups, groupIndex, groupIndex - 1);
+        } else if (dir === 'down') {
+          this.arrayMove(lgroups, groupIndex, groupIndex + 1);
         }
       }
       console.log('groupIndex after', group.name, lgroups.indexOf(group));
@@ -422,7 +461,7 @@ export class LayersService {
   /**
    * filter Overlays from layergroups and remove them;
    */
-  public removeOverlays(filter?: (value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
+  removeOverlays(filter?: (value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
     let overlays = this.filterOverlays();
     if (filter) {
       overlays = overlays.filter(filter);

@@ -44,8 +44,9 @@
       <clr-icon *ngIf="group.removable" shape="trash" class="iconButton" (click)="removeLayerGroup(group)"
         title="Remove group"></clr-icon>
     </div>
-
-    <div cdkDropList (cdkDropListDropped)="drop($event)" (cdkDropListSorted)="sort($event)">
+    
+    <!-- (cdkDropListSorted)="sort($event)" -->
+    <div cdkDropList (cdkDropListDropped)="drop($event)">
       <div class="sublayers" *ngFor="let layer of group.layers | reverse;" cdkDragLockAxis="y" cdkDrag>
         <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
           [layer]="layer" [group]="group" (update)="layerUpdate($event, group)">

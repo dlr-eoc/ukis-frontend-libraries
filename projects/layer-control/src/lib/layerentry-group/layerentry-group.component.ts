@@ -108,25 +108,9 @@ export class LayerentryGroupComponent implements OnInit {
   //CDKDRagAndDrop -------------------------------------------------------------
   //https://material.angular.io/cdk/drag-drop/api
   drop(event: CdkDragDrop<string[]>) {
-    //console.log(event)
     let previousI = this.group.layers.length - event.previousIndex - 1,
       currentI = this.group.layers.length - event.currentIndex - 1;
-    //console.log('Drop--------------------------', previousI, currentI)
     moveItemInArray(this.group.layers, previousI, currentI);
-    //this.layersSvc.setLayerGroups(this.layerGroups);
     this.layersSvc.updateLayerGroup(this.group);
-    //console.log(this.group.layers)
   }
-
-  sort(event) {
-    //console.log(event)
-    //console.log('Sort--------------------------') //event.previousIndex, event.currentIndex
-    let previousI = this.group.layers.length - event.previousIndex - 1,
-      currentI = this.group.layers.length - event.currentIndex - 1;
-    //console.log('previous', event.previousIndex, previousI)
-    //console.log('current', event.currentIndex, currentI)
-    //console.log(this.group.layers)
-  }
-
-
 }
