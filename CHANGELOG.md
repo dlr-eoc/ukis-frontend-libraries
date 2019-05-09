@@ -1,5 +1,16 @@
+# [5.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.0.0) (2019-05-09) (ability to put layers aboth overlays)
+
 ### Breaking Changes
 * **@ukis/services-layers:** filtertype of Layers has changed from `'Baselayers' | 'Overlays' | string` to `'Baselayers' | 'Overlays' | 'Layers'` and default type is now 'Layers'. This is involving `@ukis/map-ol`, `@ukis/layer-control` and `@ukis/services-owc-json`
+
+### Bug Fixes
+* **@ukis/services-layers:** custem layer default type not set ([b6af54571e3](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/b6af54571e32092a9c43d5ef318ef2f0d1d86223))
+
+* **@ukis/map-ol:** don't remove custom_layer from layer so it can be created newly ([UKISDEV-802](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-802)) ([1f8ea6f7704](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/1f8ea6f7704e5bea67af9e65e5b6378c1818a0bb)))
+
+### Features
+* **@ukis/services-map-state:** set Mapstate use object or instance (not only instance) ([30e6ce143cd](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/30e6ce143cd93ce86edf1b7c54ac7d03859fa650))
+
 
 
 # [4.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv4.0.0) (2019-05-03) (refactoring)
