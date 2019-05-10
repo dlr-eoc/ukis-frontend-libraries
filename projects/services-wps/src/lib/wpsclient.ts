@@ -61,7 +61,7 @@ export class WpsClient {
         let execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, output);
         let xmlExecbody = this.xmlmarshaller.marshalString(execbody);
 
-        let headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
+        let headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml, application/xml');
         return this.webclient.post(url, xmlExecbody, {headers: headers, responseType: 'text'}).pipe(
             map(response =>  {
                 return this.xmlunmarshaller.unmarshalString(response)
