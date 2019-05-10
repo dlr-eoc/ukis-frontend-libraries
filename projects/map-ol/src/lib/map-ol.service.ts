@@ -138,6 +138,26 @@ export class MapOlService {
     this.map.addInteraction(dragBox);
   }
 
+  public addHoverBox( hoverBoxId: string, hoverBoxBodyId: string, conditionForDrawing: (evt: any) => boolean, contentFunction: (evt: any) => string ) {
+
+    let container = document.getElementById(hoverBoxId);
+    let bodyContrainer = document.getElementById(hoverBoxBodyId);
+
+    let overlay = new olOverlay({element: container});
+    this.map.addOverlay(overlay);
+    overlay.setPosition(undefined);
+
+    this.map.on('pointermove', (evt) => {
+      if(conditionForDrawing(evt)) {
+        bodyContrainer.innerHTML = contentFunction(evt);
+        overlay.setPosition(evt.coordinate);
+      } else {
+        overlay.setPosition(undefined);
+      }
+    })
+
+  }
+
   public getLayers(type: 'baselayers' | 'layers' | 'overlays') {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
