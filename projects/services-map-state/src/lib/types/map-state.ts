@@ -40,7 +40,7 @@ export class MapState implements IMapState {
     this.extent = extent || [-180.0, -90.0, 180.0, 90.0];
     this.time = time || new Date().toISOString();
     if (options) {
-      this.options = options
+      this.options = options;
     } else {
       this.options = {
         maxzoom: 0,

@@ -69,8 +69,8 @@ export class UserService {
 
   constructor() { }
 
-  getUserInfo() {
-    return this.authService.getUserInfo();
+  getUserInfo(user?: IUser) {
+    return this.authService.getUserInfo(user);
   }
 
   login(user: IUser) {

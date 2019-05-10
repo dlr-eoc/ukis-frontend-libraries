@@ -23,15 +23,14 @@ export class MapStateService {
     return this.mapState;
   }
 
-  /*
-  public setMapState(options: IMapState) {
-    let state = new MapState(options.zoom, options.center, options.options, options.extent, options.time);
-    this.mapState.next(state);
-  }
-  */
-
-  public setMapState(state: MapState) {
-    this.mapState.next(state);
+  public setMapState(state: MapState | IMapState) {
+    if (state instanceof MapState) {
+      this.mapState.next(state);
+    } else {
+      const _stateOptions: IMapStateOptions = { ...{ notifier: 'user' }, ...state.options };
+      const _state = new MapState(state.zoom, state.center, _stateOptions, state.extent, state.time);
+      this.mapState.next(_state);
+    }
   }
 
 

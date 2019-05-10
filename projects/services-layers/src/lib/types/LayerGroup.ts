@@ -9,7 +9,7 @@ export interface ILayerGroupOptions {
     layers: Layer[];
 
     displayName?: string;
-    filtertype?: 'Overlays' | 'Baselayers' | string;
+    filtertype?: 'Baselayers' | 'Overlays' | 'Layers';
     removable?: boolean
     layerRemovable?: boolean
     bbox?: TGeoExtent
@@ -24,7 +24,7 @@ export class LayerGroup {
     layers: Layer[];
 
     displayName?: string;
-    filtertype?: 'Overlays' | 'Baselayers' | string = 'Overlays';
+    filtertype?: 'Baselayers' | 'Overlays' | 'Layers' = 'Layers';
     removable?: boolean = true;
     layerRemovable?: boolean = true;
     bbox?: [number, number, number, number];

@@ -420,7 +420,7 @@ export class OwcJsonService {
    * @TODO:
    *   - properties
    */
-  generateOwsContextFrom(id: string, baselayers: Layer[], overlays: Layer[], extent?: TGeoExtent, properties?): IEocOwsContext {
+  generateOwsContextFrom(id: string, layers: Layer[], extent?: TGeoExtent, properties?): IEocOwsContext {
 
     if (!properties) {
       properties = {
@@ -442,13 +442,9 @@ export class OwcJsonService {
       owc["bbox"] = extent;
     }
 
-    for (let baselayer of baselayers) {
-      let resource: IEocOwsResource = this.generateResourceFromLayer(baselayer);
-      owc.features.push(resource);
-    }
-
-    for (let overlay of overlays) {
-      let resource: IEocOwsResource = this.generateResourceFromLayer(overlay);
+    for (let layer of layers) {
+      let resource: IEocOwsResource = this.generateResourceFromLayer(layer);
+      // TODO check for layer types
       owc.features.push(resource);
     }
 

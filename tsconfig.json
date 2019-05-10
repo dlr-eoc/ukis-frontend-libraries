@@ -97,14 +97,6 @@
         "dist/cookie-alert/*",
         "projects/cookie-alert/*"
       ],
-      "@ukis/observation-explorer": [
-        "dist/observation-explorer",
-        "projects/observation-explorer"
-      ],
-      "@ukis/observation-explorer/*": [
-        "dist/observation-explorer/*",
-        "projects/observation-explorer/*"
-      ],
       "@ukis/dataset-explorer": [
         "dist/dataset-explorer",
         "projects/dataset-explorer"

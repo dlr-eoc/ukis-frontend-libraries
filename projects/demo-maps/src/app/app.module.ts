@@ -7,16 +7,42 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapOlModule } from '@ukis/map-ol';
 import { LayerControlModule } from '@ukis/layer-control';
 import { RouteMapComponent } from './route-components/route-map/route-map.component';
-import { RouteLandingpageComponent } from './route-components/route-landingpage/route-landingpage.component';
 import { HeaderComponent } from './components/header/header.component';
 import { GlobalFooterComponent } from './components/global-footer/global-footer.component';
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
+import { ProgressService } from './components/global-progress/progress.service';
+import { RouteMap2Component } from './route-components/route-map2/route-map2.component';
+import { RouteMap3Component } from './route-components/route-map3/route-map3.component';
+import { RouteMap4Component } from './route-components/route-map4/route-map4.component';
 
 
 
-const appRoutes: Routes = [
-    { path: '', redirectTo: 'landingpage', pathMatch: 'full', },  
-    { path: 'landingpage', component: RouteLandingpageComponent  },
-    { path: 'map', component: RouteMapComponent }
+export const appRoutes: Routes = [
+  { path: '', redirectTo: 'map', pathMatch: 'full', },
+  {
+    path: 'map', component: RouteMapComponent,
+    data: {
+      title: 'Layers'
+    }
+  },
+  {
+    path: 'map2', component: RouteMap2Component,
+    data: {
+      title: 'Projection'
+    }
+  },
+  {
+    path: 'map3', component: RouteMap3Component,
+    data: {
+      title: 'Events'
+    }
+  },
+  {
+    path: 'map4', component: RouteMap4Component,
+    data: {
+      title: 'Custom Layers'
+    }
+  }
 ];
 
 
@@ -24,19 +50,22 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     RouteMapComponent,
-    RouteLandingpageComponent,
     HeaderComponent,
-    GlobalFooterComponent
+    GlobalFooterComponent,
+    GlobalProgressComponent,
+    RouteMap2Component,
+    RouteMap3Component,
+    RouteMap4Component
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     ClarityModule,
-    BrowserAnimationsModule, 
+    BrowserAnimationsModule,
     MapOlModule,
     LayerControlModule
   ],
-  providers: [],
+  providers: [ProgressService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

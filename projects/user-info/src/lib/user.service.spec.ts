@@ -1,4 +1,4 @@
-import {  async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { UserService } from './user.service';
@@ -15,9 +15,9 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],      
+      imports: [HttpClientTestingModule],
       providers: [
-         
+
         UserService
       ]
     });
@@ -30,33 +30,8 @@ describe('UserService', () => {
     httpMock.verify();
   });
 
-  it('User loggedIn should be false', () => {
-    
-
-    service.getUser().subscribe(
-      x => expect(x.loggedIn).toBeFalsy,
-      err => console.log('Error. ' + err),
-      () => console.log('complete notification')
-    );
-  });
-
-  it('User info should be Max', () => {
-    
-    const dummyUser = [
-      {userName: 'maxm',
-      firstName: 'Max',
-      lastName: 'Mayer'}      
-    ]
-
-    service.getUserInfo("/user").subscribe(
-      x => {
-        console.log(x);
-        expect(x[0].userName).toBe('maxm');
-      }
-    )
-
-    const req = httpMock.expectOne('/user');
-    expect(req.request.method).toBe("GET");
-    req.flush(dummyUser);
+  it('should be created', () => {
+    service = TestBed.get(UserService);
+    expect(service).toBeTruthy();
   });
 });

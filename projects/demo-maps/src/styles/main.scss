@@ -57,19 +57,3 @@
   background: #fff;
   color: #444;
 }
-
-
-/** disable display of checkbox for types statistics, literature in dataset-explorer -- */
-.datagrid {
-  .statistics.datagrid-row{
-    .clr-checkbox-wrapper {
-      display: none;
-    }
-  }
-  .literature.datagrid-row{
-    .clr-checkbox-wrapper {
-      display: none;
-    }
-  }
-  
-}

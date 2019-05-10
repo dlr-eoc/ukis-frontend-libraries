@@ -2,18 +2,7 @@
   <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
 </main>
 
-
-
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2">
-
-  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="world" title="Overlays" clrVerticalNavIcon></clr-icon>
-    Overlays
-    <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'"></ukis-layer-control>
-    </clr-vertical-nav-group-children>
-  </clr-vertical-nav-group>
-
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
     <clr-icon shape="layers" clrVerticalNavIcon title="layers"></clr-icon>
     Layers
@@ -22,12 +11,15 @@
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 
-  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="world" title="Baselayers" clrVerticalNavIcon></clr-icon>
-    Baselayers
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="false" class="layers" title="Coordinates">
+    <clr-icon shape="compass" clrVerticalNavIcon></clr-icon>
+    Coordinates
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-base-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
+      <span>
+        x: {{mapCoordinates[0]}}
+        <br>
+        y: {{mapCoordinates[1]}}
+      </span>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
-
 </clr-vertical-nav>

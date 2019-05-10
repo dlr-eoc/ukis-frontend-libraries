@@ -318,76 +318,6 @@
         }
       }
     },
-    "observation-explorer": {
-      "root": "projects/observation-explorer",
-      "sourceRoot": "projects/observation-explorer/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/observation-explorer/tsconfig.lib.json",
-            "project": "projects/observation-explorer/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/observation-explorer/src/test.ts",
-            "tsConfig": "projects/observation-explorer/tsconfig.spec.json",
-            "karmaConfig": "projects/observation-explorer/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/observation-explorer/tsconfig.lib.json",
-              "projects/observation-explorer/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "dataset-explorer": {
-      "root": "projects/dataset-explorer",
-      "sourceRoot": "projects/dataset-explorer/src",
-      "projectType": "library",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/dataset-explorer/tsconfig.lib.json",
-            "project": "projects/dataset-explorer/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/dataset-explorer/src/test.ts",
-            "tsConfig": "projects/dataset-explorer/tsconfig.spec.json",
-            "karmaConfig": "projects/dataset-explorer/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/dataset-explorer/tsconfig.lib.json",
-              "projects/dataset-explorer/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "user-info": {
       "root": "projects/user-info",
       "sourceRoot": "projects/user-info/src",
@@ -458,7 +388,6 @@
         }
       }
     },
-
     "demo-user-info": {
       "root": "projects/demo-user-info/",
       "sourceRoot": "projects/demo-user-info/src",
@@ -594,8 +523,6 @@
         }
       }
     },
-
-
     "demo-maps": {
       "root": "projects/demo-maps/",
       "sourceRoot": "projects/demo-maps/src",

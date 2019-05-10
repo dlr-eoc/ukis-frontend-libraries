@@ -1,46 +1,56 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { LayersService } from '@ukis/services-layers';
 import { Layer } from '@ukis/services-layers';
 import { OwcJsonService } from '@ukis/services-owc-json';
 import { TGeoExtent, MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ukis-owc-control',
   templateUrl: "owc-control.component.html",
   styles: []
 })
-export class OwcControlComponent implements OnInit {
+export class OwcControlComponent implements OnInit, OnDestroy {
 
   @Input() layerSvc: LayersService;
   @Input() mapStateSvc: MapStateService;
   private baselayers: Layer[] = [];
   private overlays: Layer[] = [];
+  private layers: Layer[] = [];
   private extent: TGeoExtent;
   private state: MapState;
+  private sub: Subscription[] = [];
 
   constructor(
     private owcSvc: OwcJsonService
   ) { }
 
   ngOnInit() {
-    this.layerSvc.getBaseLayers().subscribe((blays: Layer[]) => {
+    this.sub.push(this.layerSvc.getBaseLayers().subscribe((blays: Layer[]) => {
       this.baselayers = blays;
-    });
-    this.layerSvc.getOverlays().subscribe((olays: Layer[]) => {
+    }));
+    this.sub.push(this.layerSvc.getOverlays().subscribe((olays: Layer[]) => {
       this.overlays = olays;
+    }));
+    this.layerSvc.getLayers().subscribe((llays: Layer[]) => {
+      this.layers = llays;
     });
-    this.mapStateSvc.getExtent().subscribe((extent: TGeoExtent) => {
+    this.sub.push(this.mapStateSvc.getExtent().subscribe((extent: TGeoExtent) => {
       this.extent = extent;
-    });
-    this.mapStateSvc.getMapState().subscribe((state: MapState) => {
+    }));
+    this.sub.push(this.mapStateSvc.getMapState().subscribe((state: MapState) => {
       this.state = state;
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    this.sub.map(sub => sub.unsubscribe());
   }
 
   onClickExport() {
     let id = "myContext";
-    let owc = this.owcSvc.generateOwsContextFrom(id, this.baselayers, this.overlays, this.extent);
+    let owc = this.owcSvc.generateOwsContextFrom(id, [...this.baselayers, ...this.overlays, ...this.layers], this.extent);
     this.downloadFile(owc, `${id}.json`);
   }
 

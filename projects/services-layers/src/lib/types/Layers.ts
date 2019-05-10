@@ -29,7 +29,7 @@ export function isLayertype(inpt: string): inpt is TLayertype {
   return (isRasterLayertype(inpt) || isVectorLayertype(inpt));
 };
 
- 
+
 /** geographic coordinates */
 export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
 
@@ -39,7 +39,7 @@ export interface ILayerOptions {
   //id: string
   type: TLayertype
 
-  filtertype?: 'Overlays' | 'Baselayers' | string;
+  filtertype?: 'Baselayers' | 'Overlays' | 'Layers';
   opacity?: number
   visible?: boolean
   removable?: boolean
@@ -48,6 +48,7 @@ export interface ILayerOptions {
   displayName?: string
   description?: string
   time?: string
+  /** zIndex: DEPRECIATED handeld internal by the layer service */
   zIndex?: number
   minResolution?: number
   maxResolution?: number
@@ -92,12 +93,13 @@ export class Layer implements ILayerOptions {
   visible: boolean = true;
   removable: boolean = false;
 
-  filtertype?: 'Overlays' | 'Baselayers' | string = 'Overlays';
+  filtertype?: 'Baselayers' | 'Overlays' | 'Layers' = 'Layers';
   continuousWorld?: boolean = false;
   attribution?: string;
   displayName?: string;
   description?: string;
   time?: string;
+  /** zIndex: DEPRECIATED handeld internal by the layer service */
   zIndex?: number;
   minResolution?: number;
   maxResolution?: number;
@@ -142,7 +144,7 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
 }
 
 export class CustomLayer extends Layer implements ICustomLayerOptions {
-  type: 'custom';
+  type = 'custom';
   custom_layer: any = {};
   constructor(options: ICustomLayerOptions) {
     super(options);

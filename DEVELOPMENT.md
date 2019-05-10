@@ -34,13 +34,18 @@ run ``ng generate library < name > --prefix ukis``
 
 # How to publish a new version of all projects
 - make sure you have updated README and CHANGELOG and commit all your stuff.
+- run `git pull` to get the latest changes.
 - run `node scripts/libraryProjects.js -c` to check if all dependencies are present. (node_modules must be installed for this)
 - run `node scripts/libraryProjects.js -t` to test all projects. (node_modules must be installed for this)
 - run `node scripts/libraryProjects.js -b` to test all projects are building locally. (node_modules must be installed for this)
 - update the `version` parameter in the package.json in the root-directory (*not* in a single libraries package.json!) according to [Semantic Versioning](https://semver.org/)
-- create a tag with the same version e.g `git tag -a v2.1.0 -m 'Version after Sprint CoastalX II'` and push it to origin
+- create a tag with the same version e.g `git tag -a v2.1.0 -m "Version after Sprint CoastalX II"` and push it to origin `git push origin v2.1.0`
 - the jenkins-job `packaging-frontend-libraries` will discover the presence of a new tag. It will then build the packages and publish them with the new version to nexus.
 - if everything is ok and you have worked on a branch, then merge your changes back into the master.
 
 
 
+# Developing libraries and frontend side by side
+Sometimes we want to work on a frontend-project and a library simultaneously. Such a situation might occur when during the work on a project an error is detected in one of the libraries that takes some work to fix. 
+There are two ways to include libraries in a frontend-project: 
+ - compile the library on changes and link the compiled library into the frontend-projects `node_modules/@ukis` directory. We have provided a script for this purpose: `bash scripts/buildAndLink <libraryName> <frontendProjectName>`. Note that this script assumes that the project- and the libraries-directories are placed side by side in the same folder. For example, assume that the folders `frontend-libraries` and `project-mariss` are situated in the same directory. Then executing `bash frontend-libraries/buildAndLink.sh services-owc-json project-mariss` will build the library `frontend-libraries/projects/services-owc-json` and link it into `project-mariss/node_modules/@ukis/services-owc-json`.

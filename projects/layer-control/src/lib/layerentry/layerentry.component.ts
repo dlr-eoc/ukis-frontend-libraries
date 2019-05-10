@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-//imports only for typings...
-import { LayerGroup, Layer } from "@ukis/services-layers";
+// imports only for typings...
+import { LayerGroup, Layer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { LayersService } from '@ukis/services-layers';
 
@@ -17,13 +17,13 @@ export class LayerentryComponent implements OnInit {
 
   @Input('group') group?: LayerGroup;
   @Input('layerGroups') layerGroups?: LayerGroup[];
-  @Input('expanded') openProperties?: boolean = false;
-  @Input('expandable') expandable?: boolean = true;
+  @Input('expanded') openProperties = false;
+  @Input('expandable') expandable = true;
 
 
   @Output() update = new EventEmitter<any>();
 
-  public canZoomToLayer: boolean = false;
+  public canZoomToLayer = false;
 
   public activeTabs = {
     'settings': false,
@@ -45,9 +45,9 @@ export class LayerentryComponent implements OnInit {
 
   ngOnInit() {
     if (!this.layersSvc) {
-      console.error('you need to provide a layersService!')
+      console.error('you need to provide a layersService!');
     }
-    //console.log(this.layer)
+    // console.log(this.layer)
     if (!this.layer.legendImg) {
       this.activeTabs.description = true;
       this.activeTabs.legend = false;
@@ -72,22 +72,22 @@ export class LayerentryComponent implements OnInit {
     if (!group) {
       if (selectedLayer.filtertype == 'Baselayers') {
         selectedLayer.visible = !selectedLayer.visible;
-        let _layers = this.layerGroups.filter((l) => l.filtertype == 'Baselayers')
-        console.log(_layers)
-        for (let layer of _layers) {
+        const _layers = this.layerGroups.filter((l) => l.filtertype == 'Baselayers');
+        console.log(_layers);
+        for (const layer of _layers) {
           if (layer instanceof Layer && layer.id != selectedLayer.id) {
             layer.visible = !selectedLayer.visible;
-            this.layersSvc.updateLayer(layer, layer.filtertype || 'Baselayers')
+            this.layersSvc.updateLayer(layer, layer.filtertype || 'Baselayers');
           }
         }
       } else {
         selectedLayer.visible = !selectedLayer.visible;
-        this.layersSvc.updateLayer(selectedLayer, selectedLayer.filtertype || 'Overlays') //TODO check for baselayers!!!!!!
+        this.layersSvc.updateLayer(selectedLayer, selectedLayer.filtertype || 'Layers'); // TODO check for baselayers!!!!!!
       }
     } else {
       /** "radio" for Baselayers */
       if (group.filtertype == 'Baselayers') {
-        for (let layer of group.layers) {
+        for (const layer of group.layers) {
           layer.visible = layer === selectedLayer;
         }
         /** "checkbox" for all other layers */
@@ -98,34 +98,34 @@ export class LayerentryComponent implements OnInit {
         layer: this.layer
       });
     }
-  };
+  }
   /**
    * setLayerIndex
    */
   setLayerIndex(layer: Layer, dir, group?: LayerGroup) {
-    console.log('is First', this.isFirst(layer))
-    console.log('is Last', this.isLast(layer))
-    console.log(layer)
-    if (layer.filtertype) {
-      this.layersSvc.setGroupLayerIndex(layer, dir, group);
-    } else {
+    console.log('is First', this.isFirst(layer));
+    console.log('is Last', this.isLast(layer));
+    console.log(layer, group);
+    if (group) {
       this.layersSvc.setLayerIndexInGroup(layer, dir, group);
+    } else {
+      this.layersSvc.setGroupLayerIndex(layer, dir, group);
     }
-  };
+  }
 
   /**
    * remove the Layer if possible
    */
   removeLayer(group: LayerGroup, selectedLayer: Layer) {
-    //console.log("delete ", group, selectedLayer)
+    // console.log("delete ", group, selectedLayer)
     if (group) {
-      //console.log("delete layer from group")
-      this.layersSvc.removeLayerFromGroup(selectedLayer, group)
+      // console.log("delete layer from group")
+      this.layersSvc.removeLayerFromGroup(selectedLayer, group);
     } else {
-      console.log("delete single layer")
-      this.layersSvc.removeLayer(selectedLayer, 'Overlays');
+      console.log('delete single layer');
+      this.layersSvc.removeLayer(selectedLayer, selectedLayer.filtertype);
     }
-  };
+  }
 
   zoomTo(layer: Layer) {
     if (this.mapState && layer.bbox && layer.bbox.length >= 4) {
@@ -135,13 +135,13 @@ export class LayerentryComponent implements OnInit {
 
   setLayerOpacity(layer) {
     if (!this.group) {
-      this.layersSvc.updateLayer(layer, layer.filtertype || 'Overlays') //TODO check for baselayers!!!!!!
+      this.layersSvc.updateLayer(layer, layer.filtertype || 'Layers'); // TODO check for baselayers!!!!!!
     } else {
       this.update.emit({
         layer: layer
       });
     }
-  };
+  }
 
   checkBaselayer(layer: Layer, group?: LayerGroup) {
     if (layer.filtertype == 'Baselayers' || group && group.filtertype == 'Baselayers') {
@@ -158,7 +158,7 @@ export class LayerentryComponent implements OnInit {
     if (this.group) {
       return !this.layer.legendImg && this.group.filtertype == 'Baselayers';
     } else {
-      return false; //!this.layer.legendImg; //this.layer.description
+      return false; // !this.layer.legendImg; //this.layer.description
     }
   }
 
@@ -166,10 +166,10 @@ export class LayerentryComponent implements OnInit {
     if (!this.is_expandable()) {
       this.openProperties = !this.openProperties;
     }
-  };
+  }
 
   switchTab(tabName: string) {
-    for (let key of Object.keys(this.activeTabs)) {
+    for (const key of Object.keys(this.activeTabs)) {
       this.activeTabs[key] = tabName === key;
     }
   }
