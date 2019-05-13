@@ -141,6 +141,7 @@ export class MapOlService {
   public addHoverBox( hoverBoxId: string, hoverBoxBodyId: string, conditionForDrawing: (evt: any) => boolean, contentFunction: (evt: any) => string ) {
 
     let container = document.getElementById(hoverBoxId);
+    container.style.display = "block";
     let bodyContrainer = document.getElementById(hoverBoxBodyId);
 
     let overlay = new olOverlay({element: container});
