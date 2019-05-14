@@ -1,3 +1,14 @@
+# [5.1.0] (2019-05-14) (services-wps)
+
+### Changes
+* **@ukis/services-wps:** created new wps-client
+* **@ukis/map-ol:** added means to do bbox-selection and show a hover-popup.
+
+### Bug Fixes
+* **@ukis/services-layers:** fixed bug where layer-visibility would be turned off after call to *removeOverlays*
+
+
+
 # [5.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.0.0) (2019-05-09) (ability to put layers aboth overlays)
 
 ### Breaking Changes
