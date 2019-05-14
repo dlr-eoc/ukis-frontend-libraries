@@ -230,8 +230,9 @@ export class MapOlService {
 
     // TODO try to deep check if a layer if exactly the same and dont create it new
     if (_layers.length < 1 && type !== 'baselayers') {
-      this.removeAllLayers('overlays');
-      this.removeAllLayers('layers');
+      // this.removeAllLayers('overlays');
+      // this.removeAllLayers('layers');
+      this.removeAllLayers(type);
     } else {
       _layers.forEach((item) => {
         let _layer;
