@@ -1,5 +1,5 @@
-import { WpsMarshaller, WpsInput, WpsOutput, WpsResult } from "../wps_marshaller";
-import { WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType, InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType } from "./wps_1.0.0";
+import { WpsMarshaller, WpsInput, WpsOutput, WpsResult, WpsCapability } from "../wps_marshaller";
+import { WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType, InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType, ResponseDocumentType } from "./wps_1.0.0";
 
 
 
@@ -15,12 +15,11 @@ export class WpsFactory100 implements WpsMarshaller {
         return `${baseurl}?service=WPS&request=Execute&version=1.0.0&identifier=${processId}`;
     }
 
-    unmarshalCapabilities(capabilities: WPSCapabilitiesType) {
-        let out = [];
+    unmarshalCapabilities(capabilities: WPSCapabilitiesType): WpsCapability[] {
+        let out: WpsCapability[] = [];
         capabilities.processOfferings.process.forEach(process => {
             out.push({
-                id: process.identifier.value,
-                title: process.title[0] ? process.title[0].value : ""
+                id: process.identifier.value
             })
         })
         return out;
@@ -28,37 +27,48 @@ export class WpsFactory100 implements WpsMarshaller {
 
     unmarshalExecuteResponse(responseJson: IWpsExecuteResponse): WpsResult[] {
         let out: WpsResult[] = [];
-        for(let output of responseJson.value.processOutputs.output) {
-            let isReference = output.reference ? true : false;
-            
-            let datatype;
-            let data;
-            let format; 
-            if(isReference) {
-                datatype = "complex";
-                data = output.reference.href;
-                format = output.reference.mimeType;
-            } else {
-                if(output.data.literalData) {
-                    datatype = "literal"; 
-                    format = output.data.literalData.dataType;
-                }
-                else if(output.data.complexData) {
-                    datatype = "complex";
-                    format = output.data.complexData.mimeType;
-                }
-                else datatype = "bbox";
-                data = this.unmarshalOutputData(output.data);
-            }
 
+        if(responseJson.value.processOutputs) { // synchronous request?
+            for(let output of responseJson.value.processOutputs.output) {
+                let isReference = output.reference ? true : false;
+                
+                let datatype;
+                let data;
+                let format; 
+                if(isReference) {
+                    datatype = "complex";
+                    data = output.reference.href || null;
+                    format = output.reference.mimeType;
+                } else {
+                    if(output.data && output.data.literalData) {
+                        datatype = "literal"; 
+                        format = output.data.literalData.dataType;
+                    }
+                    else if(output.data.complexData) {
+                        datatype = "complex";
+                        format = output.data.complexData.mimeType;
+                    }
+                    else datatype = "bbox";
+                    data = this.unmarshalOutputData(output.data);
+                }
+    
+                out.push({
+                    id: output.identifier.value,
+                    data: data,
+                    format: format,
+                    reference: isReference,
+                    type: datatype
+                });
+            }
+        } else if(responseJson.value.statusLocation) { // asynchronous request?
             out.push({
-                id: output.identifier.value,
-                data: data,
-                format: format,
-                reference: isReference,
-                type: datatype
+                id: responseJson.value.process.identifier.value,
+                data: responseJson.value.statusLocation, 
+                reference: true, 
+                type: "status"
             });
         }
+
         return out;
     }
 
@@ -76,10 +86,10 @@ export class WpsFactory100 implements WpsMarshaller {
         throw new Error(`Not yet implemented: ${data}`);
     }
 
-    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutput): IWpsExecuteProcessBody {
+    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutput, async: boolean): IWpsExecuteProcessBody {
 
         let wps1Inputs = this.marshalInputs(inputs);
-        let wps1ResponseForm = this.marshalResponseForm(output);
+        let wps1ResponseForm = this.marshalResponseForm(output, async);
 
         let bodyValue: Execute = {
             dataInputs: wps1Inputs,
@@ -105,7 +115,7 @@ export class WpsFactory100 implements WpsMarshaller {
     }
 
 
-    protected marshalResponseForm(output: WpsOutput): ResponseFormType {
+    protected marshalResponseForm(output: WpsOutput, async=false): ResponseFormType {
 
         let defType: DocumentOutputDefinitionType;
         switch(output.type) {
@@ -127,10 +137,14 @@ export class WpsFactory100 implements WpsMarshaller {
                 throw new Error(`This Wps-outputtype has not been implemented yet! ${output} `);
         }
 
+        let responseDocument: ResponseDocumentType = {
+            output: [defType],
+            status: async ? true : false,
+            storeExecuteResponse: async ? true : false
+        }
+
         let form: ResponseFormType = {
-            responseDocument: {
-                output: [defType]
-            }
+            responseDocument: responseDocument
         };
         return form;
     }

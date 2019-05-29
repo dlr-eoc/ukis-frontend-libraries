@@ -101,6 +101,7 @@ export interface ComplexDataType {
 }
 
 export interface ProcessBriefType {
+   identifier: CodeType;
    processVersion: any;
    profile?: any;
    wsdl?: any;

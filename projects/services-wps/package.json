@@ -1,25 +1,8 @@
 {
-  "name": "@ukis/services-wps",
-  "version": "0.0.0-PLACEHOLDER",
-  "main": "src/public_api",
-  "scripts": {
-    "test": "jest"
-  },
+  "name": "services-wps",
+  "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0"
-  },
-  "dependencies": {
-    "@types/node": "^11.13.5",
-    "@boundlessgeo/jsonix": "2.4.3",
-    "w3c-schemas": "^1.4.0",
-    "ogc-schemas": "^2.6.1",
-    "rxjs": "^6.4.0",
-    "uri-js": "^4.2.2"
-  },
-  "devDependencies": {
-    "@types/jest": "^24.0.11",
-    "jest": "^24.7.1",
-    "ts-jest": "^24.0.2"
   }
 }

@@ -657,6 +657,41 @@
           }
         }
       }
+    },
+    "services-wps": {
+      "root": "projects/services-wps",
+      "sourceRoot": "projects/services-wps/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/services-wps/tsconfig.lib.json",
+            "project": "projects/services-wps/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/services-wps/src/test.ts",
+            "tsConfig": "projects/services-wps/tsconfig.spec.json",
+            "karmaConfig": "projects/services-wps/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/services-wps/tsconfig.lib.json",
+              "projects/services-wps/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   }
 }

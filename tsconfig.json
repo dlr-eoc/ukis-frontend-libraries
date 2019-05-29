@@ -136,6 +136,12 @@
       "@ukis/dynforms/*": [
         "dist/dynforms/*",
         "projects/dynforms/*"
+      ],
+      "services-wps": [
+        "dist/services-wps"
+      ],
+      "services-wps/*": [
+        "dist/services-wps/*"
       ]
     }
   }

@@ -1,9 +1,12 @@
 export type WpsVerion = "1.0.0" | "2.0.0";
 
 
+/**
+ * Type "status": returned from WPS on asynchronous execute-request. Data will then be a Url to the result-document. 
+ */
 export interface WpsData {
     id: string;
-    type: "literal" | "complex" | "bbox";
+    type: "literal" | "complex" | "bbox" | "status";
     reference: boolean;
     data: any;
     format?: string;
@@ -33,5 +36,5 @@ export interface WpsMarshaller {
     unmarshalCapabilities(capabilitiesJson: any): WpsCapability[];
     unmarshalExecuteResponse(responseJson: any): WpsResult[];
 
-    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutput): any;
+    marshalExecBody(processId: string, inputs: WpsInput[], output: WpsOutput, async: boolean): any;
 }

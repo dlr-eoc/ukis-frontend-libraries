@@ -1,16 +1,7 @@
 {
-  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/services-wps",
   "lib": {
     "entryFile": "src/public_api.ts"
-  },
-  "whitelistedNonPeerDependencies": [
-    "@types/node",
-    "@boundlessgeo/jsonix",
-    "jsonix",
-    "w3c-schemas",
-    "ogc-schemas",
-    "rxjs",
-    "uri-js"
-  ]
+  }
 }
