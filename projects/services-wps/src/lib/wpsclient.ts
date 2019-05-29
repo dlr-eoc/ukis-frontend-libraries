@@ -75,8 +75,8 @@ export class WpsClient {
                     getStateRequest, 
                     pollingRate,
                     (stateResponse) => {
-                        const resutsObtained = stateResponse[0].type != "status";
-                        return resutsObtained;
+                        const resultsObtained = stateResponse[0].type != "status";
+                        return resultsObtained;
                     },
                     tapFunction
                 )
