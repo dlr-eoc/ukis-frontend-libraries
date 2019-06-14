@@ -53,6 +53,7 @@ export class MapOlService {
   public view: olView;
   public temp: any;
   public EPSG: string;
+  private hitTolerance = 0;
   constructor() {
     this.map = new olMap();
     this.view = new olView();
@@ -111,6 +112,14 @@ export class MapOlService {
       map: this.map,
       view: this.view
     };
+  }
+
+  public setHitTolerance(tolerance: number) {
+    this.hitTolerance = tolerance;
+  }
+
+  public getHitTolerance() {
+    return this.hitTolerance;
   }
 
   /**
@@ -582,7 +591,7 @@ export class MapOlService {
             }
           }
         },
-        hitTolerance: 0
+        hitTolerance: this.hitTolerance
       });
 
     FeaturesAtPixel.forEach((item, index) => {
