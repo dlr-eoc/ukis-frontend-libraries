@@ -270,7 +270,7 @@ export class LayersService {
     // remove all layers of this group from the map
     if (layerGroup.removable) {
       for (const layer of layerGroup.layers) {
-        console.log('remove layerGroup layers:', layer);
+        //console.log('remove layerGroup layers:', layer);
         this.removeLayerFromGroup(layer, layerGroup);
       }
       const lgroups = this.layergroups.getValue();
@@ -347,7 +347,7 @@ export class LayersService {
 
   /** set Group Or Layer Index: down == + 1 and up == - 1  */
   public setGroupLayerIndex(group: Layer | LayerGroup, dir: number | 'up' | 'down', layerGroup?: LayerGroup) {
-    console.log('move group ' + dir);
+    //console.log('move group ' + dir);
     let groupsCount;
     if (group instanceof Layer && group.filtertype) {
       groupsCount = this.getNumOfGroups(group.filtertype);
@@ -370,7 +370,7 @@ export class LayersService {
           this.arrayMove(lgroups, groupIndex, groupIndex + 1);
         }
       }
-      console.log('groupIndex after', group.name, lgroups.indexOf(group));
+      //console.log('groupIndex after', group.name, lgroups.indexOf(group));
       this.layergroups.next(lgroups);
       this.baseLayers.next(this.filterBaseLayers());
       this.layers.next(this.filterLayers());
