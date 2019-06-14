@@ -1,3 +1,10 @@
+# [5.2.0] (2019-06-14)
+### Changes
+* **@ukis/services-layers:** commented out some log messages (layer/layergroup remove etc.) which are not good for production
+### Features
+* **@ukis/map-ol:** added public setHitTolerance(tolerance: number) method, for configuration of click events on touch devices
+
+
 # [5.1.0] (2019-05-14) (services-wps)
 
 ### Changes
