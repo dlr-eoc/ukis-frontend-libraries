@@ -1,8 +1,9 @@
 import { WpsMarshaller, WpsInput, WpsOutput, WpsVerion, WpsResult } from "./wps_marshaller";
 import { WpsFactory100 } from "./wps100/wps_1.0.0_factory";
 import { WpsFactory200 } from "./wps200/wps_2.0_factory";
+import { Cache } from "./utils/cache";
 import { Observable, timer, of } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { map, catchError, switchMap, tap } from 'rxjs/operators';
 import { Jsonix } from '@boundlessgeo/jsonix'; //let Jsonix = require('jsonix').Jsonix;
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; let XLink_1_0 = XLink_1_0_Factory.XLink_1_0; //let XLink_1_0 = require('w3c-schemas/lib/XLink_1_0').XLink_1_0;
@@ -27,8 +28,10 @@ export class WpsClient {
     private xmlmarshaller;
     private xmlunmarshaller;
     private wpsmarshaller: WpsMarshaller;
+    private cache: Cache;
 
     constructor(url: string, version: WpsVerion, private webclient: HttpClient) {
+        this.cache = new Cache();
         this.url = url;
         this.version = version;
         let context;
@@ -66,8 +69,12 @@ export class WpsClient {
 
 
     executeAsync(processId: string, inputs: WpsInput[], output: WpsOutput, pollingRate: number = 1000, tapFunction?: (response: any) => void): Observable<WpsResult[]> {
-
+        
         const executeRequest = this.execute(processId, inputs, output, true);
+
+        const cachedResponse = this.cache.get(executeRequest);
+        if(cachedResponse) return of(cachedResponse); 
+
         return executeRequest.pipe(
             switchMap(executeResponse => {
                 const getStateRequest = this.checkState(executeResponse[0].data);
@@ -80,7 +87,8 @@ export class WpsClient {
                     },
                     tapFunction
                 )
-            })
+            }),
+            tap( response => this.cache.set(executeRequest, response))
         );
 
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterViewChecked, AfterContentChecked } from '@angular/core';
 
 
 import { MapState } from '@ukis/services-map-state';
@@ -21,7 +21,7 @@ import { group } from '@angular/animations';
   styleUrls: ['./map-ol.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, AfterContentChecked {
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapStateSvc: MapStateService;
   @Input('controls') controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
@@ -61,9 +61,13 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.mapStateSvc.setMapState(this.mapState);
   }
 
-  /** update map size on re scaling */
   ngAfterViewChecked() {
     //this.map.updateSize();
+  }
+  
+  /** update map size on re scaling */
+  ngAfterContentChecked() {
+    this.map.updateSize();
   }
 
   ngOnDestroy() {
