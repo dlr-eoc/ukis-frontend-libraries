@@ -1,6 +1,6 @@
 {
   "name": "ukis-frontend-libraries",
-  "version": "5.2.0",
+  "version": "5.1.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -41,13 +41,19 @@
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "web-animations-js": "^2.3.1",
-    "zone.js": "^0.8.29"
+    "zone.js": "^0.8.29",
+    "w3c-schemas": "^1.4.0",
+    "ogc-schemas": "^2.6.1",
+    "@boundlessgeo/jsonix": "^2.4.3"
   },
   "dependenciesFromProjects": [
     "md5",
     "ol",
     "@types/geojson",
-    "@angular/cdk"
+    "@angular/cdk",
+    "w3c-schemas",
+    "ogc-schemas",
+    "@boundlessgeo/jsonix"
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.12.0",

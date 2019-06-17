@@ -3,5 +3,12 @@
   "dest": "../../dist/services-wps",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@ukis/services-util-store",
+    "md5",
+    "w3c-schemas",
+    "ogc-schemas",
+    "@boundlessgeo/jsonix"
+  ]
 }

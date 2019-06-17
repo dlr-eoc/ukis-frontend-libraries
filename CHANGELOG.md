@@ -1,19 +1,16 @@
-# [5.2.0] (2019-06-14)
-### Changes
-* **@ukis/services-layers:** commented out some log messages (layer/layergroup remove etc.) which are not good for production
-### Features
-* **@ukis/map-ol:** added public setHitTolerance(tolerance: number) method, for configuration of click events on touch devices
-
-
-# [5.1.0] (2019-05-14) (services-wps)
+# [5.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.1.0) (2019-06-17) (services-wps/map-ol)
 
 ### Changes
 * **@ukis/services-wps:** created new wps-client
 * **@ukis/map-ol:** added means to do bbox-selection and show a hover-popup.
+* **@ukis/services-layers:** commented out some log messages (layer/layergroup remove etc.) which are not good for production
+
+### Features
+* **@ukis/map-ol:** added public setHitTolerance(tolerance: number) method, for configuration of click events on touch devices
 
 ### Bug Fixes
 * **@ukis/services-layers:** fixed bug where layer-visibility would be turned off after call to *removeOverlays*
-
+* **@ukis/services-owc-json:** adjusted owc-json.service.spec.ts to the latest state of owc-json.service.ts 
 
 
 # [5.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.0.0) (2019-05-09) (ability to put layers aboth overlays)

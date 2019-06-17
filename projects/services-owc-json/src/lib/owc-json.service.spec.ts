@@ -85,6 +85,9 @@ describe('OwcJsonService: reading data from owc', () => {
             const operation = offering.operations[0];
             expect(operation).toBeTruthy();
             const rlayerOptions = service.createRasterLayerFromOffering(offering, resource);
+
+            //console.log(rlayerOptions);
+
             expect(rlayerOptions.name).toBe(resource.properties.title);
             expect(rlayerOptions.id as string).toBe(resource.id as string);
             expect(rlayerOptions.opacity).toBe(1); // opacity is not encoded in owc-json per default. Allways falling back to 1. 
@@ -94,8 +97,8 @@ describe('OwcJsonService: reading data from owc', () => {
 
             console.log("======= check removeable: ", rlayerOptions.removable);
             expect(rlayerOptions.removable).toBe(true); // "removable" is not encoded in owc-json; falling back to "true"
-            console.log("======= check filtertype == Overlays: ", rlayerOptions.filtertype);
-            expect(rlayerOptions.filtertype).toBe("Overlays"); // all data in owc-json will - for now - be an overlay. Might be changed in the future. 
+            console.log("======= check filtertype == Layers: ", rlayerOptions.filtertype);
+            expect(rlayerOptions.filtertype).toBe("Layers"); // all data in owc-json will - for now - be an overlay. Might be changed in the future.
 
             console.log("======= check serviceType: ", rlayerOptions.type);
 
@@ -190,7 +193,7 @@ describe('OwcJsonService: writing data into owc', () => {
     });
     layersService.addLayer(osm_layer, 'Baselayers');
     layersService.getBaseLayers().subscribe(baselayers => {
-      const owc = service.generateOwsContextFrom("someid", baselayers, [], [-190, -90, 190, 90]);
+      const owc = service.generateOwsContextFrom("someid", baselayers, [-190, -90, 190, 90]);
       const layers = service.getLayers(owc);
       expect(layers.length).toBeTruthy();
     })
@@ -240,7 +243,7 @@ describe('OwcJsonService: writing data into owc', () => {
     });
 
     // enconding and deconding
-    let context = service.generateOwsContextFrom("testcontext", [], [geojsonLayer], [-190, -90, 190, 90]);
+    let context = service.generateOwsContextFrom("testcontext", [geojsonLayer], [-190, -90, 190, 90]);
     let recoveredLayers = service.getLayers(context);
     let recoveredLayer = recoveredLayers[0] as VectorLayer;
 
