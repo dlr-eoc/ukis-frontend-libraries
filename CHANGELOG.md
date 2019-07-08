@@ -1,3 +1,10 @@
+# [5.1.1](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.1.1) (2019-07-08) (angular update)
+
+### Dependency updates
+* "@angular/core": "~7.2.0" to "~8.1.0"
+* "@clr": "^1.0.4" to "^2.0.2"
+
+
 # [5.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.1.0) (2019-06-17) (services-wps/map-ol)
 
 ### Changes
