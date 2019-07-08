@@ -1,7 +1,7 @@
 /**
 * Get and set Version of Library projects from frontend-libraries
 *
-* node scripts/projetsVersion.js -l
+* node scripts/projectsVersion.js -l
 */
 const replace = require('replace');
 const PATH = require('path');
@@ -151,10 +151,15 @@ function runTests(offset = 0, projects) {
         cliArgs: ['test', '--watch=false', project]
     };
     if (project) {
-        console.info(`>>> run ng test ${project}`);
+        console.info(`>>> run ng ${options.cliArgs.join(' ')}`);
         NG.default(options).then((result) => {
             offset++;
-            runTests(offset, projects);
+            if (offset >= projects.length) {
+                process.exit(0);
+            }
+            else {
+                runTests(offset, projects);
+            }
         });
     }
 }
@@ -168,11 +173,16 @@ function runBuilds(offset = 0, projects) {
         cliArgs: ['build', '--watch=false', project]
     };
     if (project) {
-        console.info(`>>> run ng build ${project}`);
+        console.info(`>>> run ng ${options.cliArgs.join(' ')}`);
         // TODO: check if all deps build before
         NG.default(options).then((result) => {
             offset++;
-            runBuilds(offset, projects);
+            if (offset >= projects.length) {
+                process.exit(0);
+            }
+            else {
+                runBuilds(offset, projects);
+            }
         });
     }
 }
@@ -265,7 +275,7 @@ function projectsAndDependencies(silent = false) {
 }
 function showHelp() {
     console.log(`
-Syntax:   node libraryProjets [options]
+Syntax:   node  [options]
 
 Options:
 -h, --help              Print this message.

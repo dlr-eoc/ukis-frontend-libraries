@@ -179,10 +179,14 @@ function runTests(offset = 0, projects) {
     };
 
     if (project) {
-        console.info(`>>> run ng test ${project}`);
+        console.info(`>>> run ng ${options.cliArgs.join(' ')}`);
         NG.default(options).then((result) => {
             offset++;
-            runTests(offset, projects);
+            if (offset >= projects.length) {
+                process.exit(0);
+            } else {
+                runTests(offset, projects);
+            }
         });
     }
 }
@@ -200,11 +204,15 @@ function runBuilds(offset = 0, projects) {
     };
 
     if (project) {
-        console.info(`>>> run ng build ${project}`);
+        console.info(`>>> run ng ${options.cliArgs.join(' ')}`);
         // TODO: check if all deps build before
         NG.default(options).then((result) => {
             offset++;
-            runBuilds(offset, projects);
+            if (offset >= projects.length) {
+                process.exit(0);
+            } else {
+                runBuilds(offset, projects);
+            }
         });
     }
 }
