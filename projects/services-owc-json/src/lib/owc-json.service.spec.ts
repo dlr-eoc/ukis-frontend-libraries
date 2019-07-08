@@ -1,12 +1,9 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { TestBed, getTestBed } from '@angular/core/testing/';
 
 import { OwcJsonService } from './owc-json.service';
 import { barebonesContext, basicContext, exampleContext } from '../../assets/exampleContext';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { optimizeGroupPlayer } from '@angular/animations/browser/src/render/shared';
 import { Fill, Stroke, Style } from 'ol/style.js';
 import { coastalXTestContext } from '../../assets/coastalx.test.context';
-import { iterateListLike } from '@angular/core/src/change_detection/change_detection_util';
 import { osm } from '@ukis/base-layers-raster';
 import { LayersService } from '@ukis/services-layers';
 import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@ukis/services-layers';
