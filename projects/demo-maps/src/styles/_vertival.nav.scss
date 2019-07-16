@@ -1,5 +1,26 @@
 .clr-vertical-nav {
   border-radius: 1px;
+
+  &.left {
+    order: -1 !important;
+  }
+  &:not(.left) {
+    order: 1 !important;
+    &.clr-nav-level-2 .nav-trigger {
+      margin-right: auto;
+      margin-left: 0.125rem;
+      clr-icon {
+        margin-left: 0.2rem;
+        margin-right: auto;
+        &[dir="right"] svg {
+          transform: rotate(270deg);
+        }
+        &[dir="left"] svg {
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
   .nav-trigger-icon {
     color: #aaa;
     width: 1.2rem;
@@ -59,39 +80,25 @@
         max-height: calc(100% - 2.5rem); //0.5 for map-controls
         right: 0;
       }
+      .clr-vertical-nav.left {
+        position: absolute;
+        margin: 1rem;
+        //max-height: calc(100vh - 2rem);
+        //UKISDEV-709
+        max-height: calc(100% - 2.5rem); //0.5 for map-controls
+        left: 0;
+      }
       nav.sidenav {
         position: absolute;
         //right: 0;
         left: 0;
-        height: calc(100vh - (24px *2.5));
+        height: calc(100vh - (24px * 2.5));
         background: $clr-vertical-nav-bg-color;
       }
       &.left {
         .clr-vertical-nav {
           right: auto;
           left: 0;
-        }
-      }
-    }
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .content-container {
-    &:not(.left) {
-      flex-direction: row-reverse;
-      .clr-vertical-nav.clr-nav-level-2 .nav-trigger {
-        margin-right: auto;
-        margin-left: 0.125rem;
-        clr-icon {
-          margin-left: 0.2rem;
-          margin-right: auto;
-          &[dir="right"] svg {
-            transform: rotate(270deg);
-          }
-          &[dir="left"] svg {
-            transform: rotate(90deg);
-          }
         }
       }
     }

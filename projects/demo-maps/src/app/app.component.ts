@@ -10,9 +10,8 @@ import { ProgressService, IProgress } from './components/global-progress/progres
 export class AppComponent {
 
   ui = {
-    floating: true,
-    flipped: false,
-    footer: false,
+    floating: false,
+    footer: true,
     alert: null,
     progress: null
   };

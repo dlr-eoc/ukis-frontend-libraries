@@ -14,6 +14,7 @@ import { ProgressService } from './components/global-progress/progress.service';
 import { RouteMap2Component } from './route-components/route-map2/route-map2.component';
 import { RouteMap3Component } from './route-components/route-map3/route-map3.component';
 import { RouteMap4Component } from './route-components/route-map4/route-map4.component';
+import { RouteMap5Component } from './route-components/route-map5/route-map5.component';
 
 
 
@@ -42,6 +43,12 @@ export const appRoutes: Routes = [
     data: {
       title: 'Custom Layers'
     }
+  },
+  {
+    path: 'map5', component: RouteMap5Component,
+    data: {
+      title: 'Two Vertical-Nav Layout'
+    }
   }
 ];
 
@@ -55,7 +62,8 @@ export const appRoutes: Routes = [
     GlobalProgressComponent,
     RouteMap2Component,
     RouteMap3Component,
-    RouteMap4Component
+    RouteMap4Component,
+    RouteMap5Component
   ],
   imports: [
     BrowserModule,
