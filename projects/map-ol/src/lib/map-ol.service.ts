@@ -29,7 +29,7 @@ import olFeature from 'ol/Feature';
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olProjection from 'ol/proj/Projection.js';
-import { transformExtent, get, transform } from 'ol/proj.js';
+import { transformExtent, get as getProjection, transform } from 'ol/proj.js';
 import { extend as olExtend, getWidth, getTopLeft } from 'ol/extent.js';
 import { easeOut } from 'ol/easing.js';
 import olCoordinate from 'ol/coordinate';
@@ -41,7 +41,7 @@ import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
-import {DragBox, Select} from 'ol/interaction';
+import { DragBox, Select } from 'ol/interaction';
 
 
 
@@ -62,8 +62,7 @@ export class MapOlService {
     // this.createMap();
   }
 
-  public createMap(target?) {
-    const _EPSG = this.EPSG;
+  public createMap(target?: HTMLElement) {
     const zoom = 3;
     const center = {
       lat: 0,
@@ -91,22 +90,15 @@ export class MapOlService {
     });
 
     const _view = new olView({
-      center: transform([center.lon, center.lat], 'EPSG:4326', _EPSG),
+      center: transform([center.lon, center.lat], 'EPSG:4326', this.EPSG),
       zoom: zoom,
-      projection: _EPSG
+      projection: getProjection(this.EPSG)
     });
 
     /** define map in constructor so it is created before to use it in projects onInit Method  */
-    const _map = this.map;
-    [_baselayerGroup, _layersGroup, _overlayGroup].forEach(layer => _map.addLayer(layer));
-    _map.setView(_view);
-    _map.set('controls', []);
-
-    if (target && !_map.getTarget()) {
-      _map.setTarget(target);
-    }
-
-    this.map = _map;
+    [_baselayerGroup, _layersGroup, _overlayGroup].map(layer => this.map.addLayer(layer));
+    this.map.setView(_view);
+    this.map.set('controls', []);
     this.view = this.map.getView();
     return {
       map: this.map,
@@ -129,17 +121,17 @@ export class MapOlService {
    * @param onBoxStart 
    * @param onBoxEnd 
    */
-  public addBboxSelection( conditionForDrawing: (evt: any) => boolean,  onBoxStart: () => void, onBoxEnd: (any) => void) {
-    
+  public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart: () => void, onBoxEnd: (any) => void) {
+
     let dragBox = new DragBox({
-      condition: conditionForDrawing 
+      condition: conditionForDrawing
     });
 
-    dragBox.on('boxstart', function() {
+    dragBox.on('boxstart', function () {
       onBoxStart();
     });
-    
-    dragBox.on('boxend', function() {
+
+    dragBox.on('boxend', function () {
       var extent = dragBox.getGeometry().getExtent();
       onBoxEnd(extent);
     });
@@ -818,7 +810,7 @@ export class MapOlService {
 
   public setExtent(extent: olExtend, geographic?: boolean, fitOptions?: any): any {
     // var _extent = ol.extent.boundingExtent([destLoc,currentLoc]);
-    const projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
+    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
     const _fitOptions = {
       size: this.map.getSize(),
@@ -832,7 +824,7 @@ export class MapOlService {
   }
   /** ol.Coordinate xy */
   public setCenter(center: olCoordinate, geographic?: boolean) {
-    const projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
+    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
     // console.log('set center in svc', transfomCenter)
     // console.log(this.map.getView().getCenter())
@@ -840,8 +832,8 @@ export class MapOlService {
   }
 
   public getCenter(geographic?: boolean): any {
-    const dstProjection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
-    const srcProjection = get(this.map.getView().getProjection().getCode());
+    const dstProjection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const srcProjection = getProjection(this.map.getView().getProjection().getCode());
 
     const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
     // console.log('set center in svc', transfomCenter)
@@ -861,7 +853,7 @@ export class MapOlService {
   }
 
   public getCurrentExtent(geographic?: boolean): olExtend {
-    const projection = (geographic) ? get('EPSG:4326') : get(this.EPSG);
+    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
     const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
     return transfomExtent;
