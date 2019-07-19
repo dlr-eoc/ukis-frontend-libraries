@@ -1,3 +1,14 @@
+# [5.1.2](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.1.2) (2019-07-19) (olmap fix for routing)
+
+### Bug Fixes
+* **@ukis/map-ol:** map viewport was not set on route change due to olMap got no target element when used a string on map.setTarget - now using @ViewChild to get the nativeElement ([3dc113ecb6b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/3dc113ecb6bb3a8d2d673d50629edea1f67bdabf))
+
+
+### Features
+* **demo-maps:** added new demo for a layout with two vertical navs
+
+
+
 # [5.1.1](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.1.1) (2019-07-08) (angular update)
 
 ### Dependency updates
