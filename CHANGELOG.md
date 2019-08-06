@@ -1,3 +1,14 @@
+# [5.2.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.2.0) (2019-08-06) (services-layers)
+
+
+### Features
+* **@ukis/services-layers:** add function 'removeBaseLayers' and 'removeLayers' so layers can be filtered for all slots 'Baselayers' | 'Layers' | 'Overlays' ([UKISDEV-885](http://git.ukis.eoc.dlr.de/plugins/servlet/jira-integration/issues/UKISDEV-885)) ([bdb1017ab3b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/bdb1017ab3b1f98d28b4e0709cc296a6e628898f))
+
+* **@ukis/services-layers:** add 'description' to LayerGroup to show it in the ukis-layerentry-group ([UKISDEV-886](http://git.ukis.eoc.dlr.de/plugins/servlet/jira-integration/issues/UKISDEV-886)) ([3ffb35c9347](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/3ffb35c934777790cda3906c8ad3748bf4719b9c))
+* **@ukis/services-layers, @ukis/layer-control:** add 'actions' to Layer and LayerGroup to trigger functions with clarity-icons ([UKISDEV-886](http://git.ukis.eoc.dlr.de/plugins/servlet/jira-integration/issues/UKISDEV-886)) ([3ffb35c9347](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/3ffb35c934777790cda3906c8ad3748bf4719b9c))
+
+
+
 # [5.1.2](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.1.2) (2019-07-19) (olmap fix for routing)
 
 ### Bug Fixes
