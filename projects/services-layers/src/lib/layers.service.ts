@@ -446,6 +446,20 @@ export class LayersService {
     return this.baseLayers.asObservable();
   }
 
+  /**
+   * filter BaseLayers from layergroups and remove them;
+   */
+  removeBaseLayers(filter?: (value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
+    let baselayers = this.filterBaseLayers();
+    if (filter) {
+      baselayers = baselayers.filter(filter);
+    }
+    baselayers.forEach((ol) => {
+      this.removeLayerOrGroupById(ol.id);
+    });
+    return this.baseLayers.asObservable();
+  }
+
   public getBaseLayersCount(): number {
     return this.baseLayers.getValue().length;
   }
@@ -478,6 +492,20 @@ export class LayersService {
 
   /** all other layers not 'Overlays' or  'Baselayers'  */
   public getLayers(): Observable<Layer[]> {
+    return this.layers.asObservable();
+  }
+
+  /**
+   * filter Layers from layergroups and remove them;
+   */
+  removeLayers(filter?: (value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
+    let layers = this.filterLayers();
+    if (filter) {
+      layers = layers.filter(filter);
+    }
+    layers.forEach((ol) => {
+      this.removeLayerOrGroupById(ol.id);
+    });
     return this.layers.asObservable();
   }
 

@@ -199,6 +199,39 @@ describe('LayersService', () => {
     expect(service.getOverlaysCount()).toEqual(0);
   }));
 
+  it('should remove multiple or all layers from the Overlays-Slot', async(() => {
+    const service: LayersService = TestBed.get(LayersService);
+    service.addLayerGroup(layergroup1);
+    expect(service.getLayerGroupsCount()).toEqual(1);
+    expect(service.getOverlaysCount()).toEqual(1);
+    // clean up;
+    service.removeOverlays();
+    expect(service.getLayerGroupsCount()).toEqual(0);
+    expect(service.getOverlaysCount()).toEqual(0);
+  }));
+
+  it('should remove multiple or all layers from the Layers-Slot', async(() => {
+    const service: LayersService = TestBed.get(LayersService);
+    [layer1, layer2, layer3].forEach(l => service.addLayer(l, 'Layers'))
+    expect(service.getLayersCount()).toEqual(3);
+    // clean up;
+    service.removeLayers((layer) => {
+      return layer.id !== layer1.id;
+    });
+    expect(service.getLayersCount()).toEqual(1);
+  }));
+
+  it('should remove multiple or all layers from the BaseLayers-Slot', async(() => {
+    const service: LayersService = TestBed.get(LayersService);
+    [layer1, layer2, layer3].forEach(l => service.addLayer(l, 'Baselayers'))
+    expect(service.getBaseLayersCount()).toEqual(3);
+    // clean up;
+    service.removeBaseLayers((layer) => {
+      return layer.id !== layer1.id;
+    });
+    expect(service.getBaseLayersCount()).toEqual(1);
+  }));
+
   /** test for layer-control arrows up and down */
   it('should move group or layer up and down in the array', async(() => {
     const service: LayersService = TestBed.get(LayersService);
