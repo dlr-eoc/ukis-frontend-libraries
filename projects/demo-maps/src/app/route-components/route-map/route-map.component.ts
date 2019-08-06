@@ -249,10 +249,12 @@ export class RouteMapComponent implements OnInit {
         ]
       },
       visible: false,
-      popup: true
+      popup: true,
+      actions: [{ title: 'download', icon: 'download-cloud', action: (layer) => { console.log(layer) } }]
     });
 
     const esri_Image_layer = new esri_world_imagery();
+    esri_Image_layer.legendImg = null;
 
     const esri_grey_layer = new esri_grey_canvas(<any>{
       removable: true,
@@ -266,13 +268,16 @@ export class RouteMapComponent implements OnInit {
     });
 
     const osmLayer = new osm();
+    osmLayer.legendImg = 'assets/osm.png';
     /** add a Group of layers */
 
 
     const group_layer = new LayerGroup({
       id: 'group_1',
       name: 'Test Group',
-      layers: [esri_ocean_imagery_layer, osmLayer, esri_Image_layer]
+      layers: [esri_ocean_imagery_layer, osmLayer, esri_Image_layer],
+      description: 'this is a group with esri_ocean_imagery_layer, osmLayer, esri_Image_layer <img src="assets/osm.png"><a href="assets/osm.png">a link</a>',
+      actions: [{ title: 'download', icon: 'download-cloud', action: (group) => { console.log(group) } }]
     });
 
     const group_layer2 = new LayerGroup({
