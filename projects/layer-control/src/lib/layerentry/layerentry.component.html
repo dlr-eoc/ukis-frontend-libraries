@@ -45,6 +45,10 @@
         [ngClass]="{'active': activeTabs['legend']}" (click)="switchTab('legend')"></clr-icon>
       <clr-icon *ngIf="layer.description" title="Layer info" shape="info-standard" class="iconButton"
         [ngClass]="{'active': activeTabs['description']}" (click)="switchTab('description')"></clr-icon>
+
+      <clr-icon *ngFor="let item of layer.actions" [attr.shape]="item.icon" class="iconButton"
+        (click)="item.action(layer)" [title]="item.title">
+      </clr-icon>
       <span></span>
       <clr-icon *ngIf="canZoomToLayer" shape="zoom-in" class="iconButton" title="Zoom to layer" (click)="zoomTo(layer)">
       </clr-icon>

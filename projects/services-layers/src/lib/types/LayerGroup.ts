@@ -10,9 +10,11 @@ export interface ILayerGroupOptions {
 
     displayName?: string;
     filtertype?: 'Baselayers' | 'Overlays' | 'Layers';
-    removable?: boolean
-    layerRemovable?: boolean
-    bbox?: TGeoExtent
+    removable?: boolean;
+    layerRemovable?: boolean;
+    bbox?: TGeoExtent;
+    description?: string;
+    actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
 }
 
 /**
@@ -25,9 +27,11 @@ export class LayerGroup {
 
     displayName?: string;
     filtertype?: 'Baselayers' | 'Overlays' | 'Layers' = 'Layers';
-    removable?: boolean = true;
-    layerRemovable?: boolean = true;
+    removable = true;
+    layerRemovable = true;
     bbox?: [number, number, number, number];
+    description?: string;
+    actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
     constructor(options: ILayerGroupOptions) {
         Object.assign(this, options);
     }

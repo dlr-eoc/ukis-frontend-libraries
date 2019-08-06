@@ -57,6 +57,7 @@ export interface ILayerOptions {
   bbox?: TGeoExtent
   /** true if show popup or set properties or popup-function  */
   popup?: boolean | Array<string> | popup
+  actions?: [{ title: string, icon: string, action: (Layer) => void }];
 }
 
 export interface IRasterLayerOptions extends ILayerOptions {
@@ -109,6 +110,7 @@ export class Layer implements ILayerOptions {
   bbox?: TGeoExtent
   /** true if show popup or set properties or popup-function  */
   popup?: boolean | Array<string> | popup
+  actions?: [{ title: string, icon: string, action: (Layer) => void }];
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);

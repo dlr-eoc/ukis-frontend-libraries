@@ -23,6 +23,8 @@ export class LayerentryGroupComponent implements OnInit {
   public visible: boolean = true;
   public canZoomToGroup: boolean = false;
 
+  public showInfo = false;
+
   constructor() { }
 
   ngOnInit() {
