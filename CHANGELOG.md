@@ -1,3 +1,10 @@
+# [5.2.1](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.2.1) (2019-08-13) (layer-control)
+
+### Bug Fixes
+* **@ukis/layer-control:** layerentry-group don't use layer.name for the checkbox-id so layer with same name are not toggled simultaneously. ([UKISDEV-898](http://jira.ukis.eoc.dlr.de/browse/UKISDEV-898)) ([d360c8a21bf](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/d360c8a21bf85ea8967dbc1b743b81fe92744daa))
+
+
+
 # [5.2.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.2.0) (2019-08-06) (services-layers)
 
 
