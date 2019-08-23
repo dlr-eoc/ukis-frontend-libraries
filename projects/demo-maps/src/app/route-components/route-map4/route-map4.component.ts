@@ -4,7 +4,7 @@ import { MapStateService } from '@ukis/services-map-state';
 import { MapOlService } from '@ukis/map-ol';
 import { eoc_litemap, esri_world_imagery, esri_grey_canvas, esri_ocean_imagery } from '@ukis/base-layers-raster';
 
-import { Heatmap as olHeatmapLayer } from 'ol/layer';
+import { Heatmap as olHeatmapLayer, Vector as olVectorLayer } from 'ol/layer';
 import olVectorSource from 'ol/source/Vector';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olImageWMS from 'ol/source/ImageWMS';
@@ -158,6 +158,21 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: false
     });
 
+
+    const custom_vector_layer = new CustomLayer({
+      id: 'custom Vector Layer',
+      name: 'Custom Vector Layer',
+      type: 'custom',
+      custom_layer: new olVectorLayer({
+        source: new olVectorSource({
+          features: this.mapSvc.geoJsonToFeatures(data),
+          format: new olGeoJSON(),
+        }),
+      }),
+      visible: false,
+      bbox: [0.341,40.455,20.577,53.193]
+    });
+
     const esri_layer = new esri_world_imagery();
 
     const layers_group1 = new LayerGroup({
@@ -186,7 +201,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     esri_layer2.id = 'esri_layer2';
     esri_layer2.removable = true;
 
-    const layers = [layers_group1, image_wms_layer, esri_layer2];
+    const layers = [layers_group1, image_wms_layer, esri_layer2, custom_vector_layer];
 
     this.layersSvc.addLayer(eoc_litemap_layer, 'Baselayers');
     layers.forEach(layer => {
