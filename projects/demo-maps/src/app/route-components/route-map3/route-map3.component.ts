@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
 import { LayersService, CustomLayer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { MapOlService } from '@ukis/map-ol';
-import { eoc_litemap } from '@ukis/base-layers-raster';
+import { osm } from '@ukis/base-layers-raster';
 import { ProgressService } from '../../components/global-progress/progress.service';
 
 import olImageLayer from 'ol/layer/Image';
@@ -51,13 +51,10 @@ export class RouteMap3Component implements OnInit, OnDestroy {
   }
 
   addLayers() {
-    const eoc_litemap_layer = new eoc_litemap(<any>{
-      removable: true,
+    const osm_layer = new osm(<any>{
       legendImg: null,
-      visible: true,
-      id: 'eoc_litemap_base'
+      visible: true
     });
-
 
     const source = new olImageWMS({
       url: 'https://ahocevar.com/geoserver/wms',
@@ -85,7 +82,7 @@ export class RouteMap3Component implements OnInit, OnDestroy {
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const layers = [eoc_litemap_layer, event_layer];
+    const layers = [osm_layer, event_layer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
 
   }

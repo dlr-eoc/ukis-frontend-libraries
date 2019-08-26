@@ -2,11 +2,11 @@ import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { MapOlService } from '@ukis/map-ol';
-import { eoc_litemap, esri_world_imagery, esri_grey_canvas, esri_ocean_imagery } from '@ukis/base-layers-raster';
+import { esri_world_imagery, esri_grey_canvas, osm } from '@ukis/base-layers-raster';
 
 import { Heatmap as olHeatmapLayer, Vector as olVectorLayer } from 'ol/layer';
 import olVectorSource from 'ol/source/Vector';
-import olGeoJSON from 'ol/format/GeoJSON';
+import { GeoJSON as olGeoJSON, KML as olKML } from 'ol/format';
 import olImageWMS from 'ol/source/ImageWMS';
 import olImageLayer from 'ol/layer/Image';
 
@@ -37,10 +37,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   }
 
   addLayers() {
-    const eoc_litemap_layer = new eoc_litemap(<any>{
-      legendImg: null,
-      visible: true,
-      id: 'eoc_litemap_base'
+    const osm_layer = new osm(<any>{
+      legendImg: null
     });
 
     const data = {
@@ -165,12 +163,12 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       type: 'custom',
       custom_layer: new olVectorLayer({
         source: new olVectorSource({
-          features: this.mapSvc.geoJsonToFeatures(data),
-          format: new olGeoJSON(),
+          url: 'assets/data/kml/citsu_valparaiso_vinna.kml',
+          format: new olKML(),
         }),
       }),
       visible: false,
-      bbox: [0.341,40.455,20.577,53.193]
+      bbox: [-71.770,-33.112,-71.421,-32.867]
     });
 
     const esri_layer = new esri_world_imagery();
@@ -201,9 +199,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     esri_layer2.id = 'esri_layer2';
     esri_layer2.removable = true;
 
-    const layers = [layers_group1, image_wms_layer, esri_layer2, custom_vector_layer];
+    const layers = [osm_layer, layers_group1, image_wms_layer, esri_layer2, custom_vector_layer];
 
-    this.layersSvc.addLayer(eoc_litemap_layer, 'Baselayers');
+    this.layersSvc.addLayer(osm_layer, 'Baselayers');
     layers.forEach(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');
