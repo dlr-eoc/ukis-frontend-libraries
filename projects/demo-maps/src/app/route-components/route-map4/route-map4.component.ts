@@ -37,8 +37,12 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   }
 
   addLayers() {
-    const osm_layer = new osm(<any>{
+    const osm_layer_base = new osm(<any>{
       legendImg: null
+    });
+    const osm_layer_1 = new osm(<any>{
+      legendImg: null,
+      id: 'OSM1'
     });
 
     const data = {
@@ -149,7 +153,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
 
     const vector_layer = new VectorLayer({
-      id: 'Vector Layer',
+      id: 'Vector Layer1',
       name: 'Vector Layer',
       type: 'geojson',
       data: data,
@@ -168,7 +172,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         }),
       }),
       visible: false,
-      bbox: [-71.770,-33.112,-71.421,-32.867]
+      bbox: [-71.770, -33.112, -71.421, -32.867]
     });
 
     const esri_layer = new esri_world_imagery();
@@ -199,9 +203,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     esri_layer2.id = 'esri_layer2';
     esri_layer2.removable = true;
 
-    const layers = [osm_layer, layers_group1, image_wms_layer, esri_layer2, custom_vector_layer];
+    const layers = [osm_layer_1, layers_group1, image_wms_layer, esri_layer2, custom_vector_layer];
 
-    this.layersSvc.addLayer(osm_layer, 'Baselayers');
+    this.layersSvc.addLayer(osm_layer_base, 'Baselayers');
     layers.forEach(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');
@@ -255,7 +259,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     };
 
     const test_layer = new VectorLayer({
-      id: 'Vector Layer',
+      id: 'Vector Layer2',
       name: 'Vector Layer',
       type: 'geojson',
       data: data,

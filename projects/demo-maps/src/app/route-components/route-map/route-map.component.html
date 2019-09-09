@@ -10,7 +10,8 @@
     <clr-icon shape="world" title="Overlays" clrVerticalNavIcon></clr-icon>
     Overlays
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'"></ukis-layer-control>
+      <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'">
+      </ukis-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 
@@ -29,5 +30,8 @@
       <ukis-base-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
+
+  <button class="btn btn-primary" (click)="updateLayerGroup()">update LayerGroup</button>
+  <button class="btn btn-primary" (click)="addLayerToGroup()">add Layer to LayerGroup</button>
 
 </clr-vertical-nav>

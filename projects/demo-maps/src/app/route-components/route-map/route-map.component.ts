@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
-import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map } from '@ukis/base-layers-raster';
+import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map, google_earth } from '@ukis/base-layers-raster';
 import { MapOlService } from '@ukis/map-ol';
 
 @Component({
@@ -281,6 +281,7 @@ export class RouteMapComponent implements OnInit {
     });
 
     const group_layer2 = new LayerGroup({
+      // visible: true,
       id: 'group_2',
       name: 'Test Group 2',
       layers: [TDM90_DEM_layer, vector_Layer2, esri_grey_layer]
@@ -294,6 +295,9 @@ export class RouteMapComponent implements OnInit {
         this.layersSvc.addLayerGroup(layer);
       }
     });
+
+    // const test = this.layersSvc.getLayerOrGroupById('group_2')[0]
+    // console.log(test)
   }
 
   addOverlays() {
@@ -301,6 +305,19 @@ export class RouteMapComponent implements OnInit {
     const open_sea_map_on_topp = new open_sea_map();
     this.layersSvc.addLayer(layer_on_topp_of_all, 'Overlays');
     this.layersSvc.addLayer(open_sea_map_on_topp, 'Overlays');
+  }
+
+  updateLayerGroup() {
+    const test = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2')[0];
+    test.layers[1].visible = true;
+    this.layersSvc.updateLayerGroup(test);
+  }
+
+  addLayerToGroup() {
+    const group = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2')[0];
+    const google_earth_layer = new google_earth();
+    this.layersSvc.addLayerToGroup(google_earth_layer, group)
+
   }
 
 }
