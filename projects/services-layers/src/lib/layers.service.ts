@@ -259,6 +259,7 @@ export class LayersService {
       }
       lgroups.push(layergroup);
       this.layergroups.next(lgroups);
+      this.updateLayerGroup(layergroup); //update to set visible
       // don't add layers again already added trough this.layergroups.next(lgroups)
       /*
       for (const layer of layerGroup.layers) {

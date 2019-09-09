@@ -8,6 +8,7 @@ export interface ILayerGroupOptions {
     name: string;
     layers: Layer[];
 
+    visible?: boolean;
     displayName?: string;
     filtertype?: 'Baselayers' | 'Overlays' | 'Layers';
     removable?: boolean;
@@ -33,6 +34,24 @@ export class LayerGroup {
     description?: string;
     actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
     constructor(options: ILayerGroupOptions) {
+        if (options.visible && options.layers) {
+            options.layers = options.layers.map(l => {
+                l.visible = options.visible;
+                return l;
+            });
+        }
         Object.assign(this, options);
+    }
+
+    get visible() {
+        return this.layers.filter(l => l.visible).length > 0;
+    }
+    set visible(value: boolean) {
+        if (this.layers) {
+            this.layers = this.layers.map(l => {
+                l.visible = value;
+                return l;
+            });
+        }
     }
 }
