@@ -1,13 +1,17 @@
 # [5.3.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.3.0) (2019-09-09) (layer-control and services-layers)
 
 ### Bug Fixes
-* **@ukis/services-layers:** prevent to add layers or groups with same id
+* **@ukis/services-layers:** prevent to add layers or groups with same id ([71f5668a182](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/71f5668a1823fd02caf7eb24b4fc8f33d001da72))
+
+* **@ukis/layer-control:** LayerGroup is not set to visible if the group is updated with the layerservice ([51b35fe2c17](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/51b35fe2c17e7b1c056c50ba0b7a604c7ad3dc1a))
 
 ### Features
-* **@ukis/services-layers:** new functions: getLayerOrGroupById(), getLayerById()
+* **@ukis/services-layers:** new functions: getLayerOrGroupById(), getLayerById() ([71f5668a182](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/71f5668a1823fd02caf7eb24b4fc8f33d001da72))
+
+* **demo-maps:** add custom vector layer with bbox to demo-maps, add kml as custom layer ([e2544e8295e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/e2544e8295ef3e64fa1bf868aae5fa2532948977), [ba5daa1028d](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/ba5daa1028d58064ecf70f796b06bc9c68976675))
 
 ### Changes
-* **@ukis/services-layers:** function params change - isInLayergroups(layergroup: Layer | string, groups?: Array<Layer | LayerGroup>)
+* **@ukis/services-layers:** function params change - isInLayergroups(layergroup: Layer | string, groups?: Array<Layer | LayerGroup>) ([71f5668a182](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/71f5668a1823fd02caf7eb24b4fc8f33d001da72))
 
 
 
