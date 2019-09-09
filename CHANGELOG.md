@@ -1,3 +1,16 @@
+# [5.3.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.3.0) (2019-09-09) (layer-control and services-layers)
+
+### Bug Fixes
+* **@ukis/services-layers:** prevent to add layers or groups with same id
+
+### Features
+* **@ukis/services-layers:** new functions: getLayerOrGroupById(), getLayerById()
+
+### Changes
+* **@ukis/services-layers:** function params change - isInLayergroups(layergroup: Layer | string, groups?: Array<Layer | LayerGroup>)
+
+
+
 # [5.2.1](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.2.1) (2019-08-13) (layer-control)
 
 ### Bug Fixes
