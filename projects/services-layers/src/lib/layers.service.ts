@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Layer, RasterLayer } from './types/Layers';
 import { LayerGroup } from './types/LayerGroup';
 
@@ -7,7 +7,7 @@ import { LayerGroup } from './types/LayerGroup';
   providedIn: 'root'
 })
 export class LayersService {
-  private layergroups = new BehaviorSubject(Array<Layer | LayerGroup>());
+  private store = new BehaviorSubject(Array<Layer | LayerGroup>());
 
   private baseLayers = new BehaviorSubject(Array<Layer>());
 
@@ -20,119 +20,121 @@ export class LayersService {
   }
 
 
-  /**
-   * add layer /add layer to group
-   * remove layer /remove layer from group
-   * update layer /update layer on grup
-   *
-   * add group
-   * remove group
-   * update group
-   *
-   *
-   */
-
   // ----------------------------------------------------------------------------------------------------------------
   /**
-   * add's a ukis Layer or a LayerGroup to the Layerservice
-   * if toGroup is true the layer is is not added to the list of Layers and LayerGroups only used  internal
+   * Adds a ukis Layer to the Layerservice Store
+   * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+   * if filtertype is not provided the filtertype of the Layer is used!
    *
-   * filtertype: "Overlays" | "Baselayers" | string
+   * if toGroup is true the layer is not added to the list of Layers and storeItems only used  internal
    */
-  public addLayer(layer: Layer, filtertype: 'Baselayers' | 'Overlays' | 'Layers', toGroup?: boolean) {
-    // console.log("layer.filtertype", layer.filtertype)
+  public addLayer(layer: Layer, filtertype?: 'Baselayers' | 'Overlays' | 'Layers', toGroup?: boolean) {
     if (!this.isInLayergroups(layer)) {
-      const groups = this.layergroups.getValue();
+
+      if (!filtertype) {
+        filtertype = layer.filtertype;
+      } else {
+        // set filtertype of Layer!!
+        layer.filtertype = filtertype;
+      }
+
+      const storeItems = this.store.getValue();
 
       if (toGroup) {
-        if (filtertype === 'Baselayers') {
-          this.baseLayers.next(this.filterBaseLayers());
-        } else if (filtertype === 'Overlays') {
-          this.overlays.next(this.filterOverlays());
-        } else if (filtertype === 'Layers') {
-          this.layers.next(this.filterLayers());
-        }
+        this.filterFiltertype(filtertype);
       } else {
-        // add single layer to layergroups!!!!!
-        layer.filtertype = filtertype;
-        groups.push(layer);
+        storeItems.push(layer);
 
-        this.layergroups.next(groups);
-        if (filtertype === 'Baselayers') {
-          this.baseLayers.next(this.filterBaseLayers());
-        } else if (filtertype === 'Overlays') {
-          this.overlays.next(this.filterOverlays());
-        } else if (filtertype === 'Layers') {
-          this.layers.next(this.filterLayers());
-        }
+        this.store.next(storeItems);
+        this.filterFiltertype(filtertype);
       }
+    } else {
+      console.error(`layer or Group with id: ${layer.id} already exists!`);
     }
   }
 
   /**
-  * filtertype: "Overlays" | "Baselayers" | string
+  * Removes a ukis Layer from the Layerservice Store
+  * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+  * if filtertype is not provided the filtertype of the Layer is used!
   */
-  public removeLayer(layer: Layer, filtertype: 'Baselayers' | 'Overlays' | 'Layers') {
+  public removeLayer(layer: Layer, filtertype?: 'Baselayers' | 'Overlays' | 'Layers') {
     if (this.isInLayergroups(layer)) {
-      // console.log('remove single layer from layergroups!!!!!');
-      const groups = this.layergroups.getValue().filter((lg) => {
+
+      if (!filtertype) {
+        filtertype = layer.filtertype;
+      } else {
+        if (filtertype !== layer.filtertype) {
+          console.error(`the layer with id: ${layer.id} you want to remove from ${filtertype} is from filtertype: ${layer.filtertype}`);
+        }
+      }
+
+      // console.log('remove single layer from storeItems!!!!!');
+      const storeItems = this.store.getValue().filter((lg) => {
         if (lg instanceof Layer) {
           return lg.id !== layer.id;
         } else {
           return lg;
         }
       });
-      this.layergroups.next(groups);
-
-      if (filtertype === 'Overlays') {
-        this.overlays.next(this.filterOverlays());
-      }
-
-      if (filtertype === 'Baselayers') {
-        this.baseLayers.next(this.filterBaseLayers());
-      }
-
-      if (filtertype === 'Layers') {
-        this.layers.next(this.filterLayers());
-      }
+      this.store.next(storeItems);
+      this.filterFiltertype(filtertype);
+    } else {
+      console.error(`layer or Group with id: ${layer.id} not in storeItems!`);
     }
   }
 
   /**
-  * filtertype: "Overlays" | "Baselayers" | string
+  * Updates a ukis Layer in the Layerservice Store
+  * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+  * if filtertype is not provided the filtertype of the Layer is used!
   */
-  public updateLayer(layer: Layer, filtertype: 'Baselayers' | 'Overlays' | 'Layers') {
-    if (filtertype === 'Overlays') {
-      for (const l of this.filterOverlays()) {
-        if ((l.id === layer.id)) {
-          this.overlays.next(this.filterOverlays());
+  public updateLayer(layer: Layer, filtertype?: 'Baselayers' | 'Overlays' | 'Layers') {
+
+    if (this.isInLayergroups(layer)) {
+
+      if (!filtertype) {
+        filtertype = layer.filtertype;
+      } else {
+        if (filtertype !== layer.filtertype) {
+          console.error(`the layer with id: ${layer.id} you want to update is from filtertype: ${layer.filtertype} and not from ${filtertype} `);
         }
       }
-    }
-    if (filtertype === 'Layers') {
-      for (const l of this.filterLayers()) {
-        if ((l.id === layer.id)) {
-          this.layers.next(this.filterLayers());
+
+      if (layer.filtertype === 'Overlays') {
+        for (const l of this.filterOverlays()) {
+          if ((l.id === layer.id)) {
+            this.overlays.next(this.filterOverlays());
+          }
         }
       }
-    }
-    if (filtertype === 'Baselayers') {
-      for (const l of this.baseLayers.getValue()) {
-        if ((l.id === layer.id)) {
-          this.baseLayers.next(this.filterBaseLayers());
+      if (layer.filtertype === 'Layers') {
+        for (const l of this.filterLayers()) {
+          if ((l.id === layer.id)) {
+            this.layers.next(this.filterLayers());
+          }
         }
       }
+      if (layer.filtertype === 'Baselayers') {
+        for (const l of this.baseLayers.getValue()) {
+          if ((l.id === layer.id)) {
+            this.baseLayers.next(this.filterBaseLayers());
+          }
+        }
+      }
+
+
+    } else {
+      console.error(`layer with id: ${layer.id} you want to update not in storeItems!`);
     }
   }
 
-
   /**
-   *
-   * removes a ukis Layer or a LayerGroup from the Layerservice by the Layer.id or LayerGroup.id
-   * if layerGroupId is set, then it removes the Layer from a LayerGroup
+   * Removes a ukis Layer or a LayerGroup from the Layerservice Store by the Layer.id or LayerGroup.id
+   * if removeNullGroup is set, then it removes the LayerGroup if no layer is in there
    */
   public removeLayerOrGroupById(id: string, removeNullGroup?: boolean) {
-    this.layergroups.getValue().filter((lg) => {
+    this.store.getValue().filter((lg) => {
       if (lg instanceof Layer) {
         if (lg.id === id) {
           this.removeLayer(lg, lg.filtertype || 'Layers');
@@ -154,73 +156,58 @@ export class LayersService {
     });
   }
 
+  /**
+   * Adds a ukis Layer to a LayerGroup in the Layerservice Store by providing the Layer and LayerGroup
+   */
   public addLayerToGroup(layer: Layer, layerGroup: LayerGroup) {
     if (!this.isInLayergroups(layer)) {
-      /** convert filtertyle of layer to the same as the group */
+      // convert filtertyle of layer to the same as the group
       if (layer.filtertype !== layerGroup.filtertype) {
         layer.filtertype = layerGroup.filtertype;
       }
       if (!this.isInLayergroups(layer, [layerGroup])) {
         layerGroup.layers.push(layer);
+        this.updateLayerGroup(layerGroup);
+      } else {
+        // throw new Error(`layer or Group with id: ${id} already exists!`);
+        console.error(`layer with id: ${layer.id} already exists in ${layerGroup.id}!`, layerGroup);
       }
-
-      this.layergroups.getValue().forEach((lg) => {
-        if (lg instanceof Layer) {
-
-        } else if (lg instanceof LayerGroup) {
-          if (lg.id === layerGroup.id) {
-            lg.layers = layerGroup.layers;
-          }
-        }
-      });
-
-      this.layergroups.next(this.layergroups.getValue());
-      this.overlays.next(this.filterOverlays());
-      this.baseLayers.next(this.filterBaseLayers());
+    } else {
+      // throw new Error(`layer or Group with id: ${id} already exists!`);
+      console.error(`layer with id: ${layer.id} already exists!`);
     }
   }
 
+  /**
+   * Adds a ukis Layer to a LayerGroup in the Layerservice Store by providing the Layer and LayerGroup.id
+   */
   public addLayerToGroupById(layer: Layer, GroupId: string) {
-    this.layergroups.getValue().forEach((lg) => {
+    this.store.getValue().forEach((lg) => {
       if (lg instanceof LayerGroup && lg.id === GroupId) {
         this.addLayerToGroup(layer, lg);
       }
     });
   }
 
-  /** defaults if no layers on the group it will remove it */
-  public removeLayerFromGroup(layer: Layer, layerGroup: LayerGroup, removeNullGroup?: boolean) {
-    if (removeNullGroup === undefined || removeNullGroup === null) {
-      removeNullGroup = true;
-    }
-    layerGroup.layers = layerGroup.layers.filter(l => l.id !== layer.id);
-    this.removeLayer(layer, layerGroup.filtertype || 'Layers');
-
-    this.layergroups.getValue().forEach((lg) => {
-      if (lg instanceof Layer) {
-
-      } else if (lg instanceof LayerGroup) {
-        if (lg.id === layerGroup.id) {
-          lg.layers = layerGroup.layers;
-          this.layergroups.next(this.layergroups.getValue());
-        }
-      }
-    });
+  /**
+   * Removes a Layer from a LayerGroup in the Layerservice Store
+   * By default if no layers on the group it will remove it - change this through set removeNullGroup to false
+   */
+  public removeLayerFromGroup(layer: Layer, layergroup: LayerGroup, removeNullGroup: boolean = true) {
+    layergroup.layers = layergroup.layers.filter(l => l.id !== layer.id);
+    this.updateLayerGroup(layergroup);
+    this.filterFiltertype(layer.filtertype);
 
     // if no layers on the group remove it
-    if (layerGroup.layers.length === 0 && removeNullGroup) {
-      const _layergroups = this.layergroups.getValue().filter((lg) => {
-        if (lg instanceof Layer) {
-          return lg;
-        } else if (lg instanceof LayerGroup) {
-          return lg.id !== layerGroup.id;
-        }
-      });
-      this.layergroups.next(_layergroups);
+    if (layergroup.layers.length === 0 && removeNullGroup) {
+      this.removeLayerGroup(layergroup);
     }
   }
 
-  /** down == + 1 and up == - 1*/
+  /**
+  * Set the Layer Index in the Array of Layers in a LayerGroup
+  * down == + 1 and up == - 1
+  */
   public setLayerIndexInGroup(layer: Layer, dir: 'up' | 'down', layerGroup: LayerGroup) {
     // console.log("move layer in group " + dir);
     // console.log(layerGroup);
@@ -249,46 +236,68 @@ export class LayersService {
 
 
   // ----------------------------------------------------------------------------------------------------------------
-
-  public addLayerGroup(layergroup: LayerGroup) {
-    // console.log("add LayerGroup", layerGroup);
+  /**
+     * Adds a ukis LayerGroup to the Layerservice Store
+     * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+     * if filtertype is not provided the filtertype of the LayerGroup is used
+     * All the Layers of the Group are set to filtertype of the Group
+     */
+  public addLayerGroup(layergroup: LayerGroup, filtertype?: 'Baselayers' | 'Overlays' | 'Layers') {
     if (!this.isInLayergroups(layergroup)) {
-      const lgroups = this.layergroups.getValue();
+
+      if (!filtertype) {
+        filtertype = layergroup.filtertype;
+      } else {
+        // set filtertype of Group!!
+        layergroup.filtertype = filtertype;
+      }
+
+      const storeItems = this.store.getValue();
+      // remove layers from group with the same id as the group!
       if (this.isInLayergroups(layergroup, layergroup.layers)) {
         layergroup.layers = layergroup.layers.filter(l => l.id !== layergroup.id);
       }
-      lgroups.push(layergroup);
-      this.layergroups.next(lgroups);
-      this.updateLayerGroup(layergroup); //update to set visible
-      // don't add layers again already added trough this.layergroups.next(lgroups)
-      /*
-      for (const layer of layerGroup.layers) {
-        // console.log("layerGroup.filtertype", layerGroup.filtertype)
-        this.addLayer(layer, layerGroup.filtertype || 'Layers', true);
-      }
-      */
+      // set filtertype of group to layers
+      layergroup.layers = layergroup.layers.map(l => { l.filtertype = layergroup.filtertype; return l; });
+
+      storeItems.push(layergroup);
+      this.store.next(storeItems);
+
+      // update to set visible
+      this.updateLayerGroup(layergroup);
     }
   }
 
-  public removeLayerGroup(layerGroup: LayerGroup) {
-    // remove all layers of this group from the map
-    if (layerGroup.removable) {
-      for (const layer of layerGroup.layers) {
-        //console.log('remove layerGroup layers:', layer);
-        this.removeLayerFromGroup(layer, layerGroup);
+  /**
+  * Removes a ukis LayerGroup to the Layerservice Store
+  */
+  public removeLayerGroup(layergroup: LayerGroup) {
+    if (this.isInLayergroups(layergroup)) {
+      // remove all layers of this group from the map
+      if (layergroup.removable) {
+        for (const layer of layergroup.layers) {
+          this.removeLayerFromGroup(layer, layergroup);
+        }
+        const storeItems = this.store.getValue();
+
+        const filteredGroups = storeItems.filter(function (layer, index) {
+          return layer.id !== layergroup.id;
+        });
+
+        this.store.next(filteredGroups);
+      } else {
+        // throw new Error(`layerGroup: ${layerGroup.id} is not removable!`);
+        console.log(`layerGroup: ${layergroup.id} is not removable!`);
       }
-      const lgroups = this.layergroups.getValue();
-
-      const filteredGroups = lgroups.filter(function (layer, index) {
-        return layer.id !== layerGroup.id;
-      });
-
-      this.layergroups.next(filteredGroups);
     } else {
-      console.log('layerGroup is not removable!');
+      console.error(`layer or Group with id: ${layergroup.id} not in storeItems!`);
     }
   }
 
+  /**
+  * Updates a ukis LayerGroup to the Layerservice Store
+  * if sort is set to true the layers of the Group are sort so vectors are above the rasterlayers
+  */
   public updateLayerGroup(layerGroup: LayerGroup, sort: boolean = false) {
     if (sort) {
       layerGroup = this.sortLayerGroup(layerGroup);
@@ -298,14 +307,18 @@ export class LayersService {
     }
   }
 
+  /**
+  * Moves a Item in an Array to another Index
+  */
   public arrayMove(array: Array<any>, fromIndex: number, toIndex: number) {
     array.splice((toIndex < 0 ? array.length + toIndex : toIndex), 0, array.splice(fromIndex, 1)[0]);
   }
 
-  /** set Group Or Layer Index - down == + 1 and up == - 1*/
-  /*
-  public setGroupLayerIndex(group: Layer | LayerGroup, dir: 'up' | 'down', layerGroup?: LayerGroup) {
-    console.log('move group ' + dir);
+  /**
+   * Set Group Or Layer Index in the Layerservice Store
+   * down == index + 1 and up == index - 1
+   */
+  public setGroupLayerIndex(group: Layer | LayerGroup, dir: number | 'up' | 'down') {
     let groupsCount;
     if (group instanceof Layer && group.filtertype) {
       groupsCount = this.getNumOfGroups(group.filtertype);
@@ -314,68 +327,21 @@ export class LayersService {
     }
 
     if (groupsCount > 1) {
+      const storeItems = this.store.getValue();
 
-      // get only groups ... check if move is working with single layers!!!!!!!!
-      const lgroups = this.layergroups.getValue(); // .filter(lg => lg instanceof LayerGroup);
-
-      const groupIndex = lgroups.indexOf(group);
-
-      // console.log('groupIndex', group.name, groupIndex)
-      // console.log(lgroups)
-      switch (dir) {
-        case 'up': {
-          if (this.isGroupFirst(group)) {
-            break;
-          } else {
-            this.arrayMove(lgroups, groupIndex, groupIndex - 1);
-          }
-          break;
-        }
-        case 'down': {
-          if (this.isGroupLast(group)) {
-            break;
-          } else {
-            this.arrayMove(lgroups, groupIndex, groupIndex + 1);
-          }
-          break;
-        }
-      }
-      console.log('groupIndex after', group.name, lgroups.indexOf(group));
-      this.layergroups.next(lgroups);
-      this.baseLayers.next(this.filterBaseLayers());
-      this.layers.next(this.filterLayers());
-      this.overlays.next(this.filterOverlays());
-    }
-  }
-  */
-
-  /** set Group Or Layer Index: down == + 1 and up == - 1  */
-  public setGroupLayerIndex(group: Layer | LayerGroup, dir: number | 'up' | 'down', layerGroup?: LayerGroup) {
-    //console.log('move group ' + dir);
-    let groupsCount;
-    if (group instanceof Layer && group.filtertype) {
-      groupsCount = this.getNumOfGroups(group.filtertype);
-    } else if (group instanceof LayerGroup) {
-      groupsCount = this.getNumOfGroups(group.filtertype);
-    }
-
-    if (groupsCount > 1) {
-      // get only groups ... check if move is working with single layers!!!!!!!!
-      const lgroups = this.layergroups.getValue(); // .filter(lg => lg instanceof LayerGroup);
-
-      const groupIndex = lgroups.indexOf(group);
+      const groupIndex = storeItems.indexOf(group);
 
       if (!this.isGroupFirst(group) || !this.isGroupLast(group)) {
         if (typeof dir === 'number') {
-          this.arrayMove(lgroups, groupIndex, dir);
+          this.arrayMove(storeItems, groupIndex, dir);
         } else if (dir === 'up') {
-          this.arrayMove(lgroups, groupIndex, groupIndex - 1);
+          this.arrayMove(storeItems, groupIndex, groupIndex - 1);
         } else if (dir === 'down') {
-          this.arrayMove(lgroups, groupIndex, groupIndex + 1);
+          this.arrayMove(storeItems, groupIndex, groupIndex + 1);
         }
       }
-      //console.log('groupIndex after', group.name, lgroups.indexOf(group));
-      this.layergroups.next(lgroups);
+      // console.log('groupIndex after', group.name, lgroups.indexOf(group));
+      this.store.next(storeItems);
       this.baseLayers.next(this.filterBaseLayers());
       this.layers.next(this.filterLayers());
       this.overlays.next(this.filterOverlays());
@@ -383,11 +349,13 @@ export class LayersService {
   }
 
   /**
-  * filtertype: "Overlays" | "Baselayers" | string
+  * Get the Number of Items from Layerservice Store filtered by filtertype
+  * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
   */
   getNumOfGroups(filtertype: 'Baselayers' | 'Overlays' | 'Layers'): number {
     let num = 0;
-    for (const lg of this.layergroups.getValue()) {
+    const storeItems = this.store.getValue();
+    for (const lg of storeItems) {
       if (lg.filtertype === filtertype) {
         // console.log(lg.type, type)
         num++;
@@ -396,40 +364,54 @@ export class LayersService {
     return num;
   }
 
+  /**
+  * Check if a Layer or LayerGroup is on index 0 of the Layerservice Store or the provided Array
+  * if filtertype is set it only uses the items with this type
+  * filtertype?: 'Baselayers' | 'Overlays' | 'Layers'
+  */
   isGroupFirst(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: 'Baselayers' | 'Overlays' | 'Layers'): boolean {
     let value = false;
 
-    let lgroups = this.layergroups.getValue();
+    let storeItems = this.store.getValue();
     if (_lgroups) {
-      lgroups = _lgroups;
+      storeItems = _lgroups;
     }
     if (filtertype) {
-      lgroups = lgroups.filter(l => l.filtertype === filtertype);
+      storeItems = storeItems.filter(l => l.filtertype === filtertype);
     }
-    if (lgroups.indexOf(group) === 0) {
+    if (storeItems.indexOf(group) === 0) {
       // console.log(group.name, 'isFirst')
       value = true;
     }
     return value;
   }
 
+  /**
+  * Check if a Layer or LayerGroup is on index (length - 1) of the Layerservice Store or the provided Array
+  * if filtertype is set it only uses the items with this type
+  * filtertype?: 'Baselayers' | 'Overlays' | 'Layers'
+  */
   isGroupLast(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: 'Baselayers' | 'Overlays' | 'Layers'): boolean {
     let value = false;
 
-    let lgroups = this.layergroups.getValue();
+    let storeItems = this.store.getValue();
     if (_lgroups) {
-      lgroups = _lgroups;
+      storeItems = _lgroups;
     }
     if (filtertype) {
-      lgroups = lgroups.filter(l => l.filtertype === filtertype);
+      storeItems = storeItems.filter(l => l.filtertype === filtertype);
     }
-    if (lgroups.indexOf(group) === lgroups.length - 1) {
+    if (storeItems.indexOf(group) === storeItems.length - 1) {
       value = true;
     }
     return value;
   }
   // ----------------------------------------------------------------------------------------------------------------
 
+
+  /**
+  * Check if a Layer or LayerGroup is in the Layerservice Store (or the provided Array) by their ID
+  */
   public isInLayergroups(layergroup: Layer | LayerGroup | string, groups?: Array<Layer | LayerGroup>): boolean {
     let value = false;
     let id;
@@ -441,20 +423,21 @@ export class LayersService {
     const items = this.getLayerOrGroupById(id, groups);
     if (items.length > 0) {
       value = true;
-      console.error(`layer or Group with id: ${id} already exists!`, items);
     }
     return value;
   }
+
   /**
+   * Get a Layer or LayerGroup by ID from the Layerservice Store (or the provided Array)
    * normal there should only be returned one or zero items in the array otherwise there is a duplicate ID in the Layer Groups!!
    */
   public getLayerOrGroupById(id: string, groups?: Array<Layer | LayerGroup>) {
     const items: Array<Layer | LayerGroup> = [];
-    let _groups = this.layergroups.getValue();
+    let storeItems = this.store.getValue();
     if (groups) {
-      _groups = groups;
+      storeItems = groups;
     }
-    _groups.map(group => {
+    storeItems.map(group => {
       if (group instanceof LayerGroup) {
         if (group.id === id) {
           items.push(group);
@@ -473,10 +456,12 @@ export class LayersService {
     });
     return items;
   }
-
+  /**
+   * Get a Layer by ID from the Layerservice Store (or the provided Array)
+   */
   public getLayerById(id: string, layers?: Array<Layer>) {
     let value: Layer;
-    let _layers = this.flattenDeepArray(this.layergroups.getValue());
+    let _layers = this.flattenDeepArray(this.store.getValue());
     if (layers) {
       _layers = layers;
     }
@@ -488,13 +473,16 @@ export class LayersService {
     return value;
   }
 
-
+  /**
+   * Get all Layers with filterrype 'Baselayers' from the Layerservice Store
+   */
   public getBaseLayers(): Observable<Layer[]> {
     return this.baseLayers.asObservable();
   }
 
   /**
-   * filter BaseLayers from layergroups and remove them;
+   * Removes Layers with filtertype 'Baselayers' from the Layerservice Store
+   * Filter is a function to exclude layers
    */
   public removeBaseLayers(filter?: (value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
     let baselayers = this.filterBaseLayers();
@@ -513,14 +501,15 @@ export class LayersService {
 
 
   /**
-   * filter Overlays from layergroups;
+   * Get all Layers with filterrype 'Overlays' from the Layerservice Store
    */
   public getOverlays(): Observable<Layer[]> {
     return this.overlays.asObservable();
   }
 
   /**
-   * filter Overlays from layergroups and remove them;
+   * Removes Layers with filtertype 'Overlays' from the Layerservice Store
+   * Filter is a function to exclude layers
    */
   public removeOverlays(filter?: (value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
     let overlays = this.filterOverlays();
@@ -537,13 +526,16 @@ export class LayersService {
     return this.overlays.getValue().length;
   }
 
-  /** all other layers not 'Overlays' or  'Baselayers'  */
+  /**
+   * Get all Layers with filterrype 'Layers' from the Layerservice Store
+   */
   public getLayers(): Observable<Layer[]> {
     return this.layers.asObservable();
   }
 
   /**
-   * filter Layers from layergroups and remove them;
+   * Removes Layers with filtertype 'Layers' from the Layerservice Store
+   * Filter is a function to exclude layers
    */
   public removeLayers(filter?: (value: Layer, index: number, array: Layer[]) => any): Observable<Layer[]> {
     let layers = this.filterLayers();
@@ -560,35 +552,49 @@ export class LayersService {
     return this.layers.getValue().length;
   }
 
-  // all about layergroups
+  /**
+   * Get all storeItems from the Layerservice
+   */
   public getLayerGroups(): Observable<Array<Layer | LayerGroup>> {
-    return this.layergroups.asObservable();
+    return this.store.asObservable();
   }
 
-  // all about layergroups
-  public setLayerGroups(layergroups: Array<Layer | LayerGroup>): Observable<Array<Layer | LayerGroup>> {
-    this.layergroups.next(layergroups);
+  /**
+   * Set (Reset) all storeItems from the Layerservice
+   */
+  public setLayerGroups(storeItems: Array<Layer | LayerGroup>): Observable<Array<Layer | LayerGroup>> {
+    // set filtertype of group to layers
+    if (storeItems.length > 0) {
+      storeItems.map(_group => {
+        if (_group instanceof LayerGroup && _group.layers.length > 0) {
+          _group.layers = _group.layers.map(l => { l.filtertype = _group.filtertype; return l; });
+        }
+      });
+    }
+    this.store.next(storeItems);
     this.baseLayers.next(this.filterBaseLayers());
     this.layers.next(this.filterLayers());
     this.overlays.next(this.filterOverlays());
-    return this.layergroups.asObservable();
+    return this.store.asObservable();
   }
 
+  /**
+   * Get the Count of all storeItems
+   */
   public getLayerGroupsCount(): number {
-    return this.layergroups.getValue().length;
+    return this.store.getValue().length;
   }
   // ----------------------------------------------------------------------------------------------------------------
 
 
   /**
-   *
-   * flatten array with layers and group.layers to get zIndex
+   * flatten array with Layers and LayerGroups.layers (so you can get the zIndex)
    */
-  flattenDeepArray(arr: Array<Layer | LayerGroup>): Layer[] {
+  public flattenDeepArray(arr: Array<Layer | LayerGroup>): Layer[] {
     return arr.reduce((acc, val) => (val instanceof LayerGroup && Array.isArray(val.layers)) ? acc.concat(this.flattenDeepArray(val.layers)) : acc.concat(val), []);
   }
 
-
+  /*
   getZIndexForLayer(layer: Layer): number {
     let zIndex = null;
     const baselayers = this.baseLayers.getValue();
@@ -608,29 +614,41 @@ export class LayersService {
     }
     return zIndex;
   }
+  */
 
-  filterOverlays() {
-    const _groups = this.layergroups.getValue();
-    const _overlays = this.flattenDeepArray(_groups.filter((layer) => layer.filtertype === 'Overlays'));
+  private filterOverlays() {
+    const storeItems = this.store.getValue();
+    const _overlays = this.flattenDeepArray(storeItems.filter((layer) => layer.filtertype === 'Overlays'));
     return _overlays;
   }
 
-  filterBaseLayers() {
-    const _groups = this.layergroups.getValue();
-    const _baselayers = this.flattenDeepArray(_groups.filter((layer) => layer.filtertype === 'Baselayers'));
+  private filterBaseLayers() {
+    const storeItems = this.store.getValue();
+    const _baselayers = this.flattenDeepArray(storeItems.filter((layer) => layer.filtertype === 'Baselayers'));
     return _baselayers;
   }
 
-  filterLayers() {
-    const _groups = this.layergroups.getValue();
-    const _baselayers = this.flattenDeepArray(_groups.filter((layer) => layer.filtertype === 'Layers'));
+  private filterLayers() {
+    const storeItems = this.store.getValue();
+    const _baselayers = this.flattenDeepArray(storeItems.filter((layer) => layer.filtertype === 'Layers'));
     return _baselayers;
+  }
+
+
+  private filterFiltertype(filtertype: 'Baselayers' | 'Overlays' | 'Layers') {
+    if (filtertype === 'Baselayers') {
+      this.baseLayers.next(this.filterBaseLayers());
+    } else if (filtertype === 'Overlays') {
+      this.overlays.next(this.filterOverlays());
+    } else if (filtertype === 'Layers') {
+      this.layers.next(this.filterLayers());
+    }
   }
 
 
   // ----------------------------------------------------------------------
 
-  sortLayerGroup(layerGroup: LayerGroup): LayerGroup {
+  private sortLayerGroup(layerGroup: LayerGroup): LayerGroup {
 
     // fisrt sort in order to put vectors first and then rasterlayers
     layerGroup.layers.sort((a, b) => {

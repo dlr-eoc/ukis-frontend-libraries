@@ -1,62 +1,62 @@
-export type popup = {
-  properties?: any
+export interface popup {
+  properties?: any;
   pupupFunktion?: (popupobj: any) => string;
   asyncPupup?: (popupobj: any, cb: Function) => void;
 }
 
 
-export const WmsLayertype = "wms";
-export const WmtsLayertype = "wmts";
-export const XyzLayertype = "xyz";
-export const GeojsonLayertype = "geojson";
-export const WfsLayertype = "wfs";
-export const CustomLayertype = "custom";
-export type TVectorLayertype = "geojson" | "wfs" | "custom";
-export type TRasterLayertype = "wms" | "wmts" | "xyz" | "custom";
+export const WmsLayertype = 'wms';
+export const WmtsLayertype = 'wmts';
+export const XyzLayertype = 'xyz';
+export const GeojsonLayertype = 'geojson';
+export const WfsLayertype = 'wfs';
+export const CustomLayertype = 'custom';
+export type TVectorLayertype = 'geojson' | 'wfs' | 'custom';
+export type TRasterLayertype = 'wms' | 'wmts' | 'xyz' | 'custom';
 export type TLayertype = TRasterLayertype | TVectorLayertype | string;
 
 
 
 export function isVectorLayertype(inpt: string): inpt is TVectorLayertype {
   return [GeojsonLayertype, WfsLayertype, CustomLayertype].includes(inpt);
-};
+}
 
 export function isRasterLayertype(inpt: string): inpt is TRasterLayertype {
   return [WmsLayertype, WmtsLayertype, XyzLayertype, CustomLayertype].includes(inpt);
-};
+}
 
 export function isLayertype(inpt: string): inpt is TLayertype {
   return (isRasterLayertype(inpt) || isVectorLayertype(inpt));
-};
+}
 
 
 /** geographic coordinates */
 export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
 
 export interface ILayerOptions {
-  name: string
-  id: string
-  //id: string
-  type: TLayertype
+  name: string;
+  id: string;
+  // id: string
+  type: TLayertype;
 
   filtertype?: 'Baselayers' | 'Overlays' | 'Layers';
-  opacity?: number
-  visible?: boolean
-  removable?: boolean
-  continuousWorld?: boolean
-  attribution?: string
-  displayName?: string
-  description?: string
-  time?: string
+  opacity?: number;
+  visible?: boolean;
+  removable?: boolean;
+  continuousWorld?: boolean;
+  attribution?: string;
+  displayName?: string;
+  description?: string;
+  time?: string;
   /** zIndex: DEPRECIATED handeld internal by the layer service */
-  zIndex?: number
-  minResolution?: number
-  maxResolution?: number
-  legendImg?: string
+  zIndex?: number;
+  minResolution?: number;
+  maxResolution?: number;
+  legendImg?: string;
   /** geographic coordinates */
-  bbox?: TGeoExtent
+  bbox?: TGeoExtent;
   /** true if show popup or set properties or popup-function  */
-  popup?: boolean | Array<string> | popup
+  popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
 }
 
@@ -69,33 +69,33 @@ export interface IRasterLayerOptions extends ILayerOptions {
 }
 
 export interface IVectorLayerOptions extends ILayerOptions {
-  data?: any
+  data?: any;
   url?: string;
   subdomains?: Array<string>;
   /** vector options like style, pointToLayer... depends on the map-library */
-  options?: any
+  options?: any;
   /** true if show popup or set Array with keys of properties to show in popup  */
   cluster?: any;
   type: TVectorLayertype;
 }
 
 export interface ICustomLayerOptions extends ILayerOptions {
-  custom_layer: any
+  custom_layer: any;
 }
 
 /**
 * Classes for layer construction
 */
 export class Layer implements ILayerOptions {
-  name: string = '';
-  id: string = '';
+  name = '';
+  id = '';
   type: TLayertype;
-  opacity: number = 1;
-  visible: boolean = true;
-  removable: boolean = false;
+  opacity = 1;
+  visible = true;
+  removable = false;
 
   filtertype?: 'Baselayers' | 'Overlays' | 'Layers' = 'Layers';
-  continuousWorld?: boolean = false;
+  continuousWorld = false;
   attribution?: string;
   displayName?: string;
   description?: string;
@@ -107,9 +107,9 @@ export class Layer implements ILayerOptions {
   legendImg?: string;
 
   /** geographic coordinates */
-  bbox?: TGeoExtent
+  bbox?: TGeoExtent;
   /** true if show popup or set properties or popup-function  */
-  popup?: boolean | Array<string> | popup
+  popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
 
   constructor(options: ILayerOptions) {
@@ -125,7 +125,7 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
   params?: any;
 
   constructor(options: IRasterLayerOptions) {
-    super(options)
+    super(options);
   }
 }
 
