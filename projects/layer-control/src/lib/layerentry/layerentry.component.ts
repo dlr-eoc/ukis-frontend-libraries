@@ -105,11 +105,11 @@ export class LayerentryComponent implements OnInit {
   setLayerIndex(layer: Layer, dir, group?: LayerGroup) {
     console.log('is First', this.isFirst(layer));
     console.log('is Last', this.isLast(layer));
-    console.log(layer, group);
+    // console.log(layer, group);
     if (group) {
       this.layersSvc.setLayerIndexInGroup(layer, dir, group);
     } else {
-      this.layersSvc.setGroupLayerIndex(layer, dir, group);
+      this.layersSvc.setGroupLayerIndex(layer, dir);
     }
   }
 
