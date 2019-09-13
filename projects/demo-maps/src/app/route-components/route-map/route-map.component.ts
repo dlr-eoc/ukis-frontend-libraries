@@ -316,8 +316,12 @@ export class RouteMapComponent implements OnInit {
   addLayerToGroup() {
     const group = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2')[0];
     const google_earth_layer = new google_earth();
-    this.layersSvc.addLayerToGroup(google_earth_layer, group)
+    this.layersSvc.addLayerToGroup(google_earth_layer, group);
 
+  }
+
+  removeAllLayers() {
+    this.layersSvc.removeLayers();
   }
 
 }

@@ -8,11 +8,14 @@
 ### Features
 * **@ukis/services-layers:** new functions: getLayerOrGroupById(), getLayerById() ([71f5668a182](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/71f5668a1823fd02caf7eb24b4fc8f33d001da72))
 
+* **@ukis/services-layers:** LayerGroup now have the optional property visible witch is also set to Layers of the Group; Added Tests and dokumentation.
+
 * **demo-maps:** add custom vector layer with bbox to demo-maps, add kml as custom layer ([e2544e8295e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/e2544e8295ef3e64fa1bf868aae5fa2532948977), [ba5daa1028d](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/ba5daa1028d58064ecf70f796b06bc9c68976675))
 
 ### Changes
 * **@ukis/services-layers:** function params change - isInLayergroups(layergroup: Layer | string, groups?: Array<Layer | LayerGroup>) ([71f5668a182](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/71f5668a1823fd02caf7eb24b4fc8f33d001da72))
 
+* **@ukis/services-layers:** The filtertype on addLayer(), removeLayer(), updateLayer() and addLayerGroup() are now **optional** if not provided the type of the Layer or LayerGroup is used.
 
 
 # [5.2.1](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.2.1) (2019-08-13) (layer-control)
