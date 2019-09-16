@@ -1,0 +1,340 @@
+{
+    "bbox": [
+        5.789935946975231,
+        46.88147743237545,
+        15.915490661755005,
+        54.91566482448914
+    ],
+    "descriptionURL": "https://www.sciencedirect.com/science/article/pii/S003442571730514X",
+    "features": [
+        {
+            "geometry": null,
+            "id": "SCMAP_SN_LS",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1Y",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": "1984-01-01T00:00:00.000Z,1990-01-01T00:00:00.000Z,1995-01-01T00:00:00.000Z,2000-01-01T00:00:00.000Z,2005-01-01T00:00:00.000Z,2010-01-01T00:00:00.000Z"
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.0",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetMap&VERSION=1.1.0&SERVICE=WMS&FORMAT=image%2Fpng&TILED=True&LAYERS=SCMAP_SN_LS&TRANSPARENT=TRUE",
+                                "method": "GET",
+                                "type": "image/png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetFeatureInfo&VERSION=1.1.0&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "text/html"
+                            },
+                            {
+                                "code": "GetTimeSeries",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetTimeSeries&VERSION=1.1.0&SERVICE=WMS&WIDTH=1024&HEIGHT=512&TIME=...",
+                                "method": "GET",
+                                "type": "image/png"
+                            }
+                        ],
+                        "styles": [
+                            {
+                                "default": true,
+                                "legendURL": "https://geoservice.dlr.de/eoc/styles/scmap_reflectance_soil_comp_norm_legend_256px.png",
+                                "name": "soil-norm-landsat",
+                                "title": "Style for Normalized Soil Composite"
+                            }
+                        ]
+                    }
+                ],
+                "title": "SCMaP v1.0 - Reflectance Soil Composite (normalized)",
+                "updated": "2019-02-15T13:23:22"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": null,
+            "id": "SCMAP_SC_LS",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1Y",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": null
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.0",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetMap&VERSION=1.1.0&SERVICE=WMS&FORMAT=image%2Fpng&TILED=True&LAYERS=SCMAP_SC_LS&TRANSPARENT=TRUE",
+                                "method": "GET",
+                                "type": "image/png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetFeatureInfo&VERSION=1.1.0&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "text/html"
+                            },
+                            {
+                                "code": "GetTimeSeries",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetTimeSeries&VERSION=1.1.0&SERVICE=WMS&WIDTH=1024&HEIGHT=512&TIME=...",
+                                "method": "GET",
+                                "type": "image/png"
+                            }
+                        ],
+                        "styles": [
+                            {
+                                "default": true,
+                                "legendURL": "https://geoservice.dlr.de/eoc/styles/scmap_exposed_soil_coverage_legend_256px.png",
+                                "name": "soil-clas-landsat",
+                                "title": "Style for Soil Classification"
+                            }
+                        ]
+                    }
+                ],
+                "title": "SCMaP v1.0 - Exposed Soil Coverage",
+                "updated": "2019-02-15T13:23:22"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": null,
+            "id": "SCMAP_SF_LS",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1Y",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": null
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.0",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetMap&VERSION=1.1.0&SERVICE=WMS&FORMAT=image%2Fpng&TILED=True&LAYERS=SCMAP_SF_LS&TRANSPARENT=TRUE",
+                                "method": "GET",
+                                "type": "image/png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetFeatureInfo&VERSION=1.1.0&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "text/html"
+                            },
+                            {
+                                "code": "GetTimeSeries",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetTimeSeries&VERSION=1.1.0&SERVICE=WMS&WIDTH=1024&HEIGHT=512&TIME=...",
+                                "method": "GET",
+                                "type": "image/png"
+                            }
+                        ],
+                        "styles": [
+                            {
+                                "default": true,
+                                "legendURL": "https://geoservice.dlr.de/eoc/styles/scmap_exposed_soil_freq_legend_256px.png",
+                                "name": "soil-freq-landsat",
+                                "title": "Style for Soil Exposed Frequency"
+                            }
+                        ]
+                    }
+                ],
+                "title": "SCMaP v1.0 - Exposed Soil Frequency",
+                "updated": "2019-02-15T13:23:22"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": null,
+            "id": "SCMAP_SR_LS",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1Y",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": null
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.0",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetMap&VERSION=1.1.0&SERVICE=WMS&FORMAT=image%2Fpng&TILED=True&LAYERS=SCMAP_SR_LS&TRANSPARENT=TRUE",
+                                "method": "GET",
+                                "type": "image/png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetCapabilities&VERSION=1.1.0&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetFeatureInfo&VERSION=1.1.0&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "text/html"
+                            },
+                            {
+                                "code": "GetTimeSeries",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?REQUEST=GetTimeSeries&VERSION=1.1.0&SERVICE=WMS&WIDTH=1024&HEIGHT=512&TIME=...",
+                                "method": "GET",
+                                "type": "image/png"
+                            }
+                        ],
+                        "styles": [
+                            {
+                                "default": true,
+                                "legendURL": "https://geoservice.dlr.de/eoc/styles/scmap_reflectance_comp_legend_256x.png",
+                                "name": "soil-refl-landsat",
+                                "title": "Style for Reflectance Soil Composite"
+                            }
+                        ]
+                    }
+                ],
+                "title": "SCMaP v1.0 - Reflectance Composite",
+                "updated": "2019-02-15T13:23:22"
+            },
+            "type": "Feature"
+        }
+    ],
+    "id": "eoc:scmap",
+    "logoURL": "None",
+    "previewURL": "data/owc/images/map-preview-eoc_scmap.jpg",
+    "projections": [
+        {
+            "bbox": [
+                4000000.0,
+                2650000.0,
+                4700000.0,
+                3550000.0
+            ],
+            "code": "EPSG:3035",
+            "default": true,
+            "unit": "m"
+        }
+    ],
+    "properties": {
+        "abstract": "<p>The Soil Composite Mapping Processor (SCMaP) is a new approach designed to make use of per-pixel compositing to overcome the issue of limited soil exposure due to vegetation. Primary products are reflectance composites that will allow for a long term assessment of exposed soils. Further products include the distribution of exposed soils and statistical information related to soil use and intensity. The resulting reflectance soil composites correlate well with existing soil maps and the underlying geological structure.</p>\n\t\t\t<p>\n\t\t\t<b>Version:</b> V 1.0</br>\n\t\t\t<b>Sensor:</b> Landsat 4, 5, 7</br>\n\t\t\t<b>Period:</b> 1984 - 2014 (6 x 5-year composites)</br>\n\t\t\t<b>Image preprocessing:</b> Cloud-removal (FMask), ATM-Correction + Haze removal (ATCOR), Reprojection, Image filtering</br>\n\t\t\t<b>Reference:</b> Rogge, D., Bauer, A., Zeidler, J., M&uuml;ller, A., Esch, T., Heiden, U. (2018). Building an exposed soil composite processor (SCMaP) for mapping spatial and temporal characteristics of soils with Landsat imagery (1984-2014). Remote Sensing of Environment, 205, Seiten 1-17. DOI: <a href=\"https://doi.org/10.1016/j.rse.2017.11.004\">10.1016/j.rse.2017.11.004</a> ISSN 0034-425.\n\t\t\t</p>",
+        "author": "Geoservice Manager",
+        "authors": [
+            {
+                "email": "geoservice@dlr.de",
+                "name": "Geoservice Manager",
+                "role": "PoC"
+            }
+        ],
+        "categories": [
+            {
+                "term": "DLR"
+            },
+            {
+                "term": "EOC"
+            },
+            {
+                "term": "Land"
+            },
+            {
+                "term": "SCMaP"
+            },
+            {
+                "term": "Soil Map"
+            },
+            {
+                "term": "Landsat"
+            },
+            {
+                "term": "Soil Composites"
+            },
+            {
+                "term": "Soil Coverage"
+            },
+            {
+                "term": "Soil Composite Mapping Processor"
+            },
+            {
+                "term": "Reflectance Composite"
+            },
+            {
+                "term": "Reflectance Soil Composite"
+            },
+            {
+                "term": "Soil Classification"
+            },
+            {
+                "term": "Exposed Soil Coverage"
+            },
+            {
+                "term": "Exposed Soil Frequency"
+            }
+        ],
+        "lang": "en",
+        "layerGroups": [
+            {
+                "collapsed": false,
+                "groupName": "products",
+                "title": "Products",
+                "type": "checkbox"
+            },
+            {
+                "collapsed": false,
+                "groupName": "overlays",
+                "title": "Overlays",
+                "type": "checkbox"
+            },
+            {
+                "collapsed": false,
+                "groupName": "base",
+                "title": "Basemaps",
+                "type": "radio"
+            }
+        ],
+        "links": null,
+        "publisher": "German Aerospace Center (DLR)",
+        "title": "Soil Composite Mapping Processor (SCMaP) Product Suite",
+        "updated": "2019-02-15T13:23:22"
+    },
+    "type": "FeatureCollection"
+}

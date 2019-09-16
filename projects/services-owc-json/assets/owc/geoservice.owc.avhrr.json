@@ -1,0 +1,145 @@
+{
+    "bbox": [
+        -9.881468125314735,
+        27.61085890614313,
+        43.11913363773703,
+        66.44602771314118
+    ],
+    "descriptionURL": "http://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-9136/19476_read-45195/",
+    "features": [
+        {
+            "geometry": null,
+            "id": "NOAA_AVHRR_SST_MED_MONTHLY",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1M",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": null
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.0",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?TILED=True&VERSION=1.1.0&SERVICE=WMS&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=TRUE&LAYERS=NOAA_AVHRR_SST_MED_MONTHLY",
+                                "method": "GET",
+                                "type": "image/png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?VERSION=1.1.0&SERVICE=WMS&REQUEST=GetCapabilities",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?VERSION=1.1.0&SERVICE=WMS&REQUEST=GetFeatureInfo",
+                                "method": "GET",
+                                "type": "text/html"
+                            },
+                            {
+                                "code": "GetTimeSeries",
+                                "href": "https://geoservice.dlr.de/eoc/land/wms?WIDTH=1024&VERSION=1.1.0&SERVICE=WMS&REQUEST=GetTimeSeries&HEIGHT=512&TIME=...",
+                                "method": "GET",
+                                "type": "image/png"
+                            }
+                        ],
+                        "styles": [
+                            {
+                                "default": true,
+                                "legendURL": "https://geoservice.dlr.de/eoc/land/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=NOAA_AVHRR_SST_MED_MONTHLY",
+                                "name": "sst",
+                                "title": "Style for SST"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Monthly Mediterranean Sea Surface Temperature",
+                "updated": "2019-02-15T13:24:14"
+            },
+            "type": "Feature"
+        }
+    ],
+    "id": "dsda:avhrr:sst",
+    "logoURL": "https://geoservice.dlr.de/static/logos/dlr.gif",
+    "previewURL": "data/owc/images/map-preview-dsda_avhrr_sst.jpg",
+    "projections": [
+        {
+            "bbox": [
+                -1100000.0,
+                3200000.0,
+                4800000.0,
+                10000000.0
+            ],
+            "code": "EPSG:3857",
+            "default": true,
+            "unit": "m"
+        }
+    ],
+    "properties": {
+        "abstract": "<p>AVHRR - Monthly Mediterranean Sea Surface Temperature (SST) is an AVHRR subset from 1993 to 2014 integrated to facilitate valuable time series exploitation of historic data. This subset represents the Monthly Average of Sea Surface Temperature in\n        degrees celsius, being possible to display the average temperature by selecting the first day of each month. Temperature ranges in Mediterranean Sea oscillate around 10 -21 degrees celsius in winter and 18-30 in summer. For more specifications how\n        SST values are derived. See the <a href=\"http://eoweb.dlr.de/short_guide/D-SST.html\">EOWEB Short Guide</a> for details.</p>",
+        "author": "Geoservice Manager",
+        "authors": [
+            {
+                "email": "geoservice@dlr.de",
+                "name": "Geoservice Manager",
+                "role": "PoC"
+            }
+        ],
+        "categories": [
+            {
+                "term": "DLR"
+            },
+            {
+                "term": "EOC"
+            },
+            {
+                "term": "Mediterranean Sea Surface Temperature"
+            },
+            {
+                "term": "NOAA"
+            },
+            {
+                "term": "AVHRR"
+            },
+            {
+                "term": "SST"
+            },
+            {
+                "term": "MONTHLY AVERAGE"
+            }
+        ],
+        "lang": "en",
+        "layerGroups": [
+            {
+                "collapsed": false,
+                "groupName": "products",
+                "title": "Products",
+                "type": "checkbox"
+            },
+            {
+                "collapsed": false,
+                "groupName": "overlays",
+                "title": "Overlays",
+                "type": "checkbox"
+            },
+            {
+                "collapsed": false,
+                "groupName": "base",
+                "title": "Basemaps",
+                "type": "radio"
+            }
+        ],
+        "links": null,
+        "publisher": "German Aerospace Center (DLR)",
+        "title": "AVHRR - Monthly Mediterranean Sea Surface Temperature",
+        "updated": "2019-02-15T13:24:14"
+    },
+    "type": "FeatureCollection"
+}

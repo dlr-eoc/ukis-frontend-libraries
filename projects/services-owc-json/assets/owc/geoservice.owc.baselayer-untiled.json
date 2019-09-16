@@ -1,0 +1,177 @@
+{
+    "bbox": [
+        -180.0,
+        -90.0,
+        180.0,
+        90.0
+    ],
+    "descriptionURL": "None",
+    "features": [
+        {
+            "geometry": null,
+            "id": "litemap",
+            "properties": {
+                "active": false,
+                "attribution": "| Litemap &amp; Liteoverlay: Data by <a href=\"http://naturalearthdata.com\">Natural Earth</a>, Rendering \u00c2\u00a9 <a href=\"http://www.dlr.de/eoc\">DLR/EOC</a>",
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.1",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&LAYERS=litemap&TILED=False&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=TRUE",
+                                "method": "GET",
+                                "type": "image/png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo",
+                                "method": "GET",
+                                "type": "text/html"
+                            }
+                        ]
+                    }
+                ],
+                "opacity": "1.0",
+                "title": "EOC Lite Map",
+                "updated": "2019-02-15T11:21:59"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": null,
+            "id": "eoc:world_relief_bw",
+            "properties": {
+                "active": false,
+                "attribution": "| Relief: <a href=\"http://www.dlr.de/eoc\">DLR/EOC</a>",
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.1",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&LAYERS=eoc%3Aworld_relief_bw&TILED=False&REQUEST=GetMap&FORMAT=image%2Fjpeg&TRANSPARENT=TRUE",
+                                "method": "GET",
+                                "type": "image/jpeg"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo",
+                                "method": "GET",
+                                "type": "text/html"
+                            }
+                        ]
+                    }
+                ],
+                "opacity": "1.0",
+                "title": "Relief",
+                "updated": "2019-02-15T11:21:59"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": null,
+            "id": "bmng_topo_bathy",
+            "properties": {
+                "active": false,
+                "attribution": "| Blue Marble NG: <a href=\"http://earthobservatory.nasa.gov/Features/BlueMarble\">NASA Earth Observatory</a>",
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.1",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&LAYERS=bmng_topo_bathy&TILED=False&REQUEST=GetMap&FORMAT=image%2Fjpeg&TRANSPARENT=TRUE",
+                                "method": "GET",
+                                "type": "image/jpeg"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo",
+                                "method": "GET",
+                                "type": "text/html"
+                            }
+                        ]
+                    }
+                ],
+                "opacity": "1.0",
+                "title": "Blue Marble NG",
+                "updated": "2019-02-15T11:21:59"
+            },
+            "type": "Feature"
+        }
+    ],
+    "id": "baselayer-untiled",
+    "logoURL": "None",
+    "projections": [
+        {
+            "bbox": [
+                -180.0,
+                -90.0,
+                180.0,
+                90.0
+            ],
+            "code": "EPSG:4326",
+            "default": true,
+            "unit": "m"
+        }
+    ],
+    "properties": {
+        "abstract": null,
+        "author": null,
+        "authors": [
+            {
+                "email": null,
+                "name": null,
+                "role": "PoC"
+            }
+        ],
+        "lang": "en",
+        "layerGroups": [
+            {
+                "collapsed": false,
+                "groupName": "products",
+                "title": "Products",
+                "type": "checkbox"
+            },
+            {
+                "collapsed": false,
+                "groupName": "overlays",
+                "title": "Overlays",
+                "type": "checkbox"
+            },
+            {
+                "collapsed": false,
+                "groupName": "base",
+                "title": "Basemaps",
+                "type": "radio"
+            }
+        ],
+        "links": null,
+        "publisher": null,
+        "title": "Baselayer",
+        "updated": "2019-02-15T11:21:59"
+    },
+    "type": "FeatureCollection"
+}

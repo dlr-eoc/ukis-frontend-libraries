@@ -1,0 +1,255 @@
+{
+    "bbox": [
+        -13.68441114920683,
+        28.779301457662182,
+        61.0886988287346,
+        64.90858361718878
+    ],
+    "descriptionURL": "https://code-de.org",
+    "features": [
+        {
+            "geometry": null,
+            "id": "S1_SAR_L1_GRD",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1D",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": "2017-01-01/2017-01-01/P1D"
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.1",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.code-de.org/Sentinel1/wms?TRANSPARENT=TRUE&LAYERS=S1_SAR_L1_GRD&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "image/vnd.jpeg-png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.code-de.org/Sentinel1/wms?VERSION=1.1.1&REQUEST=GetCapabilities&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.code-de.org/Sentinel1/wms?VERSION=1.1.1&REQUEST=GetFeatureInfo&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "text/html"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Sentinel-1 SAR - Level 1 (Ground Range Detected)",
+                "updated": "2019-02-15T13:23:28"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": null,
+            "id": "S2_MSI_L1C",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1D",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": "2017-01-01/2017-01-01/P1D"
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.1",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.code-de.org/Sentinel2/wms?TRANSPARENT=TRUE&LAYERS=S2_MSI_L1C&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "image/vnd.jpeg-png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.code-de.org/Sentinel2/wms?VERSION=1.1.1&REQUEST=GetCapabilities&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.code-de.org/Sentinel2/wms?VERSION=1.1.1&REQUEST=GetFeatureInfo&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "text/html"
+                            }
+                        ],
+                        "styles": [
+                            {
+                                "default": true,
+                                "legendURL": null,
+                                "name": "raster",
+                                "title": "Raster"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Sentinel-2 MSI - Level 1C (Top-of-Atmosphere Reflectance)",
+                "updated": "2019-02-15T13:23:28"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": null,
+            "id": "S3_OLCI_L2_LAN",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1D",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": "2017-01-01/2017-01-01/P1D"
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.1",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.code-de.org/Sentinel3/wms?TRANSPARENT=TRUE&LAYERS=S3_OLCI_L2_LAN&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "image/vnd.jpeg-png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.code-de.org/Sentinel3/wms?VERSION=1.1.1&REQUEST=GetCapabilities&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.code-de.org/Sentinel3/wms?VERSION=1.1.1&REQUEST=GetFeatureInfo&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "text/html"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Sentinel-3 OLCI - Level 2 Land Product",
+                "updated": "2019-02-15T13:23:28"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": null,
+            "id": "S3_OLCI_L1",
+            "properties": {
+                "active": false,
+                "dimensions": [
+                    {
+                        "display": "P1D",
+                        "name": "time",
+                        "units": "ISO8601",
+                        "value": "2017-01-01/2017-01-01/P1D"
+                    }
+                ],
+                "groupName": "products",
+                "offerings": [
+                    {
+                        "code": "http://schemas.opengis.net/wms/1.1.1",
+                        "operations": [
+                            {
+                                "code": "GetMap",
+                                "href": "https://geoservice.code-de.org/Sentinel3/wms?TRANSPARENT=TRUE&LAYERS=S3_OLCI_L1&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "image/vnd.jpeg-png"
+                            },
+                            {
+                                "code": "GetCapabilities",
+                                "href": "https://geoservice.code-de.org/Sentinel3/wms?VERSION=1.1.1&REQUEST=GetCapabilities&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "application/xml"
+                            },
+                            {
+                                "code": "GetFeatureInfo",
+                                "href": "https://geoservice.code-de.org/Sentinel3/wms?VERSION=1.1.1&REQUEST=GetFeatureInfo&SERVICE=WMS",
+                                "method": "GET",
+                                "type": "text/html"
+                            }
+                        ]
+                    }
+                ],
+                "title": "Sentinel-3 OLCI - Level 1B Top-of-Atmosphere Radiance",
+                "updated": "2019-02-15T13:23:28"
+            },
+            "type": "Feature"
+        }
+    ],
+    "id": "codede:sentinel:3035",
+    "logoURL": "https://geoservice.dlr.de/static/logos/dlr.gif",
+    "projections": [
+        {
+            "bbox": [
+                2000000.0,
+                1000000.0,
+                6500000.0,
+                5500000.0
+            ],
+            "code": "EPSG:3035",
+            "default": true,
+            "unit": "m"
+        }
+    ],
+    "properties": {
+        "abstract": "<strong>CODE-DE</strong> Sentinel1 and 2",
+        "author": "Geoservice Manager",
+        "authors": [
+            {
+                "email": "geoservice@dlr.de",
+                "name": "Geoservice Manager",
+                "role": "PoC"
+            }
+        ],
+        "categories": [
+            {
+                "term": "WMS"
+            },
+            {
+                "term": "DLR"
+            }
+        ],
+        "lang": "en",
+        "layerGroups": [
+            {
+                "collapsed": false,
+                "groupName": "products",
+                "title": "Products",
+                "type": "checkbox"
+            },
+            {
+                "collapsed": false,
+                "groupName": "overlays",
+                "title": "Overlays",
+                "type": "checkbox"
+            },
+            {
+                "collapsed": false,
+                "groupName": "base",
+                "title": "Basemaps",
+                "type": "radio"
+            }
+        ],
+        "links": null,
+        "publisher": "German Aerospace Center (DLR)",
+        "title": "CODE-DE Sentinel 1 and 2 (EPSG:3035)",
+        "updated": "2019-02-15T13:23:28"
+    },
+    "type": "FeatureCollection"
+}
