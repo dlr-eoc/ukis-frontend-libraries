@@ -7,6 +7,7 @@
  * depends on @types/geojson@^7946.0.2
  */
 import * as GeoJSON from 'geojson';
+import { TagContentType } from '@angular/compiler';
 
 
 /**
@@ -144,7 +145,25 @@ export interface IOwsOffering {
   operations?: IOwsOperation[];
   /** Content Offerings allow content to be embedded in an OWS Context document. */
   contents?: IOwsContent[];
-  styles?: any[];
+  styles?: StyleSet[];
+  [k: string]: any;
+}
+
+export interface StyleSet {
+  name: string;
+  title: string;
+  abstract?: string;
+  default?: boolean;
+  legendUrl?: string;
+  content?: Content;
+  [k: string]: any;
+}
+
+export interface Content {
+  type: string;
+  href?: string;
+  title?: string;
+  content?: string;
   [k: string]: any;
 }
 
