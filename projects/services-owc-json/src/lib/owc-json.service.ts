@@ -1,8 +1,11 @@
 
 import { Injectable } from '@angular/core';
-import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering, CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering } from './types/owc-json';
+import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering,
+  CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering } from './types/owc-json';
 import { IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering } from './types/eoc-owc-json';
-import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions, Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype, TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype } from '@ukis/services-layers';
+import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
+  Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype,
+  TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype } from '@ukis/services-layers';
 import { TGeoExtent } from '@ukis/services-map-state';
 import { ReplaceSource } from 'webpack-sources';
 
@@ -10,53 +13,55 @@ import { ReplaceSource } from 'webpack-sources';
 
 
 export function isWmsOffering(str: string): str is WMS_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' || str == 'http://schemas.opengis.net/wms/1.1.1' || str == 'http://schemas.opengis.net/wms/1.1.0';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms'
+      || str === 'http://schemas.opengis.net/wms/1.1.1'
+      || str === 'http://schemas.opengis.net/wms/1.1.0';
 }
 export function isWfsOffering(str: string): str is WFS_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
 }
 export function isWpsOffering(str: string): str is WCS_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs';
 }
 export function isCswOffering(str: string): str is CSW_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw';
 }
 export function isWmtsOffering(str: string): str is WMTS_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
 }
 export function isGmlOffering(str: string): str is GML_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
 }
 export function isKmlOffering(str: string): str is KML_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml';
 }
 export function isGeoTIFFOffering(str: string): str is GeoTIFF_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff';
 }
 export function isGMLJP2Offering(str: string): str is GMLJP2_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
 }
 export function isGMLCOVOffering(str: string): str is GMLCOV_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
 }
 export function isXyzOffering(str: string): str is Xyz_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
 }
 export function isGeoJsonOffering(str: string): str is GeoJson_Offering {
-  return str == 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 }
 
 /**
- * OWS Context Service 
+ * OWS Context Service
  * OGC OWS Context Geo Encoding Standard Version: 1.0
  * http://docs.opengeospatial.org/is/14-055r2/14-055r2.html
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html
- * 
- * This service allows you to read and write OWC-data. 
- * We have added some custom fields to the OWC standard. 
+ *
+ * This service allows you to read and write OWC-data.
+ * We have added some custom fields to the OWC standard.
  *   - accepts the OWC-standard-datatypes as function inputs (so as to be as general as possible)
  *   - returns our extended OWC-datatypes as function outputs (so as to be as information-rich as possible)
- *   
+ *
  */
 
 @Injectable({
@@ -70,18 +75,18 @@ export class OwcJsonService {
 
 
   checkContext(context: IOwsContext) {
-    var isContect_1_0;
+    let isContext_1_0;
     if (!Array.isArray(context.properties.links)) {
-      isContect_1_0 = context.properties.links.profiles.find(item => item == "http://www.opengis.net/spec/owc-geojson/1.0/req/core")
+      isContext_1_0 = context.properties.links.profiles.find(item => item === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
     } else {
-      isContect_1_0 = context.properties.links.find(item => item.href == "http://www.opengis.net/spec/owc-geojson/1.0/req/core")
+      isContext_1_0 = context.properties.links.find(item => item.href === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
     }
 
-    if (!isContect_1_0) {
+    if (!isContext_1_0) {
       console.error('this is not a valid OWS Context v1.0!');
 
     }
-    return isContect_1_0;
+    return isContext_1_0;
   }
 
   getContextTitle(context: IOwsContext) {
@@ -93,7 +98,7 @@ export class OwcJsonService {
   }
 
   getContextExtent(context: IOwsContext) {
-    return (context.bbox) ? context.bbox : null; //or [-180, -90, 180, 90];
+    return (context.bbox) ? context.bbox : null; // or [-180, -90, 180, 90];
   }
 
 
@@ -119,12 +124,12 @@ export class OwcJsonService {
   }
 
   /**
-   * retrieve layer status active / inactove based on IOwsResource
-   * @param resource 
+   * retrieve layer status active / inactive based on IOwsResource
+   * @param resource: IOwsResource
    */
   isActive(resource: IOwsResource) {
     let active = true;
-    if (resource.properties.hasOwnProperty("active")) {
+    if (resource.properties.hasOwnProperty('active')) {
       active = resource.properties.active;
     }
     return active;
@@ -132,7 +137,7 @@ export class OwcJsonService {
 
   getResourceOpacity(resource: IOwsResource): number {
     let opacity = 1;
-    if (resource.properties.hasOwnProperty("opacity")) {
+    if (resource.properties.hasOwnProperty('opacity')) {
       opacity = resource.properties.opacity;
     }
     return opacity;
@@ -140,14 +145,14 @@ export class OwcJsonService {
 
   getResourceAttribution(resource: IOwsResource): string {
     let attribution = '';
-    if (resource.properties.hasOwnProperty("attribution")) {
+    if (resource.properties.hasOwnProperty('attribution')) {
       attribution = resource.properties.attribution;
     }
     return attribution;
   }
 
   getResourceShards(resource: IOwsResource): string {
-    if (resource.properties.hasOwnProperty("shards")) {
+    if (resource.properties.hasOwnProperty('shards')) {
       return resource.properties.shards;
     }
   }
@@ -184,14 +189,14 @@ export class OwcJsonService {
    * @param offering layer offering
    */
   getLegendUrl(offering: IOwsOffering) {
-    let legendUrl = "";
+    let legendUrl = '';
 
-    if (offering.hasOwnProperty("styles")) {
+    if (offering.hasOwnProperty('styles')) {
       let defaultStyle = offering.styles.filter(style => style.default);
       if (defaultStyle.length > 0) {
         return defaultStyle[0].legendURL;
       }
-    } else if (offering.hasOwnProperty("legendUrl")) {
+    } else if (offering.hasOwnProperty('legendUrl')) {
       legendUrl = offering.legendUrl;
     }
     return legendUrl;
@@ -202,8 +207,8 @@ export class OwcJsonService {
    * @param offering 
    */
   getIconUrl(offering: IOwsOffering) {
-    let iconUrl = "";
-    if (offering.hasOwnProperty("iconUrl")) {
+    let iconUrl = '';
+    if (offering.hasOwnProperty('iconUrl')) {
       iconUrl = offering.iconUrl;
     }
     return iconUrl;
@@ -281,7 +286,7 @@ export class OwcJsonService {
         customParams = this.getWmtsSpecifiParamsFromOffering(offering, resource);
         break;
       case XyzLayertype:
-        // xyz and wts are simple, pure rest services with no "operations" . 
+        // xyz and wts are simple, pure rest services with no 'operations' . 
         break;
     }
 
@@ -322,8 +327,8 @@ export class OwcJsonService {
       version: urlParams['VERSION'],
       tiled: urlParams['TILED'],
       transparent: true,
-      "operations": offering.operations,
-      "styles": offering.styles
+      'operations': offering.operations,
+      'styles': offering.styles
     };
 
     return params;
@@ -377,7 +382,7 @@ export class OwcJsonService {
   /** Misc --------------------------------------------------- */
 
   private getUrlFromUri(uri: string) {
-    return uri.substring(0, uri.indexOf("?"));
+    return uri.substring(0, uri.indexOf('?'));
   }
 
   /**
@@ -385,10 +390,10 @@ export class OwcJsonService {
    * @param uri any uri with query-parameters
    */
   private getJsonFromUri(uri: string) {
-    var query = uri.substr(uri.lastIndexOf("?") + 1);
+    var query = uri.substr(uri.lastIndexOf('?') + 1);
     var result = {};
-    query.split("&").forEach(function (part) {
-      var item = part.split("=");
+    query.split('&').forEach(function (part) {
+      var item = part.split('=');
       result[item[0].toUpperCase()] = decodeURIComponent(item[1]);
     });
     return result;
@@ -401,8 +406,8 @@ export class OwcJsonService {
    * @param resource 
    */
   private getDisplayName(offering: IOwsOffering, resource: IOwsResource) {
-    let displayName = "";
-    if (offering.hasOwnProperty("title")) {
+    let displayName = '';
+    if (offering.hasOwnProperty('title')) {
       if (offering.title) {
         displayName = offering.title;
       } else {
@@ -424,22 +429,22 @@ export class OwcJsonService {
 
     if (!properties) {
       properties = {
-        lang: "",
+        lang: '',
         links: [],
-        title: "",
-        updated: ""
+        title: '',
+        updated: ''
       };
     }
 
     let owc: IEocOwsContext = {
-      "id": id,
-      "type": "FeatureCollection",
-      "properties": properties,
-      "features": []
+      'id': id,
+      'type': 'FeatureCollection',
+      'properties': properties,
+      'features': []
     };
 
     if (extent) {
-      owc["bbox"] = extent;
+      owc['bbox'] = extent;
     }
 
     for (let layer of layers) {
@@ -453,24 +458,24 @@ export class OwcJsonService {
 
   generateResourceFromLayer(layer: Layer): IEocOwsResource {
     let resource: IEocOwsResource = {
-      "id": layer.id,
-      "properties": {
+      'id': layer.id,
+      'properties': {
         title: layer.name,
         updated: null,
         offerings: [this.generateOfferingFromLayer(layer)],
         opacity: layer.opacity,
         attribution: layer.attribution,
       },
-      "type": "Feature",
-      "geometry": null
+      'type': 'Feature',
+      'geometry': null
     }
     return resource;
   }
 
   generateOfferingFromLayer(layer: Layer, legendUrl?: string, iconUrl?: string): IEocOwsOffering {
     let offering: IEocOwsOffering = {
-      "code": this.getOfferingCodeFromLayer(layer),
-      "title": layer.name
+      'code': this.getOfferingCodeFromLayer(layer),
+      'title': layer.name
     };
 
     if (layer.type == GeojsonLayertype) {
@@ -506,7 +511,7 @@ export class OwcJsonService {
     switch (layer.type) {
       case GeojsonLayertype:
         let content = {
-          type: "FeatureCollection",
+          type: 'FeatureCollection',
           content: JSON.stringify(layer.data)
         };
         contents.push(content);
@@ -534,7 +539,7 @@ export class OwcJsonService {
 
     else if (layer instanceof VectorLayer) {
       switch (layer.type) {
-        // case "wfs": <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts 
+        // case 'wfs': <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts 
         //   return this.getWfsOperationsFromLayer(layer);
         default:
           console.error(`This type of service (${layer.type}) has not been implemented yet.`);
@@ -547,10 +552,10 @@ export class OwcJsonService {
 
   getXyzOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
     let restCall: IOwsOperation = {
-      "code": "REST",
-      "method": "GET",
-      "type": "text/html",
-      "href": `${layer.url}`
+      'code': 'REST',
+      'method': 'GET',
+      'type': 'text/html',
+      'href': `${layer.url}`
     }
 
     let operations: IOwsOperation[] = [
@@ -570,14 +575,14 @@ export class OwcJsonService {
 
     let url = layer.url;
     let layerName = layer.name;
-    let version = layer.options.version ? layer.options.version : "1.1.0";
+    let version = layer.options.version ? layer.options.version : '1.1.0';
 
 
     let GetFeature: IOwsOperation = {
-      "code": "GetFeature",
-      "method": "GET",
-      "type": "application/json",
-      "href": `${url}?service=WFS&version=${version}&request=GetFeature`
+      'code': 'GetFeature',
+      'method': 'GET',
+      'type': 'application/json',
+      'href': `${url}?service=WFS&version=${version}&request=GetFeature`
     };
 
     // let DescribeFeatureType: IOwsOperation = null;
@@ -615,28 +620,28 @@ export class OwcJsonService {
     let wmsVersion = layer.params.VERSION;
     let layerName = layer.name;
     let layerId = layer.id;
-    let format = "image/vnd.jpeg-png";
+    let format = 'image/vnd.jpeg-png';
     if (layer.params && layer.params.FORMAT) format = layer.params.FORMAT;
 
     let getMap: IOwsOperation = {
-      "code": "GetMap",
-      "method": "GET",
-      "type": format,
-      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}&TILED=true`
+      'code': 'GetMap',
+      'method': 'GET',
+      'type': format,
+      'href': `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}&TILED=true`
     };
 
     let getCapabilities: IOwsOperation = {
-      "code": "GetCapabilities",
-      "method": "GET",
-      "type": "application/xml",
-      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetCapabilities`
+      'code': 'GetCapabilities',
+      'method': 'GET',
+      'type': 'application/xml',
+      'href': `${url}?service=WMS&version=${wmsVersion}&request=GetCapabilities`
     }
 
     let getFeatureInfo: IOwsOperation = {
-      "code": "GetFeatureInfo",
-      "method": "GET",
-      "type": "text/html",
-      "href": `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}`
+      'code': 'GetFeatureInfo',
+      'method': 'GET',
+      'type': 'text/html',
+      'href': `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}`
     }
 
     let operations: IOwsOperation[] = [
@@ -654,30 +659,30 @@ export class OwcJsonService {
     let wmtsVersion = layer.params.version;
     let layerName = layer.name;
     let layerId = layer.id;
-    let format = "image/vnd.jpeg-png";
+    let format = 'image/vnd.jpeg-png';
     if (layer.params && layer.params.FORMAT) format = layer.params.FORMAT;
 
     let getTile: IOwsOperation = {
-      "code": "GetTile",
-      "href": `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=${format}&LAYER=${layerId}&VERSION=${wmtsVersion}`,
-      "method": "GET",
-      "type": format
+      'code': 'GetTile',
+      'href': `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=${format}&LAYER=${layerId}&VERSION=${wmtsVersion}`,
+      'method': 'GET',
+      'type': format
     };
 
     let getCapabilities: IOwsOperation = {
-      "code": "GetCapabilities",
-      "href": `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
-      "method": "GET",
-      "type": "application/xml"
+      'code': 'GetCapabilities',
+      'href': `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
+      'method': 'GET',
+      'type': 'application/xml'
     }
 
     // Note: we deliberately use the WMS protocol here instead of WMTS.
     // Reason: WMTS delivers RGB-values, wheras WMS delivers the actual value that was used to create a tile.
     let getFeatureInfo: IOwsOperation = {
-      "code": "GetFeatureInfo",
-      "href": `${url}?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
-      "method": "GET",
-      "type": "text/html"
+      'code': 'GetFeatureInfo',
+      'href': `${url}?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
+      'method': 'GET',
+      'type': 'text/html'
     }
 
     let operations: IOwsOperation[] = [

@@ -3,10 +3,10 @@
  * http://docs.opengeospatial.org/is/14-055r2/14-055r2.html
  * Definitions by: Mathias Boeck
  * TypeScript Version: 2.5.3
- * 
+ *
  * depends on @types/geojson@^7946.0.2
  */
-import * as GeoJSON from 'geojson'
+import * as GeoJSON from 'geojson';
 
 
 /**
@@ -16,7 +16,8 @@ import * as GeoJSON from 'geojson'
  */
 export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryObject | null, GeoJSON.GeoJsonProperties> {
   /**
-   * The id element defines a mandatory reference to the identification of the Context document. The content for the id element SHALL be an IRI, as defined by IETF [RFC3987]
+   * The id element defines a mandatory reference to the identification of the Context document.
+   * The content for the id element SHALL be an IRI, as defined by IETF [RFC3987]
    */
   id: string | number;
   properties: {
@@ -35,14 +36,14 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     publisher?: string;
     /** Tool/application used to create the Context document and its properties */
     creator?: IOwsCreator;
-    /** 
+    /**
      * Properties of the display in use when the context document was created (for display based applications only).
      * This class is optional and intended for creator applications that use a graphical user interface with a geographical display within a fixed pixel size and not scalable to different computational devices 
      */
     display?: IOwsCreatorDisplay[];
     /** Information about rights held in and over the Context document */
     rights?: string;
-    /** 
+    /**
     * Date or range of dates relevant to the resource 
     * time range which is expected to be of interest to the user.
     */
@@ -61,10 +62,12 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
 /**
  * Each layer in a context document is known as a ‘Resource’
  * A Resource reference a set of geospatial information to be treated as a logical element.
- * The resources are ordered such that the first item in the document is to be displayed at the front. This defines the order in which layers are drawn.
- * A resource (which in GIS terms is a layer) can have a number of offerings, and each offering is focussed on a particular representation of information. 
- * These can be one of a number of OGC Web Services, specifically WMS, WMTS, WFS, WCS, WPS and CSW, 
- * or one of a number of inline or referenced formats, specifically GML, KML, GeoTIFF, GMLJP2, GMLCOV, 
+ * The resources are ordered such that the first item in the document is to be displayed at the front.
+ * This defines the order in which layers are drawn.
+ * A resource (which in GIS terms is a layer) can have a number of offerings, and each offering
+ * is focussed on a particular representation of information.
+ * These can be one of a number of OGC Web Services, specifically WMS, WMTS, WFS, WCS, WPS and CSW,
+ * or one of a number of inline or referenced formats, specifically GML, KML, GeoTIFF, GMLJP2, GMLCOV,
  * or a custom offering type defined in a profile or by an organisation.
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truethe-ows-context-document-structure
  */
@@ -114,26 +117,29 @@ export interface IOwsResourceProperties {
 
 
 /**
- * In reality a resource can be realised in a number of different ways, and so an OWC document allows various options to be specified. 
- * These are known as offerings. 
- * The intention is that these are, as far as is possible by the format used, equivalent and no priority is assigned to their order in the standard. 
+ * In reality a resource can be realised in a number of different ways, and so an OWC document allows various options to be specified.
+ * These are known as offerings.
+ * The intention is that these are, as far as is possible by the format used,
+ * equivalent and no priority is assigned to their order in the standard.
  * They are intended to be alternatives that the client can use to allow it to visualise or use the resource.
- * 
- * So for example four offerings, a WMS, a WFS with portrayal as SLD, and an inline GML Offering again with portrayal as SLD. 
+ *
+ * So for example four offerings, a WMS, a WFS with portrayal as SLD, and an inline GML Offering again with portrayal as SLD.
  * Different clients could use these offerings as appropriate:
  * - a simple browser based client could use the WMS offering provided, using the standard portrayal
  * - a more sophisticated client, could use the WFS offering and the associated SLD Document.
- * 
- * There are two types of offering, service offerings and data offerings. 
- * A service offering has a service request (in the form of a capabilities request and a data request) and optional content and styling elements. 
+ *
+ * There are two types of offering, service offerings and data offerings.
+ * A service offering has a service request (in the form of a capabilities request and a data request)
+ * and optional content and styling elements.
  * A data offering has a content element and optional styling elements.
- * 
- * 
+ *
+ *
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truemultiple-offerings-and-priority
  */
 export interface IOwsOffering {
   /** Extension Offerings with type - string */
-  code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering | WMTS_Offering | GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering | GMLCOV_Offering | string;
+  code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering | WMTS_Offering |
+  GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering | GMLCOV_Offering | string;
   /** Web Service Offerings provide their operations */
   operations?: IOwsOperation[];
   /** Content Offerings allow content to be embedded in an OWS Context document. */
@@ -185,7 +191,8 @@ export interface IOwsCreatorDisplay {
   pixelWidth?: number;
   /** Width measured in pixels of the display showing by the Area of Interest */
   pixelHeight?: number;
-  /** The size of a pixel of the display in milimeters (combined with the previous ones allows for the real display size to be calculated) */
+  /** The size of a pixel of the display in milimeters 
+   * (combined with the previous ones allows for the real display size to be calculated) */
   mmPerPixel?: number;
   [k: string]: any;
 }
@@ -234,7 +241,8 @@ export type DateString = string;
 export type LangString = string;
 
 
-export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' | 'http://schemas.opengis.net/wms/1.1.1' | 'http://schemas.opengis.net/wms/1.1.0';
+export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' |
+    'http://schemas.opengis.net/wms/1.1.1' | 'http://schemas.opengis.net/wms/1.1.0';
 export type WFS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
 export type WCS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs';
 export type WPS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wps';
