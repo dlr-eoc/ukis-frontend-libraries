@@ -77,8 +77,8 @@
       </div>
       <!-- show style-switcher -->
       <div *ngIf="activeTabs['changeStyle']">
-        <select clrSelect>
-          <option *ngFor="let style of layer.styles">{{style.title}}</option>
+        <select clrSelect (change)="executeChangeStyle($event.target.value)">
+          <option *ngFor="let style of layer.styles" [value]="style.name" [attr.selected]="style.name === layer.params?.style ? true : null">{{style.title}}</option>
         </select>
       </div>
     </div>

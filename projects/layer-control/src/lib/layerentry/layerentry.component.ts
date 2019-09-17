@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // imports only for typings...
-import { LayerGroup, Layer } from '@ukis/services-layers';
+import { LayerGroup, Layer, RasterLayer, isRasterLayertype } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { LayersService } from '@ukis/services-layers';
 
@@ -173,6 +173,16 @@ export class LayerentryComponent implements OnInit {
   switchTab(tabName: string) {
     for (const key of Object.keys(this.activeTabs)) {
       this.activeTabs[key] = tabName === key;
+    }
+  }
+
+  executeChangeStyle(newStyleName: string) {
+    if (isRasterLayertype(this.layer.type)) {
+      const newStyle = (this.layer as RasterLayer).styles.find(s => s.name === newStyleName);
+      if (newStyle) {
+        (this.layer as RasterLayer).setStyle(newStyle.name);
+        this.layersSvc.updateLayer(this.layer, this.layer.filtertype);
+      }
     }
   }
 

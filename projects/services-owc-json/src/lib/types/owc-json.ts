@@ -204,7 +204,7 @@ export interface IOwsCreatorDisplay {
  */
 export interface IOwsOperation {
   /**
-   * The code identifies the type of operation. 
+   * The code identifies the type of operation.
    * Valid types are defined within each specific extension within the OWS Context conceptual model [OGC 12-080].
    */
   code: string;

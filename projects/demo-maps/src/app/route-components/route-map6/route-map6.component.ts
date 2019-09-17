@@ -31,8 +31,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.addBaseLayers();
     this.addLayers();
-    /** set map extent or IMapState (zoom, center...) with the MapStateService */
-    this.mapStateSvc.setExtent([-14, 33, 40, 57]);
+    this.mapStateSvc.setExtent([9.681317514755053, 47.425291526740125, 12.765729135848805, 49.213103602937025]);
   }
 
   addBaseLayers() {
@@ -66,6 +65,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       id: 'AGRODE_S2_EVI_P1Y',
       url: 'https://geotest.eoc.dlr.de/eoc/land/wms?',
       name: 'AGRODE',
+      filtertype: 'Layers',
       attribution: '| <a href=\'https://agro-de.info/\'>AGRO-DE</a> Indices by <a href=\'http://www.dlr.de/eoc\'>DLR</a> licensed under <a rel=\'license\' href=\'http://creativecommons.org/licenses/by-sa/4.0/\'>CC-BY-SA</a>, Contains modified Copernicus Sentinel Data [__YEAR__]',
       params: {
         LAYERS: 'AGRODE_S2_EVI_P1Y',
@@ -92,9 +92,9 @@ export class RouteMap6Component implements OnInit, OnDestroy {
           title: 'Mean'
         }
       ]
-    })
+    });
 
-    this.layersSvc.addLayer(layer, 'Layers');
+    this.layersSvc.addLayer(layer, layer.filtertype);
   }
 
   ngOnDestroy() {

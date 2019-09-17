@@ -135,14 +135,30 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
 
     // if styles are given, set params and legendImg accordingly.
     if (this.styles && this.styles.length > 0) {
-      let defaultStyle = this.styles.find(s => s.default);
+      const defaultStyleName = this.getDefaultStyleName();
+      this.setStyle(defaultStyleName);
+    }
+  }
 
-      if (!defaultStyle) {
-        defaultStyle = this.styles[0];
+  public getDefaultStyleName(): string {
+    let defaultStyle = this.styles.find(s => s.default);
+
+    if (!defaultStyle) {
+      defaultStyle = this.styles[0];
+    }
+
+    return defaultStyle.name;
+  }
+
+  public setStyle(newStyleName: string): void {
+    const newStyle = this.styles.find(s => s.name === newStyleName);
+    if (newStyle) {
+      this.legendImg = newStyle.legendURL;
+      if (this.type === WmsLayertype) {
+        this.params.styles = newStyle.name;
+      } else if (this.type === WmtsLayertype) {
+        this.params.style = newStyle.name;
       }
-
-      this.params.STYLE = defaultStyle.name; // @TODO: also handle SLD's
-      this.legendImg = defaultStyle.legendURL;
     }
   }
 }

@@ -5,7 +5,7 @@ import { MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { MapOlService } from './map-ol.service';
-import { LayersService } from '@ukis/services-layers';
+import { LayersService, isRasterLayertype, RasterLayer } from '@ukis/services-layers';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -123,6 +123,14 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
           } else {
             if (ollayer.getZIndex() !== layers.indexOf(layer)) {
               ollayer.setZIndex(layers.indexOf(layer));
+            }
+          }
+          if (isRasterLayertype(layer.type)) {
+            const source = ollayer.getSource();
+            const oldParams = ollayer.getSource().getParams();
+            const newParams = (layer as RasterLayer).params;
+            if (oldParams !== newParams) {
+              source.updateParams(newParams);
             }
           }
         }

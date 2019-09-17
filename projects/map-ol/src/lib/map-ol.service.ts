@@ -376,9 +376,10 @@ export class MapOlService {
       layer: l.params.layer || l.params.LAYER,
       matrixSet: matrixSet || l.params.matrixSet,
       tileGrid: tileGrid || l.params.tileGrid,
+      style: l.params.style || l.params.STYLE,
       projection: projection,
-      version: l.params.version || '1.0.0',
-      format: l.params.format || 'image/png',
+      version: l.params.version || l.params.VERSION || '1.0.0',
+      format: l.params.format || l.params.FORMAT || 'image/png',
       attributions: [l.attribution],
       wrapX: l.continuousWorld,
     };
