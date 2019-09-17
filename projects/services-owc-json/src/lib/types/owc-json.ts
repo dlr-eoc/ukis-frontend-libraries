@@ -235,7 +235,7 @@ export interface IOwsStyleSet {
   title: string;
   abstract?: string;
   default?: boolean;
-  legendUrl?: string;
+  legendURL?: string;
   content?: IOwsContent;
   [k: string]: any;
 }

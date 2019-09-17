@@ -142,7 +142,7 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
       }
 
       this.params.STYLE = defaultStyle.name; // @TODO: also handle SLD's
-      this.legendImg = defaultStyle.legendUrl;
+      this.legendImg = defaultStyle.legendURL;
     }
   }
 }
