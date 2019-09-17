@@ -75,19 +75,19 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       styles: [
         {
           default: true,
-          legendURL: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
+          legendUrl: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
           name: 'agrode-evi-max',
           title: 'Max'
         },
         {
           default: false,
-          legendURL: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
+          legendUrl: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
           name: 'agrode-evi-min',
           title: 'Min'
         },
         {
           default: false,
-          legendURL: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
+          legendUrl: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
           name: 'agrode-evi-mean',
           title: 'Mean'
         }

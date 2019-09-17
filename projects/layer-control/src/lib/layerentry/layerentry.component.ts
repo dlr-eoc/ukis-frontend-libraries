@@ -53,7 +53,7 @@ export class LayerentryComponent implements OnInit {
       this.activeTabs.description = true;
       this.activeTabs.legend = false;
       this.activeTabs.settings = false;
-      this.activeTabs.changeStye = false;
+      this.activeTabs.changeStyle = false;
     }
 
     if (!this.layer.legendImg && !this.layer.description) {
@@ -72,12 +72,12 @@ export class LayerentryComponent implements OnInit {
    */
   setLayerVisibility(selectedLayer: Layer, group?: LayerGroup) {
     if (!group) {
-      if (selectedLayer.filtertype == 'Baselayers') {
+      if (selectedLayer.filtertype === 'Baselayers') {
         selectedLayer.visible = !selectedLayer.visible;
-        const _layers = this.layerGroups.filter((l) => l.filtertype == 'Baselayers');
+        const _layers = this.layerGroups.filter((l) => l.filtertype === 'Baselayers');
         console.log(_layers);
         for (const layer of _layers) {
-          if (layer instanceof Layer && layer.id != selectedLayer.id) {
+          if (layer instanceof Layer && layer.id !== selectedLayer.id) {
             layer.visible = !selectedLayer.visible;
             this.layersSvc.updateLayer(layer, layer.filtertype || 'Baselayers');
           }
@@ -88,7 +88,7 @@ export class LayerentryComponent implements OnInit {
       }
     } else {
       /** "radio" for Baselayers */
-      if (group.filtertype == 'Baselayers') {
+      if (group.filtertype === 'Baselayers') {
         for (const layer of group.layers) {
           layer.visible = layer === selectedLayer;
         }
@@ -146,7 +146,7 @@ export class LayerentryComponent implements OnInit {
   }
 
   checkBaselayer(layer: Layer, group?: LayerGroup) {
-    if (layer.filtertype == 'Baselayers' || group && group.filtertype == 'Baselayers') {
+    if (layer.filtertype === 'Baselayers' || group && group.filtertype === 'Baselayers') {
       return true;
     } else {
       return false;
@@ -158,7 +158,7 @@ export class LayerentryComponent implements OnInit {
    */
   is_expandable() {
     if (this.group) {
-      return !this.layer.legendImg && this.group.filtertype == 'Baselayers';
+      return !this.layer.legendImg && this.group.filtertype === 'Baselayers';
     } else {
       return false; // !this.layer.legendImg; //this.layer.description
     }

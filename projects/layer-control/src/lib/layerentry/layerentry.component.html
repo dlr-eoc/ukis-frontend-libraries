@@ -46,7 +46,7 @@
       <clr-icon *ngIf="layer.description" title="Layer info" shape="info-standard" class="iconButton"
         [ngClass]="{'active': activeTabs['description']}" (click)="switchTab('description')"></clr-icon>
       <clr-icon *ngIf="layer?.styles.length" title="Change style" shape="cloud-chart" class="iconButton"
-        [ngClass]="{'active': activeTabs['changeStye']}" (click)="switchTab('changeStye')"></clr-icon>
+        [ngClass]="{'active': activeTabs['changeStyle']}" (click)="switchTab('changeStyle')"></clr-icon>
 
       <clr-icon *ngFor="let item of layer.actions" [attr.shape]="item.icon" class="iconButton"
         (click)="item.action(layer)" [title]="item.title">
@@ -76,7 +76,7 @@
         <span [innerHTML]="layer.description"></span>
       </div>
       <!-- show style-switcher -->
-      <div *ngIf="activeTabs['changeStye']">
+      <div *ngIf="activeTabs['changeStyle']">
         <select clrSelect>
           <option *ngFor="let style of layer.styles">{{style.title}}</option>
         </select>
