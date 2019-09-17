@@ -145,27 +145,10 @@ export interface IOwsOffering {
   operations?: IOwsOperation[];
   /** Content Offerings allow content to be embedded in an OWS Context document. */
   contents?: IOwsContent[];
-  styles?: StyleSet[];
+  styles?: IOwsStyleSet[];
   [k: string]: any;
 }
 
-export interface StyleSet {
-  name: string;
-  title: string;
-  abstract?: string;
-  default?: boolean;
-  legendUrl?: string;
-  content?: Content;
-  [k: string]: any;
-}
-
-export interface Content {
-  type: string;
-  href?: string;
-  title?: string;
-  content?: string;
-  [k: string]: any;
-}
 
 export interface IOwsCreator {
   title?: string;
@@ -248,8 +231,15 @@ export interface IOwsContent {
 }
 
 export interface IOwsStyleSet {
-
+  name: string;
+  title: string;
+  abstract?: string;
+  default?: boolean;
+  legendUrl?: string;
+  content?: IOwsContent;
+  [k: string]: any;
 }
+
 
 
 /** ISO-8601 format e.g. YYYY-MM-DDThh:mm:ssZ or YYYY-MM-DDThh:mm:ssZ/YYYY-MM-DDThh:mm:ssZ */
