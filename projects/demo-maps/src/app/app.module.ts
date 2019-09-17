@@ -15,6 +15,7 @@ import { RouteMap2Component } from './route-components/route-map2/route-map2.com
 import { RouteMap3Component } from './route-components/route-map3/route-map3.component';
 import { RouteMap4Component } from './route-components/route-map4/route-map4.component';
 import { RouteMap5Component } from './route-components/route-map5/route-map5.component';
+import { RouteMap6Component } from './route-components/route-map6/route-map6.component';
 
 
 
@@ -49,6 +50,13 @@ export const appRoutes: Routes = [
     data: {
       title: 'Two Vertical-Nav Layout'
     }
+  },
+  {
+    path: 'map6',
+    component: RouteMap6Component,
+    data: {
+      title: 'Switching Layer-Style'
+    }
   }
 ];
 
@@ -63,7 +71,8 @@ export const appRoutes: Routes = [
     RouteMap2Component,
     RouteMap3Component,
     RouteMap4Component,
-    RouteMap5Component
+    RouteMap5Component,
+    RouteMap6Component
   ],
   imports: [
     BrowserModule,

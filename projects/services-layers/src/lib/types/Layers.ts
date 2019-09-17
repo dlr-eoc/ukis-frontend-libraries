@@ -1,3 +1,5 @@
+import { IOwsStyleSet } from '@ukis/services-owc-json';
+
 export interface popup {
   properties?: any;
   pupupFunktion?: (popupobj: any) => string;
@@ -66,6 +68,8 @@ export interface IRasterLayerOptions extends ILayerOptions {
   /** raster params like wms params -> time, layers... depends on the map-library */
   params?: any;
   type: TRasterLayertype;
+  /** a layer might have more than one style; eg. true color and false color for the same dataset */
+  styles?: IOwsStyleSet[];
 }
 
 export interface IVectorLayerOptions extends ILayerOptions {
@@ -123,9 +127,23 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
   subdomains?: Array<string>;
   /** raster params like wms params -> time, layers... depends on the map-library */
   params?: any;
+  /** a layer might have more than one style; eg. true color and false color for the same dataset */
+  styles?: IOwsStyleSet[];
 
   constructor(options: IRasterLayerOptions) {
     super(options);
+
+    // if styles are given, set params and legendImg accordingly.
+    if (this.styles && this.styles.length > 0) {
+      let defaultStyle = this.styles.find(s => s.default);
+
+      if (!defaultStyle) {
+        defaultStyle = this.styles[0];
+      }
+
+      this.params.STYLE = defaultStyle.name; // @TODO: also handle SLD's
+      this.legendImg = defaultStyle.legendUrl;
+    }
   }
 }
 

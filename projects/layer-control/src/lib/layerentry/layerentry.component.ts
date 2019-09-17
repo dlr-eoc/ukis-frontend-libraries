@@ -28,7 +28,8 @@ export class LayerentryComponent implements OnInit {
   public activeTabs = {
     'settings': false,
     'legend': true,
-    'description': false
+    'description': false,
+    'changeStyle': false
   };
 
   constructor() {
@@ -52,6 +53,7 @@ export class LayerentryComponent implements OnInit {
       this.activeTabs.description = true;
       this.activeTabs.legend = false;
       this.activeTabs.settings = false;
+      this.activeTabs.changeStye = false;
     }
 
     if (!this.layer.legendImg && !this.layer.description) {
