@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // imports only for typings...
-import { LayerGroup, Layer, RasterLayer, isRasterLayertype } from '@ukis/services-layers';
+import { LayerGroup, Layer, RasterLayer, isRasterLayertype, WmsLayertype, WmtsLayertype } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { LayersService } from '@ukis/services-layers';
 
@@ -180,7 +180,12 @@ export class LayerentryComponent implements OnInit {
     if (isRasterLayertype(this.layer.type)) {
       const newStyle = (this.layer as RasterLayer).styles.find(s => s.name === newStyleName);
       if (newStyle) {
-        (this.layer as RasterLayer).setStyle(newStyle.name);
+        this.layer.legendImg = newStyle.legendURL;
+        if (this.layer.type === WmsLayertype) {
+          (this.layer as RasterLayer).params.styles = newStyle.name;
+        } else if (this.layer.type === WmtsLayertype) {
+          (this.layer as RasterLayer).params.style = newStyle.name;
+        }
         this.layersSvc.updateLayer(this.layer, this.layer.filtertype);
       }
     }
