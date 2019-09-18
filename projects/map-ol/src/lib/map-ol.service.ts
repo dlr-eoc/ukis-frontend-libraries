@@ -160,7 +160,7 @@ export class MapOlService {
     return _layer;
   }
 
-  public addLayer(layer: any, type: 'baselayers' | 'layers' | 'overlays') {
+  public addLayer(layer: olBaseLayer | olLayerGroup, type: 'baselayers' | 'layers' | 'overlays') {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -172,7 +172,7 @@ export class MapOlService {
     return layers;
   }
 
-  public addLayers(layers: olCollection<Layer>, type: 'baselayers' | 'layers' | 'overlays') {
+  public addLayers(layers: olBaseLayer[], type: 'baselayers' | 'layers' | 'overlays') {
     let _layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {

@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterViewChecked, AfterContentChecked, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 
+import olBaseLayer from 'ol/layer/Base';
+import olLayerGroup from 'ol/layer/Group';
+import olOverlay from 'ol/Overlay';
 
 import { MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { MapOlService } from './map-ol.service';
-import { LayersService, isRasterLayertype, RasterLayer } from '@ukis/services-layers';
+import { LayersService, isRasterLayertype, RasterLayer, WmtsLayertype, Layer, WmsLayertype } from '@ukis/services-layers';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -125,19 +128,74 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
               ollayer.setZIndex(layers.indexOf(layer));
             }
           }
-          if (isRasterLayertype(layer.type)) {
-            const source = ollayer.getSource();
-            const oldParams = ollayer.getSource().getParams();
-            const newParams = (layer as RasterLayer).params;
-            if (oldParams !== newParams) {
-              source.updateParams(newParams);
-            }
-          }
+          this.updateLayerParamsWith(ollayer, layer);
         }
       }
     }
-
   }
+
+
+  private updateLayerParamsWith (oldLayer: olBaseLayer, newLayer: Layer): void {
+    switch (newLayer.type) {
+      case WmsLayertype:
+        this.updateWmsLayerParamsWith(oldLayer, newLayer as RasterLayer);
+        break;
+      case WmtsLayertype:
+        this.updateWmtsLayerParamsWith(oldLayer, newLayer as RasterLayer);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private updateWmsLayerParamsWith (oldLayer: olBaseLayer, newWmsLayer: RasterLayer): void {
+    const source = oldLayer.getSource();
+    const oldParams = source.getParams();
+    const newParams = newWmsLayer.params;
+    if (!this.shallowEqual(oldParams, newParams)) {
+      oldLayer.getSource().updateParams(newParams);
+    }
+  }
+
+  private updateWmtsLayerParamsWith (oldLayer: olBaseLayer, newWmtsLayer: RasterLayer): void {
+    // contrary to a wms-source, a wmts-source has neither 'getParams' nor 'updateParams', so we need to do this manually.
+    const source = oldLayer.getSource();
+    if (source.getStyle() !== newWmtsLayer.params.style
+    || source.getFormat() !== newWmtsLayer.params.FORMAT
+    || source.getVersion() !== newWmtsLayer.params.VERSION
+    || source.getMatrixSet() !== newWmtsLayer.params.MatrixSet) {
+      const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as 'baselayers' | 'layers' | 'overlays';
+      this.mapSvc.removeLayerByKey({key: 'id', value: newWmtsLayer.id}, olFiltertype);
+      // this.mapSvc.addLayer(newWmtsLayer, olFiltertype);
+      source.set('style', newWmtsLayer.params.style);
+    }
+  }
+
+  private shallowEqual(a: object, b: object): boolean {
+    // Create arrays of property names
+    const aProps = Object.getOwnPropertyNames(a);
+    const bProps = Object.getOwnPropertyNames(b);
+
+    // If number of properties is different,
+    // objects are not equivalent
+    if (aProps.length !== bProps.length) {
+        return false;
+    }
+
+    for (let i = 0; i < aProps.length; i++) {
+        const propName = aProps[i];
+
+        // If values of same property are not equal,
+        // objects are not equivalent
+        if (a[propName] !== b[propName]) {
+            return false;
+        }
+    }
+
+    // If we made it this far, objects
+    // are considered equivalent
+    return true;
+}
 
   private addUpdateBaseLayers(layers) {
     /** if length of layers has changed add new layers */
