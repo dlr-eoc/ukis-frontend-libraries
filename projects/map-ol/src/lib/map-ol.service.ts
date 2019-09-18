@@ -139,7 +139,7 @@ export class MapOlService {
     this.map.addInteraction(dragBox);
   }
 
-  public getLayers(type: 'baselayers' | 'layers' | 'overlays') {
+  public getLayers(type: 'baselayers' | 'layers' | 'overlays'): olBaseLayer[] {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -204,7 +204,7 @@ export class MapOlService {
    * can we deep check if a layer is exactly the same and dont create it new???
    */
   public setLayers(layers: Array<Layer>, type: 'baselayers' | 'layers' | 'overlays') {
-    const _oldLayers = this.getLayers(type);
+    const _oldLayers: olBaseLayer[] = this.getLayers(type);
     const __layers = <any>[];
     const _layers = this.sortOldAndNewLayers(_oldLayers, layers);
 
@@ -245,7 +245,7 @@ export class MapOlService {
     }
   }
 
-  sortOldAndNewLayers(oldlayers: olBaseLayer[], newlayers: Layer[]) {
+  sortOldAndNewLayers(oldlayers: olBaseLayer[], newlayers: Layer[]): {oldlayer: olBaseLayer | null, newlayer: Layer}[] {
     const _layers = newlayers.map((layer) => {
       return {
         oldlayer: oldlayers.filter(_layer => _layer.get('id') === layer.id)[0],
@@ -258,7 +258,7 @@ export class MapOlService {
   /**
    * define layer types
    */
-  private create_xyz_layer(l: RasterLayer, oldlayer?: olBaseLayer) {
+  private create_xyz_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
     const xyz_options: any = {
       attributions: [l.attribution],
       wrapX: l.continuousWorld
@@ -300,7 +300,7 @@ export class MapOlService {
     return new olTileLayer(_layeroptions);
   }
 
-  private create_wms_layer(l: RasterLayer, oldlayer?: olBaseLayer) {
+  private create_wms_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
 
     const tile_options: any = {
       attributions: [l.attribution],
@@ -349,9 +349,10 @@ export class MapOlService {
   }
 
 
-  private create_wmts_layer(l: RasterLayer, oldlayer?: olBaseLayer) {
+  private create_wmts_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
 
-    // TODO: here we create a standard-tilegrid. While this will be enough for most of our wmts, it would be more rigorous to make a getCapabilites-request to the server instead.
+    // TODO: here we create a standard-tilegrid. While this will be enough for most of our wmts,
+    // it would be more rigorous to make a getCapabilites-request to the server instead.
     // https://openlayers.org/en/latest/examples/wmts-layer-from-capabilities.html?q=wmts
 
     const projection = this.getProjection();
