@@ -160,7 +160,7 @@ export class MapOlService {
     return _layer;
   }
 
-  public addLayer(layer: olBaseLayer | olLayerGroup, type: 'baselayers' | 'layers' | 'overlays') {
+  public addLayer(layer: olBaseLayer, type: 'baselayers' | 'layers' | 'overlays') {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -243,6 +243,31 @@ export class MapOlService {
     if (__layers.length > 0) {
       this.addLayers(__layers, type);
     }
+  }
+
+  public setLayer(newLayer: Layer, type: 'baselayers' | 'layers' | 'overlays'): void {
+    const oldLayers: olBaseLayer[] = this.getLayers(type);
+    const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
+    let newOlLayer;
+    switch (newLayer.type) {
+      case 'xyz':
+          newOlLayer = this.create_xyz_layer(<RasterLayer>newLayer, oldLayer);
+        break;
+      case 'wms':
+          newOlLayer = this.create_wms_layer(<RasterLayer>newLayer, oldLayer);
+        break;
+      case 'wmts':
+          newOlLayer = this.create_wmts_layer(<RasterLayer>newLayer, oldLayer);
+        break;
+      case 'geojson':
+          newOlLayer = this.create_geojson_layer(<VectorLayer>newLayer, oldLayer);
+        break;
+      case 'custom':
+          newOlLayer = this.create_custom_layer(<CustomLayer>newLayer, oldLayer);
+        break;
+    }
+    this.removeLayerByKey({key: 'id', value: oldLayer.get('id')}, type);
+    this.addLayer(newOlLayer, type);
   }
 
   sortOldAndNewLayers(oldlayers: olBaseLayer[], newlayers: Layer[]): {oldlayer: olBaseLayer | null, newlayer: Layer}[] {
