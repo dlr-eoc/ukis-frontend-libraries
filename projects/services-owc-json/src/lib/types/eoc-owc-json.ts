@@ -2,8 +2,10 @@ import { IOwsContext, IOwsResource, IOwsOffering, WMS_Offering, WFS_Offering, WC
 
 
 
+import * as GeoJSON from 'geojson';
 export interface IEocOwsContext extends IOwsContext {
     features: IEocOwsResource[];
+    projections?: IEocOwsProjection[];
 }
 
 export interface IEocOwsResource extends IOwsResource {
@@ -31,8 +33,13 @@ export interface IEocOwsWmtsMatrixSet {
     // TODO
 }
 
-
-/** 
+export interface IEocOwsProjection {
+    bbox: GeoJSON.BBox;
+    code: string;
+    default?: boolean;
+    unit?: string | number;
+}
+/**
 * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#trueextension-offerings
 */
 export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
