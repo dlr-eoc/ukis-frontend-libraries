@@ -182,7 +182,7 @@ export class LayerentryComponent implements OnInit {
       if (newStyle) {
         this.layer.legendImg = newStyle.legendURL;
         if (this.layer.type === WmsLayertype) {
-          (this.layer as RasterLayer).params.styles = newStyle.name;
+          (this.layer as RasterLayer).params.STYLES = newStyle.name;
         } else if (this.layer.type === WmtsLayertype) {
           (this.layer as RasterLayer).params.style = newStyle.name;
         }

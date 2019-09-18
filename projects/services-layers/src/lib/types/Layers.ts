@@ -143,7 +143,7 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
 
       this.legendImg = defaultStyle.legendURL;
       if (this.type === WmsLayertype) {
-        this.params.styles = defaultStyle.name;
+        this.params.STYLES = defaultStyle.name;
       } else if (this.type === WmtsLayertype) {
         this.params.style = defaultStyle.name;
       }

@@ -164,10 +164,11 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     || source.getFormat() !== newWmtsLayer.params.FORMAT
     || source.getVersion() !== newWmtsLayer.params.VERSION
     || source.getMatrixSet() !== newWmtsLayer.params.MatrixSet) {
+      // WMTS dont allow easy reloading; see:
+      // https://gis.stackexchange.com/questions/299554/openlayers-refresh-wmts-tiles-when-underlying-data-changes
+      // Instead of reloading, we remove the old layer and add the new one.
       const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as 'baselayers' | 'layers' | 'overlays';
-      this.mapSvc.removeLayerByKey({key: 'id', value: newWmtsLayer.id}, olFiltertype);
-      // this.mapSvc.addLayer(newWmtsLayer, olFiltertype);
-      source.set('style', newWmtsLayer.params.style);
+      this.mapSvc.setLayer(newWmtsLayer, olFiltertype);
     }
   }
 
