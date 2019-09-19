@@ -45,7 +45,7 @@
         [ngClass]="{'active': activeTabs['legend']}" (click)="switchTab('legend')"></clr-icon>
       <clr-icon *ngIf="layer.description" title="Layer info" shape="info-standard" class="iconButton"
         [ngClass]="{'active': activeTabs['description']}" (click)="switchTab('description')"></clr-icon>
-      <clr-icon *ngIf="layer?.styles.length" title="Change style" shape="cloud-chart" class="iconButton"
+      <clr-icon *ngIf="layer.styles?.length >= 1" title="Change style" shape="cloud-chart" class="iconButton"
         [ngClass]="{'active': activeTabs['changeStyle']}" (click)="switchTab('changeStyle')"></clr-icon>
 
       <clr-icon *ngFor="let item of layer.actions" [attr.shape]="item.icon" class="iconButton"
@@ -76,7 +76,7 @@
         <span [innerHTML]="layer.description"></span>
       </div>
       <!-- show style-switcher -->
-      <div *ngIf="activeTabs['changeStyle']">
+      <div *ngIf="activeTabs['changeStyle'] && layer.styles && layer.styles?.length >= 1">
         <select clrSelect (change)="executeChangeStyle($event.target.value)">
           <option *ngFor="let style of layer.styles" [value]="style.name" [attr.selected]="style.name === layer.params?.style ? true : null">{{style.title}}</option>
         </select>

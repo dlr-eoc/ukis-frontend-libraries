@@ -46,22 +46,23 @@ export class RouteMap6Component implements OnInit, OnDestroy {
   }
 
   addLayers() {
+    const tandemLayer = new RasterLayer({
+      type: 'wmts',
+      id: 'TDM90_AMP',
+      url: 'https://tiles.geoservice.dlr.de/service/wmts?',
+      name: 'TDM90_AMP',
+      filtertype: 'Layers',
+      attribution: "| TDM90 Data &copy; <a href=\"http://www.dlr.de\" target=\"_blank\">DLR</a> licensed for <a rel=\"license\" target=\"_blank\" href=\"https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf\">scientific use</a>",
+      params: {
+        LAYER: 'TDM90_AMP',
+        VERSION: '1.1.0',
+        FORMAT: 'image/png'
+      }
+    });
 
-    // const TDM90_DEM_layer = new RasterLayer({
-    //   type: 'wmts',
-    //   url: 'https://tiles.geoservice.dlr.de/service/wmts',
-    //   name: 'TDM90 DEM',
-    //   id: 'TDM90_DEM',
-    //   params: {
-    //     layer: 'TDM90_DEM'
-    //   },
-    //   visible: false,
-    //   description: 'TDM90_DEM',
-    //   attribution: ' | TDM90 Data ©: <a href='http://www.dlr.de' target='_blank'>DLR</a>  licensed for <a rel='license' target='_blank' href='https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf'>scientific use</a>',
-    //   legendImg: ''
-    // });
+    this.layersSvc.addLayer(tandemLayer, tandemLayer.filtertype);
 
-    const layer = new RasterLayer({
+    const agrodeLayer = new RasterLayer({
       type: 'wms',
       id: 'AGRODE_S2_EVI_P1Y',
       url: 'https://geotest.eoc.dlr.de/eoc/land/wms?',
@@ -95,43 +96,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       ]
     });
 
-    this.layersSvc.addLayer(layer, layer.filtertype);
-
-    const layer2 = new RasterLayer({
-      type: 'wmts',
-      id: 'TDM90_AMP',
-      url: 'https://tiles.geoservice.dlr.de/service/wmts?',
-      name: 'TDM90_AMP',
-      filtertype: 'Layers',
-      attribution: "| TDM90 Data &copy; <a href=\"http://www.dlr.de\" target=\"_blank\">DLR</a> licensed for <a rel=\"license\" target=\"_blank\" href=\"https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf\">scientific use</a>",
-      params: {
-        LAYER: 'TDM90_AMP',
-        VERSION: '1.1.0',
-        FORMAT: 'image/png'
-      },
-      styles: [
-        {
-          default: true,
-          legendURL: "https://geoservice.dlr.de/eoc/elevation/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=TDM90_AMP",
-          name: "tdm-sar",
-          title: "tdm-sar"
-        },
-        {
-          default: false,
-          legendURL: "https://geoservice.dlr.de/eoc/elevation/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=TDM90_AMP",
-          name: "tdm-norm",
-          title: "tdm-norm"
-        },
-        {
-          default: false,
-          legendURL: "https://geoservice.dlr.de/eoc/elevation/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=TDM90_AMP",
-          name: "tdm-amp",
-          title: "tdm-amp"
-        }
-      ]
-    });
-
-    this.layersSvc.addLayer(layer2, layer2.filtertype);
+    this.layersSvc.addLayer(agrodeLayer, agrodeLayer.filtertype);
   }
 
   ngOnDestroy() {

@@ -178,33 +178,35 @@ export class LayerentryComponent implements OnInit {
 
   executeChangeStyle(newStyleName: string) {
     if (isRasterLayertype(this.layer.type)) {
-      const newStyle = (this.layer as RasterLayer).styles.find(s => s.name === newStyleName);
-      if (newStyle) {
-        this.layer.legendImg = newStyle.legendURL;
-        if (this.layer.type === WmsLayertype) {
-          (this.layer as RasterLayer).params.STYLES = newStyle.name;
-        } else if (this.layer.type === WmtsLayertype) {
-          (this.layer as RasterLayer).params.style = newStyle.name;
+      if ((this.layer as RasterLayer).styles) {
+        const newStyle = (this.layer as RasterLayer).styles.find(s => s.name === newStyleName);
+        if (newStyle) {
+          this.layer.legendImg = newStyle.legendURL;
+          if (this.layer.type === WmsLayertype) {
+            (this.layer as RasterLayer).params.STYLES = newStyle.name;
+          } else if (this.layer.type === WmtsLayertype) {
+            (this.layer as RasterLayer).params.style = newStyle.name;
+          }
+          this.layersSvc.updateLayer(this.layer, this.layer.filtertype);
         }
-        this.layersSvc.updateLayer(this.layer, this.layer.filtertype);
       }
     }
   }
 
-  isFirst(layer) {
-    if (this.group) {
-      return this.layersSvc.isGroupFirst(layer, this.group.layers);
-    } else {
-      return this.layersSvc.isGroupFirst(layer, null, layer.filtertype);
-    }
+isFirst(layer) {
+  if (this.group) {
+    return this.layersSvc.isGroupFirst(layer, this.group.layers);
+  } else {
+    return this.layersSvc.isGroupFirst(layer, null, layer.filtertype);
   }
+}
 
-  isLast(layer) {
-    if (this.group) {
-      return this.layersSvc.isGroupLast(layer, this.group.layers);
-    } else {
-      return this.layersSvc.isGroupLast(layer, null, layer.filtertype);
-    }
+isLast(layer) {
+  if (this.group) {
+    return this.layersSvc.isGroupLast(layer, this.group.layers);
+  } else {
+    return this.layersSvc.isGroupLast(layer, null, layer.filtertype);
   }
+}
 
 }
