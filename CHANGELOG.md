@@ -1,3 +1,14 @@
+# [5.3.1]() () (layer-control)
+
+### Bug Fixes
+* **@ukis/map-ol:** fixed some type-signatures in map-ol-service ([76a9f4552c5](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/76a9f4552c58cd4af72cdbad58963cefad519632))
+
+### Features
+* **@ukis/layer-control:** now allows switching between styles of a layer (if more than one style is present) ([22c49e96015](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/22c49e960158aa20e5058536e9bd41b49a7fd55e))
+* **@ukis/services-layers:** RasterLayer now has a property 'styles' to accommodate the above mentioned feature ([0e36a07f536](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/0e36a07f536c98e2c8d66cd5a3ec7729b0fb4a12))
+* **@ukis/map-ol:** Added a method 'setLayer', analogous to 'setLayers'  ([9c74273b78e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/9c74273b78e15c47326457fec4c51235cf146399))
+
+
 # [5.3.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv5.3.0) (2019-09-09) (layer-control and services-layers)
 
 ### Bug Fixes
