@@ -78,6 +78,8 @@ export interface ILayerOptions {
   /** true if show popup or set properties or popup-function  */
   popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
+  /** a layer might have more than one style; eg. true color and false color for the same dataset */
+  styles?: IOwsStyleSet[];
 }
 
 export interface IRasterLayerOptions extends ILayerOptions {
@@ -86,8 +88,6 @@ export interface IRasterLayerOptions extends ILayerOptions {
   /** raster params like wms params -> time, layers... depends on the map-library */
   params?: any;
   type: TRasterLayertype;
-  /** a layer might have more than one style; eg. true color and false color for the same dataset */
-  styles?: IOwsStyleSet[];
 }
 
 export interface IVectorLayerOptions extends ILayerOptions {

@@ -291,22 +291,23 @@ export class OwcJsonService {
         break;
     }
 
-    let layerOptions: IRasterLayerOptions = {
+    const layerOptions: IRasterLayerOptions = {
       id: resource.id as string,
       type: layerType,
+      url: this.getUrlFromUri(offering.operations[0].href),
+      name: this.getResourceTitle(resource),
       removable: true,
       continuousWorld: false,
       opacity: this.getResourceOpacity(resource),
-      name: this.getResourceTitle(resource),
       displayName: this.getDisplayName(offering, resource),
       visible: this.isActive(resource),
-      url: this.getUrlFromUri(offering.operations[0].href),
       attribution: this.getResourceAttribution(resource),
       legendImg: this.getLegendUrl(offering),
       params: customParams,
-    }
+      styles: offering.styles
+    };
 
-    let layer: RasterLayer = new RasterLayer(layerOptions);
+    const layer: RasterLayer = new RasterLayer(layerOptions);
 
     if (resource.bbox) {
       layer.bbox = resource.bbox;
@@ -355,7 +356,10 @@ export class OwcJsonService {
   private getWmsSpecificParamsFromOffering(offering: IOwsOffering, resource: IOwsResource) {
 
     const urlParams = this.getJsonFromUri(offering.operations[0].href);
-    const defaultStyle = offering.styles.find(s => s.default) ? offering.styles.find(s => s.default).name : null;
+    let defaultStyle;
+    if (offering.styles) {
+      defaultStyle = offering.styles.find(s => s.default).name;
+    }
 
     const params = {
       LAYERS: urlParams['LAYERS'],
