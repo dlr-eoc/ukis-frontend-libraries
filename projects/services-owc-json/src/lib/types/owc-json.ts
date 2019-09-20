@@ -7,7 +7,6 @@
  * depends on @types/geojson@^7946.0.2
  */
 import * as GeoJSON from 'geojson';
-import { TagContentType } from '@angular/compiler';
 
 
 /**

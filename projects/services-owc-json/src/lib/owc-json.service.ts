@@ -2,7 +2,8 @@
 import { Injectable } from '@angular/core';
 import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering,
   CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering } from './types/owc-json';
-import { IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering } from './types/eoc-owc-json';
+import { IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsOffering,
+  IEocWmsOffering } from './types/eoc-owc-json';
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
   Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype,
   TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype } from '@ukis/services-layers';
@@ -269,7 +270,7 @@ export class OwcJsonService {
 
 
   createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): RasterLayer {
-    let layerType = this.getLayertypeFromOfferingCode(offering);
+    const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isRasterLayertype(layerType)) {
       console.error(`This type of offering '${offering.code}' cannot be converted into a rasterlayer.`);
@@ -279,14 +280,14 @@ export class OwcJsonService {
     let customParams;
     switch (layerType) {
       case WmsLayertype:
-      case CustomLayertype:
         customParams = this.getWmsSpecificParamsFromOffering(offering, resource);
         break;
-      case WmtsLayertype:
-        customParams = this.getWmtsSpecifiParamsFromOffering(offering, resource);
-        break;
-      case XyzLayertype:
-        // xyz and wts are simple, pure rest services with no 'operations' . 
+        case WmtsLayertype:
+          // customParams = this.getWmtsSpecificParamsFromOffering(offering, resource, context, targetProjection);
+          break;
+        case XyzLayertype:
+          // xyz and wts are simple, pure rest services with no 'operations' .
+        case CustomLayertype:
         break;
     }
 
@@ -316,38 +317,55 @@ export class OwcJsonService {
     return layer;
   }
 
-  private getWmtsSpecifiParamsFromOffering(offering: IOwsOffering, resource: IOwsResource) {
+  private getWmtsSpecificParamsFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string) {
 
-    let urlParams = this.getJsonFromUri(offering.operations[0].href);
+    if (offering.operations) {
+      const getTileOperation = offering.operations.find(op => op.code === 'GetTile');
+      if (getTileOperation) {
+        const url = this.getUrlFromUri(getTileOperation.href);
+        const urlParams = this.getJsonFromUri(getTileOperation.href);
 
-    let params = {
-      layers: urlParams['LAYERS'],
-      format: urlParams['FORMAT'],
-      time: urlParams['TIME'],
-      version: urlParams['VERSION'],
-      tiled: urlParams['TILED'],
-      transparent: true,
-      'operations': offering.operations,
-      'styles': offering.styles
-    };
+        const wmts_options = {
+          url: url,
+          layer: urlParams['LAYER'],
+          version: urlParams['VERSION'] || '1.1.0',
+          format: urlParams['FORMAT'] || 'image/png',
+          attributions: resource.properties.attribution ? [resource.properties.attribution] : [],
+        };
 
-    return params;
+        if (offering.matrixSets) {
+          const matrixSet = offering.matrixSets.find(m => m.srs === targetProjection);
+          if (matrixSet) {
+            wmts_options['matrixSet'] = matrixSet.matrixSet;
+          }
+        }
+
+          // tileGrid: tileGrid || l.params.tileGrid,
+          // style: l.params.style || l.params.STYLE,
+          // projection: projection,
+          // wrapX: l.continuousWorld,
+
+        return wmts_options;
+      }
+    }
 
   }
 
 
   private getWmsSpecificParamsFromOffering(offering: IOwsOffering, resource: IOwsResource) {
 
-    let urlParams = this.getJsonFromUri(offering.operations[0].href);
+    const urlParams = this.getJsonFromUri(offering.operations[0].href);
+    const defaultStyle = offering.styles.find(s => s.default) ? offering.styles.find(s => s.default).name : null;
 
-    let params = {
+    const params = {
       LAYERS: urlParams['LAYERS'],
       FORMAT: urlParams['FORMAT'],
       TIME: urlParams['TIME'],
       VERSION: urlParams['VERSION'],
       TILED: urlParams['TILED'],
-      TRANSPARENT: true
-    }
+      TRANSPARENT: true,
+      STYLES: defaultStyle
+    };
 
     return params;
   }
@@ -389,11 +407,11 @@ export class OwcJsonService {
    * helper to pack query-parameters of a uri into a JSON
    * @param uri any uri with query-parameters
    */
-  private getJsonFromUri(uri: string) {
-    var query = uri.substr(uri.lastIndexOf('?') + 1);
-    var result = {};
+  private getJsonFromUri(uri: string): object {
+    const query = uri.substr(uri.lastIndexOf('?') + 1);
+    const result = {};
     query.split('&').forEach(function (part) {
-      var item = part.split('=');
+      const item = part.split('=');
       result[item[0].toUpperCase()] = decodeURIComponent(item[1]);
     });
     return result;
@@ -402,8 +420,8 @@ export class OwcJsonService {
 
   /**
    * retrieve display name of layer, based on IOwsResource and IOwsOffering
-   * @param offering 
-   * @param resource 
+   * @param offering
+   * @param resource
    */
   private getDisplayName(offering: IOwsOffering, resource: IOwsResource) {
     let displayName = '';

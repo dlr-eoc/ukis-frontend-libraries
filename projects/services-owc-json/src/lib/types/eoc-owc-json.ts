@@ -1,4 +1,6 @@
-import { IOwsContext, IOwsResource, IOwsOffering, WMS_Offering, WFS_Offering, WCS_Offering, WPS_Offering, CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering, IOwsResourceProperties } from "./owc-json";
+import { IOwsContext, IOwsResource, IOwsOffering, WMS_Offering, WFS_Offering, WCS_Offering, WPS_Offering,
+    CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering,
+    GMLCOV_Offering, IOwsResourceProperties } from './owc-json';
 
 
 
@@ -19,18 +21,39 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
 }
 
 export interface IEocOwsOffering extends IOwsOffering {
-    code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering | WMTS_Offering | GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering | GMLCOV_Offering | GeoJson_Offering | string;
+    code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering |
+        WMTS_Offering | GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering |
+        GMLCOV_Offering | GeoJson_Offering | string;
     legendUrl?: string;
     iconUrl?: string;
     title?: string;
 }
 
-export interface IEocOwsWmtsOffering extends IEocOwsOffering {
-    matrixSets: IEocOwsWmtsMatrixSet[]
+export interface IEocWmsOffering extends IEocOwsOffering {
+    code: WMS_Offering;
 }
 
+export interface IEocOwsWmtsOffering extends IEocOwsOffering {
+    code: WMTS_Offering;
+    matrixSets?: IEocOwsWmtsMatrixSet[];
+}
+
+
+
 export interface IEocOwsWmtsMatrixSet {
-    // TODO
+    /** EPSG-Code */
+    srs: string;
+    matrixSet: string;
+    matrixIds: string[];
+    origin: {
+        x: number,
+        y: number
+    };
+    resolutions: number[];
+    tilesize: {
+        height: number,
+        width: number
+    };
 }
 
 export interface IEocOwsProjection {

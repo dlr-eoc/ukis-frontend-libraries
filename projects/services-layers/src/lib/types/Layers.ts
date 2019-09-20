@@ -1,4 +1,22 @@
-import { IOwsStyleSet } from '@ukis/services-owc-json';
+export interface IOwsContent {
+  /** MIME type of the Content */
+  type: string;
+  href?: string;
+  title?: string;
+  /** String type, not empty that can contain any text encoded media type */
+  content?: string;
+  [k: string]: any;
+}
+
+export interface IOwsStyleSet {
+  name: string;
+  title: string;
+  abstract?: string;
+  default?: boolean;
+  legendURL?: string;
+  content?: IOwsContent;
+  [k: string]: any;
+}
 
 export interface popup {
   properties?: any;
@@ -116,6 +134,9 @@ export class Layer implements ILayerOptions {
   popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
 
+  /** a layer might have more than one style; eg. true color and false color for the same dataset */
+  styles?: IOwsStyleSet[];
+
   constructor(options: ILayerOptions) {
     Object.assign(this, options);
   }
@@ -127,8 +148,6 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
   subdomains?: Array<string>;
   /** raster params like wms params -> time, layers... depends on the map-library */
   params?: any;
-  /** a layer might have more than one style; eg. true color and false color for the same dataset */
-  styles?: IOwsStyleSet[];
 
   constructor(options: IRasterLayerOptions) {
     super(options);
@@ -153,6 +172,11 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
 
 }
 
+export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
+  return isRasterLayertype(layer.type);
+};
+
+
 export class VectorLayer extends Layer implements IVectorLayerOptions {
   type: TVectorLayertype;
   data?: any;
@@ -168,6 +192,10 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
     super(options);
   }
 }
+
+export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
+  return isVectorLayertype(layer.type);
+};
 
 export class CustomLayer extends Layer implements ICustomLayerOptions {
   type = 'custom';

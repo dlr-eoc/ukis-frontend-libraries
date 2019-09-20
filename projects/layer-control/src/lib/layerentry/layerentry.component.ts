@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 // imports only for typings...
-import { LayerGroup, Layer, RasterLayer, isRasterLayertype, WmsLayertype, WmtsLayertype } from '@ukis/services-layers';
+import { LayerGroup, Layer, RasterLayer, isRasterLayertype, WmsLayertype, WmtsLayertype, isRasterLayer,
+  isVectorLayer, LayersService, VectorLayer} from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
-import { LayersService } from '@ukis/services-layers';
+import {  } from '@ukis/services-layers';
 
 @Component({
   selector: 'ukis-layerentry',
@@ -174,6 +175,17 @@ export class LayerentryComponent implements OnInit {
     for (const key of Object.keys(this.activeTabs)) {
       this.activeTabs[key] = tabName === key;
     }
+  }
+
+  isSelectedStyle(styleName: string): boolean {
+    if (isRasterLayer(this.layer)) {
+      return (this.layer as RasterLayer).params.style === styleName;
+    } else if (isVectorLayer(this.layer)) {
+      // TODO: how to compare styles for vector layers?
+      return false;
+    }
+    // TODO: how to compare styles for custom layers?
+    return false;
   }
 
   executeChangeStyle(newStyleName: string) {
