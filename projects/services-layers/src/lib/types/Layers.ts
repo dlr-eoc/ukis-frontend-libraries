@@ -1,4 +1,4 @@
-export interface IOwsContent {
+export interface ILayerStyleContent {
   /** MIME type of the Content */
   type: string;
   href?: string;
@@ -8,13 +8,13 @@ export interface IOwsContent {
   [k: string]: any;
 }
 
-export interface IOwsStyleSet {
+export interface ILayerStyleSet {
   name: string;
   title: string;
   abstract?: string;
   default?: boolean;
   legendURL?: string;
-  content?: IOwsContent;
+  content?: ILayerStyleContent;
   [k: string]: any;
 }
 
@@ -79,7 +79,7 @@ export interface ILayerOptions {
   popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
-  styles?: IOwsStyleSet[];
+  styles?: ILayerStyleSet[];
 }
 
 export interface IRasterLayerOptions extends ILayerOptions {
@@ -135,7 +135,7 @@ export class Layer implements ILayerOptions {
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
 
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
-  styles?: IOwsStyleSet[];
+  styles?: ILayerStyleSet[];
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);
