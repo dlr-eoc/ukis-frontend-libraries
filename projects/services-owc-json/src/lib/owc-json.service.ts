@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering,
   CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering } from './types/owc-json';
 import { IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsOffering,
-  IEocWmsOffering } from './types/eoc-owc-json';
+  IEocWmsOffering, IEocOwsResourceDimension } from './types/eoc-owc-json';
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
   Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype,
-  TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype } from '@ukis/services-layers';
+  TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype, ILayerDimensions, ILayerIntervalAndPeriod } from '@ukis/services-layers';
 import { TGeoExtent } from '@ukis/services-map-state';
 import { ReplaceSource } from 'webpack-sources';
 
@@ -158,6 +158,51 @@ export class OwcJsonService {
     }
   }
 
+  convertOwcTimeToIsoTimeAndPeriodicity(owctime: string):ILayerIntervalAndPeriod | string {
+    /**
+     Convert from
+    */
+    let arr = owctime.split('/');
+    let t = (arr.length == 3) ? arr[0]+'/'+arr[1] : owctime;
+    let p = (arr.length == 3) ? arr[2] : null;
+    if (p){
+      return {"interval": t, "periodicity": p};
+    }
+    else {
+      return t
+    }
+  }
+
+  getResourceDimensions(resource: IOwsResource): ILayerDimensions {
+    if (! resource.properties.hasOwnProperty('dimensions')) {
+      return undefined;
+    }
+    let dims = {}
+    for (let name in resource.properties.dimensions){
+      let dim = {}
+      if (name === "time" || resource.properties.dimensions[name].units == "ISO8601") {
+        let value = resource.properties.dimensions[name].value
+        let values = value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v))
+        dim = {
+          "values": (typeof values[0] == "string") ? values : values[0],
+          "units": resource.properties.dimensions[name].units,
+          "display": {
+            "format":"YYYMMDD",
+            "period":resource.properties.dimensions[name].display,
+            "default":"end"
+          }
+        }        
+      }
+      else if (name === "elevation") {
+        dim = resource.properties.dimensions[name];
+      }
+      else {
+        dim = resource.properties.dimensions[name];
+      }
+      dims[name] = dim;
+    }
+    return dims;
+  }
 
   /** Offering --------------------------------------------------- */
   getLayertypeFromOfferingCode(offering: IOwsOffering): TLayertype {
@@ -302,6 +347,7 @@ export class OwcJsonService {
       visible: this.isActive(resource),
       url: this.getUrlFromUri(offering.operations[0].href),
       attribution: this.getResourceAttribution(resource),
+      dimensions: this.getResourceDimensions(resource),
       legendImg: this.getLegendUrl(offering),
       params: customParams,
     }

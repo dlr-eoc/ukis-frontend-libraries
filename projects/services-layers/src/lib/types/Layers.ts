@@ -75,9 +75,38 @@ export interface ILayerOptions {
   legendImg?: string;
   /** geographic coordinates */
   bbox?: TGeoExtent;
+  dimensions?: ILayerDimensions;
   /** true if show popup or set properties or popup-function  */
   popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
+}
+
+export interface ILayerDimensions {
+  time?: ILayerTimeDimension;
+  elevation?: ILayerElevationDimension;
+  [k: string]: any;
+}
+
+export interface ILayerIntervalAndPeriod {
+  interval: string,
+  periodicity: string
+}
+
+export interface ILayerTimeDimension {
+  values: string[] | ILayerIntervalAndPeriod;
+  units: string;
+  display?: {
+    format?: string;
+    period?: string;
+    default?: string;
+  };
+}
+
+export interface ILayerElevationDimension {
+  /** Default steps to display in elevation slider */
+  display?: string;
+  units: string;
+  value?: string;
 }
 
 export interface IRasterLayerOptions extends ILayerOptions {
@@ -104,7 +133,7 @@ export interface IVectorLayerOptions extends ILayerOptions {
 export interface ICustomLayerOptions extends ILayerOptions {
   custom_layer: any;
 }
-
+;
 /**
 * Classes for layer construction
 */
