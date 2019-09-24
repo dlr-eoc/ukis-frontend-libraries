@@ -42,7 +42,7 @@ import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
 import { DragBox, Select } from 'ol/interaction';
-import { IEocOwsWmtsMatrixSet } from '@ukis/services-ogc';
+import { IEocOwsWmtsMatrixSet } from '@ukis/services-ogc/src/public_api';
 
 
 
@@ -422,7 +422,7 @@ export class MapOlService {
 
     const projection = this.getProjection();
     const matrixSet = this.getWmtsMatrixSet(projection);
-    const tileGrid = this.getWmtsTileGrid(matrixSet, l.params.matrixSets);
+    const tileGrid = this.getWmtsTileGrid(matrixSet, l.params ? l.params.matrixSets : null);
 
     const wmts_options: any = {
       url: l.url,
