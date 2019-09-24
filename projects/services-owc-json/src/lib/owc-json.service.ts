@@ -28,7 +28,9 @@ export function isCswOffering(str: string): str is CSW_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw';
 }
 export function isWmtsOffering(str: string): str is WMTS_Offering {
-  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts'
+      || str === 'http://schemas.opengis.net/wmts/1.0.0'
+      || str === 'http://schemas.opengis.net/wmts/1.1.0';
 }
 export function isGmlOffering(str: string): str is GML_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
@@ -206,19 +208,26 @@ export class OwcJsonService {
 
   /** Offering --------------------------------------------------- */
   getLayertypeFromOfferingCode(offering: IOwsOffering): TLayertype {
-    if (isWmsOffering(offering.code)) return WmsLayertype;
-    if (isWmtsOffering(offering.code)) return WmtsLayertype;
-    if (isWfsOffering(offering.code)) return WfsLayertype;
-    if (isGeoJsonOffering(offering.code)) return GeojsonLayertype;
-    if (isXyzOffering(offering.code)) return XyzLayertype;
-    else return offering.code; // an offering can also be any other string. 
+    if (isWmsOffering(offering.code)) {
+      return WmsLayertype;
+    } else if (isWmtsOffering(offering.code)) {
+      return WmtsLayertype;
+    } else if (isWfsOffering(offering.code)) {
+      return WfsLayertype;
+    } else if (isGeoJsonOffering(offering.code)) {
+      return GeojsonLayertype;
+    } else if (isXyzOffering(offering.code)) {
+      return XyzLayertype;
+    } else {
+      return offering.code; // an offering can also be any other string.
+    }
   }
 
-  checkIfServiceOffering(offering: IOwsOffering) {
+  checkIfServiceOffering(offering: IOwsOffering): boolean {
     return (!offering.contents && offering.operations) ? true : false;
   }
 
-  checkIfDataOffering(offering: IOwsOffering) {
+  checkIfDataOffering(offering: IOwsOffering): boolean {
     return (offering.contents && !offering.operations) ? true : false;
   }
 
@@ -250,7 +259,7 @@ export class OwcJsonService {
 
   /**
    * retrieve iconUrl based on IOwsOffering
-   * @param offering 
+   * @param offering
    */
   getIconUrl(offering: IOwsOffering) {
     let iconUrl = '';
@@ -262,14 +271,14 @@ export class OwcJsonService {
 
 
   createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): VectorLayer {
-    let layerType = this.getLayertypeFromOfferingCode(offering);
+    const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isVectorLayertype(layerType)) {
       console.error(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a Vectorlayer`);
       return null;
     }
 
-    let iconUrl = this.getIconUrl(offering);
+    const iconUrl = this.getIconUrl(offering);
 
     let layerUrl, params;
     // if we have a operations-offering (vs. a data-offering):
@@ -300,7 +309,7 @@ export class OwcJsonService {
     };
 
 
-    let layer = new VectorLayer(layerOptions);
+    const layer = new VectorLayer(layerOptions);
 
     if (resource.bbox) {
       layer.bbox = resource.bbox;
