@@ -60,7 +60,7 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
 }
 
 /**
- * Each layer in a context document is known as a ‘Resource’
+ * Each layer (a.k.a. feature) in a context document is known as a ‘Resource’
  * A Resource reference a set of geospatial information to be treated as a logical element.
  * The resources are ordered such that the first item in the document is to be displayed at the front.
  * This defines the order in which layers are drawn.

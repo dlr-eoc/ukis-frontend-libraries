@@ -53,7 +53,29 @@ export function isXyzOffering(str: string): str is Xyz_Offering {
 export function isGeoJsonOffering(str: string): str is GeoJson_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 }
-
+export function shardsExpand(v:string){
+    if (!v) { return; }
+    let o=[]
+    for (let i in v.split(',')){
+        var j = v.split(',')[i].split("-")
+        if (j.length == 1){
+           o.push(v.split(',')[i])
+        } else if (j.length == 2){
+            let start = j[0].charCodeAt(0)
+            let end = j[1].charCodeAt(0)
+            if (start <= end){
+                for (let k=start;k<=end;k++) {
+                    o.push(String.fromCharCode(k).toLowerCase());
+                }
+            } else {
+                for (let k=start;k>=end;k--) {
+                    o.push(String.fromCharCode(k).toLowerCase());
+                }
+            }
+        }
+    }
+    return o
+}
 /**
  * OWS Context Service
  * OGC OWS Context Geo Encoding Standard Version: 1.0
@@ -369,7 +391,8 @@ export class OwcJsonService {
       dimensions: this.getResourceDimensions(resource),
       legendImg: this.getLegendUrl(offering),
       params: customParams,
-      styles: offering.styles
+      styles: offering.styles,
+      subdomains: shardsExpand(this.getResourceShards(resource))
     };
 
     const layer: RasterLayer = new RasterLayer(layerOptions);
