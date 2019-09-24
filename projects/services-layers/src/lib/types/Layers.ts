@@ -1,4 +1,4 @@
-export interface IOwsContent {
+export interface ILayerContent {
   /** MIME type of the Content */
   type: string;
   href?: string;
@@ -8,13 +8,13 @@ export interface IOwsContent {
   [k: string]: any;
 }
 
-export interface IOwsStyleSet {
+export interface ILayerStyleSet {
   name: string;
   title: string;
   abstract?: string;
   default?: boolean;
   legendURL?: string;
-  content?: IOwsContent;
+  content?: ILayerContent;
   [k: string]: any;
 }
 
@@ -80,7 +80,7 @@ export interface ILayerOptions {
   popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
-  styles?: IOwsStyleSet[];
+  styles?: ILayerStyleSet[];
 }
 
 export interface ILayerDimensions {
@@ -90,8 +90,8 @@ export interface ILayerDimensions {
 }
 
 export interface ILayerIntervalAndPeriod {
-  interval: string,
-  periodicity: string
+  interval: string;
+  periodicity: string;
 }
 
 export interface ILayerTimeDimension {
@@ -133,7 +133,7 @@ export interface IVectorLayerOptions extends ILayerOptions {
 export interface ICustomLayerOptions extends ILayerOptions {
   custom_layer: any;
 }
-;
+
 /**
 * Classes for layer construction
 */
@@ -164,7 +164,7 @@ export class Layer implements ILayerOptions {
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
 
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
-  styles?: IOwsStyleSet[];
+  styles?: ILayerStyleSet[];
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);
@@ -205,6 +205,27 @@ export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
   return isRasterLayertype(layer.type);
 };
 
+export class WmtsLayer extends Layer {
+  type: 'wmts';
+  params: IWmtsParams;
+}
+
+export interface IWmtsParams {}
+
+export const isWmtsLayer = (layer: Layer): layer is WmtsLayer => {
+  return layer.type === 'wmts';
+};
+
+export class WmsLayer extends Layer {
+  type: 'wms';
+  params: IWmtsParams;
+}
+
+export interface IWmsParams {}
+
+export const isWmsLayer = (layer: Layer): layer is WmsLayer => {
+  return layer.type === 'wms';
+}
 
 export class VectorLayer extends Layer implements IVectorLayerOptions {
   type: TVectorLayertype;

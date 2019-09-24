@@ -42,6 +42,7 @@ import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
 import { DragBox, Select } from 'ol/interaction';
+import { IEocOwsWmtsMatrixSet } from '@ukis/services-owc-json';
 
 
 
@@ -200,7 +201,7 @@ export class MapOlService {
   }
   /** if only one group of them map is used and setLayers is called then the map flickers!
    * this is because of all layers are new created and the have all new ol_uid's
-   * 
+   *
    * can we deep check if a layer is exactly the same and dont create it new???
    */
   public setLayers(layers: Array<Layer>, type: 'baselayers' | 'layers' | 'overlays') {
@@ -373,6 +374,45 @@ export class MapOlService {
     return this.map.getView().getProjection();
   }
 
+  private getWmtsMatrixSet(projection: any): string {
+    const matrixSet = projection.getCode();
+    return matrixSet;
+  }
+
+  private getWmtsTileGrid(matrixSetName: string, matrixSets?: IEocOwsWmtsMatrixSet): olWMTSTileGrid {
+    const projection = this.getProjection();
+    const projectionExtent = projection.getExtent();
+
+    let resolutions;
+    let matrixIds;
+
+    if (matrixSets && matrixSets[matrixSetName]) {
+      // if the given matrixSet is already provided, use it.
+
+      const matrixSet = matrixSets[matrixSetName];
+      resolutions = matrixSet.resolutions;
+      matrixIds = matrixSet.matrixIds;
+
+    } else {
+      // else create a default matrixSet.
+
+      const UnitsPerPixLargestTile = getWidth(projectionExtent) / 256;
+      resolutions = new Array(14);
+      matrixIds = new Array(14);
+      for (let z = 0; z < 14; ++z) {
+        resolutions[z] = UnitsPerPixLargestTile / Math.pow(2, z);
+        matrixIds[z] = projection.getCode() + ':' + z;
+      }
+
+    }
+
+    const tileGrid = new olWMTSTileGrid({
+      origin: getTopLeft(projectionExtent),
+      resolutions: resolutions,
+      matrixIds: matrixIds
+    });
+    return tileGrid;
+  }
 
   private create_wmts_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
 
@@ -381,21 +421,8 @@ export class MapOlService {
     // https://openlayers.org/en/latest/examples/wmts-layer-from-capabilities.html?q=wmts
 
     const projection = this.getProjection();
-    const matrixSet = projection.getCode();
-    const projectionExtent = projection.getExtent();
-    const UnitsPerPixLargestTile = getWidth(projectionExtent) / 256;
-    const resolutions = new Array(14);
-    const matrixIds = new Array(14);
-    for (let z = 0; z < 14; ++z) {
-      resolutions[z] = UnitsPerPixLargestTile / Math.pow(2, z);
-      matrixIds[z] = matrixSet + ':' + z;
-    }
-
-    const tileGrid = new olWMTSTileGrid({
-      origin: getTopLeft(projectionExtent),
-      resolutions: resolutions,
-      matrixIds: matrixIds
-    });
+    const matrixSet = this.getWmtsMatrixSet(projection);
+    const tileGrid = this.getWmtsTileGrid(matrixSet, l.params.matrixSets);
 
     const wmts_options: any = {
       url: l.url,
