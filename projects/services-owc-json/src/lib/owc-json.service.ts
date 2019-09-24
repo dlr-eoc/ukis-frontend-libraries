@@ -180,26 +180,36 @@ export class OwcJsonService {
       return undefined;
     }
     let dims = {}
-    for (let name in resource.properties.dimensions){
+    
+    let dimensions = {}
+    if (Array.isArray(resource.properties.dimensions)){
+      for (let d of resource.properties.dimensions){
+        dimensions[d.name] = d
+      }
+    } else {
+      dimensions = resource.properties.dimensions
+    }
+    for (let name in dimensions){
       let dim = {}
-      if (name === "time" || resource.properties.dimensions[name].units == "ISO8601") {
-        let value = resource.properties.dimensions[name].value
+      console.log(name)
+      if (name === "time" || dimensions[name].units == "ISO8601") {
+        let value = dimensions[name].value
         let values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v)) : null
         dim = {
           "values": ((!values) || values.length > 1 ) ? values : values[0],
-          "units": resource.properties.dimensions[name].units,
+          "units": dimensions[name].units,
           "display": {
             "format":"YYYMMDD",
-            "period":resource.properties.dimensions[name].display,
+            "period":dimensions[name].display,
             "default":"end"
           }
         }        
       }
       else if (name === "elevation") {
-        dim = resource.properties.dimensions[name];
+        dim = dimensions[name];
       }
       else {
-        dim = resource.properties.dimensions[name];
+        dim = dimensions[name];
       }
       dims[name] = dim;
     }
