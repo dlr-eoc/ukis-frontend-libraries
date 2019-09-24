@@ -182,9 +182,9 @@ export class OwcJsonService {
       let dim = {}
       if (name === "time" || resource.properties.dimensions[name].units == "ISO8601") {
         let value = resource.properties.dimensions[name].value
-        let values = value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v))
+        let values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v)) : null
         dim = {
-          "values": (typeof values[0] == "string") ? values : values[0],
+          "values": ((!values) || typeof values[0] == "string") ? values : values[0],
           "units": resource.properties.dimensions[name].units,
           "display": {
             "format":"YYYMMDD",
