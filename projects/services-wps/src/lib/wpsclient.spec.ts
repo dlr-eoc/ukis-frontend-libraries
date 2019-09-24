@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { WpsClient } from './wpsclient';
 import { HttpClient, HttpXhrBackend, XhrFactory } from '@angular/common/http';
-import { WpsData, WpsDataDescription } from './wps_datatypes';
+import { WpsData, WpsDataDescription } from '../public-api';
 
 class MyXhrFactory extends XhrFactory {
     build(): XMLHttpRequest {
@@ -80,7 +80,7 @@ describe(`Testing wps-client version 1 functionality`, () => {
 
     //     const c = new WpsClient('1.0.0', httpClient);
 
-    //     c.executeAsync(url, processId, inputs, [outputDescription], 500).subscribe(resultList => {
+    //     c.executeAsync(url, processId, inputs, outputDescription, 500).subscribe(resultList => {
     //         console.log('output tsunamp:', resultList);
     //         expect(resultList.length).toBeGreaterThan(0);
     //         done();

@@ -6,7 +6,8 @@ import { IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz
   IEocWmsOffering, IEocOwsResourceDimension } from './types/eoc-owc-json';
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
   Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype,
-  TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype, ILayerDimensions, ILayerIntervalAndPeriod } from '@ukis/services-layers';
+  TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype, ILayerDimensions,
+  ILayerIntervalAndPeriod } from '@ukis/services-layers';
 import { TGeoExtent } from '@ukis/services-map-state';
 import { ReplaceSource } from 'webpack-sources';
 

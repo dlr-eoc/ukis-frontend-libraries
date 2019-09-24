@@ -3,5 +3,15 @@
   "dest": "../../dist/services-ogc",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@types/geojson",
+    "@ukis/services-layers",
+    "@ukis/services-util-store",
+    "@ukis/base-layers-raster",
+    "md5",
+    "w3c-schemas",
+    "ogc-schemas",
+    "@boundlessgeo/jsonix"
+  ]
 }

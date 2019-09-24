@@ -8,8 +8,9 @@
     "tslib",
     "@ukis/services-layers",
     "@ukis/services-layers",
-    "@ukis/services-owc-json",
+    "@ukis/services-ogc",
     "@ukis/services-map-state",
-    "@ukis/services-map-state"
+    "@ukis/services-map-state",
+    "@ukis/services-ogc"
   ]
 }

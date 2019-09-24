@@ -1,0 +1,13 @@
+{
+  "name": "@ukis/services-wps",
+  "version": "0.0.0-PLACEHOLDER",
+  "peerDependencies": {
+    "@angular/common": "^8.1.1",
+    "@angular/core": "^8.1.1",
+    "@ukis/services-util-store": "0.0.0-PLACEHOLDER",
+    "md5": "^2.2.1",
+    "w3c-schemas": "^1.4.0",
+    "ogc-schemas": "^2.6.1",
+    "@boundlessgeo/jsonix": "^2.4.3"
+  }
+}

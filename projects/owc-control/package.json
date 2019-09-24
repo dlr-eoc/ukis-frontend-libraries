@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",
-    "@ukis/services-owc-json": "0.0.0-PLACEHOLDER",
+    "@ukis/services-ogc": "0.0.0-PLACEHOLDER",
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER"
   }
 }

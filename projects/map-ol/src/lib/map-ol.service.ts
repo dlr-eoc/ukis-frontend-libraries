@@ -42,7 +42,7 @@ import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
 import { DragBox, Select } from 'ol/interaction';
-import { IEocOwsWmtsMatrixSet } from '@ukis/services-owc-json';
+import { IEocOwsWmtsMatrixSet } from '@ukis/services-ogc';
 
 
 

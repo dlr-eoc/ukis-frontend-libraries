@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { LayersService } from '@ukis/services-layers';
 import { Layer } from '@ukis/services-layers';
-import { OwcJsonService } from '@ukis/services-owc-json';
+import { OwcJsonService } from '@ukis/services-ogc';
 import { TGeoExtent, MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
 import { Subscription } from 'rxjs';

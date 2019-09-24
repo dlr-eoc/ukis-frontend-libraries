@@ -33,14 +33,6 @@
         "dist/services-map-state/*",
         "projects/services-map-state/*"
       ],
-      "@ukis/services-owc-json": [
-        "dist/services-owc-json",
-        "projects/services-owc-json"
-      ],
-      "@ukis/services-owc-json/*": [
-        "dist/services-owc-json/*",
-        "projects/services-owc-json/*"
-      ],
       "@ukis/services-util-store": [
         "dist/services-util-store",
         "projects/services-util-store"
@@ -49,13 +41,13 @@
         "dist/services-util-store/*",
         "projects/services-util-store/*"
       ],
-      "@ukis/services-wps": [
-        "dist/services-wps",
-        "projects/services-wps"
+      "@ukis/services-ogc": [
+        "dist/services-ogc",
+        "projects/services-ogc"
       ],
-      "@ukis/services-wps/*": [
-        "dist/services-wps/*",
-        "projects/services-wps/*"
+      "@ukis/services-ogc/*": [
+        "dist/services-ogc/*",
+        "projects/services-ogc/*"
       ],
       "@ukis/map-ol": [
         "dist/map-ol",
