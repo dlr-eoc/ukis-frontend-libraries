@@ -1,0 +1,90 @@
+{
+  "_from": "@boundlessgeo/jsonix",
+  "_id": "@boundlessgeo/jsonix@2.4.3",
+  "_inBundle": false,
+  "_integrity": "sha1-Zis5/cjAFXcRi4mQrHjuRLVwAJs=",
+  "_location": "/@boundlessgeo/jsonix",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@boundlessgeo/jsonix",
+    "name": "@boundlessgeo/jsonix",
+    "escapedName": "@boundlessgeo%2fjsonix",
+    "scope": "@boundlessgeo",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "http://hofer.eoc.dlr.de/nexus/repository/npm-all/@boundlessgeo/jsonix/-/jsonix-2.4.3.tgz",
+  "_shasum": "662b39fdc8c01577118b8990ac78ee44b570009b",
+  "_spec": "@boundlessgeo/jsonix",
+  "_where": "/home/michael/Desktop/ts/project-riesgos",
+  "author": {
+    "name": "Alexey Valikov",
+    "url": "http://github.com/highsource"
+  },
+  "bugs": {
+    "url": "http://github.com/highsource/jsonix/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Conrad Pankoff",
+      "url": "https://github.com/deoxxa"
+    }
+  ],
+  "dependencies": {
+    "amdefine": "0.x.x",
+    "xmldom": ">=0.1.21",
+    "xmlhttprequest": "1.x.x"
+  },
+  "deprecated": false,
+  "description": "Jsonix (JSON interfaces for XML) is a JavaScript library which allows converting between XML and JSON structures.",
+  "devDependencies": {
+    "node-static": "0.x.x",
+    "nodeunit": "0.x.x"
+  },
+  "engines": [
+    "node >= 0.8.0"
+  ],
+  "homepage": "http://github.com/highsource/jsonix",
+  "keywords": [
+    "json",
+    "xml",
+    "unmarshal",
+    "unmarshalling",
+    "marshal",
+    "marshalling",
+    "parse",
+    "parsing",
+    "serialize",
+    "serializing",
+    "javascript objects",
+    "dom",
+    "util",
+    "utility",
+    "jaxb",
+    "jsonix"
+  ],
+  "licenses": [
+    {
+      "type": "BSD-3-Clause",
+      "url": "http://github.com/highsource/jsonix/raw/master/LICENSE"
+    }
+  ],
+  "main": "jsonix.js",
+  "name": "@boundlessgeo/jsonix",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/highsource/jsonix.git"
+  },
+  "scripts": {
+    "test": "nodeunit tests/tests.js"
+  },
+  "version": "2.4.3"
+}

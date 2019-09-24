@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-export interface ILayerStyleContent {
-=======
 export interface ILayerContent {
->>>>>>> 4443a85ff0e82f8632ee57ff59dba672cadcbded
   /** MIME type of the Content */
   type: string;
   href?: string;
@@ -18,11 +14,7 @@ export interface ILayerStyleSet {
   abstract?: string;
   default?: boolean;
   legendURL?: string;
-<<<<<<< HEAD
-  content?: ILayerStyleContent;
-=======
   content?: ILayerContent;
->>>>>>> 4443a85ff0e82f8632ee57ff59dba672cadcbded
   [k: string]: any;
 }
 
@@ -89,8 +81,6 @@ export interface ILayerOptions {
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
   styles?: ILayerStyleSet[];
-<<<<<<< HEAD
-=======
 }
 
 export interface ILayerDimensions {
@@ -119,7 +109,6 @@ export interface ILayerElevationDimension {
   display?: string;
   units: string;
   value?: string;
->>>>>>> 4443a85ff0e82f8632ee57ff59dba672cadcbded
 }
 
 export interface IRasterLayerOptions extends ILayerOptions {
