@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering,
   CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering } from './types/owc-json';
 import { IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsOffering,
-  IEocWmsOffering } from './types/eoc-owc-json';
+  IEocWmsOffering, IEocOwsResourceDimension } from './types/eoc-owc-json';
 import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
   Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype,
-  TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype } from '@ukis/services-layers';
+  TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype, ILayerDimensions, ILayerIntervalAndPeriod } from '@ukis/services-layers';
 import { TGeoExtent } from '@ukis/services-map-state';
 import { ReplaceSource } from 'webpack-sources';
 
@@ -28,7 +28,9 @@ export function isCswOffering(str: string): str is CSW_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw';
 }
 export function isWmtsOffering(str: string): str is WMTS_Offering {
-  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts'
+      || str === 'http://schemas.opengis.net/wmts/1.0.0'
+      || str === 'http://schemas.opengis.net/wmts/1.1.0';
 }
 export function isGmlOffering(str: string): str is GML_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
@@ -158,22 +160,74 @@ export class OwcJsonService {
     }
   }
 
+  convertOwcTimeToIsoTimeAndPeriodicity(owctime: string):ILayerIntervalAndPeriod | string {
+    /**
+     Convert from
+    */
+    let arr = owctime.split('/');
+    let t = (arr.length == 3) ? arr[0]+'/'+arr[1] : owctime;
+    let p = (arr.length == 3) ? arr[2] : null;
+    if (p){
+      return {"interval": t, "periodicity": p};
+    }
+    else {
+      return t
+    }
+  }
+
+  getResourceDimensions(resource: IOwsResource): ILayerDimensions {
+    if (! resource.properties.hasOwnProperty('dimensions')) {
+      return undefined;
+    }
+    let dims = {}
+    for (let name in resource.properties.dimensions){
+      let dim = {}
+      if (name === "time" || resource.properties.dimensions[name].units == "ISO8601") {
+        let value = resource.properties.dimensions[name].value
+        let values = value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v))
+        dim = {
+          "values": (typeof values[0] == "string") ? values : values[0],
+          "units": resource.properties.dimensions[name].units,
+          "display": {
+            "format":"YYYMMDD",
+            "period":resource.properties.dimensions[name].display,
+            "default":"end"
+          }
+        }        
+      }
+      else if (name === "elevation") {
+        dim = resource.properties.dimensions[name];
+      }
+      else {
+        dim = resource.properties.dimensions[name];
+      }
+      dims[name] = dim;
+    }
+    return dims;
+  }
 
   /** Offering --------------------------------------------------- */
   getLayertypeFromOfferingCode(offering: IOwsOffering): TLayertype {
-    if (isWmsOffering(offering.code)) return WmsLayertype;
-    if (isWmtsOffering(offering.code)) return WmtsLayertype;
-    if (isWfsOffering(offering.code)) return WfsLayertype;
-    if (isGeoJsonOffering(offering.code)) return GeojsonLayertype;
-    if (isXyzOffering(offering.code)) return XyzLayertype;
-    else return offering.code; // an offering can also be any other string. 
+    if (isWmsOffering(offering.code)) {
+      return WmsLayertype;
+    } else if (isWmtsOffering(offering.code)) {
+      return WmtsLayertype;
+    } else if (isWfsOffering(offering.code)) {
+      return WfsLayertype;
+    } else if (isGeoJsonOffering(offering.code)) {
+      return GeojsonLayertype;
+    } else if (isXyzOffering(offering.code)) {
+      return XyzLayertype;
+    } else {
+      return offering.code; // an offering can also be any other string.
+    }
   }
 
-  checkIfServiceOffering(offering: IOwsOffering) {
+  checkIfServiceOffering(offering: IOwsOffering): boolean {
     return (!offering.contents && offering.operations) ? true : false;
   }
 
-  checkIfDataOffering(offering: IOwsOffering) {
+  checkIfDataOffering(offering: IOwsOffering): boolean {
     return (offering.contents && !offering.operations) ? true : false;
   }
 
@@ -205,7 +259,7 @@ export class OwcJsonService {
 
   /**
    * retrieve iconUrl based on IOwsOffering
-   * @param offering 
+   * @param offering
    */
   getIconUrl(offering: IOwsOffering) {
     let iconUrl = '';
@@ -217,14 +271,14 @@ export class OwcJsonService {
 
 
   createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): VectorLayer {
-    let layerType = this.getLayertypeFromOfferingCode(offering);
+    const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isVectorLayertype(layerType)) {
       console.error(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a Vectorlayer`);
       return null;
     }
 
-    let iconUrl = this.getIconUrl(offering);
+    const iconUrl = this.getIconUrl(offering);
 
     let layerUrl, params;
     // if we have a operations-offering (vs. a data-offering):
@@ -255,7 +309,7 @@ export class OwcJsonService {
     };
 
 
-    let layer = new VectorLayer(layerOptions);
+    const layer = new VectorLayer(layerOptions);
 
     if (resource.bbox) {
       layer.bbox = resource.bbox;
@@ -302,6 +356,7 @@ export class OwcJsonService {
       displayName: this.getDisplayName(offering, resource),
       visible: this.isActive(resource),
       attribution: this.getResourceAttribution(resource),
+      dimensions: this.getResourceDimensions(resource),
       legendImg: this.getLegendUrl(offering),
       params: customParams,
       styles: offering.styles

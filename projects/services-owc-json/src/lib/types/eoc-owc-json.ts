@@ -18,6 +18,20 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
     opacity?: number;
     attribution?: string;
     shards?: string;
+    dimensions?: IEocOwsResourceDimensions;
+}
+
+export interface IEocOwsResourceDimensions {
+  time?: IEocOwsResourceDimension;
+  elevation?: IEocOwsResourceDimension;
+  [k: string]: any;
+}
+
+export interface IEocOwsResourceDimension {
+  /** Default step display of time slider */
+  display?: string;
+  units: string;
+  value?: string;
 }
 
 export interface IEocOwsOffering extends IOwsOffering {
@@ -37,8 +51,6 @@ export interface IEocOwsWmtsOffering extends IEocOwsOffering {
     code: WMTS_Offering;
     matrixSets?: IEocOwsWmtsMatrixSet[];
 }
-
-
 
 export interface IEocOwsWmtsMatrixSet {
     /** EPSG-Code */
