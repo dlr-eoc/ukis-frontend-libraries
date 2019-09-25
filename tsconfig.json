@@ -128,12 +128,6 @@
       "@ukis/dynforms/*": [
         "dist/dynforms/*",
         "projects/dynforms/*"
-      ],
-      "services-ogc": [
-        "dist/services-ogc"
-      ],
-      "services-ogc/*": [
-        "dist/services-ogc/*"
       ]
     }
   }

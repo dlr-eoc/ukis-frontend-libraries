@@ -14,5 +14,6 @@
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
     "@boundlessgeo/jsonix": "^2.4.3"
-  }
+  },
+  "main": "src/public_api"
 }
