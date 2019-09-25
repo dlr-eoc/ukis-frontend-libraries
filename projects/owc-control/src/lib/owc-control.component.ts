@@ -4,7 +4,7 @@ import { Layer } from '@ukis/services-layers';
 import { TGeoExtent, MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
 import { Subscription } from 'rxjs';
-import { OwcJsonService } from '@ukis/services-ogc/src/public_api';
+import { OwcJsonService } from '@ukis/services-ogc';
 
 @Component({
   selector: 'ukis-owc-control',
