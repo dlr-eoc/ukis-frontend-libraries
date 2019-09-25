@@ -95,7 +95,7 @@ export interface ILayerIntervalAndPeriod {
 }
 
 export interface ILayerTimeDimension {
-  values: string[] | ILayerIntervalAndPeriod;
+  values: string[] | ILayerIntervalAndPeriod[] | ILayerIntervalAndPeriod;
   units: string;
   display?: {
     format?: string;
@@ -191,7 +191,7 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
       }
 
       this.legendImg = defaultStyle.legendURL;
-      if (this.params){
+      if (this.params) {
         if (this.type === WmsLayertype) {
           this.params.STYLES = defaultStyle.name;
         } else if (this.type === WmtsLayertype) {
@@ -214,7 +214,7 @@ export class WmtsLayer extends Layer {
   params: IWmtsParams;
 }
 
-export interface IWmtsParams {}
+export interface IWmtsParams { }
 
 export const isWmtsLayer = (layer: Layer): layer is WmtsLayer => {
   return layer.type === 'wmts';
@@ -225,7 +225,7 @@ export class WmsLayer extends Layer {
   params: IWmtsParams;
 }
 
-export interface IWmsParams {}
+export interface IWmsParams { }
 
 export const isWmsLayer = (layer: Layer): layer is WmsLayer => {
   return layer.type === 'wms';
