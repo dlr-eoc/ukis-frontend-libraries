@@ -159,6 +159,7 @@ export class Layer implements ILayerOptions {
 
   /** geographic coordinates */
   bbox?: TGeoExtent;
+  dimensions?: ILayerDimensions;
   /** true if show popup or set properties or popup-function  */
   popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
@@ -201,7 +202,6 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
         }
         this.params.style = defaultStyle.name;
       }
-
     }
   }
 

@@ -54,7 +54,29 @@ export function isXyzOffering(str: string): str is Xyz_Offering {
 export function isGeoJsonOffering(str: string): str is GeoJson_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 }
-
+export function shardsExpand(v:string){
+    if (!v) { return; }
+    let o=[]
+    for (let i in v.split(',')){
+        var j = v.split(',')[i].split("-")
+        if (j.length == 1){
+           o.push(v.split(',')[i])
+        } else if (j.length == 2){
+            let start = j[0].charCodeAt(0)
+            let end = j[1].charCodeAt(0)
+            if (start <= end){
+                for (let k=start;k<=end;k++) {
+                    o.push(String.fromCharCode(k).toLowerCase());
+                }
+            } else {
+                for (let k=start;k>=end;k--) {
+                    o.push(String.fromCharCode(k).toLowerCase());
+                }
+            }
+        }
+    }
+    return o
+}
 /**
  * OWS Context Service
  * OGC OWS Context Geo Encoding Standard Version: 1.0
@@ -181,26 +203,36 @@ export class OwcJsonService {
       return undefined;
     }
     let dims = {}
-    for (let name in resource.properties.dimensions){
+    
+    let dimensions = {}
+    if (Array.isArray(resource.properties.dimensions)){
+      for (let d of resource.properties.dimensions){
+        dimensions[d.name] = d
+      }
+    } else {
+      dimensions = resource.properties.dimensions
+    }
+    for (let name in dimensions){
       let dim = {}
-      if (name === "time" || resource.properties.dimensions[name].units == "ISO8601") {
-        let value = resource.properties.dimensions[name].value
-        let values = value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v))
+      console.log(name)
+      if (name === "time" || dimensions[name].units == "ISO8601") {
+        let value = dimensions[name].value
+        let values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v)) : null
         dim = {
-          "values": (typeof values[0] == "string") ? values : values[0],
-          "units": resource.properties.dimensions[name].units,
+          "values": ((!values) || values.length > 1 ) ? values : values[0],
+          "units": dimensions[name].units,
           "display": {
             "format":"YYYMMDD",
-            "period":resource.properties.dimensions[name].display,
+            "period":dimensions[name].display,
             "default":"end"
           }
         }        
       }
       else if (name === "elevation") {
-        dim = resource.properties.dimensions[name];
+        dim = dimensions[name];
       }
       else {
-        dim = resource.properties.dimensions[name];
+        dim = dimensions[name];
       }
       dims[name] = dim;
     }
@@ -360,7 +392,8 @@ export class OwcJsonService {
       dimensions: this.getResourceDimensions(resource),
       legendImg: this.getLegendUrl(offering),
       params: customParams,
-      styles: offering.styles
+      styles: offering.styles,
+      subdomains: shardsExpand(this.getResourceShards(resource))
     };
 
     const layer: RasterLayer = new RasterLayer(layerOptions);
