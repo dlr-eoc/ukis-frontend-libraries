@@ -4,7 +4,7 @@ import { WpsFactory200 } from './wps200/wps_2.0_factory';
 import { Cache } from './utils/cache';
 import { Observable, timer, of, throwError } from 'rxjs';
 import { map, catchError, switchMap, tap } from 'rxjs/operators';
-// import { Jsonix } from '@boundlessgeo/jsonix'; //let Jsonix = require('jsonix').Jsonix;
+import { Jsonix } from '@boundlessgeo/jsonix'; //let Jsonix = require('jsonix').Jsonix;
 
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; const XLink_1_0 = XLink_1_0_Factory.XLink_1_0;
@@ -14,9 +14,9 @@ import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; import { doAfter, doUntil, poll, pollUntil } from './utils/polling';
 import { Injectable, Inject } from '@angular/core';
 const WPS_2_0 = WPS_2_0_Factory.WPS_2_0; // const WPS_2_0 = require('ogc-schemas/lib/WPS_2_0').WPS_2_0;
-import * as JsonixModule from './jsonix/jsonix';
-console.log(JsonixModule);
-const Jsonix = JsonixModule.Jsonix;
+// import * as JsonixModule from './jsonix/jsonix';
+// console.log(JsonixModule);
+// const Jsonix = JsonixModule.Jsonix;
 
 
 /**
