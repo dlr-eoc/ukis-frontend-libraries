@@ -48,4 +48,18 @@ run ``ng generate library < name > --prefix ukis``
 # Developing libraries and frontend side by side
 Sometimes we want to work on a frontend-project and a library simultaneously. Such a situation might occur when during the work on a project an error is detected in one of the libraries that takes some work to fix. 
 There are two ways to include libraries in a frontend-project: 
- - compile the library on changes and link the compiled library into the frontend-projects `node_modules/@ukis` directory. We have provided a script for this purpose: `bash scripts/buildAndLink <libraryName> <frontendProjectName>`. Note that this script assumes that the project- and the libraries-directories are placed side by side in the same folder. For example, assume that the folders `frontend-libraries` and `project-mariss` are situated in the same directory. Then executing `bash frontend-libraries/buildAndLink.sh services-owc-json project-mariss` will build the library `frontend-libraries/projects/services-owc-json` and link it into `project-mariss/node_modules/@ukis/services-owc-json`.
+ - 1st method: compile the library on changes and link the compiled library into the frontend-projects `node_modules/@ukis` directory. We have provided a script for this purpose: `bash scripts/buildAndLink <libraryName> <frontendProjectName>`. Note that this script assumes that the project- and the libraries-directories are placed side by side in the same folder. For example, assume that the folders `frontend-libraries` and `project-mariss` are situated in the same directory. Then executing `bash frontend-libraries/buildAndLink.sh services-owc-json project-mariss` will build the library `frontend-libraries/projects/services-owc-json` and link it into `project-mariss/node_modules/@ukis/services-owc-json`.
+ - 2nd method: clone the libraries directly into the project. In detail: 
+    - in the root-directory of your application (say `/home/<-your-username-here->/project-geoservice`) clone the libraries: `git clone http://<-your-username-here->@git.ukis.eoc.dlr.de/scm/mofro/frontend-libraries.git`
+    - adjust the path mapping in  `project-geoservice/tsconfig.json`, so that the ts-compiler will look for any `@ukis` dependencies in the libraries-directory you just downloaded: 
+```
+    // tsconfig.json
+    ...
+    "paths": {
+        "@ukis/*": [
+            "dist/*",
+            "frontend-libraries/projects/*"
+        ]
+    }
+    ...
+```
