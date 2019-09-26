@@ -43,6 +43,7 @@ import olStroke from 'ol/style/Stroke';
 
 import { DragBox, Select } from 'ol/interaction';
 import { IEocOwsWmtsMatrixSet } from '@ukis/services-ogc';
+import { WmtsLayer } from '@ukis/services-layers';
 
 
 
@@ -225,7 +226,7 @@ export class MapOlService {
             _layer = this.create_wms_layer(<RasterLayer>item.newlayer, item.oldlayer);
             break;
           case 'wmts':
-            _layer = this.create_wmts_layer(<RasterLayer>item.newlayer, item.oldlayer);
+            _layer = this.create_wmts_layer(<WmtsLayer>item.newlayer, item.oldlayer);
             break;
           case 'geojson':
             _layer = this.create_geojson_layer(<VectorLayer>item.newlayer, item.oldlayer);
@@ -258,7 +259,7 @@ export class MapOlService {
           newOlLayer = this.create_wms_layer(<RasterLayer>newLayer, oldLayer);
         break;
       case 'wmts':
-          newOlLayer = this.create_wmts_layer(<RasterLayer>newLayer, oldLayer);
+          newOlLayer = this.create_wmts_layer(<WmtsLayer>newLayer, oldLayer);
         break;
       case 'geojson':
           newOlLayer = this.create_geojson_layer(<VectorLayer>newLayer, oldLayer);
@@ -374,72 +375,20 @@ export class MapOlService {
     return this.map.getView().getProjection();
   }
 
-  private getWmtsMatrixSet(projection: any): string {
-    const matrixSet = projection.getCode();
-    return matrixSet;
-  }
-
-  private getWmtsTileGrid(matrixSetName: string, matrixSets?: IEocOwsWmtsMatrixSet): olWMTSTileGrid {
-    const projection = this.getProjection();
-    const projectionExtent = projection.getExtent();
-
-    let resolutions;
-    let matrixIds;
-
-    if (matrixSets && matrixSets[matrixSetName]) {
-      // if the given matrixSet is already provided, use it.
-
-      const matrixSet = matrixSets[matrixSetName];
-      resolutions = matrixSet.resolutions;
-      matrixIds = matrixSet.matrixIds;
-
-    } else {
-      // else create a default matrixSet.
-
-      const UnitsPerPixLargestTile = getWidth(projectionExtent) / 256;
-      resolutions = new Array(14);
-      matrixIds = new Array(14);
-      for (let z = 0; z < 14; ++z) {
-        resolutions[z] = UnitsPerPixLargestTile / Math.pow(2, z);
-        matrixIds[z] = projection.getCode() + ':' + z;
-      }
-
-    }
-
-    const tileGrid = new olWMTSTileGrid({
-      origin: getTopLeft(projectionExtent),
-      resolutions: resolutions,
-      matrixIds: matrixIds
-    });
-    return tileGrid;
-  }
-
-  private create_wmts_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
-
-    // TODO: here we create a standard-tilegrid. While this will be enough for most of our wmts,
-    // it would be more rigorous to make a getCapabilites-request to the server instead.
+  private create_wmts_layer(l: WmtsLayer, oldlayer?: olBaseLayer): olTileLayer {
     // https://openlayers.org/en/latest/examples/wmts-layer-from-capabilities.html?q=wmts
-
-    const projection = this.getProjection();
-    const matrixSet = this.getWmtsMatrixSet(projection);
-    const tileGrid = this.getWmtsTileGrid(matrixSet, l.params ? l.params.matrixSets : null);
 
     const wmts_options: any = {
       url: l.url,
-      matrixSet: matrixSet || l.params.matrixSet,
-      tileGrid: tileGrid || l.params.tileGrid,
-      projection: projection,
+      layer: l.params.layer,
+      style: l.params.style,
+      format: l.params.format,
+      matrixSet: l.params.matrixSet,
+      projection: l.params.projection,
       attributions: [l.attribution],
       wrapX: l.continuousWorld,
     };
     
-    if (l.params) {
-      wmts_options['layer'] = l.params.layer || l.params.LAYER;
-      wmts_options['style'] = l.params.style || l.params.STYLE;
-      wmts_options['version'] = l.params.version || l.params.VERSION || '1.0.0';
-      wmts_options['format'] = l.params.format || l.params.FORMAT || 'image/png';
-    }
-
     if (l['crossOrigin']) {
       wmts_options.crossOrigin = l['crossOrigin'];
     }

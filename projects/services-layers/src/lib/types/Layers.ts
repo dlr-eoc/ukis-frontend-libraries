@@ -211,28 +211,6 @@ export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
   return isRasterLayertype(layer.type);
 };
 
-export class WmtsLayer extends Layer {
-  type: 'wmts';
-  params: IWmtsParams;
-}
-
-export interface IWmtsParams {}
-
-export const isWmtsLayer = (layer: Layer): layer is WmtsLayer => {
-  return layer.type === 'wmts';
-};
-
-export class WmsLayer extends Layer {
-  type: 'wms';
-  params: IWmtsParams;
-}
-
-export interface IWmsParams {}
-
-export const isWmsLayer = (layer: Layer): layer is WmsLayer => {
-  return layer.type === 'wms';
-}
-
 export class VectorLayer extends Layer implements IVectorLayerOptions {
   type: TVectorLayertype;
   data?: any;

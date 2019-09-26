@@ -1,13 +1,25 @@
 
 import { Injectable } from '@angular/core';
-import { IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering,
-  CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering } from './types/owc-json';
-import { IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsOffering,
-  IEocWmsOffering, IEocOwsResourceDimension } from './types/eoc-owc-json';
-import { ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
+import {
+  IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering,
+  CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering
+} from './types/owc-json';
+import {
+  IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsOffering,
+  IEocWmsOffering, IEocOwsResourceDimension
+} from './types/eoc-owc-json';
+import {
+  ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
   Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype,
   TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype, ILayerDimensions,
-  ILayerIntervalAndPeriod } from '@ukis/services-layers';
+  ILayerIntervalAndPeriod,
+  IWmtsParams,
+  WmtsLayer,
+  IWmtsOptions,
+  WmsLayer,
+  IWmsParams,
+  IWmsOptions
+} from '@ukis/services-layers';
 import { TGeoExtent } from '@ukis/services-map-state';
 import { ReplaceSource } from 'webpack-sources';
 
@@ -16,8 +28,8 @@ import { ReplaceSource } from 'webpack-sources';
 
 export function isWmsOffering(str: string): str is WMS_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms'
-      || str === 'http://schemas.opengis.net/wms/1.1.1'
-      || str === 'http://schemas.opengis.net/wms/1.1.0';
+    || str === 'http://schemas.opengis.net/wms/1.1.1'
+    || str === 'http://schemas.opengis.net/wms/1.1.0';
 }
 export function isWfsOffering(str: string): str is WFS_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
@@ -30,8 +42,8 @@ export function isCswOffering(str: string): str is CSW_Offering {
 }
 export function isWmtsOffering(str: string): str is WMTS_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts'
-      || str === 'http://schemas.opengis.net/wmts/1.0.0'
-      || str === 'http://schemas.opengis.net/wmts/1.1.0';
+    || str === 'http://schemas.opengis.net/wmts/1.0.0'
+    || str === 'http://schemas.opengis.net/wmts/1.1.0';
 }
 export function isGmlOffering(str: string): str is GML_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
@@ -54,28 +66,28 @@ export function isXyzOffering(str: string): str is Xyz_Offering {
 export function isGeoJsonOffering(str: string): str is GeoJson_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 }
-export function shardsExpand(v:string){
-    if (!v) { return; }
-    let o=[]
-    for (let i in v.split(',')){
-        var j = v.split(',')[i].split("-")
-        if (j.length == 1){
-           o.push(v.split(',')[i])
-        } else if (j.length == 2){
-            let start = j[0].charCodeAt(0)
-            let end = j[1].charCodeAt(0)
-            if (start <= end){
-                for (let k=start;k<=end;k++) {
-                    o.push(String.fromCharCode(k).toLowerCase());
-                }
-            } else {
-                for (let k=start;k>=end;k--) {
-                    o.push(String.fromCharCode(k).toLowerCase());
-                }
-            }
+export function shardsExpand(v: string) {
+  if (!v) { return; }
+  let o = []
+  for (let i in v.split(',')) {
+    var j = v.split(',')[i].split("-")
+    if (j.length == 1) {
+      o.push(v.split(',')[i])
+    } else if (j.length == 2) {
+      let start = j[0].charCodeAt(0)
+      let end = j[1].charCodeAt(0)
+      if (start <= end) {
+        for (let k = start; k <= end; k++) {
+          o.push(String.fromCharCode(k).toLowerCase());
         }
+      } else {
+        for (let k = start; k >= end; k--) {
+          o.push(String.fromCharCode(k).toLowerCase());
+        }
+      }
     }
-    return o
+  }
+  return o
 }
 /**
  * OWS Context Service
@@ -183,15 +195,15 @@ export class OwcJsonService {
     }
   }
 
-  convertOwcTimeToIsoTimeAndPeriodicity(owctime: string):ILayerIntervalAndPeriod | string {
+  convertOwcTimeToIsoTimeAndPeriodicity(owctime: string): ILayerIntervalAndPeriod | string {
     /**
      Convert from
     */
     let arr = owctime.split('/');
-    let t = (arr.length == 3) ? arr[0]+'/'+arr[1] : owctime;
+    let t = (arr.length == 3) ? arr[0] + '/' + arr[1] : owctime;
     let p = (arr.length == 3) ? arr[2] : null;
-    if (p){
-      return {"interval": t, "periodicity": p};
+    if (p) {
+      return { "interval": t, "periodicity": p };
     }
     else {
       return t
@@ -199,34 +211,34 @@ export class OwcJsonService {
   }
 
   getResourceDimensions(resource: IOwsResource): ILayerDimensions {
-    if (! resource.properties.hasOwnProperty('dimensions')) {
+    if (!resource.properties.hasOwnProperty('dimensions')) {
       return undefined;
     }
     let dims = {}
-    
+
     let dimensions = {}
-    if (Array.isArray(resource.properties.dimensions)){
-      for (let d of resource.properties.dimensions){
+    if (Array.isArray(resource.properties.dimensions)) {
+      for (let d of resource.properties.dimensions) {
         dimensions[d.name] = d
       }
     } else {
       dimensions = resource.properties.dimensions
     }
-    for (let name in dimensions){
+    for (let name in dimensions) {
       let dim = {}
       console.log(name)
       if (name === "time" || dimensions[name].units == "ISO8601") {
         let value = dimensions[name].value
         let values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v)) : null
         dim = {
-          "values": ((!values) || values.length > 1 ) ? values : values[0],
+          "values": ((!values) || values.length > 1) ? values : values[0],
           "units": dimensions[name].units,
           "display": {
-            "format":"YYYMMDD",
-            "period":dimensions[name].display,
-            "default":"end"
+            "format": "YYYMMDD",
+            "period": dimensions[name].display,
+            "default": "end"
           }
-        }        
+        }
       }
       else if (name === "elevation") {
         dim = dimensions[name];
@@ -302,6 +314,32 @@ export class OwcJsonService {
     return iconUrl;
   }
 
+  /**
+   * @TODO: at the moment this function returns a layer for the first offering of every feature. Should it maybe chose  one of the offerings by type?
+   */
+  public getLayers(owc: IOwsContext, targetProjection: string): Layer[] {
+    let features = owc.features;
+    let layers = []
+
+    /** layer priority first wms then wms then wfs if multiple in the offerings */
+    for (let feature of features) {
+      let offerings = feature.properties.offerings;
+      let indx = 0;
+      for (let offering of offerings) {
+        if (indx > 0) break;
+        indx += 1;
+        let layerType = this.getLayertypeFromOfferingCode(offering);
+        if (isRasterLayertype(layerType)) {
+          layers.push(this.createRasterLayerFromOffering(offering, feature, owc, targetProjection));
+        } else if (isVectorLayertype(layerType)) {
+          layers.push(this.createVectorLayerFromOffering(offering, feature, owc));
+        } else {
+          console.error(`This type of service (${layerType}) has not been implemented yet.`);
+        }
+      }
+    }
+    return layers;
+  }
 
   createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): VectorLayer {
     const layerType = this.getLayertypeFromOfferingCode(offering);
@@ -353,10 +391,7 @@ export class OwcJsonService {
     return layer;
   }
 
-
-
-
-  createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): RasterLayer {
+  createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): RasterLayer {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isRasterLayertype(layerType)) {
@@ -364,24 +399,146 @@ export class OwcJsonService {
       return null;
     }
 
-    let customParams;
+    let rasterLayer: RasterLayer;
     switch (layerType) {
       case WmsLayertype:
-        customParams = this.getWmsSpecificParamsFromOffering(offering, resource);
+        rasterLayer = this.createWmsLayerFromOffering(offering, resource, context);
         break;
-        case WmtsLayertype:
-          // customParams = this.getWmtsSpecificParamsFromOffering(offering, resource, context, targetProjection);
-          break;
-        case XyzLayertype:
-          // xyz and wts are simple, pure rest services with no 'operations' .
-        case CustomLayertype:
+      case WmtsLayertype:
+        rasterLayer = this.createWmtsLayerFromOffering(offering, resource, context, targetProjection);
+        break;
+      case CustomLayertype:
+        // custom layers are meant to be userdefined and not easily encoded in a OWC. 
+      case XyzLayertype:
+        // xyz and wts are simple, pure rest services with no 'operations' .
         break;
     }
 
-    const layerOptions: IRasterLayerOptions = {
+    if (resource.bbox) {
+      rasterLayer.bbox = resource.bbox;
+    } else if (context && context.bbox) {
+      rasterLayer.bbox = context.bbox;
+    }
+
+    return rasterLayer;
+  }
+
+  private createWmtsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): WmtsLayer {
+    const options: IWmtsOptions = this.getWmtsOptions(offering, resource, context, targetProjection);
+    const layer = new WmtsLayer(options);
+    return layer;
+  }
+
+  private createWmsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): WmsLayer {
+    const options: IWmsOptions = this.getWmsOptions(offering, resource, context);
+    const layer = new WmsLayer(options);
+    return layer;
+  }
+
+  private getWmtsOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): IWmtsOptions {
+    const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context);
+
+    if (rasterOptions.type === WmtsLayertype) {
+      if (offering.operations) {
+        const getTileOperation = offering.operations.find(op => op.code === 'GetTile');
+        if (getTileOperation) {
+          const url = this.getUrlFromUri(getTileOperation.href);
+          const urlParams = this.getJsonFromUri(getTileOperation.href);
+          let layer: string;
+          if (urlParams['LAYER']) {
+            layer = urlParams['LAYER'];
+          } else {
+            console.error(`There is no layer-parameter in the offering ${offering.code} for resource ${resource.id}. Cannot infer layer.`, offering);
+          }
+  
+          let matrixSet: string;
+          if (offering.matrixSets) {
+            const matrixSetData = offering.matrixSets.find(m => m.srs === targetProjection);
+            if (matrixSetData) {
+              matrixSet = matrixSetData.matrixSet;
+            }
+          }
+  
+          let style: string;
+          if (offering.styles) {
+            const styleInfo = offering.styles.find(s => s.default);
+            if (styleInfo) {
+              style = styleInfo.name;
+            }
+          }
+  
+          const wmtsOptions: IWmtsOptions = {
+            ...rasterOptions,
+            type: 'wmts',
+            params: {
+              layer: layer,
+              matrixSet: matrixSet,
+              projection: targetProjection,
+              style: style
+            }
+          };
+          return wmtsOptions;
+        } else {
+          console.error(`There is no GetTile-operation in the offering ${offering.code} for resource ${resource.id}. Cannot infer server-url.`, offering);
+        }
+      } else {
+        console.error(`The offering ${offering.code} for resource ${resource.id} has no operations. Cannot infer server-url.`, offering);
+      }
+    } else {
+      console.error(`This offering does not describe a WMTS`, offering);
+    }
+  }
+
+  private getWmsOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): IWmsOptions {
+    const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context);
+    if (rasterOptions.type === WmsLayertype) {
+
+      const urlParams = this.getJsonFromUri(offering.operations[0].href);
+      let defaultStyle;
+      if (offering.styles) {
+        defaultStyle = offering.styles.find(s => s.default).name;
+      }
+
+      const params: IWmsParams = {
+        LAYERS: urlParams['LAYERS'],
+        FORMAT: urlParams['FORMAT'],
+        TIME: urlParams['TIME'],
+        VERSION: urlParams['VERSION'],
+        TILED: urlParams['TILED'],
+        TRANSPARENT: true,
+        STYLES: defaultStyle
+      };
+
+      const wmsOptions: IWmsOptions = {
+        ...rasterOptions,
+        type: 'wms',
+        params: params
+      };
+      return wmsOptions;
+    } else {
+      console.error(`resource ${resource.id} cannot be converted into a WMS-Layer`, offering);
+    }
+  }
+
+  private getRasterLayerOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): IRasterLayerOptions {
+    const layerOptions: ILayerOptions = this.getLayerOptions(offering, resource, context);
+    if (isRasterLayertype(layerOptions.type)) {
+      const rasterLayerOptions: IRasterLayerOptions = {
+        ...layerOptions,
+        type: layerOptions.type as TRasterLayertype,
+        url: this.getUrlFromUri(offering.operations[0].href),
+        subdomains: shardsExpand(this.getResourceShards(resource))
+      };
+      return rasterLayerOptions;
+    } else {
+      console.error(`The layer ${layerOptions.id} is not a rasterlayer`, layerOptions);
+    }
+  }
+
+  private getLayerOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): ILayerOptions {
+    const layerOptions: ILayerOptions = {
       id: resource.id as string,
-      type: layerType,
-      url: this.getUrlFromUri(offering.operations[0].href),
+      type: this.getLayertypeFromOfferingCode(offering),
       name: this.getResourceTitle(resource),
       removable: true,
       continuousWorld: false,
@@ -391,103 +548,9 @@ export class OwcJsonService {
       attribution: this.getResourceAttribution(resource),
       dimensions: this.getResourceDimensions(resource),
       legendImg: this.getLegendUrl(offering),
-      params: customParams,
-      styles: offering.styles,
-      subdomains: shardsExpand(this.getResourceShards(resource))
+      styles: offering.styles
     };
-
-    const layer: RasterLayer = new RasterLayer(layerOptions);
-
-    if (resource.bbox) {
-      layer.bbox = resource.bbox;
-    } else if (context && context.bbox) {
-      layer.bbox = context.bbox;
-    }
-
-    return layer;
-  }
-
-  private getWmtsSpecificParamsFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string) {
-
-    if (offering.operations) {
-      const getTileOperation = offering.operations.find(op => op.code === 'GetTile');
-      if (getTileOperation) {
-        const url = this.getUrlFromUri(getTileOperation.href);
-        const urlParams = this.getJsonFromUri(getTileOperation.href);
-
-        const wmts_options = {
-          url: url,
-          layer: urlParams['LAYER'],
-          version: urlParams['VERSION'] || '1.1.0',
-          format: urlParams['FORMAT'] || 'image/png',
-          attributions: resource.properties.attribution ? [resource.properties.attribution] : [],
-        };
-
-        if (offering.matrixSets) {
-          const matrixSet = offering.matrixSets.find(m => m.srs === targetProjection);
-          if (matrixSet) {
-            wmts_options['matrixSet'] = matrixSet.matrixSet;
-          }
-        }
-
-          // tileGrid: tileGrid || l.params.tileGrid,
-          // style: l.params.style || l.params.STYLE,
-          // projection: projection,
-          // wrapX: l.continuousWorld,
-
-        return wmts_options;
-      }
-    }
-
-  }
-
-
-  private getWmsSpecificParamsFromOffering(offering: IOwsOffering, resource: IOwsResource) {
-
-    const urlParams = this.getJsonFromUri(offering.operations[0].href);
-    let defaultStyle;
-    if (offering.styles) {
-      defaultStyle = offering.styles.find(s => s.default).name;
-    }
-
-    const params = {
-      LAYERS: urlParams['LAYERS'],
-      FORMAT: urlParams['FORMAT'],
-      TIME: urlParams['TIME'],
-      VERSION: urlParams['VERSION'],
-      TILED: urlParams['TILED'],
-      TRANSPARENT: true,
-      STYLES: defaultStyle
-    };
-
-    return params;
-  }
-
-  /**
-   * @TODO: at the moment this function returns a layer for the first offering of every feature. Should it maybe chose  one of the offerings by type?
-   */
-  public getLayers(owc: IOwsContext): Layer[] {
-    let features = owc.features;
-    let layers = []
-
-    /** layer priority first wms then wms then wfs if multiple in the offerings */
-    for (let feature of features) {
-      let offerings = feature.properties.offerings;
-      let indx = 0;
-      for (let offering of offerings) {
-        if (indx > 0) break;
-        indx += 1;
-        let layerType = this.getLayertypeFromOfferingCode(offering);
-        if (isRasterLayertype(layerType)) {
-          layers.push(this.createRasterLayerFromOffering(offering, feature, owc));
-        } else if (isVectorLayertype(layerType)) {
-          layers.push(this.createVectorLayerFromOffering(offering, feature, owc));
-        } else {
-          console.error(`This type of service (${layerType}) has not been implemented yet.`);
-        }
-      }
-    }
-    return layers;
+    return layerOptions;
   }
 
   /** Misc --------------------------------------------------- */
