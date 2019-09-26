@@ -1,4 +1,5 @@
 import { Layer, RasterLayer, IRasterLayerOptions } from './Layers';
+import { IEocOwsWmtsMatrixSet } from '@ukis/services-ogc';
 
 /**
  * The following classes try to incorporate any information that map-libraries (ol, mapbox, leaflet) might need to display raster-layers.
@@ -28,7 +29,7 @@ export interface IWmtsParams {
     layer: string;
     /** Style name as advertised in the WMTS capabilities. */
     style: string;
-    matrixSet: string;
+    matrixSet: IEocOwsWmtsMatrixSet;
     projection: string;
     format?: string;
     version?: string;

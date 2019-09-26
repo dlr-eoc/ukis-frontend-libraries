@@ -44,6 +44,7 @@ import olStroke from 'ol/style/Stroke';
 import { DragBox, Select } from 'ol/interaction';
 import { IEocOwsWmtsMatrixSet } from '@ukis/services-ogc';
 import { WmtsLayer } from '@ukis/services-layers';
+import TileGrid from 'ol/tilegrid/TileGrid';
 
 
 
@@ -376,14 +377,22 @@ export class MapOlService {
   }
 
   private create_wmts_layer(l: WmtsLayer, oldlayer?: olBaseLayer): olTileLayer {
-    // https://openlayers.org/en/latest/examples/wmts-layer-from-capabilities.html?q=wmts
+    const projection = this.getProjection();
+    const projectionExtent = projection.getExtent();
+
+    const tileGrid = new olWMTSTileGrid({
+      origin: getTopLeft(projectionExtent),
+      resolutions: l.params.matrixSet.resolutions,
+      matrixIds: l.params.matrixSet.matrixIds
+    });
 
     const wmts_options: any = {
       url: l.url,
       layer: l.params.layer,
       style: l.params.style,
       format: l.params.format,
-      matrixSet: l.params.matrixSet,
+      matrixSet: l.params.matrixSet.matrixSet,
+      tileGrid: tileGrid,
       projection: l.params.projection,
       attributions: [l.attribution],
       wrapX: l.continuousWorld,

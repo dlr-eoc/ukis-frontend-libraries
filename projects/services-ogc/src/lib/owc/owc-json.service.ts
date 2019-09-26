@@ -6,7 +6,7 @@ import {
 } from './types/owc-json';
 import {
   IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsOffering,
-  IEocWmsOffering, IEocOwsResourceDimension
+  IEocWmsOffering, IEocOwsResourceDimension, IEocOwsWmtsMatrixSet
 } from './types/eoc-owc-json';
 import {
   ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
@@ -451,12 +451,11 @@ export class OwcJsonService {
             console.error(`There is no layer-parameter in the offering ${offering.code} for resource ${resource.id}. Cannot infer layer.`, offering);
           }
   
-          let matrixSet: string;
+          let matrixSet: IEocOwsWmtsMatrixSet;
           if (offering.matrixSets) {
-            const matrixSetData = offering.matrixSets.find(m => m.srs === targetProjection);
-            if (matrixSetData) {
-              matrixSet = matrixSetData.matrixSet;
-            }
+            matrixSet = offering.matrixSets.find(m => m.srs === targetProjection);
+          } else {
+            console.error(`There are no matrixSets in the offering ${offering.code} for resource ${resource.id}. Cannot infer matrixSet.`, offering);
           }
   
           let style: string;
