@@ -391,7 +391,8 @@ export class OwcJsonService {
     return layer;
   }
 
-  createRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): RasterLayer {
+  createRasterLayerFromOffering(
+    offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): RasterLayer {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isRasterLayertype(layerType)) {
@@ -423,7 +424,8 @@ export class OwcJsonService {
     return rasterLayer;
   }
 
-  private createWmtsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): WmtsLayer {
+  private createWmtsLayerFromOffering(
+    offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): WmtsLayer {
     const options: IWmtsOptions = this.getWmtsOptions(offering, resource, context, targetProjection);
     const layer = new WmtsLayer(options);
     return layer;
@@ -438,54 +440,61 @@ export class OwcJsonService {
   private getWmtsOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): IWmtsOptions {
     const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context);
 
-    if (rasterOptions.type === WmtsLayertype) {
-      if (offering.operations) {
-        const getTileOperation = offering.operations.find(op => op.code === 'GetTile');
-        if (getTileOperation) {
-          const url = this.getUrlFromUri(getTileOperation.href);
-          const urlParams = this.getJsonFromUri(getTileOperation.href);
-          let layer: string;
-          if (urlParams['LAYER']) {
-            layer = urlParams['LAYER'];
-          } else {
-            console.error(`There is no layer-parameter in the offering ${offering.code} for resource ${resource.id}. Cannot infer layer.`, offering);
-          }
-  
-          let matrixSet: IEocOwsWmtsMatrixSet;
-          if (offering.matrixSets) {
-            matrixSet = offering.matrixSets.find(m => m.srs === targetProjection);
-          } else {
-            console.error(`There are no matrixSets in the offering ${offering.code} for resource ${resource.id}. Cannot infer matrixSet.`, offering);
-          }
-  
-          let style: string;
-          if (offering.styles) {
-            const styleInfo = offering.styles.find(s => s.default);
-            if (styleInfo) {
-              style = styleInfo.name;
-            }
-          }
-  
-          const wmtsOptions: IWmtsOptions = {
-            ...rasterOptions,
-            type: 'wmts',
-            params: {
-              layer: layer,
-              matrixSet: matrixSet,
-              projection: targetProjection,
-              style: style
-            }
-          };
-          return wmtsOptions;
+    const layer = this.getLayerForWMTS(offering, resource);
+    const matrixSet = this.getMatrixSetForWMTS(offering, resource, targetProjection);
+
+    let style: string;
+    if (offering.styles) {
+      const styleInfo = offering.styles.find(s => s.default);
+      if (styleInfo) {
+        style = styleInfo.name;
+      }
+    }
+
+    const wmtsOptions: IWmtsOptions = {
+      ...rasterOptions,
+      type: 'wmts',
+      params: {
+        layer: layer,
+        matrixSet: matrixSet,
+        projection: targetProjection,
+        style: style
+      }
+    };
+    return wmtsOptions;
+  }
+
+  private getLayerForWMTS(offering: IOwsOffering, resource: IOwsResource): string {
+    if (offering.operations) {
+      const getTileOperation = offering.operations.find(op => op.code === 'GetTile');
+      if (getTileOperation) {
+        const url = this.getUrlFromUri(getTileOperation.href);
+        const urlParams = this.getJsonFromUri(getTileOperation.href);
+        if (urlParams['LAYER']) {
+          return urlParams['LAYER'];
         } else {
-          console.error(`There is no GetTile-operation in the offering ${offering.code} for resource ${resource.id}. Cannot infer server-url.`, offering);
+          console.error(`There is no layer-parameter in the offering ${offering.code} for resource ${resource.id}.
+          Cannot infer layer.`, offering);
         }
-      } else {
-        console.error(`The offering ${offering.code} for resource ${resource.id} has no operations. Cannot infer server-url.`, offering);
+      } else  {
+        console.error(`There is no GetTile-operation in the offering ${offering.code} for resource ${resource.id}.
+        Cannot infer server-url.`, offering);
       }
     } else {
-      console.error(`This offering does not describe a WMTS`, offering);
+      console.error(`The offering ${offering.code} for resource ${resource.id} has no operations.
+      Cannot infer server-url.`, offering);
     }
+  }
+
+  private getMatrixSetForWMTS(offering: IOwsOffering, resource: IOwsResource, targetProjection: string): IEocOwsWmtsMatrixSet {
+    let matrixSet: IEocOwsWmtsMatrixSet;
+    if (offering.matrixSets) {
+      matrixSet = offering.matrixSets.find(m => m.srs === targetProjection);
+    } else {
+      console.error(`There are no matrixSets in the offering ${offering.code} for resource ${resource.id}.
+      Cannot infer matrixSet.`, offering);
+    }
+    return matrixSet;
   }
 
   private getWmsOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): IWmsOptions {
