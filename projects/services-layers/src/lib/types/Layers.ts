@@ -150,7 +150,8 @@ export class Layer implements ILayerOptions {
   attribution?: string;
   displayName?: string;
   description?: string;
-  time?: string;
+  //time?: string;
+  protected _time?: string;
   /** zIndex: DEPRECIATED handeld internal by the layer service */
   zIndex?: number;
   minResolution?: number;
@@ -169,6 +170,13 @@ export class Layer implements ILayerOptions {
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);
+  }
+
+  get time() {
+    return this._time;
+  }
+  set time(time: string) {
+    this._time = time;
   }
 }
 
@@ -203,6 +211,16 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
     }
   }
 
+  set time(time: string) {
+    if (this.params) {
+      this.params.TIME = time;
+    }
+    this._time = time;
+  }
+
+  get time() {
+    return this._time;
+  }
 }
 
 export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
