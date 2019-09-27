@@ -152,6 +152,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     const source = oldLayer.getSource();
     const oldParams = source.getParams();
     const newParams = newWmsLayer.params;
+    console.log(newWmsLayer)
     if (!this.shallowEqual(oldParams, newParams)) {
       oldLayer.getSource().updateParams(newParams);
     }
