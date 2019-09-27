@@ -503,7 +503,20 @@ export class OwcJsonService {
       const [url, urlParams] = this.parseOperationUrl(offering, 'GetCapabilities');
       return this.wmtsClient.getCapabilities(url).pipe(
         map((capabilities: object) => {
-          return capabilities['matrixSets'];
+          const matrixSets = capabilities['value']['contents']['tileMatrixSet'];
+          const matrixSet = matrixSets.find(ms => ms['identifier']['value'] === targetProjection);
+          const owsMatrixSet: IEocOwsWmtsMatrixSet = {
+            srs: targetProjection,
+            matrixSet: matrixSet['identifier']['value'],
+            matrixIds: matrixSet['tileMatrix'].map(tm => tm['identifier']['value']),
+            resolutions: matrixSet['tileMatrix'].map(tm => tm['scaleDenominator']),
+            origin: {
+              x: matrixSet['tileMatrix'][0]['topLeftCorner'][1],
+              y: matrixSet['tileMatrix'][0]['topLeftCorner'][0]
+            },
+            tilesize: matrixSet['tileMatrix'][0]['tileHeight']
+          };
+          return owsMatrixSet;
         })
       );
     }
