@@ -179,7 +179,11 @@ export class LayerentryComponent implements OnInit {
 
   isSelectedStyle(styleName: string): boolean {
     if (isRasterLayer(this.layer)) {
-      return (this.layer as RasterLayer).params.style === styleName;
+      if (this.layer.type === WmsLayertype) {
+        return (this.layer as RasterLayer).params.STYLES === styleName;
+      } else if (this.layer.type === WmtsLayertype) {
+        return (this.layer as RasterLayer).params.style === styleName;
+      }
     } else if (isVectorLayer(this.layer)) {
       // TODO: how to compare styles for vector layers?
       return false;
