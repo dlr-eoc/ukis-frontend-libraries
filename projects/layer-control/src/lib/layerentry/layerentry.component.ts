@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 
 // imports only for typings...
 import { LayerGroup, Layer, RasterLayer, isRasterLayertype, WmsLayertype, WmtsLayertype, isRasterLayer,
@@ -9,8 +9,7 @@ import {  } from '@ukis/services-layers';
 @Component({
   selector: 'ukis-layerentry',
   templateUrl: './layerentry.component.html',
-  styleUrls: ['./layerentry.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./layerentry.component.scss']
 })
 export class LayerentryComponent implements OnInit {
   @Input('layersSvc') layersSvc: LayersService;
@@ -179,7 +178,6 @@ export class LayerentryComponent implements OnInit {
   }
 
   isSelectedStyle(styleName: string): boolean {
-    console.log("alf")
     if (isRasterLayer(this.layer)) {
       if (this.layer.type === WmsLayertype) {
         return (this.layer as RasterLayer).params.STYLES === styleName;

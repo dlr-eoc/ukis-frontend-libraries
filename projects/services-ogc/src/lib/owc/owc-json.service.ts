@@ -463,7 +463,8 @@ export class OwcJsonService {
           layer: layer,
           matrixSet: matrixSet,
           projection: targetProjection,
-          style: style
+          style: style,
+          format: 'image/png'
         }
       };
       return wmtsOptions;
