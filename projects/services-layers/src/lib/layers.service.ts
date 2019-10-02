@@ -528,6 +528,25 @@ export class LayersService {
 
   /**
    * Get all Layers with filterrype 'Layers' from the Layerservice Store
+   * 
+   * #### to filter the Observable only on some layer property changes use rxjs filter e.g. see below:
+   * this.layersSub = this.layerSvc.getLayers().pipe(filter(layers => {
+   *   const newVisible = layers.map(l => l.visible).filter(v => v === true).length;
+   *  // subscribe if visible of a layer has changed
+   *  if (newVisible !== this.oldVisibleLayers) {
+   *     return true;
+   *  } else {
+   *     // subscribe only to remove, add layers
+   *     if (this.layers && this.layers.length !== layers.length) {
+   *       return true;
+   *    } else {
+   *       return false;
+   *    }
+   *  }
+   * })).subscribe(layers => {
+   *   this.layers = layers;
+   *   this.oldVisibleLayers = this.layers.map(l => l.visible).filter(v => v === true).length;
+   * });
    */
   public getLayers(): Observable<Layer[]> {
     return this.layers.asObservable();
