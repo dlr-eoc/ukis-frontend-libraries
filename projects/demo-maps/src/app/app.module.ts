@@ -6,53 +6,55 @@ import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapOlModule } from '@ukis/map-ol';
 import { LayerControlModule } from '@ukis/layer-control';
-import { RouteMapComponent } from './route-components/route-map/route-map.component';
+
 import { HeaderComponent } from './components/header/header.component';
 import { GlobalFooterComponent } from './components/global-footer/global-footer.component';
 import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { ProgressService } from './components/global-progress/progress.service';
-import { RouteMap2Component } from './route-components/route-map2/route-map2.component';
-import { RouteMap3Component } from './route-components/route-map3/route-map3.component';
-import { RouteMap4Component } from './route-components/route-map4/route-map4.component';
-import { RouteMap5Component } from './route-components/route-map5/route-map5.component';
-import { RouteMap6Component } from './route-components/route-map6/route-map6.component';
+
+import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
+import { RouteMap2Component } from './route-components/route-example-projection/route-map2.component';
+import { RouteMap3Component } from './route-components/route-example-events/route-map3.component';
+import { RouteMap4Component } from './route-components/route-example-custom-layers/route-map4.component';
+import { RouteMap5Component } from './route-components/route-example-layout/route-map5.component';
+import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
 
 
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: 'map', pathMatch: 'full', },
   {
-    path: 'map', component: RouteMapComponent,
+    path: 'example-layers', component: RouteMapComponent,
     data: {
       title: 'Layers'
     }
   },
   {
-    path: 'map2', component: RouteMap2Component,
+    path: 'example-projection', component: RouteMap2Component,
     data: {
       title: 'Projection'
     }
   },
   {
-    path: 'map3', component: RouteMap3Component,
+    path: 'example-events', component: RouteMap3Component,
     data: {
       title: 'Events'
     }
   },
   {
-    path: 'map4', component: RouteMap4Component,
+    path: 'example-custom-layers', component: RouteMap4Component,
     data: {
       title: 'Custom Layers'
     }
   },
   {
-    path: 'map5', component: RouteMap5Component,
+    path: 'example-layout', component: RouteMap5Component,
     data: {
       title: 'Two Vertical-Nav Layout'
     }
   },
   {
-    path: 'map6',
+    path: 'example-layer-style',
     component: RouteMap6Component,
     data: {
       title: 'Switching Layer-Style'
