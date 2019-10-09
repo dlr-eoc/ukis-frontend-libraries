@@ -1,6 +1,4 @@
 import { Layer, RasterLayer, IRasterLayerOptions } from './Layers';
-import { IEocOwsWmtsMatrixSet } from '@ukis/services-ogc';
-
 /**
  * The following classes try to incorporate any information that map-libraries (ol, mapbox, leaflet) might need to display raster-layers.
  * Like Layers.ts, these classes are intended as an abstraction over all map-libraries. 
@@ -24,12 +22,28 @@ export class WmtsLayer extends RasterLayer implements IWmtsOptions {
     }
 }
 
+export interface IWmtsMatrixSet {
+    /** EPSG-Code */
+    srs: string;
+    matrixSet: string;
+    matrixIds: string[];
+    origin: {
+        x: number,
+        y: number
+    };
+    resolutions: number[];
+    tilesize: {
+        height: number,
+        width: number
+    };
+}
+
 export interface IWmtsParams {
     /** Layer name as advertised in the WMTS capabilities. */
     layer: string;
     /** Style name as advertised in the WMTS capabilities. */
     style: string;
-    matrixSet: IEocOwsWmtsMatrixSet;
+    matrixSet: IWmtsMatrixSet;
     projection: string;
     format?: string;
     version?: string;
