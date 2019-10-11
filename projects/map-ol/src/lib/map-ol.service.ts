@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, IRasterLayerOptions, ICustomLayerOptions } from '@ukis/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, IRasterLayerOptions, ICustomLayerOptions, WmtsLayer, WmsLayer } from '@ukis/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -19,6 +19,7 @@ import olXYZ from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
 import olWMTS from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
+import olTileGrid from 'ol/tilegrid/TileGrid';
 import olVectorSource from 'ol/source/Vector';
 import olTileJSON from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
@@ -29,8 +30,10 @@ import olFeature from 'ol/Feature';
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olProjection from 'ol/proj/Projection.js';
-import { transformExtent, get as getProjection, transform } from 'ol/proj.js';
-import { extend as olExtend, getWidth, getTopLeft } from 'ol/extent.js';
+import { transformExtent, get as getProjection, transform } from 'ol/proj';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
+import { toSize as olToSize } from 'ol/size';
+import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 import olCoordinate from 'ol/coordinate';
 
@@ -41,10 +44,8 @@ import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
-import { DragBox, Select } from 'ol/interaction';
-import { IEocOwsWmtsMatrixSet } from '@ukis/services-ogc';
-import { WmtsLayer } from '@ukis/services-layers';
-import TileGrid from 'ol/tilegrid/TileGrid';
+import { DragBox } from 'ol/interaction';
+
 
 
 
@@ -118,15 +119,15 @@ export class MapOlService {
   }
 
   /**
-   * See this example: 
+   * See this example:
    * https://openlayers.org/en/latest/examples/box-selection.html
-   * @param conditionForDrawing 
-   * @param onBoxStart 
-   * @param onBoxEnd 
+   * @param conditionForDrawing
+   * @param onBoxStart
+   * @param onBoxEnd
    */
   public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart: () => void, onBoxEnd: (any) => void) {
 
-    let dragBox = new DragBox({
+    const dragBox = new DragBox({
       condition: conditionForDrawing
     });
 
@@ -135,7 +136,7 @@ export class MapOlService {
     });
 
     dragBox.on('boxend', function () {
-      var extent = dragBox.getGeometry().getExtent();
+      const extent = dragBox.getGeometry().getExtent();
       onBoxEnd(extent);
     });
 
@@ -224,7 +225,7 @@ export class MapOlService {
             _layer = this.create_xyz_layer(<RasterLayer>item.newlayer, item.oldlayer);
             break;
           case 'wms':
-            _layer = this.create_wms_layer(<RasterLayer>item.newlayer, item.oldlayer);
+            _layer = this.create_wms_layer(<WmsLayer>item.newlayer, item.oldlayer);
             break;
           case 'wmts':
             _layer = this.create_wmts_layer(<WmtsLayer>item.newlayer, item.oldlayer);
@@ -254,26 +255,26 @@ export class MapOlService {
     let newOlLayer;
     switch (newLayer.type) {
       case 'xyz':
-          newOlLayer = this.create_xyz_layer(<RasterLayer>newLayer, oldLayer);
+        newOlLayer = this.create_xyz_layer(<RasterLayer>newLayer, oldLayer);
         break;
       case 'wms':
-          newOlLayer = this.create_wms_layer(<RasterLayer>newLayer, oldLayer);
+        newOlLayer = this.create_wms_layer(<WmsLayer>newLayer, oldLayer);
         break;
       case 'wmts':
-          newOlLayer = this.create_wmts_layer(<WmtsLayer>newLayer, oldLayer);
+        newOlLayer = this.create_wmts_layer(<WmtsLayer>newLayer, oldLayer);
         break;
       case 'geojson':
-          newOlLayer = this.create_geojson_layer(<VectorLayer>newLayer, oldLayer);
+        newOlLayer = this.create_geojson_layer(<VectorLayer>newLayer, oldLayer);
         break;
       case 'custom':
-          newOlLayer = this.create_custom_layer(<CustomLayer>newLayer, oldLayer);
+        newOlLayer = this.create_custom_layer(<CustomLayer>newLayer, oldLayer);
         break;
     }
-    this.removeLayerByKey({key: 'id', value: oldLayer.get('id')}, type);
+    this.removeLayerByKey({ key: 'id', value: oldLayer.get('id') }, type);
     this.addLayer(newOlLayer, type);
   }
 
-  sortOldAndNewLayers(oldlayers: olBaseLayer[], newlayers: Layer[]): {oldlayer: olBaseLayer | null, newlayer: Layer}[] {
+  sortOldAndNewLayers(oldlayers: olBaseLayer[], newlayers: Layer[]): { oldlayer: olBaseLayer | null, newlayer: Layer }[] {
     const _layers = newlayers.map((layer) => {
       return {
         oldlayer: oldlayers.filter(_layer => _layer.get('id') === layer.id)[0],
@@ -287,16 +288,21 @@ export class MapOlService {
    * define layer types
    */
   private create_xyz_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
-    const xyz_options: any = {
-      attributions: [l.attribution],
-      wrapX: l.continuousWorld
-    };
+    const xyz_options: any = {};
 
-    if (l['crossOrigin']) {
-      xyz_options.crossOrigin = l['crossOrigin'];
+    if (l.crossOrigin) {
+      xyz_options.crossOrigin = l.crossOrigin;
     }
 
     const _source = new olXYZ(xyz_options);
+
+    if (l.attribution) {
+      _source.setAttributions([l.attribution]);
+    }
+
+    if (l.continuousWorld) {
+      _source.set('wrapX', l.continuousWorld);
+    }
 
     if (l.subdomains) {
       const _urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
@@ -313,7 +319,7 @@ export class MapOlService {
       visible: l.visible,
       legendImg: l.legendImg,
       opacity: l.opacity || 1,
-      zIndex: l.zIndex || 1,
+      zIndex: 1,
       source: _source
     };
 
@@ -328,19 +334,34 @@ export class MapOlService {
     return new olTileLayer(_layeroptions);
   }
 
-  private create_wms_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
+  private create_wms_layer(l: WmsLayer, oldlayer?: olBaseLayer): olTileLayer {
 
     const tile_options: any = {
-      attributions: [l.attribution],
-      wrapX: l.continuousWorld,
-      params: this.keysToUppercase(l.params)
+      params: l.params
     };
 
-    if (l['crossOrigin']) {
-      tile_options.crossOrigin = l['crossOrigin'];
+    if (l.tileSize) {
+      console.log(l.tileSize)
+      tile_options['tileGrid'] = this.getTileGrid('default', null, l.tileSize);
+      delete tile_options.params['tileSize'];
     }
 
+    console.log(tile_options);
+
+    if (l.crossOrigin) {
+      tile_options.crossOrigin = l.crossOrigin;
+    }
+
+    tile_options.params = this.keysToUppercase(tile_options.params);
     const _source = new olTileWMS(tile_options);
+
+    if (l.attribution) {
+      _source.setAttributions([l.attribution]);
+    }
+
+    if (l.continuousWorld) {
+      _source.set('wrapX', l.continuousWorld);
+    }
 
     if (l.subdomains) {
       const _urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
@@ -357,7 +378,7 @@ export class MapOlService {
       visible: l.visible,
       legendImg: l.legendImg,
       opacity: l.opacity || 1,
-      zIndex: l.zIndex || 1,
+      zIndex: 1,
       source: _source
     };
 
@@ -372,67 +393,83 @@ export class MapOlService {
     return newlayer;
   }
 
-  public getProjection() {
-    return this.map.getView().getProjection();
-  }
-
   private create_wmts_layer(l: WmtsLayer, oldlayer?: olBaseLayer): olTileLayer {
-    const projection = this.getProjection();
-    const projectionExtent = projection.getExtent();
+    if (l instanceof WmtsLayer) {
 
-    const tileGrid = new olWMTSTileGrid({
-      origin: getTopLeft(projectionExtent),
-      resolutions: l.params.matrixSet.resolutions,
-      matrixIds: l.params.matrixSet.matrixIds
-    });
+      let tileGrid = this.getTileGrid('wmts');
+      let _matrixSet = this.EPSG;
+      if (l.params.matrixSetOptions) {
+        _matrixSet = l.params.matrixSetOptions.matrixSet;
+        if ('resolutions' in l.params.matrixSetOptions) {
+          const _resolutions: Array<string | number> = l.params.matrixSetOptions.resolutions;
+          tileGrid = this.getTileGrid('wmts', null, l.tileSize, null, _resolutions);
+        } else if ('resolutionLevels' in l.params.matrixSetOptions || 'tileMatrixPrefix' in l.params.matrixSetOptions) { /** ISimpleMatrixSet */
+          const _resolutionLevels = l.params.matrixSetOptions.resolutionLevels;
+          const _tileMatrixPrefix = l.params.matrixSetOptions.tileMatrixPrefix;
+          tileGrid = this.getTileGrid('wmts', _resolutionLevels, l.tileSize, _tileMatrixPrefix, null);
+        }
+        if ('matrixIds' in l.params.matrixSetOptions) {
+          const _matrixIds = l.params.matrixSetOptions.matrixIds;
+          tileGrid = this.getTileGrid('wmts', null, l.tileSize, null, null, _matrixIds);
+        }
+      }
 
-    const wmts_options: any = {
-      url: l.url,
-      layer: l.params.layer,
-      style: l.params.style,
-      format: l.params.format,
-      matrixSet: l.params.matrixSet.matrixSet,
-      tileGrid: tileGrid,
-      projection: l.params.projection,
-      attributions: [l.attribution],
-      wrapX: l.continuousWorld,
-    };
-    
-    if (l['crossOrigin']) {
-      wmts_options.crossOrigin = l['crossOrigin'];
-    }
-
-    const _source = new olWMTS(wmts_options);
+      let wmts_options: any = {
+        url: l.url,
+        tileGrid: tileGrid,
+        matrixSet: _matrixSet
+      };
+      wmts_options = Object.assign(wmts_options, l.params);
 
 
-    if (l.subdomains) {
-      const _urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
-      _source.setUrls(_urls);
 
+      if (l.crossOrigin) {
+        wmts_options.crossOrigin = l.crossOrigin;
+      }
+
+      const _source = new olWMTS(wmts_options);
+
+      if (l.attribution) {
+        _source.setAttributions([l.attribution]);
+      }
+
+      if (l.continuousWorld) {
+        _source.set('wrapX', l.continuousWorld);
+      }
+
+
+      if (l.subdomains) {
+        const _urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
+        _source.setUrls(_urls);
+
+      } else {
+        _source.setUrl(l.url);
+      }
+
+      const _layeroptions: any = {
+        type: 'wmts',
+        name: l.name,
+        id: l.id,
+        visible: l.visible,
+        legendImg: l.legendImg,
+        opacity: l.opacity || 1,
+        zIndex: 1,
+        source: _source
+      };
+
+      if (l.popup) {
+        _layeroptions.popup = l.popup;
+      }
+
+      if (l.bbox) {
+        _layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+      }
+
+      return new olTileLayer(_layeroptions);
     } else {
-      _source.setUrl(l.url);
+      const _l = <Layer>l;
+      console.error(`layer with id: ${_l.id} and type ${_l.type} is no instanceof WmtsLayer!`);
     }
-
-    const _layeroptions: any = {
-      type: 'wmts',
-      name: l.name,
-      id: l.id,
-      visible: l.visible,
-      legendImg: l.legendImg,
-      opacity: l.opacity || 1,
-      zIndex: l.zIndex || 1,
-      source: _source
-    };
-
-    if (l.popup) {
-      _layeroptions.popup = l.popup;
-    }
-
-    if (l.bbox) {
-      _layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
-    }
-
-    return new olTileLayer(_layeroptions);
   }
 
 
@@ -441,14 +478,17 @@ export class MapOlService {
     if (l.data) {
       _source = new olVectorSource({
         features: this.geoJsonToFeatures(l.data),
-        format: new olGeoJSON(),
-        wrapX: l.continuousWorld
+        format: new olGeoJSON()
       });
     } else if (l.url) {
       _source = new olTileJSON({
         url: l.url,
         crossOrigin: 'anonymous'
       });
+    }
+
+    if (l.continuousWorld) {
+      _source.set('wrapX', l.continuousWorld);
     }
 
     const _layeroptions = <any>{
@@ -458,7 +498,7 @@ export class MapOlService {
       visible: l.visible,
       legendImg: l.legendImg,
       opacity: l.opacity || 1,
-      zIndex: l.zIndex || 1,
+      zIndex: 1,
       source: _source
     };
 
@@ -518,9 +558,11 @@ export class MapOlService {
       const layer = l.custom_layer;
 
       const _source = layer.getSource();
+
       if (l.attribution) {
         _source.setAttributions([l.attribution]);
       }
+
       if (l.continuousWorld) {
         _source.set('wrapX', l.continuousWorld);
       }
@@ -532,7 +574,7 @@ export class MapOlService {
         visible: l.visible,
         legendImg: l.legendImg,
         opacity: l.opacity || 1,
-        zIndex: l.zIndex || 1,
+        zIndex: 1,
       };
 
       if (l.maxResolution) {
@@ -560,6 +602,61 @@ export class MapOlService {
     }
   }
 
+  public getProjection() {
+    return this.map.getView().getProjection();
+  }
+
+  private resolutionsFromExtent(extent, opt_maxZoom: number, tileSize: number) {
+    const maxZoom = opt_maxZoom;
+
+    const height = olGetHeight(extent);
+    const width = olGetWidth(extent);
+
+    const maxResolution = Math.max(width / tileSize, height / tileSize);
+
+    const length = maxZoom + 1;
+    const resolutions = new Array(length);
+    for (let z = 0; z < length; ++z) {
+      resolutions[z] = maxResolution / Math.pow(2, z);
+    }
+    return resolutions;
+  }
+
+  private matrixIdsFromResolutions(resolutionLevels: number, matrixIdPrefix?: string) {
+    return Array.from(Array(resolutionLevels).keys()).map(l => {
+      if (matrixIdPrefix) {
+        return `${matrixIdPrefix}:${l}`;
+      } else {
+        return l;
+      }
+    });
+  }
+
+  public getTileGrid(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>) {
+    const _resolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
+    const _tileSize = tileSize || DEFAULT_TILE_SIZE;
+    const _matrixIdPrefix = matrixIdPrefix || '';
+
+    const projectionExtent = this.getProjection().getExtent();
+    const defaultResolutions = this.resolutionsFromExtent(projectionExtent, _resolutionLevels, _tileSize);
+    const defaultMatrixIds = this.matrixIdsFromResolutions(defaultResolutions.length, _matrixIdPrefix);
+    /** how to generate matrix ids is not in the wms GetCapabilities ?? */
+
+    const tileGridOptions: any = {
+      extent: projectionExtent,
+      origin: olGetTopLeft(projectionExtent),
+      resolutions: resolutions || defaultResolutions,
+      tileSize: [_tileSize, _tileSize]
+    };
+
+    if (type === 'wmts') {
+      tileGridOptions.matrixIds = matrixIds || defaultMatrixIds;
+      return new olWMTSTileGrid(tileGridOptions);
+    } else if (type === 'default') {
+      return new olTileGrid(tileGridOptions);
+    }
+  }
+
   public vector_on_click(evt) {
     const FeaturesAtPixel = [];
     this.map.forEachFeatureAtPixel(evt.pixel, (_layer, layer) => {
@@ -567,18 +664,18 @@ export class MapOlService {
       // console.log(evt, _layer, layer, layer.get('type'))
       FeaturesAtPixel.push({ _layer: _layer, layer: layer });
     }, {
-        layerFilter: (layer: olVectorLayer) => {
-          if (layer instanceof olVectorLayer) {
-            const _source: olCluster | olVectorSource = layer.getSource();
-            if (_source instanceof olCluster) {
-              return (_source as any).getSource() instanceof olVectorSource;
-            } else {
-              return _source instanceof olVectorSource;
-            }
+      layerFilter: (layer: olVectorLayer) => {
+        if (layer instanceof olVectorLayer) {
+          const _source: olCluster | olVectorSource = layer.getSource();
+          if (_source instanceof olCluster) {
+            return (_source as any).getSource() instanceof olVectorSource;
+          } else {
+            return _source instanceof olVectorSource;
           }
-        },
-        hitTolerance: this.hitTolerance
-      });
+        }
+      },
+      hitTolerance: this.hitTolerance
+    });
 
     FeaturesAtPixel.forEach((item, index) => {
       const topFeature = 0;
@@ -705,15 +802,15 @@ export class MapOlService {
     this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
       LayersAtPixel.push({ layer: layer, color: color });
     }, {
-        layerFilter: (layer) => {
-          // try to catch CORS error in getImageData!!!
-          // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
-          // console.log(layer)
-          if (layer.get('popup')) {
-            return true;
-          }
+      layerFilter: (layer) => {
+        // try to catch CORS error in getImageData!!!
+        // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
+        // console.log(layer)
+        if (layer.get('popup')) {
+          return true;
         }
-      });
+      }
+    });
     LayersAtPixel.forEach((item, index) => {
       const topLayer = 0;
       if (index == topLayer) {
