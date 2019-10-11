@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer } from '@ukis/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map } from '@ukis/base-layers-raster';
 import { MapOlService } from '@ukis/map-ol';
@@ -48,14 +48,18 @@ export class RouteMap5Component implements OnInit, OnDestroy {
     });
 
     // not working in WGS84
-    const world_relief = new RasterLayer({
+    const world_relief = new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
       name: 'Relief',
       id: 'world_relief_bw',
       params: {
         layer: 'eoc:world_relief_bw',
-        style: '_empty'
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
       },
       visible: false,
       description: 'eoc:world_relief_bw as web map tile service',
@@ -85,13 +89,19 @@ export class RouteMap5Component implements OnInit, OnDestroy {
       legendImg: ''
     });
 
-    const TDM90_DEM_layer = new RasterLayer({
+    const TDM90_DEM_layer = new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
       name: 'TDM90 DEM',
       id: 'TDM90_DEM',
       params: {
-        layer: 'TDM90_DEM'
+        layer: 'TDM90_DEM',
+        style: 'default',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        },
+        format: 'image/png'
       },
       visible: false,
       description: 'TDM90_DEM',
@@ -104,7 +114,7 @@ export class RouteMap5Component implements OnInit, OnDestroy {
       "features": [
         {
           "type": "Feature",
-          "properties": { "title": "Polygon", "foo":"1", "bar":"test", "baz":"555" },
+          "properties": { "title": "Polygon", "foo": "1", "bar": "test", "baz": "555" },
           "geometry": {
             "type": "Polygon",
             "coordinates": [
@@ -139,7 +149,7 @@ export class RouteMap5Component implements OnInit, OnDestroy {
         },
         {
           "type": "Feature",
-          "properties": { "title": "Rectangle", "foo":"2", "bar":"test2", "baz":"66667" },
+          "properties": { "title": "Rectangle", "foo": "2", "bar": "test2", "baz": "66667" },
           "geometry": {
             "type": "Polygon",
             "coordinates": [
@@ -170,7 +180,7 @@ export class RouteMap5Component implements OnInit, OnDestroy {
         },
         {
           "type": "Feature",
-          "properties": { "title": "Line", "foo":"3", "bar":"test3", "baz":"111"  },
+          "properties": { "title": "Line", "foo": "3", "bar": "test3", "baz": "111" },
           "geometry": {
             "type": "LineString",
             "coordinates": [
@@ -195,7 +205,7 @@ export class RouteMap5Component implements OnInit, OnDestroy {
         },
         {
           "type": "Feature",
-          "properties": { "title": "Point", "foo":"4", "bar":"test4", "baz":"444"   },
+          "properties": { "title": "Point", "foo": "4", "bar": "test4", "baz": "444" },
           "geometry": {
             "type": "Point",
             "coordinates": [

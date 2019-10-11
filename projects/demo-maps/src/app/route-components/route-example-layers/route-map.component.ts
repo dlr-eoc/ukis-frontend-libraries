@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer } from '@ukis/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map, google_earth } from '@ukis/base-layers-raster';
 import { MapOlService } from '@ukis/map-ol';
@@ -41,15 +41,19 @@ export class RouteMapComponent implements OnInit {
       visible: true
     });
 
-    // not working in WGS84
-    const world_relief = new RasterLayer({
+    // not working in WGS84 because 
+    const world_relief = new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
       name: 'Relief',
       id: 'world_relief_bw',
       params: {
         layer: 'eoc:world_relief_bw',
-        style: '_empty'
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
       },
       visible: false,
       description: 'eoc:world_relief_bw as web map tile service',
@@ -70,22 +74,29 @@ export class RouteMapComponent implements OnInit {
       name: 'GUF Mosaic',
       id: 'GUF28_DLR_v1_Mosaic',
       params: {
-        layers: 'GUF28_DLR_v1_Mosaic',
-        styles: 'guf_8bit'
+        LAYERS: 'GUF28_DLR_v1_Mosaic',
+        STYLES: 'guf_8bit',
       },
+      tileSize: 512,
       visible: false,
       description: 'GUF28_DLR_v1_Mosaic',
       attribution: ' | GUF®: <a href="https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-9628/16557_read-40454/">DLR License</a>',
       legendImg: ''
     });
 
-    const TDM90_DEM_layer = new RasterLayer({
+    const TDM90_DEM_layer = new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
       name: 'TDM90 DEM',
       id: 'TDM90_DEM',
       params: {
-        layer: 'TDM90_DEM'
+        layer: 'TDM90_DEM',
+        style: 'default',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        },
+        format: 'image/png'
       },
       visible: false,
       description: 'TDM90_DEM',

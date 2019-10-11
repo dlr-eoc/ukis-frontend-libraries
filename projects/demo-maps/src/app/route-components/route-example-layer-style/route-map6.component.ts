@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer } from '@ukis/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map } from '@ukis/base-layers-raster';
 import { MapOlService } from '@ukis/map-ol';
@@ -46,7 +46,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
   }
 
   addLayers() {
-    const tandemLayer = new RasterLayer({
+    const tandemLayer = new WmtsLayer({
       type: 'wmts',
       id: 'TDM90_AMP',
       url: 'https://tiles.geoservice.dlr.de/service/wmts?',
@@ -54,9 +54,14 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       filtertype: 'Layers',
       attribution: "| TDM90 Data &copy; <a href=\"http://www.dlr.de\" target=\"_blank\">DLR</a> licensed for <a rel=\"license\" target=\"_blank\" href=\"https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf\">scientific use</a>",
       params: {
-        LAYER: 'TDM90_AMP',
-        VERSION: '1.1.0',
-        FORMAT: 'image/png'
+        layer: 'TDM90_AMP',
+        version: '1.1.0',
+        format: 'image/png',
+        style: 'default',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        },
       }
     });
 
