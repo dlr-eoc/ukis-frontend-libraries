@@ -1,26 +1,27 @@
-export interface ILayerContent {
+export interface IAnyObject {
+  [k: string]: any;
+}
+export interface ILayerContent extends IAnyObject {
   /** MIME type of the Content */
   type: string;
   href?: string;
   title?: string;
   /** String type, not empty that can contain any text encoded media type */
   content?: string;
-  [k: string]: any;
 }
 
-export interface ILayerStyleSet {
+export interface ILayerStyleSet extends IAnyObject {
   name: string;
   title: string;
   abstract?: string;
   default?: boolean;
   legendURL?: string;
   content?: ILayerContent;
-  [k: string]: any;
 }
 
 export interface popup {
-  properties?: any;
-  pupupFunktion?: (popupobj: any) => string;
+  properties?: IAnyObject;
+  pupupFunktion?: (popupobj: IAnyObject) => string;
   asyncPupup?: (popupobj: any, cb: Function) => void;
 }
 
@@ -83,10 +84,9 @@ export interface ILayerOptions {
   styles?: ILayerStyleSet[];
 }
 
-export interface ILayerDimensions {
+export interface ILayerDimensions extends IAnyObject {
   time?: ILayerTimeDimension;
   elevation?: ILayerElevationDimension;
-  [k: string]: any;
 }
 
 export interface ILayerIntervalAndPeriod {
@@ -115,7 +115,9 @@ export interface IRasterLayerOptions extends ILayerOptions {
   url: string;
   subdomains?: Array<string>;
   /** raster params like wms params -> time, layers... depends on the map-library */
-  params?: any;
+  params?: IRasterLayerParams;
+  /** check if the service supports this tilesize */
+  tileSize?: number;
   type: TRasterLayertype;
 }
 
@@ -124,9 +126,13 @@ export interface IVectorLayerOptions extends ILayerOptions {
   url?: string;
   subdomains?: Array<string>;
   /** vector options like style, pointToLayer... depends on the map-library */
-  options?: any;
+  options?: {
+    /** ol/style/Style */
+    style: any;
+    [k: string]: any;
+  };
   /** true if show popup or set Array with keys of properties to show in popup  */
-  cluster?: any;
+  cluster?: boolean | IAnyObject;
   type: TVectorLayertype;
 }
 
@@ -150,10 +156,7 @@ export class Layer implements ILayerOptions {
   attribution?: string;
   displayName?: string;
   description?: string;
-  //time?: string;
   protected _time?: string;
-  /** zIndex: DEPRECIATED handeld internal by the layer service */
-  zIndex?: number;
   minResolution?: number;
   maxResolution?: number;
   legendImg?: string;
@@ -167,6 +170,8 @@ export class Layer implements ILayerOptions {
 
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
   styles?: ILayerStyleSet[];
+  /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
+  crossOrigin?: string;
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);
@@ -179,13 +184,24 @@ export class Layer implements ILayerOptions {
     this._time = time;
   }
 }
+/** raster params like wms params -> time, layers... depends on the map-library */
+export interface IRasterLayerParams extends IAnyObject {
+  LAYERS?: string;
+  FORMAT?: string;
+  TIME?: string;
+  VERSION?: string;
+  TILED?: string;
+  TRANSPARENT?: boolean;
+  STYLES?: string;
+}
 
 export class RasterLayer extends Layer implements IRasterLayerOptions {
   type: TRasterLayertype;
   url: string;
   subdomains?: Array<string>;
-  /** raster params like wms params -> time, layers... depends on the map-library */
-  params?: any;
+  params?: IRasterLayerParams;
+  /** check if the service supports this tilesize */
+  tileSize?: number;
 
   constructor(options: IRasterLayerOptions) {
     super(options);
@@ -241,8 +257,8 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
    * iconUrl: string - to specify icon for points
    * rotationPropName: string - property containing rotation angle in degrees
    * */
-  options?: any;
-  cluster?: any;
+  options?: IVectorLayerOptions['options'];
+  cluster?: IVectorLayerOptions['cluster'];
   constructor(options: IVectorLayerOptions) {
     super(options);
   }
@@ -254,7 +270,7 @@ export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
 
 export class CustomLayer extends Layer implements ICustomLayerOptions {
   type = 'custom';
-  custom_layer: any = {};
+  custom_layer: ICustomLayerOptions['custom_layer'] = {};
   constructor(options: ICustomLayerOptions) {
     super(options);
     Object.assign(this, options);

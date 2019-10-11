@@ -11,31 +11,36 @@ import { Layer, RasterLayer, IRasterLayerOptions } from './Layers';
 export interface IWmtsOptions extends IRasterLayerOptions {
     type: 'wmts';
     params: IWmtsParams;
+    /** check if the service supports this tilesize */
+    tileSize?: number;
 }
 
 
 export class WmtsLayer extends RasterLayer implements IWmtsOptions {
     type: 'wmts';
     params: IWmtsParams;
+    /** check if the service supports this tilesize */
+    tileSize?: number;
     constructor(options: IWmtsOptions) {
         super(options);
     }
 }
 
-export interface IWmtsMatrixSet {
-    /** EPSG-Code */
-    srs: string;
+
+export interface IBaseMatrixSet {
+    /** the MatrixSet ID in WMTS Capabilities */
     matrixSet: string;
+}
+export interface IListMatrixSet extends IBaseMatrixSet {
     matrixIds: string[];
-    origin: {
-        x: number,
-        y: number
-    };
     resolutions: number[];
-    tilesize: {
-        height: number,
-        width: number
-    };
+}
+
+export interface ISimpleMatrixSet extends IBaseMatrixSet {
+    /** levels to create resolutions and matrixIds */
+    resolutionLevels?: number;
+    /** Prefix of the matrixId  */
+    tileMatrixPrefix?: string;
 }
 
 export interface IWmtsParams {
@@ -43,8 +48,8 @@ export interface IWmtsParams {
     layer: string;
     /** Style name as advertised in the WMTS capabilities. */
     style: string;
-    matrixSet: IWmtsMatrixSet;
-    projection: string;
+    matrixSetOptions?: ISimpleMatrixSet | IListMatrixSet;
+    projection?: string;
     format?: string;
     version?: string;
 }
@@ -56,11 +61,15 @@ export const isWmtsLayer = (layer: Layer): layer is WmtsLayer => {
 export interface IWmsOptions extends IRasterLayerOptions {
     type: 'wms';
     params: IWmsParams;
+    /** check if the service supports this tilesize */
+    tileSize?: number;
 }
 
 export class WmsLayer extends RasterLayer implements IWmsOptions {
     type: 'wms';
     params: IWmsParams;
+    /** check if the service supports this tilesize */
+    tileSize?: number;
     constructor(options: IWmsOptions) {
         super(options);
     }
