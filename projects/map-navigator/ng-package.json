@@ -6,6 +6,7 @@
   },
   "whitelistedNonPeerDependencies": [
     "tslib",
+    "ol",
     "@ukis/services-map-state",
     "@ukis/services-map-state"
   ]

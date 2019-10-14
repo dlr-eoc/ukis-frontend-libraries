@@ -8,6 +8,7 @@
     "@angular/forms": "~8.1.0"
   },
   "dependencies": {
-    "@ukis/services-map-state": "0.0.0-PLACEHOLDER"
+    "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
+    "ol": "^6.0.0"
   }
 }
