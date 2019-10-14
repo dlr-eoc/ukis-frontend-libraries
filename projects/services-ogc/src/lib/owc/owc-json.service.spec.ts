@@ -8,6 +8,8 @@ import { LayersService, RasterLayer } from '@ukis/services-layers';
 import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@ukis/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsContext } from './types/owc-json';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClient } from 'selenium-webdriver/http';
 
 
 
@@ -16,6 +18,9 @@ describe('OwcJsonService: reading data from owc', () => {
   const targetProjection = 'EPSG:4326';
 
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule]
+    });
   });
 
   afterEach(() => {
@@ -116,6 +121,8 @@ describe('OwcJsonService: reading data from owc', () => {
   it('#createVectorLayerFromOffering should return an IVectorLayerOptions instance', (done) => {
     const service: OwcJsonService = TestBed.get(OwcJsonService);
 
+    let foundVectorLayer = false;
+
     for (const context of allTestContexts) {
       for (const resource of service.getResources(context)) {
         for (const offering of resource.properties.offerings) {
@@ -125,6 +132,7 @@ describe('OwcJsonService: reading data from owc', () => {
             expect(operation).toBeTruthy();
             const layertype = service.getLayertypeFromOfferingCode(offering);
             if (layertype === WfsLayertype || layertype === GeojsonLayertype) {
+              foundVectorLayer = true;
 
               service.createVectorLayerFromOffering(offering, resource).subscribe((vlayerOptions) => {
                 expect(vlayerOptions.name).toBe(resource.properties.title);
@@ -146,6 +154,11 @@ describe('OwcJsonService: reading data from owc', () => {
         }
       }
     }
+
+    if (!foundVectorLayer) {
+      done();
+    }
+
   }, 3000);
 
 
@@ -175,6 +188,9 @@ describe('OwcJsonService: writing data into owc', () => {
   const targetProjection = 'EPSG:4326';
 
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule]
+    });
   });
 
   afterEach(() => {
@@ -197,7 +213,7 @@ describe('OwcJsonService: writing data into owc', () => {
     });
   }, 3000);
 
-  it('#generateOwcContextFrom should properly store and restore a geojson-layer', () => {
+  it('#generateOwcContextFrom should properly store and restore a geojson-layer', (done) => {
     const service: OwcJsonService = TestBed.get(OwcJsonService);
 
     // creating test-layer
@@ -245,13 +261,15 @@ describe('OwcJsonService: writing data into owc', () => {
 
     // enconding and deconding
     const context = service.generateOwsContextFrom('testcontext', [geojsonLayer], [-190, -90, 190, 90]);
-    const recoveredLayers = service.getLayers(context, targetProjection);
-    const recoveredLayer = recoveredLayers[0] as VectorLayer;
 
-    // testing
-    expect(recoveredLayer.id).toEqual(geojsonLayer.id);
-    expect(JSON.parse(recoveredLayer.data)).toEqual(geojsonLayer.data);
-    // expect(recoveredLayer.options).toEqual(geojsonLayer.options); // we dont encode style.
+    service.getLayers(context, targetProjection).subscribe(recoveredLayers => {
+      const recoveredLayer = recoveredLayers[0] as VectorLayer;
+      // testing
+      expect(recoveredLayer.id).toEqual(geojsonLayer.id);
+      expect(JSON.parse(recoveredLayer.data)).toEqual(geojsonLayer.data);
+      // expect(recoveredLayer.options).toEqual(geojsonLayer.options); // we dont encode style.
 
-  });
+      done();
+    });
+  }, 3000);
 });
