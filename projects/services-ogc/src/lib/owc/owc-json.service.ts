@@ -18,7 +18,8 @@ import {
   IWmtsOptions,
   WmsLayer,
   IWmsParams,
-  IWmsOptions
+  IWmsOptions,
+  IListMatrixSet
 } from '@ukis/services-layers';
 import { TGeoExtent } from '@ukis/services-map-state';
 import { ReplaceSource } from 'webpack-sources';
@@ -456,12 +457,17 @@ export class OwcJsonService {
     }
 
     return this.getMatrixSetForWMTS(offering, resource, targetProjection).pipe(map(((matrixSet: IEocOwsWmtsMatrixSet) => {
+      const matrixSetOptions: IListMatrixSet = {
+        matrixSet: matrixSet.matrixSet,
+        matrixIds: matrixSet.matrixIds,
+        resolutions: matrixSet.resolutions
+      };
       const wmtsOptions: IWmtsOptions = {
         ...rasterOptions,
         type: 'wmts',
         params: {
           layer: layer,
-          matrixSet: matrixSet,
+          matrixSetOptions: matrixSetOptions,
           projection: targetProjection,
           style: style,
           format: 'image/png'
