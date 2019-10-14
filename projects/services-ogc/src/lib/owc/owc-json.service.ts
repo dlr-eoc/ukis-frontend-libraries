@@ -21,7 +21,6 @@ import {
   IWmsOptions
 } from '@ukis/services-layers';
 import { TGeoExtent } from '@ukis/services-map-state';
-import { ReplaceSource } from 'webpack-sources';
 import { WmtsClientService } from '../wmts/wmtsclient.service';
 import { of, Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -328,14 +327,14 @@ export class OwcJsonService {
       const offerings = resource.properties.offerings;
       if (offerings.length > 0) {
         const offering = offerings.find(o => isWmsOffering(o.code))
-                      || offerings.find(o => isWmtsOffering(o.code))
-                      || offerings.find(o => isWfsOffering(o.code))
-                      || offerings[0];
-        layers$.push( this.createLayerFromOffering(offering, resource, owc, targetProjection) );
+          || offerings.find(o => isWmtsOffering(o.code))
+          || offerings.find(o => isWfsOffering(o.code))
+          || offerings[0];
+        layers$.push(this.createLayerFromOffering(offering, resource, owc, targetProjection));
       }
     }
 
-   return forkJoin(layers$);
+    return forkJoin(layers$);
   }
 
   createLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<Layer> {
@@ -399,7 +398,7 @@ export class OwcJsonService {
     return of(layer);
   }
 
-  createRasterLayerFromOffering (
+  createRasterLayerFromOffering(
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
@@ -427,7 +426,7 @@ export class OwcJsonService {
     return rasterLayer$;
   }
 
-  private createWmtsLayerFromOffering (
+  private createWmtsLayerFromOffering(
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<WmtsLayer> {
     return this.getWmtsOptions(offering, resource, context, targetProjection).pipe(map((options: IWmtsOptions) => {
       const layer = new WmtsLayer(options);
@@ -461,7 +460,11 @@ export class OwcJsonService {
         type: 'wmts',
         params: {
           layer: layer,
-          matrixSet: matrixSet,
+          matrixSetOptions: { //TODO check to integrate other stuff from IEocOwsWmtsMatrixSet
+            matrixSet: matrixSet.matrixSet,
+            matrixIds: matrixSet.matrixIds,
+            resolutions: matrixSet.resolutions
+          },
           projection: targetProjection,
           style: style,
           format: 'image/png'
@@ -481,14 +484,14 @@ export class OwcJsonService {
     }
   }
 
-  private parseOperationUrl (offering: IOwsOffering, opCode: string): [string, object] {
+  private parseOperationUrl(offering: IOwsOffering, opCode: string): [string, object] {
     if (offering.operations) {
       const operation = offering.operations.find(op => op.code === opCode);
       if (operation) {
         const url = this.getUrlFromUri(operation.href);
         const urlParams = this.getJsonFromUri(operation.href);
         return [url, urlParams];
-      } else  {
+      } else {
         console.error(`There is no ${opCode}-operation in the offering ${offering.code}.`, offering);
       }
     } else {

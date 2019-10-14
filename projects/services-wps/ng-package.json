@@ -3,5 +3,9 @@
   "dest": "../../dist/services-wps",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib",
+    "@ukis/services-layers"
+  ]
 }

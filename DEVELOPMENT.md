@@ -14,9 +14,11 @@ run ``ng generate library < name > --prefix ukis``
 
 
 ### 3. Add Dependencies
-- add peerDependencies for dependencies which are generally in the [project-frontend/package.json](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/project-frontend/browse/package.json)
+- add peerDependencies for dependencies which are generally in the [frontend-libraries/package.json](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse/package.json)
 
 - all @ukis dependencies from [frontend-libraries/projects](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse/projects) add to dependencies (with the version "0.0.0-PLACEHOLDER") and list them in the ng-package.json as whitelistedNonPeerDependencies (to build them correctly)
+
+- add @ukis dependencies to whitelistedNonPeerDependencies in ng-package.json
 
 
 ### 4. Test your library
