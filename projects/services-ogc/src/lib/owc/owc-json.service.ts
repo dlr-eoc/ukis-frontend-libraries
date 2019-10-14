@@ -18,7 +18,8 @@ import {
   IWmtsOptions,
   WmsLayer,
   IWmsParams,
-  IWmsOptions
+  IWmsOptions,
+  IListMatrixSet
 } from '@ukis/services-layers';
 import { TGeoExtent } from '@ukis/services-map-state';
 import { WmtsClientService } from '../wmts/wmtsclient.service';
@@ -455,16 +456,25 @@ export class OwcJsonService {
     }
 
     return this.getMatrixSetForWMTS(offering, resource, targetProjection).pipe(map(((matrixSet: IEocOwsWmtsMatrixSet) => {
+      const matrixSetOptions: IListMatrixSet = {
+        matrixSet: matrixSet.matrixSet,
+        matrixIds: matrixSet.matrixIds,
+        resolutions: matrixSet.resolutions
+      };
       const wmtsOptions: IWmtsOptions = {
         ...rasterOptions,
         type: 'wmts',
         params: {
           layer: layer,
+<<<<<<< HEAD
           matrixSetOptions: { //TODO check to integrate other stuff from IEocOwsWmtsMatrixSet
             matrixSet: matrixSet.matrixSet,
             matrixIds: matrixSet.matrixIds,
             resolutions: matrixSet.resolutions
           },
+=======
+          matrixSetOptions: matrixSetOptions,
+>>>>>>> 01e6295294fe6ce89c4014c19e34dc7b525e9ce2
           projection: targetProjection,
           style: style,
           format: 'image/png'
