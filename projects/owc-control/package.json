@@ -3,8 +3,8 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "peerDependencies": {
-    "@angular/common": "~8.1.0",
-    "@angular/core": "~8.1.0"
+    "@angular/common": "~8.2.10",
+    "@angular/core": "~8.2.10"
   },
   "dependencies": {
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",

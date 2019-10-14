@@ -3,14 +3,14 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "peerDependencies": {
-    "@angular/common": "~8.1.0",
-    "@angular/core": "~8.1.0",
-    "rxjs": "~6.3.3"
+    "@angular/common": "~8.2.10",
+    "@angular/core": "~8.2.10",
+    "rxjs": "~6.5.3"
   },
   "dependencies": {
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",
     "@ukis/services-ogc": "0.0.0-PLACEHOLDER",
-    "ol": "^6.0.0"
+    "ol": "^6.0.1"
   }
 }

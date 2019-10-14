@@ -3,17 +3,17 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "peerDependencies": {
-    "@angular/common": "~8.1.0",
-    "@angular/core": "~8.1.0",
-    "@angular/forms": "~8.1.0",
-    "@clr/angular": "^2.0.2",
-    "@clr/icons": "^2.0.2",
-    "@clr/ui": "^2.0.2",
-    "rxjs": "~6.5.2"
+    "@angular/common": "~8.2.10",
+    "@angular/core": "~8.2.10",
+    "@angular/forms": "~8.2.10",
+    "@clr/angular": "^2.2.2",
+    "@clr/icons": "^2.2.2",
+    "@clr/ui": "^2.2.2",
+    "rxjs": "~6.5.3"
   },
   "dependencies": {
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
-    "@angular/cdk": "^7.2.1"
+    "@angular/cdk": "^8.0.2"
   }
 }

@@ -3,12 +3,15 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "peerDependencies": {
-    "@angular/common": "~8.1.0",
-    "@angular/core": "~8.1.0",
-    "@angular/forms": "~8.1.0"
+    "@angular/common": "~8.2.10",
+    "@angular/core": "~8.2.10",
+    "@angular/forms": "~8.2.10",
+    "@clr/angular": "^2.2.2",
+    "@clr/icons": "^2.2.2",
+    "@clr/ui": "^2.2.2",
+    "ol": "^6.0.1"
   },
   "dependencies": {
-    "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
-    "ol": "^6.0.0"
+    "@ukis/services-map-state": "0.0.0-PLACEHOLDER"
   }
 }

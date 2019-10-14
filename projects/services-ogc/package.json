@@ -2,8 +2,8 @@
   "name": "@ukis/services-ogc",
   "version": "0.0.0-PLACEHOLDER",
   "peerDependencies": {
-    "@angular/common": "^7.0.0",
-    "@angular/core": "^7.0.0"
+    "@angular/common": "~8.2.10",
+    "@angular/core": "~8.2.10"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.4",
