@@ -11,7 +11,7 @@ export class AppComponent {
 
   ui = {
     floating: false,
-    footer: true,
+    footer: false,
     alert: null,
     progress: null
   };

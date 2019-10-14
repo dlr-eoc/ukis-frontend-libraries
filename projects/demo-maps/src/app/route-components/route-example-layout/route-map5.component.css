@@ -1,0 +1,10 @@
+.ukis-footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+}
+
+.content-area {
+  width: 100vw;
+  height: calc(100% - 5%); /** content-area - ukis-footer */
+}

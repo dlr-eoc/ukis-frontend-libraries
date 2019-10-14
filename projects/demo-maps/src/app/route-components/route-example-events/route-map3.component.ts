@@ -19,7 +19,6 @@ import { parse } from 'url';
 export class RouteMap3Component implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
   controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
-  mapCoordinates: [number, number] = [0, 0];
   mapStateSub: any;
   constructor(
     public layersSvc: LayersService,
@@ -36,18 +35,11 @@ export class RouteMap3Component implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.addLayers();
-    this.mapSvc.map.on('pointermove', this.mapMoveSubscription);
     this.subscribeToMapState();
   }
 
   ngOnDestroy() {
     this.mapStateSub.unsubscribe();
-  }
-
-  mapMoveSubscription = (evt) => {
-    if (evt.coordinate) {
-      this.mapCoordinates = evt.coordinate;
-    }
   }
 
   addLayers() {

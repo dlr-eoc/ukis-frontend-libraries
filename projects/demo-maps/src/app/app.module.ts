@@ -6,6 +6,7 @@ import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapOlModule } from '@ukis/map-ol';
 import { LayerControlModule } from '@ukis/layer-control';
+import { MapNavigatorModule } from '@ukis/map-navigator';
 
 import { HeaderComponent } from './components/header/header.component';
 import { GlobalFooterComponent } from './components/global-footer/global-footer.component';
@@ -22,7 +23,7 @@ import { RouteMap6Component } from './route-components/route-example-layer-style
 
 
 export const appRoutes: Routes = [
-  { path: '', redirectTo: 'map', pathMatch: 'full', },
+  { path: '', redirectTo: 'example-layers', pathMatch: 'full', },
   {
     path: 'example-layers', component: RouteMapComponent,
     data: {
@@ -82,7 +83,8 @@ export const appRoutes: Routes = [
     ClarityModule,
     BrowserAnimationsModule,
     MapOlModule,
-    LayerControlModule
+    LayerControlModule,
+    MapNavigatorModule
   ],
   providers: [ProgressService],
   bootstrap: [AppComponent]
