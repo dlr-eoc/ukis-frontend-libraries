@@ -11,6 +11,6 @@
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",
     "@ukis/services-ogc": "0.0.0-PLACEHOLDER",
-    "ol": "^5.3.0"
+    "ol": "^6.0.0"
   }
 }
