@@ -5,6 +5,8 @@
 
 * **@ukis/services-owc-json:** is now in @ukis/services-ogc
 
+* **@ukis/services-wps:** is now in @ukis/services-ogc
+
 
 ### Features
 * **@ukis/map-ol:** new openlayers version 6.x
