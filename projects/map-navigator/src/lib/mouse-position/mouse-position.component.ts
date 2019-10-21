@@ -15,6 +15,7 @@ interface ISelectProjection {
 export class MousePositionComponent implements OnInit, OnDestroy {
 
   public mapCoordinates: [number, number] = [0, 0];
+  public zoom: number = 0;
   public projections: ISelectProjection[];
   mapProjection: olProjection;
   public selectedProjection: string;
@@ -33,15 +34,25 @@ export class MousePositionComponent implements OnInit, OnDestroy {
 
     this.selectedProjection = this.projections[0].value;
     this.mapSvc.map.on('pointermove', this.mapMoveSubscription);
+    this.mapSvc.map.on('moveend', this.mapOnMoveend);
   }
 
   ngOnDestroy() {
     this.mapSvc.map.un('pointermove', this.mapMoveSubscription);
+    this.mapSvc.map.un('moveend', this.mapOnMoveend);
   }
 
   mapMoveSubscription = (evt) => {
     if (evt.coordinate) {
       this.mapCoordinates = olTransform(evt.coordinate, this.mapProjection, olGetProjection(this.selectedProjection));
+    }
+  }
+
+  mapOnMoveend = (evt) => {
+    const newZoom = evt.map.getView().getZoom();
+    if (this.zoom != newZoom) {
+      console.log('zoom end, new zoom: ' + newZoom);
+      this.zoom = newZoom;
     }
   }
 
