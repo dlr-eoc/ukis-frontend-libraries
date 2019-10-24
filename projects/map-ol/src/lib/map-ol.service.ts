@@ -190,6 +190,7 @@ export class MapOlService {
     return layers;
   }
 
+  // not working???
   public removeLayerByKey(key: { key: string, value: string }, type: 'baselayers' | 'layers' | 'overlays') {
     const layer = this.getLayerByKey(key, type);
     this.map.removeLayer(layer);
@@ -214,7 +215,6 @@ export class MapOlService {
     const _oldLayers: olBaseLayer[] = this.getLayers(type);
     const __layers = <any>[];
     const _layers = this.sortOldAndNewLayers(_oldLayers, layers);
-
     // TODO try to deep check if a layer if exactly the same and dont create it new
     if (_layers.length < 1 && type !== 'baselayers') {
       // this.removeAllLayers('overlays');
@@ -291,7 +291,9 @@ export class MapOlService {
    * define layer types
    */
   private create_xyz_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
-    const xyz_options: any = {};
+    const xyz_options: any = {
+      wrapX: false
+    };
 
     if (l.crossOrigin) {
       xyz_options.crossOrigin = l.crossOrigin;
@@ -340,7 +342,8 @@ export class MapOlService {
   private create_wms_layer(l: WmsLayer, oldlayer?: olBaseLayer): olTileLayer {
 
     const tile_options: any = {
-      params: l.params
+      params: l.params,
+      wrapX: false
     };
 
     if (l.tileSize) {
@@ -420,7 +423,8 @@ export class MapOlService {
       let wmts_options: any = {
         url: l.url,
         tileGrid: tileGrid,
-        matrixSet: _matrixSet
+        matrixSet: _matrixSet,
+        'wrapX': false
       };
       wmts_options = Object.assign(wmts_options, l.params);
 
@@ -481,12 +485,14 @@ export class MapOlService {
     if (l.data) {
       _source = new olVectorSource({
         features: this.geoJsonToFeatures(l.data),
-        format: new olGeoJSON()
+        format: new olGeoJSON(),
+        wrapX: false
       });
     } else if (l.url) {
       _source = new olTileJSON({
         url: l.url,
-        crossOrigin: 'anonymous'
+        crossOrigin: 'anonymous',
+        wrapX: false
       });
     }
 
@@ -561,6 +567,7 @@ export class MapOlService {
       const layer = l.custom_layer;
 
       const _source = layer.getSource();
+      _source.set('wrapX', false);
 
       if (l.attribution) {
         _source.setAttributions([l.attribution]);
