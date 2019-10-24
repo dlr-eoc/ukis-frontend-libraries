@@ -122,6 +122,7 @@ export interface IRasterLayerOptions extends ILayerOptions {
 }
 
 export interface IVectorLayerOptions extends ILayerOptions {
+  /** data: geojson data */
   data?: any;
   url?: string;
   subdomains?: Array<string>;
@@ -250,6 +251,7 @@ export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
 
 export class VectorLayer extends Layer implements IVectorLayerOptions {
   type: TVectorLayertype;
+  /** data: geojson data */
   data?: any;
   url?: string;
   subdomains?: Array<string>;
