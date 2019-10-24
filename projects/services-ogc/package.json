@@ -1,9 +1,11 @@
 {
   "name": "@ukis/services-ogc",
+  "main": "src/public_api",
   "version": "0.0.0-PLACEHOLDER",
   "peerDependencies": {
     "@angular/common": "~8.2.10",
-    "@angular/core": "~8.2.10"
+    "@angular/core": "~8.2.10",
+    "@angular/http": "~7.2.0"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.4",
@@ -14,6 +16,5 @@
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
     "@boundlessgeo/jsonix": "^2.4.3"
-  },
-  "main": "src/public_api"
+  }
 }
