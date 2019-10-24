@@ -47,7 +47,10 @@ import olStroke from 'ol/style/Stroke';
 import { DragBox } from 'ol/interaction';
 
 
-
+/**
+* like olExtend: [minX, minY, maxX, maxY]
+*/
+export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
 
 @Injectable({
   providedIn: 'root'
@@ -341,12 +344,12 @@ export class MapOlService {
     };
 
     if (l.tileSize) {
-      console.log(l.tileSize)
+      // console.log(l.tileSize)
       tile_options['tileGrid'] = this.getTileGrid('default', null, l.tileSize);
       delete tile_options.params['tileSize'];
     }
 
-    console.log(tile_options);
+    // console.log(tile_options);
 
     if (l.crossOrigin) {
       tile_options.crossOrigin = l.crossOrigin;
@@ -919,8 +922,14 @@ export class MapOlService {
     });
     return popups;
   }
-
-  public setExtent(extent: olExtend, geographic?: boolean, fitOptions?: any): any {
+  /**
+   * 
+   * @param extent: [minX, minY, maxX, maxY]
+   * @param geographic: boolean
+   * @param fitOptions 
+   * @returns olExtend: [minX, minY, maxX, maxY]
+   */
+  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     // var _extent = ol.extent.boundingExtent([destLoc,currentLoc]);
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
@@ -955,16 +964,31 @@ export class MapOlService {
     // console.log(dstProjection)
     return transfomCenter;
   }
-
-  public getFeaturesExtent(features: olFeature[]): any {
+  /**
+   * 
+   * @param features: olFeature[]
+   * @param geographic: boolean
+   * @returns olExtend: [minX, minY, maxX, maxY]
+   */
+  public getFeaturesExtent(features: olFeature[], geographic?: boolean): TGeoExtent {
     const extent: any = features[0].getGeometry().getExtent().slice(0);
     features.forEach((feature) => {
       olExtend(extent, feature.getGeometry().getExtent());
     });
-    return extent;
+    if (geographic) {
+      const projection = getProjection('EPSG:4326')
+      const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
+      return transfomExtent;
+    } else {
+      return extent;
+    }
   }
 
-  public getCurrentExtent(geographic?: boolean): olExtend {
+  /**
+   * @param geographic
+   * @returns olExtend: [minX, minY, maxX, maxY]
+   */
+  public getCurrentExtent(geographic?: boolean): TGeoExtent {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
     const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
