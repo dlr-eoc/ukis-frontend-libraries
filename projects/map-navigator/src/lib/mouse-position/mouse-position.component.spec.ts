@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MousePositionComponent } from './mouse-position.component';
+import { FormsModule } from '@angular/forms';
+import { MapOlService } from '@ukis/map-ol';
 
 describe('MousePositionComponent', () => {
   let component: MousePositionComponent;
@@ -8,9 +10,11 @@ describe('MousePositionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MousePositionComponent ]
+      declarations: [MousePositionComponent],
+      imports: [FormsModule],
+      providers: [MapOlService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

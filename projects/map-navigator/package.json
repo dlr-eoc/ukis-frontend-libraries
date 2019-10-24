@@ -12,6 +12,7 @@
     "ol": "^6.0.1"
   },
   "dependencies": {
-    "@ukis/services-map-state": "0.0.0-PLACEHOLDER"
+    "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
+    "@ukis/map-ol": "0.0.0-PLACEHOLDER"
   }
 }
