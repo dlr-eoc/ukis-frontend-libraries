@@ -30,6 +30,10 @@ export class RouteMapComponent implements OnInit {
     this.addBaseLayers();
     this.addLayers();
     this.addOverlays();
+    this.setExtent();
+  }
+
+  setExtent() {
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
     this.mapStateSvc.setExtent([-14, 33, 40, 57]);
   }
@@ -61,7 +65,13 @@ export class RouteMapComponent implements OnInit {
       legendImg: ''
     });
 
-    const layers = [eoc_litemap_layer, world_relief];
+    const osmLayer = new osm(<any>{
+      legendImg: null,
+      id: 'osm_base',
+      visible: false
+    });
+
+    const layers = [eoc_litemap_layer, world_relief, osmLayer];
 
     /** add layers with the LayersService*/
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
