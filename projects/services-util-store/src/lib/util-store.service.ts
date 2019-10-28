@@ -5,13 +5,13 @@ import md5 from 'md5';
   providedIn: 'root'
 })
 export class UtilStoreService {
-  private runtimeStore: any;
+  private _runtimeStore: any;
 
   constructor() {
-    this.runtimeStore = {};
+    this._runtimeStore = {};
   }
 
-  store(type: 'localStorage' | 'sessionStorage', key: string, value?: any) {
+  private _store(type: 'localStorage' | 'sessionStorage', key: string, value?: any) {
     var lsSupport = false, data, storrage;
 
     if (!value) {
@@ -80,15 +80,15 @@ export class UtilStoreService {
     }
   }
 
-  local(key: string, value?: any) {
-    return this.store('localStorage', key, value);
+  public local(key: string, value?: any) {
+    return this._store('localStorage', key, value);
   }
 
-  session(key: string, value?: any) {
-    return this.store('sessionStorage', key, value);
+  public session(key: string, value?: any) {
+    return this._store('sessionStorage', key, value);
   }
 
-  runtime(key: string, value?: any) {
+  public runtime(key: string, value?: any) {
     var data;
     if (!value) {
       console.log(key)
@@ -101,71 +101,71 @@ export class UtilStoreService {
     // If value is detected, set new or modify store
     if (typeof value !== "undefined" && value !== null) {
       // Set the store
-      if (this.runtimeStore.hasOwnProperty(key)) {
+      if (this._runtimeStore.hasOwnProperty(key)) {
         console.log('url already cashed')
       }
-      this.runtimeStore[key] = value;
+      this._runtimeStore[key] = value;
     }
 
     // No value supplied, return value
     if (typeof value === "undefined") {
       // Get value
-      if (this.runtimeStore.hasOwnProperty(key)) {
-        data = this.runtimeStore[key]
+      if (this._runtimeStore.hasOwnProperty(key)) {
+        data = this._runtimeStore[key]
       }
       return data;
     }
 
     // Null specified, remove store
     if (value === null) {
-      if (this.runtimeStore.hasOwnProperty(key)) {
-        delete this.runtimeStore[key]
+      if (this._runtimeStore.hasOwnProperty(key)) {
+        delete this._runtimeStore[key]
       }
     }
   }
 
-  remove(type: 'localStorage' | 'sessionStorage' | 'runtimeStorage', key: string) {
+  public remove(type: 'localStorage' | 'sessionStorage' | 'runtimeStorage', key: string) {
     if (type != 'runtimeStorage') {
-      this.store(type, key, null);
+      this._store(type, key, null);
     } else {
       this.runtime(key, null);
     }
   }
 
-  clearAll() {
-    this.runtimeStore = {};
+  public clearAll() {
+    this._runtimeStore = {};
     if (typeof (Storage) !== "undefined") {
       localStorage.clear();
       sessionStorage.clear();
     }
   }
 
-  getRuntime() {
-    return this.runtimeStore;
+  public getRuntime() {
+    return this._runtimeStore;
   }
-  clearRuntime() {
-    this.runtimeStore = {};
+  public clearRuntime() {
+    this._runtimeStore = {};
   }
 
-  getSession() {
+  public getSession() {
     return sessionStorage;
   }
-  clearSession() {
+  public clearSession() {
     if (typeof (Storage) !== "undefined") {
       sessionStorage.clear();
     }
   }
 
-  getLocal() {
+  public getLocal() {
     return localStorage;
   }
-  clearLocal() {
+  public clearLocal() {
     if (typeof (Storage) !== "undefined") {
       localStorage.clear();
     }
   }
 
-  getAll(): any {
+  public getAll(): any {
     return {
       'runtime': this.getRuntime(),
       'session': this.getSession(),
@@ -181,7 +181,7 @@ export class UtilStoreService {
    * @param  value     Contents of the store
    * @param  exp       Expiration - creation defaults to 30 days
    */
-  createCookie(key, value, exp = 30) {
+  public createCookie(key, value, exp = 30) {
     var date = new Date();
     date.setTime(date.getTime() + (exp * 24 * 60 * 60 * 1000));
     var expires = "; expires=" + date.toUTCString();
@@ -192,7 +192,7 @@ export class UtilStoreService {
   }
 
 
-  removeCookie(key) {
+  public removeCookie(key) {
     this.createCookie(key, null, -1);
   }
 
@@ -200,7 +200,7 @@ export class UtilStoreService {
    * Returns contents of cookie
    * @param  key       The key or identifier for the store
    */
-  readCookie(key) {
+  public readCookie(key) {
     var nameEQ = key + "=";
     var ca = document.cookie.split(';');
     for (var i = 0, max = ca.length; i < max; i++) {
