@@ -56,7 +56,7 @@ export interface IAuthService {
   /** check if the user has access rights/privilege */
   checkSession?();
   checkAuthorization?(permissions: string[], user?: IUser): Observable<boolean>;
-  register?(user: IRegisterUser): Observable<IUserinfo>;
+  // register?(user: IRegisterUser): Observable<IUserinfo>;
 }
 
 
@@ -64,25 +64,25 @@ export interface IAuthService {
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-  private authService: IAuthService;
-
+export class UserService implements IAuthService {
+  private _authService: IAuthService;
+  loginmethode: 'oauth_pass' | 'oauth_code' | 'ukis_cas';
   constructor() { }
 
   getUserInfo(user?: IUser) {
-    return this.authService.getUserInfo(user);
+    return this._authService.getUserInfo(user);
   }
 
   login(user: IUser) {
-    return this.authService.login(user);
+    return this._authService.login(user);
   }
 
   isloggedIn() {
-    return this.authService.isloggedIn();
+    return this._authService.isloggedIn();
   }
 
   logout(user?: IUser) {
-    return this.authService.logout();
+    return this._authService.logout();
   }
 
   register(user: IRegisterUser) {
@@ -91,7 +91,7 @@ export class UserService {
   }
 
   setAuthService(authService) {
-    this.authService = authService;
+    this._authService = authService;
   }
 
 }

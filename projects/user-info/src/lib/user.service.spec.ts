@@ -8,22 +8,16 @@ import { of } from 'rxjs';
 
 
 describe('UserService', () => {
-
-  let injector: TestBed;
   let service: UserService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-
-        UserService
-      ]
+      providers: [UserService]
     });
-    injector = getTestBed();
-    service = injector.get(UserService);
-    httpMock = injector.get(HttpTestingController);
+    service = TestBed.get(UserService);
+    httpMock = TestBed.get(HttpTestingController);
   });
 
   afterEach(() => {
@@ -31,7 +25,31 @@ describe('UserService', () => {
   });
 
   it('should be created', () => {
-    service = TestBed.get(UserService);
     expect(service).toBeTruthy();
+  });
+
+  it('should have one oth the loginmethodes', () => {
+    service.loginmethode = 'oauth_code';
+    expect(service.loginmethode).toBe('oauth_code')
+  });
+
+  it('should have a getUserInfo Methode', () => {
+    expect(typeof service.getUserInfo).toBe('function');
+  });
+
+  it('should have a login Methode', () => {
+    expect(typeof service.login).toBe('function');
+  });
+
+  it('should have a isloggedIn Methode', () => {
+    expect(typeof service.isloggedIn).toBe('function');
+  });
+
+  it('should have a logout Methode', () => {
+    expect(typeof service.logout).toBe('function');
+  });
+
+  it('should have a setAuthService Methode', () => {
+    expect(typeof service.setAuthService).toBe('function');
   });
 });
