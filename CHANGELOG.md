@@ -1,7 +1,7 @@
 # [6.0.0]() () (Sprint Geoservice 2 and Sprint water system 1)
 
 ### Changes
-* **@ukis/services-layers:** zIndex is removed only used internal.
+* **@ukis/services-layers:** zIndex is removed (only used internal).
 
 * **@ukis/services-owc-json:** is now in @ukis/services-ogc
 
@@ -9,17 +9,18 @@
 
 
 ### Features
-* **@ukis/map-ol:** new openlayers version 6.x
+* **@ukis/map-navigator:** mouse-position component ([cc2e51b70ff](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/cc2e51b70ffb7b7c022d58248d4c4a0e28a14bad), [04d9bac9209](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/04d9bac9209c65220df8eb5fd1dd89db38ac8b45))
 
-* **@ukis/map-navigator:** mouse-position component
-
-* **@ukis/services-ogc:** services for ogc like wmts, wms...
+* **@ukis/services-ogc:** services for ogc like OWC, WMTS, WMS and WPS ([cf4fd58022a](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/cf4fd58022af471ddbf512fc6800dd1d1a1071cf))
+* **@ukis/services-layers:** Add dimensions and styles property for OWC ([be9464860d4](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/be9464860d4ea8f8495383b714846a4e57405ba1))
+* **@ukis/services-layers:** Wmts Layer use default tilegrid if nothing is provided and set tileSize on WMS ([b7ce28e5d1e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/b7ce28e5d1e48111e9cf797ffd3b898069afc63a))
+* **@ukis/services-layers:** Added new types for Rasterlayers like WMS and WMTS ([936c8b683da](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/936c8b683da2cb352705118b80bea09514f59b76), [ca6136c574e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/ca6136c574eea01160411778afaae29278186cd6))
 
 * **@ukis/layer-control:** now allows switching between styles of a layer (if more than one style is present) ([22c49e96015](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/22c49e960158aa20e5058536e9bd41b49a7fd55e))
 * **@ukis/services-layers:** RasterLayer now has a property 'styles' to accommodate the above mentioned feature ([0e36a07f536](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/0e36a07f536c98e2c8d66cd5a3ec7729b0fb4a12))
 
-* **@ukis/services-layers:** Wms and Wmts Layer.. tileSize, matrixSet...
-
+* **@ukis/map-ol:** getFeaturesExtent add optional get extent geographic
+* **@ukis/map-ol:** Added a method getTileGrid ([b7ce28e5d1e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/b7ce28e5d1e48111e9cf797ffd3b898069afc63a))
 * **@ukis/map-ol:** Added a method 'setLayer', analogous to 'setLayers'  ([9c74273b78e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/9c74273b78e15c47326457fec4c51235cf146399))
 
 
