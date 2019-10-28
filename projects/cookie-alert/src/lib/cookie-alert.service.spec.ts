@@ -1,12 +1,41 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 
 import { CookieAlertService } from './cookie-alert.service';
+import { CookieAlertComponent } from './cookie-alert.component';
 
 describe('CookieAlertService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let component: CookieAlertComponent;
+  let fixture: ComponentFixture<CookieAlertComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [CookieAlertComponent]
+    });
+
+    // create component and test fixture
+    fixture = TestBed.createComponent(CookieAlertComponent);
+
+    // get test component from the fixture
+    component = fixture.componentInstance;
+
+  });
 
   it('should be created', () => {
     const service: CookieAlertService = TestBed.get(CookieAlertService);
     expect(service).toBeTruthy();
+  });
+
+  it('should have Input alert-text', () => {
+    const _text = 'test alert text';
+    component.text = _text;
+    fixture.detectChanges();
+    expect(component.text).toEqual(_text);
+  });
+
+  it('should have Input privacy-link', () => {
+    const _link = 'http://test.de';
+    component.link = _link;
+    fixture.detectChanges();
+    expect(component.link).toEqual(_link);
   });
 });
