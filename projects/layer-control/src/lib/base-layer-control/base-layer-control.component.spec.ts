@@ -13,59 +13,64 @@ import { LayerentryGroupComponent } from '@ukis/layer-control/src/lib/layerentry
 import { LayerGroup } from '@ukis/services-layers';
 
 /**
- * this service extends the LayersService to mimik its behaviour. The getLayerGroups function is overwritten to 
+ * this service extends the LayersService to mimik its behaviour. The getLayerGroups function is overwritten to
  * get test data for following tests.
  */
 class MockLayersService extends LayersService {
 
   getLayerGroups() {
-    let l = new RasterLayer(
-        { url: 'blabl', 
-          name: 'name', 
-          id: '5',
-          type: 'wms',
-          filtertype: 'Baselayers'
-        }
-      );
-    let group = new LayerGroup({
+    const l = new RasterLayer(
+      {
+        url: 'blabl',
+        name: 'name',
+        id: '5',
+        type: 'wms',
+        filtertype: 'Baselayers'
+      }
+    );
+    const group = new LayerGroup({
       id: 'g',
       name: 'Test',
       layers: [l],
       filtertype: 'Baselayers'
     });
-    return of([ group ]);
+    return of([group]);
   }
 }
 /**
  * stub for MapStateService
  */
-const mapStateSvcStub = {}
+const mapStateSvcStub = {};
 
 
 
 describe('BaseLayerControlComponent', () => {
   let component: BaseLayerControlComponent;
   let fixture: ComponentFixture<BaseLayerControlComponent>;
+  let layersSvc: LayersService;
+  let mapStateSvc: MapStateService;
 
   beforeEach(async(() => {
 
-    
+
     TestBed.configureTestingModule({
-      declarations: [ BaseLayerControlComponent, ReversePipe, MockLayerentryGroupComponent, MockLayerentryComponent ],
+      declarations: [BaseLayerControlComponent, ReversePipe, MockLayerentryGroupComponent, MockLayerentryComponent],
       providers: [
-        {provide: LayersService, useClass: MockLayersService},
-        {provide: MapStateService, useValue: mapStateSvcStub}
+        { provide: LayersService, useClass: MockLayersService },
+        MapStateService
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BaseLayerControlComponent);
     component = fixture.componentInstance;
+    layersSvc = new MockLayersService(); //TestBed.get(MockLayersService);
+    mapStateSvc = TestBed.get(MapStateService);
+
     // as we use directive @Input and do not inject the service, we need to instantiate a service here.
-    component.layersSvc = new MockLayersService();
-    //component.mapStateSvc = mapStateSvcStub;
+    component.layersSvc = layersSvc;
+    component.mapStateSvc = mapStateSvc;
     fixture.detectChanges();
   });
 
@@ -73,19 +78,27 @@ describe('BaseLayerControlComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have 1 children of ukis-layerentry-group', () =>{
+  it('should have input layersSvc', () => {
+    expect(component.layersSvc instanceof LayersService).toBeTruthy();
+  });
+
+  it('should have input mapStateSvc', () => {
+    expect(component.mapStateSvc instanceof MapStateService).toBeTruthy();
+  });
+
+  it('should have 1 children of ukis-layerentry-group', () => {
     fixture.detectChanges();
     const element = fixture.debugElement.nativeElement.querySelectorAll('ukis-layerentry-group');
     expect(element.length).toEqual(1);
-    
+
   });
 
-  it('should have 0 children of ukis-layerentry', () =>{
+  it('should have 0 children of ukis-layerentry', () => {
     fixture.detectChanges();
-    
+
     const element = fixture.debugElement.nativeElement.querySelectorAll('ukis-layerentry');
     expect(element.length).toEqual(0);
-    
+
   });
 });
 
@@ -94,18 +107,18 @@ describe('BaseLayerControlComponent', () => {
  * and give its selector
  */
 @Component({
-  selector: 'ukis-layerentry', 
+  selector: 'ukis-layerentry',
   template: ''
 })
-class MockLayerentryComponent{
+class MockLayerentryComponent {
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;
   @Input('layer') layer;
 
   @Input('group') group?;
   @Input('layerGroups') layerGroups?;
-  @Input('expanded') openProperties?: boolean = false;
-  @Input('expandable') expandable?: boolean = true;
+  @Input('expanded') openProperties = false;
+  @Input('expandable') expandable = true;
 }
 
 
@@ -114,10 +127,10 @@ class MockLayerentryComponent{
  * and give its selector
  */
 @Component({
-  selector: 'ukis-layerentry-group', 
+  selector: 'ukis-layerentry-group',
   template: ''
 })
-class MockLayerentryGroupComponent{
+class MockLayerentryGroupComponent {
 
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;

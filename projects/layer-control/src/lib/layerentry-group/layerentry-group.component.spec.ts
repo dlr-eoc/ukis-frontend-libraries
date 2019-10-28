@@ -43,7 +43,8 @@ describe('LayerentryGroupComponent', () => {
       layers: [layer]
 
     });
-
+    component.layersSvc = layersSvc;
+    component.mapState = mapStateSvc;
     component.layerGroups = [component.group];
     fixture.detectChanges();
   });
@@ -53,14 +54,10 @@ describe('LayerentryGroupComponent', () => {
   });
 
   it('should have input layersSvc', () => {
-    component.layersSvc = layersSvc;
-    fixture.detectChanges();
     expect(component.layersSvc instanceof LayersService).toBeTruthy();
   });
 
   it('should have input mapState', () => {
-    component.mapState = mapStateSvc;
-    fixture.detectChanges();
     expect(component.mapState instanceof MapStateService).toBeTruthy();
   });
 

@@ -16,25 +16,43 @@ import { ReversePipe } from '../array-reverse.pipe';
 describe('LayerControlComponent', () => {
   let component: LayerControlComponent;
   let fixture: ComponentFixture<LayerControlComponent>;
+  let layersSvc: LayersService;
+  let mapStateSvc: MapStateService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule, FormsModule],
       declarations: [LayerControlComponent, LayerentryGroupComponent, LayerentryComponent, ObjTypePipe, ReversePipe],
       providers: [LayersService, MapStateService]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LayerControlComponent);
     component = fixture.componentInstance;
-    component.layersSvc = new LayersService();
-    //component.layers = new LayersService();
+    layersSvc = TestBed.get(LayersService);
+    mapStateSvc = TestBed.get(MapStateService);
+
+    component.layersSvc = layersSvc;
+    component.mapStateSvc = mapStateSvc;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have input layersSvc', () => {
+    expect(component.layersSvc instanceof LayersService).toBeTruthy();
+  });
+
+  it('should have input mapStateSvc', () => {
+    expect(component.mapStateSvc instanceof MapStateService).toBeTruthy();
+  });
+
+  it('should have input layerfilter', () => {
+    component.layerfilter = 'Layers';
+    expect(component.layerfilter).toBe('Layers');
+  });
+
 });

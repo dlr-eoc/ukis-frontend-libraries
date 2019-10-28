@@ -15,7 +15,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 export class LayerControlComponent implements OnInit, OnDestroy {
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapStateSvc') mapStateSvc?: MapStateService;
-  @Input('layerfilter') layerfilter = 'Layers';
+  @Input('layerfilter') layerfilter: Layer['filtertype'] = 'Layers';
 
   layerGroupsSubscription: Subscription;
   layersSubscription: Subscription;
