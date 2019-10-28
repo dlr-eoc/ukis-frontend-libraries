@@ -937,7 +937,6 @@ export class MapOlService {
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
-    // var _extent = ol.extent.boundingExtent([destLoc,currentLoc]);
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
     const _fitOptions = {
@@ -948,6 +947,8 @@ export class MapOlService {
       Object.assign(_fitOptions, fitOptions);
     }
     this.map.getView().fit(transfomExtent, fitOptions);
+    this.map.getView().fit(transfomExtent);
+    console.log(this.map.getView());
     return transfomExtent;
   }
   /** ol.Coordinate xy */

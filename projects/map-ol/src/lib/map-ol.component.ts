@@ -14,9 +14,8 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import Attribution from 'ol/control/Attribution';
 import ScaleLine from 'ol/control/ScaleLine';
+import olZoomToExtent from 'ol/control/ZoomToExtent';
 import Zoom from 'ol/control/Zoom';
-import { group } from '@angular/animations';
-
 
 @Component({
   selector: 'ukis-map-ol',
@@ -63,11 +62,14 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
 
   ngOnInit() {
     this.initMap();
+    this.subscribeToLayers();
     this.mapStateSvc.setMapState(this.mapState);
   }
 
   ngAfterViewInit() {
     this.map.setTarget(this.mapDivView.nativeElement);
+    this.subscribeToMapState();
+    this.subscribeToMapEvents();
   }
 
   ngAfterViewChecked() {
@@ -135,7 +137,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
   }
 
 
-  private updateLayerParamsWith (oldLayer: olBaseLayer, newLayer: Layer): void {
+  private updateLayerParamsWith(oldLayer: olBaseLayer, newLayer: Layer): void {
     switch (newLayer.type) {
       case WmsLayertype:
         this.updateWmsLayerParamsWith(oldLayer, newLayer as RasterLayer);
@@ -148,7 +150,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     }
   }
 
-  private updateWmsLayerParamsWith (oldLayer: olBaseLayer, newWmsLayer: RasterLayer): void {
+  private updateWmsLayerParamsWith(oldLayer: olBaseLayer, newWmsLayer: RasterLayer): void {
     const source = oldLayer.getSource();
     const oldParams = source.getParams();
     const newParams = newWmsLayer.params;
@@ -158,13 +160,13 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     }
   }
 
-  private updateWmtsLayerParamsWith (oldLayer: olBaseLayer, newWmtsLayer: RasterLayer): void {
+  private updateWmtsLayerParamsWith(oldLayer: olBaseLayer, newWmtsLayer: RasterLayer): void {
     // contrary to a wms-source, a wmts-source has neither 'getParams' nor 'updateParams', so we need to do this manually.
     const source = oldLayer.getSource();
     if (source.getStyle() !== newWmtsLayer.params.style
-    || source.getFormat() !== newWmtsLayer.params.FORMAT
-    || source.getVersion() !== newWmtsLayer.params.VERSION
-    || source.getMatrixSet() !== newWmtsLayer.params.MatrixSet) {
+      || source.getFormat() !== newWmtsLayer.params.FORMAT
+      || source.getVersion() !== newWmtsLayer.params.VERSION
+      || source.getMatrixSet() !== newWmtsLayer.params.MatrixSet) {
       // WMTS dont allow easy reloading; see:
       // https://gis.stackexchange.com/questions/299554/openlayers-refresh-wmts-tiles-when-underlying-data-changes
       // Instead of reloading, we remove the old layer and add the new one.
@@ -181,23 +183,23 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     // If number of properties is different,
     // objects are not equivalent
     if (aProps.length !== bProps.length) {
-        return false;
+      return false;
     }
 
     for (let i = 0; i < aProps.length; i++) {
-        const propName = aProps[i];
+      const propName = aProps[i];
 
-        // If values of same property are not equal,
-        // objects are not equivalent
-        if (a[propName] !== b[propName]) {
-            return false;
-        }
+      // If values of same property are not equal,
+      // objects are not equivalent
+      if (a[propName] !== b[propName]) {
+        return false;
+      }
     }
 
     // If we made it this far, objects
     // are considered equivalent
     return true;
-}
+  }
 
   private addUpdateBaseLayers(layers) {
     /** if length of layers has changed add new layers */
@@ -258,7 +260,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
       this.subs.push(mapStateOn);
 
       const extentOn = this.mapStateSvc.getExtent().subscribe(extent => {
-        // console.log("new extent is: ", extent);
+        console.log("new extent is: ", extent);
         if (extent[0] && extent[1] && extent[2] && extent[3]) {
           this.mapSvc.setExtent([extent[0], extent[1], extent[2], extent[3]], true, { duration: 500 });
         }
@@ -299,6 +301,18 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     this.map = _ol.map; //
     this.view = _ol.view; //
 
+    this.addControls();
+    if (!this.layersSvc) {
+      console.log('there is no layersSvc as defined!');
+    }
+
+    if (!this.mapStateSvc) {
+      console.log('there is no mapStateSvc as defined!');
+    }
+  }
+
+  private addControls() {
+
     // add Control only if this functions is defined
     if (this.controls) {
       if (this.controls.attribution) {
@@ -317,19 +331,16 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
         this.map.addControl(zoomControl);
       }
     }
-    if (!this.layersSvc) {
-      console.log('there is no layersSvc as defined!');
-    }
 
-    if (!this.mapStateSvc) {
-      console.log('there is no mapStateSvc as defined!');
-    }
+    const _zoomCtrl = new olZoomToExtent({
+      extent: [
+        813079.7791264898, 5929220.284081122,
+        848966.9639063801, 5936863.986909639
+      ]
+    });
 
-    this.subscribeToLayers();
+    this.map.addControl(_zoomCtrl);
 
-    this.subscribeToMapState();
-
-    this.subscribeToMapEvents();
+    console.log(_zoomCtrl.getMap().getView());
   }
-
 }
