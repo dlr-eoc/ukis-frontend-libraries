@@ -38,7 +38,7 @@ export class WpsClient {
     constructor(
         @Inject('WpsVersion') version: WpsVerion = '1.0.0',
         private webclient: HttpClient,
-        private caching = false
+        @Inject('wpsCaching') private caching = false
     ) {
         this.cache = new Cache();
         this.version = version;
