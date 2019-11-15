@@ -331,16 +331,5 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
         this.map.addControl(zoomControl);
       }
     }
-
-    const _zoomCtrl = new olZoomToExtent({
-      extent: [
-        813079.7791264898, 5929220.284081122,
-        848966.9639063801, 5936863.986909639
-      ]
-    });
-
-    this.map.addControl(_zoomCtrl);
-
-    console.log(_zoomCtrl.getMap().getView());
   }
 }
