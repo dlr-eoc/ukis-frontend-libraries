@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, IRasterLayerOptions, ICustomLayerOptions, WmtsLayer, WmsLayer } from '@ukis/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer } from '@ukis/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -32,7 +32,6 @@ import olGeoJSON from 'ol/format/GeoJSON';
 import olProjection from 'ol/proj/Projection.js';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
-import { toSize as olToSize } from 'ol/size';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -935,7 +934,7 @@ export class MapOlService {
    * @param fitOptions 
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any) {
+  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
     const _fitOptions = {
