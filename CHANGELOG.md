@@ -1,4 +1,4 @@
-# [6.0.0]() () (Sprint Geoservice 2 and Sprint water system 1)
+# [6.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.0.0) (2019-11-19) (Sprint Geoservice 2 and Sprint water system 1)
 
 ### Changes
 * **@ukis/services-layers:** zIndex is removed (only used internal).
@@ -19,6 +19,7 @@
 * **@ukis/layer-control:** now allows switching between styles of a layer (if more than one style is present) ([22c49e96015](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/22c49e960158aa20e5058536e9bd41b49a7fd55e))
 * **@ukis/services-layers:** RasterLayer now has a property 'styles' to accommodate the above mentioned feature ([0e36a07f536](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/0e36a07f536c98e2c8d66cd5a3ec7729b0fb4a12))
 
+* **@ukis/map-ol:** update to openLayers 6.1.1
 * **@ukis/map-ol:** getFeaturesExtent add optional get extent geographic
 * **@ukis/map-ol:** Added a method getTileGrid ([b7ce28e5d1e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/b7ce28e5d1e48111e9cf797ffd3b898069afc63a))
 * **@ukis/map-ol:** Added a method 'setLayer', analogous to 'setLayers'  ([9c74273b78e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/9c74273b78e15c47326457fec4c51235cf146399))
