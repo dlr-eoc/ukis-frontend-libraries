@@ -2,7 +2,10 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/services-util-store",
   "lib": {
-    "entryFile": "src/public_api.ts"
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+      "md5": "md5"
+    }
   },
   "whitelistedNonPeerDependencies": [
     "tslib",
