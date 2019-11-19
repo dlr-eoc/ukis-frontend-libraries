@@ -1,5 +1,5 @@
 import { UtilStoreService } from '@ukis/services-util-store';
-import * as md5 from 'md5';
+import md5 from 'md5';
 
 export class Cache {
 
