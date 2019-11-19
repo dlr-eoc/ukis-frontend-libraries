@@ -7,9 +7,9 @@ import { FormsModule } from '@angular/forms';
 import { LayerControlComponent } from './layer-control/layer-control.component';
 import { LayerentryComponent } from './layerentry/layerentry.component';
 import { LayerentryGroupComponent } from './layerentry-group/layerentry-group.component';
-import { ObjTypePipe } from './obj-type.pipe';
-import { ReversePipe } from './array-reverse.pipe';
-import { reverseForOf } from './revers-loop.directive';
+import { ObjTypePipe } from './utils/obj-type.pipe';
+import { ReversePipe } from './utils/array-reverse.pipe';
+import { reverseForOf } from './utils/revers-loop.directive';
 
 
 import {DragDropModule} from '@angular/cdk/drag-drop';

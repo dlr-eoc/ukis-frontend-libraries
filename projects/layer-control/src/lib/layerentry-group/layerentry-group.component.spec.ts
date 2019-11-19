@@ -7,7 +7,7 @@ import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 import { Layer, LayerGroup, LayersService } from '@ukis/services-layers';
 
-import { ReversePipe } from '../array-reverse.pipe';
+import { ReversePipe } from '../utils/array-reverse.pipe';
 import { MapStateService } from '@ukis/services-map-state';
 
 describe('LayerentryGroupComponent', () => {

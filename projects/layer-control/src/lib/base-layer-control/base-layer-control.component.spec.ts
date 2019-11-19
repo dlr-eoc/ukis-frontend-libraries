@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BaseLayerControlComponent } from './base-layer-control.component';
-import { ReversePipe } from '../array-reverse.pipe';
+import { ReversePipe } from '../utils/array-reverse.pipe';
 import { LayersService } from '@ukis/services-layers';
 
 

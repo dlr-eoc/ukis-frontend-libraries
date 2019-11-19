@@ -8,10 +8,10 @@ import { LayerentryComponent } from '../layerentry/layerentry.component';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 //import { Layer, LayerGroup } from '@ukis/services-layers';
-import { ObjTypePipe } from '../obj-type.pipe'
+import { ObjTypePipe } from '../utils/obj-type.pipe'
 import { LayersService } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
-import { ReversePipe } from '../array-reverse.pipe';
+import { ReversePipe } from '../utils/array-reverse.pipe';
 
 describe('LayerControlComponent', () => {
   let component: LayerControlComponent;
