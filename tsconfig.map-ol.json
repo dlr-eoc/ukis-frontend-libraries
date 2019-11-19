@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "paths": {
+        "ol": [
+          "node_modules/ol/src"
+        ],
+        "ol/*": [
+          "node_modules/ol/src/*"
+        ]
+      },
+      "allowJs": true,
+      "checkJs": true
+    },
+    "exclude": [
+      "projects/**/src/test.ts",
+      "projects/**/src/**/*.spec.ts"
+    ],
+    "include": [
+      "projects/**/src/*.ts",
+      "node_modules/ol/**/*.js"
+    ]
+  }

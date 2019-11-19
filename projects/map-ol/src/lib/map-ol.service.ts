@@ -6,7 +6,7 @@ import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, IRasterLayerOption
 import olMap from 'ol/Map';
 import olView from 'ol/View';
 
-import olBaseLayer from 'ol/layer/Base';
+import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
 
@@ -35,7 +35,6 @@ import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, g
 import { toSize as olToSize } from 'ol/size';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
-import olCoordinate from 'ol/coordinate';
 
 
 import olStyle from 'ol/style/Style';
@@ -62,7 +61,7 @@ export class MapOlService {
   public EPSG: string;
   private hitTolerance = 0;
   constructor() {
-    this.map = new olMap();
+    this.map = new olMap({});
     this.view = new olView();
     this.temp = {};
     this.EPSG = 'EPSG:3857'; // 'EPSG:4326'; EPSG:3857
@@ -146,7 +145,7 @@ export class MapOlService {
     this.map.addInteraction(dragBox);
   }
 
-  public getLayers(type: 'baselayers' | 'layers' | 'overlays'): olBaseLayer[] {
+  public getLayers(type: 'baselayers' | 'layers' | 'overlays'): olLayer<any>[] {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -167,7 +166,7 @@ export class MapOlService {
     return _layer;
   }
 
-  public addLayer(layer: olBaseLayer, type: 'baselayers' | 'layers' | 'overlays') {
+  public addLayer(layer: olLayer<any>, type: 'baselayers' | 'layers' | 'overlays') {
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -179,7 +178,7 @@ export class MapOlService {
     return layers;
   }
 
-  public addLayers(layers: olBaseLayer[], type: 'baselayers' | 'layers' | 'overlays') {
+  public addLayers(layers: olLayer<any>[], type: 'baselayers' | 'layers' | 'overlays') {
     let _layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === type) {
@@ -212,7 +211,7 @@ export class MapOlService {
    * can we deep check if a layer is exactly the same and dont create it new???
    */
   public setLayers(layers: Array<Layer>, type: 'baselayers' | 'layers' | 'overlays') {
-    const _oldLayers: olBaseLayer[] = this.getLayers(type);
+    const _oldLayers: olLayer<any>[] = this.getLayers(type);
     const __layers = <any>[];
     const _layers = this.sortOldAndNewLayers(_oldLayers, layers);
     // TODO try to deep check if a layer if exactly the same and dont create it new
@@ -253,7 +252,7 @@ export class MapOlService {
   }
 
   public setLayer(newLayer: Layer, type: 'baselayers' | 'layers' | 'overlays'): void {
-    const oldLayers: olBaseLayer[] = this.getLayers(type);
+    const oldLayers: olLayer<any>[] = this.getLayers(type);
     const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
     let newOlLayer;
     switch (newLayer.type) {
@@ -277,7 +276,7 @@ export class MapOlService {
     this.addLayer(newOlLayer, type);
   }
 
-  sortOldAndNewLayers(oldlayers: olBaseLayer[], newlayers: Layer[]): { oldlayer: olBaseLayer | null, newlayer: Layer }[] {
+  sortOldAndNewLayers(oldlayers: olLayer<any>[], newlayers: Layer[]): { oldlayer: olLayer<any> | null, newlayer: Layer }[] {
     const _layers = newlayers.map((layer) => {
       return {
         oldlayer: oldlayers.filter(_layer => _layer.get('id') === layer.id)[0],
@@ -290,7 +289,7 @@ export class MapOlService {
   /**
    * define layer types
    */
-  private create_xyz_layer(l: RasterLayer, oldlayer?: olBaseLayer): olTileLayer {
+  private create_xyz_layer(l: RasterLayer, oldlayer?: olLayer<any>): olTileLayer {
     const xyz_options: any = {
       wrapX: false
     };
@@ -339,7 +338,7 @@ export class MapOlService {
     return new olTileLayer(_layeroptions);
   }
 
-  private create_wms_layer(l: WmsLayer, oldlayer?: olBaseLayer): olTileLayer {
+  private create_wms_layer(l: WmsLayer, oldlayer?: olLayer<any>): olTileLayer {
 
     const tile_options: any = {
       params: l.params,
@@ -399,7 +398,7 @@ export class MapOlService {
     return newlayer;
   }
 
-  private create_wmts_layer(l: WmtsLayer, oldlayer?: olBaseLayer): olTileLayer {
+  private create_wmts_layer(l: WmtsLayer, oldlayer?: olLayer<any>): olTileLayer {
     if (l instanceof WmtsLayer) {
 
       let tileGrid = this.getTileGrid('wmts');
@@ -480,7 +479,7 @@ export class MapOlService {
   }
 
 
-  private create_geojson_layer(l: VectorLayer, oldlayer?: olBaseLayer) {
+  private create_geojson_layer(l: VectorLayer, oldlayer?: olLayer<any>) {
     let _source;
     if (l.data) {
       _source = new olVectorSource({
@@ -562,7 +561,7 @@ export class MapOlService {
     return new olVectorLayer(_layeroptions);
   }
 
-  private create_custom_layer(l: CustomLayer, oldlayer?: olBaseLayer) {
+  private create_custom_layer(l: CustomLayer, oldlayer?: olLayer<any>) {
     if (l.custom_layer) {
       const layer = l.custom_layer;
 
@@ -676,7 +675,7 @@ export class MapOlService {
     }, {
       layerFilter: (layer: olVectorLayer) => {
         if (layer instanceof olVectorLayer) {
-          const _source: olCluster | olVectorSource = layer.getSource();
+          const _source: olCluster | olVectorSource<any> = layer.getSource();
           if (_source instanceof olCluster) {
             return (_source as any).getSource() instanceof olVectorSource;
           } else {
@@ -936,7 +935,7 @@ export class MapOlService {
    * @param fitOptions 
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
+  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any) {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
     const _fitOptions = {
@@ -949,10 +948,10 @@ export class MapOlService {
     this.map.getView().fit(transfomExtent, fitOptions);
     this.map.getView().fit(transfomExtent);
     console.log(this.map.getView());
-    return transfomExtent;
+    return (transfomExtent as TGeoExtent);
   }
   /** ol.Coordinate xy */
-  public setCenter(center: olCoordinate, geographic?: boolean) {
+  public setCenter(center: number[], geographic?: boolean) {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
     // console.log('set center in svc', transfomCenter)
@@ -978,7 +977,7 @@ export class MapOlService {
    * @param geographic: boolean
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  public getFeaturesExtent(features: olFeature[], geographic?: boolean): TGeoExtent {
+  public getFeaturesExtent(features: olFeature<any>[], geographic?: boolean): TGeoExtent {
     const extent: any = features[0].getGeometry().getExtent().slice(0);
     features.forEach((feature) => {
       olExtend(extent, feature.getGeometry().getExtent());
@@ -986,7 +985,7 @@ export class MapOlService {
     if (geographic) {
       const projection = getProjection('EPSG:4326')
       const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
-      return transfomExtent;
+      return (transfomExtent as TGeoExtent);
     } else {
       return extent;
     }
@@ -1000,7 +999,7 @@ export class MapOlService {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
     const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
-    return transfomExtent;
+    return (transfomExtent as TGeoExtent);
   }
 
   public setZoom(zoom: number, notifier?: 'map' | 'user') {
@@ -1015,43 +1014,36 @@ export class MapOlService {
       // upon it
       return;
     }
-    let delta = 1, newResolution, duration = 250;
-    const currentResolution = view.getResolution();
-    if (currentResolution) {
-      newResolution = view.constrainResolution(currentResolution, delta);
-      if (value === '+') {
-        newResolution = view.constrainResolution(currentResolution, delta);
-      }
-      if (value === '-') {
-        newResolution = view.constrainResolution(currentResolution, -delta);
-      }
-
+    const delta = 1, duration = 250;
+    const currentZoom = view.getZoom();
+    if (currentZoom !== undefined) {
+      const newZoom = view.getConstrainedZoom(currentZoom + delta);
       if (duration > 0) {
         if (view.getAnimating()) {
           view.cancelAnimations();
         }
         view.animate({
-          resolution: newResolution,
+          zoom: newZoom,
           duration: duration,
           easing: easeOut
         });
       } else {
-        view.setResolution(newResolution);
+        view.setZoom(newZoom);
       }
     }
   }
 
-  public geoJsonToFeature(geojson: any): olFeature {
+  public geoJsonToFeature(geojson: any): olFeature<any> {
     const GEOJSON = new olGeoJSON({
-      defaultDataProjection: 'EPSG:4326',
+      dataProjection: 'EPSG:4326',
       featureProjection: this.EPSG
     });
     return GEOJSON.readFeature(geojson);
   }
 
-  public geoJsonToFeatures(geojson: any): Array<olFeature> {
+  public geoJsonToFeatures(geojson: any): Array<olFeature<any>> {
     const GEOJSON = new olGeoJSON({
-      defaultDataProjection: 'EPSG:4326',
+      dataProjection: 'EPSG:4326',
       featureProjection: this.EPSG
     });
     return GEOJSON.readFeatures(geojson);

@@ -1,21 +1,44 @@
-import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterViewChecked, AfterContentChecked, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterViewChecked, AfterContentChecked, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 
-import olBaseLayer from 'ol/layer/Base';
-import olLayerGroup from 'ol/layer/Group';
-import olOverlay from 'ol/Overlay';
+
+
 
 import { MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MapOlService } from './map-ol.service';
-import { LayersService, isRasterLayertype, RasterLayer, WmtsLayertype, Layer, WmsLayertype } from '@ukis/services-layers';
+import { LayersService, RasterLayer, WmtsLayertype, Layer, WmsLayertype } from '@ukis/services-layers';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
+
+import olLayer from 'ol/layer/Layer';
+
 import Attribution from 'ol/control/Attribution';
 import ScaleLine from 'ol/control/ScaleLine';
-import olZoomToExtent from 'ol/control/ZoomToExtent';
 import Zoom from 'ol/control/Zoom';
+
+import olMousePosition from 'ol/control/MousePosition';
+import { toStringXY } from 'ol/coordinate';
+
+import olFullScreen from 'ol/control/FullScreen';
+
+import olOverviewMap from 'ol/control/OverviewMap';
+import olTileLayer from 'ol/layer/Tile';
+import olOSM from 'ol/source/OSM';
+
+import olRotate from 'ol/control/Rotate';
+
+export interface IMapControls {
+  attribution?: boolean;
+  scaleLine?: boolean;
+  zoom?: boolean;
+  crosshair?: boolean;
+  fullScreen?: boolean;
+  mousePosition?: boolean;
+  overviewMap?: boolean;
+  rotate?: boolean;
+}
 
 @Component({
   selector: 'ukis-map-ol',
@@ -23,17 +46,15 @@ import Zoom from 'ol/control/Zoom';
   styleUrls: ['./map-ol.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, AfterContentChecked, AfterViewInit {
+export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   @ViewChild('mapDiv', { static: false }) mapDivView: ElementRef;
 
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapStateSvc: MapStateService;
-  @Input('controls') controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
+  @Input('controls') controls: IMapControls;
 
   map: Map;
   view: View;
-
-  viewSubj = new BehaviorSubject(this.view);
 
   zoom: number; // default value
   center: any; // default value
@@ -44,28 +65,39 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
   mapOnMoveend;
   mapOnClick;
   mapOnDclick;
-  constructor(
-    @Inject(MapOlService) private mapSvc: MapOlService
-  ) {
+
+  private _mapwidth = 0;
+  private get mapwidth() {
+    return this._mapwidth;
+  }
+
+  private set mapwidth(width) {
+    this._mapwidth = width;
+    this.map.updateSize();
+  }
+
+  constructor(private mapSvc: MapOlService, private ngZone: NgZone) {
     this.zoom = 3;
     this.center = {
       lat: 0,
       lon: 0
     };
-    // console.log(this.mapSvc)
     const ms = new MapState(this.zoom, this.center);
     this.mapState = ms;
-    /// define initial center and zoom
-    // this.initMap();
-
   }
-
+  /**
+   * - subscribe to layers oninit so they get pulled after view init
+   */
   ngOnInit() {
     this.initMap();
     this.subscribeToLayers();
     this.mapStateSvc.setMapState(this.mapState);
   }
 
+  /**
+   * - set target of ol map after angular has rendered the element
+   * - then subscribe to map events
+   */
   ngAfterViewInit() {
     this.map.setTarget(this.mapDivView.nativeElement);
     this.subscribeToMapState();
@@ -73,12 +105,20 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
   }
 
   ngAfterViewChecked() {
-    //this.map.updateSize();
-  }
-
-  /** update map size on re scaling */
-  ngAfterContentChecked() {
-    this.map.updateSize();
+    /**
+     * - compare map size to update Map Size on container resize
+     * - set Timeout to also resize map on route change
+     */
+    if (this.mapDivView) {
+      const mapWidth = this.mapDivView.nativeElement.offsetWidth;
+      if (mapWidth !== this.mapwidth) {
+        this.ngZone.runOutsideAngular(() => {
+          setTimeout(() => {
+            this.mapwidth = mapWidth;
+          }, 100);
+        });
+      }
+    }
   }
 
   ngOnDestroy() {
@@ -137,7 +177,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
   }
 
 
-  private updateLayerParamsWith(oldLayer: olBaseLayer, newLayer: Layer): void {
+  private updateLayerParamsWith(oldLayer: olLayer<any>, newLayer: Layer): void {
     switch (newLayer.type) {
       case WmsLayertype:
         this.updateWmsLayerParamsWith(oldLayer, newLayer as RasterLayer);
@@ -150,7 +190,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     }
   }
 
-  private updateWmsLayerParamsWith(oldLayer: olBaseLayer, newWmsLayer: RasterLayer): void {
+  private updateWmsLayerParamsWith(oldLayer: olLayer<any>, newWmsLayer: RasterLayer): void {
     const source = oldLayer.getSource();
     const oldParams = source.getParams();
     const newParams = newWmsLayer.params;
@@ -160,7 +200,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     }
   }
 
-  private updateWmtsLayerParamsWith(oldLayer: olBaseLayer, newWmtsLayer: RasterLayer): void {
+  private updateWmtsLayerParamsWith(oldLayer: olLayer<any>, newWmtsLayer: RasterLayer): void {
     // contrary to a wms-source, a wmts-source has neither 'getParams' nor 'updateParams', so we need to do this manually.
     const source = oldLayer.getSource();
     if (source.getStyle() !== newWmtsLayer.params.style
@@ -301,7 +341,7 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     this.map = _ol.map; //
     this.view = _ol.view; //
 
-    this.addControls();
+    this.setControls();
     if (!this.layersSvc) {
       console.log('there is no layersSvc as defined!');
     }
@@ -311,13 +351,12 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
     }
   }
 
-  private addControls() {
-
+  private setControls() {
     // add Control only if this functions is defined
-    if (this.controls) {
+    if (this.controls && this.map) {
       if (this.controls.attribution) {
         const attribution = new Attribution({
-          // collapsible: false,
+          collapsible: true,
           collapsed: false
         });
         this.map.addControl(attribution);
@@ -329,6 +368,32 @@ export class MapOlComponent implements OnInit, OnDestroy, AfterViewChecked, Afte
       if (this.controls.zoom) {
         const zoomControl = new Zoom();
         this.map.addControl(zoomControl);
+      }
+      if (this.controls.mousePosition) {
+        const mousePosition = new olMousePosition({
+          coordinateFormat: coordinate => {
+            return toStringXY(coordinate, 2);
+          },
+          projection: 'EPSG:4326'
+        });
+        this.map.addControl(mousePosition);
+      }
+      if (this.controls.fullScreen) {
+        const fullScreen = new olFullScreen();
+        this.map.addControl(fullScreen);
+      }
+      if (this.controls.overviewMap) {
+        const overviewMap = new olOverviewMap({
+          layers: [new olTileLayer({
+            source: new olOSM()
+          })],
+          label: '\uD83C\uDF10'
+        });
+        this.map.addControl(overviewMap);
+      }
+      if (this.controls.rotate) {
+        const rotate = new olRotate();
+        this.map.addControl(rotate);
       }
     }
   }
