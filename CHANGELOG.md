@@ -1,3 +1,10 @@
+### Bug Fixes
+* **@ukis/services-layers:** adjust types
+* **@ukis/map-ol:** add more types from openlayers
+* **@ukis/map-ol:** set all olView options on MapOlService.createMap
+* **@ukis/map-navigator:** set precision also on zoom and remove duplicate projection in dropdown
+
+
 # [6.0.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.0.0) (2019-11-19) (Sprint Geoservice 2 and Sprint water system 1)
 
 ### Changes
