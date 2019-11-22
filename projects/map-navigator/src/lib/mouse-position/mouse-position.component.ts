@@ -26,11 +26,18 @@ export class MousePositionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.mapProjection = this.mapSvc.getProjection();
-    console.log(this.mapProjection);
-    this.projections = [
-      { title: 'EPSG:4326', value: 'EPSG:4326', },
-      { title: this.mapProjection.getCode(), value: this.mapProjection.getCode() }
-    ];
+    const mapEPSG = this.mapProjection.getCode();
+
+    if (mapEPSG === 'EPSG:4326') {
+      this.projections = [
+        { title: this.mapProjection.getCode(), value: this.mapProjection.getCode() }
+      ];
+    } else {
+      this.projections = [
+        { title: 'EPSG:4326', value: 'EPSG:4326' },
+        { title: this.mapProjection.getCode(), value: this.mapProjection.getCode() }
+      ];
+    }
 
     this.selectedProjection = this.projections[0].value;
     this.mapSvc.map.on('pointermove', this.mapMoveSubscription);
@@ -51,7 +58,7 @@ export class MousePositionComponent implements OnInit, OnDestroy {
   mapOnMoveend = (evt) => {
     const newZoom = evt.map.getView().getZoom();
     if (this.zoom != newZoom) {
-      console.log('zoom end, new zoom: ' + newZoom);
+      // console.log('zoom end, new zoom: ' + newZoom);
       this.zoom = newZoom;
     }
   }
