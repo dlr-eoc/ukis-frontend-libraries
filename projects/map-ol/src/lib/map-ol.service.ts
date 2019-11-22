@@ -939,7 +939,7 @@ export class MapOlService {
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
     const _fitOptions = {
       size: this.map.getSize(),
-      padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
+      // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
     };
     if (fitOptions) {
       Object.assign(_fitOptions, fitOptions);
