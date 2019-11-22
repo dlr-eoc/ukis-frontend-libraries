@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer } from '@ukis/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, IWmsParams, IWmtsParams } from '@ukis/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -18,6 +18,7 @@ import olVectorTileLayer from 'ol/layer/VectorTile';
 
 import olXYZ from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
+import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
 import olWMTS from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
@@ -408,7 +409,7 @@ export class MapOlService {
 
   private create_wms_layer(l: WmsLayer, oldlayer?: olLayer<any>): olTileLayer {
 
-    const tile_options: any = {
+    const tile_options: olTileWMSOptions = {
       params: l.params,
       wrapX: false
     };
@@ -1142,11 +1143,14 @@ export class MapOlService {
     }
   }
 
-  private keysToUppercase(obj: Object) {
-    const newObj = {};
-    for (const key in obj) {
-      newObj[key.toUpperCase()] = obj[key];
-    }
-    return newObj;
+  private keysToUppercase<T>(obj: Object) {
+    Object.keys(obj).forEach((key) => {
+      const k = key.toUpperCase();
+      if (k !== key) {
+        obj[k] = obj[key];
+        delete obj[key];
+      }
+    });
+    return <T>obj;
   }
 }
