@@ -17,13 +17,16 @@ import olImageLayer from 'ol/layer/Image';
 import olVectorTileLayer from 'ol/layer/VectorTile';
 
 import olXYZ from 'ol/source/XYZ';
+import { Options as olXYZOptions } from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
 import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
 import olWMTS from 'ol/source/WMTS';
+import { Options as olWMTSOptions } from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olVectorSource from 'ol/source/Vector';
 import olTileJSON from 'ol/source/TileJSON';
+import { Options as olTileJSONOptions } from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
 // import ImageWMS from 'ol/source/ImageWMS';
 // import VectorTileSource from 'ol/source/VectorTile';
@@ -280,43 +283,41 @@ export class MapOlService {
    * can we deep check if a layer is exactly the same and dont create it new???
    */
   public setLayers(layers: Array<Layer>, type: 'baselayers' | 'layers' | 'overlays') {
-    const _oldLayers: olLayer<any>[] = this.getLayers(type);
-    const __layers = <any>[];
-    const _layers = this.sortOldAndNewLayers(_oldLayers, layers);
+    const _layers = <any>[];
     // TODO try to deep check if a layer if exactly the same and dont create it new
-    if (_layers.length < 1 && type !== 'baselayers') {
+    if (layers.length < 1 && type !== 'baselayers') {
       // this.removeAllLayers('overlays');
       // this.removeAllLayers('layers');
       this.removeAllLayers(type);
     } else {
-      _layers.forEach((item) => {
+      layers.forEach((layer) => {
         let _layer;
-        switch (item.newlayer.type) {
+        switch (layer.type) {
           case 'xyz':
-            _layer = this.create_xyz_layer(<RasterLayer>item.newlayer, item.oldlayer);
+            _layer = this.create_xyz_layer(<RasterLayer>layer);
             break;
           case 'wms':
-            _layer = this.create_wms_layer(<WmsLayer>item.newlayer, item.oldlayer);
+            _layer = this.create_wms_layer(<WmsLayer>layer);
             break;
           case 'wmts':
-            _layer = this.create_wmts_layer(<WmtsLayer>item.newlayer, item.oldlayer);
+            _layer = this.create_wmts_layer(<WmtsLayer>layer);
             break;
           case 'geojson':
-            _layer = this.create_geojson_layer(<VectorLayer>item.newlayer, item.oldlayer);
+            _layer = this.create_geojson_layer(<VectorLayer>layer);
             break;
           case 'custom':
-            _layer = this.create_custom_layer(<CustomLayer>item.newlayer, item.oldlayer);
+            _layer = this.create_custom_layer(<CustomLayer>layer);
             break;
         }
         // check if layer not undefined
         if (_layer) {
-          __layers.push(_layer);
+          _layers.push(_layer);
         }
       });
     }
 
-    if (__layers.length > 0) {
-      this.addLayers(__layers, type);
+    if (_layers.length > 0) {
+      this.addLayers(_layers, type);
     }
   }
 
@@ -326,40 +327,30 @@ export class MapOlService {
     let newOlLayer;
     switch (newLayer.type) {
       case 'xyz':
-        newOlLayer = this.create_xyz_layer(<RasterLayer>newLayer, oldLayer);
+        newOlLayer = this.create_xyz_layer(<RasterLayer>newLayer);
         break;
       case 'wms':
-        newOlLayer = this.create_wms_layer(<WmsLayer>newLayer, oldLayer);
+        newOlLayer = this.create_wms_layer(<WmsLayer>newLayer);
         break;
       case 'wmts':
-        newOlLayer = this.create_wmts_layer(<WmtsLayer>newLayer, oldLayer);
+        newOlLayer = this.create_wmts_layer(<WmtsLayer>newLayer);
         break;
       case 'geojson':
-        newOlLayer = this.create_geojson_layer(<VectorLayer>newLayer, oldLayer);
+        newOlLayer = this.create_geojson_layer(<VectorLayer>newLayer);
         break;
       case 'custom':
-        newOlLayer = this.create_custom_layer(<CustomLayer>newLayer, oldLayer);
+        newOlLayer = this.create_custom_layer(<CustomLayer>newLayer);
         break;
     }
     this.removeLayerByKey({ key: 'id', value: oldLayer.get('id') }, type);
     this.addLayer(newOlLayer, type);
   }
 
-  sortOldAndNewLayers(oldlayers: olLayer<any>[], newlayers: Layer[]): { oldlayer: olLayer<any> | null, newlayer: Layer }[] {
-    const _layers = newlayers.map((layer) => {
-      return {
-        oldlayer: oldlayers.filter(_layer => _layer.get('id') === layer.id)[0],
-        newlayer: layer
-      };
-    });
-    return _layers;
-  }
-
   /**
    * define layer types
    */
-  private create_xyz_layer(l: RasterLayer, oldlayer?: olLayer<any>): olTileLayer {
-    const xyz_options: any = {
+  private create_xyz_layer(l: RasterLayer): olTileLayer {
+    const xyz_options: olXYZOptions = {
       wrapX: false
     };
 
@@ -407,7 +398,7 @@ export class MapOlService {
     return new olTileLayer(_layeroptions);
   }
 
-  private create_wms_layer(l: WmsLayer, oldlayer?: olLayer<any>): olTileLayer {
+  private create_wms_layer(l: WmsLayer): olTileLayer {
 
     const tile_options: olTileWMSOptions = {
       params: l.params,
@@ -467,7 +458,7 @@ export class MapOlService {
     return newlayer;
   }
 
-  private create_wmts_layer(l: WmtsLayer, oldlayer?: olLayer<any>): olTileLayer {
+  private create_wmts_layer(l: WmtsLayer): olTileLayer {
     if (l instanceof WmtsLayer) {
 
       let tileGrid = this.getTileGrid('wmts');
@@ -488,7 +479,7 @@ export class MapOlService {
         }
       }
 
-      let wmts_options: any = {
+      let wmts_options: olWMTSOptions = {
         url: l.url,
         tileGrid: tileGrid,
         matrixSet: _matrixSet,
@@ -548,7 +539,7 @@ export class MapOlService {
   }
 
 
-  private create_geojson_layer(l: VectorLayer, oldlayer?: olLayer<any>) {
+  private create_geojson_layer(l: VectorLayer) {
     let _source;
     if (l.data) {
       _source = new olVectorSource({
@@ -630,9 +621,9 @@ export class MapOlService {
     return new olVectorLayer(_layeroptions);
   }
 
-  private create_custom_layer(l: CustomLayer, oldlayer?: olLayer<any>) {
+  private create_custom_layer(l: CustomLayer) {
     if (l.custom_layer) {
-      const layer = l.custom_layer;
+      const layer = (l.custom_layer as olLayer);
 
       const _source = layer.getSource();
       _source.set('wrapX', false);
