@@ -300,7 +300,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       this.subs.push(mapStateOn);
 
       const extentOn = this.mapStateSvc.getExtent().subscribe(extent => {
-        console.log("new extent is: ", extent);
+        // console.log("new extent is: ", extent);
         if (extent[0] && extent[1] && extent[2] && extent[3]) {
           this.mapSvc.setExtent([extent[0], extent[1], extent[2], extent[3]], true, { duration: 500 });
         }
