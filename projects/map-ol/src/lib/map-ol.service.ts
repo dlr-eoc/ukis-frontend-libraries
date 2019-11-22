@@ -103,24 +103,24 @@ export class MapOlService {
       projection: getProjection(this.EPSG)
     };
 
-    if (this.view.constrainRotation) {
-      this.viewOptions.constrainRotation = this.view.constrainRotation;
+    if (this.view['constrainRotation']) {
+      this.viewOptions.constrainRotation = this.view['constrainRotation'];
     }
 
-    if (this.view.enableRotation) {
-      this.viewOptions.enableRotation = this.view.enableRotation;
+    if (this.view['enableRotation']) {
+      this.viewOptions.enableRotation = this.view['enableRotation'];
     }
 
-    if (this.view.extent) {
-      this.viewOptions.extent = this.view.extent;
+    if (this.view['extent']) {
+      this.viewOptions.extent = this.view['extent'];
     }
 
-    if (this.view.constrainOnlyCenter) {
-      this.viewOptions.constrainOnlyCenter = this.view.constrainOnlyCenter;
+    if (this.view['constrainOnlyCenter']) {
+      this.viewOptions.constrainOnlyCenter = this.view['constrainOnlyCenter'];
     }
 
-    if (this.view.smoothExtentConstraint) {
-      this.viewOptions.smoothExtentConstraint = this.view.smoothExtentConstraint;
+    if (this.view['smoothExtentConstraint']) {
+      this.viewOptions.smoothExtentConstraint = this.view['smoothExtentConstraint'];
     }
 
     if (this.view.getMaxResolution()) {
@@ -139,16 +139,16 @@ export class MapOlService {
       this.viewOptions.minZoom = this.view.getMinZoom();
     }
 
-    if (this.view.multiWorld) {
-      this.viewOptions.multiWorld = this.view.multiWorld;
+    if (this.view['multiWorld']) {
+      this.viewOptions.multiWorld = this.view['multiWorld'];
     }
 
-    if (this.view.constrainResolution) {
-      this.viewOptions.constrainResolution = this.view.constrainResolution;
+    if (this.view['constrainResolution']) {
+      this.viewOptions.constrainResolution = this.view['constrainResolution'];
     }
 
-    if (this.view.smoothResolutionConstraint) {
-      this.viewOptions.smoothResolutionConstraint = this.view.smoothResolutionConstraint;
+    if (this.view['smoothResolutionConstraint']) {
+      this.viewOptions.smoothResolutionConstraint = this.view['smoothResolutionConstraint'];
     }
 
     if (this.view.getResolution()) {
@@ -159,12 +159,12 @@ export class MapOlService {
       this.viewOptions.resolutions = this.view.getResolutions();
     }
 
-    if (this.view.rotation) {
-      this.viewOptions.rotation = this.view.rotation;
+    if (this.view['rotation']) {
+      this.viewOptions.rotation = this.view['rotation'];
     }
 
-    if (this.view.zoomFactor) {
-      this.viewOptions.zoomFactor = this.view.zoomFactor;
+    if (this.view['zoomFactor']) {
+      this.viewOptions.zoomFactor = this.view['zoomFactor'];
     }
     const _view = new olView(this.viewOptions);
 
@@ -1014,29 +1014,22 @@ export class MapOlService {
       Object.assign(_fitOptions, fitOptions);
     }
     this.map.getView().fit(transfomExtent, fitOptions);
-    this.map.getView().fit(transfomExtent);
-    console.log(this.map.getView());
     return (transfomExtent as TGeoExtent);
   }
   /** ol.Coordinate xy */
-  public setCenter(center: number[], geographic?: boolean) {
+  public setCenter(center: number[], geographic?: boolean): number[] {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
     // console.log('set center in svc', transfomCenter)
     // console.log(this.map.getView().getCenter())
     this.map.getView().setCenter(transfomCenter);
+    return transfomCenter;
   }
 
   public getCenter(geographic?: boolean): any {
     const dstProjection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const srcProjection = getProjection(this.map.getView().getProjection().getCode());
-
     const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
-    // console.log('set center in svc', transfomCenter)
-    // console.log(this.map.getView().getCenter())
-    // console.log(transfomCenter)
-    // console.log(srcProjection)
-    // console.log(dstProjection)
     return transfomCenter;
   }
   /**
