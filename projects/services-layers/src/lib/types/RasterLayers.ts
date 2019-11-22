@@ -1,4 +1,4 @@
-import { Layer, RasterLayer, IRasterLayerOptions } from './Layers';
+import { Layer, RasterLayer, IRasterLayerOptions, IRasterLayerParams } from './Layers';
 /**
  * The following classes try to incorporate any information that map-libraries (ol, mapbox, leaflet) might need to display raster-layers.
  * Like Layers.ts, these classes are intended as an abstraction over all map-libraries. 
@@ -75,7 +75,7 @@ export class WmsLayer extends RasterLayer implements IWmsOptions {
     }
 }
 
-export interface IWmsParams {
+export interface IWmsParams extends IRasterLayerParams {
     LAYERS: string;
     FORMAT?: string;
     TIME?: string;
