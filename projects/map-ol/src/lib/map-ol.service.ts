@@ -407,7 +407,7 @@ export class MapOlService {
 
     if (l.tileSize) {
       // console.log(l.tileSize)
-      tile_options['tileGrid'] = this.getTileGrid('default', null, l.tileSize);
+      tile_options['tileGrid'] = this.getTileGrid<olTileGrid>('default', null, l.tileSize);
       delete tile_options.params['tileSize'];
     }
 
@@ -461,21 +461,21 @@ export class MapOlService {
   private create_wmts_layer(l: WmtsLayer): olTileLayer {
     if (l instanceof WmtsLayer) {
 
-      let tileGrid = this.getTileGrid('wmts');
+      let tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts');
       let _matrixSet = this.EPSG;
       if (l.params.matrixSetOptions) {
         _matrixSet = l.params.matrixSetOptions.matrixSet;
         if ('resolutions' in l.params.matrixSetOptions) {
           const _resolutions: Array<string | number> = l.params.matrixSetOptions.resolutions;
-          tileGrid = this.getTileGrid('wmts', null, l.tileSize, null, _resolutions);
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', null, l.tileSize, null, _resolutions);
         } else if ('resolutionLevels' in l.params.matrixSetOptions || 'tileMatrixPrefix' in l.params.matrixSetOptions) { /** ISimpleMatrixSet */
           const _resolutionLevels = l.params.matrixSetOptions.resolutionLevels;
           const _tileMatrixPrefix = l.params.matrixSetOptions.tileMatrixPrefix;
-          tileGrid = this.getTileGrid('wmts', _resolutionLevels, l.tileSize, _tileMatrixPrefix, null);
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', _resolutionLevels, l.tileSize, _tileMatrixPrefix, null);
         }
         if ('matrixIds' in l.params.matrixSetOptions) {
           const _matrixIds = l.params.matrixSetOptions.matrixIds;
-          tileGrid = this.getTileGrid('wmts', null, l.tileSize, null, null, _matrixIds);
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', null, l.tileSize, null, null, _matrixIds);
         }
       }
 
@@ -483,10 +483,11 @@ export class MapOlService {
         url: l.url,
         tileGrid: tileGrid,
         matrixSet: _matrixSet,
-        'wrapX': false
+        'wrapX': false,
+        layer: l.params.layer,
+        style: l.params.style
       };
       wmts_options = Object.assign(wmts_options, l.params);
-
 
 
       if (l.crossOrigin) {
@@ -623,7 +624,7 @@ export class MapOlService {
 
   private create_custom_layer(l: CustomLayer) {
     if (l.custom_layer) {
-      const layer = (l.custom_layer as olLayer);
+      const layer = (l.custom_layer as olLayer<any>);
 
       const _source = layer.getSource();
       _source.set('wrapX', false);
@@ -697,7 +698,7 @@ export class MapOlService {
     });
   }
 
-  public getTileGrid(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>) {
+  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>): T {
     const _resolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
     const _tileSize = tileSize || DEFAULT_TILE_SIZE;
     const _matrixIdPrefix = matrixIdPrefix || '';
@@ -716,9 +717,11 @@ export class MapOlService {
 
     if (type === 'wmts') {
       tileGridOptions.matrixIds = matrixIds || defaultMatrixIds;
-      return new olWMTSTileGrid(tileGridOptions);
+      const grid = new olWMTSTileGrid(tileGridOptions);
+      return grid as unknown as T;
     } else if (type === 'default') {
-      return new olTileGrid(tileGridOptions);
+      const grid = new olTileGrid(tileGridOptions);
+      return grid as unknown as T;
     }
   }
 
