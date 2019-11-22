@@ -126,6 +126,9 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     this.map.un('moveend', this.mapOnMoveend);
     this.map.un('click', this.mapOnClick);
     this.map.un('dblclick', this.mapOnDclick);
+    this.map.getInteractions().forEach((i) => {
+      this.map.removeInteraction(i);
+    })
   }
 
   private addUpdateLayers(layers, type: 'baselayers' | 'layers' | 'overlays', layersunderneath: Array<'baselayers' | 'layers' | 'overlays'>) {
