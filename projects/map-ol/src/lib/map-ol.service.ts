@@ -5,6 +5,7 @@ import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLaye
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
+import { ViewOptions as olViewOptions } from 'ol/View';
 
 import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
@@ -56,13 +57,12 @@ export type TGeoExtent = [number, number, number, number] | [number, number, num
 export class MapOlService {
   public map: olMap; // ol.Map;
   public view: olView;
-  public temp: any;
+  private viewOptions: olViewOptions;
   public EPSG: string;
   private hitTolerance = 0;
   constructor() {
     this.map = new olMap({});
     this.view = new olView();
-    this.temp = {};
     this.EPSG = 'EPSG:3857'; // 'EPSG:4326'; EPSG:3857
     // this.createMap();
   }
@@ -94,11 +94,79 @@ export class MapOlService {
       layers: []
     });
 
-    const _view = new olView({
+    /**
+     * set default viewOptions
+     */
+    this.viewOptions = {
       center: transform([center.lon, center.lat], 'EPSG:4326', this.EPSG),
       zoom: zoom,
       projection: getProjection(this.EPSG)
-    });
+    };
+
+    if (this.view.constrainRotation) {
+      this.viewOptions.constrainRotation = this.view.constrainRotation;
+    }
+
+    if (this.view.enableRotation) {
+      this.viewOptions.enableRotation = this.view.enableRotation;
+    }
+
+    if (this.view.extent) {
+      this.viewOptions.extent = this.view.extent;
+    }
+
+    if (this.view.constrainOnlyCenter) {
+      this.viewOptions.constrainOnlyCenter = this.view.constrainOnlyCenter;
+    }
+
+    if (this.view.smoothExtentConstraint) {
+      this.viewOptions.smoothExtentConstraint = this.view.smoothExtentConstraint;
+    }
+
+    if (this.view.getMaxResolution()) {
+      this.viewOptions.maxResolution = this.view.getMaxResolution();
+    }
+
+    if (this.view.getMinResolution()) {
+      this.viewOptions.minResolution = this.view.getMinResolution();
+    }
+
+    if (this.view.getMaxZoom()) {
+      this.viewOptions.maxZoom = this.view.getMaxZoom();
+    }
+
+    if (this.view.getMinZoom()) {
+      this.viewOptions.minZoom = this.view.getMinZoom();
+    }
+
+    if (this.view.multiWorld) {
+      this.viewOptions.multiWorld = this.view.multiWorld;
+    }
+
+    if (this.view.constrainResolution) {
+      this.viewOptions.constrainResolution = this.view.constrainResolution;
+    }
+
+    if (this.view.smoothResolutionConstraint) {
+      this.viewOptions.smoothResolutionConstraint = this.view.smoothResolutionConstraint;
+    }
+
+    if (this.view.getResolution()) {
+      this.viewOptions.resolution = this.view.getResolution();
+    }
+
+    if (this.view.getResolutions()) {
+      this.viewOptions.resolutions = this.view.getResolutions();
+    }
+
+    if (this.view.rotation) {
+      this.viewOptions.rotation = this.view.rotation;
+    }
+
+    if (this.view.zoomFactor) {
+      this.viewOptions.zoomFactor = this.view.zoomFactor;
+    }
+    const _view = new olView(this.viewOptions);
 
     /** define map in constructor so it is created before to use it in projects onInit Method  */
     [_baselayerGroup, _layersGroup, _overlayGroup].map(layer => this.map.addLayer(layer));
@@ -129,7 +197,8 @@ export class MapOlService {
   public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart: () => void, onBoxEnd: (any) => void) {
 
     const dragBox = new DragBox({
-      condition: conditionForDrawing
+      condition: conditionForDrawing,
+      className: 'ol-drag-select'
     });
 
     dragBox.on('boxstart', function () {
