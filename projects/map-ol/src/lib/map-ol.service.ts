@@ -679,10 +679,6 @@ export class MapOlService {
     }
   }
 
-  public getProjection() {
-    return this.map.getView().getProjection();
-  }
-
   private resolutionsFromExtent(extent, opt_maxZoom: number, tileSize: number) {
     const maxZoom = opt_maxZoom;
 
@@ -1111,35 +1107,36 @@ export class MapOlService {
   }
 
   /**
+   * @returns {olProjection} 'olProjection'
+   */
+  public getProjection() {
+    return this.map.getView().getProjection();
+  }
+
+  /**
+   * this is currently only working on map init because no layers get reprojected!!!
    * projection is proj~ProjectionLike
    */
-  public setProjection(projection: any) {
+  public setProjection(projection: olProjection | string) {
     if (projection) {
-      let _view;
-      if (projection instanceof olProjection) {
-        _view = new olView({
-          projection: projection,
-          center: this.map.getView().getCenter(),
-          extent: projection.getExtent(),
-          zoom: this.map.getView().getZoom()
-        });
-      } else if (typeof projection === 'string') {
-        _view = new olView({
-          projection: projection,
-          center: this.map.getView().getCenter(),
-          zoom: this.map.getView().getZoom()
-        });
+      let _viewOptions: olViewOptions = {};
+      if (this.viewOptions) {
+        _viewOptions = this.viewOptions;
       }
+      if (projection instanceof olProjection) {
+        _viewOptions.projection = projection;
+        _viewOptions.center = this.map.getView().getCenter();
+        _viewOptions.extent = projection.getExtent();
+        _viewOptions.zoom = this.map.getView().getZoom();
+      } else if (typeof projection === 'string') {
+        _viewOptions.projection = projection;
+        _viewOptions.center = this.map.getView().getCenter();
+        _viewOptions.zoom = this.map.getView().getZoom();
+      }
+      const _view = new olView(_viewOptions);
 
       this.map.setView(_view);
       this.EPSG = _view.getProjection().getCode();
-
-      // this.removeAllLayers('baselayers')
-      /*
-      this.getLayers('baselayers').forEach((layer) => {
-        this.addLayer(layer, 'baselayers')
-      })
-      */
     } else {
       // console.log('projection code is undefined');
     }
