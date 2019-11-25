@@ -449,6 +449,11 @@ export class MapOlService {
 
     if (l.popup) {
       _layeroptions.popup = l.popup;
+      /**
+         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+         */
+      _layeroptions.className = l.id;
     }
 
     if (l.bbox) {
@@ -526,6 +531,11 @@ export class MapOlService {
 
       if (l.popup) {
         _layeroptions.popup = l.popup;
+        /**
+         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+         */
+        _layeroptions.className = l.id;
       }
 
       if (l.bbox) {
@@ -573,6 +583,11 @@ export class MapOlService {
 
     if (l.popup) {
       _layeroptions.popup = l.popup;
+      /**
+         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+         */
+      _layeroptions.className = l.id;
     }
 
     if (l.bbox) {
@@ -656,6 +671,11 @@ export class MapOlService {
 
       if (l.popup) {
         _layeroptions.popup = l.popup;
+        /**
+         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+         */
+        _layeroptions.className = l.id;
       }
 
       if (l.bbox) {
@@ -855,8 +875,9 @@ export class MapOlService {
 
       if (layerpopup.asyncPupup) {
         layerpopup.asyncPupup(popupproperties, (html) => {
-          // console.log(html);
-          this.addPopup(args, popupproperties, html);
+          if (html) {
+            this.addPopup(args, null, html);
+          }
         });
       } else {
         this.addPopup(args, popupproperties);
@@ -880,6 +901,7 @@ export class MapOlService {
       }
     });
     LayersAtPixel.forEach((item, index) => {
+      console.log(item, index)
       const topLayer = 0;
       if (index == topLayer) {
         this.layer_on_click(evt, item.layer, item.color);
@@ -907,7 +929,7 @@ export class MapOlService {
     let popup_html = '';
     if (args.popupFn) {
       popup_html = args.popupFn(popupObj);
-    } else if (html) {
+    } else if (html && !popupObj) {
       popup_html = html;
     } else {
       popup_html = this.createPopupHtml(popupObj);
