@@ -1,5 +1,6 @@
 ### Bug Fixes
 * **@ukis/services-layers:** adjust types
+* **@ukis/map-ol:** [Backwards incompatible changes in ol6 on map.forEachLayerAtPixel](https://github.com/openlayers/openlayers/releases/tag/v6.0.0) - fix this for popup layers with className = layer.id
 * **@ukis/map-ol:** add more types from openlayers
 * **@ukis/map-ol:** set all olView options on MapOlService.createMap
 * **@ukis/map-navigator:** set precision also on zoom and remove duplicate projection in dropdown
