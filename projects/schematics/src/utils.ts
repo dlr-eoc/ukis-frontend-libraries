@@ -39,13 +39,6 @@ export function updateTsConfigPaths(packageName: string, paths: string[]) {
                 tsconfig.compilerOptions.paths[packageName] = [];
             }
             tsconfig.compilerOptions.paths[packageName].concat(paths);
-
-            // deep import & secondary entrypoint support
-            const deepPackagePath = packageName + '/*';
-            if (!tsconfig.compilerOptions.paths[deepPackagePath]) {
-                tsconfig.compilerOptions.paths[deepPackagePath] = [];
-            }
-            tsconfig.compilerOptions.paths[deepPackagePath].push(paths + '/*');
         });
     };
 }
