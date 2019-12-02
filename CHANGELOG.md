@@ -1,3 +1,4 @@
+# [6.0.1]
 ### Features
 * **@ukis/map-navigator:** SV: added projection switch. See mariss client for example.
 ### Bug Fixes
