@@ -27,7 +27,6 @@ To use the libraries in your project specific application, you can ather use the
 - [see development documentation](DEVELOPMENT.md)
 
 
-
 ## Issues
  http://jira.ukis.eoc.dlr.de/issues/?jql=project%20%3D%20UKISDEV%20AND%20Component%20%3D%20Frontend%20AND%20Labels%20%3D%20master
 
@@ -36,17 +35,27 @@ To use the libraries in your project specific application, you can ather use the
 - Clone the repo: `git clone http://git.ukis.eoc.dlr.de/scm/mofro/frontend-libraries.git` . 
 - Check if [Node.js](https://nodejs.org/) and npm is installed.
 
-- Create your own branch for your project specific changes based on master: 
+- Create a new branch for your feature specific changes based on master: 
 ```bash
      # go to cloned repo
      cd frontend-libraries
      # create local branch based on master
-     git checkout -b project-XXX
+     git checkout -b feature-XXX
      #push local branch to remote
-     git push -u origin project-XXX
+     git push -u origin feature-XXX
 ```
+
+**don't forget to remove your feature branch (feature-XXX) if it is fully merged to the master!!!**
+
 - Install dependencies: `npm install`
 - [see development documentation for further instructions](DEVELOPMENT.md)
+
+
+## How to setup a new UKIS-Client
+1. [see clarity get-started](https://clarity.design/documentation/get-started)
+- ng new project-xxx
+- cd project-xxx
+- ng add @clr/angular
 
 
 
