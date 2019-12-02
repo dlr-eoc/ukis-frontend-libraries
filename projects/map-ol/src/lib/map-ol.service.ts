@@ -1010,10 +1010,10 @@ export class MapOlService {
     return popups;
   }
   /**
-   * 
+   *
    * @param extent: [minX, minY, maxX, maxY]
    * @param geographic: boolean
-   * @param fitOptions 
+   * @param fitOptions
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
@@ -1046,7 +1046,7 @@ export class MapOlService {
     return transfomCenter;
   }
   /**
-   * 
+   *
    * @param features: olFeature[]
    * @param geographic: boolean
    * @returns olExtend: [minX, minY, maxX, maxY]
@@ -1079,6 +1079,10 @@ export class MapOlService {
   public setZoom(zoom: number, notifier?: 'map' | 'user') {
     const view = this.map.getView();
     view.setZoom(zoom);
+  }
+
+  public getZoom(): number {
+    return this.map.getView().getZoom()
   }
 
   public zoomInOut(value: '-' | '+') {
@@ -1139,21 +1143,29 @@ export class MapOlService {
       let _viewOptions: olViewOptions = {};
       if (this.viewOptions) {
         _viewOptions = this.viewOptions;
+        _viewOptions.minResolution = undefined;
+        _viewOptions.maxResolution = undefined;
+        _viewOptions.resolution = undefined;
+        _viewOptions.resolutions = undefined;
       }
       if (projection instanceof olProjection) {
         _viewOptions.projection = projection;
-        _viewOptions.center = this.map.getView().getCenter();
-        _viewOptions.extent = projection.getExtent();
+        let newCenter = transform(this.map.getView().getCenter(), this.map.getView().getProjection(), projection); //get center coordinates in the new projection
+        _viewOptions.center = newCenter; //this.map.getView().getCenter();
+        _viewOptions.extent = projection.getExtent() || undefined; //some projections (e.g. Polar) returning null value. OL failing creating a view with null extent value
         _viewOptions.zoom = this.map.getView().getZoom();
       } else if (typeof projection === 'string') {
         _viewOptions.projection = projection;
         _viewOptions.center = this.map.getView().getCenter();
         _viewOptions.zoom = this.map.getView().getZoom();
       }
-      const _view = new olView(_viewOptions);
-
+      let _view = new olView(_viewOptions);
       this.map.setView(_view);
+      this.view = this.map.getView();
       this.EPSG = _view.getProjection().getCode();
+      for (let l of this.map.getLayers()) {
+        l.redraw();
+      }
     } else {
       // console.log('projection code is undefined');
     }
