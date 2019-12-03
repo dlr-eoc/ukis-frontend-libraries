@@ -4,7 +4,7 @@ import { IAlert } from './alert.service';
 @Component({
   selector: 'ukis-global-alert',
   templateUrl: './global-alert.component.html',
-  styleUrls: ['./global-alert.component.css']
+  styleUrls: ['./global-alert.component.scss']
 })
 export class GlobalAlertComponent {
   @Input() alert: null | IAlert;

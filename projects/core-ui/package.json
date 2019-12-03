@@ -4,7 +4,12 @@
   "main": "src/public_api",
   "schematics": "./schematics/collection.json",
   "peerDependencies": {
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
+    "@angular/common": "~8.2.10",
+    "@angular/core": "~8.2.10",
+    "@angular/forms": "~8.2.10",
+    "@clr/angular": "^2.2.2",
+    "@clr/icons": "^2.2.2",
+    "@clr/ui": "^2.2.2",
+    "rxjs": "~6.5.3"
   }
 }

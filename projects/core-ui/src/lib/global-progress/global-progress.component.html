@@ -1,4 +1,4 @@
-<span *ngIf="progress.indeterminate">
+<span *ngIf="progress && progress.indeterminate">
     <div class="progress loop" [ngClass]="progress.class"><progress></progress></div>
 </span>
 <span *ngIf="!progress.indeterminate">
