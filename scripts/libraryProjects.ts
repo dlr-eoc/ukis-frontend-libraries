@@ -10,7 +10,8 @@ const NG = require('@angular/cli');
 const UKIS_SCOPE = '@ukis/';
 
 const CWD = process.cwd();
-const PLACEHOLDER = '0.0.0-PLACEHOLDER';
+const UKIS_VERSION_PLACEHOLDER = '0.0.0-PLACEHOLDER';
+const NG_VERSION_PLACEHOLDER = '0.0.0-NG-PLACEHOLDER'; // TODO replace version of angular get from package.json -> @angular/core
 const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
 const ANGULARJSON = require(PATH.join(CWD, 'angular.json'));
 
@@ -237,14 +238,14 @@ function setVersionsOfProjects() {
     if (errors.length < 1 && MAINPACKAGE.version) {
         // console.log(projectsPaths)
         replace({
-            regex: PLACEHOLDER,
+            regex: UKIS_VERSION_PLACEHOLDER,
             replacement: MAINPACKAGE.version,
             paths: projectsPaths,
             recursive: true,
             silent: true,
             include: 'package.json'
         });
-        console.log(`replaced all ${PLACEHOLDER} with ${MAINPACKAGE.version}`);
+        console.log(`replaced all ${UKIS_VERSION_PLACEHOLDER} with ${MAINPACKAGE.version}`);
     } else {
         console.log(`check main package.json version and projects for errors!`);
         console.table(errors);
@@ -273,8 +274,8 @@ function projectsAndDependencies(silent = false) {
             dependencies: null
         };
 
-        if (projectPackage.version !== PLACEHOLDER) {
-            const error = `version of project: ${projectPackage.name} must be ${PLACEHOLDER} for build!`;
+        if (projectPackage.version !== UKIS_VERSION_PLACEHOLDER) {
+            const error = `version of project: ${projectPackage.name} must be ${UKIS_VERSION_PLACEHOLDER} for build!`;
             if (!silent) {
                 console.error(error);
             }
@@ -296,8 +297,8 @@ function projectsAndDependencies(silent = false) {
 
             Object.keys(projectPackage.dependencies).forEach((key) => {
                 const dep = projectPackage.dependencies[key];
-                if (key.indexOf(UKIS_SCOPE) !== -1 && dep !== PLACEHOLDER) {
-                    const error = `version of dependency: ${key} in project: ${projectPackage.name} must be ${PLACEHOLDER} for build!`;
+                if (key.indexOf(UKIS_SCOPE) !== -1 && dep !== UKIS_VERSION_PLACEHOLDER) {
+                    const error = `version of dependency: ${key} in project: ${projectPackage.name} must be ${UKIS_VERSION_PLACEHOLDER} for build!`;
                     if (!silent) {
                         errors.push({ project: projectPackage.name, error: error });
                     }
