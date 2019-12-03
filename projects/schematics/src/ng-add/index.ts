@@ -3,6 +3,7 @@ import { addPackageJsonDependency, NodeDependency, NodeDependencyType } from '@s
 import { updateTsConfigPaths, setupOptions } from '../utils';
 import { normalize } from 'path';
 import { strings } from '@angular-devkit/core';
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 // https://nitayneeman.com/posts/making-an-addable-angular-package-using-schematics/
 
@@ -18,6 +19,7 @@ export function ngAdd(options: any): Rule {
   }; */
 
   return chain([
+    options && options.skipInstallNodePackage ? noop() : InstallTask(),
     options && options.skipPackageJson ? noop() : addPackageJsonDependencies(),
     options && options.skipTsConfigJson ? noop() : updateTsConfig(),
     options && options.skipAddFiles ? noop() : addFiles(options)
@@ -25,6 +27,13 @@ export function ngAdd(options: any): Rule {
     //options && options.skipModuleImport ? noop() : addModuleToImports(options),
     // options && options.skipPolyfill ? noop() : addPolyfillToScripts(options)
   ]);
+}
+
+function InstallTask(): Rule {
+  return (host: Tree, context: SchematicContext) => {
+    context.addTask(new NodePackageInstallTask());
+    return host;
+  };
 }
 
 function addPackageJsonDependencies(): Rule {

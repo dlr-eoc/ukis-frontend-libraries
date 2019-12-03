@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "../../dist/core-ui/schematics",
     "baseUrl": "tsconfig",
     "lib": [
       "es2018",
