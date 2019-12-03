@@ -1,8 +1,13 @@
-import { Rule, SchematicContext, Tree, apply, url, chain, noop } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, Tree, apply, url, chain, noop, template, filter, MergeStrategy, move, mergeWith } from '@angular-devkit/schematics';
 import { addPackageJsonDependency, NodeDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
-import { updateTsConfigPaths } from '../utils';
+import { updateTsConfigPaths, setupOptions } from '../utils';
+import { normalize } from 'path';
+import { strings } from '@angular-devkit/core';
 
 // https://nitayneeman.com/posts/making-an-addable-angular-package-using-schematics/
+
+
+
 
 
 // You don't have to export the function as default. You can also have more than one rule factory
@@ -15,7 +20,7 @@ export function ngAdd(options: any): Rule {
   return chain([
     options && options.skipPackageJson ? noop() : addPackageJsonDependencies(),
     options && options.skipTsConfigJson ? noop() : updateTsConfig(),
-    options && options.skipAddFiles ? noop() : addFiles()
+    options && options.skipAddFiles ? noop() : addFiles(options)
     // options && options.skipPackageJson ? noop() : installPackageJsonDependencies(),
     //options && options.skipModuleImport ? noop() : addModuleToImports(options),
     // options && options.skipPolyfill ? noop() : addPolyfillToScripts(options)
@@ -41,11 +46,26 @@ function addPackageJsonDependencies(): Rule {
   };
 }
 
-function addFiles(): Rule {
-  return (host: Tree, context: SchematicContext) => {
-    apply(url('./files'), []);
-    context.logger.log('info', `Added files`);
-    return host;
+function addFiles(options: any): Rule {
+  return (tree: Tree, context: SchematicContext) => {
+
+    setupOptions(tree, options);
+
+    const movePath = (options.flat) ?
+      normalize(options.path) :
+      normalize(options.path + '/' + strings.dasherize(options.name));
+
+    const templateSource = apply(url('./files'), [
+      options.spec ? noop() : filter(path => !path.endsWith('.spec.ts')),
+      template({
+        ...strings,
+        ...options,
+      }),
+      move(movePath),
+    ]);
+
+    const rule = mergeWith(templateSource, MergeStrategy.Default);
+    return rule(tree, context);
   };
 }
 
