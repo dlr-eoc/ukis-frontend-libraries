@@ -11,7 +11,7 @@ import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; const XLink_1_0 
 import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0;
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
 import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 = WPS_1_0_0_Factory.WPS_1_0_0;
-import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; import { pollEveryUntil } from './utils/polling';
+import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; import { pollEveryUntil, delayedRetry } from './utils/polling';
 import { Injectable, Inject } from '@angular/core';
 const WPS_2_0 = WPS_2_0_Factory.WPS_2_0; // const WPS_2_0 = require('ogc-schemas/lib/WPS_2_0').WPS_2_0;
 
@@ -33,8 +33,8 @@ export class WpsClient {
     private xmlunmarshaller;
     private wpsmarshaller: WpsMarshaller;
     private cache: Cache;
-    
-    
+
+
     constructor(
         @Inject('WpsVersion') version: WpsVerion = '1.0.0',
         private webclient: HttpClient,
@@ -62,6 +62,7 @@ export class WpsClient {
             'Accept': 'text/xml, application/xml'
         });
         return this.webclient.get(getCapabilitiesUrl, { headers, responseType: 'text' }).pipe(
+            delayedRetry(2000, 2),
             map(response => {
                 return this.xmlunmarshaller.unmarshalString(response);
             }),
@@ -115,7 +116,11 @@ export class WpsClient {
             tap((response: WpsResult[]) => {
                 if (this.caching) {
                     console.log('storing data in cache.');
-                    this.cache.set(cacheKey, response);
+                    try {
+                        this.cache.set(cacheKey, response);
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
             }),
         );
@@ -134,6 +139,7 @@ export class WpsClient {
             'Accept': 'text/xml, application/xml'
         });
         return this.webclient.post(executeUrl, xmlExecbody, { headers, responseType: 'text' }).pipe(
+            delayedRetry(2000, 2),
             map(xmlResponse => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
                 const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse);
@@ -149,6 +155,7 @@ export class WpsClient {
             'Accept': 'text/xml, application/xml'
         });
         return this.webclient.get(statusUrl, {headers, responseType: 'text'}).pipe(
+            delayedRetry(2000, 2),
             map( xmlResponse => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
                 const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse);

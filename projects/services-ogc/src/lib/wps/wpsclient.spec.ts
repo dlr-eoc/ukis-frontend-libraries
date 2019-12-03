@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { WpsClient } from './wpsclient';
 import { HttpClient, HttpXhrBackend, XhrFactory, HttpRequest } from '@angular/common/http';
+import { WpsData, WpsDataDescription } from '../public-api';
 import { pollEveryUntil } from './utils/polling';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { tap, map } from 'rxjs/operators';
-import { forkJoin, of, Observable } from 'rxjs';
+import { tap, map, delay, expand, takeUntil, take } from 'rxjs/operators';
+import { forkJoin, of, Observable, empty, interval, timer } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 class MyXhrFactory extends XhrFactory {
     build(): XMLHttpRequest {
