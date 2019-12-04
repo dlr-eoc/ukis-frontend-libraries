@@ -53,9 +53,11 @@ To use the libraries in your project specific application, you can ather use the
 
 ## How to setup a new UKIS-Client
 1. [see clarity get-started](https://clarity.design/documentation/get-started)
-- ng new project-xxx
+- ng new project-xxx --routing=true --style=scss
 - cd project-xxx
 - ng add @clr/angular
+
+add files [see core-ui](projects/core-ui/src/lib/templates/README.md)
 
 
 
