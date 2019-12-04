@@ -16,7 +16,8 @@ schematics .:add //In this case we can use relative path instead of the package
 ```
 
 --- 
-This repository is a basic Schematic implementation that serves as a starting point to create and publish Schematics to NPM.
+This repository is a basic Schematic implementation that serves as a starting point to create and publish Schematics.
+The files are only used internally and should not be considered as part of the public API!
 
 ### Testing
 

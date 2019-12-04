@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -p tsconfig.json --watch",
-    "test": "npm run build && jasmine src/**/*_spec.js"
+    "test": "tsc -p tsconfig.test.json && jasmine src/**/*_spec.js"
   },
   "keywords": [
     "schematics"
@@ -13,6 +13,9 @@
   "author": "",
   "license": "MIT",
   "schematics": "./src/collection.json",
+  "ng-add": {
+    "save": false
+  },
   "dependencies": {
     "@angular-devkit/core": "^8.3.20",
     "@angular-devkit/schematics": "^8.3.20",
