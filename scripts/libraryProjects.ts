@@ -4,14 +4,11 @@
 * node scripts/projectsVersion.js -l
 */
 
-// const NG = require('@angular/cli');
 import * as NG from '@angular/cli';
 import * as PATH from 'path';
 import * as replace from 'replace';
 import * as toposort from 'toposort';
 import * as depcheck from 'depcheck';
-// const toposort = require('toposort');
-// const depcheck = require('depcheck');
 
 export function run() {
     const UKIS_SCOPE = '@ukis/';
