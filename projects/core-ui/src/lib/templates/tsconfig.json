@@ -1,0 +1,11 @@
+{
+    "...": "...",
+    "compilerOptions": {
+        "paths": {
+            "@ukis/*": [
+                "dist/*",
+                "frontend-libraries/projects/*"
+            ]
+        }
+    }
+}

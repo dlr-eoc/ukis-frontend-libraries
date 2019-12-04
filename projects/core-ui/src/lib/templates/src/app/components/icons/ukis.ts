@@ -1,3 +1,5 @@
+import { ClarityIcons } from '@clr/icons';
+
 /* tslint:disable:max-line-length */
 const ukisShapes: any = {
     'ukis': `
@@ -37,6 +39,8 @@ const ukisShapes: any = {
         </svg>
     `
 };
+
+// try to use this... ClarityIcons.add(ukisShapes);
 if (typeof window !== 'undefined' && window.hasOwnProperty('ClarityIcons')) {
     (<any>window).ClarityIcons.add(ukisShapes);
 }
