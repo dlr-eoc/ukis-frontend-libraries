@@ -34,8 +34,10 @@ import olFeature from 'ol/Feature';
 
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
-import olProjection from 'ol/proj/Projection.js';
+import olProjection from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
+import { register as olRegister } from 'ol/proj/proj4';
+import proj4 from 'proj4';
 import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
@@ -48,6 +50,7 @@ import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
 import { DragBox } from 'ol/interaction';
+import {Observable} from "rxjs";
 
 
 /**
@@ -1135,7 +1138,22 @@ export class MapOlService {
   }
 
   /**
-   * this is currently only working on map init because no layers get reprojected!!!
+   * function to reproject vector features
+   * @param source:  olVectorSource
+   * @param srcProj: string (e.g. 'EPSG:4326')
+   * @param dstProj: string (e.g. 'EPSG:3857')
+   */
+  public reprojectFeatures(source:olVectorSource, srcProj:string, dstProj:string) {
+    source.getFeatures().forEach(feature =>{
+      feature.getGeometry().transform(srcProj, dstProj)
+    });
+  }
+
+  /**
+   * vector layers will be reprojected automatically
+   * wms layers will be updated with corresponding proj def in the requests.
+   * for other raster layers and for those wms layers which backend does not support target projection, please
+   * define initial(default) layer projection, so openlayers will reproject on the client side
    * projection is proj~ProjectionLike
    */
   public setProjection(projection: olProjection | string) {
@@ -1152,7 +1170,7 @@ export class MapOlService {
         _viewOptions.projection = projection;
         let newCenter = transform(this.map.getView().getCenter(), this.map.getView().getProjection(), projection); //get center coordinates in the new projection
         _viewOptions.center = newCenter; //this.map.getView().getCenter();
-        _viewOptions.extent = projection.getExtent() || undefined; //some projections (e.g. Polar) returning null value. OL failing creating a view with null extent value
+       // _viewOptions.extent = projection.getExtent();// || undefined;
         _viewOptions.zoom = this.map.getView().getZoom();
       } else if (typeof projection === 'string') {
         _viewOptions.projection = projection;
@@ -1160,15 +1178,43 @@ export class MapOlService {
         _viewOptions.zoom = this.map.getView().getZoom();
       }
       let _view = new olView(_viewOptions);
+      let oldProjection = this.EPSG;
+      this.EPSG = _view.getProjection().getCode();
       this.map.setView(_view);
       this.view = this.map.getView();
-      this.EPSG = _view.getProjection().getCode();
-      for (let l of this.map.getLayers()) {
-        l.redraw();
-      }
+
+      //reprojecting vector layers
+      this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
+        layerGroup.getLayers().getArray().forEach(layer =>{
+          let source = layer.getSource();
+          //check for nested sources, e.g. cluster or cluster of clusters etc
+          while (source['source']) {
+            source = source['source'];
+          }
+          if (source instanceof olVectorSource){
+            this.reprojectFeatures(source, oldProjection, this.EPSG);
+          }
+        });
+      });
+
     } else {
       // console.log('projection code is undefined');
     }
+  }
+
+  public registerProjection(projDef: any){
+    proj4.defs(projDef.code, projDef.proj4js);
+    olRegister(proj4);
+  }
+
+  public getOlProjection(projDef: any): olProjection {
+    return new olProjection({
+      code: projDef.code,
+      extent: projDef.extent? projDef.extent: undefined,
+      worldExtent: projDef.worldExtent? projDef.worldExtent: undefined,
+      global: projDef.global? projDef.global: false,
+      units: projDef.units? projDef.units: undefined
+    });
   }
 
   private keysToUppercase<T>(obj: Object) {

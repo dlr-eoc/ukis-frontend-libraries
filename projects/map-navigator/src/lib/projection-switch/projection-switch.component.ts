@@ -1,10 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {MapOlService} from '@ukis/map-ol';
-import olProjection from 'ol/proj/Projection';
-import { register as olRegister } from 'ol/proj/proj4';
-import proj4 from 'proj4';
-import {get as getProjection} from 'ol/proj';
 
 
 @Component({
@@ -26,9 +22,10 @@ export class ProjectionSwitchComponent implements OnInit {
   }
 
   setNewProjection(projection) {
-    proj4.defs(projection.code, projection.proj4js);
-    olRegister(proj4);
-    let newProj = new getProjection(projection.code);
+    this.mapSvc.registerProjection(projection);
+
+    let newProj = this.mapSvc.getOlProjection(projection);
+
     this.mapSvc.setProjection(newProj);
     this.selectedProj = projection;
   }
