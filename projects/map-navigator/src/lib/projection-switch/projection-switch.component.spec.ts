@@ -9,7 +9,7 @@ describe('ProjectionSwitchComponent', () => {
   let component: ProjectionSwitchComponent;
   let fixture: ComponentFixture<ProjectionSwitchComponent>;
   let mapSvc: MapOlService;
-  let projList: any[];
+  let projList: any[] = [];
 
 
   beforeEach(async(() => {
@@ -24,7 +24,7 @@ describe('ProjectionSwitchComponent', () => {
     fixture = TestBed.createComponent(ProjectionSwitchComponent);
     component = fixture.componentInstance;
     component.mapSvc = mapSvc;
-    component.projList = [];
+    component.projList = projList;
     fixture.detectChanges();
   });
 
