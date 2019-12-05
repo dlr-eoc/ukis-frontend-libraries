@@ -1,6 +1,6 @@
 {
   "name": "ukis-frontend-libraries",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "license": "MIT",
   "scripts": {
     "start": "ng serve demo-maps --sourceMap",
