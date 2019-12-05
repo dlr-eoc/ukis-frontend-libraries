@@ -17,7 +17,7 @@ import { LayerControlModule } from '@ukis/layer-control';
 
 #### add the following to a route-view.component.html
 ```
-<section class="content-area">
+<section class="content-area map-view">
   <ukis-map-ol [layersSvc]="layerSvc" [mapState]="mapStateSvc" [controls]="controls"></ukis-map-ol>
 </section>
 ```
