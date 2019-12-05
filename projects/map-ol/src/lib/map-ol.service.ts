@@ -1131,7 +1131,7 @@ export class MapOlService {
   }
 
   /**
-   * @returns {olProjection} 'olProjection'
+   * @returns 'olProjection'
    */
   public getProjection() {
     return this.map.getView().getProjection();
