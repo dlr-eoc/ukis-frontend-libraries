@@ -9,7 +9,8 @@
     "@clr/angular": "^2.2.2",
     "@clr/icons": "^2.2.2",
     "@clr/ui": "^2.2.2",
-    "ol": "^6.0.1"
+    "ol": "^6.0.1",
+    "proj4": "^2.6.0"
   },
   "dependencies": {
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
