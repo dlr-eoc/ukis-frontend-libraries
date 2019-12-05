@@ -52,10 +52,13 @@ export interface Contents {
 }
 
 export interface DataInputType {
-   data: Data;
-   reference: ReferenceType;
-   input: any;
    id: string;
+   /** Raw data. Only use one of the following: data, reference, input. */
+   data?: Data;
+   /** Data per reference. Only use one of the following: data, reference, input. */
+   reference?: ReferenceType;
+   /** Nested data. Only use one of the following: data, reference, input. */
+   input?: DataInputType;
 }
 
 export interface GetResult {
@@ -89,13 +92,17 @@ export interface StatusInfo {
    percentCompleted?: number;
 }
 
-export interface OutputDefinitionType {
-   id: string;
-   output?: OutputDefinitionType;
-   transmission?: DataTransmissionModeType;
+export interface DataEncodingAttributes {
    mimeType?: string;
    encoding?: string;
    schema?: string;
+}
+
+export interface OutputDefinitionType extends DataEncodingAttributes {
+   transmission?: string;
+   id: string;
+   /** Include only for nested outputs. */
+   output?: OutputDefinitionType;
 }
 
 export interface LiteralValue {
@@ -106,7 +113,7 @@ export interface LiteralValue {
 export interface RequestBaseType {
    service: string;
    version: string;
-   extension?: any;
+   Extension?: any;
 }
 
 export interface LiteralDataType_LiteralDataDomain {
@@ -130,18 +137,12 @@ export interface GenericInputType {
    maxOccurs?: any;
 }
 
-export interface Data {
+export interface Data extends DataEncodingAttributes {
    otherAttributes?: any;
    content?: any;
-   mimeType?: string;
-   encoding?: string;
-   schema?: string;
 }
 
-export interface Format {
-   mimeType?: string;
-   encoding?: string;
-   schema?: string;
+export interface Format extends DataEncodingAttributes {
    maximumMegabytes?: number;
    _default?: boolean;
 }
@@ -163,7 +164,7 @@ export interface InputDescriptionType {
    maxOccurs?: any;
 }
 
-export type OutputTransmissionType = "value" | "reference";
+export type OutputTransmissionType = 'value' | 'reference';
 
 export interface ProcessSummaryType {
    processVersion?: string;
@@ -174,7 +175,7 @@ export interface ProcessSummaryType {
    processModel?: any;
 }
 
-export interface ReferenceType_BodyReference {
+export interface BodyReferenceType {
    href: string;
 }
 
@@ -195,13 +196,14 @@ export interface GenericProcessType {
    input?: any;
 }
 
-export interface ReferenceType {
-   body: any;
-   bodyReference: ReferenceType_BodyReference;
+export interface RequestBodyType {
+   body?: any;
+   bodyReference?: BodyReferenceType;
+}
+
+export interface ReferenceType extends DataEncodingAttributes {
+   requestBody?: RequestBodyType;
    href: string;
-   mimeType?: string;
-   encoding?: string;
-   schema?: string;
 }
 
 export interface GetStatus {
@@ -220,21 +222,30 @@ export interface ProcessOffering {
 export interface DescriptionType {
 }
 
-export interface ExecuteRequestType {
-   identifier: any;
-   output: any;
-   mode: any;
-   response: any;
-   input?: any;
+export interface ExecuteRequestType extends RequestBaseType {
+   TYPE_NAME: 'WPS_2_0.ExecuteRequestType',
+   identifier: CodeType;
+   mode: 'sync' | 'async' | 'auto';
+   response: 'raw' | 'document';
+   input?: DataInputType[];
+   output?: OutputDefinitionType[];
 }
 
-export interface WPSCapabilitiesType {
+export interface WPSCapabilitiesType extends RequestBaseType {
    contents: Contents;
    service: 'WPS',
    version: '2.0.0',
    extension?: any;
 }
 
-export interface DataTransmissionModeType {
+export interface IWpsExecuteProcessBody {
+   name: {
+      key: '{http://www.opengis.net/wps/2.0}Execute',
+      localPart: 'Execute',
+      namespaceURI: 'http://www.opengis.net/wps/2.0',
+      prefix: 'wps',
+      string: '{http://www.opengis.net/wps/2.0}wps:Execute'
+   };
+   value: ExecuteRequestType
 }
 

@@ -1,6 +1,6 @@
 import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription } from './wps_datatypes';
 import { WpsMarshaller100 } from './wps100/wps_marshaller_1.0.0';
-import { WpsFactory200 } from './wps200/wps_2.0_factory';
+import { WpsMarshaller200 } from './wps200/wps_marshaller_2.0.0';
 import { Cache } from './utils/cache';
 import { Observable, timer, of, throwError } from 'rxjs';
 import { map, catchError, switchMap, tap, share, mergeMap } from 'rxjs/operators';
@@ -11,9 +11,9 @@ import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; const XLink_1_0 
 import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0;
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
 import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 = WPS_1_0_0_Factory.WPS_1_0_0;
-import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; import { pollEveryUntil, delayedRetry } from './utils/polling';
+import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
+import { pollEveryUntil, delayedRetry } from './utils/polling';
 import { Injectable, Inject } from '@angular/core';
-const WPS_2_0 = WPS_2_0_Factory.WPS_2_0; // const WPS_2_0 = require('ogc-schemas/lib/WPS_2_0').WPS_2_0;
 
 
 
@@ -47,7 +47,7 @@ export class WpsClient {
             this.wpsmarshaller = new WpsMarshaller100();
             context = new Jsonix.Context([XLink_1_0, OWS_1_1_0, WPS_1_0_0]);
         } else if (this.version === '2.0.0') {
-            this.wpsmarshaller = new WpsFactory200();
+            this.wpsmarshaller = new WpsMarshaller200();
             context = new Jsonix.Context([XLink_1_0, OWS_2_0, WPS_2_0]);
         }
         this.xmlunmarshaller = context.createUnmarshaller();
@@ -58,7 +58,6 @@ export class WpsClient {
     getCapabilities(url: string): Observable<any> {
         const getCapabilitiesUrl = this.wpsmarshaller.getCapabilitiesUrl(url);
         const headers = new HttpHeaders({
-            'Content-Type': 'text/xml',
             'Accept': 'text/xml, application/xml'
         });
         return this.webclient.get(getCapabilitiesUrl, { headers, responseType: 'text' }).pipe(
@@ -67,7 +66,7 @@ export class WpsClient {
                 return this.xmlunmarshaller.unmarshalString(response);
             }),
             map(responseJson => {
-                return this.wpsmarshaller.unmarshalCapabilities(responseJson.value)
+                return this.wpsmarshaller.unmarshalCapabilities(responseJson.value);
             }) // @TODO: handle case when instead of WpsCapabilites an ExceptionReport is returned
         );
     }
@@ -131,7 +130,7 @@ export class WpsClient {
             outputDescriptions: WpsOutputDescription[], async: boolean): Observable<WpsResult[]> {
 
         const executeUrl = this.wpsmarshaller.executeUrl(url, processId);
-        const execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, outputDescriptions, async);
+        const execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, outputDescriptions, async); console.log('execbody', execbody)
         const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
 
         const headers = new HttpHeaders({

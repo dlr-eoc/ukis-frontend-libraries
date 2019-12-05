@@ -1,12 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { WpsClient } from './wpsclient';
 import { HttpClient, HttpXhrBackend, XhrFactory, HttpRequest } from '@angular/common/http';
-import { WpsData, WpsDataDescription } from '../public-api';
 import { pollEveryUntil } from './utils/polling';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { tap, map, delay, expand, takeUntil, take } from 'rxjs/operators';
 import { forkJoin, of, Observable, empty, interval, timer } from 'rxjs';
-import { Injectable } from '@angular/core';
+import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; const XLink_1_0 = XLink_1_0_Factory.XLink_1_0;
+import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0;
+import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
+import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 = WPS_1_0_0_Factory.WPS_1_0_0;
+import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
+import { Jsonix } from '@boundlessgeo/jsonix';
+import { WpsData, WpsDataDescription } from './wps_datatypes';
 
 class MyXhrFactory extends XhrFactory {
     build(): XMLHttpRequest {
@@ -264,6 +269,122 @@ describe(`Testing polling funcitonality`, () => {
         get2.flush(createSuccessResponse(url2, pId2, 'outId2'));
 
         httpMockServer.verify();
+
+    }, 10000);
+});
+
+
+describe(`Testing wps-client version 2 functionality`, () => {
+
+    const httpClient = new HttpClient(new HttpXhrBackend(new MyXhrFactory()));
+
+    it('Wps-client should init correctly', () => {
+        const c = new WpsClient('2.0.0', httpClient);
+        expect(c).toBeTruthy();
+    });
+
+    fit('show what a json-execute-request might look like', () => {
+        const xml = `
+        <wps:Execute
+        xmlns:wps="http://www.opengis.net/wps/2.0"
+        xmlns:ows="http://www.opengis.net/ows/2.0"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.opengis.net/wps/2.0 ../wps.xsd"
+        service="WPS" version="2.0.0" response="document" mode="async">
+        <ows:Identifier>
+            http://my.wps.server/processes/proximity/Planar-Buffer
+        </ows:Identifier>
+        <wps:Input id="INPUT_GEOMETRY">
+            <wps:Reference xlink:href="http://some.data.server/mygmldata.xml"/>
+        </wps:Input>
+        <wps:Input id="DISTANCE">
+            <wps:Data>10</wps:Data>
+        </wps:Input>
+        <!– Uses default output format –>
+        <wps:Output id="BUFFERED_GEOMETRY"
+        wps:dataTransmissionMode="reference">
+        </wps:Output>
+        </wps:Execute>
+        `;
+
+        const context = new Jsonix.Context([XLink_1_0, OWS_2_0, WPS_2_0]);
+        const xmlunmarshaller = context.createUnmarshaller();
+        const jsonForm = xmlunmarshaller.unmarshalString(xml);
+        console.log(jsonForm);
+    });
+
+    it('get-capabilities should work', (done) => {
+        const testserver = 'http://geoprocessing.demo.52north.org/javaps/service';
+        const c = new WpsClient('2.0.0', httpClient);
+        const capas$ = c.getCapabilities(testserver);
+        capas$.subscribe(result => {
+            done();
+        });
+    }, 3000);
+
+    fit('execute should work', (done) => {
+        const testserver = 'http://geoprocessing.demo.52north.org/javaps/service';
+        const processId = 'org.n52.wps.server.algorithm.SimpleBufferAlgorithm';
+
+        const data: WpsData = {
+            description: {
+                id: 'data',
+                reference: false,
+                type: 'complex',
+                format: 'application/vnd.geo+json'
+            },
+            value: {
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        [[-11.315917968749998, 21.779905342529645 ],
+                        [-14.17236328125, 18.95824648598139 ],
+                        [-4.833984374999999, 18.3336694457713 ],
+                        [-11.315917968749998, 21.779905342529645 ]]]
+                    }
+                }]
+            }
+        };
+
+        const width: WpsData = {
+            description: {
+                id: 'width',
+                reference: false,
+                type: 'literal',
+                format: 'text/plain'
+            },
+            value: 2.5
+        };
+
+        const result: WpsDataDescription = {
+            id: 'result',
+            reference: false,
+            type: 'complex',
+            format: 'application/vnd.geo+json'
+        };
+
+        const inputs: WpsData[] = [data, width];
+        const outputDescriptions: WpsDataDescription[] = [result];
+
+        const c = new WpsClient('2.0.0', httpClient);
+        const exec$ = c.execute(testserver, processId, inputs, outputDescriptions, false);
+
+        exec$.subscribe(results => {
+            console.log(results);
+            done();
+        });
+    }, 10000);
+
+    it('dismiss should work', (done) => {
+
+    }, 10000);
+
+    it('describe-process should work', (done) => {
 
     }, 10000);
 });
