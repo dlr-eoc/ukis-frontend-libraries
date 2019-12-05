@@ -7,7 +7,7 @@
             "src/manifest.json"
         ],
         "styles": [
-            "src/styles/main.scss",
+            "src/styles.scss",
             "... more added from clarity"
         ],
         "scripts": [

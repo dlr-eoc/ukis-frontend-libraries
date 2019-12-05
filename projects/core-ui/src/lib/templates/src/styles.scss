@@ -1,16 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* You can add global styles to this file, and also import other style files */
+
 // overwrite Clarity variables
-@import "clr_overwrites";
+@import "styles/overwrites.clarity";
 // Clarity Icons
 @import "@clr/icons/clr-icons.min.css";
 // Clarity Dependency SCSS and Clarity Component SCSS
 @import "@clr/ui/src/main";
 
-@import "inputs";
+@import "styles/inputs";
 
-@import "vertival.nav";
-@import "ukis.layer.nav";
+@import "styles/vertival.nav";
+@import "styles/ukis.layer.nav";
 
 /** HEADER -------------------------------------------------------------- */
 .header {
@@ -56,6 +58,13 @@
 }
 
 /** CONTENT -------------------------------------------------------------- */
+// adjust padding of main container for map!!!
+.main-container .content-container .content-area {
+    &.map-view {
+      padding: 0;
+    }
+  }
+
 .content-area {
   background: #fff;
   color: #444;
@@ -96,8 +105,4 @@
 .ol-overviewmap {
   left: 0.5em !important;
   bottom: 3.0em !important;
-
-  &.ol-overviewmap-map{
-    
-  }
 }
