@@ -25,10 +25,10 @@ export interface OutputDescriptionType {
 }
 
 export interface DataOutputType {
-   data: Data;
-   reference: ReferenceType;
-   output: DataOutputType;
    id: string;
+   data?: Data;
+   reference?: ReferenceType;
+   output?: DataOutputType;
 }
 
 export interface WPSCapabilitiesType_Extension {
@@ -85,7 +85,7 @@ export interface DataDescriptionType {
 
 export interface StatusInfo {
    jobID: string;
-   status: string;
+   status: 'Succeeded' | 'Failed' | 'Accepted' | 'Running';
    expirationDate?: string;
    estimatedCompletion?: string;
    nextPoll?: string;
@@ -126,7 +126,7 @@ export interface DescribeProcess {
 }
 
 export interface Result {
-   output: any;
+   output: DataOutputType[];
    jobID?: string;
    expirationDate?: string;
 }
@@ -249,3 +249,13 @@ export interface IWpsExecuteProcessBody {
    value: ExecuteRequestType
 }
 
+export interface IWpsExecuteResponse {
+   name: {
+      key: '{http://www.opengis.net/wps/2.0}Result',
+      localPart: 'Result',
+      namespaceURI: 'http://www.opengis.net/wps/2.0',
+      prefix: 'wps',
+      string: '{http://www.opengis.net/wps/2.0}wps:Result'
+   }, 
+   value: Result | StatusInfo
+}

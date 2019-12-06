@@ -12,6 +12,7 @@ import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
 import { Jsonix } from '@boundlessgeo/jsonix';
 import { WpsData, WpsDataDescription } from './wps_datatypes';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 class MyXhrFactory extends XhrFactory {
     build(): XMLHttpRequest {
@@ -93,19 +94,19 @@ function createRequestAcceptedResponse(serverUrl: string, pId: string): string {
     const currentStateUrl = `${serverUrl}?retrieveState`;
     return `
     <wps:ExecuteResponse
-        xmlns:wps="http://www.opengis.net/wps/1.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ows="http://www.opengis.net/ows/1.1"
-        xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd"
-        serviceInstance="${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS"
-        xml:lang="en-US"
-        service="WPS"
-        version="1.0.0"
-        statusLocation="${currentStateUrl}">
-        <wps:Process wps:processVersion="1.0.0">
+        xmlns:wps='http://www.opengis.net/wps/1.0.0'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:ows='http://www.opengis.net/ows/1.1'
+        xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd'
+        serviceInstance='${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS'
+        xml:lang='en-US'
+        service='WPS'
+        version='1.0.0'
+        statusLocation='${currentStateUrl}'>
+        <wps:Process wps:processVersion='1.0.0'>
         <ows:Identifier>${pId}</ows:Identifier>
         </wps:Process>
-        <wps:Status creationTime="2019-10-04T13:23:43.830Z">
+        <wps:Status creationTime='2019-10-04T13:23:43.830Z'>
         <wps:ProcessAccepted>Process Accepted</wps:ProcessAccepted>
         </wps:Status>
         </wps:ExecuteResponse>
@@ -116,20 +117,20 @@ function createWaitResponse(serverUrl: string, pId: string): string {
     const currentStateUrl = `${serverUrl}?retrieveState`;
     return `
     <wps:ExecuteResponse
-        xmlns:wps="http://www.opengis.net/wps/1.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ows="http://www.opengis.net/ows/1.1"
-        xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd"
-        serviceInstance="${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS"
-        xml:lang="en-US"
-        service="WPS"
-        version="1.0.0"
-        statusLocation="${currentStateUrl}">
-        <wps:Process wps:processVersion="1.0.0">
+        xmlns:wps='http://www.opengis.net/wps/1.0.0'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:ows='http://www.opengis.net/ows/1.1'
+        xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd'
+        serviceInstance='${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS'
+        xml:lang='en-US'
+        service='WPS'
+        version='1.0.0'
+        statusLocation='${currentStateUrl}'>
+        <wps:Process wps:processVersion='1.0.0'>
             <ows:Identifier>${pId}</ows:Identifier>
         </wps:Process>
-        <wps:Status creationTime="2019-10-04T13:23:43.830Z">
-            <wps:ProcessStarted percentCompleted="0"/>
+        <wps:Status creationTime='2019-10-04T13:23:43.830Z'>
+            <wps:ProcessStarted percentCompleted='0'/>
         </wps:Status>
     </wps:ExecuteResponse>
     `;
@@ -140,27 +141,27 @@ function createSuccessResponse(serverUrl: string, pId: string, outputId: string)
     const resultUrl = `${serverUrl}?retrieveResult`;
     return `
     <wps:ExecuteResponse
-        xmlns:wps="http://www.opengis.net/wps/1.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ows="http://www.opengis.net/ows/1.1"
-        xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd"
-        serviceInstance="${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS"
-        xml:lang="en-US"
-        service="WPS"
-        version="1.0.0"
-        statusLocation="${currentStateUrl}">
-        <wps:Process wps:processVersion="1.0.0">
+        xmlns:wps='http://www.opengis.net/wps/1.0.0'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:ows='http://www.opengis.net/ows/1.1'
+        xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd'
+        serviceInstance='${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS'
+        xml:lang='en-US'
+        service='WPS'
+        version='1.0.0'
+        statusLocation='${currentStateUrl}'>
+        <wps:Process wps:processVersion='1.0.0'>
             <ows:Identifier>${pId}</ows:Identifier>
         </wps:Process>
-        <wps:Status creationTime="2019-10-04T13:23:43.830Z">
+        <wps:Status creationTime='2019-10-04T13:23:43.830Z'>
             <wps:ProcessSucceeded>Process successful</wps:ProcessSucceeded>
         </wps:Status>
         <wps:ProcessOutputs>
             <wps:Output>
                 <ows:Identifier>${outputId}</ows:Identifier>
                 <wps:Reference
-                    encoding="UTF-8" mimeType="text/xml"
-                    href="${resultUrl}"/>
+                    encoding='UTF-8' mimeType='text/xml'
+                    href='${resultUrl}'/>
             </wps:Output>
         </wps:ProcessOutputs>
     </wps:ExecuteResponse>
@@ -286,24 +287,24 @@ describe(`Testing wps-client version 2 functionality`, () => {
     fit('show what a json-execute-request might look like', () => {
         const xml = `
         <wps:Execute
-        xmlns:wps="http://www.opengis.net/wps/2.0"
-        xmlns:ows="http://www.opengis.net/ows/2.0"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.opengis.net/wps/2.0 ../wps.xsd"
-        service="WPS" version="2.0.0" response="document" mode="async">
+        xmlns:wps='http://www.opengis.net/wps/2.0'
+        xmlns:ows='http://www.opengis.net/ows/2.0'
+        xmlns:xlink='http://www.w3.org/1999/xlink'
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xsi:schemaLocation='http://www.opengis.net/wps/2.0 ../wps.xsd'
+        service='WPS' version='2.0.0' response='document' mode='async'>
         <ows:Identifier>
             http://my.wps.server/processes/proximity/Planar-Buffer
         </ows:Identifier>
-        <wps:Input id="INPUT_GEOMETRY">
-            <wps:Reference xlink:href="http://some.data.server/mygmldata.xml"/>
+        <wps:Input id='INPUT_GEOMETRY'>
+            <wps:Reference xlink:href='http://some.data.server/mygmldata.xml'/>
         </wps:Input>
-        <wps:Input id="DISTANCE">
+        <wps:Input id='DISTANCE'>
             <wps:Data>10</wps:Data>
         </wps:Input>
         <!– Uses default output format –>
-        <wps:Output id="BUFFERED_GEOMETRY"
-        wps:dataTransmissionMode="reference">
+        <wps:Output id='BUFFERED_GEOMETRY'
+        wps:dataTransmissionMode='reference'>
         </wps:Output>
         </wps:Execute>
         `;
@@ -324,52 +325,28 @@ describe(`Testing wps-client version 2 functionality`, () => {
     }, 3000);
 
     fit('execute should work', (done) => {
-        const testserver = 'http://geoprocessing.demo.52north.org/javaps/service';
-        const processId = 'org.n52.wps.server.algorithm.SimpleBufferAlgorithm';
+        const testserver = 'https://riesgos.52north.org/wps/WebProcessingService';
+        const processId = 'org.n52.wps.python.algorithm.ShakemapProcess';
 
-        const data: WpsData = {
+        const quakemlInput: WpsData = {
             description: {
-                id: 'data',
+                id: 'quakeml-input',
                 reference: false,
                 type: 'complex',
                 format: 'application/vnd.geo+json'
             },
-            value: {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                      "type": "Polygon",
-                      "coordinates": [
-                        [[-11.315917968749998, 21.779905342529645 ],
-                        [-14.17236328125, 18.95824648598139 ],
-                        [-4.833984374999999, 18.3336694457713 ],
-                        [-11.315917968749998, 21.779905342529645 ]]]
-                    }
-                }]
-            }
+            value: {'type':'FeatureCollection','features':[{'type':'Feature','geometry':{'type':'Point','coordinates':[-72.3123,-33.0559]},'properties':{'preferredOriginID':'359112','preferredMagnitudeID':'359112','type':'earthquake','description.text':'stochastic','origin.publicID':'359112','origin.time.value':'69051-01-01T00:00:00.000000Z','origin.time.uncertainty':'nan','origin.depth.value':'32.15805','origin.depth.uncertainty':'nan','origin.creationInfo.value':'GFZ','originUncertainty.horizontalUncertainty':'nan','originUncertainty.minHorizontalUncertainty':'nan','originUncertainty.maxHorizontalUncertainty':'nan','originUncertainty.azimuthMaxHorizontalUncertainty':'nan','magnitude.publicID':'359112','magnitude.mag.value':'7.05','magnitude.mag.uncertainty':'nan','magnitude.type':'MW','magnitude.creationInfo.value':'GFZ','focalMechanism.publicID':'359112','focalMechanism.nodalPlanes.nodalPlane1.strike.value':'10.68754','focalMechanism.nodalPlanes.nodalPlane1.strike.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.dip.value':'16.93797','focalMechanism.nodalPlanes.nodalPlane1.dip.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.rake.value':'90.0','focalMechanism.nodalPlanes.nodalPlane1.rake.uncertainty':'nan','focalMechanism.nodalPlanes.preferredPlane':'nodalPlane1','popupContent':'selected-rows'},'id':'359112'}]}
         };
 
-        const width: WpsData = {
-            description: {
-                id: 'width',
-                reference: false,
-                type: 'literal',
-                format: 'text/plain'
-            },
-            value: 2.5
-        };
-
-        const result: WpsDataDescription = {
-            id: 'result',
+        const shakemapOutput: WpsDataDescription = {
+            id: 'shakemap-output',
             reference: false,
             type: 'complex',
-            format: 'application/vnd.geo+json'
+            format: 'application/WMS',
         };
 
-        const inputs: WpsData[] = [data, width];
-        const outputDescriptions: WpsDataDescription[] = [result];
+        const inputs: WpsData[] = [quakemlInput];
+        const outputDescriptions: WpsDataDescription[] = [shakemapOutput];
 
         const c = new WpsClient('2.0.0', httpClient);
         const exec$ = c.execute(testserver, processId, inputs, outputDescriptions, false);

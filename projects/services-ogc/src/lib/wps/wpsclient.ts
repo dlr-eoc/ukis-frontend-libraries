@@ -93,7 +93,7 @@ export class WpsClient {
 
         return executeRequest.pipe(
             mergeMap(executeResponse => {
-                const getStateRequest = this.checkState(executeResponse[0].value);
+                const getStateRequest = this.checkState(url, processId, executeResponse[0].value);
                 return pollEveryUntil(
                     getStateRequest,
                     (stateResponse) => {
@@ -130,7 +130,7 @@ export class WpsClient {
             outputDescriptions: WpsOutputDescription[], async: boolean): Observable<WpsResult[]> {
 
         const executeUrl = this.wpsmarshaller.executeUrl(url, processId);
-        const execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, outputDescriptions, async); console.log('execbody', execbody)
+        const execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, outputDescriptions, async);
         const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
 
         const headers = new HttpHeaders({
@@ -141,23 +141,27 @@ export class WpsClient {
             delayedRetry(2000, 2),
             map(xmlResponse => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
-                const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse);
+                const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse, url, processId);
                 return output;
             }),
             share()  // turning hot: to make sure that multiple subscribers dont cause multiple requests
         );
     }
 
-    private checkState(statusUrl: string): Observable<any> {
+    checkState(serverUrl: string, processId: string, statusId: string): Observable<any> {
         const headers = new HttpHeaders({
             'Content-Type': 'text/xml',
             'Accept': 'text/xml, application/xml'
         });
-        return this.webclient.get(statusUrl, {headers, responseType: 'text'}).pipe(
+        const statusUrl = this.wpsmarshaller.getStatusUrl(statusId, serverUrl, processId);
+        const execbody = this.wpsmarshaller.marshallGetStatusBody(serverUrl, processId, statusId);
+        const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
+
+        return this.webclient.post(statusUrl, xmlExecbody, {headers, responseType: 'text'}).pipe(
             delayedRetry(2000, 2),
             map( xmlResponse => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
-                const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse);
+                const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse, serverUrl, processId);
                 return output;
             })
         );

@@ -69,7 +69,7 @@ export interface WpsMarshaller {
     executeUrl(url: string, processId: string): string;
 
     unmarshalCapabilities(capabilitiesJson: any): WpsCapability[];
-    unmarshalExecuteResponse(responseJson: any): WpsResult[];
+    unmarshalExecuteResponse(responseJson: any, url: string, processId: string): WpsResult[];
 
     marshalExecBody(processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[], async: boolean): any;
 }

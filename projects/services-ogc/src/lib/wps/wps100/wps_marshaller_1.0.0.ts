@@ -29,7 +29,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
         return out;
     }
 
-    unmarshalExecuteResponse(responseJson: IWpsExecuteResponse): WpsResult[] {
+    unmarshalExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string): WpsResult[] {
         const out: WpsResult[] = [];
 
         if (responseJson.value.status.processFailed) { // Failure?
