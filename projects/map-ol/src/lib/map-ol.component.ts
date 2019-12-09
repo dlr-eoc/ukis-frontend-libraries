@@ -10,7 +10,6 @@ import { MapOlService } from './map-ol.service';
 import { LayersService, RasterLayer, WmtsLayertype, Layer, WmsLayertype } from '@ukis/services-layers';
 
 import Map from 'ol/Map';
-import View from 'ol/View';
 
 import olLayer from 'ol/layer/Layer';
 
@@ -54,7 +53,6 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   @Input('controls') controls: IMapControls;
 
   map: Map;
-  view: View;
 
   zoom: number; // default value
   center: any; // default value
@@ -316,7 +314,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     this.mapOnMoveend = (evt) => {
       // console.log(this.mapState.zoom,this.mapState.center, this.mapState.options)
       // console.log("mapOn fired", evt)
-      const zoom = Math.round(this.view.getZoom());
+      const zoom = Math.round(this.mapSvc.getZoom());
       const center = this.mapSvc.getCenter(true);
       const extent = this.mapSvc.getCurrentExtent(true);
       const ms = new MapState(zoom, { lat: parseFloat(center[1].toFixed(6)), lon: parseFloat(center[0].toFixed(6)) }, { notifier: 'map' }, extent, null);
@@ -342,7 +340,6 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   private initMap() {
     const _ol = this.mapSvc.createMap();
     this.map = _ol.map; //
-    this.view = _ol.view; //
 
     this.setControls();
     if (!this.layersSvc) {
