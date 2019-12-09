@@ -51,7 +51,22 @@ export const isBbox = (obj: object): obj is WpsBboxValue => {
         obj.hasOwnProperty('urlon') &&
         obj.hasOwnProperty('urlat')
     );
+};
+
+
+export interface WpsState {
+    status: 'Succeeded' | 'Failed' | 'Accepted' | 'Running';
+    percentCompleted?: number;
+    /** WPS 2.0 only */
+    jobID?: string;
+    /** WPS 1.0 only */
+    statusLocation?: string;
 }
+
+export function isWpsState(obj: object): obj is WpsState {
+    return obj.hasOwnProperty('status') && (obj.hasOwnProperty('jobID') || obj.hasOwnProperty('statusLocation'));
+}
+
 
 export interface WpsBboxData {
     description: WpsBboxDescription;
@@ -69,7 +84,10 @@ export interface WpsMarshaller {
     executeUrl(url: string, processId: string): string;
 
     unmarshalCapabilities(capabilitiesJson: any): WpsCapability[];
-    unmarshalExecuteResponse(responseJson: any, url: string, processId: string): WpsResult[];
+    unmarshalExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[];
+    unmarshalGetStateResponse(jsonResponse: any, serverUrl: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsData[] | WpsState;
 
     marshalExecBody(processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[], async: boolean): any;
+    marshallGetStatusBody(serverUrl: string, processId: string, statusId: string): any;
+    marshallGetResultBody(serverUrl: string, processId: string, jobID: string);
 }

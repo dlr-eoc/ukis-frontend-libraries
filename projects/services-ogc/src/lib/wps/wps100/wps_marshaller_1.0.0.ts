@@ -1,8 +1,8 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsBboxValue } from '../wps_datatypes';
+import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsBboxValue, WpsData, WpsDataDescription, WpsState } from '../wps_datatypes';
 import {
     WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType,
     InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType,
-    ResponseDocumentType, InputReferenceType, LiteralDataType
+    ResponseDocumentType, InputReferenceType, LiteralDataType, ExecuteResponse
 } from './wps_1.0.0';
 
 
@@ -29,7 +29,9 @@ export class WpsMarshaller100 implements WpsMarshaller {
         return out;
     }
 
-    unmarshalExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string): WpsResult[] {
+    unmarshalExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string,
+        inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[] {
+
         const out: WpsResult[] = [];
 
         if (responseJson.value.status.processFailed) { // Failure?
@@ -87,7 +89,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
                     reference: true,
                     type: 'status'
                 },
-                value: responseJson.value.statusLocation,
+                value: this.unmarshalGetStateResponse(responseJson, url, processId, inputs, outputDescriptions)
             });
         }
 
@@ -116,6 +118,29 @@ export class WpsMarshaller100 implements WpsMarshaller {
         }
 
         throw new Error(`Not yet implemented: ${data}`);
+    }
+
+    unmarshalGetStateResponse(responseJson: any, serverUrl: string, processId: string,
+        inputs: WpsData[], outputDescriptions: WpsDataDescription[]): WpsData[] | WpsState {
+
+        const response: ExecuteResponse = responseJson.value;
+
+        if (response.processOutputs && response.processOutputs.output) {
+            return this.unmarshalExecuteResponse(responseJson, serverUrl, processId, inputs, outputDescriptions);
+        }
+
+        const status = response.status.processSucceeded ? 'Succeeded' :
+                        response.status.processAccepted ? 'Accepted' :
+                        response.status.processStarted ? 'Running' :
+                        response.status.processFailed ? 'Failed' :
+                        'Failed';
+
+        const state: WpsState = {
+            status: status,
+            statusLocation: response.statusLocation
+        };
+
+        return state;
     }
 
     marshalExecBody(processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[], async: boolean): IWpsExecuteProcessBody {
@@ -268,5 +293,15 @@ export class WpsMarshaller100 implements WpsMarshaller {
             mimeType: input.description.format
         };
         return ref;
+    }
+
+    marshallGetStatusBody(serverUrl: string, processId: string, statusId: string) {
+        // WPS-1.0 does not send a body with a GetStatus request.
+        return {};
+    }
+
+    marshallGetResultBody(serverUrl: string, processId: string, jobID: string) {
+        // WPS-1.0 does not send a body with a GetStatus request.
+        return {};
     }
 }

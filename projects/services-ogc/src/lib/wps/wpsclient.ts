@@ -1,9 +1,9 @@
-import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription } from './wps_datatypes';
+import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription, WpsData, WpsState, isWpsState } from './wps_datatypes';
 import { WpsMarshaller100 } from './wps100/wps_marshaller_1.0.0';
 import { WpsMarshaller200 } from './wps200/wps_marshaller_2.0.0';
 import { Cache } from './utils/cache';
 import { Observable, timer, of, throwError } from 'rxjs';
-import { map, catchError, switchMap, tap, share, mergeMap } from 'rxjs/operators';
+import { map, catchError, switchMap, tap, share, mergeMap, first } from 'rxjs/operators';
 import { Jsonix } from '@boundlessgeo/jsonix';
 
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
@@ -92,18 +92,25 @@ export class WpsClient {
         }
 
         return executeRequest.pipe(
-            mergeMap(executeResponse => {
-                const getStateRequest = this.checkState(url, processId, executeResponse[0].value);
+
+            // poll until results
+            mergeMap((executeResponse: WpsData[]) => {
+
+                const firstState: WpsState = executeResponse[0].value;
+                const resultsOrState$: Observable<WpsData[] | WpsState> =
+                    this.getResultsOrState(url, processId, firstState, inputs, outputs);
+
                 return pollEveryUntil(
-                    getStateRequest,
-                    (stateResponse) => {
-                        const resultsObtained = stateResponse[0].description.type !== 'status';
-                        return resultsObtained;
+                    resultsOrState$,
+                    (response: WpsData[] | WpsState) => {
+                        return (!isWpsState(response));
                     },
                     tapFunction,
                     pollingRate
                 );
             }),
+
+            // In case of errors:
             tap((response: WpsResult[]) => {
                 for (const result of response) {
                     if (result.description.type === 'error') {
@@ -112,6 +119,8 @@ export class WpsClient {
                     }
                 }
             }),
+
+            // caching
             tap((response: WpsResult[]) => {
                 if (this.caching) {
                     console.log('storing data in cache.');
@@ -125,6 +134,8 @@ export class WpsClient {
         );
 
     }
+
+
 
     execute(url: string, processId: string, inputs: WpsInput[],
             outputDescriptions: WpsOutputDescription[], async: boolean): Observable<WpsResult[]> {
@@ -141,30 +152,81 @@ export class WpsClient {
             delayedRetry(2000, 2),
             map(xmlResponse => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
-                const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse, url, processId);
+                const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse, url, processId, inputs, outputDescriptions);
                 return output;
             }),
             share()  // turning hot: to make sure that multiple subscribers dont cause multiple requests
         );
     }
 
-    checkState(serverUrl: string, processId: string, statusId: string): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'text/xml',
-            'Accept': 'text/xml, application/xml'
-        });
-        const statusUrl = this.wpsmarshaller.getStatusUrl(statusId, serverUrl, processId);
-        const execbody = this.wpsmarshaller.marshallGetStatusBody(serverUrl, processId, statusId);
-        const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
+    private getResultsOrState(serverUrl: string, processId: string, lastState: WpsState, inputs: WpsInput[],
+        outputDescriptions: WpsOutputDescription[]): Observable<WpsData[] | WpsState> {
 
-        return this.webclient.post(statusUrl, xmlExecbody, {headers, responseType: 'text'}).pipe(
+        let request$;
+
+        if (this.version === '1.0.0') {
+
+            const headers = new HttpHeaders({
+                'Accept': 'text/xml, application/xml'
+            });
+            request$ = this.webclient.get(lastState.statusLocation, {headers, responseType: 'text'});
+
+        } else if (this.version === '2.0.0') {
+
+            const execbody = this.wpsmarshaller.marshallGetStatusBody(serverUrl, processId, lastState.jobID);
+            const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
+            const headers = new HttpHeaders({
+                'Content-Type': 'text/xml',
+                'Accept': 'text/xml, application/xml'
+            });
+            request$ = this.webclient.post(serverUrl, xmlExecbody, {headers, responseType: 'text'});
+
+        } else {
+            throw new Error(`'GetStatus' has not yet been implemented for this WPS-Version (${this.version}).`);
+        }
+
+        const request1$: Observable<WpsData[] | WpsState> = request$.pipe(
             delayedRetry(2000, 2),
             map( xmlResponse => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
-                const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse, serverUrl, processId);
+                const output: WpsData[] | WpsState =
+                    this.wpsmarshaller.unmarshalGetStateResponse(jsonResponse, serverUrl, processId, inputs, outputDescriptions);
                 return output;
             })
         );
+
+        // Wps2.0: does not fetch results immediately. Need to do this manually.
+        let request2$;
+        if (this.version === '2.0.0') {
+            request2$ = request1$.pipe(
+
+                switchMap((response: WpsState) => {
+                    if (response.status !== 'Succeeded') {
+                        return of(response);
+                    }
+
+                    const execBody = this.wpsmarshaller.marshallGetResultBody(serverUrl, processId, lastState.jobID);
+                    const xmlExecBody = this.xmlmarshaller.marshalString(execBody);
+                    const headers = new HttpHeaders({
+                        'Content-Type': 'text/xml',
+                        'Accept': 'text/xml, application/xml'
+                    });
+                    const result$ = this.webclient.post(serverUrl, xmlExecBody, {headers, responseType: 'text'});
+                    return result$.pipe(
+                        map(xmlResponse => {
+                            const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
+                            const output = this.wpsmarshaller.unmarshalExecuteResponse(jsonResponse, serverUrl, processId, inputs, outputDescriptions);
+                            return output;
+                        }),
+                    );
+                }),
+
+            );
+        } else {
+            request2$ = request1$;
+        }
+
+        return request2$;
     }
 
     dismiss(processId: string): Observable<any> {

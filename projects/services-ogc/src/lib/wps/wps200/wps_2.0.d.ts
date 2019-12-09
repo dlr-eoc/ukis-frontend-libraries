@@ -61,8 +61,10 @@ export interface DataInputType {
    input?: DataInputType;
 }
 
-export interface GetResult {
+export interface GetResult extends RequestBaseType {
    jobID: any;
+   service: 'WPS';
+   version: '2.0.0';
 }
 
 export interface SupportedCRS {
@@ -206,9 +208,12 @@ export interface ReferenceType extends DataEncodingAttributes {
    href: string;
 }
 
-export interface GetStatus {
+export interface GetStatus extends RequestBaseType {
    jobID: any;
+   service: 'WPS',
+   version: '2.0.0',
 }
+
 
 export interface ProcessOffering {
    process: ProcessDescriptionType;
@@ -258,4 +263,26 @@ export interface IWpsExecuteResponse {
       string: '{http://www.opengis.net/wps/2.0}wps:Result'
    }, 
    value: Result | StatusInfo
+}
+
+export interface IGetStatusRequest {
+   name: {
+      key: '{http://www.opengis.net/wps/2.0}GetStatus',
+      localPart: 'GetStatus',
+      namespaceURI: 'http://www.opengis.net/wps/2.0',
+      prefix: 'wps',
+      string: '{http://www.opengis.net/wps/2.0}wps:GetStatus'
+   },
+   value: GetStatus
+}
+
+export interface IGetResultRequest {
+   name: {
+      key: '{http://www.opengis.net/wps/2.0}GetResult',
+      localPart: 'GetResult',
+      namespaceURI: 'http://www.opengis.net/wps/2.0',
+      prefix: 'wps',
+      string: '{http://www.opengis.net/wps/2.0}wps:GetResult'
+   },
+   value: GetResult
 }

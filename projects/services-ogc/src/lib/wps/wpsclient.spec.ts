@@ -11,7 +11,7 @@ import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_
 import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 = WPS_1_0_0_Factory.WPS_1_0_0;
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
 import { Jsonix } from '@boundlessgeo/jsonix';
-import { WpsData, WpsDataDescription } from './wps_datatypes';
+import { WpsData, WpsDataDescription, WpsVerion } from './wps_datatypes';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 class MyXhrFactory extends XhrFactory {
@@ -19,18 +19,6 @@ class MyXhrFactory extends XhrFactory {
         return new XMLHttpRequest();
     }
 }
-
-describe(`Testing wps-client version 1 functionality`, () => {
-
-    const httpClient = new HttpClient(new HttpXhrBackend(new MyXhrFactory()));
-
-    it('Wps-client should init correctly', () => {
-        const c = new WpsClient('1.0.0', httpClient);
-        expect(c).toBeTruthy();
-    });
-
-});
-
 
 
 class PollableServer {
@@ -275,93 +263,102 @@ describe(`Testing polling funcitonality`, () => {
 });
 
 
-describe(`Testing wps-client version 2 functionality`, () => {
+const versions: WpsVerion[] = ['1.0.0', '2.0.0'];
+for (const version of versions) {
+    describe(`Testing wps-client version ${version} functionality`, () => {
 
-    const httpClient = new HttpClient(new HttpXhrBackend(new MyXhrFactory()));
+        const httpClient = new HttpClient(new HttpXhrBackend(new MyXhrFactory()));
 
-    it('Wps-client should init correctly', () => {
-        const c = new WpsClient('2.0.0', httpClient);
-        expect(c).toBeTruthy();
-    });
-
-    fit('show what a json-execute-request might look like', () => {
-        const xml = `
-        <wps:Execute
-        xmlns:wps='http://www.opengis.net/wps/2.0'
-        xmlns:ows='http://www.opengis.net/ows/2.0'
-        xmlns:xlink='http://www.w3.org/1999/xlink'
-        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-        xsi:schemaLocation='http://www.opengis.net/wps/2.0 ../wps.xsd'
-        service='WPS' version='2.0.0' response='document' mode='async'>
-        <ows:Identifier>
-            http://my.wps.server/processes/proximity/Planar-Buffer
-        </ows:Identifier>
-        <wps:Input id='INPUT_GEOMETRY'>
-            <wps:Reference xlink:href='http://some.data.server/mygmldata.xml'/>
-        </wps:Input>
-        <wps:Input id='DISTANCE'>
-            <wps:Data>10</wps:Data>
-        </wps:Input>
-        <!– Uses default output format –>
-        <wps:Output id='BUFFERED_GEOMETRY'
-        wps:dataTransmissionMode='reference'>
-        </wps:Output>
-        </wps:Execute>
-        `;
-
-        const context = new Jsonix.Context([XLink_1_0, OWS_2_0, WPS_2_0]);
-        const xmlunmarshaller = context.createUnmarshaller();
-        const jsonForm = xmlunmarshaller.unmarshalString(xml);
-        console.log(jsonForm);
-    });
-
-    it('get-capabilities should work', (done) => {
-        const testserver = 'http://geoprocessing.demo.52north.org/javaps/service';
-        const c = new WpsClient('2.0.0', httpClient);
-        const capas$ = c.getCapabilities(testserver);
-        capas$.subscribe(result => {
-            done();
+        it('Wps-client should init correctly', () => {
+            const c = new WpsClient(version, httpClient);
+            expect(c).toBeTruthy();
         });
-    }, 3000);
 
-    fit('execute should work', (done) => {
-        const testserver = 'https://riesgos.52north.org/wps/WebProcessingService';
-        const processId = 'org.n52.wps.python.algorithm.ShakemapProcess';
 
-        const quakemlInput: WpsData = {
-            description: {
-                id: 'quakeml-input',
+        it('get-capabilities should work', (done) => {
+            const testserver = 'http://geoprocessing.demo.52north.org/javaps/service';
+            const c = new WpsClient(version, httpClient);
+            const capas$ = c.getCapabilities(testserver);
+            capas$.subscribe(result => {
+                done();
+            });
+        }, 3000);
+
+        it('execute should work', (done) => {
+            const testserver = 'https://riesgos.52north.org/wps/WebProcessingService';
+            const processId = 'org.n52.wps.python.algorithm.ShakemapProcess';
+
+            const quakemlInput: WpsData = {
+                description: {
+                    id: 'quakeml-input',
+                    reference: false,
+                    type: 'complex',
+                    format: 'application/vnd.geo+json'
+                },
+                value: {'type':'FeatureCollection','features':[{'type':'Feature','geometry':{'type':'Point','coordinates':[-72.3123,-33.0559]},'properties':{'preferredOriginID':'359112','preferredMagnitudeID':'359112','type':'earthquake','description.text':'stochastic','origin.publicID':'359112','origin.time.value':'69051-01-01T00:00:00.000000Z','origin.time.uncertainty':'nan','origin.depth.value':'32.15805','origin.depth.uncertainty':'nan','origin.creationInfo.value':'GFZ','originUncertainty.horizontalUncertainty':'nan','originUncertainty.minHorizontalUncertainty':'nan','originUncertainty.maxHorizontalUncertainty':'nan','originUncertainty.azimuthMaxHorizontalUncertainty':'nan','magnitude.publicID':'359112','magnitude.mag.value':'7.05','magnitude.mag.uncertainty':'nan','magnitude.type':'MW','magnitude.creationInfo.value':'GFZ','focalMechanism.publicID':'359112','focalMechanism.nodalPlanes.nodalPlane1.strike.value':'10.68754','focalMechanism.nodalPlanes.nodalPlane1.strike.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.dip.value':'16.93797','focalMechanism.nodalPlanes.nodalPlane1.dip.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.rake.value':'90.0','focalMechanism.nodalPlanes.nodalPlane1.rake.uncertainty':'nan','focalMechanism.nodalPlanes.preferredPlane':'nodalPlane1','popupContent':'selected-rows'},'id':'359112'}]}
+            };
+    
+            const shakemapOutput: WpsDataDescription = {
+                id: 'shakemap-output',
                 reference: false,
                 type: 'complex',
-                format: 'application/vnd.geo+json'
-            },
-            value: {'type':'FeatureCollection','features':[{'type':'Feature','geometry':{'type':'Point','coordinates':[-72.3123,-33.0559]},'properties':{'preferredOriginID':'359112','preferredMagnitudeID':'359112','type':'earthquake','description.text':'stochastic','origin.publicID':'359112','origin.time.value':'69051-01-01T00:00:00.000000Z','origin.time.uncertainty':'nan','origin.depth.value':'32.15805','origin.depth.uncertainty':'nan','origin.creationInfo.value':'GFZ','originUncertainty.horizontalUncertainty':'nan','originUncertainty.minHorizontalUncertainty':'nan','originUncertainty.maxHorizontalUncertainty':'nan','originUncertainty.azimuthMaxHorizontalUncertainty':'nan','magnitude.publicID':'359112','magnitude.mag.value':'7.05','magnitude.mag.uncertainty':'nan','magnitude.type':'MW','magnitude.creationInfo.value':'GFZ','focalMechanism.publicID':'359112','focalMechanism.nodalPlanes.nodalPlane1.strike.value':'10.68754','focalMechanism.nodalPlanes.nodalPlane1.strike.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.dip.value':'16.93797','focalMechanism.nodalPlanes.nodalPlane1.dip.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.rake.value':'90.0','focalMechanism.nodalPlanes.nodalPlane1.rake.uncertainty':'nan','focalMechanism.nodalPlanes.preferredPlane':'nodalPlane1','popupContent':'selected-rows'},'id':'359112'}]}
-        };
+                format: 'application/WMS',
+            };
+    
+            const inputs: WpsData[] = [quakemlInput];
+            const outputDescriptions: WpsDataDescription[] = [shakemapOutput];
+    
+            const c = new WpsClient(version, httpClient);
+            const exec$ = c.execute(testserver, processId, inputs, outputDescriptions, false);
+    
+            exec$.subscribe(results => {
+                console.log(results);
+                results.map(r => expect(r.value).toBeTruthy());
+                done();
+            });
+        }, 10000);
 
-        const shakemapOutput: WpsDataDescription = {
-            id: 'shakemap-output',
-            reference: false,
-            type: 'complex',
-            format: 'application/WMS',
-        };
 
-        const inputs: WpsData[] = [quakemlInput];
-        const outputDescriptions: WpsDataDescription[] = [shakemapOutput];
+        it('execute-async should work', (done) => {
+            const testserver = 'https://riesgos.52north.org/wps/WebProcessingService';
+            const processId = 'org.n52.wps.python.algorithm.ShakemapProcess';
 
-        const c = new WpsClient('2.0.0', httpClient);
-        const exec$ = c.execute(testserver, processId, inputs, outputDescriptions, false);
+            const quakemlInput: WpsData = {
+                description: {
+                    id: 'quakeml-input',
+                    reference: false,
+                    type: 'complex',
+                    format: 'application/vnd.geo+json'
+                },
+                value: {'type':'FeatureCollection','features':[{'type':'Feature','geometry':{'type':'Point','coordinates':[-72.3123,-33.0559]},'properties':{'preferredOriginID':'359112','preferredMagnitudeID':'359112','type':'earthquake','description.text':'stochastic','origin.publicID':'359112','origin.time.value':'69051-01-01T00:00:00.000000Z','origin.time.uncertainty':'nan','origin.depth.value':'32.15805','origin.depth.uncertainty':'nan','origin.creationInfo.value':'GFZ','originUncertainty.horizontalUncertainty':'nan','originUncertainty.minHorizontalUncertainty':'nan','originUncertainty.maxHorizontalUncertainty':'nan','originUncertainty.azimuthMaxHorizontalUncertainty':'nan','magnitude.publicID':'359112','magnitude.mag.value':'7.05','magnitude.mag.uncertainty':'nan','magnitude.type':'MW','magnitude.creationInfo.value':'GFZ','focalMechanism.publicID':'359112','focalMechanism.nodalPlanes.nodalPlane1.strike.value':'10.68754','focalMechanism.nodalPlanes.nodalPlane1.strike.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.dip.value':'16.93797','focalMechanism.nodalPlanes.nodalPlane1.dip.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.rake.value':'90.0','focalMechanism.nodalPlanes.nodalPlane1.rake.uncertainty':'nan','focalMechanism.nodalPlanes.preferredPlane':'nodalPlane1','popupContent':'selected-rows'},'id':'359112'}]}
+            };
 
-        exec$.subscribe(results => {
-            console.log(results);
-            done();
-        });
-    }, 10000);
+            const shakemapOutput: WpsDataDescription = {
+                id: 'shakemap-output',
+                reference: false,
+                type: 'complex',
+                format: 'application/WMS',
+            };
 
-    it('dismiss should work', (done) => {
+            const inputs: WpsData[] = [quakemlInput];
+            const outputDescriptions: WpsDataDescription[] = [shakemapOutput];
 
-    }, 10000);
+            const c = new WpsClient(version, httpClient);
+            const exec$ = c.executeAsync(testserver, processId, inputs, outputDescriptions);
 
-    it('describe-process should work', (done) => {
+            exec$.subscribe(results => {
+                console.log(results);
+                results.map(r => expect(r.value).toBeTruthy());
+                done();
+            });
+        }, 10000);
 
-    }, 10000);
-});
+        it('dismiss should work', (done) => {
+
+        }, 10000);
+
+        it('describe-process should work', (done) => {
+
+        }, 10000);
+    });
+}

@@ -2,7 +2,7 @@ import { StatusInfo, DataOutputType, Result } from './wps_2.0';
 
 
 export const isStatusInfo = (obj: object): obj is StatusInfo => {
-    return obj.hasOwnProperty('jobId')
+    return obj.hasOwnProperty('jobID')
        && obj.hasOwnProperty('status');
 };
 
