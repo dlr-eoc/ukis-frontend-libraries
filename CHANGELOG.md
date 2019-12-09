@@ -1,4 +1,10 @@
+# [6.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.1.0) (2019-12-05) (Add projection switch from SV.)
+### Features
+* **@ukis/map-navigator:** SV: added projection switch. See mariss client for example.
 ### Bug Fixes
+* **@ukis/map-ol:** SV: adjusted setProjection method. It creates a new View instance with keeping previously set settings with exception resolution-related parameters. They are calculated automatically by the OL. After applying new projection all existing layers are triggered to redraw their tiles
+* **@ukis/map-ol:** SV: created getZoom method in the map-ol.service in order to get zoom value from actual olView instance. 
+* **@ukis/map-ol:** SV: changed the zoom value source for mapSate. 
 * **@ukis/services-layers:** adjust types
 * **@ukis/map-ol:** [Backwards incompatible changes in ol6 on map.forEachLayerAtPixel](https://github.com/openlayers/openlayers/releases/tag/v6.0.0) - fix this for popup layers with className = layer.id
 * **@ukis/map-ol:** add more types from openlayers

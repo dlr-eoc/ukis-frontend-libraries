@@ -7,6 +7,7 @@
   "whitelistedNonPeerDependencies": [
     "tslib",
     "ol",
+    "proj4",
     "@ukis/services-map-state",
     "@ukis/services-layers",
     "@ukis/services-layers",
