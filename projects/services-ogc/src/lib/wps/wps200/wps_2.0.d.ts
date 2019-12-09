@@ -35,8 +35,10 @@ export interface WPSCapabilitiesType_Extension {
    any?: any;
 }
 
-export interface Dismiss {
+export interface Dismiss extends RequestBaseType {
    jobID: any;
+   service: 'WPS',
+   version: '2.0.0'
 }
 
 export interface LiteralDataType {
@@ -87,7 +89,7 @@ export interface DataDescriptionType {
 
 export interface StatusInfo {
    jobID: string;
-   status: 'Succeeded' | 'Failed' | 'Accepted' | 'Running';
+   status: 'Succeeded' | 'Failed' | 'Accepted' | 'Running' | 'Dismissed';
    expirationDate?: string;
    estimatedCompletion?: string;
    nextPoll?: string;
@@ -285,4 +287,26 @@ export interface IGetResultRequest {
       string: '{http://www.opengis.net/wps/2.0}wps:GetResult'
    },
    value: GetResult
+}
+
+export interface IDismissRequest {
+   name: {
+      key: '{http://www.opengis.net/wps/2.0}Dismiss',
+      localPart: 'Dismiss',
+      namespaceURI: 'http://www.opengis.net/wps/2.0',
+      prefix: 'wps',
+      string: '{http://www.opengis.net/wps/2.0}wps:Dismiss'
+   },
+   value: Dismiss
+}
+
+export interface IDismissResponse {
+   name: {
+      key: '{http://www.opengis.net/wps/2.0}StatusInfo',
+      localPart: 'StatusInfo',
+      namespaceURI: 'http://www.opengis.net/wps/2.0',
+      prefix: 'wps',
+      string: '{http://www.opengis.net/wps/2.0}wps:StatusInfo'
+   },
+   value: StatusInfo
 }

@@ -78,7 +78,7 @@ export class WpsClient {
 
 
     executeAsync(url: string, processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[],
-                 pollingRate: number = 1000, tapFunction?: (response: any) => void): Observable<WpsResult[]> {
+                 pollingRate: number = 1000, tapFunction?: (response: WpsData[] | WpsState) => void): Observable<WpsResult[]> {
 
         const executeRequest = this.execute(url, processId, inputs, outputs, true);
 
@@ -229,7 +229,24 @@ export class WpsClient {
         return request2$;
     }
 
-    dismiss(processId: string): Observable<any> {
-        throw new Error('Not implemented yet');
+    dismiss(serverUrl: string, processId: string, jobId: string): Observable<any> {
+
+        const dismissUrl = this.wpsmarshaller.dismissUrl(serverUrl, processId, jobId);
+        const dismissBody = this.wpsmarshaller.marshalDismissBody(jobId);
+        const xmlDismissBody = this.xmlmarshaller.marshalString(dismissBody);
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'text/xml',
+            'Accept': 'text/xml, application/xml'
+        });
+        return this.webclient.post(dismissUrl, xmlDismissBody, { headers, responseType: 'text' }).pipe(
+            delayedRetry(2000, 2),
+            map(xmlResponse => {
+                const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
+                const output = this.wpsmarshaller.unmarshalDismissResponse(jsonResponse, serverUrl, processId);
+                return output;
+            }),
+            share()  // turning hot: to make sure that multiple subscribers dont cause multiple requests
+        );
     }
 }

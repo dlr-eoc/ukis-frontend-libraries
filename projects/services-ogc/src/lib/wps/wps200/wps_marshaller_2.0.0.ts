@@ -1,5 +1,5 @@
 import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsDataDescription, WpsData, WpsState } from '../wps_datatypes';
-import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitionType, IWpsExecuteProcessBody, IWpsExecuteResponse, DataOutputType, IGetStatusRequest, Data, IGetResultRequest } from './wps_2.0';
+import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitionType, IWpsExecuteProcessBody, IWpsExecuteResponse, DataOutputType, IGetStatusRequest, Data, IGetResultRequest, IDismissRequest, IDismissResponse } from './wps_2.0';
 import { isDataOutputType, isStatusInfo, isResult } from './helpers';
 
 
@@ -202,5 +202,35 @@ export class WpsMarshaller200 implements WpsMarshaller {
             }
         };
         return request;
+    }
+
+    dismissUrl(serverUrl: string, processId: string, jobId: string): string {
+        return serverUrl;
+    }
+
+    marshalDismissBody(jobId: string) {
+        const body: IDismissRequest = {
+            name: {
+                key: '{http://www.opengis.net/wps/2.0}Dismiss',
+                localPart: 'Dismiss',
+                namespaceURI: 'http://www.opengis.net/wps/2.0',
+                prefix: 'wps',
+                string: '{http://www.opengis.net/wps/2.0}wps:Dismiss'
+             },
+             value: {
+                 jobID: jobId,
+                 service: 'WPS',
+                 version: '2.0.0'
+             }
+        };
+        return body;
+    }
+
+    unmarshalDismissResponse(jsonResponse: IDismissResponse, serverUrl: string, processId: string): WpsState {
+        const state: WpsState = {
+            status: jsonResponse.value.status,
+            jobID: jsonResponse.value.jobID
+        };
+        return state;
     }
 }

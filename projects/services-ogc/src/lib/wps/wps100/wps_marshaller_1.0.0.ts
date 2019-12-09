@@ -304,4 +304,17 @@ export class WpsMarshaller100 implements WpsMarshaller {
         // WPS-1.0 does not send a body with a GetStatus request.
         return {};
     }
+
+    dismissUrl(serverUrl: string, processId: string, jobId: string): string {
+        return `${serverUrl}?service=WPS&version=1.0.0&request=Dismiss&executionId=${jobId}`;
+    }
+
+    marshalDismissBody(processId: string) {
+        // WPS-1.0 does not send a body with a Dismiss request.
+        return {};
+    }
+
+    unmarshalDismissResponse(jsonResponse: any, serverUrl: string, processId: string): WpsState {
+        throw new Error('Not yet implemented');
+    }
 }
