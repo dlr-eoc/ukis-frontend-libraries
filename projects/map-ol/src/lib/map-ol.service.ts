@@ -50,8 +50,9 @@ import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
 import { DragBox } from 'ol/interaction';
-import {Observable} from "rxjs";
 
+
+export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
 
 /**
 * like olExtend: [minX, minY, maxX, maxY]
@@ -74,6 +75,7 @@ export class MapOlService {
     // this.createMap();
   }
 
+  /** USED in map-ol.component */
   public createMap(target?: HTMLElement) {
     const zoom = 3;
     const center = {
@@ -888,6 +890,7 @@ export class MapOlService {
     }
   }
 
+  /** USED in map-ol.component */
   public layers_on_click(evt) {
     // pixel, callback, opt_options
     const LayersAtPixel = [];
@@ -982,6 +985,7 @@ export class MapOlService {
     this.map.addOverlay(overlay);
   }
 
+  /** USED in map-ol.component */
   public removeAllPopups() {
     const popups = this.getPopups();
     popups.forEach((overlay) => {
@@ -1032,6 +1036,8 @@ export class MapOlService {
     this.map.getView().fit(transfomExtent, fitOptions);
     return (transfomExtent as TGeoExtent);
   }
+
+  /** USED in map-ol.component */
   /** ol.Coordinate xy */
   public setCenter(center: number[], geographic?: boolean): number[] {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
@@ -1042,6 +1048,7 @@ export class MapOlService {
     return transfomCenter;
   }
 
+  /** USED in map-ol.component */
   public getCenter(geographic?: boolean): any {
     const dstProjection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const srcProjection = getProjection(this.map.getView().getProjection().getCode());
@@ -1068,6 +1075,7 @@ export class MapOlService {
     }
   }
 
+  /** USED in map-ol.component */
   /**
    * @param geographic
    * @returns olExtend: [minX, minY, maxX, maxY]
@@ -1079,11 +1087,13 @@ export class MapOlService {
     return (transfomExtent as TGeoExtent);
   }
 
+  /** USED in map-ol.component */
   public setZoom(zoom: number, notifier?: 'map' | 'user') {
     const view = this.map.getView();
     view.setZoom(zoom);
   }
 
+  /** USED in map-ol.component */
   public getZoom(): number {
     return this.map.getView().getZoom()
   }
@@ -1143,8 +1153,8 @@ export class MapOlService {
    * @param srcProj: string (e.g. 'EPSG:4326')
    * @param dstProj: string (e.g. 'EPSG:3857')
    */
-  public reprojectFeatures(source:olVectorSource, srcProj:string, dstProj:string) {
-    source.getFeatures().forEach(feature =>{
+  public reprojectFeatures(source: olVectorSource, srcProj: string, dstProj: string) {
+    source.getFeatures().forEach(feature => {
       feature.getGeometry().transform(srcProj, dstProj)
     });
   }
@@ -1170,7 +1180,7 @@ export class MapOlService {
         _viewOptions.projection = projection;
         let newCenter = transform(this.map.getView().getCenter(), this.map.getView().getProjection(), projection); //get center coordinates in the new projection
         _viewOptions.center = newCenter; //this.map.getView().getCenter();
-       // _viewOptions.extent = projection.getExtent();// || undefined;
+        // _viewOptions.extent = projection.getExtent();// || undefined;
         _viewOptions.zoom = this.map.getView().getZoom();
       } else if (typeof projection === 'string') {
         _viewOptions.projection = projection;
@@ -1185,13 +1195,13 @@ export class MapOlService {
 
       //reprojecting vector layers
       this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-        layerGroup.getLayers().getArray().forEach(layer =>{
+        layerGroup.getLayers().getArray().forEach(layer => {
           let source = layer.getSource();
           //check for nested sources, e.g. cluster or cluster of clusters etc
           while (source['source']) {
             source = source['source'];
           }
-          if (source instanceof olVectorSource){
+          if (source instanceof olVectorSource) {
             this.reprojectFeatures(source, oldProjection, this.EPSG);
           }
         });
@@ -1202,7 +1212,7 @@ export class MapOlService {
     }
   }
 
-  public registerProjection(projDef: any){
+  public registerProjection(projDef: any) {
     proj4.defs(projDef.code, projDef.proj4js);
     olRegister(proj4);
   }
@@ -1210,10 +1220,10 @@ export class MapOlService {
   public getOlProjection(projDef: any): olProjection {
     return new olProjection({
       code: projDef.code,
-      extent: projDef.extent? projDef.extent: undefined,
-      worldExtent: projDef.worldExtent? projDef.worldExtent: undefined,
-      global: projDef.global? projDef.global: false,
-      units: projDef.units? projDef.units: undefined
+      extent: projDef.extent ? projDef.extent : undefined,
+      worldExtent: projDef.worldExtent ? projDef.worldExtent : undefined,
+      global: projDef.global ? projDef.global : false,
+      units: projDef.units ? projDef.units : undefined
     });
   }
 

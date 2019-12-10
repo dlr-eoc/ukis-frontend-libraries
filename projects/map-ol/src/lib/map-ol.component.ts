@@ -6,8 +6,8 @@ import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterVi
 import { MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
 import { Subscription } from 'rxjs';
-import { MapOlService } from './map-ol.service';
-import { LayersService, RasterLayer, WmtsLayertype, Layer, WmsLayertype } from '@ukis/services-layers';
+import { MapOlService, Tgroupfiltertype } from './map-ol.service';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer } from '@ukis/services-layers';
 
 import Map from 'ol/Map';
 
@@ -129,7 +129,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     })
   }
 
-  private addUpdateLayers(layers, type: 'baselayers' | 'layers' | 'overlays', layersunderneath: Array<'baselayers' | 'layers' | 'overlays'>) {
+  private addUpdateLayers(layers: Layer[], type: Tgroupfiltertype, layersunderneath: Array<Tgroupfiltertype>) {
     /** get all underneath layers for zIndex */
     let _otherlayerslength = 0;
     layersunderneath.forEach(_type => {
@@ -161,7 +161,9 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (ollayer.getOpacity() !== layer.opacity) {
             ollayer.setOpacity(layer.opacity);
           }
+
           if (_otherlayerslength > 0) {
+            console.log(layer)
             if (ollayer.getZIndex() !== layers.indexOf(layer) + _otherlayerslength) {
               ollayer.setZIndex(layers.indexOf(layer) + _otherlayerslength);
             }
@@ -177,21 +179,24 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
+  /* private updateLayer(oldLayer: olLayer<any>, newLayer: Layer) {
+    this.mapSvc.updateLayerByKey({ key: 'id', value: oldLayer.get('id') }, newLayer, newLayer.filtertype);
+  } */
 
   private updateLayerParamsWith(oldLayer: olLayer<any>, newLayer: Layer): void {
     switch (newLayer.type) {
       case WmsLayertype:
-        this.updateWmsLayerParamsWith(oldLayer, newLayer as RasterLayer);
+        this.updateWmsLayerParamsWith(oldLayer, newLayer as WmsLayer);
         break;
       case WmtsLayertype:
-        this.updateWmtsLayerParamsWith(oldLayer, newLayer as RasterLayer);
+        this.updateWmtsLayerParamsWith(oldLayer, newLayer as WmtsLayer);
         break;
       default:
         break;
     }
   }
 
-  private updateWmsLayerParamsWith(oldLayer: olLayer<any>, newWmsLayer: RasterLayer): void {
+  private updateWmsLayerParamsWith(oldLayer: olLayer<any>, newWmsLayer: WmsLayer): void {
     const source = oldLayer.getSource();
     const oldParams = source.getParams();
     const newParams = newWmsLayer.params;
@@ -201,17 +206,23 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
-  private updateWmtsLayerParamsWith(oldLayer: olLayer<any>, newWmtsLayer: RasterLayer): void {
+  private updateWmtsLayerParamsWith(oldLayer: olLayer<any>, newWmtsLayer: WmtsLayer): void {
     // contrary to a wms-source, a wmts-source has neither 'getParams' nor 'updateParams', so we need to do this manually.
     const source = oldLayer.getSource();
     if (source.getStyle() !== newWmtsLayer.params.style
-      || source.getFormat() !== newWmtsLayer.params.FORMAT
-      || source.getVersion() !== newWmtsLayer.params.VERSION
-      || source.getMatrixSet() !== newWmtsLayer.params.MatrixSet) {
+      || source.getFormat() !== newWmtsLayer.params.format
+      || source.getVersion() !== newWmtsLayer.params.version
+      || source.getMatrixSet() !== newWmtsLayer.params.matrixSetOptions) {
+      /* if (newWmtsLayer.params.style && source.getStyle() !== newWmtsLayer.params.style
+        || newWmtsLayer.params.FORMAT && source.getFormat() !== newWmtsLayer.params.FORMAT
+        || newWmtsLayer.params.VERSION && source.getVersion() !== newWmtsLayer.params.VERSION
+        || newWmtsLayer.params.MatrixSet && source.getMatrixSet() !== newWmtsLayer.params.MatrixSet) { */
+
+      // console.log(source, newWmtsLayer.params)
       // WMTS dont allow easy reloading; see:
       // https://gis.stackexchange.com/questions/299554/openlayers-refresh-wmts-tiles-when-underlying-data-changes
       // Instead of reloading, we remove the old layer and add the new one.
-      const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as 'baselayers' | 'layers' | 'overlays';
+      const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as Tgroupfiltertype;
       this.mapSvc.setLayer(newWmtsLayer, olFiltertype);
     }
   }
