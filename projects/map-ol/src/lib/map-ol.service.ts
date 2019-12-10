@@ -222,18 +222,20 @@ export class MapOlService {
     this.map.addInteraction(dragBox);
   }
 
-  public getLayers(type: 'baselayers' | 'layers' | 'overlays'): olLayer<any>[] {
+  public getLayers(type: Tgroupfiltertype): olLayer<any>[] {
+    const _type = type.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === type) {
+      if (layerGroup.get('type') === _type) {
         layers = layerGroup.getLayers().getArray();
       }
     });
     return layers;
   }
 
-  public getLayerByKey(key: { key: string, value: string }, type: 'baselayers' | 'layers' | 'overlays') {
-    const layers = this.getLayers(type);
+  public getLayerByKey(key: { key: string, value: string }, type: Tgroupfiltertype) {
+    const _type = type.toLowerCase() as Tgroupfiltertype;
+    const layers = this.getLayers(_type);
     let _layer;
     layers.forEach((layer) => {
       if (layer.get(key.key) && layer.get(key.key) === key.value) {
@@ -243,10 +245,11 @@ export class MapOlService {
     return _layer;
   }
 
-  public addLayer(layer: olLayer<any>, type: 'baselayers' | 'layers' | 'overlays') {
+  public addLayer(layer: olLayer<any>, type: Tgroupfiltertype) {
+    const _type = type.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === type) {
+      if (layerGroup.get('type') === _type) {
         layers = layerGroup.getLayers().getArray();
         layers.push(layer);
         layerGroup.setLayers(new olCollection(layers));
@@ -255,10 +258,11 @@ export class MapOlService {
     return layers;
   }
 
-  public addLayers(layers: olLayer<any>[], type: 'baselayers' | 'layers' | 'overlays') {
+  public addLayers(layers: olLayer<any>[], type: Tgroupfiltertype) {
+    const _type = type.toLowerCase() as Tgroupfiltertype;
     let _layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === type) {
+      if (layerGroup.get('type') === _type) {
         _layers = layers;
         layerGroup.setLayers(new olCollection(_layers));
       }
@@ -267,15 +271,69 @@ export class MapOlService {
   }
 
   // not working???
-  public removeLayerByKey(key: { key: string, value: string }, type: 'baselayers' | 'layers' | 'overlays') {
-    const layer = this.getLayerByKey(key, type);
+  public removeLayerByKey(key: { key: string, value: string }, type: Tgroupfiltertype) {
+    const _type = type.toLowerCase() as Tgroupfiltertype;
+    const layer = this.getLayerByKey(key, _type);
     this.map.removeLayer(layer);
   }
 
-  public removeAllLayers(type: 'baselayers' | 'layers' | 'overlays') {
+  public updateLayerByKey(key: { key: string, value: string }, newLayer: olLayer, type: Tgroupfiltertype) {
+    const _type = type.toLocaleLowerCase() as Tgroupfiltertype;
+    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
+      if (layerGroup.get('type') === _type) {
+        const groupLayers = layerGroup.getLayers();
+        groupLayers.forEach((oldLayer, index) => {
+          if (oldLayer.get(key.key) && oldLayer.get(key.key) === key.value) {
+            const newSource = newLayer.getSource();
+            const newProperties = newLayer.getProperties();
+            const newExtent = newLayer.getExtent();
+
+            const newMaxZoom = newLayer.getMaxZoom();
+            const newMinZoom = newLayer.getMinZoom();
+
+            const newOpacity = newLayer.getOpacity();
+            const newVisible = newLayer.getVisible();
+
+            const newZIndex = newLayer.getZIndex();
+
+            if (newSource) {
+              oldLayer.setSource(newSource);
+            }
+            if (newProperties) {
+              oldLayer.setProperties(newProperties);
+            }
+            if (newExtent) {
+              oldLayer.setExtent(newExtent);
+            }
+            if (newMaxZoom) {
+              oldLayer.setMaxZoom(newMaxZoom);
+            }
+            if (newMinZoom) {
+              oldLayer.setMinZoom(newMinZoom);
+            }
+            if (newOpacity) {
+              oldLayer.setOpacity(newOpacity);
+            }
+            if (newVisible) {
+              oldLayer.setVisible(newVisible);
+            }
+            if (newZIndex) {
+              oldLayer.setZIndex(newZIndex);
+            }
+            oldLayer.changed();
+            groupLayers.setAt(index, oldLayer);
+          }
+        });
+        layerGroup.setLayers(groupLayers);
+      }
+    });
+  }
+
+  public removeAllLayers(type: Tgroupfiltertype) {
+    const _type = type.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === type) {
+      if (layerGroup.get('type') === _type) {
         layers = layerGroup.getLayers();
         layers.clear();
       }
@@ -287,13 +345,14 @@ export class MapOlService {
    *
    * can we deep check if a layer is exactly the same and dont create it new???
    */
-  public setLayers(layers: Array<Layer>, type: 'baselayers' | 'layers' | 'overlays') {
+  public setLayers(layers: Array<Layer>, type: Tgroupfiltertype) {
+    const _type = type.toLowerCase() as Tgroupfiltertype;
     const _layers = <any>[];
     // TODO try to deep check if a layer if exactly the same and dont create it new
-    if (layers.length < 1 && type !== 'baselayers') {
+    if (layers.length < 1 && _type !== 'baselayers') {
       // this.removeAllLayers('overlays');
       // this.removeAllLayers('layers');
-      this.removeAllLayers(type);
+      this.removeAllLayers(_type);
     } else {
       layers.forEach((layer) => {
         let _layer;
@@ -322,12 +381,13 @@ export class MapOlService {
     }
 
     if (_layers.length > 0) {
-      this.addLayers(_layers, type);
+      this.addLayers(_layers, _type);
     }
   }
 
-  public setLayer(newLayer: Layer, type: 'baselayers' | 'layers' | 'overlays'): void {
-    const oldLayers: olLayer<any>[] = this.getLayers(type);
+  public setLayer(newLayer: Layer, type: Tgroupfiltertype): void {
+    const _type = type.toLowerCase() as Tgroupfiltertype;
+    const oldLayers: olLayer<any>[] = this.getLayers(_type);
     const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
     let newOlLayer;
     switch (newLayer.type) {
