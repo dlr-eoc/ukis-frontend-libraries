@@ -270,11 +270,24 @@ export class MapOlService {
     return layers;
   }
 
-  // not working???
+
   public removeLayerByKey(key: { key: string, value: string }, type: Tgroupfiltertype) {
-    const _type = type.toLowerCase() as Tgroupfiltertype;
-    const layer = this.getLayerByKey(key, _type);
-    this.map.removeLayer(layer);
+    const _type = type.toLocaleLowerCase() as Tgroupfiltertype;
+    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
+      if (layerGroup.get('type') === _type) {
+        const groupLayers = layerGroup.getLayers();
+        let removeLayer;
+        groupLayers.forEach((layer) => {
+          if (layer.get(key.key) && layer.get(key.key) === key.value) {
+            removeLayer = layer;
+          }
+        });
+        if (removeLayer) {
+          groupLayers.remove(removeLayer);
+          layerGroup.setLayers(groupLayers);
+        }
+      }
+    });
   }
 
   public updateLayerByKey(key: { key: string, value: string }, newLayer: olLayer, type: Tgroupfiltertype) {
@@ -385,6 +398,7 @@ export class MapOlService {
     }
   }
 
+  /** this is more a updateLayer function !!! */
   public setLayer(newLayer: Layer, type: Tgroupfiltertype): void {
     const _type = type.toLowerCase() as Tgroupfiltertype;
     const oldLayers: olLayer<any>[] = this.getLayers(_type);
@@ -407,8 +421,9 @@ export class MapOlService {
         newOlLayer = this.create_custom_layer(<CustomLayer>newLayer);
         break;
     }
-    this.removeLayerByKey({ key: 'id', value: oldLayer.get('id') }, type);
-    this.addLayer(newOlLayer, type);
+    this.updateLayerByKey({ key: 'id', value: oldLayer.get('id') }, newOlLayer, type);
+    //this.removeLayerByKey({ key: 'id', value: oldLayer.get('id') }, type);
+    //this.addLayer(newOlLayer, type);
   }
 
   /**
@@ -466,7 +481,8 @@ export class MapOlService {
   private create_wms_layer(l: WmsLayer): olTileLayer {
 
     const tile_options: olTileWMSOptions = {
-      params: l.params,
+      /** use assign here otherwise params is passed by object reference to the openlayers layer! */
+      params: Object.assign({}, l.params), // params: {} = { ...l.params } ~ same as assign destructuring
       wrapX: false
     };
 
