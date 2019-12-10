@@ -163,7 +163,6 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           }
 
           if (_otherlayerslength > 0) {
-            console.log(layer)
             if (ollayer.getZIndex() !== layers.indexOf(layer) + _otherlayerslength) {
               ollayer.setZIndex(layers.indexOf(layer) + _otherlayerslength);
             }
@@ -178,10 +177,6 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       }
     }
   }
-
-  /* private updateLayer(oldLayer: olLayer<any>, newLayer: Layer) {
-    this.mapSvc.updateLayerByKey({ key: 'id', value: oldLayer.get('id') }, newLayer, newLayer.filtertype);
-  } */
 
   private updateLayerParamsWith(oldLayer: olLayer<any>, newLayer: Layer): void {
     switch (newLayer.type) {
@@ -200,7 +195,6 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     const source = oldLayer.getSource();
     const oldParams = source.getParams();
     const newParams = newWmsLayer.params;
-    // console.log(newWmsLayer)
     if (!this.shallowEqual(oldParams, newParams)) {
       oldLayer.getSource().updateParams(newParams);
     }
@@ -209,19 +203,14 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   private updateWmtsLayerParamsWith(oldLayer: olLayer<any>, newWmtsLayer: WmtsLayer): void {
     // contrary to a wms-source, a wmts-source has neither 'getParams' nor 'updateParams', so we need to do this manually.
     const source = oldLayer.getSource();
-    if (source.getStyle() !== newWmtsLayer.params.style
-      || source.getFormat() !== newWmtsLayer.params.format
-      || source.getVersion() !== newWmtsLayer.params.version
-      || source.getMatrixSet() !== newWmtsLayer.params.matrixSetOptions) {
-      /* if (newWmtsLayer.params.style && source.getStyle() !== newWmtsLayer.params.style
-        || newWmtsLayer.params.FORMAT && source.getFormat() !== newWmtsLayer.params.FORMAT
-        || newWmtsLayer.params.VERSION && source.getVersion() !== newWmtsLayer.params.VERSION
-        || newWmtsLayer.params.MatrixSet && source.getMatrixSet() !== newWmtsLayer.params.MatrixSet) { */
-
-      // console.log(source, newWmtsLayer.params)
-      // WMTS dont allow easy reloading; see:
-      // https://gis.stackexchange.com/questions/299554/openlayers-refresh-wmts-tiles-when-underlying-data-changes
-      // Instead of reloading, we remove the old layer and add the new one.
+    const oldStyle = source.getStyle(), oldFormat = source.getFormat(), oldVersion = source.getVersion(), oldMatrix = source.getMatrixSet();
+    const newStyle = newWmtsLayer.params.style, newFormat = newWmtsLayer.params.format, newVersion = newWmtsLayer.params.version, newMatrix = newWmtsLayer.params.matrixSetOptions.matrixSet;
+    if (newStyle !== undefined && oldStyle !== newStyle
+      || newFormat !== undefined && oldFormat !== newFormat
+      || newVersion !== undefined && oldVersion !== newVersion
+      || newMatrix !== undefined && oldMatrix !== newMatrix) {
+      // console.log(oldStyle, oldFormat, oldVersion, oldMatrix)
+      // console.log(newStyle, newFormat, newVersion, newMatrix)
       const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as Tgroupfiltertype;
       this.mapSvc.setLayer(newWmtsLayer, olFiltertype);
     }
