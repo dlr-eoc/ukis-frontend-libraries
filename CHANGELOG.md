@@ -1,6 +1,23 @@
 ### Features
 * **@ukis/services-ogc:** added support for WPS 2.0
+* **@ukis/services-layers:** new type *TFiltertypes = 'Baselayers' | 'Overlays' | 'Layers'* replace old duplicate definitions ([98c42aae0e6, a5f211272b6](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/98c42aae0e6f5cffa1c934933a6aa2828a0e32b6)).
+* **@ukis/map-ol:** new functions in map-ol.service: setLayers(), updateLayerByKey(), setUkisLayers(), setUkisLayer(), updateUkisLayer() ([80c7e727f1c](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/80c7e727f1c777cdcc76d3a99b683bf8e73e8d8c)).
+* **@ukis/map-ol:** ne type *Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers'* to be backwards compatible with TFiltertypes.
+* **@ukis/map-ol:** add tests for add/get/remove layers and a simple test for update layer ([db5bb17d5c2](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/db5bb17d5c29438a70985e59f708884e237674f6)).
+
+
+
+### Changes
+* **@ukis/map-ol:** rename functions in map-ol.service:  setLayers() to setUkisLayers() and setLayer() to setUkisLayer() - They were only used in map-ol.component! ([f35efcfbb2e](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/f35efcfbb2ec18c7102766076febf45c2fbab268)).
+* **@ukis/map-ol:** refactor map-ol.component and map-ol.service.
+* **demo-maps:** adjust routes to test refactoring.
+
+
 ### Bug Fixes
+* **@ukis/map-ol:** fix functions in map-ol.service addLayers(), removeLayerByKey().
+* **@ukis/map-ol:** fix wms params were passed by obj reference - this was causing a unsuspected update of a layer on the map!
+* **@ukis/map-ol:** fix wmts params update was triggered although nothing has changed! and use new function updateUkisLayer instead of remove and add the layer.
+
 
 
 # [6.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.1.0) (2019-12-05) (Add projection switch from SV.)
