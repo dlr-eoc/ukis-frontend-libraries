@@ -163,7 +163,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
     const custom_vector_layer = new CustomLayer({
       id: 'custom Vector Layer',
-      name: 'Custom Vector Layer',
+      name: 'Custom Layer KML',
       type: 'custom',
       custom_layer: new olVectorLayer({
         source: new olVectorSource({

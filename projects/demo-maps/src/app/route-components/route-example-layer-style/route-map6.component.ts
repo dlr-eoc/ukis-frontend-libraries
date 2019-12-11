@@ -64,7 +64,19 @@ export class RouteMap6Component implements OnInit, OnDestroy {
           matrixSet: 'EPSG:3857',
           tileMatrixPrefix: 'EPSG:3857',
         }
+      },
+      styles: [ //this is only to test updateWmtsLayerParams in map-ol
+        {
+          default: true,
+          name: 'default',
+          title: 'default'
+        },
+        {
+          default: false,
+          name: 'none',
+          title: 'none'
       }
+      ]
     });
 
     this.layersSvc.addLayer(tandemLayer, tandemLayer.filtertype);
@@ -79,7 +91,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       params: {
         LAYERS: 'AGRODE_S2_EVI_P1Y',
         VERSION: '1.1.0',
-        FORMAT: 'image/png'
+        FORMAT: 'image/png',
       },
       styles: [
         {
