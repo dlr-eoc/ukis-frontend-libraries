@@ -126,7 +126,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     this.map.un('dblclick', this.mapOnDclick);
     this.map.getInteractions().forEach((i) => {
       this.map.removeInteraction(i);
-    })
+    });
   }
 
   private addUpdateLayers(layers: Layer[], type: Tgroupfiltertype, layersunderneath: Array<Tgroupfiltertype>) {
@@ -138,7 +138,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
     /** if length of layers has changed add new layers */
     if (layers.length !== this.mapSvc.getLayers(type).length) {
-      this.mapSvc.setLayers(layers, type);
+      this.mapSvc.setUkisLayers(layers, type);
       // if layers underneath add thhen to the zIndex of layer
       if (_otherlayerslength > 0) {
         for (const layer of layers) {
@@ -212,7 +212,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       // console.log(oldStyle, oldFormat, oldVersion, oldMatrix)
       // console.log(newStyle, newFormat, newVersion, newMatrix)
       const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as Tgroupfiltertype;
-      this.mapSvc.setLayer(newWmtsLayer, olFiltertype);
+      // this.mapSvc.setUkisLayer(newWmtsLayer, olFiltertype);
+      this.mapSvc.updateUkisLayer(newWmtsLayer, olFiltertype)
     }
   }
 
@@ -253,7 +254,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         layers.forEach(l => l.visible = false);
         layers[0].visible = true;
       }
-      this.mapSvc.setLayers(layers, 'baselayers');
+      this.mapSvc.setUkisLayers(layers, 'baselayers');
     } else {
       /** if layers already on the map -length not changed- update them */
       for (const layer of layers) {
