@@ -1,4 +1,4 @@
-import { Layer, TGeoExtent } from './Layers';
+import { Layer, TGeoExtent, TFiltertypes } from './Layers';
 
 /**
  *  LayerGroups
@@ -10,7 +10,7 @@ export interface ILayerGroupOptions {
 
     visible?: boolean;
     displayName?: string;
-    filtertype?: 'Baselayers' | 'Overlays' | 'Layers';
+    filtertype?: TFiltertypes;
     removable?: boolean;
     layerRemovable?: boolean;
     bbox?: TGeoExtent;
@@ -27,7 +27,7 @@ export class LayerGroup {
     layers: Layer[];
 
     displayName?: string;
-    filtertype?: 'Baselayers' | 'Overlays' | 'Layers' = 'Layers';
+    filtertype?: TFiltertypes = 'Layers';
     removable = true;
     layerRemovable = true;
     bbox?: [number, number, number, number];

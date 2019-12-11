@@ -35,6 +35,7 @@ export const CustomLayertype = 'custom';
 export type TVectorLayertype = 'geojson' | 'wfs' | 'custom';
 export type TRasterLayertype = 'wms' | 'wmts' | 'xyz' | 'custom';
 export type TLayertype = TRasterLayertype | TVectorLayertype | string;
+export type TFiltertypes = 'Baselayers' | 'Overlays' | 'Layers';
 
 
 
@@ -60,7 +61,7 @@ export interface ILayerOptions {
   // id: string
   type: TLayertype;
 
-  filtertype?: 'Baselayers' | 'Overlays' | 'Layers';
+  filtertype?: TFiltertypes;
   opacity?: number;
   visible?: boolean;
   removable?: boolean;
@@ -152,7 +153,7 @@ export class Layer implements ILayerOptions {
   visible = true;
   removable = false;
 
-  filtertype?: 'Baselayers' | 'Overlays' | 'Layers' = 'Layers';
+  filtertype?: TFiltertypes = 'Layers';
   continuousWorld = false;
   attribution?: string;
   displayName?: string;

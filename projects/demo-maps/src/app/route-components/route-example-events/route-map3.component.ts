@@ -1,5 +1,5 @@
-import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { LayersService, CustomLayer } from '@ukis/services-layers';
+import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angular/core';
+import { LayersService, CustomLayer, TGeoExtent } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { MapOlService } from '@ukis/map-ol';
 import { osm } from '@ukis/base-layers-raster';
@@ -7,7 +7,11 @@ import { ProgressService } from '../../components/global-progress/progress.servi
 
 import olImageLayer from 'ol/layer/Image';
 import olImageWMS from 'ol/source/ImageWMS';
+import olVectorImageLayer from 'ol/layer/VectorImage';
+import olVectorSource from 'ol/source/Vector';
+
 import { parse } from 'url';
+import { regularGrid } from './map.utils';
 
 @Component({
   selector: 'app-route-map3',
@@ -16,7 +20,7 @@ import { parse } from 'url';
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
-export class RouteMap3Component implements OnInit, OnDestroy {
+export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
   controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
   mapStateSub: any;
@@ -38,8 +42,13 @@ export class RouteMap3Component implements OnInit, OnDestroy {
     this.subscribeToMapState();
   }
 
+  ngAfterViewInit() {
+    this.mapSvc.map.on('moveend', this.updateLayerOnZoom);
+  }
+
   ngOnDestroy() {
     this.mapStateSub.unsubscribe();
+    this.mapSvc.map.un('moveend', this.updateLayerOnZoom);
   }
 
   addLayers() {
@@ -89,6 +98,45 @@ export class RouteMap3Component implements OnInit, OnDestroy {
         window.history.pushState({ path: newurl }, '', newurl);
       }
     });
+  }
+
+  updateLayerOnZoom = (evt) => {
+    const mapState = this.mapStateSvc.getMapState().getValue();
+    const mapextent = mapState.extent;
+    const zoom = mapState.zoom;
+    const layerID = `gridLayer`;
+    const bbox: TGeoExtent = [-180, -90, 180, 90];
+    const cellSize = 1;
+    const regulargrid = regularGrid(bbox, cellSize, zoom, this.mapSvc.EPSG, mapextent);
+
+    const mapHasLayer = this.layersSvc.getLayerById(layerID);
+
+    const gridLayerSource = new olVectorSource({
+      features: regulargrid,
+      wrapX: false
+    });
+
+    const _gridLayer = new olVectorImageLayer({
+      id: layerID,
+      source: gridLayerSource
+    });
+
+    const gridLayer = new CustomLayer({
+      id: layerID,
+      name: `gridLayer`,
+      type: 'custom',
+      opacity: 0.3,
+      custom_layer: _gridLayer
+    });
+
+    if (!mapHasLayer) {
+      this.layersSvc.addLayer(gridLayer, 'Layers');
+
+    } else {
+      // this.layerSvc.removeLayer(this.gridLayer, 'Layers');
+      // this.layerSvc.addLayer(this.gridLayer, 'Layers');
+      this.layersSvc.updateLayer(gridLayer, 'Layers');
+    }
   }
 
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Layer, RasterLayer } from './types/Layers';
+import { Layer, RasterLayer, TFiltertypes } from './types/Layers';
 import { LayerGroup } from './types/LayerGroup';
 
 @Injectable({
@@ -23,12 +23,12 @@ export class LayersService {
   // ----------------------------------------------------------------------------------------------------------------
   /**
    * Adds a ukis Layer to the Layerservice Store
-   * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+   * filtertype: TFiltertypes
    * if filtertype is not provided the filtertype of the Layer is used!
    *
    * if toGroup is true the layer is not added to the list of Layers and storeItems only used  internal
    */
-  public addLayer(layer: Layer, filtertype?: 'Baselayers' | 'Overlays' | 'Layers', toGroup?: boolean) {
+  public addLayer(layer: Layer, filtertype?: TFiltertypes, toGroup?: boolean) {
     if (!this.isInLayergroups(layer)) {
 
       if (!filtertype) {
@@ -55,10 +55,10 @@ export class LayersService {
 
   /**
   * Removes a ukis Layer from the Layerservice Store
-  * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+  * filtertype: TFiltertypes
   * if filtertype is not provided the filtertype of the Layer is used!
   */
-  public removeLayer(layer: Layer, filtertype?: 'Baselayers' | 'Overlays' | 'Layers') {
+  public removeLayer(layer: Layer, filtertype?: TFiltertypes) {
     if (this.isInLayergroups(layer)) {
 
       if (!filtertype) {
@@ -86,10 +86,10 @@ export class LayersService {
 
   /**
   * Updates a ukis Layer in the Layerservice Store
-  * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+  * filtertype: TFiltertypes
   * if filtertype is not provided the filtertype of the Layer is used!
   */
-  public updateLayer(layer: Layer, filtertype?: 'Baselayers' | 'Overlays' | 'Layers') {
+  public updateLayer(layer: Layer, filtertype?: TFiltertypes) {
 
     if (this.isInLayergroups(layer)) {
 
@@ -238,11 +238,11 @@ export class LayersService {
   // ----------------------------------------------------------------------------------------------------------------
   /**
      * Adds a ukis LayerGroup to the Layerservice Store
-     * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+     * filtertype: TFiltertypes
      * if filtertype is not provided the filtertype of the LayerGroup is used
      * All the Layers of the Group are set to filtertype of the Group
      */
-  public addLayerGroup(layergroup: LayerGroup, filtertype?: 'Baselayers' | 'Overlays' | 'Layers') {
+  public addLayerGroup(layergroup: LayerGroup, filtertype?: TFiltertypes) {
     if (!this.isInLayergroups(layergroup)) {
 
       if (!filtertype) {
@@ -350,9 +350,9 @@ export class LayersService {
 
   /**
   * Get the Number of Items from Layerservice Store filtered by filtertype
-  * filtertype: 'Baselayers' | 'Overlays' | 'Layers'
+  * filtertype: TFiltertypes
   */
-  getNumOfGroups(filtertype: 'Baselayers' | 'Overlays' | 'Layers'): number {
+  getNumOfGroups(filtertype: TFiltertypes): number {
     let num = 0;
     const storeItems = this.store.getValue();
     for (const lg of storeItems) {
@@ -367,9 +367,9 @@ export class LayersService {
   /**
   * Check if a Layer or LayerGroup is on index 0 of the Layerservice Store or the provided Array
   * if filtertype is set it only uses the items with this type
-  * filtertype?: 'Baselayers' | 'Overlays' | 'Layers'
+  * filtertype?: TFiltertypes
   */
-  isGroupFirst(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: 'Baselayers' | 'Overlays' | 'Layers'): boolean {
+  isGroupFirst(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: TFiltertypes): boolean {
     let value = false;
 
     let storeItems = this.store.getValue();
@@ -389,9 +389,9 @@ export class LayersService {
   /**
   * Check if a Layer or LayerGroup is on index (length - 1) of the Layerservice Store or the provided Array
   * if filtertype is set it only uses the items with this type
-  * filtertype?: 'Baselayers' | 'Overlays' | 'Layers'
+  * filtertype?: TFiltertypes
   */
-  isGroupLast(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: 'Baselayers' | 'Overlays' | 'Layers'): boolean {
+  isGroupLast(group: Layer | LayerGroup, _lgroups?: Array<Layer | LayerGroup>, filtertype?: TFiltertypes): boolean {
     let value = false;
 
     let storeItems = this.store.getValue();
@@ -654,7 +654,7 @@ export class LayersService {
   }
 
 
-  private filterFiltertype(filtertype: 'Baselayers' | 'Overlays' | 'Layers') {
+  private filterFiltertype(filtertype: TFiltertypes) {
     if (filtertype === 'Baselayers') {
       this.baseLayers.next(this.filterBaseLayers());
     } else if (filtertype === 'Overlays') {

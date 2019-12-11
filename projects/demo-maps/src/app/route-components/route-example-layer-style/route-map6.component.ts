@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer } from '@ukis/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
 import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map } from '@ukis/base-layers-raster';
 import { MapOlService } from '@ukis/map-ol';
@@ -36,11 +36,12 @@ export class RouteMap6Component implements OnInit, OnDestroy {
   }
 
   addBaseLayers() {
-    const eoc_litemap_layer = new eoc_litemap(<any>{
+    const eoc_litemap_layer = new eoc_litemap({
       legendImg: null,
       id: 'eoc_litemap_base',
-      visible: true
-    });
+      visible: true,
+      tileSize: 512
+    } as any);
 
     this.layersSvc.addLayer(eoc_litemap_layer, 'Baselayers');
   }
@@ -49,6 +50,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
     const tandemLayer = new WmtsLayer({
       type: 'wmts',
       id: 'TDM90_AMP',
+      visible: false,
       url: 'https://tiles.geoservice.dlr.de/service/wmts?',
       name: 'TDM90_AMP',
       filtertype: 'Layers',
@@ -60,14 +62,26 @@ export class RouteMap6Component implements OnInit, OnDestroy {
         style: 'default',
         matrixSetOptions: {
           matrixSet: 'EPSG:3857',
-          tileMatrixPrefix: 'EPSG:3857'
+          tileMatrixPrefix: 'EPSG:3857',
+        }
+      },
+      styles: [ //this is only to test updateWmtsLayerParams in map-ol
+        {
+          default: true,
+          name: 'default',
+          title: 'default'
         },
+        {
+          default: false,
+          name: 'none',
+          title: 'none'
       }
+      ]
     });
 
     this.layersSvc.addLayer(tandemLayer, tandemLayer.filtertype);
 
-    const agrodeLayer = new RasterLayer({
+    const agrodeLayer = new WmsLayer({
       type: 'wms',
       id: 'AGRODE_S2_EVI_P1Y',
       url: 'https://geotest.eoc.dlr.de/eoc/land/wms?',
@@ -77,7 +91,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       params: {
         LAYERS: 'AGRODE_S2_EVI_P1Y',
         VERSION: '1.1.0',
-        FORMAT: 'image/png'
+        FORMAT: 'image/png',
       },
       styles: [
         {
