@@ -1,3 +1,8 @@
+### Features
+* **@ukis/services-ogc:** added support for WPS 2.0
+### Bug Fixes
+
+
 # [6.1.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.1.0) (2019-12-05) (Add projection switch from SV.)
 ### Features
 * **@ukis/map-navigator:** SV: added projection switch. See mariss client for example.
