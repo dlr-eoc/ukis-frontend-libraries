@@ -1,6 +1,7 @@
 export type WpsVerion = '1.0.0' | '2.0.0';
 export type WpsDataFormat = 'application/vnd.geo+json' | 'application/json' | 'application/WMS' |
-                            'application/xml' | 'text/xml' | 'application/text' | 'image/geotiff';
+                            'application/xml' | 'text/xml' | 'application/text' | 'image/geotiff' |
+                            'text/plain';
 
 
 export type ProcessId = string;
@@ -50,7 +51,22 @@ export const isBbox = (obj: object): obj is WpsBboxValue => {
         obj.hasOwnProperty('urlon') &&
         obj.hasOwnProperty('urlat')
     );
+};
+
+
+export interface WpsState {
+    status: 'Succeeded' | 'Failed' | 'Accepted' | 'Running' | 'Dismissed';
+    percentCompleted?: number;
+    /** WPS 2.0 only */
+    jobID?: string;
+    /** WPS 1.0 only */
+    statusLocation?: string;
 }
+
+export function isWpsState(obj: object): obj is WpsState {
+    return obj && obj.hasOwnProperty('status') && (obj.hasOwnProperty('jobID') || obj.hasOwnProperty('statusLocation'));
+}
+
 
 export interface WpsBboxData {
     description: WpsBboxDescription;
@@ -64,11 +80,17 @@ export interface WpsCapability {
 
 export interface WpsMarshaller {
 
-    getCapabilitiesUrl(baseurl: string): string;
     executeUrl(url: string, processId: string): string;
+    dismissUrl(serverUrl: string, processId: string, jobId: string): string;
+    getCapabilitiesUrl(baseurl: string): string;
 
     unmarshalCapabilities(capabilitiesJson: any): WpsCapability[];
-    unmarshalExecuteResponse(responseJson: any): WpsResult[];
+    unmarshalExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[];
+    unmarshalGetStateResponse(jsonResponse: any, serverUrl: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsData[] | WpsState;
+    unmarshalDismissResponse(jsonResponse: any, serverUrl: string, processId: string): WpsState;
 
     marshalExecBody(processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[], async: boolean): any;
+    marshallGetStatusBody(serverUrl: string, processId: string, statusId: string): any;
+    marshallGetResultBody(serverUrl: string, processId: string, jobID: string): any;
+    marshalDismissBody(jobId: string): any;
 }
