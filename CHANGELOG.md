@@ -1,4 +1,3 @@
-# [6.2.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.1.1) () ()
 ### Features
 * **@ukis/services-ogc:** added support for WPS 2.0
 ### Bug Fixes
