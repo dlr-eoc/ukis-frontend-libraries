@@ -26,10 +26,7 @@ import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olVectorSource from 'ol/source/Vector';
 import olTileJSON from 'ol/source/TileJSON';
-import { Options as olTileJSONOptions } from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
-// import ImageWMS from 'ol/source/ImageWMS';
-// import VectorTileSource from 'ol/source/VectorTile';
 import olFeature from 'ol/Feature';
 
 import olCollection from 'ol/Collection';
@@ -222,6 +219,9 @@ export class MapOlService {
     this.map.addInteraction(dragBox);
   }
 
+  /**
+   * get an array of olLayers from a group type
+   */
   public getLayers(type: Tgroupfiltertype): olLayer<any>[] {
     const _type = type.toLowerCase() as Tgroupfiltertype;
     let layers;
@@ -245,26 +245,68 @@ export class MapOlService {
     return _layer;
   }
 
+  /**
+   * add a olLayer to a group if it is not there
+   */
   public addLayer(layer: olLayer<any>, type: Tgroupfiltertype) {
     const _type = type.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === _type) {
-        layers = layerGroup.getLayers().getArray();
-        layers.push(layer);
-        layerGroup.setLayers(new olCollection(layers));
+        if (!this.isLayerInGroup(layer, layerGroup)) {
+          layers = layerGroup.getLayers().getArray();
+          layers.push(layer);
+          layerGroup.setLayers(new olCollection(layers));
+        }
       }
     });
     return layers;
   }
 
+  private isLayerInGroup(layer: olLayer<any>, layerGroup: olLayerGroup) {
+    const layers = layerGroup.getLayers().getArray() as olLayer<any>[];
+    const haseLayer = layers.filter(l => l.get('id') === layer.get('id'));
+    if (haseLayer.length) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+  /**
+   * add a array of olLayers to a group if they are not there
+   */
   public addLayers(layers: olLayer<any>[], type: Tgroupfiltertype) {
-    const _type = type.toLowerCase() as Tgroupfiltertype;
-    let _layers;
-    this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
+    const _type = type.toLocaleLowerCase() as Tgroupfiltertype;
+    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === _type) {
-        _layers = layers;
-        layerGroup.setLayers(new olCollection(_layers));
+        const groupLayers = layerGroup.getLayers();
+
+        if (groupLayers.getLength() > 0) {
+          const mergLayers = layerGroup.getLayers().getArray() as Array<olLayer<any>>;
+          layers.map(layer => {
+            if (!this.isLayerInGroup(layer, layerGroup)) {
+              mergLayers.push(layer);
+            }
+          });
+          layerGroup.setLayers(new olCollection(mergLayers));
+        } else {
+          layerGroup.setLayers(new olCollection(layers));
+        }
+      }
+    });
+    return layers;
+  }
+
+  /**
+   * reset a group with an array of olLayers
+   */
+  public setLayers(layers: olLayer<any>[], type: Tgroupfiltertype) {
+    const _type = type.toLocaleLowerCase() as Tgroupfiltertype;
+    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
+      if (layerGroup.get('type') === _type) {
+        layerGroup.setLayers(new olCollection(layers));
       }
     });
     return layers;
@@ -353,39 +395,25 @@ export class MapOlService {
     });
 
   }
-  /** if only one group of them map is used and setLayers is called then the map flickers!
-   * this is because of all layers are new created and the have all new ol_uid's
+
+  /**
+   * This function resets/adds all olLayers of a type with the new UKIS-Layers
    *
-   * can we deep check if a layer is exactly the same and dont create it new???
+   * if only one group of them map is used and setLayers is called then the map flickers!
+   * this is because of all layers are new created and the have all new ol_uid's
    */
-  public setLayers(layers: Array<Layer>, type: Tgroupfiltertype) {
+  public setUkisLayers(layers: Array<Layer>, type: Tgroupfiltertype) {
     const _type = type.toLowerCase() as Tgroupfiltertype;
     const _layers = <any>[];
     // TODO try to deep check if a layer if exactly the same and dont create it new
+
     if (layers.length < 1 && _type !== 'baselayers') {
       // this.removeAllLayers('overlays');
       // this.removeAllLayers('layers');
       this.removeAllLayers(_type);
     } else {
-      layers.forEach((layer) => {
-        let _layer;
-        switch (layer.type) {
-          case 'xyz':
-            _layer = this.create_xyz_layer(<RasterLayer>layer);
-            break;
-          case 'wms':
-            _layer = this.create_wms_layer(<WmsLayer>layer);
-            break;
-          case 'wmts':
-            _layer = this.create_wmts_layer(<WmtsLayer>layer);
-            break;
-          case 'geojson':
-            _layer = this.create_geojson_layer(<VectorLayer>layer);
-            break;
-          case 'custom':
-            _layer = this.create_custom_layer(<CustomLayer>layer);
-            break;
-        }
+      layers.forEach((newLayer) => {
+        const _layer = this.create_layers(newLayer);
         // check if layer not undefined
         if (_layer) {
           _layers.push(_layer);
@@ -394,16 +422,41 @@ export class MapOlService {
     }
 
     if (_layers.length > 0) {
-      this.addLayers(_layers, _type);
+      this.setLayers(_layers, _type);
     }
   }
 
-  /** this is more a updateLayer function !!! */
-  public setLayer(newLayer: Layer, type: Tgroupfiltertype): void {
+  /** This function resets/adds a olLayer of a type with the new UKIS-Layer */
+  public setUkisLayer(newLayer: Layer, type?: Tgroupfiltertype): void {
+    if (!type) {
+      type = newLayer.filtertype;
+    }
     const _type = type.toLowerCase() as Tgroupfiltertype;
     const oldLayers: olLayer<any>[] = this.getLayers(_type);
     const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
-    let newOlLayer;
+    const newOlLayer = this.create_layers(newLayer);
+    if (newOlLayer) {
+      this.removeLayerByKey({ key: 'id', value: oldLayer.get('id') }, type);
+      this.addLayer(newOlLayer, type);
+    }
+  }
+
+  public updateUkisLayer(newLayer: Layer, type?: Tgroupfiltertype): void {
+    if (!type) {
+      type = newLayer.filtertype;
+    }
+    const _type = type.toLowerCase() as Tgroupfiltertype;
+    const oldLayers: olLayer<any>[] = this.getLayers(_type);
+    const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
+    const newOlLayer = this.create_layers(newLayer);
+    if (newOlLayer) {
+      this.updateLayerByKey({ key: 'id', value: oldLayer.get('id') }, newOlLayer, type);
+    }
+  }
+
+
+  private create_layers(newLayer: Layer): null | olLayer<any> {
+    let newOlLayer = null;
     switch (newLayer.type) {
       case 'xyz':
         newOlLayer = this.create_xyz_layer(<RasterLayer>newLayer);
@@ -421,9 +474,7 @@ export class MapOlService {
         newOlLayer = this.create_custom_layer(<CustomLayer>newLayer);
         break;
     }
-    this.updateLayerByKey({ key: 'id', value: oldLayer.get('id') }, newOlLayer, type);
-    //this.removeLayerByKey({ key: 'id', value: oldLayer.get('id') }, type);
-    //this.addLayer(newOlLayer, type);
+    return newOlLayer;
   }
 
   /**
