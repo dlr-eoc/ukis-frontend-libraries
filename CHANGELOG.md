@@ -4,6 +4,7 @@
 * **@ukis/map-ol:** new functions in map-ol.service: setLayers(), updateLayerByKey(), setUkisLayers(), setUkisLayer(), updateUkisLayer() ([80c7e727f1c](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/80c7e727f1c777cdcc76d3a99b683bf8e73e8d8c)).
 * **@ukis/map-ol:** ne type *Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers'* to be backwards compatible with TFiltertypes.
 * **@ukis/map-ol:** add tests for add/get/remove layers and a simple test for update layer ([db5bb17d5c2](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/db5bb17d5c29438a70985e59f708884e237674f6)).
+* **@ukis/map-ol:** add update olSource on CustomLayer id uid changed ([7ccc339162b](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/7ccc339162b16892deaca20cdb3c500d40eda2bf)).
 
 
 
@@ -14,6 +15,7 @@
 
 
 ### Bug Fixes
+* **@ukis/services-layers:** fix: update Layer and LayerGroup was not working. ([5acc1e36547](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/5acc1e365474c1178fe2cc5e61712b62e5011ea5),[6c8dea04538](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/6c8dea0453857677c75623bf888f026d808fb327))
 * **@ukis/map-ol:** fix functions in map-ol.service addLayers(), removeLayerByKey().
 * **@ukis/map-ol:** fix wms params were passed by obj reference - this was causing a unsuspected update of a layer on the map!
 * **@ukis/map-ol:** fix wmts params update was triggered although nothing has changed! and use new function updateUkisLayer instead of remove and add the layer.

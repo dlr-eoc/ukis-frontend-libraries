@@ -106,7 +106,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     const zoom = mapState.zoom;
     const layerID = `gridLayer`;
     const bbox: TGeoExtent = [-180, -90, 180, 90];
-    const cellSize = 1;
+    const cellSize = 0.5;
     const regulargrid = regularGrid(bbox, cellSize, zoom, this.mapSvc.EPSG, mapextent);
 
     const mapHasLayer = this.layersSvc.getLayerById(layerID);
@@ -131,11 +131,8 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
 
     if (!mapHasLayer) {
       this.layersSvc.addLayer(gridLayer, 'Layers');
-
     } else {
-      // this.layerSvc.removeLayer(this.gridLayer, 'Layers');
-      // this.layerSvc.addLayer(this.gridLayer, 'Layers');
-      this.layersSvc.updateLayer(gridLayer, 'Layers');
+      this.layersSvc.updateLayer(gridLayer, gridLayer.filtertype);
     }
   }
 
