@@ -7,9 +7,10 @@ import { MapState } from '@ukis/services-map-state';
 import { MapStateService } from '@ukis/services-map-state';
 import { Subscription } from 'rxjs';
 import { MapOlService, Tgroupfiltertype } from './map-ol.service';
-import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer } from '@ukis/services-layers';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer } from '@ukis/services-layers';
 
 import Map from 'ol/Map';
+import { getUid } from 'ol/util';
 
 import olLayer from 'ol/layer/Layer';
 
@@ -161,7 +162,13 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (ollayer.getOpacity() !== layer.opacity) {
             ollayer.setOpacity(layer.opacity);
           }
-
+          if (layer instanceof CustomLayer && ollayer.getSource()) {
+            const newSource = layer.custom_layer.getSource();
+            const oldSource = ollayer.getSource();
+            if (newSource && getUid(oldSource) !== getUid(newSource)) {
+              ollayer.setSource(newSource);
+            }
+          }
           if (_otherlayerslength > 0) {
             if (ollayer.getZIndex() !== layers.indexOf(layer) + _otherlayerslength) {
               ollayer.setZIndex(layers.indexOf(layer) + _otherlayerslength);
