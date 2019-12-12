@@ -154,7 +154,7 @@ export class Layer implements ILayerOptions {
   removable = false;
 
   filtertype?: TFiltertypes = 'Layers';
-  continuousWorld = false;
+  continuousWorld?: boolean = false;
   attribution?: string;
   displayName?: string;
   description?: string;

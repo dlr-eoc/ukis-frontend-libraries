@@ -392,7 +392,7 @@ describe('LayersService', () => {
   it('should update a Layer', async(() => {
     const service: LayersService = TestBed.get(LayersService);
     service.addLayer(layer1, 'Layers');
-    expect(layer1.visible).toEqual(true);
+    expect(service.getLayerById(layer1.id).visible).toEqual(true);
     layer1.visible = false;
     service.updateLayer(layer1, 'Layers');
     expect(service.getLayerById(layer1.id).visible).toEqual(false);

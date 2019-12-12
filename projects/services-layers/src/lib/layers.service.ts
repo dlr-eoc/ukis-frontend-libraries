@@ -90,7 +90,7 @@ export class LayersService {
   * if filtertype is not provided the filtertype of the Layer is used!
   */
   public updateLayer(layer: Layer, filtertype?: TFiltertypes) {
-
+    // console.log(layer)
     if (this.isInLayergroups(layer)) {
 
       if (!filtertype) {
@@ -102,27 +102,29 @@ export class LayersService {
       }
 
       if (layer.filtertype === 'Overlays') {
-        for (const l of this.filterOverlays()) {
-          if ((l.id === layer.id)) {
-            this.overlays.next(this.filterOverlays());
+        this.filterOverlays().forEach((l, index, array) => {
+          if (l.id === layer.id) {
+            array[index] = layer;
+            this.overlays.next(array);
           }
-        }
+        });
       }
       if (layer.filtertype === 'Layers') {
-        for (const l of this.filterLayers()) {
-          if ((l.id === layer.id)) {
-            this.layers.next(this.filterLayers());
+        this.filterLayers().forEach((l, index, array) => {
+          if (l.id === layer.id) {
+            array[index] = layer;
+            this.layers.next(array);
           }
-        }
+        });
       }
       if (layer.filtertype === 'Baselayers') {
-        for (const l of this.baseLayers.getValue()) {
+        this.baseLayers.getValue().forEach((l, index, array) => {
           if ((l.id === layer.id)) {
-            this.baseLayers.next(this.filterBaseLayers());
+            array[index] = layer;
+            this.baseLayers.next(array);
           }
-        }
+        });
       }
-
 
     } else {
       console.error(`layer with id: ${layer.id} you want to update not in storeItems!`);
