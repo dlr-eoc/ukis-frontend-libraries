@@ -6,7 +6,7 @@ import { LayerGroup } from './LayerGroup';
 let layer: Layer, rasterlayer: RasterLayer, vectorlayer: VectorLayer, customlayer: CustomLayer, layergroup: LayerGroup;
 
 
-describe('LayersService', () => {
+describe('Layer Types', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({});
 
