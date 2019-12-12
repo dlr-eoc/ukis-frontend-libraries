@@ -1,11 +1,12 @@
 import { TestBed, async } from '@angular/core/testing';
-import { RasterLayer, Layer } from './types/Layers';
+import { RasterLayer, Layer, CustomLayer, TGeoExtent } from './types/Layers';
 import { LayerGroup } from './types/LayerGroup';
 import { LayersService } from './layers.service';
 import { first } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 
-let layer1: Layer, layer2: Layer, layergroup1: LayerGroup, layergroup2: LayerGroup, layer3: Layer, layer4: Layer;
+let layer1: Layer, layer2: Layer, layergroup1: LayerGroup, layergroup2: LayerGroup, layer3: Layer, layer4: Layer, layer5: CustomLayer;
 
 
 describe('LayersService', () => {
@@ -70,6 +71,14 @@ describe('LayersService', () => {
       filtertype: 'Overlays',
       id: 'group2',
       layers: [layer1, layer4]
+    });
+
+    layer5 = new CustomLayer({
+      id: 'ID-vector-image',
+      name: 'Custom Layer KML',
+      type: 'custom',
+      custom_layer: new Object({ ol_uid: 245 }),
+      visible: false
     });
 
   });
@@ -389,24 +398,79 @@ describe('LayersService', () => {
     });
   }));
 
+
+  it('should update a Subject', async(() => {
+    const subject1 = new BehaviorSubject([layer5]);
+    expect(subject1.getValue()[0]).toBe(layer5);
+
+
+    const newLayer = new CustomLayer({
+      id: 'ID-vector-image',
+      name: 'Custom Layer KML',
+      type: 'custom',
+      custom_layer: new Object({ ol_uid: 600 }),
+      visible: true
+    });
+
+    subject1.next([newLayer]);
+    expect(subject1.getValue()[0]).toBe(newLayer);
+
+
+  }));
+
   it('should update a Layer', async(() => {
     const service: LayersService = TestBed.get(LayersService);
-    service.addLayer(layer1, 'Layers');
-    expect(service.getLayerById(layer1.id).visible).toEqual(true);
-    layer1.visible = false;
-    service.updateLayer(layer1, 'Layers');
-    expect(service.getLayerById(layer1.id).visible).toEqual(false);
+    service.addLayer(layer5, 'Layers');
+    expect(service.getLayerById(layer5.id).visible).toEqual(false);
+
+    const newLayer5 = new CustomLayer({
+      id: 'ID-vector-image',
+      name: 'Custom Layer KML',
+      type: 'custom',
+      custom_layer: new Object({ ol_uid: 600 }),
+      visible: true
+    });
+
+    service.updateLayer(newLayer5, 'Layers');
+    const layerFromSvc = service.getLayerById(newLayer5.id);
+
+    expect(layerFromSvc.visible).toEqual(true);
+    expect((layerFromSvc as CustomLayer).custom_layer.ol_uid).toEqual(600);
 
     // clean up;
     service.setLayerGroups([]);
     expect(service.getLayerGroupsCount()).toEqual(0);
   }));
 
+
   it('should update a LayerGroup', async(() => {
     const service: LayersService = TestBed.get(LayersService);
-    service.addLayerGroup(layergroup1, 'Overlays');
-    expect(layergroup1.visible).toEqual(true);
 
+    service.addLayerGroup(layergroup1);
+    expect(layergroup1.visible).toBe(false);
+    expect(layergroup1.bbox).toBe(undefined); // like defined above
+    expect(layergroup1.layers.length).toEqual(1); // like defined above
+    expect(layer1.visible).toBe(layergroup1.visible); // set from group
+
+    const bbox: TGeoExtent = [-180, -90, 180, 90];
+    const newLayergroup1 = new LayerGroup({
+      visible: true,
+      name: 'baslayer Group',
+      filtertype: 'Layers',
+      id: 'baselayer_group',
+      bbox: bbox,
+      layers: [layer5]
+    });
+    // set by group
+    expect(layer5.visible).toBe(newLayergroup1.visible);
+
+    service.updateLayerGroup(newLayergroup1);
+    const layerFromSvc = service.getLayerOrGroupById(newLayergroup1.id)[0];
+    console.log(layerFromSvc);
+
+    expect(layerFromSvc.visible).toEqual(newLayergroup1.visible);
+    expect((layerFromSvc as LayerGroup).layers[0]).toEqual(layer5);
+    expect((layerFromSvc as LayerGroup).bbox).toEqual(bbox);
 
     // clean up;
     service.setLayerGroups([]);
@@ -461,6 +525,8 @@ describe('LayersService', () => {
       service.setLayerGroups([]);
       expect(service.getLayerGroupsCount()).toEqual(0);
     });
-
   }));
+
+
+
 });

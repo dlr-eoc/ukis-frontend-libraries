@@ -90,7 +90,6 @@ export class LayersService {
   * if filtertype is not provided the filtertype of the Layer is used!
   */
   public updateLayer(layer: Layer, filtertype?: TFiltertypes) {
-    // console.log(layer)
     if (this.isInLayergroups(layer)) {
 
       if (!filtertype) {
@@ -102,33 +101,38 @@ export class LayersService {
       }
 
       if (layer.filtertype === 'Overlays') {
-        this.filterOverlays().forEach((l, index, array) => {
-          if (l.id === layer.id) {
-            array[index] = layer;
-            this.overlays.next(array);
-          }
-        });
+        this.updateLayerOrGroupInStore(layer);
+        this.filterFiltertype(layer.filtertype)
       }
       if (layer.filtertype === 'Layers') {
-        this.filterLayers().forEach((l, index, array) => {
-          if (l.id === layer.id) {
-            array[index] = layer;
-            this.layers.next(array);
-          }
-        });
+        this.updateLayerOrGroupInStore(layer);
+        this.filterFiltertype(layer.filtertype)
       }
       if (layer.filtertype === 'Baselayers') {
-        this.baseLayers.getValue().forEach((l, index, array) => {
-          if ((l.id === layer.id)) {
-            array[index] = layer;
-            this.baseLayers.next(array);
-          }
-        });
+        this.updateLayerOrGroupInStore(layer);
+        this.filterFiltertype(layer.filtertype)
       }
 
     } else {
       console.error(`layer with id: ${layer.id} you want to update not in storeItems!`);
     }
+  }
+
+  private updateLayerOrGroupInStore(lg: Layer | LayerGroup, filtertype?: TFiltertypes) {
+    this.store.getValue().filter((_lg, _index, _array) => {
+      // check if both from the same type then check same id
+      if (_lg instanceof Layer && lg instanceof Layer) {
+        if (_lg.id === lg.id) {
+          _array[_index] = lg;
+          this.store.next(_array);
+        }
+      } else if (_lg instanceof LayerGroup && lg instanceof LayerGroup) {
+        if (_lg.id === lg.id) {
+          _array[_index] = lg;
+          this.store.next(_array);
+        }
+      }
+    });
   }
 
   /**
@@ -304,6 +308,7 @@ export class LayersService {
     if (sort) {
       layerGroup = this.sortLayerGroup(layerGroup);
     }
+    this.updateLayerOrGroupInStore(layerGroup);
     for (const layer of layerGroup.layers) {
       this.updateLayer(layer, layerGroup.filtertype || 'Layers');
     }
