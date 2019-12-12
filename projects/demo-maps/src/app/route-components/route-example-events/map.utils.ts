@@ -2,12 +2,16 @@ import { TGeoExtent } from '@ukis/map-ol';
 import olFeature from 'ol/Feature';
 import olPolygon from 'ol/geom/Polygon';
 import { containsCoordinate } from 'ol/extent';
+import { containsXY } from 'ol/extent';
+
+import { buffer } from 'ol/extent';
 
 /**
    * Inspired by @turf/rectangle-grid
    * https://github.com/Turfjs/turf/blob/master/packages/turf-rectangle-grid/index.ts
+   * returns  olFeature<any>[]
    */
-export const regularGrid = (bbox: TGeoExtent, cellSize: number, zoom: number, mapEPSG: string, mapExtent: TGeoExtent) => {
+export const regularGrid = (bbox: TGeoExtent, cellSizeDeg: number, zoom: number, mapEPSG: string, mapExtent: TGeoExtent) => {
     /** olFeature */
     const features = [];
 
@@ -37,11 +41,14 @@ export const regularGrid = (bbox: TGeoExtent, cellSize: number, zoom: number, ma
         multiplyFactor = 1;
     }
 
-    const cellSizeDeg = cellSize * multiplyFactor;
+    const cellSizeZoom = cellSizeDeg * multiplyFactor;
     let border = 10;//cellSize * maxMultiplyFactor;
     if (border > 10) {
         border = 10;
     }
+
+    /** buffer the extent with one cellSizeDeg */
+    mapExtent = buffer(mapExtent, cellSizeZoom);
 
     // cut border from grid
     const minX = bbox[0] + border; //bbox[0];
@@ -56,8 +63,8 @@ export const regularGrid = (bbox: TGeoExtent, cellSize: number, zoom: number, ma
     // rows & columns
     const bboxWidth = (maxX - minX);
     const bboxHeight = (maxY - minY);
-    const columns = Math.floor(bboxWidth / cellSizeDeg);
-    const rows = Math.floor(bboxHeight / cellSizeDeg);
+    const columns = Math.floor(bboxWidth / cellSizeZoom);
+    const rows = Math.floor(bboxHeight / cellSizeZoom);
 
     // if the grid does not fill the bbox perfectly, center it.
     /* const deltaX = (bboxWidth - columns * cellSizeDeg) / 2;
@@ -70,8 +77,8 @@ export const regularGrid = (bbox: TGeoExtent, cellSize: number, zoom: number, ma
     for (let column = columns; column > 0; column--) {
         let currentY = minY; // + deltaY;
         for (let row = rows; row > 0; row--) {
-            const nextX = currentX + cellSizeDeg;
-            const nextY = currentY + cellSizeDeg;
+            const nextX = currentX + cellSizeZoom;
+            const nextY = currentY + cellSizeZoom;
 
             const cords1_5 = [currentX, currentY];
             const cords2 = [currentX, nextY];
@@ -85,7 +92,9 @@ export const regularGrid = (bbox: TGeoExtent, cellSize: number, zoom: number, ma
                 cords4,
                 cords1_5,
             ]];
-            const inExtent = containsCoordinate(mapExtent, cords2) && containsCoordinate(mapExtent, cords4)
+            console.log()
+            //const inExtent = containsCoordinate(mapExtent, cords2) && containsCoordinate(mapExtent, cords4);
+            const inExtent = containsXY(mapExtent, currentX, currentY) && containsXY(mapExtent, nextX, nextY);
             if (inExtent) {
 
                 const cellPoly = new olPolygon(coordinates).transform('EPSG:4326', mapEPSG);
@@ -99,9 +108,9 @@ export const regularGrid = (bbox: TGeoExtent, cellSize: number, zoom: number, ma
                 features.push(feature);
             }
             // ---
-            currentY += cellSizeDeg;
+            currentY += cellSizeZoom;
         }
-        currentX += cellSizeDeg;
+        currentX += cellSizeZoom;
     }
     return features;
 }
