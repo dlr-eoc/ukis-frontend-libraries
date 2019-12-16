@@ -1,3 +1,5 @@
+# [6.2.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.2.0) (2019-12-05) (Sprint NextGEOSS)
+
 ### Features
 * **@ukis/services-ogc:** added support for WPS 2.0
 * **@ukis/services-layers:** new type *TFiltertypes = 'Baselayers' | 'Overlays' | 'Layers'* replace old duplicate definitions ([98c42aae0e6, a5f211272b6](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/commits/98c42aae0e6f5cffa1c934933a6aa2828a0e32b6)).
