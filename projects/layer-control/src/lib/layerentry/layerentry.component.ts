@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy, OnChanges, HostBinding } from '@angular/core';
 
 // imports only for typings...
-import { LayerGroup, Layer, RasterLayer, isRasterLayertype, WmsLayertype, WmtsLayertype, isRasterLayer,
-  isVectorLayer, LayersService, VectorLayer} from '@ukis/services-layers';
+import {
+  LayerGroup, Layer, RasterLayer, isRasterLayertype, WmsLayertype, WmtsLayertype, isRasterLayer,
+  isVectorLayer, LayersService, VectorLayer
+} from '@ukis/services-layers';
 import { MapStateService } from '@ukis/services-map-state';
-import {  } from '@ukis/services-layers';
+import { } from '@ukis/services-layers';
 
 @Component({
   selector: 'ukis-layerentry',
@@ -12,6 +14,8 @@ import {  } from '@ukis/services-layers';
   styleUrls: ['./layerentry.component.scss']
 })
 export class LayerentryComponent implements OnInit {
+  @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }
+
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;
   @Input('layer') layer: Layer;
@@ -209,20 +213,20 @@ export class LayerentryComponent implements OnInit {
     }
   }
 
-isFirst(layer) {
-  if (this.group) {
-    return this.layersSvc.isGroupFirst(layer, this.group.layers);
-  } else {
-    return this.layersSvc.isGroupFirst(layer, null, layer.filtertype);
+  isFirst(layer) {
+    if (this.group) {
+      return this.layersSvc.isGroupFirst(layer, this.group.layers);
+    } else {
+      return this.layersSvc.isGroupFirst(layer, null, layer.filtertype);
+    }
   }
-}
 
-isLast(layer) {
-  if (this.group) {
-    return this.layersSvc.isGroupLast(layer, this.group.layers);
-  } else {
-    return this.layersSvc.isGroupLast(layer, null, layer.filtertype);
+  isLast(layer) {
+    if (this.group) {
+      return this.layersSvc.isGroupLast(layer, this.group.layers);
+    } else {
+      return this.layersSvc.isGroupLast(layer, null, layer.filtertype);
+    }
   }
-}
 
 }
