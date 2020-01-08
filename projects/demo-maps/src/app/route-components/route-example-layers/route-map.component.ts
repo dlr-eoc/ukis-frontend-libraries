@@ -317,7 +317,7 @@ export class RouteMapComponent implements OnInit {
       }
     });
 
-    // const test = this.layersSvc.getLayerOrGroupById('group_2')[0]
+    // const test = this.layersSvc.getLayerOrGroupById('group_2')
     // console.log(test)
   }
 
@@ -329,16 +329,15 @@ export class RouteMapComponent implements OnInit {
   }
 
   updateLayerGroup() {
-    const test = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2')[0];
+    const test = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2');
     test.layers[1].visible = true;
     this.layersSvc.updateLayerGroup(test);
   }
 
   addLayerToGroup() {
-    const group = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2')[0];
+    const group = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2');
     const google_earth_layer = new google_earth();
     this.layersSvc.addLayerToGroup(google_earth_layer, group);
-
   }
 
   removeAllLayers() {
