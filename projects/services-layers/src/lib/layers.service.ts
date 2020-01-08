@@ -132,17 +132,6 @@ export class LayersService {
     }
   }
 
-  /* private addLayerOrGroup(lg: Layer | LayerGroup, filtertype?: TFiltertypes) {
-    if (filtertype && !lg.filtertype) {
-      lg.filtertype = filtertype;
-    }
-    if (lg instanceof Layer) {
-      this.addLayer(lg, lg.filtertype);
-    } else if (lg instanceof LayerGroup) {
-      this.addLayerGroup(lg, lg.filtertype);
-    }
-  } */
-
   private updateLayerOrGroupInStore(lg: Layer | LayerGroup) {
     this.store.getValue().filter((_lg, _index, _array) => {
       // check if both from the same type then check same id
