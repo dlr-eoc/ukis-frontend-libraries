@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
 
 
 // imports only for typings...
@@ -13,6 +13,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   styleUrls: ['./layerentry-group.component.scss']
 })
 export class LayerentryGroupComponent implements OnInit {
+  @HostBinding('class.group-visible') get visible() { return this.group.visible; }
+
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;
   @Input('group') group: LayerGroup;

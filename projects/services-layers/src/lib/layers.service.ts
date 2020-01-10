@@ -57,31 +57,45 @@ export class LayersService {
   * Removes a ukis Layer from the Layerservice Store
   * filtertype: TFiltertypes
   * if filtertype is not provided the filtertype of the Layer is used!
+  *
+  * force = true - removes a LayerGroup even it is not removable
   */
-  public removeLayer(layer: Layer, filtertype?: TFiltertypes) {
+  public removeLayer(layer: Layer, filtertype?: TFiltertypes, force?: boolean) {
     if (this.isInLayergroups(layer)) {
-
-      if (!filtertype) {
-        filtertype = layer.filtertype;
+      if (force) {
+        console.log(`layer: ${layer.id} is removed with force!`);
+        this._removeLayer(layer, filtertype);
       } else {
-        if (filtertype !== layer.filtertype) {
-          console.error(`the layer with id: ${layer.id} you want to remove from ${filtertype} is from filtertype: ${layer.filtertype}`);
+        if (layer.removable) {
+          this._removeLayer(layer, filtertype);
+        } else if (!layer.removable) {
+          console.log(`layer: ${layer.id} is not removable!`);
         }
       }
-
-      // console.log('remove single layer from storeItems!!!!!');
-      const storeItems = this.store.getValue().filter((lg) => {
-        if (lg instanceof Layer) {
-          return lg.id !== layer.id;
-        } else {
-          return lg;
-        }
-      });
-      this.store.next(storeItems);
-      this.filterFiltertype(filtertype);
     } else {
-      console.error(`layer or Group with id: ${layer.id} not in storeItems!`);
+      console.error(`layer with id: ${layer.id} not in storeItems!`);
     }
+  }
+
+  private _removeLayer(layer: Layer, filtertype?: TFiltertypes) {
+    if (!filtertype) {
+      filtertype = layer.filtertype;
+    } else {
+      if (filtertype !== layer.filtertype) {
+        console.error(`the layer with id: ${layer.id} you want to remove from ${filtertype} is from filtertype: ${layer.filtertype}`);
+      }
+    }
+
+    // console.log('remove single layer from storeItems!!!!!');
+    const storeItems = this.store.getValue().filter((lg) => {
+      if (lg instanceof Layer) {
+        return lg.id !== layer.id;
+      } else {
+        return lg;
+      }
+    });
+    this.store.next(storeItems);
+    this.filterFiltertype(filtertype);
   }
 
   /**
@@ -118,7 +132,7 @@ export class LayersService {
     }
   }
 
-  private updateLayerOrGroupInStore(lg: Layer | LayerGroup, filtertype?: TFiltertypes) {
+  private updateLayerOrGroupInStore(lg: Layer | LayerGroup) {
     this.store.getValue().filter((_lg, _index, _array) => {
       // check if both from the same type then check same id
       if (_lg instanceof Layer && lg instanceof Layer) {
@@ -138,23 +152,25 @@ export class LayersService {
   /**
    * Removes a ukis Layer or a LayerGroup from the Layerservice Store by the Layer.id or LayerGroup.id
    * if removeNullGroup is set, then it removes the LayerGroup if no layer is in there
+   *
+   * force = true - removes a LayerGroup even it is not removable
    */
-  public removeLayerOrGroupById(id: string, removeNullGroup?: boolean) {
+  public removeLayerOrGroupById(id: string, removeNullGroup?: boolean, force?: boolean) {
     this.store.getValue().filter((lg) => {
       if (lg instanceof Layer) {
         if (lg.id === id) {
-          this.removeLayer(lg, lg.filtertype || 'Layers');
+          this.removeLayer(lg, lg.filtertype || 'Layers', force);
         }
       } else if (lg instanceof LayerGroup) {
         // console.log('LayerGroup: ', lg);
         // console.log('id', id);
         if (lg.id === id) {
-          this.removeLayerGroup(lg);
+          this.removeLayerGroup(lg, force);
         } else {
           // this.removeLayerFromGroup
           lg.layers.forEach((_layer, index) => {
             if (_layer.id === id) {
-              this.removeLayerFromGroup(_layer, lg, removeNullGroup);
+              this.removeLayerFromGroup(_layer, lg, removeNullGroup, force);
             }
           });
         }
@@ -198,15 +214,17 @@ export class LayersService {
   /**
    * Removes a Layer from a LayerGroup in the Layerservice Store
    * By default if no layers on the group it will remove it - change this through set removeNullGroup to false
+   *
+   * force = true - removes the Layer even it is not removable
    */
-  public removeLayerFromGroup(layer: Layer, layergroup: LayerGroup, removeNullGroup: boolean = true) {
+  public removeLayerFromGroup(layer: Layer, layergroup: LayerGroup, removeNullGroup: boolean = true, force?: boolean) {
     layergroup.layers = layergroup.layers.filter(l => l.id !== layer.id);
     this.updateLayerGroup(layergroup);
     this.filterFiltertype(layer.filtertype);
 
     // if no layers on the group remove it
     if (layergroup.layers.length === 0 && removeNullGroup) {
-      this.removeLayerGroup(layergroup);
+      this.removeLayerGroup(layergroup, force);
     }
   }
 
@@ -276,28 +294,36 @@ export class LayersService {
 
   /**
   * Removes a ukis LayerGroup to the Layerservice Store
+  * force = true - removes a LayerGroup even it is not removable
   */
-  public removeLayerGroup(layergroup: LayerGroup) {
+  public removeLayerGroup(layergroup: LayerGroup, force?: boolean) {
     if (this.isInLayergroups(layergroup)) {
-      // remove all layers of this group from the map
-      if (layergroup.removable) {
-        for (const layer of layergroup.layers) {
-          this.removeLayerFromGroup(layer, layergroup);
-        }
-        const storeItems = this.store.getValue();
-
-        const filteredGroups = storeItems.filter(function (layer, index) {
-          return layer.id !== layergroup.id;
-        });
-
-        this.store.next(filteredGroups);
+      if (force) {
+        console.log(`layerGroup: ${layergroup.id} is removed with force!`);
+        this._removeLayerGroup(layergroup);
       } else {
-        // throw new Error(`layerGroup: ${layerGroup.id} is not removable!`);
-        console.log(`layerGroup: ${layergroup.id} is not removable!`);
+        if (layergroup.removable) {
+          this._removeLayerGroup(layergroup);
+        } else if (!layergroup.removable) {
+          console.log(`layerGroup: ${layergroup.id} is not removable!`);
+        }
       }
     } else {
       console.error(`layer or Group with id: ${layergroup.id} not in storeItems!`);
     }
+  }
+
+  private _removeLayerGroup(layergroup: LayerGroup) {
+    for (const layer of layergroup.layers) {
+      this.removeLayerFromGroup(layer, layergroup);
+    }
+    const storeItems = this.store.getValue();
+
+    const filteredGroups = storeItems.filter(function (layer, index) {
+      return layer.id !== layergroup.id;
+    });
+
+    this.store.next(filteredGroups);
   }
 
   /**
@@ -428,7 +454,7 @@ export class LayersService {
       id = layergroup;
     }
     const items = this.getLayerOrGroupById(id, groups);
-    if (items.length > 0) {
+    if (items && items instanceof Layer || items instanceof LayerGroup) {
       value = true;
     }
     return value;
@@ -455,13 +481,20 @@ export class LayersService {
             }
           });
         }
-      } else {
+      } else if (group instanceof Layer) {
         if (group.id === id) {
           items.push(group);
         }
       }
     });
-    return items;
+
+    if (!items.length) {
+      return null;
+    } else if (items.length === 1) {
+      return items[0];
+    } else if (items.length > 1) {
+      console.log('there is a duplicate ID in the Layer Groups!');
+    }
   }
   /**
    * Get a Layer by ID from the Layerservice Store (or the provided Array)
@@ -587,20 +620,41 @@ export class LayersService {
 
   /**
    * Set (Reset) all storeItems from the Layerservice
+   * if filtertype is set then only the slot is used
    */
-  public setLayerGroups(storeItems: Array<Layer | LayerGroup>): Observable<Array<Layer | LayerGroup>> {
+  public setLayerGroups(items: Array<Layer | LayerGroup>, filtertype?: TFiltertypes): Observable<Array<Layer | LayerGroup>> {
     // set filtertype of group to layers
-    if (storeItems.length > 0) {
-      storeItems.map(_group => {
+    if (items.length > 0) {
+      items.map(_group => {
         if (_group instanceof LayerGroup && _group.layers.length > 0) {
           _group.layers = _group.layers.map(l => { l.filtertype = _group.filtertype; return l; });
         }
       });
     }
-    this.store.next(storeItems);
-    this.baseLayers.next(this.filterBaseLayers());
-    this.layers.next(this.filterLayers());
-    this.overlays.next(this.filterOverlays());
+
+    if (!filtertype) {
+      this.store.next(items);
+      this.baseLayers.next(this.filterBaseLayers());
+      this.layers.next(this.filterLayers());
+      this.overlays.next(this.filterOverlays());
+    } else {
+      if (filtertype === 'Baselayers') {
+        this.removeBaseLayers();
+      } else if (filtertype === 'Layers') {
+        this.removeLayers();
+      } else if (filtertype === 'Overlays') {
+        this.removeOverlays();
+      }
+
+      items.map(lg => {
+        if (lg instanceof Layer) {
+          this.addLayer(lg, filtertype);
+        } else if (lg instanceof LayerGroup) {
+          this.addLayerGroup(lg, filtertype);
+        }
+      });
+    }
+
     return this.store.asObservable();
   }
 

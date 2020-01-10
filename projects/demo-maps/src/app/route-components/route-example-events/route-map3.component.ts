@@ -109,8 +109,6 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     const cellSize = 0.5;
     const regulargrid = regularGrid(bbox, cellSize, zoom, this.mapSvc.EPSG, mapextent);
 
-    const mapHasLayer = this.layersSvc.getLayerById(layerID);
-
     const gridLayerSource = new olVectorSource({
       features: regulargrid,
       wrapX: false
@@ -121,18 +119,20 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       source: gridLayerSource
     });
 
-    const gridLayer = new CustomLayer({
-      id: layerID,
-      name: `gridLayer`,
-      type: 'custom',
-      opacity: 0.3,
-      custom_layer: _gridLayer
-    });
+    const oldGridLayer = this.layersSvc.getLayerById(layerID) as CustomLayer;
+    if (!oldGridLayer) {
+      const gridLayer = new CustomLayer({
+        id: layerID,
+        name: `gridLayer`,
+        type: 'custom',
+        opacity: 0.3,
+        custom_layer: _gridLayer
+      });
 
-    if (!mapHasLayer) {
       this.layersSvc.addLayer(gridLayer, 'Layers');
     } else {
-      this.layersSvc.updateLayer(gridLayer, gridLayer.filtertype);
+      oldGridLayer.custom_layer = _gridLayer;
+      this.layersSvc.updateLayer(oldGridLayer, oldGridLayer.filtertype);
     }
   }
 

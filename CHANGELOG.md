@@ -1,5 +1,16 @@
+### Breaking Changes
+* **@ukis/services-layers:** getLayerOrGroupById() - is returning a Layer | LayerGroup | null - not a array anymore! 
+
+
 ### Changes
 * **@ukis/services-ogc:** made wps-datatypes available via public api.
+
+* **@ukis/services-layers:** 
+- removeLayer(), removeLayerGroup(), removeLayerFromGroup(), removeLayerOrGroupById() - add optional force if layer was set to not removable
+- updateLayerOrGroupInStore - removed optional (not used) filtertype
+
+### Features
+* **@ukis/layer-control:** add css class to visible layer or group to style them.
 
 
 # [6.2.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.2.0) (2019-12-05) (Sprint NextGEOSS)
