@@ -54,9 +54,9 @@
     "classlist.js -@clr"
   ],
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.801.0",
-    "@angular-devkit/build-ng-packagr": "~0.801.0",
-    "@angular/cli": "~8.1.0",
+    "@angular-devkit/build-angular": "~0.803.22",
+    "@angular-devkit/build-ng-packagr": "~0.803.22",
+    "@angular/cli": "~8.3.22",
     "@angular/compiler-cli": "~8.2.10",
     "@angular/language-service": "~8.2.10",
     "@boundlessgeo/jsonix": "^2.4.3",
