@@ -5,14 +5,11 @@
 * node scripts/projectsVersion.js -l
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-// const NG = require('@angular/cli');
 const NG = require("@angular/cli");
 const PATH = require("path");
 const replace = require("replace");
 const toposort = require("toposort");
 const depcheck = require("depcheck");
-// const toposort = require('toposort');
-// const depcheck = require('depcheck');
 function run() {
     const UKIS_SCOPE = '@ukis/';
     const CWD = process.cwd();
