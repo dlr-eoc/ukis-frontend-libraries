@@ -9,7 +9,13 @@
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s",
     "tsc:libraryProjects": "tsc -p scripts/tsconfig.script.json -w",
-    "list-projects": "node scripts/libraryProjects.js -l"
+    "list-pxxrojects": "node scripts/libraryProjects.js -l",
+    "schematics:build": "tsc -p projects/core-ui/tsconfig.schematics.json",
+    "schematics:copy:collection": "cp projects/core-ui/schematics/collection.json dist/core-ui/schematics/collection.json",
+    "schematics:copy:schemas": "cp --parents projects/core-ui/schematics/*/schema.json dist/core-ui/schematics",
+    "_schematics:copy:files": "cp --parents -p projects/core-ui/schematics/*/files/** dist/core-ui/schematics",
+    "postschematics:build": "npm run schematics:copy:collection && npm run schematics:copy:schemas",
+    "schematics:test": "tsc -p projects/core-ui/tsconfig.schematics.json && jasmine dist/core-ui/schematics/**/*_spec.js"
   },
   "private": true,
   "dependencies": {
@@ -39,7 +45,10 @@
     "tslib": "^1.10.0",
     "w3c-schemas": "^1.4.0",
     "web-animations-js": "^2.3.1",
-    "zone.js": "^0.9.1"
+    "zone.js": "^0.9.1",
+    "@angular-devkit/core": "^8.3.20",
+    "@angular-devkit/schematics": "^8.3.20",
+    "@schematics/angular": "^8.3.20"
   },
   "dependenciesFromProjects": [
     "md5",
@@ -51,7 +60,10 @@
     "@boundlessgeo/jsonix",
     "core-js -@clr",
     "web-animations-js -@clr",
-    "classlist.js -@clr"
+    "classlist.js -@clr",
+    "@angular-devkit/core -schematics",
+    "@angular-devkit/schematics -schematics",
+    "@schematics/angular -schematics"
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.22",
@@ -67,6 +79,7 @@
     "@types/node": "^8.9.5",
     "codelyzer": "~4.5.0",
     "depcheck": "^0.7.2",
+    "jasmine": "^3.3.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.1.1",
@@ -94,7 +107,8 @@
     "depcheck",
     "toposort",
     "replace",
-    "terser -owc services"
+    "terser -owc services",
+    "jasmine -schematics"
   ],
   "engines": {
     "node": ">=10.0.0",

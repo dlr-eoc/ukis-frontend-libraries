@@ -3,6 +3,25 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "schematics": "./schematics/collection.json",
+  "keywords": [
+    "schematics",
+    "@ukis",
+    "core-ui"
+  ],
+  "ng-add": {
+    "save": false
+  },
+  "dependencies": {
+    "@angular-devkit/core": "^8.3.22",
+    "@angular-devkit/schematics": "^8.3.22",
+    "@schematics/angular": "^8.3.22"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.3.9",
+    "@types/node": "^8.0.31",
+    "jasmine": "^3.3.1",
+    "typescript": "~3.5.3"
+  },
   "peerDependencies": {
     "@angular/common": "~8.2.10",
     "@angular/core": "~8.2.10",

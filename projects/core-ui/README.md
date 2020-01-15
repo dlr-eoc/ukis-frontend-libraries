@@ -11,6 +11,8 @@ Run `ng generate component component-name --project core-ui` to generate a new c
 
 Run `ng build core-ui` to build the project. The build artifacts will be stored in the `dist/` directory.
 
+after this build the schematics with `npm run schematics:build` 
+
 ## Publishing
 
 After building your library with `ng build core-ui`, go to the dist folder `cd dist/core-ui` and run `npm publish`.
