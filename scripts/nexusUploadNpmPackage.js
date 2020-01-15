@@ -28,6 +28,7 @@ function run() {
     // console.dir(args);
     if (Object.keys(args).length <= 1 || args.h || args.help) {
         showHelp();
+        return;
     }
     if (args.p || args.path) {
         PKG_DIR = args.p || args.path; // PATH.join(CWD, 'package.json');
@@ -43,34 +44,37 @@ function run() {
             if (pass) {
                 REGISTRY_USER_PASSWORD = pass;
                 const NPM_AUTH_HASH = Buffer.from(`${REGISTRY_USER}:${REGISTRY_USER_PASSWORD}`).toString('base64');
-                // npm supports project-specific config files .npmrc, so lets use this to avoid littering the global npm configuration
-                const npmrc = `
-                init-author-email = ${REGISTRY_USER}@eoc.dlr.de
-                init-author-name = ${REGISTRY_USER}
-                init-author-url = http://www.dlr.de
-                email = ${REGISTRY_USER}@eoc.dlr.de
-                registry = ${REGISTRY}
-                _auth = ${NPM_AUTH_HASH}
-                loglevel = "verbose"`;
-                const packagePath = PATH.join(CWD, PKG_DIR);
-                const _path = PATH.join(packagePath, '.npmrc');
-                FS.writeFileSync(_path, npmrc);
-                setVersion(PKG_VERSION, packagePath);
-                child_process_1.exec(`cd ${packagePath} &&  npm publish`, (error, stdout, stderr) => {
-                    console.log(stdout);
-                    console.log(stderr);
-                    if (error !== null) {
-                        console.log(`exec error: ${error} `);
-                    }
-                });
+                publishPackage(REGISTRY_USER, REGISTRY, NPM_AUTH_HASH, CWD, PKG_DIR, PKG_VERSION);
             }
             else {
-                console.log('provide a password --pass!');
+                console.log('provide a password');
             }
         });
     });
 }
 exports.run = run;
+function publishPackage(REGISTRY_USER, REGISTRY, NPM_AUTH_HASH, CWD, PKG_DIR, PKG_VERSION) {
+    // npm supports project-specific config files .npmrc, so lets use this to avoid littering the global npm configuration
+    const npmrc = `
+    init-author-email = ${REGISTRY_USER}@eoc.dlr.de
+    init-author-name = ${REGISTRY_USER}
+    init-author-url = http://www.dlr.de
+    email = ${REGISTRY_USER}@eoc.dlr.de
+    registry = ${REGISTRY}
+    _auth = ${NPM_AUTH_HASH}
+    loglevel = "verbose"`;
+    const packagePath = PATH.join(CWD, PKG_DIR);
+    const _path = PATH.join(packagePath, '.npmrc');
+    FS.writeFileSync(_path, npmrc);
+    setVersion(PKG_VERSION, packagePath);
+    child_process_1.exec(`cd ${packagePath} &&  npm publish`, (error, stdout, stderr) => {
+        console.log(stdout);
+        console.log(stderr);
+        if (error !== null) {
+            console.log(`exec error: ${error} `);
+        }
+    });
+}
 function getUsername() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const rl = readline.createInterface({
@@ -89,14 +93,29 @@ function getPassword() {
             input: process.stdin,
             output: process.stdout,
         });
-        const mute = (data) => {
-            readline.cursorTo(process.stdout, 0);
-            process.stdout.write('password:' + Array(rl['line'].length + 1).join('*'));
+        const mute = (buff) => {
+            const passlength = rl['line'].length + 1;
+            const data = buff.toString();
+            switch (data) {
+                case '\u0004':
+                case '\r':
+                case '\n':
+                    process.stdin.removeListener('data', mute);
+                    process.stdin.pause();
+                    break;
+                case '\u0003': // Ctrl-c
+                    process.stdin.removeListener('data', mute);
+                    process.stdin.pause();
+                    break;
+                default:
+                    readline.cursorTo(process.stdout, 0);
+                    process.stdout.write('password:' + Array(passlength).join('*'));
+                    break;
+            }
         };
         process.stdin.on('data', mute);
         return new Promise(resolve => rl.question('password:', ans => {
             rl.close();
-            process.stdin.removeListener('data', mute);
             resolve(ans);
         }));
     });
