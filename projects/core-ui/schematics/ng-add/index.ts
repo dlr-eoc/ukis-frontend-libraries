@@ -11,7 +11,8 @@ import { getWorkspace } from '@schematics/angular/utility/config';
 export function ngAdd(_options: UkisNgAddSchema): Rule {
     return chain([
         InstallTask(),
-        AddFiles(_options)
+        AddFiles(_options),
+        AdjustFiles(_options)
     ]);
 }
 
@@ -40,7 +41,7 @@ function AddFiles(_options: UkisNgAddSchema): Rule {
             project.sourceRoot = 'src';
         }
 
-        const sourcePath = join(normalize(project.root), project.sourceRoot);
+        const sourcePath = join(normalize(project.root)); // project.sourceRoot
         // const assetsPath = join(sourcePath, 'assets');
         // const stylesPath = join(sourcePath, 'styles');
 
@@ -77,6 +78,24 @@ function AddFiles(_options: UkisNgAddSchema): Rule {
     };
 }
 
+function AdjustFiles(_options: UkisNgAddSchema) {
+    return (tree: Tree, _context: SchematicContext) => {
+        // TODO ADJUST files 
+        /**
+         * app.component.html
+         * app.component.ts
+         * app.module.ts
+         *
+         * index.html
+         * styles.scss //style.css
+         * angular.json
+         * tsconfig.json
+         * 
+         */
+        return tree;
+    };
+}
+
 
 /* function addPackageJsonDependencies(): Rule {
     return (host: Tree, context: SchematicContext) => {
@@ -95,7 +114,7 @@ function AddFiles(_options: UkisNgAddSchema): Rule {
 
         return host;
     };
-    // If you are using the Angular CLI with multiple projects, you can specify which project to add Clarity 
+    // If you are using the Angular CLI with multiple projects, you can specify which project to add Clarity
     // to by using the --project PROJECTNAME flag.
     // return externalSchematic('@clr/angular', 'add', {});
 }
