@@ -13,7 +13,7 @@ export function run() {
     let REGISTRY_USER = 'jenkins';
     let REGISTRY_USER_PASSWORD = '';
     let PKG_DIR = '';
-    let PKG_VERSION = '6.0.0';
+    let PKG_VERSION = '';
 
     function showHelp() {
         console.log(`
@@ -21,8 +21,8 @@ export function run() {
 
         Options:
         -h, --help              Print this message.
-        -p, --path              Path to the build package.
-            --pVersion          Version vor the package to publish.
+        -p, --path              Path to the build package. (required)
+            --pv                Version for the package to publish. (required)
         `);
     }
 
@@ -30,28 +30,32 @@ export function run() {
     // console.dir(args);
     if (Object.keys(args).length <= 1 || args.h || args.help) {
         showHelp();
-        return;
     }
 
     if (args.p || args.path) {
         PKG_DIR = args.p || args.path; // PATH.join(CWD, 'package.json');
+    } else {
+        console.log(`You have to provide the path to the build package!`);
+        return;
     }
 
-    if (args.pVersion) {
-        PKG_VERSION = args.pVersion; // PATH.join(CWD, 'package.json');
+    if (args.pv) {
+        PKG_VERSION = args.pv; // PATH.join(CWD, 'package.json');
+    } else {
+        console.log(`You have to provide the version for the package to publish!`);
+        return;
     }
 
-    getUsername().then((user: string) => {
+
+    getInput('username:').then(user => {
         if (user) {
             REGISTRY_USER = user;
         }
-
-        getPassword().then((pass: string) => {
+        getInput('password:', '*').then(pass => {
             if (pass) {
                 REGISTRY_USER_PASSWORD = pass;
                 const NPM_AUTH_HASH = Buffer.from(`${REGISTRY_USER}:${REGISTRY_USER_PASSWORD}`).toString('base64');
                 publishPackage(REGISTRY_USER, REGISTRY, NPM_AUTH_HASH, CWD, PKG_DIR, PKG_VERSION);
-
             } else {
                 console.log('provide a password');
             }
@@ -77,6 +81,8 @@ function publishPackage(REGISTRY_USER, REGISTRY, NPM_AUTH_HASH, CWD, PKG_DIR, PK
 
     setVersion(PKG_VERSION, packagePath);
 
+    console.log(`Publish package from '${packagePath}' with version '${PKG_VERSION}' to '${REGISTRY}'`);
+
     exec(`cd ${packagePath} &&  npm publish`,
         (error, stdout, stderr) => {
             console.log(stdout);
@@ -88,48 +94,37 @@ function publishPackage(REGISTRY_USER, REGISTRY, NPM_AUTH_HASH, CWD, PKG_DIR, PK
 }
 
 
-async function getUsername() {
+async function getInput(question: string, obscurer?: string) {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
 
-    return new Promise(resolve => rl.question('username:', ans => {
-        rl.close();
-        resolve(ans);
-    }));
-}
+    if (obscurer) {
+        const mute = (buff) => {
+            const passlength = rl['line'].length + 1;
+            const data = buff.toString();
+            switch (data) {
+                case '\u0004':
+                case '\r':
+                case '\n':
+                    process.stdin.removeListener('data', mute);
+                    process.stdin.pause();
+                    break;
+                case '\u0003': // Ctrl-c
+                    process.stdin.removeListener('data', mute);
+                    process.stdin.pause();
+                    break;
+                default:
+                    readline.cursorTo(process.stdout, 0);
+                    process.stdout.write(question + Array(passlength).join(obscurer));
+                    break;
+            }
+        };
+        process.stdin.on('data', mute);
+    }
 
-async function getPassword() {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-
-    const mute = (buff) => {
-        const passlength = rl['line'].length + 1;
-        const data = buff.toString();
-        switch (data) {
-            case '\u0004':
-            case '\r':
-            case '\n':
-                process.stdin.removeListener('data', mute);
-                process.stdin.pause();
-                break;
-            case '\u0003': // Ctrl-c
-                process.stdin.removeListener('data', mute);
-                process.stdin.pause();
-                break;
-            default:
-                readline.cursorTo(process.stdout, 0);
-                process.stdout.write('password:' + Array(passlength).join('*'));
-                break;
-        }
-    };
-
-    process.stdin.on('data', mute);
-
-    return new Promise(resolve => rl.question('password:', ans => {
+    return new Promise<string>(resolve => rl.question(question, ans => {
         rl.close();
         resolve(ans);
     }));
