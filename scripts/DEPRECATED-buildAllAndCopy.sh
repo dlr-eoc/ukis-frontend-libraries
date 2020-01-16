@@ -22,6 +22,8 @@ targetdir=$basedir/$targetname/node_modules/@ukis/
 
 cd $basedir/frontend-libraries/
 
+echo "not all libraries in projects are buildable - you have to check the angular.json for this!"
+
 while inotifywait -r -e modify,create,delete ./projects; do
     npm run build
     rsync -avz ./dist/ $targetdir; 
