@@ -10,6 +10,11 @@
             "$default": {
                 "$source": "defaultProject"
             }
+        },
+        "skip": {
+            "description": "Skip install",
+            "type": "string",
+            "default": false
         }
     }
 }

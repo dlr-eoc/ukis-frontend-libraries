@@ -70,8 +70,8 @@ https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2
 
 
 to unlink use 
-`npm unlink $PATH_TO_SCHEMATIC_PROJECT` // this unfortunately do not remove the full link so do 
-`npm uninstall @ukis/core-ui -g` // this leaves an empty folder @ukis in the global directory so remove it later if not needed
+`npm unlink $PATH_TO_SCHEMATIC_PROJECT` (`npm unlink ../frontend-libraries/dist/core-ui`) // this unfortunately do not remove the full link so do 
+`npm uninstall @ukis/core-ui -g` // this leaves an empty folder @ukis in the global directory (.../AppData/Roaming/npm/node_modules) so remove it later if not needed
 
 
 
