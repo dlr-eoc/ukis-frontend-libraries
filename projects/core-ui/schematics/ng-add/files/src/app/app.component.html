@@ -1,0 +1,14 @@
+<clr-main-container [ngClass]="{'floating':ui.floating}">
+    <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
+    <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+
+    <ukis-header [ukis-title]="title">
+        ...
+        <a routerLink="/xyz" routerLinkActive="active" class="nav-link nav-text header-nav-el">xyz</a>
+        ...
+    </ukis-header>
+    <router-outlet></router-outlet>
+    <ukis-global-footer *ngIf="ui.footer">
+        <router-outlet name="footer"></router-outlet>
+    </ukis-global-footer>
+</clr-main-container>

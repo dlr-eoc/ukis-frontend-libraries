@@ -2,33 +2,35 @@ import {
     Rule, SchematicContext, Tree, chain, apply, url, mergeWith, move, template,
     filter, externalSchematic, noop, SchematicsException
 } from '@angular-devkit/schematics';
-// mergeWith, MergeStrategy, noop, filter, template, apply, move, url
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import { normalize, join, getSystemPath, Path, parseJson, JsonParseMode } from '@angular-devkit/core';
+import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
 import { UkisNgAddSchema } from './schema';
 
 
-import { getProject, addServiceComponentModule, ImoduleImport, updateWorkspaceFile } from '../utils';
-import { getWorkspace } from '@schematics/angular/utility/config';
+import { getProject, addServiceComponentModule, ImoduleImport, updateJsonFile, updateHtmlFile } from '../utils';
+import { getWorkspace, updateWorkspace } from '@schematics/angular/utility/config';
+import { TsconfigJSON } from '../schema.tsconfig';
+import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
 
 
 
 // https://angular.io/guide/schematics-for-libraries
+// https://dev.to/thisdotmedia/schematics-pt-3-add-tailwind-css-to-your-angular-project-40pp
 export function ngAdd(_options: UkisNgAddSchema): Rule {
     const rules: Rule[] = [
         (_options.skip) ? noop() : externalSchematic('@clr/angular', 'ng-add', _options),
-        (_options.skip) ? noop() : installTask(_options),
-        (_options.skip) ? noop() : addFiles(_options),
-        (_options.skip) ? noop() : addImportsInAppModule(_options),
-        (_options.skip) ? noop() : updateAngularJson(_options),
-        updateTsConfigFile(_options),
-        (_options.skip) ? noop() : updateIndexHtml(_options)
+        (_options.skip) ? noop() : ruleInstallTask(_options),
+        (_options.skip) ? noop() : ruleAddFiles(_options),
+        (_options.skip) ? noop() : ruleAddImportsInAppModule(_options),
+        (_options.skip) ? noop() : ruleUpdateAngularJson(_options),
+        (_options.skip) ? noop() : ruleUpdateTsConfigFile(_options),
+        ruleUpdateIndexHtml(_options)
     ];
 
     return chain(rules);
 }
 
-function installTask(_options: UkisNgAddSchema): Rule {
+function ruleInstallTask(_options: UkisNgAddSchema): Rule {
     return (tree: Tree, _context: SchematicContext) => {
         _context.addTask(new NodePackageInstallTask());
         return tree;
@@ -42,7 +44,15 @@ function installTask(_options: UkisNgAddSchema): Rule {
  * - styles
  * - app
  */
-function addFiles(_options: UkisNgAddSchema): Rule {
+function ruleAddFiles(_options: UkisNgAddSchema): Rule {
+    /**
+     * app.component.html
+     * add default template from files
+     * <clr-main-container>
+     * ...
+     * </clr-main-container>
+     *
+     */
     return (tree: Tree, _context: SchematicContext) => {
         const project = getProject(tree, _options);
 
@@ -64,9 +74,24 @@ function addFiles(_options: UkisNgAddSchema): Rule {
                 if (pathSeperators && pathSeperators.length > 1) {
                     return false;
                 } else {
+                    const testFiles = ['favicon.ico', 'styles.scss', 'styles.css'];
+                    /**
+                     * check for existing files the are allowed to overwrite!
+                     */
                     const destPath = join(sourcePath, path);
                     if (tree.exists(destPath)) {
-                        tree.delete(destPath);
+                        for (const f of testFiles) {
+                            /** delete css file it is replaced with scss */
+                            if (f === 'styles.css') {
+                                const cssp = join(sourcePath, f);
+                                if (tree.exists(cssp)) {
+                                    tree.delete(cssp);
+                                }
+                            }
+                            if (destPath.includes(f)) {
+                                tree.delete(destPath);
+                            }
+                        }
                     }
                     return true;
                 }
@@ -86,6 +111,21 @@ function addFiles(_options: UkisNgAddSchema): Rule {
 
         const appTemplateSource = apply(url('./files/src/app'), [
             template({ ..._options }),
+            filter((path: Path) => {
+                const testFiles = ['app.component.html', 'app.component.ts'];
+                /**
+                 * check for existing files the are allowed to overwrite!
+                 */
+                const destPath = join(appPath, path);
+                if (tree.exists(destPath)) {
+                    for (const f of testFiles) {
+                        if (destPath.includes(f)) {
+                            tree.delete(destPath);
+                        }
+                    }
+                }
+                return true;
+            }),
             move(getSystemPath(appPath)),
         ]);
 
@@ -106,7 +146,7 @@ function addFiles(_options: UkisNgAddSchema): Rule {
  * - AppRoutingModule
  * - HttpClientModule?
  */
-function addImportsInAppModule(_options: UkisNgAddSchema): Rule {
+function ruleAddImportsInAppModule(_options: UkisNgAddSchema): Rule {
     const rules: Rule[] = [];
     const imports: ImoduleImport[] = [
         { classifiedName: 'HttpClientModule', path: '@angular/common/http', module: true },
@@ -138,58 +178,58 @@ function addImportsInAppModule(_options: UkisNgAddSchema): Rule {
  * - assets
  * - styles
  */
-function updateAngularJson(_options: UkisNgAddSchema): Rule {
+function ruleUpdateAngularJson(_options: UkisNgAddSchema): Rule {
     return (tree: Tree, _context: SchematicContext) => {
         const project = getProject(tree, _options);
         const workspace = getWorkspace(tree);
-
-        if (project.architect && project.architect.build) {
-            const build = project.architect.build;
-            if (build.options && 'assets' in build.options) {
-                if (Array.isArray(build.options.assets) && !build.options.assets.includes('src/manifest.json')) {
-                    build.options.assets.push('src/manifest.json');
-                }
-            }
-
-            if (build.options && 'styles' in build.options) {
-                if (Array.isArray(build.options.styles) && !build.options.styles.includes('src/styles.scss')) {
-                    const found = build.options.styles.findIndex(i => i === 'src/styles.css');
-                    if (found !== -1) {
-                        build.options.styles[found] = 'src/styles.scss';
-                    } else {
-                        build.options.styles.push('src/styles.scss')
-                    }
-                }
-            }
-        }
-
-        if (project.architect && project.architect.test) {
-            const test = project.architect.test;
-            if (test.options && 'assets' in test.options) {
-                if (Array.isArray(test.options.assets) && !test.options.assets.includes('src/manifest.json')) {
-                    test.options.assets.push('src/manifest.json');
-                }
-            }
-
-            if (test.options && 'styles' in test.options) {
-                if (Array.isArray(test.options.styles) && !test.options.styles.includes('src/styles.scss')) {
-                    const found = test.options.styles.findIndex(i => i === 'src/styles.css');
-                    console.log('foundIndex', found);
-                    if (found !== -1) {
-                        test.options.styles[found] = 'src/styles.scss';
-                    } else {
-                        test.options.styles.push('src/styles.scss')
-                    }
-                }
-            }
-        }
+        ['build', 'test'].map(target => {
+            updateAngularArchitect(project, target);
+        });
 
         if (!_options.project) {
             throw new SchematicsException(`Could not find Project in the workspace check your --project`);
         }
         workspace.projects[_options.project] = project;
-        return updateWorkspaceFile(workspace);
+
+        /**
+         * update to use scss
+         */
+        if (!workspace.schematics) {
+            workspace.schematics = {};
+        }
+
+        workspace.schematics['@schematics/angular:component'] = {
+            'styleext': 'scss'
+        };
+
+        return updateWorkspace(workspace);
     };
+}
+
+/**
+ * this is a helper
+ */
+function updateAngularArchitect(project: WorkspaceProject, type: string | 'build' | 'test') {
+    const architect = project.architect;
+    if (architect && architect[type]) {
+        const target = architect[type];
+        if (target.options && 'assets' in target.options) {
+            if (Array.isArray(target.options.assets) && !target.options.assets.includes('src/manifest.json')) {
+                target.options.assets.push('src/manifest.json');
+            }
+        }
+
+        if (target.options && 'styles' in target.options) {
+            if (Array.isArray(target.options.styles) && !target.options.styles.includes('src/styles.scss')) {
+                const found = target.options.styles.findIndex((i: string) => i === 'src/styles.css');
+                if (found !== -1) {
+                    target.options.styles[found] = 'src/styles.scss';
+                } else {
+                    target.options.styles.push('src/styles.scss')
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -197,37 +237,27 @@ function updateAngularJson(_options: UkisNgAddSchema): Rule {
  *
  * - compilerOptions.paths
  */
-function updateTsConfigFile(_options: UkisNgAddSchema): Rule {
-    return (tree: Tree, _context: SchematicContext) => {
-        const path = 'tsconfig.json';
+function ruleUpdateTsConfigFile(_options: UkisNgAddSchema): Rule {
+    const path = 'tsconfig.json';
+    return updateJsonFile<TsconfigJSON>(path, (json) => {
         const tsconfigPaths = [
             { name: '@ukis/*', paths: ['frontend-libraries/projects/*'] }
         ];
 
-        if (!tree.exists(path)) {
-            throw new SchematicsException(`tsconfig.json is not in the workspace!`);
+        if (!json.compilerOptions) {
+            json.compilerOptions = {};
         }
 
-        const source = tree.read(path);
-        if (source) {
-            const sourceText = source.toString('utf-8');
-            const json = parseJson(sourceText, JsonParseMode.Loose);
-            console.log(json)
-
-            if (json instanceof Object && 'compilerOptions' in json) {
-                if (json.compilerOptions instanceof Object && !Array.isArray(json.compilerOptions)) {
-                    if ('paths' in json.compilerOptions && json.compilerOptions.paths instanceof Object && !Array.isArray(json.compilerOptions.paths)) {
-                        json.compilerOptions.paths[tsconfigPaths[0].name] = tsconfigPaths[0].paths;
-                    } else {
-                        json.compilerOptions['paths'] = {};
-                        json.compilerOptions.paths[tsconfigPaths[0].name] = tsconfigPaths[0].paths;
-                    }
-                }
-            }
-            tree.overwrite(path, JSON.stringify(json, null, 2));
+        if (!json.compilerOptions.paths) {
+            json.compilerOptions.paths = {};
         }
-        return tree;
-    };
+
+        for (const p of tsconfigPaths) {
+            json.compilerOptions.paths[p.name] = p.paths;
+        }
+
+        return json;
+    });
 }
 
 /**
@@ -246,66 +276,60 @@ function updateTsConfigFile(_options: UkisNgAddSchema): Rule {
  * - shortcut icon
  * - manifest
  */
-function updateIndexHtml(_options: UkisNgAddSchema): Rule {
-    return (tree: Tree, _context: SchematicContext) => {
-        // TODO!!!!!!
-        return tree;
-    };
-}
+function ruleUpdateIndexHtml(_options: UkisNgAddSchema): Rule {
+    return async (tree: Tree, _context: SchematicContext) => {
+        const project = getProject(tree, _options);
 
+        if (!project.sourceRoot) {
+            project.sourceRoot = 'src';
+            throw new SchematicsException(`Project.sourceRoot is not defined in the workspace!`);
+        }
 
-export function AdjustFiles() {
-
-    /**
-     * app.component.html
-     * add default template from files
-     * <clr-main-container>
-     * ...
-     * </clr-main-container>
-     *
-     */
-
-    /**
-    * app.component.ts
-    * add imports for
-    * - icons
-    * - services
-    * - Router
-    * - variables for UI
-    * - constructor imports
-    * - init()
-    * - getHtmlMeta()
-    *
-    * maybe use template file??
-    */
+        const sourcePath = join(normalize(project.root), project.sourceRoot, 'index.html'); // project.sourceRoot
 
 
 
-    /**
-     * styles.scss //style.css
-     * if style.css remove and add file styles.scss from templates
-     */
-}
-/*
-function addPackageJsonDependencies(): Rule {
-    return (host: Tree, context: SchematicContext) => {
-        const version = '~2.0.0';
-        const dependencies: NodeDependency[] = [
-            { type: NodeDependencyType.Default, version: version, name: '@clr/angular' },
-            { type: NodeDependencyType.Default, version: version, name: '@clr/ui' },
-            { type: NodeDependencyType.Default, version: version, name: '@clr/icons' },
-            { type: NodeDependencyType.Default, version: version, name: '@clr/core' }
+        let projectTitle = 'Your App';
+        if (_options.project) {
+            projectTitle = _options.project;
+        }
+
+        const headerTags = [
+            `  <meta name="title" content="${projectTitle}">\n`,
+            `  <meta name="short-title" content="This should be a shorter title like - ${projectTitle}">\n`,
+            `  <meta name="description" content="This should be the description for - ${projectTitle}">\n`,
+            `  <meta name="version" content="This should be the version of - ${projectTitle}">\n`,
+            `  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">\n`,
+            `  <link rel="icon" type="image/x-icon" href="favicon.ico">\n`
         ];
 
-        dependencies.forEach(dependency => {
-            addPackageJsonDependency(host, dependency);
-            context.logger.log('info', `✅️ Added "${dependency.name}" into ${dependency.type}`);
-        });
-
-        return host;
+        return chain([
+            updateHtmlFile(sourcePath, 'head', 'head', headerTags, _options)
+        ]);
     };
-    // If you are using the Angular CLI with multiple projects, you can specify which project to add Clarity
-    // to by using the --project PROJECTNAME flag.
-    // return externalSchematic('@clr/angular', 'add', {});
 }
+
+
+// TODO: maybe update this files instead of replacing them
+
+/**
+* app.component.ts
+* add imports for
+* - icons
+* - services
+* - Router
+* - variables for UI
+* - constructor imports
+* - init()
+* - getHtmlMeta()
+*
+* maybe use template file??
 */
+
+
+
+/**
+ * styles.scss //style.css
+ * if style.css remove and add file styles.scss from templates
+ */
+

@@ -1,27 +1,17 @@
 import { Tree, SchematicsException, SchematicContext, Rule } from '@angular-devkit/schematics';
 import { UkisNgAddSchema } from './ng-add/schema';
 
-import { getWorkspace, updateWorkspace } from '@schematics/angular/utility/config';
+import { getWorkspace } from '@schematics/angular/utility/config';
 
 import * as ts from 'typescript';
 import { addProviderToModule, insertImport, addImportToModule, addDeclarationToModule } from '@schematics/angular/utility/ast-utils';
 
 import { InsertChange, Change } from '@schematics/angular/utility/change';
-import { normalize, join } from '@angular-devkit/core';
+import { normalize, join, parseJson, JsonParseMode } from '@angular-devkit/core';
 import { getAppModulePath } from '@schematics/angular/utility/ng-ast-utils';
 
-export interface UpdateJsonFn<T> {
-    (obj: T): T | void;
-}
-
-export interface TsConfigPartialType {
-    compilerOptions: {
-        baseUrl: string;
-        paths: {
-            [key: string]: string[];
-        }
-    };
-}
+const RewritingStream = require('parse5-html-rewriting-stream');
+import { Readable, Writable } from 'stream';
 
 export interface ImoduleImport {
     classifiedName: string;
@@ -29,6 +19,20 @@ export interface ImoduleImport {
     module?: boolean;
     provide?: boolean;
     declare?: boolean;
+}
+
+interface Iparse5Tag {
+    tagName: string;
+    attrs: [];
+    selfClosing: boolean;
+    sourceCodeLocation: {
+        startLine: number;
+        startCol: number;
+        startOffset: number;
+        endLine: number;
+        endCol: number;
+        endOffset: number;
+    }
 }
 
 export function getProject(tree: Tree, _options: UkisNgAddSchema) {
@@ -124,7 +128,89 @@ function getTsSourceFile(host: Tree, path: string): ts.SourceFile {
     return source;
 }
 
-export function updateWorkspaceFile(workspace: any) {
-    return updateWorkspace(workspace);
+export function updateJsonFile<T>(path: string, cb: (pkgJson: T) => T): Rule {
+    return (tree: Tree, _context: SchematicContext) => {
+        if (!tree.exists(path)) {
+            throw new SchematicsException(`${path} is not in the workspace!`);
+        }
+        const source = tree.read(path);
+        if (source) {
+            const sourceText = source.toString('utf-8');
+            let json = parseJson(sourceText, JsonParseMode.Loose) as any as T;
+            json = cb(json);
+            tree.overwrite(path, JSON.stringify(json, null, 2));
+        }
+        return tree;
+    };
+}
+
+
+export function updateHtmlFile(path: string, _startTag: string, _endTag: string, items: string | string[], _options: UkisNgAddSchema): Rule {
+    return (tree: Tree, _context: SchematicContext) => {
+
+        const buffer = tree.read(path);
+        if (buffer === null) {
+            throw new SchematicsException(`Could not read index file: ${path}`);
+        }
+
+        const rewriter = new RewritingStream();
+        const startTags: Iparse5Tag[] = [];
+        rewriter.on('startTag', (startTag: Iparse5Tag) => {
+            startTags.push(startTag);
+            rewriter.emitStartTag(startTag);
+        });
+
+        const endTags: Iparse5Tag[] = [];
+        rewriter.on('endTag', (endTag: Iparse5Tag) => {
+            endTags.push(endTag);
+            if (endTag.tagName === _endTag) {
+                if (Array.isArray(items)) {
+                    for (const item of items) {
+                        rewriter.emitRaw(item);
+                    }
+                } else {
+                    rewriter.emitRaw(items);
+                }
+            }
+            rewriter.emitEndTag(endTag);
+        });
+        _context.logger.info(`INFO: update of some Tags in ${path}`);
+
+
+        return new Promise<void>(resolve => {
+            const input = new Readable({
+                encoding: 'utf8',
+                read(): void {
+                    this.push(buffer);
+                    this.push(null);
+                },
+            });
+
+            const chunks: Array<Buffer> = [];
+            const output = new Writable({
+                write(chunk: string | Buffer, encoding: string, callback: Function): void {
+                    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk, encoding) : chunk);
+                    callback();
+                },
+                final(callback: (error?: Error) => void): void {
+                    const full = Buffer.concat(chunks);
+
+                    const hasStartTag = startTags.find(i => i.tagName === _startTag);
+                    if (!hasStartTag) {
+                        _context.logger.warn(`startTag: ${_startTag} is not in the file ${path}`);
+                    }
+                    const hasEndTag = endTags.find(i => i.tagName === _endTag);
+                    if (!hasEndTag) {
+                        _context.logger.warn(`endTag: ${_endTag} is not in the file ${path}`);
+                    }
+                    tree.overwrite(path, full.toString());
+                    callback();
+                    resolve();
+                },
+            });
+
+            input.pipe(rewriter).pipe(output);
+        });
+    };
 }
 

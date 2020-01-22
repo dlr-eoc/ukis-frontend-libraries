@@ -10,7 +10,7 @@
     "compodoc-serve": "compodoc -r 8081 -s",
     "tsc:libraryProjects": "tsc -p scripts/tsconfig.script.json -w",
     "list-pxxrojects": "node scripts/libraryProjects.js -l",
-    "schematics:build": "tsc -p projects/core-ui/tsconfig.schematics.json -w",
+    "schematics:build": "tsc -p projects/core-ui/tsconfig.schematics.json",
     "schematics:copy:collection": "cpx projects/core-ui/schematics/collection.json dist/core-ui/schematics/",
     "schematics:copy:schemas": "cpx projects/core-ui/schematics/**/schema.json dist/core-ui/schematics/",
     "schematics:copy:files": "cpx projects/core-ui/schematics/*/files/** dist/core-ui/schematics/",
@@ -19,6 +19,8 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/core": "^8.3.20",
+    "@angular-devkit/schematics": "^8.3.20",
     "@angular/animations": "~8.2.10",
     "@angular/cdk": "^8.0.2",
     "@angular/common": "~8.2.10",
@@ -33,6 +35,7 @@
     "@clr/angular": "^2.2.2",
     "@clr/icons": "^2.2.2",
     "@clr/ui": "^2.2.2",
+    "@schematics/angular": "^8.3.20",
     "@webcomponents/custom-elements": "^1.3.0",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
@@ -40,15 +43,13 @@
     "md5": "^2.2.1",
     "ogc-schemas": "^2.6.1",
     "ol": "^6.1.1",
+    "parse5-html-rewriting-stream": "^5.1.1",
     "proj4": "^2.5.0",
     "rxjs": "~6.5.3",
     "tslib": "^1.10.0",
     "w3c-schemas": "^1.4.0",
     "web-animations-js": "^2.3.1",
-    "zone.js": "^0.9.1",
-    "@angular-devkit/core": "^8.3.20",
-    "@angular-devkit/schematics": "^8.3.20",
-    "@schematics/angular": "^8.3.20"
+    "zone.js": "^0.9.1"
   },
   "dependenciesFromProjects": [
     "md5",
@@ -64,7 +65,8 @@
     "@angular-devkit/core -schematics",
     "@angular-devkit/schematics -schematics",
     "@schematics/angular -schematics",
-    "cpx -schematics"
+    "cpx -schematics",
+    "parse5-html-rewriting-stream -schematics"
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.22",
