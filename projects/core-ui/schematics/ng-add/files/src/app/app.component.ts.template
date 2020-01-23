@@ -11,12 +11,12 @@ import '@clr/icons/shapes/technology-shapes';
 import '@clr/icons/shapes/travel-shapes';
 import './components/icons/ukis';
 
-import { AlertService, IAlert } from '@ukis/core-ui/global-alert/alert.service';
+import { AlertService, IAlert } from './components/global-alert/alert.service';
 // import { FooterService } from './components/global-footer/footer.service';
-import { ProgressService, IProgress } from '@ukis/core-ui/global-progress/progress.service';
+import { ProgressService, IProgress } from './components/global-progress/progress.service';
 
 @Component({
-  selector: 'app-root',
+  selector: '<%= appPrefix %>-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

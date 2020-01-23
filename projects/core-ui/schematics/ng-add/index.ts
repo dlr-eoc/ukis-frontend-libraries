@@ -1,6 +1,6 @@
 import {
-    Rule, SchematicContext, Tree, chain, apply, url, mergeWith, move, template,
-    filter, externalSchematic, noop, SchematicsException
+    Rule, SchematicContext, Tree, chain, apply, url, mergeWith, move,
+    filter, externalSchematic, noop, SchematicsException, applyTemplates
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
@@ -19,12 +19,12 @@ import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspac
 export function ngAdd(_options: UkisNgAddSchema): Rule {
     const rules: Rule[] = [
         (_options.skip) ? noop() : externalSchematic('@clr/angular', 'ng-add', _options),
-        (_options.skip) ? noop() : ruleInstallTask(_options),
         (_options.skip) ? noop() : ruleAddFiles(_options),
         (_options.skip) ? noop() : ruleAddImportsInAppModule(_options),
         (_options.skip) ? noop() : ruleUpdateAngularJson(_options),
         (_options.skip) ? noop() : ruleUpdateTsConfigFile(_options),
-        ruleUpdateIndexHtml(_options)
+        (_options.skip) ? noop() : ruleUpdateIndexHtml(_options),
+        (_options.skip) ? noop() : ruleInstallTask(_options)
     ];
 
     return chain(rules);
@@ -65,9 +65,12 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
         const assetsPath = join(sourcePath, 'assets');
         const stylesPath = join(sourcePath, 'styles');
         const appPath = join(sourcePath, 'app');
+        const templateVariabels = Object.assign(_options, {
+            appPrefix: project.prefix
+        });
 
         const srcTemplateSource = apply(url('./files/src/'), [
-            template({ ..._options }),
+            applyTemplates({ ...templateVariabels }),
             filter((path: Path) => {
                 const separator = /[\\|\/]/g;
                 const pathSeperators = path.match(separator);
@@ -96,21 +99,22 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
                     return true;
                 }
             }),
+            // renameTemplateFiles(), //  Remove every `.template` suffix from file names.
             move(getSystemPath(sourcePath)),
         ]);
 
         const assetsTemplateSource = apply(url('./files/src/assets'), [
-            template({ ..._options }),
+            applyTemplates({ ...templateVariabels }),
             move(getSystemPath(assetsPath)),
         ]);
 
         const stylesTemplateSource = apply(url('./files/src/styles'), [
-            template({ ..._options }),
+            applyTemplates({ ...templateVariabels }),
             move(getSystemPath(stylesPath)),
         ]);
 
         const appTemplateSource = apply(url('./files/src/app'), [
-            template({ ..._options }),
+            applyTemplates({ ...templateVariabels }),
             filter((path: Path) => {
                 const testFiles = ['app.component.html', 'app.component.ts'];
                 /**
@@ -186,6 +190,21 @@ function ruleUpdateAngularJson(_options: UkisNgAddSchema): Rule {
             updateAngularArchitect(project, target);
         });
 
+        /**
+         * update to use scss
+         */
+        if (!project.schematics) {
+            project.schematics = {};
+        }
+
+        if (!project.schematics['@schematics/angular:component']) {
+            project.schematics['@schematics/angular:component'] = {
+                'style': 'scss'
+            };
+        }
+        project.schematics['@schematics/angular:component']['style'] = 'scss';
+
+
         if (!_options.project) {
             throw new SchematicsException(`Could not find Project in the workspace check your --project`);
         }
@@ -194,13 +213,13 @@ function ruleUpdateAngularJson(_options: UkisNgAddSchema): Rule {
         /**
          * update to use scss
          */
-        if (!workspace.schematics) {
+        /* if (!workspace.schematics) {
             workspace.schematics = {};
         }
 
         workspace.schematics['@schematics/angular:component'] = {
             'styleext': 'scss'
-        };
+        }; */
 
         return updateWorkspace(workspace);
     };
