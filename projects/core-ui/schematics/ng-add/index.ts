@@ -7,7 +7,7 @@ import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
 import { UkisNgAddSchema } from './schema';
 
 
-import { getProject, addServiceComponentModule, ImoduleImport, updateJsonFile, updateHtmlFile } from '../utils';
+import { getProject, addServiceComponentModule, ImoduleImport, updateJsonFile, updateHtmlFile, getStyleExt } from '../utils';
 import { getWorkspace, updateWorkspace } from '@schematics/angular/utility/config';
 import { TsconfigJSON } from '../schema.tsconfig';
 import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
@@ -24,7 +24,8 @@ export function ngAdd(_options: UkisNgAddSchema): Rule {
         (_options.skip) ? noop() : ruleUpdateAngularJson(_options),
         (_options.skip) ? noop() : ruleUpdateTsConfigFile(_options),
         (_options.skip) ? noop() : ruleUpdateIndexHtml(_options),
-        (_options.skip) ? noop() : ruleInstallTask(_options)
+        (_options.skip) ? noop() : ruleInstallTask(_options),
+        // externalSchematic('@ukis/core-ui', 'add-routing', _options),
     ];
 
     return chain(rules);
@@ -52,9 +53,11 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
      * ...
      * </clr-main-container>
      *
+     *  TODO: check for style files and replace them e.g. app.component.styl ...
      */
     return (tree: Tree, _context: SchematicContext) => {
         const project = getProject(tree, _options);
+        const workspace = getWorkspace(tree);
 
         if (!project.sourceRoot) {
             project.sourceRoot = 'src';
@@ -65,8 +68,10 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
         const assetsPath = join(sourcePath, 'assets');
         const stylesPath = join(sourcePath, 'styles');
         const appPath = join(sourcePath, 'app');
+        const styleExt = getStyleExt(project, workspace, _context);
         const templateVariabels = Object.assign(_options, {
-            appPrefix: project.prefix
+            appPrefix: project.prefix,
+            styleExt: styleExt
         });
 
         const srcTemplateSource = apply(url('./files/src/'), [
@@ -77,7 +82,7 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
                 if (pathSeperators && pathSeperators.length > 1) {
                     return false;
                 } else {
-                    const testFiles = ['favicon.ico', 'styles.scss', 'styles.css'];
+                    const testFiles = ['favicon.ico', 'styles.scss'];
                     /**
                      * check for existing files the are allowed to overwrite!
                      */
@@ -85,10 +90,10 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
                     if (tree.exists(destPath)) {
                         for (const f of testFiles) {
                             /** delete css file it is replaced with scss */
-                            if (f === 'styles.css') {
-                                const cssp = join(sourcePath, f);
-                                if (tree.exists(cssp)) {
-                                    tree.delete(cssp);
+                            if (f === 'styles.scss') {
+                                const styleExtTest = join(sourcePath, f.replace('.scss', `.${styleExt}`));
+                                if (tree.exists(styleExtTest)) {
+                                    tree.delete(styleExtTest);
                                 }
                             }
                             if (destPath.includes(f)) {
@@ -123,6 +128,12 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
                 const destPath = join(appPath, path);
                 if (tree.exists(destPath)) {
                     for (const f of testFiles) {
+                        if (f === 'app.component.ts') {
+                            const styleExtTest = join(appPath, f.replace('.ts', `.${styleExt}`));
+                            if (tree.exists(styleExtTest)) {
+                                tree.delete(styleExtTest);
+                            }
+                        }
                         if (destPath.includes(f)) {
                             tree.delete(destPath);
                         }
@@ -147,14 +158,12 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
 /**
  * app.module.ts add imports
  * - core-ui components
- * - AppRoutingModule
  * - HttpClientModule?
  */
 function ruleAddImportsInAppModule(_options: UkisNgAddSchema): Rule {
     const rules: Rule[] = [];
     const imports: ImoduleImport[] = [
-        { classifiedName: 'HttpClientModule', path: '@angular/common/http', module: true },
-        { classifiedName: 'AppRoutingModule', path: './app-routing.module', module: true },
+        // { classifiedName: 'HttpClientModule', path: '@angular/common/http', module: true },
 
         { classifiedName: 'HeaderComponent', path: './components/header/header.component', declare: true },
         { classifiedName: 'GlobalAlertComponent', path: './components/global-alert/global-alert.component', declare: true },
@@ -186,8 +195,10 @@ function ruleUpdateAngularJson(_options: UkisNgAddSchema): Rule {
     return (tree: Tree, _context: SchematicContext) => {
         const project = getProject(tree, _options);
         const workspace = getWorkspace(tree);
+        const styleExt = getStyleExt(project, workspace, _context);
+
         ['build', 'test'].map(target => {
-            updateAngularArchitect(project, target);
+            updateAngularArchitect(project, target, styleExt);
         });
 
         /**
@@ -209,18 +220,6 @@ function ruleUpdateAngularJson(_options: UkisNgAddSchema): Rule {
             throw new SchematicsException(`Could not find Project in the workspace check your --project`);
         }
         workspace.projects[_options.project] = project;
-
-        /**
-         * update to use scss
-         */
-        /* if (!workspace.schematics) {
-            workspace.schematics = {};
-        }
-
-        workspace.schematics['@schematics/angular:component'] = {
-            'styleext': 'scss'
-        }; */
-
         return updateWorkspace(workspace);
     };
 }
@@ -228,7 +227,7 @@ function ruleUpdateAngularJson(_options: UkisNgAddSchema): Rule {
 /**
  * this is a helper
  */
-function updateAngularArchitect(project: WorkspaceProject, type: string | 'build' | 'test') {
+function updateAngularArchitect(project: WorkspaceProject, type: string | 'build' | 'test', styleExt: string) {
     const architect = project.architect;
     if (architect && architect[type]) {
         const target = architect[type];
@@ -240,11 +239,11 @@ function updateAngularArchitect(project: WorkspaceProject, type: string | 'build
 
         if (target.options && 'styles' in target.options) {
             if (Array.isArray(target.options.styles) && !target.options.styles.includes('src/styles.scss')) {
-                const found = target.options.styles.findIndex((i: string) => i === 'src/styles.css');
+                const found = target.options.styles.findIndex((i: string) => i === `src/styles.${styleExt}`);
                 if (found !== -1) {
                     target.options.styles[found] = 'src/styles.scss';
                 } else {
-                    target.options.styles.push('src/styles.scss')
+                    target.options.styles.push('src/styles.scss');
                 }
             }
         }

@@ -10,8 +10,11 @@ import { InsertChange, Change } from '@schematics/angular/utility/change';
 import { normalize, join, parseJson, JsonParseMode } from '@angular-devkit/core';
 import { getAppModulePath } from '@schematics/angular/utility/ng-ast-utils';
 
+import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
+
 const RewritingStream = require('parse5-html-rewriting-stream');
 import { Readable, Writable } from 'stream';
+import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 
 export interface ImoduleImport {
     classifiedName: string;
@@ -212,5 +215,23 @@ export function updateHtmlFile(path: string, _startTag: string, _endTag: string,
             input.pipe(rewriter).pipe(output);
         });
     };
+}
+
+export function getStyleExt(project: WorkspaceProject, workspace: WorkspaceSchema, _context: SchematicContext) {
+    let styleExt = 'scss';
+    if (project.schematics) {
+        const schematics = project.schematics;
+        if (schematics['@schematics/angular:component'] && schematics['@schematics/angular:component'].style) {
+            styleExt = schematics['@schematics/angular:component'].style;
+        }
+    } else if (workspace.schematics) {
+        const schematics = workspace.schematics;
+        if (schematics['@schematics/angular:component'] && schematics['@schematics/angular:component'].style) {
+            styleExt = schematics['@schematics/angular:component'].style;
+        }
+    } else {
+        _context.logger.info(`In your workspace is no style extension defined use default ${styleExt}`);
+    }
+    return styleExt;
 }
 

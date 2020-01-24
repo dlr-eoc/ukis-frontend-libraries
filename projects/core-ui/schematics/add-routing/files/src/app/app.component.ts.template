@@ -4,6 +4,7 @@ import './components/icons/ukis';
 
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
+import { Router } from '@angular/router';
 
 interface IUi {
   floating: boolean;
@@ -30,7 +31,8 @@ export class AppComponent {
 
   constructor(
     private alertService: AlertService,
-    private progressService: ProgressService
+    private progressService: ProgressService,
+    public router: Router
   ) {
     this.init();
   }
