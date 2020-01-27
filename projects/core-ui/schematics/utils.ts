@@ -4,7 +4,7 @@ import { UkisNgAddSchema } from './ng-add/schema';
 import { getWorkspace } from '@schematics/angular/utility/config';
 
 import * as ts from 'typescript';
-import { addProviderToModule, insertImport, addImportToModule, addDeclarationToModule } from '@schematics/angular/utility/ast-utils';
+import { addProviderToModule, insertImport, addImportToModule, addDeclarationToModule, getSourceNodes } from '@schematics/angular/utility/ast-utils';
 
 import { InsertChange, Change } from '@schematics/angular/utility/change';
 import { normalize, join, parseJson, JsonParseMode } from '@angular-devkit/core';
@@ -35,7 +35,17 @@ interface Iparse5Tag {
         endLine: number;
         endCol: number;
         endOffset: number;
-    }
+    };
+}
+
+
+export interface AddInjectionContext {
+    componentPath: string;
+    // e. g. /src/app/app.component.ts
+    servicePath: string;
+    // e. g. ./core/side-menu/side-menu.service
+    serviceClassName: string;
+    // e. g. SideMenuService
 }
 
 export function getProject(tree: Tree, _options: UkisNgAddSchema) {
@@ -82,7 +92,7 @@ function addInsertChange(changes: Change[] | Change, tree: Tree, modulePath: str
     }
 }
 
-export function addServiceComponentModule(_options: UkisNgAddSchema, item: ImoduleImport): Rule {
+export function addServiceComponentModule(_options: UkisNgAddSchema, item: ImoduleImport, _modulePath?: string): Rule {
     return (tree: Tree, _context: SchematicContext) => {
         // context.logger.info('Updating appmodule');
         const project = getProject(tree, _options);
@@ -98,10 +108,19 @@ export function addServiceComponentModule(_options: UkisNgAddSchema, item: Imodu
             mainPath = join(normalize(project.root), project.architect.build.options.main);
         }
 
-        const modulePath = getAppModulePath(tree, mainPath);
+        let modulePath = getAppModulePath(tree, mainPath);
+        // test
+        if (_modulePath && tree.exists(_modulePath)) {
+            modulePath = _modulePath;
+        }
         _context.logger.debug(`module path: ${modulePath}`);
 
         const moduleSource = getTsSourceFile(tree, modulePath);
+        // test
+        if (_modulePath) {
+            let nodes = getSourceNodes(moduleSource);
+            console.log(nodes);
+        }
         if (item.provide) {
             const changes = addProviderToModule(moduleSource, modulePath, item.classifiedName, item.path);
             addInsertChange(changes, tree, modulePath);

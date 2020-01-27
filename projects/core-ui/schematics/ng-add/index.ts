@@ -1,6 +1,6 @@
 import {
     Rule, SchematicContext, Tree, chain, apply, url, mergeWith, move,
-    filter, externalSchematic, noop, SchematicsException, applyTemplates
+    filter, externalSchematic, noop, SchematicsException, applyTemplates, schematic
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
@@ -11,21 +11,33 @@ import { getProject, addServiceComponentModule, ImoduleImport, updateJsonFile, u
 import { getWorkspace, updateWorkspace } from '@schematics/angular/utility/config';
 import { TsconfigJSON } from '../schema.tsconfig';
 import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
+import { UkisNgAddRoutingSchema } from '../add-routing/schema';
 
 
 
 // https://angular.io/guide/schematics-for-libraries
 // https://dev.to/thisdotmedia/schematics-pt-3-add-tailwind-css-to-your-angular-project-40pp
 export function ngAdd(_options: UkisNgAddSchema): Rule {
+    const addRoutingOptions: UkisNgAddRoutingSchema = {
+        project: _options.project,
+        skip: _options.skip
+    };
+
+    /**
+     * Schematic input does not validate against the Schema: {"routing":"true"}. Data path ".routing" should be boolean.
+     * https://github.com/angular/angular-cli/issues/12150 - @angular-devkit\schematics-cli\bin\schematics.js
+     *
+     * therefore types of schema as string
+     */
     const rules: Rule[] = [
-        (_options.skip) ? noop() : externalSchematic('@clr/angular', 'ng-add', _options),
-        (_options.skip) ? noop() : ruleAddFiles(_options),
-        (_options.skip) ? noop() : ruleAddImportsInAppModule(_options),
-        (_options.skip) ? noop() : ruleUpdateAngularJson(_options),
-        (_options.skip) ? noop() : ruleUpdateTsConfigFile(_options),
-        (_options.skip) ? noop() : ruleUpdateIndexHtml(_options),
-        (_options.skip) ? noop() : ruleInstallTask(_options),
-        // externalSchematic('@ukis/core-ui', 'add-routing', _options),
+        (_options.skip === 'true') ? noop() : externalSchematic('@clr/angular', 'ng-add', _options),
+        (_options.skip === 'true') ? noop() : ruleAddFiles(_options),
+        (_options.skip === 'true') ? noop() : ruleAddImportsInAppModule(_options),
+        (_options.skip === 'true') ? noop() : ruleUpdateAngularJson(_options),
+        (_options.skip === 'true') ? noop() : ruleUpdateTsConfigFile(_options),
+        (_options.skip === 'true') ? noop() : ruleUpdateIndexHtml(_options),
+        (_options.skip === 'true') ? noop() : ruleInstallTask(_options),
+        (_options.routing === 'false') ? noop() : schematic('add-routing', addRoutingOptions)
     ];
 
     return chain(rules);
@@ -169,9 +181,7 @@ function ruleAddImportsInAppModule(_options: UkisNgAddSchema): Rule {
         { classifiedName: 'GlobalAlertComponent', path: './components/global-alert/global-alert.component', declare: true },
         { classifiedName: 'AlertService', path: './components/global-alert/alert.service', provide: true },
         { classifiedName: 'GlobalProgressComponent', path: './components/global-progress/global-progress.component', declare: true },
-        { classifiedName: 'ProgressService', path: './components/global-progress/progress.service', provide: true },
-        { classifiedName: 'GlobalFooterComponent', path: './components/global-footer/global-footer.component', declare: true },
-        { classifiedName: 'FooterService', path: './components/global-footer/footer.service', provide: true }
+        { classifiedName: 'ProgressService', path: './components/global-progress/progress.service', provide: true }
     ];
 
     /**

@@ -3,6 +3,16 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "schematics": "./schematics/collection.json",
+  "scripts": {
+    "schematics:build": "tsc -p tsconfig.schematics.json",
+    "schematics:copy:collection": "cpx schematics/collection.json ../../dist/core-ui/schematics/",
+    "schematics:copy:schemas": "cpx schematics/**/schema.json ../../dist/core-ui/schematics/",
+    "schematics:copy:files": "cpx schematics/*/files/** ../../dist/core-ui/schematics/",
+    "schematics:copy:alert": "cpx src/lib/global-alert/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/",
+    "schematics:copy:progress": "cpx src/lib/global-progress/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/",
+    "postschematics:build": "npm run schematics:copy:collection && npm run schematics:copy:schemas && npm run schematics:copy:files && npm run schematics:copy:alert && npm run schematics:copy:progress",
+    "schematics:test": "npm run schematics:build && jasmine dist/core-ui/schematics/**/*_spec.js"
+  },
   "keywords": [
     "schematics",
     "@ukis",

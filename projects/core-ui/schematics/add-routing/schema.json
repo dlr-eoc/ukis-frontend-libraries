@@ -14,7 +14,7 @@
         "skip": {
             "description": "Skip install",
             "type": "string",
-            "default": false
+            "default": "false"
         }
     }
 }

@@ -12,9 +12,14 @@
             }
         },
         "skip": {
-            "description": "Skip install",
+            "description": "Skip install.",
             "type": "string",
-            "default": false
+            "default": "false"
+        },
+        "routing": {
+            "description": "Add routing wit sample route to your UKIS application.",
+            "type": "string",
+            "default": "false"
         }
     }
 }

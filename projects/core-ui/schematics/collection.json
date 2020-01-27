@@ -10,6 +10,10 @@
       "description": "Add routing to your UKIS project.",
       "factory": "./add-routing/index#addRouting",
       "schema": "./add-routing/schema.json"
+    },
+    "hello-world": {
+      "description": "A blank schematic.",
+      "factory": "./hello-world/index#helloWorld"
     }
   }
 }

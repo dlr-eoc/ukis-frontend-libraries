@@ -9,13 +9,12 @@
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s",
     "tsc:libraryProjects": "tsc -p scripts/tsconfig.script.json -w",
-    "list-pxxrojects": "node scripts/libraryProjects.js -l",
-    "schematics:build": "tsc -p projects/core-ui/tsconfig.schematics.json",
-    "schematics:copy:collection": "cpx projects/core-ui/schematics/collection.json dist/core-ui/schematics/",
-    "schematics:copy:schemas": "cpx projects/core-ui/schematics/**/schema.json dist/core-ui/schematics/",
-    "schematics:copy:files": "cpx projects/core-ui/schematics/*/files/** dist/core-ui/schematics/",
-    "postschematics:build": "npm run schematics:copy:collection && npm run schematics:copy:schemas && npm run schematics:copy:files",
-    "schematics:test": "tsc -p projects/core-ui/tsconfig.schematics.json && jasmine dist/core-ui/schematics/**/*_spec.js"
+    "list-projects": "node scripts/libraryProjects.js -l",
+    "link-bins": "cd projects/core-ui && npm link ../../node_modules/typescript && npm link ../../node_modules/cpx",
+    "unlink-bins": "cd projects/core-ui && npm unlink ../../node_modules/typescript && npm uninstall -g typescript && npm unlink ../../node_modules/cpx  && npm uninstall -g cpx",
+    "build:schematics": "cd projects/core-ui && npm run schematics:build",
+    "prebuild:schematics": "link-bins",
+    "test:schematics": "cd projects/core-ui && npm run schematics:test"
   },
   "private": true,
   "dependencies": {

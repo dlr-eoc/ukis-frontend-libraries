@@ -2,7 +2,6 @@
 
 ## There are some default components which you can adjust for your needs
 - ukis-global-alert
-- ukis-global-footer
 - ukis-global-progress
 - ukis-header
 - icons

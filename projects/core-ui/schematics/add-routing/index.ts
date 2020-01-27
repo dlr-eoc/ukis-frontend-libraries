@@ -3,17 +3,18 @@ import {
     filter, noop, SchematicsException, applyTemplates
 } from '@angular-devkit/schematics';
 import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
-import { UkisNgAddSchema } from './schema';
+import { UkisNgAddRoutingSchema } from './schema';
 import { getProject, addServiceComponentModule, ImoduleImport } from '../utils';
 
 
 
 // https://angular.io/guide/schematics-for-libraries
 // https://dev.to/thisdotmedia/schematics-pt-3-add-tailwind-css-to-your-angular-project-40pp
-export function addRouting(_options: UkisNgAddSchema): Rule {
+export function addRouting(_options: UkisNgAddRoutingSchema): Rule {
     const rules: Rule[] = [
-        (_options.skip) ? noop() : ruleAddFiles(_options),
-        (_options.skip) ? noop() : ruleAddImportsInAppModule(_options)
+        (_options.skip === 'true') ? noop() : ruleAddFiles(_options),
+        (_options.skip === 'true') ? noop() : ruleAddImportsInAppModule(_options),
+        // (_options.skip === 'true') ? noop() : ruleAddImportsInAppComponent(_options)
     ];
 
     return chain(rules);
@@ -26,7 +27,7 @@ export function addRouting(_options: UkisNgAddSchema): Rule {
  *
  *  TODO: update app.component.ts not override
  */
-function ruleAddFiles(_options: UkisNgAddSchema): Rule {
+function ruleAddFiles(_options: UkisNgAddRoutingSchema): Rule {
     return (tree: Tree, _context: SchematicContext) => {
         const project = getProject(tree, _options);
 
@@ -74,7 +75,7 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
  * - AppRoutingModule
  * - HttpClientModule?
  */
-function ruleAddImportsInAppModule(_options: UkisNgAddSchema): Rule {
+function ruleAddImportsInAppModule(_options: UkisNgAddRoutingSchema): Rule {
     const rules: Rule[] = [];
     const imports: ImoduleImport[] = [
         { classifiedName: 'AppRoutingModule', path: './app-routing.module', module: true },
@@ -91,4 +92,23 @@ function ruleAddImportsInAppModule(_options: UkisNgAddSchema): Rule {
     // then chain the rules to one
     return chain(rules);
 }
+
+/**
+ * https://www.softwarearchitekt.at/aktuelles/generating-custom-angular-code-with-the-cli-and-schematics-part-iii/
+ * TODO
+ */
+/* function ruleAddImportsInAppComponent(_options: UkisNgAddRoutingSchema): Rule {
+    const appCompPath = '/src/app/app.component.ts';
+    const rules: Rule[] = [];
+    const imports: ImoduleImport[] = [
+        { classifiedName: 'Router', path: '@angular/router' }
+    ];
+    // create a rule for each insertImport/addProviderToModule because addProviderToModule is not working multiple times in one Rule???
+    imports.map(item => {
+        rules.push(addServiceComponentModule(_options, item, appCompPath));
+    });
+
+    // then chain the rules to one
+    return chain(rules);
+} */
 
