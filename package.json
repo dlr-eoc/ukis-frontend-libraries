@@ -13,7 +13,7 @@
     "link-bins": "cd projects/core-ui && npm link ../../node_modules/typescript && npm link ../../node_modules/cpx",
     "unlink-bins": "cd projects/core-ui && npm unlink ../../node_modules/typescript && npm uninstall -g typescript && npm unlink ../../node_modules/cpx  && npm uninstall -g cpx",
     "build:schematics": "cd projects/core-ui && npm run schematics:build",
-    "prebuild:schematics": "link-bins",
+    "prebuild:schematics": "npm run link-bins",
     "test:schematics": "cd projects/core-ui && npm run schematics:test"
   },
   "private": true,
