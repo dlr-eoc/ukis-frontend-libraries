@@ -14,6 +14,11 @@ run ``ng generate library < name > --prefix ukis``
 
 
 ### 3. Add Dependencies
+
+[When my package depends on another package, should I put it in dependencies or peerDependencies?](https://medium.com/angular-in-depth/npm-peer-dependencies-f843f3ac4e7f)
+
+---
+
 - add peerDependencies for dependencies which are generally in the [frontend-libraries/package.json](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse/package.json)
 
 - all @ukis dependencies from [frontend-libraries/projects](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse/projects) add to dependencies (with the version "0.0.0-PLACEHOLDER") and list them in the ng-package.json as whitelistedNonPeerDependencies (to build them correctly)
