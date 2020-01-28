@@ -11,6 +11,7 @@
     "tslib",
     "@angular-devkit/core",
     "@angular-devkit/schematics",
-    "@schematics/angular"
+    "@schematics/angular",
+    "parse5-html-rewriting-stream"
   ]
 }

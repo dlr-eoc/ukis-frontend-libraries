@@ -24,7 +24,8 @@
   "dependencies": {
     "@angular-devkit/core": "^8.3.22",
     "@angular-devkit/schematics": "^8.3.22",
-    "@schematics/angular": "^8.3.22"
+    "@schematics/angular": "^8.3.22",
+    "parse5-html-rewriting-stream": "^5.1.1"
   },
   "devDependencies": {
     "@types/jasmine": "^3.3.9",
@@ -37,6 +38,7 @@
     "@angular/common": "~8.2.10",
     "@angular/core": "~8.2.10",
     "@angular/forms": "~8.2.10",
+    "@angular/router": "~8.2.10",
     "@clr/angular": "^2.2.2",
     "@clr/icons": "^2.2.2",
     "@clr/ui": "^2.2.2",
