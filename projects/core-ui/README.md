@@ -58,10 +58,11 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ng add @ukis/core-ui 
 
+--project=string // the project in the angular workspace
 --auth=boolean // default false, adjusts the app for authentication and user login
---routing=boolean // default true 
---map=boolean // adds a map component
---registry is used to create the .npmrc file
+--routing=boolean // default false
+--addMap=boolean // adds a map component default false
+--addClr=boolenan // runns @clr/angular:ng-add default true
 
 
 

@@ -12,8 +12,8 @@ import { getProject, addServiceComponentModule, ImoduleImport } from '../utils';
 // https://dev.to/thisdotmedia/schematics-pt-3-add-tailwind-css-to-your-angular-project-40pp
 export function addRouting(_options: UkisNgAddRoutingSchema): Rule {
     const rules: Rule[] = [
-        (_options.skip === 'true') ? noop() : ruleAddFiles(_options),
-        (_options.skip === 'true') ? noop() : ruleAddImportsInAppModule(_options),
+        (_options.addFiles === 'false') ? noop() : ruleAddFiles(_options),
+        (_options.updateFiles === 'false') ? noop() : ruleAddImportsInAppModule(_options),
         // (_options.skip === 'true') ? noop() : ruleAddImportsInAppComponent(_options)
     ];
 

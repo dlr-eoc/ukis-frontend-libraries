@@ -11,7 +11,7 @@
     "schematics:copy:alert": "cpx src/lib/global-alert/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/",
     "schematics:copy:progress": "cpx src/lib/global-progress/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/",
     "postschematics:build": "npm run schematics:copy:collection && npm run schematics:copy:schemas && npm run schematics:copy:files && npm run schematics:copy:alert && npm run schematics:copy:progress",
-    "schematics:test": "npm run schematics:build && jasmine dist/core-ui/schematics/**/*_spec.js"
+    "schematics:test": "npm run schematics:build && jasmine ../../dist/core-ui/schematics/**/*_spec.js"
   },
   "keywords": [
     "schematics",
@@ -29,6 +29,7 @@
   "devDependencies": {
     "@types/jasmine": "^3.3.9",
     "@types/node": "^8.0.31",
+    "cpx": "^1.5.0",
     "jasmine": "^3.3.1",
     "typescript": "~3.5.3"
   },

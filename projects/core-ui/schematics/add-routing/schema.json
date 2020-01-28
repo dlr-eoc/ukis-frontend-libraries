@@ -11,10 +11,15 @@
                 "$source": "defaultProject"
             }
         },
-        "skip": {
-            "description": "Skip install",
+        "addFiles": {
+            "description": "Add files for routing to your application.",
             "type": "string",
-            "default": "false"
+            "default": "true"
+        },
+        "updateFiles": {
+            "description": "Update files in your application.",
+            "type": "string",
+            "default": "true"
         }
     }
 }

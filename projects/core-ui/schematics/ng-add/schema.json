@@ -11,13 +11,33 @@
                 "$source": "defaultProject"
             }
         },
-        "skip": {
-            "description": "Skip install.",
+        "addClr": {
+            "description": "Runns external Schematic @clr/angular:ng-add",
             "type": "string",
-            "default": "false"
+            "default": "true"
+        },
+        "addFiles": {
+            "description": "Add assets, styles and app files to your application.",
+            "type": "string",
+            "default": "true"
+        },
+        "updateFiles": {
+            "description": "Update files in your application.",
+            "type": "string",
+            "default": "true"
         },
         "routing": {
             "description": "Add routing wit sample route to your UKIS application.",
+            "type": "string",
+            "default": "false"
+        },
+        "addMap": {
+            "description": "Add @ukis/map-ol to your UKIS application.",
+            "type": "string",
+            "default": "false"
+        },
+        "auth": {
+            "description": "Add Authentication to your UKIS application.",
             "type": "string",
             "default": "false"
         }

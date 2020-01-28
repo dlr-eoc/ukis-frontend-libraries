@@ -1,5 +1,6 @@
 import { Tree, SchematicsException, SchematicContext, Rule } from '@angular-devkit/schematics';
 import { UkisNgAddSchema } from './ng-add/schema';
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 import { getWorkspace } from '@schematics/angular/utility/config';
 
@@ -252,5 +253,12 @@ export function getStyleExt(project: WorkspaceProject, workspace: WorkspaceSchem
         _context.logger.info(`In your workspace is no style extension defined use default ${styleExt}`);
     }
     return styleExt;
+}
+
+export function ruleInstallTask(_options: UkisNgAddSchema): Rule {
+    return (tree: Tree, _context: SchematicContext) => {
+        _context.addTask(new NodePackageInstallTask());
+        return tree;
+    };
 }
 

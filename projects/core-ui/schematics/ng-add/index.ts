@@ -2,7 +2,6 @@ import {
     Rule, SchematicContext, Tree, chain, apply, url, mergeWith, move,
     filter, externalSchematic, noop, SchematicsException, applyTemplates, schematic
 } from '@angular-devkit/schematics';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
 import { UkisNgAddSchema } from './schema';
 
@@ -20,7 +19,8 @@ import { UkisNgAddRoutingSchema } from '../add-routing/schema';
 export function ngAdd(_options: UkisNgAddSchema): Rule {
     const addRoutingOptions: UkisNgAddRoutingSchema = {
         project: _options.project,
-        skip: _options.skip
+        addFiles: _options.addFiles,
+        updateFiles: _options.updateFiles
     };
 
     /**
@@ -30,24 +30,16 @@ export function ngAdd(_options: UkisNgAddSchema): Rule {
      * therefore types of schema as string
      */
     const rules: Rule[] = [
-        (_options.skip === 'true') ? noop() : externalSchematic('@clr/angular', 'ng-add', _options),
-        (_options.skip === 'true') ? noop() : ruleAddFiles(_options),
-        (_options.skip === 'true') ? noop() : ruleAddImportsInAppModule(_options),
-        (_options.skip === 'true') ? noop() : ruleUpdateAngularJson(_options),
-        (_options.skip === 'true') ? noop() : ruleUpdateTsConfigFile(_options),
-        (_options.skip === 'true') ? noop() : ruleUpdateIndexHtml(_options),
-        (_options.skip === 'true') ? noop() : ruleInstallTask(_options),
+        (_options.addClr === 'false') ? noop() : externalSchematic('@clr/angular', 'ng-add', _options),
+        (_options.addFiles === 'false') ? noop() : ruleAddFiles(_options),
+        (_options.updateFiles === 'false') ? noop() : ruleAddImportsInAppModule(_options),
+        (_options.updateFiles === 'false') ? noop() : ruleUpdateAngularJson(_options),
+        (_options.updateFiles === 'false') ? noop() : ruleUpdateTsConfigFile(_options),
+        (_options.updateFiles === 'false') ? noop() : ruleUpdateIndexHtml(_options),
         (_options.routing === 'false') ? noop() : schematic('add-routing', addRoutingOptions)
     ];
 
     return chain(rules);
-}
-
-function ruleInstallTask(_options: UkisNgAddSchema): Rule {
-    return (tree: Tree, _context: SchematicContext) => {
-        _context.addTask(new NodePackageInstallTask());
-        return tree;
-    };
 }
 
 /**
