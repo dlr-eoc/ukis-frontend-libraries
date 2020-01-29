@@ -237,6 +237,7 @@ export function updateHtmlFile(path: string, _startTag: string, _endTag: string,
     };
 }
 
+// TODO if no style is returned it uses css check tis to remove style.css
 export function getStyleExt(project: WorkspaceProject, workspace: WorkspaceSchema, _context: SchematicContext) {
     let styleExt = 'scss';
     if (project.schematics) {
