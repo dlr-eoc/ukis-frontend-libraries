@@ -1,0 +1,9 @@
+{
+    "name": "@ukis/core-ui-packagr",
+    "version": "1.0.0",
+    "description": "Builder for Architect",
+    "builders": "builders.json",
+    "devDependencies": {
+        "@angular-devkit/architect": "^1.0.0"
+    }
+}
