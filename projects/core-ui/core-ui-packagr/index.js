@@ -53,7 +53,7 @@ function execute(options, context) {
   return rxjs.from(initialize(options, context.workspaceRoot))
     .pipe(rx_operators.switchMap((packager) => {
       if (options.watch) {
-        return packager.watch();
+        return packager.watch().pipe(rx_operators.map(e => rxjs.from(buildSchematics(context))));
       }
       else {
         return packager.build().then(r => buildSchematics(context));
