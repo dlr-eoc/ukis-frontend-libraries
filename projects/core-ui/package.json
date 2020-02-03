@@ -4,14 +4,15 @@
   "main": "src/public_api",
   "schematics": "./schematics/collection.json",
   "scripts": {
-    "schematics:build": "tsc -p tsconfig.schematics.json",
-    "schematics:copy:collection": "cpx schematics/collection.json ../../dist/core-ui/schematics/",
-    "schematics:copy:schemas": "cpx schematics/**/schema.json ../../dist/core-ui/schematics/",
-    "schematics:copy:files": "cpx schematics/*/files/** ../../dist/core-ui/schematics/",
-    "schematics:copy:alert": "cpx src/lib/global-alert/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/",
-    "schematics:copy:progress": "cpx src/lib/global-progress/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/",
+    "schematics:build": "npx ../../node_modules/.bin/tsc -p tsconfig.schematics.json",
+    "schematics:copy:collection": "npx ../../node_modules/.bin/cpx schematics/collection.json ../../dist/core-ui/schematics/",
+    "schematics:copy:schemas": "npx ../../node_modules/.bin/cpx schematics/**/schema.json ../../dist/core-ui/schematics/",
+    "schematics:copy:files": "npx ../../node_modules/.bin/cpx schematics/*/files/** ../../dist/core-ui/schematics/",
+    "schematics:copy:alert": "npx ../../node_modules/.bin/cpx src/lib/global-alert/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/",
+    "schematics:copy:progress": "npx ../../node_modules/.bin/cpx src/lib/global-progress/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/",
     "postschematics:build": "npm run schematics:copy:collection && npm run schematics:copy:schemas && npm run schematics:copy:files && npm run schematics:copy:alert && npm run schematics:copy:progress",
-    "schematics:test": "npm run schematics:build && jasmine ../../dist/core-ui/schematics/**/*_spec.js"
+    "preschematics:test": "npm run schematics:build",
+    "schematics:test": "npx ../../node_modules/.bin/jasmine ../../dist/core-ui/schematics/**/*_spec.js"
   },
   "keywords": [
     "schematics",
@@ -30,7 +31,7 @@
   "devDependencies": {
     "@types/jasmine": "^3.3.9",
     "@types/node": "^8.0.31",
-    "cpx": "^1.5.0",
+    "npx ../../node_modules/.bin/cpx": "^1.5.0",
     "jasmine": "^3.3.1",
     "typescript": "~3.5.3"
   },

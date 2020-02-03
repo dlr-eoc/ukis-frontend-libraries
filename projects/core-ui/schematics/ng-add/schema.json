@@ -27,7 +27,7 @@
             "default": "true"
         },
         "routing": {
-            "description": "Add routing wit sample route to your UKIS application.",
+            "description": "Add routing with a sample route to your UKIS application.",
             "type": "string",
             "default": "false"
         },
