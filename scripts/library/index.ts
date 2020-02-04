@@ -14,6 +14,10 @@ import { IPackageJSON } from './npm-package.interface';
 
 export function run() {
     const UKIS_SCOPE = '@ukis/';
+    const CWD = process.cwd();
+    const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
+    const ANGULARJSON: WorkspaceSchema = require(PATH.join(CWD, 'angular.json'));
+
     const version_placeholders = {
         ukis: '0.0.0-PLACEHOLDER', // ukis-frontend-libraries
         ng: '0.0.0-NG-PLACEHOLDER', // @angular/core
@@ -25,11 +29,6 @@ export function run() {
         zonejs: '0.0.0-zonejs-PLACEHOLDER',
         rxjs: '0.0.0-rxjs-PLACEHOLDER'
     };
-
-    const CWD = process.cwd();
-    const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
-    const ANGULARJSON: WorkspaceSchema = require(PATH.join(CWD, 'angular.json'));
-
     const version_replace = {
         ukis: MAINPACKAGE.version,
         ng: MAINPACKAGE.dependencies['@angular/core'],

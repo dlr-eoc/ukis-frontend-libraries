@@ -12,6 +12,9 @@ const toposort = require("toposort");
 const depcheck = require("depcheck");
 function run() {
     const UKIS_SCOPE = '@ukis/';
+    const CWD = process.cwd();
+    const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
+    const ANGULARJSON = require(PATH.join(CWD, 'angular.json'));
     const version_placeholders = {
         ukis: '0.0.0-PLACEHOLDER',
         ng: '0.0.0-NG-PLACEHOLDER',
@@ -23,9 +26,6 @@ function run() {
         zonejs: '0.0.0-zonejs-PLACEHOLDER',
         rxjs: '0.0.0-rxjs-PLACEHOLDER'
     };
-    const CWD = process.cwd();
-    const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
-    const ANGULARJSON = require(PATH.join(CWD, 'angular.json'));
     const version_replace = {
         ukis: MAINPACKAGE.version,
         ng: MAINPACKAGE.dependencies['@angular/core'],
