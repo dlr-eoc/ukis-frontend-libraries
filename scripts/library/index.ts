@@ -10,18 +10,37 @@ import * as replace from 'replace';
 import * as toposort from 'toposort';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 import * as depcheck from 'depcheck';
+import { IPackageJSON } from './npm-package.interface';
 
 export function run() {
     const UKIS_SCOPE = '@ukis/';
     const version_placeholders = {
         ukis: '0.0.0-PLACEHOLDER', // ukis-frontend-libraries
         ng: '0.0.0-NG-PLACEHOLDER', // @angular/core
-        clr: '0.0.0-CLR-PLACEHOLDER' // @clr
+        ngcdk: '0.0.0-ngcdk-PLACEHOLDER',
+        ngdev: '0.0.0-ngdev-PLACEHOLDER',
+        md5: '0.0.0-md5-PLACEHOLDER',
+        clr: '0.0.0-CLR-PLACEHOLDER', // @clr
+        corejs: '0.0.0-corejs-PLACEHOLDER',
+        zonejs: '0.0.0-zonejs-PLACEHOLDER',
+        rxjs: '0.0.0-rxjs-PLACEHOLDER'
     };
 
     const CWD = process.cwd();
-    const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
+    const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
     const ANGULARJSON: WorkspaceSchema = require(PATH.join(CWD, 'angular.json'));
+
+    const version_replace = {
+        ukis: MAINPACKAGE.version,
+        ng: MAINPACKAGE.dependencies['@angular/core'],
+        ngcdk: MAINPACKAGE.dependencies['@angular/cdk'],
+        ngdev: MAINPACKAGE.dependencies['@angular-devkit/core'],
+        md5: MAINPACKAGE.dependencies['md5'],
+        clr: MAINPACKAGE.dependencies['@clr/angular'],
+        corejs: MAINPACKAGE.dependencies['core-js'],
+        zonejs: MAINPACKAGE.dependencies['zone.js'],
+        rxjs: MAINPACKAGE.dependencies['rxjs'],
+    };
 
     interface Iprojects {
         name: string;
@@ -249,18 +268,21 @@ export function run() {
     function setVersionsOfProjects() {
         const projectsPaths = getProjects().map(item => item.package);
         const errors = projectsAndDependencies(true);
-        const MAIN_NG_VERSION = MAINPACKAGE;   // @angular/core
-        if (errors.length < 1 && MAINPACKAGE.version) {
-            // console.log(projectsPaths)
-            replace({
-                regex: version_placeholders.ukis,
-                replacement: MAINPACKAGE.version,
-                paths: projectsPaths,
-                recursive: true,
-                silent: true,
-                include: 'package.json'
+        if (!errors.length) {
+            Object.keys(version_placeholders).map(key => {
+                const placeholder = version_placeholders[key];
+                const replacement = version_replace[key];
+                replace({
+                    regex: placeholder,
+                    replacement: replacement,
+                    paths: projectsPaths,
+                    recursive: true,
+                    silent: true,
+                    include: 'package.json'
+                });
+                console.log(`replaced all ${placeholder} with ${replacement}`);
             });
-            console.log(`replaced all ${version_placeholders.ukis} with ${MAINPACKAGE.version}`);
+            console.log(`replaced all ${version_placeholders.ukis} with ${version_replace.ukis}`);
         } else {
             console.log(`check main package.json version and projects for errors!`);
             console.table(errors);
@@ -285,7 +307,7 @@ export function run() {
             const projectPackage = require(project.package);
             const _project: Iproject = {
                 name: projectPackage.name,
-                version: projectPackage.version.replace('0.0.0', MAINPACKAGE.version),
+                version: projectPackage.version.replace('0.0.0', version_replace.ukis),
                 error: false,
                 dependencies: null
             };
