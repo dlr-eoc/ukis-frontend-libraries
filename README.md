@@ -55,15 +55,23 @@ To use the libraries in your project specific application, you can ather use the
 1. [see clarity get-started](https://clarity.design/documentation/get-started)
 - ng new project-xxx --routing=true --style=scss
 - cd project-xxx
-- ng add @clr/angular
-
-add files [see core-ui](projects/core-ui/src/lib/templates/README.md)
+- ng add @ukis/core-ui // [see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
 
 
 
 ## Note
 - all versions in package.json should be fixed! 
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies. (similar to hardware upgrades)
+- check for new versions `npm outdated -l` and `ng update`
+
+
+
+
+
+
+
+
+
 
 ## Usage of compodoc to generate documentation (outdated)
 [compodoc](https://github.com/compodoc/compodoc) is used to collect and render documentation from code for angular projects. 
