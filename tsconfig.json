@@ -21,6 +21,12 @@
       "@ukis/*": [
         "dist/*",
         "projects/*"
+      ],
+      "licenses": [
+        "dist/licenses"
+      ],
+      "licenses/*": [
+        "dist/licenses/*"
       ]
     }
   }

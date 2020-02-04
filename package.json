@@ -9,7 +9,8 @@
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s",
     "tsc:libraryProjects": "tsc -p scripts/tsconfig.script.json -w",
-    "list-projects": "node scripts/libraryProjects.js -l"
+    "list-projects": "node scripts/libraryProjects.js -l",
+    "attribution": "npx generate-attribution"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +37,7 @@
     "ol": "^6.1.1",
     "proj4": "^2.5.0",
     "rxjs": "~6.5.3",
+    "tslib": "^1.9.0",
     "w3c-schemas": "^1.4.0",
     "web-animations-js": "^2.3.1",
     "zone.js": "^0.9.1"
@@ -76,6 +78,7 @@
     "karma-junit-reporter": "^1.2.0",
     "ng-packagr": "^5.3.0",
     "node-sass": "^4.13.0",
+    "oss-attribution-generator": "^1.7.1",
     "protractor": "~5.4.0",
     "replace": "^1.1.0",
     "terser": "^3.14.1",
