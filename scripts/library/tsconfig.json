@@ -17,9 +17,5 @@
       "es2018"
     ],
     "downlevelIteration": true
-  },
-  "files": [
-    "libraryProjects.ts",
-    "nexusUploadNpmPackage.ts"
-  ]
+  }
 }

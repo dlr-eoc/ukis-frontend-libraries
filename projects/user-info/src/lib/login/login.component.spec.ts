@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
-import { UserService } from '@ukis/user-info/src/lib/user.service';
-/*
+import { UserService } from '../user.service';
+
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
@@ -27,4 +27,3 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-*/

@@ -9,13 +9,18 @@
     "rxjs": "~6.5.3"
   },
   "dependencies": {
-    "@types/geojson": "^7946.0.4",
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",
     "@ukis/services-util-store": "0.0.0-PLACEHOLDER",
     "@ukis/base-layers-raster": "0.0.0-PLACEHOLDER",
+    "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
     "md5": "^2.2.1",
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
     "@boundlessgeo/jsonix": "^2.4.3"
+  },
+  "devDependencies": {
+    "core-js": "^2.5.4",
+    "zone.js": "^0.9.1",
+    "@angular/platform-browser-dynamic": "~8.2.10"
   }
 }

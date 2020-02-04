@@ -8,5 +8,10 @@
     "rxjs": "~6.5.3"
   },
   "dependencies": {
+  },
+  "devDependencies": {
+    "core-js": "^2.5.4",
+    "zone.js": "^0.9.1",
+    "@angular/platform-browser-dynamic": "~8.2.10"
   }
 }

@@ -12,6 +12,7 @@
     "@ukis/services-layers",
     "@ukis/services-util-store",
     "@ukis/base-layers-raster",
+    "@ukis/services-map-state",
     "md5",
     "w3c-schemas",
     "ogc-schemas",

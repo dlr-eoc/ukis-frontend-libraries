@@ -2,19 +2,19 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserDetailsComponent } from './user-details.component';
 import { HttpClient } from '@angular/common/http';
-import { UserService } from '@ukis/user-info/src/lib/user.service';
+import { UserService } from '../user.service';
 
-/*
+
 describe('UserDetailsComponent', () => {
   let component: UserDetailsComponent;
   let fixture: ComponentFixture<UserDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserDetailsComponent ], 
+      declarations: [UserDetailsComponent],
       providers: [HttpClient, UserService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -27,4 +27,3 @@ describe('UserDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-*/

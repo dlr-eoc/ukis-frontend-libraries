@@ -9,7 +9,6 @@ import { MapStateService } from '@ukis/services-map-state';
 import { Component, Input } from '@angular/core';
 import { of } from 'rxjs';
 import { RasterLayer } from '@ukis/services-layers';
-import { LayerentryGroupComponent } from '@ukis/layer-control/src/lib/layerentry-group/layerentry-group.component';
 import { LayerGroup } from '@ukis/services-layers';
 
 /**
