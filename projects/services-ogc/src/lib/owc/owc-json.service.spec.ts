@@ -3,13 +3,12 @@ import { OwcJsonService } from './owc-json.service';
 import { barebonesContext, basicContext, exampleContext } from '../../../assets/exampleContext';
 import { coastalXTestContext } from '../../../assets/coastalx.test.context';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { osm, eoc_litemap } from '@ukis/base-layers-raster';
+import { eoc_litemap } from '@ukis/base-layers-raster';
 import { LayersService, RasterLayer } from '@ukis/services-layers';
 import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@ukis/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsContext } from './types/owc-json';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { HttpClient } from 'selenium-webdriver/http';
 
 
 

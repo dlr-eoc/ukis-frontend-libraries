@@ -1,0 +1,50 @@
+{
+  "name": "@ukis/core-ui",
+  "version": "0.0.0-PLACEHOLDER",
+  "main": "src/public_api",
+  "schematics": "./schematics/collection.json",
+  "scripts": {
+    "schematics:build": "npx ../../node_modules/.bin/tsc -p tsconfig.schematics.json",
+    "schematics:copy:collection": "npx ../../node_modules/.bin/cpx schematics/collection.json ../../dist/core-ui/schematics/",
+    "schematics:copy:schemas": "npx ../../node_modules/.bin/cpx schematics/**/schema.json ../../dist/core-ui/schematics/",
+    "schematics:copy:files": "npx ../../node_modules/.bin/cpx schematics/*/files/** ../../dist/core-ui/schematics/",
+    "schematics:copy:alert": "npx ../../node_modules/.bin/cpx src/lib/global-alert/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/",
+    "schematics:copy:progress": "npx ../../node_modules/.bin/cpx src/lib/global-progress/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/",
+    "postschematics:build": "npm run schematics:copy:collection && npm run schematics:copy:schemas && npm run schematics:copy:files && npm run schematics:copy:alert && npm run schematics:copy:progress",
+    "preschematics:test": "npm run schematics:build",
+    "schematics:test": "npx ../../node_modules/.bin/jasmine ../../dist/core-ui/schematics/**/*_spec.js"
+  },
+  "keywords": [
+    "schematics",
+    "@ukis",
+    "core-ui"
+  ],
+  "ng-add": {
+    "save": false
+  },
+  "dependencies": {
+    "@angular-devkit/core": "^8.3.22",
+    "@angular-devkit/schematics": "^8.3.22",
+    "@schematics/angular": "^8.3.22",
+    "parse5-html-rewriting-stream": "^5.1.1"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.3.9",
+    "@types/node": "^8.0.31",
+    "cpx": "^1.5.0",
+    "jasmine": "^3.3.1",
+    "typescript": "~3.5.3",
+    "zone.js": "0.0.0-zonejs-PLACEHOLDER",
+    "@angular/platform-browser-dynamic": "0.0.0-NG-PLACEHOLDER"
+  },
+  "peerDependencies": {
+    "@angular/common": "0.0.0-NG-PLACEHOLDER",
+    "@angular/core": "0.0.0-NG-PLACEHOLDER",
+    "@angular/forms": "0.0.0-NG-PLACEHOLDER",
+    "@angular/router": "0.0.0-NG-PLACEHOLDER",
+    "@clr/angular": "0.0.0-CLR-PLACEHOLDER",
+    "@clr/icons": "0.0.0-CLR-PLACEHOLDER",
+    "@clr/ui": "0.0.0-CLR-PLACEHOLDER",
+    "rxjs": "0.0.0-rxjs-PLACEHOLDER"
+  }
+}

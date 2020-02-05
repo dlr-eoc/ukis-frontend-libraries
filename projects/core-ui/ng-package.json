@@ -1,0 +1,17 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/core-ui",
+  "lib": {
+    "entryFile": "src/public-api.ts",
+    "umdModuleIds": {
+      "@clr/angular": "@clr/angular"
+    }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib",
+    "@angular-devkit/core",
+    "@angular-devkit/schematics",
+    "@schematics/angular",
+    "parse5-html-rewriting-stream"
+  ]
+}

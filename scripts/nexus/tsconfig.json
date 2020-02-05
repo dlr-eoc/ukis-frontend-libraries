@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": false,
+    "sourceMap": false,
+    "inlineSources": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "dom",
+      "es2018"
+    ],
+    "downlevelIteration": true
+  }
+}

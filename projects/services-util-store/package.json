@@ -3,10 +3,15 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "peerDependencies": {
-    "@angular/common": "~8.2.10",
-    "@angular/core": "~8.2.10"
+    "@angular/common": "0.0.0-NG-PLACEHOLDER",
+    "@angular/core": "0.0.0-NG-PLACEHOLDER"
   },
   "dependencies": {
-    "md5": "^2.2.1"
+    "md5": "0.0.0-md5-PLACEHOLDER"
+  },
+  "devDependencies": {
+    "core-js": "0.0.0-corejs-PLACEHOLDER",
+    "zone.js": "0.0.0-zonejs-PLACEHOLDER",
+    "@angular/platform-browser-dynamic": "0.0.0-NG-PLACEHOLDER"
   }
 }

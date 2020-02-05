@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2015",
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "declaration": false,
     "sourceMap": false,
@@ -17,8 +17,5 @@
       "es2018"
     ],
     "downlevelIteration": true
-  },
-  "files": [
-    "libraryProjects.ts"
-  ]
+  }
 }

@@ -1,0 +1,10 @@
+{
+  "$schema": "../architect/src/builders-schema.json",
+  "builders": {
+    "build": {
+      "implementation": "./",
+      "schema": "./schema.json",
+      "description": "Build a library with core-ui-packagr."
+    }
+  }
+}
