@@ -7,11 +7,10 @@
 
 * **@ukis/services-layers:** 
 - removeLayer(), removeLayerGroup(), removeLayerFromGroup(), removeLayerOrGroupById() - add optional force if layer was set to not removable
-- updateLayerOrGroupInStore - removed optional (not used) filtertype
+- updateLayerOrGroupInStore() - removed optional (not used) filtertype
 
 
-* **scripts**: to build projects
-
+* **scripts**: create package for libraryScripts and nexus publish
 
 
 ### Features
@@ -19,6 +18,9 @@
 * **@ukis/core-ui:** new package which adds install support through schematics :) `ng add @ukis/core-ui`
 
 
+### Bug Fixes
+* **@ukis/user-info:** fix tests
+* **all projects:** add dev- and peerDependencies check through [depcheck](https://github.com/depcheck/depcheck)
 
 
 
