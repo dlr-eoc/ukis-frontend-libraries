@@ -17,9 +17,7 @@
     "compodoc-serve": "compodoc -r 8081 -s",
     "tsc:libraryProjects": "tsc -p scripts/library/tsconfig.json -w",
     "tsc:nexusScript": "tsc -p scripts/nexus/tsconfig.json -w",
-    "list-projects": "node scripts/library/index.js -l",
-    "build:schematics": "cd projects/core-ui && npm run schematics:build",
-    "test:schematics": "cd projects/core-ui && npm run schematics:test"
+    "list-projects": "node scripts/library/index.js -l"
   },
   "private": true,
   "dependencies": {

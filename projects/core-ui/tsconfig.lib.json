@@ -22,7 +22,6 @@
   },
   "exclude": [
     "src/test.ts",
-    "**/*.spec.ts",
-    "src/lib/templates/"
+    "**/*.spec.ts"
   ]
 }

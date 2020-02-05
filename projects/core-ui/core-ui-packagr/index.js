@@ -26,13 +26,13 @@ async function initialize(options, root) {
 async function buildSchematics(context) {
   const options = {
     command: 'npm',
-    args: ['run', 'build:schematics']
+    args: ['run', 'schematics:build']
   }
   if (os.platform() === "win32") {
     options.command = 'npm.cmd'
   }
   context.reportStatus(`Executing "${options.command}"...`);
-  const child = childProcess.spawn(options.command, options.args, { stdio: 'pipe' });
+  const child = childProcess.spawn(options.command, options.args, { stdio: 'pipe', cwd: 'projects/core-ui' });
 
   child.stdout.on('data', (data) => {
     context.logger.info(data.toString());
