@@ -95,7 +95,7 @@ https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2
 
 3. link the Schematics to the project `npm link $PATH_TO_SCHEMATIC_PROJECT` (`npm link ../frontend-libraries/dist/core-ui`)
 
-4. run the schematics `schematics @ukis/core-ui:ng-add`
+4. run the schematics `schematics @ukis/core-ui:ng-add` or `ng generate @ukis/core-ui:ng-add`
 
 
 to unlink use 
