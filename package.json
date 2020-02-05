@@ -13,7 +13,7 @@
     "start": "ng serve demo-maps --sourceMap",
     "build": "node scripts/library/index.js --build",
     "test": "node scripts/library/index.js --test",
-    "compodoc": "compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
+    "compodoc": "compodoc -p tsconfig.doc.json -a projects/core-ui/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
     "compodoc-serve": "compodoc -r 8081 -s",
     "tsc:libraryProjects": "tsc -p scripts/library/tsconfig.json -w",
     "tsc:nexusScript": "tsc -p scripts/nexus/tsconfig.json -w",
