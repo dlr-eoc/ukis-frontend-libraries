@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "npx ../../node_modules/.bin/tsc -p tsconfig.json -w",
-    "list-projects": "node libraryProjects.js -l"
+    "build": "npx ../../node_modules/.bin/tsc -p tsconfig.json -w"
   },
   "private": true,
   "peerDependencies": {

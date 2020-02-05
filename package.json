@@ -11,8 +11,8 @@
   ],
   "scripts": {
     "start": "ng serve demo-maps --sourceMap",
-    "build": "node scripts/libraryProjects.js --build",
-    "test": "node scripts/libraryProjects.js --test",
+    "build": "node scripts/library/index.js --build",
+    "test": "node scripts/library/index.js --test",
     "compodoc": "node node_modules/npm-git-dependencies -p doc_modules && compodoc -p tsconfig.doc.json -n \"UKIS Client\"",
     "compodoc-serve": "compodoc -r 8081 -s",
     "tsc:libraryProjects": "tsc -p scripts/library/tsconfig.json -w",
