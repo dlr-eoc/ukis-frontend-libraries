@@ -6,6 +6,7 @@
 
 import * as NG from '@angular/cli';
 import * as PATH from 'path';
+import * as FS from 'fs';
 import * as replace from 'replace';
 import * as toposort from 'toposort';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
@@ -264,8 +265,13 @@ export function run() {
         });
     }
 
-    function setVersionsOfProjects() {
-        const projectsPaths = getProjects().map(item => item.package);
+    function setVersionsOfProjects(useDistPath = false) {
+        let projectsPaths = getProjects().map(item => item.package);
+        if (useDistPath) {
+            projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
+        }
+        projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
+        console.log(projectsPaths)
         const errors = projectsAndDependencies(true);
         if (!errors.length) {
             Object.keys(version_placeholders).map(key => {
@@ -389,7 +395,8 @@ Options:
 -l, --list              List all projects
 -d, --deps              List all projects in a table with dependencies
     --depsPeer          List all projects with dependencies and peerDependencies
--s, --set               Set versions of all projects
+-s, --set               Set versions of all projects in projects folder
+    --setInDist         Set versions of all projects in dist folder
 -g, --graph             Show a dependency graph
 -c, --check             Check if all dependencies are listed in the package.json of the project
 -t, --test              Run ng test for all projects
@@ -409,6 +416,8 @@ Options:
             projectsAndDependencies(false, true);
         } else if (arg === '-s' || arg === '--set') {
             setVersionsOfProjects();
+        } else if (arg === '--setInDist') {
+            setVersionsOfProjects(true);
         } else if (arg === '-g' || arg === '--graph') {
             runDependencyGraph();
         } else if (arg === '-c' || arg === '--check') {
