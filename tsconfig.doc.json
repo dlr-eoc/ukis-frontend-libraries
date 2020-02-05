@@ -1,16 +1,36 @@
 {
-   
-    "include": [
-    
-      "src/**/*.ts",
-      "doc_modules/@ukis/**/*.ts"
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
     ],
-    "exclude": [
-      "test.ts",
-      "**/*.spec.ts",
-      "node_modules/@ukis/**/*.spec.ts",
-      "doc_modules/@ukis/**/app.module.ts",
-      "doc_modules/@ukis/**/app.component.ts"     
-    ]
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "paths": {
+      "@ukis/*": [
+        "dist/*",
+        "projects/*"
+      ]
+    }
+  },
+  "include": [
+    "projects/**/*.ts"
+  ],
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts",
+    "node_modules/",
+    "projects/demo-maps/**/*",
+    "projects/demo-maps-e2e/**/*",
+    "projects/demo-user-info/**/*",
+    "projects/demo-user-info-e2e/**/*"
+  ]
 }
-  
