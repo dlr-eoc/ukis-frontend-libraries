@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 export interface IUrls {
   login: string;
@@ -57,6 +55,26 @@ export interface IAuthService {
   checkSession?();
   checkAuthorization?(permissions: string[], user?: IUser): Observable<boolean>;
   // register?(user: IRegisterUser): Observable<IUserinfo>;
+}
+
+export class ExampleAuthService implements IAuthService {
+  exampleUserInfo: IUserinfo = {
+    current_user: {
+      userName: 'name',
+      password: 'pass'
+    },
+    urls: {
+      login: 'https://example/login',
+      logout: 'https://example/logout',
+      register: 'https://example/register'
+    }
+  };
+
+  loginmethode: 'oauth_pass';
+  login = (user: IUser) => of<IUserinfo>(this.exampleUserInfo);
+  logout = (user?: IUser) => of<IUserinfo>(this.exampleUserInfo);
+  getUserInfo = (user?: IUser) => of<IUserinfo>(this.exampleUserInfo);
+  isloggedIn = () => true;
 }
 
 

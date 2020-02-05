@@ -1,9 +1,7 @@
-import { async, ComponentFixture, TestBed, getTestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { UserService } from './user.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { of } from 'rxjs';
 
 
 

@@ -1,20 +1,28 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
-import { UserService } from '../user.service';
+import { UserService, IAuthService, IUser, IUserinfo, ExampleAuthService } from '../user.service';
+import { ClarityModule } from '@clr/angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { of } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let usrSvc: UserService;
+  let authService: IAuthService;
+
 
   beforeEach(async(() => {
+    authService = new ExampleAuthService();
+    usrSvc = new UserService();
+    usrSvc.setAuthService(authService);
+
     TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
-      providers: [
-        UserService
-      ]
-    })
-    .compileComponents();
+      imports: [ClarityModule, FormsModule, ReactiveFormsModule],
+      declarations: [LoginComponent],
+      providers: [{ provide: UserService, useValue: usrSvc }]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

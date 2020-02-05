@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, Input, Output } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormGroup, Validators, FormControl, ValidationErrors } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UserService, IRegisterUser, IUser } from '../user.service';
@@ -22,7 +22,7 @@ export class RegisterComponent implements OnDestroy {
   user: IUser;
   submitted: false;
 
-  constructor(@Inject(UserService) private usrSvc: UserService) {
+  constructor(private usrSvc: UserService) {
     this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
       this.user = userinfo.current_user;
     }, (error) => {
