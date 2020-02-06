@@ -1,6 +1,6 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserService, IUser} from '../user.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'ukis-user-details',
@@ -10,11 +10,11 @@ import { UserService, IUser} from '../user.service';
 export class UserDetailsComponent implements OnDestroy {
 
   usrSubsription: Subscription;
-  user: any;//IUser; //angular language service error: https://github.com/angular/angular/issues/17953
+  user: any; // IUser; //angular language service error: https://github.com/angular/angular/issues/17953
 
-  constructor(@Inject(UserService) public usrSvc: UserService) {
+  constructor(public usrSvc: UserService) {
     this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
-        this.user = userinfo.current_user;
+      this.user = userinfo.current_user;
     }, (error) => {
       console.log(error);
     });

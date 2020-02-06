@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "ng-add": {
+      "description": "Add UKIS specific files to your project.",
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./ng-add/schema.json"
+    },
+    "add-routing": {
+      "description": "Add routing to your UKIS project.",
+      "factory": "./add-routing/index#addRouting",
+      "schema": "./add-routing/schema.json"
+    }
+  }
+}

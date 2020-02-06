@@ -80,25 +80,25 @@ export class MapOlService {
       lon: 0
     };
 
-    const _baselayerGroup = new olLayerGroup(<any>{
+    const _baselayerGroup = new olLayerGroup({
       title: 'Base maps',
       type: 'baselayers',
       layers: []
-    });
+    } as any);
 
 
-    const _layersGroup = new olLayerGroup(<any>{
+    const _layersGroup = new olLayerGroup({
       title: 'Layers',
       type: 'layers',
       layers: []
-    });
+    } as any);
 
     // ---------------------------------------------------------------------------------------------------
-    const _overlayGroup = new olLayerGroup(<any>{
+    const _overlayGroup = new olLayerGroup({
       title: 'Overlays',
       type: 'overlays',
       layers: []
-    });
+    } as any);
 
     /**
      * set default viewOptions
@@ -404,7 +404,7 @@ export class MapOlService {
    */
   public setUkisLayers(layers: Array<Layer>, type: Tgroupfiltertype) {
     const _type = type.toLowerCase() as Tgroupfiltertype;
-    const _layers = <any>[];
+    const _layers = [];
     // TODO try to deep check if a layer if exactly the same and dont create it new
 
     if (layers.length < 1 && _type !== 'baselayers') {

@@ -27,10 +27,21 @@
 
 * **@ukis/services-layers:** 
 - removeLayer(), removeLayerGroup(), removeLayerFromGroup(), removeLayerOrGroupById() - add optional force if layer was set to not removable
-- updateLayerOrGroupInStore - removed optional (not used) filtertype
+- updateLayerOrGroupInStore() - removed optional (not used) filtertype
+
+
+* **scripts**: create package for libraryScripts and nexus publish
+
 
 ### Features
 * **@ukis/layer-control:** add css class to visible layer or group to style them.
+* **@ukis/core-ui:** new package which adds install support through schematics :) `ng add @ukis/core-ui`
+
+
+### Bug Fixes
+* **@ukis/user-info:** fix tests
+* **all projects:** add dev- and peerDependencies check through [depcheck](https://github.com/depcheck/depcheck)
+
 
 
 # [6.2.0](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse?at=refs%2Ftags%2Fv6.2.0) (2019-12-05) (Sprint NextGEOSS)

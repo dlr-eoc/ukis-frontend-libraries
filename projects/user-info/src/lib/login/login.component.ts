@@ -18,9 +18,9 @@ export class LoginComponent implements OnDestroy {
 
   usrSubsription: Subscription;
   user: IUser;
-  submitted: boolean
+  submitted: boolean;
 
-  constructor(@Inject(UserService) public usrSvc: UserService) {
+  constructor(public usrSvc: UserService) {
     this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
       this.user = userinfo.current_user;
     }, (error) => {
@@ -29,12 +29,11 @@ export class LoginComponent implements OnDestroy {
   }
 
   login() {
-    //console.log(this.usrInfoForm)
-    let user: IUser = {
-      userName: this.usrInfoForm.get("usrName").value,
-      password: this.usrInfoForm.get("usrPass").value,
-      remember: this.usrInfoForm.get("remember").value
-    }
+    const user: IUser = {
+      userName: this.usrInfoForm.get('usrName').value,
+      password: this.usrInfoForm.get('usrPass').value,
+      remember: this.usrInfoForm.get('remember').value
+    };
     this.usrSvc.login(user);
   }
 
@@ -48,9 +47,9 @@ export class LoginComponent implements OnDestroy {
           _error = JSON.stringify(this.usrInfoForm.get(key).errors[keyError]);
         }
         if (index == 0) {
-          error += `${_error}`
+          error += `${_error}`;
         } else {
-          error += ` and ${_error}`
+          error += ` and ${_error}`;
         }
       });
     }

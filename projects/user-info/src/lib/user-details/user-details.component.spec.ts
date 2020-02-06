@@ -1,20 +1,29 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserDetailsComponent } from './user-details.component';
-import { HttpClient } from '@angular/common/http';
-import { UserService } from '@ukis/user-info/src/lib/user.service';
+import { UserService, IAuthService, ExampleAuthService } from '../user.service';
+import { ClarityModule } from '@clr/angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-/*
+
 describe('UserDetailsComponent', () => {
   let component: UserDetailsComponent;
   let fixture: ComponentFixture<UserDetailsComponent>;
+  let usrSvc: UserService;
+  let authService: IAuthService;
+
 
   beforeEach(async(() => {
+    authService = new ExampleAuthService();
+    usrSvc = new UserService();
+    usrSvc.setAuthService(authService);
+
     TestBed.configureTestingModule({
-      declarations: [ UserDetailsComponent ], 
-      providers: [HttpClient, UserService]
+      imports: [ClarityModule, FormsModule, ReactiveFormsModule],
+      declarations: [UserDetailsComponent],
+      providers: [{ provide: UserService, useValue: usrSvc }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -27,4 +36,3 @@ describe('UserDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-*/

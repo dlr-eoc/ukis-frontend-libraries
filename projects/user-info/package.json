@@ -3,12 +3,17 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
   "peerDependencies": {
-    "@angular/common": "~8.2.10",
-    "@angular/core": "~8.2.10",
-    "@angular/forms": "~8.2.10",
-    "@clr/angular": "^2.2.2",
-    "@clr/icons": "^2.2.2",
-    "@clr/ui": "^2.2.2",
-    "rxjs": "~6.5.3"
+    "@angular/common": "0.0.0-NG-PLACEHOLDER",
+    "@angular/core": "0.0.0-NG-PLACEHOLDER",
+    "@angular/forms": "0.0.0-NG-PLACEHOLDER",
+    "@clr/angular": "0.0.0-CLR-PLACEHOLDER",
+    "@clr/icons": "0.0.0-CLR-PLACEHOLDER",
+    "@clr/ui": "0.0.0-CLR-PLACEHOLDER",
+    "rxjs": "0.0.0-rxjs-PLACEHOLDER"
+  },
+  "devDependencies": {
+    "core-js": "0.0.0-corejs-PLACEHOLDER",
+    "zone.js": "0.0.0-zonejs-PLACEHOLDER",
+    "@angular/platform-browser-dynamic": "0.0.0-NG-PLACEHOLDER"
   }
 }
