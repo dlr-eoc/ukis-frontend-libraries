@@ -2,6 +2,7 @@
   "name": "@ukis/services-layers",
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public_api",
+  "license": "Apache-2.0",
   "peerDependencies": {
     "@angular/common": "0.0.0-NG-PLACEHOLDER",
     "@angular/core": "0.0.0-NG-PLACEHOLDER",
