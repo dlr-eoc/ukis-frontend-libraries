@@ -25,22 +25,27 @@ export class WpsMarshaller200 implements WpsMarshaller {
         return out;
     }
 
-    unmarshalExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string,
+    unmarshalSyncExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string,
         inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[] {
         const out: WpsResult[] = [];
 
         if (isResult(responseJson.value)) {
             for (const output of responseJson.value.output) {
                 const outputDescription = outputDescriptions.find(od => od.id === output.id);
+                if (!outputDescription) {
+                    throw new Error(`Could not find an output-description for the parameter ${output.id}.`);
+                }
 
                 const isReference = outputDescription.reference;
                 const datatype = outputDescription.type;
                 const format = outputDescription.format;
                 let data;
-                if (isReference) {
+                if (output.reference) {
                     data = output.reference.href || null;
-                } else {
+                } else if (output.data) {
                     data = this.unmarshalOutputData(output.data, outputDescription);
+                } else {
+                    throw new Error(`Output has neither reference nor data field.`);
                 }
 
                 out.push({
@@ -78,7 +83,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
             switch (data.mimeType) {
                 case 'application/vnd.geo+json':
                 case 'application/json':
-                    return data.content.map(cont => JSON.parse(cont));
+                    return data.content.map((cont: any) => JSON.parse(cont));
                 case 'application/WMS':
                     return data.content;
                 case 'text/xml':
@@ -91,6 +96,10 @@ export class WpsMarshaller200 implements WpsMarshaller {
         }
 
         throw new Error(`Not yet implemented: ${data}`);
+    }
+
+    unmarshalAsyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsData[], outputDescriptions: WpsDataDescription[]): WpsState {
+        return this.unmarshalGetStateResponse(responseJson, url, processId, inputs, outputDescriptions);
     }
 
     unmarshalGetStateResponse(responseJson: any, serverUrl: string, processId: string,
