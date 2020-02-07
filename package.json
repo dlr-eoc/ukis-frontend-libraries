@@ -83,6 +83,8 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "ng-packagr": "^5.4.0",
     "protractor": "~5.4.0",
+    "node-sass": "^4.13.1",
+    "terser": "^4.6.3",
     "ts-node": "~7.0.0",
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",
@@ -90,8 +92,10 @@
   },
   "devDependenciesFromProjects": [
     "cpx -core-ui",
-    "@types/geojson",
-    "@compodoc/compodoc"
+    "@types/geojson -services-ogc",
+    "@compodoc/compodoc -compodoc",
+    "terser -owc services",
+    "node-sass -for build?"
   ],
   "engines": {
     "node": ">=10.0.0",
