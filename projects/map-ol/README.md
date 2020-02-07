@@ -1,65 +1,24 @@
-# @ukis/map-ol
+# MapOl
 
-### how use this in a core-ui project
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
 
+## Code scaffolding
 
-#### add the following dependencies to the package.json
-- "@ukis/map-ol"
-- "@ukis/layer-control" (optional)
-- "@ukis/base-layers-raster" (optional)
+Run `ng generate component component-name --project map-ol` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project map-ol`.
+> Note: Don't forget to add `--project map-ol` or else it will be added to the default project in your `angular.json` file. 
 
-#### add the following to the app.module.ts
-```
-import { MapOlModule } from '@ukis/map-ol';
-import { LayerControlModule } from '@ukis/layer-control';
-```
+## Build
 
+Run `ng build map-ol` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-#### add the following to a route-view.component.html
-```
-<section class="content-area map-view">
-  <ukis-map-ol [layersSvc]="layerSvc" [mapState]="mapStateSvc" [controls]="controls"></ukis-map-ol>
-</section>
-```
+## Publishing
 
-#### add the following to a route-view.component.ts
-```
-import { LayersService } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { IMapControls } from '@ukis/map-ol';
+After building your library with `ng build map-ol`, go to the dist folder `cd dist/map-ol` and run `npm publish`.
 
-import { osm, eoc_litemap, esri_world_imagery } from '@ukis/base-layers-raster';
-```
+## Running unit tests
 
-```
-controls: IMapControls;
-  constructor(
-    public layerSvc: LayersService,
-    public mapStateSvc: MapStateService
-) { }
-```
+Run `ng test map-ol` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-```
-ngOnInit() {
-    this.addBaselayers();
-}
+## Further help
 
-addBaselayers() {
-    const layers = [
-        new osm(<any>{
-        visible: false,
-        legendImg: null
-        }),
-        new eoc_litemap(<any>{
-        visible: true,
-        legendImg: null
-        }),
-        new esri_world_imagery(<any>{
-        visible: false,
-        legendImg: null
-        })
-    ];
-
-    layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
-}
-```
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

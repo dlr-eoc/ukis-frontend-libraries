@@ -32,7 +32,8 @@ run ``ng generate library < name > --prefix ukis``
 
 - rename lib package: "name": "@ukis/< name >"
 - set version to: "version": "0.0.0-PLACEHOLDER"
-- set lib package: "main": "src/public_api",
+- set lib package: "main": "src/public-api",
+- add "license": "Apache-2.0" or a compatible licenses
 - add path mapping to paths in the main tsconfig.json
 
 ### 2. Add and create Files

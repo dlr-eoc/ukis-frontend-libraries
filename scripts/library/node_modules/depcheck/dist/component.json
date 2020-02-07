@@ -1,0 +1,41 @@
+{
+  "parser": [
+    "coffee",
+    "es6",
+    "es7",
+    "jsx",
+    "sass",
+    "typescript",
+    "vue"
+  ],
+  "detector": [
+    "exportDeclaration",
+    "expressViewEngine",
+    "gruntLoadTaskCallExpression",
+    "importCallExpression",
+    "importDeclaration",
+    "requireCallExpression",
+    "requireResolveCallExpression",
+    "typescriptImportEqualsDeclaration",
+    "typescriptImportType"
+  ],
+  "special": [
+    "babel",
+    "bin",
+    "commitizen",
+    "eslint",
+    "feross-standard",
+    "gatsby",
+    "gulp-load-plugins",
+    "husky",
+    "istanbul",
+    "jest",
+    "karma",
+    "lint-staged",
+    "mocha",
+    "prettier",
+    "tslint",
+    "ttypescript",
+    "webpack"
+  ]
+}

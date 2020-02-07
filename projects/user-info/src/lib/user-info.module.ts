@@ -1,21 +1,12 @@
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClarityModule } from '@clr/angular';
-import { CommonModule } from '@angular/common';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
-import { UserDetailsComponent } from './user-details/user-details.component';
-import { HttpClientModule } from '@angular/common/http';
+import { UserInfoComponent } from './user-info.component';
+
+
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, UserDetailsComponent],
+  declarations: [UserInfoComponent],
   imports: [
-    CommonModule,
-    ClarityModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule
   ],
-  exports: [LoginComponent, RegisterComponent, UserDetailsComponent]
+  exports: [UserInfoComponent]
 })
 export class UserInfoModule { }

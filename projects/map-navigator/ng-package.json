@@ -2,12 +2,6 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/map-navigator",
   "lib": {
-    "entryFile": "src/public_api.ts"
-  },
-  "whitelistedNonPeerDependencies": [
-    "tslib",
-    "ol",
-    "@ukis/services-map-state",
-    "@ukis/services-map-state"
-  ]
+    "entryFile": "src/public-api.ts"
+  }
 }

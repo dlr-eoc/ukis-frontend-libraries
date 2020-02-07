@@ -28,7 +28,8 @@ export function run() {
         clr: '0.0.0-CLR-PLACEHOLDER', // @clr
         corejs: '0.0.0-corejs-PLACEHOLDER',
         zonejs: '0.0.0-zonejs-PLACEHOLDER',
-        rxjs: '0.0.0-rxjs-PLACEHOLDER'
+        rxjs: '0.0.0-rxjs-PLACEHOLDER',
+        tsc: '0.0.0-tsc-PLACEHOLDER'
     };
     const version_replace = {
         ukis: MAINPACKAGE.version,
@@ -40,6 +41,7 @@ export function run() {
         corejs: MAINPACKAGE.dependencies['core-js'],
         zonejs: MAINPACKAGE.dependencies['zone.js'],
         rxjs: MAINPACKAGE.dependencies['rxjs'],
+        tsc: MAINPACKAGE.dependencies['typescript']
     };
 
     interface Iprojects {

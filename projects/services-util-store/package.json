@@ -1,17 +1,17 @@
 {
   "name": "@ukis/services-util-store",
   "version": "0.0.0-PLACEHOLDER",
-  "main": "src/public_api",
+  "main": "src/public-api",
+  "license": "Apache-2.0",
   "peerDependencies": {
-    "@angular/common": "0.0.0-NG-PLACEHOLDER",
-    "@angular/core": "0.0.0-NG-PLACEHOLDER"
+    "@angular/common": "^8.2.14",
+    "@angular/core": "^8.2.14"
   },
   "dependencies": {
     "md5": "0.0.0-md5-PLACEHOLDER"
   },
   "devDependencies": {
-    "core-js": "0.0.0-corejs-PLACEHOLDER",
-    "zone.js": "0.0.0-zonejs-PLACEHOLDER",
+    "zone.js": "0.0.0-corejs-PLACEHOLDER",
     "@angular/platform-browser-dynamic": "0.0.0-NG-PLACEHOLDER"
   }
 }

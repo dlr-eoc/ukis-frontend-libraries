@@ -1,9 +1,0 @@
-<div *ngIf="user">
-  <h6 class="hint" *ngIf="user.firstName">Hello {{user.firstName}} {{user.lastName}}!</h6>
-  <h6 class="hint" *ngIf="!user.firstName && user.userName">Hello {{user.userName}}!</h6>
-  <h6 class="hint" *ngIf="user.email">your email is: {{user.email}}</h6>
-  <br>
-  <button type="button" class="btn btn-primary" (click)="logout()">
-    Logout
-  </button>
-</div>
