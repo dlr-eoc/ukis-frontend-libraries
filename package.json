@@ -15,15 +15,16 @@
     "build": "node scripts/library/index.js --build",
     "test": "node scripts/library/index.js --test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
+    "compodoc": "compodoc -p tsconfig.doc.json -a projects/core-ui/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
+    "compodoc-serve": "compodoc -r 8081 -s",
     "postinstall": "cd scripts/library && npm i"
   },
   "private": true,
   "dependencies": {
     "@angular-devkit/core": "8.3.20",
     "@angular-devkit/schematics": "8.3.20",
-    "@schematics/angular": "8.3.20",
     "@angular/animations": "8.2.14",
+    "@angular/cdk": "^9.0.0",
     "@angular/common": "8.2.14",
     "@angular/compiler": "8.2.14",
     "@angular/core": "8.2.14",
@@ -34,6 +35,8 @@
     "@clr/angular": "2.3.6",
     "@clr/icons": "2.3.6",
     "@clr/ui": "2.3.6",
+    "@schematics/angular": "8.3.20",
+    "@types/geojson": "^7946.0.7",
     "md5": "2.2.1",
     "parse5-html-rewriting-stream": "5.1.1",
     "rxjs": "6.4.0",
@@ -46,7 +49,8 @@
     "@angular-devkit/core -core-ui",
     "@angular-devkit/schematics -core-ui",
     "@schematics/angular -core-ui",
-    "parse5-html-rewriting-stream -core-ui"
+    "parse5-html-rewriting-stream -core-ui",
+    "@angular/cdk -layer-control"
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.25",
@@ -54,6 +58,7 @@
     "@angular/cli": "~8.3.25",
     "@angular/compiler-cli": "8.2.14",
     "@angular/language-service": "8.2.14",
+    "@compodoc/compodoc": "^1.1.11",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
@@ -74,7 +79,9 @@
     "typescript": "~3.5.3"
   },
   "devDependenciesFromProjects": [
-    "cpx -core-ui"
+    "cpx -core-ui",
+    "@types/geojson",
+    "@compodoc/compodoc"
   ],
   "engines": {
     "node": ">=10.0.0",
