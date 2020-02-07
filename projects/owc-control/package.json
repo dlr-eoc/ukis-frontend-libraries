@@ -4,8 +4,14 @@
   "main": "src/public-api",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
+    "@angular/common": "0.0.0-NG-PLACEHOLDER",
+    "@angular/core": "0.0.0-NG-PLACEHOLDER",
+    "rxjs": "0.0.0-rxjs-PLACEHOLDER"
+  },
+  "dependencies": {
+    "@ukis/services-layers": "0.0.0-PLACEHOLDER",
+    "@ukis/services-ogc": "0.0.0-PLACEHOLDER",
+    "@ukis/services-map-state": "0.0.0-PLACEHOLDER"
   },
   "devDependencies": {
     "zone.js": "0.0.0-corejs-PLACEHOLDER",
