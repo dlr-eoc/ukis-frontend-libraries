@@ -29,7 +29,9 @@ export function run() {
         corejs: '0.0.0-corejs-PLACEHOLDER',
         zonejs: '0.0.0-zonejs-PLACEHOLDER',
         rxjs: '0.0.0-rxjs-PLACEHOLDER',
-        tsc: '0.0.0-tsc-PLACEHOLDER'
+        tsc: '0.0.0-tsc-PLACEHOLDER',
+        ol: '0.0.0-ol-PLACEHOLDER',
+        proj4: '0.0.0-proj4-PLACEHOLDER'
     };
     const version_replace = {
         ukis: MAINPACKAGE.version,
@@ -41,7 +43,9 @@ export function run() {
         corejs: MAINPACKAGE.dependencies['core-js'],
         zonejs: MAINPACKAGE.dependencies['zone.js'],
         rxjs: MAINPACKAGE.dependencies['rxjs'],
-        tsc: MAINPACKAGE.dependencies['typescript']
+        tsc: MAINPACKAGE.dependencies['typescript'],
+        ol: MAINPACKAGE.dependencies['ol'],
+        proj4: MAINPACKAGE.dependencies['proj4']
     };
 
     interface Iprojects {

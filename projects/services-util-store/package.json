@@ -4,8 +4,8 @@
   "main": "src/public-api",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
+    "@angular/common": "0.0.0-NG-PLACEHOLDER",
+    "@angular/core": "0.0.0-NG-PLACEHOLDER"
   },
   "dependencies": {
     "md5": "0.0.0-md5-PLACEHOLDER"

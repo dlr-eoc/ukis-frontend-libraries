@@ -24,9 +24,9 @@
     "save": false
   },
   "dependencies": {
-    "@angular-devkit/core": "^8.3.22",
-    "@angular-devkit/schematics": "^8.3.22",
-    "@schematics/angular": "^8.3.22",
+    "@angular-devkit/core": "0.0.0-ngdev-PLACEHOLDER",
+    "@angular-devkit/schematics": "0.0.0-ngdev-PLACEHOLDER",
+    "@schematics/angular": "0.0.0-ngdev-PLACEHOLDER",
     "parse5-html-rewriting-stream": "^5.1.1"
   },
   "peerDependencies": {

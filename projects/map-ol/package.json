@@ -11,8 +11,8 @@
   "dependencies": {
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
     "@ukis/services-layers": "0.0.0-PLACEHOLDER",
-    "ol": "^6.1.1",
-    "proj4": "^2.6.0"
+    "ol": "0.0.0-ol-PLACEHOLDER",
+    "proj4": "0.0.0-proj4-PLACEHOLDER"
   },
   "devDependencies": {
     "zone.js": "0.0.0-corejs-PLACEHOLDER",

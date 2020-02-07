@@ -10,8 +10,8 @@
     "@clr/angular": "0.0.0-CLR-PLACEHOLDER",
     "@clr/icons": "0.0.0-CLR-PLACEHOLDER",
     "@clr/ui": "0.0.0-CLR-PLACEHOLDER",
-    "ol": "^6.0.1",
-    "proj4": "^2.6.0",
+    "ol": "0.0.0-ol-PLACEHOLDER",
+    "proj4": "0.0.0-proj4-PLACEHOLDER",
     "rxjs": "0.0.0-rxjs-PLACEHOLDER"
   },
   "dependencies": {

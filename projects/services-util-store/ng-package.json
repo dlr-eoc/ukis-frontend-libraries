@@ -3,5 +3,9 @@
   "dest": "../../dist/services-util-store",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib",
+    "md5"
+  ]
 }
