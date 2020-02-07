@@ -3,5 +3,9 @@
   "dest": "../../dist/map-navigator",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "ol",
+    "@ukis/services-map-state"
+  ]
 }
