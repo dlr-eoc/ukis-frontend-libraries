@@ -3,5 +3,10 @@
   "dest": "../../dist/layer-control",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "@ukis/services-map-state",
+    "@ukis/services-layers",
+    "@angular/cdk"
+  ]
 }

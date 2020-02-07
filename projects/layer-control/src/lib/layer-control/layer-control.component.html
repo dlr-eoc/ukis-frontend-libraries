@@ -1,0 +1,17 @@
+<div cdkDropList (cdkDropListDropped)="drop($event)">
+  <!-- (cdkDropListSorted)="sort($event)" -->
+  <div class="list-item" *ngFor="let group of layergroups | reverse;" cdkDragLockAxis="y" cdkDrag>
+    <ukis-layerentry-group *ngIf="isLayerGroup(group) && group.filtertype === layerfilter" [layersSvc]="layersSvc"
+      [mapState]="mapStateSvc" [group]="group" [layerGroups]="layergroups">
+      <span class="move-item" cdkDragHandle>
+        {{group.displayName || group.name}}
+      </span>
+    </ukis-layerentry-group>
+    <ukis-layerentry *ngIf="!isLayerGroup(group) && group.filtertype === layerfilter" [layerGroups]="layergroups"
+      [expanded]="false" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [layer]="group" [group]="null">
+      <span class="move-item" cdkDragHandle>
+        {{group.displayName || group.name}}
+      </span>
+    </ukis-layerentry>
+  </div>
+</div>
