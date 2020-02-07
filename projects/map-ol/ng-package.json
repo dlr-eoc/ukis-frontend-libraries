@@ -3,5 +3,12 @@
   "dest": "../../dist/map-ol",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib",
+    "ol",
+    "proj4",
+    "@ukis/services-layers",
+    "@ukis/services-map-state"
+  ]
 }
