@@ -1,0 +1,70 @@
+/** INPUTS */
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: $clr-lighter-midtone-gray;
+}
+
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: $clr-light-midtone-gray;
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: $clr-lighter-midtone-gray;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  margin: 8px 0;
+  width: 100%;
+}
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  height: 20px;
+  width: 10px;
+  background: $clr-dark-midtone-gray;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -6px;
+}
+input[type="range"]::-moz-range-thumb {
+  height: 20px;
+  width: 10px;
+  background: $clr-dark-midtone-gray;
+  cursor: pointer;
+}
+
+
+/** BUTTONS */
+button:focus {
+  outline: none;
+}
+
+.content-container {
+  position: relative;
+}
+
+.iconButton:hover {
+  cursor: pointer;
+  color: $clr-action-blue;
+}
+
+.iconButton-drpDwn {
+  cursor: pointer;
+  transform: rotate(180deg);
+}
+
+.iconButton-drpDwn-active {
+  cursor: pointer;
+  color: $clr-action-blue;
+}
+
+.headerButton:hover {
+  cursor: pointer;
+}
