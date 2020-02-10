@@ -1,4 +1,4 @@
-import { Observable, timer, of, forkJoin, throwError } from 'rxjs';
+import { Observable, timer, of, forkJoin } from 'rxjs';
 import { tap, map, mergeMap, retryWhen, delay } from 'rxjs/operators';
 
 
@@ -19,8 +19,8 @@ export function pollUntil<T>(
         })
     );
 
-    const requestTakesAtLeast$: Observable<T> = forkJoin({req: tappedTask$, timer: timer(minWaitTime)}).pipe(
-        map(r => r.req)
+    const requestTakesAtLeast$: Observable<T> = forkJoin(tappedTask$, timer(minWaitTime)).pipe(
+        map(r => r[0])
     );
 
     const polledRequest$: Observable<T> = requestTakesAtLeast$.pipe(
