@@ -50,14 +50,7 @@ run ``ng generate library < name > --prefix ukis``
 for shared dependencies e.g. peerDependencies use version placeholder which get replaced wit the versions of the main package.json on publish!
 
 - @ukis: '0.0.0-PLACEHOLDER'
-- @angular/core: '0.0.0-NG-PLACEHOLDER'
-- @angular/cdk: '0.0.0-ngcdk-PLACEHOLDER'
-- @angular-devkit/core: '0.0.0-ngdev-PLACEHOLDER'
-- md5: '0.0.0-md5-PLACEHOLDER'
-- @clr/angular: '0.0.0-CLR-PLACEHOLDER'
-- core-js: '0.0.0-corejs-PLACEHOLDER'
-- zone.js: '0.0.0-zonejs-PLACEHOLDER'
-- rxjs: '0.0.0-rxjs-PLACEHOLDER'
+- Vendor e.g. @angular, @clr...: '0.0.0-PLACEHOLDER-VENDOR'
 
 - add peerDependencies for dependencies which are generally in the [frontend-libraries/package.json](http://git.ukis.eoc.dlr.de/projects/MOFRO/repos/frontend-libraries/browse/package.json)
 
