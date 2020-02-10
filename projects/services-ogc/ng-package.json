@@ -14,6 +14,7 @@
     "@ukis/base-layers-raster",
     "@ukis/services-map-state",
     "md5",
+    "ol",
     "w3c-schemas",
     "ogc-schemas",
     "@boundlessgeo/jsonix"

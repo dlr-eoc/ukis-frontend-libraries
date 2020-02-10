@@ -16,6 +16,7 @@
     "md5": "0.0.0-md5-PLACEHOLDER",
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
+    "ol": "^6.1.1",
     "@boundlessgeo/jsonix": "^2.4.3"
   },
   "devDependencies": {

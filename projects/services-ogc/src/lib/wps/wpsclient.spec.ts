@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { WpsClient } from './wpsclient';
 import { HttpClient, HttpXhrBackend, XhrFactory, HttpRequest } from '@angular/common/http';
-import { pollEveryUntil } from './utils/polling';
+import { pollUntil } from './utils/polling';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { tap, map, delay, expand, takeUntil, take } from 'rxjs/operators';
 import { forkJoin, of, Observable, empty, interval, timer } from 'rxjs';
@@ -166,12 +166,12 @@ describe(`Testing polling funcitonality`, () => {
         });
     });
 
-    it('#pollEveryUntil should work fine with multiple poll-requests', (done) => {
+    it('#pollUntil should work fine with multiple poll-requests', (done) => {
         const server = new PollableServer(2, 'ongoing...', 'finished!');
 
         const baseRequest$ = server.call();
 
-        const polledRequest$ = pollEveryUntil(baseRequest$,
+        const polledRequest$ = pollUntil(baseRequest$,
             (response) => response === 'finished!',
             (response) => console.log(`polling server. response: ${response} ...`),
             1000).pipe(
@@ -186,7 +186,7 @@ describe(`Testing polling funcitonality`, () => {
 
     }, 5000);
 
-    it('#pollEveryUntil should handle multithreading', (done) => {
+    it('#pollUntil should handle multithreading', (done) => {
         // prepare basic requests
         const server1 = new PollableServer(2, 'srv1: ongoing...', 'srv1: finished!');
         const server2 = new PollableServer(1, 'srv2: ongoing...', 'srv2: finished!');
@@ -194,13 +194,13 @@ describe(`Testing polling funcitonality`, () => {
         const secondRequest$ = server2.call();
 
         // wrap requests in a poll
-        const polledFirstRequest$ = pollEveryUntil(firstRequest$,
+        const polledFirstRequest$ = pollUntil(firstRequest$,
             (response) => response === 'srv1: finished!',
             (response) => console.log(`polling server 1. response: ${response} ...`),
             1000).pipe(
                 tap((response) => console.log(`first request received ${response}`))
             );
-        const polledSecondRequest$ = pollEveryUntil(secondRequest$,
+        const polledSecondRequest$ = pollUntil(secondRequest$,
             (response) => response  === 'srv2: finished!',
             (response) => console.log(`polling server 2. response: ${response} ...`),
             1200).pipe(
@@ -221,7 +221,7 @@ describe(`Testing polling funcitonality`, () => {
 
     it('#execAsync should work with multiple requests in parallel', (done) => {
         const mockHttpClient = TestBed.get(HttpClient);
-        const wpsClient: WpsClient = new WpsClient('1.0.0', mockHttpClient, false);
+        const wpsClient: WpsClient = new WpsClient('1.0.0', mockHttpClient);
         const httpMockServer: HttpTestingController = TestBed.get(HttpTestingController);
 
         const url1 = 'wpsserver1.com';
@@ -270,7 +270,7 @@ if (runTestsWithLiveServer) {
     const versions: WpsVerion[] = ['1.0.0', '2.0.0'];
     for (const version of versions) {
         describe(`Testing wps-client version ${version} functionality`, () => {
-    
+
             it('testing unmarshaller', () => {
                 const xml = `
                 <wps:StatusInfo xmlns:ows="http://www.opengis.net/ows/2.0"
@@ -296,9 +296,9 @@ if (runTestsWithLiveServer) {
 
 
             it('get-capabilities should work', (done) => {
-                const testserver = 'http://geoprocessing.demo.52north.org/javaps/service';
+                const server = 'http://geoprocessing.demo.52north.org/javaps/service';
                 const cl = new WpsClient(version, httpClient);
-                const capas$ = cl.getCapabilities(testserver);
+                const capas$ = cl.getCapabilities(server);
                 capas$.subscribe(result => {
                     done();
                 });
@@ -332,8 +332,8 @@ if (runTestsWithLiveServer) {
             const c = new WpsClient(version, httpClient);
 
             it('execute should work', (done) => {
-                const exec$ = c.execute(testserver, processId, inputs, outputDescriptions, false);
-    
+                const exec$ = c.execute(testserver, processId, inputs, outputDescriptions);
+
                 exec$.subscribe(results => {
                     console.log(results);
                     results.map(r => expect(r.value).toBeTruthy());
@@ -344,7 +344,7 @@ if (runTestsWithLiveServer) {
 
             it('execute-async should work', (done) => {
                 const exec$ = c.executeAsync(testserver, processId, inputs, outputDescriptions);
-    
+
                 exec$.subscribe(results => {
                     console.log(results);
                     results.map(r => expect(r.value).toBeTruthy());
