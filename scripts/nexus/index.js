@@ -3,10 +3,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const PATH = require("path");
-const replace = require("replace");
 const FS = require("fs");
 const child_process_1 = require("child_process");
 const readline = require("readline");
+const library_1 = require("../library");
 function run() {
     const CWD = process.cwd();
     const REGISTRY = 'http://hofer.eoc.dlr.de/nexus/content/repositories/npm-ukis/';
@@ -119,9 +119,11 @@ function getInput(question, obscurer) {
     });
 }
 function setVersion(version, packagePath) {
-    const _package = require(PATH.join(packagePath, 'package.json'));
-    const UKIS_VERSION_PLACEHOLDER = '0.0.0-PLACEHOLDER';
-    const NG_VERSION_PLACEHOLDER = '0.0.0-NG-PLACEHOLDER';
+    const path = require(PATH.join(packagePath, 'package.json'));
+    library_1.setVersionsforDependencies([path]);
+    /* const UKIS_VERSION_PLACEHOLDER = '0.0.0-PLACEHOLDER';
+    const NG_VERSION_PLACEHOLDER = '0.0.0-PLACEHOLDER-VENDOR';
+
     if (_package.version === UKIS_VERSION_PLACEHOLDER) {
         replace({
             regex: UKIS_VERSION_PLACEHOLDER,
@@ -131,6 +133,6 @@ function setVersion(version, packagePath) {
             silent: true,
             include: 'package.json'
         });
-    }
+    } */
 }
 run();

@@ -1,10 +1,10 @@
 // http://git.ukis.eoc.dlr.de/projects/ADMIN/repos/ukis-ci-scripts/browse/packaging/upload-npm-package.bash#1,3,6,8,12,20-21,28,30-31,33,41,56,62,67
 
 import * as PATH from 'path';
-import * as replace from 'replace';
 import * as FS from 'fs';
 import { exec } from 'child_process';
 import * as readline from 'readline';
+import { setVersionsforDependencies } from '../library';
 
 
 export function run() {
@@ -132,9 +132,10 @@ async function getInput(question: string, obscurer?: string) {
 
 
 function setVersion(version: string, packagePath: string) {
-    const _package = require(PATH.join(packagePath, 'package.json'));
-    const UKIS_VERSION_PLACEHOLDER = '0.0.0-PLACEHOLDER';
-    const NG_VERSION_PLACEHOLDER = '0.0.0-NG-PLACEHOLDER';
+    const path = require(PATH.join(packagePath, 'package.json'));
+    setVersionsforDependencies([path]);
+    /* const UKIS_VERSION_PLACEHOLDER = '0.0.0-PLACEHOLDER';
+    const NG_VERSION_PLACEHOLDER = '0.0.0-PLACEHOLDER-VENDOR';
 
     if (_package.version === UKIS_VERSION_PLACEHOLDER) {
         replace({
@@ -145,6 +146,6 @@ function setVersion(version: string, packagePath: string) {
             silent: true,
             include: 'package.json'
         });
-    }
+    } */
 }
 run();

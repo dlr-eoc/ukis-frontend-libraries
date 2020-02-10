@@ -5,13 +5,10 @@
   "scripts": {
     "build": "npx ../../node_modules/.bin/tsc -p tsconfig.json -w"
   },
+  "main": "index.js",
   "private": true,
-  "dependencies": {
-    "replace": "^1.1.0"
-  },
-  "peerDependencies": {
-    "replace": "^1.1.0"
-  },
+  "dependencies": {},
+  "peerDependencies": {},
   "devDependencies": {},
   "engines": {
     "node": ">=10.0.0",
