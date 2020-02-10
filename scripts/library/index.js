@@ -268,12 +268,10 @@ function setVersionsOfProjects(useDistPath = false) {
         projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
     }
     projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
-    console.log(projectsPaths);
     const errors = projectsAndDependencies(true);
     if (!errors.length) {
         setVersionsforDependencies(projectsPaths);
-        console.log(`replaced all versions in projects with '${LIBRARIES_PLACEHOLDER}' and
-        '${VENDOR_PLACEHOLDER}' with the versions of the main package.json`);
+        console.log(`replaced all versions in projects with '${LIBRARIES_PLACEHOLDER}' and '${VENDOR_PLACEHOLDER}' with the versions of the main package.json`);
     }
     else {
         console.log(`check main package.json version and projects for errors!`);
