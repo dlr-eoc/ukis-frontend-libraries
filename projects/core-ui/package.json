@@ -7,10 +7,10 @@
   "scripts": {
     "schematics:build": "npx ../../node_modules/.bin/tsc -p tsconfig.schematics.json",
     "schematics:copy:collection": "npx ../../node_modules/.bin/cpx schematics/collection.json ../../dist/core-ui/schematics/",
-    "schematics:copy:schemas": "npx ../../node_modules/.bin/cpx schematics/**/schema.json ../../dist/core-ui/schematics/",
-    "schematics:copy:files": "npx ../../node_modules/.bin/cpx schematics/*/files/** ../../dist/core-ui/schematics/",
-    "schematics:copy:alert": "npx ../../node_modules/.bin/cpx src/lib/global-alert/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/",
-    "schematics:copy:progress": "npx ../../node_modules/.bin/cpx src/lib/global-progress/** ../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/",
+    "schematics:copy:schemas": "npx ../../node_modules/.bin/cpx 'schematics/**/schema.json' '../../dist/core-ui/schematics/'",
+    "schematics:copy:files": "npx ../../node_modules/.bin/cpx 'schematics/*/files/**' '../../dist/core-ui/schematics/'",
+    "schematics:copy:alert": "npx ../../node_modules/.bin/cpx 'src/lib/global-alert/**' '../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/'",
+    "schematics:copy:progress": "npx ../../node_modules/.bin/cpx 'src/lib/global-progress/**' '../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/'",
     "postschematics:build": "npm run schematics:copy:collection && npm run schematics:copy:schemas && npm run schematics:copy:files && npm run schematics:copy:alert && npm run schematics:copy:progress",
     "preschematics:test": "npm run schematics:build",
     "schematics:test": "npx ../../node_modules/.bin/jasmine ../../dist/core-ui/schematics/**/*_spec.js"
