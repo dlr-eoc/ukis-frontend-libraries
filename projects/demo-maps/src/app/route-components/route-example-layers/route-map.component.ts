@@ -7,7 +7,7 @@ import { MapOlService } from '@ukis/map-ol';
 @Component({
   selector: 'app-route-map',
   templateUrl: './route-map.component.html',
-  styleUrls: ['./route-map.component.css'],
+  styleUrls: ['./route-map.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })

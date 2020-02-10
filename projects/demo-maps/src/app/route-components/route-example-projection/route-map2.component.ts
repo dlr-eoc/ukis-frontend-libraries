@@ -11,7 +11,7 @@ import proj4 from 'proj4';
 @Component({
   selector: 'app-route-map2',
   templateUrl: './route-map2.component.html',
-  styleUrls: ['./route-map2.component.css'],
+  styleUrls: ['./route-map2.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })

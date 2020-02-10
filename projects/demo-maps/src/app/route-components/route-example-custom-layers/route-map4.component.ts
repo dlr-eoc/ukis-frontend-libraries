@@ -13,7 +13,7 @@ import olImageLayer from 'ol/layer/Image';
 @Component({
   selector: 'app-route-map4',
   templateUrl: './route-map4.component.html',
-  styleUrls: ['./route-map4.component.css'],
+  styleUrls: ['./route-map4.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
