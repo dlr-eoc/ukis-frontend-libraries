@@ -3,8 +3,6 @@
     <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
 
     <ukis-header [ukis-title]="title">
-        <!-- <a routerLink="/example" routerLinkActive="active" class="nav-link nav-text header-nav-el">example route</a> -->
-
         <a *ngIf="!userService.isloggedIn()" routerLink="/login" routerLinkActive="active"
             class="nav-link nav-text header-nav-el">Login</a>
         <a *ngIf="userService.isloggedIn()" routerLink="/user" routerLinkActive="active"
