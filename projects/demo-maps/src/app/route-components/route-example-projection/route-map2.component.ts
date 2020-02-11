@@ -51,8 +51,8 @@ export class RouteMap2Component implements OnInit {
 
     /** use the MapOlService for directly accessing the ol/Map or ol/View or bind popups to an event, set projections... */
     this.mapSvc.setProjection(projection);
-    //this.mapSvc.setExtent(this.projExtent)
-    //this.mapSvc.setZoom(3)
+    // this.mapSvc.setExtent(this.projExtent)
+    // this.mapSvc.setZoom(3)
 
     this.addOverlays();
 
@@ -61,12 +61,12 @@ export class RouteMap2Component implements OnInit {
   }
 
   addOverlays() {
-    const eoc_litemap_layer = new eoc_litemap(<any>{
+    const eoc_litemap_layer = new eoc_litemap({
       removable: true,
       legendImg: null,
       visible: true,
       id: 'eoc_litemap_base'
-    });
+    } as any);
 
     const guf_layer = new RasterLayer({
       type: 'wms',

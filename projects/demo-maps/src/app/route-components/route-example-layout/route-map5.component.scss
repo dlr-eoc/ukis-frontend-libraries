@@ -2,14 +2,14 @@
 :host-context(.content-container) {
   &>* {
     // width: 100vw;
-    height: 90%;
+    // height: 90%;
   }
 
   .ukis-footer {
     position: fixed;
     bottom: 0px;
     width: 100vw;
-    height: 10%;
+    // height: 10%;
     padding: 0rem 1rem;
   }
 }
