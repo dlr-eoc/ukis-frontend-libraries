@@ -1,31 +1,30 @@
-import { Observable, timer, of, forkJoin, throwError } from 'rxjs';
+import { Observable, timer, of, forkJoin } from 'rxjs';
 import { tap, map, mergeMap, retryWhen, delay } from 'rxjs/operators';
-import { Predicate } from '@angular/core';
 
 
 
 
-export function pollEveryUntil<T>(
-    task$: Observable<T>, predicate: Predicate<T>, doWhile?: (t: T | null) => any, minWaitTime: number = 1000): Observable<T> {
+export function pollUntil<T>(
+    task$: Observable<T>, predicate: (results: any) => boolean, doWhile?: (t: T | null) => any, minWaitTime: number = 1000): Observable<T> {
 
     if (doWhile) {
         doWhile(null);
     }
 
-    const tappedTask$ = task$.pipe(
-        tap(r => {
+    const tappedTask$: Observable<T> = task$.pipe(
+        tap((r: any) => {
             if (doWhile) {
                 doWhile(r);
             }
         })
     );
 
-    const requestTakesAtLeast$ = forkJoin({req: tappedTask$, timer: timer(minWaitTime)}).pipe(
-        map(r => r.req)
+    const requestTakesAtLeast$: Observable<T> = forkJoin(tappedTask$, timer(minWaitTime)).pipe(
+        map(r => r[0])
     );
 
-    const polledRequest$ = requestTakesAtLeast$.pipe(
-        mergeMap(response => {
+    const polledRequest$: Observable<T> = requestTakesAtLeast$.pipe(
+        mergeMap((response: any) => {
             if (predicate(response)) {
                 // console.log(`obtained correct answer ${response}`);
                 return of(response);
@@ -49,7 +48,7 @@ export function delayedRetry(delayMs: number, maxRetries = 3) {
             retryWhen((error$: Observable<any>) => {
                 return error$.pipe(
                     delay(delayMs), // <- in any case, first wait a little while ...
-                    mergeMap(error => {
+                    mergeMap((error: any) => {
                         if (error.status && error.status === 400) {
                             // In case of a server error, repeating won't help.
                             throw error;

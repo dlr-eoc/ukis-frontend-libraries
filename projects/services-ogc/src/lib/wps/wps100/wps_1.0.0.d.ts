@@ -94,7 +94,7 @@ export interface ValuesReferenceType {
 
 export interface ComplexDataType {
    otherAttributes?: any;
-   content?: any[]; // string[]; // <-- should actually be any, but jsonix disagrees...
+   content: any[]; // string[]; // <-- should actually be any, but jsonix disagrees...
    mimeType?: string;
    encoding?: string;
    schema?: string;

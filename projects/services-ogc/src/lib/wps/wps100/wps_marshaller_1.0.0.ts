@@ -1,4 +1,4 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsBboxValue, WpsData, WpsDataDescription, WpsState } from '../wps_datatypes';
+import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsBboxValue, WpsData, WpsDataDescription, WpsState, WpsDataFormat } from '../wps_datatypes';
 import {
     WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType,
     InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType,
@@ -29,7 +29,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
         return out;
     }
 
-    unmarshalExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string,
+    unmarshalSyncExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string,
         inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[] {
 
         const out: WpsResult[] = [];
@@ -47,27 +47,24 @@ export class WpsMarshaller100 implements WpsMarshaller {
             for (const output of responseJson.value.processOutputs.output) {
                 const isReference = output.reference ? true : false;
 
-                let datatype;
+                let datatype: 'literal' | 'complex' | 'bbox' | 'status' | 'error';
                 let data;
-                let format;
-                if (isReference) {
+                let format: WpsDataFormat | undefined;
+                if (output.reference) {
                     datatype = 'complex';
-                    // @ts-ignore
                     data = output.reference.href || null;
-                    // @ts-ignore
-                    format = output.reference.mimeType;
+                    format = output.reference.mimeType as WpsDataFormat;
                 } else {
                     if (output.data && output.data.literalData) {
                         datatype = 'literal';
-                        format = output.data.literalData.dataType;
-                    }
-                    // @ts-ignore
-                    else if (output.data.complexData) {
+                        format = output.data.literalData.dataType as WpsDataFormat;
+                    } else if (output.data && output.data.complexData) {
                         datatype = 'complex';
-                        // @ts-ignore
-                        format = output.data.complexData.mimeType;
+                        format = output.data.complexData.mimeType as WpsDataFormat;
+                    } else {
+                        datatype = 'bbox';
+                        format = undefined;
                     }
-                    else datatype = 'bbox';
                     // @ts-ignore
                     data = this.unmarshalOutputData(output.data);
                 }
@@ -120,25 +117,29 @@ export class WpsMarshaller100 implements WpsMarshaller {
         throw new Error(`Not yet implemented: ${data}`);
     }
 
+    unmarshalAsyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsDataDescription[]): WpsState {
+        return this.unmarshalGetStateResponse(responseJson, url, processId, inputs, outputDescriptions);
+    }
+
     unmarshalGetStateResponse(responseJson: any, serverUrl: string, processId: string,
-        inputs: WpsData[], outputDescriptions: WpsDataDescription[]): WpsData[] | WpsState {
+        inputs: WpsData[], outputDescriptions: WpsDataDescription[]): WpsState {
 
         const response: ExecuteResponse = responseJson.value;
-
-        if (response.processOutputs && response.processOutputs.output) {
-            return this.unmarshalExecuteResponse(responseJson, serverUrl, processId, inputs, outputDescriptions);
-        }
-
+        
         const status = response.status.processSucceeded ? 'Succeeded' :
-                        response.status.processAccepted ? 'Accepted' :
-                        response.status.processStarted ? 'Running' :
-                        response.status.processFailed ? 'Failed' :
-                        'Failed';
-
+        response.status.processAccepted ? 'Accepted' :
+        response.status.processStarted ? 'Running' :
+        response.status.processFailed ? 'Failed' :
+        'Failed';
+        
         const state: WpsState = {
             status: status,
-            statusLocation: response.statusLocation
+            statusLocation: response.statusLocation,
         };
+
+        if (response.processOutputs && response.processOutputs.output) {
+            state.results = this.unmarshalSyncExecuteResponse(responseJson, serverUrl, processId, inputs, outputDescriptions);
+        }
 
         return state;
     }
@@ -282,6 +283,8 @@ export class WpsMarshaller100 implements WpsMarshaller {
                         };
                 }
                 break;
+            default:
+                throw Error(`This input is of type ${input.description.type}. We can only marshal input of type literal, bbox or complex.`);
         }
         return data;
     }
