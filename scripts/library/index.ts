@@ -404,9 +404,9 @@ function projectsAndDependencies(silent = false, showPeer = false) {
 |----------------------------------------------------------
 |version:  ${p.version}
 |
-|dependencies:${(p.dependencies) ? p.dependencies.split(',').map(d => `\n    |   - ${d}`) : ''}
+|dependencies:${(p.dependencies) ? p.dependencies.split(',').map(d => `\n|   - ${d}`) : ''}
 |
-|peerDependencies:${(p.peerDependencies) ? p.peerDependencies.split(',').map(d => `\n    |   - ${d}`) : ''}`;
+|peerDependencies:${(p.peerDependencies) ? p.peerDependencies.split(',').map(d => `\n|   - ${d}`) : ''}`;
         console.log(str)
       });
     } else {
