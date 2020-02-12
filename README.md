@@ -5,6 +5,8 @@
 ![Node.js Package](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/Node.js%20Package/badge.svg?event=registry_package)
 
 
+
+
 This repository hosts all libraries that are imported into project specific UKIS Frontend Applications. 
 It uses [angular](https://angular.io/) and the [Clarity Design System](https://vmware.github.io/clarity/).
 The dependencies to the used modules are defined in package.json and are stored in node_modules.  
@@ -26,13 +28,16 @@ This repository contains the following modules as angular libraries:
 - [services-util-store](projects/services-util-store/README.md)
 
 
+
+
 ## To use the libraries in your project specific application, you can either use the packaged npm modules or include this repository.
 
 - Use the frontend-libraries as npm modules (GitHub Packages) (Recommended)
 - or use the modules in typescript source via path mapping [see Developing libraries and frontend side by side](DEVELOPMENT.md)
 
 
-### How to install Packges from GitHub
+**How to install Packges from GitHub**
+
 1. [Create a personal access token on your github account](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with (read:packages, repo, write:packages)
 
 2. Authenticate by logging in to npm, use the npm login
@@ -40,6 +45,8 @@ This repository contains the following modules as angular libraries:
 3. Create a [.npmrc file](https://docs.npmjs.com/configuring-npm/npmrc.html) in your folder or use --registry=https://npm.pkg.github.com on npm install
 
 for more information see [configuring-npm-for-use-with-github-packages](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages)
+
+
 
 
 ## Getting Started (setup a new UKIS-Client)
@@ -60,6 +67,8 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 4. [see clarity get-started to use the components](https://clarity.design/documentation/get-started)
 
 
+
+
 ## Licenses
 
 This software is licensed under the [Apache 2.0 License](LICENSE).
@@ -67,9 +76,13 @@ This software is licensed under the [Apache 2.0 License](LICENSE).
 (c) 2020 German Aerospace Center (DLR); German Remote Sensing Data Center; Department: Geo-Risks and Civil Security
 
 
+
+
 ## Changelog
 
 [Learn about the latest changes and features](CHANGELOG.md).
+
+
 
 
 ## Contributing
