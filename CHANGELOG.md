@@ -1,28 +1,23 @@
 # [7.0.0]() (2020-xx-xx) (Opensourcing)
 
 
-### Changes
- - added LICENSE
-   - People have asked if apache2 requires us to add a license header to all source-files. It does *not* (https://www.apache.org/dev/apply-license.html): ``` Each original source document (code and documentation, but excluding the LICENSE and NOTICE files) SHOULD include a short license header at the top. ```.  
- - added NOTICE
-
- - Added CONTRIBUTING.md
-   - A modified copy of Angular's https://raw.githubusercontent.com/angular/angular/master/CONTRIBUTING.md
-   - Removed the section on commit-message-rules
-   - Removed the section on questions - it refered users to stackoverflow/tagged/angular. So far, there is no tag 'UKIS' on stackoverflow :)
-   - Removed the reference on issue-templates - we don't have any such thing yet. 
- - added utility oss-attribution-generator and included job in package.json. When compiling this code, 3rd party licenses kick in, which require us to provide attribtion-information. 
-
-
-
-
-
-
 ### Breaking Changes
 * **@ukis/services-layers:** getLayerOrGroupById() - is returning a Layer | LayerGroup | null - not a array anymore! 
 
 
 ### Changes
+
+* added LICENSE
+   - People have asked if apache2 requires us to add a license header to all source-files. It does *not* (https://www.apache.org/dev/apply-license.html): ``` Each original source document (code and documentation, but excluding the LICENSE and NOTICE files) SHOULD include a short license header at the top. ```.  
+* added NOTICE
+
+* Added CONTRIBUTING.md
+   - A modified copy of Angular's https://raw.githubusercontent.com/angular/angular/master/CONTRIBUTING.md
+   - Removed the section on commit-message-rules
+   - Removed the section on questions - it refered users to stackoverflow/tagged/angular. So far, there is no tag 'UKIS' on stackoverflow :)
+   - Removed the reference on issue-templates - we don't have any such thing yet. 
+
+
 * **@ukis/services-ogc:** made wps-datatypes available via public api.
 
 * **@ukis/services-layers:** 
