@@ -281,7 +281,8 @@ function setVersionsOfProjects(useDistPath = false) {
 function listAllProjects() {
     const projectsPaths = getProjects();
     const list = projectsPaths.reduce((p, n) => {
-        return p + '- ' + n.name + '\n';
+        const relPath = n.path.split(PATH.join(CWD, '/'))[1].replace(/\\/g, '/');
+        return p + '- ' + `[${n.name}](${relPath}/README.md)` + '\n';
     }, '');
     console.log(list);
 }
@@ -317,7 +318,7 @@ function projectsAndDependencies(silent = false, showPeer = false) {
             Object.keys(projectPackage.dependencies).forEach((key) => {
                 const dep = projectPackage.dependencies[key];
                 if (key.indexOf(UKIS_SCOPE) !== -1 && dep !== LIBRARIES_PLACEHOLDER) {
-                    const error = `version of dependency: ${key} in project: ${projectPackage.name} 
+                    const error = `version of dependency: ${key} in project: ${projectPackage.name}
                     must be ${LIBRARIES_PLACEHOLDER} for build!`;
                     if (!silent) {
                         errors.push({ project: projectPackage.name, error: error });
