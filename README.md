@@ -25,9 +25,9 @@ This repository contains the following modules as angular libraries:
 you can check this with the script `node scripts/library/index.js -l`;
 to check the dependencies of the libraries use `node scripts/library/index.js -d` or `node scripts/library/index.js --depsPeer`
 
-## To use the libraries in your project specific application, you can ather use the npm modules or include this repository.
+## To use the libraries in your project specific application, you can either use the packaged npm modules or include this repository.
 - Use the frontend-libraries as npm modules 
-- or Use the typescript modules for frontend-libraries instead of npm modules
+- or use the typescript modules for frontend-libraries instead of npm modules
 - [see Developing libraries and frontend side by side](DEVELOPMENT.md)
 
 
