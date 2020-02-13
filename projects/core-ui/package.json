@@ -1,11 +1,7 @@
 {
   "name": "@ukis/core-ui",
   "version": "0.0.0-PLACEHOLDER",
-<<<<<<< HEAD
-  "main": "src/public_api",
-=======
   "main": "src/public-api",
->>>>>>> clean-up
   "license": "Apache-2.0",
   "schematics": "./schematics/collection.json",
   "scripts": {
