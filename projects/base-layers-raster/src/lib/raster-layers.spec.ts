@@ -1,10 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
+
 import { RasterLayer } from '@ukis/services-layers';
 
 import { osm, google_earth, google_maps, google_hybrid, esri_grey_canvas, esri_nav_charts, esri_ocean_imagery, esri_world_imagery, eoc_litemap, open_sea_map } from './raster-layers';
 
-describe('Base Layers', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe('BaseLayersRasterComponent', () => {
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({})
+      .compileComponents();
+  }));
+
+  beforeEach(() => { });
 
   it('osm should be instanceof of a UKIS RasterLayer', () => {
     const testLayer = new osm();
@@ -55,5 +61,4 @@ describe('Base Layers', () => {
     const testLayer = new open_sea_map();
     expect(testLayer instanceof RasterLayer).toBeTruthy();
   });
-
 });

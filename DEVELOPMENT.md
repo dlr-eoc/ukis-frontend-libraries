@@ -4,6 +4,7 @@
 - Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` . 
 - Check if [Node.js](https://nodejs.org/) and npm are installed.
 - Move into project: `cd frontend-libraries`
+- Create a new branch for your feature specific changes based on master: e.g. `git checkout -b feature-XXX`
 - Install dependencies: `npm install`
 
 ## Note
@@ -19,12 +20,12 @@ run ``ng generate library < name > --prefix ukis``
 
 - rename lib package: "name": "@ukis/< name >"
 - set version to: "version": "0.0.0-PLACEHOLDER"
-- set lib package: "main": "src/public_api",
+- set lib package: "main": "src/public-api",
 - add "license": "Apache-2.0" or a compatible licenses
 - add path mapping to paths in the main tsconfig.json
 
 ### 2. Add and create Files
-- create components and or services in the lib with the cli 
+- create components and or services in the lib with the cli
 - add missing exports to public_api.ts
 
 ### 3. Add Dependencies
@@ -33,28 +34,28 @@ run ``ng generate library < name > --prefix ukis``
 
 ---
 
-
-If your project depends on a package that is already listed in [frontend-libraries/package.json](https://github.com/dlr-eoc/frontend-libraries/package.json), ...
-
- - add that package as a peer dependency to your project-specific package.json. Use a version-placeholder (`0.0.0-<libname>-PLACEHOLDER`) for those peer dependencies. Example: 
+If your project depends on a package that is already listed in [frontend-libraries/package.json](https://github.com/dlr-eoc/frontend-libraries/package.json)
+ - add that package as a peer dependency to your project-specific package.json. Use the version-placeholder (`0.0.0-PLACEHOLDER-VENDOR`) for those peer dependencies. If you use a library then use the version-placeholder (`0.0.0-PLACEHOLDER`)  Example: 
     ```
         // package.json
         // ...
         "peerDependencies": {
-            "@angular/common": "0.0.0-NG-PLACEHOLDER",
-            "@angular/core": "0.0.0-NG-PLACEHOLDER",
-            "@angular/cdk": "0.0.0-ngcdk-PLACEHOLDER",
-            "@clr/angular": "0.0.0-CLR-PLACEHOLDER",
-            "@clr/icons": "0.0.0-CLR-PLACEHOLDER",
-            "rxjs": "0.0.0-rxjs-PLACEHOLDER",
-            "md5": "0.0.0-md5-PLACEHOLDER",
-            "core-js": "0.0.0-corejs-PLACEHOLDER",
-            "zone.js": "0.0.0-zonejs-PLACEHOLDER"
+            "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
+            "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
+            "@angular/cdk": "0.0.0-PLACEHOLDER-VENDOR",
+            "@clr/angular": "0.0.0-PLACEHOLDER-VENDOR",
+            "@clr/icons": "0.0.0-PLACEHOLDER-VENDOR",
+            "rxjs": "0.0.0-PLACEHOLDER-VENDOR",
+            "md5": "0.0.0-PLACEHOLDER-VENDOR"
+        },
+        "dependencies":{
+          "@ukis/services-layers": "0.0.0-PLACEHOLDER"
         }
         // ...
     ```
-   This placeholder gets replaced with the versions of the main package.json on publish!
+   This placeholder gets replaced with the versions of the main package.json on publish! [see scripts/library (setVersionsOfProjects)](scripts\library\index.ts)
  - list them in your project-specific ng-package.json as whitelistedNonPeerDependencies
+
 
 
 ### 4. Test your library
@@ -126,4 +127,3 @@ Then executing `bash frontend-libraries/buildAndLink.sh services-owc-json projec
 ### Writing documentation for compodoc
 
 Compodoc use Typescript AST parser and it's internal APIs, so the comments have to be JSDoc comments. 
-

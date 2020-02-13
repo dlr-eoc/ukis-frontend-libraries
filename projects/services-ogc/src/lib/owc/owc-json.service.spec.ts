@@ -198,10 +198,10 @@ describe('OwcJsonService: writing data into owc', () => {
   it('#getLayers should properly restore a selection of layers from owc format created with #generateOwsContextFrom', (done) => {
     const service: OwcJsonService = TestBed.get(OwcJsonService);
     const layersService: LayersService = TestBed.get(LayersService);
-    const osm_layer = new eoc_litemap(<any>{
+    const osm_layer = new eoc_litemap({
       visible: true,
       legendImg: null
-    });
+    } as any);
     layersService.addLayer(osm_layer, 'Baselayers');
     layersService.getBaseLayers().subscribe(baselayers => {
       const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);

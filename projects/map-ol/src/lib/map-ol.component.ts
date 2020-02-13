@@ -122,12 +122,14 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   ngOnDestroy() {
     this.subs.forEach(sub => sub.unsubscribe());
-    this.map.un('moveend', this.mapOnMoveend);
-    this.map.un('click', this.mapOnClick);
-    this.map.un('dblclick', this.mapOnDclick);
-    this.map.getInteractions().forEach((i) => {
-      this.map.removeInteraction(i);
-    });
+    if (this.map) {
+      this.map.un('moveend', this.mapOnMoveend);
+      this.map.un('click', this.mapOnClick);
+      this.map.un('dblclick', this.mapOnDclick);
+      this.map.getInteractions().forEach((i) => {
+        this.map.removeInteraction(i);
+      });
+    }
   }
 
   private addUpdateLayers(layers: Layer[], type: Tgroupfiltertype, layersunderneath: Array<Tgroupfiltertype>) {

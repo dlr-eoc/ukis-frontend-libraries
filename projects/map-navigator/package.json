@@ -1,26 +1,29 @@
 {
   "name": "@ukis/map-navigator",
   "version": "0.0.0-PLACEHOLDER",
+<<<<<<< HEAD
   "main": "src/public_api",
+=======
+  "main": "src/public-api",
+>>>>>>> clean-up
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@angular/common": "0.0.0-NG-PLACEHOLDER",
-    "@angular/core": "0.0.0-NG-PLACEHOLDER",
-    "@angular/forms": "0.0.0-NG-PLACEHOLDER",
-    "@clr/angular": "0.0.0-CLR-PLACEHOLDER",
-    "@clr/icons": "0.0.0-CLR-PLACEHOLDER",
-    "@clr/ui": "0.0.0-CLR-PLACEHOLDER",
-    "ol": "^6.0.1",
-    "proj4": "^2.6.0",
-    "rxjs": "0.0.0-rxjs-PLACEHOLDER"
+    "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/forms": "0.0.0-PLACEHOLDER-VENDOR",
+    "@clr/angular": "0.0.0-PLACEHOLDER-VENDOR",
+    "@clr/icons": "0.0.0-PLACEHOLDER-VENDOR",
+    "@clr/ui": "0.0.0-PLACEHOLDER-VENDOR",
+    "ol": "0.0.0-PLACEHOLDER-VENDOR",
+    "proj4": "0.0.0-PLACEHOLDER-VENDOR",
+    "rxjs": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "dependencies": {
     "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
     "@ukis/map-ol": "0.0.0-PLACEHOLDER"
   },
   "devDependencies": {
-    "core-js": "0.0.0-corejs-PLACEHOLDER",
-    "zone.js": "0.0.0-zonejs-PLACEHOLDER",
-    "@angular/platform-browser-dynamic": "0.0.0-NG-PLACEHOLDER"
+    "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"
   }
 }

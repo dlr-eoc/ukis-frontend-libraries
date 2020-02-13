@@ -12,7 +12,6 @@
   ],
   "include": [
     "**/*.spec.ts",
-    "**/*.d.ts",
-    "../../node_modules/@ukis/datatypes/projects/layers/src/lib/Layers.ts"
+    "**/*.d.ts"
   ]
 }

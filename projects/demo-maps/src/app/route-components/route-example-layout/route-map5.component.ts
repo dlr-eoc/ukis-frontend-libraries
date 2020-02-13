@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-route-map5',
   templateUrl: './route-map5.component.html',
-  styleUrls: ['./route-map5.component.css'],
+  styleUrls: ['./route-map5.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
@@ -41,11 +41,11 @@ export class RouteMap5Component implements OnInit, OnDestroy {
   }
 
   addBaseLayers() {
-    const eoc_litemap_layer = new eoc_litemap(<any>{
+    const eoc_litemap_layer = new eoc_litemap({
       legendImg: null,
       id: 'eoc_litemap_base',
       visible: true
-    });
+    } as any);
 
     // not working in WGS84
     const world_relief = new WmtsLayer({
@@ -272,16 +272,16 @@ export class RouteMap5Component implements OnInit, OnDestroy {
 
     const esri_Image_layer = new esri_world_imagery();
 
-    const esri_grey_layer = new esri_grey_canvas(<any>{
+    const esri_grey_layer = new esri_grey_canvas({
       removable: true,
       legendImg: null,
-    });
+    } as any);
 
-    const esri_ocean_imagery_layer = new esri_ocean_imagery(<any>{
+    const esri_ocean_imagery_layer = new esri_ocean_imagery({
       removable: true,
       legendImg: null,
       id: 'esri_ocean_base'
-    });
+    } as any);
 
     const osmLayer = new osm();
     /** add a Group of layers */

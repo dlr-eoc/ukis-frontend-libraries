@@ -7,9 +7,8 @@ let layer: Layer, rasterlayer: RasterLayer, vectorlayer: VectorLayer, customlaye
 
 
 describe('Layer Types', () => {
-    beforeEach(() => {
+    beforeEach(async(() => {
         TestBed.configureTestingModule({});
-
         rasterlayer = new RasterLayer({
             id: 'ID-raster',
             name: 'raster',
@@ -36,7 +35,7 @@ describe('Layer Types', () => {
             name: 'custom',
             custom_layer: {}
         });
-    });
+    }));
 
     it('should created a default Layer with options merged', () => {
         const id = 'ID-layer',

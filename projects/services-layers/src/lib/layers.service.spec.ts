@@ -21,7 +21,7 @@ let layer1: Layer,
 
 
 describe('LayersService', () => {
-  beforeEach(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({});
     // create test layers
     layer1 = new RasterLayer({
@@ -130,7 +130,7 @@ describe('LayersService', () => {
 
     const service: LayersService = TestBed.get(LayersService);
     service.setLayerGroups([]);
-  });
+  }));
 
   it('should be created', () => {
     const service: LayersService = TestBed.get(LayersService);

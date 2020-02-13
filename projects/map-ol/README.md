@@ -46,18 +46,18 @@ ngOnInit() {
 
 addBaselayers() {
     const layers = [
-        new osm(<any>{
+        new osm({
         visible: false,
         legendImg: null
-        }),
-        new eoc_litemap(<any>{
+        } as any),
+        new eoc_litemap({
         visible: true,
         legendImg: null
-        }),
-        new esri_world_imagery(<any>{
+        } as any),
+        new esri_world_imagery({
         visible: false,
         legendImg: null
-        })
+        } as any)
     ];
 
     layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));

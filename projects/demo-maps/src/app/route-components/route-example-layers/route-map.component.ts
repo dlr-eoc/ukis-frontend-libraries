@@ -7,7 +7,7 @@ import { MapOlService } from '@ukis/map-ol';
 @Component({
   selector: 'app-route-map',
   templateUrl: './route-map.component.html',
-  styleUrls: ['./route-map.component.css'],
+  styleUrls: ['./route-map.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
@@ -39,11 +39,11 @@ export class RouteMapComponent implements OnInit {
   }
 
   addBaseLayers() {
-    const eoc_litemap_layer = new eoc_litemap(<any>{
+    const eoc_litemap_layer = new eoc_litemap({
       legendImg: null,
       id: 'eoc_litemap_base',
       visible: true
-    });
+    } as any);
 
     // not working in WGS84 because 
     const world_relief = new WmtsLayer({
@@ -65,11 +65,11 @@ export class RouteMapComponent implements OnInit {
       legendImg: ''
     });
 
-    const osmLayer = new osm(<any>{
+    const osmLayer = new osm({
       legendImg: null,
       id: 'osm_base',
       visible: false
-    });
+    } as any);
 
     const layers = [eoc_litemap_layer, world_relief, osmLayer];
 
@@ -277,16 +277,16 @@ export class RouteMapComponent implements OnInit {
     const esri_Image_layer = new esri_world_imagery();
     esri_Image_layer.legendImg = null;
 
-    const esri_grey_layer = new esri_grey_canvas(<any>{
+    const esri_grey_layer = new esri_grey_canvas({
       removable: true,
       legendImg: null,
-    });
+    } as any);
 
-    const esri_ocean_imagery_layer = new esri_ocean_imagery(<any>{
+    const esri_ocean_imagery_layer = new esri_ocean_imagery({
       removable: true,
       legendImg: null,
       id: 'esri_ocean_base'
-    });
+    } as any);
 
     const osmLayer = new osm();
     osmLayer.legendImg = 'assets/osm.png';

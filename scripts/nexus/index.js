@@ -3,14 +3,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const PATH = require("path");
-const replace = require("replace");
 const FS = require("fs");
 const child_process_1 = require("child_process");
 const readline = require("readline");
+const library_1 = require("../library");
 function run() {
     const CWD = process.cwd();
-    const REGISTRY = 'http://hofer.eoc.dlr.de/nexus/content/repositories/npm-ukis/';
-    let REGISTRY_USER = 'jenkins';
+    let REGISTRY = '';
+    let REGISTRY_USER = '';
     let REGISTRY_USER_PASSWORD = '';
     let PKG_DIR = '';
     let PKG_VERSION = '';
@@ -22,12 +22,20 @@ function run() {
         -h, --help              Print this message.
         -p, --path              Path to the build package. (required)
             --pv                Version for the package to publish. (required)
+        -r  --registry
         `);
     }
     const args = require('minimist')(process.argv.slice(2));
     // console.dir(args);
     if (Object.keys(args).length <= 1 || args.h || args.help) {
         showHelp();
+    }
+    if (args.r || args.registry) {
+        REGISTRY = args.r || args.registry;
+    }
+    else {
+        console.log(`You have to provide the a registry to publish the package!`);
+        return;
     }
     if (args.p || args.path) {
         PKG_DIR = args.p || args.path; // PATH.join(CWD, 'package.json');
@@ -71,8 +79,8 @@ function publishPackage(REGISTRY_USER, REGISTRY, NPM_AUTH_HASH, CWD, PKG_DIR, PK
     _auth = ${NPM_AUTH_HASH}
     loglevel = "verbose"`;
     const packagePath = PATH.join(CWD, PKG_DIR);
-    const _path = PATH.join(packagePath, '.npmrc');
-    FS.writeFileSync(_path, npmrc);
+    const npmrcpath = PATH.join(packagePath, '.npmrc');
+    FS.writeFileSync(npmrcpath, npmrc);
     setVersion(PKG_VERSION, packagePath);
     console.log(`Publish package from '${packagePath}' with version '${PKG_VERSION}' to '${REGISTRY}'`);
     child_process_1.exec(`cd ${packagePath} &&  npm publish`, (error, stdout, stderr) => {
@@ -119,18 +127,7 @@ function getInput(question, obscurer) {
     });
 }
 function setVersion(version, packagePath) {
-    const _package = require(PATH.join(packagePath, 'package.json'));
-    const UKIS_VERSION_PLACEHOLDER = '0.0.0-PLACEHOLDER';
-    const NG_VERSION_PLACEHOLDER = '0.0.0-NG-PLACEHOLDER';
-    if (_package.version === UKIS_VERSION_PLACEHOLDER) {
-        replace({
-            regex: UKIS_VERSION_PLACEHOLDER,
-            replacement: version,
-            paths: [packagePath],
-            recursive: true,
-            silent: true,
-            include: 'package.json'
-        });
-    }
+    const path = require(PATH.join(packagePath, 'package.json'));
+    library_1.setVersionsforDependencies([path]);
 }
 run();

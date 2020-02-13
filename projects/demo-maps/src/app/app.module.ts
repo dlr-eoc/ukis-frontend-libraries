@@ -1,17 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HeaderComponent } from './components/header/header.component';
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
+import { AlertService } from './components/global-alert/alert.service';
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
+import { ProgressService } from './components/global-progress/progress.service';
+
 import { MapOlModule } from '@ukis/map-ol';
 import { LayerControlModule } from '@ukis/layer-control';
 import { MapNavigatorModule } from '@ukis/map-navigator';
-
-import { HeaderComponent } from './components/header/header.component';
-import { GlobalFooterComponent } from './components/global-footer/global-footer.component';
-import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
-import { ProgressService } from './components/global-progress/progress.service';
 
 import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
 import { RouteMap2Component } from './route-components/route-example-projection/route-map2.component';
@@ -20,57 +22,13 @@ import { RouteMap4Component } from './route-components/route-example-custom-laye
 import { RouteMap5Component } from './route-components/route-example-layout/route-map5.component';
 import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
 
-
-
-export const appRoutes: Routes = [
-  { path: '', redirectTo: 'example-layers', pathMatch: 'full', },
-  {
-    path: 'example-layers', component: RouteMapComponent,
-    data: {
-      title: 'Layers'
-    }
-  },
-  {
-    path: 'example-projection', component: RouteMap2Component,
-    data: {
-      title: 'Projection'
-    }
-  },
-  {
-    path: 'example-events', component: RouteMap3Component,
-    data: {
-      title: 'Events'
-    }
-  },
-  {
-    path: 'example-custom-layers', component: RouteMap4Component,
-    data: {
-      title: 'Custom Layers'
-    }
-  },
-  {
-    path: 'example-layout', component: RouteMap5Component,
-    data: {
-      title: 'Two Vertical-Nav Layout'
-    }
-  },
-  {
-    path: 'example-layer-style',
-    component: RouteMap6Component,
-    data: {
-      title: 'Switching Layer-Style'
-    }
-  }
-];
-
-
 @NgModule({
   declarations: [
     AppComponent,
-    RouteMapComponent,
     HeaderComponent,
-    GlobalFooterComponent,
+    GlobalAlertComponent,
     GlobalProgressComponent,
+    RouteMapComponent,
     RouteMap2Component,
     RouteMap3Component,
     RouteMap4Component,
@@ -79,14 +37,14 @@ export const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes),
+    AppRoutingModule,
     ClarityModule,
     BrowserAnimationsModule,
     MapOlModule,
     LayerControlModule,
     MapNavigatorModule
   ],
-  providers: [ProgressService],
+  providers: [AlertService, ProgressService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,14 @@
+<clr-main-container [ngClass]="{'floating':ui.floating}">
+    <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
+    <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+
+    <ukis-header [ukis-title]="title">
+        <a *ngIf="!userService.isloggedIn()" routerLink="/login" routerLinkActive="active"
+            class="nav-link nav-text header-nav-el">Login</a>
+        <a *ngIf="userService.isloggedIn()" routerLink="/user" routerLinkActive="active"
+            class="nav-link nav-text header-nav-el">User</a>
+        <a routerLink="/map" routerLinkActive="active" class="nav-link nav-text header-nav-el">Map</a>
+
+    </ukis-header>
+    <router-outlet></router-outlet>
+</clr-main-container>

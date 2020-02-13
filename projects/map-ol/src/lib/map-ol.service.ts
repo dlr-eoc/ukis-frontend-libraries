@@ -702,7 +702,7 @@ export class MapOlService {
       _source.set('wrapX', l.continuousWorld);
     }
 
-    const _layeroptions = <any>{
+    const _layeroptions = {
       type: 'geojson',
       name: l.name,
       id: l.id,
@@ -711,7 +711,7 @@ export class MapOlService {
       opacity: l.opacity || 1,
       zIndex: 1,
       source: _source
-    };
+    } as any;
 
     if (l.popup) {
       _layeroptions.popup = l.popup;
@@ -784,7 +784,7 @@ export class MapOlService {
         _source.set('wrapX', l.continuousWorld);
       }
 
-      const _layeroptions = <any>{
+      const _layeroptions = {
         type: 'custom',
         name: l.name,
         id: l.id,
@@ -792,7 +792,7 @@ export class MapOlService {
         legendImg: l.legendImg,
         opacity: l.opacity || 1,
         zIndex: 1,
-      };
+      } as any;
 
       if (l.maxResolution) {
         _layeroptions.maxResolution = l.maxResolution;

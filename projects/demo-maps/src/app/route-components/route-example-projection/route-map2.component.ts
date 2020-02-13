@@ -11,7 +11,7 @@ import proj4 from 'proj4';
 @Component({
   selector: 'app-route-map2',
   templateUrl: './route-map2.component.html',
-  styleUrls: ['./route-map2.component.css'],
+  styleUrls: ['./route-map2.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
@@ -51,8 +51,8 @@ export class RouteMap2Component implements OnInit {
 
     /** use the MapOlService for directly accessing the ol/Map or ol/View or bind popups to an event, set projections... */
     this.mapSvc.setProjection(projection);
-    //this.mapSvc.setExtent(this.projExtent)
-    //this.mapSvc.setZoom(3)
+    // this.mapSvc.setExtent(this.projExtent)
+    // this.mapSvc.setZoom(3)
 
     this.addOverlays();
 
@@ -61,12 +61,12 @@ export class RouteMap2Component implements OnInit {
   }
 
   addOverlays() {
-    const eoc_litemap_layer = new eoc_litemap(<any>{
+    const eoc_litemap_layer = new eoc_litemap({
       removable: true,
       legendImg: null,
       visible: true,
       id: 'eoc_litemap_base'
-    });
+    } as any);
 
     const guf_layer = new RasterLayer({
       type: 'wms',

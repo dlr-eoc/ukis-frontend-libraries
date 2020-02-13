@@ -61,6 +61,8 @@ export interface WpsState {
     jobID?: string;
     /** WPS 1.0 only */
     statusLocation?: string;
+    /** WPS 1.0 only: a success-state already contains the results */
+    results?: WpsData[];
 }
 
 export function isWpsState(obj: object): obj is WpsState {
@@ -84,13 +86,14 @@ export interface WpsMarshaller {
     dismissUrl(serverUrl: string, processId: string, jobId: string): string;
     getCapabilitiesUrl(baseurl: string): string;
 
-    unmarshalCapabilities(capabilitiesJson: any): WpsCapability[];
-    unmarshalExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[];
-    unmarshalGetStateResponse(jsonResponse: any, serverUrl: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsData[] | WpsState;
-    unmarshalDismissResponse(jsonResponse: any, serverUrl: string, processId: string): WpsState;
-
     marshalExecBody(processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[], async: boolean): any;
     marshallGetStatusBody(serverUrl: string, processId: string, statusId: string): any;
     marshallGetResultBody(serverUrl: string, processId: string, jobID: string): any;
     marshalDismissBody(jobId: string): any;
+
+    unmarshalCapabilities(capabilitiesJson: any): WpsCapability[];
+    unmarshalSyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[];
+    unmarshalAsyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsState;
+    unmarshalGetStateResponse(jsonResponse: any, serverUrl: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsState;
+    unmarshalDismissResponse(jsonResponse: any, serverUrl: string, processId: string): WpsState;
 }

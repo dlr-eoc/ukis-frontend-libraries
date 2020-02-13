@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { WpsClient } from './wpsclient';
 import { HttpClient, HttpXhrBackend, XhrFactory, HttpRequest } from '@angular/common/http';
-import { pollEveryUntil } from './utils/polling';
+import { pollUntil } from './utils/polling';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { tap, map, delay, expand, takeUntil, take } from 'rxjs/operators';
 import { forkJoin, of, Observable, empty, interval, timer } from 'rxjs';
@@ -24,7 +24,7 @@ class PollableServer {
 
     private callCount = 0;
 
-    constructor(private maxCallCount: number, private waitResponse: string, private finalResponse: string) {}
+    constructor(private maxCallCount: number, private waitResponse: string, private finalResponse: string) { }
 
     public call(): Observable<string> {
         return of('1').pipe(
@@ -48,11 +48,11 @@ class FakeWpsServer {
     constructor(
         private network: HttpTestingController,
         private url: string) {
-            const requests = this.network.match((req: HttpRequest<any>) => {
-                return req.url === this.url;
-            });
+        const requests = this.network.match((req: HttpRequest<any>) => {
+            return req.url === this.url;
+        });
 
-            this.handle(requests);
+        this.handle(requests);
     }
 
     private handle(requests: TestRequest[]) {
@@ -98,7 +98,7 @@ function createRequestAcceptedResponse(serverUrl: string, pId: string): string {
         </wps:Status>
         </wps:ExecuteResponse>
         `;
-    }
+}
 
 function createWaitResponse(serverUrl: string, pId: string): string {
     const currentStateUrl = `${serverUrl}?retrieveState`;
@@ -161,17 +161,17 @@ describe(`Testing polling funcitonality`, () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule],
-          providers: [HttpClient]
+            imports: [HttpClientTestingModule],
+            providers: [HttpClient]
         });
     });
 
-    it('#pollEveryUntil should work fine with multiple poll-requests', (done) => {
+    it('#pollUntil should work fine with multiple poll-requests', (done) => {
         const server = new PollableServer(2, 'ongoing...', 'finished!');
 
         const baseRequest$ = server.call();
 
-        const polledRequest$ = pollEveryUntil(baseRequest$,
+        const polledRequest$ = pollUntil(baseRequest$,
             (response) => response === 'finished!',
             (response) => console.log(`polling server. response: ${response} ...`),
             1000).pipe(
@@ -186,7 +186,7 @@ describe(`Testing polling funcitonality`, () => {
 
     }, 5000);
 
-    it('#pollEveryUntil should handle multithreading', (done) => {
+    it('#pollUntil should handle multithreading', (done) => {
         // prepare basic requests
         const server1 = new PollableServer(2, 'srv1: ongoing...', 'srv1: finished!');
         const server2 = new PollableServer(1, 'srv2: ongoing...', 'srv2: finished!');
@@ -194,26 +194,26 @@ describe(`Testing polling funcitonality`, () => {
         const secondRequest$ = server2.call();
 
         // wrap requests in a poll
-        const polledFirstRequest$ = pollEveryUntil(firstRequest$,
+        const polledFirstRequest$ = pollUntil(firstRequest$,
             (response) => response === 'srv1: finished!',
             (response) => console.log(`polling server 1. response: ${response} ...`),
             1000).pipe(
                 tap((response) => console.log(`first request received ${response}`))
             );
-        const polledSecondRequest$ = pollEveryUntil(secondRequest$,
-            (response) => response  === 'srv2: finished!',
+        const polledSecondRequest$ = pollUntil(secondRequest$,
+            (response) => response === 'srv2: finished!',
             (response) => console.log(`polling server 2. response: ${response} ...`),
             1200).pipe(
                 tap((response) => console.log(`second request received ${response}`))
             );
 
         // execute polled requests in parallel
-        forkJoin({
-            first: polledFirstRequest$,
-            second: polledSecondRequest$
-        }).subscribe((responses) => {
-            expect(responses.first  === 'srv1: finished!').toBeTruthy();
-            expect(responses.second  === 'srv2: finished!').toBeTruthy();
+        forkJoin(
+            polledFirstRequest$,
+            polledSecondRequest$
+        ).subscribe((responses) => {
+            expect(responses[0] === 'srv1: finished!').toBeTruthy();
+            expect(responses[1] === 'srv2: finished!').toBeTruthy();
             done();
         });
 
@@ -221,7 +221,7 @@ describe(`Testing polling funcitonality`, () => {
 
     it('#execAsync should work with multiple requests in parallel', (done) => {
         const mockHttpClient = TestBed.get(HttpClient);
-        const wpsClient: WpsClient = new WpsClient('1.0.0', mockHttpClient, false);
+        const wpsClient: WpsClient = new WpsClient('1.0.0', mockHttpClient);
         const httpMockServer: HttpTestingController = TestBed.get(HttpTestingController);
 
         const url1 = 'wpsserver1.com';
@@ -237,12 +237,12 @@ describe(`Testing polling funcitonality`, () => {
         const poll1$ = wpsClient.executeAsync(url1, pId1, inputs1, outputs1);
         const poll2$ = wpsClient.executeAsync(url2, pId2, inputs2, outputs2);
 
-        forkJoin({
-            p1: poll1$,
-            p2: poll2$
-        }).subscribe(r => {
-            expect(r.p1).toBeTruthy();
-            expect(r.p2).toBeTruthy();
+        forkJoin(
+            poll1$,
+            poll2$
+        ).subscribe(r => {
+            expect(r[0]).toBeTruthy();
+            expect(r[1]).toBeTruthy();
             done();
         });
 
@@ -270,7 +270,7 @@ if (runTestsWithLiveServer) {
     const versions: WpsVerion[] = ['1.0.0', '2.0.0'];
     for (const version of versions) {
         describe(`Testing wps-client version ${version} functionality`, () => {
-    
+
             it('testing unmarshaller', () => {
                 const xml = `
                 <wps:StatusInfo xmlns:ows="http://www.opengis.net/ows/2.0"
@@ -296,9 +296,9 @@ if (runTestsWithLiveServer) {
 
 
             it('get-capabilities should work', (done) => {
-                const testserver = 'http://geoprocessing.demo.52north.org/javaps/service';
+                const server = 'http://geoprocessing.demo.52north.org/javaps/service';
                 const cl = new WpsClient(version, httpClient);
-                const capas$ = cl.getCapabilities(testserver);
+                const capas$ = cl.getCapabilities(server);
                 capas$.subscribe(result => {
                     done();
                 });
@@ -316,7 +316,7 @@ if (runTestsWithLiveServer) {
                     type: 'complex',
                     format: 'application/vnd.geo+json'
                 },
-                value: {'type':'FeatureCollection','features':[{'type':'Feature','geometry':{'type':'Point','coordinates':[-72.3123,-33.0559]},'properties':{'preferredOriginID':'359112','preferredMagnitudeID':'359112','type':'earthquake','description.text':'stochastic','origin.publicID':'359112','origin.time.value':'69051-01-01T00:00:00.000000Z','origin.time.uncertainty':'nan','origin.depth.value':'32.15805','origin.depth.uncertainty':'nan','origin.creationInfo.value':'GFZ','originUncertainty.horizontalUncertainty':'nan','originUncertainty.minHorizontalUncertainty':'nan','originUncertainty.maxHorizontalUncertainty':'nan','originUncertainty.azimuthMaxHorizontalUncertainty':'nan','magnitude.publicID':'359112','magnitude.mag.value':'7.05','magnitude.mag.uncertainty':'nan','magnitude.type':'MW','magnitude.creationInfo.value':'GFZ','focalMechanism.publicID':'359112','focalMechanism.nodalPlanes.nodalPlane1.strike.value':'10.68754','focalMechanism.nodalPlanes.nodalPlane1.strike.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.dip.value':'16.93797','focalMechanism.nodalPlanes.nodalPlane1.dip.uncertainty':'nan','focalMechanism.nodalPlanes.nodalPlane1.rake.value':'90.0','focalMechanism.nodalPlanes.nodalPlane1.rake.uncertainty':'nan','focalMechanism.nodalPlanes.preferredPlane':'nodalPlane1','popupContent':'selected-rows'},'id':'359112'}]}
+                value: { 'type': 'FeatureCollection', 'features': [{ 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-72.3123, -33.0559] }, 'properties': { 'preferredOriginID': '359112', 'preferredMagnitudeID': '359112', 'type': 'earthquake', 'description.text': 'stochastic', 'origin.publicID': '359112', 'origin.time.value': '69051-01-01T00:00:00.000000Z', 'origin.time.uncertainty': 'nan', 'origin.depth.value': '32.15805', 'origin.depth.uncertainty': 'nan', 'origin.creationInfo.value': 'GFZ', 'originUncertainty.horizontalUncertainty': 'nan', 'originUncertainty.minHorizontalUncertainty': 'nan', 'originUncertainty.maxHorizontalUncertainty': 'nan', 'originUncertainty.azimuthMaxHorizontalUncertainty': 'nan', 'magnitude.publicID': '359112', 'magnitude.mag.value': '7.05', 'magnitude.mag.uncertainty': 'nan', 'magnitude.type': 'MW', 'magnitude.creationInfo.value': 'GFZ', 'focalMechanism.publicID': '359112', 'focalMechanism.nodalPlanes.nodalPlane1.strike.value': '10.68754', 'focalMechanism.nodalPlanes.nodalPlane1.strike.uncertainty': 'nan', 'focalMechanism.nodalPlanes.nodalPlane1.dip.value': '16.93797', 'focalMechanism.nodalPlanes.nodalPlane1.dip.uncertainty': 'nan', 'focalMechanism.nodalPlanes.nodalPlane1.rake.value': '90.0', 'focalMechanism.nodalPlanes.nodalPlane1.rake.uncertainty': 'nan', 'focalMechanism.nodalPlanes.preferredPlane': 'nodalPlane1', 'popupContent': 'selected-rows' }, 'id': '359112' }] }
             };
 
             const shakemapOutput: WpsDataDescription = {
@@ -332,8 +332,8 @@ if (runTestsWithLiveServer) {
             const c = new WpsClient(version, httpClient);
 
             it('execute should work', (done) => {
-                const exec$ = c.execute(testserver, processId, inputs, outputDescriptions, false);
-    
+                const exec$ = c.execute(testserver, processId, inputs, outputDescriptions);
+
                 exec$.subscribe(results => {
                     console.log(results);
                     results.map(r => expect(r.value).toBeTruthy());
@@ -344,7 +344,7 @@ if (runTestsWithLiveServer) {
 
             it('execute-async should work', (done) => {
                 const exec$ = c.executeAsync(testserver, processId, inputs, outputDescriptions);
-    
+
                 exec$.subscribe(results => {
                     console.log(results);
                     results.map(r => expect(r.value).toBeTruthy());

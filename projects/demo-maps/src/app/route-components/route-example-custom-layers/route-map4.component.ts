@@ -13,7 +13,7 @@ import olImageLayer from 'ol/layer/Image';
 @Component({
   selector: 'app-route-map4',
   templateUrl: './route-map4.component.html',
-  styleUrls: ['./route-map4.component.css'],
+  styleUrls: ['./route-map4.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
@@ -37,13 +37,13 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   }
 
   addLayers() {
-    const osm_layer_base = new osm(<any>{
+    const osm_layer_base = new osm({
       legendImg: null
-    });
-    const osm_layer_1 = new osm(<any>{
+    } as any);
+    const osm_layer_1 = new osm({
       legendImg: null,
       id: 'OSM1'
-    });
+    } as any);
 
     const data = {
       'type': 'FeatureCollection',

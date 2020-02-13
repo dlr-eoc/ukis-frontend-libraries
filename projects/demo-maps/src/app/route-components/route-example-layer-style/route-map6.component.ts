@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-route-map6',
   templateUrl: './route-map6.component.html',
-  styleUrls: ['./route-map6.component.css'],
+  styleUrls: ['./route-map6.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })

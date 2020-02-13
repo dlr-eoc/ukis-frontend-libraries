@@ -16,7 +16,7 @@ import { regularGrid } from './map.utils';
 @Component({
   selector: 'app-route-map3',
   templateUrl: './route-map3.component.html',
-  styleUrls: ['./route-map3.component.css'],
+  styleUrls: ['./route-map3.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
@@ -52,10 +52,10 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addLayers() {
-    const osm_layer = new osm(<any>{
+    const osm_layer = new osm({
       legendImg: null,
       visible: true
-    });
+    } as any);
 
     const source = new olImageWMS({
       url: 'https://ahocevar.com/geoserver/wms',
