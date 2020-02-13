@@ -19,6 +19,7 @@ import { RouteMap3Component } from './route-components/route-example-events/rout
 import { RouteMap4Component } from './route-components/route-example-custom-layers/route-map4.component';
 import { RouteMap5Component } from './route-components/route-example-layout/route-map5.component';
 import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
+import { RouteAboutComponent } from './route-components/route-about/route-about.component';
 
 
 
@@ -60,6 +61,13 @@ export const appRoutes: Routes = [
     data: {
       title: 'Switching Layer-Style'
     }
+  },
+  {
+    path: 'about',
+    component: RouteAboutComponent,
+    data: {
+      title: 'About'
+    }
   }
 ];
 
@@ -69,6 +77,7 @@ export const appRoutes: Routes = [
     AppComponent,
     RouteMapComponent,
     HeaderComponent,
+    RouteAboutComponent,
     GlobalFooterComponent,
     GlobalProgressComponent,
     RouteMap2Component,

@@ -1,9 +1,3 @@
-todos
-  deitorconfig is vscode specific 
-  running full test suite must be described in developer documentation
-
-
-
 # Contributing to UKIS
 
 We would love for you to contribute to UKIS and help make it even better than it is
@@ -192,7 +186,7 @@ changes to be accepted, the CLA must be signed. It's a quick process, we promise
 
 
 [github]: https://github.com/dlr-eoc/
-[cla]: https://github.com/dlr-eoc/frontend-libraries/CLA.pdf
+[cla]: https://github.com/dlr-eoc/frontend-libraries/DLR_Individual_Contributor_License_Agreement_UKIS.pdf
 [coc]: https://github.com/dlr-eoc/frontend-libraries/CODE_OF_CONDUCT.md
 [changelog]: https://github.com/dlr-eoc/frontend-libraries/CHANGELOG.md
 [development]: https://github.com/dlr-eoc/frontend-libraries/DEVELOPMENT.md

@@ -31,16 +31,19 @@ to check the dependencies of the libraries use `node scripts/library/index.js -d
 - [see Developing libraries and frontend side by side](DEVELOPMENT.md)
 
 
-
 ## How to setup a new UKIS-Client
-1. [see clarity get-started](https://clarity.design/documentation/get-started)
-- ng new project-xxx --routing=true --style=scss
-- cd project-xxx
-- ng add @ukis/core-ui // [see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
-
+```
+ng new <projectname>
+ng add @ukis/core-ui
+```
 
 ## Issues
- http://jira.ukis.eoc.dlr.de/issues/?jql=project%20%3D%20UKISDEV%20AND%20Component%20%3D%20Frontend%20AND%20Labels%20%3D%20master
+You can add issues on [github](https://github.com/dlr-eoc/frontend-libraries/issues).
+Please read the [contribution-guide](CONTRIBUTING.md) for information on how to add issues.
+
 
 ## Changelog
 [see](CHANGELOG.md)
+
+# Licensing
+This project is licensed under the [Apache-2 license](LICENSE). Bundled applications also use third-party libraries that are distributed under their own terms. Their licenses can be found in the bundle-sourcecode in a file named `3rdpartylicenses.txt`.

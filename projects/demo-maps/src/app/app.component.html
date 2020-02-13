@@ -1,5 +1,7 @@
 <clr-main-container [ngClass]="{'floating':ui.floating}">
+  
   <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+  
   <ukis-header [ukis-title]="'Demo maps'">
     <a *ngFor="let route of routes" routerLink="/{{route.path}}" routerLinkActive="active"
       class="nav-link nav-text header-nav-el">{{route.data.title}}</a>
