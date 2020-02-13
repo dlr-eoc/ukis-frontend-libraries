@@ -1,11 +1,7 @@
 {
   "name": "@ukis/base-layers-raster",
   "version": "0.0.0-PLACEHOLDER",
-<<<<<<< HEAD
-  "main": "src/public_api",
-=======
   "main": "src/public-api",
->>>>>>> clean-up
   "license": "Apache-2.0",
   "peerDependencies": {
     "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
