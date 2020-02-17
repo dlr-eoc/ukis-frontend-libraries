@@ -1,4 +1,89 @@
-# MapNavigator
+# @ukis/map-navigator
+
+### how use this in a ukis-angular (@ukis/core-ui) project
+
+For exampels [see demo maps route-example-events](../demo-maps/README.md)
+
+#### add the following dependencies to the package.json
+- "@ukis/map-ol"
+- "@ukis/map-navigator"
+
+#### add the following to the app.module.ts
+```
+import { MapOlModule } from '@ukis/map-ol';
+import { MapNavigatorModule } from '@ukis/map-navigator';
+
+...
+
+ imports: [
+    ...
+    MapOlModule,
+    MapNavigatorModule
+  ]
+```
+
+
+#### add the following to a route-view.component.html
+```
+<main class="content-area">
+  <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
+</main>
+
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2">
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="false" class="layers" title="Coordinates">
+    <clr-icon shape="compass" clrVerticalNavIcon></clr-icon>
+    Coordinates
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ukis-mouse-position></ukis-mouse-position>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+</clr-vertical-nav>
+```
+
+#### add the following to a route-view.component.ts
+```
+import { LayersService } from '@ukis/services-layers';
+import { MapStateService } from '@ukis/services-map-state';
+import { IMapControls } from '@ukis/map-ol';
+
+import { osm, eoc_litemap, esri_world_imagery } from '@ukis/base-layers-raster';
+```
+
+```
+controls: IMapControls;
+  constructor(
+    public layerSvc: LayersService,
+    public mapStateSvc: MapStateService
+) { }
+```
+
+```
+ngOnInit() {
+    this.addBaselayers();
+}
+
+addBaselayers() {
+    const layers = [
+        new osm({
+        visible: false,
+        legendImg: null
+        }),
+        new eoc_litemap({
+        visible: true,
+        legendImg: null
+        }),
+        new esri_world_imagery({
+        visible: false,
+        legendImg: null
+        })
+    ];
+
+    layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
+}
+```
+
+
+===
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
 
@@ -10,10 +95,6 @@ Run `ng generate component component-name --project map-navigator` to generate a
 ## Build
 
 Run `ng build map-navigator` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build map-navigator`, go to the dist folder `cd dist/map-navigator` and run `npm publish`.
 
 ## Running unit tests
 

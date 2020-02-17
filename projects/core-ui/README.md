@@ -1,72 +1,41 @@
-# UKIS Core-Ui
-
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
-
-## Code scaffolding
-
-Run `ng generate component component-name --project core-ui` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project core-ui`.
-> Note: Don't forget to add `--project core-ui` or else it will be added to the default project in your `angular.json` file. 
-
-## Build
-
-Run `ng build core-ui` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-after this build the schematics with `npm run schematics:build` 
-
-## Publishing
-
-After building your library with `ng build core-ui`, go to the dist folder `cd dist/core-ui` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test core-ui` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-
-
-
-
-
-
-# Schematics for UKIS Core-Ui
+# @ukis/core-ui (Schematics for UKIS core-ui)
 
 ## Stepps to add ukis to a angular project
 - ng new client-src --routing=true --style=scss
-- ng add @clr/angular
 - set registry in .npmrc
-- ng add @ukis/core-ui (--registry=http://hofer.eoc.dlr.de/nexus/content/groups/npm-all)
+- ng add @ukis/core-ui (--registry=https://npm.pkg.github.com)
 
-## This is what the ng-add should do (ng g @ukis/core-ui:ng-add)
-- check if @clr is installed, routing is enabled and style is scss and show hints for the user
+## This is what the ng-add command is doing
+check if @clr is installed, routing is enabled and style is scss and show hints for the user
 
-- [add paths for library project in tsconfig.json](http://git.ukis.eoc.dlr.de/users/asam_hu/repos/nextg-airquality-pilot/commits/e6c884e77bc9553e1c29c0d16273efe068320856)
+- [add paths for library project in tsconfig.json](schematics/ng-add/index.ts#L260)
 
-- [add styles (for core-ui)](http://git.ukis.eoc.dlr.de/users/asam_hu/repos/nextg-airquality-pilot/commits/1becc033df579af69bd82869c5c32189309d0e14)
+- [add styles (for core-ui)](schematics/ng-add/index.ts#L52)
 
-- [add icons](http://git.ukis.eoc.dlr.de/users/asam_hu/repos/nextg-airquality-pilot/commits/dc7ea413ccb11581934b7e7163221ae2e52fe94e)
+- [add icons](schematics/ng-add/index.ts#L52)
 
-- [adjust index and add favicon](http://git.ukis.eoc.dlr.de/users/asam_hu/repos/nextg-airquality-pilot/commits/ae9e95d1ca06bd9b61afbee8195be4cf4a1a7990#components/client/client-src/src/index.html)
+- [adjust index and add favicon](schematics/ng-add/index.ts#L299)
 
-- [add default components (core-ui) for the app and register all in the app module](http://git.ukis.eoc.dlr.de/users/asam_hu/repos/nextg-airquality-pilot/commits/ac47ac38381acdc53f01f0d873386ea4ff494d2a)
+- [add default components (core-ui) for the app and register all in the app module](schematics/ng-add/index.ts#L52)
 
-- [add sample route for map](http://git.ukis.eoc.dlr.de/users/asam_hu/repos/nextg-airquality-pilot/commits/489570dba1d02c93ab90054cef800fa6434911db)
+- [add sample route for map](schematics/ng-add/index.ts#L39)
 
-## there should be options like?
+## There should be options like?
 
 ng add @ukis/core-ui 
 
 --project=string // the project in the angular workspace
---auth=boolean // default false, adjusts the app for authentication and user login
 --routing=boolean // default false
---addMap=boolean // adds a map component default false
 --addClr=boolenan // runns @clr/angular:ng-add default true
 
+// Not implemented right now!
+--addMap=boolean // adds a map component default false
+--auth=boolean // default false, adjusts the app for authentication and user login
 
 
----------------------------------------------------------------------------------------------------------------------------
+===
+
+
 ## Getting Started With Schematics
 
 This repository is a basic Schematic implementation that serves as a starting point to create and publish Schematics to NPM.
@@ -99,14 +68,14 @@ https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2
 
 
 to unlink use 
-`npm unlink $PATH_TO_SCHEMATIC_PROJECT` (`npm unlink ../frontend-libraries/dist/core-ui`) // this unfortunately do not remove the full link so do 
-`npm uninstall @ukis/core-ui -g` // this leaves an empty folder @ukis in the global directory (.../AppData/Roaming/npm/node_modules) so remove it later if not needed
+`npm unlink $PATH_TO_SCHEMATIC_PROJECT` (`npm unlink ../frontend-libraries/dist/core-ui`) // this unfortunately does not remove the full link so you have to run   
+`npm uninstall @ukis/core-ui -g` // this leaves an empty folder @ukis in the global directory (`npm config get prefix`/node_modules) so remove it later if not needed
 
 
 
 ### Unit Testing
 
-`npm run test` will run the unit tests, using Jasmine as a runner and test framework.
+`npm run schematics:test` will run the unit tests, using Jasmine as a runner and test framework.
 
 
 ### Build Schematics
@@ -125,16 +94,30 @@ to unlink use
 
 ### Publishing
 
-To publish, simply do:
-
-```bash
-npm run build
-npm publish
-```
-
-That's it!
-
-
 *for local publish use*
 - in dist/ `npm pack` this creates a ukis-schematics-<version>.tgz file which we can copy.
  
+
+===
+
+
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
+
+## Code scaffolding
+
+Run `ng generate component component-name --project core-ui` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project core-ui`.
+> Note: Don't forget to add `--project core-ui` or else it will be added to the default project in your `angular.json` file. 
+
+## Build
+
+Run `ng build core-ui` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+after this build the schematics with `npm run schematics:build` 
+
+## Running unit tests
+
+Run `ng test core-ui` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
