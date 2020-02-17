@@ -41,7 +41,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       id: 'eoc_litemap_base',
       visible: true,
       tileSize: 512
-    } as any);
+    });
 
     this.layersSvc.addLayer(eoc_litemap_layer, 'Baselayers');
   }

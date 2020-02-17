@@ -55,7 +55,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     const osm_layer = new osm({
       legendImg: null,
       visible: true
-    } as any);
+    });
 
     const source = new olImageWMS({
       url: 'https://ahocevar.com/geoserver/wms',

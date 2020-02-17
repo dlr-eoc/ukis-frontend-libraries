@@ -66,7 +66,7 @@ export class RouteMap2Component implements OnInit {
       legendImg: null,
       visible: true,
       id: 'eoc_litemap_base'
-    } as any);
+    });
 
     const guf_layer = new RasterLayer({
       type: 'wms',

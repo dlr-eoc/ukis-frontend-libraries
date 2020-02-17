@@ -39,11 +39,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   addLayers() {
     const osm_layer_base = new osm({
       legendImg: null
-    } as any);
+    });
     const osm_layer_1 = new osm({
       legendImg: null,
       id: 'OSM1'
-    } as any);
+    });
 
     const data = {
       'type': 'FeatureCollection',

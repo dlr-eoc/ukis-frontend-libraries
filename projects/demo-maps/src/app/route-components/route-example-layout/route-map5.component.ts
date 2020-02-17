@@ -45,7 +45,7 @@ export class RouteMap5Component implements OnInit, OnDestroy {
       legendImg: null,
       id: 'eoc_litemap_base',
       visible: true
-    } as any);
+    });
 
     // not working in WGS84
     const world_relief = new WmtsLayer({
@@ -275,13 +275,13 @@ export class RouteMap5Component implements OnInit, OnDestroy {
     const esri_grey_layer = new esri_grey_canvas({
       removable: true,
       legendImg: null,
-    } as any);
+    });
 
     const esri_ocean_imagery_layer = new esri_ocean_imagery({
       removable: true,
       legendImg: null,
       id: 'esri_ocean_base'
-    } as any);
+    });
 
     const osmLayer = new osm();
     /** add a Group of layers */

@@ -201,7 +201,7 @@ describe('OwcJsonService: writing data into owc', () => {
     const osm_layer = new eoc_litemap({
       visible: true,
       legendImg: null
-    } as any);
+    });
     layersService.addLayer(osm_layer, 'Baselayers');
     layersService.getBaseLayers().subscribe(baselayers => {
       const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);

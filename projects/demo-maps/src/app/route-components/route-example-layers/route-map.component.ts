@@ -43,9 +43,9 @@ export class RouteMapComponent implements OnInit {
       legendImg: null,
       id: 'eoc_litemap_base',
       visible: true
-    } as any);
+    });
 
-    // not working in WGS84 because 
+    // not working in WGS84 because
     const world_relief = new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
@@ -69,7 +69,7 @@ export class RouteMapComponent implements OnInit {
       legendImg: null,
       id: 'osm_base',
       visible: false
-    } as any);
+    });
 
     const layers = [eoc_litemap_layer, world_relief, osmLayer];
 
@@ -280,16 +280,17 @@ export class RouteMapComponent implements OnInit {
     const esri_grey_layer = new esri_grey_canvas({
       removable: true,
       legendImg: null,
-    } as any);
+    });
 
     const esri_ocean_imagery_layer = new esri_ocean_imagery({
       removable: true,
       legendImg: null,
       id: 'esri_ocean_base'
-    } as any);
+    });
 
-    const osmLayer = new osm();
-    osmLayer.legendImg = 'assets/osm.png';
+    const osmLayer = new osm({
+      legendImg: 'assets/osm.png'
+    });
     /** add a Group of layers */
 
 
