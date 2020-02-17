@@ -1,6 +1,6 @@
 # @ukis/map-ol
 
-### how use this in a core-ui project
+### how use this in a ukis-angular (@ukis/core-ui) project
 
 
 #### add the following dependencies to the package.json
@@ -12,6 +12,14 @@
 ```
 import { MapOlModule } from '@ukis/map-ol';
 import { LayerControlModule } from '@ukis/layer-control';
+
+...
+
+ imports: [
+    ...
+    MapOlModule,
+    LayerControlModule
+  ]
 ```
 
 
@@ -49,15 +57,15 @@ addBaselayers() {
         new osm({
         visible: false,
         legendImg: null
-        } as any),
+        }),
         new eoc_litemap({
         visible: true,
         legendImg: null
-        } as any),
+        }),
         new esri_world_imagery({
         visible: false,
         legendImg: null
-        } as any)
+        })
     ];
 
     layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
