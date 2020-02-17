@@ -1,4 +1,31 @@
-# ServicesMapState
+# @ukis/services-map-state
+
+### how use this in a ukis-angular (@ukis/core-ui) project
+
+For exampels see 
+- [demo maps](../demo-maps/README.md)
+- [map-navigator](../owc-control/src/lib/owc-control.component.ts)
+- [map-ol](../layer-control/src/lib/base-layer-control/base-layer-control.component.ts)
+
+
+This module is used by components like:
+- @ukis/map-ol
+- @ukis/map-navigator
+- @ukis/layer-control
+- ...
+
+It implements a basic 'state' for the map like:
+- zoom
+- center
+- options
+- extent
+- time
+
+for more details [see map-state](../services-map-state/src/lib/types/map-state.ts)
+
+
+
+===
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
 
@@ -10,10 +37,6 @@ Run `ng generate component component-name --project services-map-state` to gener
 ## Build
 
 Run `ng build services-map-state` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build services-map-state`, go to the dist folder `cd dist/services-map-state` and run `npm publish`.
 
 ## Running unit tests
 
