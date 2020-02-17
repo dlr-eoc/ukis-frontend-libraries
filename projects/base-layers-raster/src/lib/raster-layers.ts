@@ -1,7 +1,13 @@
 import { RasterLayer, IRasterLayerOptions } from '@ukis/services-layers';
 
+/**
+ * make all IRasterLayer Options optional because constructor use default objects
+ */
+type IoptionalRasterLayerOptions = {
+  [K in keyof IRasterLayerOptions]?: IRasterLayerOptions[K]
+};
 export class google_earth extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'Google Satellite',
       displayName: 'Google Satellite',
@@ -22,7 +28,7 @@ export class google_earth extends RasterLayer {
 }
 
 export class google_maps extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'Google Maps',
       displayName: 'Google Maps',
@@ -43,7 +49,7 @@ export class google_maps extends RasterLayer {
 }
 
 export class google_hybrid extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'Google Hybrid',
       displayName: 'Google Hybrid',
@@ -64,7 +70,7 @@ export class google_hybrid extends RasterLayer {
 }
 
 export class esri_grey_canvas extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'ESRI Neutral Map',
       displayName: 'ESRI Neutral Map',
@@ -85,7 +91,7 @@ export class esri_grey_canvas extends RasterLayer {
 
 
 export class esri_world_imagery extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'ESRI Imagery',
       displayName: 'ESRI Imagery',
@@ -106,7 +112,7 @@ export class esri_world_imagery extends RasterLayer {
 
 
 export class esri_ocean_imagery extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'ESRI Ocean',
       displayName: 'ESRI Ocean',
@@ -127,7 +133,7 @@ export class esri_ocean_imagery extends RasterLayer {
 
 
 export class esri_nav_charts extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'ESRI Charts',
       displayName: 'ESRI Charts',
@@ -148,7 +154,7 @@ export class esri_nav_charts extends RasterLayer {
 
 
 export class osm extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'OpenStreetMap',
       displayName: 'OpenStreetMap',
@@ -171,7 +177,7 @@ export class osm extends RasterLayer {
 
 
 export class eoc_litemap extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'EOC Litemap',
       displayName: 'EOC Litemap',
@@ -200,7 +206,7 @@ export class eoc_litemap extends RasterLayer {
 
 
 export class open_sea_map extends RasterLayer {
-  constructor(options?: IRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'OpenSeaMap',
       displayName: 'OpenSeaMap',

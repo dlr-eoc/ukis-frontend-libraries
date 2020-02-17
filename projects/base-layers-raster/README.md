@@ -1,24 +1,17 @@
-# BaseLayersRaster
+# @ukis/base-layers-raster
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
+This project includes a view often used layers in ukis mapping applications e.g. eoc_litemap, osm, ...
 
-## Code scaffolding
+### how use this in a ukis-angular (@ukis/core-ui) project
 
-Run `ng generate component component-name --project base-layers-raster` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project base-layers-raster`.
-> Note: Don't forget to add `--project base-layers-raster` or else it will be added to the default project in your `angular.json` file. 
+```
+import { osm, eoc_litemap } from '@ukis/base-layers-raster';
 
-## Build
 
-Run `ng build base-layers-raster` to build the project. The build artifacts will be stored in the `dist/` directory.
+const layer = new eoc_litemap({
+    visible: true
+});
 
-## Publishing
 
-After building your library with `ng build base-layers-raster`, go to the dist folder `cd dist/base-layers-raster` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test base-layers-raster` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+this.layersSvc.addLayer(layer, 'Baselayers');
+```
