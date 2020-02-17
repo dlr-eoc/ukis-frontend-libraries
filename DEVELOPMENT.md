@@ -26,7 +26,7 @@ run ``ng generate library < name > --prefix ukis``
 
 ### 2. Add and create Files
 - create components and or services in the lib with the cli
-- add missing exports to public_api.ts
+- add missing exports to public-api.ts
 
 ### 3. Add Dependencies
 

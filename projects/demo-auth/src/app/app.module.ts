@@ -25,6 +25,8 @@ import { HttpAuthInterceptor } from './auth/http-auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from './auth/http-error.interceptor';
 
+import { CookieAlertComponent } from '@ukis/cookie-alert';
+
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import { HttpErrorInterceptor } from './auth/http-error.interceptor';
     GlobalProgressComponent,
     RouteMapComponent,
     RouteLoginComponent,
-    RouteUserComponent
+    RouteUserComponent,
+    CookieAlertComponent
   ],
   imports: [
     BrowserModule,

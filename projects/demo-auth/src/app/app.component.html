@@ -1,6 +1,7 @@
 <clr-main-container [ngClass]="{'floating':ui.floating}">
     <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
     <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+    <ukis-cookie-alert [alert-text]="'my alert text'" [privacy-link]="'link to privacy'"></ukis-cookie-alert>
 
     <ukis-header [ukis-title]="title">
         <a *ngIf="!userService.isloggedIn()" routerLink="/login" routerLinkActive="active"

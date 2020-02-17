@@ -1,7 +1,7 @@
 {
   "name": "@ukis/cookie-alert",
   "version": "0.0.0-PLACEHOLDER",
-  "main": "src/public_api.ts",
+  "main": "src/public-api.ts",
   "license": "Apache-2.0",
   "peerDependencies": {
     "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
