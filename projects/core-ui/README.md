@@ -1,9 +1,9 @@
-# @ukis/core-ui (Schematics for UKIS core-ui)
+# @dlr-eoc/core-ui (Schematics for UKIS core-ui)
 
 ## Stepps to add ukis to a angular project
 - ng new client-src --routing=true --style=scss
 - set registry in .npmrc
-- ng add @ukis/core-ui (--registry=https://npm.pkg.github.com)
+- ng add @dlr-eoc/core-ui (--registry=https://npm.pkg.github.com)
 
 ## This is what the ng-add command is doing
 check if @clr is installed, routing is enabled and style is scss and show hints for the user
@@ -22,7 +22,7 @@ check if @clr is installed, routing is enabled and style is scss and show hints 
 
 ## There should be options like?
 
-ng add @ukis/core-ui 
+ng add @dlr-eoc/core-ui 
 
 --project=string // the project in the angular workspace
 --routing=boolean // default false
@@ -51,7 +51,7 @@ schematics --help
 
 ```
 schematics <package-name>:<schematic-name> [...options].
-schematics @ukis/core-ui:ng-add
+schematics @dlr-eoc/core-ui:ng-add
 schematics .:ng-add //In this case we can use relative path instead of the package
 ```
 
@@ -64,12 +64,12 @@ https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2
 
 3. link the Schematics to the project `npm link $PATH_TO_SCHEMATIC_PROJECT` (`npm link ../frontend-libraries/dist/core-ui`)
 
-4. run the schematics `schematics @ukis/core-ui:ng-add` or `ng generate @ukis/core-ui:ng-add`
+4. run the schematics `schematics @dlr-eoc/core-ui:ng-add` or `ng generate @dlr-eoc/core-ui:ng-add`
 
 
 to unlink use 
 `npm unlink $PATH_TO_SCHEMATIC_PROJECT` (`npm unlink ../frontend-libraries/dist/core-ui`) // this unfortunately does not remove the full link so you have to run   
-`npm uninstall @ukis/core-ui -g` // this leaves an empty folder @ukis in the global directory (`npm config get prefix`/node_modules) so remove it later if not needed
+`npm uninstall @dlr-eoc/core-ui -g` // this leaves an empty folder @dlr-eoc in the global directory (`npm config get prefix`/node_modules) so remove it later if not needed
 
 
 

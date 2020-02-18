@@ -1,4 +1,4 @@
-# @ukis/services-ogc
+# @dlr-eoc/services-ogc
 
 // TODO add description!!!
 ===

@@ -1,5 +1,5 @@
 {
-  "name": "@ukis/base-layers-raster",
+  "name": "@dlr-eoc/base-layers-raster",
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public-api",
   "license": "Apache-2.0",
@@ -8,7 +8,7 @@
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "dependencies": {
-    "@ukis/services-layers": "0.0.0-PLACEHOLDER"
+    "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER"
   },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",

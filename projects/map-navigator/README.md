@@ -1,17 +1,17 @@
-# @ukis/map-navigator
+# @dlr-eoc/map-navigator
 
-### how to use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
 For examples [see demo maps route-example-events](../demo-maps/README.md)
 
 #### add the following dependencies to the package.json
-- "@ukis/map-ol"
-- "@ukis/map-navigator"
+- "@dlr-eoc/map-ol"
+- "@dlr-eoc/map-navigator"
 
 #### add the following to the app.module.ts
 ```
-import { MapOlModule } from '@ukis/map-ol';
-import { MapNavigatorModule } from '@ukis/map-navigator';
+import { MapOlModule } from '@dlr-eoc/map-ol';
+import { MapNavigatorModule } from '@dlr-eoc/map-navigator';
 
 ...
 
@@ -42,11 +42,11 @@ import { MapNavigatorModule } from '@ukis/map-navigator';
 
 #### add the following to a route-view.component.ts
 ```
-import { LayersService } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { IMapControls } from '@ukis/map-ol';
+import { LayersService } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { IMapControls } from '@dlr-eoc/map-ol';
 
-import { osm, eoc_litemap, esri_world_imagery } from '@ukis/base-layers-raster';
+import { osm, eoc_litemap, esri_world_imagery } from '@dlr-eoc/base-layers-raster';
 ```
 
 ```

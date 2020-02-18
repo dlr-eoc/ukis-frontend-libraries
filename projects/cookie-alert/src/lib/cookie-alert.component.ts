@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UtilStoreService } from '@ukis/services-util-store';
+import { UtilStoreService } from '@dlr-eoc/services-util-store';
 
 @Component({
   selector: 'ukis-cookie-alert',

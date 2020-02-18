@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { UserService, IUser } from '@ukis/user-info';
+import { UserService, IUser } from '@dlr-eoc/user-info';
 import { AlertService } from '../components/global-alert/alert.service';
 import { Observable } from 'rxjs';
 import { BasicAuthService } from './basic-auth.service';

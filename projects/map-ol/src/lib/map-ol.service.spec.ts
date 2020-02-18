@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MapOlService } from './map-ol.service';
-import { RasterLayer, VectorLayer, CustomLayer } from '@ukis/services-layers';
+import { RasterLayer, VectorLayer, CustomLayer } from '@dlr-eoc/services-layers';
 
 import olTileLayer from 'ol/layer/Tile';
 import olXYZ from 'ol/source/XYZ';

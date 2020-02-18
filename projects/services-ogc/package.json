@@ -1,5 +1,5 @@
 {
-  "name": "@ukis/services-ogc",
+  "name": "@dlr-eoc/services-ogc",
   "main": "src/public-api",
   "version": "0.0.0-PLACEHOLDER",
   "license": "Apache-2.0",
@@ -9,10 +9,10 @@
     "rxjs": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "dependencies": {
-    "@ukis/services-layers": "0.0.0-PLACEHOLDER",
-    "@ukis/services-util-store": "0.0.0-PLACEHOLDER",
-    "@ukis/base-layers-raster": "0.0.0-PLACEHOLDER",
-    "@ukis/services-map-state": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/services-util-store": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/base-layers-raster": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/services-map-state": "0.0.0-PLACEHOLDER",
     "md5": "0.0.0-PLACEHOLDER-VENDOR",
     "w3c-schemas": "0.0.0-PLACEHOLDER-VENDOR",
     "ogc-schemas": "0.0.0-PLACEHOLDER-VENDOR",

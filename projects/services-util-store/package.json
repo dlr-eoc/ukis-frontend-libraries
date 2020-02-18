@@ -1,5 +1,5 @@
 {
-  "name": "@ukis/services-util-store",
+  "name": "@dlr-eoc/services-util-store",
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public-api",
   "license": "Apache-2.0",

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MapOlService } from '@ukis/map-ol';
+import { MapOlService } from '@dlr-eoc/map-ol';
 import { transform as olTransform, get as olGetProjection, projection as olProjection } from 'ol/proj';
 
 interface ISelectProjection {

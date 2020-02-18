@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { LayersService } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { LayerGroup, Layer } from '@ukis/services-layers';
+import { LayersService } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { LayerGroup, Layer } from '@dlr-eoc/services-layers';
 import { Subscription } from 'rxjs';
 
 @Component({

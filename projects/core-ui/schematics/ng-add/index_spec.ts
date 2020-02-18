@@ -38,7 +38,7 @@ describe('ng-add', () => {
     skipTests: false
   };
 
-  const schematicRunner = new SchematicTestRunner('@ukis/schematics', collectionPath);
+  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
 
   beforeEach(async () => {
     appTree = await schematicRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
@@ -137,7 +137,7 @@ describe('ng-add', () => {
   it('should update the stconfig file', (done) => {
     schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
       const tsconfigFile = JSON.parse(tree.readContent('/tsconfig.json'));
-      expect('@ukis/*' in tsconfigFile.compilerOptions.paths).toBe(true);
+      expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
       done();
     }, done.fail);
   });

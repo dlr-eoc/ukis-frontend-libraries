@@ -4,9 +4,9 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
 import {
   LayerGroup, Layer, RasterLayer, isRasterLayertype, WmsLayertype, WmtsLayertype, isRasterLayer,
   isVectorLayer, LayersService, VectorLayer
-} from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { } from '@ukis/services-layers';
+} from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { } from '@dlr-eoc/services-layers';
 
 @Component({
   selector: 'ukis-layerentry',

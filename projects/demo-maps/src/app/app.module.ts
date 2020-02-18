@@ -11,9 +11,9 @@ import { AlertService } from './components/global-alert/alert.service';
 import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { ProgressService } from './components/global-progress/progress.service';
 
-import { MapOlModule } from '@ukis/map-ol';
-import { LayerControlModule } from '@ukis/layer-control';
-import { MapNavigatorModule } from '@ukis/map-navigator';
+import { MapOlModule } from '@dlr-eoc/map-ol';
+import { LayerControlModule } from '@dlr-eoc/layer-control';
+import { MapNavigatorModule } from '@dlr-eoc/map-navigator';
 
 import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
 import { RouteMap2Component } from './route-components/route-example-projection/route-map2.component';

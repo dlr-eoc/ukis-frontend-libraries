@@ -1,4 +1,4 @@
-import { RasterLayer, IRasterLayerOptions } from '@ukis/services-layers';
+import { RasterLayer, IRasterLayerOptions } from '@dlr-eoc/services-layers';
 
 /**
  * make all IRasterLayer Options optional because constructor use default objects

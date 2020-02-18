@@ -1,5 +1,5 @@
 {
-    "name": "@ukis/core-ui-packagr",
+    "name": "@dlr-eoc/core-ui-packagr",
     "version": "1.0.0",
     "description": "Builder for Architect",
     "builders": "builders.json",

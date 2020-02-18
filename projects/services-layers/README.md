@@ -1,17 +1,17 @@
-# @ukis/services-layers
+# @dlr-eoc/services-layers
 
 
 ## The idea of the LayersService
 
 It should be a interface to use our components with different mapping libraries.  
 For example one layer control which is working with all the different maps and layertypes. 
-The conversion from our generalized layers to the map specific should be implemented in the corresponding component like in @ukis/map-ol 
+The conversion from our generalized layers to the map specific should be implemented in the corresponding component like in @dlr-eoc/map-ol 
 
 
 ![The idea of the layerService](assets/TheIdeaOfTheUkisLayerService.svg)
-### how to use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 ```
-import { LayersService } from '@ukis/services-layers';
+import { LayersService } from '@dlr-eoc/services-layers';
 ```
 
 ```
@@ -48,9 +48,9 @@ For examples see:
 
 
 This module is used by components like:
-- @ukis/owc-control
-- @ukis/layer-control
-- @ukis/base-layers-raster
+- @dlr-eoc/owc-control
+- @dlr-eoc/layer-control
+- @dlr-eoc/base-layers-raster
 - ...
 
 

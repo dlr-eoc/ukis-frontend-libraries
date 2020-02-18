@@ -5,10 +5,10 @@ import { LayerentryComponent } from '../layerentry/layerentry.component';
 
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
-import { Layer, LayerGroup, LayersService } from '@ukis/services-layers';
+import { Layer, LayerGroup, LayersService } from '@dlr-eoc/services-layers';
 
 import { ReversePipe } from '../utils/array-reverse.pipe';
-import { MapStateService } from '@ukis/services-map-state';
+import { MapStateService } from '@dlr-eoc/services-map-state';
 
 describe('LayerentryGroupComponent', () => {
   let component: LayerentryGroupComponent;

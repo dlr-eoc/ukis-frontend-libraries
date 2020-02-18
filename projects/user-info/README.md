@@ -1,12 +1,12 @@
-# @ukis/user-info
+# @dlr-eoc/user-info
 
 
-### how to use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
 For a example [see demo auth](../demo-auth/README.md)
 
 #### add the following dependencies to the package.json
-- "@ukis/user-info"
+- "@dlr-eoc/user-info"
 
 
 #### create a auth service
@@ -17,7 +17,7 @@ This service protects your routes and is registered in the AppRoutingModule
 
 #### add the following to the app.module.ts
 ```
-import { UserInfoModule } from '@ukis/user-info';
+import { UserInfoModule } from '@dlr-eoc/user-info';
 import { BasicAuthService } from './auth/basic-auth.service';
 import { HttpAuthInterceptor } from './auth/http-auth.interceptor';
 

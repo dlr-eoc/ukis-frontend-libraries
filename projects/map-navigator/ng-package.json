@@ -7,6 +7,6 @@
   "whitelistedNonPeerDependencies": [
     "tslib",
     "ol",
-    "@ukis/services-map-state"
+    "@dlr-eoc/services-map-state"
   ]
 }

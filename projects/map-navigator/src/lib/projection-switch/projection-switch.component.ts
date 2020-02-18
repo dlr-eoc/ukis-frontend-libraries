@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {MapOlService} from '@ukis/map-ol';
+import {MapOlService} from '@dlr-eoc/map-ol';
 
 
 @Component({

@@ -1,4 +1,4 @@
-import { TGeoExtent } from '@ukis/map-ol';
+import { TGeoExtent } from '@dlr-eoc/map-ol';
 import olFeature from 'ol/Feature';
 import olPolygon from 'ol/geom/Polygon';
 import { containsCoordinate } from 'ol/extent';

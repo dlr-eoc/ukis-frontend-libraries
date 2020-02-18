@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { MapStateService, MapState } from '@ukis/services-map-state';
+import { MapStateService, MapState } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 
 @Component({

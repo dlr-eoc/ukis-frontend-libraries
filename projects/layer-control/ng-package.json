@@ -6,8 +6,8 @@
   },
   "whitelistedNonPeerDependencies": [
     "tslib",
-    "@ukis/services-layers",
-    "@ukis/services-map-state",
+    "@dlr-eoc/services-layers",
+    "@dlr-eoc/services-map-state",
     "@angular/cdk"
   ]
 }

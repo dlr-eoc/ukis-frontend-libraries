@@ -11,21 +11,21 @@ import { AlertService } from './components/global-alert/alert.service';
 import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { ProgressService } from './components/global-progress/progress.service';
 
-import { MapOlModule } from '@ukis/map-ol';
-import { LayerControlModule } from '@ukis/layer-control';
+import { MapOlModule } from '@dlr-eoc/map-ol';
+import { LayerControlModule } from '@dlr-eoc/layer-control';
 
 import { RouteMapComponent } from './route-components/route-map/route-map.component';
 import { RouteLoginComponent } from './route-components/route-login/route-login.component';
 import { RouteUserComponent } from './route-components/route-user/route-user.component';
 
 /** for User */
-import { UserInfoModule } from '@ukis/user-info';
+import { UserInfoModule } from '@dlr-eoc/user-info';
 import { BasicAuthService } from './auth/basic-auth.service';
 import { HttpAuthInterceptor } from './auth/http-auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from './auth/http-error.interceptor';
 
-import { CookieAlertComponent } from '@ukis/cookie-alert';
+import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
 
 
 

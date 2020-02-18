@@ -6,7 +6,7 @@
     "properties": {
         "project": {
             "type": "string",
-            "description": "The name of the angular project you want to add @ukis/core-ui.",
+            "description": "The name of the angular project you want to add @dlr-eoc/core-ui.",
             "$default": {
                 "$source": "defaultProject"
             }
@@ -32,7 +32,7 @@
             "default": "false"
         },
         "addMap": {
-            "description": "Add @ukis/map-ol to your UKIS application.",
+            "description": "Add @dlr-eoc/map-ol to your UKIS application.",
             "type": "string",
             "default": "false"
         },

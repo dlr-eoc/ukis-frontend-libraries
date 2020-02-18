@@ -65,7 +65,7 @@ export function getProject(tree: Tree, _options: UkisNgAddSchema) {
     const project = workspace.projects[_options.project];
 
     if (project && project.projectType === 'library') {
-        throw new SchematicsException(`You should ad @ukis/core-ui only to an angular application not a library!`);
+        throw new SchematicsException(`You should ad @dlr-eoc/core-ui only to an angular application not a library!`);
     }
 
     if (!project.sourceRoot) {

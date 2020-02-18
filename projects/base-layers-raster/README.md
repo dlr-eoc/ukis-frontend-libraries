@@ -1,17 +1,17 @@
-# @ukis/base-layers-raster
+# @dlr-eoc/base-layers-raster
 
 This project includes a view often used layers in ukis mapping applications e.g. eoc_litemap, osm, ...
 
-### how to use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
 For examples [see demo maps](../demo-maps/README.md)
 
 #### add the following dependencies to the package.json
-- "@ukis/base-layers-raster"
+- "@dlr-eoc/base-layers-raster"
 
 #### add the following to map route/component
 ```
-import { osm, eoc_litemap } from '@ukis/base-layers-raster';
+import { osm, eoc_litemap } from '@dlr-eoc/base-layers-raster';
 
 
 const layer = new eoc_litemap({

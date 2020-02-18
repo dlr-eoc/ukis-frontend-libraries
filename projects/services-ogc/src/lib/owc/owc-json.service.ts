@@ -20,8 +20,8 @@ import {
   IWmsParams,
   IWmsOptions,
   IListMatrixSet
-} from '@ukis/services-layers';
-import { TGeoExtent } from '@ukis/services-map-state';
+} from '@dlr-eoc/services-layers';
+import { TGeoExtent } from '@dlr-eoc/services-map-state';
 import { WmtsClientService } from '../wmts/wmtsclient.service';
 import { of, Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -365,7 +365,7 @@ export class OwcJsonService {
     if (offering.operations) params = this.getJsonFromUri(offering.operations[0].href);
 
     let data;
-    // if we have a data-offering: 
+    // if we have a data-offering:
     if (offering.contents) {
       data = offering.contents[0].content;
     }
@@ -759,7 +759,7 @@ export class OwcJsonService {
 
     else if (layer instanceof VectorLayer) {
       switch (layer.type) {
-        // case 'wfs': <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts 
+        // case 'wfs': <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts
         //   return this.getWfsOperationsFromLayer(layer);
         default:
           console.error(`This type of service (${layer.type}) has not been implemented yet.`);

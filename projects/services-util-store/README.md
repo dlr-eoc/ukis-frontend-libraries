@@ -1,9 +1,9 @@
-# @ukis/services-util-store
+# @dlr-eoc/services-util-store
 
-### how to use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
 ```
-import { UtilStoreService } from '@ukis/services-util-store';
+import { UtilStoreService } from '@dlr-eoc/services-util-store';
 ```
 
 ```
@@ -27,8 +27,8 @@ For examples see:
 
 
 This module is used by components like:
-- @ukis/cookie-alert
-- @ukis/services-ogc
+- @dlr-eoc/cookie-alert
+- @dlr-eoc/services-ogc
 - ...
 
 

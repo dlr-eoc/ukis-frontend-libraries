@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, TGeoExtent } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { MapOlService } from '@ukis/map-ol';
-import { osm } from '@ukis/base-layers-raster';
+import { LayersService, CustomLayer, TGeoExtent } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapOlService } from '@dlr-eoc/map-ol';
+import { osm } from '@dlr-eoc/base-layers-raster';
 import { ProgressService } from '../../components/global-progress/progress.service';
 
 import olImageLayer from 'ol/layer/Image';

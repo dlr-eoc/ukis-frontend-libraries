@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService } from '@ukis/services-layers';
-import { osm, eoc_litemap } from '@ukis/base-layers-raster';
-import { MapStateService } from '@ukis/services-map-state';
+import { LayersService } from '@dlr-eoc/services-layers';
+import { osm, eoc_litemap } from '@dlr-eoc/base-layers-raster';
+import { MapStateService } from '@dlr-eoc/services-map-state';
 
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';

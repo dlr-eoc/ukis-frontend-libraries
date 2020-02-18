@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { MapOlService } from '@ukis/map-ol';
-import { esri_world_imagery, esri_grey_canvas, osm } from '@ukis/base-layers-raster';
+import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapOlService } from '@dlr-eoc/map-ol';
+import { esri_world_imagery, esri_grey_canvas, osm } from '@dlr-eoc/base-layers-raster';
 
 import { Heatmap as olHeatmapLayer, Vector as olVectorLayer } from 'ol/layer';
 import olVectorSource from 'ol/source/Vector';

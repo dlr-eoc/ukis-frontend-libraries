@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map, google_earth } from '@ukis/base-layers-raster';
-import { MapOlService } from '@ukis/map-ol';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map, google_earth } from '@dlr-eoc/base-layers-raster';
+import { MapOlService } from '@dlr-eoc/map-ol';
 
 @Component({
   selector: 'app-route-map',

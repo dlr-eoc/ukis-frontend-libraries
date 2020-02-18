@@ -6,6 +6,6 @@
   },
   "whitelistedNonPeerDependencies": [
     "tslib",
-    "@ukis/services-util-store"
+    "@dlr-eoc/services-util-store"
   ]
 }

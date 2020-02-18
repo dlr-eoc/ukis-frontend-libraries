@@ -3,11 +3,11 @@ import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterVi
 
 
 
-import { MapState } from '@ukis/services-map-state';
-import { MapStateService } from '@ukis/services-map-state';
+import { MapState } from '@dlr-eoc/services-map-state';
+import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { MapOlService, Tgroupfiltertype } from './map-ol.service';
-import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer } from '@ukis/services-layers';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer } from '@dlr-eoc/services-layers';
 
 import Map from 'ol/Map';
 import { getUid } from 'ol/util';

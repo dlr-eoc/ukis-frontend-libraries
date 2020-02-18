@@ -261,7 +261,7 @@ function ruleUpdateTsConfigFile(_options: UkisNgAddSchema): Rule {
     const path = 'tsconfig.json';
     return updateJsonFile<TsconfigJSON>(path, (json) => {
         const tsconfigPaths = [
-            { name: '@ukis/*', paths: ['frontend-libraries/projects/*'] }
+            { name: '@dlr-eoc/*', paths: ['frontend-libraries/projects/*'] }
         ];
 
         if (!json.compilerOptions) {

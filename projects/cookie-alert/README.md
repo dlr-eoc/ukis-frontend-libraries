@@ -1,18 +1,18 @@
-# @ukis/cookie-alert
+# @dlr-eoc/cookie-alert
 
 This project contains a component that displays a pop-up for the use of cookies on your website. 
 Agreement is stored in the localStorage of your browser with the key *cookie-agree-${host}*
 
-### how to use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
 For a example [see demo auth](../demo-auth/README.md)
 
 #### add the following dependencies to the package.json
-- "@ukis/cookie-alert"
+- "@dlr-eoc/cookie-alert"
 
 #### add the following to the app.module.ts
 ```
-  import { CookieAlertModule } from '@ukis/cookie-alert';
+  import { CookieAlertModule } from '@dlr-eoc/cookie-alert';
   ...
   imports: [
     ...
@@ -23,7 +23,7 @@ For a example [see demo auth](../demo-auth/README.md)
 or 
 
 ```
-  import { CookieAlertComponent } from '@ukis/cookie-alert';
+  import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
   ...
   declarations: [
     ...

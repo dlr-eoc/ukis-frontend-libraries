@@ -19,7 +19,7 @@
       "dom"
     ],
     "paths": {
-      "@ukis/*": [
+      "@dlr-eoc/*": [
         "dist/*",
         "projects/*"
       ]

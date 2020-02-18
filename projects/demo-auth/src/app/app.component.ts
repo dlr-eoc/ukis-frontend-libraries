@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 
 /** for User */
 import { Subscription } from 'rxjs';
-import { UserService, IUser } from '@ukis/user-info';
+import { UserService, IUser } from '@dlr-eoc/user-info';
 import { BasicAuthService } from './auth/basic-auth.service';
 
 interface IUi {

@@ -1,6 +1,6 @@
 # This is an angular demo application to show how to create a UKIS mapping application
 
-This application was generated with `ng generate application demo-maps` and then `@ukis/core-ui:ng-add --routing=true` was applied.
+This application was generated with `ng generate application demo-maps` and then `@dlr-eoc/core-ui:ng-add --routing=true` was applied.
 
 In the src folder you can find a view route-components which show the usage of:
 - [layers](src/app/route-components/route-example-layers/route-map.component.ts)

@@ -59,7 +59,7 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 
 3. Run the ng add command for ukis/core-ui
 
-- `ng add @ukis/core-ui [options]` 
+- `ng add @dlr-eoc/core-ui [options]` 
   - --routing=boolean // set up your project with [routing](https://angular.io/guide/router)
   - --addClr=boolean // runs ng add @clr/angular default=true
   - [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)

@@ -36,7 +36,7 @@ interface Idep {
 }
 
 
-const UKIS_SCOPE = '@ukis/';
+const UKIS_SCOPE = '@dlr-eoc/';
 const CWD = process.cwd();
 const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
 const ANGULARJSON: WorkspaceSchema = require(PATH.join(CWD, 'angular.json'));
@@ -71,7 +71,7 @@ function replaceDependencies(dependencies: IDependencyMap, packageAllDeps, ukisV
   const deps = dependencies;
   Object.keys(deps).forEach(key => {
     const dep = deps[key];
-    if (key.includes('@ukis') && dep === '0.0.0-PLACEHOLDER') {
+    if (key.includes('@dlr-eoc') && dep === '0.0.0-PLACEHOLDER') {
       deps[key] = ukisVersion;
     }
     if (key in packageAllDeps && dep === VENDOR_PLACEHOLDER) {

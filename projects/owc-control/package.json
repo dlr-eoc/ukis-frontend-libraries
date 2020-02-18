@@ -1,5 +1,5 @@
 {
-  "name": "@ukis/owc-control",
+  "name": "@dlr-eoc/owc-control",
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public-api",
   "license": "Apache-2.0",
@@ -9,9 +9,9 @@
     "rxjs": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "dependencies": {
-    "@ukis/services-layers": "0.0.0-PLACEHOLDER",
-    "@ukis/services-ogc": "0.0.0-PLACEHOLDER",
-    "@ukis/services-map-state": "0.0.0-PLACEHOLDER"
+    "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/services-ogc": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/services-map-state": "0.0.0-PLACEHOLDER"
   },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",

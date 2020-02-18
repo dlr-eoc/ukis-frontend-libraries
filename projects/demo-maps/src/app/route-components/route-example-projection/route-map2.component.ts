@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { MapOlService } from '@ukis/map-ol';
-import { eoc_litemap } from '@ukis/base-layers-raster';
+import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapOlService } from '@dlr-eoc/map-ol';
+import { eoc_litemap } from '@dlr-eoc/base-layers-raster';
 
 import olProjection from 'ol/proj/Projection';
 import { register as olRegister } from 'ol/proj/proj4';

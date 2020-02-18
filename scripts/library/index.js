@@ -10,7 +10,7 @@ const PATH = require("path");
 const FS = require("fs");
 const toposort = require("toposort");
 const depcheck = require("depcheck");
-const UKIS_SCOPE = '@ukis/';
+const UKIS_SCOPE = '@dlr-eoc/';
 const CWD = process.cwd();
 const MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
 const ANGULARJSON = require(PATH.join(CWD, 'angular.json'));
@@ -42,7 +42,7 @@ function replaceDependencies(dependencies, packageAllDeps, ukisVersion) {
     const deps = dependencies;
     Object.keys(deps).forEach(key => {
         const dep = deps[key];
-        if (key.includes('@ukis') && dep === '0.0.0-PLACEHOLDER') {
+        if (key.includes('@dlr-eoc') && dep === '0.0.0-PLACEHOLDER') {
             deps[key] = ukisVersion;
         }
         if (key in packageAllDeps && dep === VENDOR_PLACEHOLDER) {

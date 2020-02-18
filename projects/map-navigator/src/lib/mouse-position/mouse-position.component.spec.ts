@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MousePositionComponent } from './mouse-position.component';
 import { FormsModule } from '@angular/forms';
-import { MapOlService } from '@ukis/map-ol';
+import { MapOlService } from '@dlr-eoc/map-ol';
 
 describe('MousePositionComponent', () => {
   let component: MousePositionComponent;

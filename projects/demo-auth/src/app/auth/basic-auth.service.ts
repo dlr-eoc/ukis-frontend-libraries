@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { IUserinfo, IAuthService, IBasicUser } from '@ukis/user-info'
+import { IUserinfo, IAuthService, IBasicUser } from '@dlr-eoc/user-info'
 
 export class Auth {
     userName: string;
@@ -34,8 +34,8 @@ export class BasicAuthService implements IAuthService {
             urls: null
         }
         this.token = this.createToken(user.userName, user.password);
-        /** 
-         * this should normally come from a backend 
+        /**
+         * this should normally come from a backend
          */
         userinfo.current_user.loggedIn = true;
         userinfo.current_user.permissions = ['can_view_user', 'can_view_map'];

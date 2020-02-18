@@ -1,9 +1,9 @@
-# @ukis/services-map-state
+# @dlr-eoc/services-map-state
 
-### how to use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
 ```
-import { MapStateService } from '@ukis/services-map-state';
+import { MapStateService } from '@dlr-eoc/services-map-state';
 ```
 
 ```
@@ -24,9 +24,9 @@ For examples see:
 
 
 This module is used by components like:
-- @ukis/map-ol
-- @ukis/map-navigator
-- @ukis/layer-control
+- @dlr-eoc/map-ol
+- @dlr-eoc/map-navigator
+- @dlr-eoc/layer-control
 - ...
 
 It implements a basic 'state' for the map like:

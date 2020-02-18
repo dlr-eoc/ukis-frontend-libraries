@@ -1,4 +1,4 @@
-#! /bin/bash 
+#! /bin/bash
 
 #set -x # print out all commands
 set -e # exit on error
@@ -21,7 +21,7 @@ targetname=$2
 scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 basedir=$(readlink -f $scriptdir/../..)
 sourcedir=$basedir/frontend-libraries/dist/$projectname
-targetdir=$basedir/$targetname/node_modules/@ukis/$projectname
+targetdir=$basedir/$targetname/node_modules/@dlr-eoc/$projectname
 
 cd $basedir/frontend-libraries/
 

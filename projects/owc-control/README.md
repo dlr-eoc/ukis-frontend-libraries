@@ -1,17 +1,17 @@
-# @ukis/owc-control
+# @dlr-eoc/owc-control
 
-### how to use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
 // TODO: For examples [see demo maps](../demo-maps/README.md)
 
 #### add the following dependencies to the package.json
-- "@ukis/map-ol"
-- "@ukis/owc-control"
+- "@dlr-eoc/map-ol"
+- "@dlr-eoc/owc-control"
 
 #### add the following to the app.module.ts
 ```
-import { MapOlModule } from '@ukis/map-ol';
-import { OwcControlModule } from '@ukis/owc-control';
+import { MapOlModule } from '@dlr-eoc/map-ol';
+import { OwcControlModule } from '@dlr-eoc/owc-control';
 
 ...
 
@@ -45,11 +45,11 @@ import { OwcControlModule } from '@ukis/owc-control';
 
 #### add the following to a route-view.component.ts
 ```
-import { LayersService } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { IMapControls } from '@ukis/map-ol';
+import { LayersService } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { IMapControls } from '@dlr-eoc/map-ol';
 
-import { osm, eoc_litemap, esri_world_imagery } from '@ukis/base-layers-raster';
+import { osm, eoc_litemap, esri_world_imagery } from '@dlr-eoc/base-layers-raster';
 ```
 
 ```

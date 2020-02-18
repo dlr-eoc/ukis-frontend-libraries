@@ -18,7 +18,7 @@
 ### 1. Generate a new library with the cli
 run ``ng generate library < name > --prefix ukis``
 
-- rename lib package: "name": "@ukis/< name >"
+- rename lib package: "name": "@dlr-eoc/< name >"
 - set version to: "version": "0.0.0-PLACEHOLDER"
 - set lib package: "main": "src/public-api",
 - add "license": "Apache-2.0" or a compatible licenses
@@ -49,7 +49,7 @@ If your project depends on a package that is already listed in [frontend-librari
             "md5": "0.0.0-PLACEHOLDER-VENDOR"
         },
         "dependencies":{
-          "@ukis/services-layers": "0.0.0-PLACEHOLDER"
+          "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER"
         }
         // ...
     ```
@@ -86,12 +86,12 @@ There are two ways to include libraries in a frontend-project:
 ### 1st method: cloning libraries into your project
 - clone the libraries directly into the project. In detail: 
     - in the root-directory of your application (say `/home/<-your-username-here->/project-<name>`) clone the libraries: `git clone http://<-your-username-here->@git.../frontend-libraries.git`
-    - adjust the path mapping in  `project-<name>/tsconfig.json`, so that the ts-compiler will look for any `@ukis` dependencies in the libraries-directory you just downloaded: 
+    - adjust the path mapping in  `project-<name>/tsconfig.json`, so that the ts-compiler will look for any `@dlr-eoc` dependencies in the libraries-directory you just downloaded: 
     ```
         // tsconfig.json
         ...
         "paths": {
-            "@ukis/*": [
+            "@dlr-eoc/*": [
                 "dist/*",
                 "frontend-libraries/projects/*"
             ]
@@ -100,7 +100,7 @@ There are two ways to include libraries in a frontend-project:
     ```
 
 ### 2nd method: build libraries and project side by side
-- compile the library on changes and link the compiled library into the frontend-projects `node_modules/@ukis` directory. 
+- compile the library on changes and link the compiled library into the frontend-projects `node_modules/@dlr-eoc` directory. 
 
 ##### Building side by side - method 1: using ng build and npm link
 - clone the libraries
@@ -111,7 +111,7 @@ There are two ways to include libraries in a frontend-project:
 We have provided a script for this purpose: `bash scripts/buildAndLink.sh <libraryName> <frontendProjectName>`. 
 Note that this script assumes that the project- and the libraries-directories are placed side by side in the same folder.
 For example, assume that the folders `frontend-libraries` and `project-mariss` are situated in the same directory. 
-Then executing `bash frontend-libraries/buildAndLink.sh services-owc-json project-mariss` will build the library `frontend-libraries/projects/services-owc-json` and link it into `project-mariss/node_modules/@ukis/services-owc-json`.
+Then executing `bash frontend-libraries/buildAndLink.sh services-owc-json project-mariss` will build the library `frontend-libraries/projects/services-owc-json` and link it into `project-mariss/node_modules/@dlr-eoc/services-owc-json`.
 
 
 
