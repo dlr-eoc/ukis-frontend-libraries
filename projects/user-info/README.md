@@ -1,4 +1,6 @@
-# UserInfo
+# @ukis/user-info
+
+===
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
 
@@ -10,10 +12,6 @@ Run `ng generate component component-name --project user-info` to generate a new
 ## Build
 
 Run `ng build user-info` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build user-info`, go to the dist folder `cd dist/user-info` and run `npm publish`.
 
 ## Running unit tests
 

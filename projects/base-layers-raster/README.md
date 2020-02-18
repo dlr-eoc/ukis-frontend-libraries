@@ -4,7 +4,7 @@ This project includes a view often used layers in ukis mapping applications e.g.
 
 ### how use this in a ukis-angular (@ukis/core-ui) project
 
-For exampels [see demo maps](../demo-maps/README.md)
+For examples [see demo maps](../demo-maps/README.md)
 
 #### add the following dependencies to the package.json
 - "@ukis/base-layers-raster"

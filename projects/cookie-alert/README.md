@@ -5,7 +5,7 @@ Agreement is stored in the localStorage of your browser with the key *cookie-agr
 
 ### how use this in a ukis-angular (@ukis/core-ui) project
 
-For a exampel [see demo auth](../demo-auth/README.md)
+For a example [see demo auth](../demo-auth/README.md)
 
 #### add the following dependencies to the package.json
 - "@ukis/cookie-alert"

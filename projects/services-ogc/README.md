@@ -1,4 +1,7 @@
-# ServicesOgc
+# @ukis/services-ogc
+
+// TODO add description!!!
+===
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
 
@@ -8,10 +11,6 @@ Run `ng generate component component-name --project services-ogc` to generate a 
 > Note: Don't forget to add `--project services-ogc` or else it will be added to the default project in your `angular.json` file. 
 
 ## Build
-
-Run `ng build services-ogc` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
 
 After building your library with `ng build services-ogc`, go to the dist folder `cd dist/services-ogc` and run `npm publish`.
 

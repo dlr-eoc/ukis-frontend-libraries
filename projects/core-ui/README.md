@@ -26,7 +26,7 @@ ng add @ukis/core-ui
 
 --project=string // the project in the angular workspace
 --routing=boolean // default false
---addClr=boolenan // runns @clr/angular:ng-add default true
+--addClr=boolean // run's @clr/angular:ng-add default true
 
 // Not implemented right now!
 --addMap=boolean // adds a map component default false

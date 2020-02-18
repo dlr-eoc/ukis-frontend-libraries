@@ -2,7 +2,22 @@
 
 ### how use this in a ukis-angular (@ukis/core-ui) project
 
-For exampels see 
+```
+import { MapStateService } from '@ukis/services-map-state';
+```
+
+```
+constructor(public mapStateSvc: MapStateService,...)
+```
+
+```
+ngOnInit(){
+  this.mapStateSvc.setExtent([-14, 33, 40, 57]);
+}
+```
+
+
+For examples see:
 - [demo maps](../demo-maps/README.md)
 - [map-navigator](../owc-control/src/lib/owc-control.component.ts)
 - [map-ol](../layer-control/src/lib/base-layer-control/base-layer-control.component.ts)

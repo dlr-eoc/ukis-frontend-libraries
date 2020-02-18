@@ -2,7 +2,7 @@
 
 ### how use this in a ukis-angular (@ukis/core-ui) project
 
-// TODO: For exampels [see demo maps](../demo-maps/README.md)
+For examples [see demo maps](../demo-maps/README.md)
 
 #### add the following dependencies to the package.json
 - "@ukis/map-ol"

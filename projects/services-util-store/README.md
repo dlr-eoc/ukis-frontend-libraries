@@ -2,7 +2,26 @@
 
 ### how use this in a ukis-angular (@ukis/core-ui) project
 
-For exampels see 
+```
+import { UtilStoreService } from '@ukis/services-util-store';
+```
+
+```
+constructor(private UtilStore: UtilStoreService,...)
+```
+
+```
+function(){
+  // set value
+  this.UtilStore.local(key, value);
+
+  // get value
+  const value = this.UtilStore.local(key);
+}
+```
+
+
+For examples see:
 - [demo maps](../demo-maps/README.md)
 - [cookie-alert](../cookie-alert/src/lib/cookie-alert.component.ts)
 
@@ -12,10 +31,11 @@ This module is used by components like:
 - @ukis/services-ogc
 - ...
 
+
 It implements a basic 'storage' to store key value based data in:
-- localStorage
-- sessionStorage
-- runtime
+- local: localStorage
+- session: sessionStorage
+- runtime: runtimeStorage
 - cookie
 
 
