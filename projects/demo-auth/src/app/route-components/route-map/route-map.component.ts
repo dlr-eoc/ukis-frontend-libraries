@@ -32,22 +32,22 @@ export class RouteMapComponent implements OnInit {
   }
 
   addlayers() {
-    let osm_layer = new osm({
+    const osmLayer = new osm({
       visible: true,
       legendImg: null
     });
 
-    let eoc_layer = new eoc_litemap({
+    const eocLayer = new eoc_litemap({
       visible: false,
       legendImg: null
     });
 
     if (!this.layerSvc.getLayerById('eoc_litemap')) {
-      this.layerSvc.addLayer(eoc_layer, 'Layers');
+      this.layerSvc.addLayer(eocLayer, 'Layers');
     }
 
     if (!this.layerSvc.getLayerById('osm')) {
-      this.layerSvc.addLayer(osm_layer, 'Baselayers');
+      this.layerSvc.addLayer(osmLayer, 'Baselayers');
     }
   }
 }

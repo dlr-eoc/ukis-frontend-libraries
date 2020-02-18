@@ -19,13 +19,13 @@ export class AuthGuardService implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        let url: string = state.url;
+        const url: string = state.url;
         return this.checkRoute(url, route);
     }
 
     checkRoute(url: string, route: ActivatedRouteSnapshot) {
         if (this.userService.isloggedIn()) {
-            let canEnterRoute = this.authService.checkAuthorization(route.data.hasPermissions).pipe(
+            const canEnterRoute = this.authService.checkAuthorization(route.data.hasPermissions).pipe(
                 map(value => {
                     if (!value) {
                         this.alertService.alert({

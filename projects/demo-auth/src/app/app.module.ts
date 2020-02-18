@@ -55,8 +55,8 @@ import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
     {
       provide: HTTP_INTERCEPTORS,
       // useClass: TokenInterceptor,
-      useFactory: (BasicAuthService) => {
-        return new HttpAuthInterceptor(BasicAuthService);
+      useFactory: (authService) => {
+        return new HttpAuthInterceptor(authService);
       },
       deps: [BasicAuthService],
       multi: true

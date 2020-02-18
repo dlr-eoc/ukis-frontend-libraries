@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { IUserinfo, IAuthService, IBasicUser } from '@dlr-eoc/user-info'
+import { IUserinfo, IAuthService, IBasicUser } from '@dlr-eoc/user-info';
 
 export class Auth {
     userName: string;
@@ -17,10 +17,10 @@ export class Auth {
  */
 @Injectable()
 export class BasicAuthService implements IAuthService {
-    private userinfo = new BehaviorSubject(<IUserinfo>{ current_user: {} });
-    //private token: string;
-    loginmethode: 'oauth_pass' //loginmethode: 'oauth_pass' | 'oauth_code' | 'ukis_cas';
-    private tokenType: string = 'Basic';
+    private userinfo = new BehaviorSubject( { current_user: {} } as IUserinfo);
+    // private token: string;
+    loginmethode: 'oauth_pass'; // loginmethode: 'oauth_pass' | 'oauth_code' | 'ukis_cas';
+    private tokenType = 'Basic';
     private token: string = null;
 
     constructor(private http: HttpClient) {
@@ -29,10 +29,10 @@ export class BasicAuthService implements IAuthService {
 
 
     login(user: IBasicUser) {
-        let userinfo: IUserinfo = {
+        const userinfo: IUserinfo = {
             current_user: user,
             urls: null
-        }
+        };
         this.token = this.createToken(user.userName, user.password);
         /**
          * this should normally come from a backend
@@ -49,10 +49,10 @@ export class BasicAuthService implements IAuthService {
     }
 
     logout() {
-        let userinfo = this.userinfo.getValue();
+        const userinfo = this.userinfo.getValue();
         userinfo.current_user = null;
         this.userinfo.next(userinfo);
-        this.removeBrowserSession()
+        this.removeBrowserSession();
         return this.userinfo.asObservable();
     }
 
@@ -61,7 +61,7 @@ export class BasicAuthService implements IAuthService {
     }
 
     isloggedIn(): boolean {
-        let user = this.userinfo.getValue().current_user;
+        const user = this.userinfo.getValue().current_user;
         if (user && user.loggedIn) {
             return true;
         } else {
@@ -70,10 +70,10 @@ export class BasicAuthService implements IAuthService {
     }
 
     checkAuthorization(permissions: string[]): Observable<boolean> {
-        let user = this.userinfo.getValue().current_user;
+        const user = this.userinfo.getValue().current_user;
         if (user && Array.isArray(user.permissions)) {
-            //let boolPermissions = permissions.map((p) => user.permissions.includes(p))
-            let boolPermissions = permissions.map((p) => user.permissions.includes(p))
+            // let boolPermissions = permissions.map((p) => user.permissions.includes(p))
+            const boolPermissions = permissions.map((p) => user.permissions.includes(p));
             if (boolPermissions.includes(false)) {
                 return new BehaviorSubject(false).asObservable();
             } else {
@@ -93,39 +93,39 @@ export class BasicAuthService implements IAuthService {
     }
 
     setBrowserSession(user: IBasicUser) {
-        window.localStorage.setItem("UN", user.userName);
-        window.localStorage.setItem("PE", user.permissions.join(';'));
-        window.localStorage.setItem("ST", this.getBasicCode())
-        window.localStorage.setItem("RM", "true")
+        window.localStorage.setItem('UN', user.userName);
+        window.localStorage.setItem('PE', user.permissions.join(';'));
+        window.localStorage.setItem('ST', this.getBasicCode());
+        window.localStorage.setItem('RM', 'true');
     }
 
     removeBrowserSession() {
-        window.localStorage.removeItem("UN");
-        window.localStorage.removeItem("ST");
-        window.localStorage.removeItem("PE");
-        window.localStorage.removeItem("RM");
+        window.localStorage.removeItem('UN');
+        window.localStorage.removeItem('ST');
+        window.localStorage.removeItem('PE');
+        window.localStorage.removeItem('RM');
     }
 
     checkBrowserSession() {
-        if (window.localStorage.getItem("RM") && window.localStorage.getItem("RM") === "true") {
-            let code = window.localStorage.getItem("ST")
-            let userName = window.localStorage.getItem("UN");
+        if (window.localStorage.getItem('RM') && window.localStorage.getItem('RM') === 'true') {
+            const code = window.localStorage.getItem('ST');
+            const userName = window.localStorage.getItem('UN');
             this.setBasicCode(code);
 
-            let userinfo: IUserinfo = {
+            const userinfo: IUserinfo = {
                 current_user: {
-                    userName: userName,
+                    userName,
                     password: this.decodeToken(code)
                 },
                 urls: null
-            }
-            //let userName = window.localStorage.getItem("UN");
-            let permissions = window.localStorage.getItem("PE")
+            };
+            // let userName = window.localStorage.getItem("UN");
+            const permissions = window.localStorage.getItem('PE');
             userinfo.current_user.loggedIn = true;
             if (permissions) {
                 userinfo.current_user.permissions = permissions.split(';');
             }
-            console.log(userinfo)
+            console.log(userinfo);
             this.userinfo.next(userinfo);
         }
     }
@@ -135,8 +135,8 @@ export class BasicAuthService implements IAuthService {
     }
 
     getBasicCode(): string {
-        //trim to remove space
-        let code = this.token.split(this.tokenType)[1].trim();
+        // trim to remove space
+        const code = this.token.split(this.tokenType)[1].trim();
         return code;
     }
 
@@ -145,22 +145,22 @@ export class BasicAuthService implements IAuthService {
     }
 
     setToken(token: string) {
-        this.token = token
+        this.token = token;
     }
 
     createToken(username: string, password: string) {
-        var basicCode = btoa(`${username}:${password}`);
+        const basicCode = btoa(`${username}:${password}`);
         return `${this.tokenType} ${basicCode}`;
     }
 
     decodeToken(token: string): string {
-        let _code = token.split(this.tokenType)[1]
-        if (_code) {
-            _code = _code.trim();
+        let code = token.split(this.tokenType)[1];
+        if (code) {
+            code = code.trim();
         } else {
-            _code = token;
+            code = token;
         }
-        return atob(_code);
+        return atob(code);
     }
 
 }

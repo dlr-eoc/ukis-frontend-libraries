@@ -6,14 +6,14 @@ import { Observable } from 'rxjs';
 export class HttpAuthInterceptor implements HttpInterceptor {
     constructor(public auth: BasicAuthService) { }
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let cloneReq = request.clone({
-            //withCredentials: false,
+        const cloneReq = request.clone({
+            // withCredentials: false,
             setHeaders: {
-                'Authorization': `${this.auth.getToken()}`,
+                Authorization: `${this.auth.getToken()}`,
                 'Content-Type': 'application/json'
             }
         });
-        console.log('HttpAuthInterceptor', cloneReq)
+        console.log('HttpAuthInterceptor', cloneReq);
         return next.handle(cloneReq);
     }
 }
