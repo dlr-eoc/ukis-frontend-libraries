@@ -8,7 +8,7 @@ type IoptionalRasterLayerOptions = {
 };
 export class google_earth extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'Google Satellite',
       displayName: 'Google Satellite',
       id: 'google_satellite',
@@ -21,15 +21,15 @@ export class google_earth extends RasterLayer {
       legendImg: 'google-sat.png',
       description: '&copy google.com/vt/lyrs - satellite only',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
 export class google_maps extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'Google Maps',
       displayName: 'Google Maps',
       id: 'google_maps',
@@ -42,15 +42,15 @@ export class google_maps extends RasterLayer {
       legendImg: 'google-maps.png',
       description: '&copy google.com/vt/lyrs - terrain',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
 export class google_hybrid extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'Google Hybrid',
       displayName: 'Google Hybrid',
       id: 'google_maps',
@@ -63,15 +63,15 @@ export class google_hybrid extends RasterLayer {
       legendImg: 'google-hybrid.png',
       description: '&copy google.com/vt/lyrs - hybrid',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
 export class esri_grey_canvas extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'ESRI Neutral Map',
       displayName: 'ESRI Neutral Map',
       id: 'esri_grey_canvas',
@@ -83,16 +83,16 @@ export class esri_grey_canvas extends RasterLayer {
       legendImg: 'esri_grey_canvas.png',
       description: '&copy arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
 
 export class esri_world_imagery extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'ESRI Imagery',
       displayName: 'ESRI Imagery',
       id: 'esri_imagery',
@@ -104,16 +104,16 @@ export class esri_world_imagery extends RasterLayer {
       legendImg: 'esri_imagery.png',
       description: '&copy arcgisonline.com/arcgis/rest/services/World_Imagery',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
 
 export class esri_ocean_imagery extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'ESRI Ocean',
       displayName: 'ESRI Ocean',
       id: 'esri_ocean',
@@ -125,16 +125,16 @@ export class esri_ocean_imagery extends RasterLayer {
       legendImg: 'esri-ocean.png',
       description: '&copy arcgisonline.com/arcgis/rest/services/Ocean_Basemap',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
 
 export class esri_nav_charts extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'ESRI Charts',
       displayName: 'ESRI Charts',
       id: 'esri_charts',
@@ -146,16 +146,16 @@ export class esri_nav_charts extends RasterLayer {
       legendImg: 'esri_charts.png',
       description: '&copy arcgisonline.com/arcgis/rest/services/Specialty/World_Navigation_Charts',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
 
 export class osm extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'OpenStreetMap',
       displayName: 'OpenStreetMap',
       id: 'osm',
@@ -169,16 +169,16 @@ export class osm extends RasterLayer {
       description: '&copy OpenStreetMap and contributors',
       opacity: 1,
       zIndex: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
 
 export class eoc_litemap extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'EOC Litemap',
       displayName: 'EOC Litemap',
       id: 'eoc_litemap',
@@ -189,7 +189,7 @@ export class eoc_litemap extends RasterLayer {
         layers: 'litemap',
         format: 'image/png',
         transparent: true,
-        attribution: "",
+        attribution: '',
       },
       url: 'https://geoservice.dlr.de/eoc/basemap/wms',
       attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
@@ -197,9 +197,9 @@ export class eoc_litemap extends RasterLayer {
       legendImg: 'eoc_litemap.png',
       description: 'http://www.naturalearthdata.com/about/',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
 
@@ -207,7 +207,7 @@ export class eoc_litemap extends RasterLayer {
 
 export class open_sea_map extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
-    let _options: IRasterLayerOptions = {
+    const defaultOptions: IRasterLayerOptions = {
       name: 'OpenSeaMap',
       displayName: 'OpenSeaMap',
       id: 'OpenSeaMap',
@@ -222,8 +222,8 @@ export class open_sea_map extends RasterLayer {
       legendImg: '',
       description: 'http://map.openseamap.org/',
       opacity: 1
-    }
-    if (options) { Object.assign(_options, options); }
-    super(_options)
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
   }
 }
