@@ -1,4 +1,4 @@
-<img src="projects/core-ui/schematics/ng-add/files/src/assets/icons/icon-96x96.png" alt="UKIS Logo"> Frontend Libraries for UKIS (Map) Applications
+<img src="projects/core-ui/schematics/ng-add/files/src/assets/icons/icon-72x72.png" alt="UKIS Logo"> Frontend Libraries for UKIS (Map) Applications
 ========================
 
 ![CI](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/CI/badge.svg)
@@ -7,11 +7,14 @@
 
 
 
-This repository hosts all libraries that are imported into project specific UKIS Frontend Applications. 
-It uses [angular](https://angular.io/) and the [Clarity Design System](https://vmware.github.io/clarity/).
-The dependencies to the used modules are defined in package.json and are stored in node_modules.  
+This repository (UKIS Frontend Libraries) is a collection of angular components, services, interfaces... which are often used in UKIS mapping applications.
 
-This repository contains the following modules as angular libraries:
+It is the base to create a project specific UKIS Frontend Application.
+
+It uses [angular](https://angular.io/) and the [Clarity Design System](https://vmware.github.io/clarity/).
+ 
+
+The following angular libraries are included in this repository:
 
 - [base-layers-raster](projects/base-layers-raster/README.md)
 - [cookie-alert](projects/cookie-alert/README.md)
@@ -36,11 +39,11 @@ This repository contains the following modules as angular libraries:
 - or use the modules in typescript source via path mapping [see Developing libraries and frontend side by side](DEVELOPMENT.md)
 
 
-**How to install Packges from GitHub**
+**How to install Packages from GitHub**
 
 1. [Create a personal access token on your github account](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with (read:packages, repo, write:packages)
 
-2. Authenticate by logging in to npm, use the npm login
+2. Authenticate by logging in to GitHub npm Package Registry, use the npm login
 
 3. Create a [.npmrc file](https://docs.npmjs.com/configuring-npm/npmrc.html) in your folder or use --registry=https://npm.pkg.github.com on npm install
 
@@ -57,14 +60,14 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 2. Move into the directory
 - `cd project-<name>`
 
-3. Run the ng add command for ukis/core-ui
+3. Run the ng add command for the UKIS core-ui
 
 - `ng add @dlr-eoc/core-ui [options]` 
   - --routing=boolean // set up your project with [routing](https://angular.io/guide/router)
   - --addClr=boolean // runs ng add @clr/angular default=true
   - [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
 
-4. [see clarity get-started to use the components](https://clarity.design/documentation/get-started)
+4. [see clarity get-started to use there ui components](https://clarity.design/documentation/get-started)
 
 
 
@@ -89,3 +92,12 @@ Copyright (c) 2020 German Aerospace Center (DLR) * German Remote Sensing Data Ce
 
 The UKIS team welcomes contributions from the community.
 For more detailed information, see our [guide on contributing](CONTRIBUTING.md) and [development](DEVELOPMENT.md) if you're interested in getting involved.
+
+
+## What is UKIS?
+
+The project Environmental and Crisis Information System (the German abbreviation is UKIS, standing for Umwelt- und Kriseninformationssysteme) aims at harmonizing the development of information systems at the German Remote Sensing Data Center (DFD) and setting up a framework of modularized and generalized software components.
+
+UKIS is intended to ease and standardize the process of setting up specific information systems and thus bridging the gap from EO product generation and information fusion to the delivery of products and information to end users.
+
+Furthermore the intention is to save and broaden know-how that was and is invested and earned in the development of information systems and components in several ongoing and future DFD projects.
