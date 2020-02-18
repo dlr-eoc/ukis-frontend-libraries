@@ -177,7 +177,7 @@ export class osm extends RasterLayer {
 
 
 export class eoc_litemap extends RasterLayer {
-  constructor(options: IoptionalRasterLayerOptions) {
+  constructor(options?: IoptionalRasterLayerOptions) {
     let _options: IRasterLayerOptions = {
       name: 'EOC Litemap',
       displayName: 'EOC Litemap',
