@@ -56,7 +56,7 @@ import { CookieAlertComponent } from '@ukis/cookie-alert';
       provide: HTTP_INTERCEPTORS,
       // useClass: TokenInterceptor,
       useFactory: (BasicAuthService) => {
-        return new HttpAuthInterceptor(BasicAuthService as any);
+        return new HttpAuthInterceptor(BasicAuthService);
       },
       deps: [BasicAuthService],
       multi: true
