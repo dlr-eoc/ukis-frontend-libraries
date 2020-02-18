@@ -2,7 +2,7 @@
 
 
 ### Breaking Changes
-* **change npm package scope from @ukis to @dlr-eoc** this is braking all imports and path mappings!!! 
+* **change npm package scope from @ukis to @dlr-eoc** this is breaking all imports and path mappings!!! 
 
 * **@ukis/services-layers:** getLayerOrGroupById() - is returning a Layer | LayerGroup | null - not a array anymore! 
 
