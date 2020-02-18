@@ -2,7 +2,7 @@
 
 This project includes a view often used layers in ukis mapping applications e.g. eoc_litemap, osm, ...
 
-### how use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@ukis/core-ui) project
 
 For examples [see demo maps](../demo-maps/README.md)
 

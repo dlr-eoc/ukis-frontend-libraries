@@ -1,7 +1,7 @@
 # @ukis/user-info
 
 
-### how use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@ukis/core-ui) project
 
 For a example [see demo auth](../demo-auth/README.md)
 

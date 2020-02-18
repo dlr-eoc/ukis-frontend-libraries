@@ -4,12 +4,12 @@
 ## The idea of the LayersService
 
 It should be a interface to use our components with different mapping libraries.  
-For example one layer control which is working with all the different maps and layers types.
-The conversion from our generalized layers should be implemented in the corresponding map component like in @ukis/map-ol 
+For example one layer control which is working with all the different maps and layertypes. 
+The conversion from our generalized layers to the map specific should be implemented in the corresponding component like in @ukis/map-ol 
 
 
 ![The idea of the layerService](assets/TheIdeaOfTheUkisLayerService.svg)
-### how use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@ukis/core-ui) project
 ```
 import { LayersService } from '@ukis/services-layers';
 ```
@@ -24,7 +24,7 @@ ngOnInit(){
 }
 ```
 
-It implements the base of handling ukis-layers and defines classes and types for Layers, LayerGroups, RasterLayers...
+It implements the base of handling ukis-layers and defines classes and types for Layers, LayerGroups, RasterLayers... 
 There are actually three slots ('Baselayers' | 'Overlays' | 'Layers') to push layers so we can create a flat layer tree from that to give it to the corresponding map component. So if the mapping library does not handle groups it should also work.
 
 

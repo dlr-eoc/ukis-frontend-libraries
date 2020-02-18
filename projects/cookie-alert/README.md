@@ -3,7 +3,7 @@
 This project contains a component that displays a pop-up for the use of cookies on your website. 
 Agreement is stored in the localStorage of your browser with the key *cookie-agree-${host}*
 
-### how use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@ukis/core-ui) project
 
 For a example [see demo auth](../demo-auth/README.md)
 

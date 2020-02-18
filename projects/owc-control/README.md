@@ -1,8 +1,6 @@
 # @ukis/owc-control
 
-# @ukis/layer-control
-
-### how use this in a ukis-angular (@ukis/core-ui) project
+### how to use this in a ukis-angular (@ukis/core-ui) project
 
 // TODO: For examples [see demo maps](../demo-maps/README.md)
 
