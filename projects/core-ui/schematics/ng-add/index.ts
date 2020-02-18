@@ -16,11 +16,11 @@ import { UkisNgAddRoutingSchema } from '../add-routing/schema';
 
 // https://angular.io/guide/schematics-for-libraries
 // https://dev.to/thisdotmedia/schematics-pt-3-add-tailwind-css-to-your-angular-project-40pp
-export function ngAdd(_options: UkisNgAddSchema): Rule {
+export function ngAdd(options: UkisNgAddSchema): Rule {
     const addRoutingOptions: UkisNgAddRoutingSchema = {
-        project: _options.project,
-        addFiles: _options.addFiles,
-        updateFiles: _options.updateFiles
+        project: options.project,
+        addFiles: options.addFiles,
+        updateFiles: options.updateFiles
     };
 
     /**
@@ -30,13 +30,13 @@ export function ngAdd(_options: UkisNgAddSchema): Rule {
      * therefore types of schema as string
      */
     const rules: Rule[] = [
-        (_options.addClr === 'false') ? noop() : externalSchematic('@clr/angular', 'ng-add', _options),
-        (_options.addFiles === 'false') ? noop() : ruleAddFiles(_options),
-        (_options.updateFiles === 'false') ? noop() : ruleAddImportsInAppModule(_options),
-        (_options.updateFiles === 'false') ? noop() : ruleUpdateAngularJson(_options),
-        (_options.updateFiles === 'false') ? noop() : ruleUpdateTsConfigFile(_options),
-        (_options.updateFiles === 'false') ? noop() : ruleUpdateIndexHtml(_options),
-        (_options.routing === 'false') ? noop() : schematic('add-routing', addRoutingOptions)
+        (options.addClr === 'false') ? noop() : externalSchematic('@clr/angular', 'ng-add', options),
+        (options.addFiles === 'false') ? noop() : ruleAddFiles(options),
+        (options.updateFiles === 'false') ? noop() : ruleAddImportsInAppModule(options),
+        (options.updateFiles === 'false') ? noop() : ruleUpdateAngularJson(options),
+        (options.updateFiles === 'false') ? noop() : ruleUpdateTsConfigFile(options),
+        (options.updateFiles === 'false') ? noop() : ruleUpdateIndexHtml(options),
+        (options.routing === 'false') ? noop() : schematic('add-routing', addRoutingOptions)
     ];
 
     return chain(rules);
@@ -49,7 +49,7 @@ export function ngAdd(_options: UkisNgAddSchema): Rule {
  * - styles
  * - app
  */
-function ruleAddFiles(_options: UkisNgAddSchema): Rule {
+function ruleAddFiles(options: UkisNgAddSchema): Rule {
     /**
      * app.component.html
      * add default template from files
@@ -59,8 +59,8 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
      *
      *  TODO: check for style files and replace them e.g. app.component.styl ...
      */
-    return (tree: Tree, _context: SchematicContext) => {
-        const project = getProject(tree, _options);
+    return (tree: Tree, context: SchematicContext) => {
+        const project = getProject(tree, options);
         const workspace = getWorkspace(tree);
 
         if (!project.sourceRoot) {
@@ -72,10 +72,10 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
         const assetsPath = join(sourcePath, 'assets');
         const stylesPath = join(sourcePath, 'styles');
         const appPath = join(sourcePath, 'app');
-        const styleExt = getStyleExt(project, workspace, _context);
-        const templateVariabels = Object.assign(_options, {
+        const styleExt = getStyleExt(project, workspace, context);
+        const templateVariabels = Object.assign(options, {
             appPrefix: project.prefix,
-            styleExt: styleExt
+            styleExt
         });
 
         const srcTemplateSource = apply(url('./files/src/'), [
@@ -164,7 +164,7 @@ function ruleAddFiles(_options: UkisNgAddSchema): Rule {
  * - core-ui components
  * - HttpClientModule?
  */
-function ruleAddImportsInAppModule(_options: UkisNgAddSchema): Rule {
+function ruleAddImportsInAppModule(options: UkisNgAddSchema): Rule {
     const rules: Rule[] = [];
     const imports: ImoduleImport[] = [
         // { classifiedName: 'HttpClientModule', path: '@angular/common/http', module: true },
@@ -180,7 +180,7 @@ function ruleAddImportsInAppModule(_options: UkisNgAddSchema): Rule {
      * create a rule for each insertImport/addProviderToModule because addProviderToModule is not working multiple times in one Rule???
      */
     imports.map(item => {
-        rules.push(addServiceComponentModule(_options, item));
+        rules.push(addServiceComponentModule(options, item));
     });
 
     // then chain the rules to one
@@ -193,11 +193,11 @@ function ruleAddImportsInAppModule(_options: UkisNgAddSchema): Rule {
  * - assets
  * - styles
  */
-function ruleUpdateAngularJson(_options: UkisNgAddSchema): Rule {
-    return (tree: Tree, _context: SchematicContext) => {
-        const project = getProject(tree, _options);
+function ruleUpdateAngularJson(options: UkisNgAddSchema): Rule {
+    return (tree: Tree, context: SchematicContext) => {
+        const project = getProject(tree, options);
         const workspace = getWorkspace(tree);
-        const styleExt = getStyleExt(project, workspace, _context);
+        const styleExt = getStyleExt(project, workspace, context);
 
         ['build', 'test'].map(target => {
             updateAngularArchitect(project, target, styleExt);
@@ -212,16 +212,16 @@ function ruleUpdateAngularJson(_options: UkisNgAddSchema): Rule {
 
         if (!project.schematics['@schematics/angular:component']) {
             project.schematics['@schematics/angular:component'] = {
-                'style': 'scss'
+                style: 'scss'
             };
         }
-        project.schematics['@schematics/angular:component']['style'] = 'scss';
+        project.schematics['@schematics/angular:component'].style = 'scss';
 
 
-        if (!_options.project) {
+        if (!options.project) {
             throw new SchematicsException(`Could not find Project in the workspace check your --project`);
         }
-        workspace.projects[_options.project] = project;
+        workspace.projects[options.project] = project;
         return updateWorkspace(workspace);
     };
 }
@@ -257,7 +257,7 @@ function updateAngularArchitect(project: WorkspaceProject, type: string | 'build
  *
  * - compilerOptions.paths
  */
-function ruleUpdateTsConfigFile(_options: UkisNgAddSchema): Rule {
+function ruleUpdateTsConfigFile(options: UkisNgAddSchema): Rule {
     const path = 'tsconfig.json';
     return updateJsonFile<TsconfigJSON>(path, (json) => {
         const tsconfigPaths = [
@@ -296,9 +296,9 @@ function ruleUpdateTsConfigFile(_options: UkisNgAddSchema): Rule {
  * - shortcut icon
  * - manifest
  */
-function ruleUpdateIndexHtml(_options: UkisNgAddSchema): Rule {
-    return async (tree: Tree, _context: SchematicContext) => {
-        const project = getProject(tree, _options);
+function ruleUpdateIndexHtml(options: UkisNgAddSchema): Rule {
+    return async (tree: Tree, context: SchematicContext) => {
+        const project = getProject(tree, options);
 
         if (!project.sourceRoot) {
             project.sourceRoot = 'src';
@@ -310,8 +310,8 @@ function ruleUpdateIndexHtml(_options: UkisNgAddSchema): Rule {
 
 
         let projectTitle = 'Your App';
-        if (_options.project) {
-            projectTitle = _options.project;
+        if (options.project) {
+            projectTitle = options.project;
         }
 
         const headerTags = [
@@ -324,7 +324,7 @@ function ruleUpdateIndexHtml(_options: UkisNgAddSchema): Rule {
         ];
 
         return chain([
-            updateHtmlFile(sourcePath, 'head', 'head', headerTags, _options)
+            updateHtmlFile(sourcePath, 'head', 'head', headerTags, options)
         ]);
     };
 }
@@ -333,18 +333,18 @@ function ruleUpdateIndexHtml(_options: UkisNgAddSchema): Rule {
 // TODO: maybe update this files instead of replacing them
 
 /**
-* app.component.ts
-* add imports for
-* - icons
-* - services
-* - Router
-* - variables for UI
-* - constructor imports
-* - init()
-* - getHtmlMeta()
-*
-* maybe use template file??
-*/
+ * app.component.ts
+ * add imports for
+ * - icons
+ * - services
+ * - Router
+ * - variables for UI
+ * - constructor imports
+ * - init()
+ * - getHtmlMeta()
+ *
+ * maybe use template file??
+ */
 
 
 
