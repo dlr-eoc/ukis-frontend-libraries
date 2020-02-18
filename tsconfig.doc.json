@@ -29,8 +29,6 @@
     "**/*.spec.ts",
     "node_modules/",
     "projects/demo-maps/**/*",
-    "projects/demo-maps-e2e/**/*",
-    "projects/demo-user-info/**/*",
-    "projects/demo-user-info-e2e/**/*"
+    "projects/demo-auth/**/*",
   ]
 }
