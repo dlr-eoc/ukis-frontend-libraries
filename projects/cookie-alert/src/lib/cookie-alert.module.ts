@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from "@angular/common"; //for ngClss
+import { CommonModule } from '@angular/common'; // for ngClss
 
 import { CookieAlertComponent } from './cookie-alert.component';
 

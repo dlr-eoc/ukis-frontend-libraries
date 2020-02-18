@@ -26,16 +26,16 @@ describe('CookieAlertService', () => {
   });
 
   it('should have Input alert-text', () => {
-    const _text = 'test alert text';
-    component.text = _text;
+    const alertText = 'test alert text';
+    component.text = alertText;
     fixture.detectChanges();
-    expect(component.text).toEqual(_text);
+    expect(component.text).toEqual(alertText);
   });
 
   it('should have Input privacy-link', () => {
-    const _link = 'http://test.de';
-    component.link = _link;
+    const alertLink = 'http://test.de';
+    component.link = alertLink;
     fixture.detectChanges();
-    expect(component.link).toEqual(_link);
+    expect(component.link).toEqual(alertLink);
   });
 });
