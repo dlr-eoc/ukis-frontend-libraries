@@ -37,100 +37,100 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   }
 
   addLayers() {
-    const osm_layer_base = new osm({
+    const osmLayerBase = new osm({
       legendImg: null
     });
-    const osm_layer_1 = new osm({
+    const osmLayer1 = new osm({
       legendImg: null,
       id: 'OSM1'
     });
 
     const data = {
-      'type': 'FeatureCollection',
-      'features': [
+      type: 'FeatureCollection',
+      features: [
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               10.9423828125,
               49.001843917978526
             ]
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               11.18408203125,
               49.088257784724675
             ]
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               11.030273437499998,
               49.35375571830993
             ]
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               10.72265625,
               49.24629332459796
             ]
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               12.76611328125,
               48.011975126709956
             ]
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               13.55712890625,
               49.15296965617042
             ]
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               13.3154296875,
               48.545705491847464
             ]
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               4.482421875,
               49.224772722794825
             ]
@@ -139,7 +139,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       ]
     };
 
-    const custom_layer = new CustomLayer({
+    const customLayer = new CustomLayer({
       id: 'heatmap_layer',
       name: 'Heatmap Layer',
       type: 'custom',
@@ -152,16 +152,16 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: false
     });
 
-    const vector_layer = new VectorLayer({
+    const vectorLayer = new VectorLayer({
       id: 'Vector Layer1',
       name: 'Vector Layer',
       type: 'geojson',
-      data: data,
+      data,
       visible: false
     });
 
 
-    const custom_vector_layer = new CustomLayer({
+    const customVectorLayer = new CustomLayer({
       id: 'custom Vector Layer',
       name: 'Custom Layer KML',
       type: 'custom',
@@ -175,23 +175,23 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       bbox: [-71.770, -33.112, -71.421, -32.867]
     });
 
-    const esri_layer = new esri_world_imagery();
+    const esriLayer = new esri_world_imagery();
 
-    const layers_group1 = new LayerGroup({
+    const layersGroup1 = new LayerGroup({
       name: 'Group 1',
       filtertype: 'Layers',
       id: 'group1',
-      layers: [esri_layer, custom_layer, vector_layer]
+      layers: [esriLayer, customLayer, vectorLayer]
     });
 
-    const image_wms_layer = new CustomLayer({
+    const imageWmsLayer = new CustomLayer({
       id: 'image_wms',
       name: 'Image WMS',
       type: 'custom',
       custom_layer: new olImageLayer({
         source: new olImageWMS({
           url: 'https://ahocevar.com/geoserver/wms',
-          params: { 'LAYERS': 'topp:states' },
+          params: { LAYERS: 'topp:states' },
           serverType: 'geoserver'
         })
       }),
@@ -199,13 +199,13 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const esri_layer2 = new esri_grey_canvas();
-    esri_layer2.id = 'esri_layer2';
-    esri_layer2.removable = true;
+    const esriLayer2 = new esri_grey_canvas();
+    esriLayer2.id = 'esri_layer2';
+    esriLayer2.removable = true;
 
-    const layers = [osm_layer_1, layers_group1, image_wms_layer, esri_layer2, custom_vector_layer];
+    const layers = [osmLayer1, layersGroup1, imageWmsLayer, esriLayer2, customVectorLayer];
 
-    this.layersSvc.addLayer(osm_layer_base, 'Baselayers');
+    this.layersSvc.addLayer(osmLayerBase, 'Baselayers');
     layers.forEach(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');
@@ -222,14 +222,14 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const data = {
-      'type': 'FeatureCollection',
-      'features': [
+      type: 'FeatureCollection',
+      features: [
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Polygon',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
               [
                 [
                   7.91015625,
@@ -258,16 +258,16 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       ]
     };
 
-    const test_layer = new VectorLayer({
+    const testLayer = new VectorLayer({
       id: 'Vector Layer2',
       name: 'Vector Layer',
       type: 'geojson',
-      data: data,
+      data,
       visible: false
     });
 
     setTimeout(() => {
-      this.layersSvc.addLayer(test_layer, 'Layers');
+      this.layersSvc.addLayer(testLayer, 'Layers');
     }, 2000);
 
   }

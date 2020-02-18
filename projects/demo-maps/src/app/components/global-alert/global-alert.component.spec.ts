@@ -20,11 +20,11 @@ describe('GlobalAlertComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GlobalAlertComponent);
     component = fixture.componentInstance;
-    component.alert = <IAlert>{
+    component.alert = {
       type: 'info',
       text: 'test Alert',
       closeable: true
-    };
+    } as IAlert;
     fixture.detectChanges();
   });
 

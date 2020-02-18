@@ -22,9 +22,9 @@ describe('GlobalProgressComponent', () => {
     fixture = TestBed.createComponent(GlobalProgressComponent);
     component = fixture.componentInstance;
     progressSvc = TestBed.get(ProgressService);
-    component.progress = <IProgress>{
+    component.progress = {
       indeterminate: true
-    };
+    } as IProgress;
     fixture.detectChanges();
   });
 

@@ -61,14 +61,14 @@ export class RouteMap2Component implements OnInit {
   }
 
   addOverlays() {
-    const eoc_litemap_layer = new eoc_litemap({
+    const eocLitemapLayer = new eoc_litemap({
       removable: true,
       legendImg: null,
       visible: true,
       id: 'eoc_litemap_base'
     });
 
-    const guf_layer = new RasterLayer({
+    const gufLayer = new RasterLayer({
       type: 'wms',
       url: 'https://geoservice.dlr.de/eoc/land/wms',
       name: 'GUF Mosaic',
@@ -83,19 +83,19 @@ export class RouteMap2Component implements OnInit {
       legendImg: ''
     });
 
-    const vector_Layer = new VectorLayer({
+    const vectorLayer = new VectorLayer({
       id: 'geojson_test',
       name: 'GeoJSON Vector Layer',
       type: 'geojson',
       data: {
-        'type': 'FeatureCollection',
-        'features': [
+        type: 'FeatureCollection',
+        features: [
           {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-              'type': 'Polygon',
-              'coordinates': [
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
                 [
                   [
                     12.65625,
@@ -126,7 +126,7 @@ export class RouteMap2Component implements OnInit {
       visible: true
     });
 
-    const overlays = [eoc_litemap_layer, guf_layer, vector_Layer];
+    const overlays = [eocLitemapLayer, gufLayer, vectorLayer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 

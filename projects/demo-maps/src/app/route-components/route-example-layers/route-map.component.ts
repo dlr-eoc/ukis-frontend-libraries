@@ -39,14 +39,14 @@ export class RouteMapComponent implements OnInit {
   }
 
   addBaseLayers() {
-    const eoc_litemap_layer = new eoc_litemap({
+    const eocLitemapLayer = new eoc_litemap({
       legendImg: null,
       id: 'eoc_litemap_base',
       visible: true
     });
 
     // not working in WGS84 because
-    const world_relief = new WmtsLayer({
+    const worldRelief = new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
       name: 'Relief',
@@ -71,14 +71,14 @@ export class RouteMapComponent implements OnInit {
       visible: false
     });
 
-    const layers = [eoc_litemap_layer, world_relief, osmLayer];
+    const layers = [eocLitemapLayer, worldRelief, osmLayer];
 
-    /** add layers with the LayersService*/
+    /** add layers with the LayersService */
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
   }
 
   addLayers() {
-    const guf_layer = new RasterLayer({
+    const gufLayer = new RasterLayer({
       type: 'wms',
       url: 'https://geoservice.dlr.de/eoc/land/wms',
       name: 'GUF Mosaic',
@@ -94,7 +94,7 @@ export class RouteMapComponent implements OnInit {
       legendImg: ''
     });
 
-    const TDM90_DEM_layer = new WmtsLayer({
+    const TDM90DEMLayer = new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
       name: 'TDM90 DEM',
@@ -114,19 +114,19 @@ export class RouteMapComponent implements OnInit {
       legendImg: ''
     });
 
-    const vector_Layer = new VectorLayer({
+    const vectorLayer = new VectorLayer({
       id: 'geojson_test',
       name: 'GeoJSON Vector Layer',
       type: 'geojson',
       data: {
-        "type": "FeatureCollection",
-        "features": [
+        type: 'FeatureCollection',
+        features: [
           {
-            "type": "Feature",
-            "properties": { "title": "Polygon" },
-            "geometry": {
-              "type": "Polygon",
-              "coordinates": [
+            type: 'Feature',
+            properties: { title: 'Polygon' },
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
                 [
                   [
                     11.53564453125,
@@ -157,11 +157,11 @@ export class RouteMapComponent implements OnInit {
             }
           },
           {
-            "type": "Feature",
-            "properties": { "title": "Rectangle" },
-            "geometry": {
-              "type": "Polygon",
-              "coordinates": [
+            type: 'Feature',
+            properties: { title: 'Rectangle' },
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
                 [
                   [
                     10.986328125,
@@ -188,11 +188,11 @@ export class RouteMapComponent implements OnInit {
             }
           },
           {
-            "type": "Feature",
-            "properties": { "title": "Line" },
-            "geometry": {
-              "type": "LineString",
-              "coordinates": [
+            type: 'Feature',
+            properties: { title: 'Line' },
+            geometry: {
+              type: 'LineString',
+              coordinates: [
                 [
                   13.29345703125,
                   48.268569112964336
@@ -213,11 +213,11 @@ export class RouteMapComponent implements OnInit {
             }
           },
           {
-            "type": "Feature",
-            "properties": { "title": "Point" },
-            "geometry": {
-              "type": "Point",
-              "coordinates": [
+            type: 'Feature',
+            properties: { title: 'Point' },
+            geometry: {
+              type: 'Point',
+              coordinates: [
                 11.513671874999998,
                 46.42271253466717
               ]
@@ -229,19 +229,19 @@ export class RouteMapComponent implements OnInit {
       popup: true
     });
 
-    const vector_Layer2 = new VectorLayer({
+    const vectorLayer2 = new VectorLayer({
       id: 'geojson_test_2',
       name: 'Vector Layer in Group',
       type: 'geojson',
       data: {
-        "type": "FeatureCollection",
-        "features": [
+        type: 'FeatureCollection',
+        features: [
           {
-            "type": "Feature",
-            "properties": { "title": "Rectangle" },
-            "geometry": {
-              "type": "Polygon",
-              "coordinates": [
+            type: 'Feature',
+            properties: { title: 'Rectangle' },
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
                 [
                   [
                     10.986328125,
@@ -271,18 +271,18 @@ export class RouteMapComponent implements OnInit {
       },
       visible: false,
       popup: true,
-      actions: [{ title: 'download', icon: 'download-cloud', action: (layer) => { console.log(layer) } }]
+      actions: [{ title: 'download', icon: 'download-cloud', action: (layer) => { console.log(layer); } }]
     });
 
-    const esri_Image_layer = new esri_world_imagery();
-    esri_Image_layer.legendImg = null;
+    const esriImageLayer = new esri_world_imagery();
+    esriImageLayer.legendImg = null;
 
-    const esri_grey_layer = new esri_grey_canvas({
+    const esriGreyLayer = new esri_grey_canvas({
       removable: true,
       legendImg: null,
     });
 
-    const esri_ocean_imagery_layer = new esri_ocean_imagery({
+    const esriOceanImageryLayer = new esri_ocean_imagery({
       removable: true,
       legendImg: null,
       id: 'esri_ocean_base'
@@ -294,22 +294,22 @@ export class RouteMapComponent implements OnInit {
     /** add a Group of layers */
 
 
-    const group_layer = new LayerGroup({
+    const groupLayer = new LayerGroup({
       id: 'group_1',
       name: 'Test Group',
-      layers: [esri_ocean_imagery_layer, osmLayer, esri_Image_layer],
+      layers: [esriOceanImageryLayer, osmLayer, esriImageLayer],
       description: 'this is a group with esri_ocean_imagery_layer, osmLayer, esri_Image_layer <img src="assets/osm.png"><a href="assets/osm.png">a link</a>',
-      actions: [{ title: 'download', icon: 'download-cloud', action: (group) => { console.log(group) } }]
+      actions: [{ title: 'download', icon: 'download-cloud', action: (group) => { console.log(group); } }]
     });
 
-    const group_layer2 = new LayerGroup({
+    const groupLayer2 = new LayerGroup({
       // visible: true,
       id: 'group_2',
       name: 'Test Group 2',
-      layers: [TDM90_DEM_layer, vector_Layer2, esri_grey_layer]
+      layers: [TDM90DEMLayer, vectorLayer2, esriGreyLayer]
     });
 
-    const overlays = [guf_layer, group_layer2, vector_Layer, group_layer];
+    const overlays = [gufLayer, groupLayer2, vectorLayer, groupLayer];
     overlays.map(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');
@@ -323,22 +323,22 @@ export class RouteMapComponent implements OnInit {
   }
 
   addOverlays() {
-    const layer_on_topp_of_all = new esri_nav_charts();
-    const open_sea_map_on_topp = new open_sea_map();
-    this.layersSvc.addLayer(layer_on_topp_of_all, 'Overlays');
-    this.layersSvc.addLayer(open_sea_map_on_topp, 'Overlays');
+    const layerOnToppOfAll = new esri_nav_charts();
+    const openSeaMapOnTopp = new open_sea_map();
+    this.layersSvc.addLayer(layerOnToppOfAll, 'Overlays');
+    this.layersSvc.addLayer(openSeaMapOnTopp, 'Overlays');
   }
 
   updateLayerGroup() {
-    const test = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2');
+    const test = this.layersSvc.getLayerOrGroupById('group_2') as unknown as LayerGroup;
     test.layers[1].visible = true;
     this.layersSvc.updateLayerGroup(test);
   }
 
   addLayerToGroup() {
-    const group = <LayerGroup><unknown>this.layersSvc.getLayerOrGroupById('group_2');
-    const google_earth_layer = new google_earth();
-    this.layersSvc.addLayerToGroup(google_earth_layer, group);
+    const group = this.layersSvc.getLayerOrGroupById('group_2') as unknown as LayerGroup;
+    const googleEarthLayer = new google_earth();
+    this.layersSvc.addLayerToGroup(googleEarthLayer, group);
   }
 
   removeAllLayers() {

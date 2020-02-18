@@ -52,14 +52,14 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addLayers() {
-    const osm_layer = new osm({
+    const osmLayer = new osm({
       legendImg: null,
       visible: true
     });
 
     const source = new olImageWMS({
       url: 'https://ahocevar.com/geoserver/wms',
-      params: { 'LAYERS': 'topp:states' },
+      params: { LAYERS: 'topp:states' },
       serverType: 'geoserver'
     });
 
@@ -74,16 +74,16 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       this.progressService.progress(null);
     });
 
-    const event_layer = new CustomLayer({
+    const eventLayer = new CustomLayer({
       id: 'event_layer',
       name: 'Image load Layer',
       type: 'custom',
-      custom_layer: new olImageLayer({ source: source }),
+      custom_layer: new olImageLayer({ source }),
       visible: false,
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const layers = [osm_layer, event_layer];
+    const layers = [osmLayer, eventLayer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
 
   }
@@ -114,7 +114,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       wrapX: false
     });
 
-    const _gridLayer = new olVectorImageLayer({
+    const olGridLayer = new olVectorImageLayer({
       id: layerID,
       source: gridLayerSource
     });
@@ -126,12 +126,12 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
         name: `gridLayer`,
         type: 'custom',
         opacity: 0.3,
-        custom_layer: _gridLayer
+        custom_layer: olGridLayer
       });
 
       this.layersSvc.addLayer(gridLayer, 'Layers');
     } else {
-      oldGridLayer.custom_layer = _gridLayer;
+      oldGridLayer.custom_layer = olGridLayer;
       this.layersSvc.updateLayer(oldGridLayer, oldGridLayer.filtertype);
     }
   }
