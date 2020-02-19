@@ -1,10 +1,14 @@
-import { RasterLayer, IRasterLayerOptions } from '@dlr-eoc/services-layers';
+import { RasterLayer, IRasterLayerOptions, WmtsLayer, IWmtsOptions } from '@dlr-eoc/services-layers';
 
 /**
  * make all IRasterLayer Options optional because constructor use default objects
  */
 type IoptionalRasterLayerOptions = {
   [K in keyof IRasterLayerOptions]?: IRasterLayerOptions[K]
+};
+
+type IoptionalIWmtsOptions = {
+  [K in keyof IWmtsOptions]?: IWmtsOptions[K]
 };
 export class google_earth extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
@@ -18,7 +22,7 @@ export class google_earth extends RasterLayer {
       attribution: '&copy, <a href="https://www.google.de/maps">Google</a> contributors',
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
       continuousWorld: false,
-      legendImg: 'google-sat.png',
+      legendImg: 'https://mt3.google.com/vt/lyrs=s&x=4&y=3&z=3',
       description: '&copy google.com/vt/lyrs - satellite only',
       opacity: 1
     };
@@ -39,7 +43,7 @@ export class google_maps extends RasterLayer {
       attribution: '&copy, <a href="https://www.google.de/maps">Google</a> contributors',
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
       continuousWorld: true,
-      legendImg: 'google-maps.png',
+      legendImg: 'https://mt3.google.com/vt/lyrs=m&x=4&y=3&z=3',
       description: '&copy google.com/vt/lyrs - terrain',
       opacity: 1
     };
@@ -60,7 +64,7 @@ export class google_hybrid extends RasterLayer {
       attribution: '&copy, <a href="https://www.google.de/maps">Google</a> contributors',
       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
       continuousWorld: false,
-      legendImg: 'google-hybrid.png',
+      legendImg: 'https://mt3.google.com/vt/lyrs=y&x=4&y=3&z=3',
       description: '&copy google.com/vt/lyrs - hybrid',
       opacity: 1
     };
@@ -80,7 +84,7 @@ export class esri_grey_canvas extends RasterLayer {
       url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}.png',
       attribution: '&copy; ESRI',
       continuousWorld: false,
-      legendImg: 'esri_grey_canvas.png',
+      legendImg: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/3/3/4.png',
       description: '&copy arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base',
       opacity: 1
     };
@@ -101,7 +105,7 @@ export class esri_world_imagery extends RasterLayer {
       url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png',
       attribution: '&copy; ESRI',
       continuousWorld: false,
-      legendImg: 'esri_imagery.png',
+      legendImg: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/3/3/4.png',
       description: '&copy arcgisonline.com/arcgis/rest/services/World_Imagery',
       opacity: 1
     };
@@ -122,7 +126,7 @@ export class esri_ocean_imagery extends RasterLayer {
       url: 'https://server.arcgisonline.com/arcgis/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}.png',
       attribution: '&copy; ESRI',
       continuousWorld: false,
-      legendImg: 'esri-ocean.png',
+      legendImg: 'https://server.arcgisonline.com/arcgis/rest/services/Ocean_Basemap/MapServer/tile/3/3/4.png',
       description: '&copy arcgisonline.com/arcgis/rest/services/Ocean_Basemap',
       opacity: 1
     };
@@ -143,7 +147,7 @@ export class esri_nav_charts extends RasterLayer {
       url: 'https://server.arcgisonline.com/arcgis/rest/services/Specialty/World_Navigation_Charts/MapServer/tile/{z}/{y}/{x}.png',
       attribution: '&copy; ESRI',
       continuousWorld: false,
-      legendImg: 'esri_charts.png',
+      legendImg: 'https://server.arcgisonline.com/arcgis/rest/services/Specialty/World_Navigation_Charts/MapServer/tile/3/3/4.png',
       description: '&copy arcgisonline.com/arcgis/rest/services/Specialty/World_Navigation_Charts',
       opacity: 1
     };
@@ -165,7 +169,7 @@ export class osm extends RasterLayer {
       subdomains: ['a', 'b', 'c'],
       attribution: '&copy, <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors',
       continuousWorld: false,
-      legendImg: 'osm.png',
+      legendImg: 'https://a.tile.openstreetmap.org/3/4/3.png',
       description: '&copy OpenStreetMap and contributors',
       opacity: 1,
       zIndex: 1
@@ -194,8 +198,38 @@ export class eoc_litemap extends RasterLayer {
       url: 'https://geoservice.dlr.de/eoc/basemap/wms',
       attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
       continuousWorld: false,
-      legendImg: 'eoc_litemap.png',
+      legendImg: 'https://geoservice.dlr.de/eoc/basemap/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=litemap&ATTRIBUTION=&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=0%2C0%2C10018754.171394622%2C10018754.171394622',
       description: 'http://www.naturalearthdata.com/about/',
+      opacity: 1
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
+  }
+}
+
+export class eoc_litemap_tile extends WmtsLayer {
+  constructor(options?: IoptionalIWmtsOptions) {
+    const defaultOptions: IWmtsOptions = {
+      name: 'EOC Litemap Tile',
+      displayName: 'EOC Litemap Tile',
+      id: 'eoc_litemap_tile',
+      visible: false,
+      type: 'wmts',
+      removable: false,
+      params: {
+        layer: 'eoc:litemap',
+        format: 'image/png',
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
+      },
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
+      continuousWorld: false,
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Alitemap&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11',
+      description: 'EOC Litemap as web map tile service',
       opacity: 1
     };
     if (options) { Object.assign(defaultOptions, options); }
@@ -219,7 +253,7 @@ export class open_sea_map extends RasterLayer {
       attribution: '',
       continuousWorld: false,
       zIndex: 99999,
-      legendImg: '',
+      legendImg: 'https://t1.openseamap.org/seamark/10/554/321.png',
       description: 'http://map.openseamap.org/',
       opacity: 1
     };
