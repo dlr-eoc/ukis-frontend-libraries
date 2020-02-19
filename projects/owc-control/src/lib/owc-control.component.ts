@@ -8,7 +8,7 @@ import { OwcJsonService } from '@dlr-eoc/services-ogc';
 
 @Component({
   selector: 'ukis-owc-control',
-  templateUrl: "owc-control.component.html",
+  templateUrl: 'owc-control.component.html',
   styles: []
 })
 export class OwcControlComponent implements OnInit, OnDestroy {
@@ -49,8 +49,8 @@ export class OwcControlComponent implements OnInit, OnDestroy {
   }
 
   onClickExport() {
-    let id = "myContext";
-    let owc = this.owcSvc.generateOwsContextFrom(id, [...this.baselayers, ...this.overlays, ...this.layers], this.extent);
+    const id = 'myContext';
+    const owc = this.owcSvc.generateOwsContextFrom(id, [...this.baselayers, ...this.overlays, ...this.layers], this.extent);
     this.downloadFile(owc, `${id}.json`);
   }
 
@@ -58,12 +58,12 @@ export class OwcControlComponent implements OnInit, OnDestroy {
     const jsonData = JSON.stringify(data);
     const blob = new Blob([jsonData], { type: 'text/json;charset=utf-8;' });
 
-    //window.open(url) doesn't work here. Instead, we create a temporary link item and simulate a click on it.
+    // window.open(url) doesn't work here. Instead, we create a temporary link item and simulate a click on it.
     const url = window.URL.createObjectURL(blob);
 
-    var a = document.createElement('a');
+    const a = document.createElement('a');
     document.body.appendChild(a);
-    a.style.display = "none";
+    a.style.display = 'none';
     a.href = url;
     a.download = fileName;
     a.click();
