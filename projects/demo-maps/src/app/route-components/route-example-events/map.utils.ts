@@ -1,7 +1,6 @@
-import { TGeoExtent } from '@dlr-eoc/map-ol';
+import { TGeoExtent } from '@dlr-eoc/services-layers';
 import olFeature from 'ol/Feature';
 import olPolygon from 'ol/geom/Polygon';
-import { containsCoordinate } from 'ol/extent';
 import { containsXY } from 'ol/extent';
 
 import { buffer } from 'ol/extent';
