@@ -22,7 +22,7 @@ export interface ILayerStyleSet extends IAnyObject {
 export interface popup {
   properties?: IAnyObject;
   pupupFunktion?: (popupobj: IAnyObject) => string;
-  asyncPupup?: (popupobj: any, cb: () => void) => void;
+  asyncPupup?: (popupobj: any, cb: (html: any) => void) => void;
 }
 
 
@@ -139,7 +139,7 @@ export interface IVectorLayerOptions extends ILayerOptions {
 }
 
 export interface ICustomLayerOptions extends ILayerOptions {
-  customLayer: any;
+  custom_layer: any;
 }
 
 /**
@@ -273,7 +273,7 @@ export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
 
 export class CustomLayer extends Layer implements ICustomLayerOptions {
   type = 'custom';
-  customLayer: ICustomLayerOptions['customLayer'] = {};
+  custom_layer: ICustomLayerOptions['custom_layer'] = {};
   constructor(options: ICustomLayerOptions) {
     super(options);
     Object.assign(this, options);

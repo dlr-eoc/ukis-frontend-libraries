@@ -33,7 +33,7 @@ describe('Layer Types', () => {
       id: 'ID-custom',
       type: 'custom',
       name: 'custom',
-      customLayer: {}
+      custom_layer: {}
     });
   }));
 

@@ -89,7 +89,7 @@ describe('LayersService', () => {
       id: 'ID-vector-image',
       name: 'Custom Layer KML',
       type: 'custom',
-      customLayer: new Object({ ol_uid: 245 }),
+      custom_layer: new Object({ ol_uid: 245 }),
       visible: false
     });
 
@@ -145,7 +145,7 @@ describe('LayersService', () => {
       id: 'ID-vector-image',
       name: 'Custom Layer KML',
       type: 'custom',
-      customLayer: new Object({ ol_uid: 600 }),
+      custom_layer: new Object({ ol_uid: 600 }),
       visible: true
     });
 
@@ -454,7 +454,7 @@ describe('LayersService', () => {
       id: 'ID-vector-image',
       name: 'Custom Layer KML',
       type: 'custom',
-      customLayer: new Object({ ol_uid: 600 }),
+      custom_layer: new Object({ ol_uid: 600 }),
       visible: true
     });
 
@@ -462,7 +462,7 @@ describe('LayersService', () => {
     const layerFromSvc = service.getLayerById(newLayer5.id);
 
     expect(layerFromSvc.visible).toEqual(true);
-    expect((layerFromSvc as CustomLayer).customLayer.ol_uid).toEqual(600);
+    expect((layerFromSvc as CustomLayer).custom_layer.ol_uid).toEqual(600);
   }));
 
 
