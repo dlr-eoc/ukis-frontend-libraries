@@ -14,7 +14,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 class MockLayersService extends LayersService {
 
   getLayerGroups() {
-    let l = new RasterLayer(
+    const l = new RasterLayer(
       {
         url: 'blabl',
         name: 'name',
@@ -23,7 +23,7 @@ class MockLayersService extends LayersService {
         filtertype: 'Baselayers'
       }
     );
-    let group = new LayerGroup({
+    const group = new LayerGroup({
       id: 'g',
       name: 'Test',
       layers: [l],
