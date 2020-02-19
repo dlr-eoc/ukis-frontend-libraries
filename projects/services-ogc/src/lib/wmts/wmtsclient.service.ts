@@ -37,7 +37,7 @@ export class WmtsClientService {
     const getCapabilitiesUrl = `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${version}`;
     const headers = new HttpHeaders({
       'Content-Type': 'text/xml',
-      'Accept': 'text/xml, application/xml'
+      Accept: 'text/xml, application/xml'
     });
     return this.http.get(getCapabilitiesUrl, { headers, responseType: 'text' }).pipe(
       map(response => {

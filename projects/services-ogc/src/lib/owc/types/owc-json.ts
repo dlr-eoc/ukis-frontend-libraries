@@ -44,9 +44,9 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Information about rights held in and over the Context document */
     rights?: string;
     /**
-    * Date or range of dates relevant to the resource
-    * time range which is expected to be of interest to the user.
-    */
+     * Date or range of dates relevant to the resource
+     * time range which is expected to be of interest to the user.
+     */
     date?: DateString;
     /** This array is an optional and expresses categories related to this Context document */
     categories?: IOwsCategorie[];
@@ -107,8 +107,8 @@ export interface IOwsResourceProperties {
   /** Maximum scale for the display of the Context resource Double */
   maxscaledenominator?: number;
   /** Definition of the folder in which the resource is placed
-  * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
-  */
+   * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
+   */
   folder?: string;
   /** TODO!!! links is defined as Object but in the examples as Array  */
   links?: IOwsLinks[];
@@ -193,7 +193,8 @@ export interface IOwsCreatorDisplay {
   /** Width measured in pixels of the display showing by the Area of Interest */
   pixelHeight?: number;
   /** The size of a pixel of the display in milimeters
-   * (combined with the previous ones allows for the real display size to be calculated) */
+   * (combined with the previous ones allows for the real display size to be calculated)
+   */
   mmPerPixel?: number;
   [k: string]: any;
 }

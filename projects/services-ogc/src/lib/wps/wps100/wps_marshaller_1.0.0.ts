@@ -2,7 +2,7 @@ import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability
 import {
   WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType,
   InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType,
-  ResponseDocumentType, InputReferenceType, LiteralDataType, ExecuteResponse
+  ResponseDocumentType, InputReferenceType, ExecuteResponse
 } from './wps_1.0.0';
 
 
@@ -30,7 +30,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
   }
 
   unmarshalSyncExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string,
-    inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[] {
+                               inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[] {
 
     const out: WpsResult[] = [];
 
@@ -72,7 +72,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
         out.push({
           description: {
             id: output.identifier.value,
-            format: format,
+            format,
             reference: isReference,
             type: datatype
           },
@@ -122,7 +122,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
   }
 
   unmarshalGetStateResponse(responseJson: any, serverUrl: string, processId: string,
-    inputs: WpsData[], outputDescriptions: WpsDataDescription[]): WpsState {
+                            inputs: WpsData[], outputDescriptions: WpsDataDescription[]): WpsState {
 
     const response: ExecuteResponse = responseJson.value;
 
@@ -133,7 +133,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
             'Failed';
 
     const state: WpsState = {
-      status: status,
+      status,
       statusLocation: response.statusLocation,
     };
 
@@ -310,7 +310,8 @@ export class WpsMarshaller100 implements WpsMarshaller {
 
   dismissUrl(serverUrl: string, processId: string, jobId: string): string {
     /** this does only work in geoserver:
-    return `${serverUrl}?service=WPS&version=1.0.0&request=Dismiss&executionId=${jobId}`; */
+     * return `${serverUrl}?service=WPS&version=1.0.0&request=Dismiss&executionId=${jobId}`;
+     */
     throw new Error('Wps 1.0 does not support Dismiss-operations.');
   }
 

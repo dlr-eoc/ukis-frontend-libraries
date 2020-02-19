@@ -1,6 +1,6 @@
 import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsDataDescription, WpsData, WpsState } from '../wps_datatypes';
-import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitionType, IWpsExecuteProcessBody, IWpsExecuteResponse, DataOutputType, IGetStatusRequest, Data, IGetResultRequest, IDismissRequest, IDismissResponse } from './wps_2.0';
-import { isDataOutputType, isStatusInfo, isResult } from './helpers';
+import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitionType, IWpsExecuteProcessBody, IWpsExecuteResponse, IGetStatusRequest, Data, IGetResultRequest, IDismissRequest, IDismissResponse } from './wps_2.0';
+import { isStatusInfo, isResult } from './helpers';
 
 
 export class WpsMarshaller200 implements WpsMarshaller {
@@ -26,7 +26,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
   }
 
   unmarshalSyncExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string,
-    inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[] {
+                               inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[] {
     const out: WpsResult[] = [];
 
     if (isResult(responseJson.value)) {
@@ -51,7 +51,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
         out.push({
           description: {
             id: output.id,
-            format: format,
+            format,
             reference: isReference,
             type: datatype
           },
@@ -103,7 +103,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
   }
 
   unmarshalGetStateResponse(responseJson: any, serverUrl: string, processId: string,
-    inputs: WpsData[], outputDescriptions: WpsDataDescription[]): WpsState {
+                            inputs: WpsData[], outputDescriptions: WpsDataDescription[]): WpsState {
     if (isStatusInfo(responseJson.value)) {
       const state: WpsState = {
         status: responseJson.value.status,
@@ -207,7 +207,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
       value: {
         service: 'WPS',
         version: '2.0.0',
-        jobID: jobID
+        jobID
       }
     };
     return request;

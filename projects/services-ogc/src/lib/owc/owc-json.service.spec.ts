@@ -198,11 +198,11 @@ describe('OwcJsonService: writing data into owc', () => {
   it('#getLayers should properly restore a selection of layers from owc format created with #generateOwsContextFrom', (done) => {
     const service: OwcJsonService = TestBed.get(OwcJsonService);
     const layersService: LayersService = TestBed.get(LayersService);
-    const osm_layer = new eoc_litemap({
+    const osmLayer = new eoc_litemap({
       visible: true,
       legendImg: null
     });
-    layersService.addLayer(osm_layer, 'Baselayers');
+    layersService.addLayer(osmLayer, 'Baselayers');
     layersService.getBaseLayers().subscribe(baselayers => {
       const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);
       service.getLayers(owc, targetProjection).subscribe((layers) => {
@@ -235,7 +235,7 @@ describe('OwcJsonService: writing data into owc', () => {
 
     const featureCollection: FeatureCollection<Polygon, Props> = {
       type: 'FeatureCollection',
-      features: features
+      features
     };
 
     const options = {
@@ -255,7 +255,7 @@ describe('OwcJsonService: writing data into owc', () => {
       id: 'GeojsonLayer',
       type: GeojsonLayertype,
       data: featureCollection,
-      options: options
+      options
     });
 
     // enconding and deconding

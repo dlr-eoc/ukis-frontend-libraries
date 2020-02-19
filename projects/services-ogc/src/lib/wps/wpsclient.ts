@@ -1,11 +1,11 @@
-import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription, WpsData, WpsState, isWpsState } from './wps_datatypes';
+import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription, WpsData, WpsState } from './wps_datatypes';
 import { WpsMarshaller100 } from './wps100/wps_marshaller_1.0.0';
 import { WpsMarshaller200 } from './wps200/wps_marshaller_2.0.0';
-import { Observable, timer, of, throwError } from 'rxjs';
-import { map, catchError, switchMap, tap, share, mergeMap, first } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, tap, share, mergeMap } from 'rxjs/operators';
 import { Jsonix } from '@boundlessgeo/jsonix';
 
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; const XLink_1_0 = XLink_1_0_Factory.XLink_1_0;
 import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0;
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
@@ -56,7 +56,7 @@ export class WpsClient {
   getCapabilities(url: string): Observable<any> {
     const getCapabilitiesUrl = this.wpsmarshaller.getCapabilitiesUrl(url);
     const headers = new HttpHeaders({
-      'Accept': 'text/xml, application/xml'
+      Accept: 'text/xml, application/xml'
     });
     return this.webclient.get(getCapabilitiesUrl, { headers, responseType: 'text' }).pipe(
       delayedRetry(2000, 2),
@@ -76,7 +76,7 @@ export class WpsClient {
 
 
   executeAsync(url: string, processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[],
-    pollingRate: number = 1000, tapFunction?: (response: WpsState | null) => any): Observable<WpsResult[]> {
+               pollingRate: number = 1000, tapFunction?: (response: WpsState | null) => any): Observable<WpsResult[]> {
 
     const executeRequest$: Observable<WpsState> = this.executeAsyncS(url, processId, inputs, outputs);
 
@@ -117,13 +117,13 @@ export class WpsClient {
   }
 
   private getNextState(currentState: WpsState, serverUrl: string, processId: string, inputs: WpsInput[],
-    outputDescriptions: WpsOutputDescription[]): Observable<WpsState> {
+                       outputDescriptions: WpsOutputDescription[]): Observable<WpsState> {
 
     let rawRequest$: Observable<string>;
     if (this.version === '1.0.0') {
 
       const headers = {
-        'Accept': 'text/xml, application/xml'
+        Accept: 'text/xml, application/xml'
       };
       if (!currentState.statusLocation) {
         throw Error('No status location');
@@ -139,7 +139,7 @@ export class WpsClient {
       const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
       const headers = new HttpHeaders({
         'Content-Type': 'text/xml',
-        'Accept': 'text/xml, application/xml'
+        Accept: 'text/xml, application/xml'
       });
       rawRequest$ = this.webclient.post(serverUrl, xmlExecbody, { headers, responseType: 'text' });
 
@@ -161,7 +161,7 @@ export class WpsClient {
   }
 
   private fetchResults(lastState: WpsState, serverUrl: string, processId: string, inputs: WpsInput[],
-    outputDescriptions: WpsOutputDescription[]): Observable<WpsData[]> {
+                       outputDescriptions: WpsOutputDescription[]): Observable<WpsData[]> {
 
     if (lastState.results) { // WPS 1.0: results should already be in last state
       return of(lastState.results);
@@ -175,7 +175,7 @@ export class WpsClient {
       const xmlExecBody = this.xmlmarshaller.marshalString(execBody);
       const headers = {
         'Content-Type': 'text/xml',
-        'Accept': 'text/xml, application/xml'
+        Accept: 'text/xml, application/xml'
       };
       const result$ = this.webclient.post(serverUrl, xmlExecBody, { headers, responseType: 'text' });
       return result$.pipe(
@@ -191,7 +191,7 @@ export class WpsClient {
 
 
   private executeAsyncS(url: string, processId: string, inputs: WpsInput[],
-    outputDescriptions: WpsOutputDescription[]): Observable<WpsState> {
+                        outputDescriptions: WpsOutputDescription[]): Observable<WpsState> {
 
     const executeUrl = this.wpsmarshaller.executeUrl(url, processId);
     const execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, outputDescriptions, true);
@@ -199,7 +199,7 @@ export class WpsClient {
 
     const headers = new HttpHeaders({
       'Content-Type': 'text/xml',
-      'Accept': 'text/xml, application/xml'
+      Accept: 'text/xml, application/xml'
     });
     return this.webclient.post(executeUrl, xmlExecbody, { headers, responseType: 'text' }).pipe(
       delayedRetry(2000, 2),
@@ -214,7 +214,7 @@ export class WpsClient {
   }
 
   execute(url: string, processId: string, inputs: WpsInput[],
-    outputDescriptions: WpsOutputDescription[]): Observable<WpsResult[]> {
+          outputDescriptions: WpsOutputDescription[]): Observable<WpsResult[]> {
 
     const executeUrl = this.wpsmarshaller.executeUrl(url, processId);
     const execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, outputDescriptions, false);
@@ -222,7 +222,7 @@ export class WpsClient {
 
     const headers = new HttpHeaders({
       'Content-Type': 'text/xml',
-      'Accept': 'text/xml, application/xml'
+      Accept: 'text/xml, application/xml'
     });
     return this.webclient.post(executeUrl, xmlExecbody, { headers, responseType: 'text' }).pipe(
       delayedRetry(2000, 2),
@@ -244,7 +244,7 @@ export class WpsClient {
 
     const headers = new HttpHeaders({
       'Content-Type': 'text/xml',
-      'Accept': 'text/xml, application/xml'
+      Accept: 'text/xml, application/xml'
     });
     return this.webclient.post(dismissUrl, xmlDismissBody, { headers, responseType: 'text' }).pipe(
       delayedRetry(2000, 2),

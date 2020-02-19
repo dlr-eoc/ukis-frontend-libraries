@@ -77,7 +77,7 @@ export interface IEocOwsProjection {
   unit?: string | number;
 }
 /**
-* http://www.owscontext.org/owc_user_guide/C0_userGuide.html#trueextension-offerings
-*/
+ * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#trueextension-offerings
+ */
 export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 export type Xyz_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';

@@ -3,8 +3,8 @@ import { WpsClient } from './wpsclient';
 import { HttpClient, HttpXhrBackend, XhrFactory, HttpRequest } from '@angular/common/http';
 import { pollUntil } from './utils/polling';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { tap, map, delay, expand, takeUntil, take } from 'rxjs/operators';
-import { forkJoin, of, Observable, empty, interval, timer } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+import { forkJoin, of, Observable } from 'rxjs';
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; const XLink_1_0 = XLink_1_0_Factory.XLink_1_0;
 import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0;
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
@@ -316,7 +316,7 @@ if (runTestsWithLiveServer) {
           type: 'complex',
           format: 'application/vnd.geo+json'
         },
-        value: { 'type': 'FeatureCollection', 'features': [{ 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [-72.3123, -33.0559] }, 'properties': { 'preferredOriginID': '359112', 'preferredMagnitudeID': '359112', 'type': 'earthquake', 'description.text': 'stochastic', 'origin.publicID': '359112', 'origin.time.value': '69051-01-01T00:00:00.000000Z', 'origin.time.uncertainty': 'nan', 'origin.depth.value': '32.15805', 'origin.depth.uncertainty': 'nan', 'origin.creationInfo.value': 'GFZ', 'originUncertainty.horizontalUncertainty': 'nan', 'originUncertainty.minHorizontalUncertainty': 'nan', 'originUncertainty.maxHorizontalUncertainty': 'nan', 'originUncertainty.azimuthMaxHorizontalUncertainty': 'nan', 'magnitude.publicID': '359112', 'magnitude.mag.value': '7.05', 'magnitude.mag.uncertainty': 'nan', 'magnitude.type': 'MW', 'magnitude.creationInfo.value': 'GFZ', 'focalMechanism.publicID': '359112', 'focalMechanism.nodalPlanes.nodalPlane1.strike.value': '10.68754', 'focalMechanism.nodalPlanes.nodalPlane1.strike.uncertainty': 'nan', 'focalMechanism.nodalPlanes.nodalPlane1.dip.value': '16.93797', 'focalMechanism.nodalPlanes.nodalPlane1.dip.uncertainty': 'nan', 'focalMechanism.nodalPlanes.nodalPlane1.rake.value': '90.0', 'focalMechanism.nodalPlanes.nodalPlane1.rake.uncertainty': 'nan', 'focalMechanism.nodalPlanes.preferredPlane': 'nodalPlane1', 'popupContent': 'selected-rows' }, 'id': '359112' }] }
+        value: { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: [-72.3123, -33.0559] }, properties: { preferredOriginID: '359112', preferredMagnitudeID: '359112', type: 'earthquake', 'description.text': 'stochastic', 'origin.publicID': '359112', 'origin.time.value': '69051-01-01T00:00:00.000000Z', 'origin.time.uncertainty': 'nan', 'origin.depth.value': '32.15805', 'origin.depth.uncertainty': 'nan', 'origin.creationInfo.value': 'GFZ', 'originUncertainty.horizontalUncertainty': 'nan', 'originUncertainty.minHorizontalUncertainty': 'nan', 'originUncertainty.maxHorizontalUncertainty': 'nan', 'originUncertainty.azimuthMaxHorizontalUncertainty': 'nan', 'magnitude.publicID': '359112', 'magnitude.mag.value': '7.05', 'magnitude.mag.uncertainty': 'nan', 'magnitude.type': 'MW', 'magnitude.creationInfo.value': 'GFZ', 'focalMechanism.publicID': '359112', 'focalMechanism.nodalPlanes.nodalPlane1.strike.value': '10.68754', 'focalMechanism.nodalPlanes.nodalPlane1.strike.uncertainty': 'nan', 'focalMechanism.nodalPlanes.nodalPlane1.dip.value': '16.93797', 'focalMechanism.nodalPlanes.nodalPlane1.dip.uncertainty': 'nan', 'focalMechanism.nodalPlanes.nodalPlane1.rake.value': '90.0', 'focalMechanism.nodalPlanes.nodalPlane1.rake.uncertainty': 'nan', 'focalMechanism.nodalPlanes.preferredPlane': 'nodalPlane1', popupContent: 'selected-rows' }, id: '359112' }] }
       };
 
       const shakemapOutput: WpsDataDescription = {

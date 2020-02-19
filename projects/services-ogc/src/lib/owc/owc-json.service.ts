@@ -5,15 +5,13 @@ import {
   CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering
 } from './types/owc-json';
 import {
-  IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsOffering,
-  IEocWmsOffering, IEocOwsResourceDimension, IEocOwsWmtsMatrixSet
+  IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsMatrixSet
 } from './types/eoc-owc-json';
 import {
-  ILayerGroupOptions, ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
-  Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayer, CustomLayertype, XyzLayertype,
-  TRasterLayertype, isRasterLayertype, isVectorLayertype, TVectorLayertype, ILayerDimensions,
+  ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
+  Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayertype, XyzLayertype,
+  TRasterLayertype, isRasterLayertype, isVectorLayertype, ILayerDimensions,
   ILayerIntervalAndPeriod,
-  IWmtsParams,
   WmtsLayer,
   IWmtsOptions,
   WmsLayer,
@@ -71,26 +69,29 @@ export function isGeoJsonOffering(str: string): str is GeoJson_Offering {
 }
 export function shardsExpand(v: string) {
   if (!v) { return; }
-  let o = []
-  for (let i in v.split(',')) {
-    var j = v.split(',')[i].split("-")
-    if (j.length == 1) {
-      o.push(v.split(',')[i])
-    } else if (j.length == 2) {
-      let start = j[0].charCodeAt(0)
-      let end = j[1].charCodeAt(0)
-      if (start <= end) {
-        for (let k = start; k <= end; k++) {
-          o.push(String.fromCharCode(k).toLowerCase());
-        }
-      } else {
-        for (let k = start; k >= end; k--) {
-          o.push(String.fromCharCode(k).toLowerCase());
+  const o = [];
+  const shardsSplit = v.split(',');
+  for (const i in shardsSplit) {
+    if (shardsSplit[i]) {
+      const j = shardsSplit[i].split('-');
+      if (j.length === 1) {
+        o.push(shardsSplit[i]);
+      } else if (j.length === 2) {
+        const start = j[0].charCodeAt(0);
+        const end = j[1].charCodeAt(0);
+        if (start <= end) {
+          for (let k = start; k <= end; k++) {
+            o.push(String.fromCharCode(k).toLowerCase());
+          }
+        } else {
+          for (let k = start; k >= end; k--) {
+            o.push(String.fromCharCode(k).toLowerCase());
+          }
         }
       }
     }
   }
-  return o
+  return o;
 }
 /**
  * OWS Context Service
@@ -111,23 +112,23 @@ export function shardsExpand(v: string) {
 export class OwcJsonService {
 
   constructor(private wmtsClient: WmtsClientService) {
-    //http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truegeojson-encoding-2
+    // http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truegeojson-encoding-2
   }
 
 
   checkContext(context: IOwsContext) {
-    let isContext_1_0;
+    let ISCONTEXT_1_0;
     if (!Array.isArray(context.properties.links)) {
-      isContext_1_0 = context.properties.links.profiles.find(item => item === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
+      ISCONTEXT_1_0 = context.properties.links.profiles.find(item => item === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
     } else {
-      isContext_1_0 = context.properties.links.find(item => item.href === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
+      ISCONTEXT_1_0 = context.properties.links.find(item => item.href === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
     }
 
-    if (!isContext_1_0) {
+    if (!ISCONTEXT_1_0) {
       console.error('this is not a valid OWS Context v1.0!');
 
     }
-    return isContext_1_0;
+    return ISCONTEXT_1_0;
   }
 
   getContextTitle(context: IOwsContext) {
@@ -200,16 +201,15 @@ export class OwcJsonService {
 
   convertOwcTimeToIsoTimeAndPeriodicity(owctime: string): ILayerIntervalAndPeriod | string {
     /**
-     Convert from
-    */
-    let arr = owctime.split('/');
-    let t = (arr.length == 3) ? arr[0] + '/' + arr[1] : owctime;
-    let p = (arr.length == 3) ? arr[2] : null;
+     * Convert from
+     */
+    const arr = owctime.split('/');
+    const t = (arr.length === 3) ? arr[0] + '/' + arr[1] : owctime;
+    const p = (arr.length === 3) ? arr[2] : null;
     if (p) {
-      return { "interval": t, "periodicity": p };
-    }
-    else {
-      return t
+      return { interval: t, periodicity: p };
+    } else {
+      return t;
     }
   }
 
@@ -217,39 +217,39 @@ export class OwcJsonService {
     if (!resource.properties.hasOwnProperty('dimensions')) {
       return undefined;
     }
-    let dims = {}
+    const dims = {};
 
-    let dimensions = {}
+    let dimensions = {};
     if (Array.isArray(resource.properties.dimensions)) {
-      for (let d of resource.properties.dimensions) {
-        dimensions[d.name] = d
+      for (const d of resource.properties.dimensions) {
+        dimensions[d.name] = d;
       }
     } else {
-      dimensions = resource.properties.dimensions
+      dimensions = resource.properties.dimensions;
     }
-    for (let name in dimensions) {
-      let dim = {}
-      console.log(name)
-      if (name === "time" || dimensions[name].units == "ISO8601") {
-        let value = dimensions[name].value
-        let values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v)) : null
-        dim = {
-          "values": ((!values) || values.length > 1) ? values : values[0],
-          "units": dimensions[name].units,
-          "display": {
-            "format": "YYYMMDD",
-            "period": dimensions[name].display,
-            "default": "end"
-          }
+    for (const name in dimensions) {
+      if (dimensions[name]) {
+        let dim = {};
+        // console.log(name);
+        if (name === 'time' || dimensions[name].units === 'ISO8601') {
+          const value = dimensions[name].value;
+          const values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v)) : null;
+          dim = {
+            values: ((!values) || values.length > 1) ? values : values[0],
+            units: dimensions[name].units,
+            display: {
+              format: 'YYYMMDD',
+              period: dimensions[name].display,
+              default: 'end'
+            }
+          };
+        } else if (name === 'elevation') {
+          dim = dimensions[name];
+        } else {
+          dim = dimensions[name];
         }
+        dims[name] = dim;
       }
-      else if (name === "elevation") {
-        dim = dimensions[name];
-      }
-      else {
-        dim = dimensions[name];
-      }
-      dims[name] = dim;
     }
     return dims;
   }
@@ -295,7 +295,7 @@ export class OwcJsonService {
     let legendUrl = '';
 
     if (offering.hasOwnProperty('styles')) {
-      let defaultStyle = offering.styles.filter(style => style.default);
+      const defaultStyle = offering.styles.filter(style => style.default);
       if (defaultStyle.length > 0) {
         return defaultStyle[0].legendURL;
       }
@@ -307,7 +307,6 @@ export class OwcJsonService {
 
   /**
    * retrieve iconUrl based on IOwsOffering
-   * @param offering
    */
   getIconUrl(offering: IOwsOffering) {
     let iconUrl = '';
@@ -361,8 +360,8 @@ export class OwcJsonService {
 
     let layerUrl, params;
     // if we have a operations-offering (vs. a data-offering):
-    if (offering.operations) layerUrl = this.getUrlFromUri(offering.operations[0].href);
-    if (offering.operations) params = this.getJsonFromUri(offering.operations[0].href);
+    if (offering.operations) { layerUrl = this.getUrlFromUri(offering.operations[0].href); }
+    if (offering.operations) { params = this.getJsonFromUri(offering.operations[0].href); }
 
     let data;
     // if we have a data-offering:
@@ -370,9 +369,9 @@ export class OwcJsonService {
       data = offering.contents[0].content;
     }
 
-    let legendUrl = this.getLegendUrl(offering);
+    const legendUrl = this.getLegendUrl(offering);
 
-    let layerOptions: IVectorLayerOptions = {
+    const layerOptions: IVectorLayerOptions = {
       id: resource.id as string,
       name: this.getResourceTitle(resource),
       displayName: this.getDisplayName(offering, resource),
@@ -384,7 +383,7 @@ export class OwcJsonService {
       opacity: this.getResourceOpacity(resource),
       url: layerUrl ? layerUrl : null,
       legendImg: legendUrl ? legendUrl : null,
-      data: data
+      data
     };
 
 
@@ -465,10 +464,10 @@ export class OwcJsonService {
         ...rasterOptions,
         type: 'wmts',
         params: {
-          layer: layer,
-          matrixSetOptions: matrixSetOptions,
+          layer,
+          matrixSetOptions,
           projection: targetProjection,
-          style: style,
+          style,
           format: 'image/png'
         }
       };
@@ -551,7 +550,7 @@ export class OwcJsonService {
       const wmsOptions: IWmsOptions = {
         ...rasterOptions,
         type: 'wms',
-        params: params
+        params
       };
       return wmsOptions;
     } else {
@@ -612,7 +611,7 @@ export class OwcJsonService {
   private getJsonFromUri(uri: string): object {
     const query = uri.substr(uri.lastIndexOf('?') + 1);
     const result = {};
-    query.split('&').forEach(function (part) {
+    query.split('&').forEach((part) => {
       const item = part.split('=');
       result[item[0].toUpperCase()] = decodeURIComponent(item[1]);
     });
@@ -622,8 +621,6 @@ export class OwcJsonService {
 
   /**
    * retrieve display name of layer, based on IOwsResource and IOwsOffering
-   * @param offering
-   * @param resource
    */
   private getDisplayName(offering: IOwsOffering, resource: IOwsResource) {
     let displayName = '';
@@ -638,7 +635,7 @@ export class OwcJsonService {
   }
 
 
-  /**------------ DATA TO FILE -----------------------------------------*/
+  /** ------------ DATA TO FILE ----------------------------------------- */
 
 
   /**
@@ -656,19 +653,19 @@ export class OwcJsonService {
       };
     }
 
-    let owc: IEocOwsContext = {
-      'id': id,
-      'type': 'FeatureCollection',
-      'properties': properties,
-      'features': []
+    const owc: IEocOwsContext = {
+      id,
+      type: 'FeatureCollection',
+      properties,
+      features: []
     };
 
     if (extent) {
       owc['bbox'] = extent;
     }
 
-    for (let layer of layers) {
-      let resource: IEocOwsResource = this.generateResourceFromLayer(layer);
+    for (const layer of layers) {
+      const resource: IEocOwsResource = this.generateResourceFromLayer(layer);
       // TODO check for layer types
       owc.features.push(resource);
     }
@@ -677,35 +674,35 @@ export class OwcJsonService {
   }
 
   generateResourceFromLayer(layer: Layer): IEocOwsResource {
-    let resource: IEocOwsResource = {
-      'id': layer.id,
-      'properties': {
+    const resource: IEocOwsResource = {
+      id: layer.id,
+      properties: {
         title: layer.name,
         updated: null,
         offerings: [this.generateOfferingFromLayer(layer)],
         opacity: layer.opacity,
         attribution: layer.attribution,
       },
-      'type': 'Feature',
-      'geometry': null
-    }
+      type: 'Feature',
+      geometry: null
+    };
     return resource;
   }
 
   generateOfferingFromLayer(layer: Layer, legendUrl?: string, iconUrl?: string): IEocOwsOffering {
-    let offering: IEocOwsOffering = {
-      'code': this.getOfferingCodeFromLayer(layer),
-      'title': layer.name
+    const offering: IEocOwsOffering = {
+      code: this.getOfferingCodeFromLayer(layer),
+      title: layer.name
     };
 
-    if (layer.type == GeojsonLayertype) {
+    if (layer.type === GeojsonLayertype) {
       offering.contents = this.getContentsFromLayer(layer as VectorLayer);
     } else {
       offering.operations = this.getOperationsFromLayer(layer);
     }
 
-    if (legendUrl) offering.legendUrl = legendUrl;
-    if (iconUrl) offering.iconUrl = iconUrl;
+    if (legendUrl) { offering.legendUrl = legendUrl; }
+    if (iconUrl) { offering.iconUrl = iconUrl; }
 
     return offering;
   }
@@ -727,10 +724,10 @@ export class OwcJsonService {
   }
 
   getContentsFromLayer(layer: VectorLayer): IOwsContent[] {
-    let contents = [];
+    const contents = [];
     switch (layer.type) {
       case GeojsonLayertype:
-        let content = {
+        const content = {
           type: 'FeatureCollection',
           content: JSON.stringify(layer.data)
         };
@@ -755,9 +752,7 @@ export class OwcJsonService {
           console.error(`Cannot get operations for this type of layer: (${layer.type})`);
           return [];
       }
-    }
-
-    else if (layer instanceof VectorLayer) {
+    } else if (layer instanceof VectorLayer) {
       switch (layer.type) {
         // case 'wfs': <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts
         //   return this.getWfsOperationsFromLayer(layer);
@@ -771,14 +766,14 @@ export class OwcJsonService {
 
 
   getXyzOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
-    let restCall: IOwsOperation = {
-      'code': 'REST',
-      'method': 'GET',
-      'type': 'text/html',
-      'href': `${layer.url}`
-    }
+    const restCall: IOwsOperation = {
+      code: 'REST',
+      method: 'GET',
+      type: 'text/html',
+      href: `${layer.url}`
+    };
 
-    let operations: IOwsOperation[] = [
+    const operations: IOwsOperation[] = [
       restCall
     ];
 
@@ -793,16 +788,16 @@ export class OwcJsonService {
 
   getWfsOperationsFromLayer(layer: VectorLayer): IOwsOperation[] {
 
-    let url = layer.url;
-    let layerName = layer.name;
-    let version = layer.options.version ? layer.options.version : '1.1.0';
+    const url = layer.url;
+    const layerName = layer.name;
+    const version = layer.options.version ? layer.options.version : '1.1.0';
 
 
-    let GetFeature: IOwsOperation = {
-      'code': 'GetFeature',
-      'method': 'GET',
-      'type': 'application/json',
-      'href': `${url}?service=WFS&version=${version}&request=GetFeature`
+    const GetFeature: IOwsOperation = {
+      code: 'GetFeature',
+      method: 'GET',
+      type: 'application/json',
+      href: `${url}?service=WFS&version=${version}&request=GetFeature`
     };
 
     // let DescribeFeatureType: IOwsOperation = null;
@@ -816,7 +811,7 @@ export class OwcJsonService {
     // let ListStoredQueries: IOwsOperation = null;
     // let DescribeStoredQueries: IOwsOperation = null;
 
-    let operations = [
+    const operations = [
       GetFeature,
       // GetCapabilities,
       // DescribeFeatureType,
@@ -836,35 +831,35 @@ export class OwcJsonService {
 
   getWmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
 
-    let url = layer.url;
-    let wmsVersion = layer.params.VERSION;
-    let layerName = layer.name;
-    let layerId = layer.id;
+    const url = layer.url;
+    const wmsVersion = layer.params.VERSION;
+    const layerName = layer.name;
+    const layerId = layer.id;
     let format = 'image/vnd.jpeg-png';
-    if (layer.params && layer.params.FORMAT) format = layer.params.FORMAT;
+    if (layer.params && layer.params.FORMAT) { format = layer.params.FORMAT; }
 
-    let getMap: IOwsOperation = {
-      'code': 'GetMap',
-      'method': 'GET',
-      'type': format,
-      'href': `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}&TILED=true`
+    const getMap: IOwsOperation = {
+      code: 'GetMap',
+      method: 'GET',
+      type: format,
+      href: `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}&TILED=true`
     };
 
-    let getCapabilities: IOwsOperation = {
-      'code': 'GetCapabilities',
-      'method': 'GET',
-      'type': 'application/xml',
-      'href': `${url}?service=WMS&version=${wmsVersion}&request=GetCapabilities`
-    }
+    const getCapabilities: IOwsOperation = {
+      code: 'GetCapabilities',
+      method: 'GET',
+      type: 'application/xml',
+      href: `${url}?service=WMS&version=${wmsVersion}&request=GetCapabilities`
+    };
 
-    let getFeatureInfo: IOwsOperation = {
-      'code': 'GetFeatureInfo',
-      'method': 'GET',
-      'type': 'text/html',
-      'href': `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}`
-    }
+    const getFeatureInfo: IOwsOperation = {
+      code: 'GetFeatureInfo',
+      method: 'GET',
+      type: 'text/html',
+      href: `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}`
+    };
 
-    let operations: IOwsOperation[] = [
+    const operations: IOwsOperation[] = [
       getMap,
       getCapabilities,
       getFeatureInfo
@@ -875,37 +870,37 @@ export class OwcJsonService {
 
   getWmtsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
 
-    let url = layer.url;
-    let wmtsVersion = layer.params.version;
-    let layerName = layer.name;
-    let layerId = layer.id;
+    const url = layer.url;
+    const wmtsVersion = layer.params.version;
+    const layerName = layer.name;
+    const layerId = layer.id;
     let format = 'image/vnd.jpeg-png';
-    if (layer.params && layer.params.FORMAT) format = layer.params.FORMAT;
+    if (layer.params && layer.params.FORMAT) { format = layer.params.FORMAT; }
 
-    let getTile: IOwsOperation = {
-      'code': 'GetTile',
-      'href': `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=${format}&LAYER=${layerId}&VERSION=${wmtsVersion}`,
-      'method': 'GET',
-      'type': format
+    const getTile: IOwsOperation = {
+      code: 'GetTile',
+      href: `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=${format}&LAYER=${layerId}&VERSION=${wmtsVersion}`,
+      method: 'GET',
+      type: format
     };
 
-    let getCapabilities: IOwsOperation = {
-      'code': 'GetCapabilities',
-      'href': `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
-      'method': 'GET',
-      'type': 'application/xml'
-    }
+    const getCapabilities: IOwsOperation = {
+      code: 'GetCapabilities',
+      href: `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
+      method: 'GET',
+      type: 'application/xml'
+    };
 
     // Note: we deliberately use the WMS protocol here instead of WMTS.
     // Reason: WMTS delivers RGB-values, wheras WMS delivers the actual value that was used to create a tile.
-    let getFeatureInfo: IOwsOperation = {
-      'code': 'GetFeatureInfo',
-      'href': `${url}?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
-      'method': 'GET',
-      'type': 'text/html'
-    }
+    const getFeatureInfo: IOwsOperation = {
+      code: 'GetFeatureInfo',
+      href: `${url}?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
+      method: 'GET',
+      type: 'text/html'
+    };
 
-    let operations: IOwsOperation[] = [
+    const operations: IOwsOperation[] = [
       getTile,
       getCapabilities,
       getFeatureInfo
