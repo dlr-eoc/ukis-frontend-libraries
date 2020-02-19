@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './base-layer-control.component.html',
   styleUrls: ['./base-layer-control.component.scss']
 })
-export class BaseLayerControlComponent implements OnInit {
+export class BaseLayerControlComponent implements OnInit, OnDestroy {
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapStateSvc') mapStateSvc?: MapStateService;
 
@@ -26,7 +26,7 @@ export class BaseLayerControlComponent implements OnInit {
   ngOnInit() {
     this.layerGroupsSubscription = this.layersSvc.getLayerGroups().subscribe(layergroups => {
       this.layergroups = layergroups.filter((group) => group.filtertype === 'Baselayers');
-      //console.log(this.layergroups)
+      // console.log(this.layergroups)
     });
   }
 

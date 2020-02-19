@@ -36,10 +36,6 @@ class MockLayersService extends LayersService {
     return of([group]);
   }
 }
-/**
- * stub for MapStateService
- */
-const mapStateSvcStub = {};
 
 
 
@@ -64,7 +60,7 @@ describe('BaseLayerControlComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BaseLayerControlComponent);
     component = fixture.componentInstance;
-    layersSvc = new MockLayersService(); //TestBed.get(MockLayersService);
+    layersSvc = new MockLayersService(); // TestBed.get(MockLayersService);
     mapStateSvc = TestBed.get(MapStateService);
 
     // as we use directive @Input and do not inject the service, we need to instantiate a service here.

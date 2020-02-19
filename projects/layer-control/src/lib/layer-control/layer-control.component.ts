@@ -52,8 +52,8 @@ export class LayerControlComponent implements OnInit, OnDestroy {
   // CDKDRagAndDrop -------------------------------------------------------------
   // https://material.angular.io/cdk/drag-drop/api
   drop(event: CdkDragDrop<string[]>) {
-    const previousI = this.layergroups.length - event.previousIndex - 1,
-      currentI = this.layergroups.length - event.currentIndex - 1;
+    const previousI = this.layergroups.length - event.previousIndex - 1;
+    const currentI = this.layergroups.length - event.currentIndex - 1;
     this.layersSvc.arrayMove(this.layergroups, previousI, currentI);
     this.layersSvc.setLayerGroups(this.layergroups);
   }

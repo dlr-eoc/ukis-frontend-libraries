@@ -1,16 +1,16 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: "reverse",
+  name: 'reverse',
   pure: false
 })
 export class ReversePipe implements PipeTransform {
   transform(input: any): any {
-    if (typeof input == 'string') {
+    if (typeof input === 'string') {
       return input
-        .split("")
+        .split('')
         .reverse()
-        .join("");
+        .join('');
     }
     return Array.isArray(input) ? input.slice().reverse() : input;
   }

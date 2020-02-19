@@ -7,8 +7,8 @@ import { LayerentryComponent } from '../layerentry/layerentry.component';
 
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
-//import { Layer, LayerGroup } from '@dlr-eoc/services-layers';
-import { ObjTypePipe } from '../utils/obj-type.pipe'
+// import { Layer, LayerGroup } from '@dlr-eoc/services-layers';
+import { ObjTypePipe } from '../utils/obj-type.pipe';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { ReversePipe } from '../utils/array-reverse.pipe';
