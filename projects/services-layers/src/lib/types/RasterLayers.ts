@@ -87,4 +87,4 @@ export interface IWmsParams extends IRasterLayerParams {
 
 export const isWmsLayer = (layer: Layer): layer is WmsLayer => {
   return layer.type === 'wms';
-}
+};

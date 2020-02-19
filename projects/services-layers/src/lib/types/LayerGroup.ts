@@ -19,14 +19,14 @@ export interface ILayerGroupOptions {
 }
 
 /**
-* Classes for layer construction
-*/
+ * Classes for layer construction
+ */
 export class LayerGroup {
   id: string;
   name: string;
   layers: Layer[];
 
-  protected _visible?: boolean;
+  protected protVisible?: boolean;
   displayName?: string;
   filtertype?: TFiltertypes = 'Layers';
   removable = true;
@@ -46,12 +46,12 @@ export class LayerGroup {
 
   get visible() {
     if (this.layers && this.layers.length) {
-      this._visible = this.layers.filter(l => l.visible).length > 0;
+      this.protVisible = this.layers.filter(l => l.visible).length > 0;
     }
-    return this._visible;
+    return this.protVisible;
   }
   set visible(value: boolean) {
-    this._visible = value;
+    this.protVisible = value;
     if (this.layers && this.layers.length) {
       this.layers = this.layers.map(l => {
         l.visible = value;
