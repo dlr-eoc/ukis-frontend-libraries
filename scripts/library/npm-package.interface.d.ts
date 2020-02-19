@@ -1,60 +1,60 @@
 export interface IPackageJSON extends Object {
 
-    name: string;
+  name: string;
 
-    version?: string;
+  version?: string;
 
-    description?: string;
+  description?: string;
 
-    keywords?: string[];
+  keywords?: string[];
 
-    homepage?: string;
+  homepage?: string;
 
-    bugs?: string | IBugs;
+  bugs?: string | IBugs;
 
-    license?: string;
+  license?: string;
 
-    author?: string | IAuthor;
+  author?: string | IAuthor;
 
-    contributors?: string[] | IAuthor[];
+  contributors?: string[] | IAuthor[];
 
-    files?: string[];
+  files?: string[];
 
-    main?: string;
+  main?: string;
 
-    bin?: string | IBinMap;
+  bin?: string | IBinMap;
 
-    man?: string | string[];
+  man?: string | string[];
 
-    directories?: IDirectories;
+  directories?: IDirectories;
 
-    repository?: string | IRepository;
+  repository?: string | IRepository;
 
-    scripts?: IScriptsMap;
+  scripts?: IScriptsMap;
 
-    config?: IConfig;
+  config?: IConfig;
 
-    dependencies?: IDependencyMap;
+  dependencies?: IDependencyMap;
 
-    devDependencies?: IDependencyMap;
+  devDependencies?: IDependencyMap;
 
-    peerDependencies?: IDependencyMap;
+  peerDependencies?: IDependencyMap;
 
-    optionalDependencies?: IDependencyMap;
+  optionalDependencies?: IDependencyMap;
 
-    bundledDependencies?: string[];
+  bundledDependencies?: string[];
 
-    engines?: IEngines;
+  engines?: IEngines;
 
-    os?: string[];
+  os?: string[];
 
-    cpu?: string[];
+  cpu?: string[];
 
-    preferGlobal?: boolean;
+  preferGlobal?: boolean;
 
-    private?: boolean;
+  private?: boolean;
 
-    publishConfig?: IPublishConfig;
+  publishConfig?: IPublishConfig;
 
 }
 
@@ -62,66 +62,66 @@ export interface IPackageJSON extends Object {
  * An author or contributor
  */
 export interface IAuthor {
-    name: string;
-    email?: string;
-    homepage?: string;
+  name: string;
+  email?: string;
+  homepage?: string;
 }
 
 /**
  * A map of exposed bin commands
  */
 export interface IBinMap {
-    [commandName: string]: string;
+  [commandName: string]: string;
 }
 
 /**
  * A bugs link
  */
 export interface IBugs {
-    email: string;
-    url: string;
+  email: string;
+  url: string;
 }
 
 export interface IConfig {
-    name?: string;
-    config?: Object;
+  name?: string;
+  config?: Object;
 }
 
 /**
  * A map of dependencies
  */
 export interface IDependencyMap {
-    [dependencyName: string]: string;
+  [dependencyName: string]: string;
 }
 
 /**
  * CommonJS package structure
  */
 export interface IDirectories {
-    lib?: string;
-    bin?: string;
-    man?: string;
-    doc?: string;
-    example?: string;
+  lib?: string;
+  bin?: string;
+  man?: string;
+  doc?: string;
+  example?: string;
 }
 
 export interface IEngines {
-    node?: string;
-    npm?: string;
+  node?: string;
+  npm?: string;
 }
 
 export interface IPublishConfig {
-    registry?: string;
+  registry?: string;
 }
 
 /**
  * A project repository
  */
 export interface IRepository {
-    type: string;
-    url: string;
+  type: string;
+  url: string;
 }
 
 export interface IScriptsMap {
-    [scriptName: string]: string;
+  [scriptName: string]: string;
 }
