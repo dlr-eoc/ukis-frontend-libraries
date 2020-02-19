@@ -20,7 +20,7 @@ describe('GlobalAlertComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GlobalAlertComponent);
     component = fixture.componentInstance;
-    component.alert =  {
+    component.alert = {
       type: 'info',
       text: 'test Alert',
       closeable: true

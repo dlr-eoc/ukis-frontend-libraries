@@ -2,372 +2,372 @@ export type ExceptionReport = any;
 
 
 export interface BoundingBoxType {
-   lowerCorner: number[],
-   upperCorner: number[],
-   crs?: string,
-   dimensions?: number,
+  lowerCorner: number[],
+  upperCorner: number[],
+  crs?: string,
+  dimensions?: number,
 }
 
 export interface CodeType {
-   value: string
+  value: string
 }
 
 export interface LanguageStringType {
-   value: string
+  value: string
 }
 
 export interface AllowedValuesType {
-   valueOrRange: ValueType[]
+  valueOrRange: ValueType[]
 }
 
 export interface ValueType {
-   value: string
+  value: string
 }
 
 export interface DomainMetadataType {
-   reference?: string,
-   value: LiteralInputType
+  reference?: string,
+  value: LiteralInputType
 }
 
 export interface LiteralInputType {
-   allowedValues: any;
-   anyValue: any;
-   valuesReference: any;
-   defaultValue?: any;
+  allowedValues: any;
+  anyValue: any;
+  valuesReference: any;
+  defaultValue?: any;
 }
 
 export interface OutputReferenceType {
-   href: string;
-   mimeType?: string;
-   encoding?: string;
-   schema?: string;
+  href: string;
+  mimeType?: string;
+  encoding?: string;
+  schema?: string;
 }
 
 export interface ResponseFormType {
-   responseDocument?: ResponseDocumentType;
-   rawDataOutput?: OutputDefinitionType;
+  responseDocument?: ResponseDocumentType;
+  rawDataOutput?: OutputDefinitionType;
 }
 
 export interface DataType {
-   complexData?: ComplexDataType;
-   literalData?: LiteralDataType;
-   boundingBoxData?: BoundingBoxType;
+  complexData?: ComplexDataType;
+  literalData?: LiteralDataType;
+  boundingBoxData?: BoundingBoxType;
 }
 
 export interface ComplexDataCombinationsType {
-   format: any;
+  format: any;
 }
 
 export interface ResponseDocumentType {
-   output: DocumentOutputDefinitionType[];
-   storeExecuteResponse?: boolean;
-   lineage?: boolean;
-   status?: boolean;
+  output: DocumentOutputDefinitionType[];
+  storeExecuteResponse?: boolean;
+  lineage?: boolean;
+  status?: boolean;
 }
 
 export interface ProcessDescriptionType_ProcessOutputs {
-   output: any;
+  output: any;
 }
 
 export interface InputReferenceType_Header {
-   key: string;
-   value: string;
+  key: string;
+  value: string;
 }
 
 export interface ProcessOfferings {
-   process: any;
+  process: any;
 }
 
 export interface SupportedComplexDataInputType {
-   maximumMegabytes?: any;
+  maximumMegabytes?: any;
 }
 
 export interface SupportedComplexDataType {
-   _default: ComplexDataCombinationType;
-   supported: ComplexDataCombinationsType;
+  _default: ComplexDataCombinationType;
+  supported: ComplexDataCombinationsType;
 }
 
 export interface ValuesReferenceType {
-   reference?: string;
-   valuesForm?: string;
+  reference?: string;
+  valuesForm?: string;
 }
 
 export interface ComplexDataType {
-   otherAttributes?: any;
-   content: any[]; // string[]; // <-- should actually be any, but jsonix disagrees...
-   mimeType?: string;
-   encoding?: string;
-   schema?: string;
+  otherAttributes?: any;
+  content: any[]; // string[]; // <-- should actually be any, but jsonix disagrees...
+  mimeType?: string;
+  encoding?: string;
+  schema?: string;
 }
 
 export interface ProcessBriefType {
-   identifier: CodeType;
-   processVersion: any;
-   profile?: any;
-   wsdl?: any;
+  identifier: CodeType;
+  processVersion: any;
+  profile?: any;
+  wsdl?: any;
 }
 
 export interface Languages {
-   _default: Languages_Default;
-   supported: LanguagesType;
+  _default: Languages_Default;
+  supported: LanguagesType;
 }
 
 export interface ExecuteResponse_ProcessOutputs {
-   output: OutputDataType[];
+  output: OutputDataType[];
 }
 
 export interface DescriptionType {
-   identifier: CodeType;
-   title: LanguageStringType;
-   _abstract?: LanguageStringType;
-   metadata?: any;
+  identifier: CodeType;
+  title: LanguageStringType;
+  _abstract?: LanguageStringType;
+  metadata?: any;
 }
 
 export interface WpsProcessBriefType {
-   title: LanguageStringType[],
-   identifier: CodeType,
-   processVersion?: string,
-   metadata?: Object,
-   abstract?: Object,
-   profile?: Object,
-   WSDL?: Object
+  title: LanguageStringType[],
+  identifier: CodeType,
+  processVersion?: string,
+  metadata?: Object,
+  abstract?: Object,
+  profile?: Object,
+  WSDL?: Object
 }
 
 export interface ProcesOfferings {
-   process: WpsProcessBriefType[]
+  process: WpsProcessBriefType[]
 }
 
 export interface WPSCapabilitiesType {
-   processOfferings: ProcesOfferings;
-   languages: any;
-   service: any;
-   lang: any;
-   wsdl?: any;
+  processOfferings: ProcesOfferings;
+  languages: any;
+  service: any;
+  lang: any;
+  wsdl?: any;
 }
 
 export interface ProcessStartedType {
-   value?: string;
-   percentCompleted?: number;
+  value?: string;
+  percentCompleted?: number;
 }
 
 export interface DescribeProcess {
-   identifier: any;
+  identifier: any;
 }
 
 export interface OutputDescriptionType {
-   complexOutput: any;
-   literalOutput: any;
-   boundingBoxOutput: any;
+  complexOutput: any;
+  literalOutput: any;
+  boundingBoxOutput: any;
 }
 
 export interface ProcessDescriptions {
-   processDescription: any;
+  processDescription: any;
 }
 
 export interface InputDescriptionType {
-   complexData: any;
-   literalData: any;
-   boundingBoxData: any;
-   minOccurs: any;
-   maxOccurs: any;
+  complexData: any;
+  literalData: any;
+  boundingBoxData: any;
+  minOccurs: any;
+  maxOccurs: any;
 }
 
 export interface RequestBaseType {
-   service: string;
-   version: string;
-   language?: string;
+  service: string;
+  version: string;
+  language?: string;
 }
 
 export interface InputReferenceType {
-   href: string;
-   mimeType?: string;
-   encoding?: string;
-   schema?: string;
-   body?: any;
-   bodyReference?: InputReferenceType_BodyReference;
-   header?: any;
-   method?: 'GET' | 'POST' | 'PUT' | 'HEAD' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
+  href: string;
+  mimeType?: string;
+  encoding?: string;
+  schema?: string;
+  body?: any;
+  bodyReference?: InputReferenceType_BodyReference;
+  header?: any;
+  method?: 'GET' | 'POST' | 'PUT' | 'HEAD' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
 }
 
 export interface LiteralOutputType {
-   dataType?: DomainMetadataType;
-   uoMs?: SupportedUOMsType;
+  dataType?: DomainMetadataType;
+  uoMs?: SupportedUOMsType;
 }
 
 export interface ProcessDescriptionType {
-   processOutputs: any;
-   dataInputs?: any;
-   storeSupported?: any;
-   statusSupported?: any;
+  processOutputs: any;
+  dataInputs?: any;
+  storeSupported?: any;
+  statusSupported?: any;
 }
 
 export interface StatusType {
-   processAccepted: string;
-   processStarted: ProcessStartedType;
-   processPaused: ProcessStartedType;
-   processSucceeded: string;
-   processFailed: ProcessFailedType;
-   creationTime: string;
+  processAccepted: string;
+  processStarted: ProcessStartedType;
+  processPaused: ProcessStartedType;
+  processSucceeded: string;
+  processFailed: ProcessFailedType;
+  creationTime: string;
 }
 
 export interface UOMsType {
-   uom: any;
+  uom: any;
 }
 
 export interface ComplexDataCombinationType {
-   format: ComplexDataDescriptionType;
+  format: ComplexDataDescriptionType;
 }
 
 export interface CRSsType {
-   crs: any;
+  crs: any;
 }
 
 export interface LiteralDataType {
-   value?: string;
-   dataType?: string;
-   uom?: string;
+  value?: string;
+  dataType?: string;
+  uom?: string;
 }
 
 export interface Execute {
-   identifier: any;
-   dataInputs?: DataInputsType;
-   responseForm?: any;
-   service: "WPS";
-   version: "1.0.0";
+  identifier: any;
+  dataInputs?: DataInputsType;
+  responseForm?: any;
+  service: "WPS";
+  version: "1.0.0";
 }
 
 export interface ComplexDataDescriptionType {
-   mimeType: string;
-   encoding?: string;
-   schema?: string;
+  mimeType: string;
+  encoding?: string;
+  schema?: string;
 }
 
 export interface SupportedCRSsType_Default {
-   crs: string;
+  crs: string;
 }
 
 export interface ExecuteResponse {
-   process: ProcessBriefType;
-   status: StatusType;
-   serviceInstance: any;
-   dataInputs?: any;
-   outputDefinitions?: any;
-   processOutputs?: ExecuteResponse_ProcessOutputs;
-   statusLocation?: any;
+  process: ProcessBriefType;
+  status: StatusType;
+  serviceInstance: any;
+  dataInputs?: any;
+  outputDefinitions?: any;
+  processOutputs?: ExecuteResponse_ProcessOutputs;
+  statusLocation?: any;
 }
 
 export interface SupportedUOMsType_Default {
-   uom: DomainMetadataType;
+  uom: DomainMetadataType;
 }
 
 export interface ProcessFailedType {
-   exceptionReport: ExceptionReport;
+  exceptionReport: ExceptionReport;
 }
 
 export interface LanguagesType {
-   language: any;
+  language: any;
 }
 
 export interface OutputDefinitionsType {
-   output: any;
+  output: any;
 }
 
 export interface WSDL {
-   href: string;
+  href: string;
 }
 
 export interface SupportedUOMsType {
-   _default: SupportedUOMsType_Default;
-   supported: UOMsType;
+  _default: SupportedUOMsType_Default;
+  supported: UOMsType;
 }
 
 export interface InputReferenceType_BodyReference {
-   href: string;
+  href: string;
 }
 
 export interface DataInputsType {
-   input: InputType[];
+  input: InputType[];
 }
 
 export interface SupportedCRSsType {
-   _default: SupportedCRSsType_Default;
-   supported: CRSsType;
+  _default: SupportedCRSsType_Default;
+  supported: CRSsType;
 }
 
 export interface Languages_Default {
-   language: any;
+  language: any;
 }
 
 export interface DocumentOutputDefinitionType {
-   title?: any;
-   _abstract?: any;
-   asReference?: boolean;
-   identifier: CodeType,
-   mimeType?: string,
-   encoding?: string,
-   schema?: string,
-   uom?: string
+  title?: any;
+  _abstract?: any;
+  asReference?: boolean;
+  identifier: CodeType,
+  mimeType?: string,
+  encoding?: string,
+  schema?: string,
+  uom?: string
 }
 
 export interface ProcessDescriptionType_DataInputs {
-   input: any;
+  input: any;
 }
 
 export interface OutputDefinitionType {
-   identifier: CodeType;
-   uom?: string;
-   mimeType?: string;
-   encoding?: string;
-   schema?: string;
+  identifier: CodeType;
+  uom?: string;
+  mimeType?: string;
+  encoding?: string;
+  schema?: string;
 }
 
 export interface OutputDataType {
-   identifier: CodeType;
-   reference?: OutputReferenceType;
-   data?: DataType;
+  identifier: CodeType;
+  reference?: OutputReferenceType;
+  data?: DataType;
 }
 
 export interface InputType {
-   identifier: CodeType;
-   reference?: InputReferenceType;
-   data?: DataType;
-   title?: LanguageStringType;
-   _abstract?: LanguageStringType;
+  identifier: CodeType;
+  reference?: InputReferenceType;
+  data?: DataType;
+  title?: LanguageStringType;
+  _abstract?: LanguageStringType;
 }
 
 export interface ResponseBaseType {
-   service: string;
-   version: string;
-   lang: string;
+  service: string;
+  version: string;
+  lang: string;
 }
 
 export interface GetCapabilities {
-   service: string;
-   acceptVersions?: any;
-   language?: string;
+  service: string;
+  acceptVersions?: any;
+  language?: string;
 }
 
 
 export interface IWpsExecuteProcessBody {
-   name: {
-      key: "{http://www.opengis.net/wps/1.0.0}Execute",
-      localPart: "Execute",
-      namespaceURI: "http://www.opengis.net/wps/1.0.0",
-      prefix: "wps",
-      string: "{http://www.opengis.net/wps/1.0.0}wps:Execute"
-   };
-   value: Execute
+  name: {
+    key: "{http://www.opengis.net/wps/1.0.0}Execute",
+    localPart: "Execute",
+    namespaceURI: "http://www.opengis.net/wps/1.0.0",
+    prefix: "wps",
+    string: "{http://www.opengis.net/wps/1.0.0}wps:Execute"
+  };
+  value: Execute
 }
 
 export interface IWpsExecuteResponse {
-   name: { 
-      namespaceURI: 'http://www.opengis.net/wps/1.0.0',
-      localPart: 'ExecuteResponse',
-      prefix: 'wps',
-      key: '{http://www.opengis.net/wps/1.0.0}ExecuteResponse',
-      string: '{http://www.opengis.net/wps/1.0.0}wps:ExecuteResponse' 
-   },
-   value: ExecuteResponse
+  name: {
+    namespaceURI: 'http://www.opengis.net/wps/1.0.0',
+    localPart: 'ExecuteResponse',
+    prefix: 'wps',
+    key: '{http://www.opengis.net/wps/1.0.0}ExecuteResponse',
+    string: '{http://www.opengis.net/wps/1.0.0}wps:ExecuteResponse'
+  },
+  value: ExecuteResponse
 }
 
 

@@ -9,10 +9,10 @@ describe('CookieAlertComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CookieAlertComponent ],
+      declarations: [CookieAlertComponent],
       providers: [UtilStoreService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

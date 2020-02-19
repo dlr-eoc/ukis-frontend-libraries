@@ -22,9 +22,11 @@ input[type="range"] {
   margin: 8px 0;
   width: 100%;
 }
+
 input[type="range"]:focus {
   outline: none;
 }
+
 input[type="range"]::-webkit-slider-thumb {
   height: 20px;
   width: 10px;
@@ -33,6 +35,7 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   margin-top: -6px;
 }
+
 input[type="range"]::-moz-range-thumb {
   height: 20px;
   width: 10px;

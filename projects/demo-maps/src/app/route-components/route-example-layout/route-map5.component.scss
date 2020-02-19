@@ -27,14 +27,14 @@
   *  main-container
   *     router-outlet
   *     route-component
-  * 
+  *
   * so we have to set the class .content-container on our route-component to make it working
   * but the we don't can show multiple elements for a route like:
   *   main-container
   *      content-container
   *      subnav
   *      header
-  *      footer 
+  *      footer
   *
   * because all element are childs of the route and not descendants...
   */
@@ -46,20 +46,20 @@
     display: flex;
     flex-flow: row wrap;
     height: 100%;
-  
+
     &>:nth-child(3) {
       flex: 1 100%;
     }
-  
+
     .sidenav {
       order: 1;
     }
-  
+
     .content-area {
       order: 2;
       flex-grow: 1;
     }
-  
+
     .ukis-footer {
       order: 3;
       flex-grow: 0;
@@ -69,11 +69,11 @@
 
 /* .content-container {
     flex-flow: row wrap;
-  
+
     .ukis-footer {
       flex-grow: 1;
     }
-  
+
     .break {
       // flex-basis: 100%;
       // line-break: after;

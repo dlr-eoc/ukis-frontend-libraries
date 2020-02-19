@@ -12,7 +12,7 @@ import { ReversePipe } from './utils/array-reverse.pipe';
 import { reverseForOf } from './utils/revers-loop.directive';
 
 
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BaseLayerControlComponent } from './base-layer-control/base-layer-control.component';
 
 

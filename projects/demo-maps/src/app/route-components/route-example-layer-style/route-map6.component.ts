@@ -75,7 +75,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
           default: false,
           name: 'none',
           title: 'none'
-      }
+        }
       ]
     });
 

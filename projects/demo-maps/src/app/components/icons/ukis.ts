@@ -1,6 +1,6 @@
 /* tslint:disable:max-line-length */
 const ukisShapes: any = {
-            ukis: `
+  ukis: `
                 <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" class="has-solid"
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false" role="img">
                     <title>ukis</title>
@@ -10,7 +10,7 @@ const ukisShapes: any = {
                     <path class="clr-i-solid clr-i-solid-path-4" d="M18,4.5c-6,0-11.2,4-12.9,9.5l22-6C24.7,5.8,21.5,4.5,18,4.5z"/>
                 </svg>
             `,
-            dlr: `
+  dlr: `
                 <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" class="has-solid"
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false" role="img">
                     <title>dlr</title>
@@ -23,7 +23,7 @@ const ukisShapes: any = {
                     c0-0.7-0.6-0.7-1.2-0.7h-0.4V28.9L31.3,28.9z"/>
                 </svg>
             `,
-            eoc: `
+  eoc: `
                 <svg version="1.1" viewBox="0 0 580 220" preserveAspectRatio="xMidYMid meet" class="has-solid"
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false" role="img">
                     <title>eoc</title>
@@ -38,6 +38,6 @@ const ukisShapes: any = {
             `
 };
 if (typeof window !== 'undefined' && window.hasOwnProperty('ClarityIcons')) {
-    (window as any).ClarityIcons.add(ukisShapes);
+  (window as any).ClarityIcons.add(ukisShapes);
 }
-export {ukisShapes as UkisShapes};
+export { ukisShapes as UkisShapes };

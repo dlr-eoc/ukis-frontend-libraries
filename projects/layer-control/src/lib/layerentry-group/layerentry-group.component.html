@@ -26,7 +26,8 @@
       <input class="hide" [type]="'checkbox'" [checked]="group.visible" [name]="'group'" [id]="group.id"
         (change)="setGroupLayersVisibility()">
       <label [for]="group.id">
-        <clr-icon class="iconButton" [ngClass]="{'is-solid':group.visible}" [attr.shape]="group.visible?'eye':'eye-hide'"
+        <clr-icon class="iconButton" [ngClass]="{'is-solid':group.visible}"
+          [attr.shape]="group.visible?'eye':'eye-hide'"
           title="{{group.visible?'Hide observation layers':'Show observation layers'}}"></clr-icon>
       </label>
     </span>

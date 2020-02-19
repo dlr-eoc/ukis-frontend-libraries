@@ -568,7 +568,7 @@ export class LayersService {
 
   /**
    * Get all Layers with filterrype 'Layers' from the Layerservice Store
-   * 
+   *
    * #### to filter the Observable only on some layer property changes use rxjs filter e.g. see below:
    * this.layersSub = this.layerSvc.getLayers().pipe(filter(layers => {
    *   const newVisible = layers.map(l => l.visible).filter(v => v === true).length;

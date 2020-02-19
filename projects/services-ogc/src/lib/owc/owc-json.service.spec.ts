@@ -66,7 +66,7 @@ describe('OwcJsonService: reading data from owc', () => {
 
 
   // @TODO: this method seems to be a stub. Shouldn't it return an array of ILayerOptions?
-  it('#getlayersFromResource should properly create an array of ILayerOptions?', () => {});
+  it('#getlayersFromResource should properly create an array of ILayerOptions?', () => { });
 
 
   it('#createRasterLayerFromOffering should return an IRasterLayerOptions instance', (done) => {

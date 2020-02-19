@@ -47,9 +47,9 @@ $clr-baseline: null; // 24px;
 
 // Paragraphs
 $clr-typography-smalltext: null; // 13/$clr-rem-denominator*$clr-font-size;
-$clr-typography-xsmalltext: null;  // 12/$clr-rem-denominator*$clr-font-size;
-$clr-typography-xxsmalltext: null;  // 11/$clr-rem-denominator*$clr-font-size;
-$clr-typography-tinytext: null;  // 10/$clr-rem-denominator*$clr-font-size;
+$clr-typography-xsmalltext: null; // 12/$clr-rem-denominator*$clr-font-size;
+$clr-typography-xxsmalltext: null; // 11/$clr-rem-denominator*$clr-font-size;
+$clr-typography-tinytext: null; // 10/$clr-rem-denominator*$clr-font-size;
 
 // Navigation
 $clr-sidenav-width: null; // 18%;
@@ -239,7 +239,8 @@ $clr-login-icon-size: null; // $clr-icon-dimension-sm;
 $clr-padding-top-bottom: null; // $clr-baseline*0.125;
 $clr-padding-left-right: null; // $clr-baseline*0.5;
 
-$clr-label-colors: null; /* (
+$clr-label-colors: null;
+/* (
     gray: (
         background: $clr-gray,
         font: $clr-white

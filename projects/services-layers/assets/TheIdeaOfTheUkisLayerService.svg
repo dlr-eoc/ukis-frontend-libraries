@@ -4,49 +4,50 @@
 	<!ENTITY ns_flows "http://ns.adobe.com/Flows/1.0/">
 ]>
 <svg version="1.1"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" width="842px" height="595px" viewBox="0 0 842 595" enable-background="new 0 0 842 595" xml:space="preserve">
-<defs>
-</defs>
-<rect fill="#FFFFFF" width="841.89" height="595.276"/>
-<circle fill="#B2B2B2" stroke="#000000" stroke-miterlimit="10" cx="126.534" cy="278.083" r="25"/>
-<circle fill="#B2B2B2" stroke="#000000" stroke-miterlimit="10" cx="150.262" cy="361.981" r="33.474"/>
-<circle fill="#B2B2B2" stroke="#000000" stroke-miterlimit="10" cx="201.109" cy="452.66" r="30.932"/>
-<circle fill="#B2B2B2" stroke="#000000" stroke-miterlimit="10" cx="275.262" cy="521.727" r="38.136"/>
-<circle stroke="#000000" stroke-miterlimit="10" cx="341.152" cy="310.075" r="31.991"/>
-<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="151.534" y1="278.083" x2="309.936" y2="303.083"/>
-<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="182.271" y1="352.17" x2="309.936" y2="317.066"/>
-<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="225.47" y1="433.61" x2="317.333" y2="331.424"/>
-<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="289.128" y1="486.203" x2="331.722" y2="340.652"/>
-<rect x="82.89" y="238.439" fill="none" width="73.305" height="18.644"/>
-<text transform="matrix(1 0 0 1 82.8896 246.959)" font-family="'MyriadPro-Regular'" font-size="12">Openlayers</text>
-<rect x="87.974" y="322.795" fill="none" width="49.364" height="15.629"/>
-<text transform="matrix(1 0 0 1 87.9741 331.3149)" font-family="'MyriadPro-Regular'" font-size="12">Mapbox</text>
-<rect x="137.338" y="416.661" fill="none" width="46.822" height="33.897"/>
-<text transform="matrix(1 0 0 1 137.3384 425.1802)" font-family="'MyriadPro-Regular'" font-size="12">Leaflet</text>
-<rect x="196.152" y="504.235" fill="none" width="48.729" height="19.492"/>
-<text transform="matrix(1 0 0 1 196.1519 512.7544)" font-family="'MyriadPro-Regular'" font-size="12">Cesium</text>
-<rect x="287.338" y="261.439" fill="none" width="107.627" height="19.729"/>
-<text transform="matrix(1 0 0 1 287.3384 269.9585)" font-family="'MyriadPro-Regular'" font-size="12">Interface rxjs</text>
-<path fill="#FFFFFF" stroke="#020304" stroke-miterlimit="10" d="M732.678,383.456c0,6.628-3.663,12-8.182,12H503.572
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" x="0px" y="0px" width="842px" height="595px" viewBox="0 0 842 595" enable-background="new 0 0 842 595" xml:space="preserve">
+  <defs>
+  </defs>
+  <rect fill="#FFFFFF" width="841.89" height="595.276"/>
+  <circle fill="#B2B2B2" stroke="#000000" stroke-miterlimit="10" cx="126.534" cy="278.083" r="25"/>
+  <circle fill="#B2B2B2" stroke="#000000" stroke-miterlimit="10" cx="150.262" cy="361.981" r="33.474"/>
+  <circle fill="#B2B2B2" stroke="#000000" stroke-miterlimit="10" cx="201.109" cy="452.66" r="30.932"/>
+  <circle fill="#B2B2B2" stroke="#000000" stroke-miterlimit="10" cx="275.262" cy="521.727" r="38.136"/>
+  <circle stroke="#000000" stroke-miterlimit="10" cx="341.152" cy="310.075" r="31.991"/>
+  <line fill="none" stroke="#000000" stroke-miterlimit="10" x1="151.534" y1="278.083" x2="309.936" y2="303.083"/>
+  <line fill="none" stroke="#000000" stroke-miterlimit="10" x1="182.271" y1="352.17" x2="309.936" y2="317.066"/>
+  <line fill="none" stroke="#000000" stroke-miterlimit="10" x1="225.47" y1="433.61" x2="317.333" y2="331.424"/>
+  <line fill="none" stroke="#000000" stroke-miterlimit="10" x1="289.128" y1="486.203" x2="331.722" y2="340.652"/>
+  <rect x="82.89" y="238.439" fill="none" width="73.305" height="18.644"/>
+  <text transform="matrix(1 0 0 1 82.8896 246.959)" font-family="'MyriadPro-Regular'" font-size="12">Openlayers</text>
+  <rect x="87.974" y="322.795" fill="none" width="49.364" height="15.629"/>
+  <text transform="matrix(1 0 0 1 87.9741 331.3149)" font-family="'MyriadPro-Regular'" font-size="12">Mapbox</text>
+  <rect x="137.338" y="416.661" fill="none" width="46.822" height="33.897"/>
+  <text transform="matrix(1 0 0 1 137.3384 425.1802)" font-family="'MyriadPro-Regular'" font-size="12">Leaflet</text>
+  <rect x="196.152" y="504.235" fill="none" width="48.729" height="19.492"/>
+  <text transform="matrix(1 0 0 1 196.1519 512.7544)" font-family="'MyriadPro-Regular'" font-size="12">Cesium</text>
+  <rect x="287.338" y="261.439" fill="none" width="107.627" height="19.729"/>
+  <text transform="matrix(1 0 0 1 287.3384 269.9585)" font-family="'MyriadPro-Regular'" font-size="12">Interface rxjs</text>
+  <path fill="#FFFFFF" stroke="#020304" stroke-miterlimit="10" d="M732.678,383.456c0,6.628-3.663,12-8.182,12H503.572
 	c-4.52,0-8.183-5.372-8.183-12v-324c0-6.627,3.663-12,8.183-12h220.924c4.519,0,8.182,5.373,8.182,12V383.456z"/>
-<path fill="#706F6F" stroke="#000000" stroke-miterlimit="10" d="M597.084,122.744c0,6.627-5.373,12-12,12h-47.187
+  <path fill="#706F6F" stroke="#000000" stroke-miterlimit="10" d="M597.084,122.744c0,6.627-5.373,12-12,12h-47.187
 	c-6.627,0-12-5.373-12-12V75.558c0-6.627,5.373-12,12-12h47.187c6.627,0,12,5.373,12,12V122.744z"/>
-<path fill="#706F6F" stroke="#000000" stroke-miterlimit="10" d="M597.533,212.27c0,6.627-5.373,12-12,12h-47.636
+  <path fill="#706F6F" stroke="#000000" stroke-miterlimit="10" d="M597.533,212.27c0,6.627-5.373,12-12,12h-47.636
 	c-6.627,0-12-5.373-12-12v-47.636c0-6.627,5.373-12,12-12h47.636c6.627,0,12,5.373,12,12V212.27z"/>
-<path fill="#878787" stroke="#000000" stroke-miterlimit="10" d="M597.309,301.902c0,6.627-5.373,12-12,12h-47.636
+  <path fill="#878787" stroke="#000000" stroke-miterlimit="10" d="M597.309,301.902c0,6.627-5.373,12-12,12h-47.636
 	c-6.627,0-12-5.373-12-12v-47.636c0-6.627,5.373-12,12-12h47.636c6.627,0,12,5.373,12,12V301.902z"/>
-<rect x="616.576" y="85.591" fill="none" width="63.984" height="13.56"/>
-<text transform="matrix(1 0 0 1 616.5762 94.1113)" font-family="'MyriadPro-Regular'" font-size="12">Map View</text>
-<rect x="616.576" y="174.893" fill="none" width="137.714" height="13.56"/>
-<text transform="matrix(1 0 0 1 616.5762 183.4126)" font-family="'MyriadPro-Regular'" font-size="12">Layer Control</text>
-<rect x="616.576" y="271.303" fill="none" width="137.715" height="13.56"/>
-<text transform="matrix(1 0 0 1 616.5762 279.8232)" font-family="'MyriadPro-Regular'" font-size="12">User Management</text>
-<rect x="532.678" y="316.343" fill="none" width="185.593" height="51.445"/>
-<text transform="matrix(1 0 0 1 532.6777 358.9429)" font-family="'MyriadPro-Regular'" font-size="60">. . .</text>
-<rect x="323.525" y="513.981" fill="none" width="185.592" height="51.445"/>
-<text transform="matrix(1 0 0 1 323.5249 556.5806)" font-family="'MyriadPro-Regular'" font-size="60">. . .</text>
-<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="373.143" y1="303.083" x2="525.673" y2="284.863"/>
-<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="368.792" y1="293.973" x2="525.673" y2="198.303"/>
-<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="360.832" y1="284.863" x2="525.897" y2="99.151"/>
+  <rect x="616.576" y="85.591" fill="none" width="63.984" height="13.56"/>
+  <text transform="matrix(1 0 0 1 616.5762 94.1113)" font-family="'MyriadPro-Regular'" font-size="12">Map View</text>
+  <rect x="616.576" y="174.893" fill="none" width="137.714" height="13.56"/>
+  <text transform="matrix(1 0 0 1 616.5762 183.4126)" font-family="'MyriadPro-Regular'" font-size="12">Layer Control</text>
+  <rect x="616.576" y="271.303" fill="none" width="137.715" height="13.56"/>
+  <text transform="matrix(1 0 0 1 616.5762 279.8232)" font-family="'MyriadPro-Regular'" font-size="12">User Management</text>
+  <rect x="532.678" y="316.343" fill="none" width="185.593" height="51.445"/>
+  <text transform="matrix(1 0 0 1 532.6777 358.9429)" font-family="'MyriadPro-Regular'" font-size="60">. . .</text>
+  <rect x="323.525" y="513.981" fill="none" width="185.592" height="51.445"/>
+  <text transform="matrix(1 0 0 1 323.5249 556.5806)" font-family="'MyriadPro-Regular'" font-size="60">. . .</text>
+  <line fill="none" stroke="#000000" stroke-miterlimit="10" x1="373.143" y1="303.083" x2="525.673" y2="284.863"/>
+  <line fill="none" stroke="#000000" stroke-miterlimit="10" x1="368.792" y1="293.973" x2="525.673" y2="198.303"/>
+  <line fill="none" stroke="#000000" stroke-miterlimit="10" x1="360.832" y1="284.863" x2="525.897" y2="99.151"/>
 </svg>

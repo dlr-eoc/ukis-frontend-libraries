@@ -15,20 +15,21 @@ class MockLayersService extends LayersService {
 
   getLayerGroups() {
     let l = new RasterLayer(
-        { url: 'blabl',
-          name: 'name',
-          id: '5',
-          type: 'wms',
-          filtertype: 'Baselayers'
-        }
-      );
+      {
+        url: 'blabl',
+        name: 'name',
+        id: '5',
+        type: 'wms',
+        filtertype: 'Baselayers'
+      }
+    );
     let group = new LayerGroup({
       id: 'g',
       name: 'Test',
       layers: [l],
       filtertype: 'Baselayers'
     });
-    return of([ group ]);
+    return of([group]);
   }
 }
 
@@ -39,13 +40,13 @@ describe('MapOlComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapOlComponent ],
+      declarations: [MapOlComponent],
       providers: [
-        {provide: LayersService, useClass: MockLayersService},
-        {provide: MapStateService, useClass: MapStateService}
+        { provide: LayersService, useClass: MockLayersService },
+        { provide: MapStateService, useClass: MapStateService }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

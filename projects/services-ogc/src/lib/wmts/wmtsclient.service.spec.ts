@@ -7,7 +7,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 describe('WmtsClientService: reading data from server', () => {
 
   beforeEach(() => {
-    TestBed.configureTestingModule({imports: [HttpClientTestingModule]});
+    TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
   });
 
   afterEach(() => {
@@ -19,9 +19,9 @@ describe('WmtsClientService: reading data from server', () => {
     const url = 'https://theserver.com';
 
     service.getCapabilities(url).subscribe((capabilities: object) => {
-        console.log(capabilities);
-        expect(capabilities).toBeTruthy();
-        done();
+      console.log(capabilities);
+      expect(capabilities).toBeTruthy();
+      done();
     });
 
     const request = http.expectOne('https://theserver.com?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0');

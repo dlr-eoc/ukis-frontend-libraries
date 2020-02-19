@@ -60,10 +60,10 @@
 /** CONTENT -------------------------------------------------------------- */
 // adjust padding of main container for map!!!
 .main-container .content-container .content-area {
-    &.map-view {
-      padding: 0;
-    }
+  &.map-view {
+    padding: 0;
   }
+}
 
 .content-area {
   background: #fff;
