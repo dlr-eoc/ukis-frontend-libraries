@@ -27,14 +27,14 @@
 *  main-container
 *     router-outlet
 *     route-component
-* 
+*
 * so we have to set the class .content-container on our route-component to make it working
 * but the we don't can show multiple elements for a route like:
 *   main-container
 *      content-container
 *      subnav
 *      header
-*      footer 
+*      footer
 *
 * because all element are childs of the route and not descendants...
 */

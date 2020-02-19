@@ -152,7 +152,7 @@ function getTsSourceFile(host: Tree, path: string): ts.SourceFile {
 }
 
 export function updateJsonFile<T>(path: string, cb: (pkgJson: T) => T): Rule {
-  return (tree: Tree, context: SchematicContext) => {
+  return (tree: Tree) => {
     if (!tree.exists(path)) {
       throw new SchematicsException(`${path} is not in the workspace!`);
     }
@@ -168,7 +168,7 @@ export function updateJsonFile<T>(path: string, cb: (pkgJson: T) => T): Rule {
 }
 
 
-export function updateHtmlFile(path: string, startTagStr: string, endTagStr: string, items: string | string[], options: UkisNgAddSchema): Rule {
+export function updateHtmlFile(path: string, startTagStr: string, endTagStr: string, items: string | string[]): Rule {
   return (tree: Tree, context: SchematicContext) => {
 
     const buffer = tree.read(path);
@@ -256,7 +256,7 @@ export function getStyleExt(project: WorkspaceProject, workspace: WorkspaceSchem
   return styleExt;
 }
 
-export function ruleInstallTask(options: UkisNgAddSchema): Rule {
+export function ruleInstallTask(): Rule {
   return (tree: Tree, context: SchematicContext) => {
     context.addTask(new NodePackageInstallTask());
     return tree;

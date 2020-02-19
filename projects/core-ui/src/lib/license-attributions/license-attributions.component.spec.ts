@@ -8,9 +8,9 @@ describe('LicenseAttributionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LicenseAttributionsComponent ]
+      declarations: [LicenseAttributionsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
