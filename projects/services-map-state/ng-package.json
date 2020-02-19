@@ -3,5 +3,9 @@
   "dest": "../../dist/services-map-state",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib",
+    "@dlr-eoc/services-layers"
+  ]
 }

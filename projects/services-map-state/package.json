@@ -8,6 +8,9 @@
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
     "rxjs": "0.0.0-PLACEHOLDER-VENDOR"
   },
+  "dependencies": {
+    "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER"
+  },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"

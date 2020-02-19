@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { MapState, TGeoExtent, IMapStateOptions, IMapState } from './types/map-state';
+import { MapState, IMapStateOptions, IMapState } from './types/map-state';
+import { TGeoExtent } from '@dlr-eoc/services-layers';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +26,9 @@ export class MapStateService {
     if (state instanceof MapState) {
       this.mapState.next(state);
     } else {
-      const _stateOptions: IMapStateOptions = { ...{ notifier: 'user' }, ...state.options };
-      const _state = new MapState(state.zoom, state.center, _stateOptions, state.extent, state.time);
-      this.mapState.next(_state);
+      const stateOptions: IMapStateOptions = { ...{ notifier: 'user' }, ...state.options };
+      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.time);
+      this.mapState.next(newState);
     }
   }
 

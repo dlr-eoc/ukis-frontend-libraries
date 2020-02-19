@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MapStateService } from './map-state.service'
+import { MapStateService } from './map-state.service';
 @NgModule({
   declarations: [],
   imports: [],
