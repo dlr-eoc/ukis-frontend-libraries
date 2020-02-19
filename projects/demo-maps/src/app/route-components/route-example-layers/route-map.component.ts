@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map, google_earth } from '@dlr-eoc/base-layers-raster';
+import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, eoc_litemap_tile, esri_grey_canvas, esri_nav_charts, open_sea_map, google_earth } from '@dlr-eoc/base-layers-raster';
 import { MapOlService } from '@dlr-eoc/map-ol';
 
 @Component({
@@ -39,7 +39,7 @@ export class RouteMapComponent implements OnInit {
   }
 
   addBaseLayers() {
-    const eocLitemapLayer = new eoc_litemap({
+    const eocLitemapLayer = new eoc_litemap_tile({
       legendImg: null,
       id: 'eoc_litemap_base',
       visible: true
@@ -288,9 +288,7 @@ export class RouteMapComponent implements OnInit {
       id: 'esri_ocean_base'
     });
 
-    const osmLayer = new osm({
-      legendImg: 'assets/osm.png'
-    });
+    const osmLayer = new osm();
     /** add a Group of layers */
 
 
@@ -298,7 +296,7 @@ export class RouteMapComponent implements OnInit {
       id: 'group_1',
       name: 'Test Group',
       layers: [esriOceanImageryLayer, osmLayer, esriImageLayer],
-      description: 'this is a group with esri_ocean_imagery_layer, osmLayer, esri_Image_layer <img src="assets/osm.png"><a href="assets/osm.png">a link</a>',
+      description: 'this is a group with esri_ocean_imagery_layer, osmLayer, esri_Image_layer',
       actions: [{ title: 'download', icon: 'download-cloud', action: (group) => { console.log(group); } }]
     });
 

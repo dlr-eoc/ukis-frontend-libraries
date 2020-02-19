@@ -37,12 +37,10 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   }
 
   addLayers() {
-    const osmLayerBase = new osm({
-      legendImg: null
-    });
     const osmLayer1 = new osm({
       legendImg: null,
-      id: 'OSM1'
+      id: 'OSM1',
+      visible: true
     });
 
     const data = {
@@ -165,14 +163,17 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'custom Vector Layer',
       name: 'Custom Layer KML',
       type: 'custom',
+      popup: true,
       custom_layer: new olVectorLayer({
         source: new olVectorSource({
-          url: 'assets/data/kml/citsu_valparaiso_vinna.kml',
-          format: new olKML(),
+          url: 'assets/data/kml/TimeZones.kml',
+          format: new olKML({
+            extractStyles: true
+          }),
         }),
       }),
       visible: false,
-      bbox: [-71.770, -33.112, -71.421, -32.867]
+      bbox: [-180, -90, 180, 90]
     });
 
     const esriLayer = new esri_world_imagery();
@@ -205,7 +206,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
     const layers = [osmLayer1, layersGroup1, imageWmsLayer, esriLayer2, customVectorLayer];
 
-    this.layersSvc.addLayer(osmLayerBase, 'Baselayers');
     layers.forEach(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');
