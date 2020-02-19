@@ -22,13 +22,13 @@ describe('MapNavigatorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MapNavigatorComponent);
     component = fixture.componentInstance;
-    //inject Service
+    // inject Service
     component.mapState = new MapStateService();
-    //mock get state from Service
+    // mock get state from Service
     component.mapstate = new MapState(7, {
       lat: 0,
       lon: 0
-    }, { notifier: 'user' })
+    }, { notifier: 'user' });
     fixture.detectChanges();
   });
 

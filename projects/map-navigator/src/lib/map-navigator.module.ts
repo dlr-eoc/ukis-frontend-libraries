@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MapNavigatorComponent } from './navigator/map-navigator.component';
 import { MousePositionComponent } from './mouse-position/mouse-position.component';
 import { ProjectionSwitchComponent } from './projection-switch/projection-switch.component';
-import { ClarityModule } from "@clr/angular";
+import { ClarityModule } from '@clr/angular';
 
 @NgModule({
   declarations: [MapNavigatorComponent, MousePositionComponent, ProjectionSwitchComponent],

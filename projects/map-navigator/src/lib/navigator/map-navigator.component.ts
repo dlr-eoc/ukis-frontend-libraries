@@ -1,15 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { MapStateService, MapState } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ukis-map-navigator',
-  templateUrl: './map-navigator.component.html',
-  //styleUrls: ['./map-navigator.component.scss']
-  styles: []
+  templateUrl: './map-navigator.component.html'
 })
-export class MapNavigatorComponent implements OnInit {
+export class MapNavigatorComponent implements OnInit, OnDestroy {
   @Input('mapState') mapState?: MapStateService;
   mapstate: MapState;
   subscription: Subscription;

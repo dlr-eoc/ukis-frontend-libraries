@@ -15,7 +15,7 @@ interface ISelectProjection {
 export class MousePositionComponent implements OnInit, OnDestroy {
 
   public mapCoordinates: [number, number] = [0, 0];
-  public zoom: number = 0;
+  public zoom = 0;
   public projections: ISelectProjection[];
   mapProjection: olProjection;
   public selectedProjection: string;
@@ -57,7 +57,7 @@ export class MousePositionComponent implements OnInit, OnDestroy {
 
   mapOnMoveend = (evt) => {
     const newZoom = evt.map.getView().getZoom();
-    if (this.zoom != newZoom) {
+    if (this.zoom !== newZoom) {
       // console.log('zoom end, new zoom: ' + newZoom);
       this.zoom = newZoom;
     }

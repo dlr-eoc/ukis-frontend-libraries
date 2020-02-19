@@ -24,7 +24,7 @@ export class ProjectionSwitchComponent implements OnInit {
   setNewProjection(projection) {
     this.mapSvc.registerProjection(projection);
 
-    let newProj = this.mapSvc.getOlProjection(projection);
+    const newProj = this.mapSvc.getOlProjection(projection);
 
     this.mapSvc.setProjection(newProj);
     this.selectedProj = projection;
