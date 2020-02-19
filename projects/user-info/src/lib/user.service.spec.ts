@@ -28,7 +28,7 @@ describe('UserService', () => {
 
   it('should have one oth the loginmethodes', () => {
     service.loginmethode = 'oauth_code';
-    expect(service.loginmethode).toBe('oauth_code')
+    expect(service.loginmethode).toBe('oauth_code');
   });
 
   it('should have a getUserInfo Methode', () => {

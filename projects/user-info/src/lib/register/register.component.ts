@@ -35,14 +35,14 @@ export class RegisterComponent implements OnDestroy {
     const controlErrors: ValidationErrors = this.usrInfoForm.get(key).errors;
     if (controlErrors != null) {
       Object.keys(controlErrors).forEach((keyError, index) => {
-        let _error = keyError;
+        let newError = keyError;
         if (keyError !== 'required') {
-          _error = JSON.stringify(this.usrInfoForm.get(key).errors[keyError]);
+          newError = JSON.stringify(this.usrInfoForm.get(key).errors[keyError]);
         }
-        if (index == 0) {
-          error += `${_error}`
+        if (index === 0) {
+          error += `${newError}`;
         } else {
-          error += ` and ${_error}`
+          error += ` and ${newError}`;
         }
       });
     }
@@ -50,14 +50,14 @@ export class RegisterComponent implements OnDestroy {
   }
 
   register() {
-    let user: IRegisterUser = {
-      userName: this.usrInfoForm.get("usrName").value,
-      password: this.usrInfoForm.get("usrPass").value,
-      email: this.usrInfoForm.get("email").value,
-      firstName: this.usrInfoForm.get("firstName").value,
-      lastName: this.usrInfoForm.get("lastName").value
-    }
-    this.usrSvc.register(user)
+    const user: IRegisterUser = {
+      userName: this.usrInfoForm.get('usrName').value,
+      password: this.usrInfoForm.get('usrPass').value,
+      email: this.usrInfoForm.get('email').value,
+      firstName: this.usrInfoForm.get('firstName').value,
+      lastName: this.usrInfoForm.get('lastName').value
+    };
+    this.usrSvc.register(user);
   }
 
   ngOnDestroy() {
