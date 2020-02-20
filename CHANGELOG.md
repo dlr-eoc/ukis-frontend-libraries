@@ -2,7 +2,11 @@
 
 
 ### Breaking Changes
-* **change npm package scope from @ukis to @dlr-eoc** this is breaking all imports and path mappings!!! 
+* **change npm package scope from @ukis to @dlr-eoc:** this is breaking all imports and path mappings for @ukis!!! 
+
+* **@ukis/layer-control:** directive reverseForOf removed! 
+* **@ukis/map-ol:** duplicated exported type 'TGeoExtent' removed! - now exported from *@ukis/services-layers*
+* **@ukis/services-map-state:** duplicated exported type 'TGeoExtent' removed! - now exported from *@ukis/services-layers*
 
 * **@ukis/services-layers:** getLayerOrGroupById() - is returning a Layer | LayerGroup | null - not a array anymore! 
 
