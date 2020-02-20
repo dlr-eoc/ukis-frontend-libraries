@@ -14,6 +14,7 @@ import { ProgressService } from './components/global-progress/progress.service';
 import { MapOlModule } from '@dlr-eoc/map-ol';
 import { LayerControlModule } from '@dlr-eoc/layer-control';
 import { MapNavigatorModule } from '@dlr-eoc/map-navigator';
+import { OwcControlModule } from '@dlr-eoc/owc-control';
 
 import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
 import { RouteMap2Component } from './route-components/route-example-projection/route-map2.component';
@@ -21,6 +22,8 @@ import { RouteMap3Component } from './route-components/route-example-events/rout
 import { RouteMap4Component } from './route-components/route-example-custom-layers/route-map4.component';
 import { RouteMap5Component } from './route-components/route-example-layout/route-map5.component';
 import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
+
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,9 @@ import { RouteMap6Component } from './route-components/route-example-layer-style
     BrowserAnimationsModule,
     MapOlModule,
     LayerControlModule,
-    MapNavigatorModule
+    MapNavigatorModule,
+    OwcControlModule,
+    HttpClientModule
   ],
   providers: [AlertService, ProgressService],
   bootstrap: [AppComponent]
