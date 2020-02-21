@@ -20,12 +20,12 @@ interface License {
 })
 export class RouteLicensesComponent implements OnInit {
 
-  public licenses: Observable<License[]>;
+  public licenses$: Observable<License[]>;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.licenses = this.http.get('assets/licenses.json').pipe(map(data => {
+    this.licenses$ = this.http.get('assets/licenses.json').pipe(map(data => {
       const licenses: License[] = [];
       for (const name in data) {
         if (data[name]) {

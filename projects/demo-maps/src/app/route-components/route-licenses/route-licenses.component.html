@@ -7,12 +7,16 @@
     <clr-dg-column>License</clr-dg-column>
     <clr-dg-column>Repository</clr-dg-column>
 
-    <clr-dg-row *ngFor="let l of (licenses | async)">
-        <clr-dg-cell>{{l.name}}</clr-dg-cell>
-        <clr-dg-cell>{{l.publisher}}</clr-dg-cell>
-        <clr-dg-cell>{{l.license}}</clr-dg-cell>
-        <clr-dg-cell><a href="{{l.repository}}">{{l.repository}}</a></clr-dg-cell>
-    </clr-dg-row>
+    <ng-container *ngIf="licenses$ | async as licenses">
+        <clr-dg-row *ngFor="let l of licenses">
+            <clr-dg-cell>{{l.name}}</clr-dg-cell>
+            <clr-dg-cell>{{l.publisher}}</clr-dg-cell>
+            <clr-dg-cell>{{l.license}}</clr-dg-cell>
+            <clr-dg-cell><a href="{{l.repository}}">{{l.repository}}</a></clr-dg-cell>
+        </clr-dg-row>
+    
+        <clr-dg-footer>{{licenses.length}} third party dependencies</clr-dg-footer>
+    </ng-container>
 
-    <clr-dg-footer>{{(licenses | async).length}} third party dependencies</clr-dg-footer>
+
 </clr-datagrid>
