@@ -19,6 +19,8 @@ import { RouteMap3Component } from './route-components/route-example-events/rout
 import { RouteMap4Component } from './route-components/route-example-custom-layers/route-map4.component';
 import { RouteMap5Component } from './route-components/route-example-layout/route-map5.component';
 import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
+import { RouteLicensesComponent } from './route-components/route-licenses/route-licenses.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -60,6 +62,13 @@ export const appRoutes: Routes = [
     data: {
       title: 'Switching Layer-Style'
     }
+  },
+  {
+    path: 'licenses',
+    component: RouteLicensesComponent,
+    data: {
+      title: 'Licenses'
+    }
   }
 ];
 
@@ -75,7 +84,8 @@ export const appRoutes: Routes = [
     RouteMap3Component,
     RouteMap4Component,
     RouteMap5Component,
-    RouteMap6Component
+    RouteMap6Component,
+    RouteLicensesComponent
   ],
   imports: [
     BrowserModule,
@@ -84,7 +94,8 @@ export const appRoutes: Routes = [
     BrowserAnimationsModule,
     MapOlModule,
     LayerControlModule,
-    MapNavigatorModule
+    MapNavigatorModule,
+    HttpClientModule
   ],
   providers: [ProgressService],
   bootstrap: [AppComponent]

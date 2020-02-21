@@ -1,0 +1,18 @@
+<p>A lot of third party libraries were used to create this project. Their licenses are listed here.</p>
+
+
+<clr-datagrid>
+    <clr-dg-column>Library name</clr-dg-column>
+    <clr-dg-column>Publisher</clr-dg-column>
+    <clr-dg-column>License</clr-dg-column>
+    <clr-dg-column>Repository</clr-dg-column>
+
+    <clr-dg-row *ngFor="let l of (licenses | async)">
+        <clr-dg-cell>{{l.name}}</clr-dg-cell>
+        <clr-dg-cell>{{l.publisher}}</clr-dg-cell>
+        <clr-dg-cell>{{l.license}}</clr-dg-cell>
+        <clr-dg-cell><a href="{{l.repository}}">{{l.repository}}</a></clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-footer>{{(licenses | async).length}} third party dependencies</clr-dg-footer>
+</clr-datagrid>
