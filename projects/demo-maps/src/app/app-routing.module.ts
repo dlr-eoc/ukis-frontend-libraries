@@ -6,6 +6,7 @@ import { RouteMap3Component } from './route-components/route-example-events/rout
 import { RouteMap4Component } from './route-components/route-example-custom-layers/route-map4.component';
 import { RouteMap5Component } from './route-components/route-example-layout/route-map5.component';
 import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
+import { RouteLicensesComponent } from './route-components/route-licenses/route-licenses.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'example-layers', pathMatch: 'full' },
@@ -44,6 +45,13 @@ const routes: Routes = [
     component: RouteMap6Component,
     data: {
       title: 'Switching Layer-Style'
+    }
+  },
+  {
+    path: 'licenses',
+    component: RouteLicensesComponent,
+    data: {
+      title: 'Licenses'
     }
   }
 ];

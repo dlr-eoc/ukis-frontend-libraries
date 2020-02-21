@@ -21,6 +21,7 @@
 
 
 * **scripts**: create package for libraryScripts and nexus publish
+* **projects/demo-maps**: added route 'licenses' as an example for how to display third party licenses.
 
 
 ### Features
