@@ -1,11 +1,9 @@
-import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription, WpsData, WpsState, isWpsState } from './wps_datatypes';
+import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription, WpsData, WpsState, isWpsState, WpsDataDescription } from './wps_datatypes';
 import { WpsMarshaller100 } from './wps100/wps_marshaller_1.0.0';
 import { WpsMarshaller200 } from './wps200/wps_marshaller_2.0.0';
-import { Observable, timer, of, throwError } from 'rxjs';
-import { map, catchError, switchMap, tap, share, mergeMap, first } from 'rxjs/operators';
-import { Jsonix } from '@boundlessgeo/jsonix';
-
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { map, switchMap, tap, share, mergeMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; const XLink_1_0 = XLink_1_0_Factory.XLink_1_0;
 import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0;
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
@@ -13,6 +11,8 @@ import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
 import { pollUntil, delayedRetry } from './utils/polling';
 import { Injectable, Inject } from '@angular/core';
+import { Jsonix } from '@boundlessgeo/jsonix';
+import { Cache, FakeCache } from './cache';
 
 
 
@@ -28,16 +28,18 @@ import { Injectable, Inject } from '@angular/core';
 export class WpsClient {
 
     private version: WpsVerion;
-    private xmlmarshaller;
-    private xmlunmarshaller;
+    private xmlmarshaller: any;
+    private xmlunmarshaller: any;
     private wpsmarshaller: WpsMarshaller;
-
+    private cache: Cache = new FakeCache();
 
     constructor(
         @Inject('WpsVersion') version: WpsVerion = '1.0.0',
-        private webclient: HttpClient
+        private webclient: HttpClient,
+        @Inject('WpsCache') cache?: Cache
     ) {
         this.version = version;
+        if (cache) this.cache = cache;
         let context;
         if (this.version === '1.0.0') {
             this.wpsmarshaller = new WpsMarshaller100();
@@ -55,15 +57,9 @@ export class WpsClient {
 
     getCapabilities(url: string): Observable<any> {
         const getCapabilitiesUrl = this.wpsmarshaller.getCapabilitiesUrl(url);
-        const headers = new HttpHeaders({
-            'Accept': 'text/xml, application/xml'
-        });
-        return this.webclient.get(getCapabilitiesUrl, { headers, responseType: 'text' }).pipe(
-            delayedRetry(2000, 2),
+        return this.getRaw(getCapabilitiesUrl).pipe(
             map((response: any) => {
-                return this.xmlunmarshaller.unmarshalString(response);
-            }),
-            map((responseJson: any) => {
+                const responseJson = this.xmlunmarshaller.unmarshalString(response);
                 return this.wpsmarshaller.unmarshalCapabilities(responseJson.value);
             }) // @TODO: handle case when instead of WpsCapabilites an ExceptionReport is returned
         );
@@ -80,7 +76,7 @@ export class WpsClient {
 
         const executeRequest$: Observable<WpsState> = this.executeAsyncS(url, processId, inputs, outputs);
 
-        return executeRequest$.pipe(
+        const query$ = executeRequest$.pipe(
 
             // poll until suceeded
             mergeMap((currentState: WpsState) => {
@@ -114,21 +110,40 @@ export class WpsClient {
             })
         );
 
+        return this.cachedQuery(url, processId, inputs, outputs, query$);
+    }
+
+    private cachedQuery(url: string, processId: string, inputs: WpsInput[],
+        outputs: WpsOutputDescription[], query$: Observable<WpsData[]>): Observable<WpsData[]> {
+
+        const cachedResponse$: Observable<WpsResult[] | null> = this.cache.get({url, processId, inputs, outputs});
+        return cachedResponse$.pipe(
+            switchMap((results) => {
+                if (results) {
+                    return of(results);
+                } else {
+                    return query$.pipe(
+                        tap((response: WpsData[]) => {
+                            this.cache.set({url, processId, inputs, outputs}, response).subscribe(success => {
+                                console.log('set data in cache', success);
+                            });
+                        })
+                    );
+                }
+            })
+        );
     }
 
     private getNextState(currentState: WpsState, serverUrl: string, processId: string, inputs: WpsInput[],
         outputDescriptions: WpsOutputDescription[]): Observable<WpsState> {
 
-        let rawRequest$: Observable<string>;
+        let request$: Observable<string>;
         if (this.version === '1.0.0') {
 
-            const headers = {
-                'Accept': 'text/xml, application/xml'
-            };
             if (!currentState.statusLocation) {
                 throw Error('No status location');
             }
-            rawRequest$ = this.webclient.get(currentState.statusLocation, { headers, responseType: 'text' });
+            request$ = this.getRaw(currentState.statusLocation);
 
         } else if (this.version === '2.0.0') {
 
@@ -137,17 +152,14 @@ export class WpsClient {
             }
             const execbody = this.wpsmarshaller.marshallGetStatusBody(serverUrl, processId, currentState.jobID);
             const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
-            const headers = new HttpHeaders({
-                'Content-Type': 'text/xml',
-                'Accept': 'text/xml, application/xml'
-            });
-            rawRequest$ = this.webclient.post(serverUrl, xmlExecbody, { headers, responseType: 'text' });
+
+            request$ = this.postRaw(serverUrl, xmlExecbody);
 
         } else {
             throw new Error(`'GetStatus' has not yet been implemented for this WPS-Version (${this.version}).`);
         }
 
-        const request1$: Observable<WpsState> = rawRequest$.pipe(
+        const request1$: Observable<WpsState> = request$.pipe(
             delayedRetry(2000, 2),
             map((xmlResponse: string) => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
@@ -173,16 +185,11 @@ export class WpsClient {
 
             const execBody = this.wpsmarshaller.marshallGetResultBody(serverUrl, processId, lastState.jobID);
             const xmlExecBody = this.xmlmarshaller.marshalString(execBody);
-            const headers = {
-                'Content-Type': 'text/xml',
-                'Accept': 'text/xml, application/xml'
-            };
-            const result$ = this.webclient.post(serverUrl, xmlExecBody, { headers, responseType: 'text' });
-            return result$.pipe(
-                map((xmlResponse: any) => {
+
+            return this.postRaw(serverUrl, xmlExecBody).pipe(
+                map((xmlResponse: string) => {
                     const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
-                    const output = this.wpsmarshaller
-                        .unmarshalSyncExecuteResponse(jsonResponse, serverUrl, processId, inputs, outputDescriptions);
+                    const output = this.wpsmarshaller.unmarshalSyncExecuteResponse(jsonResponse, serverUrl, processId, inputs, outputDescriptions);
                     return output;
                 }),
             );
@@ -197,19 +204,13 @@ export class WpsClient {
         const execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, outputDescriptions, true);
         const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
 
-        const headers =  new HttpHeaders({
-            'Content-Type': 'text/xml',
-            'Accept': 'text/xml, application/xml'
-        });
-        return this.webclient.post(executeUrl, xmlExecbody, { headers, responseType: 'text' }).pipe(
-            delayedRetry(2000, 2),
-            map((xmlResponse: any) => {
+        return this.postRaw(executeUrl, xmlExecbody).pipe(
+            map((xmlResponse: string) => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
-                const output: WpsState = this.wpsmarshaller
-                    .unmarshalAsyncExecuteResponse(jsonResponse, url, processId, inputs, outputDescriptions);
+                const output: WpsState =
+                    this.wpsmarshaller.unmarshalAsyncExecuteResponse(jsonResponse, url, processId, inputs, outputDescriptions);
                 return output;
-            }),
-            share()  // turning hot: to make sure that multiple subscribers dont cause multiple requests
+            })
         );
     }
 
@@ -220,19 +221,13 @@ export class WpsClient {
         const execbody = this.wpsmarshaller.marshalExecBody(processId, inputs, outputDescriptions, false);
         const xmlExecbody = this.xmlmarshaller.marshalString(execbody);
 
-        const headers = new HttpHeaders({
-            'Content-Type': 'text/xml',
-            'Accept': 'text/xml, application/xml'
-        });
-        return this.webclient.post(executeUrl, xmlExecbody, { headers, responseType: 'text' }).pipe(
-            delayedRetry(2000, 2),
-            map((xmlResponse: any) => {
+        return this.postRaw(executeUrl, xmlExecbody).pipe(
+            map((xmlResponse: string) => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
-                const output: WpsData[] = this.wpsmarshaller
-                    .unmarshalSyncExecuteResponse(jsonResponse, url, processId, inputs, outputDescriptions);
+                const output: WpsData[] =
+                    this.wpsmarshaller.unmarshalSyncExecuteResponse(jsonResponse, url, processId, inputs, outputDescriptions);
                 return output;
-            }),
-            share()  // turning hot: to make sure that multiple subscribers dont cause multiple requests
+            })
         );
     }
 
@@ -242,18 +237,32 @@ export class WpsClient {
         const dismissBody = this.wpsmarshaller.marshalDismissBody(jobId);
         const xmlDismissBody = this.xmlmarshaller.marshalString(dismissBody);
 
-        const headers = new HttpHeaders({
-            'Content-Type': 'text/xml',
-            'Accept': 'text/xml, application/xml'
-        });
-        return this.webclient.post(dismissUrl, xmlDismissBody, { headers, responseType: 'text' }).pipe(
-            delayedRetry(2000, 2),
-            map(xmlResponse => {
+        return this.postRaw(dismissUrl, xmlDismissBody).pipe(
+            map((xmlResponse: string) => {
                 const jsonResponse = this.xmlunmarshaller.unmarshalString(xmlResponse);
                 const output = this.wpsmarshaller.unmarshalDismissResponse(jsonResponse, serverUrl, processId);
                 return output;
-            }),
+            })
+        );
+    }
+
+    postRaw(url: string, xmlBody: string): Observable<string> {
+        const headers = {
+            'Content-Type': 'text/xml',
+            'Accept': 'text/xml, application/xml'
+        };
+        return this.webclient.post(url, xmlBody, { headers, responseType: 'text' }).pipe(
+            delayedRetry(2000, 2),
             share()  // turning hot: to make sure that multiple subscribers dont cause multiple requests
+        );
+    }
+
+    getRaw(url: string): Observable<string> {
+        const headers = {
+            'Accept': 'text/xml, application/xml'
+        };
+        return this.webclient.get(url, { headers, responseType: 'text' }).pipe(
+            delayedRetry(2000, 2)
         );
     }
 }
