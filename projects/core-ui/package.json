@@ -1,7 +1,7 @@
 {
-  "name": "@ukis/core-ui",
+  "name": "@dlr-eoc/core-ui",
   "version": "0.0.0-PLACEHOLDER",
-  "main": "src/public_api",
+  "main": "src/public-api",
   "license": "Apache-2.0",
   "schematics": "./schematics/collection.json",
   "scripts": {
@@ -17,35 +17,31 @@
   },
   "keywords": [
     "schematics",
-    "@ukis",
+    "@dlr-eoc",
     "core-ui"
   ],
   "ng-add": {
     "save": false
   },
   "dependencies": {
-    "@angular-devkit/core": "^8.3.22",
-    "@angular-devkit/schematics": "^8.3.22",
-    "@schematics/angular": "^8.3.22",
+    "@angular-devkit/core": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular-devkit/schematics": "0.0.0-PLACEHOLDER-VENDOR",
+    "@schematics/angular": "0.0.0-PLACEHOLDER-VENDOR",
     "parse5-html-rewriting-stream": "^5.1.1"
   },
-  "devDependencies": {
-    "@types/jasmine": "^3.3.9",
-    "@types/node": "^8.0.31",
-    "cpx": "^1.5.0",
-    "jasmine": "^3.3.1",
-    "typescript": "~3.5.3",
-    "zone.js": "0.0.0-zonejs-PLACEHOLDER",
-    "@angular/platform-browser-dynamic": "0.0.0-NG-PLACEHOLDER"
-  },
   "peerDependencies": {
-    "@angular/common": "0.0.0-NG-PLACEHOLDER",
-    "@angular/core": "0.0.0-NG-PLACEHOLDER",
-    "@angular/forms": "0.0.0-NG-PLACEHOLDER",
-    "@angular/router": "0.0.0-NG-PLACEHOLDER",
-    "@clr/angular": "0.0.0-CLR-PLACEHOLDER",
-    "@clr/icons": "0.0.0-CLR-PLACEHOLDER",
-    "@clr/ui": "0.0.0-CLR-PLACEHOLDER",
-    "rxjs": "0.0.0-rxjs-PLACEHOLDER"
+    "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/router": "0.0.0-PLACEHOLDER-VENDOR",
+    "@clr/angular": "0.0.0-PLACEHOLDER-VENDOR",
+    "@clr/icons": "0.0.0-PLACEHOLDER-VENDOR",
+    "rxjs": "0.0.0-PLACEHOLDER-VENDOR"
+  },
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "typescript": "0.0.0-PLACEHOLDER-VENDOR",
+    "jasmine": "^2.8.0",
+    "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"
   }
 }

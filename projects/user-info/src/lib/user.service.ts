@@ -83,24 +83,24 @@ export class ExampleAuthService implements IAuthService {
   providedIn: 'root'
 })
 export class UserService implements IAuthService {
-  private _authService: IAuthService;
+  private authService: IAuthService;
   loginmethode: 'oauth_pass' | 'oauth_code' | 'ukis_cas';
   constructor() { }
 
   getUserInfo(user?: IUser) {
-    return this._authService.getUserInfo(user);
+    return this.authService.getUserInfo(user);
   }
 
   login(user: IUser) {
-    return this._authService.login(user);
+    return this.authService.login(user);
   }
 
   isloggedIn() {
-    return this._authService.isloggedIn();
+    return this.authService.isloggedIn();
   }
 
   logout(user?: IUser) {
-    return this._authService.logout();
+    return this.authService.logout();
   }
 
   register(user: IRegisterUser) {
@@ -109,7 +109,7 @@ export class UserService implements IAuthService {
   }
 
   setAuthService(authService) {
-    this._authService = authService;
+    this.authService = authService;
   }
 
 }

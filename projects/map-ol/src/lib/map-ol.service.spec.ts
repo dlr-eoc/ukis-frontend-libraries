@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MapOlService } from './map-ol.service';
-import { RasterLayer, VectorLayer, CustomLayer } from '@ukis/services-layers';
+import { RasterLayer, VectorLayer, CustomLayer } from '@dlr-eoc/services-layers';
 
 import olTileLayer from 'ol/layer/Tile';
 import olXYZ from 'ol/source/XYZ';
@@ -24,7 +24,7 @@ let vectorLayer: olVectorLayer, vetorData;
 /** ol/layer/Image - ID-image */
 let imageLayer: olImageLayer;
 
-/** ol/layer/VectorImage - ID-vector-image*/
+/** ol/layer/VectorImage - ID-vector-image */
 let vectorImageLayer: olVectorImageLayer, vectorImageData;
 
 /** ID-raster */
@@ -52,14 +52,14 @@ describe('MapOlService', () => {
     });
 
     vetorData = {
-      'type': 'FeatureCollection',
-      'features': [
+      type: 'FeatureCollection',
+      features: [
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'LineString',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'LineString',
+            coordinates: [
               [
                 2.63671875,
                 44.32384807250689
@@ -76,22 +76,22 @@ describe('MapOlService', () => {
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               4.74609375,
               44.32384807250689
             ]
           }
         },
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Polygon',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
               [
                 [
                   4.28466796875,
@@ -148,14 +148,14 @@ describe('MapOlService', () => {
 
 
     vectorImageData = {
-      'type': 'FeatureCollection',
-      'features': [
+      type: 'FeatureCollection',
+      features: [
         {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'Point',
-            'coordinates': [
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [
               4.74609375,
               44.32384807250689
             ]
@@ -307,7 +307,7 @@ describe('MapOlService', () => {
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
 
-    let visible = true, opacity = 0.5, minzoom = 2, maxzoom = 15;
+    const visible = true, opacity = 0.5, minzoom = 2, maxzoom = 15;
     const newLayer = vectorLayer = new olVectorLayer({
       id: 'ID-vector'
     });
@@ -319,11 +319,11 @@ describe('MapOlService', () => {
 
     service.updateLayerByKey({ key: 'id', value: 'ID-vector' }, newLayer, 'layers');
 
-    const _vectorLayer = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
-    expect(_vectorLayer.getVisible()).toBe(visible);
-    expect(_vectorLayer.getOpacity()).toBe(opacity);
-    expect(_vectorLayer.getMinZoom()).toBe(minzoom);
-    expect(_vectorLayer.getMaxZoom()).toBe(maxzoom);
+    const vectorLayerFromService = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
+    expect(vectorLayerFromService.getVisible()).toBe(visible);
+    expect(vectorLayerFromService.getOpacity()).toBe(opacity);
+    expect(vectorLayerFromService.getMinZoom()).toBe(minzoom);
+    expect(vectorLayerFromService.getMaxZoom()).toBe(maxzoom);
   });
 
   /** Test if ukis-layers are added to the map ----------------------------------------------------------------------- */
@@ -344,7 +344,7 @@ describe('MapOlService', () => {
     service.setUkisLayers(layers, 'Layers');
 
     const layerBeforUpdate = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
-    const ol_uid = getUid(layerBeforUpdate);
+    const olUid = getUid(layerBeforUpdate);
     expect(layerBeforUpdate.getVisible()).toBeFalsy();
 
 
@@ -352,7 +352,7 @@ describe('MapOlService', () => {
     service.setUkisLayer(ukisvectorLayer);
     const layerAfterUpdate = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
     expect(layerAfterUpdate.getVisible()).toBeTruthy();
-    expect(getUid(layerAfterUpdate) !== ol_uid).toBeTruthy();
+    expect(getUid(layerAfterUpdate) !== olUid).toBeTruthy();
   });
 
   it('should update one ukisLayer from a Type - not remove the olLayer', () => {
@@ -362,7 +362,7 @@ describe('MapOlService', () => {
     service.setUkisLayers(layers, 'Layers');
 
     const layerBeforUpdate = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
-    const ol_uid = getUid(layerBeforUpdate);
+    const olUid = getUid(layerBeforUpdate);
     expect(layerBeforUpdate.getVisible()).toBeFalsy();
 
 
@@ -370,7 +370,7 @@ describe('MapOlService', () => {
     service.updateUkisLayer(ukisvectorLayer);
     const layerAfterUpdate = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
     expect(layerAfterUpdate.getVisible()).toBeTruthy();
-    expect(getUid(layerAfterUpdate)).toBe(ol_uid);
+    expect(getUid(layerAfterUpdate)).toBe(olUid);
   });
 
 });

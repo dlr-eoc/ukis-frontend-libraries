@@ -38,7 +38,7 @@ describe('ng-add', () => {
     skipTests: false
   };
 
-  const schematicRunner = new SchematicTestRunner('@ukis/schematics', collectionPath);
+  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
 
   beforeEach(async () => {
     appTree = await schematicRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
@@ -59,11 +59,11 @@ describe('ng-add', () => {
 
   it('should add assets', (done) => {
     const dimensions = [72, 96, 128, 144, 152, 192, 384, 512];
-    const iconPath = `/src/assets/icons/icon-`;
+    const iconBasePath = `/src/assets/icons/icon-`;
     schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
       dimensions.forEach(d => {
-        const _path = `${iconPath}${d}x${d}.png`;
-        expect(tree.exists(_path)).toEqual(true);
+        const iconPath = `${iconBasePath}${d}x${d}.png`;
+        expect(tree.exists(iconPath)).toEqual(true);
       });
       expect(tree.files).toContain('/src/favicon.ico');
       done();
@@ -137,7 +137,7 @@ describe('ng-add', () => {
   it('should update the stconfig file', (done) => {
     schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
       const tsconfigFile = JSON.parse(tree.readContent('/tsconfig.json'));
-      expect('@ukis/*' in tsconfigFile.compilerOptions.paths).toBe(true);
+      expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
       done();
     }, done.fail);
   });

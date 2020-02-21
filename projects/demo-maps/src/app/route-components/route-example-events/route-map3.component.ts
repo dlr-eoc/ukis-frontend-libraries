@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, TGeoExtent } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { MapOlService } from '@ukis/map-ol';
-import { osm } from '@ukis/base-layers-raster';
+import { LayersService, CustomLayer, TGeoExtent } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapOlService } from '@dlr-eoc/map-ol';
+import { osm } from '@dlr-eoc/base-layers-raster';
 import { ProgressService } from '../../components/global-progress/progress.service';
 
 import olImageLayer from 'ol/layer/Image';
@@ -16,7 +16,7 @@ import { regularGrid } from './map.utils';
 @Component({
   selector: 'app-route-map3',
   templateUrl: './route-map3.component.html',
-  styleUrls: ['./route-map3.component.css'],
+  styleUrls: ['./route-map3.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
@@ -52,14 +52,14 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addLayers() {
-    const osm_layer = new osm(<any>{
+    const osmLayer = new osm({
       legendImg: null,
       visible: true
     });
 
     const source = new olImageWMS({
       url: 'https://ahocevar.com/geoserver/wms',
-      params: { 'LAYERS': 'topp:states' },
+      params: { LAYERS: 'topp:states' },
       serverType: 'geoserver'
     });
 
@@ -74,16 +74,16 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       this.progressService.progress(null);
     });
 
-    const event_layer = new CustomLayer({
+    const eventLayer = new CustomLayer({
       id: 'event_layer',
       name: 'Image load Layer',
       type: 'custom',
-      custom_layer: new olImageLayer({ source: source }),
+      custom_layer: new olImageLayer({ source }),
       visible: false,
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const layers = [osm_layer, event_layer];
+    const layers = [osmLayer, eventLayer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
 
   }
@@ -114,7 +114,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       wrapX: false
     });
 
-    const _gridLayer = new olVectorImageLayer({
+    const olGridLayer = new olVectorImageLayer({
       id: layerID,
       source: gridLayerSource
     });
@@ -126,12 +126,12 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
         name: `gridLayer`,
         type: 'custom',
         opacity: 0.3,
-        custom_layer: _gridLayer
+        custom_layer: olGridLayer
       });
 
       this.layersSvc.addLayer(gridLayer, 'Layers');
     } else {
-      oldGridLayer.custom_layer = _gridLayer;
+      oldGridLayer.custom_layer = olGridLayer;
       this.layersSvc.updateLayer(oldGridLayer, oldGridLayer.filtertype);
     }
   }

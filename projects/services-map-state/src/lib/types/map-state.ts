@@ -19,8 +19,8 @@ export interface IMapState {
 }
 
 /**
-* like ol.extent: minX, minY, maxX, maxY
-*/
+ * like ol.extent: minX, minY, maxX, maxY
+ */
 export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
 
 export class MapState implements IMapState {
@@ -46,7 +46,7 @@ export class MapState implements IMapState {
         maxzoom: 0,
         minzoom: 0,
         notifier: 'map'
-      }
+      };
     }
   }
 }

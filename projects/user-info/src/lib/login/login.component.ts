@@ -42,14 +42,14 @@ export class LoginComponent implements OnDestroy {
     const controlErrors: ValidationErrors = this.usrInfoForm.get(key).errors;
     if (controlErrors != null) {
       Object.keys(controlErrors).forEach((keyError, index) => {
-        let _error = keyError;
+        let newError = keyError;
         if (keyError !== 'required') {
-          _error = JSON.stringify(this.usrInfoForm.get(key).errors[keyError]);
+          newError = JSON.stringify(this.usrInfoForm.get(key).errors[keyError]);
         }
-        if (index == 0) {
-          error += `${_error}`;
+        if (index === 0) {
+          error += `${newError}`;
         } else {
-          error += ` and ${_error}`;
+          error += ` and ${newError}`;
         }
       });
     }

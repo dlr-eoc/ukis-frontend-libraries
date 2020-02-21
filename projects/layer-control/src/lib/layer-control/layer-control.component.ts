@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
-import { LayersService } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { LayerGroup, Layer } from '@ukis/services-layers';
+import { LayersService } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { LayerGroup, Layer } from '@dlr-eoc/services-layers';
 import { Subscription } from 'rxjs';
 
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
@@ -52,8 +52,8 @@ export class LayerControlComponent implements OnInit, OnDestroy {
   // CDKDRagAndDrop -------------------------------------------------------------
   // https://material.angular.io/cdk/drag-drop/api
   drop(event: CdkDragDrop<string[]>) {
-    const previousI = this.layergroups.length - event.previousIndex - 1,
-      currentI = this.layergroups.length - event.currentIndex - 1;
+    const previousI = this.layergroups.length - event.previousIndex - 1;
+    const currentI = this.layergroups.length - event.currentIndex - 1;
     this.layersSvc.arrayMove(this.layergroups, previousI, currentI);
     this.layersSvc.setLayerGroups(this.layergroups);
   }

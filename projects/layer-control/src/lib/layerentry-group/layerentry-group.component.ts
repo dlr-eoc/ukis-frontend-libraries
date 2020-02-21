@@ -2,9 +2,9 @@ import { Component, OnInit, Input, HostBinding } from '@angular/core';
 
 
 // imports only for typings...
-import { LayerGroup, Layer } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { LayersService } from '@ukis/services-layers';
+import { LayerGroup } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { LayersService } from '@dlr-eoc/services-layers';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -67,7 +67,7 @@ export class LayerentryGroupComponent implements OnInit {
 
   zoomTo(group: LayerGroup) {
     if (this.mapState && group.bbox && group.bbox.length >= 4) {
-      this.mapState.setExtent(<[number, number, number, number]>group.bbox);
+      this.mapState.setExtent(group.bbox);
     }
   }
 
@@ -98,8 +98,8 @@ export class LayerentryGroupComponent implements OnInit {
   // CDKDRagAndDrop -------------------------------------------------------------
   // https://material.angular.io/cdk/drag-drop/api
   drop(event: CdkDragDrop<string[]>) {
-    const previousI = this.group.layers.length - event.previousIndex - 1,
-      currentI = this.group.layers.length - event.currentIndex - 1;
+    const previousI = this.group.layers.length - event.previousIndex - 1;
+    const currentI = this.group.layers.length - event.currentIndex - 1;
     moveItemInArray(this.group.layers, previousI, currentI);
     this.layersSvc.updateLayerGroup(this.group);
   }

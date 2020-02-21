@@ -1,14 +1,14 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map } from '@ukis/base-layers-raster';
-import { MapOlService } from '@ukis/map-ol';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map } from '@dlr-eoc/base-layers-raster';
+import { MapOlService } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-route-map6',
   templateUrl: './route-map6.component.html',
-  styleUrls: ['./route-map6.component.css'],
+  styleUrls: ['./route-map6.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
@@ -32,18 +32,18 @@ export class RouteMap6Component implements OnInit, OnDestroy {
     this.addBaseLayers();
     this.addLayers();
     this.mapStateSvc.setExtent([9.681317514755053, 47.425291526740125, 12.765729135848805, 49.213103602937025]);
-    this.layersSvc.getLayers().subscribe(layers => console.log('layers are now ', layers))
+    this.layersSvc.getLayers().subscribe(layers => console.log('layers are now ', layers));
   }
 
   addBaseLayers() {
-    const eoc_litemap_layer = new eoc_litemap({
+    const eocLitemapLayer = new eoc_litemap({
       legendImg: null,
       id: 'eoc_litemap_base',
       visible: true,
       tileSize: 512
-    } as any);
+    });
 
-    this.layersSvc.addLayer(eoc_litemap_layer, 'Baselayers');
+    this.layersSvc.addLayer(eocLitemapLayer, 'Baselayers');
   }
 
   addLayers() {
@@ -54,7 +54,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       url: 'https://tiles.geoservice.dlr.de/service/wmts?',
       name: 'TDM90_AMP',
       filtertype: 'Layers',
-      attribution: "| TDM90 Data &copy; <a href=\"http://www.dlr.de\" target=\"_blank\">DLR</a> licensed for <a rel=\"license\" target=\"_blank\" href=\"https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf\">scientific use</a>",
+      attribution: '| TDM90 Data &copy; <a href="http://www.dlr.de" target="_blank">DLR</a> licensed for <a rel="license" target="_blank" href="https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf">scientific use</a>',
       params: {
         layer: 'TDM90_AMP',
         version: '1.1.0',
@@ -65,7 +65,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
           tileMatrixPrefix: 'EPSG:3857',
         }
       },
-      styles: [ //this is only to test updateWmtsLayerParams in map-ol
+      styles: [ // this is only to test updateWmtsLayerParams in map-ol
         {
           default: true,
           name: 'default',
@@ -75,7 +75,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
           default: false,
           name: 'none',
           title: 'none'
-      }
+        }
       ]
     });
 

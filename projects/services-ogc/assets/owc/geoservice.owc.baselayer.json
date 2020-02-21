@@ -1,393 +1,392 @@
 {
-    "bbox": [
+  "bbox": [
+    -180.0,
+    -90.0,
+    180.0,
+    90.0
+  ],
+  "descriptionURL": "None",
+  "features": [
+    {
+      "geometry": null,
+      "id": "eoc:basemap",
+      "properties": {
+        "active": false,
+        "attribution": "| Basemap &amp; Baseoverlay: Data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap contributors</a> and <a href=\"../about#basemaps\">others</a>, Rendering &copy; <a href=\"http://www.dlr.de/eoc\">DLR/EOC</a>",
+        "groupName": "products",
+        "matrixSets": {
+          "3035": {
+            "matrixIds": [
+              "EU:3035:512:0",
+              "EU:3035:512:1",
+              "EU:3035:512:2",
+              "EU:3035:512:3",
+              "EU:3035:512:4",
+              "EU:3035:512:5",
+              "EU:3035:512:6",
+              "EU:3035:512:7",
+              "EU:3035:512:8",
+              "EU:3035:512:9",
+              "EU:3035:512:10",
+              "EU:3035:512:11",
+              "EU:3035:512:12"
+            ],
+            "srs": "EPSG:3035",
+            "matrixSet": "EU:3035:512",
+            "origin": {
+              "x": 2000000.0,
+              "y": 5500000.0
+            },
+            "resolutions": [
+              8789.0625,
+              4394.53125,
+              2197.265625,
+              1098.6328125,
+              549.31640625,
+              274.658203125,
+              137.3291015625,
+              68.66455078125,
+              34.332275390625,
+              17.1661376953125,
+              8.58306884765625,
+              4.291534423828125,
+              2.1457672119140625
+            ],
+            "tilesize": {
+              "height": 512,
+              "width": 512
+            }
+          }
+        },
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wmts/1.0.0",
+            "operations": [
+              {
+                "code": "GetTile",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&FORMAT=image%2Fpng&LAYER=eoc%3Abasemap&REQUEST=GetTile&VERSION=1.0.0",
+                "method": "GET",
+                "type": "image/png",
+                "srs": [
+                  "EPSG:4326",
+                  "EPSG:3857",
+                  "EPSG:3035",
+                  "EPSG:3031",
+                  "EPSG:3995"
+                ]
+              },
+              {
+                "code": "GetCapabilities",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0",
+                "method": "GET",
+                "type": "application/xml"
+              }
+            ]
+          }
+        ],
+        "shards": "a-d",
+        "title": "EOC Base Map",
+        "updated": "2019-02-15T11:21:18"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "id": "eoc:litemap",
+      "properties": {
+        "active": false,
+        "attribution": "| Litemap &amp; Liteoverlay: Data by <a href=\"http://naturalearthdata.com\">Natural Earth</a>, Rendering &copy; <a href=\"http://www.dlr.de/eoc\">DLR/EOC</a>",
+        "groupName": "products",
+        "matrixSets": {
+          "3035": {
+            "matrixIds": [
+              "EU:3035:512:0",
+              "EU:3035:512:1",
+              "EU:3035:512:2",
+              "EU:3035:512:3",
+              "EU:3035:512:4",
+              "EU:3035:512:5",
+              "EU:3035:512:6",
+              "EU:3035:512:7",
+              "EU:3035:512:8",
+              "EU:3035:512:9",
+              "EU:3035:512:10",
+              "EU:3035:512:11",
+              "EU:3035:512:12"
+            ],
+            "matrixSet": "EU:3035:512",
+            "origin": {
+              "x": 2000000.0,
+              "y": 5500000.0
+            },
+            "resolutions": [
+              8789.0625,
+              4394.53125,
+              2197.265625,
+              1098.6328125,
+              549.31640625,
+              274.658203125,
+              137.3291015625,
+              68.66455078125,
+              34.332275390625,
+              17.1661376953125,
+              8.58306884765625,
+              4.291534423828125,
+              2.1457672119140625
+            ],
+            "tilesize": {
+              "height": 512,
+              "width": 512
+            }
+          }
+        },
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wmts/1.0.0",
+            "operations": [
+              {
+                "code": "GetTile",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&FORMAT=image%2Fpng&LAYER=eoc%3Alitemap&REQUEST=GetTile&VERSION=1.0.0",
+                "method": "GET",
+                "type": "image/png"
+              },
+              {
+                "code": "GetCapabilities",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0",
+                "method": "GET",
+                "type": "application/xml"
+              }
+            ]
+          }
+        ],
+        "shards": "a-d",
+        "srs": [
+          "EPSG:4326",
+          "EPSG:3857",
+          "EPSG:3035",
+          "EPSG:3031",
+          "EPSG:3995"
+        ],
+        "title": "EOC Lite Map",
+        "updated": "2019-02-15T11:21:18"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "id": "bmng_topo_bathy",
+      "properties": {
+        "active": false,
+        "attribution": "| Blue Marble NG: <a href=\"https://earthobservatory.nasa.gov/Features/BlueMarble\">NASA Earth Observatory</a>",
+        "groupName": "products",
+        "matrixSets": {
+          "3035": {
+            "matrixIds": [
+              "EU:3035:512:0",
+              "EU:3035:512:1",
+              "EU:3035:512:2",
+              "EU:3035:512:3",
+              "EU:3035:512:4",
+              "EU:3035:512:5",
+              "EU:3035:512:6",
+              "EU:3035:512:7",
+              "EU:3035:512:8",
+              "EU:3035:512:9",
+              "EU:3035:512:10",
+              "EU:3035:512:11",
+              "EU:3035:512:12"
+            ],
+            "matrixSet": "EU:3035:512",
+            "origin": {
+              "x": 2000000.0,
+              "y": 5500000.0
+            },
+            "resolutions": [
+              8789.0625,
+              4394.53125,
+              2197.265625,
+              1098.6328125,
+              549.31640625,
+              274.658203125,
+              137.3291015625,
+              68.66455078125,
+              34.332275390625,
+              17.1661376953125,
+              8.58306884765625,
+              4.291534423828125,
+              2.1457672119140625
+            ],
+            "tilesize": {
+              "height": 512,
+              "width": 512
+            }
+          }
+        },
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wmts/1.0.0",
+            "operations": [
+              {
+                "code": "GetTile",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&FORMAT=image%2Fjpeg&LAYER=bmng_topo_bathy&REQUEST=GetTile&VERSION=1.0.0",
+                "method": "GET",
+                "type": "image/jpeg"
+              },
+              {
+                "code": "GetCapabilities",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0",
+                "method": "GET",
+                "type": "application/xml"
+              }
+            ]
+          }
+        ],
+        "shards": "a-d",
+        "srs": [
+          "EPSG:4326",
+          "EPSG:3857",
+          "EPSG:3035",
+          "EPSG:3031",
+          "EPSG:3995"
+        ],
+        "title": "Blue Marble NG",
+        "updated": "2019-02-15T11:21:18"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "id": "eoc:world_relief_bw",
+      "properties": {
+        "active": false,
+        "attribution": "| Relief: <a href=\"https://www.dlr.de/eoc\">DLR/EOC</a>",
+        "groupName": "products",
+        "matrixSets": {
+          "3035": {
+            "matrixIds": [
+              "EU:3035:512:0",
+              "EU:3035:512:1",
+              "EU:3035:512:2",
+              "EU:3035:512:3",
+              "EU:3035:512:4",
+              "EU:3035:512:5",
+              "EU:3035:512:6",
+              "EU:3035:512:7",
+              "EU:3035:512:8",
+              "EU:3035:512:9",
+              "EU:3035:512:10",
+              "EU:3035:512:11",
+              "EU:3035:512:12"
+            ],
+            "matrixSet": "EU:3035:512",
+            "origin": {
+              "x": 2000000.0,
+              "y": 5500000.0
+            },
+            "resolutions": [
+              8789.0625,
+              4394.53125,
+              2197.265625,
+              1098.6328125,
+              549.31640625,
+              274.658203125,
+              137.3291015625,
+              68.66455078125,
+              34.332275390625,
+              17.1661376953125,
+              8.58306884765625,
+              4.291534423828125,
+              2.1457672119140625
+            ],
+            "tilesize": {
+              "height": 512,
+              "width": 512
+            }
+          }
+        },
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wmts/1.0.0",
+            "operations": [
+              {
+                "code": "GetTile",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&FORMAT=image%2Fjpeg&LAYER=eoc%3Aworld_relief_bw&REQUEST=GetTile&VERSION=1.0.0",
+                "method": "GET",
+                "type": "image/jpeg"
+              },
+              {
+                "code": "GetCapabilities",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0",
+                "method": "GET",
+                "type": "application/xml"
+              }
+            ]
+          }
+        ],
+        "shards": "a-d",
+        "srs": [
+          "EPSG:4326",
+          "EPSG:3857",
+          "EPSG:3035",
+          "EPSG:3031",
+          "EPSG:3995"
+        ],
+        "title": "Relief",
+        "updated": "2019-02-15T11:21:18"
+      },
+      "type": "Feature"
+    }
+  ],
+  "id": "baselayer",
+  "logoURL": "None",
+  "projections": [
+    {
+      "bbox": [
         -180.0,
         -90.0,
         180.0,
         90.0
+      ],
+      "code": "EPSG:4326",
+      "default": true,
+      "unit": "m"
+    }
+  ],
+  "properties": {
+    "abstract": null,
+    "author": null,
+    "authors": [
+      {
+        "email": null,
+        "name": null,
+        "role": "PoC"
+      }
     ],
-    "descriptionURL": "None",
-    "features": [
-        {
-            "geometry": null,
-            "id": "eoc:basemap",
-            "properties": {
-                "active": false,
-                "attribution": "| Basemap &amp; Baseoverlay: Data &copy; <a href=\"http://openstreetmap.org\">OpenStreetMap contributors</a> and <a href=\"../about#basemaps\">others</a>, Rendering &copy; <a href=\"http://www.dlr.de/eoc\">DLR/EOC</a>",
-                "groupName": "products",
-                "matrixSets": {
-                    "3035": {
-                        "matrixIds": [
-                            "EU:3035:512:0",
-                            "EU:3035:512:1",
-                            "EU:3035:512:2",
-                            "EU:3035:512:3",
-                            "EU:3035:512:4",
-                            "EU:3035:512:5",
-                            "EU:3035:512:6",
-                            "EU:3035:512:7",
-                            "EU:3035:512:8",
-                            "EU:3035:512:9",
-                            "EU:3035:512:10",
-                            "EU:3035:512:11",
-                            "EU:3035:512:12"
-                        ],
-                        "srs": "EPSG:3035",
-                        "matrixSet": "EU:3035:512",
-                        "origin": {
-                            "x": 2000000.0,
-                            "y": 5500000.0
-                        },
-                        "resolutions": [
-                            8789.0625,
-                            4394.53125,
-                            2197.265625,
-                            1098.6328125,
-                            549.31640625,
-                            274.658203125,
-                            137.3291015625,
-                            68.66455078125,
-                            34.332275390625,
-                            17.1661376953125,
-                            8.58306884765625,
-                            4.291534423828125,
-                            2.1457672119140625
-                        ],
-                        "tilesize": {
-                            "height": 512,
-                            "width": 512
-                        }
-                    }
-                },
-                "offerings": [
-                    {
-                        "code": "http://schemas.opengis.net/wmts/1.0.0",
-                        "operations": [
-                            {
-                                "code": "GetTile",
-                                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&FORMAT=image%2Fpng&LAYER=eoc%3Abasemap&REQUEST=GetTile&VERSION=1.0.0",
-                                "method": "GET",
-                                "type": "image/png",
-                                "srs": [
-                                    "EPSG:4326",
-                                    "EPSG:3857",
-                                    "EPSG:3035",
-                                    "EPSG:3031",
-                                    "EPSG:3995"
-                                ]
-                            },
-                            {
-                                "code": "GetCapabilities",
-                                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0",
-                                "method": "GET",
-                                "type": "application/xml"
-                            }
-                        ]
-                    }
-                ],
-                "shards": "a-d",
-
-                "title": "EOC Base Map",
-                "updated": "2019-02-15T11:21:18"
-            },
-            "type": "Feature"
-        },
-        {
-            "geometry": null,
-            "id": "eoc:litemap",
-            "properties": {
-                "active": false,
-                "attribution": "| Litemap &amp; Liteoverlay: Data by <a href=\"http://naturalearthdata.com\">Natural Earth</a>, Rendering &copy; <a href=\"http://www.dlr.de/eoc\">DLR/EOC</a>",
-                "groupName": "products",
-                "matrixSets": {
-                    "3035": {
-                        "matrixIds": [
-                            "EU:3035:512:0",
-                            "EU:3035:512:1",
-                            "EU:3035:512:2",
-                            "EU:3035:512:3",
-                            "EU:3035:512:4",
-                            "EU:3035:512:5",
-                            "EU:3035:512:6",
-                            "EU:3035:512:7",
-                            "EU:3035:512:8",
-                            "EU:3035:512:9",
-                            "EU:3035:512:10",
-                            "EU:3035:512:11",
-                            "EU:3035:512:12"
-                        ],
-                        "matrixSet": "EU:3035:512",
-                        "origin": {
-                            "x": 2000000.0,
-                            "y": 5500000.0
-                        },
-                        "resolutions": [
-                            8789.0625,
-                            4394.53125,
-                            2197.265625,
-                            1098.6328125,
-                            549.31640625,
-                            274.658203125,
-                            137.3291015625,
-                            68.66455078125,
-                            34.332275390625,
-                            17.1661376953125,
-                            8.58306884765625,
-                            4.291534423828125,
-                            2.1457672119140625
-                        ],
-                        "tilesize": {
-                            "height": 512,
-                            "width": 512
-                        }
-                    }
-                },
-                "offerings": [
-                    {
-                        "code": "http://schemas.opengis.net/wmts/1.0.0",
-                        "operations": [
-                            {
-                                "code": "GetTile",
-                                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&FORMAT=image%2Fpng&LAYER=eoc%3Alitemap&REQUEST=GetTile&VERSION=1.0.0",
-                                "method": "GET",
-                                "type": "image/png"
-                            },
-                            {
-                                "code": "GetCapabilities",
-                                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0",
-                                "method": "GET",
-                                "type": "application/xml"
-                            }
-                        ]
-                    }
-                ],
-                "shards": "a-d",
-                "srs": [
-                    "EPSG:4326",
-                    "EPSG:3857",
-                    "EPSG:3035",
-                    "EPSG:3031",
-                    "EPSG:3995"
-                ],
-                "title": "EOC Lite Map",
-                "updated": "2019-02-15T11:21:18"
-            },
-            "type": "Feature"
-        },
-        {
-            "geometry": null,
-            "id": "bmng_topo_bathy",
-            "properties": {
-                "active": false,
-                "attribution": "| Blue Marble NG: <a href=\"https://earthobservatory.nasa.gov/Features/BlueMarble\">NASA Earth Observatory</a>",
-                "groupName": "products",
-                "matrixSets": {
-                    "3035": {
-                        "matrixIds": [
-                            "EU:3035:512:0",
-                            "EU:3035:512:1",
-                            "EU:3035:512:2",
-                            "EU:3035:512:3",
-                            "EU:3035:512:4",
-                            "EU:3035:512:5",
-                            "EU:3035:512:6",
-                            "EU:3035:512:7",
-                            "EU:3035:512:8",
-                            "EU:3035:512:9",
-                            "EU:3035:512:10",
-                            "EU:3035:512:11",
-                            "EU:3035:512:12"
-                        ],
-                        "matrixSet": "EU:3035:512",
-                        "origin": {
-                            "x": 2000000.0,
-                            "y": 5500000.0
-                        },
-                        "resolutions": [
-                            8789.0625,
-                            4394.53125,
-                            2197.265625,
-                            1098.6328125,
-                            549.31640625,
-                            274.658203125,
-                            137.3291015625,
-                            68.66455078125,
-                            34.332275390625,
-                            17.1661376953125,
-                            8.58306884765625,
-                            4.291534423828125,
-                            2.1457672119140625
-                        ],
-                        "tilesize": {
-                            "height": 512,
-                            "width": 512
-                        }
-                    }
-                },
-                "offerings": [
-                    {
-                        "code": "http://schemas.opengis.net/wmts/1.0.0",
-                        "operations": [
-                            {
-                                "code": "GetTile",
-                                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&FORMAT=image%2Fjpeg&LAYER=bmng_topo_bathy&REQUEST=GetTile&VERSION=1.0.0",
-                                "method": "GET",
-                                "type": "image/jpeg"
-                            },
-                            {
-                                "code": "GetCapabilities",
-                                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0",
-                                "method": "GET",
-                                "type": "application/xml"
-                            }
-                        ]
-                    }
-                ],
-                "shards": "a-d",
-                "srs": [
-                    "EPSG:4326",
-                    "EPSG:3857",
-                    "EPSG:3035",
-                    "EPSG:3031",
-                    "EPSG:3995"
-                ],
-                "title": "Blue Marble NG",
-                "updated": "2019-02-15T11:21:18"
-            },
-            "type": "Feature"
-        },
-        {
-            "geometry": null,
-            "id": "eoc:world_relief_bw",
-            "properties": {
-                "active": false,
-                "attribution": "| Relief: <a href=\"https://www.dlr.de/eoc\">DLR/EOC</a>",
-                "groupName": "products",
-                "matrixSets": {
-                    "3035": {
-                        "matrixIds": [
-                            "EU:3035:512:0",
-                            "EU:3035:512:1",
-                            "EU:3035:512:2",
-                            "EU:3035:512:3",
-                            "EU:3035:512:4",
-                            "EU:3035:512:5",
-                            "EU:3035:512:6",
-                            "EU:3035:512:7",
-                            "EU:3035:512:8",
-                            "EU:3035:512:9",
-                            "EU:3035:512:10",
-                            "EU:3035:512:11",
-                            "EU:3035:512:12"
-                        ],
-                        "matrixSet": "EU:3035:512",
-                        "origin": {
-                            "x": 2000000.0,
-                            "y": 5500000.0
-                        },
-                        "resolutions": [
-                            8789.0625,
-                            4394.53125,
-                            2197.265625,
-                            1098.6328125,
-                            549.31640625,
-                            274.658203125,
-                            137.3291015625,
-                            68.66455078125,
-                            34.332275390625,
-                            17.1661376953125,
-                            8.58306884765625,
-                            4.291534423828125,
-                            2.1457672119140625
-                        ],
-                        "tilesize": {
-                            "height": 512,
-                            "width": 512
-                        }
-                    }
-                },
-                "offerings": [
-                    {
-                        "code": "http://schemas.opengis.net/wmts/1.0.0",
-                        "operations": [
-                            {
-                                "code": "GetTile",
-                                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&FORMAT=image%2Fjpeg&LAYER=eoc%3Aworld_relief_bw&REQUEST=GetTile&VERSION=1.0.0",
-                                "method": "GET",
-                                "type": "image/jpeg"
-                            },
-                            {
-                                "code": "GetCapabilities",
-                                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.0.0",
-                                "method": "GET",
-                                "type": "application/xml"
-                            }
-                        ]
-                    }
-                ],
-                "shards": "a-d",
-                "srs": [
-                    "EPSG:4326",
-                    "EPSG:3857",
-                    "EPSG:3035",
-                    "EPSG:3031",
-                    "EPSG:3995"
-                ],
-                "title": "Relief",
-                "updated": "2019-02-15T11:21:18"
-            },
-            "type": "Feature"
-        }
+    "lang": "en",
+    "layerGroups": [
+      {
+        "collapsed": false,
+        "groupName": "products",
+        "title": "Products",
+        "type": "checkbox"
+      },
+      {
+        "collapsed": false,
+        "groupName": "overlays",
+        "title": "Overlays",
+        "type": "checkbox"
+      },
+      {
+        "collapsed": false,
+        "groupName": "base",
+        "title": "Basemaps",
+        "type": "radio"
+      }
     ],
-    "id": "baselayer",
-    "logoURL": "None",
-    "projections": [
-        {
-            "bbox": [
-                -180.0,
-                -90.0,
-                180.0,
-                90.0
-            ],
-            "code": "EPSG:4326",
-            "default": true,
-            "unit": "m"
-        }
-    ],
-    "properties": {
-        "abstract": null,
-        "author": null,
-        "authors": [
-            {
-                "email": null,
-                "name": null,
-                "role": "PoC"
-            }
-        ],
-        "lang": "en",
-        "layerGroups": [
-            {
-                "collapsed": false,
-                "groupName": "products",
-                "title": "Products",
-                "type": "checkbox"
-            },
-            {
-                "collapsed": false,
-                "groupName": "overlays",
-                "title": "Overlays",
-                "type": "checkbox"
-            },
-            {
-                "collapsed": false,
-                "groupName": "base",
-                "title": "Basemaps",
-                "type": "radio"
-            }
-        ],
-        "links": null,
-        "publisher": null,
-        "title": "Baselayer",
-        "updated": "2019-02-15T11:21:18"
-    },
-    "type": "FeatureCollection"
+    "links": null,
+    "publisher": null,
+    "title": "Baselayer",
+    "updated": "2019-02-15T11:21:18"
+  },
+  "type": "FeatureCollection"
 }

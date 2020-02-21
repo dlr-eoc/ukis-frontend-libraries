@@ -3,9 +3,9 @@ import { OwcJsonService } from './owc-json.service';
 import { barebonesContext, basicContext, exampleContext } from '../../../assets/exampleContext';
 import { coastalXTestContext } from '../../../assets/coastalx.test.context';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { eoc_litemap } from '@ukis/base-layers-raster';
-import { LayersService, RasterLayer } from '@ukis/services-layers';
-import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@ukis/services-layers';
+import { eoc_litemap } from '@dlr-eoc/base-layers-raster';
+import { LayersService, RasterLayer } from '@dlr-eoc/services-layers';
+import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsContext } from './types/owc-json';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -66,7 +66,7 @@ describe('OwcJsonService: reading data from owc', () => {
 
 
   // @TODO: this method seems to be a stub. Shouldn't it return an array of ILayerOptions?
-  it('#getlayersFromResource should properly create an array of ILayerOptions?', () => {});
+  it('#getlayersFromResource should properly create an array of ILayerOptions?', () => { });
 
 
   it('#createRasterLayerFromOffering should return an IRasterLayerOptions instance', (done) => {
@@ -198,11 +198,11 @@ describe('OwcJsonService: writing data into owc', () => {
   it('#getLayers should properly restore a selection of layers from owc format created with #generateOwsContextFrom', (done) => {
     const service: OwcJsonService = TestBed.get(OwcJsonService);
     const layersService: LayersService = TestBed.get(LayersService);
-    const osm_layer = new eoc_litemap(<any>{
+    const osmLayer = new eoc_litemap({
       visible: true,
       legendImg: null
     });
-    layersService.addLayer(osm_layer, 'Baselayers');
+    layersService.addLayer(osmLayer, 'Baselayers');
     layersService.getBaseLayers().subscribe(baselayers => {
       const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);
       service.getLayers(owc, targetProjection).subscribe((layers) => {
@@ -235,7 +235,7 @@ describe('OwcJsonService: writing data into owc', () => {
 
     const featureCollection: FeatureCollection<Polygon, Props> = {
       type: 'FeatureCollection',
-      features: features
+      features
     };
 
     const options = {
@@ -255,7 +255,7 @@ describe('OwcJsonService: writing data into owc', () => {
       id: 'GeojsonLayer',
       type: GeojsonLayertype,
       data: featureCollection,
-      options: options
+      options
     });
 
     // enconding and deconding

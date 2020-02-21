@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer } from '@ukis/services-layers';
-import { MapStateService } from '@ukis/services-map-state';
-import { MapOlService } from '@ukis/map-ol';
-import { eoc_litemap } from '@ukis/base-layers-raster';
+import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapOlService } from '@dlr-eoc/map-ol';
+import { eoc_litemap } from '@dlr-eoc/base-layers-raster';
 
 import olProjection from 'ol/proj/Projection';
 import { register as olRegister } from 'ol/proj/proj4';
@@ -11,7 +11,7 @@ import proj4 from 'proj4';
 @Component({
   selector: 'app-route-map2',
   templateUrl: './route-map2.component.html',
-  styleUrls: ['./route-map2.component.css'],
+  styleUrls: ['./route-map2.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService]
 })
@@ -51,8 +51,8 @@ export class RouteMap2Component implements OnInit {
 
     /** use the MapOlService for directly accessing the ol/Map or ol/View or bind popups to an event, set projections... */
     this.mapSvc.setProjection(projection);
-    //this.mapSvc.setExtent(this.projExtent)
-    //this.mapSvc.setZoom(3)
+    // this.mapSvc.setExtent(this.projExtent)
+    // this.mapSvc.setZoom(3)
 
     this.addOverlays();
 
@@ -61,14 +61,14 @@ export class RouteMap2Component implements OnInit {
   }
 
   addOverlays() {
-    const eoc_litemap_layer = new eoc_litemap(<any>{
+    const eocLitemapLayer = new eoc_litemap({
       removable: true,
       legendImg: null,
       visible: true,
       id: 'eoc_litemap_base'
     });
 
-    const guf_layer = new RasterLayer({
+    const gufLayer = new RasterLayer({
       type: 'wms',
       url: 'https://geoservice.dlr.de/eoc/land/wms',
       name: 'GUF Mosaic',
@@ -83,19 +83,19 @@ export class RouteMap2Component implements OnInit {
       legendImg: ''
     });
 
-    const vector_Layer = new VectorLayer({
+    const vectorLayer = new VectorLayer({
       id: 'geojson_test',
       name: 'GeoJSON Vector Layer',
       type: 'geojson',
       data: {
-        'type': 'FeatureCollection',
-        'features': [
+        type: 'FeatureCollection',
+        features: [
           {
-            'type': 'Feature',
-            'properties': {},
-            'geometry': {
-              'type': 'Polygon',
-              'coordinates': [
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
                 [
                   [
                     12.65625,
@@ -126,7 +126,7 @@ export class RouteMap2Component implements OnInit {
       visible: true
     });
 
-    const overlays = [eoc_litemap_layer, guf_layer, vector_Layer];
+    const overlays = [eocLitemapLayer, gufLayer, vectorLayer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 

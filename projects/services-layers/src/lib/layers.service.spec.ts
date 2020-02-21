@@ -21,7 +21,7 @@ let layer1: Layer,
 
 
 describe('LayersService', () => {
-  beforeEach(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({});
     // create test layers
     layer1 = new RasterLayer({
@@ -130,7 +130,7 @@ describe('LayersService', () => {
 
     const service: LayersService = TestBed.get(LayersService);
     service.setLayerGroups([]);
-  });
+  }));
 
   it('should be created', () => {
     const service: LayersService = TestBed.get(LayersService);
@@ -185,8 +185,8 @@ describe('LayersService', () => {
   it('should set the filtertype on a layer by adding it to the store', async(() => {
     const service: LayersService = TestBed.get(LayersService);
     service.addLayer(layer1, 'Overlays');
-    const _layer1 = service.getLayerById('layer1');
-    expect(_layer1.filtertype).toEqual('Overlays');
+    const layer1FromStore = service.getLayerById('layer1');
+    expect(layer1FromStore.filtertype).toEqual('Overlays');
   }));
 
   it('should remove a layer and use its filtertype', async(() => {
@@ -396,21 +396,21 @@ describe('LayersService', () => {
     expect(service.getOverlaysCount()).toBe(1);
     expect(service.getLayerGroupsCount()).toBe(1);
 
-    const _layer1 = service.getLayerOrGroupById('layer1');
-    expect(_layer1).toBe(layer1);
-    const _layergroup1 = service.getLayerOrGroupById('layergroup1');
-    expect(_layergroup1).toBe(layergroup1);
+    const layer1FromStore = service.getLayerOrGroupById('layer1');
+    expect(layer1FromStore).toBe(layer1);
+    const layergroup1FromStore = service.getLayerOrGroupById('layergroup1');
+    expect(layergroup1FromStore).toBe(layergroup1);
   }));
 
   it('should get all LayerGroups', async(() => {
     const service: LayersService = TestBed.get(LayersService);
     layergroup1.layers.push(layer1);
     layergroup2.layers = [layer1, layer4];
-    const groups = [layergroup1, layer2, layergroup2];
-    service.setLayerGroups(groups);
+    const testGroups = [layergroup1, layer2, layergroup2];
+    service.setLayerGroups(testGroups);
 
-    service.getLayerGroups().pipe(first()).subscribe(_groups => {
-      expect(_groups.length).toEqual(3);
+    service.getLayerGroups().pipe(first()).subscribe(groups => {
+      expect(groups.length).toEqual(3);
     });
   }));
 
@@ -482,7 +482,7 @@ describe('LayersService', () => {
       name: 'baslayer Group',
       filtertype: 'Layers',
       id: 'layergroup1',
-      bbox: bbox,
+      bbox,
       layers: [layer5, layer2]
     });
     // set by group

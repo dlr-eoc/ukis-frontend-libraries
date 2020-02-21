@@ -1,25 +1,25 @@
 {
-    "$schema": "http://json-schema.org/schema",
-    "id": "SchematicsNgAdd",
-    "title": "Ng Add Schema",
-    "type": "object",
-    "properties": {
-        "project": {
-            "type": "string",
-            "description": "The name of the angular project you want to add @ukis/core-ui.",
-            "$default": {
-                "$source": "defaultProject"
-            }
-        },
-        "addFiles": {
-            "description": "Add files for routing to your application.",
-            "type": "string",
-            "default": "true"
-        },
-        "updateFiles": {
-            "description": "Update files in your application.",
-            "type": "string",
-            "default": "true"
-        }
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsNgAdd",
+  "title": "Ng Add Schema",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the angular project you want to add @dlr-eoc/core-ui.",
+      "$default": {
+        "$source": "defaultProject"
+      }
+    },
+    "addFiles": {
+      "description": "Add files for routing to your application.",
+      "type": "string",
+      "default": "true"
+    },
+    "updateFiles": {
+      "description": "Update files in your application.",
+      "type": "string",
+      "default": "true"
     }
+  }
 }

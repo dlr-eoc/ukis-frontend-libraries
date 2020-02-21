@@ -1,22 +1,22 @@
 <clr-main-container [ngClass]="{'floating':ui.floating}">
-    <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
-    <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
+  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
 
-    <ukis-header [ukis-title]="title">
-    </ukis-header>
-    <section class="content-container">
-        <main class="content-area">
-            <p>content-area</p>
-        </main>
+  <ukis-header [ukis-title]="title">
+  </ukis-header>
+  <section class="content-container">
+    <main class="content-area">
+      <p>content-area</p>
+    </main>
 
-        <!-- <clr-vertical-nav class="left">
+    <!-- <clr-vertical-nav class="left">
         </clr-vertical-nav> -->
 
-        <nav class="sidenav">
-            <p>sidenav</p>
-        </nav>
-        <section class="footer ukis-footer">
-            <p>footer</p>
-        </section>
+    <nav class="sidenav">
+      <p>sidenav</p>
+    </nav>
+    <section class="footer ukis-footer">
+      <p>footer</p>
     </section>
+  </section>
 </clr-main-container>

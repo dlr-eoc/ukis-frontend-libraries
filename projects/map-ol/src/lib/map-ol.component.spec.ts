@@ -1,34 +1,35 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapOlComponent } from './map-ol.component';
-import { LayersService } from '@ukis/services-layers';
-import { RasterLayer } from '@ukis/services-layers';
-import { LayerGroup } from '@ukis/services-layers';
+import { LayersService } from '@dlr-eoc/services-layers';
+import { RasterLayer } from '@dlr-eoc/services-layers';
+import { LayerGroup } from '@dlr-eoc/services-layers';
 import { of } from 'rxjs';
-import { MapStateService } from '@ukis/services-map-state';
+import { MapStateService } from '@dlr-eoc/services-map-state';
 
 /**
- * this service extends the LayersService to mimik its behaviour. The getLayerGroups function is overwritten to 
+ * this service extends the LayersService to mimik its behaviour. The getLayerGroups function is overwritten to
  * get test data for following tests.
  */
 class MockLayersService extends LayersService {
 
   getLayerGroups() {
-    let l = new RasterLayer(
-        { url: 'blabl', 
-          name: 'name', 
-          id: '5',
-          type: 'wms',
-          filtertype: 'Baselayers'
-        }
-      );
-    let group = new LayerGroup({
+    const l = new RasterLayer(
+      {
+        url: 'blabl',
+        name: 'name',
+        id: '5',
+        type: 'wms',
+        filtertype: 'Baselayers'
+      }
+    );
+    const group = new LayerGroup({
       id: 'g',
       name: 'Test',
       layers: [l],
       filtertype: 'Baselayers'
     });
-    return of([ group ]);
+    return of([group]);
   }
 }
 
@@ -39,13 +40,13 @@ describe('MapOlComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapOlComponent ],
+      declarations: [MapOlComponent],
       providers: [
-        {provide: LayersService, useClass: MockLayersService},
-        {provide: MapStateService, useClass: MapStateService}
+        { provide: LayersService, useClass: MockLayersService },
+        { provide: MapStateService, useClass: MapStateService }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

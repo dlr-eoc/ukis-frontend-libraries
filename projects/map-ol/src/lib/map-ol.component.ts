@@ -3,11 +3,11 @@ import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterVi
 
 
 
-import { MapState } from '@ukis/services-map-state';
-import { MapStateService } from '@ukis/services-map-state';
+import { MapState } from '@dlr-eoc/services-map-state';
+import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { MapOlService, Tgroupfiltertype } from './map-ol.service';
-import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer } from '@ukis/services-layers';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer } from '@dlr-eoc/services-layers';
 
 import Map from 'ol/Map';
 import { getUid } from 'ol/util';
@@ -65,13 +65,13 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   mapOnClick;
   mapOnDclick;
 
-  private _mapwidth = 0;
+  private privMapwidth = 0;
   private get mapwidth() {
-    return this._mapwidth;
+    return this.privMapwidth;
   }
 
   private set mapwidth(width) {
-    this._mapwidth = width;
+    this.privMapwidth = width;
     this.map.updateSize();
   }
 
@@ -122,31 +122,33 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   ngOnDestroy() {
     this.subs.forEach(sub => sub.unsubscribe());
-    this.map.un('moveend', this.mapOnMoveend);
-    this.map.un('click', this.mapOnClick);
-    this.map.un('dblclick', this.mapOnDclick);
-    this.map.getInteractions().forEach((i) => {
-      this.map.removeInteraction(i);
-    });
+    if (this.map) {
+      this.map.un('moveend', this.mapOnMoveend);
+      this.map.un('click', this.mapOnClick);
+      this.map.un('dblclick', this.mapOnDclick);
+      this.map.getInteractions().forEach((i) => {
+        this.map.removeInteraction(i);
+      });
+    }
   }
 
   private addUpdateLayers(layers: Layer[], type: Tgroupfiltertype, layersunderneath: Array<Tgroupfiltertype>) {
     /** get all underneath layers for zIndex */
-    let _otherlayerslength = 0;
-    layersunderneath.forEach(_type => {
-      _otherlayerslength += this.mapSvc.getLayers(_type).length;
+    let otherlayerslength = 0;
+    layersunderneath.forEach(itemType => {
+      otherlayerslength += this.mapSvc.getLayers(itemType).length;
     });
 
     /** if length of layers has changed add new layers */
     if (layers.length !== this.mapSvc.getLayers(type).length) {
       this.mapSvc.setUkisLayers(layers, type);
       // if layers underneath add thhen to the zIndex of layer
-      if (_otherlayerslength > 0) {
+      if (otherlayerslength > 0) {
         for (const layer of layers) {
           const ollayer = this.mapSvc.getLayerByKey({ key: 'id', value: layer.id }, type);
           if (ollayer) {
-            if (ollayer.getZIndex() !== layers.indexOf(layer) + _otherlayerslength) {
-              ollayer.setZIndex(layers.indexOf(layer) + _otherlayerslength);
+            if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
+              ollayer.setZIndex(layers.indexOf(layer) + otherlayerslength);
             }
           }
         }
@@ -169,9 +171,9 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
               ollayer.setSource(newSource);
             }
           }
-          if (_otherlayerslength > 0) {
-            if (ollayer.getZIndex() !== layers.indexOf(layer) + _otherlayerslength) {
-              ollayer.setZIndex(layers.indexOf(layer) + _otherlayerslength);
+          if (otherlayerslength > 0) {
+            if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
+              ollayer.setZIndex(layers.indexOf(layer) + otherlayerslength);
             }
 
           } else {
@@ -210,8 +212,14 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   private updateWmtsLayerParamsWith(oldLayer: olLayer<any>, newWmtsLayer: WmtsLayer): void {
     // contrary to a wms-source, a wmts-source has neither 'getParams' nor 'updateParams', so we need to do this manually.
     const source = oldLayer.getSource();
-    const oldStyle = source.getStyle(), oldFormat = source.getFormat(), oldVersion = source.getVersion(), oldMatrix = source.getMatrixSet();
-    const newStyle = newWmtsLayer.params.style, newFormat = newWmtsLayer.params.format, newVersion = newWmtsLayer.params.version, newMatrix = newWmtsLayer.params.matrixSetOptions.matrixSet;
+    const oldStyle = source.getStyle();
+    const oldFormat = source.getFormat();
+    const oldVersion = source.getVersion();
+    const oldMatrix = source.getMatrixSet();
+    const newStyle = newWmtsLayer.params.style;
+    const newFormat = newWmtsLayer.params.format;
+    const newVersion = newWmtsLayer.params.version;
+    const newMatrix = newWmtsLayer.params.matrixSetOptions.matrixSet;
     if (newStyle !== undefined && oldStyle !== newStyle
       || newFormat !== undefined && oldFormat !== newFormat
       || newVersion !== undefined && oldVersion !== newVersion
@@ -220,7 +228,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       // console.log(newStyle, newFormat, newVersion, newMatrix)
       const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as Tgroupfiltertype;
       // this.mapSvc.setUkisLayer(newWmtsLayer, olFiltertype);
-      this.mapSvc.updateUkisLayer(newWmtsLayer, olFiltertype)
+      this.mapSvc.updateUkisLayer(newWmtsLayer, olFiltertype);
     }
   }
 
@@ -235,9 +243,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       return false;
     }
 
-    for (let i = 0; i < aProps.length; i++) {
-      const propName = aProps[i];
-
+    for (const propName of aProps) {
       // If values of same property are not equal,
       // objects are not equivalent
       if (a[propName] !== b[propName]) {
@@ -346,8 +352,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
 
   private initMap() {
-    const _ol = this.mapSvc.createMap();
-    this.map = _ol.map; //
+    const olMapView = this.mapSvc.createMap();
+    this.map = olMapView.map; //
 
     this.setControls();
     if (!this.layersSvc) {

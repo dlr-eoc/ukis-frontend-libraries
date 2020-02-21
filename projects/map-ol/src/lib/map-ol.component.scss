@@ -83,14 +83,17 @@
   button {
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.5);
+
     &:focus {
       background-color: rgba(0, 0, 0, 0.5);
     }
+
     &:hover {
       background-color: rgba(78, 78, 78, 0.5);
     }
   }
 }
+
 .ol-scale-line {
   background: rgba(0, 0, 0, 0.3);
 }

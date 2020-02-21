@@ -22,7 +22,7 @@ export interface ILayerStyleSet extends IAnyObject {
 export interface popup {
   properties?: IAnyObject;
   pupupFunktion?: (popupobj: IAnyObject) => string;
-  asyncPupup?: (popupobj: any, cb: Function) => void;
+  asyncPupup?: (popupobj: any, cb: (html: any) => void) => void;
 }
 
 
@@ -52,7 +52,10 @@ export function isLayertype(inpt: string): inpt is TLayertype {
 }
 
 
-/** geographic coordinates */
+/**
+ * geographic coordinates
+ * like ol.extent: minX, minY, maxX, maxY
+ */
 export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
 
 export interface ILayerOptions {
@@ -143,8 +146,8 @@ export interface ICustomLayerOptions extends ILayerOptions {
 }
 
 /**
-* Classes for layer construction
-*/
+ * Classes for layer construction
+ */
 export class Layer implements ILayerOptions {
   name = '';
   id = '';
@@ -154,11 +157,11 @@ export class Layer implements ILayerOptions {
   removable = false;
 
   filtertype?: TFiltertypes = 'Layers';
-  continuousWorld?: boolean = false;
+  continuousWorld = false;
   attribution?: string;
   displayName?: string;
   description?: string;
-  protected _time?: string;
+  protected protTime?: string;
   minResolution?: number;
   maxResolution?: number;
   legendImg?: string;
@@ -180,10 +183,10 @@ export class Layer implements ILayerOptions {
   }
 
   get time() {
-    return this._time;
+    return this.protTime;
   }
   set time(time: string) {
-    this._time = time;
+    this.protTime = time;
   }
 }
 /** raster params like wms params -> time, layers... depends on the map-library */
@@ -237,11 +240,11 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
     if (this.params) {
       this.params.TIME = time;
     }
-    this._time = time;
+    this.protTime = time;
   }
 
   get time() {
-    return this._time;
+    return this.protTime;
   }
 }
 
@@ -259,7 +262,7 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
   /** vector options like style, pointToLayer... depends on the map-library, e.g.:
    * iconUrl: string - to specify icon for points
    * rotationPropName: string - property containing rotation angle in degrees
-   * */
+   */
   options?: IVectorLayerOptions['options'];
   cluster?: IVectorLayerOptions['cluster'];
   constructor(options: IVectorLayerOptions) {

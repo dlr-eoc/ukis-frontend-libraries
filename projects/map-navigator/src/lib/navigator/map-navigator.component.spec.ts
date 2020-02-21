@@ -2,8 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormsModule } from '@angular/forms';
 import { MapNavigatorComponent } from './map-navigator.component';
-import { MapStateService } from '@ukis/services-map-state';
-import { MapState } from '@ukis/services-map-state';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapState } from '@dlr-eoc/services-map-state';
 
 
 describe('MapNavigatorComponent', () => {
@@ -22,13 +22,13 @@ describe('MapNavigatorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MapNavigatorComponent);
     component = fixture.componentInstance;
-    //inject Service
+    // inject Service
     component.mapState = new MapStateService();
-    //mock get state from Service
+    // mock get state from Service
     component.mapstate = new MapState(7, {
       lat: 0,
       lon: 0
-    }, { notifier: 'user' })
+    }, { notifier: 'user' });
     fixture.detectChanges();
   });
 

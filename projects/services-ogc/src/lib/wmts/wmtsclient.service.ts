@@ -19,31 +19,31 @@ const WMTS_1_0 = WMTS_1_0_Factory.WMTS_1_0;
 
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class WmtsClientService {
 
-    private xmlmarshaller;
-    private xmlunmarshaller;
+  private xmlmarshaller;
+  private xmlunmarshaller;
 
-    constructor(private http: HttpClient) {
-        const context = new Jsonix.Context([SMIL_2_0, SMIL_2_0_Language, GML_3_1_1, XLink_1_0, OWS_1_1_0, WMTS_1_0]);
-        this.xmlunmarshaller = context.createUnmarshaller();
-        this.xmlmarshaller = context.createMarshaller();
-    }
+  constructor(private http: HttpClient) {
+    const context = new Jsonix.Context([SMIL_2_0, SMIL_2_0_Language, GML_3_1_1, XLink_1_0, OWS_1_1_0, WMTS_1_0]);
+    this.xmlunmarshaller = context.createUnmarshaller();
+    this.xmlmarshaller = context.createMarshaller();
+  }
 
-    public getCapabilities (url: string, version = '1.1.0'): Observable<object> {
-        // example: https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0
-        const getCapabilitiesUrl = `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${version}`;
-        const headers = new HttpHeaders({
-            'Content-Type': 'text/xml',
-            'Accept': 'text/xml, application/xml'
-        });
-        return this.http.get(getCapabilitiesUrl, { headers, responseType: 'text' }).pipe(
-            map(response => {
-                return this.xmlunmarshaller.unmarshalString(response);
-            })
-        );
-    }
+  public getCapabilities(url: string, version = '1.1.0'): Observable<object> {
+    // example: https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0
+    const getCapabilitiesUrl = `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${version}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'text/xml',
+      Accept: 'text/xml, application/xml'
+    });
+    return this.http.get(getCapabilitiesUrl, { headers, responseType: 'text' }).pipe(
+      map(response => {
+        return this.xmlunmarshaller.unmarshalString(response);
+      })
+    );
+  }
 
 }

@@ -1,17 +1,17 @@
 {
-  "name": "@ukis/base-layers-raster",
+  "name": "@dlr-eoc/base-layers-raster",
   "version": "0.0.0-PLACEHOLDER",
-  "main": "src/public_api",
+  "main": "src/public-api",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@angular/core": "0.0.0-NG-PLACEHOLDER"
+    "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "dependencies": {
-    "@ukis/services-layers": "0.0.0-PLACEHOLDER"
+    "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER"
   },
   "devDependencies": {
-    "core-js": "0.0.0-corejs-PLACEHOLDER",
-    "zone.js": "0.0.0-corejs-PLACEHOLDER",
-    "@angular/platform-browser-dynamic": "0.0.0-NG-PLACEHOLDER"
+    "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"
   }
 }

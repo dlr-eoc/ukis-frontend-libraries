@@ -34,7 +34,7 @@ describe('add-routing', () => {
     skipTests: false
   };
 
-  const schematicRunner = new SchematicTestRunner('@ukis/schematics', collectionPath);
+  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
 
   beforeEach(async () => {
     appTree = await schematicRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
