@@ -1,6 +1,16 @@
 # @dlr-eoc/services-ogc
 
-// TODO add description!!!
+This library bundles our clients for OGC standards. 
+
+## WPS
+This is a client to communicate with WPS-servers. With it, remote procedures can be called, their status monitored and their results fetched.
+The service is intended to abstract away the differences between the versions of the WPS protocol. It currently supports both WPS 1.0.0 and WPS 2.0.0.
+
+## OWC
+This is a parser to read from / write to OWC files. OWC can be used to share information about a map-context (such as extent, visible layers, zoom, ...) across multiple clients.
+This parser converts to / from UKIS-specific datatypes, like UKIS-rasterlayers, UKIS-vectorlayers etc.
+The OWC format is written to be easily extendable. We made use of this capability by adding some UKIS-specific semantic information - this information is encoded in the interfaces found in the file `eoc-owc-json.ts`.
+
 ===
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
