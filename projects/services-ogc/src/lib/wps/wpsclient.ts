@@ -85,6 +85,9 @@ export class WpsClient {
                 const poll$: Observable<WpsState> = pollUntil<WpsState>(
                     nextState$,
                     (response: WpsState) => {
+                        if (response.status === 'Failed') {
+                            throw new Error(`Error during execution of process ${processId}: ` + response.statusLocation);
+                        }
                         return response.status === 'Succeeded';
                     },
                     tapFunction,
