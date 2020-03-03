@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
 const FS = require("fs");
 const PATH = require("path");
 const depcheck = require("depcheck");
@@ -31,7 +32,6 @@ exports.consoleLogColors = {
     BgCyan: '\x1b[46m',
     BgWhite: '\x1b[47m'
 };
-;
 function setVersionsforDependencies(paths, MAINPACKAGE, placeholders, version = MAINPACKAGE.version) {
     const packageAllDeps = Object.assign(MAINPACKAGE.dependencies, MAINPACKAGE.devDependencies);
     paths.map(p => {
@@ -111,7 +111,7 @@ function getProjects(angularJson) {
         };
         projects.push(customWorkspaceProject);
     });
-    return projects; // .filter(item => item.type === 'library');
+    return projects;
 }
 exports.getProjects = getProjects;
 /**
@@ -176,84 +176,115 @@ exports.getSortedProjects = getSortedProjects;
  * check if all imported dependencies are set in package.json of each library
  */
 function checkDeps(angularJson, packageScope, showAll = false) {
-    console.log(`>>> run check dependencies of projects`);
-    const projectsPaths = getProjects(angularJson);
-    const promises = [];
-    const options = {
-        ignoreBinPackage: false,
-        skipMissing: false,
-        ignoreDirs: [
-            'dist'
-        ],
-        ignoreMatches: [
-            'geojson' // @types/geojson imports geojson
-        ],
-        parsers: {
-            '*.ts': depcheck.parser.typescript
-        },
-        detectors: [
-            depcheck.detector.requireCallExpression,
-            depcheck.detector.importDeclaration,
-            depcheck.detector.typescriptImportType,
-            depcheck.detector.typescriptImportEqualsDeclaration
-        ],
-        specials: [ // the target special parsers
-        ],
-        json: true
-    };
-    const formatDepcheck = (depcheckResults, projectName, projectPath) => {
-        const o = {
-            project: projectName,
-            projectPath,
-            missingDependencies: JSON.stringify(depcheckResults.missing, null, '\t').replace(/\\\\/g, '/'),
-            invalidFiles: JSON.stringify(depcheckResults.invalidFiles, null, '\t').replace(/\\\\/g, '/'),
-            unusedDependencies: depcheckResults.dependencies,
-            unusedDevDependencies: depcheckResults.devDependencies,
-            usedDependencies: JSON.stringify(depcheckResults.using, null, '\t').replace(/\\\\/g, '/')
+    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        console.log(`>>> run check dependencies of projects`);
+        const projectsPaths = getProjects(angularJson);
+        const projectResults = [];
+        const options = {
+            ignoreBinPackage: false,
+            skipMissing: false,
+            ignoreDirs: [
+                'dist'
+            ],
+            ignoreMatches: [
+                'geojson' // @types/geojson imports geojson
+            ],
+            parsers: {
+                '*.ts': depcheck.parser.typescript
+            },
+            detectors: [
+                depcheck.detector.requireCallExpression,
+                depcheck.detector.importDeclaration,
+                depcheck.detector.typescriptImportType,
+                depcheck.detector.typescriptImportEqualsDeclaration
+            ],
+            specials: [ // the target special parsers
+            ],
+            json: true
         };
-        const missingDeps = Object.keys(depcheckResults.missing).length;
-        if (!missingDeps && !showAll) {
-            return false;
-        }
-        else {
-            return o;
-        }
-    };
-    // function to check if dep is transitive dependency from using...
-    const aysncdepcheck = (item) => {
-        return new Promise((resolve, reject) => {
-            depcheck(item.path, options, (results) => {
-                const hasMissing = Object.keys(results.missing).length;
-                let filteredResults = results;
-                if (hasMissing) {
-                    filteredResults = checkTransitiveDependencies(results, packageScope, options.ignoreMatches);
+        const formatDepcheck = (depcheckResults, projectName, projectPath) => {
+            const o = {
+                project: projectName,
+                projectPath,
+                missingDependencies: JSON.stringify(depcheckResults.missing, null, '\t').replace(/\\\\/g, '/'),
+                invalidFiles: JSON.stringify(depcheckResults.invalidFiles, null, '\t').replace(/\\\\/g, '/'),
+                unusedDependencies: depcheckResults.dependencies,
+                unusedDevDependencies: depcheckResults.devDependencies,
+                usedDependencies: JSON.stringify(depcheckResults.using, null, '\t').replace(/\\\\/g, '/')
+            };
+            const missingDeps = Object.keys(depcheckResults.missing).length;
+            if (!missingDeps && !showAll) {
+                return false;
+            }
+            else {
+                return o;
+            }
+        };
+        // function to check if dep is transitive dependency from using...
+        const aysncdepcheck = (item) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            if (FS.existsSync(item.packagePath)) {
+                const results = yield depcheck(item.path, options);
+                if (results) {
+                    const hasMissing = Object.keys(results.missing).length;
+                    let filteredResults = results;
+                    if (hasMissing) {
+                        filteredResults = checkTransitiveDependencies(results, packageScope, options.ignoreMatches);
+                    }
+                    return formatDepcheck(filteredResults, item.name, item.path);
                 }
-                const depcheckResults = formatDepcheck(filteredResults, item.name, item.path);
-                if (!depcheckResults) {
-                    resolve(depcheckResults);
-                }
-                else {
-                    resolve(depcheckResults);
-                }
-            });
+            }
+            else {
+                return;
+            }
         });
-    };
-    projectsPaths.forEach((item) => {
-        if (FS.existsSync(item.packagePath)) {
-            promises.push(aysncdepcheck(item));
+        for (const p of projectsPaths) {
+            const res = yield aysncdepcheck(p);
+            if (res) {
+                projectResults.push(res);
+            }
         }
-    });
-    return Promise.all(promises).then(result => {
-        if (result.length) {
-            return result;
-        }
-        else {
-            console.log('no missing dependencies detected :)');
-            return false;
-        }
+        return projectResults;
     });
 }
 exports.checkDeps = checkDeps;
+function formatCheckDepsOutput(error, showUsed = false) {
+    let str = `
+  -----------------------------------------------------------
+  project:  ${error.project}
+  projectPath:  ${error.projectPath}
+  missingDependencies: ${error.missingDependencies}`;
+    if (error.unusedDependencies.length) {
+        str += `
+  peerDependencies: ${error.unusedDependencies}`;
+    }
+    if (error.unusedDevDependencies.length) {
+        str += `
+  unusedDevDependencies: ${error.unusedDevDependencies}`;
+    }
+    if (error.invalidFiles.length > 2) {
+        str += `
+  invalidFiles: ${error.invalidFiles}`;
+    }
+    if (showUsed) {
+        str += `
+  usedDependencies: ${error.usedDependencies}`;
+    }
+    console.log(str);
+}
+exports.formatCheckDepsOutput = formatCheckDepsOutput;
+function formatProjectsDepsOutput(p, i) {
+    const str = `
+-----------------------------------------------------------
+|name:  ${p.name}    -  count: ${i}
+|----------------------------------------------------------
+|version:  ${p.version}
+|
+|dependencies:${(p.dependencies) ? p.dependencies.split(',').map(d => `\n|   - ${d}`) : ''}
+|
+|peerDependencies:${(p.peerDependencies) ? p.peerDependencies.split(',').map(d => `\n|   - ${d}`) : ''}`;
+    console.log(str);
+}
+exports.formatProjectsDepsOutput = formatProjectsDepsOutput;
 /**
  * remove Transitive Dependencies from missing in depcheck!
  */

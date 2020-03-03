@@ -1,6 +1,6 @@
 import { IPackageJSON, IDependencyMap } from './npm-package.interface';
 import * as FS from 'fs';
-import { WorkspaceSchema, WorkspaceTargets } from '@schematics/angular/utility/workspace-models';
+import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
 import * as PATH from 'path';
 
@@ -66,7 +66,7 @@ interface IprojectTargets {
   e2e: boolean;
   'app-shell': boolean;
   'extract-i18n': boolean;
-};
+}
 
 
 export interface ICustomWorkspaceProject extends IprojectTargets {
@@ -84,7 +84,7 @@ export interface Iproject {
   peerDependencies?: string;
 }
 
-interface IcheckDepsOutput {
+export interface IcheckDepsOutput {
   project: string;
   projectPath: string;
   /** JSON.stringify */
@@ -181,7 +181,7 @@ export function getProjects(angularJson: WorkspaceSchema) {
     };
     projects.push(customWorkspaceProject);
   });
-  return projects; // .filter(item => item.type === 'library');
+  return projects;
 }
 
 /**
@@ -244,10 +244,10 @@ export function getSortedProjects(projects: ICustomWorkspaceProject[], packageSc
 /**
  * check if all imported dependencies are set in package.json of each library
  */
-export function checkDeps(angularJson: WorkspaceSchema, packageScope: string, showAll = false) {
+export async function checkDeps(angularJson: WorkspaceSchema, packageScope: string, showAll = false) {
   console.log(`>>> run check dependencies of projects`);
   const projectsPaths = getProjects(angularJson);
-  const promises: Promise<IcheckDepsOutput | boolean>[] = [];
+  const projectResults: IcheckDepsOutput[] = [];
 
   const options = {
     ignoreBinPackage: false, // ignore the packages with bin entry
@@ -292,39 +292,71 @@ export function checkDeps(angularJson: WorkspaceSchema, packageScope: string, sh
   };
 
   // function to check if dep is transitive dependency from using...
-
-  const aysncdepcheck = (item: ICustomWorkspaceProject) => {
-    return new Promise<IcheckDepsOutput | boolean>((resolve, reject) => {
-      depcheck(item.path, options, (results) => {
+  const aysncdepcheck = async (item: ICustomWorkspaceProject) => {
+    if (FS.existsSync(item.packagePath)) {
+      const results = await depcheck(item.path, options);
+      if (results) {
         const hasMissing = Object.keys(results.missing).length;
         let filteredResults = results;
         if (hasMissing) {
           filteredResults = checkTransitiveDependencies(results, packageScope, options.ignoreMatches);
         }
-        const depcheckResults = formatDepcheck(filteredResults, item.name, item.path);
-        if (!depcheckResults) {
-          resolve(depcheckResults);
-        } else {
-          resolve(depcheckResults);
-        }
-      });
-    });
+        return formatDepcheck(filteredResults, item.name, item.path);
+      }
+    } else {
+      return;
+    }
   };
 
-  projectsPaths.forEach((item) => {
-    if (FS.existsSync(item.packagePath)) {
-      promises.push(aysncdepcheck(item));
+  for (const p of projectsPaths) {
+    const res = await aysncdepcheck(p);
+    if (res) {
+      projectResults.push(res);
     }
-  });
+  }
+  return projectResults;
+}
 
-  return Promise.all(promises).then(result => {
-    if (result.length) {
-      return result;
-    } else {
-      console.log('no missing dependencies detected :)');
-      return false;
-    }
-  });
+export function formatCheckDepsOutput(error: IcheckDepsOutput, showUsed = false) {
+  let str = `
+  -----------------------------------------------------------
+  project:  ${error.project}
+  projectPath:  ${error.projectPath}
+  missingDependencies: ${error.missingDependencies}`;
+
+  if (error.unusedDependencies.length) {
+    str += `
+  peerDependencies: ${error.unusedDependencies}`;
+  }
+
+  if (error.unusedDevDependencies.length) {
+    str += `
+  unusedDevDependencies: ${error.unusedDevDependencies}`;
+  }
+
+  if (error.invalidFiles.length > 2) {
+    str += `
+  invalidFiles: ${ error.invalidFiles}`;
+  }
+
+  if (showUsed) {
+    str += `
+  usedDependencies: ${error.usedDependencies}`;
+  }
+  console.log(str);
+}
+
+export function formatProjectsDepsOutput(p: Iproject, i: number) {
+  const str = `
+-----------------------------------------------------------
+|name:  ${p.name}    -  count: ${i}
+|----------------------------------------------------------
+|version:  ${p.version}
+|
+|dependencies:${(p.dependencies) ? p.dependencies.split(',').map(d => `\n|   - ${d}`) : ''}
+|
+|peerDependencies:${(p.peerDependencies) ? p.peerDependencies.split(',').map(d => `\n|   - ${d}`) : ''}`;
+  console.log(str);
 }
 
 /**

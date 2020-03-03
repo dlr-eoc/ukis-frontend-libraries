@@ -27,21 +27,8 @@ function showDependencyGraph() {
 function runCheckDeps() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         const allErrors = yield utils_1.checkDeps(ANGULARJSON, packageScope);
-        if (allErrors && Array.isArray(allErrors)) {
-            allErrors.map(error => {
-                if (error && typeof error === 'object') {
-                    const str = `
------------------------------------------------------------
-project:  ${error.project}
-projectPath:  ${error.projectPath}
-missingDependencies:${error.missingDependencies}
-peerDependencies:${error.unusedDependencies}
-unusedDevDependencies:${error.unusedDevDependencies}
-invalidFiles:${error.invalidFiles}
-usedDependencies:${error.usedDependencies}`;
-                    console.log(str);
-                }
-            });
+        if (allErrors.length) {
+            allErrors.map(e => utils_1.formatCheckDepsOutput(e, false));
         }
     });
 }
@@ -89,20 +76,16 @@ function runBuilds(offset = 0, projects) {
 }
 function buildAll() {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
-        let result = yield utils_1.checkDeps(ANGULARJSON, packageScope);
+        const result = yield utils_1.checkDeps(ANGULARJSON, packageScope);
         /** build ony if there are no missing deps */
-        console.log(result);
-        if (result && Array.isArray(result)) {
-            result = result.filter(i => i !== false);
-        }
-        if (result && Array.isArray(result) && result.length) {
+        if (result.length) {
+            result.map(e => utils_1.formatCheckDepsOutput(e, false));
             throw new Error(`check for missing dependencies`);
         }
         else {
             const buildableProjects = utils_1.getProjects(ANGULARJSON).filter(item => item.build && item.type === 'library');
             const flattdepsAndProjects = utils_1.getSortedProjects(buildableProjects, packageScope);
-            console.log(flattdepsAndProjects);
-            // runBuilds(0, flattdepsAndProjects);
+            runBuilds(0, flattdepsAndProjects);
         }
     });
 }
@@ -115,7 +98,7 @@ function setVersionsOfProjects(useDistPath = false) {
         projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
     }
     projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
-    const errors = projectsAndDependencies(true);
+    const errors = showProjectsAndDependencies(true);
     if (!errors.length) {
         utils_1.setVersionsforDependencies(projectsPaths, MAINPACKAGE, placeholders);
         console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json`);
@@ -133,11 +116,11 @@ function listAllProjects() {
     }, '');
     console.log(list);
 }
-function projectsAndDependencies(silent = false, showPeer = false) {
+function showProjectsAndDependencies(silent = false, showPeer = false) {
     const projects = [], projectsPeer = [], errors = [], projectsPaths = utils_1.getProjects(ANGULARJSON);
-    projectsPaths.forEach((project) => {
-        const projectPackage = require(project.packagePath);
-        const _project = {
+    projectsPaths.forEach((p) => {
+        const projectPackage = require(p.packagePath);
+        const project = {
             name: projectPackage.name,
             version: projectPackage.version.replace('0.0.0', LIBRARIES_VERSION),
             error: false,
@@ -148,7 +131,7 @@ function projectsAndDependencies(silent = false, showPeer = false) {
             if (!silent) {
                 console.error(error);
             }
-            _project.error = true;
+            project.error = true;
             errors.push({ project: projectPackage.name, error });
         }
         if (projectPackage.name.indexOf(packageScope) === -1) {
@@ -156,12 +139,12 @@ function projectsAndDependencies(silent = false, showPeer = false) {
             if (!silent) {
                 console.error(error);
             }
-            _project.error = true;
+            project.error = true;
             errors.push({ project: projectPackage.name, error });
         }
         if (projectPackage.dependencies) {
             const dependencies = Object.keys(projectPackage.dependencies);
-            _project.dependencies = dependencies.join(',') || null;
+            project.dependencies = dependencies.join(',') || null;
             Object.keys(projectPackage.dependencies).forEach((key) => {
                 const dep = projectPackage.dependencies[key];
                 if (key.indexOf(packageScope) !== -1 && dep !== placeholders.libVersion) {
@@ -170,35 +153,24 @@ function projectsAndDependencies(silent = false, showPeer = false) {
                     if (!silent) {
                         errors.push({ project: projectPackage.name, error });
                     }
-                    _project.error = true;
+                    project.error = true;
                     errors.push({ project: projectPackage.name, error });
                 }
             });
         }
         // without peerDeps
-        projects.push(_project);
+        projects.push(project);
         // --------------------------------------
-        const __project = Object.assign({}, _project);
+        const newProject = Object.assign({}, project);
         if (projectPackage.peerDependencies) {
             const peerDependencies = Object.keys(projectPackage.peerDependencies);
-            __project.peerDependencies = peerDependencies.join(',') || null;
+            newProject.peerDependencies = peerDependencies.join(',') || null;
         }
-        projectsPeer.push(__project);
+        projectsPeer.push(newProject);
     });
     if (!silent) {
         if (showPeer) {
-            projectsPeer.map((p, i) => {
-                const str = `
------------------------------------------------------------
-|name:  ${p.name}    -  count: ${i}
-|----------------------------------------------------------
-|version:  ${p.version}
-|
-|dependencies:${(p.dependencies) ? p.dependencies.split(',').map(d => `\n|   - ${d}`) : ''}
-|
-|peerDependencies:${(p.peerDependencies) ? p.peerDependencies.split(',').map(d => `\n|   - ${d}`) : ''}`;
-                console.log(str);
-            });
+            projectsPeer.map(utils_1.formatProjectsDepsOutput);
         }
         else {
             console.table(projects);
@@ -211,16 +183,16 @@ function showHelp() {
 Syntax:   node  [options]
 
 Options:
--h, --help              Print this message.
--l, --list              List all projects
--d, --deps              List all projects in a table with dependencies
---depsPeer          List all projects with dependencies and peerDependencies
--s, --set               Set versions of all projects in projects folder
---setInDist         Set versions of all projects in dist folder
--g, --graph             Show a dependency graph
--c, --check             Check if all dependencies are listed in the package.json of the project
--t, --test              Run ng test for all projects
--b, --build             Run ng build fal all projects with toposort dependencies`);
+  -h, --help              Print this message.
+  -l, --list              List all projects
+  -d, --deps              List all projects in a table with dependencies
+  --depsPeer              List all projects with dependencies and peerDependencies
+  -s, --set               Set versions of all projects in projects folder
+  --setInDist             Set versions of all projects in dist folder
+  -g, --graph             Show a dependency graph
+  -c, --check             Check if all dependencies are listed in the package.json of the project
+  -t, --test              Run ng test for all projects
+  -b, --build             Run ng build fal all projects with toposort dependencies`);
 }
 function run() {
     const args = process.argv.slice(2);
@@ -232,10 +204,10 @@ function run() {
             listAllProjects();
         }
         else if (arg === '-d' || arg === '--deps') {
-            projectsAndDependencies();
+            showProjectsAndDependencies();
         }
         else if (arg === '--depsPeer') {
-            projectsAndDependencies(false, true);
+            showProjectsAndDependencies(false, true);
         }
         else if (arg === '-s' || arg === '--set') {
             setVersionsOfProjects();
@@ -253,7 +225,9 @@ function run() {
             testAll();
         }
         else if (arg === '-b' || arg === '--build') {
-            buildAll();
+            buildAll().catch(err => {
+                console.log(err);
+            });
         }
     });
     if (!args.length) {
