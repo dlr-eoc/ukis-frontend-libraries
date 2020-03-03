@@ -4,11 +4,12 @@ import * as PATH from 'path';
 import * as FS from 'fs';
 import { exec } from 'child_process';
 import * as readline from 'readline';
-import { setVersionsforDependencies } from '../library';
+import { setVersionsforDependencies, Iplaceholders } from '../library/utils';
+import { IPackageJSON } from '../library/npm-package.interface';
 
+const CWD = process.cwd();
 
 export function run() {
-  const CWD = process.cwd();
   let REGISTRY = '';
   let REGISTRY_USER = '';
   let REGISTRY_USER_PASSWORD = '';
@@ -140,7 +141,13 @@ async function getInput(question: string, obscurer?: string) {
 
 
 function setVersion(version: string, packagePath: string) {
+  const placeholders: Iplaceholders = {
+    libVersion: '0.0.0-PLACEHOLDER',
+    vendorVersion: '0.0.0-PLACEHOLDER-VENDOR'
+  };
+  const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
+
   const path = require(PATH.join(packagePath, 'package.json'));
-  setVersionsforDependencies([path]);
+  setVersionsforDependencies([path], MAINPACKAGE, placeholders)
 }
 run();
