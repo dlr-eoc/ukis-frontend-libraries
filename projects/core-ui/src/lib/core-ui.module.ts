@@ -5,11 +5,10 @@ import { GlobalProgressComponent } from './global-progress/global-progress.compo
 import { ProgressService } from './global-progress/progress.service';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
-import { LicenseAttributionsComponent } from './license-attributions/license-attributions.component';
 
 
 @NgModule({
-  declarations: [GlobalAlertComponent, GlobalProgressComponent, LicenseAttributionsComponent],
+  declarations: [GlobalAlertComponent, GlobalProgressComponent],
   imports: [CommonModule, ClarityModule],
   exports: [GlobalAlertComponent, GlobalProgressComponent],
   providers: [AlertService, ProgressService]
