@@ -80,10 +80,12 @@ Our team includes (in alphabetical order):
 
  - Mathias Böck
  - Monika Friedemann
+ - Stefan Keim
  - Michael Langbein
  - Nico Mandery
  - Martin Mühlbauer
  - Torsten Riedlinger
+ - Sergey Voinov
 
 
 
