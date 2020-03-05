@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -19,7 +19,7 @@ interface License {
   styleUrls: ['./route-licenses.component.scss']
 })
 export class RouteLicensesComponent implements OnInit {
-
+  @HostBinding('class') class = 'content-container';
   public licenses$: Observable<License[]>;
 
   constructor(private http: HttpClient) { }

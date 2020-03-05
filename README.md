@@ -1,4 +1,4 @@
-<img src="projects/core-ui/schematics/ng-add/files/src/assets/icons/icon-72x72.png" alt="UKIS Logo"> Frontend Libraries for UKIS (Map) Applications
+<img src="projects/core-ui/schematics/ng-add/files/src/assets/icons/icon-72x72.png" alt="UKIS Logo"> Frontend Libraries for DLR UKIS (Map) Applications
 ========================
 
 ![CI](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/CI/badge.svg)
@@ -72,6 +72,22 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 
 
 
+
+## Team
+
+The UKIS team works hard to create libraries that simplify the creation of webbased geo-applications.
+Our team includes (in alphabetical order):
+
+ - Mathias Böck
+ - Monika Friedemann
+ - Michael Langbein
+ - Nico Mandery
+ - Martin Mühlbauer
+ - Torsten Riedlinger
+
+
+
+
 ## Licenses
 
 This software is licensed under the [Apache 2.0 License](LICENSE).
@@ -96,8 +112,9 @@ For more detailed information, see our [guide on contributing](CONTRIBUTING.md) 
 
 ## What is UKIS?
 
-The project Environmental and Crisis Information System (the German abbreviation is UKIS, standing for Umwelt- und Kriseninformationssysteme) aims at harmonizing the development of information systems at the German Remote Sensing Data Center (DFD) and setting up a framework of modularized and generalized software components.
+The DLR project Environmental and Crisis Information System (the German abbreviation is UKIS, standing for [Umwelt- und Kriseninformationssysteme](https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-5413/10560_read-21914/)) aims at harmonizing the development of information systems at the German Remote Sensing Data Center (DFD) and setting up a framework of modularized and generalized software components.
 
 UKIS is intended to ease and standardize the process of setting up specific information systems and thus bridging the gap from EO product generation and information fusion to the delivery of products and information to end users.
 
 Furthermore the intention is to save and broaden know-how that was and is invested and earned in the development of information systems and components in several ongoing and future DFD projects.
+
