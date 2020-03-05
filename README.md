@@ -72,6 +72,22 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 
 
 
+
+## Team
+
+The UKIS team works hard to create libraries that simplify the creation of webbased geo-applications.
+Our team includes (in alphabetical order):
+
+ - Mathias Böck
+ - Monika Friedemann
+ - Michael Langbein
+ - Nico Mandery
+ - Martin Mühlbauer
+ - Torsten Riedlinger
+
+
+
+
 ## Licenses
 
 This software is licensed under the [Apache 2.0 License](LICENSE).
