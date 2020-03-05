@@ -3,7 +3,7 @@
 This application was generated with `ng generate application demo-auth` and then `@dlr-eoc/core-ui:ng-add --routing=true` was applied.
 
 - This app depends on *@dlr-eoc/user-info*
-- It implements a AuthGuardService to protect routes
+- It implements an AuthGuardService to protect routes
 - BasicAuthService which implements IAuthService (your business logic for authentication and authorization)
 - HttpAuthInterceptor which uses the AuthService to add a basic token on your angular http requests
 

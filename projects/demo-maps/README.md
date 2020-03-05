@@ -2,7 +2,7 @@
 
 This application was generated with `ng generate application demo-maps` and then `@dlr-eoc/core-ui:ng-add --routing=true` was applied.
 
-In the src folder you can find a view route-components which show the usage of:
+In the src folder you can find a few route-components which show the usage of main UKIS frontend components:
 - [layers](src/app/route-components/route-example-layers/route-map.component.ts)
 - [events](src/app/route-components/route-example-events/route-map3.component.ts)
 - [layer style](src/app/route-components/route-example-layer-style/route-map6.component.ts)

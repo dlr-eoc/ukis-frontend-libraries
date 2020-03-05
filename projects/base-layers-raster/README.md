@@ -1,6 +1,6 @@
 # @dlr-eoc/base-layers-raster
 
-This project includes a view often used layers in ukis mapping applications e.g. eoc_litemap, osm, ...
+This project includes a few often used layers in ukis mapping applications e.g. eoc_litemap, osm, ...
 
 ### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 

@@ -2,11 +2,8 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import { eoc_litemap } from '@dlr-eoc/base-layers-raster';
-
-import olProjection from 'ol/proj/Projection';
-import { register as olRegister } from 'ol/proj/proj4';
-import proj4 from 'proj4';
+import { osm } from '@dlr-eoc/base-layers-raster';
+import { IProjDef } from '@dlr-eoc/map-navigator'
 
 @Component({
   selector: 'app-route-map2',
@@ -18,6 +15,7 @@ import proj4 from 'proj4';
 export class RouteMap2Component implements OnInit {
   @HostBinding('class') class = 'content-container';
   controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
+  projections: IProjDef[];
 
   constructor(
     public layersSvc: LayersService,
@@ -28,44 +26,54 @@ export class RouteMap2Component implements OnInit {
       attribution: true,
       scaleLine: true
     };
+
+    let arcticPolarStereographic:IProjDef = {
+      code: 'EPSG:3995',
+      proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
+      title: 'Arctic Polar Stereographic',
+      extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
+      worldExtent: [-180.0, 60.0, 180.0, 90.0],
+      global: false,
+      units: 'm'
+    };
+
+    let antarcticPolarStereographic:IProjDef = {
+      code: `EPSG:3031`,
+      proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
+      title: 'Antarctic Polar Stereographic',
+      extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
+      worldExtent: [-180.0, -90.0, 180.0, -60.0 ],
+      global: false,
+      units: 'm'
+    };
+
+    let webMercator:IProjDef = {
+      code: `EPSG:3857`,
+      proj4js: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs',
+      title: 'Spherical Mercator',
+      extent: [-20026376.39, -20048966.10, 20026376.39, 20048966.10],
+      worldExtent: [-180.0, -85.06, 180.0, 85.06],
+      global: true,
+      units: 'm'
+    };
+
+    this.projections=[webMercator, arcticPolarStereographic, antarcticPolarStereographic];
+    this.addOverlays();
+    /** set map extent or IMapState (zoom, center...) with the MapStateService */
+    this.mapStateSvc.setExtent([-14, 33, 40, 57]);
+
   }
 
 
   ngOnInit(): void {
-    const arcticPolarStereographic = {
-      code: `EPSG:3995`,
-      extent: [-5817.41, 3333128.95, 948.75, 543592.47],
-      worldExtent: [-180, -60, 180, 60],
-      proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
-    };
-
-    proj4.defs(arcticPolarStereographic.code, arcticPolarStereographic.proj4js);
-    olRegister(proj4);
-
-
-    const projection = new olProjection({
-      code: arcticPolarStereographic.code,
-      extent: arcticPolarStereographic.extent,
-      worldExtent: arcticPolarStereographic.worldExtent
-    });
-
-    /** use the MapOlService for directly accessing the ol/Map or ol/View or bind popups to an event, set projections... */
-    this.mapSvc.setProjection(projection);
-    // this.mapSvc.setExtent(this.projExtent)
-    // this.mapSvc.setZoom(3)
-
-    this.addOverlays();
-
-    /** set map extent or IMapState (zoom, center...) with the MapStateService */
-    this.mapStateSvc.setExtent([-14, 33, 40, 57]);
   }
 
   addOverlays() {
-    const eocLitemapLayer = new eoc_litemap({
+    const osm_layer = new osm({
       removable: true,
       legendImg: null,
       visible: true,
-      id: 'eoc_litemap_base'
+      id: 'osm'
     });
 
     const gufLayer = new RasterLayer({
@@ -126,7 +134,7 @@ export class RouteMap2Component implements OnInit {
       visible: true
     });
 
-    const overlays = [eocLitemapLayer, gufLayer, vectorLayer];
+    const overlays = [osm_layer, gufLayer, vectorLayer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 
