@@ -1,11 +1,45 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
-const FS = require("fs");
-const PATH = require("path");
-const depcheck = require("depcheck");
-const toposort = require("toposort");
-const CWD = process.cwd();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+exports.__esModule = true;
+var FS = require("fs");
+var PATH = require("path");
+var depcheck = require("depcheck");
+var toposort = require("toposort");
+var CWD = process.cwd();
 /** https://en.wikipedia.org/wiki/ANSI_escape_code#Colors */
 exports.consoleLogColors = {
     Reset: '\x1b[0m',
@@ -32,19 +66,20 @@ exports.consoleLogColors = {
     BgCyan: '\x1b[46m',
     BgWhite: '\x1b[47m'
 };
-function setVersionsforDependencies(paths, MAINPACKAGE, placeholders, version = MAINPACKAGE.version) {
-    const packageAllDeps = Object.assign(MAINPACKAGE.dependencies, MAINPACKAGE.devDependencies);
-    paths.map(p => {
-        updatePackageJson(p, (json) => {
+function setVersionsforDependencies(paths, MAINPACKAGE, placeholders, version) {
+    if (version === void 0) { version = MAINPACKAGE.version; }
+    var packageAllDeps = Object.assign(MAINPACKAGE.dependencies, MAINPACKAGE.devDependencies);
+    paths.map(function (p) {
+        updatePackageJson(p, function (json) {
             /** set main version */
             if (json.version && json.version === placeholders.libVersion) {
                 json.version = version;
             }
-            const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
+            var depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
             /** set versions for all dependencies */
-            depsList.forEach(dep => {
+            depsList.forEach(function (dep) {
                 if (json.hasOwnProperty(dep)) {
-                    const deps = json[dep];
+                    var deps = json[dep];
                     json[dep] = replaceDependencies(deps, packageAllDeps, placeholders, version);
                 }
             });
@@ -54,9 +89,9 @@ function setVersionsforDependencies(paths, MAINPACKAGE, placeholders, version = 
 }
 exports.setVersionsforDependencies = setVersionsforDependencies;
 function replaceDependencies(dependencies, packageAllDeps, placeholders, version) {
-    const deps = dependencies;
-    Object.keys(deps).forEach(key => {
-        const dep = deps[key];
+    var deps = dependencies;
+    Object.keys(deps).forEach(function (key) {
+        var dep = deps[key];
         if (key.includes('@dlr-eoc') && dep === '0.0.0-PLACEHOLDER') {
             deps[key] = version;
         }
@@ -67,35 +102,35 @@ function replaceDependencies(dependencies, packageAllDeps, placeholders, version
     return deps;
 }
 function updatePackageJson(path, cb) {
-    FS.readFile(path, 'utf8', (error, jsonString) => {
+    FS.readFile(path, 'utf8', function (error, jsonString) {
         if (error) {
-            console.log(`Error read file ${path}:`, error);
+            console.log("Error read file " + path + ":", error);
             return;
         }
         try {
             if (jsonString) {
-                const jsonObj = JSON.parse(jsonString);
-                const content = cb(jsonObj);
-                FS.writeFile(path, JSON.stringify(content), err => {
+                var jsonObj = JSON.parse(jsonString);
+                var content = cb(jsonObj);
+                FS.writeFile(path, JSON.stringify(content), function (err) {
                     if (err) {
                         console.log('Error writing file', err);
                     }
                     else {
-                        console.log(`Update file ${path}`);
+                        console.log("Update file " + path);
                     }
                 });
             }
         }
         catch (err) {
-            console.log(`Error parsing JSON `, err);
+            console.log("Error parsing JSON ", err);
         }
     });
 }
 function getProjects(angularJson) {
-    const projects = [];
-    Object.keys(angularJson.projects).forEach((p) => {
-        const project = angularJson.projects[p];
-        const customWorkspaceProject = {
+    var projects = [];
+    Object.keys(angularJson.projects).forEach(function (p) {
+        var project = angularJson.projects[p];
+        var customWorkspaceProject = {
             name: p,
             path: PATH.join(CWD, project.root),
             packagePath: PATH.join(CWD, project.root, 'package.json'),
@@ -118,50 +153,51 @@ exports.getProjects = getProjects;
  * build dependency graph from projects
  * TODO check dependencies in libs project name!!!!
  */
-function dependencyGraph(projects, packageScope, withPeerDeps = false) {
-    const nodesmapGraph = new Map();
-    const edges = [];
+function dependencyGraph(projects, packageScope, withPeerDeps) {
+    if (withPeerDeps === void 0) { withPeerDeps = false; }
+    var nodesmapGraph = new Map();
+    var edges = [];
     /**
      * Map of depName: projectName
      */
-    const nodes = new Map();
-    projects.forEach((project) => {
+    var nodes = new Map();
+    projects.forEach(function (project) {
         if (FS.existsSync(project.packagePath)) { // check not working ???
-            const projectPackage = require(project.packagePath);
-            const packageProjectName = projectPackage.name.replace(packageScope, '');
-            nodes.set(packageProjectName, project.name);
+            var projectPackage = require(project.packagePath);
+            var packageProjectName_1 = projectPackage.name.replace(packageScope, '');
+            nodes.set(packageProjectName_1, project.name);
             if (projectPackage.dependencies) {
-                const projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
+                var projectDeps = Object.keys(projectPackage.dependencies).filter(function (key) { return key.indexOf(packageScope) !== -1; }).map(function (key) { return key.replace(packageScope, ''); });
                 if (projectDeps.length > 0) {
-                    const depsObj = new Map();
-                    projectDeps.forEach((dep) => {
+                    var depsObj_1 = new Map();
+                    projectDeps.forEach(function (dep) {
                         if (nodesmapGraph.has(dep)) {
-                            depsObj.set(dep, nodesmapGraph.get(dep));
+                            depsObj_1.set(dep, nodesmapGraph.get(dep));
                         }
                         else {
-                            depsObj.set(dep, null);
+                            depsObj_1.set(dep, null);
                         }
-                        edges.push([dep, packageProjectName]);
+                        edges.push([dep, packageProjectName_1]);
                     });
-                    nodesmapGraph.set(packageProjectName, depsObj);
+                    nodesmapGraph.set(packageProjectName_1, depsObj_1);
                 }
             }
             else {
-                nodesmapGraph.set(packageProjectName, null);
+                nodesmapGraph.set(packageProjectName_1, null);
             }
         }
     });
-    return { edges, nodes, nodesmapGraph };
+    return { edges: edges, nodes: nodes, nodesmapGraph: nodesmapGraph };
 }
 exports.dependencyGraph = dependencyGraph;
 function getSortedProjects(projects, packageScope) {
-    const graph = dependencyGraph(projects, packageScope);
-    const edges = graph.edges;
-    const nodes = Array.from(graph.nodes.keys());
+    var graph = dependencyGraph(projects, packageScope);
+    var edges = graph.edges;
+    var nodes = Array.from(graph.nodes.keys());
     /** toposort array nodes:string[], edges: string[][] */
-    const flattdeps = toposort.array(nodes, edges);
-    const flattdepsAndProjects = flattdeps.map(i => {
-        const hasKey = graph.nodes.has(i);
+    var flattdeps = toposort.array(nodes, edges);
+    var flattdepsAndProjects = flattdeps.map(function (i) {
+        var hasKey = graph.nodes.has(i);
         if (hasKey) {
             return graph.nodes.get(i);
         }
@@ -175,113 +211,121 @@ exports.getSortedProjects = getSortedProjects;
 /**
  * check if all imported dependencies are set in package.json of each library
  */
-function checkDeps(angularJson, packageScope, showAll = false) {
-    return tslib_1.__awaiter(this, void 0, void 0, function* () {
-        console.log(`>>> run check dependencies of projects`);
-        const projectsPaths = getProjects(angularJson);
-        const projectResults = [];
-        const options = {
-            ignoreBinPackage: false,
-            skipMissing: false,
-            ignoreDirs: [
-                'dist'
-            ],
-            ignoreMatches: [
-                'geojson' // @types/geojson imports geojson
-            ],
-            parsers: {
-                '*.ts': depcheck.parser.typescript
-            },
-            detectors: [
-                depcheck.detector.requireCallExpression,
-                depcheck.detector.importDeclaration,
-                depcheck.detector.typescriptImportType,
-                depcheck.detector.typescriptImportEqualsDeclaration
-            ],
-            specials: [ // the target special parsers
-            ],
-            json: true
-        };
-        const formatDepcheck = (depcheckResults, projectName, projectPath) => {
-            const o = {
-                project: projectName,
-                projectPath,
-                missingDependencies: JSON.stringify(depcheckResults.missing, null, '\t').replace(/\\\\/g, '/'),
-                invalidFiles: JSON.stringify(depcheckResults.invalidFiles, null, '\t').replace(/\\\\/g, '/'),
-                unusedDependencies: depcheckResults.dependencies,
-                unusedDevDependencies: depcheckResults.devDependencies,
-                usedDependencies: JSON.stringify(depcheckResults.using, null, '\t').replace(/\\\\/g, '/')
-            };
-            const missingDeps = Object.keys(depcheckResults.missing).length;
-            if (!missingDeps && !showAll) {
-                return false;
-            }
-            else {
-                return o;
-            }
-        };
-        // function to check if dep is transitive dependency from using...
-        const aysncdepcheck = (item) => tslib_1.__awaiter(this, void 0, void 0, function* () {
-            if (FS.existsSync(item.packagePath)) {
-                const results = yield depcheck(item.path, options);
-                if (results) {
-                    const hasMissing = Object.keys(results.missing).length;
-                    let filteredResults = results;
-                    if (hasMissing) {
-                        filteredResults = checkTransitiveDependencies(results, packageScope, options.ignoreMatches);
+function checkDeps(angularJson, packageScope, showAll) {
+    if (showAll === void 0) { showAll = false; }
+    return __awaiter(this, void 0, void 0, function () {
+        var projectsPaths, projectResults, options, formatDepcheck, aysncdepcheck, _i, projectsPaths_1, p, res;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log(">>> run check dependencies of projects");
+                    projectsPaths = getProjects(angularJson);
+                    projectResults = [];
+                    options = {
+                        ignoreBinPackage: false,
+                        skipMissing: false,
+                        ignoreDirs: [
+                            'dist'
+                        ],
+                        ignoreMatches: [
+                            'geojson' // @types/geojson imports geojson
+                        ],
+                        parsers: {
+                            '*.ts': depcheck.parser.typescript
+                        },
+                        detectors: [
+                            depcheck.detector.requireCallExpression,
+                            depcheck.detector.importDeclaration,
+                            depcheck.detector.typescriptImportType,
+                            depcheck.detector.typescriptImportEqualsDeclaration
+                        ],
+                        specials: [ // the target special parsers
+                        ],
+                        json: true
+                    };
+                    formatDepcheck = function (depcheckResults, projectName, projectPath) {
+                        var o = {
+                            project: projectName,
+                            projectPath: projectPath,
+                            missingDependencies: JSON.stringify(depcheckResults.missing, null, '\t').replace(/\\\\/g, '/'),
+                            invalidFiles: JSON.stringify(depcheckResults.invalidFiles, null, '\t').replace(/\\\\/g, '/'),
+                            unusedDependencies: depcheckResults.dependencies,
+                            unusedDevDependencies: depcheckResults.devDependencies,
+                            usedDependencies: JSON.stringify(depcheckResults.using, null, '\t').replace(/\\\\/g, '/')
+                        };
+                        var missingDeps = Object.keys(depcheckResults.missing).length;
+                        if (!missingDeps && !showAll) {
+                            return false;
+                        }
+                        else {
+                            return o;
+                        }
+                    };
+                    aysncdepcheck = function (item) { return __awaiter(_this, void 0, void 0, function () {
+                        var results, hasMissing, filteredResults;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!FS.existsSync(item.packagePath)) return [3 /*break*/, 2];
+                                    return [4 /*yield*/, depcheck(item.path, options)];
+                                case 1:
+                                    results = _a.sent();
+                                    if (results) {
+                                        hasMissing = Object.keys(results.missing).length;
+                                        filteredResults = results;
+                                        if (hasMissing) {
+                                            filteredResults = checkTransitiveDependencies(results, packageScope, options.ignoreMatches);
+                                        }
+                                        return [2 /*return*/, formatDepcheck(filteredResults, item.name, item.path)];
+                                    }
+                                    return [3 /*break*/, 3];
+                                case 2: return [2 /*return*/];
+                                case 3: return [2 /*return*/];
+                            }
+                        });
+                    }); };
+                    _i = 0, projectsPaths_1 = projectsPaths;
+                    _a.label = 1;
+                case 1:
+                    if (!(_i < projectsPaths_1.length)) return [3 /*break*/, 4];
+                    p = projectsPaths_1[_i];
+                    return [4 /*yield*/, aysncdepcheck(p)];
+                case 2:
+                    res = _a.sent();
+                    if (res) {
+                        projectResults.push(res);
                     }
-                    return formatDepcheck(filteredResults, item.name, item.path);
-                }
-            }
-            else {
-                return;
+                    _a.label = 3;
+                case 3:
+                    _i++;
+                    return [3 /*break*/, 1];
+                case 4: return [2 /*return*/, projectResults];
             }
         });
-        for (const p of projectsPaths) {
-            const res = yield aysncdepcheck(p);
-            if (res) {
-                projectResults.push(res);
-            }
-        }
-        return projectResults;
     });
 }
 exports.checkDeps = checkDeps;
-function formatCheckDepsOutput(error, showUsed = false) {
-    let str = `
-  -----------------------------------------------------------
-  project:  ${error.project}
-  projectPath:  ${error.projectPath}
-  missingDependencies: ${error.missingDependencies}`;
+function formatCheckDepsOutput(error, showUsed) {
+    if (showUsed === void 0) { showUsed = false; }
+    var str = "\n  -----------------------------------------------------------\n  project:  " + error.project + "\n  projectPath:  " + error.projectPath + "\n  missingDependencies: " + error.missingDependencies;
     if (error.unusedDependencies.length) {
-        str += `
-  peerDependencies: ${error.unusedDependencies}`;
+        str += "\n  peerDependencies: " + error.unusedDependencies;
     }
     if (error.unusedDevDependencies.length) {
-        str += `
-  unusedDevDependencies: ${error.unusedDevDependencies}`;
+        str += "\n  unusedDevDependencies: " + error.unusedDevDependencies;
     }
     if (error.invalidFiles.length > 2) {
-        str += `
-  invalidFiles: ${error.invalidFiles}`;
+        str += "\n  invalidFiles: " + error.invalidFiles;
     }
     if (showUsed) {
-        str += `
-  usedDependencies: ${error.usedDependencies}`;
+        str += "\n  usedDependencies: " + error.usedDependencies;
     }
     console.log(str);
 }
 exports.formatCheckDepsOutput = formatCheckDepsOutput;
 function formatProjectsDepsOutput(p, i) {
-    const str = `
------------------------------------------------------------
-|name:  ${p.name}    -  count: ${i}
-|----------------------------------------------------------
-|version:  ${p.version}
-|
-|dependencies:${(p.dependencies) ? p.dependencies.split(',').map(d => `\n|   - ${d}`) : ''}
-|
-|peerDependencies:${(p.peerDependencies) ? p.peerDependencies.split(',').map(d => `\n|   - ${d}`) : ''}`;
+    var str = "\n-----------------------------------------------------------\n|name:  " + p.name + "    -  count: " + i + "\n|----------------------------------------------------------\n|version:  " + p.version + "\n|\n|dependencies:" + ((p.dependencies) ? p.dependencies.split(',').map(function (d) { return "\n|   - " + d; }) : '') + "\n|\n|peerDependencies:" + ((p.peerDependencies) ? p.peerDependencies.split(',').map(function (d) { return "\n|   - " + d; }) : '');
     console.log(str);
 }
 exports.formatProjectsDepsOutput = formatProjectsDepsOutput;
@@ -289,38 +333,38 @@ exports.formatProjectsDepsOutput = formatProjectsDepsOutput;
  * remove Transitive Dependencies from missing in depcheck!
  */
 function checkTransitiveDependencies(depcheckResults, packageScope, ignoreMatches) {
-    let allDependencies = Object.keys(depcheckResults.using);
-    const missingDeps = depcheckResults.missing;
+    var allDependencies = Object.keys(depcheckResults.using);
+    var missingDeps = depcheckResults.missing;
     if (ignoreMatches && ignoreMatches.length > 0) {
-        allDependencies = allDependencies.filter(item => !ignoreMatches.includes(item));
+        allDependencies = allDependencies.filter(function (item) { return !ignoreMatches.includes(item); });
     }
     /**
      * get package.json for each dependency and check if it includes one of the dependencies;
      */
-    allDependencies.map(key => {
-        let packagePath = `${key}/package.json`;
+    allDependencies.map(function (key) {
+        var packagePath = key + "/package.json";
         if (key.includes(packageScope)) {
             packagePath = PATH.join(CWD, packagePath.replace(packageScope, 'projects/'));
         }
-        const depPackage = require(packagePath); // require(`${key}/package.json`); //
-        const allPackageDeps = [];
+        var depPackage = require(packagePath); // require(`${key}/package.json`); //
+        var allPackageDeps = [];
         if (depPackage.dependencies) {
-            Object.keys(depPackage.dependencies).map(i => allPackageDeps.push(i));
+            Object.keys(depPackage.dependencies).map(function (i) { return allPackageDeps.push(i); });
         }
         if (depPackage.devDependencies) {
-            Object.keys(depPackage.devDependencies).map(i => allPackageDeps.push(i));
+            Object.keys(depPackage.devDependencies).map(function (i) { return allPackageDeps.push(i); });
         }
         if (depPackage.peerDependencies) {
-            Object.keys(depPackage.peerDependencies).map(i => allPackageDeps.push(i));
+            Object.keys(depPackage.peerDependencies).map(function (i) { return allPackageDeps.push(i); });
         }
         if (depPackage.optionalDependencies) {
-            Object.keys(depPackage.optionalDependencies).map(i => allPackageDeps.push(i));
+            Object.keys(depPackage.optionalDependencies).map(function (i) { return allPackageDeps.push(i); });
         }
         /**
          * create a Intersection of depcheck.using and the required package and remove it from missing
          */
-        const transitiveDeps = allPackageDeps.filter(x => allDependencies.includes(x));
-        transitiveDeps.map(d => {
+        var transitiveDeps = allPackageDeps.filter(function (x) { return allDependencies.includes(x); });
+        transitiveDeps.map(function (d) {
             if (missingDeps.hasOwnProperty(d)) {
                 delete depcheckResults.missing[d];
             }
