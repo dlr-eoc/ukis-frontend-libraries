@@ -154,7 +154,7 @@ function setVersion(version, packagePath) {
         vendorVersion: '0.0.0-PLACEHOLDER-VENDOR'
     };
     var MAINPACKAGE = require(PATH.join(CWD, 'package.json'));
-    var path = require(PATH.join(packagePath, 'package.json'));
+    var path = PATH.join(packagePath, 'package.json');
     utils_1.setVersionsforDependencies([path], MAINPACKAGE, placeholders);
 }
 run();

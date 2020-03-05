@@ -147,7 +147,7 @@ function setVersion(version: string, packagePath: string) {
   };
   const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
 
-  const path = require(PATH.join(packagePath, 'package.json'));
+  const path = PATH.join(packagePath, 'package.json');
   setVersionsforDependencies([path], MAINPACKAGE, placeholders)
 }
 run();
