@@ -2,6 +2,22 @@
   "name": "ukis-frontend-libraries",
   "version": "6.2.0",
   "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "bugs": {
+    "url": "https://github.com/dlr-eoc/ukis-frontend-libraries/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dlr-eoc/ukis-frontend-libraries"
+  },
+  "contributors": [
+    "Stefan, Keim",
+    "Mathias, Böck",
+    "Sergey, Voinov",
+    "Michael, Langbein",
+    "Rouven, Volkmann",
+    "Nico, Mandery"
+  ],
   "keywords": [
     "angular",
     "Clarity Design",
