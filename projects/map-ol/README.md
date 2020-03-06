@@ -40,12 +40,18 @@ import { IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer, EocLitemap, BlueMarbleTile } from '@dlr-eoc/base-layers-raster';
 ```
 
+
 ```
 controls: IMapControls;
   constructor(
     public layerSvc: LayersService,
     public mapStateSvc: MapStateService
 ) { }
+```
+
+```
+// add a OnInit Function
+export class <MyComponent> implements OnInit...
 ```
 
 ```
