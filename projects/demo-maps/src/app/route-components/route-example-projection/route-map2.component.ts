@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import { osm } from '@dlr-eoc/base-layers-raster';
+import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { IProjDef } from '@dlr-eoc/map-navigator';
 
 
@@ -70,7 +70,7 @@ export class RouteMap2Component implements OnInit {
   }
 
   addOverlays() {
-    const osm_layer = new osm({
+    const osm_layer = new OsmTileLayer({
       removable: true,
       legendImg: null,
       visible: true,

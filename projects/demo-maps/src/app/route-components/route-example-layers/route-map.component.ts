@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, eoc_litemap_tile, esri_grey_canvas, esri_nav_charts, open_sea_map, google_earth } from '@dlr-eoc/base-layers-raster';
+import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
 import { MapOlService } from '@dlr-eoc/map-ol';
 
 @Component({
@@ -39,9 +39,7 @@ export class RouteMapComponent implements OnInit {
   }
 
   addBaseLayers() {
-    const eocLitemapLayer = new eoc_litemap_tile({
-      legendImg: null,
-      id: 'eoc_litemap_base',
+    const eocLitemapLayer = new EocLitemapTile({
       visible: true
     });
 
@@ -65,13 +63,11 @@ export class RouteMapComponent implements OnInit {
       legendImg: ''
     });
 
-    const osmLayer = new osm({
-      legendImg: null,
-      id: 'osm_base',
-      visible: false
+    const OsmLayer = new OsmTileLayer({
+      id: 'OSM_Base'
     });
 
-    const layers = [eocLitemapLayer, worldRelief, osmLayer];
+    const layers = [eocLitemapLayer, worldRelief, OsmLayer];
 
     /** add layers with the LayersService */
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
@@ -274,40 +270,33 @@ export class RouteMapComponent implements OnInit {
       actions: [{ title: 'download', icon: 'download-cloud', action: (layer) => { console.log(layer); } }]
     });
 
-    const esriImageLayer = new esri_world_imagery();
-    esriImageLayer.legendImg = null;
+    const eocBasemap = new EocBasemapTile();
 
-    const esriGreyLayer = new esri_grey_canvas({
-      removable: true,
-      legendImg: null,
-    });
+    const eocBaseoverlay = new EocBaseoverlayTile();
 
-    const esriOceanImageryLayer = new esri_ocean_imagery({
-      removable: true,
-      legendImg: null,
-      id: 'esri_ocean_base'
-    });
+    const eocLiteoverlay = new EocLiteoverlayTile();
 
-    const osmLayer = new osm();
+    const OsmLayer = new OsmTileLayer();
     /** add a Group of layers */
 
 
     const groupLayer = new LayerGroup({
       id: 'group_1',
       name: 'Test Group',
-      layers: [esriOceanImageryLayer, osmLayer, esriImageLayer],
-      description: 'this is a group with esri_ocean_imagery_layer, osmLayer, esri_Image_layer',
+      layers: [OsmLayer, eocBasemap, eocBaseoverlay],
+      description: 'this is a group with esri_ocean_imagery_layer, OsmLayer, esri_Image_layer',
       actions: [{ title: 'download', icon: 'download-cloud', action: (group) => { console.log(group); } }]
     });
 
     const groupLayer2 = new LayerGroup({
-      // visible: true,
       id: 'group_2',
       name: 'Test Group 2',
-      layers: [TDM90DEMLayer, vectorLayer2, esriGreyLayer]
+      layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay]
     });
 
-    const overlays = [gufLayer, groupLayer2, vectorLayer, groupLayer];
+    const hillshade = new HillshadeTile();
+
+    const overlays = [gufLayer, hillshade, groupLayer2, vectorLayer, groupLayer];
     overlays.map(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');
@@ -315,14 +304,11 @@ export class RouteMapComponent implements OnInit {
         this.layersSvc.addLayerGroup(layer);
       }
     });
-
-    // const test = this.layersSvc.getLayerOrGroupById('group_2')
-    // console.log(test)
   }
 
   addOverlays() {
-    const layerOnToppOfAll = new esri_nav_charts();
-    const openSeaMapOnTopp = new open_sea_map();
+    const layerOnToppOfAll = new BlueMarbleTile()
+    const openSeaMapOnTopp = new OpenSeaMap();
     this.layersSvc.addLayer(layerOnToppOfAll, 'Overlays');
     this.layersSvc.addLayer(openSeaMapOnTopp, 'Overlays');
   }
@@ -335,8 +321,8 @@ export class RouteMapComponent implements OnInit {
 
   addLayerToGroup() {
     const group = this.layersSvc.getLayerOrGroupById('group_2') as unknown as LayerGroup;
-    const googleEarthLayer = new google_earth();
-    this.layersSvc.addLayerToGroup(googleEarthLayer, group);
+    const worldReliefBw = new WorldReliefBwTile();
+    this.layersSvc.addLayerToGroup(worldReliefBw, group);
   }
 
   removeAllLayers() {

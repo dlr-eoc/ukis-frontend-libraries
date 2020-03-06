@@ -3,7 +3,7 @@ import { OwcJsonService } from './owc-json.service';
 import { barebonesContext, basicContext, exampleContext } from '../../../assets/exampleContext';
 import { coastalXTestContext } from '../../../assets/coastalx.test.context';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { eoc_litemap } from '@dlr-eoc/base-layers-raster';
+import { EocLitemap } from '@dlr-eoc/base-layers-raster';
 import { LayersService, RasterLayer } from '@dlr-eoc/services-layers';
 import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
@@ -198,7 +198,7 @@ describe('OwcJsonService: writing data into owc', () => {
   it('#getLayers should properly restore a selection of layers from owc format created with #generateOwsContextFrom', (done) => {
     const service: OwcJsonService = TestBed.get(OwcJsonService);
     const layersService: LayersService = TestBed.get(LayersService);
-    const osmLayer = new eoc_litemap({
+    const osmLayer = new EocLitemap({
       visible: true,
       legendImg: null
     });

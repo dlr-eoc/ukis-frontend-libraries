@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
+import { LayersService, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { osm, esri_world_imagery, esri_ocean_imagery, eoc_litemap, esri_grey_canvas, esri_nav_charts, open_sea_map } from '@dlr-eoc/base-layers-raster';
+import { EocLitemap } from '@dlr-eoc/base-layers-raster';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
 
@@ -36,9 +36,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
   }
 
   addBaseLayers() {
-    const eocLitemapLayer = new eoc_litemap({
-      legendImg: null,
-      id: 'eoc_litemap_base',
+    const eocLitemapLayer = new EocLitemap({
       visible: true,
       tileSize: 512
     });

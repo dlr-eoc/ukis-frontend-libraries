@@ -1,4 +1,4 @@
-import { RasterLayer, IRasterLayerOptions, WmtsLayer, IWmtsOptions } from '@dlr-eoc/services-layers';
+import { RasterLayer, IRasterLayerOptions, WmtsLayer, IWmtsOptions, WmsLayer, IWmsOptions } from '@dlr-eoc/services-layers';
 
 /**
  * make all IRasterLayer Options optional because constructor use default objects
@@ -7,157 +7,17 @@ type IoptionalRasterLayerOptions = {
   [K in keyof IRasterLayerOptions]?: IRasterLayerOptions[K]
 };
 
+type IoptionalIWmsOptions = {
+  [K in keyof IWmsOptions]?: IWmsOptions[K]
+};
+
 type IoptionalIWmtsOptions = {
   [K in keyof IWmtsOptions]?: IWmtsOptions[K]
 };
-export class google_earth extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
-      name: 'Google Satellite',
-      displayName: 'Google Satellite',
-      id: 'google_satellite',
-      visible: false,
-      type: 'xyz',
-      url: 'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-      attribution: '&copy, <a href="https://www.google.de/maps">Google</a> contributors',
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-      continuousWorld: false,
-      legendImg: 'https://mt3.google.com/vt/lyrs=s&x=4&y=3&z=3',
-      description: '&copy google.com/vt/lyrs - satellite only',
-      opacity: 1
-    };
-    if (options) { Object.assign(defaultOptions, options); }
-    super(defaultOptions);
-  }
-}
-
-export class google_maps extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
-      name: 'Google Maps',
-      displayName: 'Google Maps',
-      id: 'google_maps',
-      visible: false,
-      type: 'xyz',
-      url: 'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
-      attribution: '&copy, <a href="https://www.google.de/maps">Google</a> contributors',
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-      continuousWorld: true,
-      legendImg: 'https://mt3.google.com/vt/lyrs=m&x=4&y=3&z=3',
-      description: '&copy google.com/vt/lyrs - terrain',
-      opacity: 1
-    };
-    if (options) { Object.assign(defaultOptions, options); }
-    super(defaultOptions);
-  }
-}
-
-export class google_hybrid extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
-      name: 'Google Hybrid',
-      displayName: 'Google Hybrid',
-      id: 'google_maps',
-      visible: false,
-      type: 'xyz',
-      url: 'https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-      attribution: '&copy, <a href="https://www.google.de/maps">Google</a> contributors',
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-      continuousWorld: false,
-      legendImg: 'https://mt3.google.com/vt/lyrs=y&x=4&y=3&z=3',
-      description: '&copy google.com/vt/lyrs - hybrid',
-      opacity: 1
-    };
-    if (options) { Object.assign(defaultOptions, options); }
-    super(defaultOptions);
-  }
-}
-
-export class esri_grey_canvas extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
-      name: 'ESRI Neutral Map',
-      displayName: 'ESRI Neutral Map',
-      id: 'esri_grey_canvas',
-      visible: false,
-      type: 'xyz',
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}.png',
-      attribution: '&copy; ESRI',
-      continuousWorld: false,
-      legendImg: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/3/3/4.png',
-      description: '&copy arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base',
-      opacity: 1
-    };
-    if (options) { Object.assign(defaultOptions, options); }
-    super(defaultOptions);
-  }
-}
 
 
-export class esri_world_imagery extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
-      name: 'ESRI Imagery',
-      displayName: 'ESRI Imagery',
-      id: 'esri_imagery',
-      visible: false,
-      type: 'xyz',
-      url: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png',
-      attribution: '&copy; ESRI',
-      continuousWorld: false,
-      legendImg: 'https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/3/3/4.png',
-      description: '&copy arcgisonline.com/arcgis/rest/services/World_Imagery',
-      opacity: 1
-    };
-    if (options) { Object.assign(defaultOptions, options); }
-    super(defaultOptions);
-  }
-}
 
-
-export class esri_ocean_imagery extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
-      name: 'ESRI Ocean',
-      displayName: 'ESRI Ocean',
-      id: 'esri_ocean',
-      visible: false,
-      type: 'xyz',
-      url: 'https://server.arcgisonline.com/arcgis/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}.png',
-      attribution: '&copy; ESRI',
-      continuousWorld: false,
-      legendImg: 'https://server.arcgisonline.com/arcgis/rest/services/Ocean_Basemap/MapServer/tile/3/3/4.png',
-      description: '&copy arcgisonline.com/arcgis/rest/services/Ocean_Basemap',
-      opacity: 1
-    };
-    if (options) { Object.assign(defaultOptions, options); }
-    super(defaultOptions);
-  }
-}
-
-
-export class esri_nav_charts extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
-      name: 'ESRI Charts',
-      displayName: 'ESRI Charts',
-      id: 'esri_charts',
-      visible: false,
-      type: 'xyz',
-      url: 'https://server.arcgisonline.com/arcgis/rest/services/Specialty/World_Navigation_Charts/MapServer/tile/{z}/{y}/{x}.png',
-      attribution: '&copy; ESRI',
-      continuousWorld: false,
-      legendImg: 'https://server.arcgisonline.com/arcgis/rest/services/Specialty/World_Navigation_Charts/MapServer/tile/3/3/4.png',
-      description: '&copy arcgisonline.com/arcgis/rest/services/Specialty/World_Navigation_Charts',
-      opacity: 1
-    };
-    if (options) { Object.assign(defaultOptions, options); }
-    super(defaultOptions);
-  }
-}
-
-
-export class osm extends RasterLayer {
+export class OsmTileLayer extends RasterLayer {
   constructor(options?: IoptionalRasterLayerOptions) {
     const defaultOptions: IRasterLayerOptions = {
       name: 'OpenStreetMap',
@@ -170,9 +30,30 @@ export class osm extends RasterLayer {
       attribution: '&copy, <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors',
       continuousWorld: false,
       legendImg: 'https://a.tile.openstreetmap.org/3/4/3.png',
-      description: '&copy OpenStreetMap and contributors',
-      opacity: 1,
-      zIndex: 1
+      description: 'OpenStreetMap z-x-y Tiles',
+      opacity: 1
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
+  }
+}
+
+export class OpenSeaMap extends RasterLayer {
+  constructor(options?: IoptionalRasterLayerOptions) {
+    const defaultOptions: IRasterLayerOptions = {
+      name: 'OpenSeaMap',
+      displayName: 'OpenSeaMap',
+      id: 'OpenSeaMap',
+      visible: false,
+      type: 'xyz',
+      removable: false,
+      url: 'https://{s}.openseamap.org/seamark/{z}/{x}/{y}.png',
+      subdomains: ['t1'],
+      attribution: '&copy, <a href="https://map.openseamap.org/legend.php?lang=de&page=license">OpenSeaMap</a>',
+      continuousWorld: false,
+      legendImg: 'https://t1.openseamap.org/seamark/10/554/321.png',
+      description: 'http://map.openseamap.org/',
+      opacity: 1
     };
     if (options) { Object.assign(defaultOptions, options); }
     super(defaultOptions);
@@ -180,9 +61,9 @@ export class osm extends RasterLayer {
 }
 
 
-export class eoc_litemap extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
+export class EocLitemap extends WmsLayer {
+  constructor(options?: IoptionalIWmsOptions) {
+    const defaultOptions: IWmsOptions = {
       name: 'EOC Litemap',
       displayName: 'EOC Litemap',
       id: 'eoc_litemap',
@@ -190,10 +71,9 @@ export class eoc_litemap extends RasterLayer {
       type: 'wms',
       removable: false,
       params: {
-        layers: 'litemap',
-        format: 'image/png',
-        transparent: true,
-        attribution: '',
+        LAYERS: 'litemap',
+        FORMAT: 'image/png',
+        TRANSPARENT: true
       },
       url: 'https://geoservice.dlr.de/eoc/basemap/wms',
       attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
@@ -207,7 +87,7 @@ export class eoc_litemap extends RasterLayer {
   }
 }
 
-export class eoc_litemap_tile extends WmtsLayer {
+export class EocLitemapTile extends WmtsLayer {
   constructor(options?: IoptionalIWmtsOptions) {
     const defaultOptions: IWmtsOptions = {
       name: 'EOC Litemap Tile',
@@ -237,27 +117,186 @@ export class eoc_litemap_tile extends WmtsLayer {
   }
 }
 
-
-
-export class open_sea_map extends RasterLayer {
-  constructor(options?: IoptionalRasterLayerOptions) {
-    const defaultOptions: IRasterLayerOptions = {
-      name: 'OpenSeaMap',
-      displayName: 'OpenSeaMap',
-      id: 'OpenSeaMap',
+export class EocLiteoverlayTile extends WmtsLayer {
+  constructor(options?: IoptionalIWmtsOptions) {
+    const defaultOptions: IWmtsOptions = {
+      name: 'EOC Liteoverlay Tile',
+      displayName: 'EOC LiteoverlayTile',
+      id: 'eoc_Liteoverlay_tile',
       visible: false,
-      type: 'xyz',
+      type: 'wmts',
       removable: false,
-      url: 'https://{s}.openseamap.org/seamark/{z}/{x}/{y}.png',
-      subdomains: ['t1'],
-      attribution: '',
+      params: {
+        layer: 'eoc:liteoverlay',
+        format: 'image/png',
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
+      },
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
       continuousWorld: false,
-      zIndex: 99999,
-      legendImg: 'https://t1.openseamap.org/seamark/10/554/321.png',
-      description: 'http://map.openseamap.org/',
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Aliteoverlay&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11',
+      description: 'This is the liteoverlay provided for EOC Service Portals',
       opacity: 1
     };
     if (options) { Object.assign(defaultOptions, options); }
     super(defaultOptions);
   }
 }
+
+export class EocBasemapTile extends WmtsLayer {
+  constructor(options?: IoptionalIWmtsOptions) {
+    const defaultOptions: IWmtsOptions = {
+      name: 'EOC Basemap Tile',
+      displayName: 'EOC Basemap Tile',
+      id: 'eoc_basemap_tile',
+      visible: false,
+      type: 'wmts',
+      removable: false,
+      params: {
+        layer: 'eoc:basemap',
+        format: 'image/png',
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
+      },
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
+      continuousWorld: false,
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Abasemap&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11',
+      description: 'This is the basemap for DLR Service Portals',
+      opacity: 1
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
+  }
+}
+
+export class EocBaseoverlayTile extends WmtsLayer {
+  constructor(options?: IoptionalIWmtsOptions) {
+    const defaultOptions: IWmtsOptions = {
+      name: 'EOC Baseoverlay Tile',
+      displayName: 'EOC Baseoverlay Tile',
+      id: 'eoc_Baseoverlay_tile',
+      visible: false,
+      type: 'wmts',
+      removable: false,
+      params: {
+        layer: 'eoc:baseoverlay',
+        format: 'image/png',
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
+      },
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
+      continuousWorld: false,
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Abaseoverlay&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11',
+      description: 'This is the basemap for DLR Service Portals',
+      opacity: 1
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
+  }
+}
+
+export class BlueMarbleTile extends WmtsLayer {
+  constructor(options?: IoptionalIWmtsOptions) {
+    const defaultOptions: IWmtsOptions = {
+      name: 'BlueMarble Tile',
+      displayName: 'BlueMarble Tile',
+      id: 'blueMarble_tile',
+      visible: false,
+      type: 'wmts',
+      removable: false,
+      params: {
+        layer: 'bmng_topo_bathy',
+        format: 'image/png',
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
+      },
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
+      continuousWorld: false,
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=bmng_topo_bathy&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11',
+      description: 'Blue Marble NG dataset with topography and bathymetry',
+      opacity: 1
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
+  }
+}
+
+export class WorldReliefBwTile extends WmtsLayer {
+  constructor(options?: IoptionalIWmtsOptions) {
+    const defaultOptions: IWmtsOptions = {
+      name: 'World Relief B/W Tile',
+      displayName: 'World Relief B/W Tile',
+      id: 'eoc:world_relief_bw',
+      visible: false,
+      type: 'wmts',
+      removable: false,
+      params: {
+        layer: 'eoc:world_relief_bw',
+        format: 'image/png',
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
+      },
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
+      continuousWorld: false,
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Aworld_relief_bw&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11',
+      description: 'World Relief Black / White',
+      opacity: 1
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
+  }
+}
+
+export class HillshadeTile extends WmtsLayer {
+  constructor(options?: IoptionalIWmtsOptions) {
+    const defaultOptions: IWmtsOptions = {
+      name: 'Hillshade Tile',
+      displayName: 'Hillshade Tile',
+      id: 'eoc_hillshade',
+      visible: false,
+      type: 'wmts',
+      removable: false,
+      params: {
+        layer: 'hillshade',
+        format: 'image/png',
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        }
+      },
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
+      continuousWorld: false,
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=hillshade&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11',
+      description: 'Global Hillshade based on GMTED2010',
+      opacity: 1
+    };
+    if (options) { Object.assign(defaultOptions, options); }
+    super(defaultOptions);
+  }
+}
+
+
+
+

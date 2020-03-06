@@ -1,8 +1,8 @@
 import { async, TestBed } from '@angular/core/testing';
 
-import { RasterLayer } from '@dlr-eoc/services-layers';
+import { RasterLayer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
 
-import { osm, google_earth, google_maps, google_hybrid, esri_grey_canvas, esri_nav_charts, esri_ocean_imagery, esri_world_imagery, eoc_litemap, open_sea_map } from './raster-layers';
+import { OsmTileLayer, OpenSeaMap, EocLitemap, EocLitemapTile, EocLiteoverlayTile, EocBasemapTile, EocBaseoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from './raster-layers';
 
 describe('BaseLayersRasterComponent', () => {
   beforeEach(async(() => {
@@ -13,52 +13,52 @@ describe('BaseLayersRasterComponent', () => {
   beforeEach(() => { });
 
   it('osm should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new osm();
+    const testLayer = new OsmTileLayer();
     expect(testLayer instanceof RasterLayer).toBeTruthy();
   });
 
-  it('google_earth should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new google_earth();
+  it('OpenSeaMap should be instanceof of a UKIS RasterLayer', () => {
+    const testLayer = new OpenSeaMap();
     expect(testLayer instanceof RasterLayer).toBeTruthy();
   });
 
-  it('google_maps should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new google_maps();
-    expect(testLayer instanceof RasterLayer).toBeTruthy();
+  it('EocLitemap should be instanceof of a UKIS WmsLayer', () => {
+    const testLayer = new EocLitemap();
+    expect(testLayer instanceof WmsLayer).toBeTruthy();
   });
 
-  it('google_hybrid should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new google_hybrid();
-    expect(testLayer instanceof RasterLayer).toBeTruthy();
+  it('EocLitemapTile should be instanceof of a UKIS WmtsLayer', () => {
+    const testLayer = new EocLitemapTile();
+    expect(testLayer instanceof WmtsLayer).toBeTruthy();
   });
 
-  it('esri_grey_canvas should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new esri_grey_canvas();
-    expect(testLayer instanceof RasterLayer).toBeTruthy();
+  it('EocLiteoverlayTile should be instanceof of a UKIS WmtsLayer', () => {
+    const testLayer = new EocLiteoverlayTile();
+    expect(testLayer instanceof WmtsLayer).toBeTruthy();
   });
 
-  it('esri_nav_charts should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new esri_nav_charts();
-    expect(testLayer instanceof RasterLayer).toBeTruthy();
+  it('EocBasemapTile should be instanceof of a UKIS WmtsLayer', () => {
+    const testLayer = new EocBasemapTile();
+    expect(testLayer instanceof WmtsLayer).toBeTruthy();
   });
 
-  it('esri_ocean_imagery should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new esri_ocean_imagery();
-    expect(testLayer instanceof RasterLayer).toBeTruthy();
+  it('EocBaseoverlayTile should be instanceof of a UKIS WmtsLayer', () => {
+    const testLayer = new EocBaseoverlayTile();
+    expect(testLayer instanceof WmtsLayer).toBeTruthy();
   });
 
-  it('esri_world_imagery should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new esri_world_imagery();
-    expect(testLayer instanceof RasterLayer).toBeTruthy();
+  it('BlueMarbleTile should be instanceof of a UKIS WmtsLayer', () => {
+    const testLayer = new BlueMarbleTile();
+    expect(testLayer instanceof WmtsLayer).toBeTruthy();
   });
 
-  it('eoc_litemap should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new eoc_litemap();
-    expect(testLayer instanceof RasterLayer).toBeTruthy();
+  it('WorldReliefBwTile should be instanceof of a UKIS WmtsLayer', () => {
+    const testLayer = new WorldReliefBwTile();
+    expect(testLayer instanceof WmtsLayer).toBeTruthy();
   });
 
-  it('open_sea_map should be instanceof of a UKIS RasterLayer', () => {
-    const testLayer = new open_sea_map();
-    expect(testLayer instanceof RasterLayer).toBeTruthy();
+  it('HillshadeTile should be instanceof of a UKIS WmtsLayer', () => {
+    const testLayer = new HillshadeTile();
+    expect(testLayer instanceof WmtsLayer).toBeTruthy();
   });
 });

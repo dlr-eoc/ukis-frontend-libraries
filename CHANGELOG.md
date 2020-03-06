@@ -10,6 +10,8 @@
 
 * **@ukis/services-layers:** getLayerOrGroupById() - is returning a Layer | LayerGroup | null - not a array anymore! 
 
+* **@ukis/base-layers-raster:** esri and google layers are removed, new layers from EOC Geoservice (a complete restructuring)!!! 
+
 
 ### Changes
 

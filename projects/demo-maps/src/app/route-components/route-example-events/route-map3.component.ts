@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angul
 import { LayersService, CustomLayer, TGeoExtent } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import { osm } from '@dlr-eoc/base-layers-raster';
+import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { ProgressService } from '../../components/global-progress/progress.service';
 
 import olImageLayer from 'ol/layer/Image';
@@ -52,8 +52,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addLayers() {
-    const osmLayer = new osm({
-      legendImg: null,
+    const osmLayer = new OsmTileLayer({
       visible: true
     });
 

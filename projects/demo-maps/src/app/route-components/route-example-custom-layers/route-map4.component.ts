@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import { esri_world_imagery, esri_grey_canvas, osm } from '@dlr-eoc/base-layers-raster';
+import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
 import { Heatmap as olHeatmapLayer, Vector as olVectorLayer } from 'ol/layer';
 import olVectorSource from 'ol/source/Vector';
@@ -37,8 +37,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   }
 
   addLayers() {
-    const osmLayer1 = new osm({
-      legendImg: null,
+    const osmLayer1 = new OsmTileLayer({
       id: 'OSM1',
       visible: true
     });
@@ -176,13 +175,15 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       bbox: [-180, -90, 180, 90]
     });
 
-    const esriLayer = new esri_world_imagery();
+
+
+    /* const esriLayer = new esri_world_imagery(); */
 
     const layersGroup1 = new LayerGroup({
       name: 'Group 1',
       filtertype: 'Layers',
       id: 'group1',
-      layers: [esriLayer, customLayer, vectorLayer]
+      layers: [customLayer, vectorLayer]
     });
 
     const imageWmsLayer = new CustomLayer({
@@ -200,11 +201,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const esriLayer2 = new esri_grey_canvas();
-    esriLayer2.id = 'esri_layer2';
-    esriLayer2.removable = true;
-
-    const layers = [osmLayer1, layersGroup1, imageWmsLayer, esriLayer2, customVectorLayer];
+    const layers = [osmLayer1, layersGroup1, imageWmsLayer, customVectorLayer];
 
     layers.forEach(layer => {
       if (layer instanceof Layer) {
