@@ -241,13 +241,20 @@ function updateAngularArchitect(project: WorkspaceProject, type: string | 'build
     }
 
     if (target.options && 'styles' in target.options) {
-      if (Array.isArray(target.options.styles) && !target.options.styles.includes('src/styles.scss')) {
+      /** replace styles.css if it exists */
+      if (Array.isArray(target.options.styles) && target.options.styles.includes('src/styles.css')) {
+        const found = target.options.styles.findIndex((i: string) => i === `src/styles.css`);
+        if (found !== -1) {
+          target.options.styles[found] = 'src/styles.scss';
+        }
+      } else if (Array.isArray(target.options.styles) && !target.options.styles.includes('src/styles.scss')) {
         const found = target.options.styles.findIndex((i: string) => i === `src/styles.${styleExt}`);
         if (found !== -1) {
           target.options.styles[found] = 'src/styles.scss';
         } else {
           target.options.styles.push('src/styles.scss');
         }
+
       }
     }
   }
