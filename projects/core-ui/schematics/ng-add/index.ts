@@ -86,16 +86,16 @@ function ruleAddFiles(options: UkisNgAddSchema): Rule {
         if (pathSeperators && pathSeperators.length > 1) {
           return false;
         } else {
-          const testFiles = ['favicon.ico', 'styles.scss'];
+          const testFiles = ['favicon.ico', 'styles.css', 'styles.scss'];
           /**
            * check for existing files the are allowed to overwrite!
            */
           const destPath = join(sourcePath, path);
           if (tree.exists(destPath)) {
             for (const f of testFiles) {
-              /** delete css file it is replaced with scss */
-              if (f === 'styles.scss') {
-                const styleExtTest = join(sourcePath, f.replace('.scss', `.${styleExt}`));
+              /** delete styles.css file it is replaced with scss */
+              if (f === 'styles.css') {
+                const styleExtTest = join(sourcePath, f);
                 if (tree.exists(styleExtTest)) {
                   tree.delete(styleExtTest);
                 }
@@ -125,15 +125,16 @@ function ruleAddFiles(options: UkisNgAddSchema): Rule {
     const appTemplateSource = apply(url('./files/src/app'), [
       applyTemplates({ ...templateVariabels }),
       filter((path: Path) => {
-        const testFiles = ['app.component.html', 'app.component.ts'];
+        const testFiles = ['app.component.html', 'app.component.ts', 'app.component.css', 'app.component.scss'];
         /**
          * check for existing files the are allowed to overwrite!
          */
         const destPath = join(appPath, path);
         if (tree.exists(destPath)) {
           for (const f of testFiles) {
-            if (f === 'app.component.ts') {
-              const styleExtTest = join(appPath, f.replace('.ts', `.${styleExt}`));
+            /** delete app.component.css file it is replaced with scss */
+            if (f === 'app.component.css') {
+              const styleExtTest = join(appPath, f);
               if (tree.exists(styleExtTest)) {
                 tree.delete(styleExtTest);
               }
