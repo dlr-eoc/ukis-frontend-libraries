@@ -10,11 +10,25 @@
       <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
-  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="false" class="layers" title="Coordinates">
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Projection">
+    <clr-icon shape="map" clrVerticalNavIcon></clr-icon>
+    Projection
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections"></ukis-projection-switch>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Coordinates">
     <clr-icon shape="compass" clrVerticalNavIcon></clr-icon>
     Coordinates
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-mouse-position></ukis-mouse-position>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Navigator">
+    <clr-icon shape="compass" clrVerticalNavIcon></clr-icon>
+    Navigator
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ukis-map-navigator [mapState]="mapStateSvc"></ukis-map-navigator>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 </clr-vertical-nav>
