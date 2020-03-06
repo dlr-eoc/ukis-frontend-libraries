@@ -3,7 +3,8 @@ import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layer
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { osm } from '@dlr-eoc/base-layers-raster';
-import { IProjDef } from '@dlr-eoc/map-navigator'
+import { IProjDef } from '@dlr-eoc/map-navigator';
+
 
 @Component({
   selector: 'app-route-map2',
@@ -27,7 +28,7 @@ export class RouteMap2Component implements OnInit {
       scaleLine: true
     };
 
-    let arcticPolarStereographic:IProjDef = {
+    const arcticPolarStereographic: IProjDef = {
       code: 'EPSG:3995',
       proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
       title: 'Arctic Polar Stereographic',
@@ -37,7 +38,7 @@ export class RouteMap2Component implements OnInit {
       units: 'm'
     };
 
-    let antarcticPolarStereographic:IProjDef = {
+    const antarcticPolarStereographic: IProjDef = {
       code: `EPSG:3031`,
       proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
       title: 'Antarctic Polar Stereographic',
@@ -47,7 +48,7 @@ export class RouteMap2Component implements OnInit {
       units: 'm'
     };
 
-    let webMercator:IProjDef = {
+    const webMercator: IProjDef = {
       code: `EPSG:3857`,
       proj4js: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs',
       title: 'Spherical Mercator',
@@ -57,7 +58,7 @@ export class RouteMap2Component implements OnInit {
       units: 'm'
     };
 
-    this.projections=[webMercator, arcticPolarStereographic, antarcticPolarStereographic];
+    this.projections = [webMercator, arcticPolarStereographic, antarcticPolarStereographic];
     this.addOverlays();
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
     this.mapStateSvc.setExtent([-14, 33, 40, 57]);
