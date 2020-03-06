@@ -37,7 +37,7 @@ import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { IMapControls } from '@dlr-eoc/map-ol';
 
-import { osm, eoc_litemap, esri_world_imagery } from '@dlr-eoc/base-layers-raster';
+import { OsmTileLayer, EocLitemap, BlueMarbleTile } from '@dlr-eoc/base-layers-raster';
 ```
 
 ```
@@ -55,17 +55,14 @@ ngOnInit() {
 
 addBaselayers() {
     const layers = [
-        new osm({
-        visible: false,
-        legendImg: null
+        new OsmTileLayer({
+        visible: false
         }),
-        new eoc_litemap({
-        visible: true,
-        legendImg: null
+        new EocLitemap({
+        visible: true
         }),
-        new esri_world_imagery({
-        visible: false,
-        legendImg: null
+        new BlueMarbleTile({
+        visible: false
         })
     ];
 

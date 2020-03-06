@@ -284,7 +284,7 @@ export class RouteMapComponent implements OnInit {
       id: 'group_1',
       name: 'Test Group',
       layers: [OsmLayer, eocBasemap, eocBaseoverlay],
-      description: 'this is a group with esri_ocean_imagery_layer, OsmLayer, esri_Image_layer',
+      description: 'this is a group with OsmLayer, eocBasemap, eocBaseoverlay',
       actions: [{ title: 'download', icon: 'download-cloud', action: (group) => { console.log(group); } }]
     });
 

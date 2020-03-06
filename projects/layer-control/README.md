@@ -66,7 +66,7 @@ import { LayersService, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { IMapControls } from '@dlr-eoc/map-ol';
 
-import { osm, eoc_litemap, esri_world_imagery } from '@dlr-eoc/base-layers-raster';
+import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 ```
 
 ```

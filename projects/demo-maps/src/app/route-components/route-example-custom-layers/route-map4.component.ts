@@ -175,10 +175,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       bbox: [-180, -90, 180, 90]
     });
 
-
-
-    /* const esriLayer = new esri_world_imagery(); */
-
     const layersGroup1 = new LayerGroup({
       name: 'Group 1',
       filtertype: 'Layers',
