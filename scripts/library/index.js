@@ -93,15 +93,16 @@ function buildAll() {
  * replace versions of all dependencies in projects which have placeholders
  */
 function setVersionsOfProjects(useDistPath = false) {
-    let projectsPaths = utils_1.getProjects(ANGULARJSON).map(item => item.packagePath);
+    let projectsPaths = utils_1.getProjects(ANGULARJSON).filter(item => item.type === 'library').map(item => item.packagePath);
     if (useDistPath) {
         projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
     }
     projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
-    const errors = showProjectsAndDependencies(true);
+    console.log(projectsPaths);
+    const errors = showProjectsAndDependencies(true, false);
     if (!errors.length) {
         utils_1.setVersionsforDependencies(projectsPaths, MAINPACKAGE, placeholders);
-        console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json`);
+        console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json ${MAINPACKAGE.version}`);
     }
     else {
         console.log(`check main package.json version and projects for errors!`);
@@ -116,8 +117,12 @@ function listAllProjects() {
     }, '');
     console.log(list);
 }
-function showProjectsAndDependencies(silent = false, showPeer = false) {
-    const projects = [], projectsPeer = [], errors = [], projectsPaths = utils_1.getProjects(ANGULARJSON);
+function showProjectsAndDependencies(silent = false, showPeer = false, projectType) {
+    const projects = [], projectsPeer = [], errors = [];
+    let projectsPaths = utils_1.getProjects(ANGULARJSON);
+    if (projectType) {
+        projectsPaths = utils_1.getProjects(ANGULARJSON).filter(item => item.type === projectType);
+    }
     projectsPaths.forEach((p) => {
         const projectPackage = require(p.packagePath);
         const project = {
@@ -134,7 +139,7 @@ function showProjectsAndDependencies(silent = false, showPeer = false) {
             project.error = true;
             errors.push({ project: projectPackage.name, error });
         }
-        if (projectPackage.name.indexOf(packageScope) === -1) {
+        if (p.type === 'library' && projectPackage.name.indexOf(packageScope) === -1) {
             const error = `name of project: ${projectPackage.name} must be prefixed with the ${packageScope} namespace!`;
             if (!silent) {
                 console.error(error);

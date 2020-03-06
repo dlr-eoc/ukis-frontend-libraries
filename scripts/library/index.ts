@@ -9,6 +9,7 @@ import * as PATH from 'path';
 import * as FS from 'fs';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 import { IPackageJSON } from './npm-package.interface';
+import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
 
 
 import {
@@ -105,16 +106,17 @@ async function buildAll() {
  * replace versions of all dependencies in projects which have placeholders
  */
 function setVersionsOfProjects(useDistPath = false) {
-  let projectsPaths = getProjects(ANGULARJSON).map(item => item.packagePath);
+  let projectsPaths = getProjects(ANGULARJSON).filter(item => item.type === 'library').map(item => item.packagePath);
   if (useDistPath) {
     projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
   }
   projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
-  const errors = showProjectsAndDependencies(true);
+  console.log(projectsPaths);
+  const errors = showProjectsAndDependencies(true, false);
   if (!errors.length) {
     setVersionsforDependencies(projectsPaths, MAINPACKAGE, placeholders);
 
-    console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json`);
+    console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json ${MAINPACKAGE.version}`);
   } else {
     console.log(`check main package.json version and projects for errors!`);
     console.table(errors);
@@ -130,11 +132,15 @@ function listAllProjects() {
   console.log(list);
 }
 
-function showProjectsAndDependencies(silent = false, showPeer = false) {
+function showProjectsAndDependencies(silent = false, showPeer = false, projectType?: WorkspaceProject['projectType']) {
   const projects: Iproject[] = [],
     projectsPeer: Iproject[] = [],
-    errors: { project: string, error: string }[] = [],
-    projectsPaths = getProjects(ANGULARJSON);
+    errors: { project: string, error: string }[] = [];
+
+  let projectsPaths = getProjects(ANGULARJSON);
+  if (projectType) {
+    projectsPaths = getProjects(ANGULARJSON).filter(item => item.type === projectType);
+  }
 
   projectsPaths.forEach((p) => {
     const projectPackage = require(p.packagePath);
@@ -154,7 +160,7 @@ function showProjectsAndDependencies(silent = false, showPeer = false) {
       errors.push({ project: projectPackage.name, error });
     }
 
-    if (projectPackage.name.indexOf(packageScope) === -1) {
+    if (p.type === 'library' && projectPackage.name.indexOf(packageScope) === -1) {
       const error = `name of project: ${projectPackage.name} must be prefixed with the ${packageScope} namespace!`;
       if (!silent) {
         console.error(error);
