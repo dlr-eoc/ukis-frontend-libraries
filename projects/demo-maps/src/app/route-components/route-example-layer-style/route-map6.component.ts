@@ -81,34 +81,35 @@ export class RouteMap6Component implements OnInit, OnDestroy {
 
     const agrodeLayer = new WmsLayer({
       type: 'wms',
-      id: 'AGRODE_S2_EVI_P1Y',
-      url: 'https://geotest.eoc.dlr.de/eoc/land/wms?',
-      name: 'AGRODE',
+      id: 'S2_L3A_WASP_FRC_P1M',
+      url: 'https://{s}.geoservice.dlr.de/eoc/imagery/wms?',
+      name: 'S2_L3A_WASP_FRC_P1M',
+      subdomains: ['a', 'b', 'c', 'd'],
       filtertype: 'Layers',
-      attribution: '| <a href=\'https://agro-de.info/\'>AGRO-DE</a> Indices by <a href=\'http://www.dlr.de/eoc\'>DLR</a> licensed under <a rel=\'license\' href=\'http://creativecommons.org/licenses/by-sa/4.0/\'>CC-BY-SA</a>, Contains modified Copernicus Sentinel Data [__YEAR__]',
+      attribution: '| &copy; <a href="http://www.dlr.de" target="_blank">DLR</a> Contains modified Copernicus Sentinel Data [2020]',
       params: {
-        LAYERS: 'AGRODE_S2_EVI_P1Y',
+        LAYERS: 'S2_L3A_WASP_FRC_P1M',
         VERSION: '1.1.0',
         FORMAT: 'image/png',
       },
       styles: [
         {
           default: true,
-          legendURL: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
-          name: 'agrode-evi-max',
-          title: 'Max'
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:S2_L3A_WASP_FRC_P1M',
+          name: 's2-ndvi',
+          title: 'NDVI'
         },
         {
           default: false,
-          legendURL: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
-          name: 'agrode-evi-min',
-          title: 'Min'
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:S2_L3A_WASP_FRC_P1M',
+          name: 's2-infrared',
+          title: 'Infrared (8,4,3)'
         },
         {
           default: false,
-          legendURL: 'https://geotest.eoc.dlr.de/eoc/land/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:AGRODE_S2_EVI_P1Y',
-          name: 'agrode-evi-mean',
-          title: 'Mean'
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:S2_L3A_WASP_FRC_P1M',
+          name: 's2-l3a-wasp-frc',
+          title: 'Style for L3A MAJA/WASP Ground Reflectances'
         }
       ]
     });
