@@ -5,12 +5,14 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ukis-map-navigator',
-  templateUrl: './map-navigator.component.html'
+  templateUrl: './map-navigator.component.html',
+  styleUrls: ['./map-navigator.component.scss']
 })
 export class MapNavigatorComponent implements OnInit, OnDestroy {
   @Input('mapState') mapState?: MapStateService;
   mapstate: MapState;
   subscription: Subscription;
+  public inputStep = 0.01;
   constructor() { }
 
   ngOnInit() {

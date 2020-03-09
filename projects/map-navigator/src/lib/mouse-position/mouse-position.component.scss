@@ -1,9 +1,15 @@
 .mouse-position-control {
-  .input-wrapper {
-    max-height: 1rem;
-    position: relative;
-    white-space: nowrap;
-    display: inline-block;
-    margin-left: 1em;
+  margin-left: 0.2rem;
+  // padding-right: 0.4rem;
+  padding-bottom: 0.4rem;
+
+  .output-container {
+    line-height: 1.6rem;
+  }
+
+  .input-container {
+    & .clr-form-control:first-child {
+      margin-top: 0rem;
+    }
   }
 }

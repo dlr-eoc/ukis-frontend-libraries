@@ -1,17 +1,72 @@
 <div class="mouse-position-control">
-  <div>
-    {{x}}: {{toPrecision(mapCoordinates[0],precision)}}
-    {{y}}: {{toPrecision(mapCoordinates[1],precision)}}
-    Zoom: {{toPrecision(zoom,precision)}}
+
+  <div class="clr-row">
+    <div class="clr-col-7">
+      <div class="output-container">
+        <div><b>{{x}}</b> {{toPrecision(mapCoordinates[0],precision)}}</div>
+        <div><b>{{y}}</b> {{toPrecision(mapCoordinates[1],precision)}}</div>
+        <div><b>Zoom</b> {{toPrecision(zoom,precision)}}</div>
+      </div>
+    </div>
+    <div class="clr-col-5">
+      <div class="input-container">
+        <clr-select-container>
+          <label>Projection </label>
+          <select (change)="onChangeProj($event.target.value)" clrSelect>
+            <option *ngFor="let projection of projections" [value]="projection.value">{{projection.title}}</option>
+          </select>
+        </clr-select-container>
+
+        <clr-input-container>
+          <label>Precision </label>
+          <input type="number" min="0" max="12" [(ngModel)]="precision" name="precision" clrInput />
+        </clr-input-container>
+      </div>
+    </div>
   </div>
 
-  <div class="clr-select-wrapper">
-    <select class="clr-select" (change)="onChangeProj($event.target.value)" clrSelect>
+
+  <!-- <clr-select-container>
+    <label>Projection </label>
+    <select (change)="onChangeProj($event.target.value)" clrSelect>
       <option *ngFor="let projection of projections" [value]="projection.value">{{projection.title}}</option>
     </select>
-  </div>
-  <div class="input-wrapper">
+  </clr-select-container>
+
+  <form clrForm>
+    <clr-input-container>
+      <label>Precision </label>
+      <input type="number" min="0" max="12" [(ngModel)]="precision" name="precision" clrInput />
+    </clr-input-container>
+  </form>
+
+  <div>
+    {{x}}: {{toPrecision(mapCoordinates[0],precision)}}
+    <br>
+    {{y}}: {{toPrecision(mapCoordinates[1],precision)}}
+    <br>
+    Zoom: {{toPrecision(zoom,precision)}}
+  </div> -->
+
+
+
+
+
+
+  <!-- <div class="clr-select-wrapper">
+    <clr-select-container>
+      <select (change)="onChangeProj($event.target.value)" clrSelect>
+        <option *ngFor="let projection of projections" [value]="projection.value">{{projection.title}}</option>
+      </select>
+    </clr-select-container>
+  </div> -->
+  <!-- <div class="input-wrapper">
     <label>Precision </label>
-    <input type="number" min="0" max="12" [(ngModel)]="precision" clrInput />
-  </div>
+    <input type="number" min="0" max="12" [(ngModel)]="precision" name="precision" clrInput />
+  </div> -->
+
+
+
+
+
 </div>

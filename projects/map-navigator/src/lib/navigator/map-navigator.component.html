@@ -1,30 +1,18 @@
-<div class="body">
-  <table>
-    <tr>
-      <td>
-        <label for="latField" class="form-group col">Lat</label>
-      </td>
-      <td>
-        <input class="form-group" [(ngModel)]="mapstate.center.lat" type="number" step=".01" id="latField"
-          (ngModelChange)="stateChange($event)">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label for="lonField">Lon</label>
-      </td>
-      <td>
-        <input id="lonField" [(ngModel)]="mapstate.center.lon" type="number" step=".01"
-          (ngModelChange)="stateChange($event)">
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label for="zoomField">Zoom</label>
-      </td>
-      <td>
-        <input id="zoomField" type="number" [(ngModel)]="mapstate.zoom" (ngModelChange)="stateChange($event)">
-      </td>
-    </tr>
-  </table>
+<div>
+  <form clrForm class="input-container">
+    <clr-input-container>
+      <label>Lon</label>
+      <input clrInput type="number" [(ngModel)]="mapstate.center.lon" name="lon" [step]="inputStep"
+        (ngModelChange)="stateChange($event)">/>
+    </clr-input-container>
+    <clr-input-container>
+      <label>Lat</label>
+      <input clrInput type="number" [(ngModel)]="mapstate.center.lat" name="lat" [step]="inputStep"
+        (ngModelChange)="stateChange($event)">/>
+    </clr-input-container>
+    <clr-input-container>
+      <label>Zoom</label>
+      <input clrInput type="number" [(ngModel)]="mapstate.zoom" name="zoom" (ngModelChange)="stateChange($event)">/>
+    </clr-input-container>
+  </form>
 </div>

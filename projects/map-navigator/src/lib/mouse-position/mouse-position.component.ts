@@ -20,8 +20,8 @@ export class MousePositionComponent implements OnInit, OnDestroy {
   mapProjection: olProjection;
   public selectedProjection: string;
   public precision = 2;
-  x = 'lon';
-  y = 'lat';
+  x = 'Lon';
+  y = 'Lat';
   constructor(public mapSvc: MapOlService) { }
 
   ngOnInit() {
@@ -65,11 +65,11 @@ export class MousePositionComponent implements OnInit, OnDestroy {
 
   public onChangeProj(epsgcode) {
     if (epsgcode === 'EPSG:4326') {
-      this.x = 'lon';
-      this.y = 'lat';
+      this.x = 'Lon';
+      this.y = 'Lat';
     } else {
-      this.x = 'x';
-      this.y = 'y';
+      this.x = 'X';
+      this.y = 'Y';
     }
     const oldSelection = this.selectedProjection;
     this.selectedProjection = epsgcode;
