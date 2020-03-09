@@ -1,4 +1,4 @@
-# @dlr-eoc/map-navigator
+# @dlr-eoc/map-tools
 
 ### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
@@ -15,19 +15,19 @@ For examples [see demo maps route-example-events](../demo-maps/README.md)
 
 #### add the following dependencies to the package.json
 - "@dlr-eoc/map-ol"
-- "@dlr-eoc/map-navigator"
+- "@dlr-eoc/map-tools"
 
 #### add the following to the app.module.ts
 ```
 import { MapOlModule } from '@dlr-eoc/map-ol';
-import { MapNavigatorModule } from '@dlr-eoc/map-navigator';
+import { MapToolsModule } from '@dlr-eoc/map-tools';
 
 ...
 
  imports: [
     ...
     MapOlModule,
-    MapNavigatorModule
+    MapToolsModule
   ]
 ```
 ##Create simple map:
@@ -107,7 +107,7 @@ addBaselayers() {
 ```
 #### add the following to a route-view.component.ts
 ```
-import { IProjDef } from '@dlr-eoc/map-navigator'
+import { IProjDef } from '@dlr-eoc/map-tools'
 ```
 ```
 projections: IProjDef[];
@@ -169,16 +169,16 @@ This library was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Code scaffolding
 
-Run `ng generate component component-name --project map-navigator` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project map-navigator`.
-> Note: Don't forget to add `--project map-navigator` or else it will be added to the default project in your `angular.json` file. 
+Run `ng generate component component-name --project map-tools` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project map-tools`.
+> Note: Don't forget to add `--project map-tools` or else it will be added to the default project in your `angular.json` file. 
 
 ## Build
 
-Run `ng build map-navigator` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng build map-tools` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests
 
-Run `ng test map-navigator` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `ng test map-tools` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## Further help
 

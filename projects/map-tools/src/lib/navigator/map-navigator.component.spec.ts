@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MapNavigatorComponent } from './map-navigator.component';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapState } from '@dlr-eoc/services-map-state';
+import { ClarityModule } from '@clr/angular';
 
 
 describe('MapNavigatorComponent', () => {
@@ -13,7 +14,7 @@ describe('MapNavigatorComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [MapNavigatorComponent],
-      imports: [FormsModule],
+      imports: [FormsModule, ClarityModule],
       providers: [MapStateService]
     })
       .compileComponents();

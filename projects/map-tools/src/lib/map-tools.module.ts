@@ -15,4 +15,4 @@ import { ClarityModule } from '@clr/angular';
   ],
   exports: [MapNavigatorComponent, MousePositionComponent, ProjectionSwitchComponent]
 })
-export class MapNavigatorModule { }
+export class MapToolsModule { }

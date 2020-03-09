@@ -3,7 +3,7 @@ import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layer
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
-import { IProjDef } from '@dlr-eoc/map-navigator';
+import { IProjDef } from '@dlr-eoc/map-tools';
 
 
 @Component({

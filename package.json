@@ -76,8 +76,8 @@
     "@boundlessgeo/jsonix -services-ogc",
     "ogc-schemas -services-ogc",
     "w3c-schemas -services-ogc",
-    "ol -map-ol; map-navigator",
-    "proj4 -map-ol; map-navigator",
+    "ol -map-ol; map-tools",
+    "proj4 -map-ol; map-tools",
     "@webcomponents/custom-elements -@clr"
   ],
   "devDependencies": {

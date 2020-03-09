@@ -13,7 +13,7 @@ import { ProgressService } from './components/global-progress/progress.service';
 
 import { MapOlModule } from '@dlr-eoc/map-ol';
 import { LayerControlModule } from '@dlr-eoc/layer-control';
-import { MapNavigatorModule } from '@dlr-eoc/map-navigator';
+import { MapToolsModule } from '@dlr-eoc/map-tools';
 import { OwcControlModule } from '@dlr-eoc/owc-control';
 
 import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
@@ -47,7 +47,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     MapOlModule,
     LayerControlModule,
-    MapNavigatorModule,
+    MapToolsModule,
     OwcControlModule,
     HttpClientModule
   ],

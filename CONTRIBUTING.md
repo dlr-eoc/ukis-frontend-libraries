@@ -157,7 +157,7 @@ Example:
 
 ```
 ### Features
-* **@dlr-eoc/map-navigator:** SV: added projection switch. See mariss client for example.
+* **@dlr-eoc/map-tools:** SV: added projection switch. See mariss client for example.
 ### Bug Fixes
 * **@dlr-eoc/map-ol:** SV: adjusted setProjection method. It creates a new View instance with keeping previously set settings with exception resolution-related parameters. They are calculated automatically by the OL. After applying new projection all existing layers are triggered to redraw their tiles
 * **@dlr-eoc/map-ol:** SV: created getZoom method in the map-ol.service in order to get zoom value from actual olView instance. 

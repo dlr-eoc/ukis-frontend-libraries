@@ -20,7 +20,7 @@ The following angular libraries are included in this repository:
 - [cookie-alert](projects/cookie-alert/README.md)
 - [core-ui](projects/core-ui/README.md)
 - [layer-control](projects/layer-control/README.md)
-- [map-navigator](projects/map-navigator/README.md)
+- [map-tools](projects/map-tools/README.md)
 - [map-ol](projects/map-ol/README.md)
 - [owc-control](projects/owc-control/README.md)
 - [user-info](projects/user-info/README.md)

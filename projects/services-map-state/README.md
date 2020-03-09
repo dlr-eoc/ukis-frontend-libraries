@@ -19,13 +19,13 @@ ngOnInit(){
 
 For examples see:
 - [demo maps](../demo-maps/README.md)
-- [map-navigator](../owc-control/src/lib/owc-control.component.ts)
+- [map-tools](../owc-control/src/lib/owc-control.component.ts)
 - [map-ol](../layer-control/src/lib/base-layer-control/base-layer-control.component.ts)
 
 
 This module is used by components like:
 - @dlr-eoc/map-ol
-- @dlr-eoc/map-navigator
+- @dlr-eoc/map-tools
 - @dlr-eoc/layer-control
 - ...
 
