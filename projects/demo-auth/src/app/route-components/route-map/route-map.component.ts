@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService } from '@dlr-eoc/services-layers';
-import { osm, eoc_litemap } from '@dlr-eoc/base-layers-raster';
+import { OsmTileLayer, EocLitemapTile } from '@dlr-eoc/base-layers-raster';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
 import { HttpClient } from '@angular/common/http';
@@ -32,14 +32,12 @@ export class RouteMapComponent implements OnInit {
   }
 
   addlayers() {
-    const osmLayer = new osm({
-      visible: true,
-      legendImg: null
+    const osmLayer = new OsmTileLayer({
+      visible: true
     });
 
-    const eocLayer = new eoc_litemap({
-      visible: false,
-      legendImg: null
+    const eocLayer = new EocLitemapTile({
+      visible: false
     });
 
     if (!this.layerSvc.getLayerById('eoc_litemap')) {
