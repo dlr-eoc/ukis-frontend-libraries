@@ -47,6 +47,7 @@ import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
 import { DragBox } from 'ol/interaction';
+import { Subject } from 'rxjs';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -60,6 +61,8 @@ export class MapOlService {
   private viewOptions: olViewOptions;
   public EPSG: string;
   private hitTolerance = 0;
+  /** 'olProjection' */
+  public projectionChange = new Subject<string>();
   constructor() {
     this.map = new olMap({});
     this.view = new olView();
@@ -174,6 +177,7 @@ export class MapOlService {
     this.map.setView(tempview);
     this.map.set('controls', []);
     this.view = this.map.getView();
+    this.setProjection(this.EPSG);
     return {
       map: this.map,
       view: this.view
@@ -1325,7 +1329,7 @@ export class MapOlService {
           }
         });
       });
-
+      this.projectionChange.next(this.getProjection());
     } else {
       // console.log('projection code is undefined');
     }

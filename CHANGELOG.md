@@ -29,6 +29,7 @@
 ### Features
 * **@ukis/layer-control:** add css class to visible layer or group to style them.
 * **@ukis/core-ui:** new package which adds install support through schematics :) `ng add @ukis/core-ui`
+* **@ukis/map-ol:** MapOlService exports projectionChange (Subject)
 
 
 ### Bug Fixes

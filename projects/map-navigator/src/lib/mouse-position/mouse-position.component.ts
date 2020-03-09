@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { transform as olTransform, get as olGetProjection, projection as olProjection } from 'ol/proj';
+import { Subscription } from 'rxjs';
 
 interface ISelectProjection {
   title: string;
@@ -22,31 +23,41 @@ export class MousePositionComponent implements OnInit, OnDestroy {
   public precision = 2;
   x = 'Lon';
   y = 'Lat';
-  constructor(public mapSvc: MapOlService) { }
+  mapSub: Subscription;
+  constructor(public mapSvc: MapOlService) {
+    this.mapSub = this.mapSvc.projectionChange.subscribe(projLike => {
+      this.mapProjection = projLike;
+      this.setProjection(projLike);
+    });
+  }
 
   ngOnInit() {
-    this.mapProjection = this.mapSvc.getProjection();
-    const mapEPSG = this.mapProjection.getCode();
+    this.mapSvc.map.on('pointermove', this.mapMoveSubscription);
+    this.mapSvc.map.on('moveend', this.mapOnMoveend);
+  }
 
-    if (mapEPSG === 'EPSG:4326') {
+  /**
+   * projLike: 'olProjection'
+   */
+  setProjection(projLike: any) {
+    const epsg = projLike.getCode();
+    if (epsg === 'EPSG:4326') {
       this.projections = [
-        { title: this.mapProjection.getCode(), value: this.mapProjection.getCode() }
+        { title: epsg, value: epsg }
       ];
     } else {
       this.projections = [
         { title: 'EPSG:4326', value: 'EPSG:4326' },
-        { title: this.mapProjection.getCode(), value: this.mapProjection.getCode() }
+        { title: epsg, value: epsg }
       ];
     }
-
     this.selectedProjection = this.projections[0].value;
-    this.mapSvc.map.on('pointermove', this.mapMoveSubscription);
-    this.mapSvc.map.on('moveend', this.mapOnMoveend);
   }
 
   ngOnDestroy() {
     this.mapSvc.map.un('pointermove', this.mapMoveSubscription);
     this.mapSvc.map.un('moveend', this.mapOnMoveend);
+    this.mapSub.unsubscribe();
   }
 
   mapMoveSubscription = (evt) => {
