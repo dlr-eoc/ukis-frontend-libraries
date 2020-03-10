@@ -56,28 +56,40 @@ If your project depends on a package that is already listed in [frontend-librari
    This placeholder gets replaced with the versions of the main package.json on publish! [see scripts/library (setVersionsOfProjects)](scripts\library\index.ts)
  - list them in your project-specific ng-package.json as whitelistedNonPeerDependencies
 
+### 4. Check if dependencies are correct in the package.json
+- run `node scripts/library/index.js -c`
 
-
-### 4. Test your library
+### 5. Test your library
 - create specs and run `ng test < name >`
 
-### 5. Build your library locally
+### 6. Build your library locally
 - build lib `ng build < name >`
 
-### 4. update README and CHANGELOG
+### 7. update README and CHANGELOG
 - add your library to the README
 - add important/breaking changes to the CHANGELOG
 
-# How to publish a new version of all projects
-- make sure you have updated README and CHANGELOG and commit all your stuff.
-- run `git pull` to get the latest changes.
+
+# How to publish a new version for all projects
+The general workflow to create a new version:
+1. clone the repository and create a new branch for your feature specific changes based on master.
+
+2. push your branch `git push origin <branch>` and check if the github actions test and build correctly.
+- before you push the branch make sure you have updated CHANGELOG and README and commit all your stuff.
+- further you can test and build locally
 - run `node scripts/library/index.js -c` to check if all dependencies are present. (node_modules must be installed for this)
 - run `node scripts/library/index.js -t` to test all projects. (node_modules must be installed for this)
 - run `node scripts/library/index.js -b` to test all projects are building locally. (node_modules must be installed for this)
-- update the `version` parameter in the package.json in the root-directory (*not* in a single libraries package.json!) according to [Semantic Versioning](https://semver.org/)
-- create a tag with the same version e.g `git tag -a v2.1.0 -m "Version after Sprint CoastalX II"` and push it to origin `git push origin v2.1.0`
-- the jenkins-job `packaging-frontend-libraries` will discover the presence of a new tag. It will then build the packages and publish them with the new version to nexus.
-- if everything is ok and you have worked on a branch, then merge your changes back into the master.
+
+3. create a [pull request on the master](https://github.com/dlr-eoc/ukis-frontend-libraries/pulls)
+
+## Then the UKIS Team will publish a new version
+- based on the new master
+- update the `version` parameter in the package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
+  by running `npm version <newversion> -m "Version after Sprint CoastalX II"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
+- push the tags and your branch by running `git push origin <branch> —-tags`
+- then github actions will run the workflow [buildAndPublish](.github/workflows/buildAndPublish.yml) for the new tags to *test* , *build* and *publish* the angular projects as github packages.
+
 
 # Developing libraries and frontend side by side
 Sometimes we want to work on a frontend-project and a library simultaneously. Such a situation might occur when during the work on a project an error is detected in one of the libraries that takes some work to fix. 
