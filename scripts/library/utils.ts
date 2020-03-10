@@ -135,7 +135,7 @@ function replaceDependencies(dependencies: IDependencyMap, packageAllDeps, place
   return deps;
 }
 
-function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPackageJSON) {
+export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPackageJSON) {
   FS.readFile(path, 'utf8', (error, jsonString) => {
     if (error) {
       console.log(`Error read file ${path}:`, error);
@@ -157,6 +157,26 @@ function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPackageJSO
       console.log(`Error parsing JSON `, err);
     }
   });
+}
+
+export function createNpmrc(path: string, scope: string) {
+  const npmrc = `
+    ${scope}:registry=https://npm.pkg.github.com
+    loglevel = "verbose"`;
+
+  try {
+    if (path) {
+      FS.writeFile(path, npmrc, err => {
+        if (err) {
+          console.log('Error writing file', err);
+        } else {
+          console.log(`Update file ${path}`);
+        }
+      });
+    }
+  } catch (err) {
+    console.log(`Error parsing JSON `, err);
+  }
 }
 
 

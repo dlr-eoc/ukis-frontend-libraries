@@ -42,11 +42,14 @@ async function runCheckDeps() {
   }
 }
 
-function runTests(offset = 0, projects) {
+function runTests(offset = 0, projects, headless = false) {
   const project = projects[offset];
   const options = {
-    cliArgs: ['test', '--watch=false', project]
+    cliArgs: ['test', project, '--watch=false']
   };
+  if (headless) {
+    options.cliArgs.push('--browsers=ChromeHeadless');
+  }
 
   if (project) {
     console.log(consoleLogColors.Bright, `>>> run ng ${options.cliArgs.join(' ')}`);
@@ -55,16 +58,16 @@ function runTests(offset = 0, projects) {
       if (offset >= projects.length) {
         process.exit(0);
       } else {
-        runTests(offset, projects);
+        runTests(offset, projects, headless);
       }
     });
   }
 }
 
-function testAll() {
+function testAll(headless = false) {
   const testableProjects = getProjects(ANGULARJSON).filter(item => item.test && item.type === 'library');
   const flattdepsAndProjects = getSortedProjects(testableProjects, packageScope);
-  runTests(0, flattdepsAndProjects);
+  runTests(0, flattdepsAndProjects, headless);
 }
 
 function runBuilds(offset = 0, projects) {
@@ -111,16 +114,18 @@ function setVersionsOfProjects(useDistPath = false) {
     projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
   }
   projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
-  console.log(projectsPaths);
   const errors = showProjectsAndDependencies(true, false);
-  if (!errors.length) {
-    setVersionsforDependencies(projectsPaths, MAINPACKAGE, placeholders);
-
-    console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json ${MAINPACKAGE.version}`);
-  } else {
+  if (!projectsPaths.length) {
+    console.log(`there are no build projects, run npm run build first!`);
+  }
+  if (errors.length) {
     console.log(`check main package.json version and projects for errors!`);
     console.table(errors);
   }
+  if (!errors.length && projectsPaths.length) {
+    setVersionsforDependencies(projectsPaths, MAINPACKAGE, placeholders);
+    console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json ${MAINPACKAGE.version}`);
+}
 }
 
 function listAllProjects() {
@@ -133,9 +138,9 @@ function listAllProjects() {
 }
 
 function showProjectsAndDependencies(silent = false, showPeer = false, projectType?: WorkspaceProject['projectType']) {
-  const projects: Iproject[] = [],
-    projectsPeer: Iproject[] = [],
-    errors: { project: string, error: string }[] = [];
+  const projects: Iproject[] = [];
+  const projectsPeer: Iproject[] = [];
+  const errors: { project: string, error: string }[] = [];
 
   let projectsPaths = getProjects(ANGULARJSON);
   if (projectType) {
@@ -217,42 +222,41 @@ Options:
   -h, --help              Print this message.
   -l, --list              List all projects
   -d, --deps              List all projects in a table with dependencies
-  --depsPeer              List all projects with dependencies and peerDependencies
-  -s, --set               Set versions of all projects in projects folder
-  --setInDist             Set versions of all projects in dist folder
+      & --peer            List all projects with dependencies and peerDependencies
+  -s, --set               Set versions of all projects in dist folder
   -g, --graph             Show a dependency graph
   -c, --check             Check if all dependencies are listed in the package.json of the project
   -t, --test              Run ng test for all projects
+      & --headless        Run ng test for all projects with ChromeHeadless
   -b, --build             Run ng build fal all projects with toposort dependencies`);
 }
 
 export function run() {
   const args = process.argv.slice(2);
-  args.forEach((arg) => {
-    if (arg === '-h' || arg === '--help') {
+  if (args.includes('-h') || args.includes('--help')) {
       showHelp();
-    } else if (arg === '-l' || arg === '--list') {
+  } else if (args.includes('-l') || args.includes('--list')) {
       listAllProjects();
-    } else if (arg === '-d' || arg === '--deps') {
+  } else if ((args.includes('-d') || args.includes('--deps')) && args.includes('--peer')) {
+    showProjectsAndDependencies(false, true);
+  } else if (args.includes('-d') || args.includes('--deps')) {
       showProjectsAndDependencies();
-    } else if (arg === '--depsPeer') {
-      showProjectsAndDependencies(false, true);
-    } else if (arg === '-s' || arg === '--set') {
-      setVersionsOfProjects();
-    } else if (arg === '--setInDist') {
+  } else if (args.includes('-s') || args.includes('--set')) {
       setVersionsOfProjects(true);
-    } else if (arg === '-g' || arg === '--graph') {
+  } else if (args.includes('-g') || args.includes('--graph')) {
       showDependencyGraph();
-    } else if (arg === '-c' || arg === '--check') {
+  } else if (args.includes('-c') || args.includes('--check')) {
       runCheckDeps();
-    } else if (arg === '-t' || arg === '--test') {
+  } else if ((args.includes('-t') || args.includes('--test')) && args.includes('--headless')) {
+    testAll(true);
+  } else if (args.includes('-t') || args.includes('--test')) {
       testAll();
-    } else if (arg === '-b' || arg === '--build') {
+  } else if (args.includes('-b') || args.includes('--build')) {
       buildAll().catch(err => {
         console.log(err);
       });
     }
-  });
+
 
   if (!args.length) {
     showHelp();

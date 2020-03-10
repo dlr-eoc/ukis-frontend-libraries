@@ -91,6 +91,28 @@ function updatePackageJson(path, cb) {
         }
     });
 }
+exports.updatePackageJson = updatePackageJson;
+function createNpmrc(path, scope) {
+    const npmrc = `
+    ${scope}:registry=https://npm.pkg.github.com
+    loglevel = "verbose"`;
+    try {
+        if (path) {
+            FS.writeFile(path, npmrc, err => {
+                if (err) {
+                    console.log('Error writing file', err);
+                }
+                else {
+                    console.log(`Update file ${path}`);
+                }
+            });
+        }
+    }
+    catch (err) {
+        console.log(`Error parsing JSON `, err);
+    }
+}
+exports.createNpmrc = createNpmrc;
 function getProjects(angularJson) {
     const projects = [];
     Object.keys(angularJson.projects).forEach((p) => {
