@@ -1,0 +1,19 @@
+# This workflow will do a clean install of node dependencies, test and build the source code.
+name: Node.js Test and Build CI
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm ci
+      - run: npm run test -- --headless
+      - run: npm run build
