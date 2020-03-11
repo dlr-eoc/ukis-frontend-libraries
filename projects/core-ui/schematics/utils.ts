@@ -212,7 +212,12 @@ export function updateHtmlFile(path: string, startTagStr: string, endTagStr: str
       const chunks: Array<Buffer> = [];
       const output = new Writable({
         write(chunk: string | Buffer, encoding: string, callback: () => void): void {
-          chunks.push(typeof chunk === 'string' ? Buffer.from(chunk, encoding) : chunk);
+          // https://github.com/microsoft/TypeScript/issues/23155
+          if (typeof chunk === 'string') {
+            chunks.push(Buffer.from(chunk as any, encoding as any));
+          } else {
+            chunks.push(chunk);
+          }
           callback();
         },
         final(callback: (error?: Error) => void): void {
