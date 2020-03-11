@@ -2,7 +2,8 @@
 
 
 ### Breaking Changes
-* **change npm package scope from @ukis to @dlr-eoc:** this is breaking all imports and path mappings for @ukis!!! 
+* **change npm package scope from @ukis to @dlr-eoc:** this is breaking all imports and path mappings for @ukis!!!
+* **update dependencies** angular 9 and clarity 3
 
 * **@ukis/map-navigator:** is renamed to @ukis/map-tools
 
