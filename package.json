@@ -10,14 +10,6 @@
     "type": "git",
     "url": "https://github.com/dlr-eoc/ukis-frontend-libraries"
   },
-  "contributors": [
-    "Stefan, Keim",
-    "Mathias, Böck",
-    "Sergey, Voinov",
-    "Michael, Langbein",
-    "Rouven, Volkmann",
-    "Nico, Mandery"
-  ],
   "keywords": [
     "angular",
     "Clarity Design",
