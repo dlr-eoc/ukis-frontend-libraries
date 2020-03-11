@@ -84,10 +84,11 @@ The general workflow to create a new version:
 3. create a [pull request on the master](https://github.com/dlr-eoc/ukis-frontend-libraries/pulls)
 
 ## Then the UKIS Team will publish a new version
-- based on the new master
+- based on the new master create a release branch
 - update the `version` parameter in the package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Sprint CoastalX II"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
-- push the tags and your branch by running `git push origin <branch> —-tags`
+- merge the release branch in the master
+- push the tags and your branch by running `git push origin master —-tags`
 - then github actions will run the workflow [buildAndPublish](.github/workflows/buildAndPublish.yml) for the new tags to *test* , *build* and *publish* the angular projects as github packages.
 
 

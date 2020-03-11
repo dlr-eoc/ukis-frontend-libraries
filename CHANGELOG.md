@@ -1,4 +1,4 @@
-# [7.0.0](xxx) (2020-03-11) (Opensourcing)
+# [7.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.0.0) (2020-03-11) (Opensourcing)
 
 
 ### Breaking Changes
