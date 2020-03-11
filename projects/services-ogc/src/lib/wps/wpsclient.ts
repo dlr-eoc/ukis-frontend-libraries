@@ -268,4 +268,13 @@ export class WpsClient {
             delayedRetry(2000, 2)
         );
     }
+
+    /**
+     * Use this method if you want to set the caching mechanism on a client-level
+     * (as opposed to on a app-wide level)
+     * @param cache : Cache (@dlr-eoc/services-ogc)
+     */
+    setCache(cache: Cache): void {
+        this.cache = cache;
+    }
 }

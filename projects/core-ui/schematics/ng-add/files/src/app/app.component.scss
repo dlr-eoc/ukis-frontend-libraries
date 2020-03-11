@@ -5,6 +5,13 @@
     height: 90%;
   }
 
+  // openlayers requires its immediate parent to have a specified height: https://github.com/openlayers/openlayers/issues/10327
+  .content-area {
+    .map-view {
+      height: 100%;
+    }
+  }
+
   .ukis-footer {
     position: fixed;
     bottom: 0px;
