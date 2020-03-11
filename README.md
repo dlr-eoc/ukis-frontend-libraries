@@ -60,14 +60,15 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 2. Move into the directory
 - `cd project-<name>`
 
-3. Run the ng add command for the UKIS core-ui
+3. Add Clarity Angular
+`ng add @clr/angular`
 
+4. Run the ng add command for the UKIS core-ui
 - `ng add @dlr-eoc/core-ui [options]` 
   - --routing=boolean // set up your project with [routing](https://angular.io/guide/router)
-  - --addClr=boolean // runs ng add @clr/angular default=true
   - [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
 
-4. [see clarity get-started to use there ui components](https://clarity.design/documentation/get-started)
+5. [see clarity get-started to use there ui components](https://clarity.design/documentation/get-started)
 
 
 

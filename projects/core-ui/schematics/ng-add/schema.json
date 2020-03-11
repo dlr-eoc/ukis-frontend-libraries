@@ -14,7 +14,7 @@
     "addClr": {
       "description": "Runns external Schematic @clr/angular:ng-add",
       "type": "string",
-      "default": "true"
+      "default": "false"
     },
     "addFiles": {
       "description": "Add assets, styles and app files to your application.",

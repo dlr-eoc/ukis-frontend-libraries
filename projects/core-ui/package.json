@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "schematics": "./schematics/collection.json",
   "scripts": {
-    "build": "ng build core-ui",
+    "build": "npx ../../node_modules/.bin/ng build core-ui --tsConfig=./tsconfig.spec.json",
     "preschematics:test": "npm run build",
     "schematics:test": "npx ../../node_modules/.bin/jasmine ../../dist/core-ui/schematics/**/*_spec.js"
   },

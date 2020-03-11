@@ -3,6 +3,7 @@
 ## Stepps to add ukis to a angular project
 - ng new client-src --routing=true --style=scss
 - set registry in .npmrc
+- ng add @clr/angular // as long as externalSchematic resolve is working!!!
 - ng add @dlr-eoc/core-ui (--registry=https://npm.pkg.github.com)
 
 ## This is what the ng-add command is doing

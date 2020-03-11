@@ -30,6 +30,15 @@ export function ngAdd(options: UkisNgAddSchema): Rule {
    * therefore types of schema as string
    */
   const rules: Rule[] = [
+    /**
+     * externalSchematic not working with @angular-devkit ^8.3.20 (from 9.0.0 ???)
+     * https://github.com/angular/angular-cli/issues/17085
+     * maybe add @angular/clr to dependencies not peer..
+     *
+     * https://github.com/angular/angular-cli/issues/15250
+     * https://medium.com/@coco.boudard/hello-1ab084f63a1
+     * https://github.com/BottleRocketStudios/ng-momentum/issues/10
+     */
     (options.addClr === 'false') ? noop() : externalSchematic('@clr/angular', 'ng-add', options),
     (options.addFiles === 'false') ? noop() : ruleAddFiles(options),
     (options.updateFiles === 'false') ? noop() : ruleAddImportsInAppModule(options),
