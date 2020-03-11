@@ -17,7 +17,9 @@
 
 ### Changes
 
-* **@ukis/services-ogc:** made wps-datatypes available via public api.
+* **@ukis/services-ogc:** 
+ - made wps-datatypes available via public api.
+ - allowed to set caching mechanism on a client-wide level.
 
 * **@ukis/services-layers:** 
 - removeLayer(), removeLayerGroup(), removeLayerFromGroup(), removeLayerOrGroupById() - add optional force if layer was set to not removable
