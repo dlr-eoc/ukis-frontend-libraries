@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "npx ../../node_modules/.bin/tsc -p tsconfig.json -w"
+    "build": "npx ../../node_modules/.bin/tsc -p tsconfig.json -w",
+    "postinstall": "npm run build"
   },
   "main": "index.js",
   "private": true,

@@ -2,6 +2,7 @@
 
 # local files
 /TODO.md
+scripts/library/**/*.js
 
 
 # compiled output
