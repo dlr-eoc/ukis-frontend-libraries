@@ -38,11 +38,11 @@ export class AppComponent implements OnDestroy, OnInit {
   user: IUser;
 
   constructor(
-    private alertService: AlertService,
-    private progressService: ProgressService,
+    public alertService: AlertService,
+    public  progressService: ProgressService,
     public router: Router,
-    private userService: UserService,
-    private authService: BasicAuthService
+    public userService: UserService,
+    public  authService: BasicAuthService
   ) {
     this.init();
   }

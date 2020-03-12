@@ -203,18 +203,18 @@ describe('MapOlService', () => {
   });
 
   it('should be created', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     expect(service).toBeTruthy();
   });
 
   it('should create a map', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     expect(service.map.getLayers().getArray().length).toEqual(3);
   });
 
   it('should add/get layers to/from the map', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(rasterLayer, 'baselayers');
     service.addLayer(vectorLayer, 'layers');
@@ -227,7 +227,7 @@ describe('MapOlService', () => {
   });
 
   it('should not add a duplicate layer the map', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(rasterLayer, 'layers');
@@ -242,7 +242,7 @@ describe('MapOlService', () => {
   });
 
   it('should add a array of layers to aType', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(rasterLayer, 'layers');
@@ -257,7 +257,7 @@ describe('MapOlService', () => {
 
 
   it('should set (reset) a array of layers to aType', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
     service.setLayers([rasterLayer, imageLayer, vectorImageLayer], 'layers');
@@ -272,21 +272,21 @@ describe('MapOlService', () => {
 
 
   it('should get layers from a Type', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
     expect(service.getLayers('layers')[0]).toBe(vectorLayer);
   });
 
   it('should get layers by key from the map', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
     expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBe(vectorLayer);
   });
 
   it('should remove all layers from a Type', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
     service.removeAllLayers('layers');
@@ -294,7 +294,7 @@ describe('MapOlService', () => {
   });
 
   it('should remove a layer by key from a Type', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(rasterLayer, 'layers');
     service.addLayer(vectorLayer, 'layers');
@@ -303,7 +303,7 @@ describe('MapOlService', () => {
   });
 
   it('should update a layer by key from a Type', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
 
@@ -328,7 +328,7 @@ describe('MapOlService', () => {
 
   /** Test if ukis-layers are added to the map ----------------------------------------------------------------------- */
   it('should reset/add ukisLayers from a Type', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     const layers = [ukisvectorLayer, ukisRasterLayer, ukisCustomLayer];
     service.setUkisLayers(layers, 'Layers');
@@ -338,7 +338,7 @@ describe('MapOlService', () => {
   });
 
   it('should reset/add one ukisLayer from a Type', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     const layers = [ukisvectorLayer];
     service.setUkisLayers(layers, 'Layers');
@@ -356,7 +356,7 @@ describe('MapOlService', () => {
   });
 
   it('should update one ukisLayer from a Type - not remove the olLayer', () => {
-    const service: MapOlService = TestBed.get(MapOlService);
+    const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     const layers = [ukisvectorLayer];
     service.setUkisLayers(layers, 'Layers');

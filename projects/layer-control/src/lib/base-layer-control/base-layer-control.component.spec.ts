@@ -6,7 +6,7 @@ import { LayersService } from '@dlr-eoc/services-layers';
 
 
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { RasterLayer } from '@dlr-eoc/services-layers';
 import { LayerGroup } from '@dlr-eoc/services-layers';
@@ -15,6 +15,7 @@ import { LayerGroup } from '@dlr-eoc/services-layers';
  * this service extends the LayersService to mimik its behaviour. The getLayerGroups function is overwritten to
  * get test data for following tests.
  */
+@Injectable()
 class MockLayersService extends LayersService {
 
   getLayerGroups() {
@@ -60,8 +61,8 @@ describe('BaseLayerControlComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BaseLayerControlComponent);
     component = fixture.componentInstance;
-    layersSvc = new MockLayersService(); // TestBed.get(MockLayersService);
-    mapStateSvc = TestBed.get(MapStateService);
+    layersSvc = new MockLayersService(); // TestBed.inject(MockLayersService);
+    mapStateSvc = TestBed.inject(MapStateService);
 
     // as we use directive @Input and do not inject the service, we need to instantiate a service here.
     component.layersSvc = layersSvc;

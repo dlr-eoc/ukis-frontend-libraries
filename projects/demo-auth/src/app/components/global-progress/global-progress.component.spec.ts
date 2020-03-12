@@ -21,7 +21,7 @@ describe('GlobalProgressComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GlobalProgressComponent);
     component = fixture.componentInstance;
-    progressSvc = TestBed.get(ProgressService);
+    progressSvc = TestBed.inject(ProgressService);
     component.progress = {
       indeterminate: true
     } as IProgress;

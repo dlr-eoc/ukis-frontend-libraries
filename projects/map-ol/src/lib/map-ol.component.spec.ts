@@ -6,11 +6,13 @@ import { RasterLayer } from '@dlr-eoc/services-layers';
 import { LayerGroup } from '@dlr-eoc/services-layers';
 import { of } from 'rxjs';
 import { MapStateService } from '@dlr-eoc/services-map-state';
+import { Injectable } from '@angular/core';
 
 /**
  * this service extends the LayersService to mimik its behaviour. The getLayerGroups function is overwritten to
  * get test data for following tests.
  */
+@Injectable()
 class MockLayersService extends LayersService {
 
   getLayerGroups() {

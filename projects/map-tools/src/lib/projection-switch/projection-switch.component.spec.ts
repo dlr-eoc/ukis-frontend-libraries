@@ -23,7 +23,7 @@ describe('ProjectionSwitchComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ProjectionSwitchComponent);
     component = fixture.componentInstance;
-    mapSvc = TestBed.get(MapOlService);
+    mapSvc = TestBed.inject(MapOlService);
     component.mapSvc = mapSvc;
     component.projList = projList;
     fixture.detectChanges();

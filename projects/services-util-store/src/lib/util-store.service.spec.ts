@@ -10,7 +10,7 @@ describe('UtilStoreService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
 
-    service = TestBed.get(UtilStoreService); // new UtilStoreService();
+    service = TestBed.inject(UtilStoreService); // new UtilStoreService();
   });
 
   it('should have a runtime store', () => {

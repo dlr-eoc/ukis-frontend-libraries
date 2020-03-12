@@ -6,7 +6,7 @@ describe('OwcControlService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: OwcControlService = TestBed.get(OwcControlService);
+    const service: OwcControlService = TestBed.inject(OwcControlService);
     expect(service).toBeTruthy();
   });
 });

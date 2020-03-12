@@ -14,8 +14,8 @@ describe('WmtsClientService: reading data from server', () => {
   });
 
   it('#WmtsClientService: GetCapabilities should work', (done) => {
-    const http: HttpTestingController = TestBed.get(HttpTestingController);
-    const service: WmtsClientService = TestBed.get(WmtsClientService);
+    const http: HttpTestingController = TestBed.inject(HttpTestingController);
+    const service: WmtsClientService = TestBed.inject(WmtsClientService);
     const url = 'https://theserver.com';
 
     service.getCapabilities(url).subscribe((capabilities: object) => {

@@ -115,7 +115,6 @@
     "terser -owc services",
     "jasmine -schematics",
     "ng-packagr -lib build??",
-    "tsickle -lib build no ivy --prod",
     "@angular-devkit/build-ng-packagr -lib build??",
     "tslib -lib build??",
     "node-sass -lib build??",

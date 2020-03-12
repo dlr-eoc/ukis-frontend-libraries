@@ -6,13 +6,13 @@ describe('MapStateService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: MapStateService = TestBed.get(MapStateService);
+    const service: MapStateService = TestBed.inject(MapStateService);
     expect(service).toBeTruthy();
   });
 
 
   it('should get the MapState', async(() => {
-    const service: MapStateService = TestBed.get(MapStateService);
+    const service: MapStateService = TestBed.inject(MapStateService);
     service.getMapState().subscribe((state) => {
       expect(state.center.lat).toEqual(0);
       expect(state.center.lon).toEqual(0);
@@ -22,7 +22,7 @@ describe('MapStateService', () => {
 
 
   it('should set the MapState', async(() => {
-    const service: MapStateService = TestBed.get(MapStateService);
+    const service: MapStateService = TestBed.inject(MapStateService);
     const state = new MapState(4, { lat: 48, lon: 11 });
 
     service.setMapState(state);
@@ -35,7 +35,7 @@ describe('MapStateService', () => {
 
 
   it('should get the current Extent', async(() => {
-    const service: MapStateService = TestBed.get(MapStateService);
+    const service: MapStateService = TestBed.inject(MapStateService);
 
     service.getExtent().subscribe((ext) => {
       expect(ext[0]).toEqual(-180);
@@ -46,7 +46,7 @@ describe('MapStateService', () => {
   }));
 
   it('should set the current Extent', async(() => {
-    const service: MapStateService = TestBed.get(MapStateService);
+    const service: MapStateService = TestBed.inject(MapStateService);
     const extent: TGeoExtent = [-10, -10, 10, 10];
 
     service.setExtent(extent);

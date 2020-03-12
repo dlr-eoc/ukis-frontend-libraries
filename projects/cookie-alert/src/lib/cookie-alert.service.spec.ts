@@ -21,7 +21,7 @@ describe('CookieAlertService', () => {
   });
 
   it('should be created', () => {
-    const service: CookieAlertService = TestBed.get(CookieAlertService);
+    const service: CookieAlertService = TestBed.inject(CookieAlertService);
     expect(service).toBeTruthy();
   });
 

@@ -27,8 +27,8 @@ describe('LayerentryGroupComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LayerentryGroupComponent);
     component = fixture.componentInstance;
-    layersSvc = TestBed.get(LayersService);
-    mapStateSvc = TestBed.get(MapStateService);
+    layersSvc = TestBed.inject(LayersService);
+    mapStateSvc = TestBed.inject(MapStateService);
 
     const layer = new Layer({
       type: 'wms',

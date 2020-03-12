@@ -220,9 +220,9 @@ describe(`Testing polling funcitonality`, () => {
   }, 10000);
 
   it('#execAsync should work with multiple requests in parallel', (done) => {
-    const mockHttpClient = TestBed.get(HttpClient);
+    const mockHttpClient = TestBed.inject(HttpClient);
     const wpsClient: WpsClient = new WpsClient('1.0.0', mockHttpClient);
-    const httpMockServer: HttpTestingController = TestBed.get(HttpTestingController);
+    const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
 
     const url1 = 'wpsserver1.com';
     const pId1 = 'p1';

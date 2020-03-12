@@ -24,8 +24,7 @@ import { BasicAuthService } from './auth/basic-auth.service';
 import { HttpAuthInterceptor } from './auth/http-auth.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from './auth/http-error.interceptor';
-
-import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
+import { CookieAlertModule } from '@dlr-eoc/cookie-alert';
 
 
 
@@ -37,8 +36,7 @@ import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
     GlobalProgressComponent,
     RouteMapComponent,
     RouteLoginComponent,
-    RouteUserComponent,
-    CookieAlertComponent
+    RouteUserComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +45,8 @@ import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
     BrowserAnimationsModule,
     MapOlModule,
     LayerControlModule,
-    UserInfoModule
+    UserInfoModule,
+    CookieAlertModule
   ],
   providers: [
     AlertService, ProgressService,

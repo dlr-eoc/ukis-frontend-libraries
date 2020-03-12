@@ -40,11 +40,11 @@ export class RouteMapComponent implements OnInit {
       visible: false
     });
 
-    if (!this.layerSvc.getLayerById('eoc_litemap')) {
+    if (!this.layerSvc.getLayerById(eocLayer.id)) {
       this.layerSvc.addLayer(eocLayer, 'Layers');
     }
 
-    if (!this.layerSvc.getLayerById('osm')) {
+    if (!this.layerSvc.getLayerById(osmLayer.id)) {
       this.layerSvc.addLayer(osmLayer, 'Baselayers');
     }
   }

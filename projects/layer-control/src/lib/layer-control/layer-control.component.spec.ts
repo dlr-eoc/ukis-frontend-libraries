@@ -30,8 +30,8 @@ describe('LayerControlComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LayerControlComponent);
     component = fixture.componentInstance;
-    layersSvc = TestBed.get(LayersService);
-    mapStateSvc = TestBed.get(MapStateService);
+    layersSvc = TestBed.inject(LayersService);
+    mapStateSvc = TestBed.inject(MapStateService);
 
     component.layersSvc = layersSvc;
     component.mapStateSvc = mapStateSvc;

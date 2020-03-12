@@ -6,7 +6,7 @@ describe('ProjectionSwitchService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ProjectionSwitchService = TestBed.get(ProjectionSwitchService);
+    const service: ProjectionSwitchService = TestBed.inject(ProjectionSwitchService);
     expect(service).toBeTruthy();
   });
 });

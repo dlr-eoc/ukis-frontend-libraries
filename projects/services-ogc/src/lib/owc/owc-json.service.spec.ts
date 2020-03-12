@@ -27,7 +27,7 @@ describe('OwcJsonService: reading data from owc', () => {
 
 
   it('#checkContext should check if the json is a ows context', () => {
-    const service: OwcJsonService = TestBed.get(OwcJsonService);
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const context: IOwsContext = {
       id: 'test context',
       type: 'FeatureCollection',
@@ -47,7 +47,7 @@ describe('OwcJsonService: reading data from owc', () => {
 
   // @TODO: this method seems to be a stub.
   // it('#layerGroupFromResource should properly create a LayerGroup-configuration', () => {
-  //   const service: OwcJsonService = TestBed.get(OwcJsonService);
+  //   const service: OwcJsonService = TestBed.inject(OwcJsonService);
   //   for(const context of allTestContexts) {
   //     for(const resource of service.getResources(context)){
 
@@ -70,7 +70,7 @@ describe('OwcJsonService: reading data from owc', () => {
 
 
   it('#createRasterLayerFromOffering should return an IRasterLayerOptions instance', (done) => {
-    const service: OwcJsonService = TestBed.get(OwcJsonService);
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
     for (const context of allTestContexts) {
       console.log('======= context: ', context.id);
@@ -112,13 +112,13 @@ describe('OwcJsonService: reading data from owc', () => {
   }, 3000);
 
   it('#createRasterLayerFromOffering should work properly with WMTS', () => {
-    const service: OwcJsonService = TestBed.get(OwcJsonService);
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
   });
 
 
   it('#createVectorLayerFromOffering should return an IVectorLayerOptions instance', (done) => {
-    const service: OwcJsonService = TestBed.get(OwcJsonService);
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
     let foundVectorLayer = false;
 
@@ -162,7 +162,7 @@ describe('OwcJsonService: reading data from owc', () => {
 
 
   it('#getLegendUrl should return a proper url', () => {
-    const service: OwcJsonService = TestBed.get(OwcJsonService);
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
     for (const context of allTestContexts) {
       console.log('======= context: ', context.id);
@@ -196,8 +196,8 @@ describe('OwcJsonService: writing data into owc', () => {
   });
 
   it('#getLayers should properly restore a selection of layers from owc format created with #generateOwsContextFrom', (done) => {
-    const service: OwcJsonService = TestBed.get(OwcJsonService);
-    const layersService: LayersService = TestBed.get(LayersService);
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const layersService: LayersService = TestBed.inject(LayersService);
     const osmLayer = new EocLitemap({
       visible: true,
       legendImg: null
@@ -213,7 +213,7 @@ describe('OwcJsonService: writing data into owc', () => {
   }, 3000);
 
   it('#generateOwcContextFrom should properly store and restore a geojson-layer', (done) => {
-    const service: OwcJsonService = TestBed.get(OwcJsonService);
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
     // creating test-layer
     interface Props {

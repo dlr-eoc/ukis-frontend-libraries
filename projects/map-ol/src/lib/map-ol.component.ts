@@ -47,7 +47,7 @@ export interface IMapControls {
   encapsulation: ViewEncapsulation.None
 })
 export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
-  @ViewChild('mapDiv', { static: false }) mapDivView: ElementRef;
+  @ViewChild('mapDiv') mapDivView: ElementRef;
 
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapStateSvc: MapStateService;
