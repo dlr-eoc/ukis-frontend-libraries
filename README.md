@@ -45,7 +45,15 @@ The following angular libraries are included in this repository:
 
 2. Authenticate by logging in to GitHub npm Package Registry, use the npm login
 
+`npm login --registry=https://npm.pkg.github.com` and use your personal access token as Password
+
 3. Create a [.npmrc file](https://docs.npmjs.com/configuring-npm/npmrc.html) in your folder or use --registry=https://npm.pkg.github.com on npm install
+
+```
+// .npmrc
+registry=https://registry.npmjs.org/
+@dlr-eoc:registry=https://npm.pkg.github.com/dlr-eoc
+```
 
 for more information see [configuring-npm-for-use-with-github-packages](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages)
 
