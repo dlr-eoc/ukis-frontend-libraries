@@ -76,18 +76,17 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 
 ## Team
 
-The UKIS team works hard to create libraries that simplify the creation of webbased geo-applications.
-Our team includes (in alphabetical order):
+The UKIS team creates and adapts libraries which simplify the creation of web-based applications. Our team includes (in alphabetical order):
 
- - Mathias Böck
- - Monika Friedemann
- - Stefan Keim
- - Michael Langbein
- - Nico Mandery
- - Martin Mühlbauer
- - Rouven Volkmann
- - Torsten Riedlinger
- - Sergey Voinov
+ - Böck, Mathias 
+ - Friedemann, Monika 
+ - Keim, Stefan 
+ - Langbein, Michael 
+ - Mandery, Nico 
+ - Mühlbauer Martin 
+ - Volkmann, Rouven 
+ - Riedlinger, Torsten 
+ - Voinov, Sergey 
 
 
 
