@@ -1,16 +1,18 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService } from '@dlr-eoc/services-layers';
-import { OsmTileLayer, EocLitemapTile } from '@dlr-eoc/base-layers-raster';
+import { OsmTileLayer, HillshadeTile } from '@dlr-eoc/base-layers-raster';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MapOlService } from '@dlr-eoc/map-ol';
 
 
 @Component({
   selector: 'app-route-map',
   templateUrl: './route-map.component.html',
-  styleUrls: ['./route-map.component.scss']
+  styleUrls: ['./route-map.component.scss'],
+  providers: [MapOlService]
 })
 export class RouteMapComponent implements OnInit {
   @HostBinding('class') class = 'content-container';
@@ -36,7 +38,7 @@ export class RouteMapComponent implements OnInit {
       visible: true
     });
 
-    const eocLayer = new EocLitemapTile({
+    const eocLayer = new HillshadeTile({
       visible: false
     });
 
