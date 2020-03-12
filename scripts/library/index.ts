@@ -74,7 +74,7 @@ function runBuilds(offset = 0, projects) {
   const project = projects[offset];
 
   const options = {
-    cliArgs: ['build', '--watch=false', project]
+    cliArgs: ['build', '--prod=true', '--watch=false', project]
   };
 
   if (project) {
@@ -125,7 +125,7 @@ function setVersionsOfProjects(useDistPath = false) {
   if (!errors.length && projectsPaths.length) {
     setVersionsforDependencies(projectsPaths, MAINPACKAGE, placeholders);
     console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json ${MAINPACKAGE.version}`);
-}
+  }
 }
 
 function listAllProjects() {
@@ -234,28 +234,28 @@ Options:
 export function run() {
   const args = process.argv.slice(2);
   if (args.includes('-h') || args.includes('--help')) {
-      showHelp();
+    showHelp();
   } else if (args.includes('-l') || args.includes('--list')) {
-      listAllProjects();
+    listAllProjects();
   } else if ((args.includes('-d') || args.includes('--deps')) && args.includes('--peer')) {
     showProjectsAndDependencies(false, true);
   } else if (args.includes('-d') || args.includes('--deps')) {
-      showProjectsAndDependencies();
+    showProjectsAndDependencies();
   } else if (args.includes('-s') || args.includes('--set')) {
-      setVersionsOfProjects(true);
+    setVersionsOfProjects(true);
   } else if (args.includes('-g') || args.includes('--graph')) {
-      showDependencyGraph();
+    showDependencyGraph();
   } else if (args.includes('-c') || args.includes('--check')) {
-      runCheckDeps();
+    runCheckDeps();
   } else if ((args.includes('-t') || args.includes('--test')) && args.includes('--headless')) {
     testAll(true);
   } else if (args.includes('-t') || args.includes('--test')) {
-      testAll();
+    testAll();
   } else if (args.includes('-b') || args.includes('--build')) {
-      buildAll().catch(err => {
-        console.log(err);
-      });
-    }
+    buildAll().catch(err => {
+      console.log(err);
+    });
+  }
 
 
   if (!args.length) {
