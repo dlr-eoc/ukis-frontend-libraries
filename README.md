@@ -87,7 +87,8 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 The UKIS team creates and adapts libraries which simplify the creation of web-based applications. Our team includes (in alphabetical order):
 
  - Böck, Mathias 
- - Friedemann, Monika 
+ - Friedemann, Monika
+ - Jaspersen, Verena
  - Keim, Stefan 
  - Langbein, Michael 
  - Mandery, Nico 
