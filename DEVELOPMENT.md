@@ -86,7 +86,7 @@ The general workflow to create a new version:
 
 2. push your branch `git push origin <branch>` and check if the github actions test and build correctly.
 - before you push the branch make sure you have updated CHANGELOG and README and commit all your stuff.
-- further you can test and build locally
+#### further you can test and build locally
 - run `node scripts/library/index.js -c` to check if all dependencies are present. (node_modules must be installed for this)
 - run `node scripts/library/index.js -t` to test all projects. (node_modules must be installed for this)
 - run `node scripts/library/index.js -b` to test all projects are building locally. (node_modules must be installed for this)
