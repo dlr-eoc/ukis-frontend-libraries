@@ -135,6 +135,12 @@ Please consider the following guidelines when formulating your commit message:
     * **refactor**: A code change that neither fixes a bug nor adds a feature [refactoring](https://github.com/dlr-eoc/ukis-frontend-libraries/labels/refactoring)
     * **docs**: Documentation only changes [documentation](https://github.com/dlr-eoc/ukis-frontend-libraries/labels/documentation)
     * **BREAKING CHANGE**: A code change that introduces a breaking API change [BREAKING CHANGE](https://github.com/dlr-eoc/ukis-frontend-libraries/labels/BREAKING%20CHANGE)
+
+
+    * **test**: Adding missing tests or correcting existing tests
+    * **perf**: A code change that improves performance
+    * **build**: Changes that affect the build system or external dependencies
+    * **ci**: Changes to our CI configuration files and scripts
     
  - a message should mention what modules/projects have been changed
  - a message should briefly mention the motivation for the change
