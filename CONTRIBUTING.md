@@ -129,15 +129,12 @@ Please consider the following guidelines when formulating your commit message:
 
  - a message should be concise and descriptive. 
  - a message should describe what *kind* of change has been made, like this: 
-    * **build**: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
-    * **ci**: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
-    * **docs**: Documentation only changes
-    * **feat**: A new feature
-    * **fix**: A bug fix
-    * **perf**: A code change that improves performance
-    * **refactor**: A code change that neither fixes a bug nor adds a feature
-    * **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-    * **test**: Adding missing tests or correcting existing tests
+ 
+    * **fix**: A bug fix [bug](https://github.com/dlr-eoc/ukis-frontend-libraries/labels/bug)
+    * **feat**: A new feature [enhancement](https://github.com/dlr-eoc/ukis-frontend-libraries/labels/enhancement)
+    * **refactor**: A code change that neither fixes a bug nor adds a feature [refactoring](https://github.com/dlr-eoc/ukis-frontend-libraries/labels/refactoring)
+    * **docs**: Documentation only changes [documentation](https://github.com/dlr-eoc/ukis-frontend-libraries/labels/documentation)
+    
  - a message should mention what modules/projects have been changed
  - a message should briefly mention the motivation for the change
 
