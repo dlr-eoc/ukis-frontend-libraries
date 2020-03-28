@@ -10,7 +10,7 @@ import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
 import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 = WPS_1_0_0_Factory.WPS_1_0_0;
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
-import { Jsonix } from '@boundlessgeo/jsonix';
+import { Jsonix } from '@michaellangbein/jsonix';
 import { WpsData, WpsDataDescription, WpsVerion, isWpsState } from './wps_datatypes';
 
 class MyXhrFactory extends XhrFactory {

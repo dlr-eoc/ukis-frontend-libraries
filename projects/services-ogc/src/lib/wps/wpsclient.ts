@@ -11,7 +11,7 @@ import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
 import { pollUntil, delayedRetry } from './utils/polling';
 import { Injectable, Inject } from '@angular/core';
-import { Jsonix } from '@boundlessgeo/jsonix';
+import { Jsonix } from '@michaellangbein/jsonix';
 import { Cache, FakeCache } from './cache';
 
 

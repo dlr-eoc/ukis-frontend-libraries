@@ -17,6 +17,6 @@
     "ol",
     "w3c-schemas",
     "ogc-schemas",
-    "@boundlessgeo/jsonix"
+    "@michaellangbein/jsonix"
   ]
 }
