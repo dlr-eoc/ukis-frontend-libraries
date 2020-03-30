@@ -1,14 +1,20 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapOlService } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
-import { Heatmap as olHeatmapLayer, Vector as olVectorLayer } from 'ol/layer';
+import { Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer } from 'ol/layer';
 import olVectorSource from 'ol/source/Vector';
-import { GeoJSON as olGeoJSON, KML as olKML } from 'ol/format';
+import olCluster from 'ol/source/Cluster';
+import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON } from 'ol/format';
 import olImageWMS from 'ol/source/ImageWMS';
 import olImageLayer from 'ol/layer/Image';
+
+import olVectorTileLayer from 'ol/layer/VectorTile';
+import olVectorTileSource from 'ol/source/VectorTile';
+import olMVT from 'ol/format/MVT';
+import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 
 @Component({
   selector: 'app-route-map4',
@@ -19,7 +25,8 @@ import olImageLayer from 'ol/layer/Image';
 })
 export class RouteMap4Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';
-  controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
+  controls: IMapControls;
+  test = [];
   constructor(
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
@@ -27,7 +34,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
     this.controls = {
       attribution: true,
-      scaleLine: true
+      scaleLine: true,
+      overviewMap: true
     };
   }
 
@@ -47,7 +55,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       features: [
         {
           type: 'Feature',
-          properties: {},
+          properties: { pid: 1 },
           geometry: {
             type: 'Point',
             coordinates: [
@@ -58,7 +66,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: { pid: 2 },
           geometry: {
             type: 'Point',
             coordinates: [
@@ -69,7 +77,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: { pid: 3 },
           geometry: {
             type: 'Point',
             coordinates: [
@@ -80,7 +88,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: { pid: 4 },
           geometry: {
             type: 'Point',
             coordinates: [
@@ -91,7 +99,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: { pid: 5 },
           geometry: {
             type: 'Point',
             coordinates: [
@@ -102,7 +110,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: { pid: 6 },
           geometry: {
             type: 'Point',
             coordinates: [
@@ -113,7 +121,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: { pid: 7 },
           geometry: {
             type: 'Point',
             coordinates: [
@@ -124,7 +132,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         },
         {
           type: 'Feature',
-          properties: {},
+          properties: { pid: 8 },
           geometry: {
             type: 'Point',
             coordinates: [
@@ -136,10 +144,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       ]
     };
 
-    const customLayer = new CustomLayer({
+    const customHeatmapLayer = new CustomLayer({
       id: 'heatmap_layer',
       name: 'Heatmap Layer',
-      type: 'custom',
       custom_layer: new olHeatmapLayer({
         source: new olVectorSource({
           features: this.mapSvc.geoJsonToFeatures(data),
@@ -149,19 +156,19 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: false
     });
 
-    const vectorLayer = new VectorLayer({
+    const vectorPointsForHeatmap = new VectorLayer({
       id: 'Vector Layer1',
       name: 'Vector Layer',
       type: 'geojson',
       data,
-      visible: false
+      visible: false,
+      popup: true
     });
 
 
-    const customVectorLayer = new CustomLayer({
-      id: 'custom Vector Layer',
-      name: 'Custom Layer KML',
-      type: 'custom',
+    const kmlLayer = new CustomLayer({
+      id: 'Layer_KML',
+      name: 'KML - VectorLayer',
       popup: true,
       custom_layer: new olVectorLayer({
         source: new olVectorSource({
@@ -175,17 +182,86 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       bbox: [-180, -90, 180, 90]
     });
 
+    const topoJsonLayer = new CustomLayer({
+      id: 'topo_json_layer',
+      name: 'Topo Json - VectorImageLayer',
+      popup: true,
+      custom_layer: new olVectorImageLayer({
+        source: new olVectorSource({
+          url: 'https://openlayers.org/en/latest/examples/data/topojson/world-110m.json',
+          format: new olTopoJSON({
+            // don't want to render the full world polygon (stored as 'land' layer),
+            // which repeats all countries
+            layers: ['countries']
+          }),
+          overlaps: false
+        })
+      }),
+      visible: false,
+    });
+
+    const clusterLayer = new CustomLayer({
+      id: 'clusterLayer',
+      name: 'cluster Layer - VectorLayer',
+      visible: false,
+      popup: true,
+      custom_layer: new olVectorLayer({
+        source: new olCluster({
+          distance: 10,
+          source: new olVectorSource({
+            features: this.mapSvc.geoJsonToFeatures(data)
+          })
+        })
+      }),
+    });
+
+
+    const vectorTile = new CustomLayer({
+      id: 'vectorTile',
+      name: 'VectorTileLayer',
+      visible: false,
+      popup: true,
+      custom_layer: new olVectorTileLayer({
+        source: new olVectorTileSource({
+          format: new olMVT(),
+          // url: '.../VectorTileServer/tile/{z}/{y}/{x}.pbf'
+          /** EOC Geoservice TMS
+           * https://github.com/openlayers/openlayers/issues/3923
+           */
+          url: 'https://tiles.geoservice.dlr.de/service/tms/1.0.0/eoc:litemap@EPSG%3A3857@pbf/{z}/{x}/{-y}.pbf'
+          // url: 'https://ahocevar.com/geoserver/gwc/service/tms/1.0.0/ne:ne_10m_admin_0_countries@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
+        }),
+        style: (feature, resolution) => {
+          const mvtlayer = feature.get('layer');
+          if (!this.test.includes(mvtlayer)) {
+            this.test.push(mvtlayer);
+          }
+          // && layer === 'ne_50m_land'  // ne_50m_admin_0_countries // ne_10m_admin_0_countries
+          if (mvtlayer && (mvtlayer === 'ne_50m_land' || mvtlayer === 'ne_50m_admin_0_countries' || mvtlayer === 'ne_10m_admin_0_countries' )) {
+            return new olStyle({
+              stroke: new olStroke({
+                color: 'gray',
+                width: 1
+              }),
+              fill: new olFill({
+                color: 'rgba(20,20,20,0.9)'
+              })
+            });
+          }
+        }
+      }),
+    });
+
     const layersGroup1 = new LayerGroup({
-      name: 'Group 1',
+      name: 'Heatmap Group',
       filtertype: 'Layers',
       id: 'group1',
-      layers: [customLayer, vectorLayer]
+      layers: [customHeatmapLayer, vectorPointsForHeatmap]
     });
 
     const imageWmsLayer = new CustomLayer({
       id: 'image_wms',
       name: 'Image WMS',
-      type: 'custom',
       custom_layer: new olImageLayer({
         source: new olImageWMS({
           url: 'https://ahocevar.com/geoserver/wms',
@@ -194,10 +270,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         })
       }),
       visible: false,
+      popup: true,
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const layers = [osmLayer1, layersGroup1, imageWmsLayer, customVectorLayer];
+    const layers = [osmLayer1, layersGroup1, clusterLayer, vectorTile, imageWmsLayer, kmlLayer, topoJsonLayer];
 
     layers.forEach(layer => {
       if (layer instanceof Layer) {
@@ -219,7 +296,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       features: [
         {
           type: 'Feature',
-          properties: {},
+          properties: { name: 'Feature 1 - Polygon' },
           geometry: {
             type: 'Polygon',
             coordinates: [
@@ -253,10 +330,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
     const testLayer = new VectorLayer({
       id: 'Vector Layer2',
-      name: 'Vector Layer',
+      name: 'async add Layer',
       type: 'geojson',
       data,
-      visible: false
+      visible: false,
+      popup: true
     });
 
     setTimeout(() => {
