@@ -398,11 +398,13 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         tempControls.push(fullScreen);
       }
       if (this.controls.overviewMap) {
+        const icon = document.createElement('spawn');
+        icon.innerHTML = '<clr-icon shape="world"></clr-icon>';
         const overviewMap = new olOverviewMap({
           layers: [new olTileLayer({
             source: new olOSM()
           })],
-          label: '\uD83C\uDF10'
+          label: icon
         });
         tempControls.push(overviewMap);
       }
