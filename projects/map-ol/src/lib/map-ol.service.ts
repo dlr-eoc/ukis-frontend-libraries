@@ -11,10 +11,14 @@ import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
 
+import olBaseTileLayer from 'ol/layer/BaseTile';
+import olBaseVectorLayer from 'ol/layer/BaseVector';
+import olBaseImageLayer from 'ol/layer/BaseImage';
+
 import olTileLayer from 'ol/layer/Tile';
 import olVectorLayer from 'ol/layer/Vector';
-import olImageLayer from 'ol/layer/Image';
-import olVectorTileLayer from 'ol/layer/VectorTile';
+import olVectorTile from 'ol/source/VectorTile';
+
 
 import olXYZ from 'ol/source/XYZ';
 import { Options as olXYZOptions } from 'ol/source/XYZ';
@@ -876,17 +880,16 @@ export class MapOlService {
   public vector_on_click(evt) {
     const FeaturesAtPixel = [];
     this.map.forEachFeatureAtPixel(evt.pixel, (featureLayer, layer) => {
-      // console.log(layer);
       // console.log(evt, _layer, layer, layer.get('type'))
       FeaturesAtPixel.push({ _layer: featureLayer, layer });
     }, {
-      layerFilter: (layer: olVectorLayer) => {
-        if (layer instanceof olVectorLayer) {
+      layerFilter: (layer: olBaseVectorLayer) => {
+        if (layer instanceof olBaseVectorLayer) {
           const olSource: olCluster | olVectorSource<any> = layer.getSource();
           if (olSource instanceof olCluster) {
             return (olSource as any).getSource() instanceof olVectorSource;
           } else {
-            return olSource instanceof olVectorSource;
+            return olSource instanceof olVectorSource || olSource instanceof olVectorTile;
           }
         }
       },
@@ -900,7 +903,7 @@ export class MapOlService {
         const layerpopup: popup = layer.get('popup');
         let properties: any = {};
 
-        if (layer instanceof olVectorLayer && layerpopup) {
+        if (layer instanceof olBaseVectorLayer && layerpopup) {
           const features = _layer.getProperties().features;
           if (features && features.length === 1) {
             const feature = features[0];
@@ -1030,7 +1033,7 @@ export class MapOlService {
       }
     });
     LayersAtPixel.forEach((item, index) => {
-      console.log(item, index);
+      // console.log(item, index);
       const topLayer = 0;
       if (index === topLayer) {
         this.layer_on_click(evt, item.layer, item.color);
@@ -1040,13 +1043,11 @@ export class MapOlService {
 
 
   public layer_on_click(evt, layer, color?) {
-    if (layer instanceof olImageLayer) {
+    if (layer instanceof olBaseImageLayer) {
       this.raster_on_click(evt, layer, color);
-    } else if (layer instanceof olTileLayer) {
+    } else if (layer instanceof olBaseTileLayer) {
       this.raster_on_click(evt, layer, color);
-    } else if (layer instanceof olVectorLayer) {
-      this.vector_on_click(evt);
-    } else if (layer instanceof olVectorTileLayer) {
+    } else if (layer instanceof olBaseVectorLayer) {
       this.vector_on_click(evt);
     }
   }
