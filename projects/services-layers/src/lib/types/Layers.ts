@@ -1,6 +1,7 @@
 export interface IAnyObject {
   [k: string]: any;
 }
+
 export interface ILayerContent extends IAnyObject {
   /** MIME type of the Content */
   type: string;
@@ -141,7 +142,8 @@ export interface IVectorLayerOptions extends ILayerOptions {
   type: TVectorLayertype;
 }
 
-export interface ICustomLayerOptions extends ILayerOptions {
+export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type'> {
+  type?: TLayertype;
   custom_layer: any;
 }
 
@@ -278,7 +280,7 @@ export class CustomLayer extends Layer implements ICustomLayerOptions {
   type = 'custom';
   custom_layer: ICustomLayerOptions['custom_layer'] = {};
   constructor(options: ICustomLayerOptions) {
-    super(options);
+    super(options as ILayerOptions);
     Object.assign(this, options);
   }
 }
