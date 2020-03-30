@@ -367,21 +367,22 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   private setControls() {
     // add Control only if this functions is defined
+    const tempControls = [];
     if (this.controls && this.map) {
-      if (this.controls.attribution) {
+      if (this.controls.attribution !== false) {
         const attribution = new Attribution({
           collapsible: true,
           collapsed: false
         });
-        this.map.addControl(attribution);
+        tempControls.push(attribution);
       }
       if (this.controls.scaleLine) {
         const scaleLineControl = new ScaleLine();
-        this.map.addControl(scaleLineControl);
+        tempControls.push(scaleLineControl);
       }
-      if (this.controls.zoom) {
+      if (this.controls.zoom !== false) {
         const zoomControl = new Zoom();
-        this.map.addControl(zoomControl);
+        tempControls.push(zoomControl);
       }
       if (this.controls.mousePosition) {
         const mousePosition = new olMousePosition({
@@ -390,11 +391,11 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           },
           projection: 'EPSG:4326'
         });
-        this.map.addControl(mousePosition);
+        tempControls.push(mousePosition);
       }
       if (this.controls.fullScreen) {
         const fullScreen = new olFullScreen();
-        this.map.addControl(fullScreen);
+        tempControls.push(fullScreen);
       }
       if (this.controls.overviewMap) {
         const overviewMap = new olOverviewMap({
@@ -403,11 +404,15 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           })],
           label: '\uD83C\uDF10'
         });
-        this.map.addControl(overviewMap);
+        tempControls.push(overviewMap);
       }
       if (this.controls.rotate) {
         const rotate = new olRotate();
-        this.map.addControl(rotate);
+        tempControls.push(rotate);
+      }
+
+      if (tempControls.length) {
+        this.map.getControls().extend(tempControls);
       }
     }
   }
