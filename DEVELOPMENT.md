@@ -12,6 +12,16 @@
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies. (similar to hardware upgrades)
 - check for new versions `npm outdated -l` and `ng update`
 
+## General Development Workflow
+
+### Issues and Milestones
+- Collect Ideas, then Sum them up to Issues which we can then sort into different [Milestones](https://github.com/dlr-eoc/ukis-frontend-libraries/milestones)
+- Label Issues and use the [Commit Message Guidelines](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/CONTRIBUTING.md#-commit-message-guidelines)
+
+### Branch and Fork
+- Internally we use branches in the repository to create new features and bug fixes
+- If you are not member of our organization fork our repository and use branches ([see our guide on contributing](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/CONTRIBUTING.md))
+
 
 # Ho to create a new Project library (UKIS-Module)
 
@@ -76,7 +86,7 @@ The general workflow to create a new version:
 
 2. push your branch `git push origin <branch>` and check if the github actions test and build correctly.
 - before you push the branch make sure you have updated CHANGELOG and README and commit all your stuff.
-- further you can test and build locally
+#### further you can test and build locally
 - run `node scripts/library/index.js -c` to check if all dependencies are present. (node_modules must be installed for this)
 - run `node scripts/library/index.js -t` to test all projects. (node_modules must be installed for this)
 - run `node scripts/library/index.js -b` to test all projects are building locally. (node_modules must be installed for this)
@@ -84,11 +94,11 @@ The general workflow to create a new version:
 3. create a [pull request on the master](https://github.com/dlr-eoc/ukis-frontend-libraries/pulls)
 
 ## Then the UKIS Team will publish a new version
-- based on the new master create a release branch
-- update the `version` parameter in the package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
-  by running `npm version <newversion> -m "Version after Sprint CoastalX II"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
-- merge the release branch in the master
-- push the tags and your branch by running `git push origin master —-tags`
+- based on the new master create a release branch e.g `git checkout -b release-v7.1.0`
+- update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
+  by running `npm version <newversion> -m "Version after Milestone XY"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
+- merge the release branch in the master by making a pull request
+- push the tag (created from `npm version`) by running `git push origin --tags`
 - then github actions will run the workflow [buildAndPublish](.github/workflows/buildAndPublish.yml) for the new tags to *test* , *build* and *publish* the angular projects as github packages.
 
 
