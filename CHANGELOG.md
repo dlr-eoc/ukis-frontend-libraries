@@ -5,7 +5,6 @@
  * **@dlr-eoc/services-ogc:**
     - Used to depend on @boundlessgeo/jsonix, because this fork of @highsource/jsonix worked with angular8. However, that fork declared a couple of variables globally, which now no longer works with angular9 and the ES2015 target.
     - Created an own fork under @michaellangbein/jsonix that adresses both the global variables and allows building to es2015.
-    - That package is hosted on npm.pkg.github.com - the repo has been configured in .npmrc.
     - All imports of 'jsonix' have been updated to '@michaellangbein/jsonix'
     - As a consequence of using this package, the `sourceIsEvt` hack in `src/index.html` is no longer required and has been removed.
 
