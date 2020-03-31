@@ -4,7 +4,15 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 import { getWorkspace } from '@schematics/angular/utility/config';
 
-import * as ts from 'typescript';
+/**
+ * Argument of type 'import("..node_modules/typescript/lib/typescript").SourceFile' is not assignable to parameter of type
+ * 'import("...node_modules/@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript").SourceFile'.
+ * Types of property 'kind' are incompatible. in
+ * Type 'import("...node_modules/typescript/lib/typescript").SyntaxKind.SourceFile' is not assignable to type
+ * 'import("...node_modules/@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript").SyntaxKind.SourceFile'
+ */
+// import * as ts from 'typescript';
+import * as ts from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 import { addProviderToModule, insertImport, addImportToModule, addDeclarationToModule, getSourceNodes } from '@schematics/angular/utility/ast-utils';
 
 import { InsertChange, Change } from '@schematics/angular/utility/change';
