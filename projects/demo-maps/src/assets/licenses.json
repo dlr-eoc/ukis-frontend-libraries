@@ -647,7 +647,7 @@
     "path": "C:\\Users\\lang_m13\\Desktop\\code\\js\\frontend-libraries\\node_modules\\@babel\\types",
     "licenseFile": "C:\\Users\\lang_m13\\Desktop\\code\\js\\frontend-libraries\\node_modules\\@babel\\types\\LICENSE"
   },
-  "@boundlessgeo/jsonix@2.4.3": {
+  "@michaellangbein/jsonix@2.4.3": {
     "licenses": "BSD-3-Clause",
     "repository": "https://github.com/highsource/jsonix",
     "publisher": "Alexey Valikov",
