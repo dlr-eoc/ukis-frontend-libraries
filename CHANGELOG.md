@@ -1,10 +1,9 @@
-# [7.0.1]() (2020-03-30) (Jsonix)
 
 ### Bug Fixes
 
  * **@dlr-eoc/services-ogc:**
     - Used to depend on @boundlessgeo/jsonix, because this fork of @highsource/jsonix worked with angular8. However, that fork declared a couple of variables globally, which now no longer works with angular9 and the ES2015 target.
-    - Created an own fork under @michaellangbein/jsonix that adresses both the global variables and allows building to es2015.
+    - Created an own fork under @michaellangbein/jsonix that adresses both the [global variables issue](https://github.com/MichaelLangbein/jsonix/commit/45217815924da28d642f6d07fb7fab009b469642) and [allows building to es2015](https://github.com/MichaelLangbein/jsonix/commit/62da04a4367a5c12b547c5f3cd769f8aaedaa186).
     - All imports of 'jsonix' have been updated to '@michaellangbein/jsonix'
     - As a consequence of using this package, the `sourceIsEvt` hack in `src/index.html` is no longer required and has been removed.
 
