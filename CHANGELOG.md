@@ -1,5 +1,16 @@
 
+### Refactoring
+* **@ukis/services-layers:** Type for CustomLayer (type: 'custom') now optional on creation
+
+* **demo-maps:** Add more examples how to use CustomLayers for OpenLayers [route-example-custom-layers](projects/demo-maps/src/app/route-components/route-example-custom-layers/route-map4.component.ts)
+
+* **@ukis/map-ol:** Overview-Map Control now as default uses a Clarity Icon
+
+
 ### Bug Fixes
+* **@ukis/map-ol:** 
+- Fix Bug Attribution Control is displayed twice [Issue #3](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/3)
+- Fix Bug [Issue #1](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/1) Layer Popup now working for BaseTile, BaseImage, BaseVector (Cluster, Vector, VectorTile)
 
 * **@ukis/core-ui:** Use the same types for 'ts' as @schematics/angular /**Types of property 'kind' are incompatible */
 
