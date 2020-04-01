@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angular/core';
 import { LayersService, CustomLayer, TGeoExtent } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapOlService } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { ProgressService } from '../../components/global-progress/progress.service';
 
@@ -22,7 +22,7 @@ import { regularGrid } from './map.utils';
 })
 export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
-  controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
+  controls: IMapControls;
   mapStateSub: any;
   constructor(
     public layersSvc: LayersService,

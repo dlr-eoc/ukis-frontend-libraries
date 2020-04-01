@@ -14,7 +14,7 @@ interface License {
 
 
 @Component({
-  selector: 'ukis-route-licenses',
+  selector: 'app-route-licenses',
   templateUrl: './route-licenses.component.html',
   styleUrls: ['./route-licenses.component.scss']
 })
@@ -31,7 +31,7 @@ export class RouteLicensesComponent implements OnInit {
         if (data[name]) {
           const val = data[name];
           licenses.push({
-            name: name,
+            name,
             license: val.licenses,
             repository: val.repository,
             publisher: val.publisher

@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer } from '@dlr-eoc/services-layers';
+import { LayersService, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { EocLitemap, OsmTileLayer, OpenSeaMap, EocLiteoverlayTile, WorldReliefBwTile } from '@dlr-eoc/base-layers-raster';
-import { MapOlService } from '@dlr-eoc/map-ol';
+import { EocLitemap, EocLiteoverlayTile, WorldReliefBwTile } from '@dlr-eoc/base-layers-raster';
+import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class RouteMap5Component implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
-  controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
+  controls: IMapControls;
 
 
   public geojsonData: any;
