@@ -29,15 +29,23 @@ import olOSM from 'ol/source/OSM';
 
 import olRotate from 'ol/control/Rotate';
 
+
 export interface IMapControls {
-  attribution?: boolean;
-  scaleLine?: boolean;
-  zoom?: boolean;
+  /** @see (Attribution options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/Attribution.js#L13 */
+  attribution?: boolean | object;
+  /** @see (ScaleLine options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/ScaleLine.js#L39 */
+  scaleLine?: boolean | object;
+  /** @see (Zoom options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/Zoom.js#L11 */
+  zoom?: boolean | object;
   crosshair?: boolean;
-  fullScreen?: boolean;
-  mousePosition?: boolean;
-  overviewMap?: boolean;
-  rotate?: boolean;
+  /** @see (FullScreen options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/FullScreen.js#L13 */
+  fullScreen?: boolean | object;
+  /** @see (MousePosition options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/MousePosition.js#L25 */
+  mousePosition?: boolean | object;
+  /** @see (OverviewMap options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/OverviewMap.js#L46 */
+  overviewMap?: boolean | object;
+  /** @see (Rotate options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/Rotate.js#L11 */
+  rotate?: boolean | object;
 }
 
 @Component({
@@ -370,46 +378,74 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     const tempControls = [];
     if (this.controls && this.map) {
       if (this.controls.attribution !== false) {
-        const attribution = new Attribution({
+        let attributionOptions = {
           collapsible: true,
           collapsed: false
-        });
+        };
+        if (typeof this.controls.attribution === 'object') {
+          attributionOptions = Object.assign(attributionOptions, this.controls.attribution);
+        }
+        const attribution = new Attribution(attributionOptions);
         tempControls.push(attribution);
       }
       if (this.controls.scaleLine) {
-        const scaleLineControl = new ScaleLine();
+        let scaleLineOptions = {};
+        if (typeof this.controls.scaleLine === 'object') {
+          scaleLineOptions = Object.assign(scaleLineOptions, this.controls.scaleLine);
+        }
+        const scaleLineControl = new ScaleLine(scaleLineOptions);
         tempControls.push(scaleLineControl);
       }
       if (this.controls.zoom !== false) {
-        const zoomControl = new Zoom();
+        let zoomOptions = {};
+        if (typeof this.controls.zoom === 'object') {
+          zoomOptions = Object.assign(zoomOptions, this.controls.zoom);
+        }
+        const zoomControl = new Zoom(zoomOptions);
         tempControls.push(zoomControl);
       }
       if (this.controls.mousePosition) {
-        const mousePosition = new olMousePosition({
+        let mousePositionOptions = {
           coordinateFormat: coordinate => {
             return toStringXY(coordinate, 2);
           },
           projection: 'EPSG:4326'
-        });
+        };
+        if (typeof this.controls.mousePosition === 'object') {
+          mousePositionOptions = Object.assign(mousePositionOptions, this.controls.mousePosition);
+        }
+        const mousePosition = new olMousePosition(mousePositionOptions);
         tempControls.push(mousePosition);
       }
       if (this.controls.fullScreen) {
-        const fullScreen = new olFullScreen();
+        let fullScreenOptions = {};
+        if (typeof this.controls.fullScreen === 'object') {
+          fullScreenOptions = Object.assign(fullScreenOptions, this.controls.fullScreen);
+        }
+        const fullScreen = new olFullScreen(fullScreenOptions);
         tempControls.push(fullScreen);
       }
       if (this.controls.overviewMap) {
         const icon = document.createElement('spawn');
         icon.innerHTML = '<clr-icon shape="world"></clr-icon>';
-        const overviewMap = new olOverviewMap({
+        let overviewMapOptions = {
           layers: [new olTileLayer({
             source: new olOSM()
           })],
           label: icon
-        });
+        };
+        if (typeof this.controls.overviewMap === 'object') {
+          overviewMapOptions = Object.assign(overviewMapOptions, this.controls.overviewMap);
+        }
+        const overviewMap = new olOverviewMap(overviewMapOptions);
         tempControls.push(overviewMap);
       }
       if (this.controls.rotate) {
-        const rotate = new olRotate();
+        let rotateOptions = {};
+        if (typeof this.controls.rotate === 'object') {
+          rotateOptions = Object.assign(rotateOptions, this.controls.rotate);
+        }
+        const rotate = new olRotate(rotateOptions);
         tempControls.push(rotate);
       }
 
