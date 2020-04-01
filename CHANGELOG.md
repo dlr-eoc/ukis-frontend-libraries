@@ -1,10 +1,15 @@
+### Features
+* **@dlr-eoc/map-ol:** Allow to pass OpenLayers options to [IMapControls](projects/map-ol/src/lib/map-ol.component.ts)
+
 
 ### Refactoring
 * **@dlr-eoc/services-layers:** Type for CustomLayer (type: 'custom') now optional on creation
 
 * **demo-maps:** Add more examples how to use CustomLayers for OpenLayers [route-example-custom-layers](projects/demo-maps/src/app/route-components/route-example-custom-layers/route-map4.component.ts)
 
-* **@dlr-eoc/map-ol:** Overview-Map Control now as default uses a Clarity Icon
+* **@dlr-eoc/map-ol:**
+  - Overview-Map Control now as default uses a Clarity Icon
+  - Prepare for OpenLayers Types with [ol@dev](https://github.com/openlayers/openlayers/pull/10688)
 
 
 ### Bug Fixes
