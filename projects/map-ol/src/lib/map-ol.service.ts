@@ -7,6 +7,7 @@ import olMap from 'ol/Map';
 import olView from 'ol/View';
 import { ViewOptions as olViewOptions } from 'ol/View';
 
+import olBaseLayer from 'ol/layer/Base';
 import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
@@ -66,9 +67,9 @@ export class MapOlService {
   public EPSG: string;
   private hitTolerance = 0;
   /** 'olProjection' */
-  public projectionChange = new Subject<string>();
+  public projectionChange = new Subject<olProjection>();
   constructor() {
-    this.map = new olMap();
+    this.map = new olMap({});
     this.view = new olView();
     this.EPSG = 'EPSG:3857'; // 'EPSG:4326'; EPSG:3857
     // this.createMap();
@@ -222,9 +223,9 @@ export class MapOlService {
   /**
    * get an array of olLayers from a group type
    */
-  public getLayers(type: Tgroupfiltertype): olLayer<any>[] {
+  public getLayers(type: Tgroupfiltertype) {
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
-    let layers;
+    let layers: olBaseLayer[];
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === lowerType) {
         layers = layerGroup.getLayers().getArray();
@@ -248,7 +249,7 @@ export class MapOlService {
   /**
    * add a olLayer to a group if it is not there
    */
-  public addLayer(layer: olLayer<any>, type: Tgroupfiltertype) {
+  public addLayer(layer: olBaseLayer, type: Tgroupfiltertype) {
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
@@ -263,8 +264,8 @@ export class MapOlService {
     return layers;
   }
 
-  private isLayerInGroup(layer: olLayer<any>, layerGroup: olLayerGroup) {
-    const layers = layerGroup.getLayers().getArray() as olLayer<any>[];
+  private isLayerInGroup(layer: olBaseLayer, layerGroup: olLayerGroup) {
+    const layers = layerGroup.getLayers().getArray();
     const haseLayer = layers.filter(l => l.get('id') === layer.get('id'));
     if (haseLayer.length) {
       return true;
@@ -277,14 +278,14 @@ export class MapOlService {
   /**
    * add a array of olLayers to a group if they are not there
    */
-  public addLayers(layers: olLayer<any>[], type: Tgroupfiltertype) {
+  public addLayers(layers: olBaseLayer[], type: Tgroupfiltertype) {
     const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
     this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === lowerType) {
         const groupLayers = layerGroup.getLayers();
 
         if (groupLayers.getLength() > 0) {
-          const mergLayers = layerGroup.getLayers().getArray() as Array<olLayer<any>>;
+          const mergLayers = layerGroup.getLayers().getArray();
           layers.map(layer => {
             if (!this.isLayerInGroup(layer, layerGroup)) {
               mergLayers.push(layer);
@@ -302,7 +303,7 @@ export class MapOlService {
   /**
    * reset a group with an array of olLayers
    */
-  public setLayers(layers: olLayer<any>[], type: Tgroupfiltertype) {
+  public setLayers(layers: olBaseLayer[], type: Tgroupfiltertype) {
     const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
     this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === lowerType) {
@@ -332,14 +333,14 @@ export class MapOlService {
     });
   }
 
-  public updateLayerByKey(key: { key: string, value: string }, newLayer: olLayer, type: Tgroupfiltertype) {
+  public updateLayerByKey(key: { key: string, value: string }, newLayer: olBaseLayer, type: Tgroupfiltertype) {
     const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
     this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
       if (layerGroup.get('type') === lowerType) {
         const groupLayers = layerGroup.getLayers();
         groupLayers.forEach((oldLayer, index) => {
           if (oldLayer.get(key.key) && oldLayer.get(key.key) === key.value) {
-            const newSource = newLayer.getSource();
+
             const newProperties = newLayer.getProperties();
             const newExtent = newLayer.getExtent();
 
@@ -351,7 +352,8 @@ export class MapOlService {
 
             const newZIndex = newLayer.getZIndex();
 
-            if (newSource) {
+            if (oldLayer instanceof olLayer && newLayer instanceof olLayer) {
+              const newSource = newLayer.getSource();
               oldLayer.setSource(newSource);
             }
             if (newProperties) {
@@ -432,7 +434,7 @@ export class MapOlService {
       type = newLayer.filtertype;
     }
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
-    const oldLayers: olLayer<any>[] = this.getLayers(lowerType);
+    const oldLayers = this.getLayers(lowerType);
     const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
     if (newOlLayer) {
@@ -446,7 +448,7 @@ export class MapOlService {
       type = newLayer.filtertype;
     }
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
-    const oldLayers: olLayer<any>[] = this.getLayers(lowerType);
+    const oldLayers = this.getLayers(lowerType);
     const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
     if (newOlLayer) {
@@ -455,8 +457,8 @@ export class MapOlService {
   }
 
 
-  private create_layers(newLayer: Layer): null | olLayer<any> {
-    let newOlLayer = null;
+  private create_layers(newLayer: Layer) {
+    let newOlLayer: olTileLayer | olVectorLayer | olBaseLayer;
     switch (newLayer.type) {
       case 'xyz':
         newOlLayer = this.create_xyz_layer(newLayer as RasterLayer);
@@ -771,17 +773,19 @@ export class MapOlService {
 
   private create_custom_layer(l: CustomLayer) {
     if (l.custom_layer) {
-      const layer = (l.custom_layer as olLayer<any>);
+      const layer = (l.custom_layer as olBaseLayer);
 
-      const olSource = layer.getSource();
-      olSource.set('wrapX', false);
+      if (layer instanceof olLayer) {
+        const olSource = layer.getSource();
+        olSource.set('wrapX', false);
 
-      if (l.attribution) {
-        olSource.setAttributions([l.attribution]);
-      }
+        if (l.attribution) {
+          olSource.setAttributions([l.attribution]);
+        }
 
-      if (l.continuousWorld) {
-        olSource.set('wrapX', l.continuousWorld);
+        if (l.continuousWorld) {
+          olSource.set('wrapX', l.continuousWorld);
+        }
       }
 
       const layeroptions = {
@@ -883,9 +887,9 @@ export class MapOlService {
       // console.log(evt, _layer, layer, layer.get('type'))
       FeaturesAtPixel.push({ _layer: featureLayer, layer });
     }, {
-      layerFilter: (layer: olBaseVectorLayer) => {
+      layerFilter: (layer) => {
         if (layer instanceof olBaseVectorLayer) {
-          const olSource: olCluster | olVectorSource<any> = layer.getSource();
+          const olSource: olCluster | olVectorSource<any> | olVectorTile = layer.getSource();
           if (olSource instanceof olCluster) {
             return (olSource as any).getSource() instanceof olVectorSource;
           } else {
@@ -1277,7 +1281,7 @@ export class MapOlService {
    * @param srcProj: string (e.g. 'EPSG:4326')
    * @param dstProj: string (e.g. 'EPSG:3857')
    */
-  public reprojectFeatures(source: olVectorSource, srcProj: string, dstProj: string) {
+  public reprojectFeatures(source: olVectorSource<any>, srcProj: string, dstProj: string) {
     source.getFeatures().forEach(feature => {
       feature.getGeometry().transform(srcProj, dstProj);
     });
@@ -1320,13 +1324,15 @@ export class MapOlService {
       // reprojecting vector layers
       this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
         layerGroup.getLayers().getArray().forEach(layer => {
-          let source = layer.getSource();
-          // check for nested sources, e.g. cluster or cluster of clusters etc
-          while (source['source']) {
-            source = source['source'];
-          }
-          if (source instanceof olVectorSource) {
-            this.reprojectFeatures(source, oldProjection, this.EPSG);
+          if (layer instanceof olLayer) {
+            let source = layer.getSource();
+            // check for nested sources, e.g. cluster or cluster of clusters etc
+            while (source['source']) {
+              source = source['source'];
+            }
+            if (source instanceof olVectorSource) {
+              this.reprojectFeatures(source, oldProjection, this.EPSG);
+            }
           }
         });
       });
