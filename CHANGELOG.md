@@ -1,13 +1,29 @@
+### Features
+* **@dlr-eoc/map-ol:** Allow to pass OpenLayers options to [IMapControls](projects/map-ol/src/lib/map-ol.component.ts)
+
+
+### Refactoring
+* **@dlr-eoc/services-layers:** Type for CustomLayer (type: 'custom') now optional on creation
+
+* **demo-maps:** Add more examples how to use CustomLayers for OpenLayers [route-example-custom-layers](projects/demo-maps/src/app/route-components/route-example-custom-layers/route-map4.component.ts)
+
+* **@dlr-eoc/map-ol:**
+  - Overview-Map Control now as default uses a Clarity Icon
+  - Prepare for OpenLayers Types with [ol@dev](https://github.com/openlayers/openlayers/pull/10688)
+
 
 ### Bug Fixes
+* **@dlr-eoc/map-ol:** 
+  - Fix Bug Attribution Control is displayed twice [Issue #3](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/3)
+  - Fix Bug [Issue #1](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/1) Layer Popup now working for BaseTile, BaseImage, BaseVector (Cluster, Vector, VectorTile)
 
-* **@ukis/core-ui:** Use the same types for 'ts' as @schematics/angular /**Types of property 'kind' are incompatible */
+* **@dlr-eoc/core-ui:** Use the same types for 'ts' as @schematics/angular /**Types of property 'kind' are incompatible */
 
- * **@dlr-eoc/services-ogc:**
-    - Used to depend on @boundlessgeo/jsonix, because this fork of @highsource/jsonix worked with angular8. However, that fork declared a couple of variables globally, which now no longer works with angular9 and the ES2015 target.
-    - Created an own fork under @michaellangbein/jsonix that adresses both the [global variables issue](https://github.com/MichaelLangbein/jsonix/commit/45217815924da28d642f6d07fb7fab009b469642) and [allows building to es2015](https://github.com/MichaelLangbein/jsonix/commit/62da04a4367a5c12b547c5f3cd769f8aaedaa186).
-    - All imports of 'jsonix' have been updated to '@michaellangbein/jsonix'
-    - As a consequence of using this package, the `sourceIsEvt` hack in `src/index.html` is no longer required and has been removed.
+* **@dlr-eoc/services-ogc:**
+  - Used to depend on @boundlessgeo/jsonix, because this fork of @highsource/jsonix worked with angular8. However, that fork declared a couple of variables globally, which now no longer works with angular9 and the ES2015 target.
+  - Created an own fork under @michaellangbein/jsonix that adresses both the [global variables issue](https://github.com/MichaelLangbein/jsonix/commit/45217815924da28d642f6d07fb7fab009b469642) and [allows building to es2015](https://github.com/MichaelLangbein/jsonix/commit/62da04a4367a5c12b547c5f3cd769f8aaedaa186).
+  - All imports of 'jsonix' have been updated to '@michaellangbein/jsonix'
+  - As a consequence of using this package, the `sourceIsEvt` hack in `src/index.html` is no longer required and has been removed.
 
 
 # [7.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.0.0) (2020-03-11) (Opensourcing)

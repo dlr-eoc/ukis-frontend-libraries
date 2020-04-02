@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
 import { LayersService, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
-import { MapOlService } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class RouteMap6Component implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
-  controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
+  controls: IMapControls;
 
   subs: Subscription[] = [];
   constructor(

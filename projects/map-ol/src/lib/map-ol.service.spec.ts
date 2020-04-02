@@ -42,14 +42,14 @@ describe('MapOlService', () => {
     TestBed.configureTestingModule({});
 
     rasterLayer = new olTileLayer({
-      id: 'ID-raster',
-      name: 'OpenStreetMap',
       source: new olXYZ({
         url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attributions: ['&copy, <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors'],
         wrapX: false
       })
     });
+    rasterLayer.set('id', 'ID-raster');
+    rasterLayer.set('name', 'OpenStreetMap');
 
     vetorData = {
       type: 'FeatureCollection',
@@ -125,15 +125,14 @@ describe('MapOlService', () => {
     };
 
     vectorLayer = new olVectorLayer({
-      id: 'ID-vector',
-      name: 'GeoJSON Vector Layer',
       source: new olVectorSource({
         features: (new olGeoJSON()).readFeatures(vetorData)
       })
     });
+    vectorLayer.set('id', 'ID-vector');
+    vectorLayer.set('name', 'GeoJSON Vector Layer');
 
     imageLayer = new olImageLayer({
-      id: 'ID-image',
       source: new olImageStaticSource({
         attributions: '© <a href="http://xkcd.com/license.html">xkcd</a>',
         url: 'https://imgs.xkcd.com/comics/online_communities.png',
@@ -145,6 +144,7 @@ describe('MapOlService', () => {
         })
       })
     });
+    imageLayer.set('id', 'ID-image');
 
 
     vectorImageData = {
@@ -165,12 +165,12 @@ describe('MapOlService', () => {
     };
 
     vectorImageLayer = new olVectorImageLayer({
-      id: 'ID-vector-image',
       imageRatio: 2,
       source: new olVectorSource({
         features: (new olGeoJSON()).readFeatures(vectorImageData)
       })
     });
+    vectorImageLayer.set('id', 'ID-vector-image')
 
     ukisCustomLayer = new CustomLayer({
       id: 'ID-vector-image',
@@ -308,9 +308,11 @@ describe('MapOlService', () => {
     service.addLayer(vectorLayer, 'layers');
 
     const visible = true, opacity = 0.5, minzoom = 2, maxzoom = 15;
-    const newLayer = vectorLayer = new olVectorLayer({
-      id: 'ID-vector'
-    });
+    vectorLayer = new olVectorLayer({
+    })
+    vectorLayer.set('id', 'ID-vector')
+    const newLayer = vectorLayer;
+
     newLayer.setSource(vectorLayer.getSource());
     newLayer.setVisible(visible);
     newLayer.setOpacity(opacity);

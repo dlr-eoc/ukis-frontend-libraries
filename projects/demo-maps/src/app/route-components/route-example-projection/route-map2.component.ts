@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapOlService } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { IProjDef } from '@dlr-eoc/map-tools';
 
@@ -15,7 +15,7 @@ import { IProjDef } from '@dlr-eoc/map-tools';
 })
 export class RouteMap2Component implements OnInit {
   @HostBinding('class') class = 'content-container';
-  controls: { attribution?: boolean, scaleLine?: boolean, zoom?: boolean, crosshair?: boolean };
+  controls: IMapControls;
   projections: IProjDef[];
 
   constructor(
@@ -43,7 +43,7 @@ export class RouteMap2Component implements OnInit {
       proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
       title: 'Antarctic Polar Stereographic',
       extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
-      worldExtent: [-180.0, -90.0, 180.0, -60.0 ],
+      worldExtent: [-180.0, -90.0, 180.0, -60.0],
       global: false,
       units: 'm'
     };
