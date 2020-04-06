@@ -62,7 +62,7 @@
         <!-- setLayerOpacity -->
         <div class="form-group">
           <label [for]="'layer_transparency_slider_'+layer.id">Opacity:</label>
-          <input [id]="'layer_transparency_slider_'+layer.id" type="range" name="points" [value]="layer.opacity"
+          <input [id]="'layer_transparency_slider_'+layer.id" type="range" class="layer-range-input" name="points" [value]="layer.opacity"
             [min]="0.0" [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)" [(ngModel)]="layer.opacity" />
           <span>{{" "+layer.opacity}}</span>
         </div>
