@@ -1,7 +1,7 @@
 <div class="layer">
   <div class="head">
     <!-- layer expand icon -->
-    <clr-icon shape="angle" [dir]="openProperties?'down':'right'" class="iconButton"
+    <clr-icon shape="angle" [ngStyle]="getExpandShape()" class="iconButton"
       [ngClass]="{'disabled': is_expandable()}" (click)="showProperties()" title="Details"></clr-icon>
 
     <!-- layer title -->

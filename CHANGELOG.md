@@ -13,6 +13,8 @@
 
 
 ### Bug Fixes
+* **@dlr-eoc/layer-control:** Layerentry expand icon not working in Edge Browser due to [dir]. 
+
 * **@dlr-eoc/map-ol:** 
   - Fix Bug Attribution Control is displayed twice [Issue #3](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/3)
   - Fix Bug [Issue #1](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/1) Layer Popup now working for BaseTile, BaseImage, BaseVector (Cluster, Vector, VectorTile)
