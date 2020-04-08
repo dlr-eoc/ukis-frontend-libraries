@@ -3,6 +3,8 @@
 
 
 ### Refactoring
+* **@dlr-eoc/core-ui:** Start convert clr-theme to use custom css properties. If you musst support IE11 see [Setting up IE11 support](https://clarity.design/documentation/themes).
+
 * **@dlr-eoc/services-layers:** Type for CustomLayer (type: 'custom') now optional on creation
 
 * **demo-maps:** Add more examples how to use CustomLayers for OpenLayers [route-example-custom-layers](projects/demo-maps/src/app/route-components/route-example-custom-layers/route-map4.component.ts)
@@ -10,6 +12,7 @@
 * **@dlr-eoc/map-ol:**
   - Overview-Map Control now as default uses a Clarity Icon
   - Prepare for OpenLayers Types with [ol@dev](https://github.com/openlayers/openlayers/pull/10688)
+  - Start to use custom css properties
 
 
 ### Bug Fixes
