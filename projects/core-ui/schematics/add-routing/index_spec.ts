@@ -46,15 +46,13 @@ describe('add-routing', () => {
     ).toPromise();
   });
 
-  it('should include the angular project file', (done) => {
-    schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise().then(tree => {
-      expect(tree.files.includes('/angular.json')).toBe(true);
-      done();
-    }, done.fail);
+  it('should include the angular project file', async () => {
+    const tree = await schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise();
+    expect(tree.files.includes('/angular.json')).toBe(true);
   });
 
 
-  /* it('should add app files', (done) => {
+  it('should add app files', async () => {
     const testFiles = [
       '/src/app/app.component.html',
       '/src/app/app-routing.module.ts',
@@ -63,25 +61,21 @@ describe('add-routing', () => {
       '/src/app/route-components/example-route/example-route.component.ts',
       '/src/app/route-components/example-route/example-route.component.scss'
     ];
-    schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise().then(tree => {
-      testFiles.map(f => {
-        expect(tree.files).toContain(f);
-      });
-      done();
-    }, done.fail);
+    const tree = await schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise();
+    testFiles.every(f => {
+      expect(tree.files).toContain(f);
+    });
   });
 
-  it('should add Imports', (done) => {
+  it('should add Imports', async () => {
     const testImports = [
       'AppRoutingModule',
       'ExampleRouteComponent'
     ];
-    schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise().then(tree => {
-      const appModule = tree.readContent('/src/app/app.module.ts');
-      testImports.map(i => {
-        expect(appModule).toContain(i);
-      });
-      done();
-    }, done.fail);
-  }); */
+    const tree = await schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise();
+    const appModule = tree.readContent('/src/app/app.module.ts');
+    testImports.every(i => {
+      expect(appModule).toContain(i);
+    });
+  });
 });

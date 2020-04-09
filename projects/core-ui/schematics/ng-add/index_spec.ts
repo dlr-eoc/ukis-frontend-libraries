@@ -58,9 +58,10 @@ describe('ng-add', () => {
     const dimensions = [72, 96, 128, 144, 152, 192, 384, 512];
     const iconBasePath = `/src/assets/icons/icon-`;
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
-    dimensions.forEach(d => {
+    dimensions.every(d => {
       const iconPath = `${iconBasePath}${d}x${d}.png`;
-      expect(tree.exists(iconPath)).toEqual(true);
+      expect(tree.files).toContain(iconPath);
+      // expect(tree.exists(iconPath)).toBeTruthy();
     });
     expect(tree.files).toContain('/src/favicon.ico');
   });
@@ -68,18 +69,19 @@ describe('ng-add', () => {
   it('should add style files', async () => {
     const testFiles = [
       '/src/styles.scss',
-      '/src/styles/_overwrites-clr-variables.scss',
       '/src/styles/_clr-vertival-nav-layout.scss',
+      '/src/styles/_overwrites-clr-variables.scss',
       '/src/styles/_ukis-core-ui-layout.scss',
       '/src/styles/_ukis-inputs.scss',
       '/src/styles/_ukis-layer-nav.scss',
       '/src/styles/_ukis-theme.scss',
-      '/src/styles/_ukis-variables.scss',
+      '/src/styles/_ukis-variables.scss'
     ];
 
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
-    testFiles.map(f => {
+    testFiles.every(f => {
       expect(tree.files).toContain(f);
+      // expect(tree.exists(f)).toBeTruthy();
     });
   });
 
@@ -99,66 +101,61 @@ describe('ng-add', () => {
       '/src/app/components/icons/ukis.ts'
     ];
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
-    testFiles.map(f => {
+    testFiles.every(f => {
       expect(tree.files).toContain(f);
+      // expect(tree.exists(f)).toBeTruthy();
     });
   });
 
-  /*  it('should add Imports', (done) => {
-     const testImports = [
-       'HeaderComponent',
-       'GlobalAlertComponent',
-       'AlertService',
-       'GlobalProgressComponent',
-       'ProgressService'
-     ];
-     schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
-       const appModule = tree.readContent('/src/app/app.module.ts');
-       testImports.map(i => {
-         expect(appModule).toContain(i);
-       });
-       done();
-     }, done.fail);
-   }); */
+  it('should add Imports', async () => {
+    const testImports = [
+      'HeaderComponent',
+      'GlobalAlertComponent',
+      'AlertService',
+      'GlobalProgressComponent',
+      'ProgressService'
+    ];
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    const appModule = tree.readContent('/src/app/app.module.ts');
+    testImports.map(i => {
+      expect(appModule).toContain(i);
+    });
+  });
 
-  /*   it('should update the angular project file', (done) => {
-      schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
-        const projectFile = JSON.parse(tree.readContent('/angular.json'));
-        expect(projectFile.projects[appOptions.name].schematics['@schematics/angular:component'].style).toBe('scss');
-        done();
-      }, done.fail);
-    }); */
+  it('should update the angular project file', async () => {
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    const projectFile = JSON.parse(tree.readContent('/angular.json'));
+    expect(projectFile.projects[appOptions.name].schematics['@schematics/angular:component'].style).toBe('scss');
+  });
 
-  /*   it('should update the stconfig file', (done) => {
-      schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
-        const tsconfigFile = JSON.parse(tree.readContent('/tsconfig.json'));
-        expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
-        done();
-      }, done.fail);
-    }); */
+  it('should update the stconfig file', async () => {
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    const tsconfigFile = JSON.parse(tree.readContent('/tsconfig.json'));
+    expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
+  });
 
-  /*   it('should update html files', (done) => {
-      schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
-        const tsconfigFile = tree.readContent('/src/index.html');
-        expect(tsconfigFile).toContain('<meta name="description" content="This should be the description for');
-        done();
-      }, done.fail);
-    }); */
+  it('should update html files', async () => {
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    const tsconfigFile = tree.readContent('/src/index.html');
+    expect(tsconfigFile).toContain('<meta name="description" content="This should be the description for');
+  });
 
 
-  /*   it('should skip add style files', (done) => {
-      const testFiles = [
-        '/src/styles/_overwrites.clarity.scss',
-        '/src/styles/_ukis.layer.nav.scss',
-        '/src/styles/_vertival.nav.scss'
-      ];
-      const skipOptions = Object.assign(ngAddOptions, { addFiles: 'false' });
-
-      schematicRunner.runSchematicAsync('ng-add', skipOptions, appTree).toPromise().then(tree => {
-        testFiles.map(f => {
-          expect(tree.files.includes(f)).toBe(false);
-        });
-        done();
-      }, done.fail);
-    }); */
+  it('should skip add style files', async () => {
+    const testFiles = [
+      '/src/styles/_overwrites-clr-variables.scss',
+      '/src/styles/_clr-vertival-nav-layout.scss',
+      '/src/styles/_ukis-core-ui-layout.scss',
+      '/src/styles/_ukis-inputs.scss',
+      '/src/styles/_ukis-layer-nav.scss',
+      '/src/styles/_ukis-theme.scss',
+      '/src/styles/_ukis-variables.scss',
+    ];
+    const skipOptions = Object.assign({}, ngAddOptions, { addFiles: 'false' });
+    const tree = await schematicRunner.runSchematicAsync('ng-add', skipOptions, appTree).toPromise();
+    testFiles.map(f => {
+      expect(tree.files.includes(f)).toBe(false);
+      // expect(tree.exists(f)).toBeFalsy();
+    });
+  });
 });
