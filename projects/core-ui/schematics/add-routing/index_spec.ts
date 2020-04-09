@@ -54,7 +54,7 @@ describe('add-routing', () => {
   });
 
 
-  it('should add app files', (done) => {
+  /* it('should add app files', (done) => {
     const testFiles = [
       '/src/app/app.component.html',
       '/src/app/app-routing.module.ts',
@@ -83,5 +83,5 @@ describe('add-routing', () => {
       });
       done();
     }, done.fail);
-  });
+  }); */
 });
