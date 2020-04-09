@@ -73,9 +73,13 @@ describe('ng-add', () => {
   it('should add style files', (done) => {
     const testFiles = [
       '/src/styles.scss',
-      '/src/styles/_overwrites.clarity.scss',
-      '/src/styles/_ukis.layer.nav.scss',
-      '/src/styles/_vertival.nav.scss'
+      '/src/styles/_overwrites-clr-variables.scss',
+      '/src/styles/_clr-vertival-nav-layout.scss',
+      '/src/styles/_ukis-core-ui-layout.scss',
+      '/src/styles/_ukis-inputs.scss',
+      '/src/styles/_ukis-layer-nav.scss',
+      '/src/styles/_ukis-theme.scss',
+      '/src/styles/_ukis-variables.scss',
     ];
 
     schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
