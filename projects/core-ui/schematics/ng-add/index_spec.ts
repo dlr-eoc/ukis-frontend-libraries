@@ -49,47 +49,41 @@ describe('ng-add', () => {
       appTree).toPromise();
   });
 
-  it('should include the angular project file', (done) => {
-    schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
-      expect(tree.files.includes('/angular.json')).toBe(true);
-      done();
-    }, done.fail);
+  it('should include the angular project file', async () => {
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    expect(tree.files.includes('/angular.json')).toBe(true);
   });
-  /*
-    it('should add assets', (done) => {
-      const dimensions = [72, 96, 128, 144, 152, 192, 384, 512];
-      const iconBasePath = `/src/assets/icons/icon-`;
-      schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
-        dimensions.forEach(d => {
-          const iconPath = `${iconBasePath}${d}x${d}.png`;
-          expect(tree.exists(iconPath)).toEqual(true);
-        });
-        expect(tree.files).toContain('/src/favicon.ico');
-        done();
-      }, done.fail);
-    }); */
 
-  /*  it('should add style files', (done) => {
-     const testFiles = [
-       '/src/styles.scss',
-       '/src/styles/_overwrites-clr-variables.scss',
-       '/src/styles/_clr-vertival-nav-layout.scss',
-       '/src/styles/_ukis-core-ui-layout.scss',
-       '/src/styles/_ukis-inputs.scss',
-       '/src/styles/_ukis-layer-nav.scss',
-       '/src/styles/_ukis-theme.scss',
-       '/src/styles/_ukis-variables.scss',
-     ];
+  it('should add assets', async () => {
+    const dimensions = [72, 96, 128, 144, 152, 192, 384, 512];
+    const iconBasePath = `/src/assets/icons/icon-`;
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    dimensions.forEach(d => {
+      const iconPath = `${iconBasePath}${d}x${d}.png`;
+      expect(tree.exists(iconPath)).toEqual(true);
+    });
+    expect(tree.files).toContain('/src/favicon.ico');
+  });
 
-     schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
-       testFiles.map(f => {
-         expect(tree.files).toContain(f);
-       });
-       done();
-     }, done.fail);
-   }); */
+  it('should add style files', async () => {
+    const testFiles = [
+      '/src/styles.scss',
+      '/src/styles/_overwrites-clr-variables.scss',
+      '/src/styles/_clr-vertival-nav-layout.scss',
+      '/src/styles/_ukis-core-ui-layout.scss',
+      '/src/styles/_ukis-inputs.scss',
+      '/src/styles/_ukis-layer-nav.scss',
+      '/src/styles/_ukis-theme.scss',
+      '/src/styles/_ukis-variables.scss',
+    ];
 
-  /* it('should add app files', (done) => {
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    testFiles.map(f => {
+      expect(tree.files).toContain(f);
+    });
+  });
+
+  it('should add app files', async () => {
     const testFiles = [
       '/src/app/app.component.html',
       '/src/app/app.component.scss',
@@ -104,13 +98,11 @@ describe('ng-add', () => {
       '/src/app/components/icons/ukis.svg',
       '/src/app/components/icons/ukis.ts'
     ];
-    schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise().then(tree => {
-      testFiles.map(f => {
-        expect(tree.files).toContain(f);
-      });
-      done();
-    }, done.fail);
-  }); */
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    testFiles.map(f => {
+      expect(tree.files).toContain(f);
+    });
+  });
 
   /*  it('should add Imports', (done) => {
      const testImports = [
