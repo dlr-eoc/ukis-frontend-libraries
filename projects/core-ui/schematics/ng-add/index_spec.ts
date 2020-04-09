@@ -91,14 +91,35 @@ describe('ng-add', () => {
       '/src/app/app.component.scss',
       '/src/app/app.component.ts',
       '/src/app/components/README.md',
+
       '/src/app/components/header/header.component.html',
       '/src/app/components/header/header.component.scss',
       '/src/app/components/header/header.component.spec.ts',
       '/src/app/components/header/header.component.ts',
+
       '/src/app/components/icons/eoc_white.svg',
       '/src/app/components/icons/ukis-01-01.svg',
       '/src/app/components/icons/ukis.svg',
-      '/src/app/components/icons/ukis.ts'
+      '/src/app/components/icons/ukis.ts',
+
+      'src/app/components/global-alert/alert.service.spec.ts',
+      'src/app/components/global-alert/alert.service.ts',
+      'src/app/components/global-alert/global-alert.component.html',
+      'src/app/components/global-alert/global-alert.component.scss',
+      'src/app/components/global-alert/global-alert.component.spec.ts',
+      'src/app/components/global-alert/global-alert.component.ts',
+
+      'src/app/components/global-progress/global-progress.component.html',
+      'src/app/components/global-progress/global-progress.component.scss',
+      'src/app/components/global-progress/global-progress.component.spec.ts',
+      'src/app/components/global-progress/global-progress.component.ts',
+      'src/app/components/global-progress/progress.service.spec.ts',
+      'src/app/components/global-progress/progress.service.ts',
+
+      'src/app/views/test-view/test-view.component.html',
+      'src/app/views/test-view/test-view.component.scss',
+      'src/app/views/test-view/test-view.component.spec.ts',
+      'src/app/views/test-view/test-view.component.ts'
     ];
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
     testFiles.every(f => {
@@ -113,7 +134,8 @@ describe('ng-add', () => {
       'GlobalAlertComponent',
       'AlertService',
       'GlobalProgressComponent',
-      'ProgressService'
+      'ProgressService',
+      'TestViewComponent'
     ];
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
     const appModule = tree.readContent('/src/app/app.module.ts');

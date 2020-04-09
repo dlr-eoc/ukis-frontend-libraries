@@ -3,20 +3,13 @@
   <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
 
   <ukis-header [ukis-title]="title">
+    <!-- <a class="nav-link nav-text header-nav-el"><span class="nav-text">Test link</span></a> -->
+    <!-- <a href="..." class="nav-link nav-text header-nav-el"><span class="nav-text">Interactive Analytics</span></a>
+    <div class="header-action-el">
+      <a href="..." class="nav-link nav-icon" aria-label="settings">
+        <clr-icon shape="cog"></clr-icon>
+      </a>
+    </div> -->
   </ukis-header>
-  <section class="content-container">
-    <main class="content-area">
-      <p>content-area</p>
-    </main>
-
-    <!-- <clr-vertical-nav class="left">
-        </clr-vertical-nav> -->
-
-    <nav class="sidenav">
-      <p>sidenav</p>
-    </nav>
-    <section class="footer ukis-footer">
-      <p>footer</p>
-    </section>
-  </section>
+  <app-test-view></app-test-view>
 </clr-main-container>
