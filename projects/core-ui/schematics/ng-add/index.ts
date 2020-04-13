@@ -184,7 +184,7 @@ function ruleAddImportsInAppModule(options: UkisNgAddSchema): Rule {
     { classifiedName: 'AlertService', path: './components/global-alert/alert.service', provide: true },
     { classifiedName: 'GlobalProgressComponent', path: './components/global-progress/global-progress.component', declare: true },
     { classifiedName: 'ProgressService', path: './components/global-progress/progress.service', provide: true },
-    { classifiedName: 'TestViewComponent', path: './views/test-view/test-view.component', declare: true }
+    { classifiedName: 'ExampleViewComponent', path: './views/example-view/example-view.component', declare: true }
   ];
 
   /**

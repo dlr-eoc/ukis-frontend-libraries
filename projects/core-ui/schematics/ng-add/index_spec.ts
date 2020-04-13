@@ -116,10 +116,10 @@ describe('ng-add', () => {
       'src/app/components/global-progress/progress.service.spec.ts',
       'src/app/components/global-progress/progress.service.ts',
 
-      'src/app/views/test-view/test-view.component.html',
-      'src/app/views/test-view/test-view.component.scss',
-      'src/app/views/test-view/test-view.component.spec.ts',
-      'src/app/views/test-view/test-view.component.ts'
+      'src/app/views/example-view/example-view.component.html',
+      'src/app/views/example-view/example-view.component.scss',
+      'src/app/views/example-view/example-view.component.spec.ts',
+      'src/app/views/example-view/example-view.component.ts'
     ];
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
     testFiles.every(f => {
@@ -135,7 +135,7 @@ describe('ng-add', () => {
       'AlertService',
       'GlobalProgressComponent',
       'ProgressService',
-      'TestViewComponent'
+      'ExampleViewComponent'
     ];
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
     const appModule = tree.readContent('/src/app/app.module.ts');
