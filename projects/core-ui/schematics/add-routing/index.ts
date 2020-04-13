@@ -1,6 +1,6 @@
 import {
   Rule, Tree, chain, apply, url, mergeWith, move,
-  filter, noop, SchematicsException, applyTemplates
+  filter, noop, SchematicsException, applyTemplates, SchematicContext
 } from '@angular-devkit/schematics';
 import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
 import { UkisNgAddRoutingSchema } from './schema';
@@ -28,7 +28,7 @@ export function addRouting(options: UkisNgAddRoutingSchema): Rule {
  *  TODO: update app.component.ts not override
  */
 function ruleAddFiles(options: UkisNgAddRoutingSchema): Rule {
-  return (tree: Tree) => {
+  return (tree: Tree, context: SchematicContext) => {
     const project = getProject(tree, options);
 
     if (!project.sourceRoot) {
@@ -45,6 +45,10 @@ function ruleAddFiles(options: UkisNgAddRoutingSchema): Rule {
     const appTemplateSource = apply(url('./files/src/app'), [
       applyTemplates({ ...templateVariabels }),
       filter((path: Path) => {
+
+        // TODO filter out /app/views if exists
+        context.logger.info(`if you already run 'ng add @dlr-eoc/core-ui' without the routing option, you can move all components from views to 'route-components'`);
+
         const testFiles = ['app.component.html', 'app.component.ts', 'app-routing.module.ts'];
         /**
          * check for existing files the are allowed to overwrite!
