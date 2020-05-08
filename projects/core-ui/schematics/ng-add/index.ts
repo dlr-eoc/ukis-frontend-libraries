@@ -244,11 +244,6 @@ function updateAngularArchitect(project: WorkspaceProject, type: string | 'build
   const architect = project.architect;
   if (architect && architect[type]) {
     const target = architect[type];
-    if (target.options && 'assets' in target.options) {
-      if (Array.isArray(target.options.assets) && !target.options.assets.includes('src/manifest.json')) {
-        target.options.assets.push('src/manifest.json');
-      }
-    }
 
     if (target.options && 'styles' in target.options) {
       /** replace styles.css if it exists */
