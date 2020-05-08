@@ -1,8 +1,11 @@
 ### Features
+* **@dlr-eoc/core-ui:** add tests for schemanics to CI
+* **@dlr-eoc/core-ui:** Provide header component from core-ui module
 * **@dlr-eoc/map-ol:** Allow to pass OpenLayers options to [IMapControls](projects/map-ol/src/lib/map-ol.component.ts)
 
 
 ### Refactoring
+* **@dlr-eoc/core-ui:** on ngAdd without routing setup a view component so not all code is placed in the App component - this 
 * **@dlr-eoc/core-ui:** Start convert clr-theme to use custom css properties. If you musst support IE11 see [Setting up IE11 support](https://clarity.design/documentation/themes).
 
 * **@dlr-eoc/services-layers:** Type for CustomLayer (type: 'custom') now optional on creation
@@ -16,6 +19,7 @@
 
 
 ### Bug Fixes
+* **demo-maps:** workaround for header overflow [#6](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/6)
 * **@dlr-eoc/layer-control:** Layerentry expand icon not working in Edge Browser due to [dir]. 
 
 * **@dlr-eoc/map-ol:** 
