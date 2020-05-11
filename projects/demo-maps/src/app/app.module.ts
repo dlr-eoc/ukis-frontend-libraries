@@ -25,6 +25,10 @@ import { RouteMap6Component } from './route-components/route-example-layer-style
 import { RouteLicensesComponent } from './route-components/route-licenses/route-licenses.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { RouteExampleOlperformanceComponent } from './route-components/route-example-olperformance/route-example-olperformance.component';
+import { ChangedetectorComponent } from './components/changedetector/changedetector.component';
+import { BlinkerComponent } from './components/changedetector/blinker/blinker.component';
+import { FpserComponent } from './components/changedetector/fpser/fpser.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +42,11 @@ import { HttpClientModule } from '@angular/common/http';
     RouteMap4Component,
     RouteMap5Component,
     RouteMap6Component,
-    RouteLicensesComponent
+    RouteLicensesComponent,
+    RouteExampleOlperformanceComponent,
+    ChangedetectorComponent,
+    BlinkerComponent,
+    FpserComponent
   ],
   imports: [
     BrowserModule,

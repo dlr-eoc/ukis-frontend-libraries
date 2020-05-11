@@ -7,6 +7,7 @@ import { RouteMap4Component } from './route-components/route-example-custom-laye
 import { RouteMap5Component } from './route-components/route-example-layout/route-map5.component';
 import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
 import { RouteLicensesComponent } from './route-components/route-licenses/route-licenses.component';
+import { RouteExampleOlperformanceComponent } from './route-components/route-example-olperformance/route-example-olperformance.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'example-layers', pathMatch: 'full' },
@@ -45,6 +46,13 @@ const routes: Routes = [
     component: RouteMap6Component,
     data: {
       title: 'Switching Layer-Style'
+    }
+  },
+  {
+    path: 'ol-performance',
+    component: RouteExampleOlperformanceComponent,
+    data: {
+      title: 'Ol-Performance'
     }
   },
   {

@@ -5,12 +5,13 @@ import { GlobalProgressComponent } from './global-progress/global-progress.compo
 import { ProgressService } from './global-progress/progress.service';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
+import { ChangedetectorComponent } from './changedetector/changedetector.component';
 
 
 @NgModule({
-  declarations: [GlobalAlertComponent, GlobalProgressComponent],
+  declarations: [GlobalAlertComponent, GlobalProgressComponent, ChangedetectorComponent],
   imports: [CommonModule, ClarityModule],
-  exports: [GlobalAlertComponent, GlobalProgressComponent],
+  exports: [GlobalAlertComponent, GlobalProgressComponent, ChangedetectorComponent],
   providers: [AlertService, ProgressService]
 })
 export class CoreUiModule { }
