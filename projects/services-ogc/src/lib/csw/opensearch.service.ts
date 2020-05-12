@@ -9,6 +9,47 @@ import { tap, map, switchMap } from 'rxjs/operators';
  */
 
 
+
+export interface ServiceUrl {
+    _type?: any;
+    _url?: string;
+    _method?: any;
+    _enctype?: any;
+    _indexOffset?: number;
+    _pageOffset?: number;
+    _relations?: any;
+    _parameters?: any;
+    _parametersByName?: any;
+    _parametersByType?: any;
+    _multiParameters?: any;
+}
+
+export interface ServiceImage {
+    height?: number;
+    width?: number;
+    type?: string;
+    url?: string;
+}
+
+export interface ServiceDescription {
+    shortName?: string;
+    longName?: string;
+    description?: string;
+    tags?: string | string[];
+    contact?: string;
+    urls?: ServiceUrl[];
+    images?: ServiceImage[];
+    queries?: any[];
+    developer?: string;
+    attribution?: string;
+    syndicationRight?: string;
+    adultContent?: string;
+    language?: string;
+    outputEncoding?: string;
+    inputEncoding?: string;
+}
+
+
 export interface SearchParameters {
     searchTerms: string | string[];
     startIndex?: number;
@@ -37,8 +78,8 @@ export interface Record {
 export class OpensearchWrapperService {
 
     /**
-     * Checks whether this URL is compatible with the given parameters
-     * @param {object} parameters An object mapping the name or type to the value
+     * @param {string} url The opensearch-server's url
+     * @param {SearchParameters} parameters
      * @param {string} [options.type=null] The preferred transfer type.
      * @param {string} [options.method=null] The preferred HTTP method type.
      * @param {boolean} [options.raw=false] Whether the response shall be parsed or returned raw.
@@ -50,10 +91,18 @@ export class OpensearchWrapperService {
      * @param {object} [options.headers=undefined] Specific headers to send to the service.
      * @returns {Promise<array>|Promise<Response>} The search result as a Promise
      */
-    search(url: string, parameters: SearchParameters, options = {}): Observable<Result> {
+    search(url: string, parameters: SearchParameters, options = {}): Observable<SearchResult> {
         return this.getServiceInstance(url).pipe(
             switchMap((service: OpenSearchService) => {
-                return from(service.search(parameters, options));
+                return from(service.search(parameters, options)) as Observable<SearchResult>;
+            })
+        );
+    }
+
+    getDescription(url: string): Observable<ServiceDescription> {
+        return this.getServiceInstance(url).pipe(
+            map((service) => {
+                return service.getDescription();
             })
         );
     }
