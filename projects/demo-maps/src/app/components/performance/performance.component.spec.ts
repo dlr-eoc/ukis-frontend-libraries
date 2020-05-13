@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChangedetectorComponent } from './changedetector.component';
+import { PerformanceComponent } from './performance.component';
 
-describe('ChangedetectorComponent', () => {
-  let component: ChangedetectorComponent;
-  let fixture: ComponentFixture<ChangedetectorComponent>;
+describe('PerformanceComponent', () => {
+  let component: PerformanceComponent;
+  let fixture: ComponentFixture<PerformanceComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChangedetectorComponent ]
+      declarations: [ PerformanceComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChangedetectorComponent);
+    fixture = TestBed.createComponent(PerformanceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

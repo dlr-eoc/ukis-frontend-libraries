@@ -1,34 +1,41 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 import { LayersService, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapOlService } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { HttpClient } from '@angular/common/http';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import simplify from '@turf/simplify';
 import bbox from '@turf/bbox';
-import { reproject, epsg, toWgs84 } from 'reproject';
+import { reproject } from 'reproject';
 import proj4 from 'proj4';
-import { get as getProjection } from 'ol/proj';
 
 @Component({
-  selector: 'app-route-example-olperformance',
-  templateUrl: './route-example-olperformance.component.html',
-  styleUrls: ['./route-example-olperformance.component.scss'],
+  selector: 'app-route-map7',
+  templateUrl: './route-map7.component.html',
+  styleUrls: ['./route-map7.component.scss'],
   providers: [LayersService, MapStateService, MapOlService]
 })
-export class RouteExampleOlperformanceComponent implements OnInit {
+export class RouteMap7Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';
+
+  controls: IMapControls;
 
   constructor(
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
     public mapSvc: MapOlService,
     private http: HttpClient
-  ) { }
+  ) {
+    this.controls = {
+      attribution: true,
+      scaleLine: true
+    };
+   }
 
   ngOnInit(): void {
     this.mapSvc.setProjection('EPSG:4326');
+
 
     const bgLayer = new OsmTileLayer({
       visible: true
@@ -40,7 +47,6 @@ export class RouteExampleOlperformanceComponent implements OnInit {
     this.http.get(fileUrl).subscribe((dataOrig: any) => {
       const str2966 = '+proj=tmerc +lat_0=37.5 +lon_0=-87.08333333333333 +k=0.999966667 +x_0=900000 +y_0=249999.9998983998 +datum=NAD83 +units=us-ft +no_defs';
       const data = reproject(dataOrig, str2966, proj4.WGS84);
-      console.log(data);
       const bx = bbox(data);
 
       const exposureLarge = new VectorLayer({
@@ -109,6 +115,20 @@ export class RouteExampleOlperformanceComponent implements OnInit {
       this.layersSvc.addLayer(exposureSimpleGeom);
 
     });
+  }
+
+  ngAfterViewInit(): void {
+    const extent = [-87, 38.5, -86, 39.5] as [number, number, number, number];
+    /**
+     * Currenty, there is a small bug in mapStateSvc.setExtent:
+     * this method does not work as long as the 'duration' parameter is given.
+     * As a short-term workaround, we work on the olMap directly.
+     */
+    // this.mapStateSvc.setExtent(extent);
+    this.mapSvc.map.getView().fit(
+      extent, {
+        size: this.mapSvc.map.getSize(),
+      });
   }
 
 }

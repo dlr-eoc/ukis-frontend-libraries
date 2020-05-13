@@ -1,10 +1,10 @@
 <main class="content-area">
-    <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" id="olMap"></ukis-map-ol>
+    <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" id="olMap" [controls]="controls"></ukis-map-ol>
 </main>
 
-<clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2">
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" class="right" [clr-nav-level]="2">
 
-    <ukis-changedetector></ukis-changedetector>
+    <ukis-performance></ukis-performance>
 
     <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
         <clr-icon shape="layers" clrVerticalNavIcon title="layers"></clr-icon>

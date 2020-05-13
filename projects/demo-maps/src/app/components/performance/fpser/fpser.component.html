@@ -1,0 +1,15 @@
+<p style="margin: 0px;">
+    <span class="label">
+        FPS:
+        <span class="badge">{{fps}}</span>
+    </span>
+    <clr-signpost>
+        <clr-signpost-content *clrIfOpen>
+            <h3>Frames per second</h3>
+            <p>Estimates the number of frames that are rendered per second.</p>
+            <p>This is done by periodically measuring the time a call to <code>setTimeout(() => ..., 0)</code> takes.</p>
+            <p>That call is made outside the angular-zone, so as not to trigger change-detection.</p>
+            <p>Please not that in Chrome you can also monitor FPS from the developer-tools: Hit <code>ctrl-shift-p</code> and enter <code>fps</code> to find the FPS-meter.</p>
+        </clr-signpost-content>
+    </clr-signpost>
+</p>
