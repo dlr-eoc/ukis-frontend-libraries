@@ -1,0 +1,83 @@
+:root {
+  --header-branding-icon-color: #fff;
+  --header-branding-icon-color-mobile: #565656;
+}
+
+/** HEADER -------------------------------------------------------------- */
+.header {
+  .branding {
+    flex: 0 1 auto;
+    overflow: hidden;
+
+    a {
+      clr-icon {
+        color: var(--header-branding-icon-color);
+      }
+    }
+
+    .title {
+      min-width: 100px;
+      font-size: 1rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    .branding {
+      a {
+        clr-icon {
+          color: var(--header-branding-icon-color-mobile);
+        }
+      }
+    }
+  }
+}
+
+/** FOOTER -------------------------------------------------------------- */
+.footer {
+  background-color: var(--clr-vertical-nav-bg-color, var(--fallback-color-no-clr));
+  padding: 0.2rem 1rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+/** CONTENT -------------------------------------------------------------- */
+// adjust padding of main container for map!!!
+.main-container .content-container .content-area {
+  &.map-view {
+    padding: 0;
+  }
+}
+
+.content-area {
+  background: #fff;
+  color: var(--clr-color-neutral-700, var(--fallback-color-no-clr));
+}
+
+/** Clarity Datagrid overwrites */
+@media screen and (max-width: 1500px) {
+  .date-filter {
+    .datagrid-filter {
+      transform: translateX(0) translateY(24px) !important;
+      z-index: 1;
+    }
+  }
+}
+
+@media screen and (max-width: 1015px) {
+  .contry-filter {
+    .datagrid-filter {
+      transform: translateX(0) translateY(24px) !important;
+      z-index: 1;
+    }
+  }
+}
+
+.text-primary {
+  color: var(--clr-color-action-600, var(--fallback-color-no-clr));
+}

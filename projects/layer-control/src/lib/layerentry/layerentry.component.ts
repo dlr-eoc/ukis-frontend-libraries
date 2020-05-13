@@ -135,7 +135,7 @@ export class LayerentryComponent implements OnInit {
 
   zoomTo(layer: Layer) {
     if (this.mapState && layer.bbox && layer.bbox.length >= 4) {
-      this.mapState.setExtent( layer.bbox as [number, number, number, number]);
+      this.mapState.setExtent(layer.bbox as [number, number, number, number]);
     }
   }
 
@@ -226,6 +226,11 @@ export class LayerentryComponent implements OnInit {
     } else {
       return this.layersSvc.isGroupLast(layer, null, layer.filtertype);
     }
+  }
+
+  getExpandShape() {
+    // return this.openProperties ? 'down' : 'right';
+    return this.openProperties ? {transform: 'rotate(180deg)'} : {transform: 'rotate(90deg)'};
   }
 
 }

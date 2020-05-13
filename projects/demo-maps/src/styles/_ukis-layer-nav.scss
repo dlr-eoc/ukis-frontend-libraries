@@ -17,12 +17,12 @@
 
         &.disabled {
           pointer-events: none;
-          color: $clr-light-midtone-gray;
+          color: var(--clr-color-neutral-400, var(--fallback-color-no-clr));
           cursor: default;
         }
 
         &.active {
-          color: $clr-action-blue;
+          color: var(--clr-color-action-600, var(--fallback-color-no-clr));
         }
       }
 
@@ -55,7 +55,7 @@
       }
 
       .body {
-        border-left: 1px solid $clr-light-midtone-gray;
+        border-left: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
         padding-left: 0;
         margin: 0 0 0.3rem 8px;
 
@@ -70,13 +70,17 @@
           }
         }
 
-        .sublayers,
-        .tabsbody {
+        .tabsbody,
+        .sublayers {
           border-radius: 2px;
           padding: 0.2rem;
           margin-right: -0.2rem;
-          border: 1px solid $clr-light-midtone-gray;
-          border-left-width: 0;
+          border-top: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+          border-right: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+
+          &:last-child {
+            border-bottom: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+          }
         }
 
         .layersettings {
@@ -100,6 +104,14 @@
       }
     }
 
+    .layergroup {
+      .body {
+        .tabsbody {
+          border-right: none;
+        }
+      }
+    }
+
     h5 {
       font-size: 14px;
       margin: 0 0 4px 4px;
@@ -112,7 +124,7 @@
 
       &.active,
       &:hover {
-        color: $clr-action-blue;
+        color: var(--clr-color-action-600, var(--fallback-color-no-clr));
       }
     }
   }
@@ -127,5 +139,15 @@
     border-style: solid;
     border-width: 0px 0px 1px 1px;
     overflow-x: auto;
+  }
+}
+
+.layer-range-input {
+  --clr-forms-range-track-color: var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+  margin-top: 0.5rem;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 1pt 1pt var(--clr-color-action-600, var(--fallback-color-no-clr));
   }
 }

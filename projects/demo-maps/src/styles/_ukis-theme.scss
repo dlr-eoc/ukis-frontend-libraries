@@ -1,0 +1,30 @@
+/**
+ * https://css-tricks.com/guides/css-custom-properties/
+ * https://css-tricks.com/using-custom-properties-modify-components/
+ */
+
+/**
+ * https://clarity.design/documentation/themes #CSS Custom Property Dark Theme
+ * https://github.com/vmware/clarity/search?q=var%28&unscoped_q=var%28&type=Code
+ * https://raw.githubusercontent.com/mathisscott/clarity-theming-starter/clarity-css-dark-theme/src/_dark-theme.scss
+ */
+
+/**
+ * NOTE: If your application must support IE11, you must define all your custom properties
+ *       in the `:root {}` selector. Otherwise, the polyfills we use will not recognize
+ *       the overrides in IE. Try to limit the number of `:root {}` declarations in your CSS.
+ *       It's not a performance issue. It's just saner to maintain.
+ */
+
+@import "./ukis-variables";
+// --- overwrite Clarity variables - remove if
+@import "./overwrites-clr-variables";
+@import "@clr/ui/src/main";
+// ----------------------------------
+@import "./clr-vertival-nav-layout";
+
+@import "./ukis-inputs";
+@import "./ukis-layer-nav";
+
+
+@import "./ukis-core-ui-layout";

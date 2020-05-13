@@ -15,6 +15,7 @@ jobs:
           node-version: 12
       - run: npm ci
       - run: npm run test -- --headless
+      - run: npm run schematics:test
       - run: npm run build
       - name: Archive dist artifacts
         uses: actions/upload-artifact@v1

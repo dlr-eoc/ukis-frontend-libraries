@@ -21,6 +21,8 @@
     "start": "ng serve demo-maps --sourceMap",
     "build": "node scripts/library/index.js --build",
     "test": "node scripts/library/index.js --test",
+    "schematics:test": "jasmine dist/core-ui/schematics/**/*_spec.js",
+    "preschematics:test": "ng build core-ui",
     "setVersionsInBuild": "node scripts/library/index.js --set",
     "lint": "ng lint",
     "compodoc": "compodoc -p tsconfig.doc.json -a projects/core-ui/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",

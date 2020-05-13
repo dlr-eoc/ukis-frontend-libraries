@@ -21,7 +21,8 @@ export class RouteMapComponent implements OnInit {
 
     this.controls = {
       attribution: true,
-      scaleLine: true
+      scaleLine: true,
+      overviewMap: true
     };
   }
 

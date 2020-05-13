@@ -1,108 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+@import "styles/ukis-theme";
 
-/* You can add global styles to this file, and also import other style files */
+/**
+ * set Clarity header to scroll for overflow
+ * remove this if Issue (https://github.com/vmware/clarity/issues/3843) is fixed!
+ *
+ * @media screen and (min-width: 768px) and (max-width:1170px)
+ */
 
-// overwrite Clarity variables
-@import "styles/overwrites.clarity";
-// Clarity Icons
-@import "@clr/icons/clr-icons.min.css";
-// Clarity Dependency SCSS and Clarity Component SCSS
-@import "@clr/ui/src/main";
-
-@import "styles/inputs";
-
-@import "styles/vertival.nav";
-@import "styles/ukis.layer.nav";
-
-/** HEADER -------------------------------------------------------------- */
-.header {
-  .branding {
-    flex: 0 1 auto;
-    overflow: hidden;
-
-    a {
-      clr-icon {
-        color: #565656;
-      }
-    }
-
-    .title {
-      min-width: 100px;
-      font-size: 1rem;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
+$max-header-width: 1170px; // CSS native variables not working in media queries
+@media screen and (min-width: 768px + 1) and (max-width: $max-header-width) {
+  .header-1 {
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 3.7rem;
   }
-}
-
-@media screen and (min-width: 768px) {
-  .header {
-    .branding {
-      a {
-        clr-icon {
-          color: #fff;
-        }
-      }
-    }
-  }
-}
-
-/** FOOTER -------------------------------------------------------------- */
-.footer {
-  background-color: #eee;
-  padding: 0.2rem 1rem;
-
-  p {
-    margin: 0;
-  }
-}
-
-/** CONTENT -------------------------------------------------------------- */
-// adjust padding of main container for map!!!
-.main-container .content-container .content-area {
-  &.map-view {
-    padding: 0;
-  }
-}
-
-.content-area {
-  background: #fff;
-  color: #444;
-}
-
-/** Clarity Datagrid overwrites */
-@media screen and (max-width: 1500px) {
-  .date-filter {
-    .datagrid-filter {
-      transform: translateX(0) translateY(24px) !important;
-      z-index: 1;
-    }
-  }
-}
-
-@media screen and (max-width: 1015px) {
-  .contry-filter {
-    .datagrid-filter {
-      transform: translateX(0) translateY(24px) !important;
-      z-index: 1;
-    }
-  }
-}
-
-.text-primary {
-  color: rgb(0, 119, 184);
-}
-
-.ol-box {
-  background-color: rgba(255, 255, 255, 0.4);
-  border-color: rgba(87, 87, 87, 0.4) !important;
-
-  &.ol-drag-select {
-    border-color: #0077b8 !important;
-  }
-}
-
-.ol-overviewmap {
-  left: 0.5em !important;
-  bottom: 3.0em !important;
 }
