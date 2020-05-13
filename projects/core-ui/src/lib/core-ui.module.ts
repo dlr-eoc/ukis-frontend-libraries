@@ -11,7 +11,7 @@ import { HeaderComponent } from './header/header.component';
 @NgModule({
   declarations: [GlobalAlertComponent, GlobalProgressComponent, HeaderComponent],
   imports: [CommonModule, ClarityModule],
-  exports: [GlobalAlertComponent, GlobalProgressComponent, ChangedetectorComponent],
+  exports: [GlobalAlertComponent, GlobalProgressComponent],
   providers: [AlertService, ProgressService]
 })
 export class CoreUiModule { }

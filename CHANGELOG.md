@@ -1,7 +1,9 @@
 ### Features
-* **@dlr-eoc/core-ui:** add tests for schemanics to CI
+* **@dlr-eoc/core-ui:** add tests for schematics to CI
 * **@dlr-eoc/core-ui:** Provide header component from core-ui module
 * **@dlr-eoc/map-ol:** Allow to pass OpenLayers options to [IMapControls](projects/map-ol/src/lib/map-ol.component.ts)
+* **demo-maps:** Added new component `performance`, that measures FPS and change detection.
+* **demo-maps:** Added new route `map7` that showcases drop in performance when displaying large vectordata.
 
 
 ### Refactoring

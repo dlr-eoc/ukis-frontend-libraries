@@ -18,7 +18,10 @@
     "@dlr-eoc/layer-control": "0.0.0-PLACEHOLDER",
     "@dlr-eoc/map-tools": "0.0.0-PLACEHOLDER",
     "@dlr-eoc/owc-control": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/base-layers-raster": "0.0.0-PLACEHOLDER"
+    "@dlr-eoc/base-layers-raster": "0.0.0-PLACEHOLDER",
+    "@turf/bbox": "^6.0.1",
+    "@turf/simplify": "^5.1.5",
+    "reproject": "^1.2.5"
   },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
