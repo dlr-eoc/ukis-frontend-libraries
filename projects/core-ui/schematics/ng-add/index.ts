@@ -183,7 +183,8 @@ function ruleAddImportsInAppModule(options: UkisNgAddSchema): Rule {
     { classifiedName: 'GlobalAlertComponent', path: './components/global-alert/global-alert.component', declare: true },
     { classifiedName: 'AlertService', path: './components/global-alert/alert.service', provide: true },
     { classifiedName: 'GlobalProgressComponent', path: './components/global-progress/global-progress.component', declare: true },
-    { classifiedName: 'ProgressService', path: './components/global-progress/progress.service', provide: true }
+    { classifiedName: 'ProgressService', path: './components/global-progress/progress.service', provide: true },
+    { classifiedName: 'ExampleViewComponent', path: './views/example-view/example-view.component', declare: true }
   ];
 
   /**
@@ -243,11 +244,6 @@ function updateAngularArchitect(project: WorkspaceProject, type: string | 'build
   const architect = project.architect;
   if (architect && architect[type]) {
     const target = architect[type];
-    if (target.options && 'assets' in target.options) {
-      if (Array.isArray(target.options.assets) && !target.options.assets.includes('src/manifest.json')) {
-        target.options.assets.push('src/manifest.json');
-      }
-    }
 
     if (target.options && 'styles' in target.options) {
       /** replace styles.css if it exists */

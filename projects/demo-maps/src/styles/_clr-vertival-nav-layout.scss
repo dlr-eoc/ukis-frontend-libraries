@@ -1,0 +1,130 @@
+:root {
+  /** Clarity variables */
+  --clr-vertical-nav-toggle-icon-color: var(--clr-vertical-nav-item-color, var(--fallback-color-no-clr));
+
+  /** UKIS variables */
+  --nav-icon-size: 1rem;
+  --nav-items-distance-side: calc(var(--nav-icon-size) / 1.6);
+}
+
+
+/** nav orientation default left side ------------------------------ */
+.clr-vertical-nav {
+  &.is-collapsed {
+    .nav-icon {
+      margin-left: var(--nav-items-distance-side) !important; //$clr_baselineRem_0_667;
+    }
+
+    /** hide trigger angle icon*/
+    .nav-group-trigger .nav-group-trigger-icon {
+      display: none;
+    }
+  }
+
+  /** icons --------------------------------- */
+  .nav-icon {
+    height: var(--nav-icon-size);
+    width: var(--nav-icon-size);
+    flex: 0 0 var(--nav-icon-size);
+  }
+
+  .nav-trigger-icon {
+    width: var(--nav-icon-size);
+    height: var(--nav-icon-size);
+  }
+
+  /** padding nav-trigger to nav-content ------ */
+  .nav-trigger+.nav-content {
+    padding-top: 0 !important;
+  }
+
+  /** padding/margin nav items ---------------- */
+  .nav-group-content .nav-icon {
+    margin: 0 var(--nav-items-distance-side);
+  }
+
+  .nav-group-text,
+  .nav-link,
+  .nav-group-children .padding {
+    padding: 0 var(--nav-items-distance-side);
+  }
+
+  /** divider --------------------------------- */
+  .nav-divider {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .nav-content>*:not(:last-child) {
+    border-bottom: var(--clr-vertical-nav-trigger-divider-border-color, var(--fallback-color-no-clr)) solid 1px !important;
+  }
+}
+
+/** nav orientation on right side ---------------------------------- */
+.clr-vertical-nav.right {
+  order: 1 !important;
+
+  .nav-trigger {
+    margin-right: auto;
+    margin-left: 0.15rem;
+
+    .nav-trigger-icon {
+      margin-left: 0.5rem;
+      margin-right: auto;
+
+      &[dir="right"] svg {
+        transform: rotate(270deg);
+      }
+
+      &[dir="left"] svg {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  &.is-collapsed {
+    .nav-icon {
+      margin-left: auto !important;
+      margin-right: var(--nav-items-distance-side) !important;
+    }
+  }
+}
+
+
+/** floating vertical nav only not mobile -------------------------- */
+@media screen and (min-width: 768px) {
+  .floating {
+    .content-container {
+      display: block;
+      position: relative;
+
+      .content-area {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .clr-vertical-nav.right {
+        position: absolute;
+        margin: 0.5rem;
+        max-height: calc(100% - 2.5rem); //0.5 for map-controls
+        left: auto;
+        right: 0;
+      }
+
+      .clr-vertical-nav {
+        position: absolute;
+        margin: 0.5rem;
+        max-height: calc(100% - 2.5rem); //0.5 for map-controls
+        left: 0;
+      }
+
+      nav.sidenav {
+        position: absolute;
+        //right: 0;
+        left: 0;
+        height: calc(100vh - (24px * 2.5));
+        background: var(--clr-vertical-nav-bg-color, --fallback-color-no-clr);
+      }
+    }
+  }
+}

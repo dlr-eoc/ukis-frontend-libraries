@@ -6,6 +6,18 @@
 */
 @import '~ol/ol';
 
+:root {
+  --ukis-crosshair-color: #ff0004;
+  --ukis-popup-bg-color: rgb(238, 238, 238);
+  --ukis-drop-shadow: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  --ukis-ol-bbox-bg-color: rgba(255, 255, 255, 0.4);
+  --ukis-ol-bbox-border-color: rgba(87, 87, 87, 0.4);
+  --ukis-ol-overviewmap-left: 0.5em;
+  --ukis-ol-overviewmap-bottom: 3.0em;
+  --ukis-ol-control-bg-color: rgba(87, 87, 87, 0.6);
+  --ukis-ol-control-border-color: rgba(87, 87, 87, 0.4);
+}
+
 .map {
   width: 100%;
   height: 100%; //calc(100% - 56px); //header 50 + 2
@@ -16,9 +28,9 @@
 
 .ol-popup {
   position: absolute;
-  background-color: rgb(238, 238, 238);
-  -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
-  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  background-color: var(--ukis-popup-bg-color);
+  -webkit-filter: var(--ukis-drop-shadow);
+  filter: var(--ukis-drop-shadow);
   padding: 15px;
   border-radius: 2px;
   //border: 1px solid rgba(255, 255, 255, 0.9);
@@ -54,7 +66,7 @@
   }
 
   &:after {
-    border-top-color: rgb(238, 238, 238);
+    border-top-color: var(--ukis-popup-bg-color);
     border-width: 10px;
     left: 48px;
     margin-left: -10px;
@@ -72,7 +84,7 @@
   top: 50%;
   left: 50%;
   font-size: large;
-  color: #ff0004;
+  color: var(--ukis-crosshair-color);
   z-index: 1;
   position: absolute;
   cursor: default;
@@ -82,24 +94,44 @@
 .ol-control {
   button {
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--ukis-ol-control-bg-color);
 
     &:focus {
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: var(--ukis-ol-control-bg-color);
     }
 
     &:hover {
-      background-color: rgba(78, 78, 78, 0.5);
+      background-color: var(--ukis-ol-control-border-color);
     }
   }
 }
 
 .ol-scale-line {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.4);
+  line-height: 1.375em;
+
+  .ol-scale-line-inner {
+    background: var(--ukis-ol-control-bg-color);
+    border-color: var(--ukis-ol-control-bg-color);
+  }
 }
 
 .ol-attribution {
   ul {
     font-size: 0.5rem;
   }
+}
+
+.ol-box {
+  background-color: var(--ukis-ol-bbox-bg-color);
+  border-color: var(--ukis-ol-bbox-border-color) !important;
+
+  &.ol-drag-select {
+    border-color: var(--clr-color-action-600, var(--fallback-color-no-clr)) !important;
+  }
+}
+
+.ol-overviewmap {
+  left: var(--ukis-ol-overviewmap-left) !important;
+  bottom: var(--ukis-ol-overviewmap-bottom) !important;
 }

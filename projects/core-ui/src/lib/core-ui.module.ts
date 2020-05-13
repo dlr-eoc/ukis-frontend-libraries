@@ -5,11 +5,11 @@ import { GlobalProgressComponent } from './global-progress/global-progress.compo
 import { ProgressService } from './global-progress/progress.service';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
-import { ChangedetectorComponent } from './changedetector/changedetector.component';
+import { HeaderComponent } from './header/header.component';
 
 
 @NgModule({
-  declarations: [GlobalAlertComponent, GlobalProgressComponent, ChangedetectorComponent],
+  declarations: [GlobalAlertComponent, GlobalProgressComponent, HeaderComponent],
   imports: [CommonModule, ClarityModule],
   exports: [GlobalAlertComponent, GlobalProgressComponent, ChangedetectorComponent],
   providers: [AlertService, ProgressService]
