@@ -65,7 +65,8 @@ async function copyFiles(context) {
     { source: 'projects/core-ui/schematics/**/schema.json', dest: 'dist/core-ui/schematics/' },
     { source: 'projects/core-ui/schematics/*/files/**', dest: 'dist/core-ui/schematics/' },
     { source: 'projects/core-ui/src/lib/global-alert/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/' },
-    { source: 'projects/core-ui/src/lib/global-progress/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/' }
+    { source: 'projects/core-ui/src/lib/global-progress/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/' },
+    { source: 'projects/core-ui/src/lib/header/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/header/' },
   ]
 
   const copyFiles = filePaths.map(item => {
