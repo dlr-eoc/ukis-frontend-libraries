@@ -1,8 +1,4 @@
 <p style="margin: 0px;">
-    <span class="label">
-        FPS:
-        <span class="badge">{{fps}}</span>
-    </span>
     <clr-signpost>
         <clr-signpost-content *clrIfOpen [clrPosition]="'left-middle'">
             <h3>Frames per second</h3>
@@ -12,4 +8,8 @@
             <p>Please not that in Chrome you can also monitor FPS from the developer-tools: Hit <code>ctrl-shift-p</code> and enter <code>fps</code> to find the FPS-meter.</p>
         </clr-signpost-content>
     </clr-signpost>
+    <span class="label">
+        FPS:
+        <span class="badge">{{fps}}</span>
+    </span>
 </p>

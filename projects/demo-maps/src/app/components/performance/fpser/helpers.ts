@@ -24,11 +24,11 @@ export async function timeOneCycle(): Promise<number> {
     const p = new Promise<number>((resolve, reject) => {
         const t0 = window.performance.now();
         setTimeout(() => {
-        const t1 = window.performance.now();
-        const delta = t1 - t0;
-        const fps = 1000 / delta;
-        resolve(fps);
-        });
+            const t1 = window.performance.now();
+            const delta = t1 - t0;
+            const fps = 1000 / delta;
+            resolve(fps);
+        }, 0);
     });
     return p;
 }
