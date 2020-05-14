@@ -4,7 +4,7 @@
         <span class="badge">{{fps}}</span>
     </span>
     <clr-signpost>
-        <clr-signpost-content *clrIfOpen>
+        <clr-signpost-content *clrIfOpen [clrPosition]="'left-middle'">
             <h3>Frames per second</h3>
             <p>Estimates the number of frames that are rendered per second.</p>
             <p>This is done by periodically measuring the time a call to <code>setTimeout(() => ..., 0)</code> takes.</p>
