@@ -29,6 +29,7 @@ import { RouteLicensesComponent } from './route-components/route-licenses/route-
 
 import { HttpClientModule } from '@angular/common/http';
 import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
+import { FetchbuttonComponent } from './route-components/route-example-olperformance/fetchbutton/fetchbutton.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { RouteMap7Component } from './route-components/route-example-olperforman
     RouteLicensesComponent,
     PerformanceComponent,
     BlinkerComponent,
-    FpserComponent
+    FpserComponent,
+    FetchbuttonComponent
   ],
   imports: [
     BrowserModule,
