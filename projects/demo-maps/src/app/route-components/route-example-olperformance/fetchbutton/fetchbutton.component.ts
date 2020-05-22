@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LayersService, VectorLayer } from '@dlr-eoc/services-layers';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
-import simplify from '@turf/simplify';
-import bbox from '@turf/bbox';
-import { reproject } from 'reproject';
+import { VectorSource } from 'ol/source';
+import { GeoJSON } from 'ol/format';
+// import simplify from '@turf/simplify';
+// import bbox from '@turf/bbox';
+// import { reproject } from 'reproject';
 import proj4 from 'proj4';
 import { BehaviorSubject } from 'rxjs';
+import { MapOlService } from '@dlr-eoc/map-ol/src/public-api';
 
 
 type fetchState = 'ready' | 'fetching' | 'done' | 'error';
@@ -23,7 +26,8 @@ export class FetchbuttonComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private layersSvc: LayersService
+    private layersSvc: LayersService,
+    private olSvc: MapOlService
   ) { }
 
   ngOnInit(): void {
@@ -40,15 +44,19 @@ export class FetchbuttonComponent implements OnInit {
 
   private addLayers(dataOrig: any) {
 
-    const str2966 = '+proj=tmerc +lat_0=37.5 +lon_0=-87.08333333333333 +k=0.999966667 +x_0=900000 +y_0=249999.9998983998 +datum=NAD83 +units=us-ft +no_defs';
-    const data = reproject(dataOrig, str2966, proj4.WGS84);
-    const bx = bbox(data);
+    proj4.defs('EPSG:2966', '+proj=tmerc +lat_0=37.5 +lon_0=-87.08333333333333 +k=0.999966667 +x_0=900000 +y_0=249999.9998983998 +datum=NAD83 +units=us-ft +no_defs');
+    const geojsonFormat = new GeoJSON({
+      featureProjection: 'EPSG:2966',
+      dataProjection: 'EPSG:4326'
+    });
+    const features =  geojsonFormat.readFeatures(dataOrig);
+    const bx = this.olSvc.getFeaturesExtent(features);
 
     const exposureLarge = new VectorLayer({
       id: 'largeVectorLayer',
       name: 'Large VectorLayer',
       type: 'geojson',
-      data: data,
+      data: features,
       bbox: bx,
       popup: true,
       visible: false
@@ -59,7 +67,7 @@ export class FetchbuttonComponent implements OnInit {
       id: 'largeVectorLayerStyled',
       name: 'Large, styled VectorLayer',
       type: 'geojson',
-      data: data,
+      data: features,
       bbox: bx,
       popup: true,
       visible: false,
