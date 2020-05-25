@@ -4,6 +4,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { HttpClient } from '@angular/common/http';
+import { LargelayersService } from './services/largelayers.service';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
 
   constructor(
     public layersSvc: LayersService,
+    private dataSvc: LargelayersService,
     public mapStateSvc: MapStateService,
     public mapSvc: MapOlService,
     private http: HttpClient
@@ -35,7 +37,12 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
     const bgLayer = new OsmTileLayer({
       visible: true
     });
-    this.layersSvc.addLayer(bgLayer, 'Layers');
+    const fullLayer = this.dataSvc.makeLayer('full', 'Fully loaded', 'all');
+    const bbxLayer = this.dataSvc.makeLayer('bbx', 'Loading current extent only', 'bbox');
+    const simpleLayer = this.dataSvc.makeLayer('simple', 'Simplified geometry', 'simplifyGeometry');
+    const nopropsLayer = this.dataSvc.makeLayer('noprops', 'No properties', 'noprops');
+
+    [bgLayer, fullLayer, bbxLayer, simpleLayer, nopropsLayer].map(l => this.layersSvc.addLayer(l, 'Layers'));
   }
 
   ngAfterViewInit(): void {
