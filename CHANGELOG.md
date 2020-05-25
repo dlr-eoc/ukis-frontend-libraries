@@ -3,12 +3,13 @@
 * **@dlr-eoc/core-ui:** Provide header component from core-ui module
 * **@dlr-eoc/map-ol:** Allow to pass OpenLayers options to [IMapControls](projects/map-ol/src/lib/map-ol.component.ts)
 * **demo-maps:** Added new component `performance`, that measures FPS and change detection.
-* **demo-maps:** Added new route `map7` that showcases drop in performance when displaying large vectordata.
+* **demo-maps:** Added new route `map7` that showcases drop in performance when displaying large vector datasets.
+* **demo-maps:** Added service `LargeLayersService` that allows users to load data from a WFS with a specified data-strategy (downloading full data, downloading only current viewport, using simplified geometry, not loading any properties) to compare how each strategy affects loading- and render-performance.
 
 
 ### Refactoring
 * **@dlr-eoc/core-ui:** on ngAdd without routing setup a view component so not all code is placed in the App component - this 
-* **@dlr-eoc/core-ui:** Start convert clr-theme to use custom css properties. If you musst support IE11 see [Setting up IE11 support](https://clarity.design/documentation/themes).
+* **@dlr-eoc/core-ui:** Start convert clr-theme to use custom css properties. If you must support IE11 see [Setting up IE11 support](https://clarity.design/documentation/themes).
 
 * **@dlr-eoc/services-layers:** Type for CustomLayer (type: 'custom') now optional on creation
 
