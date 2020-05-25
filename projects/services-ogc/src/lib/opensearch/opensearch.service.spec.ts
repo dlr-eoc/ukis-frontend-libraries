@@ -8,7 +8,7 @@ import { OpensearchWrapperService, SearchResult } from "./opensearch.service";
  */
 
 
-fdescribe('opensearch API', () => {
+describe('opensearch API', () => {
     const osServerUrl = 'https://geotest.eoc.dlr.de/catalogue/srv/en/portal.opensearch';
 
     it('search should work as expected', (done) => {
