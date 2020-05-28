@@ -6,12 +6,13 @@ import { ProgressService } from './global-progress/progress.service';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
 import { HeaderComponent } from './header/header.component';
+import { ViewRefDirective, DynamicComponentComponent } from './dynamic-component/dynamic-component.component';
 
 
 @NgModule({
-  declarations: [GlobalAlertComponent, GlobalProgressComponent, HeaderComponent],
+  declarations: [GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, ViewRefDirective, DynamicComponentComponent],
   imports: [CommonModule, ClarityModule],
-  exports: [GlobalAlertComponent, GlobalProgressComponent],
+  exports: [GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, ViewRefDirective, DynamicComponentComponent],
   providers: [AlertService, ProgressService]
 })
 export class CoreUiModule { }
