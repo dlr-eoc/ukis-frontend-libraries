@@ -1,8 +1,8 @@
 <div class="layer">
   <div class="head">
     <!-- layer expand icon -->
-    <clr-icon shape="angle" [ngStyle]="getExpandShape()" class="iconButton"
-      [ngClass]="{'disabled': is_expandable()}" (click)="showProperties()" title="Details"></clr-icon>
+    <clr-icon shape="angle" [ngStyle]="getExpandShape()" class="iconButton" [ngClass]="{'disabled': is_expandable()}"
+      (click)="showProperties()" title="Details"></clr-icon>
 
     <!-- layer title -->
     <div #ref class="item-title-replacement title" (click)="showProperties()" [title]="getLayerName(layer)">
@@ -36,7 +36,7 @@
     </label>
 
   </div>
-  <div *ngIf="openProperties && expandable" class="body">
+  <div *ngIf="expandable && expanded" class="body">
     <!-- tools: zoomTo, remove, switch Tab -->
     <div class="tools">
       <clr-icon *ngIf="!checkBaselayer(layer, group)" title="Layer settings" shape="cog" class="iconButton"
@@ -48,9 +48,12 @@
       <clr-icon *ngIf="layer.styles?.length > 1" title="Change style" shape="cloud-chart" class="iconButton"
         [ngClass]="{'active': activeTabs['changeStyle']}" (click)="switchTab('changeStyle')"></clr-icon>
 
-      <clr-icon *ngFor="let item of layer.actions" [attr.shape]="item.icon" class="iconButton"
-        (click)="item.action(layer)" [title]="item.title">
-      </clr-icon>
+      <ng-container *ngIf="!checkIsComponentItem(layer.actions, layer);">
+        <clr-icon *ngFor="let item of layer.actions" [attr.shape]="item.icon" class="iconButton"
+          (click)="item.action(layer)" [title]="item.title">
+        </clr-icon>
+      </ng-container>
+
       <span></span>
       <clr-icon *ngIf="canZoomToLayer" shape="zoom-in" class="iconButton" title="Zoom to layer" (click)="zoomTo(layer)">
       </clr-icon>
@@ -58,30 +61,42 @@
         title="Remove layer"></clr-icon>
     </div>
     <div class="tabsbody">
-      <div *ngIf="activeTabs['settings']" class="layersettings">
+      <div *ngIf="activeTabs.settings" class="layersettings">
         <!-- setLayerOpacity -->
         <div class="form-group">
           <label [for]="'layer_transparency_slider_'+layer.id">Opacity:</label>
-          <input [id]="'layer_transparency_slider_'+layer.id" type="range" class="layer-range-input" name="points" [value]="layer.opacity"
-            [min]="0.0" [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)" [(ngModel)]="layer.opacity" />
+          <input [id]="'layer_transparency_slider_'+layer.id" type="range" class="layer-range-input" name="points"
+            [value]="layer.opacity" [min]="0.0" [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)"
+            [(ngModel)]="layer.opacity" />
           <span>{{" "+layer.opacity}}</span>
         </div>
+        <ng-container *ngIf="checkIsComponentItem(layer.actions, layer);">
+          <ukis-dynamic-component [dynamicComponent]="layer.actions"></ukis-dynamic-component>
+        </ng-container>
       </div>
       <!-- show Legend -->
-      <div *ngIf="activeTabs['legend'] && layer.legendImg">
-        <img [src]="layer.legendImg" />
+      <div *ngIf="activeTabs.legend && layer.legendImg">
+        <ng-container *ngIf="checkIsComponentItem(layer.legendImg, layer); else imageUrl">
+          <ukis-dynamic-component [dynamicComponent]="layer.legendImg"></ukis-dynamic-component>
+        </ng-container>
+
+        <ng-template #imageUrl>
+          <img [src]="layer.legendImg" />
+        </ng-template>
       </div>
       <!-- show Description -->
-      <div *ngIf="activeTabs['description'] && layer.description">
+      <div *ngIf="activeTabs.description && layer.description">
         <span [innerHTML]="layer.description"></span>
       </div>
       <!-- show style-switcher -->
-      <div *ngIf="activeTabs['changeStyle'] && layer.styles && layer.styles?.length > 1">
+      <div *ngIf="activeTabs.changeStyle && layer.styles && layer.styles?.length > 1">
         <select clrSelect (change)="executeChangeStyle($event.target.value)">
           <option *ngFor="let style of layer.styles" [value]="style.name"
             [attr.selected]="isSelectedStyle(style.name) ? true : null">{{style.title}}</option>
         </select>
       </div>
     </div>
+
   </div>
+
 </div>

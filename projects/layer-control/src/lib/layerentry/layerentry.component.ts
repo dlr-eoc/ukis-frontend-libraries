@@ -21,7 +21,7 @@ export class LayerentryComponent implements OnInit {
 
   @Input('group') group?: LayerGroup;
   @Input('layerGroups') layerGroups?: LayerGroup[];
-  @Input('expanded') openProperties = false;
+  @Input('expanded') expanded = false;
   @Input('expandable') expandable = true;
 
 
@@ -36,8 +36,27 @@ export class LayerentryComponent implements OnInit {
     changeStyle: false
   };
 
+
   constructor() {
 
+  }
+
+  /**
+   * obj: {any| IDynamicComponent}
+   */
+  checkIsComponentItem(obj: any, layer: Layer) {
+    let isComp = false;
+    if (obj) {
+      if ('component' in obj || ('component' in obj && 'inputs' in obj)) {
+        if (!obj.inputs) {
+          obj.inputs = Object.assign({ layer }, obj.inputs);
+        } else if (obj.inputs && !obj.inputs.layer) {
+          obj.inputs = Object.assign({ layer }, obj.inputs);
+        }
+        isComp = true;
+      }
+    }
+    return isComp;
   }
 
   getLayerName(layer: Layer) {
@@ -109,8 +128,8 @@ export class LayerentryComponent implements OnInit {
    * setLayerIndex
    */
   setLayerIndex(layer: Layer, dir, group?: LayerGroup) {
-    console.log('is First', this.isFirst(layer));
-    console.log('is Last', this.isLast(layer));
+    // console.log('is First', this.isFirst(layer));
+    // console.log('is Last', this.isLast(layer));
     // console.log(layer, group);
     if (group) {
       this.layersSvc.setLayerIndexInGroup(layer, dir, group);
@@ -128,7 +147,7 @@ export class LayerentryComponent implements OnInit {
       // console.log("delete layer from group")
       this.layersSvc.removeLayerFromGroup(selectedLayer, group);
     } else {
-      console.log('delete single layer');
+      // console.log('delete single layer');
       this.layersSvc.removeLayer(selectedLayer, selectedLayer.filtertype);
     }
   }
@@ -170,7 +189,7 @@ export class LayerentryComponent implements OnInit {
 
   showProperties() {
     if (!this.is_expandable()) {
-      this.openProperties = !this.openProperties;
+      this.expanded = !this.expanded;
     }
   }
 
@@ -230,7 +249,7 @@ export class LayerentryComponent implements OnInit {
 
   getExpandShape() {
     // return this.openProperties ? 'down' : 'right';
-    return this.openProperties ? {transform: 'rotate(180deg)'} : {transform: 'rotate(90deg)'};
+    return this.expanded ? { transform: 'rotate(180deg)' } : { transform: 'rotate(90deg)' };
   }
 
 }
