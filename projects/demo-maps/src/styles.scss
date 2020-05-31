@@ -9,10 +9,10 @@
  * set Clarity header to scroll for overflow
  * remove this if Issue (https://github.com/vmware/clarity/issues/3843) is fixed!
  *
- * @media screen and (min-width: 768px) and (max-width:1170px)
+ * @media screen and (min-width: 768px) and (max-width:1305px)
  */
 
-$max-header-width: 1305px; //1170px; // CSS native variables not working in media queries
+$max-header-width: 1305px; // CSS native variables not working in media queries
 @media screen and (min-width: 768px + 1) and (max-width: $max-header-width) {
   .header-1 {
     overflow-x: auto;
