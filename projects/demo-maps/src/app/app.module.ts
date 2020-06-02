@@ -10,6 +10,9 @@ import { GlobalAlertComponent } from './components/global-alert/global-alert.com
 import { AlertService } from './components/global-alert/alert.service';
 import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { ProgressService } from './components/global-progress/progress.service';
+import { BlinkerComponent } from './components/performance/blinker/blinker.component';
+import { FpserComponent } from './components/performance/fpser/fpser.component';
+import { PerformanceComponent } from './components/performance/performance.component';
 
 import { MapOlModule } from '@dlr-eoc/map-ol';
 import { LayerControlModule } from '@dlr-eoc/layer-control';
@@ -25,6 +28,7 @@ import { RouteMap6Component } from './route-components/route-example-layer-style
 import { RouteLicensesComponent } from './route-components/route-licenses/route-licenses.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +42,11 @@ import { HttpClientModule } from '@angular/common/http';
     RouteMap4Component,
     RouteMap5Component,
     RouteMap6Component,
-    RouteLicensesComponent
+    RouteMap7Component,
+    RouteLicensesComponent,
+    PerformanceComponent,
+    BlinkerComponent,
+    FpserComponent
   ],
   imports: [
     BrowserModule,
