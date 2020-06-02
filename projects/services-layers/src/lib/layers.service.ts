@@ -26,7 +26,7 @@ export class LayersService {
    * filtertype: TFiltertypes
    * if filtertype is not provided the filtertype of the Layer is used!
    *
-   * if toGroup is true the layer is not added to the list of Layers and storeItems only used  internal
+   * if toGroup is true the layer is not added to the list of Layers and storeItems. Only used  internally.
    */
   public addLayer(layer: Layer, filtertype?: TFiltertypes, toGroup?: boolean) {
     if (!this.isInLayergroups(layer)) {
