@@ -1,3 +1,5 @@
+# [7.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.1.0) (2020-06-03) (Schematics, OL-configuration, performance-monitoring)
+
 ### Features
 * **@dlr-eoc/core-ui:** add tests for schematics to CI
 * **@dlr-eoc/core-ui:** Provide header component from core-ui module
