@@ -83,9 +83,9 @@ If your project depends on a package that is already listed in [frontend-librari
 # How to publish a new version for all projects
 The general workflow to create a new version:
 1. clone the repository and create a new branch for your feature specific changes based on master.
+2. make sure you have updated CHANGELOG and README and commit all your stuff.
+3. push your branch `git push origin <branch>` and check if the github actions test and build correctly.
 
-2. push your branch `git push origin <branch>` and check if the github actions test and build correctly.
-- before you push the branch make sure you have updated CHANGELOG and README and commit all your stuff.
 #### further you can test and build locally
 - run `node scripts/library/index.js -c` to check if all dependencies are present. (node_modules must be installed for this)
 - run `node scripts/library/index.js -t` to test all projects. (node_modules must be installed for this)
@@ -95,6 +95,7 @@ The general workflow to create a new version:
 
 ## Then the UKIS Team will publish a new version
 - based on the new master create a release branch e.g `git checkout -b release-v7.1.0`
+- set version, date and description in the CHANGELOG.md e.g. `# [<version>](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v<version>) (<date>) (<description>)`
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Milestone XY"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
 - merge the release branch in the master by making a pull request
