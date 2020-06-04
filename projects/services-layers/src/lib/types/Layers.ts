@@ -116,6 +116,11 @@ export interface ILayerElevationDimension {
   value?: string;
 }
 
+
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
+export type CrossOriginType = 'anonymous' | 'use-credentials';
+
+
 export interface IRasterLayerOptions extends ILayerOptions {
   url: string;
   subdomains?: Array<string>;
@@ -124,6 +129,7 @@ export interface IRasterLayerOptions extends ILayerOptions {
   /** check if the service supports this tilesize */
   tileSize?: number;
   type: TRasterLayertype;
+  crossOrigin?: CrossOriginType;
 }
 
 export interface IVectorLayerOptions extends ILayerOptions {
@@ -178,7 +184,7 @@ export class Layer implements ILayerOptions {
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
   styles?: ILayerStyleSet[];
   /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
-  crossOrigin?: string;
+  crossOrigin?: CrossOriginType;
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);
