@@ -177,7 +177,7 @@ describe('MapOlService', () => {
       name: 'Custom Layer KML',
       type: 'custom',
       custom_layer: vectorImageLayer,
-      visible: false,
+      visible: false
     });
 
     ukisRasterLayer = new RasterLayer({
