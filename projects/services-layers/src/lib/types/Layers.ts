@@ -117,7 +117,10 @@ export interface ILayerElevationDimension {
 }
 
 
-// https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
+/*
+ * There are effectively only two values that we may set for cors: 
+ * https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
+ */
 export type CrossOriginType = 'anonymous' | 'use-credentials';
 
 

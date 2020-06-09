@@ -177,7 +177,7 @@ describe('MapOlService', () => {
       name: 'Custom Layer KML',
       type: 'custom',
       custom_layer: vectorImageLayer,
-      visible: false
+      visible: false,
     });
 
     ukisRasterLayer = new RasterLayer({
@@ -189,7 +189,8 @@ describe('MapOlService', () => {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       subdomains: ['a', 'b', 'c'],
       attribution: '&copy, <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors',
-      continuousWorld: false
+      continuousWorld: false,
+      crossOrigin: 'anonymous'
     });
 
     ukisvectorLayer = new VectorLayer({
@@ -200,6 +201,17 @@ describe('MapOlService', () => {
       visible: false
     });
 
+  });
+
+  it('should properly set the `crossOrigin` attribute, if given', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    const ukisLayers = [ukisRasterLayer];
+    service.setUkisLayers(ukisLayers, 'Layers');
+
+    const olLayerGroups = service.map.getLayers().getArray();
+    const olRasterLayer = olLayerGroups[1].getLayersArray()[0];
+    expect(olRasterLayer.getSource().crossOrigin).toEqual('anonymous');
   });
 
   it('should be created', () => {
