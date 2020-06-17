@@ -1,6 +1,13 @@
 
 ### Features
+ * **@dlr-eoc/layer-control:** Adjust layerentry so it can use a Angular Component in the settings and as legend #12 #13. 
+ * **@dlr-eoc/services-layers:** Adjust layer types so it can use a Angular Component for `action` or `legendImg` #12 #13. 
+ * **@dlr-eoc/core-ui:** Export DynamicComponent and ViewRefDirective
  * **@dlr-eoc/services-layers:** RasterLayers can now specify the parameter `crossOrigin` in their constructor. 
+
+
+### Refactoring
+* **@dlr-eoc/core-ui:** Add class ukis-range-input to adjust style of clr range
 
 
 # [7.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.1.0) (2020-06-03) (Schematics, OL-configuration, performance-monitoring)
