@@ -1,3 +1,8 @@
+
+### Features
+ * **@dlr-eoc/services-layers:** RasterLayers can now specify the parameter `crossOrigin` in their constructor. 
+
+
 # [7.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.1.0) (2020-06-03) (Schematics, OL-configuration, performance-monitoring)
 
 ### Features
