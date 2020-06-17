@@ -308,10 +308,10 @@ export class RouteMapComponent implements OnInit {
   }
 
   addOverlays() {
-    const layerOnToppOfAll = new BlueMarbleTile()
-    const openSeaMapOnTopp = new OpenSeaMap();
-    this.layersSvc.addLayer(layerOnToppOfAll, 'Overlays');
-    this.layersSvc.addLayer(openSeaMapOnTopp, 'Overlays');
+    const layerOnTopOfAll = new BlueMarbleTile({crossOrigin: 'anonymous'});
+    const openSeaMapOnTop = new OpenSeaMap({crossOrigin: 'anonymous'});
+    this.layersSvc.addLayer(layerOnTopOfAll, 'Overlays');
+    this.layersSvc.addLayer(openSeaMapOnTop, 'Overlays');
   }
 
   updateLayerGroup() {
