@@ -46,7 +46,7 @@ export class LayerentryComponent implements OnInit {
    */
   checkIsComponentItem(obj: any, layer: Layer) {
     let isComp = false;
-    if (obj) {
+    if (obj && typeof obj === 'object') {
       if ('component' in obj || ('component' in obj && 'inputs' in obj)) {
         if (!obj.inputs) {
           obj.inputs = Object.assign({ layer }, obj.inputs);

@@ -92,13 +92,16 @@ export interface ILayerOptions {
   zIndex?: number;
   minResolution?: number;
   maxResolution?: number;
+  /** legend for the layer as image or a angular component */
   legendImg?: string | IDynamicComponent;
   /** geographic coordinates */
   bbox?: TGeoExtent;
   dimensions?: ILayerDimensions;
   /** true if show popup or set properties or popup-function  */
   popup?: boolean | Array<string> | popup;
-  actions?: [{ title: string, icon: string, action: (Layer) => void }] | IDynamicComponent;
+  actions?: [{ title: string, icon: string, action: (Layer) => void }];
+  /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
+  action?: IDynamicComponent;
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
   styles?: ILayerStyleSet[];
   /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
@@ -192,14 +195,14 @@ export class Layer implements ILayerOptions {
   maxResolution?: number;
   legendImg?: string | IDynamicComponent;
 
-  /** geographic coordinates */
   bbox?: TGeoExtent;
   dimensions?: ILayerDimensions;
-  /** true if show popup or set properties or popup-function  */
-  popup?: boolean | Array<string> | popup;
-  actions?: [{ title: string, icon: string, action: (Layer) => void }] | IDynamicComponent;
 
-  /** a layer might have more than one style; eg. true color and false color for the same dataset */
+  popup?: boolean | Array<string> | popup;
+  actions?: [{ title: string, icon: string, action: (Layer) => void }];
+
+  action?: IDynamicComponent;
+
   styles?: ILayerStyleSet[];
   /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
   crossOrigin?: CrossOriginType;
