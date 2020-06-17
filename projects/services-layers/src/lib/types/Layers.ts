@@ -59,6 +59,13 @@ export function isLayertype(inpt: string): inpt is TLayertype {
  */
 export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
 
+/*
+ * There are effectively only two values that we may set for cors:
+ * https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
+ */
+export type CrossOriginType = 'anonymous' | 'use-credentials';
+
+
 export interface ILayerOptions {
   name: string;
   id: string;
@@ -87,6 +94,7 @@ export interface ILayerOptions {
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
   styles?: ILayerStyleSet[];
+  crossOrigin?: CrossOriginType;
 }
 
 export interface ILayerDimensions extends IAnyObject {
@@ -117,11 +125,6 @@ export interface ILayerElevationDimension {
 }
 
 
-/*
- * There are effectively only two values that we may set for cors:
- * https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin
- */
-export type CrossOriginType = 'anonymous' | 'use-credentials';
 
 
 export interface IRasterLayerOptions extends ILayerOptions {
@@ -132,7 +135,6 @@ export interface IRasterLayerOptions extends ILayerOptions {
   /** check if the service supports this tilesize */
   tileSize?: number;
   type: TRasterLayertype;
-  crossOrigin?: CrossOriginType;
 }
 
 export interface IVectorLayerOptions extends ILayerOptions {
@@ -151,7 +153,12 @@ export interface IVectorLayerOptions extends ILayerOptions {
   type: TVectorLayertype;
 }
 
-export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type'> {
+/**
+ * Deliberately does not have the `crossOrigin` property.
+ * When using openlayers as a map-engine, `crossOrigin` is a property that UKIS just passes on to the layersource.
+ * Since that layersource is provided by the user in a CustomLayer, setting `crossOrigin` in the ICustomLayerOptions would have no effect.
+ */
+export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type' | 'crossOrigin'> {
   type?: TLayertype;
   custom_layer: any;
 }
