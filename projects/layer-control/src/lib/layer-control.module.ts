@@ -13,11 +13,12 @@ import { ReversePipe } from './utils/array-reverse.pipe';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BaseLayerControlComponent } from './base-layer-control/base-layer-control.component';
+import { CoreUiModule } from '@dlr-eoc/core-ui';
 
 
 @NgModule({
   declarations: [LayerControlComponent, LayerentryComponent, LayerentryGroupComponent, ObjTypePipe, ReversePipe, BaseLayerControlComponent],
-  imports: [CommonModule, ClarityModule, FormsModule, DragDropModule],
+  imports: [CommonModule, ClarityModule, FormsModule, DragDropModule, CoreUiModule],
   exports: [LayerControlComponent, LayerentryComponent, LayerentryGroupComponent, ObjTypePipe, ReversePipe, BaseLayerControlComponent],
 })
 export class LayerControlModule { }

@@ -1,0 +1,6 @@
+<clr-range-container class="heatmap-range">
+  <label>Heatmap radius:</label>
+  <input type="range" class="ukis-range-input" clrRange name="two" [value]="value" (change)="changeValue($event)"
+    min="1" max="50" step="1" />
+  <clr-control-helper>{{" "+value}}</clr-control-helper>
+</clr-range-container>
