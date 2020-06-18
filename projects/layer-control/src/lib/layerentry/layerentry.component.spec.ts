@@ -74,9 +74,9 @@ describe('LayerentryComponent', () => {
   });
 
   it('should have input expanded', () => {
-    component.openProperties = true;
+    component.expanded = true;
     fixture.detectChanges();
-    expect(component.openProperties).toBe(true);
+    expect(component.expanded).toBe(true);
   });
 
   it('should have input expandable', () => {

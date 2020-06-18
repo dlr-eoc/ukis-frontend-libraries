@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ClarityModule } from '@clr/angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
 import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
@@ -29,6 +30,7 @@ import { RouteLicensesComponent } from './route-components/route-licenses/route-
 
 import { HttpClientModule } from '@angular/common/http';
 import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
+import { ExampleLayerActionComponent } from './components/example-layer-action/example-layer-action.component';
 
 @NgModule({
   declarations: [
@@ -46,12 +48,16 @@ import { RouteMap7Component } from './route-components/route-example-olperforman
     RouteLicensesComponent,
     PerformanceComponent,
     BlinkerComponent,
-    FpserComponent
+    FpserComponent,
+    RouteLicensesComponent,
+    ExampleLayerActionComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ClarityModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MapOlModule,
     LayerControlModule,

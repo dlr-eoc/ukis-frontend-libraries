@@ -15,6 +15,7 @@ import olVectorTileLayer from 'ol/layer/VectorTile';
 import olVectorTileSource from 'ol/source/VectorTile';
 import olMVT from 'ol/format/MVT';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
+import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
 
 @Component({
   selector: 'app-route-map4',
@@ -147,6 +148,10 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const customHeatmapLayer = new CustomLayer({
       id: 'heatmap_layer',
       name: 'Heatmap Layer',
+      actions: [{ title: 'test', icon: '', action: (layer) => { } }],
+      action: {
+        component: ExampleLayerActionComponent, inputs: { value: 10 }
+      },
       custom_layer: new olHeatmapLayer({
         source: new olVectorSource({
           features: this.mapSvc.geoJsonToFeatures(data),
@@ -237,7 +242,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
             this.test.push(mvtlayer);
           }
           // && layer === 'ne_50m_land'  // ne_50m_admin_0_countries // ne_10m_admin_0_countries
-          if (mvtlayer && (mvtlayer === 'ne_50m_land' || mvtlayer === 'ne_50m_admin_0_countries' || mvtlayer === 'ne_10m_admin_0_countries' )) {
+          if (mvtlayer && (mvtlayer === 'ne_50m_land' || mvtlayer === 'ne_50m_admin_0_countries' || mvtlayer === 'ne_10m_admin_0_countries')) {
             return new olStyle({
               stroke: new olStroke({
                 color: 'gray',

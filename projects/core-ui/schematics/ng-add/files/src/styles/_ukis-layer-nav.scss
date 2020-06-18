@@ -102,6 +102,10 @@
           }
         }
       }
+
+      .ukis-range-input.opacity-input {
+        margin-top: 0.5rem;
+      }
     }
 
     .layergroup {
@@ -139,15 +143,5 @@
     border-style: solid;
     border-width: 0px 0px 1px 1px;
     overflow-x: auto;
-  }
-}
-
-.layer-range-input {
-  --clr-forms-range-track-color: var(--clr-color-neutral-400, var(--fallback-color-no-clr));
-  margin-top: 0.5rem;
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 1pt 1pt var(--clr-color-action-600, var(--fallback-color-no-clr));
   }
 }

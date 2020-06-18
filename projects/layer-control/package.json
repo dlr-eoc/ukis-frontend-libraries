@@ -15,6 +15,7 @@
   "dependencies": {
     "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER",
     "@dlr-eoc/services-map-state": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/core-ui": "0.0.0-PLACEHOLDER",
     "@angular/cdk": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "devDependencies": {
