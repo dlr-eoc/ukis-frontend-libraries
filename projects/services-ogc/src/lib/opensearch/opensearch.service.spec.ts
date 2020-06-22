@@ -1,7 +1,7 @@
 import { OpensearchWrapperService, SearchResult } from "./opensearch.service";
 
 /**
- * @TODO: these are not really unittests.
+ * @TODO: these are not really unit tests.
  * They make actual http-requests; meaning they depend on external services.
  * Either create a dummy opensearch-server in js (lots of work)
  * or spin up a docker-container (but CI must support docker).
@@ -32,7 +32,7 @@ describe('opensearch API', () => {
             console.log(description);
             expect(description).toBeTruthy();
             done();
-        })
+        });
     });
 
 });
