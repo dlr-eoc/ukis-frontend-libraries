@@ -47,7 +47,7 @@
     "@clr/icons": "3.1.4",
     "@clr/ui": "3.1.4",
     "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
-    "@schematics/angular": "^9.0.5",
+    "@schematics/angular": "^9.1.9",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "md5": "^2.2.1",
     "ogc-schemas": "^2.6.1",
