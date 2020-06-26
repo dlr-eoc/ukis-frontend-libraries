@@ -77,7 +77,7 @@ export class MapOlService {
 
   /** USED in map-ol.component */
   public createMap(target?: HTMLElement) {
-    const zoom = 3;
+    const zoom = 0;
     const center = {
       lat: 0,
       lon: 0
