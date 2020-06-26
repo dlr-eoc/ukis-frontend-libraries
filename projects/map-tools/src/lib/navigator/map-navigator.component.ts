@@ -13,6 +13,7 @@ export class MapNavigatorComponent implements OnInit, OnDestroy {
   mapstate: MapState;
   subscription: Subscription;
   public inputStep = 0.01;
+  public precision = 2;
   constructor() { }
 
   ngOnInit() {
@@ -37,8 +38,17 @@ export class MapNavigatorComponent implements OnInit, OnDestroy {
     this.mapState.setMapState(newstate);
   }
 
-  stateChange(ev) {
+  stateChange(evt) {
     this.setNewState(this.mapstate);
+  }
+
+  setInputStep(evt: number) {
+    const value = Array.from(Array(evt), (_, x) => '0').join('');
+    this.inputStep = 1 / Number(`1${value}`);
+  }
+
+  public toPrecision(input: number, value: number) {
+    return input.toFixed(value);
   }
 
 }
