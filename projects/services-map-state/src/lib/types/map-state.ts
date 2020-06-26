@@ -34,19 +34,50 @@ export class MapState implements IMapState {
   /** iso 8601 Datestring */
   time: string;
 
-  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent?: TGeoExtent, time?: string) {
+  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], time: string = new Date().toISOString()) {
+    const defaultOptions = {
+      maxzoom: 0,
+      minzoom: 0,
+      notifier: 'map'
+    };
     this.zoom = zoom;
     this.center = center;
-    this.extent = extent || [-180.0, -90.0, 180.0, 90.0];
-    this.time = time || new Date().toISOString();
-    if (options) {
-      this.options = options;
+    this.extent = extent;
+    this.time = time;
+    this.options = Object.assign(defaultOptions, options);
+  }
+
+
+  public sameCenter(center: IMapState['center']) {
+    if (this.center.lat === center.lat && this.center.lon === center.lon) {
+      return true;
     } else {
-      this.options = {
-        maxzoom: 0,
-        minzoom: 0,
-        notifier: 'map'
-      };
+      return false;
+    }
+  }
+
+  public sameZoom(zoom: IMapState['zoom']) {
+    if (this.zoom === zoom) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public sameExtent(extent: TGeoExtent) {
+    const len = extent.length;
+    let isSame = false;
+    if (this.extent.length === len) {
+      isSame = this.extent.every((v, i) => extent[i] === v);
+    }
+    return isSame;
+  }
+
+  public sameNotifier(notifier: IMapState['options']['notifier']) {
+    if (this.options.notifier === notifier) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
