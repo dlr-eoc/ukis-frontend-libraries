@@ -12,6 +12,10 @@ import olVectorSource from 'ol/source/Vector';
 
 import { parse } from 'url';
 import { regularGrid } from './map.utils';
+import { ActivatedRoute } from '@angular/router';
+import { first } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-route-map3',
@@ -23,12 +27,14 @@ import { regularGrid } from './map.utils';
 export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
   controls: IMapControls;
-  mapStateSub: any;
+  subs: Subscription[] = [];
+  private startBbox = null;
   constructor(
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
     public mapSvc: MapOlService,
-    private progressService: ProgressService) {
+    private progressService: ProgressService,
+    public route: ActivatedRoute) {
 
     this.controls = {
       attribution: true,
@@ -40,14 +46,20 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.addLayers();
     this.subscribeToMapState();
+    this.subscribeToRoute();
+    if (this.startBbox) {
+      console.log('this.startBbox', this.startBbox)
+      this.mapStateSvc.setExtent(this.startBbox);
+    }
   }
 
   ngAfterViewInit() {
     this.mapSvc.map.on('moveend', this.updateLayerOnZoom);
   }
 
+
   ngOnDestroy() {
-    this.mapStateSub.unsubscribe();
+    this.subs.map(s => s.unsubscribe());
     this.mapSvc.map.un('moveend', this.updateLayerOnZoom);
   }
 
@@ -87,17 +99,50 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+  updateSearchParamsHashRouting(params: { [key: string]: string }) {
+    const url = parse(window.location.href.replace('#/', ''));
+    const urlHashRouting = parse(window.location.href);
+    const queryString = urlHashRouting.hash.split('?')[1];
+    let query = new URLSearchParams();
+    if (queryString) {
+      query = new URLSearchParams(queryString);
+    }
+    Object.keys(params).map(key => {
+      query.set(key, params[key]);
+    });
+    const newQueryString = decodeURIComponent(`${query}`);
+    const newurl = `${urlHashRouting.protocol}//${urlHashRouting.host}${urlHashRouting.pathname || ''}#${url.pathname}?${newQueryString}`; // &time=${state.time}
+    return newurl;
+  }
+
+  /** set url from MapState */
   subscribeToMapState() {
-    this.mapStateSub = this.mapStateSvc.getMapState().subscribe((state) => {
+    const mapStatSub = this.mapStateSvc.getMapState().subscribe((state) => {
       if (history.pushState) {
-        const url = parse(window.location.href.replace('#/', ''));
         const extent = state.extent.map(item => item.toFixed(3));
-        const newurl = `${url.protocol}//${url.host}/#${url.pathname}?bbox=${extent.join(',')}`; // &time=${state.time}
-        // console.log(newurl)
+
+        const newurl = this.updateSearchParamsHashRouting({ bbox: extent.join(','), zoom: state.zoom.toString() });
         window.history.pushState({ path: newurl }, '', newurl);
       }
     });
+    this.subs.push(mapStatSub);
   }
+
+  /** get url and set MapState */
+  subscribeToRoute() {
+    const queryParamsSub = this.route.queryParams.pipe(first()).subscribe((params) => {
+      if (Object.keys(params).length > 0) {
+        if (params.bbox) {
+          const bbox = params.bbox.split(',').map(i => parseFloat(i));
+          if (bbox.length === 4) {
+            this.startBbox = bbox;
+          }
+        }
+      }
+    });
+    this.subs.push(queryParamsSub);
+  }
+
 
   updateLayerOnZoom = (evt) => {
     const mapState = this.mapStateSvc.getMapState().getValue();

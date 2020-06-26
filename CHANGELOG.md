@@ -1,4 +1,12 @@
 
+### Bug Fixes
+* **demo-maps:** Set routing to HashLocationStrategy and fix update Search Params on MapState change example.
+
+
+### Changes
+* **update dependencies** angular, clarity, ol, proj4
+
+
 ### Features
  * **@dlr-eoc/layer-control:** Adjust layerentry so it can use a Angular Component in the settings and as legend #12 #13. 
  * **@dlr-eoc/services-layers:** Adjust layer types so it can use a Angular Component for `action` or `legendImg` #12 #13. 

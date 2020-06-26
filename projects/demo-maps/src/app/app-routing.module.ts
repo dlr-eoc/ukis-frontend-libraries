@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
 import { RouteMap2Component } from './route-components/route-example-projection/route-map2.component';
 import { RouteMap3Component } from './route-components/route-example-events/route-map3.component';
@@ -65,7 +65,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true, preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

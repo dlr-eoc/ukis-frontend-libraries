@@ -9,9 +9,9 @@
   "main": "index.js",
   "private": true,
   "peerDependencies": {
-    "@angular/cli": "~8.3.25",
-    "@schematics/angular": "~8.3.20",
-    "typescript": "~3.5.3"
+    "@angular/cli": "~9.1.9",
+    "@schematics/angular": "^9.0.5",
+    "typescript": "~3.7.5"
   },
   "dependencies": {
     "toposort": "^2.0.2",
