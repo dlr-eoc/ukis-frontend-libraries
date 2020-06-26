@@ -48,7 +48,6 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     this.subscribeToMapState();
     this.subscribeToRoute();
     if (this.startBbox) {
-      console.log('this.startBbox', this.startBbox)
       this.mapStateSvc.setExtent(this.startBbox);
     }
   }
