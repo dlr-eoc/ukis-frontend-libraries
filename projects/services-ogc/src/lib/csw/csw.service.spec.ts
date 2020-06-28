@@ -1,8 +1,8 @@
 import { XhrFactory, HttpClient, HttpXhrBackend } from '@angular/common/http';
 import { CswService } from './csw.service';
-import cli from '@angular/cli';
-import { CapabilitiesBaseType } from './typedefinitions/www.opengis.net/ows';
-import { DescribeRecordResponseType, GetRecordByIdResponseType, GetRecordsResponseType } from './typedefinitions/www.opengis.net/cat/csw/2.0.2';
+import { DescribeRecordResponseType, GetRecordByIdResponseType, GetRecordsResponseType,
+    CapabilitiesType, DescribeRecordType, GetCapabilitiesType, GetRecordByIdType,
+    GetRecordsType, GetDomainType, GetDomainResponseType} from './typedefinitions/www.opengis.net/cat/csw/2.0.2';
 
 
 
@@ -11,7 +11,6 @@ class MyXhrFactory extends XhrFactory {
         return new XMLHttpRequest();
     }
 }
-
 
 class TestHttpClient extends HttpClient {
     constructor() {
@@ -28,7 +27,8 @@ fdescribe('Testing CSW client', () => {
 
 
     it('testing GetCapabilities', (done) => {
-        client.getCapabilities(serviceUrl, '2.0.2').subscribe((result: CapabilitiesBaseType) => {
+        const args = new GetCapabilitiesType();
+        client.getCapabilities(serviceUrl, args).subscribe((result: CapabilitiesType) => {
             expect(result).toBeTruthy();
             expect(result.OperationsMetadata.Operation).toBeTruthy();
             done();
@@ -36,29 +36,41 @@ fdescribe('Testing CSW client', () => {
     });
 
     it('testing DescribeRecord', (done) => {
-        client.describeRecord(serviceUrl, '2.0.2').subscribe((result: DescribeRecordResponseType) => {
+        const args = new DescribeRecordType();
+        client.describeRecord(serviceUrl, args).subscribe((result: DescribeRecordResponseType) => {
             expect(result).toBeTruthy();
+            expect(result.SchemaComponent[0].schemaLanguage).toBeTruthy();
             done();
         });
     });
 
     it('testing GetRecordById', (done) => {
-        client.getRecordById(serviceUrl, '2.0.2', '9e0ce87d-07b8-420c-a8aa-9de6104f61d6', 'full').subscribe((result: GetRecordByIdResponseType) => {
+        const args = new GetRecordByIdType();
+        args.Id = ['9e0ce87d-07b8-420c-a8aa-9de6104f61d6'];
+        client.getRecordById(serviceUrl, args).subscribe((result: GetRecordByIdResponseType) => {
             expect(result).toBeTruthy();
+            expect(result.AbstractRecord[0].Record.AnyText).toBeTruthy();
             done();
         });
     });
 
     it('testing GetRecords', (done) => {
-        client.getRecords(serviceUrl, '2.0.2', 'full').subscribe((result: GetRecordsResponseType) => {
+        const args = new GetRecordsType();
+        client.getRecords(serviceUrl, args).subscribe((result: GetRecordsResponseType) => {
             expect(result).toBeTruthy();
+            expect(result.SearchResults.AbstractRecord[0].Record.AnyText).toBeTruthy();
             done();
         });
     });
 
-    it('testing GetRepositoryItem', (done) => {});
-
-    it('testing GetDomain', (done) => {});
+    it('testing GetDomain', (done) => {
+        const args = new GetDomainType();
+        client.getDomain(serviceUrl, args).subscribe((result: GetDomainResponseType) => {
+            expect(result).toBeTruthy();
+            expect(result.DomainValues[0].RangeOfValues).toBeTruthy();
+            done();
+        });
+    });
 
 
 

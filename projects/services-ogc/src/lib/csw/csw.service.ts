@@ -3,9 +3,16 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import * as parser from 'fast-xml-parser';
-import { CswVersion } from './typedefinitions/manually-added';
-import { DescribeRecordResponseType, GetRecordByIdResponseType, GetRecordsResponseType, ElementSetType } from './typedefinitions/www.opengis.net/cat/csw/2.0.2';
-import { CapabilitiesBaseType } from './typedefinitions/www.opengis.net/ows';
+import { DescribeRecordResponseType, GetRecordByIdResponseType, GetRecordsResponseType, document as CSWResponse,
+    CapabilitiesType, GetCapabilitiesType, DescribeRecordType, GetRecordByIdType, RequestBaseType, GetRecordsType, GetDomainType,
+    GetDomainResponseType } from './typedefinitions/www.opengis.net/cat/csw/2.0.2';
+
+
+const xml2jsOptions = {
+    ignoreNameSpace: true
+};
+
+const js2xmlOptions = {};
 
 
 @Injectable({
@@ -13,94 +20,127 @@ import { CapabilitiesBaseType } from './typedefinitions/www.opengis.net/ows';
 })
 export class CswService {
 
+    private xml2jsParser;
+    private js2xmlParser;
+
     constructor(
         private http: HttpClient
-    ) {}
+    ) {
+        this.xml2jsParser = parser;
+        this.js2xmlParser = new parser.j2xParser(js2xmlOptions);
+    }
 
 
-    public getCapabilities(url: string, version: CswVersion): Observable<CapabilitiesBaseType> {
-        return this.http.get(
-            `${url}?service=CSW&request=GetCapabilities&version=${version}`,
-            {responseType: 'text'}
-        ).pipe(
-            map((xmlResponseBody: string) => {
-                const validationResult = parser.validate(xmlResponseBody);
-                if (validationResult !== true) {
-                    throw new Error(`Parsing GetCapabilities has failed: ${validationResult}`);
-                }
-                const capabilities: CapabilitiesBaseType = parser.parse(xmlResponseBody, {
-                    ignoreNameSpace: true
-                }).Capabilities;
-                return capabilities;
+    public getCapabilities(url: string, body: GetCapabilitiesType): Observable<CapabilitiesType> {
+        return this.doPost(url, body).pipe(
+            map((response: CSWResponse) => {
+                return response.Capabilities;
             })
         );
     }
 
 
-    public describeRecord(url: string, version: CswVersion): Observable<DescribeRecordResponseType> {
-        return this.http.get(
-            `${url}?service=CSW&request=DescribeRecord&version=${version}&outputFormat=application/xml&schemaLanguage=http://www.w3.org/XML/Schema&namespace=csw:http://www.opengis.net/cat/csw/${version}`,
-            {responseType: 'text'}
-        ).pipe(
-            map((xmlResponseBody: string) => {
-                const validationResult = parser.validate(xmlResponseBody);
-                if (validationResult !== true) {
-                    throw new Error(`Parsing DescribeRecord has failed: ${validationResult}`);
-                }
-                const description: DescribeRecordResponseType = parser.parse(xmlResponseBody);
-                return description;
+    /**
+     * The mandatory ``DescribeRecord`` operation allows a client to discover elements of the
+     * information model supported by the target catalogue service. The operation allows some
+     * or all of the information model to be described.
+     */
+    public describeRecord(url: string, body: DescribeRecordType): Observable<DescribeRecordResponseType> {
+        return this.doPost(url, body).pipe(
+            map((response: CSWResponse) => {
+                return response.DescribeRecordResponse;
             })
         );
     }
 
 
-    public getRecordById(url: string, version: CswVersion, id: string, elementSetName: ElementSetType): Observable<GetRecordByIdResponseType> {
-        return this.http.get(
-            `${url}?request=GetRecordById&service=CSW&version=${version}&elementSetName=${elementSetName}&id=${id}`,
-            {responseType: 'text'}
-        ).pipe(
-            map((xmlResponseBody: string) => {
-                const validationResult = parser.validate(xmlResponseBody);
-                if (validationResult !== true) {
-                    throw new Error(`Parsing DescribeRecord has failed: ${validationResult}`);
-                }
-                const description: GetRecordByIdResponseType = parser.parse(xmlResponseBody);
-                return description;
+    /**
+     * The mandatory ``GetRecordById`` request retrieves the default representation of catalogue
+     * records using their identifier. The ``GetRecordById`` operation is an implementation of the
+     * ``Present`` operation from the general model. This operation presumes that a previous query
+     * has been performed in order to obtain the identifiers that may be used with this operation.
+     * For example, records returned by a ``GetRecords`` operation may contain references to
+     * other records in the catalogue that may be retrieved using the ``GetRecordById`` operation.
+     * This operation is also a subset of the ``GetRecords`` operation, and is included as a
+     * convenient short form for retrieving and linking to records in a catalogue.
+     */
+    public getRecordById(url: string, body: GetRecordByIdType): Observable<GetRecordByIdResponseType> {
+        return this.doPost(url, body).pipe(
+            map((response: CSWResponse) => {
+                return response.GetRecordByIdResponse;
             })
         );
     }
 
 
-    public getRecords(url: string, version: CswVersion, elementSetName: ElementSetType, constraintText?: string): Observable<GetRecordsResponseType> {
-        // example: https://catalog.data.gov/csw-all?request=GetRecords&service=CSW&version=2.0.2
-        // &namespace=xmlns(csw=http://www.opengis.net/cat/csw/2.0.2),xmlns(gmd=http://www.isotc211.org/2005/gmd)
-        // &typeNames=csw:Record
-        // &ElementSetName=full
-        // &resultType=results
-        // &constraint=AnyText+like+%africa%
-        // &constraintLanguage=CQL_TEXT
-        // &constraint_language_version=1.1.0
-        let fullRequest = `${url}?request=GetRecords&service=CSW&version=${version}` + 
-                            `&namespace=xmlns(csw=http://www.opengis.net/cat/csw/2.0.2),xmlns(gmd=http://www.isotc211.org/2005/gmd)` +
-                            `&typeNames=csw:Record` +
-                            `&elementSetName=${elementSetName}` +
-                            `&resultType=results`;
-        if(constraintText) {
-            fullRequest += `constraintLanguage=CQL_TEXT&constraint_language_version=1.1.0&constraint=${constraintText}`;
-        }
-        return this.http.get(
-            fullRequest,
-            {responseType: 'text'}
-        ).pipe(
-            map((xmlResponseBody: string) => {
-                const validationResult = parser.validate(xmlResponseBody);
-                if (validationResult !== true) {
-                    throw new Error(`Parsing GetRecords has failed: ${validationResult}`);
-                }
-                const results: GetRecordsResponseType = parser.parse(xmlResponseBody);
-                return results;
+    /**
+     * The primary means of resource discovery in the general model are the two operations
+     * ``search`` and ``present``. In the HTTP protocol binding these are combined in the form of the
+     * mandatory ``GetRecords`` operation, which does a search and a piggybacked present.
+     *
+     * The search portion of the ``GetRecords`` operation is encoded using the ``Query`` element.
+     * The ``Query`` element includes the parameters ``typeName`` and ``Constraint``. The ``typeName``
+     * parameter is used to specify which entities, from the information model of the catalogue,
+     * shall be queried. The ``Constraint`` parameter is used to specify which query constraints
+     * shall be applied to identify the request set.
+     *
+     * The present portion of the ``GetRecords`` operation is encoded using the ``outputSchema``
+     * parameter and the ElementName/ElementSetName parameter(s). The ``outputSchema``
+     * parameter indicates which schema shall be used to generate the response to the
+     * ``GetRecords`` operation. The ElementName or ElementSetName parameter is used to
+     * specify which properties of the ``outputSchema`` to include in each record in the
+     * ``GetRecords`` response.
+     */
+    public getRecords(url: string, body: GetRecordsType): Observable<GetRecordsResponseType> {
+        return this.doPost(url, body).pipe(
+            map((response: CSWResponse) => {
+                return response.GetRecordsResponse;
             })
         );
     }
 
+    /**
+     *  The optional GetDomain operation is used to obtain runtime information about the range
+     *  of values of a metadata record element or request parameter. The runtime range of values
+     *  for a property or request parameter is typically much smaller than the value space for that
+     *  property or parameter based on its static type definition. For example, a property or
+     *  request parameter defined as a 16bit positive integer in a database may have a value
+     *  space of 65535 distinct integers but the actual number of distinct values existing in the
+     *  database may be much smaller.
+     *
+     *  This type of runtime information about the range of values of a property or request
+     *  parameter is useful for generating user interfaces with meaningful pick lists or for
+     *  generating query predicates that have a higher chance of actually identifying a result set.
+     *  It should be noted that the GetDomain operation is a “best-effort” operation. That is to
+     *  say that a catalogue tries to generate useful information about the specified request
+     *  parameter or property if it can. It is entirely possible that a catalogue may not be able to
+     *  determine anything about the values of a property or request parameter beyond the basic
+     *  type; in this case only a type reference or a type description will be returned.
+     */
+    public getDomain(url: string, body: GetDomainType): Observable<GetDomainResponseType> {
+        return this.doPost(url, body).pipe(
+            map((response: CSWResponse) => {
+                return response.GetDomainResponse;
+            })
+        );
+    }
+
+
+    private doPost(url: string, body: RequestBaseType | GetCapabilitiesType): Observable<CSWResponse> {
+        const xmlBody = this.js2xmlParser.parse(body);
+        const headers = {
+            'Content-Type': 'text/xml',
+            Accept: 'text/xml, application/xml'
+        };
+        return this.http.post(url, xmlBody, { headers, responseType: 'text' }).pipe(
+            map((xmlResponseBody: string) => {
+                const validationResult = this.xml2jsParser.validate(xmlResponseBody);
+                if (validationResult !== true) {
+                    throw new Error(`Parsing has failed: ${validationResult}`);
+                }
+                const response: CSWResponse = parser.parse(xmlResponseBody, xml2jsOptions);
+                return response;
+            })
+        );
+    }
 }
