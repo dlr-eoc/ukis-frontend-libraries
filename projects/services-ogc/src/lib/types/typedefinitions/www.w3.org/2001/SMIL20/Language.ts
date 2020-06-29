@@ -15,7 +15,7 @@ interface _AnimateColorProxyType extends BaseType {
 }
 interface AnimateColorProxyType extends _AnimateColorProxyType { constructor: { new(): AnimateColorProxyType }; }
 
-interface _animateColorType extends smil20._animateColorPrototype {
+interface _animateColorType extends smil20.animateColorPrototype {
 	alt?: string;
 	begin: string;
 	calcMode?: smil20.Type;
@@ -71,7 +71,7 @@ interface _AnimateMotionProxyType extends BaseType {
 }
 interface AnimateMotionProxyType extends _AnimateMotionProxyType { constructor: { new(): AnimateMotionProxyType }; }
 
-interface _animateMotionType extends smil20._animateMotionPrototype {
+interface _animateMotionType extends smil20.animateMotionPrototype {
 	alt?: string;
 	begin: string;
 	calcMode?: smil20.Type;
@@ -127,7 +127,7 @@ interface _AnimateProxyType extends BaseType {
 }
 interface AnimateProxyType extends _AnimateProxyType { constructor: { new(): AnimateProxyType }; }
 
-interface _animateType extends smil20._animatePrototype {
+interface _animateType extends smil20.animatePrototype {
 	alt?: string;
 	begin: string;
 	calcMode?: smil20.Type;
@@ -183,7 +183,7 @@ interface _SetProxyType extends BaseType {
 }
 interface SetProxyType extends _SetProxyType { constructor: { new(): SetProxyType }; }
 
-interface _setType extends smil20._setPrototype {
+interface _setType extends smil20.setPrototype {
 	alt?: string;
 	begin: string;
 	class?: string;

@@ -1,8 +1,9 @@
 import { XhrFactory, HttpClient, HttpXhrBackend } from '@angular/common/http';
 import { CswService } from './csw.service';
-import { DescribeRecordResponseType, GetRecordByIdResponseType, GetRecordsResponseType,
-    CapabilitiesType, DescribeRecordType, GetCapabilitiesType, GetRecordByIdType,
-    GetRecordsType, GetDomainType, GetDomainResponseType} from './typedefinitions/www.opengis.net/cat/csw/2.0.2';
+import { GetCapabilitiesType, CapabilitiesType, DescribeRecordType, DescribeRecordResponseType,
+    GetRecordByIdType, GetRecordByIdResponseType, GetRecordsType, GetRecordsResponseType,
+    GetDomainType, GetDomainResponseType } from '../types/typedefinitions/www.opengis.net/cat/csw/2.0.2';
+
 
 
 
@@ -19,7 +20,7 @@ class TestHttpClient extends HttpClient {
 }
 
 
-fdescribe('Testing CSW client', () => {
+describe('Testing CSW client', () => {
 
     const http = new TestHttpClient();
     const client = new CswService(http);

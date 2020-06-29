@@ -3,9 +3,10 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import * as parser from 'fast-xml-parser';
-import { DescribeRecordResponseType, GetRecordByIdResponseType, GetRecordsResponseType, document as CSWResponse,
-    CapabilitiesType, GetCapabilitiesType, DescribeRecordType, GetRecordByIdType, RequestBaseType, GetRecordsType, GetDomainType,
-    GetDomainResponseType } from './typedefinitions/www.opengis.net/cat/csw/2.0.2';
+import { DescribeRecordResponseType, GetRecordByIdResponseType, GetRecordsResponseType,
+    document as CSWResponse, CapabilitiesType, GetCapabilitiesType, DescribeRecordType,
+    GetRecordByIdType, RequestBaseType, GetRecordsType, GetDomainType,
+    GetDomainResponseType } from '../types/typedefinitions/www.opengis.net/cat/csw/2.0.2';
 
 
 const xml2jsOptions = {

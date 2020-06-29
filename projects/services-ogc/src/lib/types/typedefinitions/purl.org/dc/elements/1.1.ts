@@ -71,7 +71,7 @@ interface _DCElementProxyType extends _IdentifierProxyType, _TitleProxyType, _Fo
 	  * identification system. */
 	source?: SimpleLiteral;
 }
-interface DCElementProxyType extends _DCElementProxyType { constructor: { new(): DCElementProxyType }; }
+export interface DCElementProxyType extends _DCElementProxyType { constructor: { new(): DCElementProxyType }; }
 
 interface _DescriptionProxyType extends BaseType {
 	/** An account of the content of the resource. Examples of Description
@@ -100,7 +100,7 @@ interface _FormatProxyType extends BaseType {
 	  * of Internet Media Types defining computer media formats). */
 	format?: SimpleLiteral;
 }
-interface FormatProxyType extends _FormatProxyType { constructor: { new(): FormatProxyType }; }
+export interface FormatProxyType extends _FormatProxyType { constructor: { new(): FormatProxyType }; }
 
 interface _IdentifierProxyType extends BaseType {
 	/** An unambiguous reference to the resource within a given context.
@@ -112,7 +112,7 @@ interface _IdentifierProxyType extends BaseType {
 	  * Standard Book Number (ISBN). */
 	identifier?: SimpleLiteral;
 }
-interface IdentifierProxyType extends _IdentifierProxyType { constructor: { new(): IdentifierProxyType }; }
+export interface IdentifierProxyType extends _IdentifierProxyType { constructor: { new(): IdentifierProxyType }; }
 
 interface _RelationProxyType extends BaseType {
 	/** A reference to a related resource. Recommended best practice is to
@@ -120,7 +120,7 @@ interface _RelationProxyType extends BaseType {
 	  * conforming to a formal identification system. */
 	relation?: SimpleLiteral;
 }
-interface RelationProxyType extends _RelationProxyType { constructor: { new(): RelationProxyType }; }
+export interface RelationProxyType extends _RelationProxyType { constructor: { new(): RelationProxyType }; }
 
 interface _RightsProxyType extends BaseType {
 	/** Information about rights held in and over the resource. Typically,
@@ -150,7 +150,7 @@ interface _TitleProxyType extends BaseType {
 	  * which the resource is formally known. */
 	title?: SimpleLiteral;
 }
-interface TitleProxyType extends _TitleProxyType { constructor: { new(): TitleProxyType }; }
+export interface TitleProxyType extends _TitleProxyType { constructor: { new(): TitleProxyType }; }
 
 export interface document extends BaseType {
 	/** An entity responsible for making contributions to the content of
