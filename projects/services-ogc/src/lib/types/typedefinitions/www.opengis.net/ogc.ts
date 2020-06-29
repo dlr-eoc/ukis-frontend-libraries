@@ -24,7 +24,7 @@ interface _ArithmeticOperatorsType extends BaseType {
 export interface ArithmeticOperatorsType extends _ArithmeticOperatorsType { constructor: { new(): ArithmeticOperatorsType }; }
 export var ArithmeticOperatorsType: { new(): ArithmeticOperatorsType };
 
-interface _BBOXType extends _SpatialOpsType, gml._EnvelopeProxyType {
+interface _BBOXType extends _SpatialOpsType, gml.EnvelopeProxyType {
 	PropertyName?: PropertyNameType;
 }
 export interface BBOXType extends _BBOXType { constructor: { new(): BBOXType }; }
@@ -84,7 +84,7 @@ interface _ComparisonOpsType extends BaseType {}
 export interface ComparisonOpsType extends _ComparisonOpsType { constructor: { new(): ComparisonOpsType }; }
 export var ComparisonOpsType: { new(): ComparisonOpsType };
 
-interface _DistanceBufferType extends _SpatialOpsType, gml._GeometryProxyType {
+interface _DistanceBufferType extends _SpatialOpsType, gml.GeometryProxyType {
 	Distance: DistanceType;
 	PropertyName: PropertyNameType;
 }

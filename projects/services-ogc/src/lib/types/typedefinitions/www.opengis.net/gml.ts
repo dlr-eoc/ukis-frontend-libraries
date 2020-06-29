@@ -2118,11 +2118,11 @@ interface _EngineeringDatumType extends _AbstractDatumType {}
 export interface EngineeringDatumType extends _EngineeringDatumType { constructor: { new(): EngineeringDatumType }; }
 export var EngineeringDatumType: { new(): EngineeringDatumType };
 
-interface _EnvelopeProxyType extends BaseType {
+export interface _EnvelopeProxyType extends BaseType {
 	Envelope?: EnvelopeType;
 	EnvelopeWithTimePeriod?: EnvelopeWithTimePeriodType;
 }
-interface EnvelopeProxyType extends _EnvelopeProxyType { constructor: { new(): EnvelopeProxyType }; }
+export interface EnvelopeProxyType extends _EnvelopeProxyType { constructor: { new(): EnvelopeProxyType }; }
 
 /** Envelope defines an extent using a pair of positions defining opposite corners in arbitrary dimensions. The first direct
   * position is the "lower corner" (a coordinate position consisting of all the minimal ordinates for each dimension for all points within the envelope),
@@ -2570,10 +2570,10 @@ interface _GeometryPropertyType extends _GeometryProxyType {
 export interface GeometryPropertyType extends _GeometryPropertyType { constructor: { new(): GeometryPropertyType }; }
 export var GeometryPropertyType: { new(): GeometryPropertyType };
 
-interface _GeometryProxyType extends _GeometricAggregateProxyType, _RingProxyType, _GeometricPrimitiveProxyType, _ImplicitGeometryProxyType {
+export interface _GeometryProxyType extends _GeometricAggregateProxyType, _RingProxyType, _GeometricPrimitiveProxyType, _ImplicitGeometryProxyType {
 	GeometricComplex?: GeometricComplexType;
 }
-interface GeometryProxyType extends _GeometryProxyType { constructor: { new(): GeometryProxyType }; }
+export interface GeometryProxyType extends _GeometryProxyType { constructor: { new(): GeometryProxyType }; }
 
 interface _GeometryStylePropertyType extends BaseType {
 	actuate: xlink.actuateType;

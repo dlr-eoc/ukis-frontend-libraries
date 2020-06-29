@@ -63,7 +63,7 @@ interface _BoundingBoxProxyType extends BaseType {
 	BoundingBox?: BoundingBoxType;
 	WGS84BoundingBox?: WGS84BoundingBoxType;
 }
-interface BoundingBoxProxyType extends _BoundingBoxProxyType { constructor: { new(): BoundingBoxProxyType }; }
+export interface BoundingBoxProxyType extends _BoundingBoxProxyType { constructor: { new(): BoundingBoxProxyType }; }
 
 /** XML encoded minimum rectangular bounding box (or region) parameter, surrounding all the associated data. This type is adapted from the EnvelopeType of GML 3.1, with modified contents and documentation for encoding a MINIMUM size box SURROUNDING all associated data. */
 interface _BoundingBoxType extends BaseType {

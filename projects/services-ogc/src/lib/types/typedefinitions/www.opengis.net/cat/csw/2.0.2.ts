@@ -80,7 +80,7 @@ export var BriefRecordType: { new(): BriefRecordType };
 /** This type extends ows:CapabilitiesBaseType defined in OGC-05-008
   * to include information about supported OGC filter components. A
   * profile may extend this type to describe additional capabilities. */
-interface _CapabilitiesType extends ows._CapabilitiesBaseType {
+interface _CapabilitiesType extends ows.CapabilitiesBaseType {
 	Filter_Capabilities: ogc.Filter_CapabilitiesType;
 }
 export interface CapabilitiesType extends _CapabilitiesType { constructor: { new(): CapabilitiesType }; }
@@ -183,7 +183,7 @@ export var EmptyType: { new(): EmptyType };
 
 /** Request for a description of service capabilities. See OGC 05-008
   * for more information. */
-interface _GetCapabilitiesType extends ows._GetCapabilitiesType {
+interface _GetCapabilitiesType extends ows.GetCapabilitiesType {
 	service?: string;
 }
 export interface GetCapabilitiesType extends _GetCapabilitiesType { constructor: { new(): GetCapabilitiesType }; }
@@ -204,8 +204,8 @@ interface _GetDomainType extends _RequestBaseType {
 	ParameterName: string;
 	PropertyName: string;
 }
-export interface GetDomainType extends _GetDomainType { constructor: { new(): GetDomainType }; }
-export var GetDomainType: { new(): GetDomainType };
+export interface GetDomainType extends _GetDomainType { constructor: new() => GetDomainType; }
+export var GetDomainType: new() => GetDomainType;
 
 /** Returns a representation of the matching entry. If there is no
   * matching record, the response message must be empty. */
