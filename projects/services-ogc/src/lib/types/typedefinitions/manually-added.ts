@@ -1,1 +1,0 @@
-export type CswVersion = '2.0.2';

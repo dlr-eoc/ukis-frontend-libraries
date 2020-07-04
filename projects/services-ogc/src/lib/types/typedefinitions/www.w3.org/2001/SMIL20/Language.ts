@@ -7,13 +7,13 @@ import * as xml from '../../XML/1998/namespace';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 interface _AnimateColorProxyType extends BaseType {
 	animateColor?: animateColorType;
 }
-interface AnimateColorProxyType extends _AnimateColorProxyType { constructor: { new(): AnimateColorProxyType }; }
+interface AnimateColorProxyType extends _AnimateColorProxyType {  }
 
 interface _animateColorType extends smil20.animateColorPrototype {
 	alt?: string;
@@ -63,13 +63,13 @@ interface _animateColorType extends smil20.animateColorPrototype {
 	syncToleranceDefault: string;
 	targetElement?: string;
 }
-export interface animateColorType extends _animateColorType { constructor: { new(): animateColorType }; }
-export var animateColorType: { new(): animateColorType };
+export interface animateColorType extends _animateColorType {  }
+
 
 interface _AnimateMotionProxyType extends BaseType {
 	animateMotion?: animateMotionType;
 }
-interface AnimateMotionProxyType extends _AnimateMotionProxyType { constructor: { new(): AnimateMotionProxyType }; }
+interface AnimateMotionProxyType extends _AnimateMotionProxyType {  }
 
 interface _animateMotionType extends smil20.animateMotionPrototype {
 	alt?: string;
@@ -119,13 +119,13 @@ interface _animateMotionType extends smil20.animateMotionPrototype {
 	syncToleranceDefault: string;
 	targetElement?: string;
 }
-export interface animateMotionType extends _animateMotionType { constructor: { new(): animateMotionType }; }
-export var animateMotionType: { new(): animateMotionType };
+export interface animateMotionType extends _animateMotionType {  }
+
 
 interface _AnimateProxyType extends BaseType {
 	animate?: animateType;
 }
-interface AnimateProxyType extends _AnimateProxyType { constructor: { new(): AnimateProxyType }; }
+interface AnimateProxyType extends _AnimateProxyType {  }
 
 interface _animateType extends smil20.animatePrototype {
 	alt?: string;
@@ -175,13 +175,13 @@ interface _animateType extends smil20.animatePrototype {
 	syncToleranceDefault: string;
 	targetElement?: string;
 }
-export interface animateType extends _animateType { constructor: { new(): animateType }; }
-export var animateType: { new(): animateType };
+export interface animateType extends _animateType {  }
+
 
 interface _SetProxyType extends BaseType {
 	set?: setType;
 }
-interface SetProxyType extends _SetProxyType { constructor: { new(): SetProxyType }; }
+interface SetProxyType extends _SetProxyType {  }
 
 interface _setType extends smil20.setPrototype {
 	alt?: string;
@@ -230,8 +230,8 @@ interface _setType extends smil20.setPrototype {
 	syncToleranceDefault: string;
 	targetElement?: string;
 }
-export interface setType extends _setType { constructor: { new(): setType }; }
-export var setType: { new(): setType };
+export interface setType extends _setType {  }
+
 
 export interface document extends BaseType {
 }

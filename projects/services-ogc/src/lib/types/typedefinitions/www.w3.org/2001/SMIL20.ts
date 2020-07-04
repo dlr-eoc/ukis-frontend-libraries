@@ -6,8 +6,8 @@ import * as smil20lang from './SMIL20/Language';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 type AccumulateType = ("none" | "sum");
 interface _AccumulateType extends Primitive._string { content: AccumulateType; }
@@ -25,8 +25,8 @@ interface _animateColorPrototype extends BaseType {
 	to?: string;
 	values?: string;
 }
-export interface animateColorPrototype extends _animateColorPrototype { constructor: { new(): animateColorPrototype }; }
-export var animateColorPrototype: { new(): animateColorPrototype };
+export interface animateColorPrototype extends _animateColorPrototype {  }
+
 
 interface _animateMotionPrototype extends BaseType {
 	accumulate?: AccumulateType;
@@ -37,8 +37,8 @@ interface _animateMotionPrototype extends BaseType {
 	to?: string;
 	values?: string;
 }
-export interface animateMotionPrototype extends _animateMotionPrototype { constructor: { new(): animateMotionPrototype }; }
-export var animateMotionPrototype: { new(): animateMotionPrototype };
+export interface animateMotionPrototype extends _animateMotionPrototype {  }
+
 
 interface _animatePrototype extends BaseType {
 	accumulate?: AccumulateType;
@@ -50,8 +50,8 @@ interface _animatePrototype extends BaseType {
 	to?: string;
 	values?: string;
 }
-export interface animatePrototype extends _animatePrototype { constructor: { new(): animatePrototype }; }
-export var animatePrototype: { new(): animatePrototype };
+export interface animatePrototype extends _animatePrototype {  }
+
 
 type AttributeTypeType = ("XML" | "CSS" | "auto");
 interface _AttributeTypeType extends Primitive._string { content: AttributeTypeType; }
@@ -76,8 +76,8 @@ interface _setPrototype extends BaseType {
 	attributeType?: AttributeTypeType;
 	to?: string;
 }
-export interface setPrototype extends _setPrototype { constructor: { new(): setPrototype }; }
-export var setPrototype: { new(): setPrototype };
+export interface setPrototype extends _setPrototype {  }
+
 
 export type syncBehaviorDefaultType = ("canSlip" | "locked" | "independent" | "inherit");
 interface _syncBehaviorDefaultType extends Primitive._string { content: syncBehaviorDefaultType; }

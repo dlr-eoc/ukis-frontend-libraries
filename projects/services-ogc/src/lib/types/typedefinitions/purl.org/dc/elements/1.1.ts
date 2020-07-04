@@ -5,8 +5,8 @@ import * as Primitive from '../../../xml-primitives';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 interface _CoverageProxyType extends BaseType {
 	/** The extent or scope of the content of the resource. Typically,
@@ -19,7 +19,7 @@ interface _CoverageProxyType extends BaseType {
 	  * numeric identifiers such as sets of coordinates or date ranges. */
 	coverage?: SimpleLiteral;
 }
-interface CoverageProxyType extends _CoverageProxyType { constructor: { new(): CoverageProxyType }; }
+interface CoverageProxyType extends _CoverageProxyType {  }
 
 interface _DateProxyType extends BaseType {
 	/** A date of an event in the lifecycle of the resource. Typically, Date
@@ -29,7 +29,7 @@ interface _DateProxyType extends BaseType {
 	  * form YYYY-MM-DD. */
 	date?: SimpleLiteral;
 }
-interface DateProxyType extends _DateProxyType { constructor: { new(): DateProxyType }; }
+interface DateProxyType extends _DateProxyType {  }
 
 interface _DCElementProxyType extends _IdentifierProxyType, _TitleProxyType, _FormatProxyType, _RelationProxyType, _CoverageProxyType, _DateProxyType, _DescriptionProxyType, _RightsProxyType {
 	/** The nature or genre of the content of the resource. Type includes
@@ -71,7 +71,7 @@ interface _DCElementProxyType extends _IdentifierProxyType, _TitleProxyType, _Fo
 	  * identification system. */
 	source?: SimpleLiteral;
 }
-export interface DCElementProxyType extends _DCElementProxyType { constructor: { new(): DCElementProxyType }; }
+export interface DCElementProxyType extends _DCElementProxyType {  }
 
 interface _DescriptionProxyType extends BaseType {
 	/** An account of the content of the resource. Examples of Description
@@ -80,15 +80,15 @@ interface _DescriptionProxyType extends BaseType {
 	  * account of the content. */
 	description?: SimpleLiteral;
 }
-interface DescriptionProxyType extends _DescriptionProxyType { constructor: { new(): DescriptionProxyType }; }
+interface DescriptionProxyType extends _DescriptionProxyType {  }
 
 /** This type definition is included as a convenience for schema authors
   * who need a container element for all of the DC elements. */
 interface _elementContainer extends BaseType {
 	DCElement?: DCElementProxyType[];
 }
-export interface elementContainer extends _elementContainer { constructor: { new(): elementContainer }; }
-export var elementContainer: { new(): elementContainer };
+export interface elementContainer extends _elementContainer {  }
+
 
 interface _FormatProxyType extends BaseType {
 	/** The physical or digital manifestation of the resource. Typically,
@@ -100,7 +100,7 @@ interface _FormatProxyType extends BaseType {
 	  * of Internet Media Types defining computer media formats). */
 	format?: SimpleLiteral;
 }
-export interface FormatProxyType extends _FormatProxyType { constructor: { new(): FormatProxyType }; }
+export interface FormatProxyType extends _FormatProxyType {  }
 
 interface _IdentifierProxyType extends BaseType {
 	/** An unambiguous reference to the resource within a given context.
@@ -112,7 +112,7 @@ interface _IdentifierProxyType extends BaseType {
 	  * Standard Book Number (ISBN). */
 	identifier?: SimpleLiteral;
 }
-export interface IdentifierProxyType extends _IdentifierProxyType { constructor: { new(): IdentifierProxyType }; }
+export interface IdentifierProxyType extends _IdentifierProxyType {  }
 
 interface _RelationProxyType extends BaseType {
 	/** A reference to a related resource. Recommended best practice is to
@@ -120,7 +120,7 @@ interface _RelationProxyType extends BaseType {
 	  * conforming to a formal identification system. */
 	relation?: SimpleLiteral;
 }
-export interface RelationProxyType extends _RelationProxyType { constructor: { new(): RelationProxyType }; }
+export interface RelationProxyType extends _RelationProxyType {  }
 
 interface _RightsProxyType extends BaseType {
 	/** Information about rights held in and over the resource. Typically,
@@ -131,7 +131,7 @@ interface _RightsProxyType extends BaseType {
 	  * assumptions may be made about any rights held in or over the resource. */
 	rights?: SimpleLiteral;
 }
-interface RightsProxyType extends _RightsProxyType { constructor: { new(): RightsProxyType }; }
+interface RightsProxyType extends _RightsProxyType {  }
 
 /** This is the default type for all of the DC elements. It defines a
   * complexType SimpleLiteral which permits mixed content but disallows
@@ -142,15 +142,15 @@ interface RightsProxyType extends _RightsProxyType { constructor: { new(): Right
 interface _SimpleLiteral extends Primitive._any {
 	scheme?: string;
 }
-export interface SimpleLiteral extends _SimpleLiteral { constructor: { new(): SimpleLiteral }; }
-export var SimpleLiteral: { new(): SimpleLiteral };
+export interface SimpleLiteral extends _SimpleLiteral {  }
+
 
 interface _TitleProxyType extends BaseType {
 	/** A name given to the resource. Typically, Title will be a name by
 	  * which the resource is formally known. */
 	title?: SimpleLiteral;
 }
-export interface TitleProxyType extends _TitleProxyType { constructor: { new(): TitleProxyType }; }
+export interface TitleProxyType extends _TitleProxyType {  }
 
 export interface document extends BaseType {
 	/** An entity responsible for making contributions to the content of

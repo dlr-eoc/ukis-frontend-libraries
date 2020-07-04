@@ -5,8 +5,8 @@ import * as Primitive from '../../../xml-primitives';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 export type LangType = string;
 type _LangType = Primitive._string;

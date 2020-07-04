@@ -20,7 +20,7 @@ class TestHttpClient extends HttpClient {
 }
 
 
-describe('Testing CSW client', () => {
+fdescribe('Testing CSW client', () => {
 
     const http = new TestHttpClient();
     const client = new CswService(http);
@@ -28,7 +28,12 @@ describe('Testing CSW client', () => {
 
 
     it('testing GetCapabilities', (done) => {
-        const args = new GetCapabilitiesType();
+        const args: GetCapabilitiesType = {
+            service: serviceUrl,
+            AcceptVersions: {
+                Version: ['2.0.2']
+            }
+        };
         client.getCapabilities(serviceUrl, args).subscribe((result: CapabilitiesType) => {
             expect(result).toBeTruthy();
             expect(result.OperationsMetadata.Operation).toBeTruthy();
@@ -37,7 +42,10 @@ describe('Testing CSW client', () => {
     });
 
     it('testing DescribeRecord', (done) => {
-        const args = new DescribeRecordType();
+        const args: DescribeRecordType = {
+            service: serviceUrl,
+            version: '2.0.2',
+        };
         client.describeRecord(serviceUrl, args).subscribe((result: DescribeRecordResponseType) => {
             expect(result).toBeTruthy();
             expect(result.SchemaComponent[0].schemaLanguage).toBeTruthy();
@@ -46,8 +54,11 @@ describe('Testing CSW client', () => {
     });
 
     it('testing GetRecordById', (done) => {
-        const args = new GetRecordByIdType();
-        args.Id = ['9e0ce87d-07b8-420c-a8aa-9de6104f61d6'];
+        const args: GetRecordByIdType = {
+            Id: ['9e0ce87d-07b8-420c-a8aa-9de6104f61d6'],
+            service: serviceUrl,
+            version: '2.0.2',
+        };
         client.getRecordById(serviceUrl, args).subscribe((result: GetRecordByIdResponseType) => {
             expect(result).toBeTruthy();
             expect(result.AbstractRecord[0].Record.AnyText).toBeTruthy();
@@ -56,7 +67,10 @@ describe('Testing CSW client', () => {
     });
 
     it('testing GetRecords', (done) => {
-        const args = new GetRecordsType();
+        const args: GetRecordsType = {
+            service: serviceUrl,
+            version: '2.0.2',
+        };
         client.getRecords(serviceUrl, args).subscribe((result: GetRecordsResponseType) => {
             expect(result).toBeTruthy();
             expect(result.SearchResults.AbstractRecord[0].Record.AnyText).toBeTruthy();
@@ -65,7 +79,12 @@ describe('Testing CSW client', () => {
     });
 
     it('testing GetDomain', (done) => {
-        const args = new GetDomainType();
+        const args: GetDomainType = {
+            service: serviceUrl,
+            version: '2.0.2',
+            ParameterName: '',
+            PropertyName: ''
+        };
         client.getDomain(serviceUrl, args).subscribe((result: GetDomainResponseType) => {
             expect(result).toBeTruthy();
             expect(result.DomainValues[0].RangeOfValues).toBeTruthy();

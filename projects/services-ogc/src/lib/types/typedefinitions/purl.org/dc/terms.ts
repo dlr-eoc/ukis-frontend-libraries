@@ -111,15 +111,15 @@ export interface _RightsProxyType {
 }
 }
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 interface _AudienceProxyType extends BaseType {
 	audience?: dc.SimpleLiteral;
 	educationLevel?: dc.SimpleLiteral;
 	mediator?: dc.SimpleLiteral;
 }
-interface AudienceProxyType extends _AudienceProxyType { constructor: { new(): AudienceProxyType }; }
+interface AudienceProxyType extends _AudienceProxyType {  }
 
 export interface document extends BaseType {
 	abstract: dc.SimpleLiteral;

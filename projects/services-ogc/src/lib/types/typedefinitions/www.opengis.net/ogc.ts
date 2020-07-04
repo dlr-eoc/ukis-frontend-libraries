@@ -10,32 +10,32 @@ import * as gml from './gml';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 interface _AbstractIdType extends BaseType {}
-export interface AbstractIdType extends _AbstractIdType { constructor: { new(): AbstractIdType }; }
-export var AbstractIdType: { new(): AbstractIdType };
+export interface AbstractIdType extends _AbstractIdType {  }
+
 
 interface _ArithmeticOperatorsType extends BaseType {
 	Functions: FunctionsType[];
 	SimpleArithmetic: SimpleArithmeticType[];
 }
-export interface ArithmeticOperatorsType extends _ArithmeticOperatorsType { constructor: { new(): ArithmeticOperatorsType }; }
-export var ArithmeticOperatorsType: { new(): ArithmeticOperatorsType };
+export interface ArithmeticOperatorsType extends _ArithmeticOperatorsType {  }
+
 
 interface _BBOXType extends _SpatialOpsType, gml.EnvelopeProxyType {
 	PropertyName?: PropertyNameType;
 }
-export interface BBOXType extends _BBOXType { constructor: { new(): BBOXType }; }
-export var BBOXType: { new(): BBOXType };
+export interface BBOXType extends _BBOXType {  }
+
 
 interface _BinaryComparisonOpType extends _ComparisonOpsType {
 	matchCase?: boolean;
 	expression: ExpressionProxyType[];
 }
-export interface BinaryComparisonOpType extends _BinaryComparisonOpType { constructor: { new(): BinaryComparisonOpType }; }
-export var BinaryComparisonOpType: { new(): BinaryComparisonOpType };
+export interface BinaryComparisonOpType extends _BinaryComparisonOpType {  }
+
 
 interface _BinaryLogicOpType extends _LogicOpsType {
 	comparisonOps: ComparisonOpsProxyType[];
@@ -43,26 +43,26 @@ interface _BinaryLogicOpType extends _LogicOpsType {
 	logicOps: LogicOpsProxyType[];
 	spatialOps: SpatialOpsProxyType[];
 }
-export interface BinaryLogicOpType extends _BinaryLogicOpType { constructor: { new(): BinaryLogicOpType }; }
-export var BinaryLogicOpType: { new(): BinaryLogicOpType };
+export interface BinaryLogicOpType extends _BinaryLogicOpType {  }
+
 
 interface _BinaryOperatorType extends _ExpressionType {
 	expression: ExpressionProxyType[];
 }
-export interface BinaryOperatorType extends _BinaryOperatorType { constructor: { new(): BinaryOperatorType }; }
-export var BinaryOperatorType: { new(): BinaryOperatorType };
+export interface BinaryOperatorType extends _BinaryOperatorType {  }
+
 
 interface _BinarySpatialOpType extends _SpatialOpsType, gml._GeometryProxyType, gml._EnvelopeProxyType {
 	PropertyName: PropertyNameType[];
 }
-export interface BinarySpatialOpType extends _BinarySpatialOpType { constructor: { new(): BinarySpatialOpType }; }
-export var BinarySpatialOpType: { new(): BinarySpatialOpType };
+export interface BinarySpatialOpType extends _BinarySpatialOpType {  }
+
 
 interface _ComparisonOperatorsType extends BaseType {
 	ComparisonOperator: ComparisonOperatorType[];
 }
-export interface ComparisonOperatorsType extends _ComparisonOperatorsType { constructor: { new(): ComparisonOperatorsType }; }
-export var ComparisonOperatorsType: { new(): ComparisonOperatorsType };
+export interface ComparisonOperatorsType extends _ComparisonOperatorsType {  }
+
 
 export type ComparisonOperatorType = ("LessThan" | "GreaterThan" | "LessThanEqualTo" | "GreaterThanEqualTo" | "EqualTo" | "NotEqualTo" | "Like" | "Between" | "NullCheck");
 interface _ComparisonOperatorType extends Primitive._string { content: ComparisonOperatorType; }
@@ -78,27 +78,27 @@ interface _ComparisonOpsProxyType extends BaseType {
 	PropertyIsNotEqualTo?: BinaryComparisonOpType;
 	PropertyIsNull?: PropertyIsNullType;
 }
-interface ComparisonOpsProxyType extends _ComparisonOpsProxyType { constructor: { new(): ComparisonOpsProxyType }; }
+interface ComparisonOpsProxyType extends _ComparisonOpsProxyType {  }
 
 interface _ComparisonOpsType extends BaseType {}
-export interface ComparisonOpsType extends _ComparisonOpsType { constructor: { new(): ComparisonOpsType }; }
-export var ComparisonOpsType: { new(): ComparisonOpsType };
+export interface ComparisonOpsType extends _ComparisonOpsType {  }
+
 
 interface _DistanceBufferType extends _SpatialOpsType, gml.GeometryProxyType {
 	Distance: DistanceType;
 	PropertyName: PropertyNameType;
 }
-export interface DistanceBufferType extends _DistanceBufferType { constructor: { new(): DistanceBufferType }; }
-export var DistanceBufferType: { new(): DistanceBufferType };
+export interface DistanceBufferType extends _DistanceBufferType {  }
+
 
 interface _DistanceType extends Primitive._number {
 	units: string;
 }
-export interface DistanceType extends _DistanceType { constructor: { new(): DistanceType }; }
-export var DistanceType: { new(): DistanceType };
+export interface DistanceType extends _DistanceType {  }
+
 
 interface _EIDType extends BaseType {}
-interface EIDType extends _EIDType { constructor: { new(): EIDType }; }
+interface EIDType extends _EIDType {  }
 
 interface _ExpressionProxyType extends BaseType {
 	Literal?: LiteralType;
@@ -109,65 +109,65 @@ interface _ExpressionProxyType extends BaseType {
 	Mul?: BinaryOperatorType;
 	Sub?: BinaryOperatorType;
 }
-interface ExpressionProxyType extends _ExpressionProxyType { constructor: { new(): ExpressionProxyType }; }
+interface ExpressionProxyType extends _ExpressionProxyType {  }
 
 interface _ExpressionType extends BaseType {}
-export interface ExpressionType extends _ExpressionType { constructor: { new(): ExpressionType }; }
-export var ExpressionType: { new(): ExpressionType };
+export interface ExpressionType extends _ExpressionType {  }
+
 
 interface _FeatureIdType extends _AbstractIdType {
 	fid: string;
 }
-export interface FeatureIdType extends _FeatureIdType { constructor: { new(): FeatureIdType }; }
-export var FeatureIdType: { new(): FeatureIdType };
+export interface FeatureIdType extends _FeatureIdType {  }
+
 
 interface _FIDType extends BaseType {}
-interface FIDType extends _FIDType { constructor: { new(): FIDType }; }
+interface FIDType extends _FIDType {  }
 
 interface _Filter_CapabilitiesType extends BaseType {
 	Id_Capabilities: Id_CapabilitiesType;
 	Scalar_Capabilities: Scalar_CapabilitiesType;
 	Spatial_Capabilities: Spatial_CapabilitiesType;
 }
-export interface Filter_CapabilitiesType extends _Filter_CapabilitiesType { constructor: { new(): Filter_CapabilitiesType }; }
-export var Filter_CapabilitiesType: { new(): Filter_CapabilitiesType };
+export interface Filter_CapabilitiesType extends _Filter_CapabilitiesType {  }
+
 
 interface _FilterType extends _ComparisonOpsProxyType, _LogicOpsProxyType, _SpatialOpsProxyType {
 	Id: IdProxyType[];
 }
-export interface FilterType extends _FilterType { constructor: { new(): FilterType }; }
-export var FilterType: { new(): FilterType };
+export interface FilterType extends _FilterType {  }
+
 
 interface _FunctionNamesType extends BaseType {
 	FunctionName: FunctionNameType[];
 }
-export interface FunctionNamesType extends _FunctionNamesType { constructor: { new(): FunctionNamesType }; }
-export var FunctionNamesType: { new(): FunctionNamesType };
+export interface FunctionNamesType extends _FunctionNamesType {  }
+
 
 interface _FunctionNameType extends Primitive._string {
 	nArgs: string;
 }
-export interface FunctionNameType extends _FunctionNameType { constructor: { new(): FunctionNameType }; }
-export var FunctionNameType: { new(): FunctionNameType };
+export interface FunctionNameType extends _FunctionNameType {  }
+
 
 interface _FunctionsType extends BaseType {
 	FunctionNames: FunctionNamesType;
 }
-export interface FunctionsType extends _FunctionsType { constructor: { new(): FunctionsType }; }
-export var FunctionsType: { new(): FunctionsType };
+export interface FunctionsType extends _FunctionsType {  }
+
 
 interface _FunctionType extends _ExpressionType {
 	name: string;
 	expression?: ExpressionProxyType[];
 }
-export interface FunctionType extends _FunctionType { constructor: { new(): FunctionType }; }
-export var FunctionType: { new(): FunctionType };
+export interface FunctionType extends _FunctionType {  }
+
 
 interface _GeometryOperandsType extends BaseType {
 	GeometryOperand: GeometryOperandType[];
 }
-export interface GeometryOperandsType extends _GeometryOperandsType { constructor: { new(): GeometryOperandsType }; }
-export var GeometryOperandsType: { new(): GeometryOperandsType };
+export interface GeometryOperandsType extends _GeometryOperandsType {  }
+
 
 export type GeometryOperandType = ("gml:Envelope" | "gml:Point" | "gml:LineString" | "gml:Polygon" | "gml:ArcByCenterPoint" | "gml:CircleByCenterPoint" | "gml:Arc" | "gml:Circle" | "gml:ArcByBulge" | "gml:Bezier" | "gml:Clothoid" | "gml:CubicSpline" | "gml:Geodesic" | "gml:OffsetCurve" | "gml:Triangle" | "gml:PolyhedralSurface" | "gml:TriangulatedSurface" | "gml:Tin" | "gml:Solid");
 interface _GeometryOperandType extends Primitive._string { content: GeometryOperandType; }
@@ -176,50 +176,50 @@ interface _GmlObjectIdType extends _AbstractIdType {
 	/** Database handle for the object.  It is of XML type ID, so is constrained to be unique in the XML document within which it occurs.  An external identifier for the object in the form of a URI may be constructed using standard XML and XPointer methods.  This is done by concatenating the URI for the document, a fragment separator, and the value of the id attribute. */
 	id: string;
 }
-export interface GmlObjectIdType extends _GmlObjectIdType { constructor: { new(): GmlObjectIdType }; }
-export var GmlObjectIdType: { new(): GmlObjectIdType };
+export interface GmlObjectIdType extends _GmlObjectIdType {  }
+
 
 interface _Id_CapabilitiesType extends BaseType {
 	EID: EIDType[];
 	FID: FIDType[];
 }
-export interface Id_CapabilitiesType extends _Id_CapabilitiesType { constructor: { new(): Id_CapabilitiesType }; }
-export var Id_CapabilitiesType: { new(): Id_CapabilitiesType };
+export interface Id_CapabilitiesType extends _Id_CapabilitiesType {  }
+
 
 interface _IdProxyType extends BaseType {
 	FeatureId?: FeatureIdType;
 	GmlObjectId?: GmlObjectIdType;
 }
-interface IdProxyType extends _IdProxyType { constructor: { new(): IdProxyType }; }
+interface IdProxyType extends _IdProxyType {  }
 
 interface _LiteralType extends _ExpressionType {}
-export interface LiteralType extends _LiteralType { constructor: { new(): LiteralType }; }
-export var LiteralType: { new(): LiteralType };
+export interface LiteralType extends _LiteralType {  }
+
 
 interface _LogicalOperatorsType extends BaseType {}
-interface LogicalOperatorsType extends _LogicalOperatorsType { constructor: { new(): LogicalOperatorsType }; }
+interface LogicalOperatorsType extends _LogicalOperatorsType {  }
 
 interface _LogicOpsProxyType extends BaseType {
 	And?: BinaryLogicOpType;
 	Not?: UnaryLogicOpType;
 	Or?: BinaryLogicOpType;
 }
-interface LogicOpsProxyType extends _LogicOpsProxyType { constructor: { new(): LogicOpsProxyType }; }
+interface LogicOpsProxyType extends _LogicOpsProxyType {  }
 
 interface _LogicOpsType extends BaseType {}
-export interface LogicOpsType extends _LogicOpsType { constructor: { new(): LogicOpsType }; }
-export var LogicOpsType: { new(): LogicOpsType };
+export interface LogicOpsType extends _LogicOpsType {  }
+
 
 interface _LowerBoundaryType extends _ExpressionProxyType {}
-export interface LowerBoundaryType extends _LowerBoundaryType { constructor: { new(): LowerBoundaryType }; }
-export var LowerBoundaryType: { new(): LowerBoundaryType };
+export interface LowerBoundaryType extends _LowerBoundaryType {  }
+
 
 interface _PropertyIsBetweenType extends _ComparisonOpsType, _ExpressionProxyType {
 	LowerBoundary: LowerBoundaryType;
 	UpperBoundary: UpperBoundaryType;
 }
-export interface PropertyIsBetweenType extends _PropertyIsBetweenType { constructor: { new(): PropertyIsBetweenType }; }
-export var PropertyIsBetweenType: { new(): PropertyIsBetweenType };
+export interface PropertyIsBetweenType extends _PropertyIsBetweenType {  }
+
 
 interface _PropertyIsLikeType extends _ComparisonOpsType {
 	escapeChar: string;
@@ -229,35 +229,35 @@ interface _PropertyIsLikeType extends _ComparisonOpsType {
 	Literal: LiteralType;
 	PropertyName: PropertyNameType;
 }
-export interface PropertyIsLikeType extends _PropertyIsLikeType { constructor: { new(): PropertyIsLikeType }; }
-export var PropertyIsLikeType: { new(): PropertyIsLikeType };
+export interface PropertyIsLikeType extends _PropertyIsLikeType {  }
+
 
 interface _PropertyIsNullType extends _ComparisonOpsType {
 	PropertyName: PropertyNameType;
 }
-export interface PropertyIsNullType extends _PropertyIsNullType { constructor: { new(): PropertyIsNullType }; }
-export var PropertyIsNullType: { new(): PropertyIsNullType };
+export interface PropertyIsNullType extends _PropertyIsNullType {  }
+
 
 interface _PropertyNameType extends _ExpressionType {}
-export interface PropertyNameType extends _PropertyNameType { constructor: { new(): PropertyNameType }; }
-export var PropertyNameType: { new(): PropertyNameType };
+export interface PropertyNameType extends _PropertyNameType {  }
+
 
 interface _Scalar_CapabilitiesType extends BaseType {
 	ArithmeticOperators?: ArithmeticOperatorsType;
 	ComparisonOperators?: ComparisonOperatorsType;
 	LogicalOperators?: LogicalOperatorsType;
 }
-export interface Scalar_CapabilitiesType extends _Scalar_CapabilitiesType { constructor: { new(): Scalar_CapabilitiesType }; }
-export var Scalar_CapabilitiesType: { new(): Scalar_CapabilitiesType };
+export interface Scalar_CapabilitiesType extends _Scalar_CapabilitiesType {  }
+
 
 interface _SimpleArithmeticType extends BaseType {}
-interface SimpleArithmeticType extends _SimpleArithmeticType { constructor: { new(): SimpleArithmeticType }; }
+interface SimpleArithmeticType extends _SimpleArithmeticType {  }
 
 interface _SortByType extends BaseType {
 	SortProperty: SortPropertyType[];
 }
-export interface SortByType extends _SortByType { constructor: { new(): SortByType }; }
-export var SortByType: { new(): SortByType };
+export interface SortByType extends _SortByType {  }
+
 
 export type SortOrderType = ("DESC" | "ASC");
 interface _SortOrderType extends Primitive._string { content: SortOrderType; }
@@ -266,15 +266,15 @@ interface _SortPropertyType extends BaseType {
 	PropertyName: PropertyNameType;
 	SortOrder?: SortOrderType;
 }
-export interface SortPropertyType extends _SortPropertyType { constructor: { new(): SortPropertyType }; }
-export var SortPropertyType: { new(): SortPropertyType };
+export interface SortPropertyType extends _SortPropertyType {  }
+
 
 interface _Spatial_CapabilitiesType extends BaseType {
 	GeometryOperands: GeometryOperandsType;
 	SpatialOperators: SpatialOperatorsType;
 }
-export interface Spatial_CapabilitiesType extends _Spatial_CapabilitiesType { constructor: { new(): Spatial_CapabilitiesType }; }
-export var Spatial_CapabilitiesType: { new(): Spatial_CapabilitiesType };
+export interface Spatial_CapabilitiesType extends _Spatial_CapabilitiesType {  }
+
 
 export type SpatialOperatorNameType = ("BBOX" | "Equals" | "Disjoint" | "Intersects" | "Touches" | "Crosses" | "Within" | "Contains" | "Overlaps" | "Beyond" | "DWithin");
 interface _SpatialOperatorNameType extends Primitive._string { content: SpatialOperatorNameType; }
@@ -282,15 +282,15 @@ interface _SpatialOperatorNameType extends Primitive._string { content: SpatialO
 interface _SpatialOperatorsType extends BaseType {
 	SpatialOperator: SpatialOperatorType[];
 }
-export interface SpatialOperatorsType extends _SpatialOperatorsType { constructor: { new(): SpatialOperatorsType }; }
-export var SpatialOperatorsType: { new(): SpatialOperatorsType };
+export interface SpatialOperatorsType extends _SpatialOperatorsType {  }
+
 
 interface _SpatialOperatorType extends BaseType {
 	name: SpatialOperatorNameType;
 	GeometryOperands?: GeometryOperandsType;
 }
-export interface SpatialOperatorType extends _SpatialOperatorType { constructor: { new(): SpatialOperatorType }; }
-export var SpatialOperatorType: { new(): SpatialOperatorType };
+export interface SpatialOperatorType extends _SpatialOperatorType {  }
+
 
 interface _SpatialOpsProxyType extends BaseType {
 	BBOX?: BBOXType;
@@ -305,21 +305,21 @@ interface _SpatialOpsProxyType extends BaseType {
 	Touches?: BinarySpatialOpType;
 	Within?: BinarySpatialOpType;
 }
-interface SpatialOpsProxyType extends _SpatialOpsProxyType { constructor: { new(): SpatialOpsProxyType }; }
+interface SpatialOpsProxyType extends _SpatialOpsProxyType {  }
 
 interface _SpatialOpsType extends BaseType {}
-export interface SpatialOpsType extends _SpatialOpsType { constructor: { new(): SpatialOpsType }; }
-export var SpatialOpsType: { new(): SpatialOpsType };
+export interface SpatialOpsType extends _SpatialOpsType {  }
+
 
 interface _UnaryLogicOpType extends _LogicOpsType, _ComparisonOpsProxyType, _LogicOpsProxyType, _SpatialOpsProxyType {
 	Function: FunctionType;
 }
-export interface UnaryLogicOpType extends _UnaryLogicOpType { constructor: { new(): UnaryLogicOpType }; }
-export var UnaryLogicOpType: { new(): UnaryLogicOpType };
+export interface UnaryLogicOpType extends _UnaryLogicOpType {  }
+
 
 interface _UpperBoundaryType extends _ExpressionProxyType {}
-export interface UpperBoundaryType extends _UpperBoundaryType { constructor: { new(): UpperBoundaryType }; }
-export var UpperBoundaryType: { new(): UpperBoundaryType };
+export interface UpperBoundaryType extends _UpperBoundaryType {  }
+
 
 export interface document extends BaseType {
 	Add: BinaryOperatorType;

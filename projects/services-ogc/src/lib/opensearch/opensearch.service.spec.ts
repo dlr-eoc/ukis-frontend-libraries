@@ -9,7 +9,7 @@ import { OpensearchWrapperService, SearchResult } from "./opensearch.service";
 
 
 describe('opensearch API', () => {
-    const osServerUrl = 'https://geotest.eoc.dlr.de/catalogue/srv/en/portal.opensearch';
+    const osServerUrl = 'https://catalog.dehub.dlr.de/opensearch/EOP:DLR:CODE-DE/description'; // code-de: 'https://catalog.dehub.dlr.de/opensearch/'; // catalog(not working?) 'https://geotest.eoc.dlr.de/eoc/oseo/description'; // works: 'https://geotest.eoc.dlr.de/catalogue/srv/en/portal.opensearch';
 
     it('search should work as expected', (done) => {
 

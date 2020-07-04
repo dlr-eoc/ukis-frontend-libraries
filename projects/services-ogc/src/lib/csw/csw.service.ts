@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import * as parser from 'fast-xml-parser';
 import { DescribeRecordResponseType, GetRecordByIdResponseType, GetRecordsResponseType,
-    document as CSWResponse, CapabilitiesType, GetCapabilitiesType, DescribeRecordType,
+    document as CSWDocument, CapabilitiesType, GetCapabilitiesType, DescribeRecordType,
     GetRecordByIdType, RequestBaseType, GetRecordsType, GetDomainType,
     GetDomainResponseType } from '../types/typedefinitions/www.opengis.net/cat/csw/2.0.2';
 
@@ -33,8 +33,10 @@ export class CswService {
 
 
     public getCapabilities(url: string, body: GetCapabilitiesType): Observable<CapabilitiesType> {
-        return this.doPost(url, body).pipe(
-            map((response: CSWResponse) => {
+        return this.doPost(url, {
+            GetCapabilities: body
+        }).pipe(
+            map((response: CSWDocument) => {
                 return response.Capabilities;
             })
         );
@@ -47,8 +49,10 @@ export class CswService {
      * or all of the information model to be described.
      */
     public describeRecord(url: string, body: DescribeRecordType): Observable<DescribeRecordResponseType> {
-        return this.doPost(url, body).pipe(
-            map((response: CSWResponse) => {
+        return this.doPost(url, {
+            DescribeRecord: body
+        }).pipe(
+            map((response: CSWDocument) => {
                 return response.DescribeRecordResponse;
             })
         );
@@ -66,8 +70,10 @@ export class CswService {
      * convenient short form for retrieving and linking to records in a catalogue.
      */
     public getRecordById(url: string, body: GetRecordByIdType): Observable<GetRecordByIdResponseType> {
-        return this.doPost(url, body).pipe(
-            map((response: CSWResponse) => {
+        return this.doPost(url, {
+            GetRecordById: body
+        }).pipe(
+            map((response: CSWDocument) => {
                 return response.GetRecordByIdResponse;
             })
         );
@@ -93,8 +99,10 @@ export class CswService {
      * ``GetRecords`` response.
      */
     public getRecords(url: string, body: GetRecordsType): Observable<GetRecordsResponseType> {
-        return this.doPost(url, body).pipe(
-            map((response: CSWResponse) => {
+        return this.doPost(url, {
+            GetRecords: body
+        }).pipe(
+            map((response: CSWDocument) => {
                 return response.GetRecordsResponse;
             })
         );
@@ -119,15 +127,17 @@ export class CswService {
      *  type; in this case only a type reference or a type description will be returned.
      */
     public getDomain(url: string, body: GetDomainType): Observable<GetDomainResponseType> {
-        return this.doPost(url, body).pipe(
-            map((response: CSWResponse) => {
+        return this.doPost(url, {
+            GetDomain: body
+        }).pipe(
+            map((response: CSWDocument) => {
                 return response.GetDomainResponse;
             })
         );
     }
 
 
-    private doPost(url: string, body: RequestBaseType | GetCapabilitiesType): Observable<CSWResponse> {
+    private doPost(url: string, body: CSWDocument): Observable<CSWDocument> {
         const xmlBody = this.js2xmlParser.parse(body);
         const headers = {
             'Content-Type': 'text/xml',
@@ -139,7 +149,7 @@ export class CswService {
                 if (validationResult !== true) {
                     throw new Error(`Parsing has failed: ${validationResult}`);
                 }
-                const response: CSWResponse = parser.parse(xmlResponseBody, xml2jsOptions);
+                const response: CSWDocument = parser.parse(xmlResponseBody, xml2jsOptions);
                 return response;
             })
         );

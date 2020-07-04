@@ -91,7 +91,9 @@ export class OpensearchWrapperService {
      * @param {object} [options.headers=undefined] Specific headers to send to the service.
      * @returns {Promise<array>|Promise<Response>} The search result as a Promise
      */
-    search(url: string, parameters: SearchParameters, options = {}): Observable<SearchResult> {
+    search(url: string, parameters: SearchParameters, options = {
+        // type: 'application/atom+xml',
+    }): Observable<SearchResult> {
         return this.getServiceInstance(url).pipe(
             switchMap((service: OpenSearchService) => {
                 return from(service.search(parameters, options)) as Observable<SearchResult>;

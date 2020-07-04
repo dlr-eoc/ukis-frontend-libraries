@@ -17,3 +17,10 @@ The unittests so far confirm that fast-xml-parser parses xml in the same datastr
 If, however, incompatibilities should surface between cxsd's type-definitions and fast-xml-parsers parsing-results, we'll have to either
  - hope that cxml is in a browser-runnable state by then, or
  - create the type definitions in another way (jsonix?)
+
+
+## TODOs
+did i miss any required parameters?
+is the created xml body incomplete?
+can it be completed with _namespace and _exists?
+otherwise, move back to jsonix.

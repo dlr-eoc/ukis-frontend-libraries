@@ -12,17 +12,17 @@ import * as ows from '../../ows';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 interface _AbstractQueryProxyType extends BaseType {
 	Query?: QueryType;
 }
-interface AbstractQueryProxyType extends _AbstractQueryProxyType { constructor: { new(): AbstractQueryProxyType }; }
+interface AbstractQueryProxyType extends _AbstractQueryProxyType {  }
 
 interface _AbstractQueryType extends BaseType {}
-export interface AbstractQueryType extends _AbstractQueryType { constructor: { new(): AbstractQueryType }; }
-export var AbstractQueryType: { new(): AbstractQueryType };
+export interface AbstractQueryType extends _AbstractQueryType {  }
+
 
 interface _AbstractRecordProxyType extends BaseType {
 	BriefRecord?: BriefRecordType;
@@ -30,11 +30,11 @@ interface _AbstractRecordProxyType extends BaseType {
 	Record?: RecordType;
 	SummaryRecord?: SummaryRecordType;
 }
-interface AbstractRecordProxyType extends _AbstractRecordProxyType { constructor: { new(): AbstractRecordProxyType }; }
+interface AbstractRecordProxyType extends _AbstractRecordProxyType {  }
 
 interface _AbstractRecordType extends BaseType {}
-export interface AbstractRecordType extends _AbstractRecordType { constructor: { new(): AbstractRecordType }; }
-export var AbstractRecordType: { new(): AbstractRecordType };
+export interface AbstractRecordType extends _AbstractRecordType {  }
+
 
 /** This is a general acknowledgement response message for all requests
   * that may be processed in an asynchronous manner.
@@ -47,8 +47,8 @@ interface _AcknowledgementType extends BaseType {
 	EchoedRequest: EchoedRequestType;
 	RequestId?: string;
 }
-export interface AcknowledgementType extends _AcknowledgementType { constructor: { new(): AcknowledgementType }; }
-export var AcknowledgementType: { new(): AcknowledgementType };
+export interface AcknowledgementType extends _AcknowledgementType {  }
+
 
 /** This type defines a brief representation of the common record
   * format.  It extends AbstractRecordType to include only the
@@ -74,8 +74,8 @@ interface _BriefRecordType extends _AbstractRecordType {
 	  * use the Format element. */
 	type?: dc.SimpleLiteral;
 }
-export interface BriefRecordType extends _BriefRecordType { constructor: { new(): BriefRecordType }; }
-export var BriefRecordType: { new(): BriefRecordType };
+export interface BriefRecordType extends _BriefRecordType {  }
+
 
 /** This type extends ows:CapabilitiesBaseType defined in OGC-05-008
   * to include information about supported OGC filter components. A
@@ -83,16 +83,16 @@ export var BriefRecordType: { new(): BriefRecordType };
 interface _CapabilitiesType extends ows.CapabilitiesBaseType {
 	Filter_Capabilities: ogc.Filter_CapabilitiesType;
 }
-export interface CapabilitiesType extends _CapabilitiesType { constructor: { new(): CapabilitiesType }; }
-export var CapabilitiesType: { new(): CapabilitiesType };
+export interface CapabilitiesType extends _CapabilitiesType {  }
+
 
 interface _ConceptualSchemeType extends BaseType {
 	Authority: string;
 	Document: string;
 	Name: string;
 }
-export interface ConceptualSchemeType extends _ConceptualSchemeType { constructor: { new(): ConceptualSchemeType }; }
-export var ConceptualSchemeType: { new(): ConceptualSchemeType };
+export interface ConceptualSchemeType extends _ConceptualSchemeType {  }
+
 
 /** This type encapsulates all of the standard DCMI metadata terms,
   * including the Dublin Core refinements; these terms may be mapped
@@ -100,8 +100,8 @@ export var ConceptualSchemeType: { new(): ConceptualSchemeType };
 interface _DCMIRecordType extends _AbstractRecordType {
 	DCElement?: dc.DCElementProxyType[];
 }
-export interface DCMIRecordType extends _DCMIRecordType { constructor: { new(): DCMIRecordType }; }
-export var DCMIRecordType: { new(): DCMIRecordType };
+export interface DCMIRecordType extends _DCMIRecordType {  }
+
 
 /** Deletes one or more catalogue items that satisfy some set of
   * conditions. */
@@ -110,16 +110,16 @@ interface _DeleteType extends BaseType {
 	typeName?: string;
 	Constraint: QueryConstraintType;
 }
-export interface DeleteType extends _DeleteType { constructor: { new(): DeleteType }; }
-export var DeleteType: { new(): DeleteType };
+export interface DeleteType extends _DeleteType {  }
+
 
 /** The response contains a list of matching schema components
   * in the requested schema language. */
 interface _DescribeRecordResponseType extends BaseType {
 	SchemaComponent?: SchemaComponentType[];
 }
-export interface DescribeRecordResponseType extends _DescribeRecordResponseType { constructor: { new(): DescribeRecordResponseType }; }
-export var DescribeRecordResponseType: { new(): DescribeRecordResponseType };
+export interface DescribeRecordResponseType extends _DescribeRecordResponseType {  }
+
 
 /** This request allows a user to discover elements of the
   * information model supported by the catalogue. If no TypeName
@@ -134,8 +134,10 @@ interface _DescribeRecordType extends _RequestBaseType {
 	schemaLanguage?: string;
 	TypeName?: string[];
 }
-export interface DescribeRecordType extends _DescribeRecordType { constructor: { new(): DescribeRecordType }; }
-export var DescribeRecordType: { new(): DescribeRecordType };
+
+export interface DescribeRecordType extends _DescribeRecordType {  }
+
+
 
 /** Governs the behaviour of a distributed search.
   * hopCount     - the maximum number of message hops before
@@ -145,8 +147,8 @@ export var DescribeRecordType: { new(): DescribeRecordType };
 interface _DistributedSearchType extends BaseType {
 	hopCount?: number;
 }
-export interface DistributedSearchType extends _DistributedSearchType { constructor: { new(): DistributedSearchType }; }
-export var DistributedSearchType: { new(): DistributedSearchType };
+export interface DistributedSearchType extends _DistributedSearchType {  }
+
 
 interface _DomainValuesType extends BaseType {
 	type: string;
@@ -157,19 +159,19 @@ interface _DomainValuesType extends BaseType {
 	PropertyName: string;
 	RangeOfValues?: RangeOfValuesType;
 }
-export interface DomainValuesType extends _DomainValuesType { constructor: { new(): DomainValuesType }; }
-export var DomainValuesType: { new(): DomainValuesType };
+export interface DomainValuesType extends _DomainValuesType {  }
+
 
 /** Includes a copy of the request message body. */
 interface _EchoedRequestType extends BaseType {}
-export interface EchoedRequestType extends _EchoedRequestType { constructor: { new(): EchoedRequestType }; }
-export var EchoedRequestType: { new(): EchoedRequestType };
+export interface EchoedRequestType extends _EchoedRequestType {  }
+
 
 interface _ElementSetNameType extends _ElementSetType {
 	typeNames?: TypeNameListType;
 }
-export interface ElementSetNameType extends _ElementSetNameType { constructor: { new(): ElementSetNameType }; }
-export var ElementSetNameType: { new(): ElementSetNameType };
+export interface ElementSetNameType extends _ElementSetNameType {  }
+
 
 /** Named subsets of catalogue object properties; these
   * views are mapped to a specific information model and
@@ -178,16 +180,16 @@ export type ElementSetType = ("brief" | "summary" | "full");
 interface _ElementSetType extends Primitive._string { content: ElementSetType; }
 
 interface _EmptyType extends BaseType {}
-export interface EmptyType extends _EmptyType { constructor: { new(): EmptyType }; }
-export var EmptyType: { new(): EmptyType };
+export interface EmptyType extends _EmptyType {  }
+
 
 /** Request for a description of service capabilities. See OGC 05-008
   * for more information. */
 interface _GetCapabilitiesType extends ows.GetCapabilitiesType {
 	service?: string;
 }
-export interface GetCapabilitiesType extends _GetCapabilitiesType { constructor: { new(): GetCapabilitiesType }; }
-export var GetCapabilitiesType: { new(): GetCapabilitiesType };
+export interface GetCapabilitiesType extends _GetCapabilitiesType {  }
+
 
 /** Returns the actual values for some property. In general this is a
   * subset of the value domain (that is, set of permissible values),
@@ -195,8 +197,8 @@ export var GetCapabilitiesType: { new(): GetCapabilitiesType };
 interface _GetDomainResponseType extends BaseType {
 	DomainValues: DomainValuesType[];
 }
-export interface GetDomainResponseType extends _GetDomainResponseType { constructor: { new(): GetDomainResponseType }; }
-export var GetDomainResponseType: { new(): GetDomainResponseType };
+export interface GetDomainResponseType extends _GetDomainResponseType {  }
+
 
 /** Requests the actual values of some specified request parameter
   * or other data element. */
@@ -204,16 +206,16 @@ interface _GetDomainType extends _RequestBaseType {
 	ParameterName: string;
 	PropertyName: string;
 }
-export interface GetDomainType extends _GetDomainType { constructor: new() => GetDomainType; }
-export var GetDomainType: new() => GetDomainType;
+export interface GetDomainType extends _GetDomainType { }
+
 
 /** Returns a representation of the matching entry. If there is no
   * matching record, the response message must be empty. */
 interface _GetRecordByIdResponseType extends BaseType {
 	AbstractRecord?: AbstractRecordProxyType[];
 }
-export interface GetRecordByIdResponseType extends _GetRecordByIdResponseType { constructor: { new(): GetRecordByIdResponseType }; }
-export var GetRecordByIdResponseType: { new(): GetRecordByIdResponseType };
+export interface GetRecordByIdResponseType extends _GetRecordByIdResponseType {  }
+
 
 /** Convenience operation to retrieve default record representations
   * by identifier.
@@ -227,8 +229,8 @@ interface _GetRecordByIdType extends _RequestBaseType {
 	ElementSetName?: ElementSetNameType;
 	Id: string[];
 }
-export interface GetRecordByIdType extends _GetRecordByIdType { constructor: { new(): GetRecordByIdType }; }
-export var GetRecordByIdType: { new(): GetRecordByIdType };
+export interface GetRecordByIdType extends _GetRecordByIdType {  }
+
 
 /** The response message for a GetRecords request. Some or all of the
   * matching records may be included as children of the SearchResults
@@ -239,8 +241,8 @@ interface _GetRecordsResponseType extends BaseType {
 	SearchResults: SearchResultsType;
 	SearchStatus: RequestStatusType;
 }
-export interface GetRecordsResponseType extends _GetRecordsResponseType { constructor: { new(): GetRecordsResponseType }; }
-export var GetRecordsResponseType: { new(): GetRecordsResponseType };
+export interface GetRecordsResponseType extends _GetRecordsResponseType {  }
+
 
 /** The principal means of searching the catalogue. The matching
   * catalogue entries may be included with the response. The client
@@ -258,15 +260,15 @@ interface _GetRecordsType extends _RequestBaseType, _AbstractQueryProxyType {
 	DistributedSearch?: DistributedSearchType;
 	ResponseHandler?: string[];
 }
-export interface GetRecordsType extends _GetRecordsType { constructor: { new(): GetRecordsType }; }
-export var GetRecordsType: { new(): GetRecordsType };
+export interface GetRecordsType extends _GetRecordsType {  }
+
 
 interface _HarvestResponseType extends BaseType {
 	Acknowledgement: AcknowledgementType;
 	TransactionResponse: TransactionResponseType;
 }
-export interface HarvestResponseType extends _HarvestResponseType { constructor: { new(): HarvestResponseType }; }
-export var HarvestResponseType: { new(): HarvestResponseType };
+export interface HarvestResponseType extends _HarvestResponseType {  }
+
 
 /** Requests that the catalogue attempt to harvest a resource from some
   * network location identified by the source URL.
@@ -291,8 +293,8 @@ interface _HarvestType extends _RequestBaseType {
 	ResponseHandler?: string[];
 	Source: string;
 }
-export interface HarvestType extends _HarvestType { constructor: { new(): HarvestType }; }
-export var HarvestType: { new(): HarvestType };
+export interface HarvestType extends _HarvestType {  }
+
 
 /** Returns a "brief" view of any newly created catalogue records.
   * The handle attribute may reference a particular statement in
@@ -301,8 +303,8 @@ interface _InsertResultType extends BaseType {
 	handleRef?: string;
 	BriefRecord: BriefRecordType[];
 }
-export interface InsertResultType extends _InsertResultType { constructor: { new(): InsertResultType }; }
-export var InsertResultType: { new(): InsertResultType };
+export interface InsertResultType extends _InsertResultType {  }
+
 
 /** Submits one or more records to the catalogue. The representation
   * is defined by the application profile. The handle attribute
@@ -312,14 +314,14 @@ interface _InsertType extends BaseType {
 	handle?: string;
 	typeName?: string;
 }
-export interface InsertType extends _InsertType { constructor: { new(): InsertType }; }
-export var InsertType: { new(): InsertType };
+export interface InsertType extends _InsertType {  }
+
 
 interface _ListOfValuesType extends BaseType {
 	Value: any[];
 }
-export interface ListOfValuesType extends _ListOfValuesType { constructor: { new(): ListOfValuesType }; }
-export var ListOfValuesType: { new(): ListOfValuesType };
+export interface ListOfValuesType extends _ListOfValuesType {  }
+
 
 /** A search constraint that adheres to one of the following syntaxes:
   * Filter   - OGC filter expression
@@ -330,8 +332,8 @@ interface _QueryConstraintType extends BaseType {
 	CqlText: string;
 	Filter: ogc.FilterType;
 }
-export interface QueryConstraintType extends _QueryConstraintType { constructor: { new(): QueryConstraintType }; }
-export var QueryConstraintType: { new(): QueryConstraintType };
+export interface QueryConstraintType extends _QueryConstraintType {  }
+
 
 /** Specifies a query to execute against instances of one or
   * more object types. A set of ElementName elements may be included
@@ -349,15 +351,15 @@ interface _QueryType extends _AbstractQueryType {
 	ElementSetName: ElementSetNameType;
 	SortBy?: ogc.SortByType;
 }
-export interface QueryType extends _QueryType { constructor: { new(): QueryType }; }
-export var QueryType: { new(): QueryType };
+export interface QueryType extends _QueryType {  }
+
 
 interface _RangeOfValuesType extends BaseType {
 	MaxValue: any;
 	MinValue: any;
 }
-export interface RangeOfValuesType extends _RangeOfValuesType { constructor: { new(): RangeOfValuesType }; }
-export var RangeOfValuesType: { new(): RangeOfValuesType };
+export interface RangeOfValuesType extends _RangeOfValuesType {  }
+
 
 interface _RecordPropertyType extends BaseType {
 	/** The Name element contains the name of a property
@@ -367,8 +369,8 @@ interface _RecordPropertyType extends BaseType {
 	  * named property. */
 	Value?: any;
 }
-export interface RecordPropertyType extends _RecordPropertyType { constructor: { new(): RecordPropertyType }; }
-export var RecordPropertyType: { new(): RecordPropertyType };
+export interface RecordPropertyType extends _RecordPropertyType {  }
+
 
 /** This type extends DCMIRecordType to add ows:BoundingBox;
   * it may be used to specify a spatial envelope for the
@@ -377,17 +379,20 @@ interface _RecordType extends _DCMIRecordType {
 	AnyText?: EmptyType[];
 	BoundingBox?: ows.BoundingBoxProxyType[];
 }
-export interface RecordType extends _RecordType { constructor: { new(): RecordType }; }
-export var RecordType: { new(): RecordType };
+export interface RecordType extends _RecordType {  }
+
+
+
+export type CswVersion = '2.0.2';
 
 /** Base type for all request messages except GetCapabilities. The
   * attributes identify the relevant service type and version. */
 interface _RequestBaseType extends BaseType {
 	service: string;
-	version: string;
+	version: CswVersion;
 }
-export interface RequestBaseType extends _RequestBaseType { constructor: { new(): RequestBaseType }; }
-export var RequestBaseType: { new(): RequestBaseType };
+export interface RequestBaseType extends _RequestBaseType {  }
+
 
 /** This element provides information about the status of the
   * search request.
@@ -398,8 +403,8 @@ export var RequestBaseType: { new(): RequestBaseType };
 interface _RequestStatusType extends BaseType {
 	timestamp?: Date;
 }
-export interface RequestStatusType extends _RequestStatusType { constructor: { new(): RequestStatusType }; }
-export var RequestStatusType: { new(): RequestStatusType };
+export interface RequestStatusType extends _RequestStatusType {  }
+
 
 export type ResultType = ("results" | "hits" | "validate");
 interface _ResultType extends Primitive._string { content: ResultType; }
@@ -413,8 +418,8 @@ interface _SchemaComponentType extends BaseType {
 	schemaLanguage: string;
 	targetNamespace: string;
 }
-export interface SchemaComponentType extends _SchemaComponentType { constructor: { new(): SchemaComponentType }; }
-export var SchemaComponentType: { new(): SchemaComponentType };
+export interface SchemaComponentType extends _SchemaComponentType {  }
+
 
 /** Includes representations of result set members if maxRecords > 0.
   * The items must conform to one of the csw:Record views or a
@@ -440,8 +445,8 @@ interface _SearchResultsType extends BaseType {
 	resultSetId?: string;
 	AbstractRecord?: AbstractRecordProxyType[];
 }
-export interface SearchResultsType extends _SearchResultsType { constructor: { new(): SearchResultsType }; }
-export var SearchResultsType: { new(): SearchResultsType };
+export interface SearchResultsType extends _SearchResultsType {  }
+
 
 /** This type defines a summary representation of the common record
   * format.  It extends AbstractRecordType to include the core
@@ -488,8 +493,8 @@ interface _SummaryRecordType extends _AbstractRecordType {
 	  * use the Format element. */
 	type?: dc.SimpleLiteral;
 }
-export interface SummaryRecordType extends _SummaryRecordType { constructor: { new(): SummaryRecordType }; }
-export var SummaryRecordType: { new(): SummaryRecordType };
+export interface SummaryRecordType extends _SummaryRecordType {  }
+
 
 /** The response for a transaction request that was successfully
   * completed. If the transaction failed for any reason, a service
@@ -500,8 +505,8 @@ interface _TransactionResponseType extends BaseType {
 	InsertResult?: InsertResultType[];
 	TransactionSummary: TransactionSummaryType;
 }
-export interface TransactionResponseType extends _TransactionResponseType { constructor: { new(): TransactionResponseType }; }
-export var TransactionResponseType: { new(): TransactionResponseType };
+export interface TransactionResponseType extends _TransactionResponseType {  }
+
 
 /** Reports the total number of catalogue items modified by a transaction
   * request (i.e, inserted, updated, deleted). If the client did not
@@ -512,8 +517,8 @@ interface _TransactionSummaryType extends BaseType {
 	totalInserted?: number;
 	totalUpdated?: number;
 }
-export interface TransactionSummaryType extends _TransactionSummaryType { constructor: { new(): TransactionSummaryType }; }
-export var TransactionSummaryType: { new(): TransactionSummaryType };
+export interface TransactionSummaryType extends _TransactionSummaryType {  }
+
 
 /** Users may insert, update, or delete catalogue entries. If the
   * verboseResponse attribute has the value "true", then one or more
@@ -525,8 +530,8 @@ interface _TransactionType extends _RequestBaseType {
 	Insert: InsertType[];
 	Update: UpdateType[];
 }
-export interface TransactionType extends _TransactionType { constructor: { new(): TransactionType }; }
-export var TransactionType: { new(): TransactionType };
+export interface TransactionType extends _TransactionType {  }
+
 
 /** The exact syntax is defined in an application profile. If querying
   * against the common record properties, only a single type may be
@@ -548,26 +553,26 @@ interface _UpdateType extends BaseType {
 	  * value of a record property in an update statement. */
 	RecordProperty: RecordPropertyType[];
 }
-export interface UpdateType extends _UpdateType { constructor: { new(): UpdateType }; }
-export var UpdateType: { new(): UpdateType };
+export interface UpdateType extends _UpdateType {  }
+
 
 export interface document extends BaseType {
-	Acknowledgement: AcknowledgementType;
-	BriefRecord: BriefRecordType;
-	Capabilities: CapabilitiesType;
-	Constraint: QueryConstraintType;
-	DCMIRecord: DCMIRecordType;
-	DescribeRecord: DescribeRecordType;
-	DescribeRecordResponse: DescribeRecordResponseType;
-	ElementSetName: ElementSetNameType;
-	GetCapabilities: GetCapabilitiesType;
-	GetDomain: GetDomainType;
-	GetDomainResponse: GetDomainResponseType;
-	GetRecordById: GetRecordByIdType;
-	GetRecordByIdResponse: GetRecordByIdResponseType;
-	GetRecords: GetRecordsType;
-	GetRecordsResponse: GetRecordsResponseType;
-	Harvest: HarvestType;
+	Acknowledgement?: AcknowledgementType;
+	BriefRecord?: BriefRecordType;
+	Capabilities?: CapabilitiesType;
+	Constraint?: QueryConstraintType;
+	DCMIRecord?: DCMIRecordType;
+	DescribeRecord?: DescribeRecordType;
+	DescribeRecordResponse?: DescribeRecordResponseType;
+	ElementSetName?: ElementSetNameType;
+	GetCapabilities?: GetCapabilitiesType;
+	GetDomain?: GetDomainType;
+	GetDomainResponse?: GetDomainResponseType;
+	GetRecordById?: GetRecordByIdType;
+	GetRecordByIdResponse?: GetRecordByIdResponseType;
+	GetRecords?: GetRecordsType;
+	GetRecordsResponse?: GetRecordsResponseType;
+	Harvest?: HarvestType;
 	/** The content of the response varies depending on the presence of the
 	  * ResponseHandler element. If present, then the catalogue should
 	  * verify the request and respond immediately with an csw:Acknowledgement
@@ -583,14 +588,14 @@ export interface document extends BaseType {
 	  * In any case, if the harvest attempt is successful the response
 	  * shall include summary representations of the newly created
 	  * catalogue item(s). */
-	HarvestResponse: HarvestResponseType;
-	Query: QueryType;
-	Record: RecordType;
+	HarvestResponse?: HarvestResponseType;
+	Query?: QueryType;
+	Record?: RecordType;
 	/** The RecordProperty element is used to specify the new
 	  * value of a record property in an update statement. */
-	RecordProperty: RecordPropertyType;
-	SummaryRecord: SummaryRecordType;
-	Transaction: TransactionType;
-	TransactionResponse: TransactionResponseType;
+	RecordProperty?: RecordPropertyType;
+	SummaryRecord?: SummaryRecordType;
+	Transaction?: TransactionType;
+	TransactionResponse?: TransactionResponseType;
 }
 export var document: document;

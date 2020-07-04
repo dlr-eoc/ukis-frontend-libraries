@@ -6,14 +6,14 @@ import * as xml from '../XML/1998/namespace';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 export type actuateType = ("onLoad" | "onRequest" | "other" | "none");
 interface _actuateType extends Primitive._string { content: actuateType; }
 
 interface _ArcProxyType extends BaseType {}
-interface ArcProxyType extends _ArcProxyType { constructor: { new(): ArcProxyType }; }
+interface ArcProxyType extends _ArcProxyType {  }
 
 export type arcroleType = string;
 type _arcroleType = Primitive._string;
@@ -28,8 +28,8 @@ interface _arcType extends BaseType {
 	type: typeType;
 	title?: TitleProxyType[];
 }
-export interface arcType extends _arcType { constructor: { new(): arcType }; }
-export var arcType: { new(): arcType };
+export interface arcType extends _arcType {  }
+
 
 /** Intended for use as the type of user-declared elements to make them
   * extended links.
@@ -45,8 +45,8 @@ interface _extended extends BaseType {
 	resource?: ResourceProxyType[];
 	title?: TitleProxyType[];
 }
-export interface extended extends _extended { constructor: { new(): extended }; }
-export var extended: { new(): extended };
+export interface extended extends _extended {  }
+
 
 export type fromType = string;
 type _fromType = Primitive._string;
@@ -58,7 +58,7 @@ export type labelType = string;
 type _labelType = Primitive._string;
 
 interface _LocatorProxyType extends BaseType {}
-interface LocatorProxyType extends _LocatorProxyType { constructor: { new(): LocatorProxyType }; }
+interface LocatorProxyType extends _LocatorProxyType {  }
 
 interface _locatorType extends BaseType {
 	href: string;
@@ -68,11 +68,11 @@ interface _locatorType extends BaseType {
 	type: typeType;
 	title?: TitleProxyType[];
 }
-export interface locatorType extends _locatorType { constructor: { new(): locatorType }; }
-export var locatorType: { new(): locatorType };
+export interface locatorType extends _locatorType {  }
+
 
 interface _ResourceProxyType extends BaseType {}
-interface ResourceProxyType extends _ResourceProxyType { constructor: { new(): ResourceProxyType }; }
+interface ResourceProxyType extends _ResourceProxyType {  }
 
 interface _resourceType extends BaseType {
 	label: string;
@@ -80,8 +80,8 @@ interface _resourceType extends BaseType {
 	title: string;
 	type: typeType;
 }
-export interface resourceType extends _resourceType { constructor: { new(): resourceType }; }
-export var resourceType: { new(): resourceType };
+export interface resourceType extends _resourceType {  }
+
 
 export type roleType = string;
 type _roleType = Primitive._string;
@@ -100,8 +100,8 @@ interface _simple extends BaseType {
 	title: string;
 	type: typeType;
 }
-export interface simple extends _simple { constructor: { new(): simple }; }
-export var simple: { new(): simple };
+export interface simple extends _simple {  }
+
 
 export type titleAttrType = string;
 type _titleAttrType = Primitive._string;
@@ -132,11 +132,11 @@ interface _titleEltType extends BaseType {
 	lang: string;
 	type: typeType;
 }
-export interface titleEltType extends _titleEltType { constructor: { new(): titleEltType }; }
-export var titleEltType: { new(): titleEltType };
+export interface titleEltType extends _titleEltType {  }
+
 
 interface _TitleProxyType extends BaseType {}
-interface TitleProxyType extends _TitleProxyType { constructor: { new(): TitleProxyType }; }
+interface TitleProxyType extends _TitleProxyType {  }
 
 export type toType = string;
 type _toType = Primitive._string;

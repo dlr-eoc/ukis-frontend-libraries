@@ -21,17 +21,17 @@ import * as xml from '../../www.w3.org/XML/1998/namespace';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 interface _AbstractMetaDataProxyType extends BaseType {
 	/** One additional metadata parameter. */
 	AdditionalParameter?: AdditionalParameterType;
 }
-interface AbstractMetaDataProxyType extends _AbstractMetaDataProxyType { constructor: { new(): AbstractMetaDataProxyType }; }
+interface AbstractMetaDataProxyType extends _AbstractMetaDataProxyType {  }
 
 interface _AbstractReferenceBaseProxyType extends _ReferenceProxyType {}
-interface AbstractReferenceBaseProxyType extends _AbstractReferenceBaseProxyType { constructor: { new(): AbstractReferenceBaseProxyType }; }
+interface AbstractReferenceBaseProxyType extends _AbstractReferenceBaseProxyType {  }
 
 /** Base for a reference to a remote or local
   * resource.This type contains only a restricted and annotated set of
@@ -45,8 +45,8 @@ interface _AbstractReferenceBaseType extends BaseType {
 	title?: string;
 	type: string;
 }
-export interface AbstractReferenceBaseType extends _AbstractReferenceBaseType { constructor: { new(): AbstractReferenceBaseType }; }
-export var AbstractReferenceBaseType: { new(): AbstractReferenceBaseType };
+export interface AbstractReferenceBaseType extends _AbstractReferenceBaseType {  }
+
 
 /** Prioritized sequence of zero or more GetCapabilities
   * operation response formats desired by client, with preferred formats
@@ -56,8 +56,8 @@ export var AbstractReferenceBaseType: { new(): AbstractReferenceBaseType };
 interface _AcceptFormatsType extends BaseType {
 	OutputFormat?: string[];
 }
-export interface AcceptFormatsType extends _AcceptFormatsType { constructor: { new(): AcceptFormatsType }; }
-export var AcceptFormatsType: { new(): AcceptFormatsType };
+export interface AcceptFormatsType extends _AcceptFormatsType {  }
+
 
 /** Prioritized sequence of one or more specification
   * versions accepted by client, with preferred versions listed first. See
@@ -65,22 +65,22 @@ export var AcceptFormatsType: { new(): AcceptFormatsType };
 interface _AcceptVersionsType extends BaseType {
 	Version: string[];
 }
-export interface AcceptVersionsType extends _AcceptVersionsType { constructor: { new(): AcceptVersionsType }; }
-export var AcceptVersionsType: { new(): AcceptVersionsType };
+export interface AcceptVersionsType extends _AcceptVersionsType {  }
+
 
 interface _AdditionalParametersBaseType extends _MetadataType {
 	/** One additional metadata parameter. */
 	AdditionalParameter: AdditionalParameterType;
 }
-export interface AdditionalParametersBaseType extends _AdditionalParametersBaseType { constructor: { new(): AdditionalParametersBaseType }; }
-export var AdditionalParametersBaseType: { new(): AdditionalParametersBaseType };
+export interface AdditionalParametersBaseType extends _AdditionalParametersBaseType {  }
+
 
 interface _AdditionalParametersType extends _AdditionalParametersBaseType {
 	/** One additional metadata parameter. */
 	AdditionalParameter: AdditionalParameterType; // Manually changed from `AdditionalParameter?: AdditionalParameterType[];`
 }
-export interface AdditionalParametersType extends _AdditionalParametersType { constructor: { new(): AdditionalParametersType }; }
-export var AdditionalParametersType: { new(): AdditionalParametersType };
+export interface AdditionalParametersType extends _AdditionalParametersType {  }
+
 
 interface _AdditionalParameterType extends BaseType {
 	/** Name or identifier of this AdditionalParameter,
@@ -90,7 +90,7 @@ interface _AdditionalParameterType extends BaseType {
 	  * AdditionalParameter. */
 	Value: any[];
 }
-interface AdditionalParameterType extends _AdditionalParameterType { constructor: { new(): AdditionalParameterType }; }
+interface AdditionalParameterType extends _AdditionalParameterType {  }
 
 /** Location of the responsible individual or
   * organization. */
@@ -109,17 +109,17 @@ interface _AddressType extends BaseType {
 	/** ZIP or other postal code. */
 	PostalCode?: string;
 }
-export interface AddressType extends _AddressType { constructor: { new(): AddressType }; }
-export var AddressType: { new(): AddressType };
+export interface AddressType extends _AddressType {  }
+
 
 interface _AllowedValuesType extends BaseType {
 	Range: RangeType[];
 	Value: string[];
 }
-interface AllowedValuesType extends _AllowedValuesType { constructor: { new(): AllowedValuesType }; }
+interface AllowedValuesType extends _AllowedValuesType {  }
 
 interface _AnyValueType extends BaseType {}
-interface AnyValueType extends _AnyValueType { constructor: { new(): AnyValueType }; }
+interface AnyValueType extends _AnyValueType {  }
 
 interface _AvailableCRSProxyType extends BaseType {
 	AvailableCRS?: string;
@@ -130,7 +130,7 @@ interface _AvailableCRSProxyType extends BaseType {
 	  * purposes. */
 	SupportedCRS?: string;
 }
-interface AvailableCRSProxyType extends _AvailableCRSProxyType { constructor: { new(): AvailableCRSProxyType }; }
+interface AvailableCRSProxyType extends _AvailableCRSProxyType {  }
 
 /** Basic metadata identifying and describing a set of
   * data. */
@@ -140,14 +140,14 @@ interface _BasicIdentificationType extends _DescriptionType {
 	Identifier?: CodeType;
 	Metadata?: MetadataProxyType[];
 }
-export interface BasicIdentificationType extends _BasicIdentificationType { constructor: { new(): BasicIdentificationType }; }
-export var BasicIdentificationType: { new(): BasicIdentificationType };
+export interface BasicIdentificationType extends _BasicIdentificationType {  }
+
 
 interface _BoundingBoxProxyType extends BaseType {
 	BoundingBox?: BoundingBoxType;
 	WGS84BoundingBox?: WGS84BoundingBoxType;
 }
-interface BoundingBoxProxyType extends _BoundingBoxProxyType { constructor: { new(): BoundingBoxProxyType }; }
+interface BoundingBoxProxyType extends _BoundingBoxProxyType {  }
 
 /** XML encoded minimum rectangular bounding box (or region)
   * parameter, surrounding all the associated data.This type is adapted from the EnvelopeType of GML 3.1,
@@ -185,8 +185,8 @@ interface _BoundingBoxType extends BaseType {
 	  * C.13. */
 	UpperCorner: PositionType;
 }
-export interface BoundingBoxType extends _BoundingBoxType { constructor: { new(): BoundingBoxType }; }
-export var BoundingBoxType: { new(): BoundingBoxType };
+export interface BoundingBoxType extends _BoundingBoxType {  }
+
 
 /** XML encoded GetCapabilities operation response. This
   * document provides clients with service metadata about a specific service
@@ -234,8 +234,8 @@ interface _CapabilitiesBaseType extends BaseType {
 	  * specific service instance or server. */
 	ServiceProvider?: ServiceProviderType;
 }
-export interface CapabilitiesBaseType extends _CapabilitiesBaseType { constructor: { new(): CapabilitiesBaseType }; }
-export var CapabilitiesBaseType: { new(): CapabilitiesBaseType };
+export interface CapabilitiesBaseType extends _CapabilitiesBaseType {  }
+
 
 interface _CapabilitiesBaseTypeLanguagesType extends BaseType {
 	/** Identifier of a language used by the data(set) contents.
@@ -246,7 +246,7 @@ interface _CapabilitiesBaseTypeLanguagesType extends BaseType {
 	  * is used to indicate "any language". */
 	Language: string[];
 }
-interface CapabilitiesBaseTypeLanguagesType extends _CapabilitiesBaseTypeLanguagesType { constructor: { new(): CapabilitiesBaseTypeLanguagesType }; }
+interface CapabilitiesBaseTypeLanguagesType extends _CapabilitiesBaseTypeLanguagesType {  }
 
 /** Name or code with an (optional) authority. If the
   * codeSpace attribute is present, its value shall reference a dictionary,
@@ -258,8 +258,8 @@ interface CapabilitiesBaseTypeLanguagesType extends _CapabilitiesBaseTypeLanguag
 interface _CodeType extends Primitive._string {
 	codeSpace?: string;
 }
-export interface CodeType extends _CodeType { constructor: { new(): CodeType }; }
-export var CodeType: { new(): CodeType };
+export interface CodeType extends _CodeType {  }
+
 
 /** Information required to enable contact with the
   * responsible person and/or organization.For OWS use in the service metadata document, the
@@ -289,8 +289,8 @@ interface _ContactType extends BaseType {
 	  * individual may be contacted. */
 	Phone?: TelephoneType;
 }
-export interface ContactType extends _ContactType { constructor: { new(): ContactType }; }
-export var ContactType: { new(): ContactType };
+export interface ContactType extends _ContactType {  }
+
 
 /** Contents of typical Contents section of an OWS service
   * metadata (Capabilities) document. This type shall be extended and/or
@@ -310,8 +310,8 @@ interface _ContentsBaseType extends BaseType {
 	  * each such dataset referencing this OWS server. */
 	OtherSource?: MetadataType[];
 }
-export interface ContentsBaseType extends _ContentsBaseType { constructor: { new(): ContentsBaseType }; }
-export var ContentsBaseType: { new(): ContentsBaseType };
+export interface ContentsBaseType extends _ContentsBaseType {  }
+
 
 /** Typical dataset metadata in typical Contents section of
   * an OWS service metadata (Capabilities) document. This type shall be
@@ -326,8 +326,8 @@ interface _DatasetDescriptionSummaryBaseType extends _DescriptionType {
 	Metadata?: MetadataProxyType[];
 	WGS84BoundingBox?: WGS84BoundingBoxType[];
 }
-export interface DatasetDescriptionSummaryBaseType extends _DatasetDescriptionSummaryBaseType { constructor: { new(): DatasetDescriptionSummaryBaseType }; }
-export var DatasetDescriptionSummaryBaseType: { new(): DatasetDescriptionSummaryBaseType };
+export interface DatasetDescriptionSummaryBaseType extends _DatasetDescriptionSummaryBaseType {  }
+
 
 interface _DCPType extends BaseType {
 	/** Connect point URLs for the HTTP Distributed Computing
@@ -337,7 +337,7 @@ interface _DCPType extends BaseType {
 	  * backup. */
 	HTTP: HTTPType;
 }
-interface DCPType extends _DCPType { constructor: { new(): DCPType }; }
+interface DCPType extends _DCPType {  }
 
 /** Human-readable descriptive information for the object it
   * is included within. This type shall be extended if needed for specific
@@ -360,8 +360,8 @@ interface _DescriptionType extends BaseType {
 	  * humans. */
 	Title?: LanguageStringType[];
 }
-export interface DescriptionType extends _DescriptionType { constructor: { new(): DescriptionType }; }
-export var DescriptionType: { new(): DescriptionType };
+export interface DescriptionType extends _DescriptionType {  }
+
 
 /** References metadata about a quantity, and provides a name
   * for this metadata. (Informative: This element was simplified from the
@@ -375,8 +375,8 @@ interface _DomainMetadataType extends Primitive._string {
 	  * the "ogc" URN namespace. */
 	reference?: string;
 }
-export interface DomainMetadataType extends _DomainMetadataType { constructor: { new(): DomainMetadataType }; }
-export var DomainMetadataType: { new(): DomainMetadataType };
+export interface DomainMetadataType extends _DomainMetadataType {  }
+
 
 /** Valid domain (or allowed set of values) of one quantity,
   * with its name or identifier. */
@@ -385,8 +385,8 @@ interface _DomainType extends _UnNamedDomainType {
 	  * quantity. */
 	name: string;
 }
-export interface DomainType extends _DomainType { constructor: { new(): DomainType }; }
-export var DomainType: { new(): DomainType };
+export interface DomainType extends _DomainType {  }
+
 
 interface _ExceptionReportType extends BaseType {
 	/** lang (as an attribute name)
@@ -425,7 +425,7 @@ interface _ExceptionReportType extends BaseType {
 	version: string;
 	Exception: ExceptionType[];
 }
-interface ExceptionReportType extends _ExceptionReportType { constructor: { new(): ExceptionReportType }; }
+interface ExceptionReportType extends _ExceptionReportType {  }
 
 type ExceptionReportTypeVersionType = string;
 type _ExceptionReportTypeVersionType = Primitive._string;
@@ -455,8 +455,8 @@ interface _ExceptionType extends BaseType {
 	  * with the most significant information listed first. */
 	ExceptionText?: string[];
 }
-export interface ExceptionType extends _ExceptionType { constructor: { new(): ExceptionType }; }
-export var ExceptionType: { new(): ExceptionType };
+export interface ExceptionType extends _ExceptionType {  }
+
 
 /** XML encoded GetCapabilities operation request. This
   * operation allows clients to retrieve service metadata about a specific
@@ -486,8 +486,8 @@ interface _GetCapabilitiesType extends BaseType {
 	  * document. */
 	Sections?: SectionsType;
 }
-export interface GetCapabilitiesType extends _GetCapabilitiesType { constructor: { new(): GetCapabilitiesType }; }
-export var GetCapabilitiesType: { new(): GetCapabilitiesType };
+export interface GetCapabilitiesType extends _GetCapabilitiesType {  }
+
 
 interface _GetCapabilitiesTypeAcceptLanguagesType extends BaseType {
 	/** Identifier of a language used by the data(set) contents.
@@ -498,7 +498,7 @@ interface _GetCapabilitiesTypeAcceptLanguagesType extends BaseType {
 	  * is used to indicate "any language". */
 	Language: string[];
 }
-interface GetCapabilitiesTypeAcceptLanguagesType extends _GetCapabilitiesTypeAcceptLanguagesType { constructor: { new(): GetCapabilitiesTypeAcceptLanguagesType }; }
+interface GetCapabilitiesTypeAcceptLanguagesType extends _GetCapabilitiesTypeAcceptLanguagesType {  }
 
 /** Request to a service to perform the GetResourceByID
   * operation. This operation allows a client to retrieve one or more
@@ -521,8 +521,8 @@ interface _GetResourceByIdType extends BaseType {
 	  * specification. */
 	ResourceID?: string[];
 }
-export interface GetResourceByIdType extends _GetResourceByIdType { constructor: { new(): GetResourceByIdType }; }
-export var GetResourceByIdType: { new(): GetResourceByIdType };
+export interface GetResourceByIdType extends _GetResourceByIdType {  }
+
 
 interface _HTTPType extends BaseType {
 	/** Connect point URL prefix and any constraints for
@@ -533,7 +533,7 @@ interface _HTTPType extends BaseType {
 	  * "Post" request method for this operation request. */
 	Post: RequestMethodType[];
 }
-interface HTTPType extends _HTTPType { constructor: { new(): HTTPType }; }
+interface HTTPType extends _HTTPType {  }
 
 /** Extended metadata identifying and describing a set of
   * data. This type shall be extended if needed for each specific OWS to
@@ -549,8 +549,8 @@ interface _IdentificationType extends _BasicIdentificationType {
 	  * parameter can be included for different purposes. */
 	OutputFormat?: string[];
 }
-export interface IdentificationType extends _IdentificationType { constructor: { new(): IdentificationType }; }
-export var IdentificationType: { new(): IdentificationType };
+export interface IdentificationType extends _IdentificationType {  }
+
 
 /** Unordered list of one or more commonly used or formalised
   * word(s) or phrase(s) used to describe the subject. When needed, the
@@ -568,8 +568,8 @@ interface _KeywordsType extends BaseType {
 	Keyword: LanguageStringType[];
 	Type?: CodeType;
 }
-export interface KeywordsType extends _KeywordsType { constructor: { new(): KeywordsType }; }
-export var KeywordsType: { new(): KeywordsType };
+export interface KeywordsType extends _KeywordsType {  }
+
 
 /** Text string with the language of the string identified as
   * recommended in the XML 1.0 W3C Recommendation, section
@@ -599,16 +599,16 @@ interface _LanguageStringType extends Primitive._string {
 	  * the empty string. */
 	lang?: string;
 }
-export interface LanguageStringType extends _LanguageStringType { constructor: { new(): LanguageStringType }; }
-export var LanguageStringType: { new(): LanguageStringType };
+export interface LanguageStringType extends _LanguageStringType {  }
+
 
 /** Unordered list of one or more groups of references to
   * remote and/or local resources. */
 interface _ManifestType extends _BasicIdentificationType {
 	ReferenceGroup: ReferenceGroupType[];
 }
-export interface ManifestType extends _ManifestType { constructor: { new(): ManifestType }; }
-export var ManifestType: { new(): ManifestType };
+export interface ManifestType extends _ManifestType {  }
+
 
 interface _MetadataProxyType extends BaseType {
 	Metadata?: MetadataType;
@@ -616,7 +616,7 @@ interface _MetadataProxyType extends BaseType {
 	  * AdditionalParameters. */
 	AdditionalParameters?: AdditionalParametersType;
 }
-interface MetadataProxyType extends _MetadataProxyType { constructor: { new(): MetadataProxyType }; }
+interface MetadataProxyType extends _MetadataProxyType {  }
 
 /** This element either references or contains more metadata
   * about the element that includes this element. To reference metadata
@@ -640,8 +640,8 @@ interface _MetadataType extends _AbstractMetaDataProxyType {
 	title: string;
 	type: xlink.typeType;
 }
-export interface MetadataType extends _MetadataType { constructor: { new(): MetadataType }; }
-export var MetadataType: { new(): MetadataType };
+export interface MetadataType extends _MetadataType {  }
+
 
 /** XML encoded identifier of a standard MIME type, possibly
   * a parameterized MIME type. */
@@ -655,11 +655,11 @@ interface _NilValueType extends _CodeType {
 	  * describes the reason for the nil value */
 	nilReason?: string;
 }
-export interface NilValueType extends _NilValueType { constructor: { new(): NilValueType }; }
-export var NilValueType: { new(): NilValueType };
+export interface NilValueType extends _NilValueType {  }
+
 
 interface _NoValuesType extends BaseType {}
-interface NoValuesType extends _NoValuesType { constructor: { new(): NoValuesType }; }
+interface NoValuesType extends _NoValuesType {  }
 
 /** Reference to on-line resource from which data can be
   * obtained.For OWS use in the service metadata document, the
@@ -674,8 +674,8 @@ interface _OnlineResourceType extends BaseType {
 	title: string;
 	type: xlink.typeType;
 }
-export interface OnlineResourceType extends _OnlineResourceType { constructor: { new(): OnlineResourceType }; }
-export var OnlineResourceType: { new(): OnlineResourceType };
+export interface OnlineResourceType extends _OnlineResourceType {  }
+
 
 interface _OperationsMetadataType extends BaseType {
 	/** Optional unordered list of valid domain constraints
@@ -697,7 +697,7 @@ interface _OperationsMetadataType extends BaseType {
 	  * Specification for this service. */
 	Parameter?: DomainType[];
 }
-interface OperationsMetadataType extends _OperationsMetadataType { constructor: { new(): OperationsMetadataType }; }
+interface OperationsMetadataType extends _OperationsMetadataType {  }
 
 interface _OperationType extends BaseType {
 	/** Name or identifier of this operation (request) (for
@@ -729,7 +729,7 @@ interface _OperationType extends BaseType {
 	  * Specification for this service. */
 	Parameter?: DomainType[];
 }
-interface OperationType extends _OperationType { constructor: { new(): OperationType }; }
+interface OperationType extends _OperationType {  }
 
 /** Position instances hold the coordinates of a position in
   * a coordinate reference system (CRS) referenced by the related "crs"
@@ -786,8 +786,8 @@ interface _RangeType extends BaseType {
 	  * values in a range. */
 	Spacing?: string;
 }
-export interface RangeType extends _RangeType { constructor: { new(): RangeType }; }
-export var RangeType: { new(): RangeType };
+export interface RangeType extends _RangeType {  }
+
 
 /** Logical group of one or more references to remote and/or
   * local resources, allowing including metadata about that group. A Group
@@ -796,14 +796,14 @@ export var RangeType: { new(): RangeType };
 interface _ReferenceGroupType extends _BasicIdentificationType {
 	AbstractReferenceBase: AbstractReferenceBaseProxyType[];
 }
-export interface ReferenceGroupType extends _ReferenceGroupType { constructor: { new(): ReferenceGroupType }; }
-export var ReferenceGroupType: { new(): ReferenceGroupType };
+export interface ReferenceGroupType extends _ReferenceGroupType {  }
+
 
 interface _ReferenceProxyType extends BaseType {
 	Reference?: ReferenceType;
 	ServiceReference?: ServiceReferenceType;
 }
-interface ReferenceProxyType extends _ReferenceProxyType { constructor: { new(): ReferenceProxyType }; }
+interface ReferenceProxyType extends _ReferenceProxyType {  }
 
 /** Complete reference to a remote or local resource,
   * allowing including metadata about that resource. */
@@ -820,8 +820,8 @@ interface _ReferenceType extends _AbstractReferenceBaseType {
 	Identifier?: CodeType;
 	Metadata?: MetadataProxyType[];
 }
-export interface ReferenceType extends _ReferenceType { constructor: { new(): ReferenceType }; }
-export var ReferenceType: { new(): ReferenceType };
+export interface ReferenceType extends _ReferenceType {  }
+
 
 /** Connect point URL and any constraints for this HTTP
   * request method for this operation request. In the OnlineResourceType,
@@ -840,8 +840,8 @@ interface _RequestMethodType extends _OnlineResourceType {
 	  * Implementation Specification for this service. */
 	Constraint?: DomainType[];
 }
-export interface RequestMethodType extends _RequestMethodType { constructor: { new(): RequestMethodType }; }
-export var RequestMethodType: { new(): RequestMethodType };
+export interface RequestMethodType extends _RequestMethodType {  }
+
 
 /** Identification of, and means of communication with,
   * person responsible for the server.For OWS use in the ServiceProvider section of a service
@@ -864,8 +864,8 @@ interface _ResponsiblePartySubsetType extends BaseType {
 	  * Subclause B.5.5 of ISO 19115:2003. */
 	Role?: CodeType;
 }
-export interface ResponsiblePartySubsetType extends _ResponsiblePartySubsetType { constructor: { new(): ResponsiblePartySubsetType }; }
-export var ResponsiblePartySubsetType: { new(): ResponsiblePartySubsetType };
+export interface ResponsiblePartySubsetType extends _ResponsiblePartySubsetType {  }
+
 
 /** Identification of, and means of communication with,
   * person responsible for the server. At least one of IndividualName,
@@ -886,8 +886,8 @@ interface _ResponsiblePartyType extends BaseType {
 	  * Subclause B.5.5 of ISO 19115:2003. */
 	Role: CodeType;
 }
-export interface ResponsiblePartyType extends _ResponsiblePartyType { constructor: { new(): ResponsiblePartyType }; }
-export var ResponsiblePartyType: { new(): ResponsiblePartyType };
+export interface ResponsiblePartyType extends _ResponsiblePartyType {  }
+
 
 /** Unordered list of zero or more names of requested
   * sections in complete service metadata document. Each Section value shall
@@ -896,8 +896,8 @@ export var ResponsiblePartyType: { new(): ResponsiblePartyType };
 interface _SectionsType extends BaseType {
 	Section?: string[];
 }
-export interface SectionsType extends _SectionsType { constructor: { new(): SectionsType }; }
-export var SectionsType: { new(): SectionsType };
+export interface SectionsType extends _SectionsType {  }
+
 
 interface _ServiceIdentificationType extends _DescriptionType {
 	/** Access constraint applied to assure the protection of
@@ -930,7 +930,7 @@ interface _ServiceIdentificationType extends _DescriptionType {
 	  * for that purpose. */
 	ServiceTypeVersion: string[];
 }
-interface ServiceIdentificationType extends _ServiceIdentificationType { constructor: { new(): ServiceIdentificationType }; }
+interface ServiceIdentificationType extends _ServiceIdentificationType {  }
 
 interface _ServiceProviderType extends BaseType {
 	/** A unique identifier for the service provider
@@ -945,7 +945,7 @@ interface _ServiceProviderType extends BaseType {
 	  * provider. */
 	ServiceContact: ResponsiblePartySubsetType;
 }
-interface ServiceProviderType extends _ServiceProviderType { constructor: { new(): ServiceProviderType }; }
+interface ServiceProviderType extends _ServiceProviderType {  }
 
 /** Complete reference to a remote resource that needs to be
   * retrieved from an OWS using an XML-encoded operation request. This
@@ -966,8 +966,8 @@ interface _ServiceReferenceType extends _ReferenceType {
 	  * using a URL. */
 	RequestMessageReference: string;
 }
-export interface ServiceReferenceType extends _ServiceReferenceType { constructor: { new(): ServiceReferenceType }; }
-export var ServiceReferenceType: { new(): ServiceReferenceType };
+export interface ServiceReferenceType extends _ServiceReferenceType {  }
+
 
 /** Service type identifier, where the string value is the
   * OWS type abbreviation, such as "WMS" or "WFS". */
@@ -984,8 +984,8 @@ interface _TelephoneType extends BaseType {
 	  * the responsible organization or individual. */
 	Voice?: string[];
 }
-export interface TelephoneType extends _TelephoneType { constructor: { new(): TelephoneType }; }
-export var TelephoneType: { new(): TelephoneType };
+export interface TelephoneType extends _TelephoneType {  }
+
 
 /** Valid domain (or allowed set of values) of one quantity,
   * with needed metadata but without a quantity name or
@@ -1035,8 +1035,8 @@ interface _UnNamedDomainType extends BaseType {
 	  * 3.0.) */
 	ValuesReference: ValuesReferenceType;
 }
-export interface UnNamedDomainType extends _UnNamedDomainType { constructor: { new(): UnNamedDomainType }; }
-export var UnNamedDomainType: { new(): UnNamedDomainType };
+export interface UnNamedDomainType extends _UnNamedDomainType {  }
+
 
 /** Service metadata document version, having values that are
   * "increased" whenever any change is made in service metadata document.
@@ -1055,7 +1055,7 @@ interface _ValuesReferenceType extends Primitive._string {
 	  * the "ogc" URN namespace. */
 	reference: string;
 }
-interface ValuesReferenceType extends _ValuesReferenceType { constructor: { new(): ValuesReferenceType }; }
+interface ValuesReferenceType extends _ValuesReferenceType {  }
 
 /** A single value, encoded as a string. This type can be
   * used for one value, for a spacing between allowed values, or for the
@@ -1104,8 +1104,8 @@ interface _WGS84BoundingBoxType extends _BoundingBoxType {
 	  * Subclauses 10.4.5 and C.13. */
 	UpperCorner: PositionType2D;
 }
-export interface WGS84BoundingBoxType extends _WGS84BoundingBoxType { constructor: { new(): WGS84BoundingBoxType }; }
-export var WGS84BoundingBoxType: { new(): WGS84BoundingBoxType };
+export interface WGS84BoundingBoxType extends _WGS84BoundingBoxType {  }
+
 
 export interface document extends BaseType {
 	/** Brief narrative description of this resource, normally

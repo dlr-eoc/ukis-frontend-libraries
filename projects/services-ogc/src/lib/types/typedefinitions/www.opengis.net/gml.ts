@@ -36,23 +36,23 @@ import * as xlink from '../www.w3.org/1999/xlink';
 
 
 interface BaseType {
-	_exists: boolean;
-	_namespace: string;
+	
+	
 }
 /** Closeness of reported coordinate values to values accepted as or being true. */
 interface _AbsoluteExternalPositionalAccuracyType extends _AbstractPositionalAccuracyType {
 	/** A quantitative result defined by the evaluation procedure used, and identified by the measureDescription. */
 	result: MeasureType;
 }
-export interface AbsoluteExternalPositionalAccuracyType extends _AbsoluteExternalPositionalAccuracyType { constructor: { new(): AbsoluteExternalPositionalAccuracyType }; }
-export var AbsoluteExternalPositionalAccuracyType: { new(): AbsoluteExternalPositionalAccuracyType };
+export interface AbsoluteExternalPositionalAccuracyType extends _AbsoluteExternalPositionalAccuracyType {  }
+
 
 /** A continuous coverage as defined in ISO 19123 is a coverage that can return different values for the same feature attribute at different direct positions within a single spatiotemporal object in its spatiotemporal domain */
 interface _AbstractContinuousCoverageType extends _AbstractCoverageType {
 	coverageFunction?: CoverageFunctionType;
 }
-export interface AbstractContinuousCoverageType extends _AbstractContinuousCoverageType { constructor: { new(): AbstractContinuousCoverageType }; }
-export var AbstractContinuousCoverageType: { new(): AbstractContinuousCoverageType };
+export interface AbstractContinuousCoverageType extends _AbstractContinuousCoverageType {  }
+
 
 /** Basic encoding for coordinate operation objects, simplifying and restricting the DefinitionType as needed. */
 interface _AbstractCoordinateOperationBaseType extends _DefinitionType {
@@ -63,8 +63,8 @@ interface _AbstractCoordinateOperationBaseType extends _DefinitionType {
 	/** Contains or refers to a metadata package that contains metadata properties. */
 	metaDataProperty?: MetaDataPropertyType[];
 }
-export interface AbstractCoordinateOperationBaseType extends _AbstractCoordinateOperationBaseType { constructor: { new(): AbstractCoordinateOperationBaseType }; }
-export var AbstractCoordinateOperationBaseType: { new(): AbstractCoordinateOperationBaseType };
+export interface AbstractCoordinateOperationBaseType extends _AbstractCoordinateOperationBaseType {  }
+
 
 /** A mathematical operation on coordinates that transforms or converts coordinates to another coordinate reference system. Many but not all coordinate operations (from CRS A to CRS B) also uniquely define the inverse operation (from CRS B to CRS A). In some cases, the operation method algorithm for the inverse operation is the same as for the forward algorithm, but the signs of some operation parameter values must be reversed. In other cases, different algorithms are required for the forward and inverse operations, but the same operation parameter values are used. If (some) entirely different parameter values are needed, a different coordinate operation shall be defined. */
 interface _AbstractCoordinateOperationType extends _AbstractCoordinateOperationBaseType {
@@ -84,8 +84,8 @@ interface _AbstractCoordinateOperationType extends _AbstractCoordinateOperationB
 	/** Area or region in which this CRS object is valid. */
 	validArea?: ExtentType;
 }
-export interface AbstractCoordinateOperationType extends _AbstractCoordinateOperationType { constructor: { new(): AbstractCoordinateOperationType }; }
-export var AbstractCoordinateOperationType: { new(): AbstractCoordinateOperationType };
+export interface AbstractCoordinateOperationType extends _AbstractCoordinateOperationType {  }
+
 
 /** Basic encoding for coordinate system objects, simplifying and restricting the DefinitionType as needed. */
 interface _AbstractCoordinateSystemBaseType extends _DefinitionType {
@@ -96,8 +96,8 @@ interface _AbstractCoordinateSystemBaseType extends _DefinitionType {
 	/** Contains or refers to a metadata package that contains metadata properties. */
 	metaDataProperty?: MetaDataPropertyType[];
 }
-export interface AbstractCoordinateSystemBaseType extends _AbstractCoordinateSystemBaseType { constructor: { new(): AbstractCoordinateSystemBaseType }; }
-export var AbstractCoordinateSystemBaseType: { new(): AbstractCoordinateSystemBaseType };
+export interface AbstractCoordinateSystemBaseType extends _AbstractCoordinateSystemBaseType {  }
+
 
 /** A coordinate system (CS) is the set of coordinate system axes that spans a given coordinate space. A CS is derived from a set of (mathematical) rules for specifying how coordinates in a given space are to be assigned to points. The coordinate values in a coordinate tuple shall be recorded in the order in which the coordinate system axes associations are recorded, whenever those coordinates use a coordinate reference system that uses this coordinate system. This abstract complexType shall not be used, extended, or restricted, in an Application Schema, to define a concrete subtype with a meaning equivalent to a concrete subtype specified in this document. */
 interface _AbstractCoordinateSystemType extends _AbstractCoordinateSystemBaseType {
@@ -108,16 +108,16 @@ interface _AbstractCoordinateSystemType extends _AbstractCoordinateSystemBaseTyp
 	/** Association to a coordinate system axis. */
 	usesAxis: CoordinateSystemAxisRefType[];
 }
-export interface AbstractCoordinateSystemType extends _AbstractCoordinateSystemType { constructor: { new(): AbstractCoordinateSystemType }; }
-export var AbstractCoordinateSystemType: { new(): AbstractCoordinateSystemType };
+export interface AbstractCoordinateSystemType extends _AbstractCoordinateSystemType {  }
+
 
 /** Abstract element which acts as the head of a substitution group for coverages. Note that a coverage is a GML feature. */
 interface _AbstractCoverageType extends _AbstractFeatureType, _DomainSetProxyType {
 	dimension?: number;
 	rangeSet: RangeSetType;
 }
-export interface AbstractCoverageType extends _AbstractCoverageType { constructor: { new(): AbstractCoverageType }; }
-export var AbstractCoverageType: { new(): AbstractCoverageType };
+export interface AbstractCoverageType extends _AbstractCoverageType {  }
+
 
 /** Curve segment defines a homogeneous segment of a curve. */
 interface _AbstractCurveSegmentType extends BaseType {
@@ -131,14 +131,14 @@ interface _AbstractCurveSegmentType extends BaseType {
 	  * NOTE: Use of these values is only appropriate when the basic curve definition is an underdetermined system. For example, line string segments cannot support continuity above C 0 , since there is no spare control parameter to adjust the incoming angle at the end points of the segment. Spline functions on the other hand often have extra degrees of freedom on end segments that allow them to adjust the values of the derivatives to support C 1 or higher continuity. */
 	numDerivativesAtStart?: number;
 }
-export interface AbstractCurveSegmentType extends _AbstractCurveSegmentType { constructor: { new(): AbstractCurveSegmentType }; }
-export var AbstractCurveSegmentType: { new(): AbstractCurveSegmentType };
+export interface AbstractCurveSegmentType extends _AbstractCurveSegmentType {  }
+
 
 /** An abstraction of a curve to support the different levels of complexity. The curve can always be viewed as a geometric
   * primitive, i.e. is continuous. */
 interface _AbstractCurveType extends _AbstractGeometricPrimitiveType {}
-export interface AbstractCurveType extends _AbstractCurveType { constructor: { new(): AbstractCurveType }; }
-export var AbstractCurveType: { new(): AbstractCurveType };
+export interface AbstractCurveType extends _AbstractCurveType {  }
+
 
 /** Basic encoding for datum objects, simplifying and restricting the DefinitionType as needed. */
 interface _AbstractDatumBaseType extends _DefinitionType {
@@ -149,8 +149,8 @@ interface _AbstractDatumBaseType extends _DefinitionType {
 	/** Contains or refers to a metadata package that contains metadata properties. */
 	metaDataProperty?: MetaDataPropertyType[];
 }
-export interface AbstractDatumBaseType extends _AbstractDatumBaseType { constructor: { new(): AbstractDatumBaseType }; }
-export var AbstractDatumBaseType: { new(): AbstractDatumBaseType };
+export interface AbstractDatumBaseType extends _AbstractDatumBaseType {  }
+
 
 /** A datum specifies the relationship of a coordinate system to the earth, thus creating a coordinate reference system. A datum uses a parameter or set of parameters that determine the location of the origin of the coordinate reference system. Each datum subtype can be associated with only specific types of coordinate systems. This abstract complexType shall not be used, extended, or restricted, in an Application Schema, to define a concrete subtype with a meaning equivalent to a concrete subtype specified in this document. */
 interface _AbstractDatumType extends _AbstractDatumBaseType {
@@ -171,30 +171,30 @@ interface _AbstractDatumType extends _AbstractDatumBaseType {
 	/** Area or region in which this CRS object is valid. */
 	validArea?: ExtentType;
 }
-export interface AbstractDatumType extends _AbstractDatumType { constructor: { new(): AbstractDatumType }; }
-export var AbstractDatumType: { new(): AbstractDatumType };
+export interface AbstractDatumType extends _AbstractDatumType {  }
+
 
 /** A discrete coverage consists of a domain set, range set and optionally a coverage function. The domain set consists of either geometry or temporal objects, finite in number. The range set is comprised of a finite number of attribute values each of which is associated to every direct position within any single spatiotemporal object in the domain. In other words, the range values are constant on each spatiotemporal object in the domain. This coverage function maps each element from the coverage domain to an element in its range. This definition conforms to ISO 19123. */
 interface _AbstractDiscreteCoverageType extends _AbstractCoverageType {
 	coverageFunction?: CoverageFunctionType;
 }
-export interface AbstractDiscreteCoverageType extends _AbstractDiscreteCoverageType { constructor: { new(): AbstractDiscreteCoverageType }; }
-export var AbstractDiscreteCoverageType: { new(): AbstractDiscreteCoverageType };
+export interface AbstractDiscreteCoverageType extends _AbstractDiscreteCoverageType {  }
+
 
 /** A feature collection contains zero or more features. */
 interface _AbstractFeatureCollectionType extends _AbstractFeatureType {
 	featureMember?: FeaturePropertyType[];
 	featureMembers?: FeatureArrayPropertyType;
 }
-export interface AbstractFeatureCollectionType extends _AbstractFeatureCollectionType { constructor: { new(): AbstractFeatureCollectionType }; }
-export var AbstractFeatureCollectionType: { new(): AbstractFeatureCollectionType };
+export interface AbstractFeatureCollectionType extends _AbstractFeatureCollectionType {  }
+
 
 /** An abstract feature provides a set of common properties, including id, metaDataProperty, name and description inherited from AbstractGMLType, plus boundedBy.    A concrete feature type must derive from this type and specify additional  properties in an application schema. A feature must possess an identifying attribute ('id' - 'fid' has been deprecated). */
 interface _AbstractFeatureType extends _AbstractGMLType, _LocationProxyType {
 	boundedBy?: BoundingShapeType;
 }
-export interface AbstractFeatureType extends _AbstractFeatureType { constructor: { new(): AbstractFeatureType }; }
-export var AbstractFeatureType: { new(): AbstractFeatureType };
+export interface AbstractFeatureType extends _AbstractFeatureType {  }
+
 
 /** An abstract operation on coordinates that does not include any change of datum. The best-known example of a coordinate conversion is a map projection. The parameters describing coordinate conversions are defined rather than empirically derived. Note that some conversions have no parameters.
   *
@@ -216,8 +216,8 @@ interface _AbstractGeneralConversionType extends _AbstractCoordinateOperationTyp
 	/** Area or region in which this CRS object is valid. */
 	validArea?: ExtentType;
 }
-export interface AbstractGeneralConversionType extends _AbstractGeneralConversionType { constructor: { new(): AbstractGeneralConversionType }; }
-export var AbstractGeneralConversionType: { new(): AbstractGeneralConversionType };
+export interface AbstractGeneralConversionType extends _AbstractGeneralConversionType {  }
+
 
 /** A coordinate reference system that is defined by its coordinate conversion from another coordinate reference system (not by a datum). This abstract complexType shall not be used, extended, or restricted, in an Application Schema, to define a concrete subtype with a meaning equivalent to a concrete subtype specified in this document. */
 interface _AbstractGeneralDerivedCRSType extends _AbstractReferenceSystemType {
@@ -226,8 +226,8 @@ interface _AbstractGeneralDerivedCRSType extends _AbstractReferenceSystemType {
 	/** Association to the coordinate conversion used to define this derived CRS. */
 	definedByConversion: GeneralConversionRefType;
 }
-export interface AbstractGeneralDerivedCRSType extends _AbstractGeneralDerivedCRSType { constructor: { new(): AbstractGeneralDerivedCRSType }; }
-export var AbstractGeneralDerivedCRSType: { new(): AbstractGeneralDerivedCRSType };
+export interface AbstractGeneralDerivedCRSType extends _AbstractGeneralDerivedCRSType {  }
+
 
 /** Association to an operation parameter or group, either referencing or containing the definition of that parameter or group. */
 interface _AbstractGeneralOperationParameterRefType extends _GeneralOperationParameterProxyType {
@@ -241,23 +241,23 @@ interface _AbstractGeneralOperationParameterRefType extends _GeneralOperationPar
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface AbstractGeneralOperationParameterRefType extends _AbstractGeneralOperationParameterRefType { constructor: { new(): AbstractGeneralOperationParameterRefType }; }
-export var AbstractGeneralOperationParameterRefType: { new(): AbstractGeneralOperationParameterRefType };
+export interface AbstractGeneralOperationParameterRefType extends _AbstractGeneralOperationParameterRefType {  }
+
 
 /** Abstract definition of a parameter or group of parameters used by an operation method. */
 interface _AbstractGeneralOperationParameterType extends _DefinitionType {
 	/** The minimum number of times that values for this parameter group or parameter are required. If this attribute is omitted, the minimum number is one. */
 	minimumOccurs?: number;
 }
-export interface AbstractGeneralOperationParameterType extends _AbstractGeneralOperationParameterType { constructor: { new(): AbstractGeneralOperationParameterType }; }
-export var AbstractGeneralOperationParameterType: { new(): AbstractGeneralOperationParameterType };
+export interface AbstractGeneralOperationParameterType extends _AbstractGeneralOperationParameterType {  }
+
 
 /** Abstract parameter value or group of parameter values.
   *
   * This abstract complexType is expected to be extended and restricted for well-known operation methods with many instances, in Application Schemas that define operation-method-specialized element names and contents. Specific parameter value elements are directly contained in concrete subtypes, not in this abstract type. All concrete types derived from this type shall extend this type to include one "...Value" element with an appropriate type, which should be one of the element types allowed in the ParameterValueType. In addition, all derived concrete types shall extend this type to include a "valueOfParameter" element that references one element substitutable for the "OperationParameter" element. */
 interface _AbstractGeneralParameterValueType extends BaseType {}
-export interface AbstractGeneralParameterValueType extends _AbstractGeneralParameterValueType { constructor: { new(): AbstractGeneralParameterValueType }; }
-export var AbstractGeneralParameterValueType: { new(): AbstractGeneralParameterValueType };
+export interface AbstractGeneralParameterValueType extends _AbstractGeneralParameterValueType {  }
+
 
 /** An abstract operation on coordinates that usually includes a change of Datum. The parameters of a coordinate transformation are empirically derived from data containing the coordinates of a series of points in both coordinate reference systems. This computational process is usually "over-determined", allowing derivation of error (or accuracy) estimates for the transformation. Also, the stochastic nature of the parameters may result in multiple (different) versions of the same coordinate transformation.
   *
@@ -285,20 +285,20 @@ interface _AbstractGeneralTransformationType extends _AbstractCoordinateOperatio
 	/** Area or region in which this CRS object is valid. */
 	validArea?: ExtentType;
 }
-export interface AbstractGeneralTransformationType extends _AbstractGeneralTransformationType { constructor: { new(): AbstractGeneralTransformationType }; }
-export var AbstractGeneralTransformationType: { new(): AbstractGeneralTransformationType };
+export interface AbstractGeneralTransformationType extends _AbstractGeneralTransformationType {  }
+
 
 /** This is the abstract root type of the geometric aggregates. */
 interface _AbstractGeometricAggregateType extends _AbstractGeometryType {}
-export interface AbstractGeometricAggregateType extends _AbstractGeometricAggregateType { constructor: { new(): AbstractGeometricAggregateType }; }
-export var AbstractGeometricAggregateType: { new(): AbstractGeometricAggregateType };
+export interface AbstractGeometricAggregateType extends _AbstractGeometricAggregateType {  }
+
 
 /** This is the abstract root type of the geometric primitives. A geometric primitive is a geometric object that is not
   * decomposed further into other primitives in the system. All primitives are oriented in the direction implied by the sequence of their
   * coordinate tuples. */
 interface _AbstractGeometricPrimitiveType extends _AbstractGeometryType {}
-export interface AbstractGeometricPrimitiveType extends _AbstractGeometricPrimitiveType { constructor: { new(): AbstractGeometricPrimitiveType }; }
-export var AbstractGeometricPrimitiveType: { new(): AbstractGeometricPrimitiveType };
+export interface AbstractGeometricPrimitiveType extends _AbstractGeometricPrimitiveType {  }
+
 
 /** All geometry elements are derived directly or indirectly from this abstract supertype. A geometry element may
   * have an identifying attribute ("gml:id"), a name (attribute "name") and a description (attribute "description"). It may be associated
@@ -329,8 +329,8 @@ interface _AbstractGeometryType extends _AbstractGMLType {
 	  * shall also be omitted. */
 	uomLabels?: NCNameList;
 }
-export interface AbstractGeometryType extends _AbstractGeometryType { constructor: { new(): AbstractGeometryType }; }
-export var AbstractGeometryType: { new(): AbstractGeometryType };
+export interface AbstractGeometryType extends _AbstractGeometryType {  }
+
 
 /** All complexContent GML elements are directly or indirectly derived from this abstract supertype
   * to establish a hierarchy of GML types that may be distinguished from other XML types by their ancestry.
@@ -345,8 +345,8 @@ interface _AbstractGMLType extends BaseType {
 	/** Label for the object, normally a descriptive name. An object may have several names, typically assigned by different authorities.  The authority for a name is indicated by the value of its (optional) codeSpace attribute.  The name may or may not be unique, as determined by the rules of the organization responsible for the codeSpace. */
 	name?: NameProxyType[];
 }
-export interface AbstractGMLType extends _AbstractGMLType { constructor: { new(): AbstractGMLType }; }
-export var AbstractGMLType: { new(): AbstractGMLType };
+export interface AbstractGMLType extends _AbstractGMLType {  }
+
 
 /** A gridded surface is a parametric curve
   * surface derived from a rectangular grid in the parameter
@@ -379,29 +379,29 @@ interface _AbstractGriddedSurfaceType extends _AbstractParametricCurveSurfaceTyp
 	  * of rows in the parameter grid. */
 	rows?: number;
 }
-export interface AbstractGriddedSurfaceType extends _AbstractGriddedSurfaceType { constructor: { new(): AbstractGriddedSurfaceType }; }
-export var AbstractGriddedSurfaceType: { new(): AbstractGriddedSurfaceType };
+export interface AbstractGriddedSurfaceType extends _AbstractGriddedSurfaceType {  }
+
 
 /** An abstract base type for complex metadata types. */
 interface _AbstractMetaDataType extends BaseType {
 	/** Database handle for the object.  It is of XML type ID, so is constrained to be unique in the XML document within which it occurs.  An external identifier for the object in the form of a URI may be constructed using standard XML and XPointer methods.  This is done by concatenating the URI for the document, a fragment separator, and the value of the id attribute. */
 	id?: string;
 }
-export interface AbstractMetaDataType extends _AbstractMetaDataType { constructor: { new(): AbstractMetaDataType }; }
-export var AbstractMetaDataType: { new(): AbstractMetaDataType };
+export interface AbstractMetaDataType extends _AbstractMetaDataType {  }
+
 
 
 interface _AbstractParametricCurveSurfaceType extends _AbstractSurfacePatchType {}
-export interface AbstractParametricCurveSurfaceType extends _AbstractParametricCurveSurfaceType { constructor: { new(): AbstractParametricCurveSurfaceType }; }
-export var AbstractParametricCurveSurfaceType: { new(): AbstractParametricCurveSurfaceType };
+export interface AbstractParametricCurveSurfaceType extends _AbstractParametricCurveSurfaceType {  }
+
 
 /** Position error estimate (or accuracy) data. */
 interface _AbstractPositionalAccuracyType extends BaseType {
 	/** A description of the position accuracy parameter(s) provided. */
 	measureDescription?: CodeType;
 }
-export interface AbstractPositionalAccuracyType extends _AbstractPositionalAccuracyType { constructor: { new(): AbstractPositionalAccuracyType }; }
-export var AbstractPositionalAccuracyType: { new(): AbstractPositionalAccuracyType };
+export interface AbstractPositionalAccuracyType extends _AbstractPositionalAccuracyType {  }
+
 
 /** Basic encoding for reference system objects, simplifying and restricting the DefinitionType as needed. */
 interface _AbstractReferenceSystemBaseType extends _DefinitionType {
@@ -412,8 +412,8 @@ interface _AbstractReferenceSystemBaseType extends _DefinitionType {
 	/** The name by which this reference system is identified. */
 	srsName: CodeType;
 }
-export interface AbstractReferenceSystemBaseType extends _AbstractReferenceSystemBaseType { constructor: { new(): AbstractReferenceSystemBaseType }; }
-export var AbstractReferenceSystemBaseType: { new(): AbstractReferenceSystemBaseType };
+export interface AbstractReferenceSystemBaseType extends _AbstractReferenceSystemBaseType {  }
+
 
 /** Description of a spatial and/or temporal reference system used by a dataset. */
 interface _AbstractReferenceSystemType extends _AbstractReferenceSystemBaseType {
@@ -426,43 +426,43 @@ interface _AbstractReferenceSystemType extends _AbstractReferenceSystemBaseType 
 	/** Area or region in which this CRS object is valid. */
 	validArea?: ExtentType;
 }
-export interface AbstractReferenceSystemType extends _AbstractReferenceSystemType { constructor: { new(): AbstractReferenceSystemType }; }
-export var AbstractReferenceSystemType: { new(): AbstractReferenceSystemType };
+export interface AbstractReferenceSystemType extends _AbstractReferenceSystemType {  }
+
 
 /** Encapsulates a ring to represent the surface boundary property of a surface. */
 interface _AbstractRingPropertyType extends _RingProxyType {}
-export interface AbstractRingPropertyType extends _AbstractRingPropertyType { constructor: { new(): AbstractRingPropertyType }; }
-export var AbstractRingPropertyType: { new(): AbstractRingPropertyType };
+export interface AbstractRingPropertyType extends _AbstractRingPropertyType {  }
+
 
 /** An abstraction of a ring to support surface boundaries of different complexity. */
 interface _AbstractRingType extends _AbstractGeometryType {}
-export interface AbstractRingType extends _AbstractRingType { constructor: { new(): AbstractRingType }; }
-export var AbstractRingType: { new(): AbstractRingType };
+export interface AbstractRingType extends _AbstractRingType {  }
+
 
 /** An abstraction of a solid to support the different levels of complexity. A solid is always contiguous. */
 interface _AbstractSolidType extends _AbstractGeometricPrimitiveType {}
-export interface AbstractSolidType extends _AbstractSolidType { constructor: { new(): AbstractSolidType }; }
-export var AbstractSolidType: { new(): AbstractSolidType };
+export interface AbstractSolidType extends _AbstractSolidType {  }
+
 
 /** [complexType of] The value of the top-level property. It is an abstract element. Used as the head element of the substitution group for extensibility purposes. */
 interface _AbstractStyleType extends _AbstractGMLType {}
-export interface AbstractStyleType extends _AbstractStyleType { constructor: { new(): AbstractStyleType }; }
-export var AbstractStyleType: { new(): AbstractStyleType };
+export interface AbstractStyleType extends _AbstractStyleType {  }
+
 
 /** A surface patch defines a homogenuous portion of a surface. */
 interface _AbstractSurfacePatchType extends BaseType {}
-export interface AbstractSurfacePatchType extends _AbstractSurfacePatchType { constructor: { new(): AbstractSurfacePatchType }; }
-export var AbstractSurfacePatchType: { new(): AbstractSurfacePatchType };
+export interface AbstractSurfacePatchType extends _AbstractSurfacePatchType {  }
+
 
 /** An abstraction of a surface to support the different levels of complexity. A surface is always a continuous region of a plane. */
 interface _AbstractSurfaceType extends _AbstractGeometricPrimitiveType {}
-export interface AbstractSurfaceType extends _AbstractSurfaceType { constructor: { new(): AbstractSurfaceType }; }
-export var AbstractSurfaceType: { new(): AbstractSurfaceType };
+export interface AbstractSurfaceType extends _AbstractSurfaceType {  }
+
 
 /** The abstract supertype for temporal complexes. */
 interface _AbstractTimeComplexType extends _AbstractTimeObjectType {}
-export interface AbstractTimeComplexType extends _AbstractTimeComplexType { constructor: { new(): AbstractTimeComplexType }; }
-export var AbstractTimeComplexType: { new(): AbstractTimeComplexType };
+export interface AbstractTimeComplexType extends _AbstractTimeComplexType {  }
+
 
 /** The abstract supertype for temporal geometric primitives.
   * A temporal geometry must be associated with a temporal reference system via URI.
@@ -472,20 +472,20 @@ export var AbstractTimeComplexType: { new(): AbstractTimeComplexType };
 interface _AbstractTimeGeometricPrimitiveType extends _AbstractTimePrimitiveType {
 	frame?: string;
 }
-export interface AbstractTimeGeometricPrimitiveType extends _AbstractTimeGeometricPrimitiveType { constructor: { new(): AbstractTimeGeometricPrimitiveType }; }
-export var AbstractTimeGeometricPrimitiveType: { new(): AbstractTimeGeometricPrimitiveType };
+export interface AbstractTimeGeometricPrimitiveType extends _AbstractTimeGeometricPrimitiveType {  }
+
 
 /** The abstract supertype for temporal objects. */
 interface _AbstractTimeObjectType extends _AbstractGMLType {}
-export interface AbstractTimeObjectType extends _AbstractTimeObjectType { constructor: { new(): AbstractTimeObjectType }; }
-export var AbstractTimeObjectType: { new(): AbstractTimeObjectType };
+export interface AbstractTimeObjectType extends _AbstractTimeObjectType {  }
+
 
 /** The abstract supertype for temporal primitives. */
 interface _AbstractTimePrimitiveType extends _AbstractTimeObjectType {
 	relatedTime?: RelatedTimeType[];
 }
-export interface AbstractTimePrimitiveType extends _AbstractTimePrimitiveType { constructor: { new(): AbstractTimePrimitiveType }; }
-export var AbstractTimePrimitiveType: { new(): AbstractTimePrimitiveType };
+export interface AbstractTimePrimitiveType extends _AbstractTimePrimitiveType {  }
+
 
 /** A value in the time domain is measured relative to a temporal reference system. Common
   * types of reference systems include calendars, ordinal temporal reference systems, and
@@ -493,8 +493,8 @@ export var AbstractTimePrimitiveType: { new(): AbstractTimePrimitiveType };
 interface _AbstractTimeReferenceSystemType extends _DefinitionType {
 	domainOfValidity?: string;
 }
-export interface AbstractTimeReferenceSystemType extends _AbstractTimeReferenceSystemType { constructor: { new(): AbstractTimeReferenceSystemType }; }
-export var AbstractTimeReferenceSystemType: { new(): AbstractTimeReferenceSystemType };
+export interface AbstractTimeReferenceSystemType extends _AbstractTimeReferenceSystemType {  }
+
 
 /** A timeslice encapsulates the time-varying properties of a dynamic feature--it
   * must be extended to represent a timestamped projection of a feature. The dataSource
@@ -503,26 +503,26 @@ interface _AbstractTimeSliceType extends _AbstractGMLType {
 	dataSource?: StringOrRefType;
 	validTime: TimePrimitivePropertyType;
 }
-export interface AbstractTimeSliceType extends _AbstractTimeSliceType { constructor: { new(): AbstractTimeSliceType }; }
-export var AbstractTimeSliceType: { new(): AbstractTimeSliceType };
+export interface AbstractTimeSliceType extends _AbstractTimeSliceType {  }
+
 
 /** The element "complex" carries a reference to the complex containing this primitive. */
 interface _AbstractTimeTopologyPrimitiveType extends _AbstractTimePrimitiveType {
 	complex?: ReferenceType;
 }
-export interface AbstractTimeTopologyPrimitiveType extends _AbstractTimeTopologyPrimitiveType { constructor: { new(): AbstractTimeTopologyPrimitiveType }; }
-export var AbstractTimeTopologyPrimitiveType: { new(): AbstractTimeTopologyPrimitiveType };
+export interface AbstractTimeTopologyPrimitiveType extends _AbstractTimeTopologyPrimitiveType {  }
+
 
 interface _AbstractTopologyType extends _AbstractGMLType {}
-export interface AbstractTopologyType extends _AbstractTopologyType { constructor: { new(): AbstractTopologyType }; }
-export var AbstractTopologyType: { new(): AbstractTopologyType };
+export interface AbstractTopologyType extends _AbstractTopologyType {  }
+
 
 interface _AbstractTopoPrimitiveType extends _AbstractTopologyType {
 	container?: ContainerPropertyType;
 	isolated?: IsolatedPropertyType[];
 }
-export interface AbstractTopoPrimitiveType extends _AbstractTopoPrimitiveType { constructor: { new(): AbstractTopoPrimitiveType }; }
-export var AbstractTopoPrimitiveType: { new(): AbstractTopoPrimitiveType };
+export interface AbstractTopoPrimitiveType extends _AbstractTopoPrimitiveType {  }
+
 
 /** Graph-specific styling property. */
 export type AesheticCriteriaType = ("MIN_CROSSINGS" | "MIN_AREA" | "MIN_BENDS" | "MAX_BENDS" | "UNIFORM_BENDS" | "MIN_SLOPES" | "MIN_EDGE_LENGTH" | "MAX_EDGE_LENGTH" | "UNIFORM_EDGE_LENGTH" | "MAX_ANGULAR_RESOLUTION" | "MIN_ASPECT_RATIO" | "MAX_SYMMETRIES");
@@ -572,21 +572,21 @@ interface _AffinePlacementType extends BaseType {
 	  * outDimension. */
 	refDirection: VectorType[];
 }
-export interface AffinePlacementType extends _AffinePlacementType { constructor: { new(): AffinePlacementType }; }
-export var AffinePlacementType: { new(): AffinePlacementType };
+export interface AffinePlacementType extends _AffinePlacementType {  }
+
 
 /** Value of an angle quantity provided in either degree-minute-second format or single value format. */
 interface _AngleChoiceType extends BaseType {
 	angle: MeasureType;
 	dmsAngle: DMSAngleType;
 }
-export interface AngleChoiceType extends _AngleChoiceType { constructor: { new(): AngleChoiceType }; }
-export var AngleChoiceType: { new(): AngleChoiceType };
+export interface AngleChoiceType extends _AngleChoiceType {  }
+
 
 /** Value of an angle quantity recorded as a single number, with its units. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for an angle, such as degrees or radians. */
 interface _AngleType extends _MeasureType {}
-export interface AngleType extends _AngleType { constructor: { new(): AngleType }; }
-export var AngleType: { new(): AngleType };
+export interface AngleType extends _AngleType {  }
+
 
 /** An ArcByBulge is an arc string with only one arc unit, i.e. two control points and one bulge. */
 interface _ArcByBulgeType extends _ArcStringByBulgeType {
@@ -610,14 +610,14 @@ interface _ArcByBulgeType extends _ArcStringByBulgeType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface ArcByBulgeType extends _ArcByBulgeType { constructor: { new(): ArcByBulgeType }; }
-export var ArcByBulgeType: { new(): ArcByBulgeType };
+export interface ArcByBulgeType extends _ArcByBulgeType {  }
+
 
 interface _ArcByCenterPointProxyType extends BaseType {
 	ArcByCenterPoint?: ArcByCenterPointType;
 	CircleByCenterPoint?: CircleByCenterPointType;
 }
-interface ArcByCenterPointProxyType extends _ArcByCenterPointProxyType { constructor: { new(): ArcByCenterPointProxyType }; }
+interface ArcByCenterPointProxyType extends _ArcByCenterPointProxyType {  }
 
 /** This variant of the arc requires that the points on the arc have to be computed instead of storing the coordinates directly. The control point is the center point of the arc plus the radius and the bearing at start and end. This represenation can be used only in 2D. */
 interface _ArcByCenterPointType extends _AbstractCurveSegmentType {
@@ -643,8 +643,8 @@ interface _ArcByCenterPointType extends _AbstractCurveSegmentType {
 	/** The bearing of the arc at the start. */
 	startAngle?: AngleType;
 }
-export interface ArcByCenterPointType extends _ArcByCenterPointType { constructor: { new(): ArcByCenterPointType }; }
-export var ArcByCenterPointType: { new(): ArcByCenterPointType };
+export interface ArcByCenterPointType extends _ArcByCenterPointType {  }
+
 
 /** Integer number of arc-minutes in a degree-minute-second angular value. */
 export type ArcMinutesType = number;
@@ -654,7 +654,7 @@ interface _ArcProxyType extends BaseType {
 	Arc?: ArcType;
 	Circle?: CircleType;
 }
-interface ArcProxyType extends _ArcProxyType { constructor: { new(): ArcProxyType }; }
+interface ArcProxyType extends _ArcProxyType {  }
 
 /** Number of arc-seconds in a degree-minute-second angular value. */
 export type ArcSecondsType = number;
@@ -664,7 +664,7 @@ interface _ArcStringByBulgeProxyType extends BaseType {
 	ArcStringByBulge?: ArcStringByBulgeType;
 	ArcByBulge?: ArcByBulgeType;
 }
-interface ArcStringByBulgeProxyType extends _ArcStringByBulgeProxyType { constructor: { new(): ArcStringByBulgeProxyType }; }
+interface ArcStringByBulgeProxyType extends _ArcStringByBulgeProxyType {  }
 
 /** This variant of the arc computes the mid points of the arcs instead of storing the coordinates directly. The control point sequence consists of the start and end points of each arc plus the bulge. */
 interface _ArcStringByBulgeType extends _AbstractCurveSegmentType {
@@ -691,13 +691,13 @@ interface _ArcStringByBulgeType extends _AbstractCurveSegmentType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface ArcStringByBulgeType extends _ArcStringByBulgeType { constructor: { new(): ArcStringByBulgeType }; }
-export var ArcStringByBulgeType: { new(): ArcStringByBulgeType };
+export interface ArcStringByBulgeType extends _ArcStringByBulgeType {  }
+
 
 interface _ArcStringProxyType extends _ArcProxyType {
 	ArcString?: ArcStringType;
 }
-interface ArcStringProxyType extends _ArcStringProxyType { constructor: { new(): ArcStringProxyType }; }
+interface ArcStringProxyType extends _ArcStringProxyType {  }
 
 /** An ArcString is a curve segment that uses three-point circular arc interpolation. */
 interface _ArcStringType extends _AbstractCurveSegmentType {
@@ -717,8 +717,8 @@ interface _ArcStringType extends _AbstractCurveSegmentType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface ArcStringType extends _ArcStringType { constructor: { new(): ArcStringType }; }
-export var ArcStringType: { new(): ArcStringType };
+export interface ArcStringType extends _ArcStringType {  }
+
 
 /** An Arc is an arc string with only one arc unit, i.e. three control points. */
 interface _ArcType extends _ArcStringType {
@@ -735,13 +735,13 @@ interface _ArcType extends _ArcStringType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface ArcType extends _ArcType { constructor: { new(): ArcType }; }
-export var ArcType: { new(): ArcType };
+export interface ArcType extends _ArcType {  }
+
 
 /** Value of a spatial area quantity, with its units. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for an area, such as square metres or square miles. */
 interface _AreaType extends _MeasureType {}
-export interface AreaType extends _AreaType { constructor: { new(): AreaType }; }
-export var AreaType: { new(): AreaType };
+export interface AreaType extends _AreaType {  }
+
 
 /** A base for derived types used to specify complex types containing an array of objects, by unspecified UML association - either composition or aggregation.  An instance of this type contains elements representing Objects.
   *
@@ -751,18 +751,18 @@ interface _ArrayAssociationType extends BaseType {
 	/** This abstract element is the head of a substitutionGroup hierararchy which may contain either simpleContent or complexContent elements.  It is used to assert the model position of "class" elements declared in other GML schemas. */
 	Object?: ObjectProxyType[];
 }
-export interface ArrayAssociationType extends _ArrayAssociationType { constructor: { new(): ArrayAssociationType }; }
-export var ArrayAssociationType: { new(): ArrayAssociationType };
+export interface ArrayAssociationType extends _ArrayAssociationType {  }
+
 
 /** A non-abstract generic collection type that can be used as a document element for a homogeneous collection of any GML types - Geometries, Topologies, Features ... */
 interface _ArrayType extends _AbstractGMLType {
 	members?: ArrayAssociationType;
 }
-export interface ArrayType extends _ArrayType { constructor: { new(): ArrayType }; }
-export var ArrayType: { new(): ArrayType };
+export interface ArrayType extends _ArrayType {  }
+
 
 interface _AssociationProxyType extends BaseType {}
-interface AssociationProxyType extends _AssociationProxyType { constructor: { new(): AssociationProxyType }; }
+interface AssociationProxyType extends _AssociationProxyType {  }
 
 /** A pattern or base for derived types used to specify complex types corresponding to an  unspecified UML association - either composition or aggregation.  Restricts the cardinality of Objects contained in the association to a maximum of one.  An instance of this type can contain an element representing an Object, or serve as a pointer to a remote Object.
   *
@@ -786,8 +786,8 @@ interface _AssociationType extends _ObjectProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface AssociationType extends _AssociationType { constructor: { new(): AssociationType }; }
-export var AssociationType: { new(): AssociationType };
+export interface AssociationType extends _AssociationType {  }
+
 
 /** A non-abstract generic collection type that can be used as a document element for a collection of any GML types - Geometries, Topologies, Features ...
   *
@@ -806,8 +806,8 @@ interface _BagType extends _AbstractGMLType {
 	member?: AssociationType[];
 	members?: ArrayAssociationType;
 }
-export interface BagType extends _BagType { constructor: { new(): BagType }; }
-export var BagType: { new(): BagType };
+export interface BagType extends _BagType {  }
+
 
 /** Base complex type for geometry, topology, label and graph styles. */
 interface _BaseStyleDescriptorType extends _AbstractGMLType {
@@ -818,15 +818,15 @@ interface _BaseStyleDescriptorType extends _AbstractGMLType {
 	spatialResolution?: ScaleType;
 	styleVariation?: StyleVariationType[];
 }
-export interface BaseStyleDescriptorType extends _BaseStyleDescriptorType { constructor: { new(): BaseStyleDescriptorType }; }
-export var BaseStyleDescriptorType: { new(): BaseStyleDescriptorType };
+export interface BaseStyleDescriptorType extends _BaseStyleDescriptorType {  }
+
 
 /** Definition of a unit of measure which is a base unit from the system of units.  A base unit cannot be derived by combination of other base units within this system.  Sometimes known as "fundamental unit". */
 interface _BaseUnitType extends _UnitDefinitionType {
 	unitsSystem: ReferenceType;
 }
-export interface BaseUnitType extends _BaseUnitType { constructor: { new(): BaseUnitType }; }
-export var BaseUnitType: { new(): BaseUnitType };
+export interface BaseUnitType extends _BaseUnitType {  }
+
 
 /** Bezier curves are polynomial splines that use Bezier or Bernstein polynomials for interpolation purposes. It is a special case of the B-Spline curve with two knots. */
 interface _BezierType extends _BSplineType {
@@ -852,8 +852,8 @@ interface _BezierType extends _BSplineType {
 	pos?: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface BezierType extends _BezierType { constructor: { new(): BezierType }; }
-export var BezierType: { new(): BezierType };
+export interface BezierType extends _BezierType {  }
+
 
 /** XML List based on XML Schema boolean type.  An element of this type contains a space-separated list of boolean values {0,1,true,false} */
 export type booleanList = boolean[];
@@ -870,8 +870,8 @@ interface _BooleanPropertyType extends _ValuePropertyType {
 	/** A value from two-valued logic, using the XML Schema boolean type.  An instance may take the values {true, false, 1, 0}. */
 	Boolean?: boolean;
 }
-export interface BooleanPropertyType extends _BooleanPropertyType { constructor: { new(): BooleanPropertyType }; }
-export var BooleanPropertyType: { new(): BooleanPropertyType };
+export interface BooleanPropertyType extends _BooleanPropertyType {  }
+
 
 /** Makes boundedBy mandatory */
 interface _BoundedFeatureType extends _AbstractFeatureType, _LocationProxyType {
@@ -883,21 +883,21 @@ interface _BoundedFeatureType extends _AbstractFeatureType, _LocationProxyType {
 	/** Label for the object, normally a descriptive name. An object may have several names, typically assigned by different authorities.  The authority for a name is indicated by the value of its (optional) codeSpace attribute.  The name may or may not be unique, as determined by the rules of the organization responsible for the codeSpace. */
 	name?: NameProxyType[];
 }
-export interface BoundedFeatureType extends _BoundedFeatureType { constructor: { new(): BoundedFeatureType }; }
-export var BoundedFeatureType: { new(): BoundedFeatureType };
+export interface BoundedFeatureType extends _BoundedFeatureType {  }
+
 
 /** Bounding shape. */
 interface _BoundingShapeType extends _EnvelopeProxyType {
 	Null: string;
 }
-export interface BoundingShapeType extends _BoundingShapeType { constructor: { new(): BoundingShapeType }; }
-export var BoundingShapeType: { new(): BoundingShapeType };
+export interface BoundingShapeType extends _BoundingShapeType {  }
+
 
 interface _BSplineProxyType extends BaseType {
 	BSpline?: BSplineType;
 	Bezier?: BezierType;
 }
-interface BSplineProxyType extends _BSplineProxyType { constructor: { new(): BSplineProxyType }; }
+interface BSplineProxyType extends _BSplineProxyType {  }
 
 /** A B-Spline is a piecewise parametric polynomial or rational curve described in terms of control points and basis functions. Knots are breakpoints on the curve that connect its pieces. They are given as a non-decreasing sequence of real numbers. If the weights in the knots are equal then it is a polynomial spline. The degree is the algebraic degree of the basis functions. */
 interface _BSplineType extends _AbstractCurveSegmentType {
@@ -924,8 +924,8 @@ interface _BSplineType extends _AbstractCurveSegmentType {
 	pos?: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface BSplineType extends _BSplineType { constructor: { new(): BSplineType }; }
-export var BSplineType: { new(): BSplineType };
+export interface BSplineType extends _BSplineType {  }
+
 
 /** Calendar dates may be indicated with varying degrees of precision,
   * using year, year-month, date.
@@ -949,13 +949,13 @@ interface _CartesianCSRefType extends BaseType {
 	remoteSchema?: string;
 	CartesianCS?: CartesianCSType;
 }
-export interface CartesianCSRefType extends _CartesianCSRefType { constructor: { new(): CartesianCSRefType }; }
-export var CartesianCSRefType: { new(): CartesianCSRefType };
+export interface CartesianCSRefType extends _CartesianCSRefType {  }
+
 
 /** A 1-, 2-, or 3-dimensional coordinate system. Gives the position of points relative to orthogonal straight axes in the 2- and 3-dimensional cases. In the 1-dimensional case, it contains a single straight coordinate axis. In the multi-dimensional case, all axes shall have the same length unit of measure. A CartesianCS shall have one, two, or three usesAxis associations. */
 interface _CartesianCSType extends _AbstractCoordinateSystemType {}
-export interface CartesianCSType extends _CartesianCSType { constructor: { new(): CartesianCSType }; }
-export var CartesianCSType: { new(): CartesianCSType };
+export interface CartesianCSType extends _CartesianCSType {  }
+
 
 /** Restriction of list type to store a 2-point range of ordinal values. If one member is a null, then this is a single ended interval. */
 export type CategoryExtentType = string[];
@@ -965,18 +965,18 @@ interface _CategoryPropertyType extends _ValuePropertyType {
 	/** A term representing a classification.  It has an optional XML attribute codeSpace, whose value is a URI which identifies a dictionary, codelist or authority for the term. */
 	Category?: CodeType;
 }
-export interface CategoryPropertyType extends _CategoryPropertyType { constructor: { new(): CategoryPropertyType }; }
-export var CategoryPropertyType: { new(): CategoryPropertyType };
+export interface CategoryPropertyType extends _CategoryPropertyType {  }
+
 
 /** A CircleByCenterPoint is an ArcByCenterPoint with identical start and end angle to form a full circle. Again, this represenation can be used only in 2D. */
 interface _CircleByCenterPointType extends _ArcByCenterPointType {}
-export interface CircleByCenterPointType extends _CircleByCenterPointType { constructor: { new(): CircleByCenterPointType }; }
-export var CircleByCenterPointType: { new(): CircleByCenterPointType };
+export interface CircleByCenterPointType extends _CircleByCenterPointType {  }
+
 
 /** A Circle is an arc whose ends coincide to form a simple closed loop. The "start" and "end" bearing are equal and shall be the bearing for the first controlPoint listed. The three control points must be distinct non-co-linear points for the Circle to be unambiguously defined. The arc is simply extended past the third control point until the first control point is encountered. */
 interface _CircleType extends _ArcType {}
-export interface CircleType extends _CircleType { constructor: { new(): CircleType }; }
-export var CircleType: { new(): CircleType };
+export interface CircleType extends _CircleType {  }
+
 
 /** A clothoid, or Cornu's spiral, is plane
   * curve whose curvature is a fixed function of its length.
@@ -1023,13 +1023,13 @@ interface _ClothoidType extends _AbstractCurveSegmentType {
 	  * tangent vector. The term length distance for the */
 	startParameter: number;
 }
-export interface ClothoidType extends _ClothoidType { constructor: { new(): ClothoidType }; }
-export var ClothoidType: { new(): ClothoidType };
+export interface ClothoidType extends _ClothoidType {  }
+
 
 interface _ClothoidTypeRefLocationType extends BaseType {
 	AffinePlacement: AffinePlacementType;
 }
-interface ClothoidTypeRefLocationType extends _ClothoidTypeRefLocationType { constructor: { new(): ClothoidTypeRefLocationType }; }
+interface ClothoidTypeRefLocationType extends _ClothoidTypeRefLocationType {  }
 
 /** List of values on a uniform nominal scale.  List of text tokens.
   * In a list context a token should not include any spaces, so xsd:Name is used instead of xsd:string.
@@ -1052,8 +1052,8 @@ export type CodeOrNullListType = string[];
 interface _CodeType extends Primitive._string {
 	codeSpace?: string;
 }
-export interface CodeType extends _CodeType { constructor: { new(): CodeType }; }
-export var CodeType: { new(): CodeType };
+export interface CodeType extends _CodeType {  }
+
 
 export type CompassPointEnumeration = ("N" | "NNE" | "NE" | "ENE" | "E" | "ESE" | "SE" | "SSE" | "S" | "SSW" | "SW" | "WSW" | "W" | "WNW" | "NW" | "NNW");
 interface _CompassPointEnumeration extends Primitive._string { content: CompassPointEnumeration; }
@@ -1070,16 +1070,16 @@ interface _CompositeCurvePropertyType extends BaseType {
 	remoteSchema?: string;
 	CompositeCurve?: CompositeCurveType;
 }
-export interface CompositeCurvePropertyType extends _CompositeCurvePropertyType { constructor: { new(): CompositeCurvePropertyType }; }
-export var CompositeCurvePropertyType: { new(): CompositeCurvePropertyType };
+export interface CompositeCurvePropertyType extends _CompositeCurvePropertyType {  }
+
 
 /** A CompositeCurve is defined by a sequence of (orientable) curves such that the each curve in the sequence terminates at the start point of the subsequent curve in the list. */
 interface _CompositeCurveType extends _AbstractCurveType {
 	/** This property element either references a curve via the XLink-attributes or contains the curve element. A curve element is any element which is substitutable for "_Curve". */
 	curveMember: CurvePropertyType[];
 }
-export interface CompositeCurveType extends _CompositeCurveType { constructor: { new(): CompositeCurveType }; }
-export var CompositeCurveType: { new(): CompositeCurveType };
+export interface CompositeCurveType extends _CompositeCurveType {  }
+
 
 interface _CompositeSolidPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -1093,8 +1093,8 @@ interface _CompositeSolidPropertyType extends BaseType {
 	remoteSchema?: string;
 	CompositeSolid?: CompositeSolidType;
 }
-export interface CompositeSolidPropertyType extends _CompositeSolidPropertyType { constructor: { new(): CompositeSolidPropertyType }; }
-export var CompositeSolidPropertyType: { new(): CompositeSolidPropertyType };
+export interface CompositeSolidPropertyType extends _CompositeSolidPropertyType {  }
+
 
 /** A composite solid is a geometry type with all the geometric properties of a (primitive) solid.
   * Essentially, a composite solid is a collection of solids that join in pairs on common boundary surfaces and which, when considered as a whole, form a single solid. */
@@ -1102,8 +1102,8 @@ interface _CompositeSolidType extends _AbstractSolidType {
 	/** This property element either references a solid via the XLink-attributes or contains the solid element. A solid element is any element which is substitutable for "_Solid". */
 	solidMember: SolidPropertyType[];
 }
-export interface CompositeSolidType extends _CompositeSolidType { constructor: { new(): CompositeSolidType }; }
-export var CompositeSolidType: { new(): CompositeSolidType };
+export interface CompositeSolidType extends _CompositeSolidType {  }
+
 
 interface _CompositeSurfacePropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -1117,16 +1117,16 @@ interface _CompositeSurfacePropertyType extends BaseType {
 	remoteSchema?: string;
 	CompositeSurface?: CompositeSurfaceType;
 }
-export interface CompositeSurfacePropertyType extends _CompositeSurfacePropertyType { constructor: { new(): CompositeSurfacePropertyType }; }
-export var CompositeSurfacePropertyType: { new(): CompositeSurfacePropertyType };
+export interface CompositeSurfacePropertyType extends _CompositeSurfacePropertyType {  }
+
 
 /** A CompositeSurface is defined by a set of orientable surfaces. A composite surface is geometry type with all the geometric properties of a (primitive) surface. Essentially, a composite surface is a collection of surfaces that join in pairs on common boundary curves and which, when considered as a whole, form a single surface. */
 interface _CompositeSurfaceType extends _AbstractSurfaceType {
 	/** This property element either references a surface via the XLink-attributes or contains the surface element. A surface element is any element which is substitutable for "_Surface". */
 	surfaceMember: SurfacePropertyType[];
 }
-export interface CompositeSurfaceType extends _CompositeSurfaceType { constructor: { new(): CompositeSurfaceType }; }
-export var CompositeSurfaceType: { new(): CompositeSurfaceType };
+export interface CompositeSurfaceType extends _CompositeSurfaceType {  }
+
 
 interface _CompositeValueProxyType extends BaseType {
 	/** Aggregate value built using the Composite pattern. */
@@ -1134,7 +1134,7 @@ interface _CompositeValueProxyType extends BaseType {
 	/** A Value Array is used for homogeneous arrays of primitive and aggregate values.   _ScalarValueList is preferred for arrays of Scalar Values since this is more efficient.  Since "choice" is not available for attribute groups, an external constraint (e.g. Schematron) would be required to enforce the selection of only one of these through schema validation */
 	ValueArray?: ValueArrayType;
 }
-interface CompositeValueProxyType extends _CompositeValueProxyType { constructor: { new(): CompositeValueProxyType }; }
+interface CompositeValueProxyType extends _CompositeValueProxyType {  }
 
 /** Aggregate value built from other Values using the Composite pattern. It contains zero or an arbitrary number of valueComponent elements, and zero or one valueComponents elements.  It may be used for strongly coupled aggregates (vectors, tensors) or for arbitrary collections of values. */
 interface _CompositeValueType extends _AbstractGMLType {
@@ -1143,8 +1143,8 @@ interface _CompositeValueType extends _AbstractGMLType {
 	/** Element which refers to, or contains, a set of homogeneously typed Values. */
 	valueComponents?: ValueArrayPropertyType;
 }
-export interface CompositeValueType extends _CompositeValueType { constructor: { new(): CompositeValueType }; }
-export var CompositeValueType: { new(): CompositeValueType };
+export interface CompositeValueType extends _CompositeValueType {  }
+
 
 /** Association to a compound coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _CompoundCRSRefType extends BaseType {
@@ -1159,16 +1159,16 @@ interface _CompoundCRSRefType extends BaseType {
 	remoteSchema?: string;
 	CompoundCRS?: CompoundCRSType;
 }
-export interface CompoundCRSRefType extends _CompoundCRSRefType { constructor: { new(): CompoundCRSRefType }; }
-export var CompoundCRSRefType: { new(): CompoundCRSRefType };
+export interface CompoundCRSRefType extends _CompoundCRSRefType {  }
+
 
 /** A coordinate reference system describing the position of points through two or more independent coordinate reference systems. */
 interface _CompoundCRSType extends _AbstractReferenceSystemType {
 	/** An association to a component coordinate reference system included in this compound coordinate reference system. */
 	includesCRS: CoordinateReferenceSystemRefType[];
 }
-export interface CompoundCRSType extends _CompoundCRSType { constructor: { new(): CompoundCRSType }; }
-export var CompoundCRSType: { new(): CompoundCRSType };
+export interface CompoundCRSType extends _CompoundCRSType {  }
+
 
 /** Association to a concatenated operation, either referencing or containing the definition of that concatenated operation. */
 interface _ConcatenatedOperationRefType extends BaseType {
@@ -1183,16 +1183,16 @@ interface _ConcatenatedOperationRefType extends BaseType {
 	remoteSchema?: string;
 	ConcatenatedOperation?: ConcatenatedOperationType;
 }
-export interface ConcatenatedOperationRefType extends _ConcatenatedOperationRefType { constructor: { new(): ConcatenatedOperationRefType }; }
-export var ConcatenatedOperationRefType: { new(): ConcatenatedOperationRefType };
+export interface ConcatenatedOperationRefType extends _ConcatenatedOperationRefType {  }
+
 
 /** An ordered sequence of two or more single coordinate operations. The sequence of operations is constrained by the requirement that the source coordinate reference system of step (n+1) must be the same as the target coordinate reference system of step (n). The source coordinate reference system of the first step and the target coordinate reference system of the last step are the source and target coordinate reference system associated with the concatenated operation. Instead of a forward operation, an inverse operation may be used for one or more of the operation steps mentioned above, if the inverse operation is uniquely defined by the forward operation. */
 interface _ConcatenatedOperationType extends _AbstractCoordinateOperationType {
 	/** Association to a single operation. */
 	usesSingleOperation: SingleOperationRefType[];
 }
-export interface ConcatenatedOperationType extends _ConcatenatedOperationType { constructor: { new(): ConcatenatedOperationType }; }
-export var ConcatenatedOperationType: { new(): ConcatenatedOperationType };
+export interface ConcatenatedOperationType extends _ConcatenatedOperationType {  }
+
 
 /** A cone is a gridded surface given as a
   * family of conic sections whose control points vary linearly.
@@ -1209,8 +1209,8 @@ interface _ConeType extends _AbstractGriddedSurfaceType {
 	horizontalCurveType: CurveInterpolationType;
 	verticalCurveType: CurveInterpolationType;
 }
-export interface ConeType extends _ConeType { constructor: { new(): ConeType }; }
-export var ConeType: { new(): ConeType };
+export interface ConeType extends _ConeType {  }
+
 
 interface _ContainerPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -1225,11 +1225,11 @@ interface _ContainerPropertyType extends BaseType {
 	Face?: FaceType;
 	TopoSolid?: TopoSolidType;
 }
-export interface ContainerPropertyType extends _ContainerPropertyType { constructor: { new(): ContainerPropertyType }; }
-export var ContainerPropertyType: { new(): ContainerPropertyType };
+export interface ContainerPropertyType extends _ContainerPropertyType {  }
+
 
 interface _ContinuousCoverageProxyType extends BaseType {}
-interface ContinuousCoverageProxyType extends _ContinuousCoverageProxyType { constructor: { new(): ContinuousCoverageProxyType }; }
+interface ContinuousCoverageProxyType extends _ContinuousCoverageProxyType {  }
 
 /** Definition of a unit of measure which is related to a preferred unit for this quantity type through a conversion formula.  A method for deriving this unit by algebraic combination of more primitive units, may also be provided. */
 interface _ConventionalUnitType extends _UnitDefinitionType {
@@ -1239,8 +1239,8 @@ interface _ConventionalUnitType extends _UnitDefinitionType {
 	/** This element is included when the correct definition of this unit is unknown, but this unit has a rough or inaccurate conversion to the preferred unit for this quantity type. */
 	roughConversionToPreferredUnit: ConversionToPreferredUnitType;
 }
-export interface ConventionalUnitType extends _ConventionalUnitType { constructor: { new(): ConventionalUnitType }; }
-export var ConventionalUnitType: { new(): ConventionalUnitType };
+export interface ConventionalUnitType extends _ConventionalUnitType {  }
+
 
 /** Association to a concrete general-purpose conversion, either referencing or containing the definition of that conversion. */
 interface _ConversionRefType extends BaseType {
@@ -1255,8 +1255,8 @@ interface _ConversionRefType extends BaseType {
 	remoteSchema?: string;
 	Conversion?: ConversionType;
 }
-export interface ConversionRefType extends _ConversionRefType { constructor: { new(): ConversionRefType }; }
-export var ConversionRefType: { new(): ConversionRefType };
+export interface ConversionRefType extends _ConversionRefType {  }
+
 
 /** Relation of a unit to the preferred unit for this quantity type, specified by an arithmetic conversion (scaling and/or offset). A preferred unit is either a base unit or a derived unit selected for all units of one quantity type. The mandatory attribute "uom" shall reference the preferred unit that this conversion applies to. The conversion is specified by one of two alternative elements: "factor" or "formula". */
 interface _ConversionToPreferredUnitType extends _UnitOfMeasureType {
@@ -1265,8 +1265,8 @@ interface _ConversionToPreferredUnitType extends _UnitOfMeasureType {
 	/** Specification of the formula by which a value using this unit of measure can be converted to obtain the corresponding value using the preferred unit of measure. */
 	formula: FormulaType;
 }
-export interface ConversionToPreferredUnitType extends _ConversionToPreferredUnitType { constructor: { new(): ConversionToPreferredUnitType }; }
-export var ConversionToPreferredUnitType: { new(): ConversionToPreferredUnitType };
+export interface ConversionToPreferredUnitType extends _ConversionToPreferredUnitType {  }
+
 
 /** A concrete operation on coordinates that does not include any change of Datum. The best-known example of a coordinate conversion is a map projection. The parameters describing coordinate conversions are defined rather than empirically derived. Note that some conversions have no parameters.
   *
@@ -1277,13 +1277,13 @@ interface _ConversionType extends _AbstractGeneralConversionType {
 	/** Composition association to a parameter value used by this coordinate operation. */
 	usesValue?: ParameterValueType[];
 }
-export interface ConversionType extends _ConversionType { constructor: { new(): ConversionType }; }
-export var ConversionType: { new(): ConversionType };
+export interface ConversionType extends _ConversionType {  }
+
 
 interface _CoordinateOperationProxyType extends _SingleOperationProxyType {
 	ConcatenatedOperation?: ConcatenatedOperationType;
 }
-interface CoordinateOperationProxyType extends _CoordinateOperationProxyType { constructor: { new(): CoordinateOperationProxyType }; }
+interface CoordinateOperationProxyType extends _CoordinateOperationProxyType {  }
 
 /** Association to a coordinate operation, either referencing or containing the definition of that coordinate operation. */
 interface _CoordinateOperationRefType extends _CoordinateOperationProxyType {
@@ -1297,8 +1297,8 @@ interface _CoordinateOperationRefType extends _CoordinateOperationProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface CoordinateOperationRefType extends _CoordinateOperationRefType { constructor: { new(): CoordinateOperationRefType }; }
-export var CoordinateOperationRefType: { new(): CoordinateOperationRefType };
+export interface CoordinateOperationRefType extends _CoordinateOperationRefType {  }
+
 
 interface _CoordinateReferenceSystemProxyType extends _GeneralDerivedCRSProxyType {
 	GeographicCRS?: GeographicCRSType;
@@ -1308,7 +1308,7 @@ interface _CoordinateReferenceSystemProxyType extends _GeneralDerivedCRSProxyTyp
 	ImageCRS?: ImageCRSType;
 	TemporalCRS?: TemporalCRSType;
 }
-interface CoordinateReferenceSystemProxyType extends _CoordinateReferenceSystemProxyType { constructor: { new(): CoordinateReferenceSystemProxyType }; }
+interface CoordinateReferenceSystemProxyType extends _CoordinateReferenceSystemProxyType {  }
 
 /** Association to a coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _CoordinateReferenceSystemRefType extends _CoordinateReferenceSystemProxyType {
@@ -1322,8 +1322,8 @@ interface _CoordinateReferenceSystemRefType extends _CoordinateReferenceSystemPr
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface CoordinateReferenceSystemRefType extends _CoordinateReferenceSystemRefType { constructor: { new(): CoordinateReferenceSystemRefType }; }
-export var CoordinateReferenceSystemRefType: { new(): CoordinateReferenceSystemRefType };
+export interface CoordinateReferenceSystemRefType extends _CoordinateReferenceSystemRefType {  }
+
 
 /** Tables or arrays of tuples.
   * May be used for text-encoding of values from a table.
@@ -1338,8 +1338,8 @@ interface _CoordinatesType extends Primitive._string {
 	decimal: string;
 	ts: string;
 }
-export interface CoordinatesType extends _CoordinatesType { constructor: { new(): CoordinatesType }; }
-export var CoordinatesType: { new(): CoordinatesType };
+export interface CoordinatesType extends _CoordinatesType {  }
+
 
 /** Basic encoding for coordinate system axis objects, simplifying and restricting the DefinitionType as needed. */
 interface _CoordinateSystemAxisBaseType extends _DefinitionType {
@@ -1350,8 +1350,8 @@ interface _CoordinateSystemAxisBaseType extends _DefinitionType {
 	/** Label for the object, normally a descriptive name. An object may have several names, typically assigned by different authorities.  The authority for a name is indicated by the value of its (optional) codeSpace attribute.  The name may or may not be unique, as determined by the rules of the organization responsible for the codeSpace. */
 	name: NameProxyType[];
 }
-export interface CoordinateSystemAxisBaseType extends _CoordinateSystemAxisBaseType { constructor: { new(): CoordinateSystemAxisBaseType }; }
-export var CoordinateSystemAxisBaseType: { new(): CoordinateSystemAxisBaseType };
+export interface CoordinateSystemAxisBaseType extends _CoordinateSystemAxisBaseType {  }
+
 
 /** Association to a coordinate system axis, either referencing or containing the definition of that axis. */
 interface _CoordinateSystemAxisRefType extends BaseType {
@@ -1366,8 +1366,8 @@ interface _CoordinateSystemAxisRefType extends BaseType {
 	remoteSchema?: string;
 	CoordinateSystemAxis?: CoordinateSystemAxisType;
 }
-export interface CoordinateSystemAxisRefType extends _CoordinateSystemAxisRefType { constructor: { new(): CoordinateSystemAxisRefType }; }
-export var CoordinateSystemAxisRefType: { new(): CoordinateSystemAxisRefType };
+export interface CoordinateSystemAxisRefType extends _CoordinateSystemAxisRefType {  }
+
 
 /** Definition of a coordinate system axis. */
 interface _CoordinateSystemAxisType extends _CoordinateSystemAxisBaseType {
@@ -1382,8 +1382,8 @@ interface _CoordinateSystemAxisType extends _CoordinateSystemAxisBaseType {
 	/** Information about this object or code. Contains text or refers to external text. */
 	remarks?: StringOrRefType;
 }
-export interface CoordinateSystemAxisType extends _CoordinateSystemAxisType { constructor: { new(): CoordinateSystemAxisType }; }
-export var CoordinateSystemAxisType: { new(): CoordinateSystemAxisType };
+export interface CoordinateSystemAxisType extends _CoordinateSystemAxisType {  }
+
 
 interface _CoordinateSystemProxyType extends BaseType {
 	EllipsoidalCS?: EllipsoidalCSType;
@@ -1397,7 +1397,7 @@ interface _CoordinateSystemProxyType extends BaseType {
 	CylindricalCS?: CylindricalCSType;
 	ObliqueCartesianCS?: ObliqueCartesianCSType;
 }
-interface CoordinateSystemProxyType extends _CoordinateSystemProxyType { constructor: { new(): CoordinateSystemProxyType }; }
+interface CoordinateSystemProxyType extends _CoordinateSystemProxyType {  }
 
 /** Association to a coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _CoordinateSystemRefType extends _CoordinateSystemProxyType {
@@ -1411,8 +1411,8 @@ interface _CoordinateSystemRefType extends _CoordinateSystemProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface CoordinateSystemRefType extends _CoordinateSystemRefType { constructor: { new(): CoordinateSystemRefType }; }
-export var CoordinateSystemRefType: { new(): CoordinateSystemRefType };
+export interface CoordinateSystemRefType extends _CoordinateSystemRefType {  }
+
 
 /** Represents a coordinate tuple in one, two, or three dimensions. Deprecated with GML 3.0 and replaced by
   * DirectPositionType. */
@@ -1421,8 +1421,8 @@ interface _CoordType extends BaseType {
 	Y?: number;
 	Z?: number;
 }
-export interface CoordType extends _CoordType { constructor: { new(): CoordType }; }
-export var CoordType: { new(): CoordType };
+export interface CoordType extends _CoordType {  }
+
 
 /** Restriction of list type to store a 2-point range of frequency values. If one member is a null, then this is a single ended interval. */
 export type CountExtentType = string[];
@@ -1432,8 +1432,8 @@ interface _CountPropertyType extends _ValuePropertyType {
 	/** An integer representing a frequency of occurrence. */
 	Count?: number;
 }
-export interface CountPropertyType extends _CountPropertyType { constructor: { new(): CountPropertyType }; }
-export var CountPropertyType: { new(): CountPropertyType };
+export interface CountPropertyType extends _CountPropertyType {  }
+
 
 /** An element of a covariance matrix. */
 interface _CovarianceElementType extends BaseType {
@@ -1444,16 +1444,16 @@ interface _CovarianceElementType extends BaseType {
 	/** Row number of this covariance element value. */
 	rowIndex: number;
 }
-export interface CovarianceElementType extends _CovarianceElementType { constructor: { new(): CovarianceElementType }; }
-export var CovarianceElementType: { new(): CovarianceElementType };
+export interface CovarianceElementType extends _CovarianceElementType {  }
+
 
 /** Error estimate covariance matrix. */
 interface _CovarianceMatrixType extends _AbstractPositionalAccuracyType {
 	includesElement: CovarianceElementType[];
 	unitOfMeasure: UnitOfMeasureType[];
 }
-export interface CovarianceMatrixType extends _CovarianceMatrixType { constructor: { new(): CovarianceMatrixType }; }
-export var CovarianceMatrixType: { new(): CovarianceMatrixType };
+export interface CovarianceMatrixType extends _CovarianceMatrixType {  }
+
 
 /** The function or rule which defines the map from members of the domainSet to the range.
   * More functions will be added to this list */
@@ -1461,16 +1461,16 @@ interface _CoverageFunctionType extends _GridFunctionProxyType {
 	/** Description of a rule for associating members from the domainSet with members of the rangeSet. */
 	MappingRule: StringOrRefType;
 }
-export interface CoverageFunctionType extends _CoverageFunctionType { constructor: { new(): CoverageFunctionType }; }
-export var CoverageFunctionType: { new(): CoverageFunctionType };
+export interface CoverageFunctionType extends _CoverageFunctionType {  }
+
 
 interface _CoverageProxyType extends _ContinuousCoverageProxyType, _DiscreteCoverageProxyType {}
-interface CoverageProxyType extends _CoverageProxyType { constructor: { new(): CoverageProxyType }; }
+interface CoverageProxyType extends _CoverageProxyType {  }
 
 interface _CRSProxyType extends _CoordinateReferenceSystemProxyType {
 	CompoundCRS?: CompoundCRSType;
 }
-interface CRSProxyType extends _CRSProxyType { constructor: { new(): CRSProxyType }; }
+interface CRSProxyType extends _CRSProxyType {  }
 
 /** Association to a CRS abstract coordinate reference system, either referencing or containing the definition of that CRS. */
 interface _CRSRefType extends _CRSProxyType {
@@ -1484,8 +1484,8 @@ interface _CRSRefType extends _CRSProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface CRSRefType extends _CRSRefType { constructor: { new(): CRSRefType }; }
-export var CRSRefType: { new(): CRSRefType };
+export interface CRSRefType extends _CRSRefType {  }
+
 
 /** Cubic splines are similar to line strings in that they are a sequence of segments each with its own defining function. A cubic spline uses the control points and a set of derivative parameters to define a piecewise 3rd degree polynomial interpolation. Unlike line-strings, the parameterization by arc length is not necessarily still a polynomial.
   * The function describing the curve must be C2, that is, have a continuous 1st and 2nd derivative at all points, and pass through the controlPoints in the order given. Between the control points, the curve segment is defined by a cubic polynomial. At each control point, the polynomial changes in such a manner that the 1st and 2nd derivative vectors are the same from either side. The control parameters record must contain vectorAtStart, and vectorAtEnd which are the unit tangent vectors at controlPoint[1] and controlPoint[n] where n = controlPoint.count.
@@ -1511,8 +1511,8 @@ interface _CubicSplineType extends _AbstractCurveSegmentType {
 	/** "vectorAtStart" is the unit tangent vector at the start point of the spline. */
 	vectorAtStart: VectorType;
 }
-export interface CubicSplineType extends _CubicSplineType { constructor: { new(): CubicSplineType }; }
-export var CubicSplineType: { new(): CubicSplineType };
+export interface CubicSplineType extends _CubicSplineType {  }
+
 
 /** A container for an array of curves. The elements are always contained in the array property, referencing geometry elements
   * or arrays of geometry elements is not supported. */
@@ -1520,8 +1520,8 @@ interface _CurveArrayPropertyType extends BaseType {
 	/** The "_Curve" element is the abstract head of the substituition group for all (continuous) curve elements. */
 	Curve?: CurveProxyType[];
 }
-export interface CurveArrayPropertyType extends _CurveArrayPropertyType { constructor: { new(): CurveArrayPropertyType }; }
-export var CurveArrayPropertyType: { new(): CurveArrayPropertyType };
+export interface CurveArrayPropertyType extends _CurveArrayPropertyType {  }
+
 
 /** CurveInterpolationType is a list of codes that may be used to identify the interpolation mechanisms specified by an
   * application schema. */
@@ -1542,8 +1542,8 @@ interface _CurvePropertyType extends _CurveProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface CurvePropertyType extends _CurvePropertyType { constructor: { new(): CurvePropertyType }; }
-export var CurvePropertyType: { new(): CurvePropertyType };
+export interface CurvePropertyType extends _CurvePropertyType {  }
+
 
 interface _CurveProxyType extends BaseType {
 	CompositeCurve?: CompositeCurveType;
@@ -1551,15 +1551,15 @@ interface _CurveProxyType extends BaseType {
 	Curve?: CurveType;
 	OrientableCurve?: OrientableCurveType;
 }
-interface CurveProxyType extends _CurveProxyType { constructor: { new(): CurveProxyType }; }
+interface CurveProxyType extends _CurveProxyType {  }
 
 /** A container for an array of curve segments. */
 interface _CurveSegmentArrayPropertyType extends BaseType {
 	/** The "_CurveSegment" element is the abstract head of the substituition group for all curve segment elements, i.e. continuous segments of the same interpolation mechanism. */
 	CurveSegment?: CurveSegmentProxyType[];
 }
-export interface CurveSegmentArrayPropertyType extends _CurveSegmentArrayPropertyType { constructor: { new(): CurveSegmentArrayPropertyType }; }
-export var CurveSegmentArrayPropertyType: { new(): CurveSegmentArrayPropertyType };
+export interface CurveSegmentArrayPropertyType extends _CurveSegmentArrayPropertyType {  }
+
 
 interface _CurveSegmentProxyType extends _ArcByCenterPointProxyType, _ArcStringProxyType, _ArcStringByBulgeProxyType, _BSplineProxyType, _GeodesicStringProxyType {
 	LineStringSegment?: LineStringSegmentType;
@@ -1567,7 +1567,7 @@ interface _CurveSegmentProxyType extends _ArcByCenterPointProxyType, _ArcStringP
 	CubicSpline?: CubicSplineType;
 	OffsetCurve?: OffsetCurveType;
 }
-interface CurveSegmentProxyType extends _CurveSegmentProxyType { constructor: { new(): CurveSegmentProxyType }; }
+interface CurveSegmentProxyType extends _CurveSegmentProxyType {  }
 
 /** Curve is a 1-dimensional primitive. Curves are continuous, connected, and have a measurable length in terms of the coordinate system.
   * A curve is composed of one or more curve segments. Each curve segment within a curve may be defined using a different interpolation method. The curve segments are connected to one another, with the end point of each segment except the last being the start point of the next segment in the segment list.
@@ -1576,8 +1576,8 @@ interface _CurveType extends _AbstractCurveType {
 	/** This property element contains a list of curve segments. The order of the elements is significant and shall be preserved when processing the array. */
 	segments: CurveSegmentArrayPropertyType;
 }
-export interface CurveType extends _CurveType { constructor: { new(): CurveType }; }
-export var CurveType: { new(): CurveType };
+export interface CurveType extends _CurveType {  }
+
 
 /** A cylinder is a gridded surface given as a
   * family of circles whose positions vary along a set of parallel
@@ -1590,8 +1590,8 @@ interface _CylinderType extends _AbstractGriddedSurfaceType {
 	horizontalCurveType: CurveInterpolationType;
 	verticalCurveType: CurveInterpolationType;
 }
-export interface CylinderType extends _CylinderType { constructor: { new(): CylinderType }; }
-export var CylinderType: { new(): CylinderType };
+export interface CylinderType extends _CylinderType {  }
+
 
 /** Association to a cylindrical coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _CylindricalCSRefType extends BaseType {
@@ -1606,21 +1606,21 @@ interface _CylindricalCSRefType extends BaseType {
 	remoteSchema?: string;
 	CylindricalCS?: CylindricalCSType;
 }
-export interface CylindricalCSRefType extends _CylindricalCSRefType { constructor: { new(): CylindricalCSRefType }; }
-export var CylindricalCSRefType: { new(): CylindricalCSRefType };
+export interface CylindricalCSRefType extends _CylindricalCSRefType {  }
+
 
 /** A three-dimensional coordinate system consisting of a polar coordinate system extended by a straight coordinate axis perpendicular to the plane spanned by the polar coordinate system. A CylindricalCS shall have three usesAxis associations. */
 interface _CylindricalCSType extends _AbstractCoordinateSystemType {}
-export interface CylindricalCSType extends _CylindricalCSType { constructor: { new(): CylindricalCSType }; }
-export var CylindricalCSType: { new(): CylindricalCSType };
+export interface CylindricalCSType extends _CylindricalCSType {  }
+
 
 interface _DataBlockType extends BaseType {
 	doubleOrNullTupleList: doubleOrNullList;
 	rangeParameters: RangeParametersType;
 	tupleList: CoordinatesType;
 }
-export interface DataBlockType extends _DataBlockType { constructor: { new(): DataBlockType }; }
-export var DataBlockType: { new(): DataBlockType };
+export interface DataBlockType extends _DataBlockType {  }
+
 
 interface _DatumProxyType extends BaseType {
 	EngineeringDatum?: EngineeringDatumType;
@@ -1629,7 +1629,7 @@ interface _DatumProxyType extends BaseType {
 	TemporalDatum?: TemporalDatumType;
 	GeodeticDatum?: GeodeticDatumType;
 }
-interface DatumProxyType extends _DatumProxyType { constructor: { new(): DatumProxyType }; }
+interface DatumProxyType extends _DatumProxyType {  }
 
 /** Association to a datum, either referencing or containing the definition of that datum. */
 interface _DatumRefType extends _DatumProxyType {
@@ -1643,8 +1643,8 @@ interface _DatumRefType extends _DatumProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface DatumRefType extends _DatumRefType { constructor: { new(): DatumRefType }; }
-export var DatumRefType: { new(): DatumRefType };
+export interface DatumRefType extends _DatumRefType {  }
+
 
 /** Decimal number of arc-minutes in a degree-minute angular value. */
 export type DecimalMinutesType = number;
@@ -1663,15 +1663,15 @@ interface _DefaultStylePropertyType extends _StyleProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface DefaultStylePropertyType extends _DefaultStylePropertyType { constructor: { new(): DefaultStylePropertyType }; }
-export var DefaultStylePropertyType: { new(): DefaultStylePropertyType };
+export interface DefaultStylePropertyType extends _DefaultStylePropertyType {  }
+
 
 /** A proxy entry in a dictionary of definitions. An element of this type contains a reference to a remote definition object. This entry is expected to be convenient in allowing multiple elements in one XML document to contain short (abbreviated XPointer) references, which are resolved to an external definition provided in a Dictionary element in the same XML document. */
 interface _DefinitionProxyType extends _DefinitionType {
 	definitionRef: ReferenceType;
 }
-export interface DefinitionProxyType extends _DefinitionProxyType { constructor: { new(): DefinitionProxyType }; }
-export var DefinitionProxyType: { new(): DefinitionProxyType };
+export interface DefinitionProxyType extends _DefinitionProxyType {  }
+
 
 interface _DefinitionProxyType_2 extends _CoordinateSystemProxyType, _DatumProxyType, _ReferenceSystemProxyType, _CoordinateOperationProxyType, _GeneralOperationParameterProxyType, _TimeReferenceSystemProxyType, _UnitDefinitionProxyType {
 	Definition?: DefinitionType;
@@ -1684,7 +1684,7 @@ interface _DefinitionProxyType_2 extends _CoordinateSystemProxyType, _DatumProxy
 	DefinitionCollection?: DictionaryType;
 	Dictionary?: DictionaryType;
 }
-interface DefinitionProxyType_2 extends _DefinitionProxyType_2 { constructor: { new(): DefinitionProxyType_2 }; }
+interface DefinitionProxyType_2 extends _DefinitionProxyType_2 {  }
 
 /** A definition, which can be included in or referenced by a dictionary. In this extended type, the inherited "description" optional element can hold the definition whenever only text is needed. The inherited "name" elements can provide one or more brief terms for which this is the definition. The inherited "metaDataProperty" elements can be used to reference or include more information about this definition.
   * The gml:id attribute is required - it must be possible to reference this definition using this handle. */
@@ -1698,15 +1698,15 @@ interface _DefinitionType extends _AbstractGMLType {
 	/** Label for the object, normally a descriptive name. An object may have several names, typically assigned by different authorities.  The authority for a name is indicated by the value of its (optional) codeSpace attribute.  The name may or may not be unique, as determined by the rules of the organization responsible for the codeSpace. */
 	name: NameProxyType[];
 }
-export interface DefinitionType extends _DefinitionType { constructor: { new(): DefinitionType }; }
-export var DefinitionType: { new(): DefinitionType };
+export interface DefinitionType extends _DefinitionType {  }
+
 
 /** Integer number of degrees, plus the angle direction. This element can be used for geographic Latitude and Longitude. For Latitude, the XML attribute direction can take the values "N" or "S", meaning North or South of the equator. For Longitude, direction can take the values "E" or "W", meaning East or West of the prime meridian. This element can also be used for other angles. In that case, the direction can take the values "+" or "-" (of SignType), in the specified rotational direction from a specified reference direction. */
 interface _DegreesType extends _DegreeValueType {
 	direction: string;
 }
-export interface DegreesType extends _DegreesType { constructor: { new(): DegreesType }; }
-export var DegreesType: { new(): DegreesType };
+export interface DegreesType extends _DegreesType {  }
+
 
 type DegreesTypeDirectionType = string;
 type _DegreesTypeDirectionType = Primitive._string;
@@ -1719,8 +1719,8 @@ type _DegreeValueType = Primitive._number;
 interface _DerivationUnitTermType extends _UnitOfMeasureType {
 	exponent: number;
 }
-export interface DerivationUnitTermType extends _DerivationUnitTermType { constructor: { new(): DerivationUnitTermType }; }
-export var DerivationUnitTermType: { new(): DerivationUnitTermType };
+export interface DerivationUnitTermType extends _DerivationUnitTermType {  }
+
 
 /** Association to a non-projected derived coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _DerivedCRSRefType extends BaseType {
@@ -1735,8 +1735,8 @@ interface _DerivedCRSRefType extends BaseType {
 	remoteSchema?: string;
 	DerivedCRS?: DerivedCRSType;
 }
-export interface DerivedCRSRefType extends _DerivedCRSRefType { constructor: { new(): DerivedCRSRefType }; }
-export var DerivedCRSRefType: { new(): DerivedCRSRefType };
+export interface DerivedCRSRefType extends _DerivedCRSRefType {  }
+
 
 /** A coordinate reference system that is defined by its coordinate conversion from another coordinate reference system but is not a projected coordinate reference system. This category includes coordinate reference systems derived from a projected coordinate reference system. */
 interface _DerivedCRSType extends _AbstractGeneralDerivedCRSType {
@@ -1744,29 +1744,29 @@ interface _DerivedCRSType extends _AbstractGeneralDerivedCRSType {
 	/** Association to the coordinate system used by this CRS. */
 	usesCS: CoordinateSystemRefType;
 }
-export interface DerivedCRSType extends _DerivedCRSType { constructor: { new(): DerivedCRSType }; }
-export var DerivedCRSType: { new(): DerivedCRSType };
+export interface DerivedCRSType extends _DerivedCRSType {  }
+
 
 /** Type of a derived coordinate reference system. */
 interface _DerivedCRSTypeType extends _CodeType {
 	/** Reference to a source of information specifying the values and meanings of all the allowed string values for this DerivedCRSTypeType. */
 	codeSpace: string;
 }
-export interface DerivedCRSTypeType extends _DerivedCRSTypeType { constructor: { new(): DerivedCRSTypeType }; }
-export var DerivedCRSTypeType: { new(): DerivedCRSTypeType };
+export interface DerivedCRSTypeType extends _DerivedCRSTypeType {  }
+
 
 /** Definition of a unit of measure which is defined through algebraic combination of more primitive units, which are usually base units from a particular system of units. Derived units based directly on base units are usually preferred for quantities other than the base units or fundamental quantities within a system.  If a derived unit is not the preferred unit, the ConventionalUnit element should be used instead. */
 interface _DerivedUnitType extends _UnitDefinitionType {
 	derivationUnitTerm: DerivationUnitTermType[];
 }
-export interface DerivedUnitType extends _DerivedUnitType { constructor: { new(): DerivedUnitType }; }
-export var DerivedUnitType: { new(): DerivedUnitType };
+export interface DerivedUnitType extends _DerivedUnitType {  }
+
 
 interface _DictionaryEntryProxyType extends BaseType {
 	dictionaryEntry?: DictionaryEntryType;
 	definitionMember?: DictionaryEntryType;
 }
-interface DictionaryEntryProxyType extends _DictionaryEntryProxyType { constructor: { new(): DictionaryEntryProxyType }; }
+interface DictionaryEntryProxyType extends _DictionaryEntryProxyType {  }
 
 /** An entry in a dictionary of definitions. An instance of this type contains or refers to a definition object.
   *
@@ -1782,16 +1782,16 @@ interface _DictionaryEntryType extends _DefinitionProxyType_2 {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface DictionaryEntryType extends _DictionaryEntryType { constructor: { new(): DictionaryEntryType }; }
-export var DictionaryEntryType: { new(): DictionaryEntryType };
+export interface DictionaryEntryType extends _DictionaryEntryType {  }
+
 
 /** A non-abstract bag that is specialized for use as a dictionary which contains a set of definitions. These definitions are referenced from other places, in the same and different XML documents. In this restricted type, the inherited optional "description" element can be used for a description of this dictionary. The inherited optional "name" element can be used for the name(s) of this dictionary. The inherited "metaDataProperty" elements can be used to reference or contain more information about this dictionary. The inherited required gml:id attribute allows the dictionary to be referenced using this handle. */
 interface _DictionaryType extends _DefinitionType {
 	dictionaryEntry?: DictionaryEntryProxyType[];
 	indirectEntry?: IndirectEntryType[];
 }
-export interface DictionaryType extends _DictionaryType { constructor: { new(): DictionaryType }; }
-export var DictionaryType: { new(): DictionaryType };
+export interface DictionaryType extends _DictionaryType {  }
+
 
 interface _DirectedEdgePropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -1806,8 +1806,8 @@ interface _DirectedEdgePropertyType extends BaseType {
 	remoteSchema?: string;
 	Edge?: EdgeType;
 }
-export interface DirectedEdgePropertyType extends _DirectedEdgePropertyType { constructor: { new(): DirectedEdgePropertyType }; }
-export var DirectedEdgePropertyType: { new(): DirectedEdgePropertyType };
+export interface DirectedEdgePropertyType extends _DirectedEdgePropertyType {  }
+
 
 interface _DirectedFacePropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -1822,8 +1822,8 @@ interface _DirectedFacePropertyType extends BaseType {
 	remoteSchema?: string;
 	Face?: FaceType;
 }
-export interface DirectedFacePropertyType extends _DirectedFacePropertyType { constructor: { new(): DirectedFacePropertyType }; }
-export var DirectedFacePropertyType: { new(): DirectedFacePropertyType };
+export interface DirectedFacePropertyType extends _DirectedFacePropertyType {  }
+
 
 interface _DirectedNodePropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -1838,26 +1838,26 @@ interface _DirectedNodePropertyType extends BaseType {
 	remoteSchema?: string;
 	Node?: NodeType;
 }
-export interface DirectedNodePropertyType extends _DirectedNodePropertyType { constructor: { new(): DirectedNodePropertyType }; }
-export var DirectedNodePropertyType: { new(): DirectedNodePropertyType };
+export interface DirectedNodePropertyType extends _DirectedNodePropertyType {  }
+
 
 interface _DirectedObservationAtDistanceType extends _DirectedObservationType {
 	distance: MeasureType;
 }
-export interface DirectedObservationAtDistanceType extends _DirectedObservationAtDistanceType { constructor: { new(): DirectedObservationAtDistanceType }; }
-export var DirectedObservationAtDistanceType: { new(): DirectedObservationAtDistanceType };
+export interface DirectedObservationAtDistanceType extends _DirectedObservationAtDistanceType {  }
+
 
 interface _DirectedObservationProxyType extends BaseType {
 	DirectedObservation?: DirectedObservationType;
 	DirectedObservationAtDistance?: DirectedObservationAtDistanceType;
 }
-interface DirectedObservationProxyType extends _DirectedObservationProxyType { constructor: { new(): DirectedObservationProxyType }; }
+interface DirectedObservationProxyType extends _DirectedObservationProxyType {  }
 
 interface _DirectedObservationType extends _ObservationType {
 	direction: DirectionPropertyType;
 }
-export interface DirectedObservationType extends _DirectedObservationType { constructor: { new(): DirectedObservationType }; }
-export var DirectedObservationType: { new(): DirectedObservationType };
+export interface DirectedObservationType extends _DirectedObservationType {  }
+
 
 interface _DirectedTopoSolidPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -1872,8 +1872,8 @@ interface _DirectedTopoSolidPropertyType extends BaseType {
 	remoteSchema?: string;
 	TopoSolid?: TopoSolidType;
 }
-export interface DirectedTopoSolidPropertyType extends _DirectedTopoSolidPropertyType { constructor: { new(): DirectedTopoSolidPropertyType }; }
-export var DirectedTopoSolidPropertyType: { new(): DirectedTopoSolidPropertyType };
+export interface DirectedTopoSolidPropertyType extends _DirectedTopoSolidPropertyType {  }
+
 
 interface _DirectionPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -1890,8 +1890,8 @@ interface _DirectionPropertyType extends BaseType {
 	DirectionString: StringOrRefType;
 	DirectionVector: DirectionVectorType;
 }
-export interface DirectionPropertyType extends _DirectionPropertyType { constructor: { new(): DirectionPropertyType }; }
-export var DirectionPropertyType: { new(): DirectionPropertyType };
+export interface DirectionPropertyType extends _DirectionPropertyType {  }
+
 
 /** Direction expressed as a vector, either using components, or using angles. */
 interface _DirectionVectorType extends BaseType {
@@ -1899,8 +1899,8 @@ interface _DirectionVectorType extends BaseType {
 	vector: VectorType;
 	verticalAngle: AngleType;
 }
-export interface DirectionVectorType extends _DirectionVectorType { constructor: { new(): DirectionVectorType }; }
-export var DirectionVectorType: { new(): DirectionVectorType };
+export interface DirectionVectorType extends _DirectionVectorType {  }
+
 
 /** DirectPositionList instances hold the coordinates for a sequence of direct positions within the same coordinate
   * reference system (CRS). */
@@ -1920,7 +1920,7 @@ interface _DiscreteCoverageProxyType extends BaseType {
 	MultiSurfaceCoverage?: MultiSurfaceCoverageType;
 	RectifiedGridCoverage?: RectifiedGridCoverageType;
 }
-interface DiscreteCoverageProxyType extends _DiscreteCoverageProxyType { constructor: { new(): DiscreteCoverageProxyType }; }
+interface DiscreteCoverageProxyType extends _DiscreteCoverageProxyType {  }
 
 /** Angle value provided in degree-minute-second or degree-minute format. */
 interface _DMSAngleType extends BaseType {
@@ -1929,8 +1929,8 @@ interface _DMSAngleType extends BaseType {
 	minutes?: number;
 	seconds?: number;
 }
-export interface DMSAngleType extends _DMSAngleType { constructor: { new(): DMSAngleType }; }
-export var DMSAngleType: { new(): DMSAngleType };
+export interface DMSAngleType extends _DMSAngleType {  }
+
 
 interface _DomainSetProxyType extends BaseType {
 	domainSet?: DomainSetType;
@@ -1941,7 +1941,7 @@ interface _DomainSetProxyType extends BaseType {
 	gridDomain?: GridDomainType;
 	rectifiedGridDomain?: RectifiedGridDomainType;
 }
-interface DomainSetProxyType extends _DomainSetProxyType { constructor: { new(): DomainSetProxyType }; }
+interface DomainSetProxyType extends _DomainSetProxyType {  }
 
 /** The spatiotemporal domain of a coverage.
   * Typically
@@ -1961,8 +1961,8 @@ interface _DomainSetType extends _GeometryProxyType, _TimeObjectProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface DomainSetType extends _DomainSetType { constructor: { new(): DomainSetType }; }
-export var DomainSetType: { new(): DomainSetType };
+export interface DomainSetType extends _DomainSetType {  }
+
 
 /** XML List based on XML Schema double type.  An element of this type contains a space-separated list of double values */
 export type doubleList = number[];
@@ -1983,16 +1983,16 @@ interface _DynamicFeatureCollectionType extends _FeatureCollectionType, _History
 	dataSource?: StringOrRefType;
 	validTime?: TimePrimitivePropertyType;
 }
-export interface DynamicFeatureCollectionType extends _DynamicFeatureCollectionType { constructor: { new(): DynamicFeatureCollectionType }; }
-export var DynamicFeatureCollectionType: { new(): DynamicFeatureCollectionType };
+export interface DynamicFeatureCollectionType extends _DynamicFeatureCollectionType {  }
+
 
 /** A dynamic feature may possess a history and/or a timestamp. */
 interface _DynamicFeatureType extends _AbstractFeatureType, _HistoryProxyType {
 	dataSource?: StringOrRefType;
 	validTime?: TimePrimitivePropertyType;
 }
-export interface DynamicFeatureType extends _DynamicFeatureType { constructor: { new(): DynamicFeatureType }; }
-export var DynamicFeatureType: { new(): DynamicFeatureType };
+export interface DynamicFeatureType extends _DynamicFeatureType {  }
+
 
 /** There is precisely one positively directed and one negatively directed node in the boundary of every edge. The negatively and positively directed nodes correspond to the start and end nodes respectively. The optional coboundary of an edge is a circular sequence of directed faces which are incident on this edge in document order. Faces which use a particular boundary edge in its positive orientation appear with positive orientation on the coboundary of the same edge. In the 2D case, the orientation of the face on the left of the edge is "+"; the orientation of the face on the right on its right is "-". An edge may optionally be realised by a 1-dimensional (curve) geometric primitive. */
 interface _EdgeType extends _AbstractTopoPrimitiveType {
@@ -2003,8 +2003,8 @@ interface _EdgeType extends _AbstractTopoPrimitiveType {
 	directedFace?: DirectedFacePropertyType[];
 	directedNode: DirectedNodePropertyType[];
 }
-export interface EdgeType extends _EdgeType { constructor: { new(): EdgeType }; }
-export var EdgeType: { new(): EdgeType };
+export interface EdgeType extends _EdgeType {  }
+
 
 /** Association to an ellipsoidal coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _EllipsoidalCSRefType extends BaseType {
@@ -2019,13 +2019,13 @@ interface _EllipsoidalCSRefType extends BaseType {
 	remoteSchema?: string;
 	EllipsoidalCS?: EllipsoidalCSType;
 }
-export interface EllipsoidalCSRefType extends _EllipsoidalCSRefType { constructor: { new(): EllipsoidalCSRefType }; }
-export var EllipsoidalCSRefType: { new(): EllipsoidalCSRefType };
+export interface EllipsoidalCSRefType extends _EllipsoidalCSRefType {  }
+
 
 /** A two- or three-dimensional coordinate system in which position is specified by geodetic latitude, geodetic longitude, and (in the three-dimensional case) ellipsoidal height. An EllipsoidalCS shall have two or three usesAxis associations. */
 interface _EllipsoidalCSType extends _AbstractCoordinateSystemType {}
-export interface EllipsoidalCSType extends _EllipsoidalCSType { constructor: { new(): EllipsoidalCSType }; }
-export var EllipsoidalCSType: { new(): EllipsoidalCSType };
+export interface EllipsoidalCSType extends _EllipsoidalCSType {  }
+
 
 /** Basic encoding for ellipsoid objects, simplifying and restricting the DefinitionType as needed. */
 interface _EllipsoidBaseType extends _DefinitionType {
@@ -2036,8 +2036,8 @@ interface _EllipsoidBaseType extends _DefinitionType {
 	/** Contains or refers to a metadata package that contains metadata properties. */
 	metaDataProperty?: MetaDataPropertyType[];
 }
-export interface EllipsoidBaseType extends _EllipsoidBaseType { constructor: { new(): EllipsoidBaseType }; }
-export var EllipsoidBaseType: { new(): EllipsoidBaseType };
+export interface EllipsoidBaseType extends _EllipsoidBaseType {  }
+
 
 /** Association to an ellipsoid, either referencing or containing the definition of that ellipsoid. */
 interface _EllipsoidRefType extends BaseType {
@@ -2052,8 +2052,8 @@ interface _EllipsoidRefType extends BaseType {
 	remoteSchema?: string;
 	Ellipsoid?: EllipsoidType;
 }
-export interface EllipsoidRefType extends _EllipsoidRefType { constructor: { new(): EllipsoidRefType }; }
-export var EllipsoidRefType: { new(): EllipsoidRefType };
+export interface EllipsoidRefType extends _EllipsoidRefType {  }
+
 
 /** An ellipsoid is a geometric figure that can be used to describe the approximate shape of the earth. In mathematical terms, it is a surface formed by the rotation of an ellipse about its minor axis. */
 interface _EllipsoidType extends _EllipsoidBaseType {
@@ -2065,8 +2065,8 @@ interface _EllipsoidType extends _EllipsoidBaseType {
 	/** Length of the semi-major axis of the ellipsoid, with its units. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for a length, such as metres or feet. */
 	semiMajorAxis: MeasureType;
 }
-export interface EllipsoidType extends _EllipsoidType { constructor: { new(): EllipsoidType }; }
-export var EllipsoidType: { new(): EllipsoidType };
+export interface EllipsoidType extends _EllipsoidType {  }
+
 
 /** Association to an engineering coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _EngineeringCRSRefType extends BaseType {
@@ -2081,8 +2081,8 @@ interface _EngineeringCRSRefType extends BaseType {
 	remoteSchema?: string;
 	EngineeringCRS?: EngineeringCRSType;
 }
-export interface EngineeringCRSRefType extends _EngineeringCRSRefType { constructor: { new(): EngineeringCRSRefType }; }
-export var EngineeringCRSRefType: { new(): EngineeringCRSRefType };
+export interface EngineeringCRSRefType extends _EngineeringCRSRefType {  }
+
 
 /** A contextually local coordinate reference system; which can be divided into two broad categories:
   * - earth-fixed systems applied to engineering activities on or near the surface of the earth;
@@ -2094,8 +2094,8 @@ interface _EngineeringCRSType extends _AbstractReferenceSystemType {
 	/** Association to the engineering datum used by this CRS. */
 	usesEngineeringDatum: EngineeringDatumRefType;
 }
-export interface EngineeringCRSType extends _EngineeringCRSType { constructor: { new(): EngineeringCRSType }; }
-export var EngineeringCRSType: { new(): EngineeringCRSType };
+export interface EngineeringCRSType extends _EngineeringCRSType {  }
+
 
 /** Association to an engineering datum, either referencing or containing the definition of that datum. */
 interface _EngineeringDatumRefType extends BaseType {
@@ -2110,19 +2110,19 @@ interface _EngineeringDatumRefType extends BaseType {
 	remoteSchema?: string;
 	EngineeringDatum?: EngineeringDatumType;
 }
-export interface EngineeringDatumRefType extends _EngineeringDatumRefType { constructor: { new(): EngineeringDatumRefType }; }
-export var EngineeringDatumRefType: { new(): EngineeringDatumRefType };
+export interface EngineeringDatumRefType extends _EngineeringDatumRefType {  }
+
 
 /** An engineering datum defines the origin of an engineering coordinate reference system, and is used in a region around that origin. This origin can be fixed with respect to the earth (such as a defined point at a construction site), or be a defined point on a moving vehicle (such as on a ship or satellite). */
 interface _EngineeringDatumType extends _AbstractDatumType {}
-export interface EngineeringDatumType extends _EngineeringDatumType { constructor: { new(): EngineeringDatumType }; }
-export var EngineeringDatumType: { new(): EngineeringDatumType };
+export interface EngineeringDatumType extends _EngineeringDatumType {  }
+
 
 export interface _EnvelopeProxyType extends BaseType {
 	Envelope?: EnvelopeType;
 	EnvelopeWithTimePeriod?: EnvelopeWithTimePeriodType;
 }
-export interface EnvelopeProxyType extends _EnvelopeProxyType { constructor: { new(): EnvelopeProxyType }; }
+export interface EnvelopeProxyType extends _EnvelopeProxyType {  }
 
 /** Envelope defines an extent using a pair of positions defining opposite corners in arbitrary dimensions. The first direct
   * position is the "lower corner" (a coordinate position consisting of all the minimal ordinates for each dimension for all points within the envelope),
@@ -2155,8 +2155,8 @@ interface _EnvelopeType extends BaseType {
 	pos: DirectPositionType[];
 	upperCorner: DirectPositionType;
 }
-export interface EnvelopeType extends _EnvelopeType { constructor: { new(): EnvelopeType }; }
-export var EnvelopeType: { new(): EnvelopeType };
+export interface EnvelopeType extends _EnvelopeType {  }
+
 
 /** Envelope that includes also a temporal extent. */
 interface _EnvelopeWithTimePeriodType extends _EnvelopeType {
@@ -2164,8 +2164,8 @@ interface _EnvelopeWithTimePeriodType extends _EnvelopeType {
 	/** Direct representation of a temporal position */
 	timePosition: TimePositionType[];
 }
-export interface EnvelopeWithTimePeriodType extends _EnvelopeWithTimePeriodType { constructor: { new(): EnvelopeWithTimePeriodType }; }
-export var EnvelopeWithTimePeriodType: { new(): EnvelopeWithTimePeriodType };
+export interface EnvelopeWithTimePeriodType extends _EnvelopeWithTimePeriodType {  }
+
 
 /** Information about the spatial, vertical, and/or temporal extent of a reference system object. Constraints: At least one of the elements "description", "boundingBox", "boundingPolygon", "verticalExtent", and temporalExtent" must be included, but more that one can be included when appropriate. Furthermore, more than one "boundingBox", "boundingPolygon", "verticalExtent", and/or temporalExtent" element can be included, with more than one meaning the union of the individual domains. */
 interface _ExtentType extends BaseType {
@@ -2180,8 +2180,8 @@ interface _ExtentType extends BaseType {
 	/** An interval defining the vertical spatial domain of this object. */
 	verticalExtent?: EnvelopeType[];
 }
-export interface ExtentType extends _ExtentType { constructor: { new(): ExtentType }; }
-export var ExtentType: { new(): ExtentType };
+export interface ExtentType extends _ExtentType {  }
+
 
 interface _ExteriorProxyType extends BaseType {
 	/** A boundary of a surface consists of a number of rings. In the normal 2D case, one of these rings is distinguished as being the exterior boundary. In a general manifold this is not always possible, in which case all boundaries shall be listed as interior boundaries, and the exterior will be empty. */
@@ -2189,7 +2189,7 @@ interface _ExteriorProxyType extends BaseType {
 	/** Deprecated with GML 3.0, included only for backwards compatibility with GML 2. Use "exterior" instead. */
 	outerBoundaryIs?: AbstractRingPropertyType;
 }
-interface ExteriorProxyType extends _ExteriorProxyType { constructor: { new(): ExteriorProxyType }; }
+interface ExteriorProxyType extends _ExteriorProxyType {  }
 
 /** . The topological boundary of a face consists of a set of directed edges. Note that all edges associated with a Face, including dangling and interior edges, appear in the boundary.  Dangling and interior edges are each referenced by pairs of directedEdges with opposing orientations.  The optional coboundary of a face is a pair of directed solids which are bounded by this face. If present, there is precisely one positively directed and one negatively directed solid in the coboundary of every face. The positively directed solid corresponds to the solid which lies in the direction of the positively directed normal to the face in any geometric realisation.  A face may optionally be realised by a 2-dimensional (surface) geometric primitive. */
 interface _FaceType extends _AbstractTopoPrimitiveType {
@@ -2198,23 +2198,23 @@ interface _FaceType extends _AbstractTopoPrimitiveType {
 	/** This property element either references a surface via the XLink-attributes or contains the surface element. surfaceProperty is the predefined property which can be used by GML Application Schemas whenever a GML Feature has a property with a value that is substitutable for _Surface. */
 	surfaceProperty?: SurfacePropertyType;
 }
-export interface FaceType extends _FaceType { constructor: { new(): FaceType }; }
-export var FaceType: { new(): FaceType };
+export interface FaceType extends _FaceType {  }
+
 
 /** Container for features - follow gml:ArrayAssociationType pattern. */
 interface _FeatureArrayPropertyType extends BaseType {
 	Feature?: FeatureProxyType[];
 }
-export interface FeatureArrayPropertyType extends _FeatureArrayPropertyType { constructor: { new(): FeatureArrayPropertyType }; }
-export var FeatureArrayPropertyType: { new(): FeatureArrayPropertyType };
+export interface FeatureArrayPropertyType extends _FeatureArrayPropertyType {  }
+
 
 interface _FeatureCollectionProxyType extends BaseType {}
-interface FeatureCollectionProxyType extends _FeatureCollectionProxyType { constructor: { new(): FeatureCollectionProxyType }; }
+interface FeatureCollectionProxyType extends _FeatureCollectionProxyType {  }
 
 /** Concrete generic feature collection. */
 interface _FeatureCollectionType extends _AbstractFeatureCollectionType {}
-export interface FeatureCollectionType extends _FeatureCollectionType { constructor: { new(): FeatureCollectionType }; }
-export var FeatureCollectionType: { new(): FeatureCollectionType };
+export interface FeatureCollectionType extends _FeatureCollectionType {  }
+
 
 /** Container for a feature - follow gml:AssociationType pattern. */
 interface _FeaturePropertyType extends _FeatureProxyType {
@@ -2228,13 +2228,13 @@ interface _FeaturePropertyType extends _FeatureProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface FeaturePropertyType extends _FeaturePropertyType { constructor: { new(): FeaturePropertyType }; }
-export var FeaturePropertyType: { new(): FeaturePropertyType };
+export interface FeaturePropertyType extends _FeaturePropertyType {  }
+
 
 interface _FeatureProxyType extends _CoverageProxyType, _FeatureCollectionProxyType, _ObservationProxyType {
 	FeatureCollection?: FeatureCollectionType;
 }
-interface FeatureProxyType extends _FeatureProxyType { constructor: { new(): FeatureProxyType }; }
+interface FeatureProxyType extends _FeatureProxyType {  }
 
 interface _FeatureStylePropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -2250,8 +2250,8 @@ interface _FeatureStylePropertyType extends BaseType {
 	/** The style descriptor for features. */
 	FeatureStyle?: FeatureStyleType;
 }
-export interface FeatureStylePropertyType extends _FeatureStylePropertyType { constructor: { new(): FeatureStylePropertyType }; }
-export var FeatureStylePropertyType: { new(): FeatureStylePropertyType };
+export interface FeatureStylePropertyType extends _FeatureStylePropertyType {  }
+
 
 /** [complexType of] The style descriptor for features. */
 interface _FeatureStyleType extends _AbstractGMLType {
@@ -2266,8 +2266,8 @@ interface _FeatureStyleType extends _AbstractGMLType {
 	/** The style descriptor for topologies of a feature. Describes individual topology elements styles. */
 	TopologyStyle?: TopologyStyleType[];
 }
-export interface FeatureStyleType extends _FeatureStyleType { constructor: { new(): FeatureStyleType }; }
-export var FeatureStyleType: { new(): FeatureStyleType };
+export interface FeatureStyleType extends _FeatureStyleType {  }
+
 
 interface _FileType extends BaseType {
 	compression?: string;
@@ -2276,8 +2276,8 @@ interface _FileType extends BaseType {
 	mimeType?: string;
 	rangeParameters: RangeParametersType;
 }
-export interface FileType extends _FileType { constructor: { new(): FileType }; }
-export var FileType: { new(): FileType };
+export interface FileType extends _FileType {  }
+
 
 /** List of codes that identifies the file structure model for records stored in files. */
 export type FileValueModelType = "Record Interleaved";
@@ -2290,13 +2290,13 @@ interface _FormulaType extends BaseType {
 	c: number;
 	d?: number;
 }
-export interface FormulaType extends _FormulaType { constructor: { new(): FormulaType }; }
-export var FormulaType: { new(): FormulaType };
+export interface FormulaType extends _FormulaType {  }
+
 
 interface _GeneralConversionProxyType extends BaseType {
 	Conversion?: ConversionType;
 }
-interface GeneralConversionProxyType extends _GeneralConversionProxyType { constructor: { new(): GeneralConversionProxyType }; }
+interface GeneralConversionProxyType extends _GeneralConversionProxyType {  }
 
 /** Association to a general conversion, either referencing or containing the definition of that conversion. */
 interface _GeneralConversionRefType extends _GeneralConversionProxyType {
@@ -2310,20 +2310,20 @@ interface _GeneralConversionRefType extends _GeneralConversionProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface GeneralConversionRefType extends _GeneralConversionRefType { constructor: { new(): GeneralConversionRefType }; }
-export var GeneralConversionRefType: { new(): GeneralConversionRefType };
+export interface GeneralConversionRefType extends _GeneralConversionRefType {  }
+
 
 interface _GeneralDerivedCRSProxyType extends BaseType {
 	ProjectedCRS?: ProjectedCRSType;
 	DerivedCRS?: DerivedCRSType;
 }
-interface GeneralDerivedCRSProxyType extends _GeneralDerivedCRSProxyType { constructor: { new(): GeneralDerivedCRSProxyType }; }
+interface GeneralDerivedCRSProxyType extends _GeneralDerivedCRSProxyType {  }
 
 interface _GeneralOperationParameterProxyType extends BaseType {
 	OperationParameter?: OperationParameterType;
 	OperationParameterGroup?: OperationParameterGroupType;
 }
-interface GeneralOperationParameterProxyType extends _GeneralOperationParameterProxyType { constructor: { new(): GeneralOperationParameterProxyType }; }
+interface GeneralOperationParameterProxyType extends _GeneralOperationParameterProxyType {  }
 
 interface _GeneralParameterValueProxyType extends BaseType {
 	/** A composition association to a parameter value or group of values included in this group. */
@@ -2331,12 +2331,12 @@ interface _GeneralParameterValueProxyType extends BaseType {
 	parameterValue?: ParameterValueType;
 	parameterValueGroup?: ParameterValueGroupType;
 }
-interface GeneralParameterValueProxyType extends _GeneralParameterValueProxyType { constructor: { new(): GeneralParameterValueProxyType }; }
+interface GeneralParameterValueProxyType extends _GeneralParameterValueProxyType {  }
 
 interface _GeneralTransformationProxyType extends BaseType {
 	Transformation?: TransformationType;
 }
-interface GeneralTransformationProxyType extends _GeneralTransformationProxyType { constructor: { new(): GeneralTransformationProxyType }; }
+interface GeneralTransformationProxyType extends _GeneralTransformationProxyType {  }
 
 /** Association to a general transformation, either referencing or containing the definition of that transformation. */
 interface _GeneralTransformationRefType extends _GeneralTransformationProxyType {
@@ -2350,13 +2350,13 @@ interface _GeneralTransformationRefType extends _GeneralTransformationProxyType 
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface GeneralTransformationRefType extends _GeneralTransformationRefType { constructor: { new(): GeneralTransformationRefType }; }
-export var GeneralTransformationRefType: { new(): GeneralTransformationRefType };
+export interface GeneralTransformationRefType extends _GeneralTransformationRefType {  }
+
 
 /** Deprecated with GML version 3.1.0. */
 interface _GenericMetaDataType extends _AbstractMetaDataType {}
-export interface GenericMetaDataType extends _GenericMetaDataType { constructor: { new(): GenericMetaDataType }; }
-export var GenericMetaDataType: { new(): GenericMetaDataType };
+export interface GenericMetaDataType extends _GenericMetaDataType {  }
+
 
 /** Association to a geocentric coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _GeocentricCRSRefType extends BaseType {
@@ -2371,8 +2371,8 @@ interface _GeocentricCRSRefType extends BaseType {
 	remoteSchema?: string;
 	GeocentricCRS?: GeocentricCRSType;
 }
-export interface GeocentricCRSRefType extends _GeocentricCRSRefType { constructor: { new(): GeocentricCRSRefType }; }
-export var GeocentricCRSRefType: { new(): GeocentricCRSRefType };
+export interface GeocentricCRSRefType extends _GeocentricCRSRefType {  }
+
 
 /** A 3D coordinate reference system with the origin at the approximate centre of mass of the earth. A geocentric CRS deals with the earth's curvature by taking a 3D spatial view, which obviates the need to model the earth's curvature. */
 interface _GeocentricCRSType extends _AbstractReferenceSystemType {
@@ -2383,14 +2383,14 @@ interface _GeocentricCRSType extends _AbstractReferenceSystemType {
 	/** Association to the spherical coordinate system used by this CRS. */
 	usesSphericalCS: SphericalCSRefType;
 }
-export interface GeocentricCRSType extends _GeocentricCRSType { constructor: { new(): GeocentricCRSType }; }
-export var GeocentricCRSType: { new(): GeocentricCRSType };
+export interface GeocentricCRSType extends _GeocentricCRSType {  }
+
 
 interface _GeodesicStringProxyType extends BaseType {
 	GeodesicString?: GeodesicStringType;
 	Geodesic?: GeodesicType;
 }
-interface GeodesicStringProxyType extends _GeodesicStringProxyType { constructor: { new(): GeodesicStringProxyType }; }
+interface GeodesicStringProxyType extends _GeodesicStringProxyType {  }
 
 /** A GeodesicString consists of sequence of
   * geodesic segments. The type essentially combines a sequence of
@@ -2412,8 +2412,8 @@ interface _GeodesicStringType extends _AbstractCurveSegmentType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface GeodesicStringType extends _GeodesicStringType { constructor: { new(): GeodesicStringType }; }
-export var GeodesicStringType: { new(): GeodesicStringType };
+export interface GeodesicStringType extends _GeodesicStringType {  }
+
 
 /** A Geodesic consists of two distinct
   * positions joined by a geodesic curve. The control points of
@@ -2424,8 +2424,8 @@ export var GeodesicStringType: { new(): GeodesicStringType };
   * other positions. Any other point in the controlPoint array
   * must fall on this geodesic. */
 interface _GeodesicType extends _GeodesicStringType {}
-export interface GeodesicType extends _GeodesicType { constructor: { new(): GeodesicType }; }
-export var GeodesicType: { new(): GeodesicType };
+export interface GeodesicType extends _GeodesicType {  }
+
 
 /** Association to a geodetic datum, either referencing or containing the definition of that datum. */
 interface _GeodeticDatumRefType extends BaseType {
@@ -2440,8 +2440,8 @@ interface _GeodeticDatumRefType extends BaseType {
 	remoteSchema?: string;
 	GeodeticDatum?: GeodeticDatumType;
 }
-export interface GeodeticDatumRefType extends _GeodeticDatumRefType { constructor: { new(): GeodeticDatumRefType }; }
-export var GeodeticDatumRefType: { new(): GeodeticDatumRefType };
+export interface GeodeticDatumRefType extends _GeodeticDatumRefType {  }
+
 
 /** A geodetic datum defines the precise location and orientation in 3-dimensional space of a defined ellipsoid (or sphere) that approximates the shape of the earth, or of a Cartesian coordinate system centered in this ellipsoid (or sphere). */
 interface _GeodeticDatumType extends _AbstractDatumType {
@@ -2450,8 +2450,8 @@ interface _GeodeticDatumType extends _AbstractDatumType {
 	/** Association to the prime meridian used by this geodetic datum. */
 	usesPrimeMeridian: PrimeMeridianRefType;
 }
-export interface GeodeticDatumType extends _GeodeticDatumType { constructor: { new(): GeodeticDatumType }; }
-export var GeodeticDatumType: { new(): GeodeticDatumType };
+export interface GeodeticDatumType extends _GeodeticDatumType {  }
+
 
 /** Association to a geographic coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _GeographicCRSRefType extends BaseType {
@@ -2466,8 +2466,8 @@ interface _GeographicCRSRefType extends BaseType {
 	remoteSchema?: string;
 	GeographicCRS?: GeographicCRSType;
 }
-export interface GeographicCRSRefType extends _GeographicCRSRefType { constructor: { new(): GeographicCRSRefType }; }
-export var GeographicCRSRefType: { new(): GeographicCRSRefType };
+export interface GeographicCRSRefType extends _GeographicCRSRefType {  }
+
 
 /** A coordinate reference system based on an ellipsoidal approximation of the geoid; this provides an accurate representation of the geometry of geographic features for a large portion of the earth's surface. */
 interface _GeographicCRSType extends _AbstractReferenceSystemType {
@@ -2476,8 +2476,8 @@ interface _GeographicCRSType extends _AbstractReferenceSystemType {
 	/** Association to the geodetic datum used by this CRS. */
 	usesGeodeticDatum: GeodeticDatumRefType;
 }
-export interface GeographicCRSType extends _GeographicCRSType { constructor: { new(): GeographicCRSType }; }
-export var GeographicCRSType: { new(): GeographicCRSType };
+export interface GeographicCRSType extends _GeographicCRSType {  }
+
 
 interface _GeometricAggregateProxyType extends BaseType {
 	MultiPoint?: MultiPointType;
@@ -2490,7 +2490,7 @@ interface _GeometricAggregateProxyType extends BaseType {
 	MultiPolygon?: MultiPolygonType;
 	MultiGeometry?: MultiGeometryType;
 }
-interface GeometricAggregateProxyType extends _GeometricAggregateProxyType { constructor: { new(): GeometricAggregateProxyType }; }
+interface GeometricAggregateProxyType extends _GeometricAggregateProxyType {  }
 
 /** A property that has a geometric complex as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none.
   * NOTE: The allowed geometry elements contained in such a property (or referenced by it) have to be modelled by an XML Schema choice element since the composites inherit both from geometric complex *and* geometric primitive and are already part of the _GeometricPrimitive substitution group. */
@@ -2509,15 +2509,15 @@ interface _GeometricComplexPropertyType extends BaseType {
 	CompositeSurface?: CompositeSurfaceType;
 	GeometricComplex?: GeometricComplexType;
 }
-export interface GeometricComplexPropertyType extends _GeometricComplexPropertyType { constructor: { new(): GeometricComplexPropertyType }; }
-export var GeometricComplexPropertyType: { new(): GeometricComplexPropertyType };
+export interface GeometricComplexPropertyType extends _GeometricComplexPropertyType {  }
+
 
 /** A geometric complex. */
 interface _GeometricComplexType extends _AbstractGeometryType {
 	element: GeometricPrimitivePropertyType[];
 }
-export interface GeometricComplexType extends _GeometricComplexType { constructor: { new(): GeometricComplexType }; }
-export var GeometricComplexType: { new(): GeometricComplexType };
+export interface GeometricComplexType extends _GeometricComplexType {  }
+
 
 /** A property that has a geometric primitive as its value domain can either be an appropriate geometry element
   * encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry
@@ -2534,13 +2534,13 @@ interface _GeometricPrimitivePropertyType extends _GeometricPrimitiveProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface GeometricPrimitivePropertyType extends _GeometricPrimitivePropertyType { constructor: { new(): GeometricPrimitivePropertyType }; }
-export var GeometricPrimitivePropertyType: { new(): GeometricPrimitivePropertyType };
+export interface GeometricPrimitivePropertyType extends _GeometricPrimitivePropertyType {  }
+
 
 interface _GeometricPrimitiveProxyType extends _SolidProxyType, _SurfaceProxyType, _CurveProxyType {
 	Point?: PointType;
 }
-interface GeometricPrimitiveProxyType extends _GeometricPrimitiveProxyType { constructor: { new(): GeometricPrimitiveProxyType }; }
+interface GeometricPrimitiveProxyType extends _GeometricPrimitiveProxyType {  }
 
 /** A container for an array of geometry elements. The elements are always contained in the array property,
   * referencing geometry elements or arrays of geometry elements is not supported. */
@@ -2550,8 +2550,8 @@ interface _GeometryArrayPropertyType extends BaseType {
 	  * of AbstractGeometryType and must be directly or indirectly in the substitution group of "_Geometry". */
 	Geometry?: GeometryProxyType[];
 }
-export interface GeometryArrayPropertyType extends _GeometryArrayPropertyType { constructor: { new(): GeometryArrayPropertyType }; }
-export var GeometryArrayPropertyType: { new(): GeometryArrayPropertyType };
+export interface GeometryArrayPropertyType extends _GeometryArrayPropertyType {  }
+
 
 /** A geometric property can either be any geometry element encapsulated in an element of this type or an XLink reference
   * to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Note that either
@@ -2567,13 +2567,13 @@ interface _GeometryPropertyType extends _GeometryProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface GeometryPropertyType extends _GeometryPropertyType { constructor: { new(): GeometryPropertyType }; }
-export var GeometryPropertyType: { new(): GeometryPropertyType };
+export interface GeometryPropertyType extends _GeometryPropertyType {  }
+
 
 export interface _GeometryProxyType extends _GeometricAggregateProxyType, _RingProxyType, _GeometricPrimitiveProxyType, _ImplicitGeometryProxyType {
 	GeometricComplex?: GeometricComplexType;
 }
-export interface GeometryProxyType extends _GeometryProxyType { constructor: { new(): GeometryProxyType }; }
+export interface GeometryProxyType extends _GeometryProxyType {  }
 
 interface _GeometryStylePropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -2589,8 +2589,8 @@ interface _GeometryStylePropertyType extends BaseType {
 	/** The style descriptor for geometries of a feature. */
 	GeometryStyle?: GeometryStyleType;
 }
-export interface GeometryStylePropertyType extends _GeometryStylePropertyType { constructor: { new(): GeometryStylePropertyType }; }
-export var GeometryStylePropertyType: { new(): GeometryStylePropertyType };
+export interface GeometryStylePropertyType extends _GeometryStylePropertyType {  }
+
 
 /** [complexType of] The style descriptor for geometries of a feature. */
 interface _GeometryStyleType extends _BaseStyleDescriptorType {
@@ -2603,8 +2603,8 @@ interface _GeometryStyleType extends _BaseStyleDescriptorType {
 	/** The symbol property. Extends the gml:AssociationType to allow for remote referencing of symbols. */
 	symbol: SymbolType;
 }
-export interface GeometryStyleType extends _GeometryStyleType { constructor: { new(): GeometryStyleType }; }
-export var GeometryStyleType: { new(): GeometryStyleType };
+export interface GeometryStyleType extends _GeometryStyleType {  }
+
 
 interface _GMLProxyType extends _GeometryProxyType, _TimeSliceProxyType, _TimeObjectProxyType, _FeatureProxyType, _StyleProxyType, _DefinitionProxyType_2, _TopologyProxyType {
 	/** The style descriptor for features. */
@@ -2622,7 +2622,7 @@ interface _GMLProxyType extends _GeometryProxyType, _TimeSliceProxyType, _TimeOb
 	/** Generic GML element to contain a heterogeneous collection of GML _Objects */
 	Bag?: BagType;
 }
-interface GMLProxyType extends _GMLProxyType { constructor: { new(): GMLProxyType }; }
+interface GMLProxyType extends _GMLProxyType {  }
 
 interface _GraphStylePropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -2638,8 +2638,8 @@ interface _GraphStylePropertyType extends BaseType {
 	/** The style descriptor for a graph consisting of a number of features. Describes graph-specific style attributes. */
 	GraphStyle?: GraphStyleType;
 }
-export interface GraphStylePropertyType extends _GraphStylePropertyType { constructor: { new(): GraphStylePropertyType }; }
-export var GraphStylePropertyType: { new(): GraphStylePropertyType };
+export interface GraphStylePropertyType extends _GraphStylePropertyType {  }
+
 
 /** [complexType of] The style descriptor for a graph consisting of a number of features. Describes graph-specific style attributes. */
 interface _GraphStyleType extends _BaseStyleDescriptorType {
@@ -2653,8 +2653,8 @@ interface _GraphStyleType extends _BaseStyleDescriptorType {
 	minDistance?: number;
 	planar?: boolean;
 }
-export interface GraphStyleType extends _GraphStyleType { constructor: { new(): GraphStyleType }; }
-export var GraphStyleType: { new(): GraphStyleType };
+export interface GraphStyleType extends _GraphStyleType {  }
+
 
 /** Graph-specific styling property. */
 export type GraphTypeType = ("TREE" | "BICONNECTED");
@@ -2672,15 +2672,15 @@ interface _GridCoverageType extends _AbstractDiscreteCoverageType {
 	name?: NameProxyType[];
 	rangeSet: RangeSetType;
 }
-export interface GridCoverageType extends _GridCoverageType { constructor: { new(): GridCoverageType }; }
-export var GridCoverageType: { new(): GridCoverageType };
+export interface GridCoverageType extends _GridCoverageType {  }
+
 
 interface _GriddedSurfaceProxyType extends BaseType {
 	Cone?: ConeType;
 	Cylinder?: CylinderType;
 	Sphere?: SphereType;
 }
-interface GriddedSurfaceProxyType extends _GriddedSurfaceProxyType { constructor: { new(): GriddedSurfaceProxyType }; }
+interface GriddedSurfaceProxyType extends _GriddedSurfaceProxyType {  }
 
 interface _GridDomainType extends _DomainSetType {
 	actuate: xlink.actuateType;
@@ -2694,22 +2694,22 @@ interface _GridDomainType extends _DomainSetType {
 	remoteSchema?: string;
 	Grid?: GridType;
 }
-export interface GridDomainType extends _GridDomainType { constructor: { new(): GridDomainType }; }
-export var GridDomainType: { new(): GridDomainType };
+export interface GridDomainType extends _GridDomainType {  }
+
 
 /** Provides grid coordinate values for the diametrically opposed corners of an envelope that bounds a section of grid. The value of a single coordinate is the number of offsets from the origin of the grid in the direction of a specific axis. */
 interface _GridEnvelopeType extends BaseType {
 	high: integerList;
 	low: integerList;
 }
-export interface GridEnvelopeType extends _GridEnvelopeType { constructor: { new(): GridEnvelopeType }; }
-export var GridEnvelopeType: { new(): GridEnvelopeType };
+export interface GridEnvelopeType extends _GridEnvelopeType {  }
+
 
 interface _GridFunctionProxyType extends BaseType {
 	GridFunction?: GridFunctionType;
 	IndexMap?: IndexMapType;
 }
-interface GridFunctionProxyType extends _GridFunctionProxyType { constructor: { new(): GridFunctionProxyType }; }
+interface GridFunctionProxyType extends _GridFunctionProxyType {  }
 
 /** Defines how values in the domain are mapped to the range set. The start point and the sequencing rule are specified here. */
 interface _GridFunctionType extends BaseType {
@@ -2718,19 +2718,19 @@ interface _GridFunctionType extends BaseType {
 	/** Index position of the first grid post, which must lie somwhere in the GridEnvelope.  If absent, the startPoint is equal to the value of gridEnvelope::low from the grid definition. */
 	startPoint?: integerList;
 }
-export interface GridFunctionType extends _GridFunctionType { constructor: { new(): GridFunctionType }; }
-export var GridFunctionType: { new(): GridFunctionType };
+export interface GridFunctionType extends _GridFunctionType {  }
+
 
 /** Value of a length (or distance) quantity in a grid, where the grid spacing does not have any associated physical units, or does not have a constant physical spacing. This grid length will often be used in a digital image grid, where the base units are likely to be pixel spacings. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for length along the axes of a grid, such as pixel spacings or grid spacings. */
 interface _GridLengthType extends _MeasureType {}
-export interface GridLengthType extends _GridLengthType { constructor: { new(): GridLengthType }; }
-export var GridLengthType: { new(): GridLengthType };
+export interface GridLengthType extends _GridLengthType {  }
+
 
 interface _GridLimitsType extends BaseType {
 	GridEnvelope: GridEnvelopeType;
 }
-export interface GridLimitsType extends _GridLimitsType { constructor: { new(): GridLimitsType }; }
-export var GridLimitsType: { new(): GridLimitsType };
+export interface GridLimitsType extends _GridLimitsType {  }
+
 
 /** An unrectified grid, which is a network composed of two or more sets of equally spaced parallel lines in which the members of each set intersect the members of the other sets at right angles. */
 interface _GridType extends _AbstractGeometryType {
@@ -2738,21 +2738,21 @@ interface _GridType extends _AbstractGeometryType {
 	axisName: string[];
 	limits: GridLimitsType;
 }
-export interface GridType extends _GridType { constructor: { new(): GridType }; }
-export var GridType: { new(): GridType };
+export interface GridType extends _GridType {  }
+
 
 /** The history relationship associates a feature with a sequence of TimeSlice instances. */
 interface _HistoryPropertyType extends BaseType {
 	TimeSlice: TimeSliceProxyType[];
 }
-export interface HistoryPropertyType extends _HistoryPropertyType { constructor: { new(): HistoryPropertyType }; }
-export var HistoryPropertyType: { new(): HistoryPropertyType };
+export interface HistoryPropertyType extends _HistoryPropertyType {  }
+
 
 interface _HistoryProxyType extends BaseType {
 	history?: HistoryPropertyType;
 	track?: TrackType;
 }
-interface HistoryProxyType extends _HistoryProxyType { constructor: { new(): HistoryProxyType }; }
+interface HistoryProxyType extends _HistoryProxyType {  }
 
 /** An identification of a CRS object. The first use of the IdentifierType for an object, if any, is normally the primary identification code, and any others are aliases. */
 interface _IdentifierType extends _NameProxyType {
@@ -2761,8 +2761,8 @@ interface _IdentifierType extends _NameProxyType {
 	/** Identifier of the version of the associated codeSpace or code, as specified by the codeSpace or code authority. This version is included only when the "code" or "codeSpace" uses versions. When appropriate, the version is identified by the effective date, coded using ISO 8601 date format. */
 	version?: string;
 }
-export interface IdentifierType extends _IdentifierType { constructor: { new(): IdentifierType }; }
-export var IdentifierType: { new(): IdentifierType };
+export interface IdentifierType extends _IdentifierType {  }
+
 
 /** Association to an image coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _ImageCRSRefType extends BaseType {
@@ -2777,8 +2777,8 @@ interface _ImageCRSRefType extends BaseType {
 	remoteSchema?: string;
 	ImageCRS?: ImageCRSType;
 }
-export interface ImageCRSRefType extends _ImageCRSRefType { constructor: { new(): ImageCRSRefType }; }
-export var ImageCRSRefType: { new(): ImageCRSRefType };
+export interface ImageCRSRefType extends _ImageCRSRefType {  }
+
 
 /** An engineering coordinate reference system applied to locations in images. Image coordinate reference systems are treated as a separate sub-type because a separate user community exists for images with its own terms of reference. */
 interface _ImageCRSType extends _AbstractReferenceSystemType {
@@ -2789,8 +2789,8 @@ interface _ImageCRSType extends _AbstractReferenceSystemType {
 	/** Association to the oblique Cartesian coordinate system used by this CRS. */
 	usesObliqueCartesianCS: ObliqueCartesianCSRefType;
 }
-export interface ImageCRSType extends _ImageCRSType { constructor: { new(): ImageCRSType }; }
-export var ImageCRSType: { new(): ImageCRSType };
+export interface ImageCRSType extends _ImageCRSType {  }
+
 
 /** Association to an image datum, either referencing or containing the definition of that datum. */
 interface _ImageDatumRefType extends BaseType {
@@ -2805,22 +2805,22 @@ interface _ImageDatumRefType extends BaseType {
 	remoteSchema?: string;
 	ImageDatum?: ImageDatumType;
 }
-export interface ImageDatumRefType extends _ImageDatumRefType { constructor: { new(): ImageDatumRefType }; }
-export var ImageDatumRefType: { new(): ImageDatumRefType };
+export interface ImageDatumRefType extends _ImageDatumRefType {  }
+
 
 /** An image datum defines the origin of an image coordinate reference system, and is used in a local context only. For more information, see OGC Abstract Specification Topic 2. */
 interface _ImageDatumType extends _AbstractDatumType {
 	pixelInCell: PixelInCellType;
 }
-export interface ImageDatumType extends _ImageDatumType { constructor: { new(): ImageDatumType }; }
-export var ImageDatumType: { new(): ImageDatumType };
+export interface ImageDatumType extends _ImageDatumType {  }
+
 
 interface _ImplicitGeometryProxyType extends BaseType {
 	Grid?: GridType;
 	/** Should be substitutionGroup="gml:Grid" but changed in order to accomplish Xerces-J schema validation */
 	RectifiedGrid?: RectifiedGridType;
 }
-interface ImplicitGeometryProxyType extends _ImplicitGeometryProxyType { constructor: { new(): ImplicitGeometryProxyType }; }
+interface ImplicitGeometryProxyType extends _ImplicitGeometryProxyType {  }
 
 /** The enumeration value here indicates the incrementation order  to be used on the first 2 axes, i.e. "+x-y" means that the points on the first axis are to be traversed from lowest to highest and  the points on the second axis are to be traversed from highest to lowest. The points on all other axes (if any) beyond the first 2 are assumed to increment from lowest to highest. */
 export type IncrementOrder = ("+x+y" | "+y+x" | "+x-y" | "-x-y");
@@ -2830,15 +2830,15 @@ interface _IncrementOrder extends Primitive._string { content: IncrementOrder; }
 interface _IndexMapType extends _GridFunctionType {
 	lookUpTable: integerList;
 }
-export interface IndexMapType extends _IndexMapType { constructor: { new(): IndexMapType }; }
-export var IndexMapType: { new(): IndexMapType };
+export interface IndexMapType extends _IndexMapType {  }
+
 
 /** An entry in a dictionary of definitions that contains a GML object which references a remote definition object. This entry is expected to be convenient in allowing multiple elements in one XML document to contain short (abbreviated XPointer) references, which are resolved to an external definition provided in a Dictionary element in the same XML document. Specialized descendents of this dictionaryEntry might be restricted in an application schema to allow only including specified types of definitions as valid entries in a dictionary. */
 interface _IndirectEntryType extends BaseType {
 	DefinitionProxy: DefinitionProxyType;
 }
-export interface IndirectEntryType extends _IndirectEntryType { constructor: { new(): IndirectEntryType }; }
-export var IndirectEntryType: { new(): IndirectEntryType };
+export interface IndirectEntryType extends _IndirectEntryType {  }
+
 
 /** XML List based on XML Schema integer type.  An element of this type contains a space-separated list of integer values */
 export type integerList = number[];
@@ -2856,7 +2856,7 @@ interface _InteriorProxyType extends BaseType {
 	/** Deprecated with GML 3.0, included only for backwards compatibility with GML 2. Use "interior" instead. */
 	innerBoundaryIs?: AbstractRingPropertyType;
 }
-interface InteriorProxyType extends _InteriorProxyType { constructor: { new(): InteriorProxyType }; }
+interface InteriorProxyType extends _InteriorProxyType {  }
 
 interface _IsolatedPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -2871,8 +2871,8 @@ interface _IsolatedPropertyType extends BaseType {
 	Edge?: EdgeType;
 	Node?: NodeType;
 }
-export interface IsolatedPropertyType extends _IsolatedPropertyType { constructor: { new(): IsolatedPropertyType }; }
-export var IsolatedPropertyType: { new(): IsolatedPropertyType };
+export interface IsolatedPropertyType extends _IsolatedPropertyType {  }
+
 
 type IsSphereType = "sphere";
 interface _IsSphereType extends Primitive._string { content: IsSphereType; }
@@ -2881,8 +2881,8 @@ interface _IsSphereType extends Primitive._string { content: IsSphereType; }
 interface _KnotPropertyType extends BaseType {
 	Knot: KnotType;
 }
-export interface KnotPropertyType extends _KnotPropertyType { constructor: { new(): KnotPropertyType }; }
-export var KnotPropertyType: { new(): KnotPropertyType };
+export interface KnotPropertyType extends _KnotPropertyType {  }
+
 
 /** A knot is a breakpoint on a piecewise spline curve. */
 interface _KnotType extends BaseType {
@@ -2893,8 +2893,8 @@ interface _KnotType extends BaseType {
 	/** The property "weight" is the value of the averaging weight used for this knot of the spline. */
 	weight: number;
 }
-export interface KnotType extends _KnotType { constructor: { new(): KnotType }; }
-export var KnotType: { new(): KnotType };
+export interface KnotType extends _KnotType {  }
+
 
 /** Defines allowed values for the knots` type. Uniform knots implies that all knots are of multiplicity 1 and they differ by a positive constant from the preceding knot. Knots are quasi-uniform iff they are of multiplicity (degree + 1) at the ends, of multiplicity 1 elsewhere, and they differ by a positive constant from the preceding knot. */
 export type KnotTypesType = ("uniform" | "quasiUniform" | "piecewiseBezier");
@@ -2914,16 +2914,16 @@ interface _LabelStylePropertyType extends BaseType {
 	/** The style descriptor for labels of a feature, geometry or topology. */
 	LabelStyle?: LabelStyleType;
 }
-export interface LabelStylePropertyType extends _LabelStylePropertyType { constructor: { new(): LabelStylePropertyType }; }
-export var LabelStylePropertyType: { new(): LabelStylePropertyType };
+export interface LabelStylePropertyType extends _LabelStylePropertyType {  }
+
 
 /** [complexType of] The style descriptor for labels of a feature, geometry or topology. */
 interface _LabelStyleType extends _BaseStyleDescriptorType {
 	label: LabelType;
 	style: string;
 }
-export interface LabelStyleType extends _LabelStyleType { constructor: { new(): LabelStyleType }; }
-export var LabelStyleType: { new(): LabelStyleType };
+export interface LabelStyleType extends _LabelStyleType {  }
+
 
 /** Label is mixed -- composed of text and XPath expressions used to extract the useful information from the feature. */
 interface _LabelType extends BaseType {
@@ -2931,13 +2931,13 @@ interface _LabelType extends BaseType {
 	transform?: string;
 	LabelExpression?: string[];
 }
-export interface LabelType extends _LabelType { constructor: { new(): LabelType }; }
-export var LabelType: { new(): LabelType };
+export interface LabelType extends _LabelType {  }
+
 
 /** Value of a length (or distance) quantity, with its units. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for a length, such as metres or feet. */
 interface _LengthType extends _MeasureType {}
-export interface LengthType extends _LengthType { constructor: { new(): LengthType }; }
-export var LengthType: { new(): LengthType };
+export interface LengthType extends _LengthType {  }
+
 
 /** Association to a linear coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _LinearCSRefType extends BaseType {
@@ -2952,20 +2952,20 @@ interface _LinearCSRefType extends BaseType {
 	remoteSchema?: string;
 	LinearCS?: LinearCSType;
 }
-export interface LinearCSRefType extends _LinearCSRefType { constructor: { new(): LinearCSRefType }; }
-export var LinearCSRefType: { new(): LinearCSRefType };
+export interface LinearCSRefType extends _LinearCSRefType {  }
+
 
 /** A one-dimensional coordinate system that consists of the points that lie on the single axis described. The associated ordinate is the distance from the specified origin to the point along the axis. Example: usage of the line feature representing a road to describe points on or along that road. A LinearCS shall have one usesAxis association. */
 interface _LinearCSType extends _AbstractCoordinateSystemType {}
-export interface LinearCSType extends _LinearCSType { constructor: { new(): LinearCSType }; }
-export var LinearCSType: { new(): LinearCSType };
+export interface LinearCSType extends _LinearCSType {  }
+
 
 /** Encapsulates a ring to represent properties in features or geometry collections. */
 interface _LinearRingPropertyType extends BaseType {
 	LinearRing: LinearRingType;
 }
-export interface LinearRingPropertyType extends _LinearRingPropertyType { constructor: { new(): LinearRingPropertyType }; }
-export var LinearRingPropertyType: { new(): LinearRingPropertyType };
+export interface LinearRingPropertyType extends _LinearRingPropertyType {  }
+
 
 /** A LinearRing is defined by four or more coordinate tuples, with linear interpolation between them; the first and last coordinates must be coincident. */
 interface _LinearRingType extends _AbstractRingType {
@@ -2982,8 +2982,8 @@ interface _LinearRingType extends _AbstractRingType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface LinearRingType extends _LinearRingType { constructor: { new(): LinearRingType }; }
-export var LinearRingType: { new(): LinearRingType };
+export interface LinearRingType extends _LinearRingType {  }
+
 
 /** This type is deprecated with GML 3 and shall not be used. It is included for backwards compatibility with GML 2. Use
   * CurvePropertyType instead. A property that has a line string as its value domain can either be an appropriate geometry element encapsulated
@@ -3001,14 +3001,14 @@ interface _LineStringPropertyType extends BaseType {
 	remoteSchema?: string;
 	LineString?: LineStringType;
 }
-export interface LineStringPropertyType extends _LineStringPropertyType { constructor: { new(): LineStringPropertyType }; }
-export var LineStringPropertyType: { new(): LineStringPropertyType };
+export interface LineStringPropertyType extends _LineStringPropertyType {  }
+
 
 interface _LineStringSegmentArrayPropertyType extends BaseType {
 	LineStringSegment?: LineStringSegmentType[];
 }
-export interface LineStringSegmentArrayPropertyType extends _LineStringSegmentArrayPropertyType { constructor: { new(): LineStringSegmentArrayPropertyType }; }
-export var LineStringSegmentArrayPropertyType: { new(): LineStringSegmentArrayPropertyType };
+export interface LineStringSegmentArrayPropertyType extends _LineStringSegmentArrayPropertyType {  }
+
 
 /** A LineStringSegment is a curve segment that is defined by two or more coordinate tuples, with linear interpolation between them.
   * Note: LineStringSegment implements GM_LineString of ISO 19107. */
@@ -3027,8 +3027,8 @@ interface _LineStringSegmentType extends _AbstractCurveSegmentType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface LineStringSegmentType extends _LineStringSegmentType { constructor: { new(): LineStringSegmentType }; }
-export var LineStringSegmentType: { new(): LineStringSegmentType };
+export interface LineStringSegmentType extends _LineStringSegmentType {  }
+
 
 /** A LineString is a special curve that consists of a single segment with linear interpolation. It is defined by two or more coordinate
   * tuples, with linear interpolation between them. It is backwards compatible with the LineString of GML 2, GM_LineString of ISO 19107 is
@@ -3047,8 +3047,8 @@ interface _LineStringType extends _AbstractCurveType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-export interface LineStringType extends _LineStringType { constructor: { new(): LineStringType }; }
-export var LineStringType: { new(): LineStringType };
+export interface LineStringType extends _LineStringType {  }
+
 
 /** Graph-specific styling property. */
 export type LineTypeType = ("STRAIGHT" | "BENT");
@@ -3071,8 +3071,8 @@ interface _LocationPropertyType extends _GeometryProxyType {
 	LocationString?: StringOrRefType;
 	Null?: string;
 }
-export interface LocationPropertyType extends _LocationPropertyType { constructor: { new(): LocationPropertyType }; }
-export var LocationPropertyType: { new(): LocationPropertyType };
+export interface LocationPropertyType extends _LocationPropertyType {  }
+
 
 interface _LocationProxyType extends BaseType {
 	/** Deprecated in GML 3.1.0 */
@@ -3080,7 +3080,7 @@ interface _LocationProxyType extends BaseType {
 	/** Deprecated in GML 3.1.0 */
 	priorityLocation?: PriorityLocationPropertyType;
 }
-interface LocationProxyType extends _LocationProxyType { constructor: { new(): LocationProxyType }; }
+interface LocationProxyType extends _LocationProxyType {  }
 
 /** List of numbers with a uniform scale.
   * The value of uom (Units Of Measure) attribute is a reference to
@@ -3098,8 +3098,8 @@ export type MeasureOrNullListType = string[];
 interface _MeasureType extends Primitive._number {
 	uom: string;
 }
-export interface MeasureType extends _MeasureType { constructor: { new(): MeasureType }; }
-export var MeasureType: { new(): MeasureType };
+export interface MeasureType extends _MeasureType {  }
+
 
 /** Base type for complex metadata property types. */
 interface _MetaDataPropertyType extends BaseType {
@@ -3114,14 +3114,14 @@ interface _MetaDataPropertyType extends BaseType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface MetaDataPropertyType extends _MetaDataPropertyType { constructor: { new(): MetaDataPropertyType }; }
-export var MetaDataPropertyType: { new(): MetaDataPropertyType };
+export interface MetaDataPropertyType extends _MetaDataPropertyType {  }
+
 
 interface _MetaDataProxyType extends BaseType {
 	/** Concrete element in the _MetaData substitution group, which permits any well-formed XML content.  Intended to act as a container for metadata defined in external schemas, for which it is not possible to add the concrete components to the GML _MetaData substitution group directly. Deprecated with GML version 3.1.0. */
 	GenericMetaData?: GenericMetaDataType;
 }
-interface MetaDataProxyType extends _MetaDataProxyType { constructor: { new(): MetaDataProxyType }; }
+interface MetaDataProxyType extends _MetaDataProxyType {  }
 
 /** This type encapsulates various dynamic properties of moving objects
   * (points, lines, regions). It is useful for dealing with features whose
@@ -3133,8 +3133,8 @@ interface _MovingObjectStatusType extends _AbstractTimeSliceType, _LocationProxy
 	speed?: MeasureType;
 	status?: StringOrRefType;
 }
-export interface MovingObjectStatusType extends _MovingObjectStatusType { constructor: { new(): MovingObjectStatusType }; }
-export var MovingObjectStatusType: { new(): MovingObjectStatusType };
+export interface MovingObjectStatusType extends _MovingObjectStatusType {  }
+
 
 /** A discrete coverage type whose domain is defined by a collection of curves. */
 interface _MultiCurveCoverageType extends _AbstractDiscreteCoverageType {
@@ -3149,8 +3149,8 @@ interface _MultiCurveCoverageType extends _AbstractDiscreteCoverageType {
 	name?: NameProxyType[];
 	rangeSet: RangeSetType;
 }
-export interface MultiCurveCoverageType extends _MultiCurveCoverageType { constructor: { new(): MultiCurveCoverageType }; }
-export var MultiCurveCoverageType: { new(): MultiCurveCoverageType };
+export interface MultiCurveCoverageType extends _MultiCurveCoverageType {  }
+
 
 interface _MultiCurveDomainType extends _DomainSetType {
 	actuate: xlink.actuateType;
@@ -3164,8 +3164,8 @@ interface _MultiCurveDomainType extends _DomainSetType {
 	remoteSchema?: string;
 	MultiCurve?: MultiCurveType;
 }
-export interface MultiCurveDomainType extends _MultiCurveDomainType { constructor: { new(): MultiCurveDomainType }; }
-export var MultiCurveDomainType: { new(): MultiCurveDomainType };
+export interface MultiCurveDomainType extends _MultiCurveDomainType {  }
+
 
 /** A property that has a collection of curves as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
 interface _MultiCurvePropertyType extends BaseType {
@@ -3180,8 +3180,8 @@ interface _MultiCurvePropertyType extends BaseType {
 	remoteSchema?: string;
 	MultiCurve?: MultiCurveType;
 }
-export interface MultiCurvePropertyType extends _MultiCurvePropertyType { constructor: { new(): MultiCurvePropertyType }; }
-export var MultiCurvePropertyType: { new(): MultiCurvePropertyType };
+export interface MultiCurvePropertyType extends _MultiCurvePropertyType {  }
+
 
 /** A MultiCurve is defined by one or more Curves, referenced through curveMember elements. */
 interface _MultiCurveType extends _AbstractGeometricAggregateType {
@@ -3190,8 +3190,8 @@ interface _MultiCurveType extends _AbstractGeometricAggregateType {
 	/** This property element contains a list of curves. The order of the elements is significant and shall be preserved when processing the array. */
 	curveMembers?: CurveArrayPropertyType;
 }
-export interface MultiCurveType extends _MultiCurveType { constructor: { new(): MultiCurveType }; }
-export var MultiCurveType: { new(): MultiCurveType };
+export interface MultiCurveType extends _MultiCurveType {  }
+
 
 /** A property that has a geometric aggregate as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
 interface _MultiGeometryPropertyType extends _GeometricAggregateProxyType {
@@ -3205,8 +3205,8 @@ interface _MultiGeometryPropertyType extends _GeometricAggregateProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface MultiGeometryPropertyType extends _MultiGeometryPropertyType { constructor: { new(): MultiGeometryPropertyType }; }
-export var MultiGeometryPropertyType: { new(): MultiGeometryPropertyType };
+export interface MultiGeometryPropertyType extends _MultiGeometryPropertyType {  }
+
 
 /** A geometry collection must include one or more geometries, referenced through geometryMember elements. */
 interface _MultiGeometryType extends _AbstractGeometricAggregateType {
@@ -3215,8 +3215,8 @@ interface _MultiGeometryType extends _AbstractGeometricAggregateType {
 	/** This property element contains a list of geometry elements. The order of the elements is significant and shall be preserved when processing the array. */
 	geometryMembers?: GeometryArrayPropertyType;
 }
-export interface MultiGeometryType extends _MultiGeometryType { constructor: { new(): MultiGeometryType }; }
-export var MultiGeometryType: { new(): MultiGeometryType };
+export interface MultiGeometryType extends _MultiGeometryType {  }
+
 
 /** This type is deprecated with GML 3 and shall not be used. It is included for backwards compatibility with GML 2. Use MultiCurvePropertyType instead.
   * A property that has a collection of line strings as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
@@ -3233,8 +3233,8 @@ interface _MultiLineStringPropertyType extends BaseType {
 	/** Deprecated with GML 3.0 and included for backwards compatibility with GML 2. Use the "MultiCurve" element instead. */
 	MultiLineString?: MultiLineStringType;
 }
-export interface MultiLineStringPropertyType extends _MultiLineStringPropertyType { constructor: { new(): MultiLineStringPropertyType }; }
-export var MultiLineStringPropertyType: { new(): MultiLineStringPropertyType };
+export interface MultiLineStringPropertyType extends _MultiLineStringPropertyType {  }
+
 
 /** A MultiLineString is defined by one or more LineStrings, referenced through lineStringMember elements. Deprecated with GML version 3.0. Use MultiCurveType instead. */
 interface _MultiLineStringType extends _AbstractGeometricAggregateType {
@@ -3242,8 +3242,8 @@ interface _MultiLineStringType extends _AbstractGeometricAggregateType {
 	  * This property element either references a line string via the XLink-attributes or contains the line string element. */
 	lineStringMember?: LineStringPropertyType[];
 }
-export interface MultiLineStringType extends _MultiLineStringType { constructor: { new(): MultiLineStringType }; }
-export var MultiLineStringType: { new(): MultiLineStringType };
+export interface MultiLineStringType extends _MultiLineStringType {  }
+
 
 /** A discrete coverage type whose domain is defined by a collection of point */
 interface _MultiPointCoverageType extends _AbstractDiscreteCoverageType {
@@ -3258,8 +3258,8 @@ interface _MultiPointCoverageType extends _AbstractDiscreteCoverageType {
 	name?: NameProxyType[];
 	rangeSet: RangeSetType;
 }
-export interface MultiPointCoverageType extends _MultiPointCoverageType { constructor: { new(): MultiPointCoverageType }; }
-export var MultiPointCoverageType: { new(): MultiPointCoverageType };
+export interface MultiPointCoverageType extends _MultiPointCoverageType {  }
+
 
 interface _MultiPointDomainType extends _DomainSetType {
 	actuate: xlink.actuateType;
@@ -3273,8 +3273,8 @@ interface _MultiPointDomainType extends _DomainSetType {
 	remoteSchema?: string;
 	MultiPoint?: MultiPointType;
 }
-export interface MultiPointDomainType extends _MultiPointDomainType { constructor: { new(): MultiPointDomainType }; }
-export var MultiPointDomainType: { new(): MultiPointDomainType };
+export interface MultiPointDomainType extends _MultiPointDomainType {  }
+
 
 /** A property that has a collection of points as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
 interface _MultiPointPropertyType extends BaseType {
@@ -3289,8 +3289,8 @@ interface _MultiPointPropertyType extends BaseType {
 	remoteSchema?: string;
 	MultiPoint?: MultiPointType;
 }
-export interface MultiPointPropertyType extends _MultiPointPropertyType { constructor: { new(): MultiPointPropertyType }; }
-export var MultiPointPropertyType: { new(): MultiPointPropertyType };
+export interface MultiPointPropertyType extends _MultiPointPropertyType {  }
+
 
 /** A MultiPoint is defined by one or more Points, referenced through pointMember elements. */
 interface _MultiPointType extends _AbstractGeometricAggregateType {
@@ -3299,8 +3299,8 @@ interface _MultiPointType extends _AbstractGeometricAggregateType {
 	/** This property element contains a list of points. The order of the elements is significant and shall be preserved when processing the array. */
 	pointMembers?: PointArrayPropertyType;
 }
-export interface MultiPointType extends _MultiPointType { constructor: { new(): MultiPointType }; }
-export var MultiPointType: { new(): MultiPointType };
+export interface MultiPointType extends _MultiPointType {  }
+
 
 /** This type is deprecated with GML 3 and shall not be used. It is included for backwards compatibility with GML 2. Use MultiSurfacePropertyType instead.
   *
@@ -3318,8 +3318,8 @@ interface _MultiPolygonPropertyType extends BaseType {
 	/** Deprecated with GML 3.0 and included for backwards compatibility with GML 2. Use the "MultiSurface" element instead. */
 	MultiPolygon?: MultiPolygonType;
 }
-export interface MultiPolygonPropertyType extends _MultiPolygonPropertyType { constructor: { new(): MultiPolygonPropertyType }; }
-export var MultiPolygonPropertyType: { new(): MultiPolygonPropertyType };
+export interface MultiPolygonPropertyType extends _MultiPolygonPropertyType {  }
+
 
 /** A MultiPolygon is defined by one or more Polygons, referenced through polygonMember elements. Deprecated with GML version 3.0. Use MultiSurfaceType instead. */
 interface _MultiPolygonType extends _AbstractGeometricAggregateType {
@@ -3327,8 +3327,8 @@ interface _MultiPolygonType extends _AbstractGeometricAggregateType {
 	  * This property element either references a polygon via the XLink-attributes or contains the polygon element. */
 	polygonMember?: PolygonPropertyType[];
 }
-export interface MultiPolygonType extends _MultiPolygonType { constructor: { new(): MultiPolygonType }; }
-export var MultiPolygonType: { new(): MultiPolygonType };
+export interface MultiPolygonType extends _MultiPolygonType {  }
+
 
 /** A discrete coverage type whose domain is defined by a collection of Solids. */
 interface _MultiSolidCoverageType extends _AbstractDiscreteCoverageType {
@@ -3343,8 +3343,8 @@ interface _MultiSolidCoverageType extends _AbstractDiscreteCoverageType {
 	name?: NameProxyType[];
 	rangeSet: RangeSetType;
 }
-export interface MultiSolidCoverageType extends _MultiSolidCoverageType { constructor: { new(): MultiSolidCoverageType }; }
-export var MultiSolidCoverageType: { new(): MultiSolidCoverageType };
+export interface MultiSolidCoverageType extends _MultiSolidCoverageType {  }
+
 
 interface _MultiSolidDomainType extends _DomainSetType {
 	actuate: xlink.actuateType;
@@ -3358,8 +3358,8 @@ interface _MultiSolidDomainType extends _DomainSetType {
 	remoteSchema?: string;
 	MultiSolid?: MultiSolidType;
 }
-export interface MultiSolidDomainType extends _MultiSolidDomainType { constructor: { new(): MultiSolidDomainType }; }
-export var MultiSolidDomainType: { new(): MultiSolidDomainType };
+export interface MultiSolidDomainType extends _MultiSolidDomainType {  }
+
 
 /** A property that has a collection of solids as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
 interface _MultiSolidPropertyType extends BaseType {
@@ -3374,8 +3374,8 @@ interface _MultiSolidPropertyType extends BaseType {
 	remoteSchema?: string;
 	MultiSolid?: MultiSolidType;
 }
-export interface MultiSolidPropertyType extends _MultiSolidPropertyType { constructor: { new(): MultiSolidPropertyType }; }
-export var MultiSolidPropertyType: { new(): MultiSolidPropertyType };
+export interface MultiSolidPropertyType extends _MultiSolidPropertyType {  }
+
 
 /** A MultiSolid is defined by one or more Solids, referenced through solidMember elements. */
 interface _MultiSolidType extends _AbstractGeometricAggregateType {
@@ -3384,8 +3384,8 @@ interface _MultiSolidType extends _AbstractGeometricAggregateType {
 	/** This property element contains a list of solids. The order of the elements is significant and shall be preserved when processing the array. */
 	solidMembers?: SolidArrayPropertyType;
 }
-export interface MultiSolidType extends _MultiSolidType { constructor: { new(): MultiSolidType }; }
-export var MultiSolidType: { new(): MultiSolidType };
+export interface MultiSolidType extends _MultiSolidType {  }
+
 
 /** A discrete coverage type whose domain is defined by a collection of surface patches (includes polygons, triangles, rectangles, etc). */
 interface _MultiSurfaceCoverageType extends _AbstractDiscreteCoverageType {
@@ -3400,8 +3400,8 @@ interface _MultiSurfaceCoverageType extends _AbstractDiscreteCoverageType {
 	name?: NameProxyType[];
 	rangeSet: RangeSetType;
 }
-export interface MultiSurfaceCoverageType extends _MultiSurfaceCoverageType { constructor: { new(): MultiSurfaceCoverageType }; }
-export var MultiSurfaceCoverageType: { new(): MultiSurfaceCoverageType };
+export interface MultiSurfaceCoverageType extends _MultiSurfaceCoverageType {  }
+
 
 interface _MultiSurfaceDomainType extends _DomainSetType {
 	actuate: xlink.actuateType;
@@ -3415,8 +3415,8 @@ interface _MultiSurfaceDomainType extends _DomainSetType {
 	remoteSchema?: string;
 	MultiSurface?: MultiSurfaceType;
 }
-export interface MultiSurfaceDomainType extends _MultiSurfaceDomainType { constructor: { new(): MultiSurfaceDomainType }; }
-export var MultiSurfaceDomainType: { new(): MultiSurfaceDomainType };
+export interface MultiSurfaceDomainType extends _MultiSurfaceDomainType {  }
+
 
 /** A property that has a collection of surfaces as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
 interface _MultiSurfacePropertyType extends BaseType {
@@ -3431,8 +3431,8 @@ interface _MultiSurfacePropertyType extends BaseType {
 	remoteSchema?: string;
 	MultiSurface?: MultiSurfaceType;
 }
-export interface MultiSurfacePropertyType extends _MultiSurfacePropertyType { constructor: { new(): MultiSurfacePropertyType }; }
-export var MultiSurfacePropertyType: { new(): MultiSurfacePropertyType };
+export interface MultiSurfacePropertyType extends _MultiSurfacePropertyType {  }
+
 
 /** A MultiSurface is defined by one or more Surfaces, referenced through surfaceMember elements. */
 interface _MultiSurfaceType extends _AbstractGeometricAggregateType {
@@ -3441,8 +3441,8 @@ interface _MultiSurfaceType extends _AbstractGeometricAggregateType {
 	/** This property element contains a list of surfaces. The order of the elements is significant and shall be preserved when processing the array. */
 	surfaceMembers?: SurfaceArrayPropertyType;
 }
-export interface MultiSurfaceType extends _MultiSurfaceType { constructor: { new(): MultiSurfaceType }; }
-export var MultiSurfaceType: { new(): MultiSurfaceType };
+export interface MultiSurfaceType extends _MultiSurfaceType {  }
+
 
 /** XML List based on XML Schema Name type.  An element of this type contains a space-separated list of Name values */
 export type NameList = string[];
@@ -3476,7 +3476,7 @@ interface _NameProxyType extends BaseType {
 	/** The name by which this operation parameter group is identified. */
 	groupName?: CodeType;
 }
-interface NameProxyType extends _NameProxyType { constructor: { new(): NameProxyType }; }
+interface NameProxyType extends _NameProxyType {  }
 
 /** A set of values, representing a list of token with the lexical value space of NCName. The tokens are seperated by whitespace. */
 export type NCNameList = string[];
@@ -3489,8 +3489,8 @@ interface _NodeType extends _AbstractTopoPrimitiveType {
 	  * is substitutable for Point. */
 	pointProperty?: PointPropertyType;
 }
-export interface NodeType extends _NodeType { constructor: { new(): NodeType }; }
-export var NodeType: { new(): NodeType };
+export interface NodeType extends _NodeType {  }
+
 
 /** Some common reasons for a null value:
   *
@@ -3513,7 +3513,7 @@ export type NullType = string;
 type _NullType = Primitive._string;
 
 interface _ObjectProxyType extends _GMLProxyType, _MetaDataProxyType {}
-interface ObjectProxyType extends _ObjectProxyType { constructor: { new(): ObjectProxyType }; }
+interface ObjectProxyType extends _ObjectProxyType {  }
 
 /** Association to an oblique-Cartesian coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _ObliqueCartesianCSRefType extends BaseType {
@@ -3528,18 +3528,18 @@ interface _ObliqueCartesianCSRefType extends BaseType {
 	remoteSchema?: string;
 	ObliqueCartesianCS?: ObliqueCartesianCSType;
 }
-export interface ObliqueCartesianCSRefType extends _ObliqueCartesianCSRefType { constructor: { new(): ObliqueCartesianCSRefType }; }
-export var ObliqueCartesianCSRefType: { new(): ObliqueCartesianCSRefType };
+export interface ObliqueCartesianCSRefType extends _ObliqueCartesianCSRefType {  }
+
 
 /** A two- or three-dimensional coordinate system with straight axes that are not necessarily orthogonal. An ObliqueCartesianCS shall have two or three usesAxis associations. */
 interface _ObliqueCartesianCSType extends _AbstractCoordinateSystemType {}
-export interface ObliqueCartesianCSType extends _ObliqueCartesianCSType { constructor: { new(): ObliqueCartesianCSType }; }
-export var ObliqueCartesianCSType: { new(): ObliqueCartesianCSType };
+export interface ObliqueCartesianCSType extends _ObliqueCartesianCSType {  }
+
 
 interface _ObservationProxyType extends _DirectedObservationProxyType {
 	Observation?: ObservationType;
 }
-interface ObservationProxyType extends _ObservationProxyType { constructor: { new(): ObservationProxyType }; }
+interface ObservationProxyType extends _ObservationProxyType {  }
 
 interface _ObservationType extends _AbstractFeatureType, _TargetProxyType {
 	/** The result of the observation: an image, external object, etc */
@@ -3548,8 +3548,8 @@ interface _ObservationType extends _AbstractFeatureType, _TargetProxyType {
 	using?: FeaturePropertyType;
 	validTime: TimePrimitivePropertyType;
 }
-export interface ObservationType extends _ObservationType { constructor: { new(): ObservationType }; }
-export var ObservationType: { new(): ObservationType };
+export interface ObservationType extends _ObservationType {  }
+
 
 /** An offset curve is a curve at a constant
   * distance from the basis curve. They can be useful as a cheap
@@ -3598,8 +3598,8 @@ interface _OffsetCurveType extends _AbstractCurveSegmentType {
 	  * above. */
 	refDirection?: VectorType;
 }
-export interface OffsetCurveType extends _OffsetCurveType { constructor: { new(): OffsetCurveType }; }
-export var OffsetCurveType: { new(): OffsetCurveType };
+export interface OffsetCurveType extends _OffsetCurveType {  }
+
 
 /** Basic encoding for operation method objects, simplifying and restricting the DefinitionType as needed. */
 interface _OperationMethodBaseType extends _DefinitionType {
@@ -3610,8 +3610,8 @@ interface _OperationMethodBaseType extends _DefinitionType {
 	/** The name by which this operation method is identified. */
 	methodName: CodeType;
 }
-export interface OperationMethodBaseType extends _OperationMethodBaseType { constructor: { new(): OperationMethodBaseType }; }
-export var OperationMethodBaseType: { new(): OperationMethodBaseType };
+export interface OperationMethodBaseType extends _OperationMethodBaseType {  }
+
 
 /** Association to a concrete general-purpose operation method, either referencing or containing the definition of that method. */
 interface _OperationMethodRefType extends BaseType {
@@ -3626,8 +3626,8 @@ interface _OperationMethodRefType extends BaseType {
 	remoteSchema?: string;
 	OperationMethod?: OperationMethodType;
 }
-export interface OperationMethodRefType extends _OperationMethodRefType { constructor: { new(): OperationMethodRefType }; }
-export var OperationMethodRefType: { new(): OperationMethodRefType };
+export interface OperationMethodRefType extends _OperationMethodRefType {  }
+
 
 /** Definition of an algorithm used to perform a coordinate operation. Most operation methods use a number of operation parameters, although some coordinate conversions use none. Each coordinate operation using the method assigns values to these parameters. */
 interface _OperationMethodType extends _OperationMethodBaseType {
@@ -3644,8 +3644,8 @@ interface _OperationMethodType extends _OperationMethodBaseType {
 	/** Association to an operation parameter or parameter group used by this operation method. */
 	usesParameter?: AbstractGeneralOperationParameterRefType[];
 }
-export interface OperationMethodType extends _OperationMethodType { constructor: { new(): OperationMethodType }; }
-export var OperationMethodType: { new(): OperationMethodType };
+export interface OperationMethodType extends _OperationMethodType {  }
+
 
 /** Basic encoding for operation parameter objects, simplifying and restricting the DefinitionType as needed. */
 interface _OperationParameterBaseType extends _AbstractGeneralOperationParameterType {
@@ -3658,8 +3658,8 @@ interface _OperationParameterBaseType extends _AbstractGeneralOperationParameter
 	/** The name by which this operation parameter is identified. */
 	parameterName: CodeType;
 }
-export interface OperationParameterBaseType extends _OperationParameterBaseType { constructor: { new(): OperationParameterBaseType }; }
-export var OperationParameterBaseType: { new(): OperationParameterBaseType };
+export interface OperationParameterBaseType extends _OperationParameterBaseType {  }
+
 
 /** Basic encoding for operation parameter group objects, simplifying and restricting the DefinitionType as needed. */
 interface _OperationParameterGroupBaseType extends _AbstractGeneralOperationParameterType {
@@ -3672,8 +3672,8 @@ interface _OperationParameterGroupBaseType extends _AbstractGeneralOperationPara
 	/** The minimum number of times that values for this parameter group or parameter are required. If this attribute is omitted, the minimum number is one. */
 	minimumOccurs?: number;
 }
-export interface OperationParameterGroupBaseType extends _OperationParameterGroupBaseType { constructor: { new(): OperationParameterGroupBaseType }; }
-export var OperationParameterGroupBaseType: { new(): OperationParameterGroupBaseType };
+export interface OperationParameterGroupBaseType extends _OperationParameterGroupBaseType {  }
+
 
 /** Association to an operation parameter, either referencing or containing the definition of that parameter. */
 interface _OperationParameterGroupRefType extends BaseType {
@@ -3688,8 +3688,8 @@ interface _OperationParameterGroupRefType extends BaseType {
 	remoteSchema?: string;
 	OperationParameterGroup?: OperationParameterGroupType;
 }
-export interface OperationParameterGroupRefType extends _OperationParameterGroupRefType { constructor: { new(): OperationParameterGroupRefType }; }
-export var OperationParameterGroupRefType: { new(): OperationParameterGroupRefType };
+export interface OperationParameterGroupRefType extends _OperationParameterGroupRefType {  }
+
 
 /** The definition of a group of parameters used by an operation method. This complexType is expected to be used or extended for all applicable operation methods, without defining operation-method-specialized element names. */
 interface _OperationParameterGroupType extends _OperationParameterGroupBaseType {
@@ -3702,8 +3702,8 @@ interface _OperationParameterGroupType extends _OperationParameterGroupBaseType 
 	/** Information about this object or code. Contains text or refers to external text. */
 	remarks?: StringOrRefType;
 }
-export interface OperationParameterGroupType extends _OperationParameterGroupType { constructor: { new(): OperationParameterGroupType }; }
-export var OperationParameterGroupType: { new(): OperationParameterGroupType };
+export interface OperationParameterGroupType extends _OperationParameterGroupType {  }
+
 
 /** Association to an operation parameter, either referencing or containing the definition of that parameter. */
 interface _OperationParameterRefType extends BaseType {
@@ -3718,8 +3718,8 @@ interface _OperationParameterRefType extends BaseType {
 	remoteSchema?: string;
 	OperationParameter?: OperationParameterType;
 }
-export interface OperationParameterRefType extends _OperationParameterRefType { constructor: { new(): OperationParameterRefType }; }
-export var OperationParameterRefType: { new(): OperationParameterRefType };
+export interface OperationParameterRefType extends _OperationParameterRefType {  }
+
 
 /** The definition of a parameter used by an operation method. Most parameter values are numeric, but other types of parameter values are possible. This complexType is expected to be used or extended for all operation methods, without defining operation-method-specialized element names. */
 interface _OperationParameterType extends _OperationParameterBaseType {
@@ -3728,11 +3728,11 @@ interface _OperationParameterType extends _OperationParameterBaseType {
 	/** Information about this object or code. Contains text or refers to external text. */
 	remarks?: StringOrRefType;
 }
-export interface OperationParameterType extends _OperationParameterType { constructor: { new(): OperationParameterType }; }
-export var OperationParameterType: { new(): OperationParameterType };
+export interface OperationParameterType extends _OperationParameterType {  }
+
 
 interface _OperationProxyType extends _GeneralConversionProxyType, _GeneralTransformationProxyType {}
-interface OperationProxyType extends _OperationProxyType { constructor: { new(): OperationProxyType }; }
+interface OperationProxyType extends _OperationProxyType {  }
 
 /** Association to an abstract operation, either referencing or containing the definition of that operation. */
 interface _OperationRefType extends _OperationProxyType {
@@ -3746,8 +3746,8 @@ interface _OperationRefType extends _OperationProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface OperationRefType extends _OperationRefType { constructor: { new(): OperationRefType }; }
-export var OperationRefType: { new(): OperationRefType };
+export interface OperationRefType extends _OperationRefType {  }
+
 
 /** OrientableCurve consists of a curve and an orientation. If the orientation is "+", then the OrientableCurve is identical to the baseCurve. If the orientation is "-", then the OrientableCurve is related to another _Curve with a parameterization that reverses the sense of the curve traversal. */
 interface _OrientableCurveType extends _AbstractCurveType {
@@ -3756,8 +3756,8 @@ interface _OrientableCurveType extends _AbstractCurveType {
 	/** This property element either references a curve via the XLink-attributes or contains the curve element. A curve element is any element which is substitutable for "_Curve". */
 	baseCurve: CurvePropertyType;
 }
-export interface OrientableCurveType extends _OrientableCurveType { constructor: { new(): OrientableCurveType }; }
-export var OrientableCurveType: { new(): OrientableCurveType };
+export interface OrientableCurveType extends _OrientableCurveType {  }
+
 
 /** OrientableSurface consists of a surface and an orientation. If the orientation is "+", then the OrientableSurface is identical to the baseSurface. If the orientation is "-", then the OrientableSurface is a reference to a Surface with an up-normal that reverses the direction for this OrientableSurface, the sense of "the top of the surface". */
 interface _OrientableSurfaceType extends _AbstractSurfaceType {
@@ -3766,8 +3766,8 @@ interface _OrientableSurfaceType extends _AbstractSurfaceType {
 	/** This property element either references a surface via the XLink-attributes or contains the surface element. A surface element is any element which is substitutable for "_Surface". */
 	baseSurface: SurfacePropertyType;
 }
-export interface OrientableSurfaceType extends _OrientableSurfaceType { constructor: { new(): OrientableSurfaceType }; }
-export var OrientableSurfaceType: { new(): OrientableSurfaceType };
+export interface OrientableSurfaceType extends _OrientableSurfaceType {  }
+
 
 /** A group of related parameter values. The same group can be repeated more than once in a Conversion, Transformation, or higher level parameterValueGroup, if those instances contain different values of one or more parameterValues which suitably distinquish among those groups. This concrete complexType can be used for operation methods without using an Application Schema that defines operation-method-specialized element names and contents, especially for methods with only one instance. This complexType can be used, extended, or restricted for well-known operation methods, especially for methods with many instances. */
 interface _ParameterValueGroupType extends _AbstractGeneralParameterValueType {
@@ -3776,8 +3776,8 @@ interface _ParameterValueGroupType extends _AbstractGeneralParameterValueType {
 	/** Association to the operation parameter group for which this element provides parameter values. */
 	valuesOfGroup: OperationParameterGroupRefType;
 }
-export interface ParameterValueGroupType extends _ParameterValueGroupType { constructor: { new(): ParameterValueGroupType }; }
-export var ParameterValueGroupType: { new(): ParameterValueGroupType };
+export interface ParameterValueGroupType extends _ParameterValueGroupType {  }
+
 
 /** A parameter value, ordered sequence of values, or reference to a file of parameter values. This concrete complexType can be used for operation methods without using an Application Schema that defines operation-method-specialized element names and contents, especially for methods with only one instance. This complexType can be used, extended, or restricted for well-known operation methods, especially for methods with many instances. */
 interface _ParameterValueType extends _AbstractGeneralParameterValueType {
@@ -3800,11 +3800,11 @@ interface _ParameterValueType extends _AbstractGeneralParameterValueType {
 	/** Association to the operation parameter that this is a value of. */
 	valueOfParameter: OperationParameterRefType;
 }
-export interface ParameterValueType extends _ParameterValueType { constructor: { new(): ParameterValueType }; }
-export var ParameterValueType: { new(): ParameterValueType };
+export interface ParameterValueType extends _ParameterValueType {  }
+
 
 interface _ParametricCurveSurfaceProxyType extends _GriddedSurfaceProxyType {}
-interface ParametricCurveSurfaceProxyType extends _ParametricCurveSurfaceProxyType { constructor: { new(): ParametricCurveSurfaceProxyType }; }
+interface ParametricCurveSurfaceProxyType extends _ParametricCurveSurfaceProxyType {  }
 
 /** Association to a pass through operation, either referencing or containing the definition of that pass through operation. */
 interface _PassThroughOperationRefType extends BaseType {
@@ -3819,8 +3819,8 @@ interface _PassThroughOperationRefType extends BaseType {
 	remoteSchema?: string;
 	PassThroughOperation?: PassThroughOperationType;
 }
-export interface PassThroughOperationRefType extends _PassThroughOperationRefType { constructor: { new(): PassThroughOperationRefType }; }
-export var PassThroughOperationRefType: { new(): PassThroughOperationRefType };
+export interface PassThroughOperationRefType extends _PassThroughOperationRefType {  }
+
 
 /** A pass-through operation specifies that a subset of a coordinate tuple is subject to a specific coordinate operation. */
 interface _PassThroughOperationType extends _AbstractCoordinateOperationType {
@@ -3829,8 +3829,8 @@ interface _PassThroughOperationType extends _AbstractCoordinateOperationType {
 	/** Association to the operation applied to the specified ordinates. */
 	usesOperation: OperationRefType;
 }
-export interface PassThroughOperationType extends _PassThroughOperationType { constructor: { new(): PassThroughOperationType }; }
-export var PassThroughOperationType: { new(): PassThroughOperationType };
+export interface PassThroughOperationType extends _PassThroughOperationType {  }
+
 
 interface _PatchesProxyType extends BaseType {
 	/** This property element contains a list of surface patches. The order of the elements is significant and shall be preserved when processing the array. */
@@ -3844,23 +3844,23 @@ interface _PatchesProxyType extends BaseType {
 	  * shall be preserved when processing the list. */
 	trianglePatches?: TrianglePatchArrayPropertyType;
 }
-interface PatchesProxyType extends _PatchesProxyType { constructor: { new(): PatchesProxyType }; }
+interface PatchesProxyType extends _PatchesProxyType {  }
 
 /** Specification of the way an image grid is associated with the image data attributes. */
 interface _PixelInCellType extends _CodeType {
 	/** Reference to a source of information specifying the values and meanings of all the allowed string values for this PixelInCellType. */
 	codeSpace: string;
 }
-export interface PixelInCellType extends _PixelInCellType { constructor: { new(): PixelInCellType }; }
-export var PixelInCellType: { new(): PixelInCellType };
+export interface PixelInCellType extends _PixelInCellType {  }
+
 
 /** A container for an array of points. The elements are always contained in the array property, referencing geometry
   * elements or arrays of geometry elements is not supported. */
 interface _PointArrayPropertyType extends BaseType {
 	Point?: PointType[];
 }
-export interface PointArrayPropertyType extends _PointArrayPropertyType { constructor: { new(): PointArrayPropertyType }; }
-export var PointArrayPropertyType: { new(): PointArrayPropertyType };
+export interface PointArrayPropertyType extends _PointArrayPropertyType {  }
+
 
 /** A property that has a point as its value domain can either be an appropriate geometry element encapsulated in an
   * element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located
@@ -3877,8 +3877,8 @@ interface _PointPropertyType extends BaseType {
 	remoteSchema?: string;
 	Point?: PointType;
 }
-export interface PointPropertyType extends _PointPropertyType { constructor: { new(): PointPropertyType }; }
-export var PointPropertyType: { new(): PointPropertyType };
+export interface PointPropertyType extends _PointPropertyType {  }
+
 
 /** A Point is defined by a single coordinate tuple. */
 interface _PointType extends _AbstractGeometricPrimitiveType {
@@ -3888,8 +3888,8 @@ interface _PointType extends _AbstractGeometricPrimitiveType {
 	coordinates: CoordinatesType;
 	pos: DirectPositionType;
 }
-export interface PointType extends _PointType { constructor: { new(): PointType }; }
-export var PointType: { new(): PointType };
+export interface PointType extends _PointType {  }
+
 
 /** Association to a polar coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _PolarCSRefType extends BaseType {
@@ -3904,21 +3904,21 @@ interface _PolarCSRefType extends BaseType {
 	remoteSchema?: string;
 	PolarCS?: PolarCSType;
 }
-export interface PolarCSRefType extends _PolarCSRefType { constructor: { new(): PolarCSRefType }; }
-export var PolarCSRefType: { new(): PolarCSRefType };
+export interface PolarCSRefType extends _PolarCSRefType {  }
+
 
 /** A two-dimensional coordinate system in which position is specified by the distance from the origin and the angle between the line from the origin to a point and a reference direction. A PolarCS shall have two usesAxis associations. */
 interface _PolarCSType extends _AbstractCoordinateSystemType {}
-export interface PolarCSType extends _PolarCSType { constructor: { new(): PolarCSType }; }
-export var PolarCSType: { new(): PolarCSType };
+export interface PolarCSType extends _PolarCSType {  }
+
 
 /** This type defines a container for an array of
   * polygon patches. */
 interface _PolygonPatchArrayPropertyType extends _SurfacePatchArrayPropertyType {
 	PolygonPatch?: PolygonPatchType[];
 }
-export interface PolygonPatchArrayPropertyType extends _PolygonPatchArrayPropertyType { constructor: { new(): PolygonPatchArrayPropertyType }; }
-export var PolygonPatchArrayPropertyType: { new(): PolygonPatchArrayPropertyType };
+export interface PolygonPatchArrayPropertyType extends _PolygonPatchArrayPropertyType {  }
+
 
 /** A PolygonPatch is a surface patch that is defined by a set of boundary curves and an underlying surface to which these curves adhere. The curves are coplanar and the polygon uses planar interpolation in its interior. Implements GM_Polygon of ISO 19107. */
 interface _PolygonPatchType extends _AbstractSurfacePatchType, _ExteriorProxyType {
@@ -3927,8 +3927,8 @@ interface _PolygonPatchType extends _AbstractSurfacePatchType, _ExteriorProxyTyp
 	/** A boundary of a surface consists of a number of rings. The "interior" rings seperate the surface / surface patch from the area enclosed by the rings. */
 	interior?: InteriorProxyType[];
 }
-export interface PolygonPatchType extends _PolygonPatchType { constructor: { new(): PolygonPatchType }; }
-export var PolygonPatchType: { new(): PolygonPatchType };
+export interface PolygonPatchType extends _PolygonPatchType {  }
+
 
 /** This type is deprecated with GML 3 and shall not be used. It is included for backwards compatibility with GML 2. Use SurfacePropertyType instead.
   * A property that has a polygon as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
@@ -3944,16 +3944,16 @@ interface _PolygonPropertyType extends BaseType {
 	remoteSchema?: string;
 	Polygon?: PolygonType;
 }
-export interface PolygonPropertyType extends _PolygonPropertyType { constructor: { new(): PolygonPropertyType }; }
-export var PolygonPropertyType: { new(): PolygonPropertyType };
+export interface PolygonPropertyType extends _PolygonPropertyType {  }
+
 
 /** A Polygon is a special surface that is defined by a single surface patch. The boundary of this patch is coplanar and the polygon uses planar interpolation in its interior. It is backwards compatible with the Polygon of GML 2, GM_Polygon of ISO 19107 is implemented by PolygonPatch. */
 interface _PolygonType extends _AbstractSurfaceType, _ExteriorProxyType {
 	/** A boundary of a surface consists of a number of rings. The "interior" rings seperate the surface / surface patch from the area enclosed by the rings. */
 	interior?: InteriorProxyType[];
 }
-export interface PolygonType extends _PolygonType { constructor: { new(): PolygonType }; }
-export var PolygonType: { new(): PolygonType };
+export interface PolygonType extends _PolygonType {  }
+
 
 /** A polyhedral surface is a surface composed
   * of polygon surfaces connected along their common boundary
@@ -3971,15 +3971,15 @@ interface _PolyhedralSurfaceType extends _SurfaceType {
 	  * shall be preserved when processing the list. */
 	polygonPatches: PolygonPatchArrayPropertyType;
 }
-export interface PolyhedralSurfaceType extends _PolyhedralSurfaceType { constructor: { new(): PolyhedralSurfaceType }; }
-export var PolyhedralSurfaceType: { new(): PolyhedralSurfaceType };
+export interface PolyhedralSurfaceType extends _PolyhedralSurfaceType {  }
+
 
 interface _PositionalAccuracyProxyType extends BaseType {
 	absoluteExternalPositionalAccuracy?: AbsoluteExternalPositionalAccuracyType;
 	covarianceMatrix?: CovarianceMatrixType;
 	relativeInternalPositionalAccuracy?: RelativeInternalPositionalAccuracyType;
 }
-interface PositionalAccuracyProxyType extends _PositionalAccuracyProxyType { constructor: { new(): PositionalAccuracyProxyType }; }
+interface PositionalAccuracyProxyType extends _PositionalAccuracyProxyType {  }
 
 /** Basic encoding for prime meridian objects, simplifying and restricting the DefinitionType as needed. */
 interface _PrimeMeridianBaseType extends _DefinitionType {
@@ -3990,8 +3990,8 @@ interface _PrimeMeridianBaseType extends _DefinitionType {
 	/** Contains or refers to a metadata package that contains metadata properties. */
 	metaDataProperty?: MetaDataPropertyType[];
 }
-export interface PrimeMeridianBaseType extends _PrimeMeridianBaseType { constructor: { new(): PrimeMeridianBaseType }; }
-export var PrimeMeridianBaseType: { new(): PrimeMeridianBaseType };
+export interface PrimeMeridianBaseType extends _PrimeMeridianBaseType {  }
+
 
 /** Association to a prime meridian, either referencing or containing the definition of that meridian. */
 interface _PrimeMeridianRefType extends BaseType {
@@ -4006,8 +4006,8 @@ interface _PrimeMeridianRefType extends BaseType {
 	remoteSchema?: string;
 	PrimeMeridian?: PrimeMeridianType;
 }
-export interface PrimeMeridianRefType extends _PrimeMeridianRefType { constructor: { new(): PrimeMeridianRefType }; }
-export var PrimeMeridianRefType: { new(): PrimeMeridianRefType };
+export interface PrimeMeridianRefType extends _PrimeMeridianRefType {  }
+
 
 /** A prime meridian defines the origin from which longitude values are determined. */
 interface _PrimeMeridianType extends _PrimeMeridianBaseType {
@@ -4018,15 +4018,15 @@ interface _PrimeMeridianType extends _PrimeMeridianBaseType {
 	/** Information about this object or code. Contains text or refers to external text. */
 	remarks?: StringOrRefType;
 }
-export interface PrimeMeridianType extends _PrimeMeridianType { constructor: { new(): PrimeMeridianType }; }
-export var PrimeMeridianType: { new(): PrimeMeridianType };
+export interface PrimeMeridianType extends _PrimeMeridianType {  }
+
 
 /** G-XML componentDeprecated in GML 3.1.0 */
 interface _PriorityLocationPropertyType extends _LocationPropertyType {
 	priority?: string;
 }
-export interface PriorityLocationPropertyType extends _PriorityLocationPropertyType { constructor: { new(): PriorityLocationPropertyType }; }
-export var PriorityLocationPropertyType: { new(): PriorityLocationPropertyType };
+export interface PriorityLocationPropertyType extends _PriorityLocationPropertyType {  }
+
 
 /** Association to a projected coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _ProjectedCRSRefType extends BaseType {
@@ -4041,16 +4041,16 @@ interface _ProjectedCRSRefType extends BaseType {
 	remoteSchema?: string;
 	ProjectedCRS?: ProjectedCRSType;
 }
-export interface ProjectedCRSRefType extends _ProjectedCRSRefType { constructor: { new(): ProjectedCRSRefType }; }
-export var ProjectedCRSRefType: { new(): ProjectedCRSRefType };
+export interface ProjectedCRSRefType extends _ProjectedCRSRefType {  }
+
 
 /** A 2D coordinate reference system used to approximate the shape of the earth on a planar surface, but in such a way that the distortion that is inherent to the approximation is carefully controlled and known. Distortion correction is commonly applied to calculated bearings and distances to produce values that are a close match to actual field values. */
 interface _ProjectedCRSType extends _AbstractGeneralDerivedCRSType {
 	/** Association to the Cartesian coordinate system used by this CRS. */
 	usesCartesianCS: CartesianCSRefType;
 }
-export interface ProjectedCRSType extends _ProjectedCRSType { constructor: { new(): ProjectedCRSType }; }
-export var ProjectedCRSType: { new(): ProjectedCRSType };
+export interface ProjectedCRSType extends _ProjectedCRSType {  }
+
 
 /** A set of values, representing a list of token with the lexical value space of QName. The tokens are seperated by whitespace. */
 export type QNameList = string[];
@@ -4063,8 +4063,8 @@ interface _QuantityPropertyType extends _ValuePropertyType {
 	/** A numeric value with a scale.  The content of the element is an amount using the XML Schema type double which permits decimal or scientific notation.  An XML attribute uom (unit of measure) is required, whose value is a URI which identifies the definition of the scale or units by which the numeric value must be multiplied. */
 	Quantity?: MeasureType;
 }
-export interface QuantityPropertyType extends _QuantityPropertyType { constructor: { new(): QuantityPropertyType }; }
-export var QuantityPropertyType: { new(): QuantityPropertyType };
+export interface QuantityPropertyType extends _QuantityPropertyType {  }
+
 
 /** Used to specify the grammar of the feature query mechanism. */
 export type QueryGrammarEnumeration = ("xpath" | "xquery" | "other");
@@ -4106,8 +4106,8 @@ interface _RangeParametersType extends _CompositeValueProxyType {
 	/** A space separated list of amounts or nulls.  The amounts use the XML Schema type double.  A single XML attribute uom (unit of measure) is required, whose value is a URI which identifies the definition of the scale or units by which all the amounts in the list must be multiplied. */
 	QuantityList?: MeasureOrNullListType;
 }
-export interface RangeParametersType extends _RangeParametersType { constructor: { new(): RangeParametersType }; }
-export var RangeParametersType: { new(): RangeParametersType };
+export interface RangeParametersType extends _RangeParametersType {  }
+
 
 interface _RangeSetType extends BaseType {
 	/** XML List based on XML Schema boolean type.  An element of this type contains a space-separated list of boolean values {0,1,true,false} */
@@ -4123,16 +4123,16 @@ interface _RangeSetType extends BaseType {
 	/** A Value Array is used for homogeneous arrays of primitive and aggregate values.   _ScalarValueList is preferred for arrays of Scalar Values since this is more efficient.  Since "choice" is not available for attribute groups, an external constraint (e.g. Schematron) would be required to enforce the selection of only one of these through schema validation */
 	ValueArray: ValueArrayType[];
 }
-export interface RangeSetType extends _RangeSetType { constructor: { new(): RangeSetType }; }
-export var RangeSetType: { new(): RangeSetType };
+export interface RangeSetType extends _RangeSetType {  }
+
 
 /** Represents a rectangle as a surface with an outer boundary consisting of a linear ring. Note that this is a polygon (subtype) with no inner boundaries. The number of points in the linear ring must be five. */
 interface _RectangleType extends _AbstractSurfacePatchType, _ExteriorProxyType {
 	/** The attribute "interpolation" specifies the interpolation mechanism used for this surface patch. Currently only planar surface patches are defined in GML 3, the attribute is fixed to "planar", i.e. the interpolation method shall return points on a single plane. The boundary of the patch shall be contained within that plane. */
 	interpolation: SurfaceInterpolationType;
 }
-export interface RectangleType extends _RectangleType { constructor: { new(): RectangleType }; }
-export var RectangleType: { new(): RectangleType };
+export interface RectangleType extends _RectangleType {  }
+
 
 interface _RectifiedGridCoverageType extends _AbstractDiscreteCoverageType {
 	boundedBy?: BoundingShapeType;
@@ -4146,8 +4146,8 @@ interface _RectifiedGridCoverageType extends _AbstractDiscreteCoverageType {
 	rangeSet: RangeSetType;
 	rectifiedGridDomain: RectifiedGridDomainType;
 }
-export interface RectifiedGridCoverageType extends _RectifiedGridCoverageType { constructor: { new(): RectifiedGridCoverageType }; }
-export var RectifiedGridCoverageType: { new(): RectifiedGridCoverageType };
+export interface RectifiedGridCoverageType extends _RectifiedGridCoverageType {  }
+
 
 interface _RectifiedGridDomainType extends _DomainSetType {
 	actuate: xlink.actuateType;
@@ -4162,22 +4162,22 @@ interface _RectifiedGridDomainType extends _DomainSetType {
 	/** Should be substitutionGroup="gml:Grid" but changed in order to accomplish Xerces-J schema validation */
 	RectifiedGrid?: RectifiedGridType;
 }
-export interface RectifiedGridDomainType extends _RectifiedGridDomainType { constructor: { new(): RectifiedGridDomainType }; }
-export var RectifiedGridDomainType: { new(): RectifiedGridDomainType };
+export interface RectifiedGridDomainType extends _RectifiedGridDomainType {  }
+
 
 /** A rectified grid has an origin and vectors that define its post locations. */
 interface _RectifiedGridType extends _GridType {
 	offsetVector: VectorType[];
 	origin: PointPropertyType;
 }
-export interface RectifiedGridType extends _RectifiedGridType { constructor: { new(): RectifiedGridType }; }
-export var RectifiedGridType: { new(): RectifiedGridType };
+export interface RectifiedGridType extends _RectifiedGridType {  }
+
 
 interface _ReferenceProxyType extends BaseType {}
-interface ReferenceProxyType extends _ReferenceProxyType { constructor: { new(): ReferenceProxyType }; }
+interface ReferenceProxyType extends _ReferenceProxyType {  }
 
 interface _ReferenceSystemProxyType extends _CRSProxyType {}
-interface ReferenceSystemProxyType extends _ReferenceSystemProxyType { constructor: { new(): ReferenceSystemProxyType }; }
+interface ReferenceSystemProxyType extends _ReferenceSystemProxyType {  }
 
 /** Association to a reference system, either referencing or containing the definition of that reference system. */
 interface _ReferenceSystemRefType extends _ReferenceSystemProxyType {
@@ -4191,8 +4191,8 @@ interface _ReferenceSystemRefType extends _ReferenceSystemProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface ReferenceSystemRefType extends _ReferenceSystemRefType { constructor: { new(): ReferenceSystemRefType }; }
-export var ReferenceSystemRefType: { new(): ReferenceSystemRefType };
+export interface ReferenceSystemRefType extends _ReferenceSystemRefType {  }
+
 
 /** A pattern or base for derived types used to specify complex types corresponding to a UML aggregation association.  An instance of this type serves as a pointer to a remote Object. */
 interface _ReferenceType extends BaseType {
@@ -4206,14 +4206,14 @@ interface _ReferenceType extends BaseType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface ReferenceType extends _ReferenceType { constructor: { new(): ReferenceType }; }
-export var ReferenceType: { new(): ReferenceType };
+export interface ReferenceType extends _ReferenceType {  }
+
 
 interface _RelatedTimeType extends _TimePrimitivePropertyType {
 	relativePosition: RelatedTimeTypeRelativePositionType;
 }
-export interface RelatedTimeType extends _RelatedTimeType { constructor: { new(): RelatedTimeType }; }
-export var RelatedTimeType: { new(): RelatedTimeType };
+export interface RelatedTimeType extends _RelatedTimeType {  }
+
 
 type RelatedTimeTypeRelativePositionType = ("Before" | "After" | "Begins" | "Ends" | "During" | "Equals" | "Contains" | "Overlaps" | "Meets" | "OverlappedBy" | "MetBy" | "BegunBy" | "EndedBy");
 interface _RelatedTimeTypeRelativePositionType extends Primitive._string { content: RelatedTimeTypeRelativePositionType; }
@@ -4223,21 +4223,21 @@ interface _RelativeInternalPositionalAccuracyType extends _AbstractPositionalAcc
 	/** A quantitative result defined by the evaluation procedure used, and identified by the measureDescription. */
 	result: MeasureType;
 }
-export interface RelativeInternalPositionalAccuracyType extends _RelativeInternalPositionalAccuracyType { constructor: { new(): RelativeInternalPositionalAccuracyType }; }
-export var RelativeInternalPositionalAccuracyType: { new(): RelativeInternalPositionalAccuracyType };
+export interface RelativeInternalPositionalAccuracyType extends _RelativeInternalPositionalAccuracyType {  }
+
 
 /** Encapsulates a ring to represent properties in features or geometry collections. */
 interface _RingPropertyType extends BaseType {
 	Ring: RingType;
 }
-export interface RingPropertyType extends _RingPropertyType { constructor: { new(): RingPropertyType }; }
-export var RingPropertyType: { new(): RingPropertyType };
+export interface RingPropertyType extends _RingPropertyType {  }
+
 
 interface _RingProxyType extends BaseType {
 	Ring?: RingType;
 	LinearRing?: LinearRingType;
 }
-interface RingProxyType extends _RingProxyType { constructor: { new(): RingProxyType }; }
+interface RingProxyType extends _RingProxyType {  }
 
 /** A Ring is used to represent a single connected component of a surface boundary. It consists of a sequence of curves connected in a cycle (an object whose boundary is empty).
   * A Ring is structurally similar to a composite curve in that the endPoint of each curve in the sequence is the startPoint of the next curve in the Sequence. Since the sequence is circular, there is no exception to this rule. Each ring, like all boundaries, is a cycle and each ring is simple.
@@ -4246,8 +4246,8 @@ interface _RingType extends _AbstractRingType {
 	/** This property element either references a curve via the XLink-attributes or contains the curve element. A curve element is any element which is substitutable for "_Curve". */
 	curveMember: CurvePropertyType[];
 }
-export interface RingType extends _RingType { constructor: { new(): RingType }; }
-export var RingType: { new(): RingType };
+export interface RingType extends _RingType {  }
+
 
 interface _RowType extends BaseType {
 	/** This property element either references a point via the XLink-attributes or contains the point element. pointProperty
@@ -4257,7 +4257,7 @@ interface _RowType extends BaseType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-interface RowType extends _RowType { constructor: { new(): RowType }; }
+interface RowType extends _RowType {  }
 
 /** Property whose content is a scalar value. */
 interface _ScalarValuePropertyType extends _ValuePropertyType {
@@ -4270,13 +4270,13 @@ interface _ScalarValuePropertyType extends _ValuePropertyType {
 	/** A numeric value with a scale.  The content of the element is an amount using the XML Schema type double which permits decimal or scientific notation.  An XML attribute uom (unit of measure) is required, whose value is a URI which identifies the definition of the scale or units by which the numeric value must be multiplied. */
 	Quantity?: MeasureType;
 }
-export interface ScalarValuePropertyType extends _ScalarValuePropertyType { constructor: { new(): ScalarValuePropertyType }; }
-export var ScalarValuePropertyType: { new(): ScalarValuePropertyType };
+export interface ScalarValuePropertyType extends _ScalarValuePropertyType {  }
+
 
 /** Value of a scale factor (or ratio) that has no physical unit. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for a scale factor, such as percent, permil, or parts-per-million. */
 interface _ScaleType extends _MeasureType {}
-export interface ScaleType extends _ScaleType { constructor: { new(): ScaleType }; }
-export var ScaleType: { new(): ScaleType };
+export interface ScaleType extends _ScaleType {  }
+
 
 /** Definition of the second parameter that defines the shape of an ellipsoid. An ellipsoid requires two defining parameters: semi-major axis and inverse flattening or semi-major axis and semi-minor axis. When the reference body is a sphere rather than an ellipsoid, only a single defining parameter is required, namely the radius of the sphere; in that case, the semi-major axis "degenerates" into the radius of the sphere. */
 interface _SecondDefiningParameterType extends BaseType {
@@ -4287,8 +4287,8 @@ interface _SecondDefiningParameterType extends BaseType {
 	/** Length of the semi-minor axis of the ellipsoid. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for a length, such as metres or feet. */
 	semiMinorAxis: MeasureType;
 }
-export interface SecondDefiningParameterType extends _SecondDefiningParameterType { constructor: { new(): SecondDefiningParameterType }; }
-export var SecondDefiningParameterType: { new(): SecondDefiningParameterType };
+export interface SecondDefiningParameterType extends _SecondDefiningParameterType {  }
+
 
 /** List of codes (adopted from ISO 19123 Annex C) that identifies the rule for traversing a grid to correspond with the sequence of members of the rangeSet. */
 export type SequenceRuleNames = ("Linear" | "Boustrophedonic" | "Cantor-diagonal" | "Spiral" | "Morton" | "Hilbert");
@@ -4297,8 +4297,8 @@ interface _SequenceRuleNames extends Primitive._string { content: SequenceRuleNa
 interface _SequenceRuleType extends _SequenceRuleNames {
 	order?: IncrementOrder;
 }
-export interface SequenceRuleType extends _SequenceRuleType { constructor: { new(): SequenceRuleType }; }
-export var SequenceRuleType: { new(): SequenceRuleType };
+export interface SequenceRuleType extends _SequenceRuleType {  }
+
 
 /** Utility type used in various places
   * - e.g. to indicate the direction of topological objects;
@@ -4309,7 +4309,7 @@ interface _SignType extends Primitive._string { content: SignType; }
 interface _SingleOperationProxyType extends _OperationProxyType {
 	PassThroughOperation?: PassThroughOperationType;
 }
-interface SingleOperationProxyType extends _SingleOperationProxyType { constructor: { new(): SingleOperationProxyType }; }
+interface SingleOperationProxyType extends _SingleOperationProxyType {  }
 
 /** Association to a single operation, either referencing or containing the definition of that single operation. */
 interface _SingleOperationRefType extends _SingleOperationProxyType {
@@ -4323,16 +4323,16 @@ interface _SingleOperationRefType extends _SingleOperationProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface SingleOperationRefType extends _SingleOperationRefType { constructor: { new(): SingleOperationRefType }; }
-export var SingleOperationRefType: { new(): SingleOperationRefType };
+export interface SingleOperationRefType extends _SingleOperationRefType {  }
+
 
 /** A container for an array of solids. The elements are always contained in the array property, referencing geometry elements or arrays of geometry elements is not supported. */
 interface _SolidArrayPropertyType extends BaseType {
 	/** The "_Solid" element is the abstract head of the substituition group for all (continuous) solid elements. */
 	Solid?: SolidProxyType[];
 }
-export interface SolidArrayPropertyType extends _SolidArrayPropertyType { constructor: { new(): SolidArrayPropertyType }; }
-export var SolidArrayPropertyType: { new(): SolidArrayPropertyType };
+export interface SolidArrayPropertyType extends _SolidArrayPropertyType {  }
+
 
 /** A property that has a solid as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
 interface _SolidPropertyType extends _SolidProxyType {
@@ -4346,14 +4346,14 @@ interface _SolidPropertyType extends _SolidProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface SolidPropertyType extends _SolidPropertyType { constructor: { new(): SolidPropertyType }; }
-export var SolidPropertyType: { new(): SolidPropertyType };
+export interface SolidPropertyType extends _SolidPropertyType {  }
+
 
 interface _SolidProxyType extends BaseType {
 	CompositeSolid?: CompositeSolidType;
 	Solid?: SolidType;
 }
-interface SolidProxyType extends _SolidProxyType { constructor: { new(): SolidProxyType }; }
+interface SolidProxyType extends _SolidProxyType {  }
 
 /** A solid is the basis for 3-dimensional geometry. The extent of a solid is defined by the boundary surfaces (shells). A shell is represented by a composite surface, where every  shell is used to represent a single connected component of the boundary of a solid. It consists of a composite surface (a list of orientable surfaces) connected in a topological cycle (an object whose boundary is empty). Unlike a Ring, a Shell's elements have no natural sort order. Like Rings, Shells are simple. */
 interface _SolidType extends _AbstractSolidType {
@@ -4362,13 +4362,13 @@ interface _SolidType extends _AbstractSolidType {
 	/** Boundaries of solids are similar to surface boundaries. */
 	interior?: SurfacePropertyType[];
 }
-export interface SolidType extends _SolidType { constructor: { new(): SolidType }; }
-export var SolidType: { new(): SolidType };
+export interface SolidType extends _SolidType {  }
+
 
 /** Value of a speed, with its units. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for a velocity, such as metres per second or miles per hour. */
 interface _SpeedType extends _MeasureType {}
-export interface SpeedType extends _SpeedType { constructor: { new(): SpeedType }; }
-export var SpeedType: { new(): SpeedType };
+export interface SpeedType extends _SpeedType {  }
+
 
 /** A sphere is a gridded surface given as a
   * family of circles whose positions vary linearly along the
@@ -4407,8 +4407,8 @@ interface _SphereType extends _AbstractGriddedSurfaceType {
 	horizontalCurveType: CurveInterpolationType;
 	verticalCurveType: CurveInterpolationType;
 }
-export interface SphereType extends _SphereType { constructor: { new(): SphereType }; }
-export var SphereType: { new(): SphereType };
+export interface SphereType extends _SphereType {  }
+
 
 /** Association to a spherical coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _SphericalCSRefType extends BaseType {
@@ -4423,16 +4423,16 @@ interface _SphericalCSRefType extends BaseType {
 	remoteSchema?: string;
 	SphericalCS?: SphericalCSType;
 }
-export interface SphericalCSRefType extends _SphericalCSRefType { constructor: { new(): SphericalCSRefType }; }
-export var SphericalCSRefType: { new(): SphericalCSRefType };
+export interface SphericalCSRefType extends _SphericalCSRefType {  }
+
 
 /** A three-dimensional coordinate system with one distance measured from the origin and two angular coordinates. Not to be confused with an ellipsoidal coordinate system based on an ellipsoid "degenerated" into a sphere. A SphericalCS shall have three usesAxis associations. */
 interface _SphericalCSType extends _AbstractCoordinateSystemType {}
-export interface SphericalCSType extends _SphericalCSType { constructor: { new(): SphericalCSType }; }
-export var SphericalCSType: { new(): SphericalCSType };
+export interface SphericalCSType extends _SphericalCSType {  }
+
 
 interface _StrictAssociationProxyType extends BaseType {}
-interface StrictAssociationProxyType extends _StrictAssociationProxyType { constructor: { new(): StrictAssociationProxyType }; }
+interface StrictAssociationProxyType extends _StrictAssociationProxyType {  }
 
 /** Union of the XML Schema string type and the GML Nulltype.  An element which uses this type may have content which is either a string or a value from Nulltype.  Note that a "string" may contain whitespace. */
 export type stringOrNull = string;
@@ -4450,14 +4450,14 @@ interface _StringOrRefType extends Primitive._string {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface StringOrRefType extends _StringOrRefType { constructor: { new(): StringOrRefType }; }
-export var StringOrRefType: { new(): StringOrRefType };
+export interface StringOrRefType extends _StringOrRefType {  }
+
 
 interface _StyleProxyType extends BaseType {
 	/** Predefined concrete value of the top-level property. Encapsulates all other styling information. */
 	Style?: StyleType;
 }
-interface StyleProxyType extends _StyleProxyType { constructor: { new(): StyleProxyType }; }
+interface StyleProxyType extends _StyleProxyType {  }
 
 /** [complexType of] Predefined concrete value of the top-level property. Encapsulates all other styling information. */
 interface _StyleType extends _AbstractStyleType {
@@ -4466,16 +4466,16 @@ interface _StyleType extends _AbstractStyleType {
 	/** The style descriptor for a graph consisting of a number of features. Describes graph-specific style attributes. */
 	GraphStyle?: GraphStyleType;
 }
-export interface StyleType extends _StyleType { constructor: { new(): StyleType }; }
-export var StyleType: { new(): StyleType };
+export interface StyleType extends _StyleType {  }
+
 
 /** Used to vary individual graphic parameters and attributes of the style, symbol or text. */
 interface _StyleVariationType extends Primitive._string {
 	featurePropertyRange?: string;
 	styleProperty: string;
 }
-export interface StyleVariationType extends _StyleVariationType { constructor: { new(): StyleVariationType }; }
-export var StyleVariationType: { new(): StyleVariationType };
+export interface StyleVariationType extends _StyleVariationType {  }
+
 
 /** Feature succession is a semantic relationship derived from evaluation of observer, and
   * Feature Substitution, Feature Division and Feature Fusion are defined as associations between
@@ -4491,8 +4491,8 @@ interface _SurfaceArrayPropertyType extends BaseType {
 	/** The "_Surface" element is the abstract head of the substituition group for all (continuous) surface elements. */
 	Surface?: SurfaceProxyType[];
 }
-export interface SurfaceArrayPropertyType extends _SurfaceArrayPropertyType { constructor: { new(): SurfaceArrayPropertyType }; }
-export var SurfaceArrayPropertyType: { new(): SurfaceArrayPropertyType };
+export interface SurfaceArrayPropertyType extends _SurfaceArrayPropertyType {  }
+
 
 /** SurfaceInterpolationType is a list of codes that may be used to identify the interpolation mechanisms specified by an
   * application schema. */
@@ -4504,15 +4504,15 @@ interface _SurfacePatchArrayPropertyType extends BaseType {
 	/** The "_SurfacePatch" element is the abstract head of the substituition group for all surface pach elements describing a continuous portion of a surface. */
 	SurfacePatch?: SurfacePatchProxyType[];
 }
-export interface SurfacePatchArrayPropertyType extends _SurfacePatchArrayPropertyType { constructor: { new(): SurfacePatchArrayPropertyType }; }
-export var SurfacePatchArrayPropertyType: { new(): SurfacePatchArrayPropertyType };
+export interface SurfacePatchArrayPropertyType extends _SurfacePatchArrayPropertyType {  }
+
 
 interface _SurfacePatchProxyType extends _ParametricCurveSurfaceProxyType {
 	PolygonPatch?: PolygonPatchType;
 	Triangle?: TriangleType;
 	Rectangle?: RectangleType;
 }
-interface SurfacePatchProxyType extends _SurfacePatchProxyType { constructor: { new(): SurfacePatchProxyType }; }
+interface SurfacePatchProxyType extends _SurfacePatchProxyType {  }
 
 /** A property that has a surface as its value domain can either be an appropriate geometry element encapsulated in an element of this type or an XLink reference to a remote geometry element (where remote includes geometry elements located elsewhere in the same document). Either the reference or the contained element must be given, but neither both nor none. */
 interface _SurfacePropertyType extends _SurfaceProxyType {
@@ -4526,27 +4526,27 @@ interface _SurfacePropertyType extends _SurfaceProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface SurfacePropertyType extends _SurfacePropertyType { constructor: { new(): SurfacePropertyType }; }
-export var SurfacePropertyType: { new(): SurfacePropertyType };
+export interface SurfacePropertyType extends _SurfacePropertyType {  }
+
 
 interface _SurfaceProxyType extends _SurfaceProxyType_2 {
 	Polygon?: PolygonType;
 	CompositeSurface?: CompositeSurfaceType;
 	OrientableSurface?: OrientableSurfaceType;
 }
-interface SurfaceProxyType extends _SurfaceProxyType { constructor: { new(): SurfaceProxyType }; }
+interface SurfaceProxyType extends _SurfaceProxyType {  }
 
 interface _SurfaceProxyType_2 extends _TriangulatedSurfaceProxyType {
 	Surface?: SurfaceType;
 	PolyhedralSurface?: PolyhedralSurfaceType;
 }
-interface SurfaceProxyType_2 extends _SurfaceProxyType_2 { constructor: { new(): SurfaceProxyType_2 }; }
+interface SurfaceProxyType_2 extends _SurfaceProxyType_2 {  }
 
 /** A Surface is a 2-dimensional primitive and is composed of one or more surface patches. The surface patches are connected to one another.
   * The orientation of the surface is positive ("up"). The orientation of a surface chooses an "up" direction through the choice of the upward normal, which, if the surface is not a cycle, is the side of the surface from which the exterior boundary appears counterclockwise. Reversal of the surface orientation reverses the curve orientation of each boundary component, and interchanges the conceptual "up" and "down" direction of the surface. If the surface is the boundary of a solid, the "up" direction is usually outward. For closed surfaces, which have no boundary, the up direction is that of the surface patches, which must be consistent with one another. Its included surface patches describe the interior structure of the Surface. */
 interface _SurfaceType extends _AbstractSurfaceType, _PatchesProxyType {}
-export interface SurfaceType extends _SurfaceType { constructor: { new(): SurfaceType }; }
-export var SurfaceType: { new(): SurfaceType };
+export interface SurfaceType extends _SurfaceType {  }
+
 
 /** [complexType of] The symbol property. Allows for remote referencing of symbols. */
 interface _SymbolType extends BaseType {
@@ -4564,8 +4564,8 @@ interface _SymbolType extends BaseType {
 	/** Defines the geometric transformation of entities. There is no particular grammar defined for this value. */
 	transform?: string;
 }
-export interface SymbolType extends _SymbolType { constructor: { new(): SymbolType }; }
-export var SymbolType: { new(): SymbolType };
+export interface SymbolType extends _SymbolType {  }
+
 
 /** Used to specify the type of the symbol used. */
 export type SymbolTypeEnumeration = ("svg" | "xpath" | "other");
@@ -4583,8 +4583,8 @@ interface _TargetPropertyType extends _FeatureProxyType, _GeometryProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface TargetPropertyType extends _TargetPropertyType { constructor: { new(): TargetPropertyType }; }
-export var TargetPropertyType: { new(): TargetPropertyType };
+export interface TargetPropertyType extends _TargetPropertyType {  }
+
 
 interface _TargetProxyType extends BaseType {
 	/** This element contains or points to the specimen, region or station which is the object of the observation */
@@ -4592,7 +4592,7 @@ interface _TargetProxyType extends BaseType {
 	/** Synonym for target - common word used for photographs */
 	subject?: TargetPropertyType;
 }
-interface TargetProxyType extends _TargetProxyType { constructor: { new(): TargetProxyType }; }
+interface TargetProxyType extends _TargetProxyType {  }
 
 /** Association to a temporal coordinate reference system, either referencing or containing the definition of that reference system. */
 interface _TemporalCRSRefType extends BaseType {
@@ -4607,8 +4607,8 @@ interface _TemporalCRSRefType extends BaseType {
 	remoteSchema?: string;
 	TemporalCRS?: TemporalCRSType;
 }
-export interface TemporalCRSRefType extends _TemporalCRSRefType { constructor: { new(): TemporalCRSRefType }; }
-export var TemporalCRSRefType: { new(): TemporalCRSRefType };
+export interface TemporalCRSRefType extends _TemporalCRSRefType {  }
+
 
 /** A 1D coordinate reference system used for the recording of time. */
 interface _TemporalCRSType extends _AbstractReferenceSystemType {
@@ -4617,8 +4617,8 @@ interface _TemporalCRSType extends _AbstractReferenceSystemType {
 	/** Association to the temporal datum used by this CRS. */
 	usesTemporalDatum: TemporalDatumRefType;
 }
-export interface TemporalCRSType extends _TemporalCRSType { constructor: { new(): TemporalCRSType }; }
-export var TemporalCRSType: { new(): TemporalCRSType };
+export interface TemporalCRSType extends _TemporalCRSType {  }
+
 
 /** Association to a temporal coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _TemporalCSRefType extends BaseType {
@@ -4633,13 +4633,13 @@ interface _TemporalCSRefType extends BaseType {
 	remoteSchema?: string;
 	TemporalCS?: TemporalCSType;
 }
-export interface TemporalCSRefType extends _TemporalCSRefType { constructor: { new(): TemporalCSRefType }; }
-export var TemporalCSRefType: { new(): TemporalCSRefType };
+export interface TemporalCSRefType extends _TemporalCSRefType {  }
+
 
 /** A one-dimensional coordinate system containing a single time axis, used to describe the temporal position of a point in the specified time units from a specified time origin. A TemporalCS shall have one usesAxis association. */
 interface _TemporalCSType extends _AbstractCoordinateSystemType {}
-export interface TemporalCSType extends _TemporalCSType { constructor: { new(): TemporalCSType }; }
-export var TemporalCSType: { new(): TemporalCSType };
+export interface TemporalCSType extends _TemporalCSType {  }
+
 
 /** Partially defines the origin of a temporal coordinate reference system. This type restricts the AbstractDatumType to remove the "anchorPoint" and "realizationEpoch" elements. */
 interface _TemporalDatumBaseType extends _AbstractDatumType {
@@ -4656,8 +4656,8 @@ interface _TemporalDatumBaseType extends _AbstractDatumType {
 	/** Area or region in which this CRS object is valid. */
 	validArea?: ExtentType;
 }
-export interface TemporalDatumBaseType extends _TemporalDatumBaseType { constructor: { new(): TemporalDatumBaseType }; }
-export var TemporalDatumBaseType: { new(): TemporalDatumBaseType };
+export interface TemporalDatumBaseType extends _TemporalDatumBaseType {  }
+
 
 /** Association to a temporal datum, either referencing or containing the definition of that datum. */
 interface _TemporalDatumRefType extends BaseType {
@@ -4672,16 +4672,16 @@ interface _TemporalDatumRefType extends BaseType {
 	remoteSchema?: string;
 	TemporalDatum?: TemporalDatumType;
 }
-export interface TemporalDatumRefType extends _TemporalDatumRefType { constructor: { new(): TemporalDatumRefType }; }
-export var TemporalDatumRefType: { new(): TemporalDatumRefType };
+export interface TemporalDatumRefType extends _TemporalDatumRefType {  }
+
 
 /** Defines the origin of a temporal coordinate reference system. This type extends the TemporalDatumRestrictionType to add the "origin" element with the dateTime type. */
 interface _TemporalDatumType extends _TemporalDatumBaseType {
 	/** The date and time origin of this temporal datum. */
 	origin: Date;
 }
-export interface TemporalDatumType extends _TemporalDatumType { constructor: { new(): TemporalDatumType }; }
-export var TemporalDatumType: { new(): TemporalDatumType };
+export interface TemporalDatumType extends _TemporalDatumType {  }
+
 
 interface _TimeCalendarEraPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -4695,8 +4695,8 @@ interface _TimeCalendarEraPropertyType extends BaseType {
 	remoteSchema?: string;
 	TimeCalendarEra?: TimeCalendarEraType;
 }
-export interface TimeCalendarEraPropertyType extends _TimeCalendarEraPropertyType { constructor: { new(): TimeCalendarEraPropertyType }; }
-export var TimeCalendarEraPropertyType: { new(): TimeCalendarEraPropertyType };
+export interface TimeCalendarEraPropertyType extends _TimeCalendarEraPropertyType {  }
+
 
 /** In every calendar, years are numbered relative to the date of a
   * reference event that defines a calendar era.
@@ -4719,8 +4719,8 @@ interface _TimeCalendarEraType extends _DefinitionType {
 	/** Name or description of a mythical or historic event which fixes the position of the base scale of the calendar era. */
 	referenceEvent: StringOrRefType;
 }
-export interface TimeCalendarEraType extends _TimeCalendarEraType { constructor: { new(): TimeCalendarEraType }; }
-export var TimeCalendarEraType: { new(): TimeCalendarEraType };
+export interface TimeCalendarEraType extends _TimeCalendarEraType {  }
+
 
 interface _TimeCalendarPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -4734,8 +4734,8 @@ interface _TimeCalendarPropertyType extends BaseType {
 	remoteSchema?: string;
 	TimeCalendar?: TimeCalendarType;
 }
-export interface TimeCalendarPropertyType extends _TimeCalendarPropertyType { constructor: { new(): TimeCalendarPropertyType }; }
-export var TimeCalendarPropertyType: { new(): TimeCalendarPropertyType };
+export interface TimeCalendarPropertyType extends _TimeCalendarPropertyType {  }
+
 
 /** A calendar is a discrete temporal reference system
   * that provides a basis for defining temporal position to a resolution of one day.
@@ -4744,8 +4744,8 @@ interface _TimeCalendarType extends _AbstractTimeReferenceSystemType {
 	/** Link to the CalendarEras that it uses as a reference for dating. */
 	referenceFrame: TimeCalendarEraPropertyType[];
 }
-export interface TimeCalendarType extends _TimeCalendarType { constructor: { new(): TimeCalendarType }; }
-export var TimeCalendarType: { new(): TimeCalendarType };
+export interface TimeCalendarType extends _TimeCalendarType {  }
+
 
 interface _TimeClockPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -4759,8 +4759,8 @@ interface _TimeClockPropertyType extends BaseType {
 	remoteSchema?: string;
 	TimeClock?: TimeClockType;
 }
-export interface TimeClockPropertyType extends _TimeClockPropertyType { constructor: { new(): TimeClockPropertyType }; }
-export var TimeClockPropertyType: { new(): TimeClockPropertyType };
+export interface TimeClockPropertyType extends _TimeClockPropertyType {  }
+
 
 /** A clock provides a basis for defining temporal position within a day.
   * A clock must be used with a calendar in order to provide a complete description of a temporal position
@@ -4776,14 +4776,14 @@ interface _TimeClockType extends _AbstractTimeReferenceSystemType {
 	/** 24 hour local or UTC time that corresponds to the reference time. */
 	utcReference: string;
 }
-export interface TimeClockType extends _TimeClockType { constructor: { new(): TimeClockType }; }
-export var TimeClockType: { new(): TimeClockType };
+export interface TimeClockType extends _TimeClockType {  }
+
 
 interface _TimeComplexProxyType extends BaseType {
 	/** This element represents temporal topology complex. It shall be the connected acyclic directed graph composed of time nodes and time edges. */
 	TimeTopologyComplex?: TimeTopologyComplexType;
 }
-interface TimeComplexProxyType extends _TimeComplexProxyType { constructor: { new(): TimeComplexProxyType }; }
+interface TimeComplexProxyType extends _TimeComplexProxyType {  }
 
 /** A temporal coordinate system is based on a continuous interval scale defined in terms of a single time interval. */
 interface _TimeCoordinateSystemType extends _AbstractTimeReferenceSystemType {
@@ -4791,8 +4791,8 @@ interface _TimeCoordinateSystemType extends _AbstractTimeReferenceSystemType {
 	origin: TimeInstantPropertyType;
 	originPosition: TimePositionType;
 }
-export interface TimeCoordinateSystemType extends _TimeCoordinateSystemType { constructor: { new(): TimeCoordinateSystemType }; }
-export var TimeCoordinateSystemType: { new(): TimeCoordinateSystemType };
+export interface TimeCoordinateSystemType extends _TimeCoordinateSystemType {  }
+
 
 /** A time edge property can either be any time edge element encapsulated in an element of this type
   * or an XLink reference to a remote time edge element (where remote includes elements located elsewhere in the same document).
@@ -4812,8 +4812,8 @@ interface _TimeEdgePropertyType extends BaseType {
 	  * and its boundaries shall associate with two different time nodes. */
 	TimeEdge?: TimeEdgeType;
 }
-export interface TimeEdgePropertyType extends _TimeEdgePropertyType { constructor: { new(): TimeEdgePropertyType }; }
-export var TimeEdgePropertyType: { new(): TimeEdgePropertyType };
+export interface TimeEdgePropertyType extends _TimeEdgePropertyType {  }
+
 
 /** Type declaration of the element "TimeEdge". */
 interface _TimeEdgeType extends _AbstractTimeTopologyPrimitiveType {
@@ -4821,8 +4821,8 @@ interface _TimeEdgeType extends _AbstractTimeTopologyPrimitiveType {
 	extent?: TimePeriodPropertyType;
 	start: TimeNodePropertyType;
 }
-export interface TimeEdgeType extends _TimeEdgeType { constructor: { new(): TimeEdgeType }; }
-export var TimeEdgeType: { new(): TimeEdgeType };
+export interface TimeEdgeType extends _TimeEdgeType {  }
+
 
 interface _TimeGeometricPrimitivePropertyType extends _TimeGeometricPrimitiveProxyType {
 	actuate: xlink.actuateType;
@@ -4835,14 +4835,14 @@ interface _TimeGeometricPrimitivePropertyType extends _TimeGeometricPrimitivePro
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface TimeGeometricPrimitivePropertyType extends _TimeGeometricPrimitivePropertyType { constructor: { new(): TimeGeometricPrimitivePropertyType }; }
-export var TimeGeometricPrimitivePropertyType: { new(): TimeGeometricPrimitivePropertyType };
+export interface TimeGeometricPrimitivePropertyType extends _TimeGeometricPrimitivePropertyType {  }
+
 
 interface _TimeGeometricPrimitiveProxyType extends BaseType {
 	TimeInstant?: TimeInstantType;
 	TimePeriod?: TimePeriodType;
 }
-interface TimeGeometricPrimitiveProxyType extends _TimeGeometricPrimitiveProxyType { constructor: { new(): TimeGeometricPrimitiveProxyType }; }
+interface TimeGeometricPrimitiveProxyType extends _TimeGeometricPrimitiveProxyType {  }
 
 /** This enumerated data type specifies values for indeterminate positions. */
 export type TimeIndeterminateValueType = ("after" | "before" | "now" | "unknown");
@@ -4860,16 +4860,16 @@ interface _TimeInstantPropertyType extends BaseType {
 	remoteSchema?: string;
 	TimeInstant?: TimeInstantType;
 }
-export interface TimeInstantPropertyType extends _TimeInstantPropertyType { constructor: { new(): TimeInstantPropertyType }; }
-export var TimeInstantPropertyType: { new(): TimeInstantPropertyType };
+export interface TimeInstantPropertyType extends _TimeInstantPropertyType {  }
+
 
 /** Omit back-pointers begunBy, endedBy. */
 interface _TimeInstantType extends _AbstractTimeGeometricPrimitiveType {
 	/** Direct representation of a temporal position */
 	timePosition: TimePositionType;
 }
-export interface TimeInstantType extends _TimeInstantType { constructor: { new(): TimeInstantType }; }
-export var TimeInstantType: { new(): TimeInstantType };
+export interface TimeInstantType extends _TimeInstantType {  }
+
 
 /** This type extends the built-in xsd:decimal simple type to allow floating-point
   * values for temporal length. According to  the ISO 11404 model you have to use
@@ -4882,8 +4882,8 @@ interface _TimeIntervalLengthType extends Primitive._number {
 	radix?: number;
 	unit: string;
 }
-export interface TimeIntervalLengthType extends _TimeIntervalLengthType { constructor: { new(): TimeIntervalLengthType }; }
-export var TimeIntervalLengthType: { new(): TimeIntervalLengthType };
+export interface TimeIntervalLengthType extends _TimeIntervalLengthType {  }
+
 
 /** A time node property can either be any time node element encapsulated in an element of this type
   * or an XLink reference to a remote time node element (where remote includes elements located elsewhere in the same document).
@@ -4904,8 +4904,8 @@ interface _TimeNodePropertyType extends BaseType {
 	  * An isolated node may not be an element of any temporal topology complex. */
 	TimeNode?: TimeNodeType;
 }
-export interface TimeNodePropertyType extends _TimeNodePropertyType { constructor: { new(): TimeNodePropertyType }; }
-export var TimeNodePropertyType: { new(): TimeNodePropertyType };
+export interface TimeNodePropertyType extends _TimeNodePropertyType {  }
+
 
 /** Type declaration of the element "TimeNode". */
 interface _TimeNodeType extends _AbstractTimeTopologyPrimitiveType {
@@ -4913,11 +4913,11 @@ interface _TimeNodeType extends _AbstractTimeTopologyPrimitiveType {
 	position?: TimeInstantPropertyType;
 	previousEdge?: TimeEdgePropertyType[];
 }
-export interface TimeNodeType extends _TimeNodeType { constructor: { new(): TimeNodeType }; }
-export var TimeNodeType: { new(): TimeNodeType };
+export interface TimeNodeType extends _TimeNodeType {  }
+
 
 interface _TimeObjectProxyType extends _TimePrimitiveProxyType, _TimeComplexProxyType {}
-interface TimeObjectProxyType extends _TimeObjectProxyType { constructor: { new(): TimeObjectProxyType }; }
+interface TimeObjectProxyType extends _TimeObjectProxyType {  }
 
 interface _TimeOrdinalEraPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -4931,8 +4931,8 @@ interface _TimeOrdinalEraPropertyType extends BaseType {
 	remoteSchema?: string;
 	TimeOrdinalEra?: TimeOrdinalEraType;
 }
-export interface TimeOrdinalEraPropertyType extends _TimeOrdinalEraPropertyType { constructor: { new(): TimeOrdinalEraPropertyType }; }
-export var TimeOrdinalEraPropertyType: { new(): TimeOrdinalEraPropertyType };
+export interface TimeOrdinalEraPropertyType extends _TimeOrdinalEraPropertyType {  }
+
 
 /** Ordinal temporal reference systems are often hierarchically structured
   * such that an ordinal era at a given level of the hierarchy includes a
@@ -4957,8 +4957,8 @@ interface _TimeOrdinalEraType extends _DefinitionType {
 	relatedTime?: RelatedTimeType[];
 	start: TimeNodePropertyType;
 }
-export interface TimeOrdinalEraType extends _TimeOrdinalEraType { constructor: { new(): TimeOrdinalEraType }; }
-export var TimeOrdinalEraType: { new(): TimeOrdinalEraType };
+export interface TimeOrdinalEraType extends _TimeOrdinalEraType {  }
+
 
 /** In an ordinal reference system the order of events in time can be well
   * established, but the magnitude of the intervals between them can not be
@@ -4966,8 +4966,8 @@ export var TimeOrdinalEraType: { new(): TimeOrdinalEraType };
 interface _TimeOrdinalReferenceSystemType extends _AbstractTimeReferenceSystemType {
 	component: TimeOrdinalEraPropertyType[];
 }
-export interface TimeOrdinalReferenceSystemType extends _TimeOrdinalReferenceSystemType { constructor: { new(): TimeOrdinalReferenceSystemType }; }
-export var TimeOrdinalReferenceSystemType: { new(): TimeOrdinalReferenceSystemType };
+export interface TimeOrdinalReferenceSystemType extends _TimeOrdinalReferenceSystemType {  }
+
 
 interface _TimePeriodPropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -4981,8 +4981,8 @@ interface _TimePeriodPropertyType extends BaseType {
 	remoteSchema?: string;
 	TimePeriod?: TimePeriodType;
 }
-export interface TimePeriodPropertyType extends _TimePeriodPropertyType { constructor: { new(): TimePeriodPropertyType }; }
-export var TimePeriodPropertyType: { new(): TimePeriodPropertyType };
+export interface TimePeriodPropertyType extends _TimePeriodPropertyType {  }
+
 
 interface _TimePeriodType extends _AbstractTimeGeometricPrimitiveType {
 	begin: TimeInstantPropertyType;
@@ -4998,8 +4998,8 @@ interface _TimePeriodType extends _AbstractTimeGeometricPrimitiveType {
 	  * according to section 3.14.6, rule 2.2.4 in XML Schema, Part 1. */
 	timeInterval?: TimeIntervalLengthType;
 }
-export interface TimePeriodType extends _TimePeriodType { constructor: { new(): TimePeriodType }; }
-export var TimePeriodType: { new(): TimePeriodType };
+export interface TimePeriodType extends _TimePeriodType {  }
+
 
 /** Direct representation of a temporal position.
   * Indeterminate time values are also allowed, as described in ISO 19108. The indeterminatePosition
@@ -5012,8 +5012,8 @@ interface _TimePositionType extends _TimePositionUnion {
 	frame?: string;
 	indeterminatePosition?: TimeIndeterminateValueType;
 }
-export interface TimePositionType extends _TimePositionType { constructor: { new(): TimePositionType }; }
-export var TimePositionType: { new(): TimePositionType };
+export interface TimePositionType extends _TimePositionType {  }
+
 
 /** The ISO 19108:2002 hierarchy of subtypes for temporal position are collapsed
   * by defining a union of XML Schema simple types for indicating temporal position relative
@@ -5042,11 +5042,11 @@ interface _TimePrimitivePropertyType extends _TimePrimitiveProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface TimePrimitivePropertyType extends _TimePrimitivePropertyType { constructor: { new(): TimePrimitivePropertyType }; }
-export var TimePrimitivePropertyType: { new(): TimePrimitivePropertyType };
+export interface TimePrimitivePropertyType extends _TimePrimitivePropertyType {  }
+
 
 interface _TimePrimitiveProxyType extends _TimeTopologyPrimitiveProxyType, _TimeGeometricPrimitiveProxyType {}
-interface TimePrimitiveProxyType extends _TimePrimitiveProxyType { constructor: { new(): TimePrimitiveProxyType }; }
+interface TimePrimitiveProxyType extends _TimePrimitiveProxyType {  }
 
 interface _TimeReferenceSystemProxyType extends BaseType {
 	TimeCalendar?: TimeCalendarType;
@@ -5054,12 +5054,12 @@ interface _TimeReferenceSystemProxyType extends BaseType {
 	TimeCoordinateSystem?: TimeCoordinateSystemType;
 	TimeOrdinalReferenceSystem?: TimeOrdinalReferenceSystemType;
 }
-interface TimeReferenceSystemProxyType extends _TimeReferenceSystemProxyType { constructor: { new(): TimeReferenceSystemProxyType }; }
+interface TimeReferenceSystemProxyType extends _TimeReferenceSystemProxyType {  }
 
 interface _TimeSliceProxyType extends BaseType {
 	MovingObjectStatus?: MovingObjectStatusType;
 }
-interface TimeSliceProxyType extends _TimeSliceProxyType { constructor: { new(): TimeSliceProxyType }; }
+interface TimeSliceProxyType extends _TimeSliceProxyType {  }
 
 /** A time topology complex property can either be any time topology complex element
   * encapsulated in an element of this type or an XLink reference to a remote time topology complex element
@@ -5078,15 +5078,15 @@ interface _TimeTopologyComplexPropertyType extends BaseType {
 	/** This element represents temporal topology complex. It shall be the connected acyclic directed graph composed of time nodes and time edges. */
 	TimeTopologyComplex?: TimeTopologyComplexType;
 }
-export interface TimeTopologyComplexPropertyType extends _TimeTopologyComplexPropertyType { constructor: { new(): TimeTopologyComplexPropertyType }; }
-export var TimeTopologyComplexPropertyType: { new(): TimeTopologyComplexPropertyType };
+export interface TimeTopologyComplexPropertyType extends _TimeTopologyComplexPropertyType {  }
+
 
 /** A temporal topology complex. */
 interface _TimeTopologyComplexType extends _AbstractTimeComplexType {
 	primitive: TimeTopologyPrimitivePropertyType[];
 }
-export interface TimeTopologyComplexType extends _TimeTopologyComplexType { constructor: { new(): TimeTopologyComplexType }; }
-export var TimeTopologyComplexType: { new(): TimeTopologyComplexType };
+export interface TimeTopologyComplexType extends _TimeTopologyComplexType {  }
+
 
 /** A time topology primitive property can either hold any time topology complex element
   * eor carry an XLink reference to a remote time topology complex element
@@ -5103,8 +5103,8 @@ interface _TimeTopologyPrimitivePropertyType extends _TimeTopologyPrimitiveProxy
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface TimeTopologyPrimitivePropertyType extends _TimeTopologyPrimitivePropertyType { constructor: { new(): TimeTopologyPrimitivePropertyType }; }
-export var TimeTopologyPrimitivePropertyType: { new(): TimeTopologyPrimitivePropertyType };
+export interface TimeTopologyPrimitivePropertyType extends _TimeTopologyPrimitivePropertyType {  }
+
 
 interface _TimeTopologyPrimitiveProxyType extends BaseType {
 	/** "TimeNode" is a zero dimensional temporal topology primitive,
@@ -5117,12 +5117,12 @@ interface _TimeTopologyPrimitiveProxyType extends BaseType {
 	  * and its boundaries shall associate with two different time nodes. */
 	TimeEdge?: TimeEdgeType;
 }
-interface TimeTopologyPrimitiveProxyType extends _TimeTopologyPrimitiveProxyType { constructor: { new(): TimeTopologyPrimitiveProxyType }; }
+interface TimeTopologyPrimitiveProxyType extends _TimeTopologyPrimitiveProxyType {  }
 
 /** Value of a time or temporal quantity, with its units. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for a time value, such as seconds or weeks. */
 interface _TimeType extends _MeasureType {}
-export interface TimeType extends _TimeType { constructor: { new(): TimeType }; }
-export var TimeType: { new(): TimeType };
+export interface TimeType extends _TimeType {  }
+
 
 /** Standard units for measuring time intervals (see ISO 31-1). */
 export type TimeUnitType = string;
@@ -5170,8 +5170,8 @@ interface _TinType extends _TriangulatedSurfaceType {
 	  * pathological segments as a set of line strings. */
 	stopLines?: LineStringSegmentArrayPropertyType[];
 }
-export interface TinType extends _TinType { constructor: { new(): TinType }; }
-export var TinType: { new(): TinType };
+export interface TinType extends _TinType {  }
+
 
 interface _TinTypeControlPointType extends BaseType {
 	/** This property element either references a point via the XLink-attributes or contains the point element. pointProperty
@@ -5181,7 +5181,7 @@ interface _TinTypeControlPointType extends BaseType {
 	pos: DirectPositionType[];
 	posList: DirectPositionListType;
 }
-interface TinTypeControlPointType extends _TinTypeControlPointType { constructor: { new(): TinTypeControlPointType }; }
+interface TinTypeControlPointType extends _TinTypeControlPointType {  }
 
 /** This Property can be used to embed a TopoComplex in a feature collection. */
 interface _TopoComplexMemberType extends BaseType {
@@ -5196,8 +5196,8 @@ interface _TopoComplexMemberType extends BaseType {
 	remoteSchema?: string;
 	TopoComplex?: TopoComplexType;
 }
-export interface TopoComplexMemberType extends _TopoComplexMemberType { constructor: { new(): TopoComplexMemberType }; }
-export var TopoComplexMemberType: { new(): TopoComplexMemberType };
+export interface TopoComplexMemberType extends _TopoComplexMemberType {  }
+
 
 /** This type represents a TP_Complex capable of holding topological primitives. */
 interface _TopoComplexType extends _AbstractTopologyType {
@@ -5209,27 +5209,27 @@ interface _TopoComplexType extends _AbstractTopologyType {
 	topoPrimitiveMember?: TopoPrimitiveMemberType[];
 	topoPrimitiveMembers?: TopoPrimitiveArrayAssociationType;
 }
-export interface TopoComplexType extends _TopoComplexType { constructor: { new(): TopoComplexType }; }
-export var TopoComplexType: { new(): TopoComplexType };
+export interface TopoComplexType extends _TopoComplexType {  }
+
 
 interface _TopoCurvePropertyType extends BaseType {
 	TopoCurve: TopoCurveType;
 }
-export interface TopoCurvePropertyType extends _TopoCurvePropertyType { constructor: { new(): TopoCurvePropertyType }; }
-export var TopoCurvePropertyType: { new(): TopoCurvePropertyType };
+export interface TopoCurvePropertyType extends _TopoCurvePropertyType {  }
+
 
 /** The end Node of each directedEdge of a TopoCurveType
   * is the start Node of the next directedEdge of the TopoCurveType in document order.  The TopoCurve type and element represent a homogeneous topological expression, a list of directed edges, which if realised are isomorphic to a geometric curve primitive. The intended use of TopoCurve is to appear within a line feature instance to express the structural and geometric relationships of this line to other features via the shared edge definitions. */
 interface _TopoCurveType extends _AbstractTopologyType {
 	directedEdge: DirectedEdgePropertyType[];
 }
-export interface TopoCurveType extends _TopoCurveType { constructor: { new(): TopoCurveType }; }
-export var TopoCurveType: { new(): TopoCurveType };
+export interface TopoCurveType extends _TopoCurveType {  }
+
 
 interface _TopologyProxyType extends _TopoPrimitiveProxyType {
 	TopoComplex?: TopoComplexType;
 }
-interface TopologyProxyType extends _TopologyProxyType { constructor: { new(): TopologyProxyType }; }
+interface TopologyProxyType extends _TopologyProxyType {  }
 
 interface _TopologyStylePropertyType extends BaseType {
 	actuate: xlink.actuateType;
@@ -5245,8 +5245,8 @@ interface _TopologyStylePropertyType extends BaseType {
 	/** The style descriptor for topologies of a feature. Describes individual topology elements styles. */
 	TopologyStyle?: TopologyStyleType;
 }
-export interface TopologyStylePropertyType extends _TopologyStylePropertyType { constructor: { new(): TopologyStylePropertyType }; }
-export var TopologyStylePropertyType: { new(): TopologyStylePropertyType };
+export interface TopologyStylePropertyType extends _TopologyStylePropertyType {  }
+
 
 /** [complexType of] The style descriptor for topologies of a feature. Describes individual topology elements styles. */
 interface _TopologyStyleType extends _BaseStyleDescriptorType {
@@ -5259,29 +5259,29 @@ interface _TopologyStyleType extends _BaseStyleDescriptorType {
 	/** The symbol property. Extends the gml:AssociationType to allow for remote referencing of symbols. */
 	symbol: SymbolType;
 }
-export interface TopologyStyleType extends _TopologyStyleType { constructor: { new(): TopologyStyleType }; }
-export var TopologyStyleType: { new(): TopologyStyleType };
+export interface TopologyStyleType extends _TopologyStyleType {  }
+
 
 interface _TopoPointPropertyType extends BaseType {
 	TopoPoint: TopoPointType;
 }
-export interface TopoPointPropertyType extends _TopoPointPropertyType { constructor: { new(): TopoPointPropertyType }; }
-export var TopoPointPropertyType: { new(): TopoPointPropertyType };
+export interface TopoPointPropertyType extends _TopoPointPropertyType {  }
+
 
 /** The intended use of TopoPoint is to appear within a point feature to express the structural and possibly geometric relationships of this point to other features via shared node definitions. Note the orientation assigned to the directedNode has no meaning in this context. It is preserved for symmetry with the types and elements which follow. */
 interface _TopoPointType extends _AbstractTopologyType {
 	directedNode: DirectedNodePropertyType;
 }
-export interface TopoPointType extends _TopoPointType { constructor: { new(): TopoPointType }; }
-export var TopoPointType: { new(): TopoPointType };
+export interface TopoPointType extends _TopoPointType {  }
+
 
 /** This type supports embedding an array of topological primitives in a TopoComplex */
 interface _TopoPrimitiveArrayAssociationType extends BaseType {
 	/** Substitution group branch for Topo Primitives, used by TopoPrimitiveArrayAssociationType */
 	TopoPrimitive?: TopoPrimitiveProxyType[];
 }
-export interface TopoPrimitiveArrayAssociationType extends _TopoPrimitiveArrayAssociationType { constructor: { new(): TopoPrimitiveArrayAssociationType }; }
-export var TopoPrimitiveArrayAssociationType: { new(): TopoPrimitiveArrayAssociationType };
+export interface TopoPrimitiveArrayAssociationType extends _TopoPrimitiveArrayAssociationType {  }
+
 
 /** This type supports embedding topological primitives in a TopoComplex. */
 interface _TopoPrimitiveMemberType extends _TopoPrimitiveProxyType {
@@ -5295,8 +5295,8 @@ interface _TopoPrimitiveMemberType extends _TopoPrimitiveProxyType {
 	/** Reference to an XML Schema fragment that specifies the content model of the propertys value. This is in conformance with the XML Schema Section 4.14 Referencing Schemas from Elsewhere. */
 	remoteSchema?: string;
 }
-export interface TopoPrimitiveMemberType extends _TopoPrimitiveMemberType { constructor: { new(): TopoPrimitiveMemberType }; }
-export var TopoPrimitiveMemberType: { new(): TopoPrimitiveMemberType };
+export interface TopoPrimitiveMemberType extends _TopoPrimitiveMemberType {  }
+
 
 interface _TopoPrimitiveProxyType extends BaseType {
 	Edge?: EdgeType;
@@ -5304,47 +5304,47 @@ interface _TopoPrimitiveProxyType extends BaseType {
 	Face?: FaceType;
 	TopoSolid?: TopoSolidType;
 }
-interface TopoPrimitiveProxyType extends _TopoPrimitiveProxyType { constructor: { new(): TopoPrimitiveProxyType }; }
+interface TopoPrimitiveProxyType extends _TopoPrimitiveProxyType {  }
 
 /** The topological boundary of a TopoSolid consists of a set of directed faces. Note that all faces associated with the TopoSolid, including dangling faces, appear in the boundary. The coboundary of a TopoSolid is empty and hence requires no representation. */
 interface _TopoSolidType extends _AbstractTopoPrimitiveType {
 	directedFace: DirectedFacePropertyType[];
 }
-export interface TopoSolidType extends _TopoSolidType { constructor: { new(): TopoSolidType }; }
-export var TopoSolidType: { new(): TopoSolidType };
+export interface TopoSolidType extends _TopoSolidType {  }
+
 
 interface _TopoSurfacePropertyType extends BaseType {
 	TopoSurface: TopoSurfaceType;
 }
-export interface TopoSurfacePropertyType extends _TopoSurfacePropertyType { constructor: { new(): TopoSurfacePropertyType }; }
-export var TopoSurfacePropertyType: { new(): TopoSurfacePropertyType };
+export interface TopoSurfacePropertyType extends _TopoSurfacePropertyType {  }
+
 
 /** The TopoSurface type and element represent a homogeneous topological expression, a set of directed faces, which if realised are isomorphic to a geometric surface primitive. The intended use of TopoSurface is to appear within a surface feature instance to express the structural and possibly geometric relationships of this surface to other features via the shared face definitions. */
 interface _TopoSurfaceType extends _AbstractTopologyType {
 	directedFace: DirectedFacePropertyType[];
 }
-export interface TopoSurfaceType extends _TopoSurfaceType { constructor: { new(): TopoSurfaceType }; }
-export var TopoSurfaceType: { new(): TopoSurfaceType };
+export interface TopoSurfaceType extends _TopoSurfaceType {  }
+
 
 interface _TopoVolumePropertyType extends BaseType {
 	TopoVolume: TopoVolumeType;
 }
-export interface TopoVolumePropertyType extends _TopoVolumePropertyType { constructor: { new(): TopoVolumePropertyType }; }
-export var TopoVolumePropertyType: { new(): TopoVolumePropertyType };
+export interface TopoVolumePropertyType extends _TopoVolumePropertyType {  }
+
 
 /** The TopoVolume type and element represent a homogeneous topological expression, a set of directed TopoSolids, which if realised are isomorphic to a geometric solid primitive. The intended use of TopoVolume is to appear within a 3D solid feature instance to express the structural and geometric relationships of this solid to other features via the shared TopoSolid definitions.  . Note the orientation assigned to the directedSolid has no meaning in three dimensions. It is preserved for symmetry with the preceding types and elements. */
 interface _TopoVolumeType extends _AbstractTopologyType {
 	directedTopoSolid: DirectedTopoSolidPropertyType[];
 }
-export interface TopoVolumeType extends _TopoVolumeType { constructor: { new(): TopoVolumeType }; }
-export var TopoVolumeType: { new(): TopoVolumeType };
+export interface TopoVolumeType extends _TopoVolumeType {  }
+
 
 /** The track of a moving object is a sequence of specialized timeslices        that indicate the status of the object. */
 interface _TrackType extends _HistoryPropertyType {
 	MovingObjectStatus: MovingObjectStatusType[];
 }
-export interface TrackType extends _TrackType { constructor: { new(): TrackType }; }
-export var TrackType: { new(): TrackType };
+export interface TrackType extends _TrackType {  }
+
 
 /** Association to a transformation, either referencing or containing the definition of that transformation. */
 interface _TransformationRefType extends BaseType {
@@ -5359,8 +5359,8 @@ interface _TransformationRefType extends BaseType {
 	remoteSchema?: string;
 	Transformation?: TransformationType;
 }
-export interface TransformationRefType extends _TransformationRefType { constructor: { new(): TransformationRefType }; }
-export var TransformationRefType: { new(): TransformationRefType };
+export interface TransformationRefType extends _TransformationRefType {  }
+
 
 /** A concrete operation on coordinates that usually includes a change of datum. The parameters of a coordinate transformation are empirically derived from data containing the coordinates of a series of points in both coordinate reference systems. This computational process is usually "over-determined", allowing derivation of error (or accuracy) estimates for the transformation. Also, the stochastic nature of the parameters may result in multiple (different) versions of the same coordinate transformation.
   *
@@ -5371,30 +5371,30 @@ interface _TransformationType extends _AbstractGeneralTransformationType {
 	/** Composition association to a parameter value used by this coordinate operation. */
 	usesValue?: ParameterValueType[];
 }
-export interface TransformationType extends _TransformationType { constructor: { new(): TransformationType }; }
-export var TransformationType: { new(): TransformationType };
+export interface TransformationType extends _TransformationType {  }
+
 
 /** This type defines a container for an array of
   * triangle patches. */
 interface _TrianglePatchArrayPropertyType extends _SurfacePatchArrayPropertyType {
 	Triangle?: TriangleType[];
 }
-export interface TrianglePatchArrayPropertyType extends _TrianglePatchArrayPropertyType { constructor: { new(): TrianglePatchArrayPropertyType }; }
-export var TrianglePatchArrayPropertyType: { new(): TrianglePatchArrayPropertyType };
+export interface TrianglePatchArrayPropertyType extends _TrianglePatchArrayPropertyType {  }
+
 
 /** Represents a triangle as a surface with an outer boundary consisting of a linear ring. Note that this is a polygon (subtype) with no inner boundaries. The number of points in the linear ring must be four. */
 interface _TriangleType extends _AbstractSurfacePatchType, _ExteriorProxyType {
 	/** The attribute "interpolation" specifies the interpolation mechanism used for this surface patch. Currently only planar surface patches are defined in GML 3, the attribute is fixed to "planar", i.e. the interpolation method shall return points on a single plane. The boundary of the patch shall be contained within that plane. */
 	interpolation: SurfaceInterpolationType;
 }
-export interface TriangleType extends _TriangleType { constructor: { new(): TriangleType }; }
-export var TriangleType: { new(): TriangleType };
+export interface TriangleType extends _TriangleType {  }
+
 
 interface _TriangulatedSurfaceProxyType extends BaseType {
 	TriangulatedSurface?: TriangulatedSurfaceType;
 	Tin?: TinType;
 }
-interface TriangulatedSurfaceProxyType extends _TriangulatedSurfaceProxyType { constructor: { new(): TriangulatedSurfaceProxyType }; }
+interface TriangulatedSurfaceProxyType extends _TriangulatedSurfaceProxyType {  }
 
 /** A triangulated surface is a polyhedral
   * surface that is composed only of triangles. There is no
@@ -5411,8 +5411,8 @@ interface _TriangulatedSurfaceType extends _SurfaceType {
 	  * shall be preserved when processing the list. */
 	trianglePatches: TrianglePatchArrayPropertyType;
 }
-export interface TriangulatedSurfaceType extends _TriangulatedSurfaceType { constructor: { new(): TriangulatedSurfaceType }; }
-export var TriangulatedSurfaceType: { new(): TriangulatedSurfaceType };
+export interface TriangulatedSurfaceType extends _TriangulatedSurfaceType {  }
+
 
 interface _UnitDefinitionProxyType extends BaseType {
 	UnitDefinition?: UnitDefinitionType;
@@ -5420,7 +5420,7 @@ interface _UnitDefinitionProxyType extends BaseType {
 	ConventionalUnit?: ConventionalUnitType;
 	DerivedUnit?: DerivedUnitType;
 }
-interface UnitDefinitionProxyType extends _UnitDefinitionProxyType { constructor: { new(): UnitDefinitionProxyType }; }
+interface UnitDefinitionProxyType extends _UnitDefinitionProxyType {  }
 
 /** Definition of a unit of measure (or uom). The definition includes a quantityType property, which indicates the phenomenon to which the units apply, and a catalogSymbol, which gives the short symbol used for this unit. This element is used when the relationship of this unit to other units or units systems is unknown. */
 interface _UnitDefinitionType extends _DefinitionType {
@@ -5429,16 +5429,16 @@ interface _UnitDefinitionType extends _DefinitionType {
 	/** Informal description of the phenomenon or type of quantity that is measured or observed. For example, "length", "angle", "time", "pressure", or "temperature". When the quantity is the result of an observation or measurement, this term is known as Observable Type or Measurand. */
 	quantityType: StringOrRefType;
 }
-export interface UnitDefinitionType extends _UnitDefinitionType { constructor: { new(): UnitDefinitionType }; }
-export var UnitDefinitionType: { new(): UnitDefinitionType };
+export interface UnitDefinitionType extends _UnitDefinitionType {  }
+
 
 /** Reference to a unit of measure definition that applies to all the numerical values described by the element containing this element. Notice that a complexType which needs to include the uom attribute can do so by extending this complexType. Alternately, this complexType can be used as a pattern for a new complexType. */
 interface _UnitOfMeasureType extends BaseType {
 	/** Reference to a unit of measure definition, usually within the same XML document but possibly outside the XML document which contains this reference. For a reference within the same XML document, the "#" symbol should be used, followed by a text abbreviation of the unit name. However, the "#" symbol may be optional, and still may be interpreted as a reference. */
 	uom: string;
 }
-export interface UnitOfMeasureType extends _UnitOfMeasureType { constructor: { new(): UnitOfMeasureType }; }
-export var UnitOfMeasureType: { new(): UnitOfMeasureType };
+export interface UnitOfMeasureType extends _UnitOfMeasureType {  }
+
 
 /** Association to a user-defined coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _UserDefinedCSRefType extends BaseType {
@@ -5453,13 +5453,13 @@ interface _UserDefinedCSRefType extends BaseType {
 	remoteSchema?: string;
 	UserDefinedCS?: UserDefinedCSType;
 }
-export interface UserDefinedCSRefType extends _UserDefinedCSRefType { constructor: { new(): UserDefinedCSRefType }; }
-export var UserDefinedCSRefType: { new(): UserDefinedCSRefType };
+export interface UserDefinedCSRefType extends _UserDefinedCSRefType {  }
+
 
 /** A two- or three-dimensional coordinate system that consists of any combination of coordinate axes not covered by any other coordinate system type. An example is a multilinear coordinate system which contains one coordinate axis that may have any 1-D shape which has no intersections with itself. This non-straight axis is supplemented by one or two straight axes to complete a 2 or 3 dimensional coordinate system. The non-straight axis is typically incrementally straight or curved. A UserDefinedCS shall have two or three usesAxis associations. */
 interface _UserDefinedCSType extends _AbstractCoordinateSystemType {}
-export interface UserDefinedCSType extends _UserDefinedCSType { constructor: { new(): UserDefinedCSType }; }
-export var UserDefinedCSType: { new(): UserDefinedCSType };
+export interface UserDefinedCSType extends _UserDefinedCSType {  }
+
 
 /** GML property which refers to, or contains, a set of homogeneously typed Values. */
 interface _ValueArrayPropertyType extends BaseType {
@@ -5491,16 +5491,16 @@ interface _ValueArrayPropertyType extends BaseType {
 	/** A space separated list of amounts or nulls.  The amounts use the XML Schema type double.  A single XML attribute uom (unit of measure) is required, whose value is a URI which identifies the definition of the scale or units by which all the amounts in the list must be multiplied. */
 	QuantityList: MeasureOrNullListType[];
 }
-export interface ValueArrayPropertyType extends _ValueArrayPropertyType { constructor: { new(): ValueArrayPropertyType }; }
-export var ValueArrayPropertyType: { new(): ValueArrayPropertyType };
+export interface ValueArrayPropertyType extends _ValueArrayPropertyType {  }
+
 
 /** A Value Array is used for homogeneous arrays of primitive and aggregate values.  The member values may be scalars, composites, arrays or lists.  ValueArray has the same content model as CompositeValue, but the member values must be homogeneous.  The element declaration contains a Schematron constraint which expresses this restriction precisely.            Since the members are homogeneous, the referenceSystem (uom, codeSpace) may be specified on the ValueArray itself and implicitly inherited by all the members if desired.    Note that a_ScalarValueList is preferred for arrays of Scalar Values since this is a more efficient encoding. */
 interface _ValueArrayType extends _CompositeValueType {
 	codeSpace?: string;
 	uom?: string;
 }
-export interface ValueArrayType extends _ValueArrayType { constructor: { new(): ValueArrayType }; }
-export var ValueArrayType: { new(): ValueArrayType };
+export interface ValueArrayType extends _ValueArrayType {  }
+
 
 /** GML property which refers to, or contains, a Value */
 interface _ValuePropertyType extends _ObjectProxyType, _CompositeValueProxyType {
@@ -5537,8 +5537,8 @@ interface _ValuePropertyType extends _ObjectProxyType, _CompositeValueProxyType 
 	/** A space separated list of amounts or nulls.  The amounts use the XML Schema type double.  A single XML attribute uom (unit of measure) is required, whose value is a URI which identifies the definition of the scale or units by which all the amounts in the list must be multiplied. */
 	QuantityList?: MeasureOrNullListType;
 }
-export interface ValuePropertyType extends _ValuePropertyType { constructor: { new(): ValuePropertyType }; }
-export var ValuePropertyType: { new(): ValuePropertyType };
+export interface ValuePropertyType extends _ValuePropertyType {  }
+
 
 /** Vector instances hold the compoents for a (usually spatial) vector within some coordinate reference system (CRS).
   * Since Vectors will often be included in larger objects that have references to CRS, the "srsName" attribute may be missing.
@@ -5560,8 +5560,8 @@ interface _VerticalCRSRefType extends BaseType {
 	remoteSchema?: string;
 	VerticalCRS?: VerticalCRSType;
 }
-export interface VerticalCRSRefType extends _VerticalCRSRefType { constructor: { new(): VerticalCRSRefType }; }
-export var VerticalCRSRefType: { new(): VerticalCRSRefType };
+export interface VerticalCRSRefType extends _VerticalCRSRefType {  }
+
 
 /** A 1D coordinate reference system used for recording heights or depths. Vertical CRSs make use of the direction of gravity to define the concept of height or depth, but the relationship with gravity may not be straightforward. By implication, ellipsoidal heights (h) cannot be captured in a vertical coordinate reference system. Ellipsoidal heights cannot exist independently, but only as an inseparable part of a 3D coordinate tuple defined in a geographic 3D coordinate reference system. */
 interface _VerticalCRSType extends _AbstractReferenceSystemType {
@@ -5570,8 +5570,8 @@ interface _VerticalCRSType extends _AbstractReferenceSystemType {
 	/** Association to the vertical datum used by this CRS. */
 	usesVerticalDatum: VerticalDatumRefType;
 }
-export interface VerticalCRSType extends _VerticalCRSType { constructor: { new(): VerticalCRSType }; }
-export var VerticalCRSType: { new(): VerticalCRSType };
+export interface VerticalCRSType extends _VerticalCRSType {  }
+
 
 /** Association to a vertical coordinate system, either referencing or containing the definition of that coordinate system. */
 interface _VerticalCSRefType extends BaseType {
@@ -5586,13 +5586,13 @@ interface _VerticalCSRefType extends BaseType {
 	remoteSchema?: string;
 	VerticalCS?: VerticalCSType;
 }
-export interface VerticalCSRefType extends _VerticalCSRefType { constructor: { new(): VerticalCSRefType }; }
-export var VerticalCSRefType: { new(): VerticalCSRefType };
+export interface VerticalCSRefType extends _VerticalCSRefType {  }
+
 
 /** A one-dimensional coordinate system used to record the heights (or depths) of points. Such a coordinate system is usually dependent on the Earth's gravity field, perhaps loosely as when atmospheric pressure is the basis for the vertical coordinate system axis. A VerticalCS shall have one usesAxis association. */
 interface _VerticalCSType extends _AbstractCoordinateSystemType {}
-export interface VerticalCSType extends _VerticalCSType { constructor: { new(): VerticalCSType }; }
-export var VerticalCSType: { new(): VerticalCSType };
+export interface VerticalCSType extends _VerticalCSType {  }
+
 
 /** Association to a vertical datum, either referencing or containing the definition of that datum. */
 interface _VerticalDatumRefType extends BaseType {
@@ -5607,28 +5607,28 @@ interface _VerticalDatumRefType extends BaseType {
 	remoteSchema?: string;
 	VerticalDatum?: VerticalDatumType;
 }
-export interface VerticalDatumRefType extends _VerticalDatumRefType { constructor: { new(): VerticalDatumRefType }; }
-export var VerticalDatumRefType: { new(): VerticalDatumRefType };
+export interface VerticalDatumRefType extends _VerticalDatumRefType {  }
+
 
 /** A textual description and/or a set of parameters identifying a particular reference level surface used as a zero-height surface, including its position with respect to the Earth for any of the height types recognized by this standard. There are several types of Vertical Datums, and each may place constraints on the Coordinate Axis with which it is combined to create a Vertical CRS. */
 interface _VerticalDatumType extends _AbstractDatumType {
 	verticalDatumType?: VerticalDatumTypeType;
 }
-export interface VerticalDatumType extends _VerticalDatumType { constructor: { new(): VerticalDatumType }; }
-export var VerticalDatumType: { new(): VerticalDatumType };
+export interface VerticalDatumType extends _VerticalDatumType {  }
+
 
 /** Type of a vertical datum. */
 interface _VerticalDatumTypeType extends _CodeType {
 	/** Reference to a source of information specifying the values and meanings of all the allowed string values for this VerticalDatumTypeType. */
 	codeSpace: string;
 }
-export interface VerticalDatumTypeType extends _VerticalDatumTypeType { constructor: { new(): VerticalDatumTypeType }; }
-export var VerticalDatumTypeType: { new(): VerticalDatumTypeType };
+export interface VerticalDatumTypeType extends _VerticalDatumTypeType {  }
+
 
 /** Value of a spatial volume quantity, with its units. Uses the MeasureType with the restriction that the unit of measure referenced by uom must be suitable for a volume, such as cubic metres or cubic feet. */
 interface _VolumeType extends _MeasureType {}
-export interface VolumeType extends _VolumeType { constructor: { new(): VolumeType }; }
-export var VolumeType: { new(): VolumeType };
+export interface VolumeType extends _VolumeType {  }
+
 
 export interface document extends BaseType {
 	absoluteExternalPositionalAccuracy: AbsoluteExternalPositionalAccuracyType;
