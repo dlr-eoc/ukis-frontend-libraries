@@ -5,6 +5,7 @@
 
 
 ### Changes
+* **@dlr-eoc/map-ol:** The function mapOnMoveend now set the MapState without rounding the values for zoom and center.
 * **update dependencies** angular, clarity, ol, proj4
 * **@dlr-eoc/services-map-state:** Create new instances on set state and remove the not needed extent Subject.
 
