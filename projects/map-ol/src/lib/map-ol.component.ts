@@ -6,6 +6,7 @@ import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterVi
 import { MapState } from '@dlr-eoc/services-map-state';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
+import { skip } from 'rxjs/operators';
 import { MapOlService, Tgroupfiltertype } from './map-ol.service';
 import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer } from '@dlr-eoc/services-layers';
 
@@ -62,12 +63,6 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   @Input('controls') controls: IMapControls;
 
   map: Map;
-
-  zoom: number; // default value
-  center: any; // default value
-  mapState: MapState;
-  extent: Array<number>;
-  extentOn: Subscription;
   subs: Subscription[] = [];
   mapOnMoveend;
   mapOnClick;
@@ -84,21 +79,15 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   }
 
   constructor(private mapSvc: MapOlService, private ngZone: NgZone) {
-    this.zoom = 3;
-    this.center = {
-      lat: 0,
-      lon: 0
-    };
-    const ms = new MapState(this.zoom, this.center);
-    this.mapState = ms;
   }
   /**
    * - subscribe to layers oninit so they get pulled after view init
    */
   ngOnInit() {
+    /** Subscribe to mapStateSvc before map is created */
+    this.subscribeToMapState();
     this.initMap();
     this.subscribeToLayers();
-    this.mapStateSvc.setMapState(this.mapState);
   }
 
   /**
@@ -107,7 +96,12 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
    */
   ngAfterViewInit() {
     this.map.setTarget(this.mapDivView.nativeElement);
-    this.subscribeToMapState();
+
+    /** Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit */
+    const oldMapState = this.mapStateSvc.getMapState().getValue();
+    this.setMapState(oldMapState);
+
+    /** Subscribe to map events when the map completely created  */
     this.subscribeToMapEvents();
   }
 
@@ -308,39 +302,39 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
+  private setMapState(mapState: MapState) {
+    const lastAction = this.mapStateSvc.getLastAction().getValue();
+    if (mapState.options.notifier === 'user') {
+      if (lastAction === 'setExtent') {
+        this.mapSvc.setExtent(mapState.extent, true);
+      } else if (lastAction === 'setState') {
+        this.mapSvc.setZoom(mapState.zoom, mapState.options.notifier);
+        this.mapSvc.setCenter([mapState.center.lon, mapState.center.lat], true);
+      }
+    }
+    /* else if (mapState.options.notifier === 'map') {
+      console.log("--------Map triggered mapState change", mapState);
+    } */
+  }
+
   private subscribeToMapState() {
     if (this.mapStateSvc) {
-      const mapStateOn = this.mapStateSvc.getMapState().subscribe(mapState => {
-        if (mapState.options.notifier === 'user') {
-          this.mapState = mapState;
-          // console.log("User triggered mapState change", mapState)
-          this.mapSvc.setZoom(mapState.zoom, mapState.options.notifier);
-          this.mapSvc.setCenter([mapState.center.lon, mapState.center.lat], true);
-        } else if (mapState.options.notifier === 'map') {
-          // console.log("Map triggered mapState change", mapState)
-        }
-      });
+      /** .pipe(skip(1)) skips the first, e.g. initial value of the BehaviorSubject!! -- https://www.learnrxjs.io/learn-rxjs/operators/filtering/skip#why-use-skip  */
+      const mapStateOn = this.mapStateSvc.getMapState().pipe(skip(1)).subscribe(state => this.setMapState(state));
       this.subs.push(mapStateOn);
-
-      const extentOn = this.mapStateSvc.getExtent().subscribe(extent => {
-        // console.log("new extent is: ", extent);
-        if (extent[0] && extent[1] && extent[2] && extent[3]) {
-          this.mapSvc.setExtent([extent[0], extent[1], extent[2], extent[3]], true, { duration: 500 });
-        }
-      });
-      this.subs.push(extentOn);
     }
   }
 
   private subscribeToMapEvents() {
     this.mapOnMoveend = (evt) => {
-      // console.log(this.mapState.zoom,this.mapState.center, this.mapState.options)
-      // console.log("mapOn fired", evt)
-      const zoom = Math.round(this.mapSvc.getZoom());
+      // const zoom = Math.round(this.mapSvc.getZoom());
+      const zoom = this.mapSvc.getZoom();
       const center = this.mapSvc.getCenter(true);
       const extent = this.mapSvc.getCurrentExtent(true);
-      const ms = new MapState(zoom, { lat: parseFloat(center[1].toFixed(6)), lon: parseFloat(center[0].toFixed(6)) }, { notifier: 'map' }, extent, null);
-      this.mapState = ms;
+
+      // const newCenter = { lat: parseFloat(center[1].toFixed(6)), lon: parseFloat(center[0].toFixed(6)) };
+      const newCenter = { lat: parseFloat(center[1]), lon: parseFloat(center[0]) };
+      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent);
       this.mapStateSvc.setMapState(ms);
     };
     this.map.on('moveend', this.mapOnMoveend);
