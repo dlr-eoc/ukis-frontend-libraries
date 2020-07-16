@@ -1,4 +1,4 @@
-# [Contributing](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project) to UKIS
+# Contributing to UKIS
 
 We would love for you to contribute to UKIS and help make it even better than it is
 today! As a contributor, here are the guidelines we would like you to follow:
@@ -55,22 +55,22 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 #### Getting started
 1. [Fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) the UKIS repo [and check that your name and e-mail](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/remembering-your-github-username-or-email) is set in the Git configuration.
 
-2. Clone your forked repository and set the upstream 
+2. Clone your forked repository and add a upstream remote
   ```shell
      git clone https://github.com/<username>/ukis-frontend-libraries.git
 
      git remote add upstream https://github.com/dlr-eoc/ukis-frontend-libraries.git
-     ```
+  ```
 
 
-2. Sync Make a new local topic branch for your chnages:
-     ```shell
-     git checkout master
+2. Make a new local topic branch for your chnages:
+  ```shell
+    git checkout master
 
-     git pull upstream master && git push origin master //
+    git pull upstream master && git push origin master //Sync your local repository and fork with the upstream
 
-     git checkout -b my-fix-branch master
-     ```
+    git checkout -b my-fix-branch master
+  ```
 
   - Follow our [Coding Rules](#rules).
   - Commit your changes using a descriptive [commit message](#a-name%22commit%22a-commit-message-guidelines).
@@ -79,37 +79,38 @@ Before you submit your Pull Request (PR) consider the following guidelines:
       ```
       Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
 
-  - Create your patch/feature, **including appropriate test cases**.
+  - Create your patch/feature **including appropriate test cases**.
   - Document your changes in the [changelog](CHANGELOG.md).
-  - Run the full UKIS test suite, as described in the [developer documentation](DEVELOPMENT.md#further-you-can-test-and-build-locally),
-  and ensure that all tests pass.
+  - You can run the UKIS test suite locally, as described in the [developer documentation](DEVELOPMENT.md#further-you-can-test-and-build-locally),
+  to ensure that all tests pass.
 
 
-6. Push your branch to your fork on GitHub:
-   
+3. Push your branch to your fork on GitHub:
     ```shell
     git push origin my-fix-branch
     ```
-**Do not, rebase your local branch on newer versions of our master while your work is still in progress or we request changes!!!**
 
-7. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis:master`.
+
+4. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis-frontend-libraries:master`.
   * If we suggest changes then:
-    * Make the required updates.
-    * Re-run the UKIS test suites to ensure tests are still passing.
+    * Make the required updates and push it back to the same branch you opened the Pull Request on.
+    * This will automatically re-run the UKIS test suites ([configured in the GitHub Actions](.github/workflows/testAndBuild.yml)) to ensure tests are still passing.
+
+**Do not, rebase your local branch on newer versions of the master before your work is complete and all requested changes are made!!!** [The Perils of Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
 
 
-
-[Keeping up with Upstream](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project#_keeping_up_with_upstream)
-
-
-[Advanced Pull Requests](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project#_advanced_pull_requests)
+#### Bring the changes into the `ukis-frontend-libraries:master`.
+  - Once everything is **finished and reviewed** we will rebase the topic branch on the newest master if it's needed.
+  - If we want to rebase the topic branch, we push the rebased branch to a new branch on GitHub and open a brand new Pull Request referencing the old one, then close the original one.
 
 
-8. Bring the changes into the `ukis:master`.
-  - Once everything is **finished and reviewed** we will rebase the topic branch on the newest master... 
+**For more information on how to contribute see the following links:**
+- [GitHub - Contributing to a Project](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project)
+- [Advanced Pull Requests](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project#_advanced_pull_requests)
+- [Rebase vs. Merge](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_vs_merge)
 
+That's it :) Thank you for your contribution!
 
-That's it! Thank you for your contribution!
 
 #### After your pull request is merged
 
@@ -120,12 +121,6 @@ from the main (upstream) repository:
 
     ```shell
     git push origin --delete my-fix-branch
-    ```
-
-* Check out the master branch:
-
-    ```shell
-    git checkout master -f
     ```
 
 * Delete the local branch:
@@ -139,6 +134,7 @@ from the main (upstream) repository:
     ```shell
     git pull --ff upstream master
     ```
+
 
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
