@@ -1,4 +1,4 @@
-# Contributing to UKIS
+# [Contributing](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project) to UKIS
 
 We would love for you to contribute to UKIS and help make it even better than it is
 today! As a contributor, here are the guidelines we would like you to follow:
@@ -39,51 +39,75 @@ Before you submit an issue, please search the issue tracker, maybe an issue for 
 We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs, we will systematically ask you to provide a minimal reproduction. Having a minimal reproducible scenario gives us a wealth of important information without going back & forth to you with additional questions.
 
 A minimal reproduction allows us to quickly confirm a bug (or point out a coding problem) as well as confirm that we are fixing the right problem.
+Also use our issue templates for [Bug reports and Feature request](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/new/choose)
 
-### <a name="submit-pr"></a> Submitting a Pull Request (PR)
+
+### <a name="submit-pr"></a> [Submitting a Pull Request](https://opensource.guide/how-to-contribute/#opening-a-pull-request) (PR)
 Before you submit your Pull Request (PR) consider the following guidelines:
 
-1. Search GitHub for an open or closed PR
+- Search GitHub for an open or closed PR
   that relates to your submission. You don't want to duplicate effort.
-1. Be sure that an issue describes the problem you're fixing, or documents the design for the feature you'd like to add.
+- Be sure that an issue describes the problem you're fixing, or documents the design for the feature you'd like to add.
   Discussing the design up front helps to ensure that we're ready to accept your work.
-1. Please sign our [Contributor License Agreement (CLA)](#cla) before sending PRs.
+- **Please sign our [Contributor License Agreement (CLA)](#cla) before sending PRs.**
   We cannot accept code without this. Make sure you sign with the primary email address of the Git identity that has been granted access to the UKIS repository.
-1. Fork the UKIS repo.
-1. Make your changes in a new git branch:
 
+#### Getting started
+1. [Fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) the UKIS repo [and check that your name and e-mail](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/remembering-your-github-username-or-email) is set in the Git configuration.
+
+2. Clone your forked repository and set the upstream 
+  ```shell
+     git clone https://github.com/<username>/ukis-frontend-libraries.git
+
+     git remote add upstream https://github.com/dlr-eoc/ukis-frontend-libraries.git
+     ```
+
+
+2. Sync Make a new local topic branch for your chnages:
      ```shell
+     git checkout master
+
+     git pull upstream master && git push origin master //
+
      git checkout -b my-fix-branch master
      ```
 
-1. Create your patch, **including appropriate test cases**.
-1. Follow our [Coding Rules](#rules).
-1. Run the full UKIS test suite, as described in the [developer documentation][dev-doc],
-  and ensure that all tests pass.
-1. Document your changes in the [changelog][changelog].
-1. Commit your changes using a descriptive [commit message](#a-name%22commit%22a-commit-message-guidelines).
-    
-     ```shell
-     git commit -a
-     ```
-    Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
+  - Follow our [Coding Rules](#rules).
+  - Commit your changes using a descriptive [commit message](#a-name%22commit%22a-commit-message-guidelines).
+      ```shell
+      git commit -a
+      ```
+      Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
 
-1. Push your branch to GitHub:
+  - Create your patch/feature, **including appropriate test cases**.
+  - Document your changes in the [changelog](CHANGELOG.md).
+  - Run the full UKIS test suite, as described in the [developer documentation](DEVELOPMENT.md#further-you-can-test-and-build-locally),
+  and ensure that all tests pass.
+
+
+6. Push your branch to your fork on GitHub:
    
     ```shell
     git push origin my-fix-branch
     ```
+**Do not, rebase your local branch on newer versions of our master while your work is still in progress or we request changes!!!**
 
-1. In GitHub, send a pull request to `ukis:master`.
-* If we suggest changes then:
-  * Make the required updates.
-  * Re-run the UKIS test suites to ensure tests are still passing.
-  * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
+7. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis:master`.
+  * If we suggest changes then:
+    * Make the required updates.
+    * Re-run the UKIS test suites to ensure tests are still passing.
 
-    ```shell
-    git rebase master -i
-    git push -f
-    ```
+
+
+[Keeping up with Upstream](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project#_keeping_up_with_upstream)
+
+
+[Advanced Pull Requests](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project#_advanced_pull_requests)
+
+
+8. Bring the changes into the `ukis:master`.
+  - Once everything is **finished and reviewed** we will rebase the topic branch on the newest master... 
+
 
 That's it! Thank you for your contribution!
 
@@ -144,6 +168,11 @@ Please consider the following guidelines when formulating your commit message:
     
  - a message should mention what modules/projects have been changed
  - a message should briefly mention the motivation for the change
+
+
+ Further see these documents for commit messages:
+- [Closing Issues Via Commit Messages](https://help.github.com/articles/closing-issues-via-commit-messages/)
+- [Github: Closing issues using keywords](https://help.github.com/en/articles/closing-issues-using-keywords)
 
 
 ## <a name="changelogGuidelines"></a> Changelog guidelines
