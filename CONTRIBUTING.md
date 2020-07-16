@@ -39,7 +39,7 @@ Before you submit an issue, please search the issue tracker, maybe an issue for 
 We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs, we will systematically ask you to provide a minimal reproduction. Having a minimal reproducible scenario gives us a wealth of important information without going back & forth to you with additional questions.
 
 A minimal reproduction allows us to quickly confirm a bug (or point out a coding problem) as well as confirm that we are fixing the right problem.
-Also use our issue templates for [Bug reports and Feature request](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/new/choose)
+Also use our issue templates for [Bug reports and Feature request](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/new/choose).
 
 
 ### <a name="submit-pr"></a> [Submitting a Pull Request](https://opensource.guide/how-to-contribute/#opening-a-pull-request) (PR)
@@ -204,10 +204,10 @@ changes to be accepted, the CLA must be signed. It's a quick process, we promise
 
   If you have more than one Git identity, you must make sure that you sign the CLA using the primary email address associated with the ID that has been granted access to the UKIS repository. Git identities can be associated with more than one email address, and only one is primary. Here are some links to help you sort out multiple Git identities and email addresses:
 
-  * https://help.github.com/articles/setting-your-commit-email-address-in-git/
+  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#setting-your-commit-email-address-in-git
   * https://stackoverflow.com/questions/37245303/what-does-usera-committed-with-userb-13-days-ago-on-github-mean
-  * https://help.github.com/articles/about-commit-email-addresses/
-  * https://help.github.com/articles/blocking-command-line-pushes-that-expose-your-personal-email-address/
+  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#about-commit-email-addresses
+  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/blocking-command-line-pushes-that-expose-your-personal-email-address
 
   Note that if you have more than one Git identity, it is important to verify that you are logged in with the same ID with which you signed the CLA, before you commit changes. If not, your PR will fail the CLA check.
 
