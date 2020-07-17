@@ -54,7 +54,7 @@ we use a basic layout like the following, containing the router-outlet which the
 ```
 
 ### For a application without routes:
-we replace the router-outlet with a view component who also adds the Clarity `content-container` class as HostBinding.
+we replace the router-outlet with a view component which also adds the Clarity `content-container` class as HostBinding.
 ```
 <clr-main-container [ngClass]="{'floating':ui.floating}">
   <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
@@ -68,7 +68,7 @@ we replace the router-outlet with a view component who also adds the Clarity `co
 
 - The css class `floating` on the `main-container` makes the [Clarity Vertical Nav](https://clarity.design/documentation/vertical-nav/collapsible-nav/normal) floating above the `content-container` so it takes less space. For this, however, you have to worry about the placement of the elements in the `content-container` if the `vertical-nav` is expanded.
 - The `global-alert` and `global-progress` can be activated with their responsible services which you can inject in your components.
-- For more doku about the `ukis-header` [see](src/lib/header/README.md)
+- For more doku about the `ukis-header` [see the header README](src/lib/header/README.md)
 
 
 **Always check that yout layout structure is like following (with direct childs)**:
@@ -83,6 +83,7 @@ and be aware that the router is placing the routes outside of the router-outlet 
 main-container
   router-outlet
   route-component
+  ...
 ```
 
 so you must add the the class `content-container` as HostBinding to each 'route-component'.
@@ -108,16 +109,16 @@ The basic layout of a route or view component (see below) is the same so you can
 </section>
 ```
 
-- The route or view component uses the `content-container` class like described before, so you should normally be able to put everything in there like shown in the documentation of [Clarity Application Layout](https://clarity.design/documentation/app-layout).
+- The route or view component uses the `content-container` class like described before, so you should normally be able to put everything in there which is shown in the documentation of [Clarity Application Layout](https://clarity.design/documentation/app-layout).
 
-- The `content-area` is the place where we put normally the map.
+- The `content-area` is the place where we put the map normally.
 
 - As Aside we mostly use the `vertical-nav`. The default placement is on the left side like in the Clarity Layout, but with the class `right` the navigation will stick to the right side.
 There are also some styles for the `layer-control` inside a `vertical-nav`, so this is the place where we put the `layer-control`.
 
 - A section with the class `footer` will get you a footer element independent for each route. If it should be the same for all routes, you can add it in the `main-container`. For an example with the footer see the `demo-maps` route 'route-example-layout'.
 
-- The `sidenav` is only rarely used by us.
+- Use the `sidenav` if you don't want the navigation collapsible, but we have no style for a `layer-control` inside it.
 
 - All our styles (ukis-theme) are in the styles folder and get imported in the main styles.scss.
 For app over all styles you can use the styles.scss, otherwise use the style files of your components to write custom styles.
