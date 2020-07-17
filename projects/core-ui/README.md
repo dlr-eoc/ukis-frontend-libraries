@@ -33,6 +33,104 @@ ng add @dlr-eoc/core-ui
 --addMap=boolean // adds a map component default false
 --auth=boolean // default false, adjusts the app for authentication and user login
 
+## layout structure of the core-ui
+
+The UKIS core-ui (created by the the schematics) is based on the [Clarity Application Layout](https://clarity.design/documentation/app-layout).
+
+It uses the angular components from Clarity to get a responsive navigation. 
+
+### For a application with routes:
+We use a basic layout like the following containing the router-outlet which then shows route components as the Clarity `content-container`.
+```
+<clr-main-container [ngClass]="{'floating':ui.floating}">
+  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
+  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+  <ukis-header [ukis-title]="title">
+    ...
+  </ukis-header>
+  <router-outlet></router-outlet>
+</clr-main-container>
+```
+
+### For a application without routes:
+We replace the router-outlet with a view component that adds the Clarity `content-container` class to the Host.
+```
+<clr-main-container [ngClass]="{'floating':ui.floating}">
+  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
+  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+  <ukis-header [ukis-title]="title">
+  ...
+  </ukis-header>
+  <app-example-view></app-example-view>
+</clr-main-container>
+```
+
+- For more doku about the `ukis-header` [see](src/lib/header/README.md)
+- The css class `floating` on the `main-container` makes the [Clarity Vertical Nav](https://clarity.design/documentation/vertical-nav/collapsible-nav/normal) floating above the `content-container` so it takes less space. For this, however, you have to worry about the placement of the elements in the `content-container` if the `vertical-nav` is expanded.
+- The `global-alert` and `global-progress` can be activated with their responsible services which you can inject in your components.
+
+
+### Layout of a route or view component
+The basic layout of a route or view component (see below) is the same so you can easily change it if you decide later to switch between them.
+
+```
+<main class="content-area">
+  <p>This is the content-area</p>
+</main>
+
+<clr-vertical-nav class="right">
+</clr-vertical-nav>
+
+<nav class="sidenav">
+  <a href="">Test link</a>
+</nav>
+
+<section class="footer ukis-footer">
+
+</section>
+```
+
+- The component uses `content-container` as a Host class like described before so you should normally be able to put everything in there like shown in the documentation of [Clarity Application Layout](https://clarity.design/documentation/app-layout).
+
+- A section with the class `footer` will get you a footer element independent for each route. If it should be the same for all routes, you can add it in the `main-container` . For an example see the `demo-maps` route 'route-example-layout'.
+
+
+- .... vertical-nav   class="right"
+- ..... normally put the map inthe main content-area
+- ...... styles for the vertical-nav so you can put in the ukis-layer-control
+
+- .... see projects\core-ui\schematics\ng-add\files\src\styles\_ukis-core-ui-layout.scss
+
+
+
+
+
+/**
+  * flexbox test not working because clarity forces a Layout structure like following with direct childs:
+  *
+  *  main-container
+  *     content-container
+  *         content-area
+  *
+  * -----------------------------------------------------------------------------------------------------
+  * if we get a route then the component is placed outside of the router-outlet like this:
+  *  main-container
+  *     router-outlet
+  *     route-component
+  *
+  * so we have to set the class .content-container on our route-component to make it working
+  * but the we don't can show multiple elements for a route like:
+  *   main-container
+  *      content-container
+  *      subnav
+  *      header
+  *      footer
+  *
+  * because all element are childs of the route and not descendants...
+  */
+
+
+
 
 ## Test locally on a new angular project
 https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2
