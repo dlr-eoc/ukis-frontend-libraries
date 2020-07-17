@@ -46,6 +46,12 @@
   }
 }
 
+.main-container .content-container .footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+
 /** CONTENT -------------------------------------------------------------- */
 // adjust padding of main container for map!!!
 .main-container .content-container .content-area {
