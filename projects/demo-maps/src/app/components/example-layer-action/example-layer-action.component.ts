@@ -1,25 +1,33 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-example-layer-action',
   templateUrl: './example-layer-action.component.html',
   styleUrls: ['./example-layer-action.component.scss']
 })
-export class ExampleLayerActionComponent implements OnInit {
+export class ExampleLayerActionComponent {
   @Input() layer;
 
-  @Input() value = 1;
+  private privValue = 1;
+  @Input() set value(value: number) {
+    this.privValue = value;
+    if (this.layer.custom_layer) {
+      this.layer.custom_layer.setRadius(value);
+    }
+  }
+  get value() {
+    return this.privValue;
+  }
+  @Output() valueChange = new EventEmitter<number>();
+
   constructor() { }
 
   changeValue(event) {
-    this.value = parseInt(event.target.value, 10);
+    const value = parseInt(event.target.value, 10);
+    this.value = value;
+    this.valueChange.emit(value);
     if (this.layer.custom_layer) {
-      this.layer.custom_layer.setRadius(this.value);
-    }
-  }
-  ngOnInit(): void {
-    if (this.layer.custom_layer) {
-      this.layer.custom_layer.setRadius(this.value);
+      this.layer.custom_layer.setRadius(value);
     }
   }
 
