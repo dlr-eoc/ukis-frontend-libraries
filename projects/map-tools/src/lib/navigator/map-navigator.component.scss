@@ -1,5 +1,11 @@
-.input-container {
+.output-container {
   & .clr-form-control:first-child {
     margin-top: 0rem;
+  }
+}
+
+.output-container {
+  .clr-input {
+    width: 90%;
   }
 }
