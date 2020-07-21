@@ -76,7 +76,9 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
   - --routing=boolean // set up your project with [routing](https://angular.io/guide/router)
   - [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
 
-5. [see clarity get-started to use there ui components](https://clarity.design/documentation/get-started)
+5. [See layout structure of the core-ui](projects/core-ui/README.md#layout-structure-of-the-core-ui)
+
+6. [See clarity get-started to use there ui components](https://clarity.design/documentation/get-started)
 
 
 

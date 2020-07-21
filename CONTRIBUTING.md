@@ -39,53 +39,78 @@ Before you submit an issue, please search the issue tracker, maybe an issue for 
 We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs, we will systematically ask you to provide a minimal reproduction. Having a minimal reproducible scenario gives us a wealth of important information without going back & forth to you with additional questions.
 
 A minimal reproduction allows us to quickly confirm a bug (or point out a coding problem) as well as confirm that we are fixing the right problem.
+Also use our issue templates for [Bug reports and Feature request](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/new/choose).
 
-### <a name="submit-pr"></a> Submitting a Pull Request (PR)
+
+### <a name="submit-pr"></a> [Submitting a Pull Request](https://opensource.guide/how-to-contribute/#opening-a-pull-request) (PR)
 Before you submit your Pull Request (PR) consider the following guidelines:
 
-1. Search GitHub for an open or closed PR
+- Search GitHub for an open or closed PR
   that relates to your submission. You don't want to duplicate effort.
-1. Be sure that an issue describes the problem you're fixing, or documents the design for the feature you'd like to add.
+- Be sure that an issue describes the problem you're fixing, or documents the design for the feature you'd like to add.
   Discussing the design up front helps to ensure that we're ready to accept your work.
-1. Please sign our [Contributor License Agreement (CLA)](#cla) before sending PRs.
+- **Please sign our [Contributor License Agreement (CLA)](#cla) before sending PRs.**
   We cannot accept code without this. Make sure you sign with the primary email address of the Git identity that has been granted access to the UKIS repository.
-1. Fork the UKIS repo.
-1. Make your changes in a new git branch:
 
-     ```shell
-     git checkout -b my-fix-branch master
-     ```
+#### Getting started
+1. [Fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) the UKIS repo [and check that your name and e-mail](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/remembering-your-github-username-or-email) is set in the Git configuration.
 
-1. Create your patch, **including appropriate test cases**.
-1. Follow our [Coding Rules](#rules).
-1. Run the full UKIS test suite, as described in the [developer documentation][dev-doc],
-  and ensure that all tests pass.
-1. Document your changes in the [changelog][changelog].
-1. Commit your changes using a descriptive [commit message](#a-name%22commit%22a-commit-message-guidelines).
-    
-     ```shell
-     git commit -a
-     ```
-    Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
+2. Clone your forked repository and add a upstream remote
+  ```shell
+     git clone https://github.com/<username>/ukis-frontend-libraries.git
 
-1. Push your branch to GitHub:
-   
+     git remote add upstream https://github.com/dlr-eoc/ukis-frontend-libraries.git
+  ```
+
+
+2. Make a new local topic branch for your chnages:
+  ```shell
+    git checkout master
+
+    git pull upstream master && git push origin master //Sync your local repository and fork with the upstream
+
+    git checkout -b my-fix-branch master
+  ```
+
+  - Follow our [Coding Rules](#rules).
+  - Commit your changes using a descriptive [commit message](#a-name%22commit%22a-commit-message-guidelines).
+      ```shell
+      git commit -a
+      ```
+      Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
+
+  - Create your patch/feature **including appropriate test cases**.
+  - Document your changes in the [changelog](CHANGELOG.md).
+  - You can run the UKIS test suite locally, as described in the [developer documentation](DEVELOPMENT.md#further-you-can-test-and-build-locally),
+  to ensure that all tests pass.
+
+
+3. Push your branch to your fork on GitHub:
     ```shell
     git push origin my-fix-branch
     ```
 
-1. In GitHub, send a pull request to `ukis:master`.
-* If we suggest changes then:
-  * Make the required updates.
-  * Re-run the UKIS test suites to ensure tests are still passing.
-  * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
-    ```shell
-    git rebase master -i
-    git push -f
-    ```
+4. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis-frontend-libraries:master`.
+  * If we suggest changes then:
+    * Make the required updates and push it back to the same branch you opened the Pull Request on.
+    * This will automatically re-run the UKIS test suites ([configured in the GitHub Actions](.github/workflows/testAndBuild.yml)) to ensure tests are still passing.
 
-That's it! Thank you for your contribution!
+**Do not, rebase your local branch on newer versions of the master before your work is complete and all requested changes are made!!!** [The Perils of Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
+
+
+#### Bring the changes into the `ukis-frontend-libraries:master`.
+  - Once everything is **finished and reviewed** we will rebase the topic branch on the newest master if it's needed.
+  - If we want to rebase the topic branch, we push the rebased branch to a new branch on GitHub and open a brand new Pull Request referencing the old one, then close the original one.
+
+
+**For more information on how to contribute see the following links:**
+- [GitHub - Contributing to a Project](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project)
+- [Advanced Pull Requests](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project#_advanced_pull_requests)
+- [Rebase vs. Merge](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_vs_merge)
+
+That's it :) Thank you for your contribution!
+
 
 #### After your pull request is merged
 
@@ -96,12 +121,6 @@ from the main (upstream) repository:
 
     ```shell
     git push origin --delete my-fix-branch
-    ```
-
-* Check out the master branch:
-
-    ```shell
-    git checkout master -f
     ```
 
 * Delete the local branch:
@@ -115,6 +134,7 @@ from the main (upstream) repository:
     ```shell
     git pull --ff upstream master
     ```
+
 
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
@@ -144,6 +164,11 @@ Please consider the following guidelines when formulating your commit message:
     
  - a message should mention what modules/projects have been changed
  - a message should briefly mention the motivation for the change
+
+
+ Further see these documents for commit messages:
+- [Closing Issues Via Commit Messages](https://help.github.com/articles/closing-issues-via-commit-messages/)
+- [Github: Closing issues using keywords](https://help.github.com/en/articles/closing-issues-using-keywords)
 
 
 ## <a name="changelogGuidelines"></a> Changelog guidelines
@@ -179,10 +204,10 @@ changes to be accepted, the CLA must be signed. It's a quick process, we promise
 
   If you have more than one Git identity, you must make sure that you sign the CLA using the primary email address associated with the ID that has been granted access to the UKIS repository. Git identities can be associated with more than one email address, and only one is primary. Here are some links to help you sort out multiple Git identities and email addresses:
 
-  * https://help.github.com/articles/setting-your-commit-email-address-in-git/
+  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#setting-your-commit-email-address-in-git
   * https://stackoverflow.com/questions/37245303/what-does-usera-committed-with-userb-13-days-ago-on-github-mean
-  * https://help.github.com/articles/about-commit-email-addresses/
-  * https://help.github.com/articles/blocking-command-line-pushes-that-expose-your-personal-email-address/
+  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#about-commit-email-addresses
+  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/blocking-command-line-pushes-that-expose-your-personal-email-address
 
   Note that if you have more than one Git identity, it is important to verify that you are logged in with the same ID with which you signed the CLA, before you commit changes. If not, your PR will fail the CLA check.
 

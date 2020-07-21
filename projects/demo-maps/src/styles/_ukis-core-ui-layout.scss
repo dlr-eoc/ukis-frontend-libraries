@@ -46,6 +46,12 @@
   }
 }
 
+.main-container .content-container .footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+
 /** CONTENT -------------------------------------------------------------- */
 // adjust padding of main container for map!!!
 .main-container .content-container .content-area {
@@ -59,24 +65,6 @@
   color: var(--clr-color-neutral-700, var(--fallback-color-no-clr));
 }
 
-/** Clarity Datagrid overwrites */
-@media screen and (max-width: 1500px) {
-  .date-filter {
-    .datagrid-filter {
-      transform: translateX(0) translateY(24px) !important;
-      z-index: 1;
-    }
-  }
-}
-
-@media screen and (max-width: 1015px) {
-  .contry-filter {
-    .datagrid-filter {
-      transform: translateX(0) translateY(24px) !important;
-      z-index: 1;
-    }
-  }
-}
 
 .text-primary {
   color: var(--clr-color-action-600, var(--fallback-color-no-clr));
