@@ -7,6 +7,7 @@ export interface IAnyObject {
 interface IDynamicComponent {
   component: Type<any>;
   inputs?: { [input: string]: any };
+  outputs?: { [inputChange: string]: (value) => void };
 }
 
 export interface ILayerContent extends IAnyObject {

@@ -10,4 +10,19 @@
       <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <clr-icon shape="layers" clrVerticalNavIcon title="layers"></clr-icon>
+    Test to set dynamic component
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <button class="btn btn-primary"
+        title="set input of dynamic component from parent when it is created or the input changed"
+        (click)="setInput()">Set
+        Heatmap Layer radius</button>
+      {{inputValue.value}}
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+
+
 </clr-vertical-nav>

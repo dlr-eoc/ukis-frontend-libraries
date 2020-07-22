@@ -70,13 +70,14 @@
           <span>{{" "+layer.opacity}}</span>
         </div>
         <ng-container *ngIf="checkIsComponentItem(layer.action, layer);">
-          <ukis-dynamic-component [dynamicComponent]="layer.action"></ukis-dynamic-component>
+          <ukis-dynamic-component [(dynamicComponent)]="layer.action">
+          </ukis-dynamic-component>
         </ng-container>
       </div>
       <!-- show Legend -->
       <div *ngIf="activeTabs.legend && layer.legendImg">
         <ng-container *ngIf="checkIsComponentItem(layer.legendImg, layer); else imageUrl">
-          <ukis-dynamic-component [dynamicComponent]="layer.legendImg"></ukis-dynamic-component>
+          <ukis-dynamic-component [(dynamicComponent)]="layer.legendImg"></ukis-dynamic-component>
         </ng-container>
 
         <ng-template #imageUrl>
