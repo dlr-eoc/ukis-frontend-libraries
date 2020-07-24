@@ -10,6 +10,7 @@
 * **@dlr-eoc/map-ol:** The function mapOnMoveend now set the MapState without rounding the values for zoom and center.
 * **update dependencies** angular, clarity, ol, proj4
 * **@dlr-eoc/services-map-state:** Create new instances on set state and remove the not needed extent Subject.
+* **@dlr-eoc/utils:** Created `utils` project. Contains utilities that do not depend on angular and can potentially be used in other libraries, too.
 
 
 ### Features
@@ -20,6 +21,9 @@
 * **@dlr-eoc/services-layers:** Adjust layer types so it can use a Angular Component for `action` or `legendImg` #12 #13. 
 * **@dlr-eoc/core-ui:** Export DynamicComponent and ViewRefDirective
 * **@dlr-eoc/services-layers:** RasterLayers can now specify the parameter `crossOrigin` in their constructor. 
+* **@dlr-eoc/utils:** `Paper` class to aid in getting dimensions of paper-sheets (A5, A4, ...) in pixel and cm.
+* **@dlr-eoc/utils:** `ol` utilities to copy a map's current image in a canvas (potentially for later downloading).
+* **@dlr-eoc/utils:** `download` utilities to save us some boilerplate when saving data to a file.
 
 
 ### Refactoring
