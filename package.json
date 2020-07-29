@@ -27,7 +27,7 @@
     "lint": "ng lint",
     "compodoc": "compodoc -p tsconfig.doc.json -a projects/core-ui/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
     "compodoc-serve": "compodoc -r 8081 -s",
-    "postinstall": "cd scripts/library && npm i"
+    "postinstall": "ngcc && cd scripts/library && npm i"
   },
   "private": true,
   "dependencies": {
