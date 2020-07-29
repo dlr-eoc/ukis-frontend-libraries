@@ -10,7 +10,7 @@
   "private": true,
   "peerDependencies": {
     "@angular/cli": "~10.0.4",
-    "@schematics/angular": "^9.1.9",
+    "@schematics/angular": "^10.0.4",
     "typescript": "~3.9.7"
   },
   "dependencies": {
