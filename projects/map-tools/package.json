@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@dlr-eoc/services-map-state": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/map-ol": "0.0.0-PLACEHOLDER"
+    "@dlr-eoc/map-ol": "0.0.0-PLACEHOLDER",
+    "tslib": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",

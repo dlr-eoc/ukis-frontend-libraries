@@ -8,7 +8,8 @@
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "dependencies": {
-    "@dlr-eoc/services-util-store": "0.0.0-PLACEHOLDER"
+    "@dlr-eoc/services-util-store": "0.0.0-PLACEHOLDER",
+    "tslib": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",

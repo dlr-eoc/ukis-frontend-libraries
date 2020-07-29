@@ -17,7 +17,8 @@
     "w3c-schemas": "0.0.0-PLACEHOLDER-VENDOR",
     "ogc-schemas": "0.0.0-PLACEHOLDER-VENDOR",
     "ol": "0.0.0-PLACEHOLDER-VENDOR",
-    "@michaellangbein/jsonix": "0.0.0-PLACEHOLDER-VENDOR"
+    "@michaellangbein/jsonix": "0.0.0-PLACEHOLDER-VENDOR",
+    "tslib": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
