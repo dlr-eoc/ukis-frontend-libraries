@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit, Inject } from '@angular/core';
 import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
@@ -16,6 +16,7 @@ import olVectorTileSource from 'ol/source/VectorTile';
 import olMVT from 'ol/format/MVT';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
+import { IDynamicComponent } from '@dlr-eoc/core-ui/src/public-api';
 
 @Component({
   selector: 'app-route-map4',
@@ -28,6 +29,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';
   controls: IMapControls;
   test = [];
+  inputValue = { value: 15 };
   constructor(
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
@@ -38,11 +40,23 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       scaleLine: true,
       overviewMap: true
     };
+
+    /* this.heatMapComp = {
+      component: ExampleLayerActionComponent, inputs: { value: 15 }
+    }; */
   }
 
 
   ngOnInit(): void {
     this.addLayers();
+  }
+
+  setInput() {
+    const layer = this.layersSvc.getLayerById('heatmap_layer') as CustomLayer;
+    this.inputValue.value = 40;
+    layer.action.inputs = this.inputValue;
+    /** change object ref to trigger input change */
+    layer.action = Object.assign({}, layer.action);
   }
 
   addLayers() {
@@ -150,13 +164,18 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       name: 'Heatmap Layer',
       actions: [{ title: 'test', icon: '', action: (layer) => { } }],
       action: {
-        component: ExampleLayerActionComponent, inputs: { value: 10 }
+        component: ExampleLayerActionComponent, inputs: this.inputValue, outputs: {
+          valueChange: (value) => {
+            this.inputValue.value = value;
+          }
+        }
       },
       custom_layer: new olHeatmapLayer({
         source: new olVectorSource({
           features: this.mapSvc.geoJsonToFeatures(data),
           format: new olGeoJSON(),
         }),
+        radius: this.inputValue.value
       }),
       visible: false
     });

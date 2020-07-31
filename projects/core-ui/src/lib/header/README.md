@@ -9,7 +9,7 @@
 For examples [see demo maps](../demo-maps/README.md)
 
 #### in the app.component.html 
-
+```
 <clr-main-container [ngClass]="{'floating':ui.floating}">
   ...
   <ukis-header [ukis-title]="title">
@@ -21,3 +21,5 @@ For examples [see demo maps](../demo-maps/README.md)
   </ukis-header>
   ...
 </clr-main-container>
+```
+

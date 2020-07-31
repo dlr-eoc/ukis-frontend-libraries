@@ -1,48 +1,55 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { MapState, IMapStateOptions, IMapState } from './types/map-state';
 import { TGeoExtent } from '@dlr-eoc/services-layers';
+import { map } from 'rxjs/operators';
 
+const initialState = new MapState(0, { lat: 0, lon: 0 });
 @Injectable({
   providedIn: 'root'
 })
 export class MapStateService {
-  private mapState = new BehaviorSubject(new MapState(12, { lat: 0, lon: 0 }, null, [-180, -90, 180, 90], null));
-  private extent = new BehaviorSubject<TGeoExtent>([-180, -90, 180, 90]);
+  private mapState = new BehaviorSubject(initialState)
+  private lastAction = new BehaviorSubject<'setExtent' | 'setState'>(null);
   constructor() {
-    // let extent = [-180, -90, 180, 90];
-    // this.extent.next(extent);
-    const state = new MapState(12, { lat: 0, lon: 0 });
-    this.mapState.next(state);
   }
 
-
-  // Observable<MapState> |
-  public getMapState(): BehaviorSubject<MapState> {
+  public getMapState() {
     return this.mapState;
   }
 
   public setMapState(state: MapState | IMapState) {
+    if (!state) {
+      return;
+    }
+    this.lastAction.next('setState');
     if (state instanceof MapState) {
-      this.mapState.next(state);
+      const newState = new MapState(state.zoom, state.center, state.options, state.extent);
+      this.mapState.next(newState);
     } else {
       const stateOptions: IMapStateOptions = { ...{ notifier: 'user' }, ...state.options };
-      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.time);
+      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent);
       this.mapState.next(newState);
     }
   }
 
-
-  // Observable<TGeoExtent>
-  public getExtent(): Observable<TGeoExtent> {
-    // return this.mapState.pipe(map((state) => { return state.extent }));
-    return this.extent.asObservable();
+  public getExtent() {
+    return this.mapState.pipe(map((state) => state.extent));
   }
 
-  public setExtent(extent: TGeoExtent) {
-    // let state = this.mapState.getValue();
-    // state.extent = extent;
-    // this.mapState.next(state);
-    this.extent.next(extent);
+  public setExtent(extent: TGeoExtent, notifier: IMapState['options']['notifier'] = 'user') {
+    if (!extent) {
+      return;
+    }
+    this.lastAction.next('setExtent');
+    const state = this.getMapState().getValue();
+    state.options.notifier = notifier;
+    const newState = new MapState(state.zoom, state.center, state.options, extent);
+    this.mapState.next(newState);
+  }
+
+
+  public getLastAction() {
+    return this.lastAction;
   }
 }
