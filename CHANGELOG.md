@@ -1,5 +1,6 @@
 
 ### Bug Fixes
+* **@dlr-eoc/layer-control:** LayerentryGroup emit change for LayerGroup on Layerentry update [Issue #29](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/29)
 * **@dlr-eoc/core-ui:** Input/Output binding of dynamic component [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
 * **@dlr-eoc/layer-control:** Binding to dynamicComponent [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
 * **demo-maps:** Set routing to HashLocationStrategy and fix update Search Params on MapState change example.
