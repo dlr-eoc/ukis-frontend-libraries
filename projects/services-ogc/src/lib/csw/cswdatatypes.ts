@@ -1,11 +1,10 @@
-import { ElementSetType } from '../types/cxsd/www.opengis.net/cat/csw/2.0.2';
 
 export type CswVersion = '2.0.2';
 
 
 export type CswNodeType = 'Capabilities' | 'DescribeRecord' | 'DescribeRecordResponse' | 'GetRecordById'
             | 'GetRecordByIdResponse' | 'SummaryRecord' | 'BoundingBox' | 'Query' | 'Record' | 'GetRecords'
-            | 'ExceptionReport' | 'GetRecordsResponse' | 'identifier';
+            | 'ExceptionReport' | 'GetRecordsResponse' | 'identifier' | 'GetDomain' | 'GetDomainResponse';
 
 export type GmdNodeType = 'MD_Metadata';
 
@@ -344,7 +343,7 @@ export interface CswSearchResultsType {
     numberOfRecordsMatched: number;
     numberOfRecordsReturned: number;
     recordSchema: 'http://www.opengis.net/cat/csw/2.0.2';
-    elementSet: ElementSetType;
+    elementSet: CswElementSetName;
     abstractRecord: CswAbstractRecordElement[];
 }
 
@@ -359,4 +358,28 @@ export interface CswGetRecordsResponseElement extends Element {
     value: CswGetRecordsResponse;
 }
 
+export interface CswGetDomainType {
+    TYPE_NAME: 'CSW_2_0_2.GetDomainType';
+    service: 'CSW';
+    version: '2.0.2';
+    parameterName: string;
+  }
 
+export interface CswGetDomainElement extends Element {
+    value: CswGetDomainType;
+}
+
+export interface CswDomainValues {
+    TYPE_NAME: 'CSW_2_0_2.DomainValuesType';
+    type: CswElementAttributes;
+    parameterName: string;
+  }
+
+export interface CswGetDomainResponseType {
+    TYPE_NAME: 'CSW_2_0_2.GetDomainResponseType';
+    domainValues: CswDomainValues[];
+}
+
+export interface CswGetDomainResponseElement extends Element {
+    value: CswGetDomainResponseType;
+}
