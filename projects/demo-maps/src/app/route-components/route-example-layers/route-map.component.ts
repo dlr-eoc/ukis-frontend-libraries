@@ -108,7 +108,8 @@ export class RouteMapComponent implements OnInit {
       visible: false,
       description: 'TDM90_DEM',
       attribution: ' | TDM90 Data ©: <a href="http://www.dlr.de" target="_blank">DLR</a>  licensed for <a rel="license" target="_blank" href="https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf">scientific use</a>',
-      legendImg: ''
+      legendImg: '',
+      expanded: true
     });
 
     const vectorLayer = new VectorLayer({
@@ -292,6 +293,7 @@ export class RouteMapComponent implements OnInit {
     const groupLayer2 = new LayerGroup({
       id: 'group_2',
       name: 'Test Group 2',
+      expanded: true,
       layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay]
     });
 
@@ -308,8 +310,8 @@ export class RouteMapComponent implements OnInit {
   }
 
   addOverlays() {
-    const layerOnTopOfAll = new BlueMarbleTile({crossOrigin: 'anonymous'});
-    const openSeaMapOnTop = new OpenSeaMap({crossOrigin: 'anonymous'});
+    const layerOnTopOfAll = new BlueMarbleTile({ crossOrigin: 'anonymous' });
+    const openSeaMapOnTop = new OpenSeaMap({ crossOrigin: 'anonymous' });
     this.layersSvc.addLayer(layerOnTopOfAll, 'Overlays');
     this.layersSvc.addLayer(openSeaMapOnTop, 'Overlays');
   }
