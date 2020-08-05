@@ -1,8 +1,10 @@
 
 ### Bug Fixes
-* **@dlr-eoc/layer-control:** LayerentryGroup emit change for LayerGroup on Layerentry update [Issue #29](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/29)
+* **@dlr-eoc/layer-control:**
+  - LayerentryGroup emit change for LayerGroup on Layerentry update [Issue #29](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/29)
+  - Binding to dynamicComponent [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
+
 * **@dlr-eoc/core-ui:** Input/Output binding of dynamic component [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
-* **@dlr-eoc/layer-control:** Binding to dynamicComponent [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
 * **demo-maps:** Set routing to HashLocationStrategy and fix update Search Params on MapState change example.
 * **@dlr-eoc/map-ol:** Subscribe to map state before map creation, then set this state on AfterViewInit so if `mapStateSvc.setMapState` or `mapStateSvc.setExtent` is triggered from a View/Route in ngOnInit the state is set correctly.
 
@@ -14,13 +16,19 @@
 
 
 ### Features
-* **@dlr-eoc/services-layers:** Layer IDynamicComponent Interface is extended for Outputs [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23).
+* **@dlr-eoc/services-layers:**
+  - Add new attribute expanded to Layer and LayerGroup [Issue #25](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/25).
+  - Layer IDynamicComponent Interface is extended for Outputs [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23).
+  - Adjust layer types so it can use a Angular Component for `action` or `legendImg` #12 #13.
+  - RasterLayers can now specify the parameter `crossOrigin` in their constructor.
+
+* **@dlr-eoc/layer-control:**
+  - Use the attribute expanded from Layer or LayerGroup to expand the settings tab [Issue #25](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/25).
+  - Adjust layerentry so it can use a Angular Component in the settings and as legend #12 #13.
+
 * **@dlr-eoc/map-tools:** Allow map navigator to set the input step.
 * **@dlr-eoc/services-map-state:** Add function to get the last action of the MapStateService so if a full state was set or only the extent.
-* **@dlr-eoc/layer-control:** Adjust layerentry so it can use a Angular Component in the settings and as legend #12 #13. 
-* **@dlr-eoc/services-layers:** Adjust layer types so it can use a Angular Component for `action` or `legendImg` #12 #13. 
 * **@dlr-eoc/core-ui:** Export DynamicComponent and ViewRefDirective
-* **@dlr-eoc/services-layers:** RasterLayers can now specify the parameter `crossOrigin` in their constructor. 
 
 
 ### Refactoring
