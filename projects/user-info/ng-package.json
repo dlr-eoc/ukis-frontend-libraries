@@ -6,5 +6,8 @@
     "umdModuleIds": {
       "@clr/angular": "@clr/angular"
     }
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib"
+  ]
 }

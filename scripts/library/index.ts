@@ -228,7 +228,7 @@ Options:
   -c, --check             Check if all dependencies are listed in the package.json of the project
   -t, --test              Run ng test for all projects
       & --headless        Run ng test for all projects with ChromeHeadless
-  -b, --build             Run ng build fal all projects with toposort dependencies`);
+  -b, --build             Run ng build for all projects with toposort dependencies`);
 }
 
 export function run() {
