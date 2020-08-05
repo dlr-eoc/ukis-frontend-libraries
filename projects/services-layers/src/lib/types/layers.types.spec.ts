@@ -60,6 +60,7 @@ describe('Layer Types', () => {
     /** optional or defaults */
     expect(layer.opacity).toBe(opacity);
     expect(layer.visible).toBe(true);
+    expect(layer.expanded).toBe(false);
     expect(layer.removable).toBe(false);
     expect(layer.filtertype).toBe('Layers');
     expect(layer.continuousWorld).toBe(false);
@@ -138,6 +139,7 @@ describe('Layer Types', () => {
     const id = 'ID-vector', name = 'vector',
       type = 'geojson',
       visible = true,
+      expanded = true,
       data = { Feature: {} },
       cluster = true,
       options = { style: () => { } };
@@ -150,7 +152,9 @@ describe('Layer Types', () => {
       type,
       data,
       cluster,
-      options
+      options,
+      visible,
+      expanded
     });
 
     /** mandatory */
@@ -161,6 +165,7 @@ describe('Layer Types', () => {
     /** optional or defaults */
     expect(newVectorLayer.opacity).toBe(1);
     expect(newVectorLayer.visible).toBe(visible);
+    expect(newVectorLayer.expanded).toBe(expanded);
     expect(newVectorLayer.removable).toBe(false);
     expect(newVectorLayer.filtertype).toBe('Layers');
     expect(newVectorLayer.continuousWorld).toBe(false);
@@ -191,6 +196,7 @@ describe('Layer Types', () => {
   it('should created a LayerGroup with options merged', () => {
     const id = 'ID-group', name = 'group',
       visible = true,
+      expanded = true,
       filtertype = 'Overlays',
       layers = [rasterlayer, vectorlayer, customlayer];
 
@@ -198,6 +204,7 @@ describe('Layer Types', () => {
     const newRasterlayer = new LayerGroup({
       id,
       visible, // set visible on each layer
+      expanded, // set expanded on the group (not for each layer)
       name,
       filtertype,
       layers
@@ -219,6 +226,7 @@ describe('Layer Types', () => {
 
     /** optional or defaults */
     expect(newRasterlayer.visible).toBe(visible);
+    expect(newRasterlayer.expanded).toBe(expanded);
     expect(newRasterlayer.removable).toBe(true);
     expect(newRasterlayer.layerRemovable).toBe(true);
     expect(newRasterlayer.filtertype).toBe(filtertype);
@@ -231,13 +239,13 @@ describe('Layer Types', () => {
 
   it('should created a RasterLayer with CORS property set', () => {
     const id = 'ID-raster', name = 'raster',
-    type = 'wms',
-    url = '//geoservice.dlr.de/eoc/basemap/wms',
-    removable = true,
-    visible = true,
-    params = {
-      layers: 'litemap'
-    };
+      type = 'wms',
+      url = '//geoservice.dlr.de/eoc/basemap/wms',
+      removable = true,
+      visible = true,
+      params = {
+        layers: 'litemap'
+      };
     const corsMode = 'anonymous';
 
     const newRasterlayer = new RasterLayer({
