@@ -1,5 +1,3 @@
-// This file is only here for usage by our IDE. The tsconfig that angular really uses is in `tsconfig.base.json`. ´
-// More information: https://angular.io/guide/migration-solution-style-tsconfig
 {
   "compileOnSave": false,
   "compilerOptions": {
