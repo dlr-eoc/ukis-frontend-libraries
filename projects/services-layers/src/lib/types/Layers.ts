@@ -107,6 +107,8 @@ export interface ILayerOptions {
   styles?: ILayerStyleSet[];
   /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
   crossOrigin?: CrossOriginType;
+  /** UI is expanded */
+  expanded?: boolean;
 }
 
 export interface ILayerDimensions extends IAnyObject {
@@ -207,6 +209,8 @@ export class Layer implements ILayerOptions {
   styles?: ILayerStyleSet[];
   /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
   crossOrigin?: CrossOriginType;
+  /** UI is expanded */
+  expanded = false;
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);

@@ -16,6 +16,8 @@ export interface ILayerGroupOptions {
   bbox?: TGeoExtent;
   description?: string;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
+  /** UI is expanded */
+  expanded?: boolean;
 }
 
 /**
@@ -34,6 +36,9 @@ export class LayerGroup {
   bbox?: [number, number, number, number];
   description?: string;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
+  /** UI is expanded */
+  expanded = false;
+
   constructor(options: ILayerGroupOptions) {
     if (options && options.visible !== undefined && options.layers && options.layers.length) {
       options.layers = options.layers.map(l => {
