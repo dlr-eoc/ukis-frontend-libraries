@@ -20,8 +20,18 @@ export class LayerentryGroupComponent implements OnInit {
   @Input('group') group: LayerGroup;
   @Input('layerGroups') layerGroups: LayerGroup[];
 
-  public openProperties = false;
-  public openAllLayersProperties = false;
+  public set openAllLayersProperties(value: boolean) {
+    if (this.group && this.group.layers.length) {
+      this.group.layers.forEach(l => l.expanded = value);
+    }
+  }
+  public get openAllLayersProperties() {
+    if (this.group && this.group.layers.length) {
+      return this.group.layers.filter(l => l.expanded === true).length === this.group.layers.length;
+    } else {
+      return false;
+    }
+  }
   // public visible: boolean = true;
   public canZoomToGroup = false;
 
@@ -83,7 +93,7 @@ export class LayerentryGroupComponent implements OnInit {
 
 
   showProperties() {
-    this.openProperties = !this.openProperties;
+    this.group.expanded = !this.group.expanded;
   }
 
   showHideAllDetails() {

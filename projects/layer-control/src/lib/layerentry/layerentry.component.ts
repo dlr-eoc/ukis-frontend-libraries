@@ -21,7 +21,18 @@ export class LayerentryComponent implements OnInit {
 
   @Input('group') group?: LayerGroup;
   @Input('layerGroups') layerGroups?: LayerGroup[];
-  @Input('expanded') expanded = false;
+  @Input('expanded') set expanded(value: boolean) {
+    if (this.layer) {
+      this.layer.expanded = value;
+    }
+  }
+  get expanded() {
+    if (this.layer) {
+      return this.layer.expanded;
+    } else {
+      return false;
+    }
+  }
   @Input('expandable') expandable = true;
 
 
