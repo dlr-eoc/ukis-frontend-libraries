@@ -17,13 +17,15 @@
 
 ### Features
 * **@dlr-eoc/services-layers:**
-  - Add new attribute expanded to Layer and LayerGroup [Issue #25](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/25).
+  - Add new attribute `cssClass` to Layer and LayerGroup for custom styling [Issue #32](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/32).
+  - Add new attribute `expanded` to Layer and LayerGroup [Issue #25](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/25).
   - Layer IDynamicComponent Interface is extended for Outputs [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23).
   - Adjust layer types so it can use a Angular Component for `action` or `legendImg` #12 #13.
   - RasterLayers can now specify the parameter `crossOrigin` in their constructor.
 
 * **@dlr-eoc/layer-control:**
-  - Use the attribute expanded from Layer or LayerGroup to expand the settings tab [Issue #25](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/25).
+  - Add the attribute `cssClass` whith component HostBinding [Issue #32](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/32).
+  - Use the attribute `expanded` from Layer or LayerGroup to expand the settings tab [Issue #25](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/25).
   - Adjust layerentry so it can use a Angular Component in the settings and as legend #12 #13.
 
 * **@dlr-eoc/map-tools:** Allow map navigator to set the input step.
