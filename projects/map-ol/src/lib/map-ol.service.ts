@@ -69,7 +69,7 @@ export class MapOlService {
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
   constructor() {
-    this.map = new olMap({});
+    this.map = new olMap({ controls: [] });
     this.view = new olView();
     this.EPSG = 'EPSG:3857'; // 'EPSG:4326'; EPSG:3857
     // this.createMap();
@@ -180,7 +180,7 @@ export class MapOlService {
     /** define map in constructor so it is created before to use it in projects onInit Method  */
     [baselayerGroup, layersGroup, overlayGroup].map(layer => this.map.addLayer(layer));
     this.map.setView(tempview);
-    this.map.getControls().clear();
+    // this.map.getControls().clear();
     this.view = this.map.getView();
     this.setProjection(this.EPSG);
     return {

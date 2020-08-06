@@ -29,6 +29,7 @@ import olTileLayer from 'ol/layer/Tile';
 import olOSM from 'ol/source/OSM';
 
 import olRotate from 'ol/control/Rotate';
+import { Control as olControl } from 'ol/control';
 
 
 export interface IMapControls {
@@ -369,7 +370,15 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   private setControls() {
     // add Control only if this functions is defined
-    const tempControls = [];
+    const tempControls: olControl[] = [];
+    const oldControls: olControl[] = [];
+    if (this.map) {
+      const controlsArry = this.map.getControls().getArray();
+      controlsArry.forEach(i => oldControls.push(i));
+      /** fix: The Attribution Control is displayed twice #3 */
+      this.map.getControls().clear();
+    }
+
     if (this.controls && this.map) {
       if (this.controls.attribution !== false) {
         let attributionOptions = {
@@ -444,6 +453,12 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       }
 
       if (tempControls.length) {
+        /**
+         * check tempControls dose not include oldControls
+         * https://medium.com/@alvaro.saburido/set-theory-for-arrays-in-es6-eb2f20a61848#f22b
+         */
+        const difference = oldControls.filter(x => !tempControls.includes(x));
+        difference.forEach(i => tempControls.push(i));
         this.map.getControls().extend(tempControls);
       }
     }
