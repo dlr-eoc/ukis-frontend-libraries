@@ -78,6 +78,7 @@ describe('Layer Types', () => {
     expect(layer.actions).toBe(undefined);
     expect(layer.styles).toBe(undefined);
     expect(layer.crossOrigin).toBe(undefined);
+    expect(layer.cssClass).toBe(undefined);
   });
 
 
@@ -87,6 +88,7 @@ describe('Layer Types', () => {
       url = '//geoservice.dlr.de/eoc/basemap/wms',
       removable = true,
       visible = true,
+      cssClass = 'custom-class',
       params = {
         layers: 'litemap'
       };
@@ -98,7 +100,8 @@ describe('Layer Types', () => {
       url,
       removable,
       visible,
-      params
+      params,
+      cssClass
     });
 
     /** mandatory */
@@ -109,6 +112,7 @@ describe('Layer Types', () => {
     /** optional or defaults */
     expect(newRasterlayer.opacity).toBe(1);
     expect(newRasterlayer.visible).toBe(visible);
+    expect(newRasterlayer.expanded).toBe(false);
     expect(newRasterlayer.removable).toBe(removable);
     expect(newRasterlayer.filtertype).toBe('Layers');
     expect(newRasterlayer.continuousWorld).toBe(false);
@@ -126,6 +130,7 @@ describe('Layer Types', () => {
     expect(newRasterlayer.actions).toBe(undefined);
     expect(newRasterlayer.styles).toBe(undefined);
     expect(newRasterlayer.crossOrigin).toBe(undefined);
+    expect(newRasterlayer.cssClass).toBe(cssClass);
 
     /** raster specific */
     expect(newRasterlayer.url).toBe(url);
@@ -197,6 +202,7 @@ describe('Layer Types', () => {
     const id = 'ID-group', name = 'group',
       visible = true,
       expanded = true,
+      cssClass = 'custom-group-class',
       filtertype = 'Overlays',
       layers = [rasterlayer, vectorlayer, customlayer];
 
@@ -205,6 +211,7 @@ describe('Layer Types', () => {
       id,
       visible, // set visible on each layer
       expanded, // set expanded on the group (not for each layer)
+      cssClass,
       name,
       filtertype,
       layers
@@ -227,6 +234,7 @@ describe('Layer Types', () => {
     /** optional or defaults */
     expect(newRasterlayer.visible).toBe(visible);
     expect(newRasterlayer.expanded).toBe(expanded);
+    expect(newRasterlayer.cssClass).toBe(cssClass);
     expect(newRasterlayer.removable).toBe(true);
     expect(newRasterlayer.layerRemovable).toBe(true);
     expect(newRasterlayer.filtertype).toBe(filtertype);
