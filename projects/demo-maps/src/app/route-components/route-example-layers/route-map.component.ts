@@ -3,6 +3,7 @@ import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, 
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
+import { ZommNumberControl } from './ol-custom-control';
 
 @Component({
   selector: 'app-route-map',
@@ -17,17 +18,17 @@ export class RouteMapComponent implements OnInit {
 
   constructor(
     public layersSvc: LayersService,
-    public mapStateSvc: MapStateService) {
+    public mapStateSvc: MapStateService,
+    public mapSvc: MapOlService) {
 
     this.controls = {
       attribution: true,
-      scaleLine: true,
-      overviewMap: true
+      scaleLine: true
     };
   }
 
-
   ngOnInit(): void {
+    this.mapSvc.map.addControl(new ZommNumberControl());
     this.addBaseLayers();
     this.addLayers();
     this.addOverlays();
@@ -106,7 +107,8 @@ export class RouteMapComponent implements OnInit {
         format: 'image/png'
       },
       visible: false,
-      description: 'TDM90_DEM',
+      maxZoom: 8,
+      description: 'TDM90_DEM maxZoom: 8',
       attribution: ' | TDM90 Data ©: <a href="http://www.dlr.de" target="_blank">DLR</a>  licensed for <a rel="license" target="_blank" href="https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf">scientific use</a>',
       legendImg: '',
       expanded: true,

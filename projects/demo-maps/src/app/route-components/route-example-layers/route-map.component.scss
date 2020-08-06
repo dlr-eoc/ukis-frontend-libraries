@@ -13,7 +13,7 @@
 
 :host ::ng-deep {
   .custom-layer-group {
-    .head>.title{
+    .head>.title {
       color: rgb(102, 15, 0);
     }
   }
@@ -22,5 +22,13 @@
     .head>.title {
       color: rgb(184, 125, 0);
     }
+  }
+
+  .zoom-number {
+    /* top: 65px;
+    left: .5em; */
+
+    bottom: 2.5em;
+    left: 8px;
   }
 }
