@@ -93,6 +93,8 @@ export interface ILayerOptions {
   zIndex?: number;
   minResolution?: number;
   maxResolution?: number;
+  minZoom?: number;
+  maxZoom?: number;
   /** legend for the layer as image or a angular component */
   legendImg?: string | IDynamicComponent;
   /** geographic coordinates */
@@ -198,6 +200,8 @@ export class Layer implements ILayerOptions {
   protected protTime?: string;
   minResolution?: number;
   maxResolution?: number;
+  minZoom?: number;
+  maxZoom?: number;
   legendImg?: string | IDynamicComponent;
 
   bbox?: TGeoExtent;

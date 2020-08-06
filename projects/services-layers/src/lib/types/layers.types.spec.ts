@@ -41,6 +41,8 @@ describe('Layer Types', () => {
     const id = 'ID-layer',
       type = 'xyz',
       name = 'layer',
+      minZoom = 3,
+      maxZoom = 25,
       opacity = 0.5,
       bbox: TGeoExtent = [-180, -90, 180, 90];
 
@@ -49,7 +51,9 @@ describe('Layer Types', () => {
       type,
       name,
       opacity,
-      bbox
+      bbox,
+      minZoom,
+      maxZoom
     });
 
     /** mandatory */
@@ -71,6 +75,8 @@ describe('Layer Types', () => {
     expect(layer.time).toBe(undefined);
     expect(layer.minResolution).toBe(undefined);
     expect(layer.maxResolution).toBe(undefined);
+    expect(layer.minZoom).toBe(minZoom);
+    expect(layer.maxZoom).toBe(maxZoom);
     expect(layer.legendImg).toBe(undefined);
     expect(layer.bbox).toBe(bbox);
     expect(layer.dimensions).toBe(undefined);
@@ -123,6 +129,8 @@ describe('Layer Types', () => {
     expect(newRasterlayer.time).toBe(undefined);
     expect(newRasterlayer.minResolution).toBe(undefined);
     expect(newRasterlayer.maxResolution).toBe(undefined);
+    expect(newRasterlayer.minZoom).toBe(undefined);
+    expect(newRasterlayer.maxZoom).toBe(undefined);
     expect(newRasterlayer.legendImg).toBe(undefined);
     expect(newRasterlayer.bbox).toBe(undefined);
     expect(newRasterlayer.dimensions).toBe(undefined);
@@ -181,6 +189,8 @@ describe('Layer Types', () => {
     expect(newVectorLayer.time).toBe(undefined);
     expect(newVectorLayer.minResolution).toBe(undefined);
     expect(newVectorLayer.maxResolution).toBe(undefined);
+    expect(newVectorLayer.minZoom).toBe(undefined);
+    expect(newVectorLayer.maxZoom).toBe(undefined);
     expect(newVectorLayer.legendImg).toBe(undefined);
     expect(newVectorLayer.bbox).toBe(undefined);
     expect(newVectorLayer.dimensions).toBe(undefined);

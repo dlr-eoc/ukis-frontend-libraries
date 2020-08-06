@@ -528,6 +528,20 @@ export class MapOlService {
       layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
     }
 
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
+    }
+
     return new olTileLayer(layeroptions);
   }
 
@@ -588,6 +602,20 @@ export class MapOlService {
        * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
        */
       layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
     }
 
     if (l.bbox) {
@@ -672,6 +700,20 @@ export class MapOlService {
         layeroptions.className = l.id;
       }
 
+      if (l.maxResolution) {
+        layeroptions.maxResolution = l.maxResolution;
+      }
+      if (l.minResolution) {
+        layeroptions.minResolution = l.minResolution;
+      }
+
+      if (l.maxZoom) {
+        layeroptions.maxZoom = l.maxZoom;
+      }
+      if (l.minZoom) {
+        layeroptions.minZoom = l.minZoom;
+      }
+
       if (l.bbox) {
         layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
       }
@@ -722,6 +764,20 @@ export class MapOlService {
        * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
        */
       layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
     }
 
     if (l.bbox) {
@@ -803,6 +859,13 @@ export class MapOlService {
       }
       if (l.minResolution) {
         layeroptions.minResolution = l.minResolution;
+      }
+
+      if (l.maxZoom) {
+        layeroptions.maxZoom = l.maxZoom;
+      }
+      if (l.minZoom) {
+        layeroptions.minZoom = l.minZoom;
       }
 
       if (l.popup) {
