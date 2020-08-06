@@ -109,6 +109,8 @@ export interface ILayerOptions {
   crossOrigin?: CrossOriginType;
   /** UI is expanded */
   expanded?: boolean;
+  /** CSS Class for custom styling */
+  cssClass?: string;
 }
 
 export interface ILayerDimensions extends IAnyObject {
@@ -211,6 +213,8 @@ export class Layer implements ILayerOptions {
   crossOrigin?: CrossOriginType;
   /** UI is expanded */
   expanded = false;
+  /** CSS Class for custom styling */
+  cssClass?: string;
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);
