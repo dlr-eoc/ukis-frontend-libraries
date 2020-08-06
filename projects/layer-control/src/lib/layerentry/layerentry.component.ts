@@ -14,6 +14,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 })
 export class LayerentryComponent implements OnInit {
   @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }
+  @HostBinding('class') get cssClass() { return this.layer.cssClass; }
 
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;

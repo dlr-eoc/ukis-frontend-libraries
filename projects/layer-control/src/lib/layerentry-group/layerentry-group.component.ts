@@ -14,6 +14,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class LayerentryGroupComponent implements OnInit {
   @HostBinding('class.group-visible') get visible() { return this.group.visible; }
+  @HostBinding('class') get cssClass() { return this.group.cssClass; }
 
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;
