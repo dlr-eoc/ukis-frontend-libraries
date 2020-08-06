@@ -7,6 +7,7 @@
 * **@dlr-eoc/core-ui:** Input/Output binding of dynamic component [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
 * **demo-maps:** Set routing to HashLocationStrategy and fix update Search Params on MapState change example.
 * **@dlr-eoc/map-ol:**
+  - Allow `CustomLayer` to use olLayerGroup [Issue #37](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/37).
   - Set min/max resolution and zoom of Layer in the creation of layers [Issue #36](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/36).
   - Allow to add a custom olControl on ngOnInit in a 'route-component' [Issue #35](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/35).
   - Subscribe to map state before map creation, then set this state on AfterViewInit so if `mapStateSvc.setMapState` or `mapStateSvc.setExtent` is triggered from a View/Route in ngOnInit the state is set correctly [Pull #17](https://github.com/dlr-eoc/ukis-frontend-libraries/pull/17).
