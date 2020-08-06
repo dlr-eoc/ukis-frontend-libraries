@@ -9,7 +9,7 @@ It is based on Clarity so add this first!
 ng add @dlr-eoc/core-ui
 ```
 
-- [add paths for library project in tsconfig.json](schematics/ng-add/index.ts#L273)
+- [add paths for library project in tsconfig.base.json](schematics/ng-add/index.ts#L273)
 
 - [add styles and files (for core-ui)](schematics/ng-add/index.ts#L61)
 
