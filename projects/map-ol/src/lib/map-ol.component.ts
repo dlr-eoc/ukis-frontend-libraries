@@ -13,7 +13,9 @@ import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer,
 import Map from 'ol/Map';
 import { getUid } from 'ol/util';
 
+import olBaseLayer from 'ol/layer/Base';
 import olLayer from 'ol/layer/Layer';
+import olLayerGroup from 'ol/layer/Group';
 
 import Attribution from 'ol/control/Attribution';
 import ScaleLine from 'ol/control/ScaleLine';
@@ -159,7 +161,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     } else {
       /** if layers already on the map -length not changed- update them */
       for (const layer of layers) {
-        const ollayer = this.mapSvc.getLayerByKey({ key: 'id', value: layer.id }, type);
+        const ollayer = this.mapSvc.getLayerByKey({ key: 'id', value: layer.id }, type) as olBaseLayer | olLayer<any> | olLayerGroup;
         if (ollayer) {
           if (ollayer.getVisible() !== layer.visible) {
             ollayer.setVisible(layer.visible);
@@ -167,12 +169,27 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (ollayer.getOpacity() !== layer.opacity) {
             ollayer.setOpacity(layer.opacity);
           }
-          if (layer instanceof CustomLayer && ollayer.getSource()) {
+          if (layer instanceof CustomLayer && ollayer instanceof olLayer) {
             const newSource = layer.custom_layer.getSource();
             const oldSource = ollayer.getSource();
             if (newSource && getUid(oldSource) !== getUid(newSource)) {
               ollayer.setSource(newSource);
             }
+          } else if (layer instanceof CustomLayer && layer.custom_layer instanceof olLayerGroup && ollayer instanceof olLayerGroup) {
+            const newLayers = layer.custom_layer.getLayers().getArray();
+            const oldLayers = ollayer.getLayers().getArray();
+
+            /** assume the order and length of layers is not changing and no more grouping!!! */
+            oldLayers.forEach((l, i) => {
+              const newLayer = newLayers[i];
+              if (l instanceof olLayer && newLayer instanceof olLayer) {
+                const oldSource = l.getSource();
+                const newSource = newLayer.getSource();
+                if (newSource && getUid(oldSource) !== getUid(newSource)) {
+                  l.setSource(newSource);
+                }
+              }
+            });
           }
           if (otherlayerslength > 0) {
             if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
@@ -184,7 +201,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
               ollayer.setZIndex(layers.indexOf(layer));
             }
           }
-          this.updateLayerParamsWith(ollayer, layer);
+          this.updateLayerParamsWith(ollayer as olLayer<any>, layer);
         }
       }
     }
@@ -204,34 +221,38 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   }
 
   private updateWmsLayerParamsWith(oldLayer: olLayer<any>, newWmsLayer: WmsLayer): void {
-    const source = oldLayer.getSource();
-    const oldParams = source.getParams();
-    const newParams = newWmsLayer.params;
-    if (!this.shallowEqual(oldParams, newParams)) {
-      oldLayer.getSource().updateParams(newParams);
+    if (oldLayer instanceof olLayer) {
+      const source = oldLayer.getSource();
+      const oldParams = source.getParams();
+      const newParams = newWmsLayer.params;
+      if (!this.shallowEqual(oldParams, newParams)) {
+        oldLayer.getSource().updateParams(newParams);
+      }
     }
   }
 
   private updateWmtsLayerParamsWith(oldLayer: olLayer<any>, newWmtsLayer: WmtsLayer): void {
     // contrary to a wms-source, a wmts-source has neither 'getParams' nor 'updateParams', so we need to do this manually.
-    const source = oldLayer.getSource();
-    const oldStyle = source.getStyle();
-    const oldFormat = source.getFormat();
-    const oldVersion = source.getVersion();
-    const oldMatrix = source.getMatrixSet();
-    const newStyle = newWmtsLayer.params.style;
-    const newFormat = newWmtsLayer.params.format;
-    const newVersion = newWmtsLayer.params.version;
-    const newMatrix = newWmtsLayer.params.matrixSetOptions.matrixSet;
-    if (newStyle !== undefined && oldStyle !== newStyle
-      || newFormat !== undefined && oldFormat !== newFormat
-      || newVersion !== undefined && oldVersion !== newVersion
-      || newMatrix !== undefined && oldMatrix !== newMatrix) {
-      // console.log(oldStyle, oldFormat, oldVersion, oldMatrix)
-      // console.log(newStyle, newFormat, newVersion, newMatrix)
-      const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as Tgroupfiltertype;
-      // this.mapSvc.setUkisLayer(newWmtsLayer, olFiltertype);
-      this.mapSvc.updateUkisLayer(newWmtsLayer, olFiltertype);
+    if (oldLayer instanceof olLayer) {
+      const source = oldLayer.getSource();
+      const oldStyle = source.getStyle();
+      const oldFormat = source.getFormat();
+      const oldVersion = source.getVersion();
+      const oldMatrix = source.getMatrixSet();
+      const newStyle = newWmtsLayer.params.style;
+      const newFormat = newWmtsLayer.params.format;
+      const newVersion = newWmtsLayer.params.version;
+      const newMatrix = newWmtsLayer.params.matrixSetOptions.matrixSet;
+      if (newStyle !== undefined && oldStyle !== newStyle
+        || newFormat !== undefined && oldFormat !== newFormat
+        || newVersion !== undefined && oldVersion !== newVersion
+        || newMatrix !== undefined && oldMatrix !== newMatrix) {
+        // console.log(oldStyle, oldFormat, oldVersion, oldMatrix)
+        // console.log(newStyle, newFormat, newVersion, newMatrix)
+        const olFiltertype = newWmtsLayer.filtertype.toLowerCase() as Tgroupfiltertype;
+        // this.mapSvc.setUkisLayer(newWmtsLayer, olFiltertype);
+        this.mapSvc.updateUkisLayer(newWmtsLayer, olFiltertype);
+      }
     }
   }
 
