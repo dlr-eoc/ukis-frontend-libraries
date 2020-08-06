@@ -109,7 +109,8 @@ export class RouteMapComponent implements OnInit {
       description: 'TDM90_DEM',
       attribution: ' | TDM90 Data ©: <a href="http://www.dlr.de" target="_blank">DLR</a>  licensed for <a rel="license" target="_blank" href="https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf">scientific use</a>',
       legendImg: '',
-      expanded: true
+      expanded: true,
+      cssClass: 'custom-layer',
     });
 
     const vectorLayer = new VectorLayer({
@@ -294,6 +295,7 @@ export class RouteMapComponent implements OnInit {
       id: 'group_2',
       name: 'Test Group 2',
       expanded: true,
+      cssClass: 'custom-layer-group',
       layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay]
     });
 

@@ -10,3 +10,17 @@
       padding: 0rem 1rem;
     }
   } */
+
+:host ::ng-deep {
+  .custom-layer-group {
+    .head>.title{
+      color: rgb(102, 15, 0);
+    }
+  }
+
+  .custom-layer {
+    .head>.title {
+      color: rgb(184, 125, 0);
+    }
+  }
+}
