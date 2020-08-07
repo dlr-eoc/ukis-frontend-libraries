@@ -1,0 +1,45 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "@dlr-eoc/*": [
+        "dist/*",
+        "projects/*"
+      ],
+      "ol": [
+        "node_modules/ol/src"
+      ],
+      "ol/*": [
+        "node_modules/ol/src/*"
+      ]
+    },
+    "allowJs": true
+  },
+  "include": [
+    "**/*.ts",
+    "node_modules/ol/**/*"
+  ],
+  "typeAcquisition": {
+    "exclude": [
+      "ol"
+    ]
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

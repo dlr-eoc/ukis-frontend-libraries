@@ -266,12 +266,12 @@ function updateAngularArchitect(project: WorkspaceProject, type: string | 'build
 }
 
 /**
- * tsconfig.json add
+ * tsconfig.base.json add
  *
  * - compilerOptions.paths
  */
 function ruleUpdateTsConfigFile(): Rule {
-  const path = 'tsconfig.json';
+  const path = 'tsconfig.base.json';
   return updateJsonFile<TsconfigJSON>(path, (json) => {
     const tsconfigPaths = [
       { name: '@dlr-eoc/*', paths: ['frontend-libraries/projects/*'] }
