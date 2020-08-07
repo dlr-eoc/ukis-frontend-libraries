@@ -17,6 +17,7 @@
 * **@dlr-eoc/map-ol:** The function mapOnMoveend now set the MapState without rounding the values for zoom and center.
 * **update dependencies** angular, clarity, ol, proj4
 * **@dlr-eoc/services-map-state:** Create new instances on set state and remove the not needed extent Subject.
+* **angular:** Created a `tsconfig.json` for usage by the IDE and a `tsconfig.base.json` for new projects to inherit from to conform with angular 10. More information:  https://angular.io/guide/migration-solution-style-tsconfig
 
 
 ### Features
@@ -40,6 +41,7 @@
 
 ### Refactoring
 * **@dlr-eoc/core-ui:** Add class ukis-range-input to adjust style of clr range
+
 
 
 # [7.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.1.0) (2020-06-03) (Schematics, OL-configuration, performance-monitoring)

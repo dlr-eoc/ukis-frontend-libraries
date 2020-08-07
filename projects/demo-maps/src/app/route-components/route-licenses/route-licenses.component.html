@@ -1,6 +1,22 @@
 <main class="content-area licenses">
   <p>A lot of third party libraries were used to create this project. Their licenses are listed here.</p>
 
+  <p>For more information, click here:
+    <clr-signpost>
+      <clr-signpost-content *clrIfOpen>
+          <h3>Licenses setup</h3>
+          <p>This component expects a <code>assets/licenses.json</code> file to be present in the project bundle.</p>
+          <p>That file was created with the following command:</p>
+          <code>
+            cd ./frontend-libraries
+            npm install -g license-checker
+            npx license-checker --json --out ./dist/demo-maps/assets
+          </code>
+          You might want to add this command to the build-process by adding a <code>"postbuild"</code> task to your package.json.
+      </clr-signpost-content>
+    </clr-signpost>
+  </p>
+
   <clr-datagrid>
     <clr-dg-column>Library name</clr-dg-column>
     <clr-dg-column>Publisher</clr-dg-column>
