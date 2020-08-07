@@ -8,16 +8,91 @@
   "files": [],
   "references": [
     {
-      "path": "./tsconfig.app.json"
+      "path": "./tsconfig.base.json"
     },
     {
-      "path": "./tsconfig.spec.json"
+      "path": "./projects/base-layers-raster/tsconfig.lib.json"
     },
     {
-      "path": "./projects/test-lib/tsconfig.lib.json"
+      "path": "./projects/base-layers-raster/tsconfig.spec.json"
     },
     {
-      "path": "./projects/test-lib/tsconfig.spec.json"
-    }
+      "path": "./projects/cookie-alert/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/cookie-alert/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/core-ui/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/core-ui/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo-auth/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo-auth/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo-maps/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo-maps/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/layer-control/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/layer-control/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map-ol/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-ol/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map-tools/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-tools/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/owc-control/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/owc-control/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-layers/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-layers/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-map-state/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-map-state/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-ogc/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-ogc/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-util-store/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-util-store/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/user-info/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/user-info/tsconfig.spec.json"
+    },
   ]
 }
