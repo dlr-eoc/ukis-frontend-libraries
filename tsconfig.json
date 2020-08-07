@@ -1,32 +1,98 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {
-      "@dlr-eoc/*": [
-        "dist/*",
-        "projects/*"
-      ]
-    }
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.base.json"
+    },
+    {
+      "path": "./projects/base-layers-raster/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/base-layers-raster/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/cookie-alert/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/cookie-alert/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/core-ui/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/core-ui/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo-auth/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo-auth/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo-maps/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo-maps/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/layer-control/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/layer-control/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map-ol/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-ol/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map-tools/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-tools/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/owc-control/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/owc-control/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-layers/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-layers/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-map-state/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-map-state/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-ogc/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-ogc/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-util-store/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-util-store/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/user-info/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/user-info/tsconfig.spec.json"
+    },
+  ]
 }
