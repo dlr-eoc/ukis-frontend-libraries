@@ -69,7 +69,7 @@ export class MapOlService {
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
   constructor() {
-    this.map = new olMap({});
+    this.map = new olMap({ controls: [] });
     this.view = new olView();
     this.EPSG = 'EPSG:3857'; // 'EPSG:4326'; EPSG:3857
     // this.createMap();
@@ -180,7 +180,7 @@ export class MapOlService {
     /** define map in constructor so it is created before to use it in projects onInit Method  */
     [baselayerGroup, layersGroup, overlayGroup].map(layer => this.map.addLayer(layer));
     this.map.setView(tempview);
-    this.map.getControls().clear();
+    // this.map.getControls().clear();
     this.view = this.map.getView();
     this.setProjection(this.EPSG);
     return {
@@ -528,6 +528,20 @@ export class MapOlService {
       layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
     }
 
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
+    }
+
     return new olTileLayer(layeroptions);
   }
 
@@ -588,6 +602,20 @@ export class MapOlService {
        * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
        */
       layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
     }
 
     if (l.bbox) {
@@ -672,6 +700,20 @@ export class MapOlService {
         layeroptions.className = l.id;
       }
 
+      if (l.maxResolution) {
+        layeroptions.maxResolution = l.maxResolution;
+      }
+      if (l.minResolution) {
+        layeroptions.minResolution = l.minResolution;
+      }
+
+      if (l.maxZoom) {
+        layeroptions.maxZoom = l.maxZoom;
+      }
+      if (l.minZoom) {
+        layeroptions.minZoom = l.minZoom;
+      }
+
       if (l.bbox) {
         layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
       }
@@ -722,6 +764,20 @@ export class MapOlService {
        * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
        */
       layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
     }
 
     if (l.bbox) {
@@ -803,6 +859,13 @@ export class MapOlService {
       }
       if (l.minResolution) {
         layeroptions.minResolution = l.minResolution;
+      }
+
+      if (l.maxZoom) {
+        layeroptions.maxZoom = l.maxZoom;
+      }
+      if (l.minZoom) {
+        layeroptions.minZoom = l.minZoom;
       }
 
       if (l.popup) {

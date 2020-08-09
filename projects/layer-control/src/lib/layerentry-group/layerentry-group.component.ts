@@ -2,7 +2,7 @@ import { Component, OnInit, Input, HostBinding } from '@angular/core';
 
 
 // imports only for typings...
-import { LayerGroup } from '@dlr-eoc/services-layers';
+import { LayerGroup, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -14,14 +14,25 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class LayerentryGroupComponent implements OnInit {
   @HostBinding('class.group-visible') get visible() { return this.group.visible; }
+  @HostBinding('class') get cssClass() { return this.group.cssClass; }
 
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;
   @Input('group') group: LayerGroup;
   @Input('layerGroups') layerGroups: LayerGroup[];
 
-  public openProperties = false;
-  public openAllLayersProperties = false;
+  public set openAllLayersProperties(value: boolean) {
+    if (this.group && this.group.layers.length) {
+      this.group.layers.forEach(l => l.expanded = value);
+    }
+  }
+  public get openAllLayersProperties() {
+    if (this.group && this.group.layers.length) {
+      return this.group.layers.filter(l => l.expanded === true).length === this.group.layers.length;
+    } else {
+      return false;
+    }
+  }
   // public visible: boolean = true;
   public canZoomToGroup = false;
 
@@ -72,14 +83,18 @@ export class LayerentryGroupComponent implements OnInit {
   }
 
   layerUpdate(event, group: LayerGroup) {
-    const layer = event.layer;
-    this.layersSvc.updateLayer(layer, group.filtertype);
-    // this.checkGroupLayersVisibility();
+    const layer = event.layer as Layer;
+    /** update event layer in the group... this is done by object reference!! */
+    /* const updateLayerIndex = group.layers.findIndex(l => l.id === layer.id);
+    if (updateLayerIndex !== -1) {
+      group.layers[updateLayerIndex] = layer;
+    } */
+    this.layersSvc.updateLayerGroup(group);
   }
 
 
   showProperties() {
-    this.openProperties = !this.openProperties;
+    this.group.expanded = !this.group.expanded;
   }
 
   showHideAllDetails() {

@@ -16,12 +16,16 @@ export interface ILayerGroupOptions {
   bbox?: TGeoExtent;
   description?: string;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
+  /** UI is expanded */
+  expanded?: boolean;
+  /** CSS Class for custom styling */
+  cssClass?: string;
 }
 
 /**
  * Classes for layer construction
  */
-export class LayerGroup {
+export class LayerGroup implements ILayerGroupOptions {
   id: string;
   name: string;
   layers: Layer[];
@@ -34,6 +38,11 @@ export class LayerGroup {
   bbox?: [number, number, number, number];
   description?: string;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
+  /** UI is expanded */
+  expanded = false;
+  /** CSS Class for custom styling */
+  cssClass?: string;
+
   constructor(options: ILayerGroupOptions) {
     if (options && options.visible !== undefined && options.layers && options.layers.length) {
       options.layers = options.layers.map(l => {

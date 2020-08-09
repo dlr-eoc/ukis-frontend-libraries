@@ -41,6 +41,8 @@ describe('Layer Types', () => {
     const id = 'ID-layer',
       type = 'xyz',
       name = 'layer',
+      minZoom = 3,
+      maxZoom = 25,
       opacity = 0.5,
       bbox: TGeoExtent = [-180, -90, 180, 90];
 
@@ -49,7 +51,9 @@ describe('Layer Types', () => {
       type,
       name,
       opacity,
-      bbox
+      bbox,
+      minZoom,
+      maxZoom
     });
 
     /** mandatory */
@@ -60,6 +64,7 @@ describe('Layer Types', () => {
     /** optional or defaults */
     expect(layer.opacity).toBe(opacity);
     expect(layer.visible).toBe(true);
+    expect(layer.expanded).toBe(false);
     expect(layer.removable).toBe(false);
     expect(layer.filtertype).toBe('Layers');
     expect(layer.continuousWorld).toBe(false);
@@ -70,6 +75,8 @@ describe('Layer Types', () => {
     expect(layer.time).toBe(undefined);
     expect(layer.minResolution).toBe(undefined);
     expect(layer.maxResolution).toBe(undefined);
+    expect(layer.minZoom).toBe(minZoom);
+    expect(layer.maxZoom).toBe(maxZoom);
     expect(layer.legendImg).toBe(undefined);
     expect(layer.bbox).toBe(bbox);
     expect(layer.dimensions).toBe(undefined);
@@ -77,6 +84,7 @@ describe('Layer Types', () => {
     expect(layer.actions).toBe(undefined);
     expect(layer.styles).toBe(undefined);
     expect(layer.crossOrigin).toBe(undefined);
+    expect(layer.cssClass).toBe(undefined);
   });
 
 
@@ -86,6 +94,7 @@ describe('Layer Types', () => {
       url = '//geoservice.dlr.de/eoc/basemap/wms',
       removable = true,
       visible = true,
+      cssClass = 'custom-class',
       params = {
         layers: 'litemap'
       };
@@ -97,7 +106,8 @@ describe('Layer Types', () => {
       url,
       removable,
       visible,
-      params
+      params,
+      cssClass
     });
 
     /** mandatory */
@@ -108,6 +118,7 @@ describe('Layer Types', () => {
     /** optional or defaults */
     expect(newRasterlayer.opacity).toBe(1);
     expect(newRasterlayer.visible).toBe(visible);
+    expect(newRasterlayer.expanded).toBe(false);
     expect(newRasterlayer.removable).toBe(removable);
     expect(newRasterlayer.filtertype).toBe('Layers');
     expect(newRasterlayer.continuousWorld).toBe(false);
@@ -118,6 +129,8 @@ describe('Layer Types', () => {
     expect(newRasterlayer.time).toBe(undefined);
     expect(newRasterlayer.minResolution).toBe(undefined);
     expect(newRasterlayer.maxResolution).toBe(undefined);
+    expect(newRasterlayer.minZoom).toBe(undefined);
+    expect(newRasterlayer.maxZoom).toBe(undefined);
     expect(newRasterlayer.legendImg).toBe(undefined);
     expect(newRasterlayer.bbox).toBe(undefined);
     expect(newRasterlayer.dimensions).toBe(undefined);
@@ -125,6 +138,7 @@ describe('Layer Types', () => {
     expect(newRasterlayer.actions).toBe(undefined);
     expect(newRasterlayer.styles).toBe(undefined);
     expect(newRasterlayer.crossOrigin).toBe(undefined);
+    expect(newRasterlayer.cssClass).toBe(cssClass);
 
     /** raster specific */
     expect(newRasterlayer.url).toBe(url);
@@ -138,6 +152,7 @@ describe('Layer Types', () => {
     const id = 'ID-vector', name = 'vector',
       type = 'geojson',
       visible = true,
+      expanded = true,
       data = { Feature: {} },
       cluster = true,
       options = { style: () => { } };
@@ -150,7 +165,9 @@ describe('Layer Types', () => {
       type,
       data,
       cluster,
-      options
+      options,
+      visible,
+      expanded
     });
 
     /** mandatory */
@@ -161,6 +178,7 @@ describe('Layer Types', () => {
     /** optional or defaults */
     expect(newVectorLayer.opacity).toBe(1);
     expect(newVectorLayer.visible).toBe(visible);
+    expect(newVectorLayer.expanded).toBe(expanded);
     expect(newVectorLayer.removable).toBe(false);
     expect(newVectorLayer.filtertype).toBe('Layers');
     expect(newVectorLayer.continuousWorld).toBe(false);
@@ -171,6 +189,8 @@ describe('Layer Types', () => {
     expect(newVectorLayer.time).toBe(undefined);
     expect(newVectorLayer.minResolution).toBe(undefined);
     expect(newVectorLayer.maxResolution).toBe(undefined);
+    expect(newVectorLayer.minZoom).toBe(undefined);
+    expect(newVectorLayer.maxZoom).toBe(undefined);
     expect(newVectorLayer.legendImg).toBe(undefined);
     expect(newVectorLayer.bbox).toBe(undefined);
     expect(newVectorLayer.dimensions).toBe(undefined);
@@ -191,6 +211,8 @@ describe('Layer Types', () => {
   it('should created a LayerGroup with options merged', () => {
     const id = 'ID-group', name = 'group',
       visible = true,
+      expanded = true,
+      cssClass = 'custom-group-class',
       filtertype = 'Overlays',
       layers = [rasterlayer, vectorlayer, customlayer];
 
@@ -198,6 +220,8 @@ describe('Layer Types', () => {
     const newRasterlayer = new LayerGroup({
       id,
       visible, // set visible on each layer
+      expanded, // set expanded on the group (not for each layer)
+      cssClass,
       name,
       filtertype,
       layers
@@ -219,6 +243,8 @@ describe('Layer Types', () => {
 
     /** optional or defaults */
     expect(newRasterlayer.visible).toBe(visible);
+    expect(newRasterlayer.expanded).toBe(expanded);
+    expect(newRasterlayer.cssClass).toBe(cssClass);
     expect(newRasterlayer.removable).toBe(true);
     expect(newRasterlayer.layerRemovable).toBe(true);
     expect(newRasterlayer.filtertype).toBe(filtertype);
@@ -231,13 +257,13 @@ describe('Layer Types', () => {
 
   it('should created a RasterLayer with CORS property set', () => {
     const id = 'ID-raster', name = 'raster',
-    type = 'wms',
-    url = '//geoservice.dlr.de/eoc/basemap/wms',
-    removable = true,
-    visible = true,
-    params = {
-      layers: 'litemap'
-    };
+      type = 'wms',
+      url = '//geoservice.dlr.de/eoc/basemap/wms',
+      removable = true,
+      visible = true,
+      params = {
+        layers: 'litemap'
+      };
     const corsMode = 'anonymous';
 
     const newRasterlayer = new RasterLayer({

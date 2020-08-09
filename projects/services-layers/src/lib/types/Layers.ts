@@ -93,6 +93,8 @@ export interface ILayerOptions {
   zIndex?: number;
   minResolution?: number;
   maxResolution?: number;
+  minZoom?: number;
+  maxZoom?: number;
   /** legend for the layer as image or a angular component */
   legendImg?: string | IDynamicComponent;
   /** geographic coordinates */
@@ -107,6 +109,10 @@ export interface ILayerOptions {
   styles?: ILayerStyleSet[];
   /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
   crossOrigin?: CrossOriginType;
+  /** UI is expanded */
+  expanded?: boolean;
+  /** CSS Class for custom styling */
+  cssClass?: string;
 }
 
 export interface ILayerDimensions extends IAnyObject {
@@ -194,6 +200,8 @@ export class Layer implements ILayerOptions {
   protected protTime?: string;
   minResolution?: number;
   maxResolution?: number;
+  minZoom?: number;
+  maxZoom?: number;
   legendImg?: string | IDynamicComponent;
 
   bbox?: TGeoExtent;
@@ -207,6 +215,10 @@ export class Layer implements ILayerOptions {
   styles?: ILayerStyleSet[];
   /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
   crossOrigin?: CrossOriginType;
+  /** UI is expanded */
+  expanded = false;
+  /** CSS Class for custom styling */
+  cssClass?: string;
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);

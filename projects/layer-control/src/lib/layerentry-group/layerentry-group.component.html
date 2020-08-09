@@ -1,8 +1,8 @@
 <div class="layergroup">
   <div class="head">
     <!-- layer expand icon -->
-    <clr-icon [attr.shape]="openProperties?'folder-open':'folder'" class="iconButton" (click)="showProperties()"
-      title="{{openProperties?'Close':'Open'}}"></clr-icon>
+    <clr-icon [attr.shape]="group.expanded?'folder-open':'folder'" class="iconButton" (click)="showProperties()"
+      title="{{group.expanded?'Close':'Open'}}"></clr-icon>
 
 
     <!-- layer title -->
@@ -33,7 +33,7 @@
     </span>
   </div>
 
-  <div *ngIf="openProperties" class="body">
+  <div *ngIf="group.expanded" class="body">
     <!-- tools: zoomTo, remove, open all Tabs -->
     <div class="tools">
       <span></span>
