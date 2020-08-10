@@ -5,7 +5,7 @@ import { fromLonLat } from 'ol/proj';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { flattenLayers, simpleMapToCanvas } from './ol';
+import { flattenLayers, simpleMapToCanvas } from './utils-ol';
 
 
 

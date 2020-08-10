@@ -8,6 +8,8 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"
+    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR",
+    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
+    "zone.js": "0.0.0-PLACEHOLDER-VENDOR"
   }
 }

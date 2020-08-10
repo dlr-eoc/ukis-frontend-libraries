@@ -2,4 +2,4 @@
  * Public API Surface of utils-maps
  */
 
-export * from './lib/ol/ol';
+export * from './lib/ol/utils-ol';
