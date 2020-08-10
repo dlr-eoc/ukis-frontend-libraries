@@ -22,7 +22,7 @@
     "@schematics/angular": "0.0.0-PLACEHOLDER-VENDOR",
     "parse5-html-rewriting-stream": "^5.1.1",
     "tslib": "0.0.0-PLACEHOLDER-VENDOR"
-  },
+},
   "peerDependencies": {
     "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",

@@ -18,7 +18,7 @@
     "@dlr-eoc/core-ui": "0.0.0-PLACEHOLDER",
     "@angular/cdk": "0.0.0-PLACEHOLDER-VENDOR",
     "tslib": "0.0.0-PLACEHOLDER-VENDOR"
-  },
+},
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"

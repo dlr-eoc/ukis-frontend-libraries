@@ -33,7 +33,8 @@ describe('LayerentryGroupComponent', () => {
     const layer = new Layer({
       type: 'wms',
       name: 'test layer',
-      id: 'test_layer'
+      id: 'test_layer',
+      expanded: true
     });
 
     component.group = new LayerGroup({
@@ -65,7 +66,8 @@ describe('LayerentryGroupComponent', () => {
     expect(component.group instanceof LayerGroup).toBeTruthy();
   });
 
-  it('should have input layerGroups', () => {
-    expect(component.layerGroups[0] instanceof LayerGroup).toBeTruthy();
+  it('should get openAllLayersProperties from the expanded Layers', () => {
+    /** test_layer is expanded */
+    expect(component.openAllLayersProperties).toBeTrue();
   });
 });

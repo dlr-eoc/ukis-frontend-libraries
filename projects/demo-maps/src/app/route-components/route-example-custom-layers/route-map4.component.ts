@@ -5,18 +5,20 @@ import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
 import { Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer } from 'ol/layer';
+import olLayerGroup from 'ol/layer/Group';
 import olVectorSource from 'ol/source/Vector';
 import olCluster from 'ol/source/Cluster';
 import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON } from 'ol/format';
 import olImageWMS from 'ol/source/ImageWMS';
 import olImageLayer from 'ol/layer/Image';
+import olTileLayer from 'ol/layer/Tile';
+import olTileWMS from 'ol/source/TileWMS';
 
 import olVectorTileLayer from 'ol/layer/VectorTile';
 import olVectorTileSource from 'ol/source/VectorTile';
 import olMVT from 'ol/format/MVT';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
-import { IDynamicComponent } from '@dlr-eoc/core-ui/src/public-api';
 
 @Component({
   selector: 'app-route-map4',
@@ -224,6 +226,35 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: false,
     });
 
+    const customLayerGroup = new CustomLayer({
+      id: 'customLayerOlGroup',
+      name: 'cluster Layer OlGroup',
+      visible: false,
+      popup: true,
+      custom_layer: new olLayerGroup({
+        layers: [
+          new olTileLayer({
+            source: new olTileWMS({
+              url: 'https://geoservice.dlr.de/eoc/basemap/wms',
+              params: { LAYERS: 'litemap', TILED: true },
+              serverType: 'geoserver',
+              // Countries have transparency, so do not fade tiles:
+              transition: 0,
+            }),
+          }),
+          new olTileLayer({
+            source: new olTileWMS({
+              url: 'https://geoservice.dlr.de/eoc/basemap/wms',
+              params: { LAYERS: 'liteoverlay', TILED: true },
+              serverType: 'geoserver',
+              // Countries have transparency, so do not fade tiles:
+              transition: 0,
+            }),
+          })
+        ]
+      })
+    });
+
     const clusterLayer = new CustomLayer({
       id: 'clusterLayer',
       name: 'cluster Layer - VectorLayer',
@@ -298,7 +329,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const layers = [osmLayer1, layersGroup1, clusterLayer, vectorTile, imageWmsLayer, kmlLayer, topoJsonLayer];
+    const layers = [osmLayer1, layersGroup1, clusterLayer, vectorTile, imageWmsLayer, kmlLayer, topoJsonLayer, customLayerGroup];
 
     layers.forEach(layer => {
       if (layer instanceof Layer) {

@@ -319,7 +319,7 @@ export class LayersService {
     }
     const storeItems = this.store.getValue();
 
-    const filteredGroups = storeItems.filter(function(layer, index) {
+    const filteredGroups = storeItems.filter(function (layer, index) {
       return layer.id !== layergroup.id;
     });
 
@@ -336,6 +336,9 @@ export class LayersService {
     }
     this.updateLayerOrGroupInStore(layerGroup);
     for (const layer of layerGroup.layers) {
+      /** TODO: this triggers a change for every layer efen if no attributes of the layer are changed!!
+       * To check if layer is changed we have to check all attributes, also objects e.g. CustomLayer... this is complicated??
+       */
       this.updateLayer(layer, layerGroup.filtertype || 'Layers');
     }
   }

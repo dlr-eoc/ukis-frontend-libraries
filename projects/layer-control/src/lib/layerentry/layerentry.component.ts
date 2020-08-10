@@ -14,6 +14,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 })
 export class LayerentryComponent implements OnInit {
   @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }
+  @HostBinding('class') get cssClass() { return this.layer.cssClass; }
 
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;
@@ -21,11 +22,22 @@ export class LayerentryComponent implements OnInit {
 
   @Input('group') group?: LayerGroup;
   @Input('layerGroups') layerGroups?: LayerGroup[];
-  @Input('expanded') expanded = false;
+  @Input('expanded') set expanded(value: boolean) {
+    if (this.layer) {
+      this.layer.expanded = value;
+    }
+  }
+  get expanded() {
+    if (this.layer) {
+      return this.layer.expanded;
+    } else {
+      return false;
+    }
+  }
   @Input('expandable') expandable = true;
 
 
-  @Output() update = new EventEmitter<any>();
+  @Output() update = new EventEmitter<{ layer: Layer }>();
 
   public canZoomToLayer = false;
 
@@ -110,18 +122,32 @@ export class LayerentryComponent implements OnInit {
         this.layersSvc.updateLayer(selectedLayer, selectedLayer.filtertype || 'Layers'); // TODO check for baselayers!!!!!!
       }
     } else {
-      /** "radio" for Baselayers */
-      if (group.filtertype === 'Baselayers') {
-        for (const layer of group.layers) {
-          layer.visible = layer === selectedLayer;
+      if (group.layers.length > 0) {
+        /** "radio" for Baselayers */
+        if (group.filtertype === 'Baselayers') {
+          for (const layer of group.layers) {
+            layer.visible = layer === selectedLayer;
+          }
+          this.update.emit({
+            layer: this.layer
+          });
+          /** "checkbox" for all other layers */
+        } else {
+          const tempGroupVisible = group.visible;
+          /** change visibility of the selected layer */
+          selectedLayer.visible = !selectedLayer.visible;
+
+          /** check if group visibility has changed */
+          if (tempGroupVisible !== group.visible) {
+            this.update.emit({
+              layer: this.layer
+            });
+          } else {
+            /** If the visibility of the group don't changes update only the layer  */
+            this.layersSvc.updateLayer(selectedLayer, selectedLayer.filtertype || 'Layers');
+          }
         }
-        /** "checkbox" for all other layers */
-      } else {
-        selectedLayer.visible = !selectedLayer.visible;
       }
-      this.update.emit({
-        layer: this.layer
-      });
     }
   }
   /**
