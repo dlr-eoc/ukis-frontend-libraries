@@ -18,6 +18,7 @@
 * **update dependencies** angular, clarity, ol, proj4
 * **@dlr-eoc/services-map-state:** Create new instances on set state and remove the not needed extent Subject.
 * **angular:** Created a `tsconfig.json` for usage by the IDE and a `tsconfig.base.json` for new projects to inherit from to conform with angular 10. More information:  https://angular.io/guide/migration-solution-style-tsconfig
+* **@dlr-eoc/utils:** Created `utils-*` projects. These contain utilities that do not depend on angular and can potentially be used in other libraries, too.
 
 
 ### Features
@@ -37,6 +38,10 @@
 * **@dlr-eoc/map-tools:** Allow map navigator to set the input step.
 * **@dlr-eoc/services-map-state:** Add function to get the last action of the MapStateService so if a full state was set or only the extent.
 * **@dlr-eoc/core-ui:** Export DynamicComponent and ViewRefDirective
+* **@dlr-eoc/services-layers:** RasterLayers can now specify the parameter `crossOrigin` in their constructor. 
+* **@dlr-eoc/utils-browser:** `Paper` class to aid in getting dimensions of paper-sheets (A5, A4, ...) in pixel and cm.
+* **@dlr-eoc/utils-browser:** `download` utilities to save us some boilerplate when saving data to a file.
+* **@dlr-eoc/utils-maps:** `ol` utilities to copy a map's current image in a canvas (potentially for later downloading).
 
 
 ### Refactoring

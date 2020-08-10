@@ -94,5 +94,17 @@
     {
       "path": "./projects/user-info/tsconfig.spec.json"
     },
+    {
+      "path": "./projects/utils-maps/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/utils-maps/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/utils-browser/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/utils-browser/tsconfig.spec.json"
+    },
   ]
 }

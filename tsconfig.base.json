@@ -25,6 +25,14 @@
       ],
       "ol/*": [
         "node_modules/ol/src/*"
+      ],
+      "utils-maps": [
+        "dist/utils-maps/utils-maps",
+        "dist/utils-maps"
+      ],
+      "utils-browser": [
+        "dist/utils-browser/utils-browser",
+        "dist/utils-browser"
       ]
     },
     "allowJs": true
