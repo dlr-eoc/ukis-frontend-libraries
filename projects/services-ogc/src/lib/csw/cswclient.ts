@@ -17,7 +17,12 @@ import { Observable } from 'rxjs';
 import { delayedRetry } from '../wps/utils/polling';
 import { share, map, tap } from 'rxjs/operators';
 
-
+// Bugfix: in Jsonix's Dublin-Core schema, the `URI` element was not listed.
+DC_1_1.eis.push({
+    en: 'URI',
+    ti: '.SimpleLiteral',
+    sh: 'DC-element'
+});
 
 
 @Injectable()
