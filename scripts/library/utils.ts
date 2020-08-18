@@ -159,9 +159,9 @@ export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPac
   });
 }
 
-export function createNpmrc(path: string, scope: string) {
+export function createNpmrc(path: string, scope: string, registry = 'https://npm.pkg.github.com') {
   const npmrc = `
-    ${scope}:registry=https://npm.pkg.github.com
+    ${scope}:registry=${registry}
     loglevel = "verbose"`;
 
   try {

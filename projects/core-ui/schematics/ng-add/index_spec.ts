@@ -150,9 +150,9 @@ describe('ng-add', () => {
     expect(projectFile.projects[appOptions.name].schematics['@schematics/angular:component'].style).toBe('scss');
   });
 
-  it('should update the stconfig file', async () => {
+  it('should update the tsconfig file', async () => {
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
-    const tsconfigFile = JSON.parse(tree.readContent('/tsconfig.json'));
+    const tsconfigFile = JSON.parse(tree.readContent('/tsconfig.base.json'));
     expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
   });
 

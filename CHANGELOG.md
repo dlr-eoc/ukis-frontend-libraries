@@ -1,29 +1,52 @@
 
 ### Bug Fixes
+* **@dlr-eoc/layer-control:**
+  - LayerentryGroup emit change for LayerGroup on Layerentry update [Issue #29](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/29)
+  - Binding to dynamicComponent [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
+
 * **@dlr-eoc/core-ui:** Input/Output binding of dynamic component [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
-* **@dlr-eoc/layer-control:** Binding to dynamicComponent [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23)
 * **demo-maps:** Set routing to HashLocationStrategy and fix update Search Params on MapState change example.
-* **@dlr-eoc/map-ol:** Subscribe to map state before map creation, then set this state on AfterViewInit so if `mapStateSvc.setMapState` or `mapStateSvc.setExtent` is triggered from a View/Route in ngOnInit the state is set correctly.
+* **@dlr-eoc/map-ol:**
+  - Allow `CustomLayer` to use olLayerGroup [Issue #37](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/37).
+  - Set min/max resolution and zoom of Layer in the creation of layers [Issue #36](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/36).
+  - Allow to add a custom olControl on ngOnInit in a 'route-component' [Issue #35](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/35).
+  - Subscribe to map state before map creation, then set this state on AfterViewInit so if `mapStateSvc.setMapState` or `mapStateSvc.setExtent` is triggered from a View/Route in ngOnInit the state is set correctly [Pull #17](https://github.com/dlr-eoc/ukis-frontend-libraries/pull/17).
 
 
 ### Changes
 * **@dlr-eoc/map-ol:** The function mapOnMoveend now set the MapState without rounding the values for zoom and center.
 * **update dependencies** angular, clarity, ol, proj4
 * **@dlr-eoc/services-map-state:** Create new instances on set state and remove the not needed extent Subject.
+* **angular:** Created a `tsconfig.json` for usage by the IDE and a `tsconfig.base.json` for new projects to inherit from to conform with angular 10. More information:  https://angular.io/guide/migration-solution-style-tsconfig
+* **@dlr-eoc/utils:** Created `utils-*` projects. These contain utilities that do not depend on angular and can potentially be used in other libraries, too.
 
 
 ### Features
-* **@dlr-eoc/services-layers:** Layer IDynamicComponent Interface is extended for Outputs [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23).
+* **@dlr-eoc/services-layers:**
+  - Add new attribute min/max Zoom to Layer [Issue #36](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/36).
+  - Add new attribute `cssClass` to Layer and LayerGroup for custom styling [Issue #32](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/32).
+  - Add new attribute `expanded` to Layer and LayerGroup [Issue #25](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/25).
+  - Layer IDynamicComponent Interface is extended for Outputs [Issue #23](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/23).
+  - Adjust layer types so it can use a Angular Component for `action` or `legendImg` #12 #13.
+  - RasterLayers can now specify the parameter `crossOrigin` in their constructor.
+
+* **@dlr-eoc/layer-control:**
+  - Add the attribute `cssClass` whith component HostBinding [Issue #32](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/32).
+  - Use the attribute `expanded` from Layer or LayerGroup to expand the settings tab [Issue #25](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/25).
+  - Adjust layerentry so it can use a Angular Component in the settings and as legend #12 #13.
+
 * **@dlr-eoc/map-tools:** Allow map navigator to set the input step.
 * **@dlr-eoc/services-map-state:** Add function to get the last action of the MapStateService so if a full state was set or only the extent.
-* **@dlr-eoc/layer-control:** Adjust layerentry so it can use a Angular Component in the settings and as legend #12 #13. 
-* **@dlr-eoc/services-layers:** Adjust layer types so it can use a Angular Component for `action` or `legendImg` #12 #13. 
 * **@dlr-eoc/core-ui:** Export DynamicComponent and ViewRefDirective
 * **@dlr-eoc/services-layers:** RasterLayers can now specify the parameter `crossOrigin` in their constructor. 
+* **@dlr-eoc/utils-browser:** `Paper` class to aid in getting dimensions of paper-sheets (A5, A4, ...) in pixel and cm.
+* **@dlr-eoc/utils-browser:** `download` utilities to save us some boilerplate when saving data to a file.
+* **@dlr-eoc/utils-maps:** `ol` utilities to copy a map's current image in a canvas (potentially for later downloading).
 
 
 ### Refactoring
 * **@dlr-eoc/core-ui:** Add class ukis-range-input to adjust style of clr range
+
 
 
 # [7.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.1.0) (2020-06-03) (Schematics, OL-configuration, performance-monitoring)

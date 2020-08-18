@@ -2,6 +2,7 @@ import { updatePackageJson, createNpmrc } from './utils';
 
 const CWD = process.cwd();
 const PATH = require('path');
+const args = process.argv.slice(2);
 
 const packagePath = PATH.join(CWD, 'package.json');
 const packageScope = '@dlr-eoc';
@@ -19,4 +20,11 @@ updatePackageJson(packagePath, (json) => {
   return json;
 });
 
-createNpmrc(PATH.join(CWD, '.npmrc'), packageScope);
+/** TODO: maybe use yargs - it is installed anyway by other modules */
+const registryIsSet = args.indexOf('--registry');
+if (registryIsSet !== -1) {
+  const registry = args[registryIsSet + 1];
+  createNpmrc(PATH.join(CWD, '.npmrc'), packageScope, registry);
+} else {
+  createNpmrc(PATH.join(CWD, '.npmrc'), packageScope);
+}

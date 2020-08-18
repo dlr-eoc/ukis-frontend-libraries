@@ -39,6 +39,7 @@ async function runCheckDeps() {
   const allErrors = await checkDeps(ANGULARJSON, packageScope);
   if (allErrors.length) {
     allErrors.map(e => formatCheckDepsOutput(e, false));
+    process.exit(1);
   }
 }
 
@@ -228,9 +229,10 @@ Options:
   -c, --check             Check if all dependencies are listed in the package.json of the project
   -t, --test              Run ng test for all projects
       & --headless        Run ng test for all projects with ChromeHeadless
-  -b, --build             Run ng build fal all projects with toposort dependencies`);
+  -b, --build             Run ng build for all projects with toposort dependencies`);
 }
 
+/** TODO: maybe use yargs - it is installed anyway by other modules */
 export function run() {
   const args = process.argv.slice(2);
   if (args.includes('-h') || args.includes('--help')) {
