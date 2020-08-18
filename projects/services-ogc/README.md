@@ -121,6 +121,42 @@ for (const resource of service.getResources(context)) {
 Parts of this library depend on [jsonix](https://github.com/highsource/jsonix). The current version of jsonix ([3.0.0](https://github.com/highsource/jsonix/releases/tag/3.0.0)) does not build to ES2015. To still be able to use this library, we created a [fork with some minor modifications](https://github.com/MichaelLangbein/jsonix). As soon as the main repository of jsonix has fixed its build problems (we're working on a pull-request) we can move from our fork back to the main repo.  
 
 
+
+## CSW
+This is a client for CSW servers (https://www.ogc.org/standards/cat). It supports all required CSW operations.
+Only a minimal set of parameters is expected to be passed to the client, freeing the user of the need to build potentially deeply nested structures as bodies for the CSW.
+All data is marshalled and unmarshalled to json by Jsonix.
+Note: currently, search in the `GetRecords` operation only works by passing a CQL string, not by passing an XML-tree.
+
+## Opensearch
+This is a wrapper around the [EOXC opensearch-client](https://www.npmjs.com/package/opensearch-browser). While that package provides an `OpensearchService`, it does only allow searching through links of the `results` type, not through `collection` links. This wrapper instead exposes the packages `search` functionality, so that the user can decide for himself which search-url to use. This way a search entails more steps, but allows for more control, too.
+
+Example:
+```js
+  const osw = new OpensearchWrapperService();
+  // step 1: parse description.xml for searchable urls
+  osw.discover(osServerUrl).pipe(
+      map((instance: OpenSearchService) => {
+          const urls = osw.getUrls(instance);
+          // step 2: select the url to search
+          return urls[3];
+      }),
+      switchMap((url: OpenSearchUrl) => {
+          // step 3: do the actual search. The possible search-parameters are described in the `URL` object.
+          const parameters = {
+              parentIdentifier: 'EOP:CODE-DE:S2_MSI_L1C',
+              startDate: '2020-06-01T00:00:00Z',
+              endDate: '2020-06-07T23:59:59Z',
+          };
+          return osw.search(url, parameters);
+      })
+  ).subscribe((results: OpenSearchResult | Response) => {
+      expect(results).toBeTruthy();
+  });
+```
+
+
+
 ===
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.

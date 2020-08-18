@@ -22,20 +22,21 @@ describe('opensearch API', () => {
 
     if (runWithLifeBackend) {
         it('search should work as expected', (done) => {
-
-            const parameters = {
-                parentIdentifier: 'EOP:CODE-DE:S2_MSI_L1C',
-                startDate: '2020-06-01T00:00:00Z',
-                endDate: '2020-06-07T23:59:59Z',
-            };
-
             const osw = new OpensearchWrapperService();
+            // step 1: parse description.xml for searchable urls
             osw.discover(osServerUrl).pipe(
                 map((instance: OpenSearchService) => {
                     const urls = osw.getUrls(instance);
+                    // step 2: select the url to search
                     return urls[3];
                 }),
                 switchMap((url: OpenSearchUrl) => {
+                    // step 3: do the actual search. The possible search-parameters are described in the `URL` object.
+                    const parameters = {
+                        parentIdentifier: 'EOP:CODE-DE:S2_MSI_L1C',
+                        startDate: '2020-06-01T00:00:00Z',
+                        endDate: '2020-06-07T23:59:59Z',
+                    };
                     return osw.search(url, parameters);
                 })
             ).subscribe((results: OpenSearchResult | Response) => {
@@ -43,7 +44,7 @@ describe('opensearch API', () => {
                 expect(results.records[0].properties.summary).toBeTruthy();
                 done();
             });
-        });
+        }, 3000);
     }
 
 
