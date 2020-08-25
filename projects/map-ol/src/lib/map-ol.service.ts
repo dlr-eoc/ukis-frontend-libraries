@@ -406,7 +406,8 @@ export class MapOlService {
    */
   public setUkisLayers(layers: Array<Layer>, type: Tgroupfiltertype) {
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
-    const tempLayers = [];
+    const tempLayers: olBaseLayer[] = [];
+    console.log(layers)
     // TODO try to deep check if a layer if exactly the same and dont create it new
 
     if (layers.length < 1 && lowerType !== 'baselayers') {
@@ -425,6 +426,10 @@ export class MapOlService {
 
     if (tempLayers.length > 0) {
       this.setLayers(tempLayers, lowerType);
+      const newTempLayer: { type: Tgroupfiltertype, layers: olBaseLayer[] } = {
+        type: lowerType, layers: tempLayers
+      };
+      return newTempLayer;
     }
   }
 
