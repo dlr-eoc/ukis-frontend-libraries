@@ -38,15 +38,15 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     creator?: IOwsCreator;
     /**
      * Properties of the display in use when the context document was created (for display based applications only).
-     * This class is optional and intended for creator applications that use a graphical user interface with a geographical display within a fixed pixel size and not scalable to different computational devices
+     * This class is optional and intended for creator applications that use a graphical user interface with a geographical display within a fixed pixel size and not scalable to different computational devices 
      */
     display?: IOwsCreatorDisplay[];
     /** Information about rights held in and over the Context document */
     rights?: string;
     /**
-     * Date or range of dates relevant to the resource
-     * time range which is expected to be of interest to the user.
-     */
+    * Date or range of dates relevant to the resource 
+    * time range which is expected to be of interest to the user.
+    */
     date?: DateString;
     /** This array is an optional and expresses categories related to this Context document */
     categories?: IOwsCategorie[];
@@ -106,9 +106,9 @@ export interface IOwsResourceProperties {
   minscaledenominator?: number;
   /** Maximum scale for the display of the Context resource Double */
   maxscaledenominator?: number;
-  /** Definition of the folder in which the resource is placed
-   * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
-   */
+  /** Definition of the folder in which the resource is placed 
+  * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
+  */
   folder?: string;
   /** TODO!!! links is defined as Object but in the examples as Array  */
   links?: IOwsLinks[];
@@ -192,15 +192,14 @@ export interface IOwsCreatorDisplay {
   pixelWidth?: number;
   /** Width measured in pixels of the display showing by the Area of Interest */
   pixelHeight?: number;
-  /** The size of a pixel of the display in milimeters
-   * (combined with the previous ones allows for the real display size to be calculated)
-   */
+  /** The size of a pixel of the display in milimeters 
+   * (combined with the previous ones allows for the real display size to be calculated) */
   mmPerPixel?: number;
   [k: string]: any;
 }
 
 /**
- * Most service offerings have two operations, a ‘GetCapabilities’ operation and a data operation such as ‘GetMap’ for WMS
+ * Most service offerings have two operations, a ‘GetCapabilities’ operation and a data operation such as ‘GetMap’ for WMS 
  */
 export interface IOwsOperation {
   /**
@@ -251,7 +250,7 @@ export type LangString = string;
 
 
 export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' |
-  'http://schemas.opengis.net/wms/1.1.1' | 'http://schemas.opengis.net/wms/1.1.0';
+    'http://schemas.opengis.net/wms/1.1.1' | 'http://schemas.opengis.net/wms/1.1.0';
 export type WFS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
 export type WCS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs';
 export type WPS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wps';

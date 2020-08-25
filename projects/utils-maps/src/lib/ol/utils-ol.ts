@@ -65,23 +65,18 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
     const layers = flattenLayers(map.getLayers().getArray());
     const subscriptions: EventsKey[] = [];
     for (const layer of layers) {
-        // Step 2: catch each layer's postrender event.
-        // Note that ol/renderer/webgl/* does not call `this.postRender(context, frameState)`
-        // in `renderFrame` - so heatmaps won't be copied here!
-        const key = layer.on('postrender', (event: RenderEvent) => {
-            const sourceContext = event.context;
-            const sourceCanvas = sourceContext.canvas;
-
-            // Step 3: copy source bitmap to target-canvas.
-            let matrix = [1, 0, 0, 1, 0, 0];  // [scale_x, skew_y, skew_x, scale_y, translate_x, translate_y]
-            const transform = sourceCanvas.style.transform;
-            if (transform !== '') {
-                matrix = transform.match(/^matrix\(([^\(]*)\)$/)[1].split(',').map(Number);
-            }
-            targetContext.setTransform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
-            targetContext.drawImage(sourceCanvas, 0, 0, sourceCanvas.clientWidth, sourceCanvas.clientHeight, 0, 0, targetCanvas.width, targetCanvas.height);
-        });
-        subscriptions.push(key);
+        if (layer.getVisible() && layer.getOpacity() > 0.0) {
+            // Step 2: catch each layer's postrender event.
+            // Note that ol/renderer/webgl/* does not call `this.postRender(context, frameState)`
+            // in `renderFrame` - so heatmaps won't be copied here!
+            const key = layer.on('postrender', (event: RenderEvent) => {
+                const sourceContext = event.context;
+                const sourceCanvas = sourceContext.canvas;
+                // Step 3: copy source bitmap to target-canvas.
+                targetContext.drawImage(sourceCanvas, 0, 0, sourceCanvas.clientWidth, sourceCanvas.clientHeight, 0, 0, targetCanvas.width, targetCanvas.height);
+            });
+            subscriptions.push(key);
+        }
     }
 
     map.once('rendercomplete', (evt: RenderEvent) => {

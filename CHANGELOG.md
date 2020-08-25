@@ -42,6 +42,9 @@
 * **@dlr-eoc/utils-browser:** `Paper` class to aid in getting dimensions of paper-sheets (A5, A4, ...) in pixel and cm.
 * **@dlr-eoc/utils-browser:** `download` utilities to save us some boilerplate when saving data to a file.
 * **@dlr-eoc/utils-maps:** `ol` utilities to copy a map's current image in a canvas (potentially for later downloading).
+* **@dlr-eoc/services-ogc:**
+  - Added `CswClient`, a client of [OGC-conform](https://www.ogc.org/standards/cat) CSW-Servers.
+  - Added `OpensearchWrapperService`, a client for [OpenSearch](https://de.wikipedia.org/wiki/OpenSearch) endpoints (like the one provided by [PyCSW](https://docs.pycsw.org/en/latest/opensearch.html)).
 
 
 ### Refactoring
@@ -390,11 +393,6 @@
 
 
 ### Features
-* 
-
-### Performance Improvements
-
-* 
 
 ### Possible Breaking Changes
 * 
