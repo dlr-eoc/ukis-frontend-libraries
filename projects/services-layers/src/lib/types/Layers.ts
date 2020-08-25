@@ -32,6 +32,7 @@ export interface popup {
   properties?: IAnyObject;
   pupupFunktion?: (popupobj: IAnyObject) => string;
   asyncPupup?: (popupobj: any, cb: (html: any) => void) => void;
+  event?: 'move' | 'click';
 }
 
 
