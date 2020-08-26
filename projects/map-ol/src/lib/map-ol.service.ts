@@ -54,6 +54,7 @@ import olStroke from 'ol/style/Stroke';
 
 import { DragBox } from 'ol/interaction';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
+import olRenderFeature from 'ol/render/Feature';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 
@@ -64,6 +65,7 @@ export interface IPopupArgs {
   modelName: string;
   properties: any;
   layer: olLayer<any>;
+  featureLayer?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
   popupFn?: popup['pupupFunktion'];
 }
@@ -959,161 +961,52 @@ export class MapOlService {
     }
   }
 
-  public vector_on_click(evt: olMapBrowserEvent<PointerEvent>) {
-    const FeaturesAtPixel = [];
-    this.map.forEachFeatureAtPixel(evt.pixel, (featureLayer, layer) => {
-      // console.log(evt, _layer, layer, layer.get('type'))
-      FeaturesAtPixel.push({ _layer: featureLayer, layer });
-    }, {
-      layerFilter: (layer) => {
-        if (layer instanceof olBaseVectorLayer) {
-          const olSource: olCluster | olVectorSource<any> | olVectorTile = layer.getSource();
-          if (olSource instanceof olCluster) {
-            return (olSource as any).getSource() instanceof olVectorSource;
-          } else {
-            return olSource instanceof olVectorSource || olSource instanceof olVectorTile;
-          }
-        }
-      },
-      hitTolerance: this.hitTolerance
-    });
-
-    FeaturesAtPixel.forEach((item, index) => {
-      const topFeature = 0;
-      if (index === topFeature) {
-        const layer = item.layer, _layer = item._layer;
-        const layerpopup: popup = layer.get('popup');
-        let properties: any = {};
-
-        if (layer instanceof olBaseVectorLayer && layerpopup) {
-          const features = _layer.getProperties().features;
-          if (features && features.length === 1) {
-            const feature = features[0];
-            properties = feature.getProperties();
-          } else if (features && features.length > 1) {
-            // zoom in TODO
-            // _layer.getProperties()
-            // _layer.getGeometry().getExtent()
-            const extent = this.getFeaturesExtent(_layer.getProperties().features);
-            // console.log(_layer, extent)
-            this.setExtent(extent);
-            return false;
-          } else {
-            // type no cluster
-            properties = _layer.getProperties();
-          }
-
-          const args: IPopupArgs = {
-            modelName: properties.id,
-            properties,
-            layer: _layer,
-            event: evt
-          };
-
-          if (layerpopup.pupupFunktion) {
-            args['popupFn'] = layerpopup.pupupFunktion;
-          }
-
-          let popupproperties = Object.assign({}, properties);
-
-          // console.log(popupproperties);
-          if (layerpopup['properties']) {
-            if (Array.isArray(Object.keys(layerpopup['properties']))) {
-              popupproperties = Object.keys(popupproperties)
-                .filter(key => Object.keys(layerpopup['properties']).includes(key))
-                .reduce((obj, key) => {
-                  // obj[key] = popupproperties[key];
-                  const newKey = layerpopup['properties'][key];
-                  obj[newKey] = popupproperties[key];
-                  return obj;
-                }, {});
-            }
-          }
-          if (popupproperties.geometry) {
-            delete popupproperties.geometry;
-          }
-          if (layerpopup.asyncPupup) {
-            layerpopup.asyncPupup(popupproperties, (html) => {
-              this.addPopup(args, popupproperties, html);
-            });
-          } else {
-            this.addPopup(args, popupproperties);
-          }
-        }
-      }
-    });
-  }
-
-  public raster_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
-    const layerpopup: popup = layer.get('popup');
-    let properties: any = {};
-
-    if (layerpopup) {
-      properties = layer.getProperties();
-      properties.evt = evt;
-      if (color) {
-        properties.color = color;
-      }
-
-      const args: IPopupArgs = {
-        modelName: properties.id,
-        properties,
-        layer,
-        event: evt
-      };
-
-      if (layerpopup.pupupFunktion) {
-        args['popupFn'] = layerpopup.pupupFunktion;
-      }
-
-      let popupproperties = Object.assign({}, properties);
-
-      // console.log(popupproperties);
-      if (layerpopup['properties']) {
-        if (Array.isArray(Object.keys(layerpopup['properties']))) {
-          popupproperties = Object.keys(popupproperties)
-            .filter(key => Object.keys(layerpopup['properties']).includes(key))
-            .reduce((obj, key) => {
-              // obj[key] = popupproperties[key];
-              const newKey = layerpopup['properties'][key];
-              obj[newKey] = popupproperties[key];
-              return obj;
-            }, {});
-        }
-      }
-      if (popupproperties.geometry) {
-        delete popupproperties.geometry;
-      }
-      // console.log(popupproperties);
-
-      if (layerpopup.asyncPupup) {
-        layerpopup.asyncPupup(popupproperties, (html) => {
-          if (html) {
-            this.addPopup(args, null, html);
-          }
-        });
-      } else {
-        this.addPopup(args, popupproperties);
-      }
-    }
-  }
-
   /** USED in map-ol.component */
   public layers_on_click(evt: olMapBrowserEvent<PointerEvent>) {
-    // pixel, callback, opt_options
-    const LayersAtPixel = [];
+    const layerFilter = (layer) => {
+      // try to catch CORS error in getImageData!!!
+      // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
+      const layerpopup: Layer['popup'] = layer.get('popup');
+      if (layerpopup) {
+        return true;
+      }
+    };
+    this.layers_on_click_move(evt, layerFilter);
+  }
+
+  public layers_on_pointermove(evt: olMapBrowserEvent<PointerEvent>) {
+    const layerFilter = (layer) => {
+      // try to catch CORS error in getImageData!!!
+      // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
+      const layerpopup: Layer['popup'] = layer.get('popup');
+      if (layerpopup && typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.event === 'move') {
+        return true;
+      }
+    };
+    this.layers_on_click_move(evt, layerFilter);
+  }
+
+  private layers_on_click_move(evt: olMapBrowserEvent<PointerEvent>, layerFilter: (layer: olLayer<any>) => boolean) {
+    /** set cursor for features */
+    if (evt.type === 'pointermove') {
+      const hit = this.map.forEachFeatureAtPixel(evt.pixel, () => {
+        return true;
+      });
+      if (hit) {
+        this.map.getTargetElement().style.cursor = 'pointer';
+      } else {
+        this.removeAllPopups((item) => {
+          return item.get('addEvent') === 'pointermove';
+        });
+        this.map.getTargetElement().style.cursor = '';
+      }
+    }
+
+    const LayersAtPixel: { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array }[] = [];
     this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
       LayersAtPixel.push({ layer, color });
     }, {
-      layerFilter: (layer) => {
-        // try to catch CORS error in getImageData!!!
-        // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
-        // console.log(layer)
-        const layerpopup: popup = layer.get('popup');
-        if (layerpopup && (!layerpopup.event || layerpopup.event === 'click')) {
-          return true;
-        }
-      }
+      layerFilter
     });
     LayersAtPixel.forEach((item, index) => {
       // console.log(item, index);
@@ -1134,47 +1027,57 @@ export class MapOlService {
     }
   }
 
-  public layers_on_pointermove(evt: olMapBrowserEvent<PointerEvent>) {
-    /** set cursor for features */
-    const hit = this.map.forEachFeatureAtPixel(evt.pixel, (featureLayer, layer) => {
-      return true;
-    });
-    if (hit) {
-      this.map.getTargetElement().style.cursor = 'pointer';
-    } else {
-      this.removeAllPopups((item) => {
-        return item.get('addEvent') === 'pointermove';
-      });
-      this.map.getTargetElement().style.cursor = '';
-    }
-
-    // pixel, callback, opt_options
-    const LayersAtPixel: { layer: olLayer<any>, color: Uint8ClampedArray | Uint8Array }[] = [];
-    this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
-      LayersAtPixel.push({ layer, color });
-      return true;
+  public vector_on_click(evt: olMapBrowserEvent<PointerEvent>) {
+    const FeaturesAtPixel: { featureLayer: olFeature<any> | olRenderFeature, layer: olLayer<any> }[] = [];
+    this.map.forEachFeatureAtPixel(evt.pixel, (featureLayer, layer) => {
+      FeaturesAtPixel.push({ featureLayer, layer });
     }, {
       layerFilter: (layer) => {
-        // try to catch CORS error in getImageData!!!
-        // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
-        // console.log(layer)
-        const layerpopup: popup = layer.get('popup');
-        if (layerpopup && layerpopup.event === 'move') {
-          return true;
+        if (layer instanceof olBaseVectorLayer) {
+          const olSource: olCluster | olVectorSource<any> | olVectorTile = layer.getSource();
+          if (olSource instanceof olCluster) {
+            return (olSource as any).getSource() instanceof olVectorSource;
+          } else {
+            return olSource instanceof olVectorSource || olSource instanceof olVectorTile;
+          }
         }
-      }
+      },
+      hitTolerance: this.hitTolerance
     });
-    LayersAtPixel.forEach((item, index) => {
-      // console.log(item, index);
-      const topLayer = 0;
-      if (index === topLayer) {
-        this.layer_on_pointermove(evt, item.layer, hit, item.color);
+
+    FeaturesAtPixel.forEach((item, index) => {
+      const topFeature = 0;
+      if (index === topFeature) {
+        const layer = item.layer;
+        const featureLayer = item.featureLayer;
+        const layerpopup: Layer['popup'] = layer.get('popup');
+        let properties: any = {};
+
+        if (layer instanceof olBaseVectorLayer && layerpopup) {
+          const features = featureLayer.getProperties().features;
+          if (features && features.length === 1) {
+            const feature = features[0];
+            properties = feature.getProperties();
+          } else if (features && features.length > 1) {
+            // zoom in TODO
+            // _layer.getProperties()
+            // _layer.getGeometry().getExtent()
+            const extent = this.getFeaturesExtent(featureLayer.getProperties().features);
+            this.setExtent(extent);
+            return false;
+          } else {
+            // type no cluster
+            properties = featureLayer.getProperties();
+          }
+
+          this.getPopupProperties(properties, layer, featureLayer, evt, layerpopup);
+        }
       }
     });
   }
 
-  public layer_on_pointermove(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, hit: boolean, color?: Uint8ClampedArray | Uint8Array) {
-    const layerpopup: popup = layer.get('popup');
+  public raster_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
+    const layerpopup: Layer['popup'] = layer.get('popup');
     let properties: any = {};
 
     if (layerpopup) {
@@ -1184,55 +1087,92 @@ export class MapOlService {
         properties.color = color;
       }
 
-      const args: IPopupArgs = {
-        modelName: properties.id,
-        properties,
-        layer,
-        event: evt
-      };
+      this.getPopupProperties(properties, layer, null, evt, layerpopup);
+    }
+  }
 
-      if (layerpopup.pupupFunktion) {
-        args['popupFn'] = layerpopup.pupupFunktion;
-      }
+  private getPopupProperties(layerProperties: any, layer: olLayer<any>, featureLayer: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
+    const args: IPopupArgs = {
+      modelName: layerProperties.id,
+      properties: layerProperties,
+      layer,
+      featureLayer,
+      event: evt
+    };
 
-      let popupproperties = Object.assign({}, properties);
+    let popupProperties = Object.assign({}, layerProperties);
+    if (popupProperties.geometry) {
+      delete popupProperties.geometry;
+    }
 
-      if (layerpopup['properties']) {
-        if (Array.isArray(Object.keys(layerpopup['properties']))) {
-          popupproperties = Object.keys(popupproperties)
-            .filter(key => Object.keys(layerpopup['properties']).includes(key))
+    /** Popup is array - limit properties */
+    if (Array.isArray(layerpopup)) {
+      popupProperties = Object.keys(popupProperties)
+        .filter(key => layerpopup.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = popupProperties[key];
+          return obj;
+        }, {});
+    }
+    /** Popup is object - limit properties */
+    if (typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.filterkeys) {
+      popupProperties = Object.keys(popupProperties)
+        .filter(key => layerpopup.filterkeys.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = popupProperties[key];
+          return obj;
+        }, {});
+    }
+
+    if (typeof layerpopup === 'object' && !Array.isArray(layerpopup)) {
+      /** overwrite the keys of the layer properties */
+      if (layerpopup.properties) {
+        const usedProperties = Object.keys(layerpopup.properties);
+        if (Array.isArray(usedProperties)) {
+          popupProperties = Object.keys(popupProperties)
+            /* .filter(key => usedProperties.includes(key)) */
             .reduce((obj, key) => {
-              // obj[key] = popupproperties[key];
-              const newKey = layerpopup['properties'][key];
-              obj[newKey] = popupproperties[key];
+              const newKey = layerpopup.properties[key];
+              if (newKey) {
+                obj[newKey] = popupProperties[key];
+              } else {
+                obj[key] = popupProperties[key];
+              }
               return obj;
             }, {});
         }
-      }
-      if (popupproperties.geometry) {
-        delete popupproperties.geometry;
-      }
 
-      if (layerpopup.asyncPupup) {
-        layerpopup.asyncPupup(popupproperties, (html) => {
-          if (html) {
-            this.addPopup(args, null, html, 'move');
-          }
-        });
-      } else {
-        this.addPopup(args, popupproperties, null, 'move');
+        /** function to create html string */
+      } else if (layerpopup.pupupFunktion) {
+        args.popupFn = layerpopup.pupupFunktion;
       }
+    }
+
+    /** add event if popup object */
+    if (typeof layerpopup === 'object' && 'event' in layerpopup) {
+      this.addPopup(args, popupProperties, null, layerpopup.event);
+
+      /** async function where you can paste a html string to the callback */
+    } else if (typeof layerpopup === 'object' && 'asyncPupup' in layerpopup) {
+      layerpopup.asyncPupup(popupProperties, (html) => {
+        this.addPopup(args, null, html, layerpopup.event);
+      });
+      /** popup is boolean */
+    } else {
+      this.addPopup(args, popupProperties, null);
     }
   }
 
   public addPopup(args: IPopupArgs, popupObj: any, html?: string, removePopups?: 'all' | 'click' | 'move') {
+    const layerpopup: Layer['popup'] = args.layer.get('popup');
     const content = document.createElement('div');
     content.className = 'ol-popup-content';
-
+    // console.log(args, popupObj, html)
     let popupHtml = '';
     if (args.popupFn) {
       popupHtml = args.popupFn(popupObj);
-    } else if (html && !popupObj) {
+    }
+    else if (html && (!popupObj || Object.keys(popupObj).length === 0)) {
       popupHtml = html;
     } else {
       popupHtml = this.createPopupHtml(popupObj);
@@ -1250,7 +1190,7 @@ export class MapOlService {
     container.appendChild(closer);
     container.appendChild(content);
 
-    const overlayoptions: olOverlayOptions = {
+    const defaultOptions: olOverlayOptions = {
       element: container,
       autoPan: true,
       id: (args.layer && olGetUid(args.layer)) ? olGetUid(args.layer) : `popup_${new Date().getTime()}`,
@@ -1261,6 +1201,12 @@ export class MapOlService {
       stopEvent: true,
       insertFirst: false,
     };
+
+    let overlayoptions = defaultOptions;
+
+    if (layerpopup && typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.options) {
+      overlayoptions = Object.assign(defaultOptions, layerpopup.options);
+    }
 
     const overlay = new olOverlay(overlayoptions);
     overlay.set('addEvent', args.event.type);
