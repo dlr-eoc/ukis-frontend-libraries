@@ -11,7 +11,7 @@ import { MapOlService, Tgroupfiltertype } from './map-ol.service';
 import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer } from '@dlr-eoc/services-layers';
 
 import Map from 'ol/Map';
-import { getUid } from 'ol/util';
+import { getUid as olGetUid } from 'ol/util';
 
 import olBaseLayer from 'ol/layer/Base';
 import olLayer from 'ol/layer/Layer';
@@ -31,6 +31,8 @@ import olTileLayer from 'ol/layer/Tile';
 import olOSM from 'ol/source/OSM';
 
 import olRotate from 'ol/control/Rotate';
+import olMapBrowserEvent from 'ol/MapBrowserEvent';
+import olMapEvent from 'ol/MapEvent';
 import { Control as olControl } from 'ol/control';
 
 
@@ -68,6 +70,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   map: Map;
   subs: Subscription[] = [];
   mapOnMoveend;
+  mapOnPointermove;
   mapOnClick;
   mapOnDclick;
 
@@ -131,6 +134,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       this.map.un('moveend', this.mapOnMoveend);
       this.map.un('click', this.mapOnClick);
       this.map.un('dblclick', this.mapOnDclick);
+      this.map.un('pointermove', this.mapOnPointermove);
       this.map.getInteractions().forEach((i) => {
         this.map.removeInteraction(i);
       });
@@ -172,7 +176,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (layer instanceof CustomLayer && ollayer instanceof olLayer) {
             const newSource = layer.custom_layer.getSource();
             const oldSource = ollayer.getSource();
-            if (newSource && getUid(oldSource) !== getUid(newSource)) {
+            if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
               ollayer.setSource(newSource);
             }
           } else if (layer instanceof CustomLayer && layer.custom_layer instanceof olLayerGroup && ollayer instanceof olLayerGroup) {
@@ -185,7 +189,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
               if (l instanceof olLayer && newLayer instanceof olLayer) {
                 const oldSource = l.getSource();
                 const newSource = newLayer.getSource();
-                if (newSource && getUid(oldSource) !== getUid(newSource)) {
+                if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
                   l.setSource(newSource);
                 }
               }
@@ -348,7 +352,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   }
 
   private subscribeToMapEvents() {
-    this.mapOnMoveend = (evt) => {
+    this.mapOnMoveend = (evt: olMapEvent) => {
       // const zoom = Math.round(this.mapSvc.getZoom());
       const zoom = this.mapSvc.getZoom();
       const center = this.mapSvc.getCenter(true);
@@ -362,16 +366,22 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     this.map.on('moveend', this.mapOnMoveend);
 
     /** handle click on vektor layers */
-    this.mapOnClick = (evt) => {
+    this.mapOnClick = (evt: olMapBrowserEvent<PointerEvent>) => {
       this.mapSvc.layers_on_click(evt);
     };
     this.map.on('click', this.mapOnClick);
 
     /** handle double click */
-    this.mapOnDclick = (evt) => {
+    this.mapOnDclick = (evt: olMapBrowserEvent<PointerEvent>) => {
       this.mapSvc.removeAllPopups();
     };
     this.map.on('dblclick', this.mapOnDclick);
+
+    /** handle pointermove/mousemove */
+    this.mapOnPointermove = (evt: olMapBrowserEvent<PointerEvent>) => {
+      this.mapSvc.layers_on_pointermove(evt);
+    };
+    this.map.on('pointermove', this.mapOnPointermove);
   }
 
 
