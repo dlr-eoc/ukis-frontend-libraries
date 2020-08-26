@@ -227,7 +227,7 @@ export class RouteMapComponent implements OnInit {
         ]
       },
       visible: false,
-      popup: true
+      popup: { event: 'move' }
     });
 
     const vectorLayer2 = new VectorLayer({
@@ -239,30 +239,40 @@ export class RouteMapComponent implements OnInit {
         features: [
           {
             type: 'Feature',
-            properties: { title: 'Rectangle' },
+            properties: {
+              title: 'Polygon'
+            },
             geometry: {
               type: 'Polygon',
               coordinates: [
                 [
                   [
-                    10.986328125,
-                    43.89789239125797
+                    -4.9658203125,
+                    41.09591205639546
                   ],
                   [
-                    11.755371093749998,
-                    43.89789239125797
+                    -6.459960937499999,
+                    39.52099229357195
                   ],
                   [
-                    11.755371093749998,
-                    44.41808794374846
+                    -5.009765625,
+                    38.42777351132902
                   ],
                   [
-                    10.986328125,
-                    44.41808794374846
+                    -1.8896484375,
+                    38.77121637244273
                   ],
                   [
-                    10.986328125,
-                    43.89789239125797
+                    -0.68115234375,
+                    40.84706035607122
+                  ],
+                  [
+                    -2.900390625,
+                    41.65649719441145
+                  ],
+                  [
+                    -4.9658203125,
+                    41.09591205639546
                   ]
                 ]
               ]
