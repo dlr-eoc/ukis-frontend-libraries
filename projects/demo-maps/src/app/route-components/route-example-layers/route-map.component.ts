@@ -4,6 +4,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { ZommNumberControl } from './ol-custom-control';
+import { getFeatureInfoPopup } from './map-helpers';
 
 @Component({
   selector: 'app-route-map',
@@ -89,7 +90,12 @@ export class RouteMapComponent implements OnInit {
       visible: false,
       description: 'GUF28_DLR_v1_Mosaic',
       attribution: ' | GUF®: <a href="https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-9628/16557_read-40454/">DLR License</a>',
-      legendImg: ''
+      legendImg: '',
+      popup: {
+        asyncPupup: (obj, cb) => {
+          getFeatureInfoPopup(obj, this.mapSvc, cb);
+        }
+      }
     });
 
     const TDM90DEMLayer = new WmtsLayer({
@@ -230,6 +236,35 @@ export class RouteMapComponent implements OnInit {
       popup: { event: 'move' }
     });
 
+    const vectorLayer3 = new VectorLayer({
+      id: 'geojson_test_3',
+      name: 'GeoJSON Point Layer',
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              title: 'Munich',
+              type: 'City',
+              image: 'https://en.wikipedia.org/wiki/Munich#/media/File:Stadtbild_M%C3%BCnchen.jpg',
+              wiki: 'https://en.wikipedia.org/wiki/Munich'
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [
+                11.557617187499998,
+                48.151428143221224
+              ]
+            }
+          }
+        ]
+      },
+      visible: false,
+      popup: { properties: { title: 'Title', type: 'Type' } }
+    });
+
     const vectorLayer2 = new VectorLayer({
       id: 'geojson_test_2',
       name: 'Vector Layer in Group',
@@ -240,7 +275,9 @@ export class RouteMapComponent implements OnInit {
           {
             type: 'Feature',
             properties: {
-              title: 'Polygon'
+              type: 'Polygon',
+              name: 'Vector Layer in Group',
+              data: 'geojson',
             },
             geometry: {
               type: 'Polygon',
@@ -281,7 +318,7 @@ export class RouteMapComponent implements OnInit {
         ]
       },
       visible: false,
-      popup: true,
+      popup: ['type', 'name'],
       actions: [{ title: 'download', icon: 'download-cloud', action: (layer) => { console.log(layer); } }]
     });
 
@@ -311,9 +348,29 @@ export class RouteMapComponent implements OnInit {
       layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay]
     });
 
-    const hillshade = new HillshadeTile();
+    const hillshade = new HillshadeTile({
+      popup: {
+        pupupFunktion: (obj) => {
+          return `
+            <table>
+              <tbody>
+                <tr>
+                  <td style="vertical-align: top; padding-right: 7px;"><b>Name: ${obj.name}</b></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td style="vertical-align: top; padding-right: 7px;"><b>type: ${obj.type}</b></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <img src="${obj.legendImg}">
+            `;
+        }
+      }
+    });
 
-    const overlays = [gufLayer, hillshade, groupLayer2, vectorLayer, groupLayer];
+    const overlays = [gufLayer, hillshade, groupLayer2, vectorLayer, vectorLayer3, groupLayer];
     overlays.map(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');
