@@ -1070,7 +1070,7 @@ export class MapOlService {
             properties = featureLayer.getProperties();
           }
 
-          this.getPopupProperties(properties, layer, featureLayer, evt, layerpopup);
+          this.prepareAddPopup(properties, layer, featureLayer, evt, layerpopup);
         }
       }
     });
@@ -1087,11 +1087,11 @@ export class MapOlService {
         properties.color = color;
       }
 
-      this.getPopupProperties(properties, layer, null, evt, layerpopup);
+      this.prepareAddPopup(properties, layer, null, evt, layerpopup);
     }
   }
 
-  private getPopupProperties(layerProperties: any, layer: olLayer<any>, featureLayer: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
+  private prepareAddPopup(layerProperties: any, layer: olLayer<any>, featureLayer: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
     const args: IPopupArgs = {
       modelName: layerProperties.id,
       properties: layerProperties,
@@ -1239,7 +1239,7 @@ export class MapOlService {
     }
 
     overlay.setPosition(coordinate);
-    console.log(event, removePopups)
+
     if (removePopups) {
       this.removeAllPopups();
     } else if (event === 'move' && removePopups !== false) {
