@@ -65,7 +65,7 @@ export interface IPopupArgs {
   modelName: string;
   properties: any;
   layer: olLayer<any>;
-  featureLayer?: olFeature<any> | olRenderFeature;
+  feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
   popupFn?: popup['pupupFunktion'];
 }
@@ -1028,9 +1028,9 @@ export class MapOlService {
   }
 
   public vector_on_click(evt: olMapBrowserEvent<PointerEvent>) {
-    const FeaturesAtPixel: { featureLayer: olFeature<any> | olRenderFeature, layer: olLayer<any> }[] = [];
-    this.map.forEachFeatureAtPixel(evt.pixel, (featureLayer, layer) => {
-      FeaturesAtPixel.push({ featureLayer, layer });
+    const FeaturesAtPixel: { feature: olFeature<any> | olRenderFeature, layer: olLayer<any> }[] = [];
+    this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+      FeaturesAtPixel.push({ feature, layer });
     }, {
       layerFilter: (layer) => {
         if (layer instanceof olBaseVectorLayer) {
@@ -1049,28 +1049,28 @@ export class MapOlService {
       const topFeature = 0;
       if (index === topFeature) {
         const layer = item.layer;
-        const featureLayer = item.featureLayer;
+        const feature = item.feature;
         const layerpopup: Layer['popup'] = layer.get('popup');
         let properties: any = {};
 
         if (layer instanceof olBaseVectorLayer && layerpopup) {
-          const features = featureLayer.getProperties().features;
-          if (features && features.length === 1) {
-            const feature = features[0];
-            properties = feature.getProperties();
-          } else if (features && features.length > 1) {
+          const childFeatures = feature.getProperties().features;
+          if (childFeatures && childFeatures.length === 1) {
+            const childFeature = childFeatures[0];
+            properties = childFeature.getProperties();
+          } else if (childFeatures && childFeatures.length > 1) {
             // zoom in TODO
             // _layer.getProperties()
             // _layer.getGeometry().getExtent()
-            const extent = this.getFeaturesExtent(featureLayer.getProperties().features);
+            const extent = this.getFeaturesExtent(feature.getProperties().features);
             this.setExtent(extent);
             return false;
           } else {
             // type no cluster
-            properties = featureLayer.getProperties();
+            properties = feature.getProperties();
           }
 
-          this.prepareAddPopup(properties, layer, featureLayer, evt, layerpopup);
+          this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
         }
       }
     });
@@ -1091,12 +1091,12 @@ export class MapOlService {
     }
   }
 
-  private prepareAddPopup(layerProperties: any, layer: olLayer<any>, featureLayer: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
+  private prepareAddPopup(layerProperties: any, layer: olLayer<any>, feature: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
     const args: IPopupArgs = {
       modelName: layerProperties.id,
       properties: layerProperties,
       layer,
-      featureLayer,
+      feature,
       event: evt
     };
 
@@ -1201,8 +1201,8 @@ export class MapOlService {
 
     container.appendChild(content);
     let popupID = null;
-    if (args.featureLayer) {
-      popupID = olGetUid(args.featureLayer);
+    if (args.feature) {
+      popupID = olGetUid(args.feature);
     } else if (args.layer) {
       popupID = olGetUid(args.layer);
     } else {
