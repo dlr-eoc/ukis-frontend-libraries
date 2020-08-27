@@ -211,7 +211,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const topoJsonLayer = new CustomLayer({
       id: 'topo_json_layer',
       name: 'Topo Json - VectorImageLayer',
-      popup: true,
+      popup: {
+        single: true
+      },
       custom_layer: new olVectorImageLayer({
         source: new olVectorSource({
           url: 'https://openlayers.org/en/latest/examples/data/topojson/world-110m.json',
