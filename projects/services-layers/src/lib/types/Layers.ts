@@ -39,6 +39,8 @@ export interface popup {
   asyncPupup?: (popupobj: any, cb: (html: any) => void) => void;
   /** default event is click - use move for a popup on hover */
   event?: 'move' | 'click';
+  /** default is false - removes the other popups if the next is added */
+  single?: boolean;
   /** options which get assigned on the popup creations e.g. ol/Overlay */
   options?: IAnyObject;
 }

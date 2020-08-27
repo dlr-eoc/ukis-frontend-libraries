@@ -1148,22 +1148,24 @@ export class MapOlService {
       }
     }
 
-    /** add event if popup object */
-    if (typeof layerpopup === 'object' && 'event' in layerpopup) {
-      this.addPopup(args, popupProperties, null, layerpopup.event);
-
+    if (typeof layerpopup === 'object' && !Array.isArray(layerpopup)) {
       /** async function where you can paste a html string to the callback */
-    } else if (typeof layerpopup === 'object' && 'asyncPupup' in layerpopup) {
-      layerpopup.asyncPupup(popupProperties, (html) => {
-        this.addPopup(args, null, html, layerpopup.event);
-      });
+      if ('asyncPupup' in layerpopup) {
+        layerpopup.asyncPupup(popupProperties, (html) => {
+          this.addPopup(args, null, html, layerpopup.event, layerpopup.single);
+        });
+        /** add event if popup object */
+      } else {
+        this.addPopup(args, popupProperties, null, layerpopup.event, layerpopup.single);
+      }
+
       /** popup is boolean */
     } else {
       this.addPopup(args, popupProperties, null);
     }
   }
 
-  public addPopup(args: IPopupArgs, popupObj: any, html?: string, removePopups?: 'all' | 'click' | 'move') {
+  public addPopup(args: IPopupArgs, popupObj: any, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
     const layerpopup: Layer['popup'] = args.layer.get('popup');
     const content = document.createElement('div');
     content.className = 'ol-popup-content';
@@ -1184,8 +1186,7 @@ export class MapOlService {
     container.id = `popup_${new Date().getTime()}`;
     container.style.display = 'block';
 
-
-    if (!removePopups || removePopups !== 'move') {
+    if (!event || event !== 'move') {
       const closer = document.createElement('a');
       closer.className = 'ol-popup-closer';
       container.appendChild(closer);
@@ -1197,11 +1198,21 @@ export class MapOlService {
       closer.addEventListener('click', closeFunction, false);
     }
 
+
     container.appendChild(content);
+    let popupID = null;
+    if (args.featureLayer) {
+      popupID = olGetUid(args.featureLayer);
+    } else if (args.layer) {
+      popupID = olGetUid(args.layer);
+    } else {
+      popupID = `popup_${new Date().getTime()}`;
+    }
+
     const defaultOptions: olOverlayOptions = {
       element: container,
       autoPan: true,
-      id: (args.layer && olGetUid(args.layer)) ? olGetUid(args.layer) : `popup_${new Date().getTime()}`,
+      id: popupID,
       autoPanAnimation: {
         duration: 250
       },
@@ -1228,15 +1239,12 @@ export class MapOlService {
     }
 
     overlay.setPosition(coordinate);
-    if (removePopups === 'all') {
+    console.log(event, removePopups)
+    if (removePopups) {
       this.removeAllPopups();
-    } else if (removePopups === 'move') {
+    } else if (event === 'move' && removePopups !== false) {
       this.removeAllPopups((item) => {
         return item.get('addEvent') === 'pointermove';
-      });
-    } else if (removePopups === 'click') {
-      this.removeAllPopups((item) => {
-        return item.get('addEvent') === 'click';
       });
     }
 
