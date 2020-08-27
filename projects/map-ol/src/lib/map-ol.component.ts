@@ -109,6 +109,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
     /** Subscribe to map events when the map completely created  */
     this.subscribeToMapEvents();
+    this.map.getTargetElement().addEventListener('mouseleave', this.removePopupsOnMouseLeave);
   }
 
   ngAfterViewChecked() {
@@ -135,10 +136,17 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       this.map.un('click', this.mapOnClick);
       this.map.un('dblclick', this.mapOnDclick);
       this.map.un('pointermove', this.mapOnPointermove);
+      this.map.getTargetElement().removeEventListener('mouseleave', this.removePopupsOnMouseLeave);
       this.map.getInteractions().forEach((i) => {
         this.map.removeInteraction(i);
       });
     }
+  }
+
+  private removePopupsOnMouseLeave = (evt) => {
+    this.mapSvc.removeAllPopups((item) => {
+      return item.get('addEvent') === 'pointermove';
+    });
   }
 
   private addUpdateLayers(layers: Layer[], type: Tgroupfiltertype, layersunderneath: Array<Tgroupfiltertype>) {
