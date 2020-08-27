@@ -1179,17 +1179,25 @@ export class MapOlService {
     }
     content.innerHTML = popupHtml;
 
-    const closer = document.createElement('a');
-    closer.className = 'ol-popup-closer';
-
     const container = document.createElement('div');
     container.className = 'ol-popup';
     container.id = `popup_${new Date().getTime()}`;
     container.style.display = 'block';
 
-    container.appendChild(closer);
-    container.appendChild(content);
 
+    if (!removePopups || removePopups !== 'move') {
+      const closer = document.createElement('a');
+      closer.className = 'ol-popup-closer';
+      container.appendChild(closer);
+
+      const closeFunction = () => {
+        closer.removeEventListener('click', closeFunction, false);
+        this.map.removeOverlay(overlay);
+      };
+      closer.addEventListener('click', closeFunction, false);
+    }
+
+    container.appendChild(content);
     const defaultOptions: olOverlayOptions = {
       element: container,
       autoPan: true,
@@ -1220,11 +1228,6 @@ export class MapOlService {
     }
 
     overlay.setPosition(coordinate);
-    const closeFunction = () => {
-      closer.removeEventListener('click', closeFunction, false);
-      this.map.removeOverlay(overlay);
-    };
-    closer.addEventListener('click', closeFunction, false);
     if (removePopups === 'all') {
       this.removeAllPopups();
     } else if (removePopups === 'move') {
