@@ -211,7 +211,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const topoJsonLayer = new CustomLayer({
       id: 'topo_json_layer',
       name: 'Topo Json - VectorImageLayer',
-      popup: true,
+      popup: {
+        single: true
+      },
       custom_layer: new olVectorImageLayer({
         source: new olVectorSource({
           url: 'https://openlayers.org/en/latest/examples/data/topojson/world-110m.json',
@@ -228,7 +230,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
     const customLayerGroup = new CustomLayer({
       id: 'customLayerOlGroup',
-      name: 'cluster Layer OlGroup',
+      name: 'Custom Layer OlGroup',
       visible: false,
       popup: true,
       custom_layer: new olLayerGroup({
@@ -275,7 +277,12 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'vectorTile',
       name: 'VectorTileLayer',
       visible: false,
-      popup: true,
+      popup: {
+        event: 'move',
+        filterkeys: ['name', 'region_un', 'region_wb'],
+        properties: { 'name': 'Name' },
+        options: { autoPan: false }
+      },
       custom_layer: new olVectorTileLayer({
         source: new olVectorTileSource({
           format: new olMVT(),

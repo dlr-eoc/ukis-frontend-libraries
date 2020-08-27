@@ -22,6 +22,11 @@
 
 
 ### Features
+* **@dlr-eoc/map-ol:**
+  - Subscribe to `pointermove` to allow layer Popup on move.
+  - Optional filter function for `removeAllPopups(filter?)` in `MapOlService`.
+  - Return created ol layers from `setUkisLayers()` in `MapOlService`.
+  
 * **@dlr-eoc/services-layers:**
   - Add new attribute min/max Zoom to Layer [Issue #36](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/36).
   - Add new attribute `cssClass` to Layer and LayerGroup for custom styling [Issue #32](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/32).

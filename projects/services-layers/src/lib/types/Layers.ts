@@ -29,9 +29,20 @@ export interface ILayerStyleSet extends IAnyObject {
 }
 
 export interface popup {
+  /** limit properties */
+  filterkeys?: Array<string>;
+  /** To overwrite the keys of the layer properties */
   properties?: IAnyObject;
+  /** function to create html string - popupobj: nativeLayer */
   pupupFunktion?: (popupobj: IAnyObject) => string;
+  /** async function where you can paste a html string to the callback - popupobj: nativeLayer */
   asyncPupup?: (popupobj: any, cb: (html: any) => void) => void;
+  /** default event is click - use move for a popup on hover */
+  event?: 'move' | 'click';
+  /** default is false - removes the other popups if the next is added */
+  single?: boolean;
+  /** options which get assigned on the popup creations e.g. ol/Overlay */
+  options?: IAnyObject;
 }
 
 
@@ -100,7 +111,7 @@ export interface ILayerOptions {
   /** geographic coordinates */
   bbox?: TGeoExtent;
   dimensions?: ILayerDimensions;
-  /** true if show popup or set properties or popup-function  */
+  /** true: show popup on click | array: show popup on click and limit properties | or use a popup object to configure the popup */
   popup?: boolean | Array<string> | popup;
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
   /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
