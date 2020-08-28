@@ -35,29 +35,9 @@ The following angular libraries are included in this repository:
 
 ## To use the libraries in your project specific application, you can either use the packaged npm modules or include this repository.
 
-- Use the frontend-libraries as npm modules (GitHub Packages) (Recommended)
+- Use the frontend-libraries as npm modules **Recommended**
+- Use the frontend-libraries as npm modules (GitHub Packages) [see How to install Packages from GitHub](DEVELOPMENT.md)
 - or use the modules in typescript source via path mapping [see Developing libraries and frontend side by side](DEVELOPMENT.md)
-
-
-**How to install Packages from GitHub**
-
-1. [Create a personal access token on your github account](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line) with (read:packages, repo, write:packages)
-
-2. Authenticate by logging in to GitHub npm Package Registry, use the npm login
-
-`npm login --registry=https://npm.pkg.github.com` and use your personal access token as Password
-
-3. Create a [.npmrc file](https://docs.npmjs.com/configuring-npm/npmrc.html) in your folder or use --registry=https://npm.pkg.github.com on npm install
-
-```
-// .npmrc
-registry=https://registry.npmjs.org/
-@dlr-eoc:registry=https://npm.pkg.github.com/dlr-eoc
-```
-
-for more information see [configuring-npm-for-use-with-github-packages](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages)
-
-
 
 
 ## Getting Started (setup a new UKIS-Client)
@@ -69,7 +49,7 @@ for more information see [configuring-npm-for-use-with-github-packages](https://
 - `cd project-<name>`
 
 3. Add Clarity Angular
-`ng add @clr/angular`
+- `ng add @clr/angular`
 
 4. Run the ng add command for the UKIS core-ui
 - `ng add @dlr-eoc/core-ui [options]` 
