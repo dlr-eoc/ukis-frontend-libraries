@@ -32,7 +32,7 @@ import { RouteLicensesComponent } from './route-components/route-licenses/route-
 import { HttpClientModule } from '@angular/common/http';
 import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
 import { ExampleLayerActionComponent } from './components/example-layer-action/example-layer-action.component';
-import { SunlightComponent } from './route-components/route-example-custom-layers/sunlight/sunlight.component';
+import { SunlightComponent } from './components/sunlight/sunlight.component';
 import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
 
 @NgModule({

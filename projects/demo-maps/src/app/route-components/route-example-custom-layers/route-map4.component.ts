@@ -13,9 +13,9 @@ import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
 import { DtmLayer } from './customRenderers/dtm_renderer';
-import { SunlightComponent } from './sunlight/sunlight.component';
 import { BarsLayer } from './customRenderers/threejs_renderer';
 import { munichPolys, heatMapData, vectorLayerData } from './resources/features';
+import { SunlightComponent } from '../../components/sunlight/sunlight.component';
 
 
 @Component({
