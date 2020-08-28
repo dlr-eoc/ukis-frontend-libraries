@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, AfterViewInit, Inject, NgZone } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
@@ -33,8 +33,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   constructor(
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
-    public mapSvc: MapOlService,
-    private zone: NgZone
+    public mapSvc: MapOlService
   ) {
 
     this.controls = {
