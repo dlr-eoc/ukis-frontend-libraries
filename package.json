@@ -47,18 +47,18 @@
     "@clr/icons": "4.0.0",
     "@clr/ui": "4.0.0",
     "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
-    "@schematics/angular": "^10.0.4",
+    "@schematics/angular": "^10.0.8",
     "@webcomponents/webcomponentsjs": "^2.4.4",
     "md5": "^2.2.1",
     "ogc-schemas": "^2.6.1",
-    "ol": "^6.4.0",
+    "ol": "^6.4.3",
     "opensearch-browser": "^2.0.0-alpha.5",
     "parse5-html-rewriting-stream": "^5.1.1",
     "proj4": "^2.6.2",
     "rxjs": "~6.6.0",
-    "tslib": "^2.0.0",
+    "tslib": "^2.0.1",
     "w3c-schemas": "^1.4.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.3"
   },
   "dependenciesFromProjects": [
     "md5",
@@ -75,7 +75,8 @@
     "@angular-devkit/schematics -schematics",
     "@schematics/angular -schematics",
     "cpx -schematics",
-    "parse5-html-rewriting-stream -schematics"
+    "parse5-html-rewriting-stream -schematics",
+    "opensearch-browser - services-ogc"
   ],
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1000.8",
@@ -85,9 +86,9 @@
     "@angular/language-service": "~10.0.14",
     "@compodoc/compodoc": "^1.1.11",
     "@types/geojson": "^7946.0.4",
-    "@types/jasmine": "^3.5.11",
+    "@types/jasmine": "^3.5.14",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^14.0.27",
+    "@types/node": "^14.6.1",
     "codelyzer": "^6.0.0",
     "cpx": "^1.5.0",
     "jasmine": "^3.6.1",
@@ -100,7 +101,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "karma-junit-reporter": "^1.2.0",
     "minimist": "^1.2.0",
-    "ng-packagr": "^10.0.0",
+    "ng-packagr": "^10.1.0",
     "node-sass": "^4.13.0",
     "protractor": "~7.0.0",
     "terser": "^3.14.1",
