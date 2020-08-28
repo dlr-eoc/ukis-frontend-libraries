@@ -1,4 +1,3 @@
-
 ### Bug Fixes
 * **@dlr-eoc/layer-control:**
   - LayerentryGroup emit change for LayerGroup on Layerentry update [Issue #29](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/29)
@@ -22,6 +21,8 @@
 
 
 ### Features
+**all projects:** all packages now available on [npm @dlr-eoc](https://www.npmjs.com/search?q=%40dlr-eoc)
+
 * **@dlr-eoc/map-ol:**
   - Subscribe to `pointermove` to allow layer Popup on move.
   - Optional filter function for `removeAllPopups(filter?)` in `MapOlService`.
