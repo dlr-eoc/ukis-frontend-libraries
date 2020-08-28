@@ -20,7 +20,7 @@ export class SunlightComponent implements OnInit {
 
   ngOnInit(): void {
     this.sunlightForm.valueChanges.subscribe((newVal) => {
-      this.changeHandler(parseInt(newVal.x) / 100.0, parseInt(newVal.y) / 100.0);
+      this.changeHandler(parseInt(newVal.x, 10) / 100.0, parseInt(newVal.y, 10) / 100.0);
     });
   }
 
