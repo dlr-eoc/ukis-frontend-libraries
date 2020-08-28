@@ -19,24 +19,6 @@
       "@dlr-eoc/*": [
         "dist/*",
         "projects/*"
-      ],
-      "ol": [
-        "node_modules/ol/src"
-      ],
-      "ol/*": [
-        "node_modules/ol/src/*"
-      ],
-      "utils-maps": [
-        "dist/utils-maps/utils-maps",
-        "dist/utils-maps"
-      ],
-      "utils-browser": [
-        "dist/utils-browser/utils-browser",
-        "dist/utils-browser"
-      ],
-      "map-three": [
-        "dist/map-three/map-three",
-        "dist/map-three"
       ]
     },
     "allowJs": true
