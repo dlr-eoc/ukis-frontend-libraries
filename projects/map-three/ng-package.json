@@ -6,8 +6,6 @@
   },
   "whitelistedNonPeerDependencies": [
     "tslib",
-    "ol",
-    "proj4",
     "@dlr-eoc/services-layers",
     "@dlr-eoc/services-map-state",
     "@dlr-eoc/services-map-state",
