@@ -14,6 +14,7 @@ import RenderEvent from 'ol/render/Event';
 export class MapThreeService implements OnDestroy {
 
   private subs: Subscription[] = [];
+  private needsResize = false;
 
   constructor(
     private mapStateSvc: MapStateService,
@@ -31,7 +32,7 @@ export class MapThreeService implements OnDestroy {
      *       Step 1: setting up threejs-scene                                          *
      **********************************************************************************/
     const renderer = new WebGLRenderer({ alpha: true, antialias: true, canvas: threeCanvas });
-    renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight); // @TODO: why is this initially so low when I use threeCanv.width / threeCanv.height instead?
+    renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight);
     const scene = new Scene();
     const fov = 50;
     const camera = new PerspectiveCamera(fov, threeCanvas.clientWidth / threeCanvas.clientHeight, 0.01, 100000);
@@ -108,9 +109,21 @@ export class MapThreeService implements OnDestroy {
 
     this.zone.runOutsideAngular(() => {
       renderLoop(30, (deltaT: number) => {
+
+        if (this.needsResize) {
+          renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight, false);
+          camera.aspect = threeCanvas.clientWidth / threeCanvas.clientHeight;
+          camera.updateProjectionMatrix();
+          this.needsResize = false;
+        }
+
         renderer.render(scene, camera);
       });
     });
+  }
+
+  onResize(event: any) {
+    this.needsResize = true;
   }
 
   ngOnDestroy(): void {

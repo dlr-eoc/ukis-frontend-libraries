@@ -1,11 +1,9 @@
 <main class="content-area">
-    <div class="clr-row">
-        <div class="clr-col-6">
-            <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
-        </div>
-        <div class="clr-col-6">
-            <ukis-map-three [mapOlSvc]="mapOlSvc" id="threeMap"></ukis-map-three>
-        </div>
+    <div style="height: 49.5%; width: 100%;">
+        <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
+    </div>
+    <div style="height: 50%; width: 100%;">
+        <ukis-map-three [mapOlSvc]="mapOlSvc" id="threeMap"></ukis-map-three>
     </div>
 </main>
 

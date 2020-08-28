@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { MapThreeService } from './map-three.service';
 import { Mesh } from 'three';
 import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { HostListener } from '@angular/core';
 
 
 
@@ -25,7 +26,8 @@ export class MapThreeComponent implements OnInit, AfterViewInit {
   @ViewChild('threeCanvas') private threeCanvas: ElementRef;
 
   constructor(
-    private mapThreeSvc: MapThreeService
+    private mapThreeSvc: MapThreeService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {}
@@ -46,5 +48,10 @@ export class MapThreeComponent implements OnInit, AfterViewInit {
     objectGltfPromise.then((mesh: Mesh) => {
       this.mapThreeSvc.initScene(this.threeCanvas.nativeElement, mesh, this.mapOlSvc.map);
     });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.mapThreeSvc.onResize(event);
   }
 }
