@@ -37,24 +37,24 @@ export const windMeasurements = {
             wind: [0.1, -0.8],
         }
     }, {
-      type: 'Feature',
-      geometry: {
-          type: 'Point',
-          coordinates: [11.2, 46.5]
-      },
-      properties: {
-          wind: [-0.1, 0.2],
-      }
-  }, {
-    type: 'Feature',
-    geometry: {
-        type: 'Point',
-        coordinates: [9.6, 45.5]
-    },
-    properties: {
-        wind: [0.1, 0.1],
-    }
-}]
+        type: 'Feature',
+        geometry: {
+            type: 'Point',
+            coordinates: [11.2, 46.5]
+        },
+        properties: {
+            wind: [-0.1, 0.2],
+        }
+    }, {
+        type: 'Feature',
+        geometry: {
+            type: 'Point',
+            coordinates: [9.6, 45.5]
+        },
+        properties: {
+            wind: [0.1, 0.1],
+        }
+    }]
 };
 
 
@@ -357,6 +357,137 @@ export const munichPolys = {
                         [
                             11.517448425292969,
                             48.10972362702285
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+};
+
+export const heatMapData = {
+    type: 'FeatureCollection',
+    features: [
+        {
+            type: 'Feature',
+            properties: { pid: 1 },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    10.9423828125,
+                    49.001843917978526
+                ]
+            }
+        },
+        {
+            type: 'Feature',
+            properties: { pid: 2 },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    11.18408203125,
+                    49.088257784724675
+                ]
+            }
+        },
+        {
+            type: 'Feature',
+            properties: { pid: 3 },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    11.030273437499998,
+                    49.35375571830993
+                ]
+            }
+        },
+        {
+            type: 'Feature',
+            properties: { pid: 4 },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    10.72265625,
+                    49.24629332459796
+                ]
+            }
+        },
+        {
+            type: 'Feature',
+            properties: { pid: 5 },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    12.76611328125,
+                    48.011975126709956
+                ]
+            }
+        },
+        {
+            type: 'Feature',
+            properties: { pid: 6 },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    13.55712890625,
+                    49.15296965617042
+                ]
+            }
+        },
+        {
+            type: 'Feature',
+            properties: { pid: 7 },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    13.3154296875,
+                    48.545705491847464
+                ]
+            }
+        },
+        {
+            type: 'Feature',
+            properties: { pid: 8 },
+            geometry: {
+                type: 'Point',
+                coordinates: [
+                    4.482421875,
+                    49.224772722794825
+                ]
+            }
+        }
+    ]
+};
+
+export const vectorLayerData = {
+    type: 'FeatureCollection',
+    features: [
+        {
+            type: 'Feature',
+            properties: { name: 'Feature 1 - Polygon' },
+            geometry: {
+                type: 'Polygon',
+                coordinates: [
+                    [
+                        [
+                            7.91015625,
+                            50.233151832472245
+                        ],
+                        [
+                            9.140625,
+                            47.81315451752768
+                        ],
+                        [
+                            13.33740234375,
+                            48.28319289548349
+                        ],
+                        [
+                            13.7109375,
+                            50.17689812200107
+                        ],
+                        [
+                            7.91015625,
+                            50.233151832472245
                         ]
                     ]
                 ]

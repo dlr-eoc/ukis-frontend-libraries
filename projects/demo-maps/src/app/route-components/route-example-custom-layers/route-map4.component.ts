@@ -15,7 +15,7 @@ import { ExampleLayerActionComponent } from '../../components/example-layer-acti
 import { DtmLayer } from './customRenderers/dtm_renderer';
 import { SunlightComponent } from './sunlight/sunlight.component';
 import { BarsLayer } from './customRenderers/threejs_renderer';
-import { munichPolys } from './resources/features';
+import { munichPolys, heatMapData, vectorLayerData } from './resources/features';
 
 
 @Component({
@@ -67,100 +67,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: true
     });
 
-    const data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: { pid: 1 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              10.9423828125,
-              49.001843917978526
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 2 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              11.18408203125,
-              49.088257784724675
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 3 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              11.030273437499998,
-              49.35375571830993
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 4 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              10.72265625,
-              49.24629332459796
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 5 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              12.76611328125,
-              48.011975126709956
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 6 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              13.55712890625,
-              49.15296965617042
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 7 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              13.3154296875,
-              48.545705491847464
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 8 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              4.482421875,
-              49.224772722794825
-            ]
-          }
-        }
-      ]
-    };
-
     const customHeatmapLayer = new CustomLayer({
       id: 'heatmap_layer',
       name: 'Heatmap Layer',
@@ -174,7 +80,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       },
       custom_layer: new olHeatmapLayer({
         source: new olVectorSource({
-          features: this.mapSvc.geoJsonToFeatures(data),
+          features: this.mapSvc.geoJsonToFeatures(heatMapData),
           format: new olGeoJSON(),
         }),
         radius: this.inputValue.value
@@ -186,7 +92,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'Vector Layer1',
       name: 'Vector Layer',
       type: 'geojson',
-      data,
+      data: heatMapData,
       visible: false,
       popup: true
     });
@@ -266,7 +172,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         source: new olCluster({
           distance: 10,
           source: new olVectorSource({
-            features: this.mapSvc.geoJsonToFeatures(data)
+            features: this.mapSvc.geoJsonToFeatures(heatMapData)
           })
         })
       }),
@@ -401,48 +307,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: { name: 'Feature 1 - Polygon' },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [
-                [
-                  7.91015625,
-                  50.233151832472245
-                ],
-                [
-                  9.140625,
-                  47.81315451752768
-                ],
-                [
-                  13.33740234375,
-                  48.28319289548349
-                ],
-                [
-                  13.7109375,
-                  50.17689812200107
-                ],
-                [
-                  7.91015625,
-                  50.233151832472245
-                ]
-              ]
-            ]
-          }
-        }
-      ]
-    };
-
     const testLayer = new VectorLayer({
       id: 'Vector Layer2',
       name: 'async add Layer',
       type: 'geojson',
-      data,
+      data: vectorLayerData,
       visible: false,
       popup: true
     });
