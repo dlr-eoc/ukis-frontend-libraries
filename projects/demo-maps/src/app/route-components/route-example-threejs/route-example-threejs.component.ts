@@ -1,7 +1,6 @@
-import { Component, OnInit, HostBinding, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 
 import { LayersService, CustomLayer } from '@dlr-eoc/services-layers';
-import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { MapThreeService } from '@dlr-eoc/map-three';
