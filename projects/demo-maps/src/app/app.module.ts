@@ -19,6 +19,7 @@ import { MapOlModule } from '@dlr-eoc/map-ol';
 import { LayerControlModule } from '@dlr-eoc/layer-control';
 import { MapToolsModule } from '@dlr-eoc/map-tools';
 import { OwcControlModule } from '@dlr-eoc/owc-control';
+import { MapThreeModule } from '@dlr-eoc/map-three';
 
 import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
 import { RouteMap2Component } from './route-components/route-example-projection/route-map2.component';
@@ -31,6 +32,8 @@ import { RouteLicensesComponent } from './route-components/route-licenses/route-
 import { HttpClientModule } from '@angular/common/http';
 import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
 import { ExampleLayerActionComponent } from './components/example-layer-action/example-layer-action.component';
+import { SunlightComponent } from './route-components/route-example-custom-layers/sunlight/sunlight.component';
+import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +53,9 @@ import { ExampleLayerActionComponent } from './components/example-layer-action/e
     BlinkerComponent,
     FpserComponent,
     RouteLicensesComponent,
-    ExampleLayerActionComponent
+    ExampleLayerActionComponent,
+    SunlightComponent,
+    RouteMap8Component
   ],
   imports: [
     BrowserModule,
@@ -60,6 +65,7 @@ import { ExampleLayerActionComponent } from './components/example-layer-action/e
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MapOlModule,
+    MapThreeModule,
     LayerControlModule,
     MapToolsModule,
     OwcControlModule,

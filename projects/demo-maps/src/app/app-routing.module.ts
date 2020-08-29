@@ -8,6 +8,7 @@ import { RouteMap5Component } from './route-components/route-example-layout/rout
 import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
 import { RouteLicensesComponent } from './route-components/route-licenses/route-licenses.component';
 import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
+import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'example-layers', pathMatch: 'full' },
@@ -53,6 +54,13 @@ const routes: Routes = [
     component: RouteMap7Component,
     data: {
       title: 'Ol-Performance'
+    }
+  },
+  {
+    path: 'threejs',
+    component: RouteMap8Component,
+    data: {
+      title: 'Threejs'
     }
   },
   {
