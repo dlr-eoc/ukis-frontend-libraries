@@ -24,5 +24,9 @@ The reason for this difference is that this component does in fact depend on ope
 Create a `ukis-map-ol` anyway, but hide it *behind* `ukis-map-three`. This way, openlayers can still handle all the WMTS loading logic and other complicated map-functionality, while this component continues to focus on 3d-specific problems.
 
 ## TODOs
+ - avoid those gray areas where no texture is present. Either:
+   - make ol-map larger (but make that new padding invisible to the user), 
+   - or store a full map extent (in small resolution) in a framebuffer and fall back to it when no texture is available.
  - extend the shader to handle lighting
- - implement a raycaster to handle click-events on the mesh.
+ - implement a raycaster to handle click-events on the mesh (also returning geographic coordinate of click)
+ - handle multi-center objects like 67P/Churyumov–Gerasimenko

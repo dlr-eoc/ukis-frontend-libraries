@@ -3,7 +3,7 @@ import { Scene, PerspectiveCamera, WebGLRenderer, Mesh, CubeTextureLoader } from
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mapToSingleCanvas, renderLoop } from '@dlr-eoc/utils-maps';
 import { WGS84TextureMesh, Map2SphereConverter } from './utils/utils-three';
-import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
+import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { Map } from 'ol';
 import RenderEvent from 'ol/render/Event';
@@ -32,7 +32,7 @@ export class MapThreeService implements OnDestroy {
      *       Step 1: setting up threejs-scene                                          *
      **********************************************************************************/
     const renderer = new WebGLRenderer({ alpha: true, antialias: true, canvas: threeCanvas });
-    renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight);
+    renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight, false);  // important to have this `false` argument: keeps threejs from overwriting css.
     const scene = new Scene();
     const fov = 50;
     const camera = new PerspectiveCamera(fov, threeCanvas.clientWidth / threeCanvas.clientHeight, 0.01, 100000);
@@ -111,9 +111,11 @@ export class MapThreeService implements OnDestroy {
       renderLoop(30, (deltaT: number) => {
 
         if (this.needsResize) {
-          renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight, false);
-          camera.aspect = threeCanvas.clientWidth / threeCanvas.clientHeight;
-          camera.updateProjectionMatrix();
+          if (threeCanvas.clientHeight !== threeCanvas.height || threeCanvas.clientWidth !== threeCanvas.width) {
+            renderer.setSize(threeCanvas.clientWidth, threeCanvas.clientHeight, false);  // important to have this `false` argument: keeps threejs from overwriting css.
+            camera.aspect = threeCanvas.clientWidth / threeCanvas.clientHeight;
+            camera.updateProjectionMatrix();
+          }
           this.needsResize = false;
         }
 
