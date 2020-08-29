@@ -45,7 +45,7 @@ export function flattenLayers(layers: BaseLayer[]): Layer[] {
  * Note that this value may differ from clientWidth/clientHeight: that is the size to which the actual image is scaled to in the DOM.
  */
 export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas,
-    onDone: (updatedTargetCanvas: HTMLCanvasElement | OffscreenCanvas) => void): void {
+    onDone: (updatedTargetCanvas: HTMLCanvasElement | OffscreenCanvas) => void, keepSynced = false): void {
 
     // Step 0: inspecting targetCanvas
     const targetContext = targetCanvas.getContext('2d');
@@ -79,13 +79,20 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
         }
     }
 
-    map.once('rendercomplete', (evt: RenderEvent) => {
-        // note that a map-render-event does not have a context ... contrary to a layer-render-event.
-        for (const key of subscriptions) {
-            unByKey(key);
-        }
-        onDone(targetCanvas);
-    });
+    if (keepSynced) {
+        map.on('rendercomplete', (evt: RenderEvent) => {
+            onDone(targetCanvas);
+        });
+    } else {
+        // if we don't want the canvas to remain in sync with the map, we unsubscribe to further changes here.
+        map.once('rendercomplete', (evt: RenderEvent) => {
+            // note that a map-render-event does not have a context ... contrary to a layer-render-event.
+            for (const key of subscriptions) {
+                unByKey(key);
+            }
+            onDone(targetCanvas);
+        });
+    }
 
     // Step 1: trigger a re-render of the map.
     map.renderSync();
@@ -107,8 +114,8 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
  * This is the size of the actually drawn image in pixels.
  * Note that this value may differ from clientWidth/clientHeight: that is the size to which the actual image is scaled to in the DOM.
  */
-export function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas, 
-    onDone: (updatedTargetCanvas: HTMLCanvasElement | OffscreenCanvas) => void): void {
+export function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas,
+    onDone: (updatedTargetCanvas: HTMLCanvasElement | OffscreenCanvas) => void, keepSynced = false): void {
     /* An alternative approach would be to create a new map with the desired size and copies of the old map's layers.
      * This way we wouldn't have to mess with the original map's size.
      * But unfortunately openlayers provides no means of cloning a layer.
@@ -128,7 +135,7 @@ export function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElemen
         map.setSize(initialMapSize);
         map.getView().setResolution(initialMapResolution);
         onDone(updatedTargetCanvas);
-    });
+    }, keepSynced);
 }
 
 
@@ -150,7 +157,7 @@ export function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElemen
  * ```
  */
 export function simpleMapToCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas, drawingBufferWidth?: number, drawingBufferHeight?: number,
-    onDone?: (canvas: HTMLCanvasElement | OffscreenCanvas) => void) {
+    onDone?: (canvas: HTMLCanvasElement | OffscreenCanvas) => void, keepSynced = false) {
 
     // Halting interactions: prevents user from panning map during drawing process.
     const interactions = map.getInteractions();
@@ -174,6 +181,8 @@ export function simpleMapToCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
             interaction.setActive(true);
         });
 
-        onDone(updatedCanvas);
-    });
+        if (onDone) {
+            onDone(updatedCanvas);
+        }
+    }, keepSynced);
 }
