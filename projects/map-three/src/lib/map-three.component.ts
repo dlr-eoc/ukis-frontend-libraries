@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { MapThreeService } from './map-three.service';
 import { Mesh } from 'three';
@@ -21,13 +21,12 @@ import { HostListener } from '@angular/core';
 export class MapThreeComponent implements OnInit, AfterViewInit {
 
   @Input('mapOlSvc') mapOlSvc: MapOlService;
-  @Input('modelFilePath') modelFilePath = 'assets/images/Phobos_1_1000.glb';
+  @Input('modelFilePath') modelFilePath = 'https://solarsystem.nasa.gov/system/resources/gltf_files/2358_Phobos_1_1000.glb'; // 'assets/images/Phobos_1_1000.glb';
   @Input('modelName') modelName = 'phobos';
   @ViewChild('threeCanvas') private threeCanvas: ElementRef;
 
   constructor(
-    private mapThreeSvc: MapThreeService,
-    private cdr: ChangeDetectorRef
+    private mapThreeSvc: MapThreeService
   ) { }
 
   ngOnInit(): void {}

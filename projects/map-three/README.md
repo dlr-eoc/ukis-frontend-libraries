@@ -30,3 +30,4 @@ Create a `ukis-map-ol` anyway, but hide it *behind* `ukis-map-three`. This way, 
  - extend the shader to handle lighting
  - implement a raycaster to handle click-events on the mesh (also returning geographic coordinate of click)
  - handle multi-center objects like 67P/Churyumov–Gerasimenko
+ - use brower-cache so gltf models don't need to be reloaded
