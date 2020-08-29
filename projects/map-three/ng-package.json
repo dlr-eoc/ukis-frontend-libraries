@@ -1,0 +1,19 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/map-three",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib",
+    "ol",
+    "proj4",
+    "@dlr-eoc/services-layers",
+    "@dlr-eoc/services-map-state",
+    "@dlr-eoc/services-map-state",
+    "@dlr-eoc/services-layers",
+    "@dlr-eoc/map-ol",
+    "@dlr-eoc/utils-maps",
+    "three"
+  ]
+}

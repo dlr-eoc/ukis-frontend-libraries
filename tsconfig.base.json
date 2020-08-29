@@ -33,6 +33,10 @@
       "utils-browser": [
         "dist/utils-browser/utils-browser",
         "dist/utils-browser"
+      ],
+      "map-three": [
+        "dist/map-three/map-three",
+        "dist/map-three"
       ]
     },
     "allowJs": true
