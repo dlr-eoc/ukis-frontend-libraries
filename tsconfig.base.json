@@ -19,6 +19,12 @@
       "@dlr-eoc/*": [
         "dist/*",
         "projects/*"
+      ],
+      "ol": [
+        "node_modules/ol/src"
+      ],
+      "ol/*": [
+        "node_modules/ol/src/*"
       ]
     },
     "allowJs": true
