@@ -1,3 +1,5 @@
+# [7.2.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.2.0) (2020-08-31) (Npm packages and a lot of features and bug fixes)
+
 ### Bug Fixes
 * **@dlr-eoc/layer-control:**
   - LayerentryGroup emit change for LayerGroup on Layerentry update [Issue #29](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/29)
