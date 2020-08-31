@@ -1,3 +1,4 @@
+# [7.2.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.2.0) (2020-08-31) (Npm packages and a lot of features and bug fixes)
 
 ### Bug Fixes
 * **@dlr-eoc/layer-control:**
@@ -21,6 +22,8 @@
 
 
 ### Features
+**all projects:** all packages now available on [npm @dlr-eoc](https://www.npmjs.com/search?q=%40dlr-eoc)
+
 * **@dlr-eoc/map-ol:**
   - Subscribe to `pointermove` to allow layer Popup on move.
   - Optional filter function for `removeAllPopups(filter?)` in `MapOlService`.
