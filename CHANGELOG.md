@@ -18,7 +18,6 @@
 * **update dependencies** angular, clarity, ol, proj4
 * **@dlr-eoc/services-map-state:** Create new instances on set state and remove the not needed extent Subject.
 * **angular:** Created a `tsconfig.json` for usage by the IDE and a `tsconfig.base.json` for new projects to inherit from to conform with angular 10. More information:  https://angular.io/guide/migration-solution-style-tsconfig
-* **@dlr-eoc/utils:** Created `utils-*` projects. These contain utilities that do not depend on angular and can potentially be used in other libraries, too.
 
 
 ### Features
@@ -50,6 +49,23 @@
 * **@dlr-eoc/services-ogc:**
   - Added `CswClient`, a client of [OGC-conform](https://www.ogc.org/standards/cat) CSW-Servers.
   - Added `OpensearchWrapperService`, a client for [OpenSearch](https://de.wikipedia.org/wiki/OpenSearch) endpoints (like the one provided by [PyCSW](https://docs.pycsw.org/en/latest/opensearch.html)).
+* **@dlr-eoc/utils-browser:** 
+  - `Paper` class to aid in getting dimensions of paper-sheets (A5, A4, ...) in pixel and cm.
+  - `download` utilities to save us some boilerplate when saving data to a file.
+* **@dlr-eoc/utils-maps:** 
+  - `ol` utilities to copy a map's current image in a canvas (potentially for later downloading).
+  - `mapToSingleCanvas` can now also optionally keep track of the maps state instead of only storing a snapshot. This way, we can now not only take 'photos' but also 'videos' of the map and use them elsewhere. 
+  - added utilities for the usage of WebGL. The new `Shader` API is a very thin, object-oriented wrapper around WebGL that removes a lot of the verbosity usually associated with writing shaders. Contrary to `threejs`, however, the programmer is still able to directly manipulate every data-structure manually.
+  - added utilities for the usage of `threejs`. 
+    - `Map2SphereConverter` helps in converting EPSG:4326 in 3d-coordinates and back
+    - `WGS84TextureMesh` is a custom mesh that projects a canvas onto a 3d-object. It works well in combination with `mapToSingleCanvas` to project ol-maps onto objects.
+* **demo-maps:**
+  - **Custom layers**: added illustrations for the usage of WebGL in openlayer's custom `LayerRenderer`. 
+     1. `minimal_renderer` contains an absolute minimal example of what is required to create a custom renderer
+     2. `dtm_renderer` illustrates how WebGL can make use of normal-maps
+     3. `threejs_renderer` illustrates how we can integrate the popular `three.js` library into an openlayers-map
+  - **Threejs**: added an example of how two maps with the same data can be displayed side by side. Here, an openlayers-map is displayed next to a threejs-scene. Data is being synced between them.
+* **@dlr-eoc/map-three:** Created a component `ukis-map-three` analogous to `ukis-map-ol`. It projects an ol-map onto a Mesh, allowing us to display maps in 3d. The threejs-dependency is bundled here, so that the package does not artificially bloat our build-size when no threejs is required.
 
 
 ### Refactoring

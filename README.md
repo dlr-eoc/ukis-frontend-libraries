@@ -14,7 +14,7 @@ It is the base to create a project specific UKIS Frontend Application.
 It uses [angular](https://angular.io/) and the [Clarity Design System](https://vmware.github.io/clarity/).
  
 
-The following angular libraries are included in this repository:
+The following libraries/packages are included in this repository:
 
 - [base-layers-raster](projects/base-layers-raster/README.md)
 - [cookie-alert](projects/cookie-alert/README.md)
@@ -30,7 +30,9 @@ The following angular libraries are included in this repository:
 - [services-ogc](projects/services-ogc/README.md)
 - [services-util-store](projects/services-util-store/README.md)
 
-
+- [utils-maps](projects/utils-maps/README.md)
+- [utils-browser](projects/utils-browser/README.md)
+- [map-three](projects/map-three/README.md)
 
 
 ## To use the libraries in your project specific application, you can either use the packaged npm modules or include this repository.

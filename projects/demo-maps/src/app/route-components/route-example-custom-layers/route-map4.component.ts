@@ -1,30 +1,28 @@
-import { Component, OnInit, HostBinding, AfterViewInit, Inject } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
-import { Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer } from 'ol/layer';
-import olLayerGroup from 'ol/layer/Group';
-import olVectorSource from 'ol/source/Vector';
-import olCluster from 'ol/source/Cluster';
-import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON } from 'ol/format';
-import olImageWMS from 'ol/source/ImageWMS';
-import olImageLayer from 'ol/layer/Image';
-import olTileLayer from 'ol/layer/Tile';
-import olTileWMS from 'ol/source/TileWMS';
-
-import olVectorTileLayer from 'ol/layer/VectorTile';
-import olVectorTileSource from 'ol/source/VectorTile';
-import olMVT from 'ol/format/MVT';
+import { Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer,
+         Group as olLayerGroup, Image as olImageLayer, Tile as olTileLayer, VectorTile as olVectorTileLayer } from 'ol/layer';
+import { ImageStatic as olStatic, Vector as olVectorSource, ImageWMS as olImageWMS, Cluster as olCluster,
+         TileWMS as olTileWMS, VectorTile as olVectorTileSource } from 'ol/source';
+import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON, MVT as olMVT } from 'ol/format';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
+
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
+import { DtmLayer } from './customRenderers/dtm_renderer';
+import { BarsLayer } from './customRenderers/threejs_renderer';
+import { munichPolys, heatMapData, vectorLayerData } from './resources/features';
+import { SunlightComponent } from '../../components/sunlight/sunlight.component';
+
 
 @Component({
   selector: 'app-route-map4',
   templateUrl: './route-map4.component.html',
   styleUrls: ['./route-map4.component.scss'],
-  /** use differnt instances of the services only for testing with diffenr routs  */
+  /** use different instances of the services only for testing with different routes  */
   providers: [LayersService, MapStateService, MapOlService]
 })
 export class RouteMap4Component implements OnInit, AfterViewInit {
@@ -35,7 +33,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   constructor(
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
-    public mapSvc: MapOlService) {
+    public mapSvc: MapOlService
+  ) {
 
     this.controls = {
       attribution: true,
@@ -50,6 +49,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
+    this.mapSvc.setProjection('EPSG:4326');
     this.addLayers();
   }
 
@@ -67,100 +67,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: true
     });
 
-    const data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: { pid: 1 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              10.9423828125,
-              49.001843917978526
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 2 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              11.18408203125,
-              49.088257784724675
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 3 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              11.030273437499998,
-              49.35375571830993
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 4 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              10.72265625,
-              49.24629332459796
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 5 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              12.76611328125,
-              48.011975126709956
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 6 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              13.55712890625,
-              49.15296965617042
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 7 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              13.3154296875,
-              48.545705491847464
-            ]
-          }
-        },
-        {
-          type: 'Feature',
-          properties: { pid: 8 },
-          geometry: {
-            type: 'Point',
-            coordinates: [
-              4.482421875,
-              49.224772722794825
-            ]
-          }
-        }
-      ]
-    };
-
     const customHeatmapLayer = new CustomLayer({
       id: 'heatmap_layer',
       name: 'Heatmap Layer',
@@ -174,7 +80,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       },
       custom_layer: new olHeatmapLayer({
         source: new olVectorSource({
-          features: this.mapSvc.geoJsonToFeatures(data),
+          features: this.mapSvc.geoJsonToFeatures(heatMapData),
           format: new olGeoJSON(),
         }),
         radius: this.inputValue.value
@@ -186,7 +92,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'Vector Layer1',
       name: 'Vector Layer',
       type: 'geojson',
-      data,
+      data: heatMapData,
       visible: false,
       popup: true
     });
@@ -266,7 +172,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         source: new olCluster({
           distance: 10,
           source: new olVectorSource({
-            features: this.mapSvc.geoJsonToFeatures(data)
+            features: this.mapSvc.geoJsonToFeatures(heatMapData)
           })
         })
       }),
@@ -336,7 +242,55 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const layers = [osmLayer1, layersGroup1, clusterLayer, vectorTile, imageWmsLayer, kmlLayer, topoJsonLayer, customLayerGroup];
+
+
+    const dtmLayer = new CustomLayer({
+      id: 'dtmLayer',
+      name: 'SRTM DTM',
+      filtertype: 'Layers',
+      custom_layer: new DtmLayer({
+        source: new olStatic({
+            url: 'assets/images/srtm_small.png',
+            imageExtent: [10.00, 45.00, 15.00, 50.00],
+            projection: 'EPSG:4326',
+          })
+      }),
+      action: {
+        component: SunlightComponent,
+        inputs: {
+          changeHandler: (x: number, y: number) => {
+            dtmLayer.custom_layer.updateSunAngle([x, y]);
+          }
+        }
+      },
+      opacity: 0.6,
+      visible: false,
+      description: `<p>This layer uses SRTM data to calculate surface-normals and uses them to dynamically create shades on hilltops. Things like these might be a nice illustration for time-enabled maps.</p>
+      <p>Use the controls to dynamically change the sun's angle.</p>`
+    });
+
+    const barLayer = new CustomLayer({
+      id: 'three',
+      name: 'Bars layer',
+      custom_layer: new BarsLayer({
+        source: new olVectorSource({
+          features: this.mapSvc.geoJsonToFeatures(munichPolys)
+        })
+      }),
+      filtertype: 'Layers',
+      opacity: 0.7,
+      visible: false,
+      description: `<p>This layer demonstrates how a common 3d-library, three.js, can be integrated in a 2d-map. Using three.js often yields less verbose code than calling WebGL directly.</p>`
+    });
+
+    const layerGroup2 = new LayerGroup({
+      name: 'Webgl Group',
+      filtertype: 'Layers',
+      id: 'group2',
+      layers: [dtmLayer, barLayer]
+    });
+
+    const layers = [osmLayer1, layersGroup1, layerGroup2, clusterLayer, vectorTile, imageWmsLayer, kmlLayer, topoJsonLayer, customLayerGroup];
 
     layers.forEach(layer => {
       if (layer instanceof Layer) {
@@ -353,48 +307,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const data = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: { name: 'Feature 1 - Polygon' },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [
-              [
-                [
-                  7.91015625,
-                  50.233151832472245
-                ],
-                [
-                  9.140625,
-                  47.81315451752768
-                ],
-                [
-                  13.33740234375,
-                  48.28319289548349
-                ],
-                [
-                  13.7109375,
-                  50.17689812200107
-                ],
-                [
-                  7.91015625,
-                  50.233151832472245
-                ]
-              ]
-            ]
-          }
-        }
-      ]
-    };
-
     const testLayer = new VectorLayer({
       id: 'Vector Layer2',
       name: 'async add Layer',
       type: 'geojson',
-      data,
+      data: vectorLayerData,
       visible: false,
       popup: true
     });
@@ -402,6 +319,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.layersSvc.addLayer(testLayer, 'Layers');
     }, 2000);
+
 
   }
 }

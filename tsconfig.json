@@ -106,5 +106,11 @@
     {
       "path": "./projects/utils-browser/tsconfig.spec.json"
     },
+    {
+      "path": "./projects/map-three/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-three/tsconfig.spec.json"
+    },
   ]
 }
