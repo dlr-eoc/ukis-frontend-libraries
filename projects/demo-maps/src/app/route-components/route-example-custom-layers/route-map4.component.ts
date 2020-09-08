@@ -284,7 +284,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       description: `<p>This layer demonstrates how a common 3d-library, three.js, can be integrated in a 2d-map. Using three.js often yields less verbose code than calling WebGL directly.</p>`
     });
 
-    console.log(this.mapSvc.map.getView().getProjection().getMetersPerUnit())
     const interpolationLayer = new CustomLayer({
       id: 'interpolation',
       name: 'Interpolation',
@@ -292,7 +291,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         source: new olVectorSource({
           features: this.mapSvc.geoJsonToFeatures(crescentPoints)
         }),
-        maxEdgeLength: 3000000 / this.mapSvc.map.getView().getProjection().getMetersPerUnit(),
+        maxEdgeLength: 40000 / this.mapSvc.map.getView().getProjection().getMetersPerUnit(),
         distanceWeightingPower: 2.0,
         colorRamp: {
           0: [255, 255, 204],
@@ -301,7 +300,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           18: [44, 127, 184],
           22.5: [37, 52, 148]
         },
-        smooth: true
+        smooth: true,
+        valueProperty: 'val'
       }),
       actions: [{ title: 'test', icon: '', action: (layer) => { } }],
       action: {

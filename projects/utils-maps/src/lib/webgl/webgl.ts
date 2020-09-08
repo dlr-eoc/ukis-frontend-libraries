@@ -658,10 +658,10 @@ export const bindValueToUniform = (gl: WebGLRenderingContext, uniformLocation: W
  * the WebGL programmer has no explicit access to the frontbuffer whatsoever.
  *
  * Once you called `clear`, `drawElements` or `drawArrays`, the browser marks the canvas as `needs to be composited`.
- * (Assuming `preserveDrawingBuffer == false`:) Immediately before compositing, the browser
+ * Assuming `preserveDrawingBuffer == false` (the default): Immediately before compositing, the browser
  *  - swaps the back- and frontbuffer
  *  - clears the new backbuffer.
- * (If `preserveDrawingBuffer === true`: ) Immediately before compositing, the browser
+ * If `preserveDrawingBuffer === true`: Immediately before compositing, the browser
  *  - copies the drawingbuffer to the frontbuffer.
  *
  * As a consequence, if you're going to use canvas.toDataURL or canvas.toBlob or gl.readPixels or any other way of getting data from a WebGL canvas,
@@ -697,4 +697,3 @@ export const getCurrentFramebuffersPixels = (canvas: HTMLCanvasElement): ArrayBu
 
     return pixels;
 };
-

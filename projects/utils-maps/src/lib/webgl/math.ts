@@ -38,6 +38,9 @@ export const vectorLength = (vec: Vector): number => {
     return Math.sqrt(sq);
 };
 
+export const vectorSum = (vec: Vector): number => {
+    return vec.reduce((prev: number, val: number) => prev + val, 0);
+};
 
 export const pointDistance = (p0: Vector, p1: Vector): number => {
     const diff = vectorSubtraction(p0, p1);
@@ -54,7 +57,7 @@ export const flattenMatrix = (m: Matrix): number[] => {
     return flat;
 };
 
-export const sumMatrix = (m: Matrix): number => {
+export const matrixSum = (m: Matrix): number => {
     let sum = 0.;
     for (const row of m) {
         for (const entry of row) {
@@ -62,4 +65,13 @@ export const sumMatrix = (m: Matrix): number => {
         }
     }
     return sum;
+};
+
+export const matrixVectorProduct = (m: Matrix, v: Vector): Vector => {
+    const out = [];
+    for (const row of m) {
+        const s = vectorSum(pointWiseVectorMultiplication(row, v));
+        out.push(s);
+    }
+    return out;
 };
