@@ -14,8 +14,10 @@ import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
 import { DtmLayer } from './customRenderers/dtm_renderer';
 import { BarsLayer } from './customRenderers/threejs_renderer';
-import { munichPolys, heatMapData, vectorLayerData } from './resources/features';
+import { InterpolationLayer, ColorRamp } from './customRenderers/interpolation_renderer';
+import { munichPolys, heatMapData, vectorLayerData, crescentPoints } from './resources/features';
 import { SunlightComponent } from '../../components/sunlight/sunlight.component';
+import { InterpolationSettingsComponent } from '../../components/interpolation-settings/interpolation-settings.component';
 
 
 @Component({
@@ -49,7 +51,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.mapSvc.setProjection('EPSG:4326');
     this.addLayers();
   }
 
@@ -283,11 +284,44 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       description: `<p>This layer demonstrates how a common 3d-library, three.js, can be integrated in a 2d-map. Using three.js often yields less verbose code than calling WebGL directly.</p>`
     });
 
+    console.log(this.mapSvc.map.getView().getProjection().getMetersPerUnit())
+    const interpolationLayer = new CustomLayer({
+      id: 'interpolation',
+      name: 'Interpolation',
+      custom_layer: new InterpolationLayer({
+        source: new olVectorSource({
+          features: this.mapSvc.geoJsonToFeatures(crescentPoints)
+        }),
+        maxEdgeLength: 3000000 / this.mapSvc.map.getView().getProjection().getMetersPerUnit(),
+        distanceWeightingPower: 2.0,
+        colorRamp: {
+          0: [255, 255, 204],
+          7: [161, 218, 180],
+          12: [65, 182, 196],
+          18: [44, 127, 184],
+          22.5: [37, 52, 148]
+        },
+        smooth: true
+      }),
+      actions: [{ title: 'test', icon: '', action: (layer) => { } }],
+      action: {
+        component: InterpolationSettingsComponent,
+        inputs: {
+          changeHandler: (power: number, smooth: boolean, colorRamp: ColorRamp) => {
+            interpolationLayer.custom_layer.updateParas(power, smooth, colorRamp);
+          }
+        }
+      },
+      filtertype: 'Layers',
+      opacity: 0.7,
+      visible: false,
+    });
+
     const layerGroup2 = new LayerGroup({
       name: 'Webgl Group',
       filtertype: 'Layers',
       id: 'group2',
-      layers: [dtmLayer, barLayer]
+      layers: [dtmLayer, barLayer, interpolationLayer]
     });
 
     const layers = [osmLayer1, layersGroup1, layerGroup2, clusterLayer, vectorTile, imageWmsLayer, kmlLayer, topoJsonLayer, customLayerGroup];

@@ -1,0 +1,21 @@
+<form clrForm [formGroup]="interpolationForm" clrLayout="vertical">
+    <clr-input-container>
+        <label>Power</label>
+        <input type="range" min="1" max="7" value="1" clrInput formControlName="power">
+        <clr-control-helper>inverse distance weighting power</clr-control-helper>
+    </clr-input-container>
+    <clr-input-container>
+        <label>Smoothing</label>
+        <input type="checkbox" value="true" clrCheckbox formControlName="smooth">
+        <clr-control-helper>Smooth transition between colors</clr-control-helper>
+    </clr-input-container>
+    <clr-input-container>
+        <label>Color-ramp</label>
+        <select clrSelect name="ColorRamp" formControlName="colorRamp">
+            <option value="one">One</option>
+            <option value="two">Two</option>
+            <option value="three">Three</option>
+          </select>
+        <clr-control-helper>Colors for displaying data</clr-control-helper>
+    </clr-input-container>
+</form>
