@@ -1,4 +1,4 @@
-import { createShaderProgram, setup3dScene, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, getUniformLocation, bindValueToUniform, clearBackground, BufferObject, UniformType, bindProgram, createTexture, bindTextureToUniform, TextureObject, FramebufferObject, bindFramebuffer, bindOutputCanvasToFramebuffer, updateBufferData, bindTextureToFramebuffer, createEmptyTexture, createFramebuffer, updateTexture, createIndexBuffer, IndexBufferObject, drawArray } from './webgl';
+import { createShaderProgram, setup3dScene, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, getUniformLocation, bindValueToUniform, clearBackground, BufferObject, WebGLVariableType, bindProgram, createTexture, bindTextureToUniform, TextureObject, FramebufferObject, bindFramebuffer, bindOutputCanvasToFramebuffer, updateBufferData, bindTextureToFramebuffer, createEmptyTexture, createFramebuffer, updateTexture, createIndexBuffer, IndexBufferObject, drawArray } from './webgl';
 
 
 // dead-simple hash function - not intended to be secure in any way.
@@ -35,7 +35,7 @@ export class Program implements IProgram {
 
 export interface IUniform {
     location: WebGLUniformLocation;
-    type: UniformType;
+    type: WebGLVariableType;
     value: number[];
     variableName: string;
 }
@@ -44,11 +44,11 @@ export interface IUniform {
 export class Uniform implements IUniform {
 
     readonly location: WebGLUniformLocation;
-    readonly type: UniformType;
+    readonly type: WebGLVariableType;
     readonly value: number[];
     readonly variableName: string;
 
-    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, type: UniformType, data: number[]) {
+    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, type: WebGLVariableType, data: number[]) {
         this.location = getUniformLocation(gl, program.program, variableName);
         this.type = type;
         this.value = data;
@@ -136,10 +136,11 @@ function first<T>(arr: T[], condition: (el: T) => boolean): T | null {
 }
 
 
-function parseProgram(program: IProgram): [string[], string[], string[]] {
+function parseProgram(program: IProgram): [string[], string[], string[], string[]] {
     const attributeRegex = /^\s*attribute (int|float|vec2|vec3|vec4|mat2|mat3|mat4) (\w*);/gm;
     const uniformRegex = /^\s*uniform (int|float|vec2|vec3|vec4|mat2|mat3|mat4) (\w*)(\[\d\])*;/gm;
     const textureRegex = /^\s*uniform sampler2D (\w*);/gm;
+    const precisionRegex = /^\s*precision (\w*) float;/gm;
 
     const shaderCode = program.fragmentShaderSource + '\n\n\n' + program.vertexShaderSource;
 
@@ -159,7 +160,13 @@ function parseProgram(program: IProgram): [string[], string[], string[]] {
         textureNames.push(textureMatches[1]);
     }
 
-    return [attributeNames, uniformNames, textureNames];
+    const precisions = [];
+    let precisionMatches;
+    while ((precisionMatches = textureRegex.exec(shaderCode)) !== null) {
+        precisions.push(precisionMatches[1]);
+    }
+
+    return [attributeNames, uniformNames, textureNames, precisions];
 }
 
 
@@ -184,7 +191,7 @@ export class Shader implements IShader {
         readonly uniforms: IUniform[],
         readonly textures: ITexture[]
     ) {
-        const [attributeNames, uniformNames, textureNames] = parseProgram(program);
+        const [attributeNames, uniformNames, textureNames, precisions] = parseProgram(program);
         for (const attrName of attributeNames) {
             const found = attributes.filter(a => a.variableName === attrName);
             if (found.length !== 1) {
@@ -202,6 +209,10 @@ export class Shader implements IShader {
             if (found.length !== 1) {
                 throw new Error(`Provided ${found.length} values for shader's texture ${texName}.`);
             }
+        }
+        if (precisions.length === 1) {
+            console.warn(`You have only provided one precision qualifier.
+            This can cause issues when you want to use a uniform in both the vertex- and the fragment-shader.`);
         }
     }
 
