@@ -109,14 +109,14 @@ export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
                 new Attribute(gl, program, 'a_position', rectangleInWorldPosition.vertices),
                 new Attribute(gl, program, 'a_texturePosition', rectangleInWorldPosition.texturePositions)
             ], [
-                new Uniform(gl, program, 'u_imageSize', '1f', [2048.]),
-                new Uniform(gl, program, 'u_sun', '3f', [0., 0., 1.]),  // array, pointing to sun from middle of map.
-                new Uniform(gl, program, 'u_world2pix', 'matrix3fv', flattenMatrix([
+                new Uniform(gl, program, 'u_imageSize', 'float', [2048.]),
+                new Uniform(gl, program, 'u_sun', 'vec3', [0., 0., 1.]),  // array, pointing to sun from middle of map.
+                new Uniform(gl, program, 'u_world2pix', 'mat3', flattenMatrix([
                     [1., 0., 0.],
                     [0., 1., 0.],
                     [0., 0., 1.]
                 ])),
-                new Uniform(gl, program, 'u_pix2canv', 'matrix3fv', flattenMatrix([
+                new Uniform(gl, program, 'u_pix2canv', 'mat3', flattenMatrix([
                     [1. /  (canvas.width / 2),  0.,                        0. ],
                     [0,                        -1. / (canvas.height / 2),  0. ],
                     [-1.,                      1.,                         1. ]
