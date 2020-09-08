@@ -59,16 +59,16 @@ export const windMeasurements = {
 
 
 export const munichPolys = {
-    "type": "FeatureCollection",
-    "features": [
+    type: 'FeatureCollection',
+    'features': [
         {
-            "type": "Feature",
-            "properties": {
+            type: 'Feature',
+            properties: {
                 height: 2
             },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [
+            geometry: {
+                type: 'Polygon',
+                coordinates: [
                     [
                         [
                             11.539764404296875,
@@ -136,13 +136,13 @@ export const munichPolys = {
             }
         },
         {
-            "type": "Feature",
-            "properties": {
+            type: 'Feature',
+            properties: {
                 height: 1
             },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [
+            geometry: {
+                type: 'Polygon',
+                coordinates: [
                     [
                         [
                             11.605682373046875,
@@ -205,13 +205,13 @@ export const munichPolys = {
             }
         },
         {
-            "type": "Feature",
-            "properties": {
+            type: 'Feature',
+            properties: {
                 height: 3
             },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [
+            geometry: {
+                type: 'Polygon',
+                coordinates: [
                     [
                         [
                             11.516075134277344,
@@ -290,13 +290,13 @@ export const munichPolys = {
             }
         },
         {
-            "type": "Feature",
-            "properties": {
+            type: 'Feature',
+            properties: {
                 height: 0
             },
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [
+            geometry: {
+                type: 'Polygon',
+                coordinates: [
                     [
                         [
                             11.517448425292969,
@@ -494,4 +494,396 @@ export const vectorLayerData = {
             }
         }
     ]
+};
+
+
+export const crescentPoints = {
+  type: 'FeatureCollection',
+  'features': [
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.1673583984375,
+          45.27875187893957
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.2772216796875,
+          45.44086267178177
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.5299072265625,
+          45.56021795715051
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.661743164062498,
+          45.460130637921004
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.491455078125,
+          45.4986468234261
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.447509765625,
+          45.390735154248894
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.3541259765625,
+          45.20913363773731
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.601318359374998,
+          45.321254361171476
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.859497070312498,
+          45.22848059584359
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.9254150390625,
+          45.583289756006316
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.128662109375,
+          45.64860838388028
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.2000732421875,
+          45.75602615586017
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.5406494140625,
+          45.694669843547246
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.60107421875,
+          45.74069339553309
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.721923828124998,
+          45.66012730272194
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.77685546875,
+          45.606352077118316
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.677978515625,
+          45.57175504130605
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.5791015625,
+          45.4947963896697
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.463745117187498,
+          45.4947963896697
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.53515625,
+          45.321254361171476
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.216552734375,
+          45.286481972782816
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.5626220703125,
+          45.66780526567164
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.590087890625,
+          45.625563438215984
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.2769775390625,
+          45.64092778836502
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.447265624999998,
+          45.66780526567164
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.359375,
+          45.52559248776561
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.084716796874998,
+          45.537136680398596
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.342895507812498,
+          45.42544355958045
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.095703125,
+          45.46783598133375
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.9473876953125,
+          45.47554027158593
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          13.216552734375,
+          45.40616374516014
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.94189453125,
+          45.37916094640917
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.7276611328125,
+          45.386877348270374
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.59033203125,
+          45.24008561090264
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: { val: Math.random() * 22.5 },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          12.81005859375,
+          45.54483149242463
+        ]
+      }
+    }
+  ]
 };
