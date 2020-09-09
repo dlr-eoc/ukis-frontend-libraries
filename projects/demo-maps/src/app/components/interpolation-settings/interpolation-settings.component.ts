@@ -9,11 +9,12 @@ import { ColorRamp } from '../../route-components/route-example-custom-layers/cu
 })
 export class InterpolationSettingsComponent implements OnInit {
 
-  @Input() changeHandler: (power: number, smooth: boolean, colorRamp: ColorRamp) => void;
+  @Input() changeHandler: (power: number, smooth: boolean, colorRamp: ColorRamp, labels: boolean) => void;
 
   public interpolationForm = new FormGroup({
       power: new FormControl(1, Validators.required),
       smooth: new FormControl(true, Validators.required),
+      labels: new FormControl(false, Validators.required),
       colorRamp: new FormControl({
         0: [216, 179, 101],
         10: [245, 245, 245],
@@ -56,7 +57,7 @@ export class InterpolationSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.interpolationForm.valueChanges.subscribe((newVal) => {
-      this.changeHandler(newVal.power, newVal.smooth, newVal.colorRamp);
+      this.changeHandler(newVal.power, newVal.smooth, newVal.colorRamp, newVal.labels);
     });
   }
 

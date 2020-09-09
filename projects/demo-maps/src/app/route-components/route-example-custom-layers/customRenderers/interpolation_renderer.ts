@@ -8,6 +8,10 @@ import Delaunator from 'delaunator';
 import { Shader, Program, Attribute, Uniform, flattenMatrix, pointDistance,
     Texture, Framebuffer, getCurrentFramebuffersPixels, Matrix, rectangleA,
     Index, identity, matrixVectorProduct } from '@dlr-eoc/utils-maps';
+import { Coordinate } from 'ol/coordinate';
+import { FeatureLike } from 'ol/Feature';
+import { Layer } from 'ol/layer';
+import RenderFeature from 'ol/render/Feature';
 
 
 export interface ColorRamp {
@@ -24,6 +28,8 @@ export interface InterpolationLayerOptions {
     colorRamp: ColorRamp;
     /** Should color-ramp be interpolated? */
     smooth: boolean;
+    /** Should labels be displayed over datapoints? */
+    showLabels: boolean;
     /** Under which feature-property do we find the value to be interpolated? */
     valueProperty: string;
     [key: string]: any;
@@ -40,11 +46,11 @@ export class InterpolationLayer extends VectorLayer {
     }
 
     createRenderer(): InterpolationRenderer {
-        return new InterpolationRenderer(this, this.options.maxEdgeLength, this.options.distanceWeightingPower, this.options.colorRamp, this.options.smooth, this.options.valueProperty);
+        return new InterpolationRenderer(this, this.options.maxEdgeLength, this.options.distanceWeightingPower, this.options.colorRamp, this.options.smooth, this.options.valueProperty, this.options.showLabels);
     }
 
-    updateParas(power: number, smooth: boolean, colorRamp: ColorRamp): void {
-        (super.getRenderer() as InterpolationRenderer).setParas(power, smooth, colorRamp);
+    updateParas(power: number, smooth: boolean, colorRamp: ColorRamp, showLabels: boolean): void {
+        (super.getRenderer() as InterpolationRenderer).setParas(power, smooth, colorRamp, showLabels);
     }
 }
 
@@ -80,9 +86,12 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private values: number[];
     private coordsWorld: number[][];
     private interpolatedValues: Uint8Array;
+    private showLabels: boolean;
 
-    constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string) {
+    constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string, showLabels: boolean) {
         super(layer);
+
+        this.showLabels = showLabels;
 
         // setting up HTML element
         this.container = document.createElement('div');
@@ -163,7 +172,20 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         return this.container;
     }
 
-    public setParas(power: number, smooth: boolean, colorRamp: ColorRamp) {
+
+  forEachFeatureAtCoordinate<T>(
+    coordinate: Coordinate,
+    frameState: FrameState,
+    hitTolerance: number,
+    callback: (arg0: Feature<any> | RenderFeature, arg1: Layer<any>) => T,
+    declutteredFeatures: FeatureLike[]
+  ) {
+      // @TODO: query the valueFb to provide data at the given point.
+      callback(null, super.layer_);
+  }
+
+    public setParas(power: number, smooth: boolean, colorRamp: ColorRamp, showLabels: boolean) {
+        this.showLabels = showLabels;
         this.updateInterpolationShader(power);
         this.updateColorizationShader(colorRamp, smooth);
         this.runInterpolationShader();
@@ -231,24 +253,27 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     }
 
     private updateTextCanvas(coordinateToPixelTransform: number[], zoom: number): void {
-        const world2pix = [
-            [coordinateToPixelTransform[0], coordinateToPixelTransform[2], coordinateToPixelTransform[4] ],
-            [coordinateToPixelTransform[1], coordinateToPixelTransform[3], coordinateToPixelTransform[5] ],
-            [0,                             0,                             1                             ]
-        ];
-        const coordsWorldAugm = this.coordsWorld.map(c => [...c, 1]);
-        const coordsPix = applyTransformToEach(coordsWorldAugm, world2pix);
-
         const context = this.twodCanvas.getContext('2d');
-        context.font = '8pt Tahoma';
-        context.lineWidth = 1;
-        context.strokeStyle = 'white';
-        context.fillStyle = 'black';
-
         context.clearRect(0, 0, this.twodCanvas.width, this.twodCanvas.height);
-        for (let i = 0; i < coordsPix.length; i++) {
-            // context.fillText(`${this.values[i].toPrecision(5)}`, coordsPix[i][0], coordsPix[i][1]);
-            context.strokeText(`${this.values[i].toPrecision(5)}`, coordsPix[i][0], coordsPix[i][1]);
+
+        if (this.showLabels) {
+            const world2pix = [
+                [coordinateToPixelTransform[0], coordinateToPixelTransform[2], coordinateToPixelTransform[4] ],
+                [coordinateToPixelTransform[1], coordinateToPixelTransform[3], coordinateToPixelTransform[5] ],
+                [0,                             0,                             1                             ]
+            ];
+            const coordsWorldAugm = this.coordsWorld.map(c => [...c, 1]);
+            const coordsPix = applyTransformToEach(coordsWorldAugm, world2pix);
+
+            context.font = '8pt Tahoma';
+            context.lineWidth = 1;
+            context.strokeStyle = 'white';
+            context.fillStyle = 'black';
+
+            for (let i = 0; i < coordsPix.length; i++) {
+                // context.fillText(`${this.values[i].toPrecision(5)}`, coordsPix[i][0], coordsPix[i][1]);
+                context.strokeText(`${this.values[i].toPrecision(5)}`, coordsPix[i][0], coordsPix[i][1]);
+            }
         }
     }
 }

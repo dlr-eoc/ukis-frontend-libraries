@@ -8,7 +8,7 @@ export type Matrix = number[][];
 
 export const binaryVectorOp = (vec0: Vector, vec1: Vector, operation: (a: number, b: number) => number): Vector => {
     if (vec0.length !== vec1.length) {
-        throw new Error('');
+        throw new Error('Vectors are not of the same length');
     }
     const newVec = [];
     for (let i = 0; i < vec0.length; i++) {
