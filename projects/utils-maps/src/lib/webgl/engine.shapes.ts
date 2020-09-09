@@ -227,6 +227,15 @@ export const boxA = (width: number, height: number, depth: number): ShapeA => {
 
 
 
+export const identity = (): Matrix => {
+    return [
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1]
+    ];
+};
+
+
 export const edgeDetectKernel = (): Matrix => {
     return [
         [-1., -1., -1.],
