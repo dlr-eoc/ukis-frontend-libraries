@@ -2,7 +2,7 @@ import LayerRenderer from 'ol/renderer/Layer';
 import ImageLayer from 'ol/layer/Image';
 import { FrameState } from 'ol/PluggableMap';
 import { transformExtent } from 'ol/proj';
-import { Program, Shader, Attribute, Uniform, Texture, rectangle, flattenMatrix, Shape, createTextCanvas, bindProgram } from '@dlr-eoc/utils-maps';
+import { Program, Shader, Attribute, Uniform, Texture, rectangleA, flattenMatrix, ShapeA, createTextCanvas, bindProgram } from '@dlr-eoc/utils-maps';
 import Static from 'ol/source/ImageStatic';
 
 
@@ -182,8 +182,8 @@ export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
     }
 
 
-    private bboxOntoRectangle(width: number, height: number, bbox: number[]): Shape {
-        const rect = rectangle(width, height);
+    private bboxOntoRectangle(width: number, height: number, bbox: number[]): ShapeA {
+        const rect = rectangleA(width, height);
         for (const vertex of rect.vertices) {
             const x = vertex[0];
             const y = vertex[1];

@@ -5,7 +5,8 @@ import VectorLayer from 'ol/layer/Vector';
 import Point from 'ol/geom/Point';
 import { Vector as VectorSource } from 'ol/source';
 import Delaunator from 'delaunator';
-import { Shader, Program, Attribute, Uniform, flattenMatrix, pointDistance, box, rectangle, Texture, Framebuffer, getCurrentFramebuffersPixels, Matrix, matrixVectorProduct } from '@dlr-eoc/utils-maps';
+import { Shader, Program, Attribute, Uniform, flattenMatrix, pointDistance, Texture,
+    Framebuffer, getCurrentFramebuffersPixels, Matrix, matrixVectorProduct, rectangleA, Index } from '@dlr-eoc/utils-maps';
 
 
 export interface ColorRamp {
@@ -85,9 +86,21 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         // preparing data
         const source = layer.getSource();
         const features = source.getFeatures() as Feature<Point>[];
-        const observationsWorld = this.readFeatureData(features, maxEdgeLength, valueProperty);
+        const observationsWorld = features.map(f => {
+            const coords = f.getGeometry().getCoordinates();
+            const props = f.getProperties();
+            return [
+                coords[0],
+                coords[1],
+                props.val as number
+            ];
+        });
+        const indices = this.featuresToDelaunay(observationsWorld.map(o => [o[0], o[1]]));
+
+        // const observationsWorld = this.readFeatureData(features, maxEdgeLength, valueProperty);
         const observationsPx = this.applyMatrix(observationsWorld, this.world2Pix);
         const observationsClip = this.applyMatrix(observationsPx, this.pix2Clip);
+        const bbox = this.getBbox(observationsWorld);
 
         // Getting rendering context
         const gl = canvas.getContext('webgl');
@@ -99,15 +112,15 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         ], [
             new Uniform(gl, interpolationProgram, 'u_power', 'float', [power]),
             new Uniform(gl, interpolationProgram, 'u_dataPoints', 'vec3[]', flattenMatrix(observationsClip))
-        ], []);
+        ], [], new Index(gl, indices));
 
         const valueFb = new Framebuffer(gl, canvas.width, canvas.height);
 
         // Setting up second shader
         const colorizationProgram = this.compileColorizationProgram(gl, Object.keys(colorRamp).length);
         const colorizationShader = new Shader(colorizationProgram, [
-            new Attribute(gl, colorizationProgram, 'a_position', rectangle(2.0, 2.0).vertices),
-            new Attribute(gl, colorizationProgram, 'a_textureCoord', rectangle(2.0, 2.0).texturePositions)
+            new Attribute(gl, colorizationProgram, 'a_position', rectangleA(2.0, 2.0).vertices),
+            new Attribute(gl, colorizationProgram, 'a_textureCoord', rectangleA(2.0, 2.0).texturePositions)
         ], [
             new Uniform(gl, colorizationProgram, 'u_colorRampValues', 'float[]', Object.keys(colorRamp).map(k => parseFloat(k))),
             new Uniform(gl, colorizationProgram, 'u_colorRampColors', 'vec3[]', flattenMatrix(Object.values(colorRamp))),
@@ -159,7 +172,6 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
     renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         this.interpolationShader.bind(this.gl);
-        //this.interpolationShader.render(this.gl, [0, 0, 0, 0]);
         this.interpolationShader.render(this.gl, [0, 0, 0, 0], this.valueFb.fbo);
         this.interpolatedValues = getCurrentFramebuffersPixels(this.webGlCanvas) as Uint8Array;
         this.colorizationShader.bind(this.gl);
@@ -292,9 +304,8 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         return aObservations;
     }
 
-    private featuresToDelaunay(features: Feature<Point>[]): number[][] {
-        const coordinates = features.map(f => f.getGeometry().getCoordinates());
-        const delaunay = Delaunator.from(coordinates);
+    private featuresToDelaunay(coords: number[][]): number[][] {
+        const delaunay = Delaunator.from(coords);
         return delaunay.triangles;
     }
 
@@ -354,6 +365,16 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
             out.push([t[0], t[1], v]);
         }
         return out;
+    }
+
+    private getBbox(obs: Matrix): number[] {
+        const xs = obs.map(p => p[0]);
+        const ys = obs.map(p => p[1]);
+        const xMin = Math.min(...xs);
+        const xMax = Math.max(...xs);
+        const yMin = Math.min(...ys);
+        const yMax = Math.max(...ys);
+        return [xMin, yMin, xMax, yMax];
     }
 }
 
