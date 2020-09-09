@@ -48,9 +48,26 @@ export class InterpolationLayer extends VectorLayer {
     }
 }
 
-
+/**
+ * This renderer runs three shaders in a row.
+ *  1. interpolationShader: takes every observation at every pixel and executes the interpolation. The values are stored in `valueFb`.
+ *  2. colorizationShader: uses the interpolated values from valueFb to apply the colorization according to the given colorRamp and smoothing-options.
+ *  3. arrangementShader: the previous shaders have moved the data in the center of the canvas. this shader now arranges the pixels to the correct position relative to the map.
+ *
+ * Only the third shader needs to be executed with every frame. This way, the operation-heavy interpolation does not slow down the map.
+ * It generally makes sense to arrange shaders in such a way that all openlayers-perspective-operations occur in the last shader.
+ *
+ * valueFb is also being used to handle click events: from this structure we get the actual value at a pixel when the user clicks.
+ *
+ * Note a few caveats.
+ * This implementation is not really intended for updating observations, maxEdgeLength or colorRamps at runtime. These parameters are rather intended for the developer to set once.
+ * While you can change the color-ramp at runtime, it's length is hardcoded in the colorization shader, so you'd have to recompile it to properly reflect the new ramp.
+ * In the same way, the interpolation-shader has the number of observations baked into it. When new data becomes available, you must recompile the interpolation shader.
+ */
 export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
+    private container: HTMLDivElement;
+    private twodCanvas: HTMLCanvasElement;
     private webGlCanvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;
     private interpolationShader: Shader;
@@ -64,28 +81,47 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string) {
         super(layer);
 
-        // setting up canvas
+        // setting up HTML element
+        this.container = document.createElement('div');
+        this.container.style.setProperty('position', 'relative');
+        this.container.style.setProperty('width', '100%');
+        this.container.style.setProperty('height', '100%');
+
         this.webGlCanvas = document.createElement('canvas');
+        this.webGlCanvas.style.setProperty('position', 'absolute');
+        this.webGlCanvas.style.setProperty('left', '0px');
+        this.webGlCanvas.style.setProperty('top', '0px');
+        this.webGlCanvas.style.setProperty('width', '100%');
+        this.webGlCanvas.style.setProperty('height', '100%');
         this.webGlCanvas.width = 1000;
         this.webGlCanvas.height = 1000;
-        this.webGlCanvas.style.position = 'absolute';
         this.gl = this.webGlCanvas.getContext('webgl');
+        this.container.appendChild(this.webGlCanvas);
+
+        this.twodCanvas = document.createElement('canvas');
+        this.twodCanvas.style.setProperty('position', 'absolute');
+        this.twodCanvas.style.setProperty('left', '0px');
+        this.twodCanvas.style.setProperty('top', '0px');
+        this.twodCanvas.style.setProperty('width', '100%');
+        this.twodCanvas.style.setProperty('height', '100%');
+        this.twodCanvas.width = 1000;
+        this.twodCanvas.height = 1000;
+        this.container.appendChild(this.twodCanvas);
 
         // preparing data
         const source = layer.getSource();
         const features = source.getFeatures() as Feature<Point>[];
-        this.observationsWorld = features.map(f => {
-            const coords = f.getGeometry().getCoordinates();
-            const props = f.getProperties();
-            return [
-                coords[0],
-                coords[1],
-                props.val as number
-            ];
-        });
-        const indices = this.featuresToDelaunay(this.observationsWorld.map(o => [o[0], o[1]]));
-        const filteredIndices = this.filterTrianglesByMaxEdgeLength(this.observationsWorld.map(o => [o[0], o[1]]), flattenMatrix(indices), maxEdgeLength);
-        const bbox = this.getBbox(this.observationsWorld);
+
+        const coords = features.map(f => f.getGeometry().getCoordinates());
+        const values = features.map(f => f.getProperties()[valueProperty]);
+        const d = Delaunator.from(coords);
+        const indices = d.triangles;
+        const indicesFiltered = filterTrianglesByMaxEdgeLength(coords, indices, maxEdgeLength);
+        const coordsFiltered = pickIndices(coords, unique(indicesFiltered));
+        const valuesFiltered = pickIndices(values, unique(indicesFiltered));
+        const bbox = getBbox(coordsFiltered);
+        this.observationsWorld = zip(coordsFiltered, valuesFiltered);
+
 
         // setting up shaders
         this.interpolationShader = createInterpolationShader(this.gl, this.observationsWorld, indices, power, bbox);
@@ -98,6 +134,7 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         // running first two shaders once
         this.runInterpolationShader();
         this.runColorizationShader();
+        this.runTextCanvas();
     }
 
     prepareFrame(frameState: FrameState): boolean {
@@ -107,6 +144,8 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         if (size[0] !== this.webGlCanvas.width || size[1] !== this.webGlCanvas.height) {
             this.webGlCanvas.width = size[0];
             this.webGlCanvas.height = size[1];
+            this.twodCanvas.width = size[0];
+            this.twodCanvas.height = size[1];
         }
         this.webGlCanvas.style.opacity = `${opacity}`;
 
@@ -118,7 +157,8 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
     renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         this.runArrangementShader();
-        return this.webGlCanvas;
+        this.runTextCanvas();
+        return this.container;
     }
 
     public setParas(power: number, smooth: boolean, colorRamp: ColorRamp) {
@@ -188,57 +228,10 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         this.colorizationShader.render(this.gl, [0, 0, 0, 0], this.colorFb.fbo);
     }
 
-    private featuresToDelaunay(coords: number[][]): number[][] {
-        const delaunay = Delaunator.from(coords);
-        return delaunay.triangles;
-    }
-
-    private filterTrianglesByMaxEdgeLength(pointCoords: number[][], triangleIndices: number[], threshold: number): number[] {
-        const smallEdges = [];
-        const largeEdges = [];
-        const smallTriangles = [];
-        for (let i = 0; i < triangleIndices.length; i += 3) {
-            const thisTriangleIndices = [triangleIndices[i], triangleIndices[i + 1], triangleIndices[i + 2]];
-            let isSmallTriangle = true;
-
-            for (let j = 0; j < 3; j++) {
-
-                const indx0 = thisTriangleIndices[j];
-                const indx1 = thisTriangleIndices[(j + 1) % 3];
-                const p0 = pointCoords[indx0];
-                const p1 = pointCoords[indx1];
-
-                if (smallEdges.includes([indx1, indx0])) {
-                    continue;
-                } else if (largeEdges.includes([indx1, indx0])) {
-                    isSmallTriangle = false;
-                    continue;
-                } else {
-                    if (pointDistance(p0, p1) <= threshold) {
-                        smallEdges.push([indx0, indx1]);
-                    } else {
-                        largeEdges.push([indx0, indx1]);
-                        isSmallTriangle = false;
-                    }
-                }
-            }
-
-            if (isSmallTriangle) {
-                smallTriangles.push(...thisTriangleIndices);
-            }
-        }
-
-        return smallTriangles;
-    }
-
-    private getBbox(obs: Matrix): number[] {
-        const xs = obs.map(p => p[0]);
-        const ys = obs.map(p => p[1]);
-        const xMin = Math.min(...xs);
-        const xMax = Math.max(...xs);
-        const yMin = Math.min(...ys);
-        const yMax = Math.max(...ys);
-        return [xMin, yMin, xMax, yMax];
+    private runTextCanvas(): void {
+        const context = this.twodCanvas.getContext('2d');
+        context.clearRect(0, 0, this.twodCanvas.width, this.twodCanvas.height);
+        context.fillText('Hello, 2dcanvas!', 100, 100);
     }
 }
 
@@ -424,4 +417,74 @@ const createArrangementShader = (gl: WebGLRenderingContext, world2pix: number[][
     ]);
 
     return arrangementShader;
+};
+
+
+const getBbox = (obs: number[][]): number[] => {
+    const xs = obs.map(p => p[0]);
+    const ys = obs.map(p => p[1]);
+    const xMin = Math.min(...xs);
+    const xMax = Math.max(...xs);
+    const yMin = Math.min(...ys);
+    const yMax = Math.max(...ys);
+    return [xMin, yMin, xMax, yMax];
+};
+
+const filterTrianglesByMaxEdgeLength = (pointCoords: number[][], triangleIndices: number[], threshold: number): number[] => {
+    const smallEdges = [];
+    const largeEdges = [];
+    const smallTriangles = [];
+    for (let i = 0; i < triangleIndices.length; i += 3) {
+        const thisTriangleIndices = [triangleIndices[i], triangleIndices[i + 1], triangleIndices[i + 2]];
+        let isSmallTriangle = true;
+
+        for (let j = 0; j < 3; j++) {
+
+            const indx0 = thisTriangleIndices[j];
+            const indx1 = thisTriangleIndices[(j + 1) % 3];
+            const p0 = pointCoords[indx0];
+            const p1 = pointCoords[indx1];
+
+            if (smallEdges.includes([indx1, indx0])) {
+                continue;
+            } else if (largeEdges.includes([indx1, indx0])) {
+                isSmallTriangle = false;
+                continue;
+            } else {
+                if (pointDistance(p0, p1) <= threshold) {
+                    smallEdges.push([indx0, indx1]);
+                } else {
+                    largeEdges.push([indx0, indx1]);
+                    isSmallTriangle = false;
+                }
+            }
+        }
+
+        if (isSmallTriangle) {
+            smallTriangles.push(...thisTriangleIndices);
+        }
+    }
+
+    return smallTriangles;
+};
+
+const pickIndices = (arr: any[], indices: number[]): any[] => {
+    const out = [];
+    for (const index of indices) {
+        out.push(arr[index]);
+    }
+    return out;
+};
+
+const zip = (arr0: any[], arr1: any[]): any[] => {
+    const out = [];
+    for (let i = 0; i < arr0.length; i++) {
+        out.push(arr0[i].concat(arr1[i]));
+    }
+    return out;
+};
+
+const unique = (arr: any[]): any[] => {
+    const unique = arr.filter((v, i, a) => a.indexOf(v) === i);
+    return unique;
 };
