@@ -55,11 +55,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private interpolationShader: Shader;
     private valueFb: Framebuffer;
     private colorizationShader: Shader;
-    private world2Pix: Matrix;
-    private pix2Clip: Matrix;
+    private colorFb: Framebuffer;
+    private arrangementShader: Shader;
     private observationsWorld: number[][];
-    private observationsPx: number[][];
-    private observationsClip: number[][];
     private interpolatedValues: Uint8Array;
 
     constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string) {
@@ -70,18 +68,6 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         canvas.width = 1000;
         canvas.height = 1000;
         canvas.style.position = 'absolute';
-
-        this.world2Pix = [
-            [1,   0,    0. ],
-            [0,   1,    0. ],
-            [0,   0,    1. ]
-        ];
-
-        this.pix2Clip = [
-            [1. /  (canvas.width / 2),  0.,                        -1. ],
-            [0,                         1. / (canvas.height / 2),  1.  ],
-            [0.,                        0.,                        1.  ]
-        ];
 
         // preparing data
         const source = layer.getSource();
@@ -96,11 +82,18 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
             ];
         });
         const indices = this.featuresToDelaunay(observationsWorld.map(o => [o[0], o[1]]));
-
-        // const observationsWorld = this.readFeatureData(features, maxEdgeLength, valueProperty);
-        const observationsPx = this.applyMatrix(observationsWorld, this.world2Pix);
-        const observationsClip = this.applyMatrix(observationsPx, this.pix2Clip);
         const bbox = this.getBbox(observationsWorld);
+
+        const world2pix = [
+            [1, 0, 0 ],
+            [0, 1, 0 ],
+            [0, 0, 1 ]
+        ];
+        const pix2clip = [
+            [1. /  (canvas.width / 2),  0.,                          -1. ],
+            [0,                        -1. / (canvas.height / 2),     1. ],
+            [0.,                        0.,                           1. ]
+        ];
 
         // Getting rendering context
         const gl = canvas.getContext('webgl');
@@ -108,10 +101,11 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         // Setting up first shader
         const interpolationProgram = this.compileInterpolationProgram(gl, observationsWorld.length);
         const interpolationShader = new Shader(interpolationProgram, [
-            new Attribute(gl, interpolationProgram, 'a_position', observationsClip.map(o => [o[0], o[1]]))
+            new Attribute(gl, interpolationProgram, 'a_position', observationsWorld.map(o => [o[0], o[1]]))
         ], [
             new Uniform(gl, interpolationProgram, 'u_power', 'float', [power]),
-            new Uniform(gl, interpolationProgram, 'u_dataPoints', 'vec3[]', flattenMatrix(observationsClip))
+            new Uniform(gl, interpolationProgram, 'u_dataPoints', 'vec3[]', flattenMatrix(observationsWorld)),
+            new Uniform(gl, interpolationProgram, 'u_bbox', 'vec4', bbox)
         ], [], new Index(gl, indices));
 
         const valueFb = new Framebuffer(gl, canvas.width, canvas.height);
@@ -129,15 +123,68 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
             new Texture(gl, colorizationProgram, 'u_valueTexture', valueFb.fbo.texture, 0)
         ]);
 
+        const colorFb = new Framebuffer(gl, canvas.width, canvas.height);
+
+        // Setting up third shader
+        const arrangementProgram = new Program(gl, `
+            precision mediump float;
+            attribute vec3 a_pos;
+            attribute vec2 a_posTexture;
+            uniform mat3 u_world2pix;
+            uniform mat3 u_pix2clip;
+            uniform vec4 u_bbox;
+            varying vec2 v_posTexture;
+
+            vec2 clipBbx2worldCoords(vec2 clipCoords, vec4 bbox) {
+                float xPerct = ( clipCoords.x + 1.0 ) / 2.0;
+                float yPerct = ( clipCoords.y + 1.0 ) / 2.0;
+                float xWorld = xPerct * (bbox.z - bbox.x) + bbox.x;
+                float yWorld = yPerct * (bbox.w - bbox.y) + bbox.y;
+                return vec2(xWorld, yWorld);
+            }
+
+            void main() {
+                v_posTexture = a_posTexture;
+                vec2 worldPos = clipBbx2worldCoords(a_pos.xy, u_bbox);
+                vec3 clipPos = u_pix2clip * u_world2pix * vec3(worldPos.xy, 1.0);
+                gl_Position = vec4(clipPos.xy, 0.0, 1.0);
+            }
+        `, `
+            precision mediump float;
+            uniform sampler2D u_texture;
+            varying vec2 v_posTexture;
+
+            void main() {
+                gl_FragColor = texture2D(u_texture, v_posTexture);
+            }
+        `);
+        const arrangementShader = new Shader(arrangementProgram, [
+            new Attribute(gl, arrangementProgram, 'a_pos', rectangleA(2, 2).vertices),
+            new Attribute(gl, arrangementProgram, 'a_posTexture', rectangleA(2, 2).texturePositions),
+        ], [
+            new Uniform(gl, arrangementProgram, 'u_world2pix', 'mat3', flattenMatrix(world2pix)),
+            new Uniform(gl, arrangementProgram, 'u_pix2clip', 'mat3', flattenMatrix(pix2clip)),
+            new Uniform(gl, arrangementProgram, 'u_bbox', 'vec4', bbox)
+        ], [
+            new Texture(gl, arrangementProgram, 'u_texture', colorFb.fbo.texture, 0)
+        ]);
+
         // making data available for later
         this.webGlCanvas = canvas;
         this.gl = gl;
         this.interpolationShader = interpolationShader;
         this.valueFb = valueFb;
         this.colorizationShader = colorizationShader;
+        this.colorFb = colorFb;
+        this.arrangementShader = arrangementShader;
         this.observationsWorld = observationsWorld;
-        this.observationsPx = observationsPx;
-        this.observationsClip = observationsClip;
+
+        // running first shaders once
+        this.interpolationShader.bind(this.gl);
+        this.interpolationShader.render(this.gl, [0, 0, 0, 0], this.valueFb.fbo);
+        this.interpolatedValues = getCurrentFramebuffersPixels(this.webGlCanvas) as Uint8Array;
+        this.colorizationShader.bind(this.gl);
+        this.colorizationShader.render(this.gl, [0, 0, 0, 0], this.colorFb.fbo);
     }
 
     prepareFrame(frameState: FrameState): boolean {
@@ -151,54 +198,69 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         this.webGlCanvas.style.opacity = `${opacity}`;
 
         const c2pT = frameState.coordinateToPixelTransform;
-        this.world2Pix = [
-            [c2pT[0],   c2pT[2], c2pT[4] ],
-            [c2pT[1],   c2pT[3], c2pT[5] ],
-            [0.,        0.,      1.      ]
+        const world2pix = [
+            [c2pT[0],   c2pT[1], 0. ],
+            [c2pT[2],   c2pT[3], 0. ],
+            [c2pT[4],   c2pT[5], 1. ]
         ];
-        this.pix2Clip = [
-            [1. /  (this.webGlCanvas.width / 2),  0.,                                  -1. ],
-            [0,                                  -1. / (this.webGlCanvas.height / 2),   1. ],
-            [0.,                                 0.,                                    1. ]
+        const pix2clip = [
+            [1. /  (this.webGlCanvas.width / 2),  0.,                                   0. ],
+            [0,                                  -1. / (this.webGlCanvas.height / 2),   0. ],
+            [-1.,                                 1.,                                   1. ]
         ];
 
-        this.observationsPx = this.applyMatrix(this.observationsWorld, this.world2Pix);
-        this.observationsClip = this.applyMatrix(this.observationsPx, this.pix2Clip);
-        this.interpolationShader.updateAttributeData(this.gl, 'a_position', this.observationsClip.map(o => [o[0], o[1]]));
-        this.interpolationShader.updateUniformData(this.gl, 'u_dataPoints', flattenMatrix(this.observationsClip));
+        this.arrangementShader.updateUniformData(this.gl, 'u_world2pix', flattenMatrix(world2pix));
+        this.arrangementShader.updateUniformData(this.gl, 'u_pix2clip', flattenMatrix(pix2clip));
 
         return true;
     }
 
     renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
-        this.interpolationShader.bind(this.gl);
-        this.interpolationShader.render(this.gl, [0, 0, 0, 0], this.valueFb.fbo);
-        this.interpolatedValues = getCurrentFramebuffersPixels(this.webGlCanvas) as Uint8Array;
-        this.colorizationShader.bind(this.gl);
-        this.colorizationShader.render(this.gl, [0, 0, 0, 0]);
+        this.arrangementShader.bind(this.gl);
+        this.arrangementShader.render(this.gl, [0, 0, 0, 0]);
         return this.webGlCanvas;
     }
 
     private compileInterpolationProgram(gl: WebGLRenderingContext, nrObservations: number): Program {
         const interpolationProgram = new Program(gl, `
+            precision mediump float;
             attribute vec2 a_position;
+            uniform vec4 u_bbox;
             varying vec2 v_pos;
 
+            vec2 worldCoords2clipBbx(vec2 point, vec4 bbox) {
+                float xPerct = (point.x - bbox.x) / (bbox.z - bbox.x);
+                float yPerct = (point.y - bbox.y) / (bbox.w - bbox.y);
+                float xClip = 2.0 * xPerct - 1.0;
+                float yClip = 2.0 * yPerct - 1.0;
+                return vec2(xClip, yClip);
+            }
+
             void main() {
-                v_pos = a_position;
-                gl_Position = vec4(a_position.xy, 0.0, 1.0);
+                vec2 pos = worldCoords2clipBbx(a_position.xy, u_bbox);
+                v_pos = pos;
+                gl_Position = vec4(pos.xy, 0.0, 1.0);
             }
         `, `
             precision mediump float;
             uniform float u_power;
+            uniform vec4 u_bbox;
             uniform vec3 u_dataPoints[${nrObservations}];
             varying vec2 v_pos;
+
+            vec2 worldCoords2clipBbx(vec2 point, vec4 bbox) {
+                float xPerct = (point.x - bbox.x) / (bbox.z - bbox.x);
+                float yPerct = (point.y - bbox.y) / (bbox.w - bbox.y);
+                float xClip = 2.0 * xPerct - 1.0;
+                float yClip = 2.0 * yPerct - 1.0;
+                return vec2(xClip, yClip);
+            }
 
             float interpolate(vec2 pos, vec3 observations[${nrObservations}]) {
                 float valSum = 0.0;
                 float wSum = 0.0;
                 for (int i = 0; i < ${nrObservations}; i++) {
-                    float d = distance(pos, observations[i].xy);
+                    float d = distance(pos, worldCoords2clipBbx(observations[i].xy, u_bbox));
                     float w = 1.0 / pow(d, u_power);
                     valSum += observations[i].z * w;
                     wSum += w;
@@ -251,10 +313,6 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
                     }
                 }
                 return u_colorRampColors[${colorRampSize} - 1];
-            }
-
-            float rand(vec2 co){
-                return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
             }
 
             void main() {
