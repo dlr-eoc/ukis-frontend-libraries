@@ -246,8 +246,6 @@ export const bindBufferToAttribute = (gl: WebGLRenderingContext, attributeLocati
 };
 
 
-
-
 export interface IndexBufferObject {
     buffer: WebGLBuffer;
     count: number;
@@ -279,19 +277,14 @@ export const createIndexBuffer = (gl: WebGLRenderingContext, indices: number[][]
     return bufferObject;
 };
 
+export const bindIndexBuffer = (gl: WebGLRenderingContext, ibo: IndexBufferObject) => {
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo.buffer);
+};
+
 export const drawElements = (gl: WebGLRenderingContext, ibo: IndexBufferObject): void => {
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo.buffer);  // @TODO: optimize this to somewhere else?
     gl.drawElements(ibo.drawingMode, ibo.count, ibo.type, ibo.offset);
 };
 
-
-export const draw = (gl: WebGLRenderingContext, b: BufferObject | IndexBufferObject): void => {
-    if (b.type  === gl.UNSIGNED_SHORT) {
-        drawElements(gl, b as IndexBufferObject);
-    } else {
-        drawArray(gl, b as BufferObject);
-    }
-};
 
 
 

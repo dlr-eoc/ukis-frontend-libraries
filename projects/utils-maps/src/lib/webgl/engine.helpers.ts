@@ -1,5 +1,5 @@
 import { TextureObject, createShaderProgram, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, clearBackground, getUniformLocation, bindTextureToUniform, bindProgram, bindValueToUniform, createTexture } from './webgl';
-import { rectangle } from './engine.shapes';
+import { rectangleA } from './engine.shapes';
 
 
 
@@ -32,7 +32,7 @@ export const displayImageOn = (canvas: HTMLCanvasElement, image: HTMLImageElemen
     const program = createShaderProgram(gl, vertexShaderSource, fragmentShaderSource);
     bindProgram(gl, program);
 
-    const rct = rectangle(1.3, 1.3);
+    const rct = rectangleA(1.3, 1.3);
 
     const bxData = createFloatBuffer(gl, rct.vertices);
     const bxLoc = getAttributeLocation(gl, program, 'a_vertex');

@@ -34,7 +34,7 @@ export const scalarProduct = (scalar: number, vector: Vector): Vector => {
 };
 
 export const vectorLength = (vec: Vector): number => {
-    const sq = vec.reduce((prevVal: number, currVal: number) => prevVal + currVal*currVal, 0);
+    const sq = vec.reduce((prevVal: number, currVal: number) => prevVal + currVal * currVal, 0);
     return Math.sqrt(sq);
 };
 

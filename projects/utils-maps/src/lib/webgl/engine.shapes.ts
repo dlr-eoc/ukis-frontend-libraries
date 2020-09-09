@@ -32,13 +32,20 @@ export function bezierGenerator(ps: Vector[]): (t: number) => Vector {
 
 
 
-export interface Shape {
+export interface ShapeA {
     vertices: V3Matrix;
     texturePositions: V2Matrix;
 }
 
+export interface ShapeE {
+    vertices: V3Matrix;
+    texturePositions: V2Matrix;
+    vertexIndices: V3Matrix;
+}
 
-export const triangle = (width: number, height: number): Shape => {
+
+
+export const triangleA = (width: number, height: number): ShapeA => {
     return {
         vertices: [
             [-width / 2, -height / 2, 0],
@@ -54,7 +61,26 @@ export const triangle = (width: number, height: number): Shape => {
 };
 
 
-export const rectangle = (width: number, height: number): Shape => {
+export const triangleE = (width: number, height: number): ShapeE => {
+    return {
+        vertices: [
+            [-width / 2, -height / 2, 0],
+            [         0,  height / 2, 0],
+            [ width / 2, -height / 2, 0]
+        ],
+        texturePositions: [
+            [0, 0],
+            [0, 1],
+            [1, 0]
+        ],
+        vertexIndices: [
+            [0, 1, 2]
+        ]
+    };
+};
+
+
+export const rectangleA = (width: number, height: number): ShapeA => {
     return {
         vertices: [
             [-width / 2,  height / 2, 0],
@@ -75,7 +101,28 @@ export const rectangle = (width: number, height: number): Shape => {
     };
 };
 
-export const box = (width: number, height: number, depth: number): Shape => {
+export const rectangleE = (width: number, height: number): ShapeE => {
+    return {
+        vertices: [
+            [-width / 2,  height / 2, 0],
+            [-width / 2, -height / 2, 0],
+            [ width / 2, -height / 2, 0],
+            [ width / 2,  height / 2, 0],
+        ],
+        texturePositions: [
+            [0, 1],
+            [0, 0],
+            [1, 0],
+            [1, 1]
+        ],
+        vertexIndices: [
+            [0, 1, 2],
+            [0, 2, 3]
+        ]
+    };
+};
+
+export const boxA = (width: number, height: number, depth: number): ShapeA => {
     return {
         vertices: [
                 // face 1
@@ -177,6 +224,7 @@ export const box = (width: number, height: number, depth: number): Shape => {
         ]
     };
 };
+
 
 
 export const edgeDetectKernel = (): Matrix => {
