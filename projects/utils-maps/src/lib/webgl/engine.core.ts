@@ -182,7 +182,7 @@ function parseProgram(program: IProgram): [string[], string[], string[], string[
 
     const precisions = [];
     let precisionMatches;
-    while ((precisionMatches = textureRegex.exec(shaderCode)) !== null) {
+    while ((precisionMatches = precisionRegex.exec(shaderCode)) !== null) {
         precisions.push(precisionMatches[1]);
     }
 
