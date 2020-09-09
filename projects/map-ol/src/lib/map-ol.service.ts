@@ -60,6 +60,7 @@ import { Subject } from 'rxjs';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
+const FILTER_TYPE_KEY = 'type';
 
 export interface IPopupArgs {
   modelName: string;
@@ -240,7 +241,7 @@ export class MapOlService {
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
     let layers: olBaseLayer[];
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         layers = layerGroup.getLayers().getArray();
       }
     });
@@ -266,7 +267,7 @@ export class MapOlService {
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         if (!this.isLayerInGroup(layer, layerGroup)) {
           layers = layerGroup.getLayers().getArray();
           layers.push(layer);
@@ -294,7 +295,7 @@ export class MapOlService {
   public addLayers(layers: olBaseLayer[], type: Tgroupfiltertype) {
     const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
     this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         const groupLayers = layerGroup.getLayers();
 
         if (groupLayers.getLength() > 0) {
@@ -319,7 +320,7 @@ export class MapOlService {
   public setLayers(layers: olBaseLayer[], type: Tgroupfiltertype) {
     const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
     this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         layerGroup.setLayers(new olCollection(layers));
       }
     });
@@ -330,7 +331,7 @@ export class MapOlService {
   public removeLayerByKey(key: { key: string, value: string }, type: Tgroupfiltertype) {
     const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
     this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         const groupLayers = layerGroup.getLayers();
         let removeLayer;
         groupLayers.forEach((layer) => {
@@ -349,7 +350,7 @@ export class MapOlService {
   public updateLayerByKey(key: { key: string, value: string }, newLayer: olBaseLayer, type: Tgroupfiltertype) {
     const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
     this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         const groupLayers = layerGroup.getLayers();
         groupLayers.forEach((oldLayer, index) => {
           if (oldLayer.get(key.key) && oldLayer.get(key.key) === key.value) {
@@ -403,7 +404,7 @@ export class MapOlService {
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         layers = layerGroup.getLayers();
         layers.clear();
       }
@@ -1229,7 +1230,7 @@ export class MapOlService {
 
     const overlay = new olOverlay(overlayoptions);
     overlay.set('addEvent', args.event.type);
-    overlay.set('type', 'popup');
+    overlay.set(FILTER_TYPE_KEY, 'popup');
 
     let coordinate;
     if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
@@ -1263,7 +1264,7 @@ export class MapOlService {
       popups = this.getPopups().filter(filter);
     }
     popups.forEach((overlay) => {
-      if (overlay.get('type') === 'popup') {
+      if (overlay.get(FILTER_TYPE_KEY) === 'popup') {
         this.map.removeOverlay(overlay);
       }
     });
@@ -1284,7 +1285,7 @@ export class MapOlService {
   public getPopups(): olOverlay[] {
     const popups = [];
     this.map.getOverlays().getArray().slice(0).forEach((overlay) => {
-      if (overlay.get('type') === 'popup') {
+      if (overlay.get(FILTER_TYPE_KEY) === 'popup') {
         popups.push(overlay);
       }
     });
