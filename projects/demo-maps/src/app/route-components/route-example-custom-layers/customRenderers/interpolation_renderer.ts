@@ -7,7 +7,7 @@ import { Vector as VectorSource } from 'ol/source';
 import Delaunator from 'delaunator';
 import { Shader, Program, Attribute, Uniform, flattenMatrix, pointDistance,
     Texture, Framebuffer, getCurrentFramebuffersPixels, Matrix, rectangleA,
-    Index, identity } from '@dlr-eoc/utils-maps';
+    Index, identity, matrixVectorProduct } from '@dlr-eoc/utils-maps';
 
 
 export interface ColorRamp {
@@ -69,13 +69,16 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private container: HTMLDivElement;
     private twodCanvas: HTMLCanvasElement;
     private webGlCanvas: HTMLCanvasElement;
+
     private gl: WebGLRenderingContext;
     private interpolationShader: Shader;
     private valueFb: Framebuffer;
     private colorizationShader: Shader;
     private colorFb: Framebuffer;
     private arrangementShader: Shader;
-    private observationsWorld: number[][];
+
+    private values: number[];
+    private coordsWorld: number[][];
     private interpolatedValues: Uint8Array;
 
     constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string) {
@@ -120,11 +123,11 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         const coordsFiltered = pickIndices(coords, unique(indicesFiltered));
         const valuesFiltered = pickIndices(values, unique(indicesFiltered));
         const bbox = getBbox(coordsFiltered);
-        this.observationsWorld = zip(coordsFiltered, valuesFiltered);
-
+        this.values = valuesFiltered;
+        this.coordsWorld = coordsFiltered;
 
         // setting up shaders
-        this.interpolationShader = createInterpolationShader(this.gl, this.observationsWorld, indices, power, bbox);
+        this.interpolationShader = createInterpolationShader(this.gl, zip(coordsFiltered, valuesFiltered), indices, power, bbox);
         this.valueFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
         this.colorizationShader = createColorizationShader(this.gl, colorRamp, smooth, this.valueFb);
         this.colorFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
@@ -134,7 +137,6 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         // running first two shaders once
         this.runInterpolationShader();
         this.runColorizationShader();
-        this.runTextCanvas();
     }
 
     prepareFrame(frameState: FrameState): boolean {
@@ -151,13 +153,13 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
         const c2pT = frameState.coordinateToPixelTransform;
         this.updateArrangementShader(c2pT, this.webGlCanvas.width, this.webGlCanvas.height);
+        this.updateTextCanvas(c2pT, frameState.viewState.zoom);
 
         return true;
     }
 
     renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         this.runArrangementShader();
-        this.runTextCanvas();
         return this.container;
     }
 
@@ -228,10 +230,26 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         this.colorizationShader.render(this.gl, [0, 0, 0, 0], this.colorFb.fbo);
     }
 
-    private runTextCanvas(): void {
+    private updateTextCanvas(coordinateToPixelTransform: number[], zoom: number): void {
+        const world2pix = [
+            [coordinateToPixelTransform[0], coordinateToPixelTransform[2], coordinateToPixelTransform[4] ],
+            [coordinateToPixelTransform[1], coordinateToPixelTransform[3], coordinateToPixelTransform[5] ],
+            [0,                             0,                             1                             ]
+        ];
+        const coordsWorldAugm = this.coordsWorld.map(c => [...c, 1]);
+        const coordsPix = applyTransformToEach(coordsWorldAugm, world2pix);
+
         const context = this.twodCanvas.getContext('2d');
+        context.font = '8pt Tahoma';
+        context.lineWidth = 1;
+        context.strokeStyle = 'white';
+        context.fillStyle = 'black';
+
         context.clearRect(0, 0, this.twodCanvas.width, this.twodCanvas.height);
-        context.fillText('Hello, 2dcanvas!', 100, 100);
+        for (let i = 0; i < coordsPix.length; i++) {
+            // context.fillText(`${this.values[i].toPrecision(5)}`, coordsPix[i][0], coordsPix[i][1]);
+            context.strokeText(`${this.values[i].toPrecision(5)}`, coordsPix[i][0], coordsPix[i][1]);
+        }
     }
 }
 
@@ -487,4 +505,13 @@ const zip = (arr0: any[], arr1: any[]): any[] => {
 const unique = (arr: any[]): any[] => {
     const unique = arr.filter((v, i, a) => a.indexOf(v) === i);
     return unique;
+};
+
+const applyTransformToEach = (arr: number[][], matrix: number[][]): number[][] => {
+    const out = [];
+    for (const vec of arr) {
+        const vec1 = matrixVectorProduct(matrix, vec);
+        out.push(vec1);
+    }
+    return out;
 };
