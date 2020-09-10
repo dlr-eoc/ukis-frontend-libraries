@@ -14,12 +14,11 @@ import { Fill as olFill, Stroke as olStroke, Style as olStyle, Circle as olCircl
 import { Point as olPoint } from 'ol/geom';
 
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
-import { DtmLayer } from './customRenderers/dtm_renderer';
-import { BarsLayer } from './customRenderers/threejs_renderer';
-import { InterpolationLayer, ColorRamp } from './customRenderers/interpolation_renderer';
 import { munichPolys, heatMapData, vectorLayerData, crescentPoints } from './resources/features';
 import { SunlightComponent } from '../../components/sunlight/sunlight.component';
 import { InterpolationSettingsComponent } from '../../components/interpolation-settings/interpolation-settings.component';
+import { BarsLayer } from './customRenderers/threejs_renderer';
+import { InterpolationLayer, ColorRamp, DtmLayer } from '@dlr-eoc/utils-maps';
 
 
 @Component({

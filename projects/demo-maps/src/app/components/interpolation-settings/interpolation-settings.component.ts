@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ColorRamp } from '../../route-components/route-example-custom-layers/customRenderers/interpolation_renderer';
+import { ColorRamp } from '@dlr-eoc/utils-maps';
 
 @Component({
   selector: 'app-interpolation-settings',

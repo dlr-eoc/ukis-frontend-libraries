@@ -5,17 +5,22 @@ import VectorLayer from 'ol/layer/Vector';
 import Point from 'ol/geom/Point';
 import { Vector as VectorSource } from 'ol/source';
 import Delaunator from 'delaunator';
-import { Shader, Program, Attribute, Uniform, flattenMatrix, pointDistance,
-    Texture, Framebuffer, getCurrentFramebuffersPixels, Matrix, rectangleA,
-    Index, identity, matrixVectorProduct } from '@dlr-eoc/utils-maps';
 import { Coordinate } from 'ol/coordinate';
 import { FeatureLike } from 'ol/Feature';
 import { Layer } from 'ol/layer';
 import RenderFeature from 'ol/render/Feature';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
+import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute } from '../../webgl/engine.core';
+import { flattenMatrix, pointDistance } from '../../webgl/math';
+import { getCurrentFramebuffersPixels } from '../../webgl/webgl';
+import { rectangleA, identity } from '../../webgl/engine.shapes';
 
 
 export interface ColorRamp {
+    /**
+     * key: value up to which a certain color is to be used.
+     * value: rgb-array form of color.
+     */
     [key: number]: [number, number, number];
 }
 

@@ -2,8 +2,12 @@ import LayerRenderer from 'ol/renderer/Layer';
 import ImageLayer from 'ol/layer/Image';
 import { FrameState } from 'ol/PluggableMap';
 import { transformExtent } from 'ol/proj';
-import { Program, Shader, Attribute, Uniform, Texture, rectangleA, flattenMatrix, ShapeA, createTextCanvas, bindProgram } from '@dlr-eoc/utils-maps';
 import Static from 'ol/source/ImageStatic';
+import { Shader, Program, Uniform, Texture, Attribute } from '../../webgl/engine.core';
+import { createTextCanvas } from '../../webgl/engine.helpers';
+import { bindProgram } from '../../webgl/webgl';
+import { flattenMatrix } from '../../webgl/math';
+import { ShapeA, rectangleA } from '../../webgl/engine.shapes';
 
 
 
