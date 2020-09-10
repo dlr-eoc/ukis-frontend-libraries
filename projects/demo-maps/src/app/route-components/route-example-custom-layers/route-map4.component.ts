@@ -4,12 +4,14 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
+import { Feature as olFeature } from 'ol';
 import { Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer,
          Group as olLayerGroup, Image as olImageLayer, Tile as olTileLayer, VectorTile as olVectorTileLayer } from 'ol/layer';
 import { ImageStatic as olStatic, Vector as olVectorSource, ImageWMS as olImageWMS, Cluster as olCluster,
          TileWMS as olTileWMS, VectorTile as olVectorTileSource } from 'ol/source';
 import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON, MVT as olMVT } from 'ol/format';
-import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
+import { Fill as olFill, Stroke as olStroke, Style as olStyle, Circle as olCircle, Text as olText } from 'ol/style';
+import { Point as olPoint } from 'ol/geom';
 
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
 import { DtmLayer } from './customRenderers/dtm_renderer';
@@ -291,24 +293,51 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         source: new olVectorSource({
           features: this.mapSvc.geoJsonToFeatures(crescentPoints)
         }),
-        maxEdgeLength: 40000 / this.mapSvc.map.getView().getProjection().getMetersPerUnit(),
+        style: (feature: olFeature<olPoint>, resolution: number): olStyle => {
+          const labelText = `${Number.parseFloat(feature.getProperties()['val']).toPrecision(3)}`;
+
+          return new olStyle({
+            image: new olCircle({
+              radius: 13,
+              fill: new olFill({
+                color: 'rgba(0, 153, 255, 0.2)',
+              }),
+              stroke: new olStroke({
+                color: 'rgba(255, 255, 255, 0.2)',
+                width: 1,
+              })
+            }),
+            text: new olText({
+              text: labelText,
+              overflow: true,
+              offsetX: -((labelText.length * 5) / 2),
+              offsetY: 1,
+              textAlign: 'left',
+              fill: new olFill({
+                color: '#ffffff'
+              }),
+            })
+          });
+        },
+        maxEdgeLength: 50000 / this.mapSvc.map.getView().getProjection().getMetersPerUnit(),
         distanceWeightingPower: 2.0,
         colorRamp: {
-          0: [255, 255, 204],
-          7: [161, 218, 180],
-          12: [65, 182, 196],
-          18: [44, 127, 184],
-          22.5: [37, 52, 148]
-        },
+          0: [166, 97, 26],
+          7: [223, 194, 125],
+          12: [247, 247, 247],
+          18: [128, 205, 193],
+          22.5: [1, 133, 113]
+      },
         smooth: true,
+        showLabels: false,
         valueProperty: 'val'
       }),
       actions: [{ title: 'test', icon: '', action: (layer) => { } }],
       action: {
         component: InterpolationSettingsComponent,
         inputs: {
-          changeHandler: (power: number, smooth: boolean, colorRamp: ColorRamp) => {
-            interpolationLayer.custom_layer.updateParas(power, smooth, colorRamp);
+          changeHandler: (power: number, smooth: boolean, colorRamp: ColorRamp, labels: boolean) => {
+            interpolationLayer.custom_layer.updateParas(power, smooth, colorRamp, labels);
           }
         }
       },

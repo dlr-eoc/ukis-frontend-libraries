@@ -12,6 +12,7 @@ import { Coordinate } from 'ol/coordinate';
 import { FeatureLike } from 'ol/Feature';
 import { Layer } from 'ol/layer';
 import RenderFeature from 'ol/render/Feature';
+import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 
 
 export interface ColorRamp {
@@ -73,8 +74,10 @@ export class InterpolationLayer extends VectorLayer {
 export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
     private container: HTMLDivElement;
-    private twodCanvas: HTMLCanvasElement;
     private webGlCanvas: HTMLCanvasElement;
+
+    private pointRenderer: CanvasVectorLayerRenderer;
+    private showLabels: boolean;
 
     private gl: WebGLRenderingContext;
     private interpolationShader: Shader;
@@ -86,12 +89,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private values: number[];
     private coordsWorld: number[][];
     private interpolatedValues: Uint8Array;
-    private showLabels: boolean;
 
     constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string, showLabels: boolean) {
         super(layer);
-
-        this.showLabels = showLabels;
 
         // setting up HTML element
         this.container = document.createElement('div');
@@ -110,15 +110,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         this.gl = this.webGlCanvas.getContext('webgl');
         this.container.appendChild(this.webGlCanvas);
 
-        this.twodCanvas = document.createElement('canvas');
-        this.twodCanvas.style.setProperty('position', 'absolute');
-        this.twodCanvas.style.setProperty('left', '0px');
-        this.twodCanvas.style.setProperty('top', '0px');
-        this.twodCanvas.style.setProperty('width', '100%');
-        this.twodCanvas.style.setProperty('height', '100%');
-        this.twodCanvas.width = 1000;
-        this.twodCanvas.height = 1000;
-        this.container.appendChild(this.twodCanvas);
+        // setting up point-renderer
+        this.pointRenderer = new CanvasVectorLayerRenderer(layer);
+        this.showLabels = showLabels;
 
         // preparing data
         const source = layer.getSource();
@@ -155,20 +149,20 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         if (size[0] !== this.webGlCanvas.width || size[1] !== this.webGlCanvas.height) {
             this.webGlCanvas.width = size[0];
             this.webGlCanvas.height = size[1];
-            this.twodCanvas.width = size[0];
-            this.twodCanvas.height = size[1];
         }
         this.webGlCanvas.style.opacity = `${opacity}`;
 
         const c2pT = frameState.coordinateToPixelTransform;
         this.updateArrangementShader(c2pT, this.webGlCanvas.width, this.webGlCanvas.height);
-        this.updateTextCanvas(c2pT, frameState.viewState.zoom);
-
+        this.pointRenderer.prepareFrame(frameState);
         return true;
     }
 
     renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         this.runArrangementShader();
+        const pointCanvas = this.pointRenderer.renderFrame(frameState, this.container);
+        this.container.appendChild(pointCanvas);
+        pointCanvas.hidden = ! this.showLabels;
         return this.container;
     }
 
@@ -191,6 +185,7 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         this.runInterpolationShader();
         this.runColorizationShader();
         this.runArrangementShader();
+        super.getLayer().changed();
     }
 
     /**
@@ -250,31 +245,6 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private runColorizationShader(): void {
         this.colorizationShader.bind(this.gl);
         this.colorizationShader.render(this.gl, [0, 0, 0, 0], this.colorFb.fbo);
-    }
-
-    private updateTextCanvas(coordinateToPixelTransform: number[], zoom: number): void {
-        const context = this.twodCanvas.getContext('2d');
-        context.clearRect(0, 0, this.twodCanvas.width, this.twodCanvas.height);
-
-        if (this.showLabels) {
-            const world2pix = [
-                [coordinateToPixelTransform[0], coordinateToPixelTransform[2], coordinateToPixelTransform[4] ],
-                [coordinateToPixelTransform[1], coordinateToPixelTransform[3], coordinateToPixelTransform[5] ],
-                [0,                             0,                             1                             ]
-            ];
-            const coordsWorldAugm = this.coordsWorld.map(c => [...c, 1]);
-            const coordsPix = applyTransformToEach(coordsWorldAugm, world2pix);
-
-            context.font = '8pt Tahoma';
-            context.lineWidth = 1;
-            context.strokeStyle = 'white';
-            context.fillStyle = 'black';
-
-            for (let i = 0; i < coordsPix.length; i++) {
-                // context.fillText(`${this.values[i].toPrecision(5)}`, coordsPix[i][0], coordsPix[i][1]);
-                context.strokeText(`${this.values[i].toPrecision(5)}`, coordsPix[i][0], coordsPix[i][1]);
-            }
-        }
     }
 }
 
@@ -528,15 +498,5 @@ const zip = (arr0: any[], arr1: any[]): any[] => {
 };
 
 const unique = (arr: any[]): any[] => {
-    const unique = arr.filter((v, i, a) => a.indexOf(v) === i);
-    return unique;
-};
-
-const applyTransformToEach = (arr: number[][], matrix: number[][]): number[][] => {
-    const out = [];
-    for (const vec of arr) {
-        const vec1 = matrixVectorProduct(matrix, vec);
-        out.push(vec1);
-    }
-    return out;
+    return arr.filter((v, i, a) => a.indexOf(v) === i);
 };

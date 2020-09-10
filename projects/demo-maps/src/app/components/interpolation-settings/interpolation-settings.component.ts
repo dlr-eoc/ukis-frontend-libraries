@@ -11,16 +11,7 @@ export class InterpolationSettingsComponent implements OnInit {
 
   @Input() changeHandler: (power: number, smooth: boolean, colorRamp: ColorRamp, labels: boolean) => void;
 
-  public interpolationForm = new FormGroup({
-      power: new FormControl(1, Validators.required),
-      smooth: new FormControl(true, Validators.required),
-      labels: new FormControl(false, Validators.required),
-      colorRamp: new FormControl({
-        0: [216, 179, 101],
-        10: [245, 245, 245],
-        22: [90, 180, 172]
-      }, Validators.required),
-  });
+  public interpolationForm: FormGroup;
 
   public colorRampOptions = [
     {
@@ -53,6 +44,12 @@ export class InterpolationSettingsComponent implements OnInit {
   ];
 
   constructor() {
+    this.interpolationForm = new FormGroup({
+      power: new FormControl(2, Validators.required),
+      smooth: new FormControl(true, Validators.required),
+      labels: new FormControl(false, Validators.required),
+      colorRamp: new FormControl(this.colorRampOptions[0].value, Validators.required),
+  })
   }
 
   ngOnInit(): void {
