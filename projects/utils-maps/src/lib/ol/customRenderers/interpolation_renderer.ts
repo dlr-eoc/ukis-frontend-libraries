@@ -131,13 +131,14 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         const coordsFiltered = pickIndices(coords, unique(indicesFiltered));
         const valuesFiltered = pickIndices(values, unique(indicesFiltered));
         const bbox = getBbox(coordsFiltered);
+        const maxVal = valuesFiltered.reduce((prev, curr) => curr > prev ? curr : prev, 0);
         this.values = valuesFiltered;
         this.coordsWorld = coordsFiltered;
 
         // setting up shaders
-        this.interpolationShader = createInterpolationShader(this.gl, zip(coordsFiltered, valuesFiltered), indices, power, bbox);
+        this.interpolationShader = createInterpolationShader(this.gl, zip(coordsFiltered, valuesFiltered), indices, maxVal, power, bbox);
         this.valueFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
-        this.colorizationShader = createColorizationShader(this.gl, colorRamp, smooth, this.valueFb);
+        this.colorizationShader = createColorizationShader(this.gl, colorRamp, maxVal, smooth, this.valueFb);
         this.colorFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
         this.arrangementShader = createArrangementShader(this.gl, identity(), identity(), bbox, this.colorFb);
 
@@ -253,9 +254,22 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     }
 }
 
+const worldCoords2clipBbox = (point: number[], bbox: number[]): number[] => {
+    const xPerct = (point[0] - bbox[0]) / (bbox[2] - bbox[0]);
+    const yPerct = (point[1] - bbox[1]) / (bbox[3] - bbox[1]);
+    const xClip = 2 * xPerct - 1;
+    const yClip = 2 * yPerct - 1;
+    return [xClip, yClip];
+};
 
+const createInterpolationShader = (gl: WebGLRenderingContext, observationsWorld: number[][], indices: number[][], maxValue: number, power: number, bbox: number[]): Shader => {
 
-const createInterpolationShader = (gl: WebGLRenderingContext, observationsWorld: number[][], indices: number[][], power: number, bbox: number[]): Shader => {
+    // const observationsClip = observationsWorld.map(o => {
+    //     const coordsClip = worldCoords2clipBbox([o[0], o[1]], bbox);
+    //     return [coordsClip[0], coordsClip[1], o[2], 255];
+    // });
+
+    const maxObservations = 300;
     const interpolationProgram = new Program(gl, `
             precision mediump float;
             attribute vec2 a_position;
@@ -279,7 +293,9 @@ const createInterpolationShader = (gl: WebGLRenderingContext, observationsWorld:
             precision mediump float;
             uniform float u_power;
             uniform vec4 u_bbox;
-            uniform vec3 u_dataPoints[${observationsWorld.length}];
+            uniform vec3 u_dataPoints[${maxObservations}];
+            uniform int u_nrDataPoints;
+            uniform float u_maxValue;
             varying vec2 v_pos;
 
             vec2 worldCoords2clipBbx(vec2 point, vec4 bbox) {
@@ -290,21 +306,24 @@ const createInterpolationShader = (gl: WebGLRenderingContext, observationsWorld:
                 return vec2(xClip, yClip);
             }
 
-            float interpolate(vec2 pos, vec3 observations[${observationsWorld.length}]) {
+            float interpolate(vec2 pos) {
                 float valSum = 0.0;
                 float wSum = 0.0;
-                for (int i = 0; i < ${observationsWorld.length}; i++) {
-                    float d = distance(pos, worldCoords2clipBbx(observations[i].xy, u_bbox));
+                for (int i = 0; i < ${maxObservations}; i++) {
+                    if (i > u_nrDataPoints) {
+                        break;
+                    }
+                    float d = distance(pos, worldCoords2clipBbx(u_dataPoints[i].xy, u_bbox));
                     float w = 1.0 / pow(d, u_power);
-                    valSum += observations[i].z * w;
+                    valSum += u_dataPoints[i].z * w;
                     wSum += w;
                 }
                 return valSum / wSum;
             }
 
             void main() {
-                float val = interpolate(v_pos, u_dataPoints);
-                gl_FragColor = vec4(val / 22.5, 0.0, 0.0, 1.0);
+                float val = interpolate(v_pos);
+                gl_FragColor = vec4(val / u_maxValue, 0.0, 0.0, 1.0);
             }
         `);
 
@@ -313,6 +332,8 @@ const createInterpolationShader = (gl: WebGLRenderingContext, observationsWorld:
     ], [
         new Uniform(gl, interpolationProgram, 'u_power', 'float', [power]),
         new Uniform(gl, interpolationProgram, 'u_dataPoints', 'vec3[]', flattenMatrix(observationsWorld)),
+        new Uniform(gl, interpolationProgram, 'u_nrDataPoints', 'int', [observationsWorld.length]),
+        new Uniform(gl, interpolationProgram, 'u_maxValue', 'float', [maxValue]),
         new Uniform(gl, interpolationProgram, 'u_bbox', 'vec4', bbox)
     ], [], new Index(gl, indices));
 
@@ -320,7 +341,9 @@ const createInterpolationShader = (gl: WebGLRenderingContext, observationsWorld:
 };
 
 
-const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRamp, smooth: boolean, valueFb: Framebuffer): Shader => {
+const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRamp, maxVal: number, smooth: boolean, valueFb: Framebuffer): Shader => {
+
+    const maxColorRampValues = 15;
     const colorizationProgram = new Program(gl, `
             precision mediump float;
             attribute vec2 a_position;
@@ -333,14 +356,19 @@ const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRam
             }
         `, `
             precision mediump float;
-            uniform float u_colorRampValues[${Object.keys(colorRamp).length}];
-            uniform vec3 u_colorRampColors[${Object.keys(colorRamp).length}];
+            uniform float u_colorRampValues[${maxColorRampValues}];
+            uniform vec3 u_colorRampColors[${maxColorRampValues}];
+            uniform int u_nrColorRampValues;
+            uniform float u_maxValue;
             uniform bool u_smooth;
             uniform sampler2D u_valueTexture;
             varying vec2 v_textureCoord;
 
             vec3 valueToSmoothColor(in float value) {
-                for (int i = 1; i < ${Object.keys(colorRamp).length}; i++) {
+                for (int i = 1; i < ${maxColorRampValues}; i++) {
+                    if (i > u_nrColorRampValues) {
+                        break;
+                    }
                     if (value <= u_colorRampValues[i]) {
                         float alpha = (value - u_colorRampValues[i-1]) / (u_colorRampValues[i] - u_colorRampValues[i-1]);
                         vec3 color = alpha * (u_colorRampColors[i] - u_colorRampColors[i-1]) + u_colorRampColors[i-1];
@@ -350,17 +378,22 @@ const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRam
             }
 
             vec3 valueToStepColor(in float value) {
-                for (int i = 1; i < ${Object.keys(colorRamp).length}; i++) {
+                for (int i = 1; i < ${maxColorRampValues}; i++) {
+                    if (i > u_nrColorRampValues) {
+                        break;
+                    }
                     if (value <= u_colorRampValues[i]) {
                         return u_colorRampColors[i - 1];
                     }
+                    if (i == u_nrColorRampValues) {
+                        return u_colorRampColors[i];
+                    }
                 }
-                return u_colorRampColors[${Object.keys(colorRamp).length} - 1];
             }
 
             void main() {
                 vec4 pixelData = texture2D(u_valueTexture, v_textureCoord);
-                float val = pixelData.x * u_colorRampValues[${Object.keys(colorRamp).length} - 1];
+                float val = pixelData.x * u_maxValue;
                 float dataFlag = pixelData.w;
                 vec3 rgb = vec3(0.0, 0.0, 0.0);
                 if (dataFlag > 0.01) {
@@ -380,6 +413,8 @@ const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRam
     ], [
         new Uniform(gl, colorizationProgram, 'u_colorRampValues', 'float[]', Object.keys(colorRamp).map(k => parseFloat(k))),
         new Uniform(gl, colorizationProgram, 'u_colorRampColors', 'vec3[]', flattenMatrix(Object.values(colorRamp))),
+        new Uniform(gl, colorizationProgram, 'u_nrColorRampValues', 'int', [Object.keys(colorRamp).length]),
+        new Uniform(gl, colorizationProgram, 'u_maxValue', 'float', [maxVal]),
         new Uniform(gl, colorizationProgram, 'u_smooth', 'bool', [smooth ? 1 : 0]),
     ], [
         new Texture(gl, colorizationProgram, 'u_valueTexture', valueFb.fbo.texture, 0)
