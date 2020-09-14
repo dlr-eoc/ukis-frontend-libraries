@@ -76,30 +76,28 @@ export const canvasToImage = (canvas: HTMLCanvasElement): HTMLImageElement => {
     return image;
 };
 
+export const arrayToCanvas = (data: number[][][]) => {
+    const rows = data.length;
+    const cols = data[0].length;
 
-export function downloadJson(data: object, fileName: string) {
-    const jsonData = JSON.stringify(data);
-    const blob = new Blob([jsonData], { type: 'text/json;charset=utf-8;' });
-    return downloadBlob(blob, fileName);
-}
+    const buffer = new Uint8ClampedArray(cols * rows * 4);
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            const pos = (r * cols + c) * 4;
+            buffer[pos    ] = data[r][c][0];
+            buffer[pos + 1] = data[r][c][1];
+            buffer[pos + 2] = data[r][c][2];
+            buffer[pos + 3] = data[r][c][3];
+        }
+    }
 
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = cols;
+    canvas.height = rows;
+    const imageDataContainer = ctx.createImageData(cols, rows);
+    imageDataContainer.data.set(buffer);
+    ctx.putImageData(imageDataContainer, 0, 0);
 
-export function downloadBlob(blob: Blob, fileName: string) {
-    const url = window.URL.createObjectURL(blob);
-    downloadUrl(url, fileName);
-}
-
-
-export function downloadUrl(url: string, fileName: string) {
-    // window.open(url) doesn't work here. Instead, we create a temporary link item and simulate a click on it.
-    const a = document.createElement('a');
-    document.body.appendChild(a);
-    a.style.display = 'none';
-    a.href = url;
-    a.download = fileName;
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-}
-
+    return canvas;
+};

@@ -49,10 +49,16 @@ export const pointDistance = (p0: Vector, p1: Vector): number => {
 };
 
 
-export const flattenMatrix = (m: Matrix): number[] => {
+export const flattenRecursive = (m: any[]): number[] => {
     let flat: number[] = [];
     for (const row of m) {
-        flat = Array.prototype.concat(flat, row);
+        let flattenedRow;
+        if (Array.isArray(row[0])) {
+            flattenedRow = flattenRecursive(row);
+        } else {
+            flattenedRow = row;
+        }
+        flat = Array.prototype.concat(flat, flattenedRow);
     }
     return flat;
 };

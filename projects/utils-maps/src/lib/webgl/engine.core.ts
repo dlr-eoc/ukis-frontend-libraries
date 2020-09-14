@@ -1,4 +1,4 @@
-import { createShaderProgram, setup3dScene, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, getUniformLocation, bindValueToUniform, clearBackground, BufferObject, WebGLVariableType, bindProgram, createTexture, bindTextureToUniform, TextureObject, FramebufferObject, bindFramebuffer, bindOutputCanvasToFramebuffer, updateBufferData, bindTextureToFramebuffer, createEmptyTexture, createFramebuffer, updateTexture, createIndexBuffer, IndexBufferObject, drawArray, drawElements, bindIndexBuffer } from './webgl';
+import { createShaderProgram, setup3dScene, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, getUniformLocation, bindValueToUniform, clearBackground, BufferObject, WebGLVariableType, bindProgram, createTexture, bindTextureToUniform, TextureObject, FramebufferObject, bindFramebuffer, bindOutputCanvasToFramebuffer, updateBufferData, bindTextureToFramebuffer, createEmptyTexture, createFramebuffer, updateTexture, createIndexBuffer, IndexBufferObject, drawArray, drawElements, bindIndexBuffer, createDataTexture } from './webgl';
 
 
 // dead-simple hash function - not intended to be secure in any way.
@@ -78,6 +78,20 @@ export class Texture implements ITexture {
         } else {
             this.texture = im;
         }
+        this.bindPoint = bindPoint;
+        this.variableName = variableName;
+    }
+}
+
+export class DataTexture implements ITexture {
+    readonly location: WebGLUniformLocation;
+    readonly bindPoint: number;
+    readonly texture: TextureObject;
+    readonly variableName: string;
+
+    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, data: number[][][], bindPoint: number) {
+        this.location = getUniformLocation(gl, program.program, variableName);
+        this.texture = createDataTexture(gl, data);
         this.bindPoint = bindPoint;
         this.variableName = variableName;
     }

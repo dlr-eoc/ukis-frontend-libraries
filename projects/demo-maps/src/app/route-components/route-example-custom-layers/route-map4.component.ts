@@ -285,6 +285,15 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       description: `<p>This layer demonstrates how a common 3d-library, three.js, can be integrated in a 2d-map. Using three.js often yields less verbose code than calling WebGL directly.</p>`
     });
 
+
+    const valueParameter = 'SWH';
+    const colorRamp: ColorRamp = {
+      0.0: [166, 97, 26],  // 0.0: [27,158,119],
+      0.4: [223, 194, 125],  // 0.4: [217,95,2],
+      0.8: [247, 247, 247],  // 0.8: [117,112,179],
+      2.0: [128, 205, 193],  // 2.0: [231,41,138],
+      22.5: [1, 133, 113],  // 22.5: [102,166,30],
+    };
     const interpolationLayer = new CustomLayer({
       id: 'interpolation',
       name: 'Interpolation',
@@ -293,7 +302,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           features: this.mapSvc.geoJsonToFeatures(crescentPoints)
         }),
         style: (feature: olFeature<olPoint>, resolution: number): olStyle => {
-          const labelText = `${Number.parseFloat(feature.getProperties()['val']).toPrecision(3)}`;
+          const labelText = `${Number.parseFloat(feature.getProperties()[valueParameter]).toPrecision(3)}`;
 
           return new olStyle({
             image: new olCircle({
@@ -318,24 +327,18 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
             })
           });
         },
-        maxEdgeLength: 50000 / this.mapSvc.map.getView().getProjection().getMetersPerUnit(),
+        maxEdgeLength: 15000 / this.mapSvc.map.getView().getProjection().getMetersPerUnit(),
         distanceWeightingPower: 2.0,
-        colorRamp: {
-          0: [166, 97, 26],
-          7: [223, 194, 125],
-          12: [247, 247, 247],
-          18: [128, 205, 193],
-          22.5: [1, 133, 113]
-      },
+        colorRamp: colorRamp,
         smooth: true,
         showLabels: false,
-        valueProperty: 'val'
+        valueProperty: valueParameter
       }),
       actions: [{ title: 'test', icon: '', action: (layer) => { } }],
       action: {
         component: InterpolationSettingsComponent,
         inputs: {
-          changeHandler: (power: number, smooth: boolean, colorRamp: ColorRamp, labels: boolean) => {
+          changeHandler: (power: number, smooth: boolean, labels: boolean) => {
             interpolationLayer.custom_layer.updateParas(power, smooth, colorRamp, labels);
           }
         }

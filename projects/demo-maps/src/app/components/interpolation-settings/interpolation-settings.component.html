@@ -20,12 +20,4 @@
           <label>Show labels</label>
         </clr-checkbox-wrapper>
     </clr-checkbox-container>
-
-    <clr-select-container>
-        <label>Color-ramp</label>
-        <select clrSelect name="ColorRamp" formControlName="colorRamp">
-            <option *ngFor="let o of colorRampOptions" [ngValue]="o.value">{{o.name}}</option>
-        </select>
-        <clr-control-helper>Colors for displaying data</clr-control-helper>
-      </clr-select-container>
 </form>

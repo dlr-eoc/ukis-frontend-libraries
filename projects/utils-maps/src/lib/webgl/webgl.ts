@@ -52,9 +52,24 @@
  * That means it makes sense to first draw large objects that are close to the camera - all objects behind them won't need their fragment-shader executed.
  *
  * All `create*` functions unbind variables after setting their values. This is to avoid unwanted side-effects.
+ *
+ *
+ *
+ * WebGL components
+ *    - global-state
+ *        - ARRAY_BUFFER_BINDING: currently bound buffer
+ *        - VERTEX_ARRAY_BINDING: currently bound vertex-array (in WebGL 1 this was always only the global vertex-array, in WebGL 2 you can now create your own ones)
+ *        - ACTIVE_TEXTURE: currently bound texture
+ *        - texture-units: a list of pointers to texture-buffers.
+ *        - uniform-buffer-bindings (WebGL2 only): a list of pointers to uniform-buffers.
+ *    - vertex-array: a list of pointers to attribute-buffers (+ metadata like datatype, stride, offset etc.).
+ *        - all attributes must have the same number of elements (though one attribute's elements may be vec2's, while another one's may be vec3's)
+ *        - drawArray: attributes repeat elements in groups of three for drawing triangles
+ *        - drawElements: the indices for the triangles are defined in ELEMENT_ARRAY_BUFFER_BINDING
+ *        - WebGL 2.0: allows you to create your own vertex-arrays, whereas 1.0 always only used one global vertex-array.
  */
 
-import { flattenMatrix } from './math';
+import { flattenRecursive } from './math';
 
 
 
@@ -126,6 +141,10 @@ export const setup3dScene = (gl: WebGLRenderingContext): void => {
     clearBackground(gl, [0, 0, 0, 1]);
 };
 
+export const updateViewPort = (gl: WebGLRenderingContext, x0: number, y0: number, x1: number, y1: number): void => {
+    gl.viewport(x0, y0, x1, y1);
+};
+
 
 export const bindProgram = (gl: WebGLRenderingContext, program: WebGLProgram): void => {
     gl.useProgram(program);
@@ -159,7 +178,7 @@ export interface BufferObject {
  */
 export const createFloatBuffer = (gl: WebGLRenderingContext, data: number[][], drawingMode: number = gl.TRIANGLES): BufferObject => {
 
-    const dataFlattened = new Float32Array(flattenMatrix(data));
+    const dataFlattened = new Float32Array(flattenRecursive(data));
 
     const buffer = gl.createBuffer();
     if (!buffer) {
@@ -193,7 +212,7 @@ export const drawArray = (gl: WebGLRenderingContext, bo: BufferObject): void => 
 
 export const updateBufferData = (gl: WebGLRenderingContext, bo: BufferObject, newData: number[][]): BufferObject => {
 
-    const dataFlattened = new Float32Array(flattenMatrix(newData));
+    const dataFlattened = new Float32Array(flattenRecursive(newData));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, bo.buffer);
     gl.bufferData(gl.ARRAY_BUFFER, dataFlattened, gl.STATIC_DRAW);
@@ -234,11 +253,11 @@ export const getAttributeLocation = (gl: WebGLRenderingContext, program: WebGLPr
  * So it makes sense for WebGl to store attribute values in a dedicated data structure - the buffer.
  */
 export const bindBufferToAttribute = (gl: WebGLRenderingContext, attributeLocation: number, bufferObject: BufferObject): void => {
-    // Enable editing
-    gl.enableVertexAttribArray(attributeLocation);
-    // Bind buffer to ARRAY_BUFFER
+    // Bind buffer to global-state ARRAY_BUFFER
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferObject.buffer);
-    // Bind the buffer currently at ARRAY_BUFFER to a vertex-buffer-location.
+    // Enable editing of vertex-array-location
+    gl.enableVertexAttribArray(attributeLocation);
+    // Bind the buffer currently at global-state ARRAY_BUFFER to a vertex-array-location.
     gl.vertexAttribPointer(
         attributeLocation,
         bufferObject.vectorSize, bufferObject.type, bufferObject.normalize, bufferObject.stride, bufferObject.offset);
@@ -256,7 +275,7 @@ export interface IndexBufferObject {
 
 export const createIndexBuffer = (gl: WebGLRenderingContext, indices: number[][], drawingMode: number = gl.TRIANGLES): IndexBufferObject => {
 
-    const indicesFlattened = new Uint16Array(flattenMatrix(indices));
+    const indicesFlattened = new Uint16Array(flattenRecursive(indices));
 
     const buffer = gl.createBuffer();
     if (!buffer) {
@@ -320,7 +339,13 @@ export const createTexture = (gl: WebGLRenderingContext, image: HTMLImageElement
     }
     gl.activeTexture(gl.TEXTURE0 + textureConstructionBindPoint); // so that we don't overwrite another texture in the next line.
     gl.bindTexture(gl.TEXTURE_2D, texture);  // analog to bindBuffer. Binds texture to currently active texture-bindpoint (aka. texture unit).
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);  // analog to bufferData
+
+    const level = 0;
+    const internalFormat = gl.RGBA;
+    const format = gl.RGBA;
+    const type = gl.UNSIGNED_BYTE;
+
+    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, format, type, image);  // analog to bufferData
     gl.generateMipmap(gl.TEXTURE_2D); // mipmaps are mini-versions of the texture.
     gl.bindTexture(gl.TEXTURE_2D, null);  // unbinding
 
@@ -332,6 +357,77 @@ export const createTexture = (gl: WebGLRenderingContext, image: HTMLImageElement
         w = image.width;
         h = image.height;
     }
+
+    const textureObj: TextureObject = {
+        texture: texture,
+        level: level,
+        internalformat: internalFormat,
+        format: format,
+        type: type,
+        width: w,
+        height: h
+    };
+
+    return textureObj;
+};
+
+
+export type textureDataType = '';
+
+/**
+ * This is just another texture, but optimized for carrying data, not for display.
+ *
+ * Valid combinations of texture-data parameters:
+ *
+ * | Internal Format | Format          | Type                      | Source Bytes Per Pixel |
+ * |-----------------|-----------------|---------------------------|------------------------|
+ * | RGBA            | RGBA            | UNSIGNED_BYTE             | 4                      |
+ * | RGB	         | RGB             | UNSIGNED_BYTE             | 3                      |
+ * | RGBA            | RGBA            | UNSIGNED_SHORT_4_4_4_4    | 2                      |
+ * | RGBA            | RGBA            | UNSIGNED_SHORT_5_5_5_1	   | 2                      |
+ * | RGB             | RGB             | UNSIGNED_SHORT_5_6_5      | 2                      |
+ * | LUMINANCE_ALPHA | LUMINANCE_ALPHA | UNSIGNED_BYTE	           | 2                      |
+ * | LUMINANCE       | LUMINANCE       | UNSIGNED_BYTE             | 1                      |
+ * | ALPHA           | ALPHA           | UNSIGNED_BYTE             | 1                      |
+ * Plus many more in WebGL2.
+ *
+ */
+export const createDataTexture = (gl: WebGLRenderingContext, data: number[][][]): TextureObject => {
+
+    const texture = gl.createTexture();  // analog to createBuffer
+    if (!texture) {
+        throw new Error('No texture was created');
+    }
+    gl.activeTexture(gl.TEXTURE0 + textureConstructionBindPoint); // so that we don't overwrite another texture in the next line.
+    gl.bindTexture(gl.TEXTURE_2D, texture);  // analog to bindBuffer. Binds texture to currently active texture-bindpoint (aka. texture unit).
+
+    // to be used for data. we want no interpolation of data, so disallow mipmap and interpolation.
+    const level = 0;
+    const height = data.length;
+    const width = data[0].length;
+    const border = 0;
+    const internalFormat = gl.RGBA;
+    const format = gl.RGBA;
+    const type = gl.UNSIGNED_BYTE;
+
+    const binData = new Uint8Array(flattenRecursive(data));
+
+    if (data[0][0].length !== 4) {
+        // have WebGL digest data one byte at a time.
+        // (Per default tries 4 bytes at a time, which causes errors when our data is not a mulitple of 4).
+        const alignment = 1; // valid values are 1, 2, 4, and 8.
+        gl.pixelStorei(gl.UNPACK_ALIGNMENT, alignment);
+    }
+
+    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border, format, type, binData); // analog to bufferData
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.bindTexture(gl.TEXTURE_2D, null);  // unbinding
+
+    const h = data.length;
+    const w = data[0].length;
 
     const textureObj: TextureObject = {
         texture: texture,
@@ -380,7 +476,7 @@ export const createEmptyTexture = (gl: WebGLRenderingContext, width: number, hei
 
 
 /**
- * Even though we reference textures as uniforms in a fragment shader, assigning an actual texture-value to that uniform works differently than for normal uniforms.
+ * Even though we reference textures as uniforms in a fragment shader, assigning an actual texture-value to that uniform works differently from normal uniforms.
  * Normal uniforms have a concrete value.
  * Texture uniforms, on the other hand, are just an integer-index that points to a special slot in the GPU memory (the bindPoint) where the actual texture value lies.
  */
@@ -512,7 +608,7 @@ export type WebGLVariableType = 'bool'  | 'bvec2' | 'bvec3' | 'bvec4'| 'bool[]' 
 
 
 /**
- * Contrary to attributes, uniforms don't need to be stored in a buffer.
+ * Contrary to attributes, uniforms don't need to be stored in a buffer. (Note: in WebGL 2.0, however, there *are* uniform buffers!)
  *
  * 'v' is not about the shader, but how you provide data from the js-side.
  * uniform1fv(loc, [3.19]) === uniform1f(loc, 3.19)
