@@ -14,6 +14,7 @@ import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataT
 import { flattenRecursive, pointDistance } from '../../webgl/math';
 import { getCurrentFramebuffersPixels } from '../../webgl/webgl';
 import { rectangleA, identity, rectangleE } from '../../webgl/engine.shapes';
+import { replaceChildren } from 'ol/dom';
 
 
 export interface ColorRamp {
@@ -94,13 +95,16 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private values: number[];
     private coordsWorld: number[][];
     private interpolatedValues: Uint8Array;
+    private id: string;
 
     constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string, showLabels: boolean) {
         super(layer);
+        this.id = `${(Math.random() * 10).toPrecision(3)}`;
 
         // setting up HTML element
         this.container = document.createElement('div');
-        this.container.style.setProperty('position', 'relative');
+        this.container.classList.add('ol-layer');
+        this.container.style.setProperty('position', 'absolute');
         this.container.style.setProperty('width', '100%');
         this.container.style.setProperty('height', '100%');
 
@@ -128,8 +132,21 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         const bbox = getBbox(coords);
         const deltaX = bbox[2] - bbox[0];
         const deltaY = bbox[3] - bbox[1];
-        const bboxDelta = [bbox[0] - deltaX / 2, bbox[1] - deltaY / 2, bbox[2] + deltaX / 2, bbox[3] + deltaY / 2];
-        const maxEdgeLengthViewPort = maxEdgeLength / Math.min(deltaX, deltaY);
+        let addX: number, addY: number;
+        if (deltaX > deltaY) {
+            addY = deltaX - deltaY;
+            addX = 0;
+        } else {
+            addY = 0;
+            addX = deltaY - deltaX;
+        }
+        const bboxDelta = [
+            bbox[0] - maxEdgeLength,
+            bbox[1] - maxEdgeLength,
+            bbox[2] + addX + maxEdgeLength,
+            bbox[3] + addY + maxEdgeLength
+        ];
+        const maxEdgeLengthViewPort = maxEdgeLength / Math.max(deltaX, deltaY);
         const maxVal = values.reduce((prev, curr) => curr > prev ? curr : prev, 0);
         this.values = values;
         this.coordsWorld = coords;
@@ -162,8 +179,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         this.runArrangementShader();
         const pointCanvas = this.pointRenderer.renderFrame(frameState, this.container);
-        this.container.appendChild(pointCanvas);
+        replaceChildren(this.container, [this.webGlCanvas, pointCanvas]);
         pointCanvas.hidden = ! this.showLabels;
+        console.log(`renderFrame from ${this.id}`)
         return this.container;
     }
 
@@ -260,6 +278,11 @@ const worldCoords2clipBbox = (point: number[], bbox: number[]): number[] => {
 
 
 const createSplineInterpolationShader = (gl: WebGLRenderingContext, observationsWorld: number[][], maxValue: number, power: number, bbox: number[], maxEdgeLength: number): Shader => {
+    /**
+     * @todo
+     *  - arrange observations in a regular 2d-grid (contrary to inverse distance, which uses a 1d-grid)
+     *  - how should we handle extrapolation?
+     */
 
     const observationsBbox = observationsWorld.map(o => {
         const coordsBbox = worldCoords2clipBbox([o[0], o[1]], bbox);
