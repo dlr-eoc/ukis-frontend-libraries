@@ -1,4 +1,4 @@
-import { createShaderProgram, setup3dScene, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, getUniformLocation, bindValueToUniform, clearBackground, BufferObject, WebGLVariableType, bindProgram, createTexture, bindTextureToUniform, TextureObject, FramebufferObject, bindFramebuffer, bindOutputCanvasToFramebuffer, updateBufferData, bindTextureToFramebuffer, createEmptyTexture, createFramebuffer, updateTexture, createIndexBuffer, IndexBufferObject, drawArray, drawElements, bindIndexBuffer, createDataTexture } from './webgl';
+import { createShaderProgram, setup3dScene, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, getUniformLocation, bindValueToUniform, clearBackground, BufferObject, WebGLVariableType, bindProgram, createTexture, bindTextureToUniform, TextureObject, FramebufferObject, bindFramebuffer, bindOutputCanvasToFramebuffer, updateBufferData, bindTextureToFramebuffer, createEmptyTexture, createFramebuffer, updateTexture, createIndexBuffer, IndexBufferObject, drawArray, drawElements, bindIndexBuffer, createDataTexture, updateViewPort } from './webgl';
 
 
 // dead-simple hash function - not intended to be secure in any way.
@@ -213,7 +213,7 @@ interface IShader {
     uniforms: IUniform[];
     textures: ITexture[];
     bind: (gl: WebGLRenderingContext) => void;
-    render: (gl: WebGLRenderingContext, background?: number[], frameBuffer?: FramebufferObject) => void;
+    render: (gl: WebGLRenderingContext, background?: number[], frameBuffer?: FramebufferObject, viewport?: [number, number, number, number]) => void;
     updateAttributeData: (gl: WebGLRenderingContext, variableName: string, newData: number[][]) => void;
     updateUniformData: (gl: WebGLRenderingContext, variableName: string, newData: number[]) => void;
     updateTextureData: (gl: WebGLRenderingContext, variableName: string, newImage: HTMLImageElement | HTMLCanvasElement) => void;
@@ -272,11 +272,12 @@ export class Shader implements IShader {
         }
     }
 
-    public render(gl: WebGLRenderingContext, background?: number[], frameBuffer?: FramebufferObject): void {
+
+    public render(gl: WebGLRenderingContext, background?: number[], frameBuffer?: FramebufferObject, viewport?: [number, number, number, number]): void {
         if (!frameBuffer) {
-            bindOutputCanvasToFramebuffer(gl);
+            bindOutputCanvasToFramebuffer(gl, viewport);
         } else {
-            bindFramebuffer(gl, frameBuffer);
+            bindFramebuffer(gl, frameBuffer, viewport);
         }
         if (background) {
             clearBackground(gl, background);

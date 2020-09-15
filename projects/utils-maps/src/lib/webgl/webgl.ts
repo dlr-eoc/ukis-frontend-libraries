@@ -132,12 +132,10 @@ export const createShaderProgram = (gl: WebGLRenderingContext, vertexShaderSourc
 
 
 export const setup3dScene = (gl: WebGLRenderingContext): void => {
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);  // making sure that shader-coordinate-system goes from 0 to 1.
-
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
     gl.cullFace(gl.BACK);
-
     clearBackground(gl, [0, 0, 0, 1]);
 };
 
@@ -538,18 +536,46 @@ export const createFramebuffer = (gl: WebGLRenderingContext): WebGLFramebuffer =
 
 /**
  * The operations `clear`, `drawArrays` and `drawElements` only affect the currently bound framebuffer.
+ *
+ * Note that binding the framebuffer does *not* mean binding its texture.
+ * In fact, if there is a bound texture, it must be the *input* to a shader, not the output.
+ * Therefore, a framebuffer's texture must not be bound when the framebuffer is.
  */
-export const bindFramebuffer = (gl: WebGLRenderingContext, fbo: FramebufferObject) => {
+export const bindFramebuffer = (gl: WebGLRenderingContext, fbo: FramebufferObject, manualViewport?: [number, number, number, number]) => {
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo.framebuffer);
-    gl.viewport(0, 0, fbo.width, fbo.height);
-    // Note that binding the framebuffer does *not* mean binding its texture. In fact, if there is a bound texture, it must be the *input* to a shader, not the output.
-    // Therefore, a framebuffer's texture must not be bound when the framebuffer is.
+    // It's EXTREMELY IMPORTANT to remember to call gl.viewport and set it to the size of the thing your rendering to.
+    // https://webglfundamentals.org/webgl/lessons/webgl-render-to-texture.html
+    if (manualViewport) {
+        if ((fbo.width / fbo.height) !== (manualViewport[2] / manualViewport[3])) {
+            console.warn(`Your viewport-aspect is different from the framebuffer-aspect.`);
+        }
+        gl.viewport(...manualViewport);
+    } else {
+        gl.viewport(0, 0, fbo.width, fbo.height);
+    }
 };
 
-
-export const bindOutputCanvasToFramebuffer = (gl: WebGLRenderingContext) => {
+/**
+ * Webgl renders to the viewport, which is relative to canvas.width * canvas.height.
+ * (To be more precise, only *polygons* are clipped to the viewport.
+ * Operations like `clearColor()` et.al., will still draw to the *full* canvas.width * height!
+ * If you want to also constrain clearColor, use `scissor` instead of viewport.)
+ * That canvas.width * canvas.height then gets stretched to canvas.clientWidth * canvas.clientHeight.
+ * (Note: the full canvas.width gets stretched to clientWidth, not just the viewport!)
+ */
+export const bindOutputCanvasToFramebuffer = (gl: WebGLRenderingContext, manualViewport?: [number, number, number, number]) => {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    // It's EXTREMELY IMPORTANT to remember to call gl.viewport and set it to the size of the thing your rendering to.
+    // https://webglfundamentals.org/webgl/lessons/webgl-render-to-texture.html
+    if (manualViewport) {
+        if ((gl.canvas.width / gl.canvas.height) !== (manualViewport[2] / manualViewport[3])) {
+            console.warn(`Your viewport-aspect is different from the canvas-aspect.`);
+        }
+        gl.viewport(...manualViewport);
+    } else {
+        // Note: don't use clientWidth here.
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    }
 };
 
 
