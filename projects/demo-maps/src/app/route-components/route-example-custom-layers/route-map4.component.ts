@@ -286,6 +286,14 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
 
 
+    const metersPerUnit = this.mapSvc.map.getView().getProjection().getMetersPerUnit();
+    const crescentSource = new olVectorSource({
+      features: this.mapSvc.geoJsonToFeatures(crescentPoints)
+    });
+    const clusteredCrescentSource = new olCluster({
+      source: crescentSource,
+      distance: 25  // pixel
+    });
     const valueParameter = 'SWH';
     const colorRamp: ColorRamp = {
       0.0: [166, 97, 26],  // 0.0: [27,158,119],
@@ -298,11 +306,15 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'interpolation',
       name: 'Interpolation',
       custom_layer: new InterpolationLayer({
-        source: new olVectorSource({
-          features: this.mapSvc.geoJsonToFeatures(crescentPoints)
-        }),
-        style: (feature: olFeature<olPoint>, resolution: number): olStyle => {
-          const labelText = `${Number.parseFloat(feature.getProperties()[valueParameter]).toPrecision(3)}`;
+        source: clusteredCrescentSource,
+        style: (feature: olFeature<any>, resolution: number): olStyle => {
+          const features = feature.getProperties().features;
+          let labelText: string;
+          if (features.length > 1) {
+            labelText = `${feature.getProperties().features.length}`;
+          } else {
+            labelText = `${Number.parseFloat(features[0].getProperties()[valueParameter]).toPrecision(3)}`;
+          }
 
           return new olStyle({
             image: new olCircle({
@@ -327,7 +339,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
             })
           });
         },
-        maxEdgeLength: 15000 / this.mapSvc.map.getView().getProjection().getMetersPerUnit(),
+        maxEdgeLength: 15000 / metersPerUnit,
         distanceWeightingPower: 2.0,
         colorRamp: colorRamp,
         smooth: true,

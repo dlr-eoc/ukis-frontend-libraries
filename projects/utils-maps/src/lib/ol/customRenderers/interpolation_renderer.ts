@@ -3,16 +3,15 @@ import { FrameState } from 'ol/PluggableMap';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import Point from 'ol/geom/Point';
-import { Vector as VectorSource } from 'ol/source';
-import Delaunator from 'delaunator';
+import { Vector as VectorSource, Cluster as olCluster } from 'ol/source';
 import { Coordinate } from 'ol/coordinate';
 import { FeatureLike } from 'ol/Feature';
 import { Layer } from 'ol/layer';
 import RenderFeature from 'ol/render/Feature';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataTexture } from '../../webgl/engine.core';
-import { flattenRecursive, pointDistance } from '../../webgl/math';
-import { getCurrentFramebuffersPixels } from '../../webgl/webgl';
+import { flattenRecursive } from '../../webgl/math';
+import { FramebufferObject, getCurrentFramebuffersPixels } from '../../webgl/webgl';
 import { rectangleA, identity, rectangleE } from '../../webgl/engine.shapes';
 import { replaceChildren } from 'ol/dom';
 
@@ -95,11 +94,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private values: number[];
     private coordsWorld: number[][];
     private interpolatedValues: Uint8Array;
-    private id: string;
 
     constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string, showLabels: boolean) {
         super(layer);
-        this.id = `${(Math.random() * 10).toPrecision(3)}`;
 
         // setting up HTML element
         this.container = document.createElement('div');
@@ -125,7 +122,12 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
         // preparing data
         const source = layer.getSource();
-        const features = source.getFeatures() as Feature<Point>[];
+        let features: Feature<Point>[] = source.getFeatures() as Feature<Point>[];
+        if (source instanceof olCluster) {
+            features = source.getSource().getFeatures() as Feature<Point>[];
+        } else {
+            features = source.getFeatures() as Feature<Point>[];
+        }
 
         const coords = features.map(f => f.getGeometry().getCoordinates());
         const values = features.map(f => parseFloat(f.getProperties()[valueProperty]));
@@ -160,15 +162,13 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
 
         // running first two shaders once
-        this.runInterpolationShader();
-        this.runColorizationShader();
+        this.runInterpolationShader(this.valueFb.fbo);
+        this.runColorizationShader(this.colorFb.fbo);
     }
 
     prepareFrame(frameState: FrameState): boolean {
         const layerState = frameState.layerStatesArray[frameState.layerIndex];
-        const size = frameState.size;
-        const opacity = layerState.opacity;
-        this.webGlCanvas.style.opacity = `${opacity}`;
+        this.webGlCanvas.style.opacity = `${layerState.opacity}`;
 
         const c2pT = frameState.coordinateToPixelTransform;
         this.updateArrangementShader(c2pT, this.webGlCanvas.width, this.webGlCanvas.height);
@@ -177,11 +177,13 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     }
 
     renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
-        this.runArrangementShader();
-        const pointCanvas = this.pointRenderer.renderFrame(frameState, this.container);
-        replaceChildren(this.container, [this.webGlCanvas, pointCanvas]);
-        pointCanvas.hidden = ! this.showLabels;
-        console.log(`renderFrame from ${this.id}`)
+        this.runArrangementShader();  // @todo: arrangement shader could be replaced with a simple css-transformation-matrix.
+        if (this.showLabels) {
+            const pointCanvas = this.pointRenderer.renderFrame(frameState, this.container);
+            replaceChildren(this.container, [this.webGlCanvas, pointCanvas]);
+        } else {
+            replaceChildren(this.container, [this.webGlCanvas]);
+        }
         return this.container;
     }
 
@@ -201,8 +203,8 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         this.showLabels = showLabels;
         this.updateInterpolationShader(power);
         this.updateColorizationShader(colorRamp, smooth);
-        this.runInterpolationShader();
-        this.runColorizationShader();
+        this.runInterpolationShader(this.valueFb.fbo);
+        this.runColorizationShader(this.colorFb.fbo);
         this.runArrangementShader();
         super.getLayer().changed();
     }
@@ -228,9 +230,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     /**
      * Called at every renderFrame. Designed for speed.
      */
-    private runArrangementShader(): void {
+    private runArrangementShader(target?: FramebufferObject): void {
         this.arrangementShader.bind(this.gl);
-        this.arrangementShader.render(this.gl, [0, 0, 0, 0]);
+        this.arrangementShader.render(this.gl, [0, 0, 0, 0], target);
     }
 
     /**
@@ -243,9 +245,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     /**
      * Slow! Avoid calling this too often.
      */
-    private runInterpolationShader(): void {
+    private runInterpolationShader(target?: FramebufferObject): void {
         this.interpolationShader.bind(this.gl);
-        this.interpolationShader.render(this.gl, [0, 0, 0, 0], this.valueFb.fbo);
+        this.interpolationShader.render(this.gl, [0, 0, 0, 0], target);
         this.interpolatedValues = getCurrentFramebuffersPixels(this.webGlCanvas) as Uint8Array;
     }
 
@@ -261,9 +263,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     /**
      * Slow! Avoid calling this too often.
      */
-    private runColorizationShader(): void {
+    private runColorizationShader(target?: FramebufferObject): void {
         this.colorizationShader.bind(this.gl);
-        this.colorizationShader.render(this.gl, [0, 0, 0, 0], this.colorFb.fbo);
+        this.colorizationShader.render(this.gl, [0, 0, 0, 0], target);
     }
 }
 
@@ -565,60 +567,10 @@ const getBbox = (obs: number[][]): number[] => {
     return [xMin, yMin, xMax, yMax];
 };
 
-const filterTrianglesByMaxEdgeLength = (pointCoords: number[][], triangleIndices: number[], threshold: number): number[] => {
-    const smallEdges = [];
-    const largeEdges = [];
-    const smallTriangles = [];
-    for (let i = 0; i < triangleIndices.length; i += 3) {
-        const thisTriangleIndices = [triangleIndices[i], triangleIndices[i + 1], triangleIndices[i + 2]];
-        let isSmallTriangle = true;
-
-        for (let j = 0; j < 3; j++) {
-
-            const indx0 = thisTriangleIndices[j];
-            const indx1 = thisTriangleIndices[(j + 1) % 3];
-            const p0 = pointCoords[indx0];
-            const p1 = pointCoords[indx1];
-
-            if (smallEdges.includes([indx1, indx0])) {
-                continue;
-            } else if (largeEdges.includes([indx1, indx0])) {
-                isSmallTriangle = false;
-                continue;
-            } else {
-                if (pointDistance(p0, p1) <= threshold) {
-                    smallEdges.push([indx0, indx1]);
-                } else {
-                    largeEdges.push([indx0, indx1]);
-                    isSmallTriangle = false;
-                }
-            }
-        }
-
-        if (isSmallTriangle) {
-            smallTriangles.push(...thisTriangleIndices);
-        }
-    }
-
-    return smallTriangles;
-};
-
-const pickIndices = (arr: any[], indices: number[]): any[] => {
-    const out = [];
-    for (const index of indices) {
-        out.push(arr[index]);
-    }
-    return out;
-};
-
 const zip = (arr0: any[], arr1: any[]): any[] => {
     const out = [];
     for (let i = 0; i < arr0.length; i++) {
         out.push(arr0[i].concat(arr1[i]));
     }
     return out;
-};
-
-const unique = (arr: any[]): any[] => {
-    return arr.filter((v, i, a) => a.indexOf(v) === i);
 };
