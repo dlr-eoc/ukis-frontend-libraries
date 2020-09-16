@@ -69,7 +69,7 @@
  *        - WebGL 2.0: allows you to create your own vertex-arrays, whereas 1.0 always only used one global vertex-array.
  */
 
-import { flattenRecursive } from './math';
+import { flattenRecursive, isPowerOf } from './math';
 
 
 
@@ -315,6 +315,7 @@ export interface TextureObject {
     internalformat: number;
     format: number;
     type: number;
+    border: number;
 }
 
 /**
@@ -363,7 +364,8 @@ export const createTexture = (gl: WebGLRenderingContext, image: HTMLImageElement
         format: format,
         type: type,
         width: w,
-        height: h
+        height: h,
+        border: 0
     };
 
     return textureObj;
@@ -391,6 +393,16 @@ export type textureDataType = '';
  *
  */
 export const createDataTexture = (gl: WebGLRenderingContext, data: number[][][]): TextureObject => {
+    const height = data.length;
+    const width = data[0].length;
+    const channels = data[0][0].length;
+    if ( !isPowerOf(width, 2) || !isPowerOf(height, 2) ) {
+        throw new Error(`Texture-data-dimensions must be a power of two, but are ${width} x ${height}`);
+    }
+    if ( channels !== 4) {
+        // @todo: remove this when we implement non-rgba data-textures.
+        throw new Error(`Expecting 4 channels, but ${channels} provided`);
+    }
 
     const texture = gl.createTexture();  // analog to createBuffer
     if (!texture) {
@@ -401,8 +413,6 @@ export const createDataTexture = (gl: WebGLRenderingContext, data: number[][][])
 
     // to be used for data. we want no interpolation of data, so disallow mipmap and interpolation.
     const level = 0;
-    const height = data.length;
-    const width = data[0].length;
     const border = 0;
     const internalFormat = gl.RGBA;
     const format = gl.RGBA;
@@ -410,7 +420,7 @@ export const createDataTexture = (gl: WebGLRenderingContext, data: number[][][])
 
     const binData = new Uint8Array(flattenRecursive(data));
 
-    if (data[0][0].length !== 4) {
+    if (channels !== 4) {
         // have WebGL digest data one byte at a time.
         // (Per default tries 4 bytes at a time, which causes errors when our data is not a mulitple of 4).
         const alignment = 1; // valid values are 1, 2, 4, and 8.
@@ -424,17 +434,16 @@ export const createDataTexture = (gl: WebGLRenderingContext, data: number[][][])
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.bindTexture(gl.TEXTURE_2D, null);  // unbinding
 
-    const h = data.length;
-    const w = data[0].length;
 
     const textureObj: TextureObject = {
         texture: texture,
-        level: 0,
-        internalformat: gl.RGBA,
-        format: gl.RGBA,
-        type: gl.UNSIGNED_BYTE,
-        width: w,
-        height: h
+        level: level,
+        internalformat: internalFormat,
+        format: format,
+        type: type,
+        width: width,
+        height: height,
+        border: border
     };
 
     return textureObj;
@@ -466,7 +475,8 @@ export const createEmptyTexture = (gl: WebGLRenderingContext, width: number, hei
         format: gl.RGBA,
         type: gl.UNSIGNED_BYTE,
         width: width,
-        height: height
+        height: height,
+        border: 0
     };
 
     return textureObj;
@@ -494,24 +504,34 @@ export const bindTextureToUniform = (gl: WebGLRenderingContext, texture: WebGLTe
 
 
 
-export const updateTexture = (gl: WebGLRenderingContext, to: TextureObject, newImage: HTMLImageElement | HTMLCanvasElement): TextureObject => {
+export const updateTexture = (gl: WebGLRenderingContext, to: TextureObject, newData: HTMLImageElement | HTMLCanvasElement | number[][][]): TextureObject => {
 
     gl.activeTexture(gl.TEXTURE0 + textureConstructionBindPoint); // so that we don't overwrite another texture in the next line.
     gl.bindTexture(gl.TEXTURE_2D, to.texture);  // analog to bindBuffer. Binds texture to currently active texture-bindpoint (aka. texture unit).
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, newImage);  // analog to bufferData
+    if (newData instanceof HTMLImageElement || newData instanceof HTMLCanvasElement) {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, newData);  // analog to bufferData
+    } else {
+        const width = newData[0].length;
+        const height = newData.length;
+        if ( !isPowerOf(width, 2) || !isPowerOf(height, 2) ) {
+            throw new Error(`Texture-data-dimensions must be a power of two, but are ${height} x ${width}`);
+        }
+        const binData = new Uint8Array(flattenRecursive(newData));  // @todo: use another ArrayBufferView depending on to.format?
+        gl.texImage2D(gl.TEXTURE_2D, to.level, to.internalformat, to.width, to.height, to.border, to.format, to.type, binData);
+    }
     gl.generateMipmap(gl.TEXTURE_2D); // mipmaps are mini-versions of the texture.
     gl.bindTexture(gl.TEXTURE_2D, null);  // unbinding
 
-    let w, h: number;
-    if (newImage instanceof HTMLImageElement) {
-        w = newImage.naturalWidth;
-        h = newImage.naturalHeight;
+    if (newData instanceof HTMLImageElement) {
+        to.width = newData.naturalWidth;
+        to.height = newData.naturalHeight;
+    } else if (newData instanceof HTMLCanvasElement) {
+        to.width = newData.width;
+        to.height = newData.height;
     } else {
-        w = newImage.width;
-        h = newImage.height;
+        to.width = newData[0].length;
+        to.height = newData.length;
     }
-    to.width = w;
-    to.height = h;
 
     return to;
 };
@@ -811,4 +831,23 @@ export const getCurrentFramebuffersPixels = (canvas: HTMLCanvasElement): ArrayBu
     gl.readPixels(0, 0, canvas.width, canvas.height, format, type, pixels);
 
     return pixels;
+};
+
+export const getDebugInfo = (gl: WebGLRenderingContext): object => {
+    const baseInfo = {
+        renderer: gl.getParameter(gl.RENDERER),
+        currentProgram: gl.getParameter(gl.CURRENT_PROGRAM),
+        arrayBuffer: gl.getParameter(gl.ARRAY_BUFFER_BINDING),
+        elementArrayBuffer: gl.getParameter(gl.ELEMENT_ARRAY_BUFFER_BINDING),
+        frameBuffer: gl.getParameter(gl.FRAMEBUFFER_BINDING),
+        renderBuffer: gl.getParameter(gl.RENDERBUFFER_BINDING),
+        texture: gl.getParameter(gl.TEXTURE_BINDING_2D),
+        viewPort: gl.getParameter(gl.VIEWPORT)
+    };
+    const programInfo = {
+        infoLog: gl.getProgramInfoLog(baseInfo.currentProgram)
+    };
+    return {
+        baseInfo, programInfo
+    }
 };
