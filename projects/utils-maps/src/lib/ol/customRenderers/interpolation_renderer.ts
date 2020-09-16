@@ -10,7 +10,7 @@ import { Layer } from 'ol/layer';
 import RenderFeature from 'ol/render/Feature';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataTexture } from '../../webgl/engine.core';
-import { flattenRecursive } from '../../webgl/math';
+import { flattenRecursive, nextPowerOf } from '../../webgl/math';
 import { FramebufferObject, getCurrentFramebuffersPixels } from '../../webgl/webgl';
 import { rectangleA, identity, rectangleE } from '../../webgl/engine.shapes';
 import { replaceChildren } from 'ol/dom';
@@ -79,24 +79,28 @@ export class InterpolationLayer extends VectorLayer {
 export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
     private container: HTMLDivElement;
-    private webGlCanvas: HTMLCanvasElement;
-
     private pointRenderer: CanvasVectorLayerRenderer;
-    private showLabels: boolean;
-
+    private webGlCanvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;
     private interpolationShader: Shader;
     private valueFb: Framebuffer;
     private colorizationShader: Shader;
     private colorFb: Framebuffer;
     private arrangementShader: Shader;
-
-    private values: number[];
-    private coordsWorld: number[][];
     private interpolatedValues: Uint8Array;
+
+    private showLabels: boolean;
+    private projection;
+    private bbox;
+    private maxEdgeLength: number;
+    private valueProperty: string;
+    private power: number;
 
     constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string, showLabels: boolean) {
         super(layer);
+        this.maxEdgeLength = maxEdgeLength;
+        this.valueProperty = valueProperty;
+        this.power = power;
 
         // setting up HTML element
         this.container = document.createElement('div');
@@ -122,44 +126,16 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
         // preparing data
         const source = layer.getSource();
-        let features: Feature<Point>[] = source.getFeatures() as Feature<Point>[];
-        if (source instanceof olCluster) {
-            features = source.getSource().getFeatures() as Feature<Point>[];
-        } else {
-            features = source.getFeatures() as Feature<Point>[];
-        }
-
-        const coords = features.map(f => f.getGeometry().getCoordinates());
-        const values = features.map(f => parseFloat(f.getProperties()[valueProperty]));
-        const bbox = getBbox(coords);
-        const deltaX = bbox[2] - bbox[0];
-        const deltaY = bbox[3] - bbox[1];
-        let addX: number, addY: number;
-        if (deltaX > deltaY) {
-            addY = deltaX - deltaY;
-            addX = 0;
-        } else {
-            addY = 0;
-            addX = deltaY - deltaX;
-        }
-        const bboxDelta = [
-            bbox[0] - maxEdgeLength,
-            bbox[1] - maxEdgeLength,
-            bbox[2] + addX + maxEdgeLength,
-            bbox[3] + addY + maxEdgeLength
-        ];
-        const maxEdgeLengthViewPort = maxEdgeLength / Math.max(deltaX, deltaY);
-        const maxVal = values.reduce((prev, curr) => curr > prev ? curr : prev, 0);
-        this.values = values;
-        this.coordsWorld = coords;
+        const { coords, values, bboxDelta, maxVal } = this.parseData(source, valueProperty, maxEdgeLength);
+        const { observationsBbox, maxEdgeLengthBbox } = this.parseDataBbox(bboxDelta, coords, values, maxVal, maxEdgeLength);
+        this.bbox = bboxDelta;
 
         // setting up shaders
-        this.interpolationShader = createInverseDistanceInterpolationShader(this.gl, zip(this.coordsWorld, this.values), maxVal, power, bboxDelta, maxEdgeLengthViewPort);
+        this.interpolationShader = createInverseDistanceInterpolationShader(this.gl, observationsBbox, maxVal, power, maxEdgeLengthBbox);
         this.valueFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
         this.colorizationShader = createColorizationShader(this.gl, colorRamp, maxVal, smooth, this.valueFb);
         this.colorFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
         this.arrangementShader = createArrangementShader(this.gl, identity(), identity(), bboxDelta, this.colorFb);
-
 
         // running first two shaders once
         this.runInterpolationShader(this.valueFb.fbo);
@@ -170,8 +146,19 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         const layerState = frameState.layerStatesArray[frameState.layerIndex];
         this.webGlCanvas.style.opacity = `${layerState.opacity}`;
 
+        if (frameState.viewState.projection !== this.projection) {
+            this.projection = frameState.viewState.projection;
+            const source = super.getLayer().getSource();
+            const { coords, values, bboxDelta, maxVal } = this.parseData(source, this.valueProperty, this.maxEdgeLength);
+            const { observationsBbox, maxEdgeLengthBbox } = this.parseDataBbox(bboxDelta, coords, values, maxVal, this.maxEdgeLength);
+            this.updateInterpolationShader(this.power, observationsBbox, maxEdgeLengthBbox);
+            this.runInterpolationShader(this.valueFb.fbo);
+            this.runColorizationShader(this.colorFb.fbo);
+            this.bbox = bboxDelta;
+        }
+
         const c2pT = frameState.coordinateToPixelTransform;
-        this.updateArrangementShader(c2pT, this.webGlCanvas.width, this.webGlCanvas.height);
+        this.updateArrangementShader(c2pT, this.webGlCanvas.clientWidth, this.webGlCanvas.clientHeight, this.bbox);
         this.pointRenderer.prepareFrame(frameState);
         return true;
     }
@@ -201,6 +188,7 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
     public setParas(power: number, smooth: boolean, colorRamp: ColorRamp, showLabels: boolean) {
         this.showLabels = showLabels;
+        this.power = power;
         this.updateInterpolationShader(power);
         this.updateColorizationShader(colorRamp, smooth);
         this.runInterpolationShader(this.valueFb.fbo);
@@ -212,19 +200,20 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     /**
      * Called at every renderFrame. Designed for speed.
      */
-    private updateArrangementShader(coordinateToPixelTransform: number[], canvasWidth: number, canvasHeight: number): void {
+    private updateArrangementShader(coordinateToPixelTransform: number[], canvasWidth: number, canvasHeight: number, bbox: [number, number, number, number]): void {
         const world2pix = [
             [coordinateToPixelTransform[0], coordinateToPixelTransform[1], 0.],
             [coordinateToPixelTransform[2], coordinateToPixelTransform[3], 0.],
             [coordinateToPixelTransform[4], coordinateToPixelTransform[5], 1.]
         ];
         const pix2clip = [
-            [1. / (this.webGlCanvas.clientWidth / 2), 0., 0.],
-            [0, -1. / (this.webGlCanvas.clientHeight / 2), 0.],
+            [1. / (canvasWidth / 2), 0., 0.],
+            [0, -1. / (canvasHeight / 2), 0.],
             [-1., 1., 1.]
         ];
         this.arrangementShader.updateUniformData(this.gl, 'u_world2pix', flattenRecursive(world2pix));
         this.arrangementShader.updateUniformData(this.gl, 'u_pix2clip', flattenRecursive(pix2clip));
+        this.arrangementShader.updateUniformData(this.gl, 'u_bbox', bbox);
     }
 
     /**
@@ -238,8 +227,14 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     /**
      * Slow! Avoid calling this too often.
      */
-    private updateInterpolationShader(power: number): void {
+    private updateInterpolationShader(power: number, observations?: number[][], maxEdgeLengthBbox?: number): void {
         this.interpolationShader.updateUniformData(this.gl, 'u_power', [power]);
+        if (observations) {
+            this.interpolationShader.updateTextureData(this.gl, 'u_dataTexture', [observations]);
+        }
+        if (maxEdgeLengthBbox) {
+            this.interpolationShader.updateUniformData(this.gl, 'u_maxDistance', [maxEdgeLengthBbox]);
+        }
     }
 
     /**
@@ -266,6 +261,64 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private runColorizationShader(target?: FramebufferObject): void {
         this.colorizationShader.bind(this.gl);
         this.colorizationShader.render(this.gl, [0, 0, 0, 0], target);
+    }
+
+    private parseData(source, valueProperty: string, maxEdgeLength: number) {
+        let features: Feature<Point>[] = source.getFeatures() as Feature<Point>[];
+        if (source instanceof olCluster) {
+            features = source.getSource().getFeatures() as Feature<Point>[];
+        } else {
+            features = source.getFeatures() as Feature<Point>[];
+        }
+
+        const coords = features.map(f => f.getGeometry().getCoordinates());
+        const values = features.map(f => parseFloat(f.getProperties()[valueProperty]));
+
+        const bbox = getBbox(coords);
+        const deltaX = bbox[2] - bbox[0];
+        const deltaY = bbox[3] - bbox[1];
+        let addX: number, addY: number;
+        if (deltaX > deltaY) {
+            addY = deltaX - deltaY;
+            addX = 0;
+        } else {
+            addY = 0;
+            addX = deltaY - deltaX;
+        }
+        const bboxDelta = [
+            bbox[0] - maxEdgeLength,
+            bbox[1] - maxEdgeLength,
+            bbox[2] + addX + maxEdgeLength,
+            bbox[3] + addY + maxEdgeLength
+        ];
+        const maxVal = values.reduce((prev, curr) => curr > prev ? curr : prev, 0);
+
+        return {
+            coords, values, bboxDelta, maxVal
+        };
+    }
+
+    private parseDataBbox(bbox, coords, values, maxVal, maxEdgeLength) {
+        const observationsBbox = zip(coords, values).map(o => {
+            const coordsBbox = worldCoords2clipBbox([o[0], o[1]], bbox);
+            return [
+                255 * (coordsBbox[0] + 1) / 2,
+                255 * (coordsBbox[1] + 1) / 2,
+                255 * o[2] / maxVal,
+                255
+            ];
+        });
+        const nrObservations = observationsBbox.length;
+        const nextPowerOfTwo = nextPowerOf(nrObservations, 2);
+        for (let i = 0; i < nextPowerOfTwo - nrObservations; i++) {
+            observationsBbox.push([0, 0, 0, 0]);
+        }
+
+        const deltaX = bbox[2] - bbox[0];
+        const deltaY = bbox[3] - bbox[1];
+        const maxEdgeLengthBbox = maxEdgeLength / Math.max(deltaX, deltaY);
+
+        return { observationsBbox, maxEdgeLengthBbox };
     }
 }
 
@@ -341,19 +394,9 @@ const createSplineInterpolationShader = (gl: WebGLRenderingContext, observations
 };
 
 
-const createInverseDistanceInterpolationShader = (gl: WebGLRenderingContext, observationsWorld: number[][], maxValue: number, power: number, bbox: number[], maxEdgeLength: number): Shader => {
+const createInverseDistanceInterpolationShader = (gl: WebGLRenderingContext, observationsBbox: number[][], maxValue: number, power: number, maxEdgeLengthBbox: number): Shader => {
 
-    const observationsBbox = observationsWorld.map(o => {
-        const coordsBbox = worldCoords2clipBbox([o[0], o[1]], bbox);
-        return [
-            255 * (coordsBbox[0] + 1) / 2,
-            255 * (coordsBbox[1] + 1) / 2,
-            255 * o[2] / maxValue,
-            255
-        ];
-    });
-
-    const maxObservations = 1000;
+    const maxObservations = 10000;
     const inverseDistanceProgram = new Program(gl, `
             precision mediump float;
             attribute vec3 a_position;
@@ -386,15 +429,17 @@ const createInverseDistanceInterpolationShader = (gl: WebGLRenderingContext, obs
                         break;
                     }
                     vec4 dataPoint = texture2D(u_dataTexture, vec2(float(i) / float(u_nrDataPoints), 0.5));
-                    vec2 coords = dataPoint.xy * 2.0 - 1.0;
-                    float value = dataPoint.z * u_maxValue;
+                    if (dataPoint.w > 0.0) {  // texture is padded to next power of two with transparent 0-values.
+                        vec2 coords = dataPoint.xy * 2.0 - 1.0;
+                        float value = dataPoint.z * u_maxValue;
 
-                    float d = distance(v_position, coords);
-                    float w = 1.0 / pow(d, u_power);
-                    valSum += value * w;
-                    wSum += w;
-                    if (d < minD) {
-                        minD = d;
+                        float d = distance(v_position, coords);
+                        float w = 1.0 / pow(d, u_power);
+                        valSum += value * w;
+                        wSum += w;
+                        if (d < minD) {
+                            minD = d;
+                        }
                     }
                 }
                 float interpolatedValue = valSum / wSum;
@@ -414,9 +459,9 @@ const createInverseDistanceInterpolationShader = (gl: WebGLRenderingContext, obs
         new Attribute(gl, inverseDistanceProgram, 'a_texturePosition', viewPort.texturePositions)
     ], [
         new Uniform(gl, inverseDistanceProgram, 'u_power', 'float', [power]),
-        new Uniform(gl, inverseDistanceProgram, 'u_nrDataPoints', 'int', [observationsWorld.length]),
+        new Uniform(gl, inverseDistanceProgram, 'u_nrDataPoints', 'int', [observationsBbox.length]),
         new Uniform(gl, inverseDistanceProgram, 'u_maxValue', 'float', [maxValue]),
-        new Uniform(gl, inverseDistanceProgram, 'u_maxDistance', 'float', [maxEdgeLength])
+        new Uniform(gl, inverseDistanceProgram, 'u_maxDistance', 'float', [maxEdgeLengthBbox])
     ], [
         new DataTexture(gl, inverseDistanceProgram, 'u_dataTexture', [observationsBbox], 0)
     ], new Index(gl, viewPort.vertexIndices));
