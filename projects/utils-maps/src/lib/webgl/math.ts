@@ -94,3 +94,17 @@ export const nextPowerOf = (val: number, root: number): number => {
     const exponent = Math.ceil(logN(val, root));
     return Math.pow(2, exponent);
 };
+
+export const createNDimArray = (dimensions: number[]) => {
+    if (dimensions.length > 0) {
+        const dim = dimensions[0];
+        const rest = dimensions.slice(1);
+        const newArray = new Array(dim);
+        for (let i = 0; i < dim; i++) {
+            newArray[i] = createNDimArray(rest);
+        }
+        return newArray;
+     } else {
+        return undefined;
+     }
+};

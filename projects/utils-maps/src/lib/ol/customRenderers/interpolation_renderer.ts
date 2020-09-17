@@ -8,7 +8,7 @@ import { Vector as VectorSource, Cluster as olCluster } from 'ol/source';
 import { replaceChildren } from 'ol/dom';
 import { Projection } from 'ol/proj';
 import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataTexture } from '../../webgl/engine.core';
-import { flattenRecursive, nextPowerOf } from '../../webgl/math';
+import { createNDimArray, flattenRecursive, nextPowerOf, pointDistance } from '../../webgl/math';
 import { FramebufferObject, getCurrentFramebuffersPixels } from '../../webgl/webgl';
 import { rectangleA, identity, rectangleE } from '../../webgl/engine.shapes';
 
@@ -328,69 +328,6 @@ const worldCoords2clipBbox = (point: number[], bbox: number[]): number[] => {
     return [xClip, yClip];
 };
 
-
-const createSplineInterpolationShader = (gl: WebGLRenderingContext, observationsWorld: number[][], maxValue: number, power: number, bbox: number[], maxEdgeLength: number): Shader => {
-    /**
-     * @todo
-     *  - arrange observations in a regular 2d-grid (contrary to inverse distance, which uses a 1d-grid)
-     *  - how should we handle extrapolation?
-     */
-
-    const observationsBbox = observationsWorld.map(o => {
-        const coordsBbox = worldCoords2clipBbox([o[0], o[1]], bbox);
-        return [
-            255 * (coordsBbox[0] + 1) / 2,
-            255 * (coordsBbox[1] + 1) / 2,
-            255 * o[2] / maxValue,
-            255
-        ];
-    });
-
-    const viewPort = rectangleE(2, 2);
-
-    const splineProgram = new Program(gl, `
-            precision mediump float;
-            attribute vec3 a_position;
-            attribute vec2 a_texturePosition;
-            varying vec2 v_position;
-            varying vec2 v_texturePosition;
-
-            void main() {
-                v_position = a_position.xy;
-                v_texturePosition = a_texturePosition;
-                gl_Position = vec4(a_position.xy, 0.0, 1.0);
-            }
-    `, `
-            precision mediump float;
-            uniform float u_power;
-            uniform sampler2D u_dataTexture;
-            uniform int u_nrDataPoints;
-            uniform float u_maxValue;
-            uniform float u_maxDistance;
-            varying vec2 v_position;
-            varying vec2 v_texturePosition;
-
-            void main() {
-                
-            }
-    `);
-
-    const shader = new Shader(splineProgram, [
-        new Attribute(gl, splineProgram, 'a_position', viewPort.vertices),
-        new Attribute(gl, splineProgram, 'a_texturePosition', viewPort.texturePositions)
-    ], [
-        new Uniform(gl, splineProgram, 'u_power', 'float', [power]),
-        new Uniform(gl, splineProgram, 'u_nrDataPoints', 'int', [observationsWorld.length]),
-        new Uniform(gl, splineProgram, 'u_maxValue', 'float', [maxValue]),
-        new Uniform(gl, splineProgram, 'u_maxDistance', 'float', [maxEdgeLength])
-    ], [
-        new DataTexture(gl, splineProgram, 'u_dataTexture', [observationsBbox], 0)
-    ], new Index(gl, viewPort.vertexIndices));
-
-    return shader;
-};
-
-
 const createInverseDistanceInterpolationShader = (gl: WebGLRenderingContext, observationsBbox: number[][], maxValue: number, power: number, maxEdgeLengthBbox: number): Shader => {
 
     const maxObservations = 10000;
@@ -604,7 +541,6 @@ const createArrangementShader = (gl: WebGLRenderingContext, world2pix: number[][
     return arrangementShader;
 };
 
-
 const getBbox = (obs: number[][]): number[] => {
     const xs = obs.map(p => p[0]);
     const ys = obs.map(p => p[1]);
@@ -621,4 +557,44 @@ const zip = (arr0: any[], arr1: any[]): any[] => {
         out.push(arr0[i].concat(arr1[i]));
     }
     return out;
+};
+
+const createDistanceMatrix = (coords: number[][]): number[][] => {
+    const matrix = createNDimArray([coords.length, coords.length]);
+    for (let i = 0; i < coords.length; i++) {
+        for (let j = i + 1; j < coords.length; j++) {
+            const d = pointDistance(coords[i], coords[j]);
+            matrix[i][j] = d;
+            matrix[j][i] = d;
+        }
+    }
+    return matrix;
+};
+
+const create7NearestNeighborsTextureData = (distanceMatrix: number[][], coords: number[][], values: number[]): number[][][] => {
+    const rows = nextPowerOf(values.length, 2);
+    const data = createNDimArray([rows, 8, 4]);
+    for (let r = 0; r < values.length; r++) {
+        data[r][0] = [coords[r][0], coords[r][1], values[r], 255];
+        const neighborIndices = getNIndicesSmallest(7, distanceMatrix[r]);
+        for (let n = 1; n < 8; n++) {
+            const ni = neighborIndices[n - 1];
+            data[r][n] = [coords[ni][0], coords[ni][1], values[ni], 255];
+        }
+    }
+    return data;
+};
+
+const getNIndicesSmallest = (n: number, values: number[]): number[] => {
+    const smallest = getNSmallest(n, values);
+    const indices = getIndicesInArray(smallest, values);
+    return indices;
+};
+
+const getIndicesInArray = (pickedValues: number[], allValues: number[]): number[] => {
+    return pickedValues.map(v => allValues.findIndex(a => a === v));
+};
+
+const getNSmallest = (n: number, values: number[]): number[] => {
+    return values.sort(function(a, b){ return a - b; }).slice(0, n);
 };
