@@ -1,44 +1,43 @@
 import { Feature } from 'ol';
 import { FrameState } from 'ol/PluggableMap';
 import LayerRenderer from 'ol/renderer/Layer';
+import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import VectorLayer from 'ol/layer/Vector';
 import Point from 'ol/geom/Point';
 import { Vector as VectorSource, Cluster as olCluster } from 'ol/source';
-import { Coordinate } from 'ol/coordinate';
-import { FeatureLike } from 'ol/Feature';
-import { Layer } from 'ol/layer';
-import RenderFeature from 'ol/render/Feature';
-import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
+import { replaceChildren } from 'ol/dom';
+import { Projection } from 'ol/proj';
 import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataTexture } from '../../webgl/engine.core';
 import { flattenRecursive, nextPowerOf } from '../../webgl/math';
 import { FramebufferObject, getCurrentFramebuffersPixels } from '../../webgl/webgl';
 import { rectangleA, identity, rectangleE } from '../../webgl/engine.shapes';
-import { replaceChildren } from 'ol/dom';
 
 
-export interface ColorRamp {
-    /**
-     * key: value up to which a certain color is to be used.
-     * value: rgb-array form of color.
-     */
-    [key: number]: [number, number, number];
-}
+
+
+export type ColorRamp = {val: number, rgb: [number, number, number]}[];
+
+
 
 export interface InterpolationLayerOptions {
     source: VectorSource<Point>;
-    /** Max length of delaunay-triangle-edges. To prevent concave shapes to be filled by superfluous triangles. */
-    maxEdgeLength: number;
-    /** Power for inverse distance weighting */
-    distanceWeightingPower: number;
-    /** key = value, value = color[RGB] */
-    colorRamp: ColorRamp;
-    /** Should color-ramp be interpolated? */
-    smooth: boolean;
-    /** Should labels be displayed over datapoints? */
-    showLabels: boolean;
-    /** Under which feature-property do we find the value to be interpolated? */
-    valueProperty: string;
+    renderSettings: InterpolationRendererSettings;
     [key: string]: any;
+}
+
+export interface InterpolationRendererSettings {
+    /** maximum distance for interpolation */
+    maxEdgeLength: number;
+    power: number;
+    /** `val`/`color` pairs. a given `color` is used for all values strictly smaller than `val`.  */
+    colorRamp: ColorRamp;
+    /** show a smooth color-gradient or isolines? */
+    smooth: boolean;
+    /** which feature-property should be interpolated? */
+    valueProperty: string;
+    showLabels: boolean;
+    /** allows you to read out interpolated pixel values, but bad for performance */
+    storeInterpolatedPixelData: boolean;
 }
 
 
@@ -52,11 +51,21 @@ export class InterpolationLayer extends VectorLayer {
     }
 
     createRenderer(): InterpolationRenderer {
-        return new InterpolationRenderer(this, this.options.maxEdgeLength, this.options.distanceWeightingPower, this.options.colorRamp, this.options.smooth, this.options.valueProperty, this.options.showLabels);
+        return new InterpolationRenderer(this, this.options.renderSettings);
     }
 
-    updateParas(power: number, smooth: boolean, colorRamp: ColorRamp, showLabels: boolean): void {
-        (super.getRenderer() as InterpolationRenderer).setParas(power, smooth, colorRamp, showLabels);
+    updateParas(power: number, smooth: boolean, showLabels: boolean): void {
+        const newSettings: InterpolationRendererSettings = {
+            colorRamp: this.options.renderSettings.colorRamp,
+            maxEdgeLength: this.options.renderSettings.maxEdgeLength,
+            storeInterpolatedPixelData: this.options.renderSettings.storeInterpolatedPixelData,
+            valueProperty: this.options.renderSettings.valueProperty,
+            power: power,
+            showLabels: showLabels,
+            smooth: smooth,
+        };
+        (super.getRenderer() as InterpolationRenderer).updateSettings(newSettings);
+        this.options.renderSettings = newSettings;
     }
 }
 
@@ -89,18 +98,11 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private arrangementShader: Shader;
     private interpolatedValues: Uint8Array;
 
-    private showLabels: boolean;
-    private projection;
-    private bbox;
-    private maxEdgeLength: number;
-    private valueProperty: string;
-    private power: number;
+    private projection: Projection;
+    private bbox: number[];
 
-    constructor(layer: VectorLayer, maxEdgeLength: number, power: number, colorRamp: ColorRamp, smooth: boolean, valueProperty: string, showLabels: boolean) {
+    constructor(layer: VectorLayer, private settings: InterpolationRendererSettings) {
         super(layer);
-        this.maxEdgeLength = maxEdgeLength;
-        this.valueProperty = valueProperty;
-        this.power = power;
 
         // setting up HTML element
         this.container = document.createElement('div');
@@ -122,18 +124,18 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
 
         // setting up point-renderer
         this.pointRenderer = new CanvasVectorLayerRenderer(layer);
-        this.showLabels = showLabels;
 
         // preparing data
         const source = layer.getSource();
-        const { coords, values, bboxDelta, maxVal } = this.parseData(source, valueProperty, maxEdgeLength);
-        const { observationsBbox, maxEdgeLengthBbox } = this.parseDataBbox(bboxDelta, coords, values, maxVal, maxEdgeLength);
+        this.projection = source.getProjection();
+        const { coords, values, bboxDelta, maxVal } = this.parseData(source, this.settings.valueProperty, this.settings.maxEdgeLength);
+        const { observationsBbox, maxEdgeLengthBbox } = this.parseDataBbox(bboxDelta, coords, values, maxVal, this.settings.maxEdgeLength);
         this.bbox = bboxDelta;
 
         // setting up shaders
-        this.interpolationShader = createInverseDistanceInterpolationShader(this.gl, observationsBbox, maxVal, power, maxEdgeLengthBbox);
+        this.interpolationShader = createInverseDistanceInterpolationShader(this.gl, observationsBbox, maxVal, this.settings.power, maxEdgeLengthBbox);
         this.valueFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
-        this.colorizationShader = createColorizationShader(this.gl, colorRamp, maxVal, smooth, this.valueFb);
+        this.colorizationShader = createColorizationShader(this.gl, this.settings.colorRamp, maxVal, this.settings.smooth, this.valueFb);
         this.colorFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
         this.arrangementShader = createArrangementShader(this.gl, identity(), identity(), bboxDelta, this.colorFb);
 
@@ -149,23 +151,24 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         if (frameState.viewState.projection !== this.projection) {
             this.projection = frameState.viewState.projection;
             const source = super.getLayer().getSource();
-            const { coords, values, bboxDelta, maxVal } = this.parseData(source, this.valueProperty, this.maxEdgeLength);
-            const { observationsBbox, maxEdgeLengthBbox } = this.parseDataBbox(bboxDelta, coords, values, maxVal, this.maxEdgeLength);
-            this.updateInterpolationShader(this.power, observationsBbox, maxEdgeLengthBbox);
+            const { coords, values, bboxDelta, maxVal } = this.parseData(source, this.settings.valueProperty, this.settings.maxEdgeLength);
+            const { observationsBbox, maxEdgeLengthBbox } = this.parseDataBbox(bboxDelta, coords, values, maxVal, this.settings.maxEdgeLength);
+            this.updateInterpolationShader(this.settings.power, observationsBbox, maxEdgeLengthBbox);
             this.runInterpolationShader(this.valueFb.fbo);
             this.runColorizationShader(this.colorFb.fbo);
             this.bbox = bboxDelta;
         }
 
         const c2pT = frameState.coordinateToPixelTransform;
-        this.updateArrangementShader(c2pT, this.webGlCanvas.clientWidth, this.webGlCanvas.clientHeight, this.bbox);
+        // using frameState.size instead of this.webGlCanvas.clientWidth because the latter is null when layer invisible.
+        this.updateArrangementShader(c2pT, frameState.size[0], frameState.size[1], this.bbox);
         this.pointRenderer.prepareFrame(frameState);
         return true;
     }
 
     renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         this.runArrangementShader();  // @todo: arrangement shader could be replaced with a simple css-transformation-matrix.
-        if (this.showLabels) {
+        if (this.settings.showLabels) {
             const pointCanvas = this.pointRenderer.renderFrame(frameState, this.container);
             replaceChildren(this.container, [this.webGlCanvas, pointCanvas]);
         } else {
@@ -174,33 +177,25 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         return this.container;
     }
 
-
-  forEachFeatureAtCoordinate<T>(
-    coordinate: Coordinate,
-    frameState: FrameState,
-    hitTolerance: number,
-    callback: (arg0: Feature<any> | RenderFeature, arg1: Layer<any>) => T,
-    declutteredFeatures: FeatureLike[]
-  ) {
-      // @TODO: query the valueFb to provide data at the given point.
-      callback(null, super.layer_);
-  }
-
-    public setParas(power: number, smooth: boolean, colorRamp: ColorRamp, showLabels: boolean) {
-        this.showLabels = showLabels;
-        this.power = power;
-        this.updateInterpolationShader(power);
-        this.updateColorizationShader(colorRamp, smooth);
-        this.runInterpolationShader(this.valueFb.fbo);
-        this.runColorizationShader(this.colorFb.fbo);
-        this.runArrangementShader();
+    public updateSettings(newSettings: InterpolationRendererSettings) {
+        const oldSettings = this.settings;
+        this.settings = newSettings;
+        if (newSettings.power !== oldSettings.power) {
+            this.updateInterpolationShader(newSettings.power);
+            this.runInterpolationShader(this.valueFb.fbo);
+            this.updateColorizationShader(newSettings.smooth);
+            this.runColorizationShader(this.colorFb.fbo);
+        } else if (newSettings.smooth !== oldSettings.smooth) {
+            this.updateColorizationShader(newSettings.smooth);
+            this.runColorizationShader(this.colorFb.fbo);
+        }
         super.getLayer().changed();
     }
 
     /**
-     * Called at every renderFrame. Designed for speed.
+     * Called at every renderFrame. Fast.
      */
-    private updateArrangementShader(coordinateToPixelTransform: number[], canvasWidth: number, canvasHeight: number, bbox: [number, number, number, number]): void {
+    private updateArrangementShader(coordinateToPixelTransform: number[], canvasWidth: number, canvasHeight: number, bbox: number[]): void {
         const world2pix = [
             [coordinateToPixelTransform[0], coordinateToPixelTransform[1], 0.],
             [coordinateToPixelTransform[2], coordinateToPixelTransform[3], 0.],
@@ -217,7 +212,7 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     }
 
     /**
-     * Called at every renderFrame. Designed for speed.
+     * Called at every renderFrame. Fast.
      */
     private runArrangementShader(target?: FramebufferObject): void {
         this.arrangementShader.bind(this.gl);
@@ -243,15 +238,17 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private runInterpolationShader(target?: FramebufferObject): void {
         this.interpolationShader.bind(this.gl);
         this.interpolationShader.render(this.gl, [0, 0, 0, 0], target);
-        this.interpolatedValues = getCurrentFramebuffersPixels(this.webGlCanvas) as Uint8Array;
+        if (this.settings.storeInterpolatedPixelData) {
+            this.interpolatedValues = getCurrentFramebuffersPixels(this.webGlCanvas) as Uint8Array;
+        }
     }
 
     /**
      * Slow! Avoid calling this too often.
      */
-    private updateColorizationShader(colorRamp: ColorRamp, smooth: boolean): void {
-        this.colorizationShader.updateUniformData(this.gl, 'u_colorRampValues', Object.keys(colorRamp).map(k => parseFloat(k)));
-        this.colorizationShader.updateUniformData(this.gl, 'u_colorRampColors', flattenRecursive(Object.values(colorRamp)));
+    private updateColorizationShader(smooth: boolean): void {
+        // this.colorizationShader.updateUniformData(this.gl, 'u_colorRampValues', colorRamp.map(e => e.val));
+        // this.colorizationShader.updateUniformData(this.gl, 'u_colorRampColors', flattenRecursive( colorRamp.map(e => e.rgb) ));
         this.colorizationShader.updateUniformData(this.gl, 'u_smooth', [smooth ? 1 : 0]);
     }
 
@@ -430,8 +427,8 @@ const createInverseDistanceInterpolationShader = (gl: WebGLRenderingContext, obs
                     }
                     vec4 dataPoint = texture2D(u_dataTexture, vec2(float(i) / float(u_nrDataPoints), 0.5));
                     if (dataPoint.w > 0.0) {  // texture is padded to next power of two with transparent 0-values.
-                        vec2 coords = dataPoint.xy * 2.0 - 1.0;
-                        float value = dataPoint.z * u_maxValue;
+                        vec2 coords = dataPoint.xy * 2.0 - 1.0;  // transforming coords from [0, 1] to [-1, 1]
+                        float value = dataPoint.z * u_maxValue;  // transforming value from [0, 1] to [0, maxValue]
 
                         float d = distance(v_position, coords);
                         float w = 1.0 / pow(d, u_power);
@@ -494,25 +491,31 @@ const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRam
             varying vec2 v_textureCoord;
 
             vec3 valueToSmoothColor(in float value) {
+                if (value < u_colorRampValues[0]) {
+                    return u_colorRampColors[0];
+                }
                 for (int i = 1; i < ${maxColorRampValues}; i++) {
                     if (i > u_nrColorRampValues) {
                         break;
                     }
-                    if (value <= u_colorRampValues[i]) {
+                    if (value < u_colorRampValues[i]) {
                         float alpha = (value - u_colorRampValues[i-1]) / (u_colorRampValues[i] - u_colorRampValues[i-1]);
                         vec3 color = alpha * (u_colorRampColors[i] - u_colorRampColors[i-1]) + u_colorRampColors[i-1];
                         return color;
+                    }
+                    if (i == u_nrColorRampValues) {
+                        return u_colorRampColors[i];
                     }
                 }
             }
 
             vec3 valueToStepColor(in float value) {
-                for (int i = 1; i < ${maxColorRampValues}; i++) {
+                for (int i = 0; i < ${maxColorRampValues}; i++) {
                     if (i > u_nrColorRampValues) {
                         break;
                     }
-                    if (value <= u_colorRampValues[i]) {
-                        return u_colorRampColors[i - 1];
+                    if (value < u_colorRampValues[i]) {
+                        return u_colorRampColors[i];
                     }
                     if (i == u_nrColorRampValues) {
                         return u_colorRampColors[i];
@@ -522,7 +525,7 @@ const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRam
 
             void main() {
                 vec4 pixelData = texture2D(u_valueTexture, v_textureCoord);
-                float val = pixelData.x * u_maxValue;
+                float val = pixelData.r * u_maxValue;
                 float alpha = pixelData.w;
                 vec3 rgb = vec3(0.0, 0.0, 0.0);
                 if (alpha > 0.01) {
@@ -532,7 +535,7 @@ const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRam
                         rgb = valueToStepColor(val);
                     }
                 }
-                gl_FragColor = vec4(rgb.x / 255.0, rgb.z / 255.0, rgb.y / 255.0, alpha);
+                gl_FragColor = vec4(rgb.x / 255.0, rgb.y / 255.0, rgb.z / 255.0, alpha);
             }
         `);
 
@@ -540,9 +543,9 @@ const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRam
         new Attribute(gl, colorizationProgram, 'a_position', rectangleA(2.0, 2.0).vertices),
         new Attribute(gl, colorizationProgram, 'a_textureCoord', rectangleA(2.0, 2.0).texturePositions)
     ], [
-        new Uniform(gl, colorizationProgram, 'u_colorRampValues', 'float[]', Object.keys(colorRamp).map(k => parseFloat(k))),
-        new Uniform(gl, colorizationProgram, 'u_colorRampColors', 'vec3[]', flattenRecursive(Object.values(colorRamp))),
-        new Uniform(gl, colorizationProgram, 'u_nrColorRampValues', 'int', [Object.keys(colorRamp).length]),
+        new Uniform(gl, colorizationProgram, 'u_colorRampValues', 'float[]', colorRamp.map(e => e.val)),
+        new Uniform(gl, colorizationProgram, 'u_colorRampColors', 'vec3[]', flattenRecursive( colorRamp.map(e => e.rgb) )),
+        new Uniform(gl, colorizationProgram, 'u_nrColorRampValues', 'int', [colorRamp.length]),
         new Uniform(gl, colorizationProgram, 'u_maxValue', 'float', [maxVal]),
         new Uniform(gl, colorizationProgram, 'u_smooth', 'bool', [smooth ? 1 : 0]),
     ], [

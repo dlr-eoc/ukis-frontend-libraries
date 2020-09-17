@@ -295,13 +295,13 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       distance: 25  // pixel
     });
     const valueParameter = 'SWH';
-    const colorRamp: ColorRamp = {
-      0.0: [166, 97, 26],  // 0.0: [27,158,119],
-      0.4: [223, 194, 125],  // 0.4: [217,95,2],
-      0.8: [247, 247, 247],  // 0.8: [117,112,179],
-      2.0: [128, 205, 193],  // 2.0: [231,41,138],
-      22.5: [1, 133, 113],  // 22.5: [102,166,30],
-    };
+    const colorRamp: ColorRamp = [
+      { val: 0.0,   rgb: [166, 97, 26]    },
+      { val: 0.4,   rgb: [223, 194, 125]  },
+      { val: 0.8,   rgb: [247, 247, 247]  },
+      { val: 2.0,   rgb: [128, 205, 193]  },
+      { val: 22.5,  rgb: [1, 133, 113]    },
+    ];
     const interpolationLayer = new CustomLayer({
       id: 'interpolation',
       name: 'Interpolation',
@@ -339,19 +339,22 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
             })
           });
         },
-        maxEdgeLength: 15000 / metersPerUnit,
-        distanceWeightingPower: 2.0,
-        colorRamp: colorRamp,
-        smooth: true,
-        showLabels: false,
-        valueProperty: valueParameter
+        renderSettings: {
+          maxEdgeLength: 15000 / metersPerUnit,
+          power: 2.0,
+          colorRamp: colorRamp,
+          smooth: true,
+          showLabels: false,
+          valueProperty: valueParameter,
+          storeInterpolatedPixelData: false
+        }
       }),
       actions: [{ title: 'test', icon: '', action: (layer) => { } }],
       action: {
         component: InterpolationSettingsComponent,
         inputs: {
           changeHandler: (power: number, smooth: boolean, labels: boolean) => {
-            interpolationLayer.custom_layer.updateParas(power, smooth, colorRamp, labels);
+            (interpolationLayer.custom_layer as InterpolationLayer).updateParas(power, smooth, labels);
           }
         }
       },
