@@ -361,6 +361,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       filtertype: 'Layers',
       opacity: 0.7,
       visible: false,
+      description: 'This layer is an example of how WebGL can be used to outsource computationally expensive operations. For inverse-distance interpolation we need to account for every datapoint at every pixel.'
     });
 
     const layerGroup2 = new LayerGroup({
