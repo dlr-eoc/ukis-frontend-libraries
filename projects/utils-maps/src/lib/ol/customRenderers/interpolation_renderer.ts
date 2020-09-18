@@ -8,9 +8,9 @@ import { Vector as VectorSource, Cluster as olCluster } from 'ol/source';
 import { replaceChildren } from 'ol/dom';
 import { Projection } from 'ol/proj';
 import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataTexture } from '../../webgl/engine.core';
-import { createNDimArray, flattenRecursive, nextPowerOf, pointDistance } from '../../webgl/math';
 import { FramebufferObject, getCurrentFramebuffersPixels } from '../../webgl/webgl';
-import { rectangleA, identity, rectangleE } from '../../webgl/engine.shapes';
+import { rectangleA, rectangleE } from '../../webgl/engine.shapes';
+import { flattenRecursive, createNDimArray } from '../../webgl/engine.helpers';
 
 
 
@@ -133,11 +133,12 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         this.bbox = bboxDelta;
 
         // setting up shaders
+        const identity = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
         this.interpolationShader = createInverseDistanceInterpolationShader(this.gl, observationsBbox, maxVal, this.settings.power, maxEdgeLengthBbox);
         this.valueFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
         this.colorizationShader = createColorizationShader(this.gl, this.settings.colorRamp, maxVal, this.settings.smooth, this.valueFb);
         this.colorFb = new Framebuffer(this.gl, this.webGlCanvas.width, this.webGlCanvas.height);
-        this.arrangementShader = createArrangementShader(this.gl, identity(), identity(), bboxDelta, this.colorFb);
+        this.arrangementShader = createArrangementShader(this.gl, identity, identity, bboxDelta, this.colorFb);
 
         // running first two shaders once
         this.runInterpolationShader(this.valueFb.fbo);
@@ -319,7 +320,6 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     }
 }
 
-
 const worldCoords2clipBbox = (point: number[], bbox: number[]): number[] => {
     const xPerct = (point[0] - bbox[0]) / (bbox[2] - bbox[0]);
     const yPerct = (point[1] - bbox[1]) / (bbox[3] - bbox[1]);
@@ -402,7 +402,6 @@ const createInverseDistanceInterpolationShader = (gl: WebGLRenderingContext, obs
 
     return inverseDistanceShader;
 };
-
 
 const createColorizationShader = (gl: WebGLRenderingContext, colorRamp: ColorRamp, maxVal: number, smooth: boolean, valueFb: Framebuffer): Shader => {
 
@@ -585,6 +584,10 @@ const create7NearestNeighborsTextureData = (distanceMatrix: number[][], coords: 
     return data;
 };
 
+const pointDistance = (a: number[], b: number[]): number => {
+    return Math.sqrt(Math.pow((a[0] - b[0]), 2) + Math.pow((a[1] - b[1]), 2));
+};
+
 const getNIndicesSmallest = (n: number, values: number[]): number[] => {
     const smallest = getNSmallest(n, values);
     const indices = getIndicesInArray(smallest, values);
@@ -597,4 +600,17 @@ const getIndicesInArray = (pickedValues: number[], allValues: number[]): number[
 
 const getNSmallest = (n: number, values: number[]): number[] => {
     return values.sort(function(a, b){ return a - b; }).slice(0, n);
+};
+
+export const logN = (val: number, root: number): number => {
+    return Math.log(val) / Math.log(root);
+};
+
+export const isPowerOf = (val: number, root: number): boolean => {
+    return logN(val, root) % 1 === 0;
+};
+
+export const nextPowerOf = (val: number, root: number): number => {
+    const exponent = Math.ceil(logN(val, root));
+    return Math.pow(2, exponent);
 };

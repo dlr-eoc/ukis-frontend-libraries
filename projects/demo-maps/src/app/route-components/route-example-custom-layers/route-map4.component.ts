@@ -349,7 +349,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           storeInterpolatedPixelData: false
         }
       }),
-      actions: [{ title: 'test', icon: '', action: (layer) => { } }],
       action: {
         component: InterpolationSettingsComponent,
         inputs: {
