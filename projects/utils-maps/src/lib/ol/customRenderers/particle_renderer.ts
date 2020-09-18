@@ -6,7 +6,7 @@ import Point from 'ol/geom/Point';
 import Delaunator from 'delaunator';
 import { Shader, Framebuffer, Program, Uniform, Texture, renderLoop, Attribute } from '../../webgl/engine.core';
 import { rectangleA } from '../../webgl/engine.shapes';
-import { flattenRecursive } from '../../webgl/math';
+import { flattenRecursive } from '../../webgl/utils';
 
 
 export class WindFieldLayer extends VectorLayer {

@@ -102,32 +102,3 @@ export const arrayToCanvas = (data: number[][][]) => {
     return canvas;
 };
 
-
-export const flattenRecursive = (m: any[]): number[] => {
-    let flat: number[] = [];
-    for (const row of m) {
-        let flattenedRow;
-        if (Array.isArray(row[0])) {
-            flattenedRow = flattenRecursive(row);
-        } else {
-            flattenedRow = row;
-        }
-        flat = Array.prototype.concat(flat, flattenedRow);
-    }
-    return flat;
-};
-
-
-export const createNDimArray = (dimensions: number[]) => {
-    if (dimensions.length > 0) {
-        const dim = dimensions[0];
-        const rest = dimensions.slice(1);
-        const newArray = new Array(dim);
-        for (let i = 0; i < dim; i++) {
-            newArray[i] = createNDimArray(rest);
-        }
-        return newArray;
-     } else {
-        return undefined;
-     }
-};

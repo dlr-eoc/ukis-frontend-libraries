@@ -10,7 +10,7 @@ import { Projection } from 'ol/proj';
 import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataTexture } from '../../webgl/engine.core';
 import { FramebufferObject, getCurrentFramebuffersPixels } from '../../webgl/webgl';
 import { rectangleA, rectangleE } from '../../webgl/engine.shapes';
-import { flattenRecursive, createNDimArray } from '../../webgl/engine.helpers';
+import { nextPowerOf, flattenRecursive, createNDimArray } from '../../webgl/utils';
 
 
 
@@ -600,17 +600,4 @@ const getIndicesInArray = (pickedValues: number[], allValues: number[]): number[
 
 const getNSmallest = (n: number, values: number[]): number[] => {
     return values.sort(function(a, b){ return a - b; }).slice(0, n);
-};
-
-export const logN = (val: number, root: number): number => {
-    return Math.log(val) / Math.log(root);
-};
-
-export const isPowerOf = (val: number, root: number): boolean => {
-    return logN(val, root) % 1 === 0;
-};
-
-export const nextPowerOf = (val: number, root: number): number => {
-    const exponent = Math.ceil(logN(val, root));
-    return Math.pow(2, exponent);
 };

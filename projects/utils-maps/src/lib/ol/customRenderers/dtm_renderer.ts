@@ -6,8 +6,8 @@ import Static from 'ol/source/ImageStatic';
 import { Shader, Program, Uniform, Texture, Attribute } from '../../webgl/engine.core';
 import { createTextCanvas } from '../../webgl/engine.helpers';
 import { bindProgram } from '../../webgl/webgl';
-import { flattenRecursive } from '../../webgl/math';
 import { ShapeA, rectangleA } from '../../webgl/engine.shapes';
+import { flattenRecursive } from '../../webgl/utils';
 
 
 
