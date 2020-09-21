@@ -4,18 +4,21 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
+import { Feature as olFeature } from 'ol';
 import { Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer,
          Group as olLayerGroup, Image as olImageLayer, Tile as olTileLayer, VectorTile as olVectorTileLayer } from 'ol/layer';
 import { ImageStatic as olStatic, Vector as olVectorSource, ImageWMS as olImageWMS, Cluster as olCluster,
          TileWMS as olTileWMS, VectorTile as olVectorTileSource } from 'ol/source';
 import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON, MVT as olMVT } from 'ol/format';
-import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
+import { Fill as olFill, Stroke as olStroke, Style as olStyle, Circle as olCircle, Text as olText } from 'ol/style';
+import { Point as olPoint } from 'ol/geom';
 
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
-import { DtmLayer } from './customRenderers/dtm_renderer';
-import { BarsLayer } from './customRenderers/threejs_renderer';
-import { munichPolys, heatMapData, vectorLayerData } from './resources/features';
+import { munichPolys, heatMapData, vectorLayerData, crescentPoints } from './resources/features';
 import { SunlightComponent } from '../../components/sunlight/sunlight.component';
+import { InterpolationSettingsComponent } from '../../components/interpolation-settings/interpolation-settings.component';
+import { BarsLayer } from './customRenderers/threejs_renderer';
+import { InterpolationLayer, ColorRamp, DtmLayer } from '@dlr-eoc/utils-maps';
 
 
 @Component({
@@ -49,7 +52,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.mapSvc.setProjection('EPSG:4326');
     this.addLayers();
   }
 
@@ -283,11 +285,89 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       description: `<p>This layer demonstrates how a common 3d-library, three.js, can be integrated in a 2d-map. Using three.js often yields less verbose code than calling WebGL directly.</p>`
     });
 
+
+    const metersPerUnit = this.mapSvc.map.getView().getProjection().getMetersPerUnit();
+    const crescentSource = new olVectorSource({
+      features: this.mapSvc.geoJsonToFeatures(crescentPoints)
+    });
+    const clusteredCrescentSource = new olCluster({
+      source: crescentSource,
+      distance: 25  // pixel
+    });
+    const valueParameter = 'SWH';
+    const colorRamp: ColorRamp = [
+      { val: 0.0,   rgb: [166, 97, 26]    },
+      { val: 0.4,   rgb: [223, 194, 125]  },
+      { val: 0.8,   rgb: [247, 247, 247]  },
+      { val: 2.0,   rgb: [128, 205, 193]  },
+      { val: 22.5,  rgb: [1, 133, 113]    },
+    ];
+    const interpolationLayer = new CustomLayer({
+      id: 'interpolation',
+      name: 'Interpolation',
+      custom_layer: new InterpolationLayer({
+        source: clusteredCrescentSource,
+        style: (feature: olFeature<any>, resolution: number): olStyle => {
+          const features = feature.getProperties().features;
+          let labelText: string;
+          if (features.length > 1) {
+            labelText = `${feature.getProperties().features.length}`;
+          } else {
+            labelText = `${Number.parseFloat(features[0].getProperties()[valueParameter]).toPrecision(3)}`;
+          }
+
+          return new olStyle({
+            image: new olCircle({
+              radius: 13,
+              fill: new olFill({
+                color: 'rgba(0, 153, 255, 0.2)',
+              }),
+              stroke: new olStroke({
+                color: 'rgba(255, 255, 255, 0.2)',
+                width: 1,
+              })
+            }),
+            text: new olText({
+              text: labelText,
+              overflow: true,
+              offsetX: -((labelText.length * 5) / 2),
+              offsetY: 1,
+              textAlign: 'left',
+              fill: new olFill({
+                color: '#ffffff'
+              }),
+            })
+          });
+        },
+        renderSettings: {
+          maxEdgeLength: 15000 / metersPerUnit,
+          power: 2.0,
+          colorRamp: colorRamp,
+          smooth: true,
+          showLabels: false,
+          valueProperty: valueParameter,
+          storeInterpolatedPixelData: false
+        }
+      }),
+      action: {
+        component: InterpolationSettingsComponent,
+        inputs: {
+          changeHandler: (power: number, smooth: boolean, labels: boolean) => {
+            (interpolationLayer.custom_layer as InterpolationLayer).updateParas(power, smooth, labels);
+          }
+        }
+      },
+      filtertype: 'Layers',
+      opacity: 0.7,
+      visible: false,
+      description: 'This layer is an example of how WebGL can be used to outsource computationally expensive operations. For inverse-distance interpolation we need to account for every datapoint at every pixel.'
+    });
+
     const layerGroup2 = new LayerGroup({
       name: 'Webgl Group',
       filtertype: 'Layers',
       id: 'group2',
-      layers: [dtmLayer, barLayer]
+      layers: [dtmLayer, barLayer, interpolationLayer]
     });
 
     const layers = [osmLayer1, layersGroup1, layerGroup2, clusterLayer, vectorTile, imageWmsLayer, kmlLayer, topoJsonLayer, customLayerGroup];

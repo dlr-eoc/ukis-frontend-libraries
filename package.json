@@ -49,6 +49,7 @@
     "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
     "@schematics/angular": "^10.0.8",
     "@webcomponents/webcomponentsjs": "^2.4.4",
+    "delaunator": "^4.0.1",
     "md5": "^2.2.1",
     "ogc-schemas": "^2.6.1",
     "ol": "^6.4.3",
@@ -56,10 +57,10 @@
     "parse5-html-rewriting-stream": "^5.1.1",
     "proj4": "^2.6.2",
     "rxjs": "~6.6.0",
+    "three": "^0.118.3",
     "tslib": "^2.0.1",
     "w3c-schemas": "^1.4.0",
-    "zone.js": "~0.10.3",
-    "three": "^0.118.3"
+    "zone.js": "~0.10.3"
   },
   "dependenciesFromProjects": [
     "md5",

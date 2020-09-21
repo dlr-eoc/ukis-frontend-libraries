@@ -1,3 +1,14 @@
+### Features
+* **@dlr-eoc/utils-maps:**:
+  - created new custom renderer `InterpolationRenderer`.
+    - Takes a vector-source (or a clustered vector-source) and does inverse-distance-interpolation on every pixel between the data points.
+    - Allows user to optionally style data-point-labels just like any other openlayers vector-layer.
+  - extended webgl-utils to handle textures that are not intended for display, but for data-transmission to and from shaders.
+
+### Refactoring
+* **@dlr-eoc/utils-maps:**:
+  - moved existing custom renderers out of `demo-maps` into `utils-maps`, since they have no dependencies on angular and can be used in any openlayers project.
+
 # [7.2.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.2.0) (2020-08-31) (Npm packages and a lot of features and bug fixes)
 
 ### Bug Fixes
