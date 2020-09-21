@@ -2,6 +2,7 @@
  * Public API Surface of utils-maps
  */
 
+export * from './lib/ol/utils-ol-data';
 export * from './lib/ol/utils-ol-canvas';
 export * from './lib/ol//utils-ol-layers';
 export * from './lib/ol/customRenderers/dtm_renderer';
