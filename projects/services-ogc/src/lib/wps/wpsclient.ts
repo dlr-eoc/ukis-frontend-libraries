@@ -1,4 +1,5 @@
-import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription, WpsData, WpsState, isWpsState, WpsDataDescription } from './wps_datatypes';
+import { WpsMarshaller, WpsInput, WpsVerion, WpsResult, WpsOutputDescription, WpsData, WpsState,
+    isWpsState, WpsDataDescription, WpsCapability, WpsProcessDescription } from './wps_datatypes';
 import { WpsMarshaller100 } from './wps100/wps_marshaller_1.0.0';
 import { WpsMarshaller200 } from './wps200/wps_marshaller_2.0.0';
 import { Observable, of } from 'rxjs';
@@ -55,7 +56,7 @@ export class WpsClient {
     }
 
 
-    getCapabilities(url: string): Observable<any> {
+    getCapabilities(url: string): Observable<WpsCapability[]> {
         const getCapabilitiesUrl = this.wpsmarshaller.getCapabilitiesUrl(url);
         return this.getRaw(getCapabilitiesUrl).pipe(
             map((response: any) => {
@@ -66,8 +67,14 @@ export class WpsClient {
     }
 
 
-    describeProcess(processId: string): Observable<any> {
-        throw new Error('Not implemented yet');
+    describeProcess(url: string, processId: string): Observable<WpsProcessDescription> {
+        const describeProcessUrl = this.wpsmarshaller.getDescribeProcessUrl(url, processId);
+        return this.getRaw(describeProcessUrl).pipe(
+            map((response: any) => {
+                const responseJson = this.xmlunmarshaller.unmarshalString(response);
+                return this.wpsmarshaller.unmarshalProcessDescription(responseJson.value);
+            })
+        );
     }
 
 

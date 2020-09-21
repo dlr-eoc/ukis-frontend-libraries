@@ -80,11 +80,22 @@ export interface WpsCapability {
 }
 
 
+export interface WpsProcessDescription {
+  id: string;
+  processVersion: string;
+  title?: string;
+  description?: string;
+  inputs: WpsInput[];
+  outputs: WpsResult[];
+}
+
+
 export interface WpsMarshaller {
 
   executeUrl(url: string, processId: string): string;
   dismissUrl(serverUrl: string, processId: string, jobId: string): string;
   getCapabilitiesUrl(baseurl: string): string;
+  getDescribeProcessUrl(baseurl: string, processId: string): string;
 
   marshalExecBody(processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[], async: boolean): any;
   marshallGetStatusBody(serverUrl: string, processId: string, statusId: string): any;
@@ -92,6 +103,7 @@ export interface WpsMarshaller {
   marshalDismissBody(jobId: string): any;
 
   unmarshalCapabilities(capabilitiesJson: any): WpsCapability[];
+  unmarshalProcessDescription(processDescriptionJson: any): WpsProcessDescription;
   unmarshalSyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[];
   unmarshalAsyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsState;
   unmarshalGetStateResponse(jsonResponse: any, serverUrl: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsState;

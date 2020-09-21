@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { WpsClient } from './wpsclient';
 import { HttpClient, HttpXhrBackend, XhrFactory, HttpRequest } from '@angular/common/http';
-import { pollUntil } from './utils/polling';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { tap, map } from 'rxjs/operators';
 import { forkJoin, of, Observable } from 'rxjs';
@@ -11,7 +9,11 @@ import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_
 import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 = WPS_1_0_0_Factory.WPS_1_0_0;
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
 import { Jsonix } from '@michaellangbein/jsonix';
-import { WpsData, WpsDataDescription, WpsVerion, isWpsState } from './wps_datatypes';
+import { FakeWpsServer } from './fake_wps_server';
+import { PollableServer } from './pollable_server';
+import { pollUntil } from '../utils/polling';
+import { WpsClient } from '../wpsclient';
+import { isWpsState, WpsData, WpsDataDescription, WpsVerion } from '../wps_datatypes';
 
 class MyXhrFactory extends XhrFactory {
   build(): XMLHttpRequest {
@@ -20,143 +22,9 @@ class MyXhrFactory extends XhrFactory {
 }
 
 
-class PollableServer {
-
-  private callCount = 0;
-
-  constructor(private maxCallCount: number, private waitResponse: string, private finalResponse: string) { }
-
-  public call(): Observable<string> {
-    return of('1').pipe(
-      map(_ => {
-        console.log(`server queried. current call count: ${this.callCount}`);
-        let out;
-        if (this.callCount <= this.maxCallCount) {
-          out = this.waitResponse;
-        } else {
-          out = this.finalResponse;
-        }
-        this.callCount += 1;
-        return out;
-      })
-    );
-  }
-}
-
-class FakeWpsServer {
-
-  constructor(
-    private network: HttpTestingController,
-    private url: string) {
-    const requests = this.network.match((req: HttpRequest<any>) => {
-      return req.url === this.url;
-    });
-
-    this.handle(requests);
-  }
-
-  private handle(requests: TestRequest[]) {
-    for (const request of requests) {
-      // const requestType = this.getRequestType(request);
-      // switch (requestType) {
-      //     case 'Execute':
-      //         this.acceptExecuteRequest(request);
-      //         break;
-      //     case 'Status':
-      //         this.returnStatus(request);
-      //         break;
-      //     case 'GetResults':
-      //         this.sendResults(request);
-      //         break;
-      // }
-    }
-  }
-
-}
 
 
-
-
-function createRequestAcceptedResponse(serverUrl: string, pId: string): string {
-  const currentStateUrl = `${serverUrl}?retrieveState`;
-  return `
-    <wps:ExecuteResponse
-        xmlns:wps='http://www.opengis.net/wps/1.0.0'
-        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-        xmlns:ows='http://www.opengis.net/ows/1.1'
-        xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd'
-        serviceInstance='${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS'
-        xml:lang='en-US'
-        service='WPS'
-        version='1.0.0'
-        statusLocation='${currentStateUrl}'>
-        <wps:Process wps:processVersion='1.0.0'>
-        <ows:Identifier>${pId}</ows:Identifier>
-        </wps:Process>
-        <wps:Status creationTime='2019-10-04T13:23:43.830Z'>
-        <wps:ProcessAccepted>Process Accepted</wps:ProcessAccepted>
-        </wps:Status>
-        </wps:ExecuteResponse>
-        `;
-}
-
-function createWaitResponse(serverUrl: string, pId: string): string {
-  const currentStateUrl = `${serverUrl}?retrieveState`;
-  return `
-    <wps:ExecuteResponse
-        xmlns:wps='http://www.opengis.net/wps/1.0.0'
-        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-        xmlns:ows='http://www.opengis.net/ows/1.1'
-        xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd'
-        serviceInstance='${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS'
-        xml:lang='en-US'
-        service='WPS'
-        version='1.0.0'
-        statusLocation='${currentStateUrl}'>
-        <wps:Process wps:processVersion='1.0.0'>
-            <ows:Identifier>${pId}</ows:Identifier>
-        </wps:Process>
-        <wps:Status creationTime='2019-10-04T13:23:43.830Z'>
-            <wps:ProcessStarted percentCompleted='0'/>
-        </wps:Status>
-    </wps:ExecuteResponse>
-    `;
-}
-
-function createSuccessResponse(serverUrl: string, pId: string, outputId: string): string {
-  const currentStateUrl = `${serverUrl}?retrieveState`;
-  const resultUrl = `${serverUrl}?retrieveResult`;
-  return `
-    <wps:ExecuteResponse
-        xmlns:wps='http://www.opengis.net/wps/1.0.0'
-        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-        xmlns:ows='http://www.opengis.net/ows/1.1'
-        xsi:schemaLocation='http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd'
-        serviceInstance='${serverUrl}?REQUEST=GetCapabilities&amp;SERVICE=WPS'
-        xml:lang='en-US'
-        service='WPS'
-        version='1.0.0'
-        statusLocation='${currentStateUrl}'>
-        <wps:Process wps:processVersion='1.0.0'>
-            <ows:Identifier>${pId}</ows:Identifier>
-        </wps:Process>
-        <wps:Status creationTime='2019-10-04T13:23:43.830Z'>
-            <wps:ProcessSucceeded>Process successful</wps:ProcessSucceeded>
-        </wps:Status>
-        <wps:ProcessOutputs>
-            <wps:Output>
-                <ows:Identifier>${outputId}</ows:Identifier>
-                <wps:Reference
-                    encoding='UTF-8' mimeType='text/xml'
-                    href='${resultUrl}'/>
-            </wps:Output>
-        </wps:ProcessOutputs>
-    </wps:ExecuteResponse>
-`;
-}
-
-
-describe(`Testing polling funcitonality`, () => {
+fdescribe(`Testing polling funcitonality`, () => {
 
 
   beforeEach(() => {
@@ -223,6 +91,7 @@ describe(`Testing polling funcitonality`, () => {
     const mockHttpClient = TestBed.inject(HttpClient);
     const wpsClient: WpsClient = new WpsClient('1.0.0', mockHttpClient);
     const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
+    const fakeWpsServer = new FakeWpsServer();
 
     const url1 = 'wpsserver1.com';
     const pId1 = 'p1';
@@ -247,18 +116,38 @@ describe(`Testing polling funcitonality`, () => {
     });
 
     const post1 = httpMockServer.expectOne(url1 + '?service=WPS&request=Execute&version=1.0.0&identifier=' + pId1);
-    post1.flush(createRequestAcceptedResponse(url1, pId1));
+    post1.flush(fakeWpsServer.createRequestAcceptedResponse(url1, pId1));
     const get1 = httpMockServer.expectOne(url1 + '?retrieveState');
-    get1.flush(createSuccessResponse(url1, pId1, 'outId1'));
+    get1.flush(fakeWpsServer.createSuccessResponse(url1, pId1, 'outId1'));
 
     const post2 = httpMockServer.expectOne(url2 + '?service=WPS&request=Execute&version=1.0.0&identifier=' + pId2);
-    post2.flush(createRequestAcceptedResponse(url2, pId2));
+    post2.flush(fakeWpsServer.createRequestAcceptedResponse(url2, pId2));
     const get2 = httpMockServer.expectOne(url2 + '?retrieveState');
-    get2.flush(createSuccessResponse(url2, pId2, 'outId2'));
+    get2.flush(fakeWpsServer.createSuccessResponse(url2, pId2, 'outId2'));
 
     httpMockServer.verify();
 
   }, 10000);
+
+  fit('#describeProcess should work as expected', (done) => {
+    const mockHttpClient = TestBed.inject(HttpClient);
+    const wpsClient: WpsClient = new WpsClient('2.0.0', mockHttpClient);
+    const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
+    const fakeWpsServer = new FakeWpsServer();
+
+    const url = 'server.com';
+    const processId = 'processId';
+
+    const request$ = wpsClient.describeProcess(url, processId);
+    request$.subscribe(results => {
+      expect(results).toBeTruthy();
+      expect(results.inputs[0].description.id).toBeTruthy();
+      done();
+    });
+
+    const testRequest = httpMockServer.expectOne(`${url}?service=WPS&request=DescribeProcess&version=2.0.0&Language=en&Identifier=${processId}`);
+    testRequest.flush(fakeWpsServer.createDescribeProcessResponse200());
+  });
 });
 
 /**

@@ -1,5 +1,5 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsDataDescription, WpsData, WpsState } from '../wps_datatypes';
-import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitionType, IWpsExecuteProcessBody, IWpsExecuteResponse, IGetStatusRequest, Data, IGetResultRequest, IDismissRequest, IDismissResponse } from './wps_2.0';
+import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsDataDescription, WpsData, WpsState, WpsProcessDescription, WpsDataFormat } from '../wps_datatypes';
+import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitionType, IWpsExecuteProcessBody, IWpsExecuteResponse, IGetStatusRequest, Data, IGetResultRequest, IDismissRequest, IDismissResponse, ProcessOfferings, InputDescriptionType, OutputDescriptionType } from './wps_2.0';
 import { isStatusInfo, isResult } from './helpers';
 
 
@@ -9,6 +9,89 @@ export class WpsMarshaller200 implements WpsMarshaller {
 
   getCapabilitiesUrl(baseurl: string): string {
     return `${baseurl}?service=WPS&request=GetCapabilities&version=2.0.0`;
+  }
+
+  getDescribeProcessUrl(baseurl: string, processId: string): string {
+    return `${baseurl}?service=WPS&request=DescribeProcess&version=2.0.0&Language=en&Identifier=${processId}`;
+  }
+
+  unmarshalProcessDescription(processDescriptionJson: ProcessOfferings): WpsProcessDescription {
+    const description = processDescriptionJson.processOffering[0];
+
+    const inputs: WpsInput[] = [];
+    for (const dataInput of description.process.input) {
+      inputs.push({
+        description: this.unmarshalInputDescription(dataInput),
+        value: null
+      });
+    }
+
+    const outputs: WpsResult[] = [];
+    for (const processOutput of description.process.output) {
+      outputs.push({
+        description: this.unmarshalOutputDescription(processOutput),
+        value: null
+      });
+    }
+
+    return {
+      id: description.process.identifier.value,
+      processVersion: description.processVersion,
+      description: description.process._abstract?.value,
+      title: description.process.title.value,
+      inputs: inputs,
+      outputs: outputs,
+    };
+  }
+
+  protected unmarshalInputDescription(dataInput: InputDescriptionType): WpsDataDescription {
+    if (dataInput.dataDescription.name.localPart === 'BoundingBoxData') {
+      return {
+        id: dataInput.identifier.value,
+        reference: false,
+        type: 'bbox'
+      };
+    } else if (dataInput.dataDescription.name.localPart === 'LiteralData') {
+      return {
+        id: dataInput.identifier.value,
+        reference: false,
+        type: 'literal'
+      };
+    } else if (dataInput.dataDescription.name.localPart === 'ComplexData') {
+      return {
+        id: dataInput.identifier.value,
+        reference: true,
+        type: 'complex',
+        format: dataInput.dataDescription.value.format[0].mimeType as WpsDataFormat
+      };
+    } else {
+      throw new Error(`Cannot unmarshal input-description ${dataInput.identifier.value}`);
+    }
+  }
+
+  protected unmarshalOutputDescription(processOutput: OutputDescriptionType): WpsDataDescription {
+    if (processOutput.dataDescription.name.localPart === 'BoundingBoxData') {
+      return {
+        id: processOutput.identifier.value,
+        reference: false,
+        type: 'bbox'
+      };
+    } else if (processOutput.dataDescription.name.localPart === 'LiteralData') {
+      return {
+        id: processOutput.identifier.value,
+        reference: false,
+        type: 'literal'
+      };
+    } else if (processOutput.dataDescription.name.localPart === 'ComplexData') {
+      return {
+        id: processOutput.identifier.value,
+        reference: true,
+        type: 'complex',
+        format: processOutput.dataDescription.value.format[0].mimeType as WpsDataFormat
+      };
+    } else {
+      throw new Error(`Cannot unmarshal input-description ${processOutput.identifier.value}`);
+    }
   }
 
   executeUrl(baseurl: string, processId: string): string {

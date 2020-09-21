@@ -55,7 +55,7 @@ export interface DataType {
 }
 
 export interface ComplexDataCombinationsType {
-  format: any;
+  format: ComplexDataDescriptionType[];
 }
 
 export interface ResponseDocumentType {
@@ -66,8 +66,9 @@ export interface ResponseDocumentType {
 }
 
 export interface ProcessDescriptionType_ProcessOutputs {
-  output: any;
+  output: OutputDescriptionType[];
 }
+
 
 export interface InputReferenceType_Header {
   key: string;
@@ -79,6 +80,8 @@ export interface ProcessOfferings {
 }
 
 export interface SupportedComplexDataInputType {
+  supported: ComplexDataCombinationsType;
+  _default: ComplexDataCombinationType;
   maximumMegabytes?: any;
 }
 
@@ -155,9 +158,11 @@ export interface DescribeProcess {
 }
 
 export interface OutputDescriptionType {
-  complexOutput: any;
-  literalOutput: any;
-  boundingBoxOutput: any;
+  identifier: CodeType;
+  title: LanguageStringType;
+  complexOutput?: SupportedComplexDataType;
+  literalOutput?: LiteralOutputType;
+  boundingBoxOutput?: BoundingBoxType;
 }
 
 export interface ProcessDescriptions {
@@ -165,11 +170,16 @@ export interface ProcessDescriptions {
 }
 
 export interface InputDescriptionType {
-  complexData: any;
-  literalData: any;
-  boundingBoxData: any;
-  minOccurs: any;
-  maxOccurs: any;
+  identifier: CodeType;
+  complexData?: SupportedComplexDataInputType;
+  literalData?: InputDescriptionType;
+  boundingBoxData?: SupportedCRSsType;
+  minOccurs: number;
+  maxOccurs: number;
+  title: LanguageStringType;
+  _abstract?: LanguageStringType;
+  statusSupported: boolean;
+  storeSupported: boolean;
 }
 
 export interface RequestBaseType {
@@ -195,11 +205,16 @@ export interface LiteralOutputType {
 }
 
 export interface ProcessDescriptionType {
-  processOutputs: any;
-  dataInputs?: any;
-  storeSupported?: any;
-  statusSupported?: any;
+  processOutputs: ProcessDescriptionType_ProcessOutputs;
+  dataInputs: ProcessDescriptionType_DataInputs;
+  storeSupported?: boolean;
+  statusSupported?: boolean;
+  processVersion: string;
+  identifier: CodeType;
+  title: LanguageStringType;
+  _abstract?: LanguageStringType;
 }
+
 
 export interface StatusType {
   processAccepted: string;
@@ -310,8 +325,10 @@ export interface DocumentOutputDefinitionType {
 }
 
 export interface ProcessDescriptionType_DataInputs {
-  input: any;
+  input: InputDescriptionType[];
 }
+
+
 
 export interface OutputDefinitionType {
   identifier: CodeType;
@@ -371,3 +388,9 @@ export interface IWpsExecuteResponse {
 }
 
 
+export interface IWpsDescribeProcessResponse {
+  lang: string;
+  service: "WPS";
+  version: "1.0.0";
+  processDescription: ProcessDescriptionType[]
+}
