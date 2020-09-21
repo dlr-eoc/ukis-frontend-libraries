@@ -1,18 +1,12 @@
-/**
- * NOTE: this file has been commented out:
- * While it serves as a nice illustration, it does depend on an external dependency (delaunator)
- * that we would rather not have to include without need.
- */
-
-
-
 import { Feature } from 'ol';
 import { FrameState } from 'ol/PluggableMap';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import Point from 'ol/geom/Point';
 import Delaunator from 'delaunator';
-import { Shader, Framebuffer, rectangle, Program, Attribute, Uniform, flattenMatrix, Texture, renderLoop } from '@dlr-eoc/utils-maps';
+import { Shader, Framebuffer, Program, Uniform, Texture, renderLoop, Attribute } from '../../webgl/engine.core';
+import { rectangleA } from '../../webgl/engine.shapes';
+import { flattenRecursive } from '../../webgl/utils';
 
 
 export class WindFieldLayer extends VectorLayer {
@@ -73,7 +67,7 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
         const aObservation = this.pointsToObservations(features);
 
         const gl = canvas.getContext('webgl');
-        const rect = rectangle(2.0, 2.0);
+        const rect = rectangleA(2.0, 2.0);
 
 
 
@@ -103,12 +97,12 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
         const interpolShader = new Shader(interpolProgram, [
             new Attribute(gl, interpolProgram, 'a_observation', aObservation)
         ], [
-            new Uniform(gl, interpolProgram, 'u_world2pix', 'matrix3fv', flattenMatrix([
+            new Uniform(gl, interpolProgram, 'u_world2pix', 'mat3', flattenRecursive([
                 [1., 0., 0.],
                 [0., 1., 0.],
                 [0., 0., 1.]
             ])),
-            new Uniform(gl, interpolProgram, 'u_pix2canv', 'matrix3fv', flattenMatrix([
+            new Uniform(gl, interpolProgram, 'u_pix2canv', 'mat3', flattenRecursive([
                 [1. /  (canvas.width / 2),  0.,                        0. ],
                 [0,                        -1. / (canvas.height / 2),  0. ],
                 [-1.,                      1.,                         1. ]
@@ -180,7 +174,7 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
             new Attribute(gl, particleProgram, 'a_vertex', rect.vertices),
             new Attribute(gl, particleProgram, 'a_textureCoord', rect.texturePositions)
         ], [
-            new Uniform(gl, particleProgram, 'u_deltaT', '1f', [0.01])
+            new Uniform(gl, particleProgram, 'u_deltaT', 'float', [0.01])
         ], [
             new Texture(gl, particleProgram, 'u_forceTexture', interpolFb.fbo.texture, 0),
             new Texture(gl, particleProgram, 'u_particleTexture', particleFb1.fbo.texture, 1)
@@ -298,7 +292,7 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
             [c2pT[2],   c2pT[3],    0. ],
             [c2pT[4],   c2pT[5],    1. ]
         ];
-        this.interpolationShader.updateUniformData(this.gl, 'u_world2pix', flattenMatrix(worldToPixelTransform));
+        this.interpolationShader.updateUniformData(this.gl, 'u_world2pix', flattenRecursive(worldToPixelTransform));
 
         // update pix2canvas
         const pix2canv = [
@@ -306,7 +300,7 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
             [0,                              -1. / (this.canvas.height / 2),  0. ],
             [-1.,                            1.,                              1. ]
         ];
-        this.interpolationShader.updateUniformData(this.gl, 'u_pix2canv', flattenMatrix(pix2canv));
+        this.interpolationShader.updateUniformData(this.gl, 'u_pix2canv', flattenRecursive(pix2canv));
 
         // bind new data and render
         this.interpolationShader.bind(this.gl);
@@ -324,9 +318,9 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
     private pointsToObservations(features: Feature<Point>[]): number[][] {
 
         const pointToObservation = (feature: Feature<Point>): number[] => {
-            const coordinates = feature.getGeometry().getCoordinates();
+            const coords = feature.getGeometry().getCoordinates();
             const props = feature.getProperties();
-            return [coordinates[0], coordinates[1], props.wind[0], props.wind[1]];
+            return [coords[0], coords[1], props.wind[0], props.wind[1]];
         };
 
         const coordinates = features.map(f => f.getGeometry().getCoordinates());

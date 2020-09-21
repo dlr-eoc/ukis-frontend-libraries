@@ -26,6 +26,21 @@ Example usage:
   });
 ```
 
+Custom renderers. Openlayers allows us to define our own, custom renderers. Currently we have: 
+ - `minimal_renderer` contains an absolute minimal example of what is required to create a custom renderer
+ - `dtm_renderer` illustrates how WebGL can make use of normal-maps 
+ - `particle_renderer` procedurally generates little white particles that move along a force-field (that the user may change at any point)
+ - `interpolation_renderer` does an inverse distance interpolation between a set of data-points on a per-pixel basis.
+
+
+### webgl
+
+This is a simple object-oriented abstraction of the webgl-api.
+ - `webgl.ts` contains a very simple wrapper around the native webgl-api-calls. It only attempts to group commonly associated operations and abstract away the details of data-assignment.
+ - `engine.core.ts` is a object-oriented wrapper around `webgl.ts`. Creating an instance of the class `Shader` will make sure the programmer has provided all the required attributes, uniforms, textures and indices, and also simplify binding and drawing. There's even some - limited - glsl-parsing to avoid the most common errors in shader-programming.
+ - `engine.shapes.ts` contains a few commonly used vertex-primitives like triangles, rectangles, boxes, etc., as well as shape-building helpers like a Bezier-curve creator.
+
+
 ### Development
 The `utils` libraries are all designed to have no production dependencies on angular. The primary objective here is to create utilities that can be used in other frameworks or framework-independent. Such utilities might take on the form of libraries of webcomponents. 
 

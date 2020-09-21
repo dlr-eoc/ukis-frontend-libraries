@@ -33,6 +33,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
 import { ExampleLayerActionComponent } from './components/example-layer-action/example-layer-action.component';
 import { SunlightComponent } from './components/sunlight/sunlight.component';
+import { InterpolationSettingsComponent } from './components/interpolation-settings/interpolation-settings.component';
 import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
 
 @NgModule({
@@ -55,7 +56,8 @@ import { RouteMap8Component } from './route-components/route-example-threejs/rou
     RouteLicensesComponent,
     ExampleLayerActionComponent,
     SunlightComponent,
-    RouteMap8Component
+    RouteMap8Component,
+    InterpolationSettingsComponent
   ],
   imports: [
     BrowserModule,

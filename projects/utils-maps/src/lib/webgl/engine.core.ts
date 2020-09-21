@@ -1,4 +1,4 @@
-import { createShaderProgram, setup3dScene, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, getUniformLocation, bindValueToUniform, clearBackground, BufferObject, UniformType, bindProgram, createTexture, bindTextureToUniform, TextureObject, FramebufferObject, bindFramebuffer, bindOutputCanvasToFramebuffer, updateBufferData, bindTextureToFramebuffer, createEmptyTexture, createFramebuffer, updateTexture, createIndexBuffer, IndexBufferObject, drawArray } from './webgl';
+import { createShaderProgram, setup3dScene, createFloatBuffer, getAttributeLocation, bindBufferToAttribute, getUniformLocation, bindValueToUniform, clearBackground, BufferObject, WebGLVariableType, bindProgram, createTexture, bindTextureToUniform, TextureObject, FramebufferObject, bindFramebuffer, bindOutputCanvasToFramebuffer, updateBufferData, bindTextureToFramebuffer, createEmptyTexture, createFramebuffer, updateTexture, createIndexBuffer, IndexBufferObject, drawArray, drawElements, bindIndexBuffer, createDataTexture, updateViewPort } from './webgl';
 
 
 // dead-simple hash function - not intended to be secure in any way.
@@ -35,7 +35,7 @@ export class Program implements IProgram {
 
 export interface IUniform {
     location: WebGLUniformLocation;
-    type: UniformType;
+    type: WebGLVariableType;
     value: number[];
     variableName: string;
 }
@@ -44,11 +44,11 @@ export interface IUniform {
 export class Uniform implements IUniform {
 
     readonly location: WebGLUniformLocation;
-    readonly type: UniformType;
+    readonly type: WebGLVariableType;
     readonly value: number[];
     readonly variableName: string;
 
-    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, type: UniformType, data: number[]) {
+    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, type: WebGLVariableType, data: number[]) {
         this.location = getUniformLocation(gl, program.program, variableName);
         this.type = type;
         this.value = data;
@@ -83,6 +83,20 @@ export class Texture implements ITexture {
     }
 }
 
+export class DataTexture implements ITexture {
+    readonly location: WebGLUniformLocation;
+    readonly bindPoint: number;
+    readonly texture: TextureObject;
+    readonly variableName: string;
+
+    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, data: number[][][], bindPoint: number) {
+        this.location = getUniformLocation(gl, program.program, variableName);
+        this.texture = createDataTexture(gl, data);
+        this.bindPoint = bindPoint;
+        this.variableName = variableName;
+    }
+}
+
 
 export interface IAttribute {
     location: number;
@@ -91,6 +105,8 @@ export interface IAttribute {
 }
 
 
+export type GlDrawingMode = 'triangles' | 'points' | 'lines';
+
 export class Attribute implements IAttribute {
 
     readonly location: number;
@@ -98,32 +114,50 @@ export class Attribute implements IAttribute {
     readonly variableName: string;
     readonly drawingMode: number;
 
-    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, data: number[][], drawingMode: number = gl.TRIANGLES) {
+    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, data: number[][], drawingMode: GlDrawingMode = 'triangles') {
+        let glDrawingMode: number;
+        switch (drawingMode) {
+            case 'triangles':
+                glDrawingMode = gl.TRIANGLES;
+                break;
+            case 'lines':
+                glDrawingMode = gl.LINES;
+                break;
+            case 'points':
+                glDrawingMode = gl.POINTS;
+                break;
+            default:
+                throw new Error(`Invalid drawing mode ${drawingMode}`);
+        }
         this.location = getAttributeLocation(gl, program.program, variableName);
-        this.value = createFloatBuffer(gl, data, drawingMode);
+        this.value = createFloatBuffer(gl, data, glDrawingMode);
         this.variableName = variableName;
-        this.drawingMode = drawingMode;
+        this.drawingMode = glDrawingMode;
     }
 }
 
 
-/**
- * @TODO: this is not yet used anywhere.
- */
-export class ElementAttribute implements IAttribute {
-    readonly location: number;
-    readonly value: BufferObject;
-    readonly indices: IndexBufferObject;
-    readonly variableName: string;
+export class Index {
+    readonly index: IndexBufferObject;
 
-    constructor(gl: WebGLRenderingContext, program: IProgram, variableName: string, data: number[][], indices: number[][]) {
-        this.location = getAttributeLocation(gl, program.program, variableName);
-        this.value = createFloatBuffer(gl, data);
-        this.indices = createIndexBuffer(gl, indices);
-        this.variableName = variableName;
+    constructor(gl: WebGLRenderingContext, indices: number[][], drawingMode: GlDrawingMode = 'triangles') {
+        let glDrawingMode: number;
+        switch (drawingMode) {
+            case 'triangles':
+                glDrawingMode = gl.TRIANGLES;
+                break;
+            case 'lines':
+                glDrawingMode = gl.LINES;
+                break;
+            case 'points':
+                glDrawingMode = gl.POINTS;
+                break;
+            default:
+                throw new Error(`Invalid drawing mode ${drawingMode}`);
+        }
+        this.index = createIndexBuffer(gl, indices, glDrawingMode);
     }
 }
-
 
 
 function first<T>(arr: T[], condition: (el: T) => boolean): T | null {
@@ -136,10 +170,11 @@ function first<T>(arr: T[], condition: (el: T) => boolean): T | null {
 }
 
 
-function parseProgram(program: IProgram): [string[], string[], string[]] {
+function parseProgram(program: IProgram): [string[], string[], string[], string[]] {
     const attributeRegex = /^\s*attribute (int|float|vec2|vec3|vec4|mat2|mat3|mat4) (\w*);/gm;
     const uniformRegex = /^\s*uniform (int|float|vec2|vec3|vec4|mat2|mat3|mat4) (\w*)(\[\d\])*;/gm;
     const textureRegex = /^\s*uniform sampler2D (\w*);/gm;
+    const precisionRegex = /^\s*precision (\w*) float;/gm;
 
     const shaderCode = program.fragmentShaderSource + '\n\n\n' + program.vertexShaderSource;
 
@@ -159,7 +194,13 @@ function parseProgram(program: IProgram): [string[], string[], string[]] {
         textureNames.push(textureMatches[1]);
     }
 
-    return [attributeNames, uniformNames, textureNames];
+    const precisions = [];
+    let precisionMatches;
+    while ((precisionMatches = precisionRegex.exec(shaderCode)) !== null) {
+        precisions.push(precisionMatches[1]);
+    }
+
+    return [attributeNames, uniformNames, textureNames, precisions];
 }
 
 
@@ -167,11 +208,12 @@ export type RenderMode = 'points' | 'lines' | 'triangles';
 
 interface IShader {
     program: IProgram;
+    index?: Index;
     attributes: IAttribute[];
     uniforms: IUniform[];
     textures: ITexture[];
     bind: (gl: WebGLRenderingContext) => void;
-    render: (gl: WebGLRenderingContext, background?: number[], frameBuffer?: FramebufferObject) => void;
+    render: (gl: WebGLRenderingContext, background?: number[], frameBuffer?: FramebufferObject, viewport?: [number, number, number, number]) => void;
     updateAttributeData: (gl: WebGLRenderingContext, variableName: string, newData: number[][]) => void;
     updateUniformData: (gl: WebGLRenderingContext, variableName: string, newData: number[]) => void;
     updateTextureData: (gl: WebGLRenderingContext, variableName: string, newImage: HTMLImageElement | HTMLCanvasElement) => void;
@@ -182,9 +224,10 @@ export class Shader implements IShader {
         readonly program: IProgram,
         readonly attributes: IAttribute[],
         readonly uniforms: IUniform[],
-        readonly textures: ITexture[]
+        readonly textures: ITexture[],
+        readonly index?: Index
     ) {
-        const [attributeNames, uniformNames, textureNames] = parseProgram(program);
+        const [attributeNames, uniformNames, textureNames, precisions] = parseProgram(program);
         for (const attrName of attributeNames) {
             const found = attributes.filter(a => a.variableName === attrName);
             if (found.length !== 1) {
@@ -203,6 +246,14 @@ export class Shader implements IShader {
                 throw new Error(`Provided ${found.length} values for shader's texture ${texName}.`);
             }
         }
+        if (precisions.length === 1) {
+            console.warn(`You have only provided one precision qualifier.
+            This can cause issues when you want to use a uniform in both the vertex- and the fragment-shader.`);
+        }
+        const lengths = this.attributes.map(a => a.value.vectorCount);
+        if (Math.min(...lengths) !== Math.max(...lengths)) {
+            throw new Error(`Your attributes are not of the same length!`);
+        }
     }
 
     public bind(gl: WebGLRenderingContext): void {
@@ -216,20 +267,28 @@ export class Shader implements IShader {
         for (const t of this.textures) {
             bindTextureToUniform(gl, t.texture.texture, t.bindPoint, t.location);
         }
+        if (this.index) {
+            bindIndexBuffer(gl, this.index.index);
+        }
     }
 
-    public render(gl: WebGLRenderingContext, background?: number[], frameBuffer?: FramebufferObject): void {
+
+    public render(gl: WebGLRenderingContext, background?: number[], frameBuffer?: FramebufferObject, viewport?: [number, number, number, number]): void {
         if (!frameBuffer) {
-            bindOutputCanvasToFramebuffer(gl);
+            bindOutputCanvasToFramebuffer(gl, viewport);
         } else {
-            bindFramebuffer(gl, frameBuffer);
+            bindFramebuffer(gl, frameBuffer, viewport);
         }
         if (background) {
             clearBackground(gl, background);
         }
 
-        const firstAttribute = this.attributes[0].value;
-        drawArray(gl, firstAttribute);
+        if (this.index) {
+            drawElements(gl, this.index.index);
+        } else {
+            const firstAttribute = this.attributes[0];
+            drawArray(gl, firstAttribute.value);
+        }
     }
 
 
@@ -249,10 +308,10 @@ export class Shader implements IShader {
         uniform.value = newData;
     }
 
-    public updateTextureData(gl: WebGLRenderingContext, variableName: string, newImage: HTMLImageElement | HTMLCanvasElement): void {
+    public updateTextureData(gl: WebGLRenderingContext, variableName: string, newImage: HTMLImageElement | HTMLCanvasElement | number[][][]): void {
         const original = first<ITexture>(this.textures, t => t.variableName === variableName);
         if (!original) {
-            throw new Error(`No such original ${variableName} to be updated.`);
+            throw new Error(`No such texture ${variableName} to be updated.`);
         }
         const newTextureObject = updateTexture(gl, original.texture, newImage);
         original.texture = newTextureObject;
