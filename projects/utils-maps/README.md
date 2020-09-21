@@ -1,15 +1,19 @@
 
-## dlr-eoc/utils-maps
+## @dlr-eoc/utils-maps
 
 This library contains a collection of utilities that do not themselves depend on angular.
 
 ### ol
 
-Utilities that help in the management of openlayers. 
+**utils-ol-layers**
+Utilities that help in the management of openlayers layers.
 
- - flattenLayers: layers can be arbitrarily nested. This function flattens such a nested collection.
+  - flattenLayers: layers can be arbitrarily nested. This function flattens such a nested collection.
+  - ...
 
+**utils-ol-canvas**
 Utilities for copying the images of openlayers' multiple canvases into one, ready to download.
+
  - mapToSingleCanvas
  - scaledMapToSingleCanvas
  - simpleMapToCanvas
@@ -26,7 +30,21 @@ Example usage:
   });
 ```
 
-Custom renderers. Openlayers allows us to define our own, custom renderers. Currently we have: 
+**utils-ol-data**
+Utilities to work with data like GeoJson and openlayers.
+
+
+**utils-ol-interaction** 
+Utilities to work with stuff like popups or feature selection.
+
+
+**utils-ol-mapstate** 
+Utilities that help in the management of the mapsate like extent, zoom, center and projection.
+
+
+**Custom renderers**
+Openlayers allows us to define our own, custom renderers. Currently we have:
+
  - `minimal_renderer` contains an absolute minimal example of what is required to create a custom renderer
  - `dtm_renderer` illustrates how WebGL can make use of normal-maps 
  - `particle_renderer` procedurally generates little white particles that move along a force-field (that the user may change at any point)
