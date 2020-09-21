@@ -29,12 +29,11 @@ describe('mapToCanvas test suite', () => {
     // For testing purposes: using an offscreen-canvas as render-target because it doesn't need to be attached to the DOM to allow drawing.
     const imageTargetCanvas = new OffscreenCanvas(300, 400);
 
-    simpleMapToCanvas(map, imageTargetCanvas, 600, 800).then((updatedCanvas: OffscreenCanvas) => {
+    simpleMapToCanvas(map, imageTargetCanvas, 600, 800, ((updatedCanvas: OffscreenCanvas) => {
       const image = updatedCanvas.transferToImageBitmap();
       expect(image.width).toBeTruthy();
       expect(image.height).toBeTruthy();
       done();
-    });
-
+    }));
   });
 });

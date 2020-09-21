@@ -1,10 +1,15 @@
-import { Map, View } from 'ol';
+import { Map } from 'ol';
 import RenderEvent from 'ol/render/Event';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import { Interaction } from 'ol/interaction';
 import { flattenLayers } from './utils-ol-layers';
 import BaseLayer from 'ol/layer/Base';
+
+
+
+
+
 
 
 /**
@@ -22,65 +27,63 @@ import BaseLayer from 'ol/layer/Base';
  * This is the size of the actually drawn image in pixels.
  * Note that this value may differ from clientWidth/clientHeight: that is the size to which the actual image is scaled to in the DOM.
  */
-export async function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas, keepSynced = false) {
-  return new Promise<HTMLCanvasElement | OffscreenCanvas>(async (resolve, reject) => {
-    // Step 0: inspecting targetCanvas
-    const targetContext = targetCanvas.getContext('2d');
-    if (!targetContext) {
-      throw new Error('The target-canvas needs to use a 2d-context.');
-    }
-    if (!targetCanvas.width || !targetCanvas.height) {
-      throw new Error('TargetCanvas: width or height have not been set.');
-    }
-    targetContext.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas,
+  onDone: (updatedTargetCanvas: HTMLCanvasElement | OffscreenCanvas) => void, keepSynced = false): void {
 
-    const mapSize = map.getSize();
-    targetCanvas.width = mapSize[0];
-    targetCanvas.height = mapSize[1];
+  // Step 0: inspecting targetCanvas
+  const targetContext = targetCanvas.getContext('2d');
+  if (!targetContext) {
+    throw new Error('The target-canvas needs to use a 2d-context.');
+  }
+  if (!targetCanvas.width || !targetCanvas.height) {
+    throw new Error('TargetCanvas: width or height have not been set.');
+  }
+  targetContext.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
 
-    const layers: BaseLayer[] = flattenLayers(map.getLayers().getArray());
-    const subscriptions: EventsKey[] = [];
-    for (const layer of layers) {
-      if (layer.getVisible() && layer.getOpacity() > 0.0) {
-        // Step 2: catch each layer's postrender event.
-        // Note that ol/renderer/webgl/* does not call `this.postRender(context, frameState)`
-        // in `renderFrame` - so heatmaps won't be copied here!
-        const key = layer.on('postrender', (event: RenderEvent) => {
-          const sourceContext = event.context;
-          const sourceCanvas = sourceContext.canvas;
-          // Step 3: copy source bitmap to target-canvas.
-          targetContext.drawImage(sourceCanvas, 0, 0, sourceCanvas.clientWidth, sourceCanvas.clientHeight, 0, 0, targetCanvas.width, targetCanvas.height);
-          console.log('layer postrender', layer);
-        });
-        if (Array.isArray(key)) {
-          key.forEach(k => subscriptions.push(k));
-        } else {
-          subscriptions.push(key);
-        }
+  const mapSize = map.getSize();
+  const mapResolution = map.getView().getResolution();
+  targetCanvas.width = mapSize[0];
+  targetCanvas.height = mapSize[1];
+
+  const layers: BaseLayer[] = flattenLayers(map.getLayers().getArray());
+  const subscriptions: EventsKey[] = [];
+  for (const layer of layers) {
+    if (layer.getVisible() && layer.getOpacity() > 0.0) {
+      // Step 2: catch each layer's postrender event.
+      // Note that ol/renderer/webgl/* does not call `this.postRender(context, frameState)`
+      // in `renderFrame` - so heatmaps won't be copied here!
+      const key = layer.on('postrender', (event: RenderEvent) => {
+        const sourceContext = event.context;
+        const sourceCanvas = sourceContext.canvas;
+        // Step 3: copy source bitmap to target-canvas.
+        targetContext.drawImage(sourceCanvas, 0, 0, sourceCanvas.clientWidth, sourceCanvas.clientHeight, 0, 0, targetCanvas.width, targetCanvas.height);
+      });
+      if (Array.isArray(key)) {
+        key.forEach(k => subscriptions.push(k));
+      } else {
+        subscriptions.push(key);
       }
     }
+  }
 
-    if (keepSynced) {
-      map.on('rendercomplete', (evt: RenderEvent) => {
-        console.log(`map.onc('rendercomplete')`);
-        resolve(targetCanvas);
-      });
+  if (keepSynced) {
+    map.on('rendercomplete', (evt: RenderEvent) => {
+      onDone(targetCanvas);
+    });
+  } else {
+    // if we don't want the canvas to remain in sync with the map, we unsubscribe to further changes here.
+    map.once('rendercomplete', (evt: RenderEvent) => {
+      // note that a map-render-event does not have a context ... contrary to a layer-render-event.
+      for (const key of subscriptions) {
+        unByKey(key);
+      }
+      onDone(targetCanvas);
+    });
+  }
 
-    } else {
-      // if we don't want the canvas to remain in sync with the map, we unsubscribe to further changes here.
-      map.once('rendercomplete', (evt: RenderEvent) => {
-        // note that a map-render-event does not have a context ... contrary to a layer-render-event.
-        for (const key of subscriptions) {
-          unByKey(key);
-        }
-        console.log(`map.once('rendercomplete')`);
-        resolve(targetCanvas);
-      });
-    }
+  // Step 1: trigger a re-render of the map.
+  map.renderSync();
 
-    // Step 1: trigger a re-render of the map.
-    map.renderSync();
-  });
 }
 
 
@@ -98,7 +101,8 @@ export async function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElemen
  * This is the size of the actually drawn image in pixels.
  * Note that this value may differ from clientWidth/clientHeight: that is the size to which the actual image is scaled to in the DOM.
  */
-export async function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas, keepSynced = false) {
+export function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas,
+  onDone: (updatedTargetCanvas: HTMLCanvasElement | OffscreenCanvas) => void, keepSynced = false): void {
   /* An alternative approach would be to create a new map with the desired size and copies of the old map's layers.
    * This way we wouldn't have to mess with the original map's size.
    * But unfortunately openlayers provides no means of cloning a layer.
@@ -112,12 +116,13 @@ export async function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvas
   const scale = Math.min(targetCanvas.width / initialMapSize[0], targetCanvas.height / initialMapSize[1]);
   map.getView().setResolution(initialMapResolution / scale);
 
-
   // Step 2: get image of scaled map
-  const updatedTargetCanvas = await mapToSingleCanvas(map, targetCanvas, keepSynced);
-  map.setSize(initialMapSize);
-  map.getView().setResolution(initialMapResolution);
-  return updatedTargetCanvas;
+  mapToSingleCanvas(map, targetCanvas, (updatedTargetCanvas: HTMLCanvasElement) => {
+    // Step 3: set map-size back to initial values.
+    map.setSize(initialMapSize);
+    map.getView().setResolution(initialMapResolution);
+    onDone(updatedTargetCanvas);
+  }, keepSynced);
 }
 
 
@@ -130,7 +135,7 @@ export async function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvas
  * Example usage:
  * ```
  *   previewButton.addEventListener('click', () => {
- *   simpleMapToCanvas(map, previewCanvas, paper.widthPx, paper.heightPx).then((updated) => {
+ *   simpleMapToCanvas(map, previewCanvas, paper.widthPx, paper.heightPx, (updated) => {
  *       console.log('done');
  *   });
  *   downloadButton.addEventListener('click', () => {
@@ -138,7 +143,8 @@ export async function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvas
  *   });
  * ```
  */
-export async function simpleMapToCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas, drawingBufferWidth?: number, drawingBufferHeight?: number, keepSynced = false) {
+export function simpleMapToCanvas(map: Map, targetCanvas: HTMLCanvasElement | OffscreenCanvas, drawingBufferWidth?: number, drawingBufferHeight?: number,
+  onDone?: (canvas: HTMLCanvasElement | OffscreenCanvas) => void, keepSynced = false) {
 
   // Halting interactions: prevents user from panning map during drawing process.
   const interactions = map.getInteractions();
@@ -155,10 +161,15 @@ export async function simpleMapToCanvas(map: Map, targetCanvas: HTMLCanvasElemen
     targetCanvas.height = drawingBufferHeight;
   }
 
-  const updatedCanvas = await scaledMapToSingleCanvas(map, targetCanvas, keepSynced);
-  interactions.forEach((interaction: Interaction) => {
-    interaction.setActive(true);
-  });
+  scaledMapToSingleCanvas(map, targetCanvas, (updatedCanvas) => {
 
-  return updatedCanvas;
+    // reactivating interactions
+    interactions.forEach((interaction: Interaction) => {
+      interaction.setActive(true);
+    });
+
+    if (onDone) {
+      onDone(updatedCanvas);
+    }
+  }, keepSynced);
 }
