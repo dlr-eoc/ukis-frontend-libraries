@@ -1,7 +1,7 @@
 import { FrameState } from 'ol/PluggableMap';
 import VectorLayer from 'ol/layer/Vector';
 import LayerRenderer from 'ol/renderer/Layer';
-import { createShaderProgram, bindProgram, clearBackground } from '@dlr-eoc/utils-maps/src/public-api';
+import { createShaderProgram, bindProgram, clearBackground } from '../../webgl/webgl';
 
 
 export class CustomWebGlVectorLayer extends VectorLayer {

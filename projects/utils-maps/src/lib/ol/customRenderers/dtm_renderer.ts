@@ -2,8 +2,12 @@ import LayerRenderer from 'ol/renderer/Layer';
 import ImageLayer from 'ol/layer/Image';
 import { FrameState } from 'ol/PluggableMap';
 import { transformExtent } from 'ol/proj';
-import { Program, Shader, Attribute, Uniform, Texture, rectangle, flattenMatrix, Shape, createTextCanvas, bindProgram } from '@dlr-eoc/utils-maps';
 import Static from 'ol/source/ImageStatic';
+import { Shader, Program, Uniform, Texture, Attribute } from '../../webgl/engine.core';
+import { createTextCanvas } from '../../webgl/engine.helpers';
+import { bindProgram } from '../../webgl/webgl';
+import { ShapeA, rectangleA } from '../../webgl/engine.shapes';
+import { flattenRecursive } from '../../webgl/utils';
 
 
 
@@ -109,14 +113,14 @@ export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
                 new Attribute(gl, program, 'a_position', rectangleInWorldPosition.vertices),
                 new Attribute(gl, program, 'a_texturePosition', rectangleInWorldPosition.texturePositions)
             ], [
-                new Uniform(gl, program, 'u_imageSize', '1f', [2048.]),
-                new Uniform(gl, program, 'u_sun', '3f', [0., 0., 1.]),  // array, pointing to sun from middle of map.
-                new Uniform(gl, program, 'u_world2pix', 'matrix3fv', flattenMatrix([
+                new Uniform(gl, program, 'u_imageSize', 'float', [2048.]),
+                new Uniform(gl, program, 'u_sun', 'vec3', [0., 0., 1.]),  // array, pointing to sun from middle of map.
+                new Uniform(gl, program, 'u_world2pix', 'mat3', flattenRecursive([
                     [1., 0., 0.],
                     [0., 1., 0.],
                     [0., 0., 1.]
                 ])),
-                new Uniform(gl, program, 'u_pix2canv', 'matrix3fv', flattenMatrix([
+                new Uniform(gl, program, 'u_pix2canv', 'mat3', flattenRecursive([
                     [1. /  (canvas.width / 2),  0.,                        0. ],
                     [0,                        -1. / (canvas.height / 2),  0. ],
                     [-1.,                      1.,                         1. ]
@@ -154,7 +158,7 @@ export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
                 [c2pT[2],   c2pT[3],    0. ],
                 [c2pT[4],   c2pT[5],    1. ]
             ];
-            this.shader.updateUniformData(this.gl, 'u_world2pix', flattenMatrix(worldToPixelTransform));
+            this.shader.updateUniformData(this.gl, 'u_world2pix', flattenRecursive(worldToPixelTransform));
             this.shader.bind(this.gl); // <--- @TODO: inefficient! Only re-bind world2pix matrix.
 
             if (frameState.viewState.projection !== this.projection) {
@@ -182,8 +186,8 @@ export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
     }
 
 
-    private bboxOntoRectangle(width: number, height: number, bbox: number[]): Shape {
-        const rect = rectangle(width, height);
+    private bboxOntoRectangle(width: number, height: number, bbox: number[]): ShapeA {
+        const rect = rectangleA(width, height);
         for (const vertex of rect.vertices) {
             const x = vertex[0];
             const y = vertex[1];
@@ -220,7 +224,7 @@ export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
             [0,                              -1. / (this.canvas.height / 2),  0. ],
             [-1.,                            1.,                              1. ]
         ];
-        this.shader.updateUniformData(this.gl, 'u_pix2canv', flattenMatrix(pix2canv));
+        this.shader.updateUniformData(this.gl, 'u_pix2canv', flattenRecursive(pix2canv));
         // this.interpolationShader.bind(this.gl); <-- not required: already happens in `prepareFrame`
     }
 }
