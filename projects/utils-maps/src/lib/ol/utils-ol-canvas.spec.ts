@@ -3,7 +3,7 @@ import View from 'ol/View';
 import { Tile as TileLayer } from 'ol/layer';
 import { fromLonLat } from 'ol/proj';
 import OSM from 'ol/source/OSM';
-import { simpleMapToCanvas } from './utils-ol';
+import { simpleMapToCanvas } from './utils-ol-canvas';
 
 
 describe('mapToCanvas test suite', () => {
