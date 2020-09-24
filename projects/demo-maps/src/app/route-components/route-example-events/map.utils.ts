@@ -47,7 +47,7 @@ export const regularGrid = (bbox: TGeoExtent, cellSizeDeg: number, zoom: number,
   }
 
   /** buffer the extent with one cellSizeDeg */
-  mapExtent = buffer(mapExtent, cellSizeZoom);
+  mapExtent = buffer(mapExtent, cellSizeZoom) as TGeoExtent;
 
   // cut border from grid
   const minX = bbox[0] + border; // bbox[0];

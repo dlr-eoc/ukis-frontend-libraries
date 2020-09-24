@@ -10,6 +10,9 @@ import olImageWMS from 'ol/source/ImageWMS';
 import olVectorImageLayer from 'ol/layer/VectorImage';
 import olVectorSource from 'ol/source/Vector';
 
+import { platformModifierKeyOnly } from 'ol/events/condition';
+import { Interaction as olIneraction } from 'ol/interaction';
+
 import { parse } from 'url';
 import { regularGrid } from './map.utils';
 import { ActivatedRoute } from '@angular/router';
@@ -28,6 +31,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
   controls: IMapControls;
   subs: Subscription[] = [];
+  interactions: olIneraction[] = [];
   private startBbox = null;
   constructor(
     public layersSvc: LayersService,
@@ -50,6 +54,12 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     if (this.startBbox) {
       this.mapStateSvc.setExtent(this.startBbox);
     }
+
+    // interaction to get bbox on drag
+    const dragBox = this.mapSvc.addBboxSelection(platformModifierKeyOnly, null, (ext, evt) => {
+      console.log(ext, evt);
+    });
+    this.interactions.push(dragBox);
   }
 
   ngAfterViewInit() {
@@ -60,6 +70,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.subs.map(s => s.unsubscribe());
     this.mapSvc.map.un('moveend', this.updateLayerOnZoom);
+    this.interactions.forEach(i => this.mapSvc.map.removeInteraction(i));
   }
 
   addLayers() {
@@ -158,9 +169,9 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     });
 
     const olGridLayer = new olVectorImageLayer({
-      id: layerID,
       source: gridLayerSource
     });
+    olGridLayer.set('id', layerID);
 
     const oldGridLayer = this.layersSvc.getLayerById(layerID) as CustomLayer;
     if (!oldGridLayer) {
