@@ -23,23 +23,27 @@ export interface IPopupOptions {
  * Add a box-selection interaction to the map
  * https://openlayers.org/en/latest/examples/box-selection.html
  */
-export function addBboxSelection(map: Map, onBoxStart: () => void, onBoxEnd: (ext) => void, dragBoxOptions: DragBoxOptions) {
+export function addBboxSelection(map: Map, onBoxStart?: (evt) => void, onBoxEnd?: (ext, evt) => void, dragBoxOptions?: DragBoxOptions) {
   const options = {
     className: 'ol-drag-select'
   };
   Object.assign(options, dragBoxOptions);
   const dragBox = new DragBox(dragBoxOptions);
+  if (onBoxStart) {
+    dragBox.on('boxstart', (evt) => {
+      onBoxStart(evt);
+    });
+  }
 
-  dragBox.on('boxstart', () => {
-    onBoxStart();
-  });
-
-  dragBox.on('boxend', () => {
-    const extent = dragBox.getGeometry().getExtent();
-    onBoxEnd(extent);
-  });
+  if (onBoxEnd) {
+    dragBox.on('boxend', (evt) => {
+      const extent = dragBox.getGeometry().getExtent();
+      onBoxEnd(extent, evt);
+    });
+  }
 
   map.addInteraction(dragBox);
+  return dragBox;
 }
 
 

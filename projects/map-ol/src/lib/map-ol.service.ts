@@ -52,15 +52,18 @@ import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
-import { DragBox } from 'ol/interaction';
+import { Options as olDragBoxOptions } from 'ol/interaction/DragBox';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olRenderFeature from 'ol/render/Feature';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 
+import { addBboxSelection } from '@dlr-eoc/utils-maps';
+
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
 const FILTER_TYPE_KEY = 'type';
+const ID_KEY = 'id';
 
 export interface IPopupArgs {
   modelName: string;
@@ -215,23 +218,12 @@ export class MapOlService {
    * See this example:
    * https://openlayers.org/en/latest/examples/box-selection.html
    */
-  public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart: () => void, onBoxEnd: (ext) => void) {
-
-    const dragBox = new DragBox({
-      condition: conditionForDrawing,
-      className: 'ol-drag-select'
-    });
-
-    dragBox.on('boxstart', () => {
-      onBoxStart();
-    });
-
-    dragBox.on('boxend', () => {
-      const extent = dragBox.getGeometry().getExtent();
-      onBoxEnd(extent);
-    });
-
-    this.map.addInteraction(dragBox);
+  public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart?: (evt) => void, onBoxEnd?: (ext, evt) => void) {
+    const options: olDragBoxOptions = {
+      className: 'ol-drag-select',
+      condition: conditionForDrawing
+    };
+    return addBboxSelection(this.map, onBoxStart, onBoxEnd, options);
   }
 
   /**
@@ -280,7 +272,7 @@ export class MapOlService {
 
   private isLayerInGroup(layer: olBaseLayer, layerGroup: olLayerGroup) {
     const layers = layerGroup.getLayers().getArray();
-    const haseLayer = layers.filter(l => l.get('id') === layer.get('id'));
+    const haseLayer = layers.filter(l => l.get(ID_KEY) === layer.get(ID_KEY));
     if (haseLayer.length) {
       return true;
     } else {
@@ -453,10 +445,10 @@ export class MapOlService {
     }
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
     const oldLayers = this.getLayers(lowerType);
-    const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
+    const oldLayer = oldLayers.find(l => l.get(ID_KEY) === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
     if (newOlLayer) {
-      this.removeLayerByKey({ key: 'id', value: oldLayer.get('id') }, type);
+      this.removeLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, type);
       this.addLayer(newOlLayer, type);
     }
   }
@@ -467,10 +459,10 @@ export class MapOlService {
     }
     const lowerType = type.toLowerCase() as Tgroupfiltertype;
     const oldLayers = this.getLayers(lowerType);
-    const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
+    const oldLayer = oldLayers.find(l => l.get(ID_KEY) === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
     if (newOlLayer) {
-      this.updateLayerByKey({ key: 'id', value: oldLayer.get('id') }, newOlLayer, type);
+      this.updateLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, newOlLayer, type);
     }
   }
 
