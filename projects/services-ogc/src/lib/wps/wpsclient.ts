@@ -4,17 +4,30 @@ import { WpsMarshaller100 } from './wps100/wps_marshaller_1.0.0';
 import { WpsMarshaller200 } from './wps200/wps_marshaller_2.0.0';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, tap, share, mergeMap } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0'; const XLink_1_0 = XLink_1_0_Factory.XLink_1_0;
 import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0;
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
 import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 = WPS_1_0_0_Factory.WPS_1_0_0;
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
 import { pollUntil, delayedRetry } from './utils/polling';
-import { Injectable, Inject } from '@angular/core';
 import { Jsonix } from '@michaellangbein/jsonix';
 import { Cache, FakeCache } from './cache';
+import { Injectable, Inject } from '@angular/core';
 
+
+export interface WpsHttpClientRequestParameters {
+    headers?: object;
+    [key: string]: any;
+}
+
+/**
+ * This library attempts to be largely independent of angular. 
+ * As such, we allow other http-clients than @angular/http.
+ */
+export interface WpsHttpClient {
+    get(url: string, paras?: WpsHttpClientRequestParameters): Observable<string>;
+    post(url: string, body: string, paras?: WpsHttpClientRequestParameters): Observable<string>;
+}
 
 
 /**
@@ -35,9 +48,9 @@ export class WpsClient {
     private cache: Cache = new FakeCache();
 
     constructor(
-        @Inject('WpsVersion') version: WpsVerion = '1.0.0',
-        private webclient: HttpClient,
-        @Inject('WpsCache') cache?: Cache
+        version: WpsVerion = '1.0.0',
+        private webclient: WpsHttpClient,
+        cache?: Cache
     ) {
         this.version = version;
         if (cache) this.cache = cache;
@@ -257,21 +270,27 @@ export class WpsClient {
     }
 
     postRaw(url: string, xmlBody: string): Observable<string> {
-        const headers = {
-            'Content-Type': 'text/xml',
-            'Accept': 'text/xml, application/xml'
+        const paras = {
+            headers: {
+                'Content-Type': 'text/xml',
+                'Accept': 'text/xml, application/xml'
+            },
+            responseType: 'text'
         };
-        return this.webclient.post(url, xmlBody, { headers, responseType: 'text' }).pipe(
+        return this.webclient.post(url, xmlBody, paras).pipe(
             delayedRetry(2000, 2),
             share()  // turning hot: to make sure that multiple subscribers dont cause multiple requests
         );
     }
 
     getRaw(url: string): Observable<string> {
-        const headers = {
-            'Accept': 'text/xml, application/xml'
+        const paras = {
+            headers: {
+                'Accept': 'text/xml, application/xml'
+            },
+            responseType: 'text'
         };
-        return this.webclient.get(url, { headers, responseType: 'text' }).pipe(
+        return this.webclient.get(url, paras).pipe(
             delayedRetry(2000, 2)
         );
     }
