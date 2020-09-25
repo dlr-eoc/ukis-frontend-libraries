@@ -11,9 +11,6 @@ import { Tile as TileLayer } from 'ol/layer';
 import { get as getProjection } from 'ol/proj';
 
 
-
-
-
 @Component({
   selector: 'app-route-example-threejs',
   templateUrl: './route-example-threejs.component.html',
@@ -43,7 +40,7 @@ export class RouteMap8Component implements OnInit, AfterViewInit {
       source: new TileWMS({
         url: 'https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/mars/phobos_simp_cyl.map',
         params: {
-          'LAYERS': 'VIKING',
+          LAYERS: 'VIKING',
         },
         crossOrigin: 'anonymous',  // this is important: prevents CORS errors.
       })
