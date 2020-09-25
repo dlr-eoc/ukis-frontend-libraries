@@ -5,20 +5,26 @@ import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
 import { Feature as olFeature } from 'ol';
-import { Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer,
-         Group as olLayerGroup, Image as olImageLayer, Tile as olTileLayer, VectorTile as olVectorTileLayer } from 'ol/layer';
-import { ImageStatic as olStatic, Vector as olVectorSource, ImageWMS as olImageWMS, Cluster as olCluster,
-         TileWMS as olTileWMS, VectorTile as olVectorTileSource } from 'ol/source';
+import {
+  Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer,
+  Group as olLayerGroup, Image as olImageLayer, Tile as olTileLayer, VectorTile as olVectorTileLayer
+} from 'ol/layer';
+import {
+  ImageStatic as olStatic, Vector as olVectorSource, ImageWMS as olImageWMS, Cluster as olCluster,
+  TileWMS as olTileWMS, VectorTile as olVectorTileSource
+} from 'ol/source';
 import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON, MVT as olMVT } from 'ol/format';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle, Circle as olCircle, Text as olText } from 'ol/style';
-import { Point as olPoint } from 'ol/geom';
 
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
-import { munichPolys, heatMapData, vectorLayerData, crescentPoints } from './resources/features';
 import { SunlightComponent } from '../../components/sunlight/sunlight.component';
 import { InterpolationSettingsComponent } from '../../components/interpolation-settings/interpolation-settings.component';
 import { BarsLayer } from './customRenderers/threejs_renderer';
 import { InterpolationLayer, ColorRamp, DtmLayer } from '@dlr-eoc/utils-maps';
+
+/** this needs: resolveJsonModule and allowSyntheticDefaultImports in tsconfig */
+import crescentPoints from '../../../assets/data/geojson/crescentPoints.json';
+import munichPolys from '../../../assets/data/geojson/munichPolys.json';
 
 
 @Component({
@@ -82,7 +88,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       },
       custom_layer: new olHeatmapLayer({
         source: new olVectorSource({
-          features: this.mapSvc.geoJsonToFeatures(heatMapData),
+          url: 'assets/data/geojson/pointFeatureCollection.json',
           format: new olGeoJSON(),
         }),
         radius: this.inputValue.value
@@ -94,7 +100,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'Vector Layer1',
       name: 'Vector Layer',
       type: 'geojson',
-      data: heatMapData,
+      url: 'assets/data/geojson/pointFeatureCollection.json',
       visible: false,
       popup: true
     });
@@ -174,7 +180,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         source: new olCluster({
           distance: 10,
           source: new olVectorSource({
-            features: this.mapSvc.geoJsonToFeatures(heatMapData)
+            url: 'assets/data/geojson/pointFeatureCollection.json',
+            format: new olGeoJSON(),
           })
         })
       }),
@@ -188,7 +195,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       popup: {
         event: 'move',
         filterkeys: ['name', 'region_un', 'region_wb'],
-        properties: { 'name': 'Name' },
+        properties: { name: 'Name' },
         options: { autoPan: false }
       },
       custom_layer: new olVectorTileLayer({
@@ -252,10 +259,10 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       filtertype: 'Layers',
       custom_layer: new DtmLayer({
         source: new olStatic({
-            url: 'assets/images/srtm_small.png',
-            imageExtent: [10.00, 45.00, 15.00, 50.00],
-            projection: 'EPSG:4326',
-          })
+          url: 'assets/images/srtm_small.png',
+          imageExtent: [10.00, 45.00, 15.00, 50.00],
+          projection: 'EPSG:4326',
+        })
       }),
       action: {
         component: SunlightComponent,
@@ -267,8 +274,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       },
       opacity: 0.6,
       visible: false,
-      description: `<p>This layer uses SRTM data to calculate surface-normals and uses them to dynamically create shades on hilltops. Things like these might be a nice illustration for time-enabled maps.</p>
-      <p>Use the controls to dynamically change the sun's angle.</p>`
+      description: `This layer uses SRTM data to calculate surface-normals and uses them to dynamically create shades on hilltops. Things like these might be a nice illustration for time-enabled maps.<br>
+      Use the controls to dynamically change the sun's angle.`
     });
 
     const barLayer = new CustomLayer({
@@ -282,11 +289,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       filtertype: 'Layers',
       opacity: 0.7,
       visible: false,
-      description: `<p>This layer demonstrates how a common 3d-library, three.js, can be integrated in a 2d-map. Using three.js often yields less verbose code than calling WebGL directly.</p>`
+      description: `This layer demonstrates how a common 3d-library, three.js, can be integrated in a 2d-map. Using three.js often yields less verbose code than calling WebGL directly.`
     });
 
 
-    const metersPerUnit = this.mapSvc.map.getView().getProjection().getMetersPerUnit();
+    const metersPerUnit = this.mapSvc.getProjection().getMetersPerUnit();
     const crescentSource = new olVectorSource({
       features: this.mapSvc.geoJsonToFeatures(crescentPoints)
     });
@@ -296,11 +303,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
     const valueParameter = 'SWH';
     const colorRamp: ColorRamp = [
-      { val: 0.0,   rgb: [166, 97, 26]    },
-      { val: 0.4,   rgb: [223, 194, 125]  },
-      { val: 0.8,   rgb: [247, 247, 247]  },
-      { val: 2.0,   rgb: [128, 205, 193]  },
-      { val: 22.5,  rgb: [1, 133, 113]    },
+      { val: 0.0, rgb: [166, 97, 26] },
+      { val: 0.4, rgb: [223, 194, 125] },
+      { val: 0.8, rgb: [247, 247, 247] },
+      { val: 2.0, rgb: [128, 205, 193] },
+      { val: 22.5, rgb: [1, 133, 113] },
     ];
     const interpolationLayer = new CustomLayer({
       id: 'interpolation',
@@ -342,7 +349,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         renderSettings: {
           maxEdgeLength: 15000 / metersPerUnit,
           power: 2.0,
-          colorRamp: colorRamp,
+          colorRamp,
           smooth: true,
           showLabels: false,
           valueProperty: valueParameter,
@@ -391,7 +398,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'Vector Layer2',
       name: 'async add Layer',
       type: 'geojson',
-      data: vectorLayerData,
+      url: 'assets/data/geojson/testFeatureCollection.json',
       visible: false,
       popup: true
     });

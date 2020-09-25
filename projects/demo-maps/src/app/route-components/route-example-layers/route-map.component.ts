@@ -125,117 +125,12 @@ export class RouteMapComponent implements OnInit {
       id: 'geojson_test',
       name: 'GeoJSON Vector Layer',
       type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: { title: 'Polygon' },
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [
-                    11.53564453125,
-                    48.80686346108517
-                  ],
-                  [
-                    11.42578125,
-                    48.61838518688487
-                  ],
-                  [
-                    11.97509765625,
-                    48.516604348867475
-                  ],
-                  [
-                    12.2607421875,
-                    48.69096039092549
-                  ],
-                  [
-                    12.0849609375,
-                    48.99463598353405
-                  ],
-                  [
-                    11.53564453125,
-                    48.80686346108517
-                  ]
-                ]
-              ]
-            }
-          },
-          {
-            type: 'Feature',
-            properties: { title: 'Rectangle' },
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [
-                    10.986328125,
-                    43.89789239125797
-                  ],
-                  [
-                    11.755371093749998,
-                    43.89789239125797
-                  ],
-                  [
-                    11.755371093749998,
-                    44.41808794374846
-                  ],
-                  [
-                    10.986328125,
-                    44.41808794374846
-                  ],
-                  [
-                    10.986328125,
-                    43.89789239125797
-                  ]
-                ]
-              ]
-            }
-          },
-          {
-            type: 'Feature',
-            properties: { title: 'Line' },
-            geometry: {
-              type: 'LineString',
-              coordinates: [
-                [
-                  13.29345703125,
-                  48.268569112964336
-                ],
-                [
-                  15.073242187499998,
-                  47.56170075451973
-                ],
-                [
-                  14.1064453125,
-                  46.40756396630067
-                ],
-                [
-                  15.886230468750002,
-                  44.94924926661153
-                ]
-              ]
-            }
-          },
-          {
-            type: 'Feature',
-            properties: { title: 'Point' },
-            geometry: {
-              type: 'Point',
-              coordinates: [
-                11.513671874999998,
-                46.42271253466717
-              ]
-            }
-          }
-        ]
-      },
+      url: 'assets/data/geojson/testFeatureCollection.json',
       visible: false,
       popup: { event: 'move' }
     });
 
+    /** GeoJson Layer using Layer.data and a FeatureCollection */
     const vectorLayer3 = new VectorLayer({
       id: 'geojson_test_3',
       name: 'GeoJSON Point Layer',
@@ -265,57 +160,53 @@ export class RouteMapComponent implements OnInit {
       popup: { properties: { title: 'Title', type: 'Type' } }
     });
 
+    /** GeoJson Layer using Layer.data and a single Feature */
     const vectorLayer2 = new VectorLayer({
       id: 'geojson_test_2',
       name: 'Vector Layer in Group',
       type: 'geojson',
       data: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {
-              type: 'Polygon',
-              name: 'Vector Layer in Group',
-              data: 'geojson',
-            },
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [
-                    -4.9658203125,
-                    41.09591205639546
-                  ],
-                  [
-                    -6.459960937499999,
-                    39.52099229357195
-                  ],
-                  [
-                    -5.009765625,
-                    38.42777351132902
-                  ],
-                  [
-                    -1.8896484375,
-                    38.77121637244273
-                  ],
-                  [
-                    -0.68115234375,
-                    40.84706035607122
-                  ],
-                  [
-                    -2.900390625,
-                    41.65649719441145
-                  ],
-                  [
-                    -4.9658203125,
-                    41.09591205639546
-                  ]
-                ]
+        type: 'Feature',
+        properties: {
+          type: 'Polygon',
+          name: 'Vector Layer in Group',
+          data: 'geojson',
+        },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [
+                -4.9658203125,
+                41.09591205639546
+              ],
+              [
+                -6.459960937499999,
+                39.52099229357195
+              ],
+              [
+                -5.009765625,
+                38.42777351132902
+              ],
+              [
+                -1.8896484375,
+                38.77121637244273
+              ],
+              [
+                -0.68115234375,
+                40.84706035607122
+              ],
+              [
+                -2.900390625,
+                41.65649719441145
+              ],
+              [
+                -4.9658203125,
+                41.09591205639546
               ]
-            }
-          }
-        ]
+            ]
+          ]
+        }
       },
       visible: false,
       popup: ['type', 'name'],
