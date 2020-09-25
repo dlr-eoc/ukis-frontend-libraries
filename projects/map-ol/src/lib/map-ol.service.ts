@@ -8,13 +8,17 @@ import olView from 'ol/View';
 import { ViewOptions as olViewOptions } from 'ol/View';
 
 import olBaseLayer from 'ol/layer/Base';
+import { Options as olBaseLayerOptions } from 'ol/layer/Base';
 import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
+import { Options as olLayerGroupOptions } from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
 import { Options as olOverlayOptions } from 'ol/Overlay';
 
 import olBaseTileLayer from 'ol/layer/BaseTile';
+import { Options as olBaseTileLayerOptions } from 'ol/layer/BaseTile';
 import olBaseVectorLayer from 'ol/layer/BaseVector';
+import { Options as olBaseVectorLayerOptions } from 'ol/layer/BaseVector';
 import olBaseImageLayer from 'ol/layer/BaseImage';
 
 import olTileLayer from 'ol/layer/Tile';
@@ -58,7 +62,7 @@ import olRenderFeature from 'ol/render/Feature';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 
-import { addBboxSelection } from '@dlr-eoc/utils-maps';
+import { addBboxSelection, getLayersFromGroup } from '@dlr-eoc/utils-maps';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -521,21 +525,12 @@ export class MapOlService {
       olSource.setUrl(l.url);
     }
 
-    const layeroptions: any = {
-      type: 'xyz',
-      filtertype: l.filtertype,
-      name: l.name,
-      id: l.id,
+    const layeroptions: olBaseTileLayerOptions = {
       visible: l.visible,
-      legendImg: l.legendImg,
       opacity: l.opacity || 1,
       zIndex: 1,
       source: olSource
     };
-
-    if (l.popup) {
-      layeroptions.popup = l.popup;
-    }
 
     if (l.bbox) {
       layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
@@ -554,8 +549,25 @@ export class MapOlService {
     if (l.minZoom) {
       layeroptions.minZoom = l.minZoom;
     }
+    const newLayer = new olTileLayer(layeroptions);
 
-    return new olTileLayer(layeroptions);
+    if (l.popup) {
+      newLayer.set('popup', l.popup);
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      newLayer.set('className', l.id);
+    }
+
+    newLayer.setProperties({
+      type: 'xyz',
+      filtertype: l.filtertype,
+      name: l.name,
+      id: l.id,
+      legendImg: l.legendImg
+    });
+    return newLayer;
   }
 
   private create_wms_layer(l: WmsLayer): olTileLayer {
@@ -567,12 +579,9 @@ export class MapOlService {
     };
 
     if (l.tileSize) {
-      // console.log(l.tileSize)
       tileOptions['tileGrid'] = this.getTileGrid<olTileGrid>('default', null, l.tileSize);
       delete tileOptions.params['tileSize'];
     }
-
-    // console.log(tile_options);
 
     if (l.crossOrigin) {
       tileOptions.crossOrigin = l.crossOrigin;
@@ -597,26 +606,12 @@ export class MapOlService {
       olSource.setUrl(l.url);
     }
 
-    const layeroptions: any = {
-      type: 'wms',
-      filtertype: l.filtertype,
-      name: l.name,
-      id: l.id,
+    const layeroptions: olBaseTileLayerOptions = {
       visible: l.visible,
-      legendImg: l.legendImg,
       opacity: l.opacity || 1,
       zIndex: 1,
       source: olSource
     };
-
-    if (l.popup) {
-      layeroptions.popup = l.popup;
-      /**
-       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
-       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
-       */
-      layeroptions.className = l.id;
-    }
 
     if (l.maxResolution) {
       layeroptions.maxResolution = l.maxResolution;
@@ -635,8 +630,24 @@ export class MapOlService {
     if (l.bbox) {
       layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
     }
-    const newlayer = new olTileLayer(layeroptions);
-    return newlayer;
+    const newLayer = new olTileLayer(layeroptions);
+
+    if (l.popup) {
+      newLayer.set('popup', l.popup);
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      newLayer.set('className', l.id);
+    }
+    newLayer.setProperties({
+      type: 'wms',
+      filtertype: l.filtertype,
+      name: l.name,
+      id: l.id,
+      legendImg: l.legendImg
+    });
+    return newLayer;
   }
 
   private create_wmts_layer(l: WmtsLayer): olTileLayer {
@@ -694,26 +705,12 @@ export class MapOlService {
         olSource.setUrl(l.url);
       }
 
-      const layeroptions: any = {
-        type: 'wmts',
-        filtertype: l.filtertype,
-        name: l.name,
-        id: l.id,
+      const layeroptions: olBaseTileLayerOptions = {
         visible: l.visible,
-        legendImg: l.legendImg,
         opacity: l.opacity || 1,
         zIndex: 1,
         source: olSource
       };
-
-      if (l.popup) {
-        layeroptions.popup = l.popup;
-        /**
-         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
-         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
-         */
-        layeroptions.className = l.id;
-      }
 
       if (l.maxResolution) {
         layeroptions.maxResolution = l.maxResolution;
@@ -733,7 +730,25 @@ export class MapOlService {
         layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
       }
 
-      return new olTileLayer(layeroptions);
+      const newLayer = new olTileLayer(layeroptions);
+
+      if (l.popup) {
+        newLayer.set('popup', l.popup);
+        /**
+         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+         */
+        newLayer.set('className', l.id);
+      }
+
+      newLayer.setProperties({
+        type: 'wmts',
+        filtertype: l.filtertype,
+        name: l.name,
+        id: l.id,
+        legendImg: l.legendImg
+      });
+      return newLayer;
     } else {
       const layer = l as Layer;
       console.error(`layer with id: ${layer.id} and type ${layer.type} is no instanceof WmtsLayer!`);
@@ -742,17 +757,23 @@ export class MapOlService {
 
 
   private create_geojson_layer(l: VectorLayer) {
-    let olSource;
+    let olSource: olVectorSource<any>;
     if (l.data) {
       olSource = new olVectorSource({
         features: this.geoJsonToFeatures(l.data),
-        format: new olGeoJSON(),
+        format: new olGeoJSON({
+          dataProjection: 'EPSG:4326',
+          featureProjection: this.EPSG
+        }),
         wrapX: false
       });
     } else if (l.url) {
-      olSource = new olTileJSON({
+      olSource = new olVectorSource({
         url: l.url,
-        crossOrigin: 'anonymous',
+        format: new olGeoJSON({
+          dataProjection: 'EPSG:4326',
+          featureProjection: this.EPSG
+        }),
         wrapX: false
       });
     }
@@ -761,25 +782,12 @@ export class MapOlService {
       olSource.set('wrapX', l.continuousWorld);
     }
 
-    const layeroptions = {
-      type: 'geojson',
-      name: l.name,
-      id: l.id,
+    const layeroptions: olBaseVectorLayerOptions = {
       visible: l.visible,
-      legendImg: l.legendImg,
       opacity: l.opacity || 1,
       zIndex: 1,
       source: olSource
-    } as any;
-
-    if (l.popup) {
-      layeroptions.popup = l.popup;
-      /**
-       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
-       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
-       */
-      layeroptions.className = l.id;
-    }
+    };
 
     if (l.maxResolution) {
       layeroptions.maxResolution = l.maxResolution;
@@ -839,35 +847,60 @@ export class MapOlService {
       Object.assign(layeroptions, l.options);
     }
 
-    return new olVectorLayer(layeroptions);
+    const newLayer = new olVectorLayer(layeroptions);
+
+    if (l.popup) {
+      newLayer.set('popup', l.popup);
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      newLayer.set('className', l.id);
+    }
+
+    newLayer.setProperties({
+      type: 'geojson',
+      name: l.name,
+      id: l.id,
+      legendImg: l.legendImg
+    });
+    return newLayer;
   }
 
   private create_custom_layer(l: CustomLayer) {
-    if (l.custom_layer) {
-      const layer = (l.custom_layer as olBaseLayer);
+    const updateLayerSource = (layer: olLayer<any>) => {
+      const olSource = layer.getSource();
+      olSource.set('wrapX', false);
 
-      if (layer instanceof olLayer) {
-        const olSource = layer.getSource();
-        olSource.set('wrapX', false);
-
-        if (l.attribution) {
-          olSource.setAttributions([l.attribution]);
-        }
-
-        if (l.continuousWorld) {
-          olSource.set('wrapX', l.continuousWorld);
-        }
+      if (l.attribution) {
+        olSource.setAttributions([l.attribution]);
       }
 
-      const layeroptions = {
-        type: 'custom',
-        name: l.name,
-        id: l.id,
+      if (l.continuousWorld) {
+        olSource.set('wrapX', l.continuousWorld);
+      }
+    };
+    if (l.custom_layer) {
+      const layer: olBaseLayer | olLayerGroup = l.custom_layer;
+      if (layer instanceof olLayer) {
+        updateLayerSource(layer);
+
+        // if custom_layer is a olLayerGroup update all layers (object) and set group filtertype
+      } else if (layer instanceof olLayerGroup) {
+        const groupLayers = getLayersFromGroup(layer, null, null, true);
+        groupLayers.forEach(gl => {
+          if (gl instanceof olLayer) {
+            gl.set(FILTER_TYPE_KEY, l.filtertype);
+            updateLayerSource(gl);
+          }
+        });
+      }
+
+      const layeroptions: olLayerGroupOptions | olBaseLayerOptions = {
         visible: l.visible,
-        legendImg: l.legendImg,
         opacity: l.opacity || 1,
         zIndex: 1,
-      } as any;
+      };
 
       if (l.maxResolution) {
         layeroptions.maxResolution = l.maxResolution;
@@ -883,20 +916,27 @@ export class MapOlService {
         layeroptions.minZoom = l.minZoom;
       }
 
+      if (l.bbox) {
+        layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.getProjection().getCode());
+      }
+
+      layer.setProperties(layeroptions);
+      layer.setProperties({
+        type: 'custom',
+        filtertype: l.filtertype,
+        name: l.name,
+        id: l.id,
+        legendImg: l.legendImg
+      });
+
       if (l.popup) {
-        layeroptions.popup = l.popup;
+        layer.set('popup', l.popup);
         /**
          * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
          * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
          */
-        layeroptions.className = l.id;
+        layer.set('className', l.id);
       }
-
-      if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
-      }
-
-      layer.setProperties(layeroptions);
       // don't delete the custom Layer, it is used to newly create all layer from layerservice after map all layers removed!
       // delete l.custom_layer;
       return layer;
