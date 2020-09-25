@@ -3,7 +3,6 @@ import { LayersService, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
-import { HttpClient } from '@angular/common/http';
 import { LargeLayersService } from './services/largelayers.service';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { Feature } from 'ol';
@@ -29,14 +28,14 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
       attribution: true,
       scaleLine: true
     };
-   }
+  }
 
   ngOnInit(): void {
     this.mapSvc.setProjection('EPSG:4326');
 
-    const styleFunc = (feature: Feature, resolution: number) => {
-      const fullId = feature.getId();
-      const id = fullId.match(/(\d+)/)[0];
+    const styleFunc = (feature: Feature<any>, resolution: number) => {
+      const fullId = feature.getId().toString();
+      const id = parseFloat(fullId.match(/(\d+)/)[0]);
       const r = id % 255;
       const g = (id + 20) % 255;
       const b = (id + 40) % 255;
@@ -50,7 +49,7 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
           color: `rgba(${r}, ${g}, ${b},0.7)`
         })
       });
-    }
+    };
 
     const bgLayer = new OsmTileLayer({
       visible: true
@@ -81,8 +80,8 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
     // this.mapStateSvc.setExtent(extent);
     this.mapSvc.map.getView().fit(
       extent, {
-        size: this.mapSvc.map.getSize(),
-      });
+      size: this.mapSvc.map.getSize(),
+    });
   }
 
 }
