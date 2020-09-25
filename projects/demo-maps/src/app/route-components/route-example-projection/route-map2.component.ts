@@ -70,7 +70,7 @@ export class RouteMap2Component implements OnInit {
   }
 
   addOverlays() {
-    const osm_layer = new OsmTileLayer({
+    const osmLayer = new OsmTileLayer({
       removable: true,
       legendImg: null,
       visible: true,
@@ -135,7 +135,7 @@ export class RouteMap2Component implements OnInit {
       visible: true
     });
 
-    const overlays = [osm_layer, gufLayer, vectorLayer];
+    const overlays = [osmLayer, gufLayer, vectorLayer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 
