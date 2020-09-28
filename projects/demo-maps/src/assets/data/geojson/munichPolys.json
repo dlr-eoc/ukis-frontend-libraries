@@ -4,7 +4,7 @@
     {
       "type": "Feature",
       "properties": {
-        "height": 2
+        "height": 20000
       },
       "geometry": {
         "type": "Polygon",
@@ -12,8 +12,7 @@
           [
             [
               11.539764404296875,
-              48.17707562779612,
-              2.0
+              48.17707562779612
             ],
             [
               11.53289794921875,
@@ -78,7 +77,7 @@
     {
       "type": "Feature",
       "properties": {
-        "height": 1
+        "height": 10000
       },
       "geometry": {
         "type": "Polygon",
@@ -147,7 +146,7 @@
     {
       "type": "Feature",
       "properties": {
-        "height": 3
+        "height": 30000
       },
       "geometry": {
         "type": "Polygon",

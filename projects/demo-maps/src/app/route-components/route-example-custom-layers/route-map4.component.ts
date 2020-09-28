@@ -278,6 +278,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       Use the controls to dynamically change the sun's angle.`
     });
 
+    const metersPerUnit = this.mapSvc.getProjection().getMetersPerUnit();
+    munichPolys.features.map(f => f.properties.height = f.properties.height / metersPerUnit);
     const barLayer = new CustomLayer({
       id: 'three',
       name: 'Bars layer',
@@ -293,7 +295,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
 
 
-    const metersPerUnit = this.mapSvc.getProjection().getMetersPerUnit();
     const crescentSource = new olVectorSource({
       features: this.mapSvc.geoJsonToFeatures(crescentPoints)
     });
