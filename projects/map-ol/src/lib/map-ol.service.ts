@@ -67,7 +67,7 @@ import olRenderFeature from 'ol/render/Feature';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 
-import { addBboxSelection, getLayersFromGroup } from '@dlr-eoc/utils-maps';
+import { addBboxSelection, getLayerGroups, getLayersFromGroup, getLayersByKey } from '@dlr-eoc/utils-maps';
 import { GeoJSONFeature } from 'ol/format/GeoJSON';
 import { GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
 
@@ -126,6 +126,7 @@ export class MapOlService {
     });
     baselayerGroup.set(FILTER_TYPE_KEY, 'baselayers');
     baselayerGroup.set(TITLE_KEY, 'Base maps');
+    baselayerGroup.set(ID_KEY, 'ID_filtertype_baselayers');
 
 
     const layersGroup = new olLayerGroup({
@@ -133,6 +134,7 @@ export class MapOlService {
     });
     layersGroup.set(FILTER_TYPE_KEY, 'layers');
     layersGroup.set(TITLE_KEY, 'Layers');
+    layersGroup.set(ID_KEY, 'ID_filtertype_layers');
 
     // ---------------------------------------------------------------------------------------------------
     const overlayGroup = new olLayerGroup({
@@ -140,6 +142,7 @@ export class MapOlService {
     });
     overlayGroup.set(FILTER_TYPE_KEY, 'overlays');
     overlayGroup.set(TITLE_KEY, 'Overlays');
+    overlayGroup.set(ID_KEY, 'ID_filtertype_overlays');
 
     /**
      * set default viewOptions
@@ -248,29 +251,34 @@ export class MapOlService {
   }
 
   /**
-   * get an array of olLayers from a group type
+   * get an array of olLayers from a group filtertype - so all direkt child layers from one of the layergroups
    */
   public getLayers(filtertype: Tgroupfiltertype) {
-    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
-    let layers: olBaseLayer[];
-    this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
-        layers = layerGroup.getLayers().getArray();
-      }
+    let layers: olBaseLayer[] = [];
+    const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
+    layerGroups.forEach(l => {
+      layers = layers.concat(getLayersFromGroup(l));
     });
     return layers;
   }
 
-  public getLayerByKey(key: { key: string, value: string }, filtertype: Tgroupfiltertype) {
-    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
-    const layers = this.getLayers(lowerType);
-    let layer;
-    layers.forEach((item) => {
-      if (item.get(key.key) && item.get(key.key) === key.value) {
-        layer = item;
-      }
-    });
-    return layer;
+  /**
+   * get a layer from the map by key and value
+   */
+  public getLayerByKey(key: { key: string, value: string }, filtertype?: Tgroupfiltertype) {
+    let layers: olBaseLayer[] = [];
+    if (filtertype) {
+      layers = getLayersByKey(this.map, key.key, key.value, filtertype, FILTER_TYPE_KEY);
+    } else {
+      layers = getLayersByKey(this.map, key.key, key.value);
+    }
+
+    // there could maybe more the one layers with the same key!!!!
+    if (layers.length === 1) {
+      return layers[0];
+    } else {
+      return null;
+    }
   }
 
   /**

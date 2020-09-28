@@ -12,6 +12,7 @@ import olGeoJSON from 'ol/format/GeoJSON';
 import olImageLayer from 'ol/layer/Image';
 import olImageStaticSource from 'ol/source/ImageStatic';
 import olProjection from 'ol/proj/Projection';
+import olLayerGroup from 'ol/layer/Group';
 
 import { getUid } from 'ol/util';
 
@@ -35,6 +36,11 @@ let ukisvectorLayer: VectorLayer;
 
 /** ID-vector-image */
 let ukisCustomLayer: CustomLayer;
+
+/** ID-group-layer1 */
+let groupLayer1: olLayerGroup;
+/** ID-group-layer2 */
+let groupLayer2: olLayerGroup;
 
 
 describe('MapOlService', () => {
@@ -170,7 +176,7 @@ describe('MapOlService', () => {
         features: (new olGeoJSON()).readFeatures(vectorImageData)
       })
     });
-    vectorImageLayer.set('id', 'ID-vector-image')
+    vectorImageLayer.set('id', 'ID-vector-image');
 
     ukisCustomLayer = new CustomLayer({
       id: 'ID-vector-image',
@@ -200,6 +206,16 @@ describe('MapOlService', () => {
       data: vetorData,
       visible: false
     });
+
+    groupLayer1 = new olLayerGroup({
+      layers: [rasterLayer]
+    });
+    groupLayer1.set('id', 'ID-group-layer1');
+
+    groupLayer2 = new olLayerGroup({
+      layers: [groupLayer1]
+    });
+    groupLayer2.set('id', 'ID-group-layer2');
 
   });
 
@@ -294,7 +310,16 @@ describe('MapOlService', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
+
     expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBe(vectorLayer);
+
+    // add group with a group with a rasterLayer
+    service.addLayer(groupLayer2, 'layers');
+
+    expect(service.getLayerByKey({ key: 'id', value: 'ID-raster' }, 'layers')).toBe(rasterLayer);
+    expect(service.getLayerByKey({ key: 'id', value: 'ID-group-layer1' })).toBe(groupLayer1);
+
+    // expect(service.getLayerByKey({ key: 'id', value: 'ID-group-layer1' }, 'layers')).toBe(groupLayer1);
   });
 
   it('should remove all layers from a Type', () => {
