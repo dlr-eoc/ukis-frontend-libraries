@@ -22,10 +22,7 @@ export function setFilterType(layer: BaseLayer, filtertype: string, filtertypeKe
   layer.set(filtertypeKey, filtertype);
   if (layer instanceof LayerGroup) {
     layer.getLayers().forEach(l => {
-      l.set(filtertypeKey, filtertype);
-      if (l instanceof LayerGroup) {
-        setFilterType(l, filtertype, filtertypeKey);
-      }
+      setFilterType(l, filtertype, filtertypeKey);
     });
   }
 }
@@ -48,11 +45,19 @@ export function addLayer(map: Map, layer: BaseLayer, filtertype?: string, filter
  *
  * @param filtertypeKey [filtertypeKey='filtertype']
  */
-export function getLayers(map: Map, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY) {
-  if (filtertype) {
-    return map.getLayers().getArray().filter(layer => layer.get(filtertypeKey) && (layer.get(filtertypeKey).toLowerCase() === filtertype.toLowerCase()));
+export function getLayers(map: Map, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY, recursive = false) {
+  let layers: BaseLayer[] = [];
+  if (recursive) {
+    const groupLayers = getLayersFromGroup(map.getLayerGroup(), filtertype, filtertypeKey, true);
+    layers = layers.concat(groupLayers);
   } else {
-    return map.getLayers().getArray();
+    layers = map.getLayers().getArray();
+  }
+
+  if (filtertype) {
+    return layers.filter(layer => layer.get(filtertypeKey) && (layer.get(filtertypeKey).toLowerCase() === filtertype.toLowerCase()));
+  } else {
+    return layers;
   }
 }
 
@@ -90,7 +95,7 @@ export function getLayersFromGroup(group: LayerGroup, filtertype?: string, filte
     let groups: BaseLayer[] = [].concat(layers);
     layers.forEach(l => {
       if (l instanceof LayerGroup) {
-        groups = groups.concat(l.getLayers().getArray());
+        groups = groups.concat(getLayersFromGroup(l, filtertype, filtertypeKey, true));
       }
     });
     tempLayers = groups;
@@ -110,24 +115,30 @@ export function getLayersFromGroup(group: LayerGroup, filtertype?: string, filte
  *
  * @param filtertypeKey [filtertypeKey='filtertype']
  */
-export function getLayerByKey(map: Map, key: string, value: any, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY) {
+export function getLayersByKey(map: Map, key: string, value: any, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY) {
   const layers = getLayers(map, filtertype, filtertypeKey);
   const flattLayers = flattenLayers(layers);
-  let layer: BaseLayer;
+  const keyLayers: BaseLayer[] = [];
   flattLayers.forEach((item) => {
     if (item.get(key) && item.get(key) === value) {
-      layer = item;
+      if (keyLayers.indexOf(item) === -1) {
+        keyLayers.push(item);
+      }
     }
   });
-  if (!layer) {
-    const subLayers = getLayersFromGroup(map.getLayerGroup(), filtertype, filtertypeKey, true);
-    subLayers.forEach((item) => {
-      if (item.get(key) && item.get(key) === value) {
-        layer = item;
-      }
-    });
+  if (!keyLayers.length) {
+    const subLayers = getLayers(map, filtertype, filtertypeKey, true);  // (map.getLayerGroup(), filtertype, filtertypeKey, true);
+    if (subLayers.length) {
+      subLayers.forEach((item) => {
+        if (item.get(key) && item.get(key) === value) {
+          if (keyLayers.indexOf(item) === -1) {
+            keyLayers.push(item);
+          }
+        }
+      });
+    }
   }
-  return layer;
+  return keyLayers;
 }
 
 /**
@@ -160,8 +171,10 @@ export function isLayerInGroup(layer: BaseLayer, layerGroup: LayerGroup, filtert
  */
 export function removeLayerByKey(map: Map, key: string, value: string, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY) {
   const lowerType = filtertype.toLocaleLowerCase();
-  const layer = getLayerByKey(map, key, value, lowerType, filtertypeKey);
-  if (layer) {
+  const layer = getLayersByKey(map, key, value, lowerType, filtertypeKey);
+  if (Array.isArray(layer)) {
+    layer.forEach(l => map.removeLayer(l));
+  } else {
     map.removeLayer(layer);
   }
 }

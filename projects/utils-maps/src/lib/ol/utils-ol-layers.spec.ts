@@ -20,7 +20,8 @@ import Projection from 'ol/proj/Projection';
 
 
 import { getUid } from 'ol/util';
-import { addLayer, getLayerByKey, getLayers, getLayersFromGroup, isLayerInGroup, removeAllLayers, removeLayerFromGroup } from './utils-ol-layers';
+import { addLayer, getLayersByKey, getLayers, getLayersFromGroup, isLayerInGroup, removeAllLayers, removeLayerFromGroup } from './utils-ol-layers';
+import { Collection } from 'ol';
 
 
 let rasterLayer: TileLayer;
@@ -34,12 +35,13 @@ let layerGroupRaster: LayerGroup;
 let layerGroupVector: LayerGroup;
 let layerGroupImage: LayerGroup;
 
-let layerLayerGroup: LayerGroup;
+let layerGroupLayerGroup: LayerGroup;
+
+let layerGroupLayerGroupLayerGroup: LayerGroup;
 
 let map: Map;
 
 describe('Utils OpenLayers Layers: ', () => {
-
   beforeEach(() => {
     map = new Map({
       layers: [],
@@ -220,10 +222,17 @@ describe('Utils OpenLayers Layers: ', () => {
     });
     layerGroupImage.set('id', 'ID-GroupImage');
 
-    layerLayerGroup = new LayerGroup({
+    layerGroupLayerGroup = new LayerGroup({
       layers: [layerGroupRaster, layerGroupImage, layerGroupVector]
     });
-    layerLayerGroup.set('id', 'ID-layerLayerGroup');
+    layerGroupLayerGroup.set('id', 'ID-layerGroupLayerGroup');
+
+
+    layerGroupLayerGroupLayerGroup = new LayerGroup({
+      layers: [layerGroupLayerGroup]
+    });
+    layerGroupLayerGroupLayerGroup.set('id', 'ID-layerGroupLayerGroupLayerGroup');
+
   });
 
   it('addLayer: should add/get a Layer or Group to/from the map with a filtertypeKey set to filtertype', () => {
@@ -240,6 +249,30 @@ describe('Utils OpenLayers Layers: ', () => {
     const GroupsRaster = getLayers(map, 'Baselayers');
     expect(GroupsRaster.includes(layerGroupRaster)).toBeTrue();
   });
+
+
+  it('getLayers: should get all Layers from the map recursive! and optional only for a type', () => {
+
+    addLayer(map, layerGroupLayerGroupLayerGroup, 'Layers', 'type');
+    addLayer(map, osmLayer, 'Overlays', 'type');
+
+    // !!! if the same Layer objects get added again to a different group - then the Filtertype get changed and rewrites the others!!!
+    // so create new instances of the layers if you want to add them again
+    // addLayer(map, layerGroupVector, 'Overlays', 'type');
+
+    // get all layers without filtering for a type
+    const allLayers = getLayers(map, null, null, true);
+    expect(allLayers.length).toEqual(11);
+
+    // get all layers filtered by get('type') = Layers
+    const allLayersLayers = getLayers(map, 'Layers', 'type', true);
+    expect(allLayersLayers.length).toEqual(10);
+
+    // get all layers filtered by get('type') = Layers
+    const allLayersOverlays = getLayers(map, 'Overlays', 'type', true);
+    expect(allLayersOverlays.length).toEqual(1);
+  });
+
 
   it('getLayerGroups: should get all direkt Layer Groups added to the map', () => {
     addLayer(map, layerGroupImage, 'Overlays', 'type');
@@ -282,7 +315,7 @@ describe('Utils OpenLayers Layers: ', () => {
     expect(groupLayers.length).toEqual(2);
 
 
-    const recursiveGroupLayers = getLayersFromGroup(layerLayerGroup, null, null, true);
+    const recursiveGroupLayers = getLayersFromGroup(layerGroupLayerGroup, null, null, true);
     expect(recursiveGroupLayers.length).toEqual(8);
     expect(recursiveGroupLayers.includes(layerGroupImage)).toBeTrue();
     expect(recursiveGroupLayers.includes(layerGroupRaster)).toBeTrue();
@@ -296,19 +329,20 @@ describe('Utils OpenLayers Layers: ', () => {
   });
 
   it('getLayerByKey: should get a Layer from the Map filtered by a key (property )', () => {
-    addLayer(map, layerGroupVector, 'Layers');
+    // layerGroupVector and vectorLayer are in layerGroupLayerGroupLayerGroup
+    addLayer(map, layerGroupLayerGroupLayerGroup, 'Layers');
 
-    const tempLayer = getLayerByKey(map, 'id', vectorLayer.get('id'));
-    expect(tempLayer === vectorLayer).toBeTrue();
+    const tempLayers = getLayersByKey(map, 'id', vectorLayer.get('id'));
+    expect(tempLayers.find(i => i === vectorLayer)).toBeTruthy();
 
 
-    const tempGroup = getLayerByKey(map, 'id', layerGroupVector.get('id'));
-    expect(tempGroup === layerGroupVector).toBeTrue();
+    const tempGroup = getLayersByKey(map, 'id', layerGroupVector.get('id'));
+    expect(tempGroup.find(i => i === layerGroupVector)).toBeTruthy();
   });
 
 
   it('isLayerInGroup: should return if a Layer or Group is in a LayerGroup', () => {
-    addLayer(map, layerLayerGroup, 'Layers', 'type');
+    addLayer(map, layerGroupLayerGroup, 'Layers', 'type');
 
     const layerGroups = getLayerGroups(map, 'Layers', 'type');
     expect(layerGroups.length).toEqual(1);
@@ -346,18 +380,23 @@ describe('Utils OpenLayers Layers: ', () => {
 
 
   it('removeLayerFromGroup: should remove a Layer or Group from a LayerGroup', () => {
-    addLayer(map, layerLayerGroup);
+    addLayer(map, layerGroupLayerGroup);
     const layers = getLayers(map);
     expect(layers.length).toEqual(1);
-    const haseLayerForRemove = getLayerByKey(map, 'id', layerGroupImage.get('id'));
-    expect(haseLayerForRemove).toBeTruthy();
+    const haseLayerForRemove = getLayersByKey(map, 'id', layerGroupImage.get('id'));
+    if (!Array.isArray(haseLayerForRemove)) {
+      expect(haseLayerForRemove).toBeTruthy();
+    }
 
-    removeLayerFromGroup(layerGroupImage, layerLayerGroup);
-    const layersAfterRemove = getLayersFromGroup(layerLayerGroup);
+
+    removeLayerFromGroup(layerGroupImage, layerGroupLayerGroup);
+    const layersAfterRemove = getLayersFromGroup(layerGroupLayerGroup);
     expect(layersAfterRemove.length).toEqual(2);
 
-    const haseLayer = getLayerByKey(map, 'id', layerGroupImage.get('id'));
-    expect(haseLayer).toBeFalsy();
+    const haseLayer = getLayersByKey(map, 'id', layerGroupImage.get('id'));
+    if (!Array.isArray(haseLayer)) {
+      expect(haseLayer).toBeFalsy();
+    }
   });
 
 
