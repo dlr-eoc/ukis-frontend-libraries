@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent } from '@dlr-eoc/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, IAnyObject } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -33,10 +33,14 @@ import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
 import olWMTS from 'ol/source/WMTS';
 import { Options as olWMTSOptions } from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
+import { Options as olWMTSTileGridOptions } from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
+import { Options as olTileGridOptions } from 'ol/tilegrid/TileGrid';
+
 import olVectorSource from 'ol/source/Vector';
 import olTileJSON from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
+import { Options as olClusterOptions } from 'ol/source/Cluster';
 import olFeature from 'ol/Feature';
 
 import olCollection from 'ol/Collection';
@@ -57,12 +61,15 @@ import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 
 import { Options as olDragBoxOptions } from 'ol/interaction/DragBox';
+import olEvent from 'ol/events/Event';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olRenderFeature from 'ol/render/Feature';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 
 import { addBboxSelection, getLayersFromGroup } from '@dlr-eoc/utils-maps';
+import { GeoJSONFeature } from 'ol/format/GeoJSON';
+import { GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -71,9 +78,18 @@ const FILTER_TYPE_KEY = 'filtertype';
 const ID_KEY = 'id';
 const TITLE_KEY = 'title';
 
+export interface IProjDef {
+  code: string;
+  proj4js: string | proj4.ProjectionDefinition;
+  extent?: number[];
+  worldExtent?: number[];
+  global?: boolean;
+  units?: any;
+}
+
 export interface IPopupArgs {
   modelName: string;
-  properties: any;
+  properties: IAnyObject;
   layer: olLayer<any>;
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
@@ -223,7 +239,7 @@ export class MapOlService {
    * See this example:
    * https://openlayers.org/en/latest/examples/box-selection.html
    */
-  public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart?: (evt) => void, onBoxEnd?: (ext, evt) => void) {
+  public addBboxSelection(conditionForDrawing: (evt: olMapBrowserEvent<any>) => boolean, onBoxStart?: (evt: olEvent) => void, onBoxEnd?: (ext: TGeoExtent, evt: olEvent) => void) {
     const options: olDragBoxOptions = {
       className: 'ol-drag-select',
       condition: conditionForDrawing
@@ -808,7 +824,7 @@ export class MapOlService {
     }
 
     if (l.cluster) {
-      const clusteroptions: any = {};
+      const clusteroptions: olClusterOptions = {};
       if (typeof l.cluster === 'object') {
         Object.assign(clusteroptions, l.cluster);
       }
@@ -967,12 +983,12 @@ export class MapOlService {
       if (matrixIdPrefix) {
         return `${matrixIdPrefix}:${l}`;
       } else {
-        return l;
+        return `${l}`;
       }
     });
   }
 
-  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>): T {
+  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string>): T {
     const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
     const newTileSize = tileSize || DEFAULT_TILE_SIZE;
     const newMatrixIdPrefix = matrixIdPrefix || '';
@@ -982,7 +998,7 @@ export class MapOlService {
     const defaultMatrixIds = this.matrixIdsFromResolutions(defaultResolutions.length, newMatrixIdPrefix);
     /** how to generate matrix ids is not in the wms GetCapabilities ?? */
 
-    const tileGridOptions: any = {
+    const tileGridOptions: olTileGridOptions | olWMTSTileGridOptions = {
       extent: projectionExtent,
       origin: olGetTopLeft(projectionExtent),
       resolutions: resolutions || defaultResolutions,
@@ -990,8 +1006,8 @@ export class MapOlService {
     };
 
     if (type === 'wmts') {
-      tileGridOptions.matrixIds = matrixIds || defaultMatrixIds;
-      const grid = new olWMTSTileGrid(tileGridOptions);
+      (tileGridOptions as olWMTSTileGridOptions).matrixIds = matrixIds || defaultMatrixIds;
+      const grid = new olWMTSTileGrid(tileGridOptions as olWMTSTileGridOptions);
       return grid as unknown as T;
     } else if (type === 'default') {
       const grid = new olTileGrid(tileGridOptions);
@@ -1074,7 +1090,7 @@ export class MapOlService {
         if (layer instanceof olBaseVectorLayer) {
           const olSource: olCluster | olVectorSource<any> | olVectorTile = layer.getSource();
           if (olSource instanceof olCluster) {
-            return (olSource as any).getSource() instanceof olVectorSource;
+            return olSource.getSource() instanceof olVectorSource;
           } else {
             return olSource instanceof olVectorSource || olSource instanceof olVectorTile;
           }
@@ -1089,7 +1105,7 @@ export class MapOlService {
         const layer = item.layer;
         const feature = item.feature;
         const layerpopup: Layer['popup'] = layer.get('popup');
-        let properties: any = {};
+        let properties = {};
 
         if (layer instanceof olBaseVectorLayer && layerpopup) {
           const childFeatures = feature.getProperties().features;
@@ -1116,7 +1132,7 @@ export class MapOlService {
 
   public raster_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
     const layerpopup: Layer['popup'] = layer.get('popup');
-    let properties: any = {};
+    let properties: IAnyObject = {};
 
     if (layerpopup) {
       properties = layer.getProperties();
@@ -1129,7 +1145,7 @@ export class MapOlService {
     }
   }
 
-  private prepareAddPopup(layerProperties: any, layer: olLayer<any>, feature: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
+  private prepareAddPopup(layerProperties: IAnyObject, layer: olLayer<any>, feature: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
     const args: IPopupArgs = {
       modelName: layerProperties.id,
       properties: layerProperties,
@@ -1203,7 +1219,7 @@ export class MapOlService {
     }
   }
 
-  public addPopup(args: IPopupArgs, popupObj: any, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
+  public addPopup(args: IPopupArgs, popupObj: IAnyObject, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
     const layerpopup: Layer['popup'] = args.layer.get('popup');
     const content = document.createElement('div');
     content.className = 'ol-popup-content';
@@ -1307,7 +1323,7 @@ export class MapOlService {
     });
   }
 
-  public createPopupHtml(obj: any) {
+  public createPopupHtml(obj: IAnyObject) {
     let htmlStr = '<table>';
     for (const o in obj) {
       if (obj.hasOwnProperty(o)) {
@@ -1361,7 +1377,7 @@ export class MapOlService {
   }
 
   /** USED in map-ol.component */
-  public getCenter(geographic?: boolean): any {
+  public getCenter(geographic?: boolean) {
     const dstProjection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const srcProjection = getProjection(this.map.getView().getProjection().getCode());
     const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
@@ -1374,7 +1390,7 @@ export class MapOlService {
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public getFeaturesExtent(features: olFeature<any>[], geographic?: boolean): TGeoExtent {
-    const extent: any = features[0].getGeometry().getExtent().slice(0);
+    const extent = features[0].getGeometry().getExtent().slice(0);
     features.forEach((feature) => {
       olExtend(extent, feature.getGeometry().getExtent());
     });
@@ -1436,7 +1452,7 @@ export class MapOlService {
     }
   }
 
-  public geoJsonToFeature(geojson: any): olFeature<any> {
+  public geoJsonToFeature(geojson: GeoJSONFeature): olFeature<any> {
     const GEOJSON = new olGeoJSON({
       dataProjection: 'EPSG:4326',
       featureProjection: this.EPSG
@@ -1444,7 +1460,7 @@ export class MapOlService {
     return GEOJSON.readFeature(geojson);
   }
 
-  public geoJsonToFeatures(geojson: any): Array<olFeature<any>> {
+  public geoJsonToFeatures(geojson: GeoJSONFeatureCollection): Array<olFeature<any>> {
     const GEOJSON = new olGeoJSON({
       dataProjection: 'EPSG:4326',
       featureProjection: this.EPSG
@@ -1526,12 +1542,12 @@ export class MapOlService {
     }
   }
 
-  public registerProjection(projDef: any) {
+  public registerProjection(projDef: IProjDef) {
     proj4.defs(projDef.code, projDef.proj4js);
     olRegister(proj4);
   }
 
-  public getOlProjection(projDef: any): olProjection {
+  public getOlProjection(projDef: IProjDef): olProjection {
     return new olProjection({
       code: projDef.code,
       extent: projDef.extent ? projDef.extent : undefined,
@@ -1541,7 +1557,7 @@ export class MapOlService {
     });
   }
 
-  private keysToUppercase<T>(obj: { [k: string]: any }) {
+  private keysToUppercase<T>(obj: IAnyObject) {
     Object.keys(obj).forEach((key) => {
       const k = key.toUpperCase();
       if (k !== key) {

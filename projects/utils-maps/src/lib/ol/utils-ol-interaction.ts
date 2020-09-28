@@ -8,6 +8,7 @@ import { Options as OverlayOptions } from 'ol/Overlay';
 import MapBrowserEvent from 'ol/MapBrowserEvent';
 import RenderFeature from 'ol/render/Feature';
 import Feature from 'ol/Feature';
+import olEvent from 'ol/events/Event';
 
 
 export interface IPopupOptions {
@@ -23,7 +24,7 @@ export interface IPopupOptions {
  * Add a box-selection interaction to the map
  * https://openlayers.org/en/latest/examples/box-selection.html
  */
-export function addBboxSelection(map: Map, onBoxStart?: (evt) => void, onBoxEnd?: (ext, evt) => void, dragBoxOptions?: DragBoxOptions) {
+export function addBboxSelection(map: Map, onBoxStart?: (evt: olEvent) => void, onBoxEnd?: (ext, evt: olEvent) => void, dragBoxOptions?: DragBoxOptions) {
   const options = {
     className: 'ol-drag-select'
   };
