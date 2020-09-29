@@ -445,7 +445,7 @@ describe('Utils OpenLayers Layers: ', () => {
   });
 
 
-  /* it('removeLayerByKey: should remove a Layer or Group by key from the map', () => {
+  it('removeLayerByKey: should remove a Layer or Group by key from the map', () => {
     addLayer(map, layerGroupLayerGroup);
     const layers = getLayers(map);
     expect(layers.length).toEqual(1);
@@ -463,7 +463,7 @@ describe('Utils OpenLayers Layers: ', () => {
     if (!Array.isArray(haseLayer)) {
       expect(haseLayer).toBeFalsy();
     }
-  }); */
+  });
 
 
 });

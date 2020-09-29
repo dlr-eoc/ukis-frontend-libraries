@@ -192,11 +192,15 @@ export function isLayerInGroup(layer: BaseLayer, layerGroup: LayerGroup, filtert
  * @param filtertypeKey [filtertypeKey='filtertype']
  */
 export function removeLayerByKey(map: Map, key: string, value: string, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY) {
-  const layer = getLayersByKey(map, key, value, filtertype, filtertypeKey);
-  if (Array.isArray(layer)) {
-    layer.forEach(l => map.removeLayer(l));
-  } else {
-    map.removeLayer(layer);
+  const layers = getLayersByKey(map, key, value, filtertype, filtertypeKey);
+  if (layers.length) {
+    layers.forEach(l => {
+      const gropObj = getLayerGroupForLayer(map, l);
+      if (gropObj.group) {
+        const filterdLayers = getLayersFromGroup(gropObj.group).filter(i => i !== l);
+        gropObj.group.setLayers(new Collection(filterdLayers));
+      }
+    });
   }
 }
 
