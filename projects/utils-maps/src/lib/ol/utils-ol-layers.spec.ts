@@ -5,7 +5,7 @@ import { fromLonLat } from 'ol/proj';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { flattenLayers, getLayerGroups } from './utils-ol-layers';
+import { flattenLayers, getLayerGroupForLayer, getLayerGroups, removeLayerByKey, removeLayerByKeyFromGroup } from './utils-ol-layers';
 
 
 import XYZ from 'ol/source/XYZ';
@@ -400,6 +400,70 @@ describe('Utils OpenLayers Layers: ', () => {
   });
 
 
+  it('removeLayerByKeyFromGroup: should remove a Layer or Group from a LayerGroup', () => {
+    addLayer(map, layerGroupLayerGroup);
+    const layers = getLayers(map);
+    expect(layers.length).toEqual(1);
+    const haseLayerForRemove = getLayersByKey(map, 'id', layerGroupImage.get('id'));
+    if (!Array.isArray(haseLayerForRemove)) {
+      expect(haseLayerForRemove).toBeTruthy();
+    }
+
+
+    removeLayerByKeyFromGroup('id', layerGroupImage.get('id'), layerGroupLayerGroup);
+    const layersAfterRemove = getLayersFromGroup(layerGroupLayerGroup);
+    expect(layersAfterRemove.length).toEqual(2);
+
+    const haseLayer = getLayersByKey(map, 'id', layerGroupImage.get('id'));
+    if (!Array.isArray(haseLayer)) {
+      expect(haseLayer).toBeFalsy();
+    }
+  });
+
+
+  it('getLayerGroupForLayerByKey: should get the group from a Layer', () => {
+    // layerGroupLayerGroupLayerGroup.layers[
+    //  layerGroupLayerGroup.layers[layerGroupRaster, layerGroupImage, layerGroupVector]
+    // ]
+    addLayer(map, osmLayer);
+    addLayer(map, layerGroupLayerGroupLayerGroup);
+    const layers = getLayers(map);
+    expect(layers.length).toEqual(2);
+
+    const obj1 = getLayerGroupForLayer(map, layerGroupRaster);
+    expect(obj1.group === layerGroupLayerGroup).toBeTrue();
+    expect(obj1.layer === layerGroupRaster).toBeTrue();
+
+    const obj2 = getLayerGroupForLayer(map, vectorLayer);
+    expect(obj2.group === layerGroupVector).toBeTrue();
+    expect(obj2.layer === vectorLayer).toBeTrue();
+
+
+    const obj3 = getLayerGroupForLayer(map, osmLayer);
+    expect(obj3.group === map.getLayerGroup()).toBeTrue();
+    expect(obj3.layer === osmLayer).toBeTrue();
+  });
+
+
+  /* it('removeLayerByKey: should remove a Layer or Group by key from the map', () => {
+    addLayer(map, layerGroupLayerGroup);
+    const layers = getLayers(map);
+    expect(layers.length).toEqual(1);
+    const haseLayerForRemove = getLayersByKey(map, 'id', layerGroupImage.get('id'));
+    if (!Array.isArray(haseLayerForRemove)) {
+      expect(haseLayerForRemove).toBeTruthy();
+    }
+
+
+    removeLayerByKey(map, 'id', layerGroupImage.get('id'));
+    const layersAfterRemove = getLayersFromGroup(layerGroupLayerGroup);
+    expect(layersAfterRemove.length).toEqual(2);
+
+    const haseLayer = getLayersByKey(map, 'id', layerGroupImage.get('id'));
+    if (!Array.isArray(haseLayer)) {
+      expect(haseLayer).toBeFalsy();
+    }
+  }); */
 
 
 });

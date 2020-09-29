@@ -142,6 +142,28 @@ export function getLayersByKey(map: Map, key: string, value: any, filtertype?: s
 }
 
 /**
+ * get corresponding Layer Group on which the layer is added
+ */
+export function getLayerGroupForLayer(map: Map, layer: BaseLayer) {
+  const subLayers = getLayers(map, null, null, true);
+  subLayers.push(map.getLayerGroup());
+  let lyerGroup: { group: LayerGroup, layer: BaseLayer } | null = null;
+  subLayers.forEach((l) => {
+    if (l instanceof LayerGroup) {
+      const groupLayers = getLayersFromGroup(l);
+      const hasLayer = groupLayers.find(i => i === layer);
+      if (hasLayer) {
+        lyerGroup = {
+          group: l,
+          layer: hasLayer
+        };
+      }
+    }
+  });
+  return lyerGroup;
+}
+
+/**
  * Check if a Layer/Group is in a LayerGroup - by layer.get(key)
  *
  * @param filtertypeKey [filtertypeKey='filtertype']
@@ -170,8 +192,7 @@ export function isLayerInGroup(layer: BaseLayer, layerGroup: LayerGroup, filtert
  * @param filtertypeKey [filtertypeKey='filtertype']
  */
 export function removeLayerByKey(map: Map, key: string, value: string, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY) {
-  const lowerType = filtertype.toLocaleLowerCase();
-  const layer = getLayersByKey(map, key, value, lowerType, filtertypeKey);
+  const layer = getLayersByKey(map, key, value, filtertype, filtertypeKey);
   if (Array.isArray(layer)) {
     layer.forEach(l => map.removeLayer(l));
   } else {
@@ -209,6 +230,15 @@ export function removeLayerFromGroup(layer: BaseLayer, group: LayerGroup, key: s
   group.setLayers(new Collection(filterdLayers));
 }
 
+
+/**
+ * Removes a Layer/Group from a LayerGroup - by key and value
+ */
+export function removeLayerByKeyFromGroup(key: string, value: string, group: LayerGroup) {
+  const layers = getLayersFromGroup(group);
+  const filterdLayers = layers.filter(l => l.get(key) !== value);
+  group.setLayers(new Collection(filterdLayers));
+}
 
 /**
  * Get a flatt Array of layers from all layers and groups
