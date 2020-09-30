@@ -5,8 +5,6 @@ import { fromLonLat } from 'ol/proj';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-import { flattenLayers, getLayerGroupForLayer, getLayerGroups, removeLayerByKey, removeLayerByKeyFromGroup } from './utils-ol-layers';
-
 
 import XYZ from 'ol/source/XYZ';
 
@@ -18,10 +16,10 @@ import ImageLayer from 'ol/layer/Image';
 import ImageStaticSource from 'ol/source/ImageStatic';
 import Projection from 'ol/proj/Projection';
 
-
-import { getUid } from 'ol/util';
-import { addLayer, getLayersByKey, getLayers, getLayersFromGroup, isLayerInGroup, removeAllLayers, removeLayerFromGroup } from './utils-ol-layers';
-import { Collection } from 'ol';
+import {
+  addLayer, getLayersByKey, getLayers, getLayersFromGroup, isLayerInGroup, removeAllLayers, removeLayerFromGroup,
+  flattenLayers, getLayerGroupForLayer, getLayerGroups, removeLayerByKey, removeLayerByKeyFromGroup, setRecursiveKey
+} from './utils-ol-layers';
 
 
 let rasterLayer: TileLayer;
@@ -235,6 +233,16 @@ describe('Utils OpenLayers Layers: ', () => {
 
   });
 
+  it('setRecursiveKey: should set a value for a key on a Layer or Group recrusive', () => {
+    expect(layerGroupImage.get('testType')).toBe(undefined);
+    setRecursiveKey(layerGroupImage, 'a', 'testType');
+
+    expect(layerGroupImage.get('testType')).toBe('a');
+    layerGroupImage.getLayersArray().forEach(l => {
+      expect(l.get('testType')).toBe('a');
+    });
+  });
+
   it('addLayer: should add/get a Layer or Group to/from the map with a filtertypeKey set to filtertype', () => {
     addLayer(map, layerGroupImage, 'Overlays', 'type');
     addLayer(map, layerGroupVector, 'Layers', 'type');
@@ -262,15 +270,15 @@ describe('Utils OpenLayers Layers: ', () => {
 
     // get all layers without filtering for a type
     const allLayers = getLayers(map, null, null, true);
-    expect(allLayers.length).toEqual(11);
+    expect(allLayers.length).toBe(11);
 
     // get all layers filtered by get('type') = Layers
     const allLayersLayers = getLayers(map, 'Layers', 'type', true);
-    expect(allLayersLayers.length).toEqual(10);
+    expect(allLayersLayers.length).toBe(10);
 
     // get all layers filtered by get('type') = Layers
     const allLayersOverlays = getLayers(map, 'Overlays', 'type', true);
-    expect(allLayersOverlays.length).toEqual(1);
+    expect(allLayersOverlays.length).toBe(1);
   });
 
 
@@ -281,7 +289,7 @@ describe('Utils OpenLayers Layers: ', () => {
 
 
     const layerGroups = getLayerGroups(map, null);
-    expect(layerGroups.length).toEqual(3);
+    expect(layerGroups.length).toBe(3);
     expect(layerGroups.includes(layerGroupImage)).toBeTrue();
     expect(layerGroups.includes(layerGroupRaster)).toBeTrue();
     expect(layerGroups.includes(layerGroupVector)).toBeTrue();
@@ -293,7 +301,7 @@ describe('Utils OpenLayers Layers: ', () => {
     addLayer(map, layerGroupRaster, 'Baselayers');
 
     const filteredLayerGroups = getLayerGroups(map, 'Baselayers');
-    expect(filteredLayerGroups.length).toEqual(1);
+    expect(filteredLayerGroups.length).toBe(1);
   });
 
   it('getLayerGroups: should get all direkt Layer Groups with filtertype Layers and custom filtertypeKey', () => {
@@ -302,21 +310,21 @@ describe('Utils OpenLayers Layers: ', () => {
     addLayer(map, layerGroupRaster, 'Baselayers');
 
     const filteredLayerGroupsType = getLayerGroups(map, 'Layers', 'type');
-    expect(filteredLayerGroupsType.length).toEqual(1);
+    expect(filteredLayerGroupsType.length).toBe(1);
   });
 
   it('getLayersFromGroup: should get all Layers/Groups from a layerGroup with a filtertypeKey set to filtertype', () => {
     addLayer(map, layerGroupVector, 'Layers', 'type');
 
     const filteredLayerGroupsType = getLayerGroups(map, 'Layers', 'type');
-    expect(filteredLayerGroupsType.length).toEqual(1);
+    expect(filteredLayerGroupsType.length).toBe(1);
 
     const groupLayers = getLayersFromGroup(filteredLayerGroupsType[0], 'Layers', 'type', false);
-    expect(groupLayers.length).toEqual(2);
+    expect(groupLayers.length).toBe(2);
 
 
     const recursiveGroupLayers = getLayersFromGroup(layerGroupLayerGroup, null, null, true);
-    expect(recursiveGroupLayers.length).toEqual(8);
+    expect(recursiveGroupLayers.length).toBe(8);
     expect(recursiveGroupLayers.includes(layerGroupImage)).toBeTrue();
     expect(recursiveGroupLayers.includes(layerGroupRaster)).toBeTrue();
     expect(recursiveGroupLayers.includes(layerGroupVector)).toBeTrue();
@@ -345,7 +353,7 @@ describe('Utils OpenLayers Layers: ', () => {
     addLayer(map, layerGroupLayerGroup, 'Layers', 'type');
 
     const layerGroups = getLayerGroups(map, 'Layers', 'type');
-    expect(layerGroups.length).toEqual(1);
+    expect(layerGroups.length).toBe(1);
 
     const haseLayer = isLayerInGroup(vectorLayer, layerGroups[0]);
     expect(haseLayer).toBeTrue();
@@ -363,7 +371,7 @@ describe('Utils OpenLayers Layers: ', () => {
 
     removeAllLayers(map);
     const layers = getLayers(map);
-    expect(layers.length).toEqual(0);
+    expect(layers.length).toBe(0);
   });
 
   it('removeAllLayers: should remove all Layers or Groups only for a filtertype', () => {
@@ -375,49 +383,40 @@ describe('Utils OpenLayers Layers: ', () => {
     removeAllLayers(map, 'Layers');
     removeAllLayers(map, 'Overlays');
     const layers = getLayers(map);
-    expect(layers.length).toEqual(2);
+    expect(layers.length).toBe(2);
   });
 
 
   it('removeLayerFromGroup: should remove a Layer or Group from a LayerGroup', () => {
     addLayer(map, layerGroupLayerGroup);
     const layers = getLayers(map);
-    expect(layers.length).toEqual(1);
+    expect(layers.length).toBe(1);
     const haseLayerForRemove = getLayersByKey(map, 'id', layerGroupImage.get('id'));
-    if (!Array.isArray(haseLayerForRemove)) {
-      expect(haseLayerForRemove).toBeTruthy();
-    }
-
+    expect(haseLayerForRemove.length).toBe(1);
 
     removeLayerFromGroup(layerGroupImage, layerGroupLayerGroup);
     const layersAfterRemove = getLayersFromGroup(layerGroupLayerGroup);
-    expect(layersAfterRemove.length).toEqual(2);
+    expect(layersAfterRemove.length).toBe(2);
 
     const haseLayer = getLayersByKey(map, 'id', layerGroupImage.get('id'));
-    if (!Array.isArray(haseLayer)) {
-      expect(haseLayer).toBeFalsy();
-    }
+    expect(haseLayer.length).toBe(0);
   });
 
 
   it('removeLayerByKeyFromGroup: should remove a Layer or Group from a LayerGroup', () => {
     addLayer(map, layerGroupLayerGroup);
     const layers = getLayers(map);
-    expect(layers.length).toEqual(1);
+    expect(layers.length).toBe(1);
     const haseLayerForRemove = getLayersByKey(map, 'id', layerGroupImage.get('id'));
-    if (!Array.isArray(haseLayerForRemove)) {
-      expect(haseLayerForRemove).toBeTruthy();
-    }
+    expect(haseLayerForRemove.length).toBe(1);
 
 
     removeLayerByKeyFromGroup('id', layerGroupImage.get('id'), layerGroupLayerGroup);
     const layersAfterRemove = getLayersFromGroup(layerGroupLayerGroup);
-    expect(layersAfterRemove.length).toEqual(2);
+    expect(layersAfterRemove.length).toBe(2);
 
     const haseLayer = getLayersByKey(map, 'id', layerGroupImage.get('id'));
-    if (!Array.isArray(haseLayer)) {
-      expect(haseLayer).toBeFalsy();
-    }
+    expect(haseLayer.length).toBe(0);
   });
 
 
@@ -428,7 +427,7 @@ describe('Utils OpenLayers Layers: ', () => {
     addLayer(map, osmLayer);
     addLayer(map, layerGroupLayerGroupLayerGroup);
     const layers = getLayers(map);
-    expect(layers.length).toEqual(2);
+    expect(layers.length).toBe(2);
 
     const obj1 = getLayerGroupForLayer(map, layerGroupRaster);
     expect(obj1.group === layerGroupLayerGroup).toBeTrue();
@@ -448,23 +447,30 @@ describe('Utils OpenLayers Layers: ', () => {
   it('removeLayerByKey: should remove a Layer or Group by key from the map', () => {
     addLayer(map, layerGroupLayerGroup);
     const layers = getLayers(map);
-    expect(layers.length).toEqual(1);
+    expect(layers.length).toBe(1);
     const haseLayerForRemove = getLayersByKey(map, 'id', layerGroupImage.get('id'));
-    if (!Array.isArray(haseLayerForRemove)) {
-      expect(haseLayerForRemove).toBeTruthy();
-    }
+    expect(haseLayerForRemove.length).toBe(1);
+
 
 
     removeLayerByKey(map, 'id', layerGroupImage.get('id'));
     const layersAfterRemove = getLayersFromGroup(layerGroupLayerGroup);
-    expect(layersAfterRemove.length).toEqual(2);
+    expect(layersAfterRemove.length).toBe(2);
 
     const haseLayer = getLayersByKey(map, 'id', layerGroupImage.get('id'));
-    if (!Array.isArray(haseLayer)) {
-      expect(haseLayer).toBeFalsy();
-    }
+    expect(haseLayer.length).toBe(0);
   });
 
+
+  // TODO:
+  /* it('resolutionsFromExtent: ...', () => {
+  });
+
+  it('matrixIdsFromResolutions: ...', () => {
+  });
+
+  it('getTileGrid: ...', () => {
+  }); */
 
 });
 
@@ -504,6 +510,6 @@ describe('flattenLayers test suite', () => {
     });
 
     const flattenedLayers = flattenLayers(map2.getLayers().getArray());
-    expect(flattenedLayers.length).toEqual(2);
+    expect(flattenedLayers.length).toBe(2);
   });
 });
