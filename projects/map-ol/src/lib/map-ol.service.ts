@@ -67,7 +67,7 @@ import olRenderFeature from 'ol/render/Feature';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 
-import { addBboxSelection, getLayerGroups, getLayersFromGroup, getLayersByKey } from '@dlr-eoc/utils-maps';
+import { addBboxSelection, getLayerGroups, getLayersFromGroup, getLayersByKey, isLayerInGroup, removeLayerByKey, setRecursiveKey } from '@dlr-eoc/utils-maps';
 import { GeoJSONFeature } from 'ol/format/GeoJSON';
 import { GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
 
@@ -251,7 +251,9 @@ export class MapOlService {
   }
 
   /**
-   * get an array of olLayers from a group filtertype - so all direkt child layers from one of the layergroups
+   * get an array of olLayers from one of the base groups of filtertype - so all direkt child layers from one of the layergroups
+   *
+   * base groups: baselayerGroup | layersGroup | overlayGroup
    */
   public getLayers(filtertype: Tgroupfiltertype) {
     let layers: olBaseLayer[] = [];
@@ -263,7 +265,7 @@ export class MapOlService {
   }
 
   /**
-   * get a layer from the map by key and value
+   * get a layer from the map by key and value - this is working recursive so even if the layer is in a group
    */
   public getLayerByKey(key: { key: string, value: string }, filtertype?: Tgroupfiltertype) {
     let layers: olBaseLayer[] = [];
@@ -282,155 +284,137 @@ export class MapOlService {
   }
 
   /**
-   * add a olLayer to a group if it is not there
+   * add a olLayer to one of the base groups if it is not already in the group
+   *
+   * base groups: baselayerGroup | layersGroup | overlayGroup
+   *
+   * returns the new layers which are then in the group
    */
   public addLayer(layer: olBaseLayer, filtertype: Tgroupfiltertype) {
-    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
-    let layers;
-    this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
-        if (!this.isLayerInGroup(layer, layerGroup)) {
-          layers = layerGroup.getLayers().getArray();
-          layers.push(layer);
-          layerGroup.setLayers(new olCollection(layers));
-        }
+    let layers: olBaseLayer[];
+    const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
+    layerGroups.forEach(l => {
+      if (!this.isLayerInGroup(layer, l)) {
+        layers = l.getLayers().getArray();
+        setRecursiveKey(layer, filtertype.toLocaleLowerCase(), FILTER_TYPE_KEY);
+        layers.push(layer);
+        l.setLayers(new olCollection(layers));
       }
     });
     return layers;
   }
 
   private isLayerInGroup(layer: olBaseLayer, layerGroup: olLayerGroup) {
-    const layers = layerGroup.getLayers().getArray();
-    const haseLayer = layers.filter(l => l.get(ID_KEY) === layer.get(ID_KEY));
-    if (haseLayer.length) {
-      return true;
-    } else {
-      return false;
-    }
+    return isLayerInGroup(layer, layerGroup, null, null, ID_KEY);
   }
 
 
   /**
-   * add a array of olLayers to a group if they are not there
+   * add a array of olLayers to a base group if they are not there
+   *
+   * base groups: baselayerGroup | layersGroup | overlayGroup
    */
   public addLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
-    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
-    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
-        const groupLayers = layerGroup.getLayers();
-
-        if (groupLayers.getLength() > 0) {
-          const mergLayers = layerGroup.getLayers().getArray();
-          layers.map(layer => {
-            if (!this.isLayerInGroup(layer, layerGroup)) {
-              mergLayers.push(layer);
-            }
-          });
-          layerGroup.setLayers(new olCollection(mergLayers));
-        } else {
-          layerGroup.setLayers(new olCollection(layers));
-        }
+    let newLayers: olBaseLayer[];
+    const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
+    layerGroups.forEach(l => {
+      const groupLayers = l.getLayers();
+      if (groupLayers.getLength() > 0) {
+        // I think doing it like this should be more performant like as using the addLayer in a loop
+        newLayers = l.getLayers().getArray();
+        layers.map(layer => {
+          if (!this.isLayerInGroup(layer, l)) {
+            newLayers.push(layer);
+          }
+        });
+      } else {
+        newLayers = layers;
       }
+      l.setLayers(new olCollection(newLayers));
+    });
+    return newLayers;
+  }
+
+  /**
+   * reset a base group with an array of olLayers
+   *
+   * base groups: baselayerGroup | layersGroup | overlayGroup
+   */
+  public setLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
+    const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
+    layerGroups.forEach(l => {
+      l.setLayers(new olCollection(layers));
     });
     return layers;
   }
 
   /**
-   * reset a group with an array of olLayers
+   *
    */
-  public setLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
-    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
-    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
-        layerGroup.setLayers(new olCollection(layers));
-      }
-    });
-    return layers;
-  }
-
-
   public removeLayerByKey(key: { key: string, value: string }, filtertype: Tgroupfiltertype) {
-    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
-    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
-        const groupLayers = layerGroup.getLayers();
-        let removeLayer;
-        groupLayers.forEach((layer) => {
-          if (layer.get(key.key) && layer.get(key.key) === key.value) {
-            removeLayer = layer;
-          }
-        });
-        if (removeLayer) {
-          groupLayers.remove(removeLayer);
-          layerGroup.setLayers(groupLayers);
-        }
-      }
-    });
+    removeLayerByKey(this.map, key.key, key.value, filtertype, FILTER_TYPE_KEY);
+    /* const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
+    layerGroups.forEach(l => {
+      removeLayerByKeyFromGroup(key.key, key.value, l);
+    }); */
   }
 
   public updateLayerByKey(key: { key: string, value: string }, newLayer: olBaseLayer, filtertype: Tgroupfiltertype) {
-    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
-    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
-        const groupLayers = layerGroup.getLayers();
-        groupLayers.forEach((oldLayer, index) => {
-          if (oldLayer.get(key.key) && oldLayer.get(key.key) === key.value) {
+    const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
+    layerGroups.forEach(l => {
+      const groupLayers = l.getLayers();
+      groupLayers.forEach((oldLayer, index) => {
+        if (oldLayer.get(key.key) && oldLayer.get(key.key) === key.value) {
 
-            const newProperties = newLayer.getProperties();
-            const newExtent = newLayer.getExtent();
+          const newProperties = newLayer.getProperties();
+          const newExtent = newLayer.getExtent();
 
-            const newMaxZoom = newLayer.getMaxZoom();
-            const newMinZoom = newLayer.getMinZoom();
+          const newMaxZoom = newLayer.getMaxZoom();
+          const newMinZoom = newLayer.getMinZoom();
 
-            const newOpacity = newLayer.getOpacity();
-            const newVisible = newLayer.getVisible();
+          const newOpacity = newLayer.getOpacity();
+          const newVisible = newLayer.getVisible();
 
-            const newZIndex = newLayer.getZIndex();
+          const newZIndex = newLayer.getZIndex();
 
-            if (oldLayer instanceof olLayer && newLayer instanceof olLayer) {
-              const newSource = newLayer.getSource();
-              oldLayer.setSource(newSource);
-            }
-            if (newProperties) {
-              oldLayer.setProperties(newProperties);
-            }
-            if (newExtent) {
-              oldLayer.setExtent(newExtent);
-            }
-            if (newMaxZoom) {
-              oldLayer.setMaxZoom(newMaxZoom);
-            }
-            if (newMinZoom) {
-              oldLayer.setMinZoom(newMinZoom);
-            }
-            if (newOpacity) {
-              oldLayer.setOpacity(newOpacity);
-            }
-            if (newVisible) {
-              oldLayer.setVisible(newVisible);
-            }
-            if (newZIndex) {
-              oldLayer.setZIndex(newZIndex);
-            }
-            oldLayer.changed();
-            groupLayers.setAt(index, oldLayer);
+          if (oldLayer instanceof olLayer && newLayer instanceof olLayer) {
+            const newSource = newLayer.getSource();
+            oldLayer.setSource(newSource);
           }
-        });
-        layerGroup.setLayers(groupLayers);
-      }
+          if (newProperties) {
+            oldLayer.setProperties(newProperties);
+          }
+          if (newExtent) {
+            oldLayer.setExtent(newExtent);
+          }
+          if (newMaxZoom) {
+            oldLayer.setMaxZoom(newMaxZoom);
+          }
+          if (newMinZoom) {
+            oldLayer.setMinZoom(newMinZoom);
+          }
+          if (newOpacity) {
+            oldLayer.setOpacity(newOpacity);
+          }
+          if (newVisible) {
+            oldLayer.setVisible(newVisible);
+          }
+          if (newZIndex) {
+            oldLayer.setZIndex(newZIndex);
+          }
+          oldLayer.changed();
+          groupLayers.setAt(index, oldLayer);
+        }
+      });
+      l.setLayers(groupLayers);
     });
   }
 
   public removeAllLayers(filtertype: Tgroupfiltertype) {
-    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
-    let layers;
-    this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
-        layers = layerGroup.getLayers();
-        layers.clear();
-      }
+    const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
+    layerGroups.forEach(l => {
+      l.getLayers().clear();
     });
-
   }
 
   /**

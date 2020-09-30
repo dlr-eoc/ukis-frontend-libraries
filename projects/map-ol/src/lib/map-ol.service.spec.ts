@@ -274,6 +274,7 @@ describe('MapOlService', () => {
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(rasterLayer, 'layers');
+    // it should not add the duplicate rasterLayer
     service.addLayers([rasterLayer, imageLayer, vectorImageLayer], 'layers');
 
     expect(service.getLayers('layers').length).toEqual(4);
@@ -317,9 +318,7 @@ describe('MapOlService', () => {
     service.addLayer(groupLayer2, 'layers');
 
     expect(service.getLayerByKey({ key: 'id', value: 'ID-raster' }, 'layers')).toBe(rasterLayer);
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-group-layer1' })).toBe(groupLayer1);
-
-    // expect(service.getLayerByKey({ key: 'id', value: 'ID-group-layer1' }, 'layers')).toBe(groupLayer1);
+    expect(service.getLayerByKey({ key: 'id', value: 'ID-group-layer1' }, 'layers')).toBe(groupLayer1);
   });
 
   it('should remove all layers from a Type', () => {
@@ -333,10 +332,17 @@ describe('MapOlService', () => {
   it('should remove a layer by key from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
-    service.addLayer(rasterLayer, 'layers');
+    // groupLayer2 -> groupLayer1 -> rasterLayer
+    service.addLayer(groupLayer2, 'layers');
     service.addLayer(vectorLayer, 'layers');
-    service.removeLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBeFalsy();
+    expect(service.getLayers('layers').length).toEqual(2);
+
+    service.removeLayerByKey({ key: 'id', value: 'ID-raster' }, 'layers');
+    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: 'ID-group-layer2' }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: 'ID-group-layer1' }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: 'ID-raster' }, 'layers')).toBeFalsy();
+    expect(service.getLayers('layers').length).toEqual(2);
   });
 
   it('should update a layer by key from a Type', () => {
@@ -346,8 +352,8 @@ describe('MapOlService', () => {
 
     const visible = true, opacity = 0.5, minzoom = 2, maxzoom = 15;
     vectorLayer = new olVectorLayer({
-    })
-    vectorLayer.set('id', 'ID-vector')
+    });
+    vectorLayer.set('id', 'ID-vector');
     const newLayer = vectorLayer;
 
     newLayer.setSource(vectorLayer.getSource());
