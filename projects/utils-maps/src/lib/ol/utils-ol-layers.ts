@@ -3,7 +3,7 @@ import { Layer } from 'ol/layer';
 import BaseLayer from 'ol/layer/Base';
 import LayerGroup from 'ol/layer/Group';
 import Collection from 'ol/Collection';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
+import { getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import TileGrid from 'ol/tilegrid/TileGrid';
@@ -16,13 +16,13 @@ const FILTER_TYPE_KEY = 'filtertype';
 /**
  * set a FilterType to a Layer or Group recursively
  *
- * @param filtertypeKey [filtertypeKey='filtertype']
+ * @param key [key='filtertype']
  */
-export function setFilterType(layer: BaseLayer, filtertype: string, filtertypeKey = FILTER_TYPE_KEY) {
-  layer.set(filtertypeKey, filtertype);
+export function setRecursiveKey(layer: BaseLayer, value: string, key = FILTER_TYPE_KEY) {
+  layer.set(key, value);
   if (layer instanceof LayerGroup) {
     layer.getLayers().forEach(l => {
-      setFilterType(l, filtertype, filtertypeKey);
+      setRecursiveKey(l, value, key);
     });
   }
 }
@@ -34,7 +34,7 @@ export function setFilterType(layer: BaseLayer, filtertype: string, filtertypeKe
  */
 export function addLayer(map: Map, layer: BaseLayer, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY) {
   if (filtertype) {
-    setFilterType(layer, filtertype, filtertypeKey);
+    setRecursiveKey(layer, filtertype, filtertypeKey);
   }
   map.addLayer(layer);
   return layer;
@@ -264,9 +264,12 @@ export function flattenLayers(layers: BaseLayer[]): Layer<any>[] {
 }
 
 
-/** --------------------------------------------------------------- */
+/** TODO: --------------------------------------------------------------- */
 
-export function resolutionsFromExtent(extent, optMaxZoom: number, tileSize: number) {
+/**
+ * get the View resolutions for an extent with a certain tileSize
+ */
+export function resolutionsFromExtent(extent: number[], optMaxZoom: number, tileSize: number) {
   const maxZoom = optMaxZoom;
 
   const height = olGetHeight(extent);
@@ -275,14 +278,16 @@ export function resolutionsFromExtent(extent, optMaxZoom: number, tileSize: numb
   const maxResolution = Math.max(width / tileSize, height / tileSize);
 
   const length = maxZoom + 1;
-  const resolutions = new Array(length);
+  const resolutions = new Array<number>(length);
   for (let z = 0; z < length; ++z) {
     resolutions[z] = maxResolution / Math.pow(2, z);
   }
   return resolutions;
 }
 
-
+/**
+ * get matrixIds
+ */
 export function matrixIdsFromResolutions(resolutionLevels: number, matrixIdPrefix?: string) {
   return Array.from(Array(resolutionLevels).keys()).map(l => {
     if (matrixIdPrefix) {
@@ -294,7 +299,12 @@ export function matrixIdsFromResolutions(resolutionLevels: number, matrixIdPrefi
 }
 
 
-
+/**
+ * get TileGrid or WMTSTileGrid
+ * @param resolutionLevels [resolutionLevels=DEFAULT_MAX_ZOOM]
+ * @param tileSize [tileSize=DEFAULT_TILE_SIZE]
+ * @param matrixIdPrefix [matrixIdPrefix='']
+ */
 export function getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>): T {
   const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
   const newTileSize = tileSize || DEFAULT_TILE_SIZE;
