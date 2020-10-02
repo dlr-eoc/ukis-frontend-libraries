@@ -3,7 +3,7 @@ import { Layer } from 'ol/layer';
 import BaseLayer from 'ol/layer/Base';
 import LayerGroup from 'ol/layer/Group';
 import Collection from 'ol/Collection';
-import { getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
+import { getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, Extent } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import TileGrid from 'ol/tilegrid/TileGrid';
@@ -267,7 +267,7 @@ export function flattenLayers(layers: BaseLayer[]): Layer<any>[] {
 /**
  * get the View resolutions for an extent with a certain tileSize
  */
-export function resolutionsFromExtent(extent: number[], optMaxZoom: number, tileSize: number) {
+export function resolutionsFromExtent(extent: number[], optMaxZoom: number, tileSize: number): number[] {
   const maxZoom = optMaxZoom;
 
   const height = olGetHeight(extent);
@@ -286,46 +286,93 @@ export function resolutionsFromExtent(extent: number[], optMaxZoom: number, tile
 /**
  * get matrixIds
  */
-export function matrixIdsFromResolutions(resolutionLevels: number, matrixIdPrefix?: string) {
-  return Array.from(Array(resolutionLevels).keys()).map(l => {
-    if (matrixIdPrefix) {
-      return `${matrixIdPrefix}:${l}`;
-    } else {
-      return l;
-    }
-  });
+export function matrixIdsFromResolutions(resolutionLevels: number, matrixIdPrefix: string = ''): string[] {
+  const matrixIds: string[] = [];
+  for (let i = 0; i < resolutionLevels; i++) {
+    matrixIds.push(`${matrixIdPrefix}:${i}`);
+  }
+  return matrixIds;
 }
 
 
+
 /**
- * get TileGrid or WMTSTileGrid
- * @param resolutionLevels [resolutionLevels=DEFAULT_MAX_ZOOM]
- * @param tileSize [tileSize=DEFAULT_TILE_SIZE]
- * @param matrixIdPrefix [matrixIdPrefix='']
+ * Creates a tile-grid for known resolutions.
+ * @param extent  Commonly obtained from `map.getView().getProjection().getExtent()`
+ * @param resolutions  Array of resolutions at which the tile-server is known to provide tiles.
+ * @param tileSize
  */
-export function getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>): T {
-  const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
-  const newTileSize = tileSize || DEFAULT_TILE_SIZE;
-  const newMatrixIdPrefix = matrixIdPrefix || '';
+export function getTileGrid(extent: Extent, resolutions: number[], tileSize: number = DEFAULT_TILE_SIZE): TileGrid {
 
-  const projectionExtent = this.getProjection().getExtent();
-  const defaultResolutions = this.resolutionsFromExtent(projectionExtent, newResolutionLevels, newTileSize);
-  const defaultMatrixIds = this.matrixIdsFromResolutions(defaultResolutions.length, newMatrixIdPrefix);
-  /** how to generate matrix ids is not in the wms GetCapabilities ?? */
-
-  const tileGridOptions: any = {
-    extent: projectionExtent,
-    origin: olGetTopLeft(projectionExtent),
-    resolutions: resolutions || defaultResolutions,
-    tileSize: [newTileSize, newTileSize]
+  const tileGridOptions = {
+    extent: extent,
+    origin: olGetTopLeft(extent),
+    resolutions: resolutions,
+    tileSize: [tileSize, tileSize]
   };
 
-  if (type === 'wmts') {
-    tileGridOptions.matrixIds = matrixIds || defaultMatrixIds;
-    const grid = new WMTSTileGrid(tileGridOptions);
-    return grid as unknown as T;
-  } else if (type === 'default') {
-    const grid = new TileGrid(tileGridOptions);
-    return grid as unknown as T;
-  }
+  return new TileGrid(tileGridOptions);
+}
+
+/**
+ * Creates a tile-grid at default-resolutions given a known number of zoom-levels.
+ * @param extent  Commonly obtained from `map.getView().getProjection().getExtent()`
+ * @param nrResolutionLevels  Number of zooms at which the tile-server is known to provide tiles.
+ * @param tileSize
+ */
+export function getTileGridAuto(extent: Extent, nrResolutionLevels: number, tileSize: number = DEFAULT_TILE_SIZE): TileGrid {
+
+  const defaultResolutions = resolutionsFromExtent(extent, nrResolutionLevels, tileSize);
+
+  const tileGridOptions = {
+    extent: extent,
+    origin: olGetTopLeft(extent),
+    resolutions: defaultResolutions,
+    tileSize: [tileSize, tileSize]
+  };
+
+  return new TileGrid(tileGridOptions);
+}
+
+/**
+ * Creates a WMTS-tile-grid for known resolutions.
+ * @param extent  Commonly obtained from `map.getView().getProjection().getExtent()`
+ * @param resolutions  Array of resolutions at which the WMTS is known to provide tiles.
+ * @param matrixIds Array of matrix-names at which the WMTS is known to provide tiles.
+ * @param tileSize
+ */
+export function getWMTSTileGrid(extent: Extent, resolutions: number[], matrixIds: string[], tileSize: number = DEFAULT_TILE_SIZE): WMTSTileGrid {
+
+  const tileGridOptions = {
+    extent: extent,
+    origin: olGetTopLeft(extent),
+    resolutions: resolutions,
+    matrixIds: matrixIds,
+    tileSize: [tileSize, tileSize]
+  };
+
+  return new WMTSTileGrid(tileGridOptions);
+}
+
+/**
+ * Creates a WMTS-tile-grid at default-resolutions given a known number of zoom-levels and a known matrix-id prefix.
+ * @param extent  Commonly obtained from `map.getView().getProjection().getExtent()`
+ * @param nrResolutionLevels  Number of zooms at which the WMTS is known to provide tiles.
+ * @param matrixIdPrefix  The string with which all matrix-ids for this tile-set begin.
+ * @param tileSize
+ */
+export function getWMTSTileGridAuto(extent: Extent, nrResolutionLevels: number, matrixIdPrefix: string, tileSize: number = DEFAULT_TILE_SIZE): WMTSTileGrid {
+
+  const defaultResolutions = resolutionsFromExtent(extent, nrResolutionLevels, tileSize);
+  const defaultMatrixIds = matrixIdsFromResolutions(defaultResolutions.length, matrixIdPrefix);
+
+  const tileGridOptions = {
+    extent: extent,
+    origin: olGetTopLeft(extent),
+    resolutions: defaultResolutions,
+    matrixIds: defaultMatrixIds,
+    tileSize: [tileSize, tileSize]
+  };
+
+  return new WMTSTileGrid(tileGridOptions);
 }
