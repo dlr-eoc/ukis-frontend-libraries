@@ -25,6 +25,10 @@
       ],
       "ol/*": [
         "node_modules/ol/src/*"
+      ],
+      "utils-ogc": [
+        "dist/utils-ogc/utils-ogc",
+        "dist/utils-ogc"
       ]
     },
     "allowJs": true
