@@ -6,6 +6,7 @@
   },
   "whitelistedNonPeerDependencies": [
     "ol",
-    "delaunator"
+    "delaunator",
+    "proj4"
   ]
 }
