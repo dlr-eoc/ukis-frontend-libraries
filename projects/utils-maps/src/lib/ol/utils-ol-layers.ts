@@ -267,9 +267,7 @@ export function flattenLayers(layers: BaseLayer[]): Layer<any>[] {
 /**
  * get the View resolutions for an extent with a certain tileSize
  */
-export function resolutionsFromExtent(extent: number[], optMaxZoom: number, tileSize: number): number[] {
-  const maxZoom = optMaxZoom;
-
+export function resolutionsFromExtent(extent: number[], maxZoom: number, tileSize: number): number[] {
   const height = olGetHeight(extent);
   const width = olGetWidth(extent);
 

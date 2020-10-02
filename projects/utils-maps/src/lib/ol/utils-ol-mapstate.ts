@@ -10,6 +10,7 @@ import View, { ViewOptions } from 'ol/View';
 import { reprojectVectorSource } from './utils-ol-data';
 import { register as Register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
+import { flattenLayers } from './utils-ol-layers';
 
 const DEFAULT_PROJECTION = 'EPSG:3857';
 /**
@@ -150,20 +151,13 @@ export function setMapProjection(map: Map, newProjection: Projection | string) {
   map.setView(newView);
 
   // reprojecting vector layers
-  map.getLayers().getArray().forEach((layerGroup: LayerGroup) => {
-    layerGroup.getLayers().getArray().forEach(layer => {
-      if (layer instanceof Layer) {
-        let source = layer.getSource();
-        // check for nested sources, e.g. cluster or cluster of clusters etc
-        while (source['source']) {
-          source = source['source'];
-        }
-        if (source instanceof VectorSource) {
-          reprojectVectorSource(source, oldProjection, newProjection);
-        }
-      }
-    });
-  });
+  const layers = flattenLayers(map.getLayers().getArray());
+  for (const layer of layers) {
+    const source = layer.getSource();
+    if (source instanceof VectorSource) {
+      reprojectVectorSource(source, oldProjection, newProjection);
+    }
+  }
 
   // @TODO: wms layers will be updated with corresponding proj def in the requests.
 
