@@ -41,7 +41,7 @@ export function addLayer(map: Map, layer: BaseLayer, filtertype?: string, filter
 }
 
 /**
- * Get all direkt Layers or Groups from the map with a filtertypeKey set to filtertype
+ * Get all Layers or Groups from the map with a filtertypeKey set to filtertype
  *
  * @param filtertypeKey [filtertypeKey='filtertype']
  */
@@ -111,15 +111,15 @@ export function getLayersFromGroup(group: LayerGroup, filtertype?: string, filte
 /**
  * Get Layer or LayerGroup by key and value from the map.
  *
- * This function is working recursive, so you can also get childs of groups.
+ * This function is working recursively, so you can also get children of groups.
  *
  * @param filtertypeKey [filtertypeKey='filtertype']
  */
 export function getLayersByKey(map: Map, key: string, value: any, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY) {
   const layers = getLayers(map, filtertype, filtertypeKey);
-  const flattLayers = flattenLayers(layers);
+  const flattenedLayers = flattenLayers(layers);
   const keyLayers: BaseLayer[] = [];
-  flattLayers.forEach((item) => {
+  flattenedLayers.forEach((item) => {
     if (item.get(key) && item.get(key) === value) {
       if (keyLayers.indexOf(item) === -1) {
         keyLayers.push(item);
@@ -171,13 +171,11 @@ export function getLayerGroupForLayer(map: Map, layer: BaseLayer) {
  */
 export function isLayerInGroup(layer: BaseLayer, layerGroup: LayerGroup, filtertype?: string, filtertypeKey = FILTER_TYPE_KEY, key: string = 'id') {
   const layers = getLayersFromGroup(layerGroup, filtertype, filtertypeKey, false);
-  const haseLayer = layers.filter(l => l.get(key) === layer.get(key));
-  if (haseLayer.length) {
+  if (layers.find(l => l.get(key) === layer.get(key))) {
     return true;
   } else {
-    const recursivelayers = getLayersFromGroup(layerGroup, filtertype, filtertypeKey, true);
-    const recursiveHaseLayer = recursivelayers.filter(l => l.get(key) === layer.get(key));
-    if (recursiveHaseLayer.length) {
+    const recursiveLayers = getLayersFromGroup(layerGroup, filtertype, filtertypeKey, true);
+    if (recursiveLayers.find(l => l.get(key) === layer.get(key))) {
       return true;
     } else {
       return false;
@@ -230,8 +228,8 @@ export function removeAllLayers(map: Map, filtertype?: string, filtertypeKey = F
  */
 export function removeLayerFromGroup(layer: BaseLayer, group: LayerGroup, key: string = 'id') {
   const layers = getLayersFromGroup(group);
-  const filterdLayers = layers.filter(l => l.get(key) !== layer.get(key));
-  group.setLayers(new Collection(filterdLayers));
+  const filteredLayers = layers.filter(l => l.get(key) !== layer.get(key));
+  group.setLayers(new Collection(filteredLayers));
 }
 
 
@@ -255,7 +253,7 @@ export function flattenLayers(layers: BaseLayer[]): Layer<any>[] {
       const flattenedSubLayers = flattenLayers(subLayers);
       flattenedLayers = Array.prototype.concat(flattenedLayers, flattenedSubLayers);
     } else {
-      // this cast is ok: since `layer` is no LayerGroup, it must be a Layer.
+      // Casting is terrible, but this cast is ok for once: since `layer` is no LayerGroup, it must be a Layer.
       // See the `Subclasses` section here: https://openlayers.org/en/latest/apidoc/module-ol_layer_Base-BaseLayer.html
       flattenedLayers.push(layer as Layer<any>);
     }
