@@ -100,13 +100,14 @@ export interface IPopupArgs {
   providedIn: 'root'
 })
 export class MapOlService {
-  public map: olMap; // ol.Map;
-  public view: olView;
-  private viewOptions: olViewOptions;
-  public EPSG: string;
-  private hitTolerance = 0;
+  map: olMap; // ol.Map;
+  view: olView;
+  EPSG: string;
   /** 'olProjection' */
-  public projectionChange = new Subject<olProjection>();
+  projectionChange = new Subject<olProjection>();
+
+  private viewOptions: olViewOptions;
+  private hitTolerance = 0;
   constructor() {
     this.map = new olMap({ controls: [] });
     this.view = new olView();
@@ -114,7 +115,7 @@ export class MapOlService {
   }
 
   /** USED in map-ol.component */
-  public createMap(target?: HTMLElement) {
+  createMap(target?: HTMLElement) {
     const zoom = 0;
     const center = {
       lat: 0,
@@ -230,11 +231,11 @@ export class MapOlService {
     };
   }
 
-  public setHitTolerance(tolerance: number) {
+  setHitTolerance(tolerance: number) {
     this.hitTolerance = tolerance;
   }
 
-  public getHitTolerance() {
+  getHitTolerance() {
     return this.hitTolerance;
   }
 
@@ -242,7 +243,7 @@ export class MapOlService {
    * See this example:
    * https://openlayers.org/en/latest/examples/box-selection.html
    */
-  public addBboxSelection(conditionForDrawing: (evt: olMapBrowserEvent<any>) => boolean, onBoxStart?: (evt: olEvent) => void, onBoxEnd?: (ext: TGeoExtent, evt: olEvent) => void) {
+  addBboxSelection(conditionForDrawing: (evt: olMapBrowserEvent<any>) => boolean, onBoxStart?: (evt: olEvent) => void, onBoxEnd?: (ext: TGeoExtent, evt: olEvent) => void) {
     const options: olDragBoxOptions = {
       className: 'ol-drag-select',
       condition: conditionForDrawing
@@ -255,7 +256,7 @@ export class MapOlService {
    *
    * base groups: baselayerGroup | layersGroup | overlayGroup
    */
-  public getLayers(filtertype: Tgroupfiltertype) {
+  getLayers(filtertype: Tgroupfiltertype) {
     let layers: olBaseLayer[] = [];
     const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
     layerGroups.forEach(l => {
@@ -267,7 +268,7 @@ export class MapOlService {
   /**
    * get a layer from the map by key and value - this is working recursive so even if the layer is in a group
    */
-  public getLayerByKey(key: { key: string, value: string }, filtertype?: Tgroupfiltertype) {
+  getLayerByKey(key: { key: string, value: string }, filtertype?: Tgroupfiltertype) {
     let layers: olBaseLayer[] = [];
     if (filtertype) {
       layers = getLayersByKey(this.map, key.key, key.value, filtertype, FILTER_TYPE_KEY);
@@ -290,7 +291,7 @@ export class MapOlService {
    *
    * returns the new layers which are then in the group
    */
-  public addLayer(layer: olBaseLayer, filtertype: Tgroupfiltertype) {
+  addLayer(layer: olBaseLayer, filtertype: Tgroupfiltertype) {
     let layers: olBaseLayer[];
     const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
     layerGroups.forEach(l => {
@@ -314,7 +315,7 @@ export class MapOlService {
    *
    * base groups: baselayerGroup | layersGroup | overlayGroup
    */
-  public addLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
+  addLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
     let newLayers: olBaseLayer[];
     const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
     layerGroups.forEach(l => {
@@ -340,7 +341,7 @@ export class MapOlService {
    *
    * base groups: baselayerGroup | layersGroup | overlayGroup
    */
-  public setLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
+  setLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
     const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
     layerGroups.forEach(l => {
       l.setLayers(new olCollection(layers));
@@ -351,7 +352,7 @@ export class MapOlService {
   /**
    *
    */
-  public removeLayerByKey(key: { key: string, value: string }, filtertype: Tgroupfiltertype) {
+  removeLayerByKey(key: { key: string, value: string }, filtertype: Tgroupfiltertype) {
     removeLayerByKey(this.map, key.key, key.value, filtertype, FILTER_TYPE_KEY);
     /* const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
     layerGroups.forEach(l => {
@@ -359,7 +360,7 @@ export class MapOlService {
     }); */
   }
 
-  public updateLayerByKey(key: { key: string, value: string }, newLayer: olBaseLayer, filtertype: Tgroupfiltertype) {
+  updateLayerByKey(key: { key: string, value: string }, newLayer: olBaseLayer, filtertype: Tgroupfiltertype) {
     const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
     layerGroups.forEach(l => {
       const groupLayers = l.getLayers();
@@ -410,7 +411,7 @@ export class MapOlService {
     });
   }
 
-  public removeAllLayers(filtertype: Tgroupfiltertype) {
+  removeAllLayers(filtertype: Tgroupfiltertype) {
     const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
     layerGroups.forEach(l => {
       l.getLayers().clear();
@@ -423,7 +424,7 @@ export class MapOlService {
    * if only one group of them map is used and setLayers is called then the map flickers!
    * this is because of all layers are new created and the have all new ol_uid's
    */
-  public setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
+  setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const tempLayers: olBaseLayer[] = [];
     // TODO try to deep check if a layer if exactly the same and dont create it new
@@ -453,7 +454,7 @@ export class MapOlService {
   }
 
   /** This function resets/adds a olLayer of a type with the new UKIS-Layer */
-  public setUkisLayer(newLayer: Layer, filtertype?: Tgroupfiltertype): void {
+  setUkisLayer(newLayer: Layer, filtertype?: Tgroupfiltertype): void {
     if (!filtertype) {
       filtertype = newLayer.filtertype;
     }
@@ -467,7 +468,7 @@ export class MapOlService {
     }
   }
 
-  public updateUkisLayer(newLayer: Layer, filtertype?: Tgroupfiltertype): void {
+  updateUkisLayer(newLayer: Layer, filtertype?: Tgroupfiltertype): void {
     if (!filtertype) {
       filtertype = newLayer.filtertype;
     }
@@ -980,7 +981,7 @@ export class MapOlService {
     });
   }
 
-  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string>): T {
+  getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string>): T {
     const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
     const newTileSize = tileSize || DEFAULT_TILE_SIZE;
     const newMatrixIdPrefix = matrixIdPrefix || '';
@@ -1008,7 +1009,7 @@ export class MapOlService {
   }
 
   /** USED in map-ol.component */
-  public layers_on_click(evt: olMapBrowserEvent<PointerEvent>) {
+  layers_on_click(evt: olMapBrowserEvent<PointerEvent>) {
     const layerFilter = (layer) => {
       // try to catch CORS error in getImageData!!!
       // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
@@ -1020,7 +1021,7 @@ export class MapOlService {
     this.layers_on_click_move(evt, layerFilter);
   }
 
-  public layers_on_pointermove(evt: olMapBrowserEvent<PointerEvent>) {
+  layers_on_pointermove(evt: olMapBrowserEvent<PointerEvent>) {
     const layerFilter = (layer) => {
       // try to catch CORS error in getImageData!!!
       // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
@@ -1063,7 +1064,7 @@ export class MapOlService {
     });
   }
 
-  public layer_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
+  layer_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
     if (layer instanceof olBaseImageLayer) {
       this.raster_on_click(evt, layer, color);
     } else if (layer instanceof olBaseTileLayer) {
@@ -1073,7 +1074,7 @@ export class MapOlService {
     }
   }
 
-  public vector_on_click(evt: olMapBrowserEvent<PointerEvent>) {
+  vector_on_click(evt: olMapBrowserEvent<PointerEvent>) {
     const FeaturesAtPixel: { feature: olFeature<any> | olRenderFeature, layer: olLayer<any> }[] = [];
     this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
       FeaturesAtPixel.push({ feature, layer });
@@ -1122,7 +1123,7 @@ export class MapOlService {
     });
   }
 
-  public raster_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
+  raster_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
     const layerpopup: Layer['popup'] = layer.get('popup');
     let properties: IAnyObject = {};
 
@@ -1211,7 +1212,7 @@ export class MapOlService {
     }
   }
 
-  public addPopup(args: IPopupArgs, popupObj: IAnyObject, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
+  addPopup(args: IPopupArgs, popupObj: IAnyObject, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
     const layerpopup: Layer['popup'] = args.layer.get('popup');
     const content = document.createElement('div');
     content.className = 'ol-popup-content';
@@ -1303,7 +1304,7 @@ export class MapOlService {
   }
 
   /** USED in map-ol.component */
-  public removeAllPopups(filter?: (item: olOverlay) => boolean) {
+  removeAllPopups(filter?: (item: olOverlay) => boolean) {
     let popups = this.getPopups();
     if (filter) {
       popups = this.getPopups().filter(filter);
@@ -1315,7 +1316,7 @@ export class MapOlService {
     });
   }
 
-  public createPopupHtml(obj: IAnyObject) {
+  createPopupHtml(obj: IAnyObject) {
     let htmlStr = '<table>';
     for (const o in obj) {
       if (obj.hasOwnProperty(o)) {
@@ -1327,7 +1328,7 @@ export class MapOlService {
     return htmlStr;
   }
 
-  public getPopups(): olOverlay[] {
+  getPopups(): olOverlay[] {
     const popups = [];
     this.map.getOverlays().getArray().slice(0).forEach((overlay) => {
       if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
@@ -1343,7 +1344,7 @@ export class MapOlService {
    * @param fitOptions: olFitOptions
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
+  setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
     const newFitOptions = {
@@ -1359,7 +1360,7 @@ export class MapOlService {
 
   /** USED in map-ol.component */
   /** ol.Coordinate xy */
-  public setCenter(center: number[], geographic?: boolean): number[] {
+  setCenter(center: number[], geographic?: boolean): number[] {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
     // console.log('set center in svc', transfomCenter)
@@ -1369,7 +1370,7 @@ export class MapOlService {
   }
 
   /** USED in map-ol.component */
-  public getCenter(geographic?: boolean) {
+  getCenter(geographic?: boolean) {
     const dstProjection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const srcProjection = getProjection(this.map.getView().getProjection().getCode());
     const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
@@ -1381,7 +1382,7 @@ export class MapOlService {
    * @param geographic: boolean
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  public getFeaturesExtent(features: olFeature<any>[], geographic?: boolean): TGeoExtent {
+  getFeaturesExtent(features: olFeature<any>[], geographic?: boolean): TGeoExtent {
     const extent = features[0].getGeometry().getExtent().slice(0);
     features.forEach((feature) => {
       olExtend(extent, feature.getGeometry().getExtent());
@@ -1400,7 +1401,7 @@ export class MapOlService {
    * @param geographic: boolean
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  public getCurrentExtent(geographic?: boolean): TGeoExtent {
+  getCurrentExtent(geographic?: boolean): TGeoExtent {
     const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
     const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
@@ -1408,17 +1409,17 @@ export class MapOlService {
   }
 
   /** USED in map-ol.component */
-  public setZoom(zoom: number, notifier?: 'map' | 'user') {
+  setZoom(zoom: number, notifier?: 'map' | 'user') {
     const view = this.map.getView();
     view.setZoom(zoom);
   }
 
   /** USED in map-ol.component */
-  public getZoom(): number {
+  getZoom(): number {
     return this.map.getView().getZoom();
   }
 
-  public zoomInOut(value: '-' | '+') {
+  zoomInOut(value: '-' | '+') {
     const view = this.map.getView();
     if (!view) {
       // the map does not have a view, so we can't act
@@ -1444,7 +1445,7 @@ export class MapOlService {
     }
   }
 
-  public geoJsonToFeature(geojson: GeoJSONFeature): olFeature<any> {
+  geoJsonToFeature(geojson: GeoJSONFeature): olFeature<any> {
     const GEOJSON = new olGeoJSON({
       dataProjection: 'EPSG:4326',
       featureProjection: this.EPSG
@@ -1452,7 +1453,7 @@ export class MapOlService {
     return GEOJSON.readFeature(geojson);
   }
 
-  public geoJsonToFeatures(geojson: GeoJSONFeatureCollection): Array<olFeature<any>> {
+  geoJsonToFeatures(geojson: GeoJSONFeatureCollection): Array<olFeature<any>> {
     const GEOJSON = new olGeoJSON({
       dataProjection: 'EPSG:4326',
       featureProjection: this.EPSG
@@ -1463,7 +1464,7 @@ export class MapOlService {
   /**
    * @returns 'olProjection'
    */
-  public getProjection() {
+  getProjection() {
     return this.map.getView().getProjection();
   }
 
@@ -1473,7 +1474,7 @@ export class MapOlService {
    * @param srcProj: string (e.g. 'EPSG:4326')
    * @param dstProj: string (e.g. 'EPSG:3857')
    */
-  public reprojectFeatures(source: olVectorSource<any>, srcProj: string, dstProj: string) {
+  reprojectFeatures(source: olVectorSource<any>, srcProj: string, dstProj: string) {
     source.getFeatures().forEach(feature => {
       feature.getGeometry().transform(srcProj, dstProj);
     });
@@ -1486,7 +1487,7 @@ export class MapOlService {
    * define initial(default) layer projection, so openlayers will reproject on the client side
    * projection is proj~ProjectionLike
    */
-  public setProjection(projection: olProjection | string) {
+  setProjection(projection: olProjection | string) {
     if (projection) {
       let viewOptions: olViewOptions = {};
       if (this.viewOptions) {
@@ -1534,12 +1535,12 @@ export class MapOlService {
     }
   }
 
-  public registerProjection(projDef: IProjDef) {
+  registerProjection(projDef: IProjDef) {
     proj4.defs(projDef.code, projDef.proj4js);
     olRegister(proj4);
   }
 
-  public getOlProjection(projDef: IProjDef): olProjection {
+  getOlProjection(projDef: IProjDef): olProjection {
     return new olProjection({
       code: projDef.code,
       extent: projDef.extent ? projDef.extent : undefined,
