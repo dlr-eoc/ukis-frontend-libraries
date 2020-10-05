@@ -318,20 +318,20 @@ export class MapOlService {
   addLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
     let newLayers: olBaseLayer[];
     const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
-    layerGroups.forEach(l => {
-      const groupLayers = l.getLayers();
+    layerGroups.forEach(lg => {
+      const groupLayers = lg.getLayers();
       if (groupLayers.getLength() > 0) {
         // I think doing it like this should be more performant like as using the addLayer in a loop
-        newLayers = l.getLayers().getArray();
+        newLayers = lg.getLayers().getArray();
         layers.map(layer => {
-          if (!this.isLayerInGroup(layer, l)) {
+          if (!this.isLayerInGroup(layer, lg)) {
             newLayers.push(layer);
           }
         });
       } else {
         newLayers = layers;
       }
-      l.setLayers(new olCollection(newLayers));
+      lg.setLayers(new olCollection(newLayers));
     });
     return newLayers;
   }

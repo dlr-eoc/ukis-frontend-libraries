@@ -41,6 +41,8 @@ let ukisCustomLayer: CustomLayer;
 let groupLayer1: olLayerGroup;
 /** ID-group-layer2 */
 let groupLayer2: olLayerGroup;
+/** ID-group-layer3 */
+let groupLayer3: olLayerGroup;
 
 
 describe('MapOlService', () => {
@@ -217,6 +219,11 @@ describe('MapOlService', () => {
     });
     groupLayer2.set('id', 'ID-group-layer2');
 
+    groupLayer3 = new olLayerGroup({
+      layers: [vectorLayer, vectorImageLayer]
+    });
+    groupLayer3.set('id', 'ID-group-layer3');
+
   });
 
   it('should properly set the `crossOrigin` attribute, if given', () => {
@@ -244,29 +251,43 @@ describe('MapOlService', () => {
   it('should add/get layers to/from the map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
-    service.addLayer(rasterLayer, 'baselayers');
+    service.addLayer(imageLayer, 'baselayers');
     service.addLayer(vectorLayer, 'layers');
+    service.addLayer(groupLayer1, 'layers');
 
     expect(service.getLayers('baselayers').length).toEqual(1);
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-raster' }, 'baselayers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: imageLayer.get('id') }, 'baselayers')).toBeTruthy();
 
-    expect(service.getLayers('layers').length).toEqual(1);
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBeTruthy();
+    // 2 layers - one olLayer and one olLayerGroup with another layer
+    expect(service.getLayers('layers').length).toEqual(2);
+    expect(service.getLayerByKey({ key: 'id', value: vectorLayer.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: groupLayer1.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: rasterLayer.get('id') }, 'layers')).toBeTruthy();
   });
 
-  it('should not add a duplicate layer the map', () => {
+  it('should not add a duplicate layer to the map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(rasterLayer, 'layers');
     expect(service.getLayers('layers').length).toEqual(2);
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-raster' }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: vectorLayer.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: rasterLayer.get('id') }, 'layers')).toBeTruthy();
 
     service.addLayer(vectorLayer, 'layers');
     expect(service.getLayers('layers').length).toEqual(2);
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-raster' }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: vectorLayer.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: rasterLayer.get('id') }, 'layers')).toBeTruthy();
+
+    // duplicate layers are added if the are in a olLayerGroup!!!!
+    service.addLayer(groupLayer3, 'layers');
+    expect(service.getLayers('layers').length).toEqual(3);
+    expect(service.getLayers('layers').includes(vectorLayer)).toBeTrue();
+    expect(service.getLayers('layers').includes(rasterLayer)).toBeTrue();
+    expect(service.getLayers('layers').includes(groupLayer3)).toBeTrue();
+
+    expect(groupLayer3.getLayersArray().length).toBe(1);
+    expect(groupLayer3.getLayersArray()[0]).toBe(vectorLayer);
   });
 
   it('should add a array of layers to aType', () => {
@@ -275,13 +296,15 @@ describe('MapOlService', () => {
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(rasterLayer, 'layers');
     // it should not add the duplicate rasterLayer
-    service.addLayers([rasterLayer, imageLayer, vectorImageLayer], 'layers');
+    service.addLayers([rasterLayer, imageLayer, vectorImageLayer, groupLayer3], 'layers');
 
-    expect(service.getLayers('layers').length).toEqual(4);
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-raster' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-image' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector-image' }, 'layers')).toBeTruthy();
+    expect(service.getLayers('layers').length).toEqual(5);
+    expect(service.getLayerByKey({ key: 'id', value: vectorLayer.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: rasterLayer.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: imageLayer.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: vectorImageLayer.get('id') }, 'layers')).toBeTruthy();
+    // TODO: this layers is not added becase of recrusive is in group???
+    expect(service.getLayerByKey({ key: 'id', value: groupLayer3.get('id') }, 'layers')).toBeTruthy();
   });
 
 
