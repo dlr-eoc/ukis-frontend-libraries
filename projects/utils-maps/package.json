@@ -4,6 +4,7 @@
   "version": "0.0.0-PLACEHOLDER",
   "license": "Apache-2.0",
   "peerDependencies": {
+    "proj4": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "dependencies": {
     "ol": "0.0.0-PLACEHOLDER-VENDOR",

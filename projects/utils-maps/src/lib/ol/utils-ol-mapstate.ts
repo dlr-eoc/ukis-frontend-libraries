@@ -10,6 +10,7 @@ import View, { ViewOptions } from 'ol/View';
 import { reprojectVectorSource } from './utils-ol-data';
 import { register as Register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
+import { flattenLayers } from './utils-ol-layers';
 
 const DEFAULT_PROJECTION = 'EPSG:3857';
 /**
@@ -126,60 +127,44 @@ export function getMapProjection(map: Map) {
  * wms layers will be updated with corresponding proj def in the requests.
  * for other raster layers and for those wms layers whose backend does not support target projection, please
  * define initial(default) layer projection, so openlayers will reproject on the client side
- * projection is proj~ProjectionLike
  */
-export function setMapProjection(map: Map, projection: Projection | string, viewOptions?: ViewOptions, cb?: (projection: Projection) => void) {
-  let epsg = DEFAULT_PROJECTION;
-  let view = null;
-  if (projection) {
-    let newViewOptions: ViewOptions = {};
-    if (viewOptions) {
-      newViewOptions = viewOptions;
-      newViewOptions.minResolution = undefined;
-      newViewOptions.maxResolution = undefined;
-      newViewOptions.resolution = undefined;
-      newViewOptions.resolutions = undefined;
-    }
-    if (projection instanceof Projection) {
-      newViewOptions.projection = projection;
-      const newCenter = transform(map.getView().getCenter(), map.getView().getProjection(), projection); // get center coordinates in the new projection
-      newViewOptions.center = newCenter; // map.getView().getCenter();
-      // _viewOptions.extent = projection.getExtent();// || undefined;
-      newViewOptions.zoom = map.getView().getZoom();
-    } else if (typeof projection === 'string') {
-      newViewOptions.projection = projection;
-      newViewOptions.center = map.getView().getCenter();
-      newViewOptions.zoom = map.getView().getZoom();
-    }
-    const mapView = new View(newViewOptions);
-    const oldProjection = DEFAULT_PROJECTION;
-    epsg = mapView.getProjection().getCode();
-    map.setView(mapView);
-    view = map.getView();
+export function setMapProjection(map: Map, newProjection: Projection | string) {
+  const oldProjection = map.getView().getProjection();
 
-    // reprojecting vector layers
-    map.getLayers().getArray().forEach((layerGroup: LayerGroup) => {
-      layerGroup.getLayers().getArray().forEach(layer => {
-        if (layer instanceof Layer) {
-          let source = layer.getSource();
-          // check for nested sources, e.g. cluster or cluster of clusters etc
-          while (source['source']) {
-            source = source['source'];
-          }
-          if (source instanceof VectorSource) {
-            reprojectVectorSource(source, oldProjection, DEFAULT_PROJECTION);
-          }
-        }
-      });
-    });
-    cb(getMapProjection(map));
-    return {
-      epsg,
-      view
-    };
-  } else {
-    console.warn('projection code is undefined');
+  // Getting the most recent viewOptions, so we don't loose old settings like `multiWorld`, `enableRotation` etc.
+  const oldViewOptions: ViewOptions = (map.getView() as any).getUpdatedOptions_();
+  const newViewOptions = oldViewOptions;
+
+  // When a new projection changes the map-unit, the old resolutions are no longer valid. Un-setting them here.
+  newViewOptions.minResolution = undefined;
+  newViewOptions.maxResolution = undefined;
+  newViewOptions.resolution = undefined;
+  newViewOptions.resolutions = undefined;
+
+  // reprojecting center, copying current zoom
+  newViewOptions.projection = newProjection;
+  const newCenter = transform(map.getView().getCenter(), oldProjection, newProjection);
+  newViewOptions.center = newCenter;
+  newViewOptions.zoom = map.getView().getZoom();
+
+  const newView = new View(newViewOptions);
+  map.setView(newView);
+
+  // reprojecting vector layers
+  const layers = flattenLayers(map.getLayers().getArray());
+  for (const layer of layers) {
+    const source = layer.getSource();
+    if (source instanceof VectorSource) {
+      reprojectVectorSource(source, oldProjection, newProjection);
+    }
   }
+
+  // @TODO: wms layers will be updated with corresponding proj def in the requests.
+
+  return {
+    epsg: newView.getProjection().getCode(),
+    view: map.getView()
+  };
 }
 
 

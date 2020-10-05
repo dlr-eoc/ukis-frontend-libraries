@@ -5,7 +5,7 @@ import { fromLonLat } from 'ol/proj';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
-
+import { getWidth } from 'ol/extent';
 import XYZ from 'ol/source/XYZ';
 
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -18,13 +18,14 @@ import Projection from 'ol/proj/Projection';
 
 import {
   addLayer, getLayersByKey, getLayers, getLayersFromGroup, isLayerInGroup, removeAllLayers, removeLayerFromGroup,
-  flattenLayers, getLayerGroupForLayer, getLayerGroups, removeLayerByKey, removeLayerByKeyFromGroup, setRecursiveKey
+  flattenLayers, getLayerGroupForLayer, getLayerGroups, removeLayerByKey, removeLayerByKeyFromGroup, setRecursiveKey, getTileGrid, getTileGridAuto
 } from './utils-ol-layers';
+import { DEFAULT_TILE_SIZE } from 'ol/src/tilegrid/common';
 
 
 let rasterLayer: TileLayer;
 let osmLayer: TileLayer;
-let vectorLayer: VectorLayer, vetorData;
+let vectorLayer: VectorLayer, vectorData;
 let vectorTileLayer: VectorTileLayer;
 let imageLayer: ImageLayer;
 let vectorImageLayer: VectorImageLayer, vectorImageData;
@@ -67,7 +68,7 @@ describe('Utils OpenLayers Layers: ', () => {
     osmLayer.set('id', 'ID-OsmLayer');
     osmLayer.set('name', 'OpenStreetMap');
 
-    vetorData = {
+    vectorData = {
       type: 'FeatureCollection',
       features: [
         {
@@ -142,7 +143,7 @@ describe('Utils OpenLayers Layers: ', () => {
 
     vectorLayer = new VectorLayer({
       source: new VectorSource({
-        features: (new GeoJSON()).readFeatures(vetorData)
+        features: (new GeoJSON()).readFeatures(vectorData)
       })
     });
     vectorLayer.set('id', 'ID-VectorLayer');
@@ -282,7 +283,7 @@ describe('Utils OpenLayers Layers: ', () => {
   });
 
 
-  it('getLayerGroups: should get all direkt Layer Groups added to the map', () => {
+  it('getLayerGroups: should get all direct Layer Groups added to the map', () => {
     addLayer(map, layerGroupImage, 'Overlays', 'type');
     addLayer(map, layerGroupVector, 'Layers', 'type');
     addLayer(map, layerGroupRaster, 'Baselayers');
@@ -295,7 +296,7 @@ describe('Utils OpenLayers Layers: ', () => {
     expect(layerGroups.includes(layerGroupVector)).toBeTrue();
   });
 
-  it('getLayerGroups: should get all direkt Layer Groups with filtertype Baselayers and default filtertypeKey', () => {
+  it('getLayerGroups: should get all direct Layer Groups with filtertype Baselayers and default filtertypeKey', () => {
     addLayer(map, layerGroupImage, 'Overlays', 'type');
     addLayer(map, layerGroupVector, 'Layers', 'type');
     addLayer(map, layerGroupRaster, 'Baselayers');
@@ -304,7 +305,7 @@ describe('Utils OpenLayers Layers: ', () => {
     expect(filteredLayerGroups.length).toBe(1);
   });
 
-  it('getLayerGroups: should get all direkt Layer Groups with filtertype Layers and custom filtertypeKey', () => {
+  it('getLayerGroups: should get all dirext Layer Groups with filtertype Layers and custom filtertypeKey', () => {
     addLayer(map, layerGroupImage, 'Overlays', 'type');
     addLayer(map, layerGroupVector, 'Layers', 'type');
     addLayer(map, layerGroupRaster, 'Baselayers');
@@ -348,7 +349,6 @@ describe('Utils OpenLayers Layers: ', () => {
     expect(tempGroup.find(i => i === layerGroupVector)).toBeTruthy();
   });
 
-
   it('isLayerInGroup: should return if a Layer or Group is in a LayerGroup', () => {
     addLayer(map, layerGroupLayerGroup, 'Layers', 'type');
 
@@ -361,7 +361,6 @@ describe('Utils OpenLayers Layers: ', () => {
     const haseLayerGroup = isLayerInGroup(layerGroupVector, layerGroups[0]);
     expect(haseLayerGroup).toBeTrue();
   });
-
 
   it('removeAllLayers: should remove all Layers or Groups', () => {
     addLayer(map, layerGroupImage, 'Overlays');
@@ -386,7 +385,6 @@ describe('Utils OpenLayers Layers: ', () => {
     expect(layers.length).toBe(2);
   });
 
-
   it('removeLayerFromGroup: should remove a Layer or Group from a LayerGroup', () => {
     addLayer(map, layerGroupLayerGroup);
     const layers = getLayers(map);
@@ -401,7 +399,6 @@ describe('Utils OpenLayers Layers: ', () => {
     const haseLayer = getLayersByKey(map, 'id', layerGroupImage.get('id'));
     expect(haseLayer.length).toBe(0);
   });
-
 
   it('removeLayerByKeyFromGroup: should remove a Layer or Group from a LayerGroup', () => {
     addLayer(map, layerGroupLayerGroup);
@@ -418,7 +415,6 @@ describe('Utils OpenLayers Layers: ', () => {
     const haseLayer = getLayersByKey(map, 'id', layerGroupImage.get('id'));
     expect(haseLayer.length).toBe(0);
   });
-
 
   it('getLayerGroupForLayerByKey: should get the group from a Layer', () => {
     // layerGroupLayerGroupLayerGroup.layers[
@@ -442,7 +438,6 @@ describe('Utils OpenLayers Layers: ', () => {
     expect(obj3.group === map.getLayerGroup()).toBeTrue();
     expect(obj3.layer === osmLayer).toBeTrue();
   });
-
 
   it('removeLayerByKey: should remove a Layer or Group by key from the map', () => {
     addLayer(map, layerGroupLayerGroup);
@@ -468,9 +463,39 @@ describe('Utils OpenLayers Layers: ', () => {
 
   it('matrixIdsFromResolutions: ...', () => {
   });
+   */
 
-  it('getTileGrid: ...', () => {
-  }); */
+  it('getTileGrid should return a properly formatted TileGrid', () => {
+    const extent = map.getView().getProjection().getExtent();
+    const tileSize = DEFAULT_TILE_SIZE;
+    const depth = 14;
+    const width = getWidth(extent);
+    const resolutions = [];
+    for (let z = 0; z <= depth; z++) {
+      resolutions.push((width / tileSize) / Math.pow(2, z));
+    }
+
+    const tileGrid = getTileGrid(extent, resolutions, tileSize);
+
+    expect(tileGrid.getMinZoom()).toEqual(0);
+    expect(tileGrid.getMaxZoom()).toEqual(depth);
+    expect(tileGrid.getResolutions().length).toEqual(depth + 1);
+    expect(tileGrid.getResolutions()[0] * tileSize).toBeCloseTo(width);
+  });
+
+  it('getTileGridAuto should return a properly formatted TileGrid', () => {
+    const extent = map.getView().getProjection().getExtent();
+    const tileSize = DEFAULT_TILE_SIZE;
+    const depth = 14;
+    const width = getWidth(extent);
+
+    const tileGrid = getTileGridAuto(extent, depth, tileSize);
+
+    expect(tileGrid.getMinZoom()).toEqual(0);
+    expect(tileGrid.getMaxZoom()).toEqual(depth);
+    expect(tileGrid.getResolutions().length).toEqual(depth + 1);
+    expect(tileGrid.getResolutions()[0] * tileSize).toBeCloseTo(width);
+  });
 
 });
 

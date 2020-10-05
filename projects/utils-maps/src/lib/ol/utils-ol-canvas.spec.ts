@@ -35,5 +35,5 @@ describe('mapToCanvas test suite', () => {
       expect(image.height).toBeTruthy();
       done();
     }));
-  });
+  }, 6000);
 });
