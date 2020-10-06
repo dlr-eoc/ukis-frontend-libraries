@@ -325,6 +325,7 @@ export class MapOlService {
         newLayers = lg.getLayers().getArray();
         layers.map(layer => {
           if (!this.isLayerInGroup(layer, lg)) {
+            setRecursiveKey(layer, filtertype.toLocaleLowerCase(), FILTER_TYPE_KEY);
             newLayers.push(layer);
           }
         });
@@ -427,7 +428,7 @@ export class MapOlService {
   setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const tempLayers: olBaseLayer[] = [];
-    // TODO try to deep check if a layer if exactly the same and dont create it new
+    // TODO try to deep check if a layer is exactly the same and dont create it new
 
     if (layers.length < 1 && lowerType !== 'baselayers') {
       // this.removeAllLayers('overlays');

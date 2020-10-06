@@ -286,7 +286,7 @@ describe('MapOlService', () => {
     expect(service.getLayers('layers').includes(rasterLayer)).toBeTrue();
     expect(service.getLayers('layers').includes(groupLayer3)).toBeTrue();
 
-    expect(groupLayer3.getLayersArray().length).toBe(1);
+    expect(groupLayer3.getLayersArray().length).toBe(2);
     expect(groupLayer3.getLayersArray()[0]).toBe(vectorLayer);
   });
 
