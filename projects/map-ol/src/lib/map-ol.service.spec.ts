@@ -303,7 +303,6 @@ describe('MapOlService', () => {
     expect(service.getLayerByKey({ key: 'id', value: rasterLayer.get('id') }, 'layers')).toBeTruthy();
     expect(service.getLayerByKey({ key: 'id', value: imageLayer.get('id') }, 'layers')).toBeTruthy();
     expect(service.getLayerByKey({ key: 'id', value: vectorImageLayer.get('id') }, 'layers')).toBeTruthy();
-    // TODO: this layers is not added becase of recrusive is in group???
     expect(service.getLayerByKey({ key: 'id', value: groupLayer3.get('id') }, 'layers')).toBeTruthy();
   });
 
@@ -312,14 +311,17 @@ describe('MapOlService', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
-    service.setLayers([rasterLayer, imageLayer, vectorImageLayer], 'layers');
+    service.addLayer(rasterLayer, 'layers');
+    service.setLayers([vectorImageLayer, imageLayer, groupLayer1], 'layers');
 
     expect(service.getLayers('layers').length).toEqual(3);
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBeFalsy();
+    expect(service.getLayerByKey({ key: 'id', value: vectorLayer.get('id') }, 'layers')).toBeFalsy();
 
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-raster' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-image' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-vector-image' }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: vectorImageLayer.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: imageLayer.get('id') }, 'layers')).toBeTruthy();
+
+    expect(service.getLayerByKey({ key: 'id', value: groupLayer1.get('id') }, 'layers')).toBeTruthy();
+    expect(service.getLayerByKey({ key: 'id', value: rasterLayer.get('id') }, 'layers')).toBeTruthy();
   });
 
 

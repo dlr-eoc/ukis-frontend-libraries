@@ -344,6 +344,11 @@ export class MapOlService {
    */
   setLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
     const layerGroups = getLayerGroups(this.map, filtertype, FILTER_TYPE_KEY);
+    layers.forEach(l => {
+      if (l instanceof olLayerGroup) {
+        setRecursiveKey(l, filtertype.toLocaleLowerCase(), FILTER_TYPE_KEY);
+      }
+    });
     layerGroups.forEach(l => {
       l.setLayers(new olCollection(layers));
     });
