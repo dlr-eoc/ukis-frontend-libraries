@@ -5,7 +5,6 @@ import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitio
   InputDescriptionType, OutputDescriptionType, LiteralDataType } from './wps_2.0';
 import { isStatusInfo, isResult } from './helpers';
 import * as xmlserializer from 'xmlserializer';
-import * as atob from 'atob';
 
 
 export class WpsMarshaller200 implements WpsMarshaller {
@@ -184,9 +183,13 @@ export class WpsMarshaller200 implements WpsMarshaller {
 
   protected unmarshalOutputData(data: Data, description: WpsOutputDescription): any {
     if (description.type === 'complex') {
-      
+
       if (data.encoding === 'base64') {
-        data.content.map((c: any) => atob(c));
+        if (typeof module !== 'undefined' && module.exports) { // node
+          data.content.map(c => new Buffer(c, 'base64').toString('ascii'));
+        } else { // browser
+          data.content.map((c: any) => atob(c));
+        }
       }
 
       switch (data.mimeType) {

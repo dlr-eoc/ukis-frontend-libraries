@@ -14,7 +14,7 @@ import { CswVersion, Element, CswCapabilitiesElement, CswDescribeRecordElement,
     CswDescribeRecordResponseElement, CswGetRecordByIdResponseElement, CswGetRecordByIdElement,
     CswGetRecordsElement, CswResultType, ExceptionReportType, CswGetRecordsResponseElement, CswElementAttributes, CswGetDomainElement, CswGetDomainResponseElement, CswElementSetName } from './cswdatatypes';
 import { Observable } from 'rxjs';
-import { delayedRetry } from '../wps/utils/polling';
+import { delayedRetry } from '@dlr-eoc/utils-ogc';
 import { share, map, tap } from 'rxjs/operators';
 
 // Bugfix: in Jsonix's Dublin-Core schema, the `URI` element was not listed.

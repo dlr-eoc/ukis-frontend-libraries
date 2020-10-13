@@ -6,7 +6,6 @@ import {
   ResponseDocumentType, InputReferenceType, ExecuteResponse, IWpsDescribeProcessResponse,
   InputDescriptionType, OutputDescriptionType } from './wps_1.0.0';
 import * as xmlserializer from 'xmlserializer';
-import * as atob from 'atob';
 
 
 
@@ -136,7 +135,11 @@ export class WpsMarshaller100 implements WpsMarshaller {
     if (data.complexData) {
 
       if (data.complexData.encoding === 'base64') {
-        data.complexData.content.map(c => atob(c));
+        if (typeof module !== 'undefined' && module.exports) { // node
+          data.complexData.content.map(c => new Buffer(c, 'base64').toString('ascii'));
+        } else { // browser
+          data.complexData.content.map(c => atob(c));
+        }
       }
 
       switch (data.complexData.mimeType) {
