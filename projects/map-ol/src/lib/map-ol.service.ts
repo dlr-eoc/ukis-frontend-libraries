@@ -23,6 +23,7 @@ import olBaseImageLayer from 'ol/layer/BaseImage';
 
 import olTileLayer from 'ol/layer/Tile';
 import olVectorLayer from 'ol/layer/Vector';
+// import olVectorTileLayer from 'ol/layer/VectorTile';
 import olVectorTile from 'ol/source/VectorTile';
 
 
@@ -231,6 +232,9 @@ export class MapOlService {
     };
   }
 
+  /**
+   * Hit-detection tolerance. Pixels inside the radius around the given position will be checked for features.
+   */
   setHitTolerance(tolerance: number) {
     this.hitTolerance = tolerance;
   }
@@ -305,6 +309,7 @@ export class MapOlService {
     return layers;
   }
 
+  /* istanbul ignore next */
   private isLayerInGroup(layer: olBaseLayer, layerGroup: olLayerGroup) {
     return isLayerInGroup(layer, layerGroup, null, null, ID_KEY);
   }
@@ -491,7 +496,7 @@ export class MapOlService {
     }
   }
 
-
+  /* istanbul ignore next */
   private create_layers(newLayer: Layer) {
     let newOlLayer: olTileLayer | olVectorLayer | olBaseLayer;
     switch (newLayer.type) {
@@ -517,6 +522,7 @@ export class MapOlService {
   /**
    * define layer types
    */
+  /* istanbul ignore next */
   private create_xyz_layer(l: RasterLayer): olTileLayer {
     const xyzOptions: olXYZOptions = {
       wrapX: false
@@ -589,6 +595,7 @@ export class MapOlService {
     return newLayer;
   }
 
+  /* istanbul ignore next */
   private create_wms_layer(l: WmsLayer): olTileLayer {
 
     const tileOptions: olTileWMSOptions = {
@@ -669,6 +676,7 @@ export class MapOlService {
     return newLayer;
   }
 
+  /* istanbul ignore next */
   private create_wmts_layer(l: WmtsLayer): olTileLayer {
     if (l instanceof WmtsLayer) {
 
@@ -774,7 +782,7 @@ export class MapOlService {
     }
   }
 
-
+  /* istanbul ignore next */
   private create_geojson_layer(l: VectorLayer) {
     let olSource: olVectorSource<any>;
     if (l.data) {
@@ -886,6 +894,7 @@ export class MapOlService {
     return newLayer;
   }
 
+  /* istanbul ignore next */
   private create_custom_layer(l: CustomLayer) {
     const updateLayerSource = (layer: olLayer<any>) => {
       const olSource = layer.getSource();
@@ -965,6 +974,7 @@ export class MapOlService {
     }
   }
 
+  /* istanbul ignore next */
   private resolutionsFromExtent(extent, optMaxZoom: number, tileSize: number) {
     const maxZoom = optMaxZoom;
 
@@ -981,6 +991,7 @@ export class MapOlService {
     return resolutions;
   }
 
+  /* istanbul ignore next */
   private matrixIdsFromResolutions(resolutionLevels: number, matrixIdPrefix?: string) {
     return Array.from(Array(resolutionLevels).keys()).map(l => {
       if (matrixIdPrefix) {
@@ -1043,6 +1054,7 @@ export class MapOlService {
     this.layers_on_click_move(evt, layerFilter);
   }
 
+  /* istanbul ignore next */
   private layers_on_click_move(evt: olMapBrowserEvent<PointerEvent>, layerFilter: (layer: olLayer<any>) => boolean) {
     /** set cursor for features */
     if (evt.type === 'pointermove') {
@@ -1148,6 +1160,7 @@ export class MapOlService {
     }
   }
 
+  /* istanbul ignore next */
   private prepareAddPopup(layerProperties: IAnyObject, layer: olLayer<any>, feature: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
     const args: IPopupArgs = {
       modelName: layerProperties.id,
@@ -1560,6 +1573,7 @@ export class MapOlService {
     });
   }
 
+  /* istanbul ignore next */
   private keysToUppercase<T>(obj: IAnyObject) {
     Object.keys(obj).forEach((key) => {
       const k = key.toUpperCase();
