@@ -1002,7 +1002,10 @@ export class MapOlService {
     });
   }
 
-  getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string>): T {
+
+  // TODO: how can this be replaced from @dlr-eoc/utils-maps
+  // is this possible with the exported functions getTileGrid, getTileGridAuto, getWMTSTileGrid, getWMTSTileGridAuto????
+  getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels: number = DEFAULT_MAX_ZOOM, tileSize: number = DEFAULT_TILE_SIZE, matrixIdPrefix: string = '', resolutions?: Array<string | number>, matrixIds?: Array<string>): T {
     const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
     const newTileSize = tileSize || DEFAULT_TILE_SIZE;
     const newMatrixIdPrefix = matrixIdPrefix || '';
