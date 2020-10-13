@@ -325,13 +325,17 @@ export class MapOlService {
         newLayers = lg.getLayers().getArray();
         layers.map(layer => {
           if (!this.isLayerInGroup(layer, lg)) {
-            setRecursiveKey(layer, filtertype.toLocaleLowerCase(), FILTER_TYPE_KEY);
             newLayers.push(layer);
           }
         });
       } else {
         newLayers = layers;
       }
+      newLayers.forEach(l => {
+        if (l instanceof olLayerGroup) {
+          setRecursiveKey(l, filtertype.toLocaleLowerCase(), FILTER_TYPE_KEY);
+        }
+      });
       lg.setLayers(new olCollection(newLayers));
     });
     return newLayers;
