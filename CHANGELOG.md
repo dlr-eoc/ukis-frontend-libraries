@@ -4,10 +4,19 @@
     - Takes a vector-source (or a clustered vector-source) and does inverse-distance-interpolation on every pixel between the data points.
     - Allows user to optionally style data-point-labels just like any other openlayers vector-layer.
   - extended webgl-utils to handle textures that are not intended for display, but for data-transmission to and from shaders.
+* **@dlr-eoc/utils-ogc:**:
+  - Created new package `@dlr-eoc/utils-ogc`. Provides our OGC-services that have been made independent of angular.
+  - Created first service `WpsClient` for accessing [WPS 1.0.0 and 2.0.0](https://www.ogc.org/standards/wps) services.
+    - Port of original `@dlr-eoc/services-ogc/WpsClient` made independent of angular- and browser-libraries (runs on node as well)
+    - Original implementation remains as a wrapper for backwards-compatibility.
+    - Added method `describeProcess`
+    - Added ability to overwrite data-decoding with a user-provided method, for cases where a unconventional mime-type or encoding has been used.
 
 ### Refactoring
 * **@dlr-eoc/utils-maps:**:
   - moved existing custom renderers out of `demo-maps` into `utils-maps`, since they have no dependencies on angular and can be used in any openlayers project.
+* **@dlr-eoc/utils-ogc:**:
+  - moved business-logic of `@dlr-eoc/services-ogc/WpsClient` into `@dlr-eoc/utils-ogc`
 
 # [7.2.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.2.0) (2020-08-31) (Npm packages and a lot of features and bug fixes)
 

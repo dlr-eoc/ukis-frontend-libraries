@@ -112,5 +112,11 @@
     {
       "path": "./projects/map-three/tsconfig.spec.json"
     },
+    {
+      "path": "./projects/utils-ogc/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/utils-ogc/tsconfig.spec.json"
+    },
   ]
 }

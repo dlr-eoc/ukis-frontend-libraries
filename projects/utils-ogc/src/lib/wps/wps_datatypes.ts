@@ -1,4 +1,4 @@
-export type WpsVerion = '1.0.0' | '2.0.0';
+export type WpsVersion = '1.0.0' | '2.0.0';
 export type WpsDataFormat = 'application/vnd.geo+json' | 'application/json' | 'application/WMS' |
   'application/xml' | 'text/xml' | 'application/text' | 'image/geotiff' |
   'text/plain';
@@ -9,11 +9,13 @@ export type ProductId = string;
 
 export interface WpsDataDescription {
   id: ProductId;
+  title: string;
   type: 'literal' | 'complex' | 'bbox' | 'status' | 'error';
   reference: boolean;
   format?: WpsDataFormat;
   description?: string;
   defaultValue?: any;
+  options?: any[];
 }
 export type WpsInputDescription = WpsDataDescription;
 export type WpsOutputDescription = WpsDataDescription;
@@ -62,7 +64,7 @@ export interface WpsState {
   /** WPS 1.0 only */
   statusLocation?: string;
   /** WPS 1.0 only: a success-state already contains the results */
-  results?: WpsData[];
+  results?: any;
 }
 
 export function isWpsState(obj: object): obj is WpsState {
@@ -80,11 +82,27 @@ export interface WpsCapability {
 }
 
 
+export interface WpsProcessDescription {
+  id: string;
+  processVersion: string;
+  title?: string;
+  description?: string;
+  inputs: WpsInput[];
+  outputs: WpsResult[];
+}
+
+export interface WpsServerDescription {
+  serverUrl: string;
+  serverVersion: WpsVersion;
+}
+
+
 export interface WpsMarshaller {
 
   executeUrl(url: string, processId: string): string;
   dismissUrl(serverUrl: string, processId: string, jobId: string): string;
   getCapabilitiesUrl(baseurl: string): string;
+  getDescribeProcessUrl(baseurl: string, processId: string): string;
 
   marshalExecBody(processId: string, inputs: WpsInput[], outputs: WpsOutputDescription[], async: boolean): any;
   marshallGetStatusBody(serverUrl: string, processId: string, statusId: string): any;
@@ -92,6 +110,7 @@ export interface WpsMarshaller {
   marshalDismissBody(jobId: string): any;
 
   unmarshalCapabilities(capabilitiesJson: any): WpsCapability[];
+  unmarshalProcessDescription(processDescriptionJson: any): WpsProcessDescription;
   unmarshalSyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[];
   unmarshalAsyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsState;
   unmarshalGetStateResponse(jsonResponse: any, serverUrl: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsState;

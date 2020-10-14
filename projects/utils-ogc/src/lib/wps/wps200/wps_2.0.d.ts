@@ -1,3 +1,5 @@
+import { DomainMetadataType } from "../wps100/wps_1.0.0";
+
 export type BoundingBoxType = any;
 export type ExceptionReport = any;
 
@@ -20,8 +22,13 @@ export interface ValueType {
 
 
 export interface OutputDescriptionType {
-  dataDescription: any;
-  output: any;
+  dataDescription: {
+    name: any;
+    value: ComplexDataType;
+  };
+  identifier: CodeType;
+  title: LanguageStringType;
+  abstract?: LanguageStringType;
 }
 
 export interface DataOutputType {
@@ -42,7 +49,8 @@ export interface Dismiss extends RequestBaseType {
 }
 
 export interface LiteralDataType {
-  literalDataDomain: any;
+  literalDataDomain?: LiteralDataDomainType;
+  format: Format[];
 }
 
 export interface GetCapabilitiesType {
@@ -78,7 +86,7 @@ export interface LiteralDataDomainType {
   allowedValues: AllowedValuesType;
   anyValue: any;
   valuesReference: any;
-  dataType?: any;
+  dataType?: DomainMetadataType;
   uom?: any;
   defaultValue?: ValueType;
 }
@@ -149,23 +157,34 @@ export interface Data extends DataEncodingAttributes {
 export interface Format extends DataEncodingAttributes {
   maximumMegabytes?: number;
   _default?: boolean;
+  encoding?: string;
+  mimeType: string;
 }
 
 export interface BoundingBoxData {
-  supportedCRS: any;
+  supportedCRS: SupportedCRS[];
+  format: Format[];
 }
 
 export interface ProcessDescriptionType {
-  output: any;
-  input?: any;
+  identifier: CodeType;
+  title: LanguageStringType;
+  _abstract?: LanguageStringType;
+  input: InputDescriptionType[];
+  output: OutputDescriptionType[];
   lang?: any;
 }
 
 export interface InputDescriptionType {
-  dataDescription: any;
-  input: any;
-  minOccurs?: any;
-  maxOccurs?: any;
+  identifier: CodeType;
+  title: LanguageStringType;
+  abstract?: LanguageStringType;
+  dataDescription: {
+    name: any;
+    value: ComplexDataType | BoundingBoxData | LiteralDataType;
+  };
+  minOccurs?: number;
+  maxOccurs?: number;
 }
 
 export type OutputTransmissionType = 'value' | 'reference';
@@ -184,7 +203,7 @@ export interface BodyReferenceType {
 }
 
 export interface ProcessOfferings {
-  processOffering: any;
+  processOffering: ProcessOffering[];
 }
 
 export interface GenericOutputType {
@@ -192,7 +211,7 @@ export interface GenericOutputType {
 }
 
 export interface ComplexDataType {
-  any?: any;
+  format: Format[];
 }
 
 export interface GenericProcessType {
@@ -217,11 +236,14 @@ export interface GetStatus extends RequestBaseType {
 }
 
 
+export type JobControlOptions = 'sync-execute' | 'async-execute';
+
+
 export interface ProcessOffering {
   process: ProcessDescriptionType;
   any: any;
-  jobControlOptions: any;
-  outputTransmission?: any;
+  jobControlOptions: JobControlOptions[];
+  outputTransmission?: OutputTransmissionType[];
   processVersion?: string;
   processModel?: string;
 }

@@ -856,6 +856,46 @@
           }
         }
       }
+    },
+    "utils-ogc": {
+      "projectType": "library",
+      "root": "projects/utils-ogc",
+      "sourceRoot": "projects/utils-ogc/src",
+      "prefix": "ukis",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/utils-ogc/tsconfig.lib.json",
+            "project": "projects/utils-ogc/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/utils-ogc/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/utils-ogc/src/test.ts",
+            "tsConfig": "projects/utils-ogc/tsconfig.spec.json",
+            "karmaConfig": "projects/utils-ogc/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/utils-ogc/tsconfig.lib.json",
+              "projects/utils-ogc/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "schematics": {

@@ -14,25 +14,14 @@ It is the base to create a project specific UKIS Frontend Application.
 It uses [angular](https://angular.io/) and the [Clarity Design System](https://vmware.github.io/clarity/).
  
 
-The following libraries/packages are included in this repository:
+Our libraries/packages can be found in the [projects](projects/) directory:
 
-- [base-layers-raster](projects/base-layers-raster/README.md)
-- [cookie-alert](projects/cookie-alert/README.md)
-- [core-ui](projects/core-ui/README.md)
-- [layer-control](projects/layer-control/README.md)
-- [map-tools](projects/map-tools/README.md)
-- [map-ol](projects/map-ol/README.md)
-- [owc-control](projects/owc-control/README.md)
-- [user-info](projects/user-info/README.md)
+- ``projects/utils-*`` collections of utilities that do not themselves depend on angular.
+- ``projects/services-*`` angular services and types for layers.
+- ``projects/*`` all other projects are mostly angular components.
+- ``projects/demo-*`` demo angular applications to show how to use the libraries/packages.
 
-- [services-layers](projects/services-layers/README.md)
-- [services-map-state](projects/services-map-state/README.md)
-- [services-ogc](projects/services-ogc/README.md)
-- [services-util-store](projects/services-util-store/README.md)
-
-- [utils-maps](projects/utils-maps/README.md)
-- [utils-browser](projects/utils-browser/README.md)
-- [map-three](projects/map-three/README.md)
+For documentation of a specific project look at it's [README.md](projects/**/README.md)
 
 
 ## To use the libraries in your project specific application, you can either use the packaged npm modules or include this repository.
