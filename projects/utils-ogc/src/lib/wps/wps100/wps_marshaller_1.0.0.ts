@@ -1,9 +1,11 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsBboxValue, WpsData, WpsDataDescription, WpsState, WpsDataFormat } from '../wps_datatypes';
+import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsBboxValue, WpsData, 
+  WpsDataDescription, WpsState, WpsDataFormat, WpsProcessDescription } from '../wps_datatypes';
 import {
   WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType,
   InputType, ResponseFormType, DataType, IWpsExecuteResponse, DocumentOutputDefinitionType,
-  ResponseDocumentType, InputReferenceType, ExecuteResponse
-} from './wps_1.0.0';
+  ResponseDocumentType, InputReferenceType, ExecuteResponse, IWpsDescribeProcessResponse,
+  InputDescriptionType, OutputDescriptionType } from './wps_1.0.0';
+import * as xmlserializer from 'xmlserializer';
 
 
 
@@ -13,6 +15,10 @@ export class WpsMarshaller100 implements WpsMarshaller {
 
   getCapabilitiesUrl(baseurl: string): string {
     return `${baseurl}?service=WPS&request=GetCapabilities&version=1.0.0`;
+  }
+
+  getDescribeProcessUrl(baseurl: string, processId: string): string {
+    return `${baseurl}?service=WPS&request=DescribeProcess&version=1.0.0&Identifier=${processId}`;
   }
 
   executeUrl(baseurl: string, processId: string): string {
@@ -29,6 +35,35 @@ export class WpsMarshaller100 implements WpsMarshaller {
     return out;
   }
 
+  unmarshalProcessDescription(processDescriptionJson: IWpsDescribeProcessResponse): WpsProcessDescription {
+    const description = processDescriptionJson.processDescription[0];
+
+    const inputs: WpsInput[] = [];
+    for (const dataInput of description.dataInputs.input) {
+      inputs.push({
+        description: this.unmarshalInputDescription(dataInput),
+        value: null
+      });
+    }
+
+    const outputs: WpsResult[] = [];
+    for (const processOutput of description.processOutputs.output) {
+      outputs.push({
+        description: this.unmarshalOutputDescription(processOutput),
+        value: null
+      });
+    }
+
+    return {
+      id: description.identifier.value,
+      processVersion: description.processVersion,
+      description: description._abstract?.value,
+      title: description.title.value,
+      inputs: inputs,
+      outputs: outputs,
+    };
+  }
+
   unmarshalSyncExecuteResponse(responseJson: IWpsExecuteResponse, url: string, processId: string,
                                inputs: WpsInput[], outputDescriptions: WpsOutputDescription[]): WpsResult[] {
 
@@ -38,6 +73,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
       out.push({
         description: {
           id: responseJson.value.process.identifier.value,
+          title: responseJson.value.process.title.value,
           reference: true,
           type: 'error'
         },
@@ -72,6 +108,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
         out.push({
           description: {
             id: output.identifier.value,
+            title: output.title.value,
             format,
             reference: isReference,
             type: datatype
@@ -83,6 +120,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
       out.push({
         description: {
           id: responseJson.value.process.identifier.value,
+          title: responseJson.value.process.title.value,
           reference: true,
           type: 'status'
         },
@@ -95,6 +133,15 @@ export class WpsMarshaller100 implements WpsMarshaller {
 
   protected unmarshalOutputData(data: DataType): any {
     if (data.complexData) {
+
+      if (data.complexData.encoding === 'base64') {
+        if (typeof module !== 'undefined' && module.exports) { // node
+          data.complexData.content.map(c => new Buffer(c, 'base64').toString('ascii'));
+        } else { // browser
+          data.complexData.content.map(c => atob(c));
+        }
+      }
+
       switch (data.complexData.mimeType) {
         case 'application/vnd.geo+json':
         case 'application/json':
@@ -102,7 +149,8 @@ export class WpsMarshaller100 implements WpsMarshaller {
         case 'application/WMS':
           return data.complexData.content;
         case 'text/xml':
-          return new XMLSerializer().serializeToString(data.complexData.content[0]); // @TODO: better: handle actual xml-data
+        case 'application/xml':
+          return xmlserializer.serializeToString(data.complexData.content[0]); // @TODO: better: handle actual xml-data
         default:
           throw new Error(`Cannot unmarshal data of format ${data.complexData.mimeType}`);
       }
@@ -115,6 +163,71 @@ export class WpsMarshaller100 implements WpsMarshaller {
     }
 
     throw new Error(`Not yet implemented: ${data}`);
+  }
+
+  protected unmarshalInputDescription(data: InputDescriptionType): WpsDataDescription {
+    if (data.boundingBoxData) {
+      return {
+        id: data.identifier.value,
+        title: data.title.value,
+        reference: false,
+        type: 'bbox',
+        description: data._abstract?.value,
+        format: 'text/plain',
+      };
+    }
+    else if (data.complexData) {
+      return {
+        id: data.identifier.value,
+        title: data.title.value,
+        reference: data.storeSupported,
+        type: 'complex',
+        description: data._abstract?.value,
+        format: data.complexData._default.format.mimeType as WpsDataFormat
+      };
+    }
+    else if (data.literalData) {
+      return {
+        id: data.identifier.value,
+        title: data.title.value,
+        reference: false,
+        type: 'literal',
+        description: data._abstract?.value,
+        defaultValue: data.literalData.defaultValue,
+        options: data.literalData.allowedValues?.valueOrRange.map(v => v.value),
+        format: 'text/plain'
+      };
+    } else {
+      throw new Error(`Cannot unmarshal the input-description for ${data.identifier.value}`);
+    }
+  }
+
+  protected unmarshalOutputDescription(data: OutputDescriptionType): WpsDataDescription {
+    if (data.complexOutput) {
+      return {
+        id: data.identifier.value,
+        title: data.title.value,
+        reference: true,
+        type: 'complex',
+        format: data.complexOutput._default.format.mimeType as WpsDataFormat
+      };
+    } else if (data.boundingBoxOutput) {
+      return {
+        id: data.identifier.value,
+        title: data.title.value,
+        reference: false,
+        type: 'bbox',
+      };
+    } else if (data.literalOutput) {
+      return {
+        id: data.identifier.value,
+        title: data.title.value,
+        reference: false,
+        type: 'literal',
+      };
+    } else {
+      throw new Error(`Cannot unmarshal the input-description for ${data.identifier.value}`);
+    }
   }
 
   unmarshalAsyncExecuteResponse(responseJson: any, url: string, processId: string, inputs: WpsInput[], outputDescriptions: WpsDataDescription[]): WpsState {
@@ -138,7 +251,7 @@ export class WpsMarshaller100 implements WpsMarshaller {
     };
 
     if (response.processOutputs && response.processOutputs.output) {
-      state.results = this.unmarshalSyncExecuteResponse(responseJson, serverUrl, processId, inputs, outputDescriptions);
+      state.results = responseJson; // this.unmarshalSyncExecuteResponse(responseJson, serverUrl, processId, inputs, outputDescriptions);
     }
 
     return state;

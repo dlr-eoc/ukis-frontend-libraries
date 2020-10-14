@@ -12,5 +12,5 @@ export const isDataOutputType = (obj: object): obj is DataOutputType => {
 };
 
 export const isResult = (obj: object): obj is Result => {
-  return (obj.hasOwnProperty('output') && typeof obj['output'] === 'object');
+  return (obj.hasOwnProperty('output'));
 };

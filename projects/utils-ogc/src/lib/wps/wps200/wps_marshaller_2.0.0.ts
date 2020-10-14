@@ -1,6 +1,10 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsDataDescription, WpsData, WpsState } from '../wps_datatypes';
-import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitionType, IWpsExecuteProcessBody, IWpsExecuteResponse, IGetStatusRequest, Data, IGetResultRequest, IDismissRequest, IDismissResponse } from './wps_2.0';
+import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsDataDescription,
+  WpsData, WpsState, WpsProcessDescription, WpsDataFormat } from '../wps_datatypes';
+import { WPSCapabilitiesType, ExecuteRequestType, DataInputType, OutputDefinitionType, IWpsExecuteProcessBody,
+  IWpsExecuteResponse, IGetStatusRequest, Data, IGetResultRequest, IDismissRequest, IDismissResponse, ProcessOfferings,
+  InputDescriptionType, OutputDescriptionType, LiteralDataType } from './wps_2.0';
 import { isStatusInfo, isResult } from './helpers';
+import * as xmlserializer from 'xmlserializer';
 
 
 export class WpsMarshaller200 implements WpsMarshaller {
@@ -9,6 +13,103 @@ export class WpsMarshaller200 implements WpsMarshaller {
 
   getCapabilitiesUrl(baseurl: string): string {
     return `${baseurl}?service=WPS&request=GetCapabilities&version=2.0.0`;
+  }
+
+  getDescribeProcessUrl(baseurl: string, processId: string): string {
+    return `${baseurl}?service=WPS&request=DescribeProcess&version=2.0.0&Identifier=${processId}`;
+  }
+
+  unmarshalProcessDescription(processDescriptionJson: ProcessOfferings): WpsProcessDescription {
+    const description = processDescriptionJson.processOffering[0];
+  
+    const inputs: WpsInput[] = [];
+    for (const dataInput of description.process.input) {
+      inputs.push({
+        description: this.unmarshalInputDescription(dataInput),
+        value: null
+      });
+    }
+
+    const outputs: WpsResult[] = [];
+    for (const processOutput of description.process.output) {
+      outputs.push({
+        description: this.unmarshalOutputDescription(processOutput),
+        value: null
+      });
+    }
+
+    return {
+      id: description.process.identifier.value,
+      processVersion: description.processVersion || '',
+      description: description.process._abstract?.value,
+      title: description.process.title?.value || '',
+      inputs: inputs,
+      outputs: outputs,
+    };
+  }
+
+  protected unmarshalInputDescription(dataInput: InputDescriptionType): WpsDataDescription {
+    if (dataInput.dataDescription.name.localPart === 'BoundingBoxData') {
+      return {
+        id: dataInput.identifier.value,
+        title: dataInput.title.value,
+        reference: false,
+        type: 'bbox',
+        description: dataInput.abstract?.value
+      };
+    } else if (dataInput.dataDescription.name.localPart === 'LiteralData') {
+      return {
+        id: dataInput.identifier.value,
+        title: dataInput.title.value,
+        reference: false,
+        type: 'literal',
+        defaultValue: (dataInput.dataDescription.value as LiteralDataType).literalDataDomain?.defaultValue?.value,
+        options: (dataInput.dataDescription.value as LiteralDataType).literalDataDomain?.allowedValues.valueOrRange.map(v => v.value),
+        description: dataInput.abstract?.value
+      };
+    } else if (dataInput.dataDescription.name.localPart === 'ComplexData') {
+      return {
+        id: dataInput.identifier.value,
+        title: dataInput.title.value,
+        reference: true,
+        type: 'complex',
+        format: dataInput.dataDescription.value.format[0].mimeType as WpsDataFormat,
+        description: dataInput.abstract?.value
+      };
+    } else {
+      throw new Error(`Cannot unmarshal input-description ${dataInput.identifier.value}`);
+    }
+  }
+
+  protected unmarshalOutputDescription(processOutput: OutputDescriptionType): WpsDataDescription {
+    if (processOutput.dataDescription.name.localPart === 'BoundingBoxData') {
+      return {
+        id: processOutput.identifier.value,
+        title: processOutput.title.value,
+        reference: false,
+        type: 'bbox',
+        description: processOutput.abstract?.value
+      };
+    } else if (processOutput.dataDescription.name.localPart === 'LiteralData') {
+      return {
+        id: processOutput.identifier.value,
+        title: processOutput.title.value,
+        reference: false,
+        type: 'literal',
+        description: processOutput.abstract?.value
+      };
+    } else if (processOutput.dataDescription.name.localPart === 'ComplexData') {
+      return {
+        id: processOutput.identifier.value,
+        title: processOutput.title.value,
+        reference: true,
+        type: 'complex',
+        format: processOutput.dataDescription.value.format[0].mimeType as WpsDataFormat,
+        description: processOutput.abstract?.value
+      };
+    } else {
+      throw new Error(`Cannot unmarshal input-description ${processOutput.identifier.value}`);
+    }
   }
 
   executeUrl(baseurl: string, processId: string): string {
@@ -51,6 +152,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
         out.push({
           description: {
             id: output.id,
+            title: outputDescription.title,
             format,
             reference: isReference,
             type: datatype
@@ -68,6 +170,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
       out.push({
         description: {
           id: processId,
+          title: '',
           reference: true,
           type: 'status'
         },
@@ -80,6 +183,15 @@ export class WpsMarshaller200 implements WpsMarshaller {
 
   protected unmarshalOutputData(data: Data, description: WpsOutputDescription): any {
     if (description.type === 'complex') {
+
+      if (data.encoding === 'base64') {
+        if (typeof module !== 'undefined' && module.exports) { // node
+          data.content.map(c => new Buffer(c, 'base64').toString('ascii'));
+        } else { // browser
+          data.content.map((c: any) => atob(c));
+        }
+      }
+
       switch (data.mimeType) {
         case 'application/vnd.geo+json':
         case 'application/json':
@@ -87,7 +199,8 @@ export class WpsMarshaller200 implements WpsMarshaller {
         case 'application/WMS':
           return data.content;
         case 'text/xml':
-          return new XMLSerializer().serializeToString(data.content[0]); // @TODO: better: handle actual xml-data
+        case 'application/xml':
+          return xmlserializer.serializeToString(data.content[0]); // @TODO: better: handle actual xml-data
         default:
           throw new Error(`Cannot unmarshal complex data of format ${data.mimeType}`);
       }

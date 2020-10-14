@@ -13,6 +13,7 @@
     "@dlr-eoc/services-util-store",
     "@dlr-eoc/base-layers-raster",
     "@dlr-eoc/services-map-state",
+    "@dlr-eoc/utils-ogc",
     "md5",
     "ol",
     "w3c-schemas",

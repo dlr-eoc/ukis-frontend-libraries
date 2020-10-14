@@ -2,16 +2,6 @@
 
 This library bundles our clients for OGC standards. 
 
-## WPS
-This is a client to communicate with WPS-servers. With it, remote procedures can be called, their status monitored and their results fetched.
-The service is intended to abstract away the differences between the versions of the WPS protocol. It currently supports both WPS 1.0.0 and WPS 2.0.0.
-
-```
-const c = new WpsClient('1.0.0', httpClient);
-const exec$ = c.execute('http://testserver.com/wps', 'processId', inputs, outputDescriptions);
-exec$.subscribe(results => console.log(results) );
-```
-
 ## OWC
 This is a parser to read from / write to OWC files. OWC can be used to share information about a map-context (such as extent, visible layers, zoom, ...) across multiple clients.
 This parser converts to / from UKIS-specific datatypes, like UKIS-rasterlayers, UKIS-vectorlayers etc.
