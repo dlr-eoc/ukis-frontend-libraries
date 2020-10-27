@@ -6,7 +6,7 @@ import OSM from 'ol/source/OSM';
 import { simpleMapToCanvas } from './utils-ol-canvas';
 
 
-describe('mapToCanvas test suite', () => {
+describe('Utils OpenLayers Canvas test suite', () => {
   it('simpleMapToCanvas should create an image in a canvas', (done) => {
 
     const mapTarget = document.createElement('div');
