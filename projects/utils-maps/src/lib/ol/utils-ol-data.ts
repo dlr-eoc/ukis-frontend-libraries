@@ -1,4 +1,6 @@
 import GeoJSON from 'ol/format/GeoJSON';
+import { Map } from 'ol';
+import { Options as GeoJsonOptions } from 'ol/format/GeoJSON';
 import VectorSource from 'ol/source/Vector';
 import { ProjectionLike } from 'ol/proj';
 
@@ -6,10 +8,11 @@ import { ProjectionLike } from 'ol/proj';
 /**
  * Create a OpenLayers Feature from a GeoJson Feature
  */
-export function geoJsonToFeature(geojson: any) {
+export function geoJsonToFeature(geojson: any, map: Map, options?: GeoJsonOptions) {
   const GEOJSON = new GeoJSON({
-    dataProjection: 'EPSG:4326',
-    featureProjection: this.EPSG
+    dataProjection: options?.dataProjection || 'EPSG:4326',
+    featureProjection: options?.featureProjection || map.getView().getProjection(),
+    ...options
   });
   return GEOJSON.readFeature(geojson);
 }
@@ -17,10 +20,11 @@ export function geoJsonToFeature(geojson: any) {
 /**
  * Create a Array of OpenLayers Features from a GeoJson FeatureCollection
  */
-export function geoJsonToFeatures(geojson: any) {
+export function geoJsonToFeatures(geojson: any, map: Map, options?: GeoJsonOptions) {
   const GEOJSON = new GeoJSON({
-    dataProjection: 'EPSG:4326',
-    featureProjection: this.EPSG
+    dataProjection: options?.dataProjection || 'EPSG:4326',
+    featureProjection: options?.featureProjection || map.getView().getProjection(),
+    ...options
   });
   return GEOJSON.readFeatures(geojson);
 }
