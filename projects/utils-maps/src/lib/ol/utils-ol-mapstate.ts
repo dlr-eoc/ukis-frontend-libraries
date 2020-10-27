@@ -1,6 +1,4 @@
 import { Map } from 'ol';
-import { Layer } from 'ol/layer';
-import LayerGroup from 'ol/layer/Group';
 import { extend as olExtend, Extent } from 'ol/extent';
 import { transformExtent, get as getProjection, transform, Projection } from 'ol/proj';
 import { easeOut } from 'ol/easing.js';
@@ -12,70 +10,107 @@ import { register as Register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import { flattenLayers } from './utils-ol-layers';
 
-const DEFAULT_PROJECTION = 'EPSG:3857';
-/**
- *
- */
-export function setExtent(map: Map, extent: Extent, geographic?: boolean, fitOptions?: any) {
-  const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(DEFAULT_PROJECTION);
-  const transfomExtent = transformExtent(extent, projection, map.getView().getProjection().getCode());
-  const newFitOptions = {
-    size: map.getSize(),
-    // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
+
+
+function _getViewAndGeoProj(map: Map) {
+  const view = map.getView();
+  const viewProj = view.getProjection();
+  const wgs84Proj = getProjection('EPSG:4326');
+  return {
+    view,
+    viewProj,
+    wgs84Proj
   };
+}
+
+/**
+ * map.getView().fit() tries to fit the specified extent on the map
+ *
+ * So the extent is not set accurately!!!
+ *
+ * @param geographic - use true if your extent is in geographic coordinates
+ */
+export function fitExtent(map: Map, extent: Extent, geographic?: boolean, fitOptions?: any) {
+  const { view, viewProj, wgs84Proj } = _getViewAndGeoProj(map);
+  let transfomExtent = extent;
+  if (geographic && viewProj.getCode() !== wgs84Proj.getCode()) {
+    transfomExtent = transformExtent(extent, wgs84Proj, viewProj);
+  }
+
+  const newFitOptions = {
+    size: map.getSize()
+  };
+
   if (fitOptions) {
     Object.assign(newFitOptions, fitOptions);
   }
-  map.getView().fit(transfomExtent, fitOptions);
-  return (transfomExtent as Extent);
+
+  view.fit(transfomExtent, fitOptions);
 }
 
-export function setCenter(map: Map, center: number[], geographic?: boolean): number[] {
-  const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(DEFAULT_PROJECTION);
-  const transformedCenter = transform(center, projection, map.getView().getProjection().getCode());
-  // console.log('set center in svc', transfomCenter)
-  // console.log(map.getView().getCenter())
-  map.getView().setCenter(transformedCenter);
-  return transformedCenter;
+/**
+ *
+ * @param geographic - use true if your center is in geographic coordinates
+ */
+export function setCenter(map: Map, center: number[], geographic?: boolean) {
+  const { view, viewProj, wgs84Proj } = _getViewAndGeoProj(map);
+  let transformedCenter = center;
+
+  if (geographic && viewProj.getCode() !== wgs84Proj.getCode()) {
+    transformedCenter = transform(center, wgs84Proj, viewProj);
+  }
+
+  view.setCenter(transformedCenter);
 }
 
-export function getCenter(map: Map, geographic?: boolean): any {
-  const dstProjection = (geographic) ? getProjection('EPSG:4326') : getProjection(DEFAULT_PROJECTION);
-  const srcProjection = getProjection(map.getView().getProjection().getCode());
-  const transformedCenter = transform(map.getView().getCenter(), srcProjection, dstProjection);
-  return transformedCenter;
+/**
+ * @param geographic - true: returns geographic coordinates
+ */
+export function getCenter(map: Map, geographic?: boolean) {
+  const { view, viewProj, wgs84Proj } = _getViewAndGeoProj(map);
+  let center = view.getCenter();
+
+  if (geographic && viewProj.getCode() !== wgs84Proj.getCode()) {
+    center = transform(center, viewProj, wgs84Proj);
+  }
+
+  return center;
 }
 
 
 /**
-  *
-  * @param features: olFeature[]
-  * @param geographic: boolean
-  * @returns olExtend: [minX, minY, maxX, maxY]
-  */
-export function getFeaturesExtent(map: Map, features: Feature<any>[], geographic?: boolean) {
-  const extent: any = features[0].getGeometry().getExtent().slice(0);
-  features.forEach((feature) => {
-    olExtend(extent, feature.getGeometry().getExtent());
+ * @param geographic - true: returns geographic coordinates
+ * @returns olExtend: [minX, minY, maxX, maxY]
+ */
+export function getExtentFromFeatures(map: Map, features: Feature<any>[], geographic?: boolean) {
+  const { viewProj, wgs84Proj } = _getViewAndGeoProj(map);
+  const startIndex = 0;
+  const extent: number[] = features[startIndex].getGeometry().getExtent().slice(0);
+  features.forEach((feature, index) => {
+    if (index > startIndex) {
+      olExtend(extent, feature.getGeometry().getExtent());
+    }
   });
-  if (geographic) {
-    const projection = getProjection('EPSG:4326');
-    const transformedExtent = transformExtent(extent, map.getView().getProjection().getCode(), projection);
-    return (transformedExtent as Extent);
+  if (geographic && viewProj.getCode() !== wgs84Proj.getCode()) {
+    const transformedExtent = transformExtent(extent, viewProj, wgs84Proj);
+    return transformedExtent;
   } else {
     return extent;
   }
 }
 
 /**
- * @param geographic: boolean
+ * @param geographic - true: returns geographic coordinates
  * @returns olExtend: [minX, minY, maxX, maxY]
  */
 export function getCurrentExtent(map: Map, geographic?: boolean) {
-  const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(DEFAULT_PROJECTION);
-  const extent = map.getView().calculateExtent();
-  const transformedExtent = transformExtent(extent, map.getView().getProjection().getCode(), projection);
-  return (transformedExtent as Extent);
+  const { view, viewProj, wgs84Proj } = _getViewAndGeoProj(map);
+  let viewExtent = view.calculateExtent();
+  if (geographic && viewProj.getCode() !== wgs84Proj.getCode()) {
+    viewExtent = transformExtent(viewExtent, viewProj, wgs84Proj);
+  }
+
+  return viewExtent;
 }
 
 
@@ -116,7 +151,9 @@ export function zoomInOut(map: Map, value: '-' | '+') {
 }
 
 
-
+/**
+ * Get the view Projection from ol map
+ */
 export function getMapProjection(map: Map) {
   return map.getView().getProjection();
 }
@@ -178,7 +215,7 @@ export function registerProjection(projDef: any) {
  * and sets all fields that are missing to make it an actual `Projection`
  * to `undefined` or `false`.
  */
-export function getOlProjection(projDef: { code: any, [k: string]: any}): Projection {
+export function getOlProjection(projDef: { code: any, [k: string]: any }): Projection {
   return new Projection({
     code: projDef.code,
     extent: projDef.extent ? projDef.extent : undefined,
