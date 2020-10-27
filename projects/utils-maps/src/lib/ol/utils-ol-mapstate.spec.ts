@@ -69,7 +69,7 @@ describe('Utils OpenLayers mapstate test-suite', () => {
 
   it('should set/get the correct new projection', () => {
     const newProj = setMapProjection(map, google);
-    expect(newProj.epsg).toEqual('EPSG:3857');
+    expect(newProj.proj.getCode()).toEqual('EPSG:3857');
     expect(getMapProjection(map)).toEqual(google);
   });
 

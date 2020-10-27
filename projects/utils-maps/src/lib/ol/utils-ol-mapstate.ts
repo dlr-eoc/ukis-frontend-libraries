@@ -199,7 +199,7 @@ export function setMapProjection(map: Map, newProjection: Projection | string) {
   // @TODO: wms layers will be updated with corresponding proj def in the requests.
 
   return {
-    epsg: newView.getProjection().getCode(),
+    proj: newView.getProjection(),
     view: map.getView()
   };
 }
