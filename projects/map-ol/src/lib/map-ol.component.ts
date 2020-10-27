@@ -369,7 +369,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       const extent = this.mapSvc.getCurrentExtent(true);
 
       // const newCenter = { lat: parseFloat(center[1].toFixed(6)), lon: parseFloat(center[0].toFixed(6)) };
-      const newCenter = { lat: parseFloat(center[1]), lon: parseFloat(center[0]) };
+      const newCenter = { lat: center[1], lon: center[0] };
       const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent);
       this.mapStateSvc.setMapState(ms);
     };
