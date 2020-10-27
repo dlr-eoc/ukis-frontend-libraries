@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { MapOlService } from './map-ol.service';
+import { IPopupArgs, MapOlService } from './map-ol.service';
 import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup } from '@dlr-eoc/services-layers';
 
 import olTileLayer from 'ol/layer/Tile';
@@ -23,6 +23,11 @@ import { platformModifierKeyOnly } from 'ol/events/condition';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
+
+import testFeatureCollection from '../../../demo-maps/src/assets/data/geojson/testFeatureCollection.json';
+import olOverlay from 'ol/Overlay';
+import { getUid as olGetUid } from 'ol/util';
+import { get as getProjection } from 'ol/proj';
 
 
 /** ol/layer/Tile - ID-raster */
@@ -75,78 +80,7 @@ const beforeEachFn = () => {
   rasterLayer.set('id', 'ID-raster');
   rasterLayer.set('name', 'OpenStreetMap');
 
-  vetorData = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'LineString',
-          coordinates: [
-            [
-              2.63671875,
-              44.32384807250689
-            ],
-            [
-              3.504638671875,
-              44.95702412512118
-            ],
-            [
-              4.449462890625,
-              44.75453548416007
-            ]
-          ]
-        }
-      },
-      {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'Point',
-          coordinates: [
-            4.74609375,
-            44.32384807250689
-          ]
-        }
-      },
-      {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [
-                4.28466796875,
-                45.46783598133375
-              ],
-              [
-                4.976806640625,
-                45.1742925240767
-              ],
-              [
-                5.4931640625,
-                45.56021795715051
-              ],
-              [
-                5.4052734375,
-                46.027481852486645
-              ],
-              [
-                4.46044921875,
-                45.84410779560204
-              ],
-              [
-                4.28466796875,
-                45.46783598133375
-              ]
-            ]
-          ]
-        }
-      }
-    ]
-  };
+  vetorData = testFeatureCollection;
 
   vectorLayer = new olVectorLayer({
     source: new olVectorSource({
@@ -568,8 +502,7 @@ describe('MapOlService ukisLayers', () => {
   });
 });
 
-
-describe('MapOlService utils', () => {
+describe('MapOlService TileGrid', () => {
   beforeEach(beforeEachFn);
 
   it('should create a default Tile Grid', () => {
@@ -654,5 +587,132 @@ describe('MapOlService utils', () => {
     // TODO: what exactly should be created here only as much resolutions like matrixIds???
     // expect(tileGrid.getMatrixId(14)).toEqual('');
     // expect(tileGrid.getResolutions().length).toEqual(matrixIds.length + 1);
+  });
+});
+
+describe('MapOlService popup', () => {
+  beforeEach(beforeEachFn);
+
+  it('should add a basic popup to the map for vector Layers', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+
+    const feature = vectorLayer.getSource().getFeatures()[0];
+    const popupProperties = feature.getProperties();
+    const args: IPopupArgs = {
+      modelName: vectorLayer.get('id'),
+      properties: popupProperties,
+      layer: vectorLayer,
+      feature,
+      event: { type: 'click', coordinate: [1312192.0073726526, 5444712.8273727745] } as any
+    };
+
+    service.addPopup(args, popupProperties, null);
+    expect(service.getPopups().length).toBe(1);
+    const popupOnMap = service.getPopups()[0];
+    expect(popupOnMap instanceof olOverlay).toBeTrue();
+    /** OVERLAY_TYPE_KEY, OVERLAY_TYPE_VALUE */
+    expect(popupOnMap.get('type')).toBe('popup');
+    expect(popupOnMap.getId()).toBe(olGetUid(feature));
+    expect(popupOnMap.get('addEvent')).toBe(args.event.type);
+  });
+
+  it('should add multiple popups to the map for vector Layers', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+
+    const features = vectorLayer.getSource().getFeatures();
+
+    const addPopups = (feature) => {
+      const popupProperties = feature.getProperties();
+      const args: IPopupArgs = {
+        modelName: vectorLayer.get('id'),
+        properties: popupProperties,
+        layer: vectorLayer,
+        feature,
+        event: { type: 'click' } as any
+      };
+
+      service.addPopup(args, popupProperties, null);
+    };
+
+    features.forEach(f => {
+      addPopups(f);
+    });
+
+    expect(service.getPopups().length).toBe(features.length);
+  });
+
+  it('should remove all popups from the map', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+
+    const features = vectorLayer.getSource().getFeatures();
+
+    const addPopups = (feature) => {
+      const popupProperties = feature.getProperties();
+      const args: IPopupArgs = {
+        modelName: vectorLayer.get('id'),
+        properties: popupProperties,
+        layer: vectorLayer,
+        feature,
+        event: { type: 'click' } as any
+      };
+
+      service.addPopup(args, popupProperties, null);
+    };
+
+    features.forEach(f => {
+      addPopups(f);
+    });
+
+    expect(service.getPopups().length).toBe(features.length);
+
+    service.removeAllPopups((i) => i.get('type') === 'popup');
+    expect(service.getPopups().length).toBe(0);
+  });
+});
+
+
+describe('MapOlService State', () => {
+  // beforeEach(beforeEachFn);
+  it('should set/get zoom, center', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    const center = [11, 48];
+    service.setZoom(8);
+    service.setCenter(center, true);
+
+    expect(service.getZoom()).toBe(8);
+    // Rounding errors 47.99999999999997 to equal 48
+    expect(service.getCenter(true)[0]).toBeCloseTo(center[0], 1);
+    expect(service.getCenter(true)[1]).toBeCloseTo(center[1], 1);
+  });
+
+  it('should set/get extent', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    const oldExtent = service.getCurrentExtent(true);
+    const extent = [-14, 33, 40, 57] as any;
+    service.setExtent(extent, true);
+    // map.getView().fit() tries to fit the specified extent on the map -> [-14.000000000000002, 24.562357322635023, 40, 61.890976149402576]
+    // therefore only check if the extent has changed!!!
+    expect(service.getCurrentExtent(true) !== oldExtent).toBeTrue();
+  });
+
+  it('should set/get projection string', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    const projectionCode = 'EPSG:4326';
+    service.setProjection(projectionCode);
+    expect(service.getProjection().getCode()).toBe(projectionCode);
+  });
+
+  it('should set/get projection obj', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    const projection = getProjection('EPSG:4326');
+    service.setProjection(projection);
+    expect(service.getProjection()).toBe(projection);
   });
 });
