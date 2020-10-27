@@ -70,7 +70,7 @@ import { Subject } from 'rxjs';
 import {
   addBboxSelection, getLayerGroups, getLayersFromGroup, getLayersByKey, isLayerInGroup, removeLayerByKey,
   setRecursiveKey, removeAllPopups, createPopupHtml, getPopups, matrixIdsFromResolutions,
-  resolutionsFromExtent, fitExtent, getExtentFromFeatures, getCurrentExtent
+  resolutionsFromExtent, fitExtent, getExtentFromFeatures, getCurrentExtent, getOlProjection, registerProjection, setMapProjection, reprojectVectorSource, getMapProjection, geoJsonToFeatures, geoJsonToFeature, zoomInOut, getZoom, setZoom
 } from '@dlr-eoc/utils-maps';
 import { GeoJSONFeature } from 'ol/format/GeoJSON';
 import { GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
@@ -1377,62 +1377,31 @@ export class MapOlService {
 
   /** USED in map-ol.component */
   setZoom(zoom: number, notifier?: 'map' | 'user') {
-    const view = this.map.getView();
-    view.setZoom(zoom);
+    setZoom(this.map, zoom, notifier);
   }
 
   /** USED in map-ol.component */
   getZoom(): number {
-    return this.map.getView().getZoom();
+    return getZoom(this.map);
   }
 
   zoomInOut(value: '-' | '+') {
-    const view = this.map.getView();
-    if (!view) {
-      // the map does not have a view, so we can't act
-      // upon it
-      return;
-    }
-    const delta = 1, duration = 250;
-    const currentZoom = view.getZoom();
-    if (currentZoom !== undefined) {
-      const newZoom = view.getConstrainedZoom(currentZoom + delta);
-      if (duration > 0) {
-        if (view.getAnimating()) {
-          view.cancelAnimations();
-        }
-        view.animate({
-          zoom: newZoom,
-          duration,
-          easing: easeOut
-        });
-      } else {
-        view.setZoom(newZoom);
-      }
-    }
+    zoomInOut(this.map, value);
   }
 
   geoJsonToFeature(geojson: GeoJSONFeature): olFeature<any> {
-    const GEOJSON = new olGeoJSON({
-      dataProjection: 'EPSG:4326',
-      featureProjection: this.EPSG
-    });
-    return GEOJSON.readFeature(geojson);
+    return geoJsonToFeature(geojson, this.map);
   }
 
   geoJsonToFeatures(geojson: GeoJSONFeatureCollection): Array<olFeature<any>> {
-    const GEOJSON = new olGeoJSON({
-      dataProjection: 'EPSG:4326',
-      featureProjection: this.EPSG
-    });
-    return GEOJSON.readFeatures(geojson);
+    return geoJsonToFeatures(geojson, this.map);
   }
 
   /**
    * @returns 'olProjection'
    */
   getProjection() {
-    return this.map.getView().getProjection();
+    return getMapProjection(this.map);
   }
 
   /**
@@ -1442,9 +1411,7 @@ export class MapOlService {
    * @param dstProj: string (e.g. 'EPSG:3857')
    */
   reprojectFeatures(source: olVectorSource<any>, srcProj: string, dstProj: string) {
-    source.getFeatures().forEach(feature => {
-      feature.getGeometry().transform(srcProj, dstProj);
-    });
+    reprojectVectorSource(source, srcProj, dstProj);
   }
 
   /**
@@ -1455,66 +1422,20 @@ export class MapOlService {
    * projection is proj~ProjectionLike
    */
   setProjection(projection: olProjection | string) {
-    if (projection) {
-      let viewOptions: olViewOptions = {};
-      if (this.viewOptions) {
-        viewOptions = this.viewOptions;
-        viewOptions.minResolution = undefined;
-        viewOptions.maxResolution = undefined;
-        viewOptions.resolution = undefined;
-        viewOptions.resolutions = undefined;
-      }
-      if (projection instanceof olProjection) {
-        viewOptions.projection = projection;
-        const newCenter = transform(this.map.getView().getCenter(), this.map.getView().getProjection(), projection); // get center coordinates in the new projection
-        viewOptions.center = newCenter; // this.map.getView().getCenter();
-        // _viewOptions.extent = projection.getExtent();// || undefined;
-        viewOptions.zoom = this.map.getView().getZoom();
-      } else if (typeof projection === 'string') {
-        viewOptions.projection = projection;
-        viewOptions.center = this.map.getView().getCenter();
-        viewOptions.zoom = this.map.getView().getZoom();
-      }
-      const view = new olView(viewOptions);
-      const oldProjection = this.EPSG;
-      this.EPSG = view.getProjection().getCode();
-      this.map.setView(view);
-      this.view = this.map.getView();
-
-      // reprojecting vector layers
-      this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-        layerGroup.getLayers().getArray().forEach(layer => {
-          if (layer instanceof olLayer) {
-            let source = layer.getSource();
-            // check for nested sources, e.g. cluster or cluster of clusters etc
-            while (source['source']) {
-              source = source['source'];
-            }
-            if (source instanceof olVectorSource) {
-              this.reprojectFeatures(source, oldProjection, this.EPSG);
-            }
-          }
-        });
-      });
+    const newProj = setMapProjection(this.map, projection);
+    if (newProj.proj) {
       this.projectionChange.next(this.getProjection());
     } else {
-      // console.log('projection code is undefined');
+      console.log(`set Map Projection error`, newProj);
     }
   }
 
   registerProjection(projDef: IProjDef) {
-    proj4.defs(projDef.code, projDef.proj4js);
-    olRegister(proj4);
+    registerProjection(projDef);
   }
 
   getOlProjection(projDef: IProjDef): olProjection {
-    return new olProjection({
-      code: projDef.code,
-      extent: projDef.extent ? projDef.extent : undefined,
-      worldExtent: projDef.worldExtent ? projDef.worldExtent : undefined,
-      global: projDef.global ? projDef.global : false,
-      units: projDef.units ? projDef.units : undefined
-    });
+    return getOlProjection(projDef);
   }
 
   /* istanbul ignore next */
