@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import { transform as olTransform, get as olGetProjection, projection as olProjection } from 'ol/proj';
+import { transform as olTransform, get as olGetProjection, Projection as olProjection } from 'ol/proj';
 import { Subscription } from 'rxjs';
 
 interface ISelectProjection {
@@ -39,7 +39,7 @@ export class MousePositionComponent implements OnInit, OnDestroy {
   /**
    * projLike: 'olProjection'
    */
-  setProjection(projLike: any) {
+  setProjection(projLike: olProjection) {
     const epsg = projLike.getCode();
     if (epsg === 'EPSG:4326') {
       this.projections = [
@@ -62,7 +62,7 @@ export class MousePositionComponent implements OnInit, OnDestroy {
 
   mapMoveSubscription = (evt) => {
     if (evt.coordinate) {
-      this.mapCoordinates = olTransform(evt.coordinate, this.mapProjection, olGetProjection(this.selectedProjection));
+      this.mapCoordinates = olTransform(evt.coordinate, this.mapProjection, olGetProjection(this.selectedProjection)) as any;
     }
   }
 
@@ -84,7 +84,7 @@ export class MousePositionComponent implements OnInit, OnDestroy {
     }
     const oldSelection = this.selectedProjection;
     this.selectedProjection = epsgcode;
-    this.mapCoordinates = olTransform(this.mapCoordinates, olGetProjection(oldSelection), olGetProjection(this.selectedProjection));
+    this.mapCoordinates = olTransform(this.mapCoordinates, olGetProjection(oldSelection), olGetProjection(this.selectedProjection)) as any;
   }
 
   public toPrecision(input: number, value: number) {
