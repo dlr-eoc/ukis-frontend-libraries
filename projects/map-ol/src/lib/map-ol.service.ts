@@ -13,7 +13,7 @@ import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
 import { Options as olLayerGroupOptions } from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
-import { Options as olOverlayOptions } from 'ol/Overlay';
+import { getUid as olGetUid } from 'ol/util';
 
 import olBaseTileLayer from 'ol/layer/BaseTile';
 import { Options as olBaseTileLayerOptions } from 'ol/layer/BaseTile';
@@ -39,7 +39,7 @@ import olTileGrid from 'ol/tilegrid/TileGrid';
 import { Options as olTileGridOptions } from 'ol/tilegrid/TileGrid';
 
 import olVectorSource from 'ol/source/Vector';
-import olTileJSON from 'ol/source/TileJSON';
+// import olTileJSON from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
 import { Options as olClusterOptions } from 'ol/source/Cluster';
 import olFeature from 'ol/Feature';
@@ -65,17 +65,21 @@ import { Options as olDragBoxOptions } from 'ol/interaction/DragBox';
 import olEvent from 'ol/events/Event';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olRenderFeature from 'ol/render/Feature';
-import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 
-import { addBboxSelection, getLayerGroups, getLayersFromGroup, getLayersByKey, isLayerInGroup, removeLayerByKey, setRecursiveKey } from '@dlr-eoc/utils-maps';
+import {
+  addBboxSelection, getLayerGroups, getLayersFromGroup, getLayersByKey, isLayerInGroup, removeLayerByKey,
+  setRecursiveKey, removeAllPopups, createPopupHtml, getPopups, matrixIdsFromResolutions,
+  resolutionsFromExtent, fitExtent, getExtentFromFeatures, getCurrentExtent
+} from '@dlr-eoc/utils-maps';
 import { GeoJSONFeature } from 'ol/format/GeoJSON';
 import { GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
-const OVERLAY_TYPE_KEY = 'type';
 const FILTER_TYPE_KEY = 'filtertype';
+const OVERLAY_TYPE_KEY = 'type';
+const OVERLAY_TYPE_VALUE = 'popup';
 const ID_KEY = 'id';
 const TITLE_KEY = 'title';
 
@@ -685,7 +689,7 @@ export class MapOlService {
       if (l.params.matrixSetOptions) {
         matrixSet = l.params.matrixSetOptions.matrixSet;
         if ('resolutions' in l.params.matrixSetOptions) {
-          const resolutions: Array<string | number> = l.params.matrixSetOptions.resolutions;
+          const resolutions = l.params.matrixSetOptions.resolutions;
           tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', null, l.tileSize, null, resolutions);
         } else if ('resolutionLevels' in l.params.matrixSetOptions || 'tileMatrixPrefix' in l.params.matrixSetOptions) { /** ISimpleMatrixSet */
           const resolutionLevels = l.params.matrixSetOptions.resolutionLevels;
@@ -694,6 +698,7 @@ export class MapOlService {
         }
         if ('matrixIds' in l.params.matrixSetOptions) {
           const matrixIds = l.params.matrixSetOptions.matrixIds;
+          // TODO: what exactly should be created here only as much resolutions like matrixIds??? now all matrixIds in higher zoom levels are undefined.
           tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', null, l.tileSize, null, null, matrixIds);
         }
       }
@@ -974,45 +979,17 @@ export class MapOlService {
     }
   }
 
-  /* istanbul ignore next */
-  private resolutionsFromExtent(extent, optMaxZoom: number, tileSize: number) {
-    const maxZoom = optMaxZoom;
-
-    const height = olGetHeight(extent);
-    const width = olGetWidth(extent);
-
-    const maxResolution = Math.max(width / tileSize, height / tileSize);
-
-    const length = maxZoom + 1;
-    const resolutions = new Array(length);
-    for (let z = 0; z < length; ++z) {
-      resolutions[z] = maxResolution / Math.pow(2, z);
-    }
-    return resolutions;
-  }
-
-  /* istanbul ignore next */
-  private matrixIdsFromResolutions(resolutionLevels: number, matrixIdPrefix?: string) {
-    return Array.from(Array(resolutionLevels).keys()).map(l => {
-      if (matrixIdPrefix) {
-        return `${matrixIdPrefix}:${l}`;
-      } else {
-        return `${l}`;
-      }
-    });
-  }
-
-
   // TODO: how can this be replaced from @dlr-eoc/utils-maps
   // is this possible with the exported functions getTileGrid, getTileGridAuto, getWMTSTileGrid, getWMTSTileGridAuto????
-  getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels: number = DEFAULT_MAX_ZOOM, tileSize: number = DEFAULT_TILE_SIZE, matrixIdPrefix: string = '', resolutions?: Array<string | number>, matrixIds?: Array<string>): T {
+  /** DEPRECATED - use this from @dlr-eoc/utils-maps */
+  getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels: number = DEFAULT_MAX_ZOOM, tileSize: number = DEFAULT_TILE_SIZE, matrixIdPrefix: string = '', resolutions?: Array<number>, matrixIds?: Array<string>): T {
     const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
     const newTileSize = tileSize || DEFAULT_TILE_SIZE;
     const newMatrixIdPrefix = matrixIdPrefix || '';
 
     const projectionExtent = this.getProjection().getExtent();
-    const defaultResolutions = this.resolutionsFromExtent(projectionExtent, newResolutionLevels, newTileSize);
-    const defaultMatrixIds = this.matrixIdsFromResolutions(defaultResolutions.length, newMatrixIdPrefix);
+    const defaultResolutions = resolutionsFromExtent(projectionExtent, newResolutionLevels, newTileSize);
+    const defaultMatrixIds = matrixIdsFromResolutions(defaultResolutions.length, newMatrixIdPrefix);
     /** how to generate matrix ids is not in the wms GetCapabilities ?? */
 
     const tileGridOptions: olTileGridOptions | olWMTSTileGridOptions = {
@@ -1163,6 +1140,9 @@ export class MapOlService {
     }
   }
 
+  /**
+   * function to merge or filter which properties of the layer are used in the popup
+   */
   /* istanbul ignore next */
   private prepareAddPopup(layerProperties: IAnyObject, layer: olLayer<any>, feature: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
     const args: IPopupArgs = {
@@ -1238,6 +1218,7 @@ export class MapOlService {
     }
   }
 
+
   addPopup(args: IPopupArgs, popupObj: IAnyObject, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
     const layerpopup: Layer['popup'] = args.layer.get('popup');
     const content = document.createElement('div');
@@ -1250,7 +1231,7 @@ export class MapOlService {
     else if (html && (!popupObj || Object.keys(popupObj).length === 0)) {
       popupHtml = html;
     } else {
-      popupHtml = this.createPopupHtml(popupObj);
+      popupHtml = createPopupHtml(popupObj);
     }
     content.innerHTML = popupHtml;
 
@@ -1282,7 +1263,7 @@ export class MapOlService {
       popupID = `popup_${new Date().getTime()}`;
     }
 
-    const defaultOptions: olOverlayOptions = {
+    const defaultOptions = {
       element: container,
       autoPan: true,
       id: popupID,
@@ -1314,14 +1295,14 @@ export class MapOlService {
     overlay.setPosition(coordinate);
 
     if (removePopups) {
-      this.removeAllPopups();
+      removeAllPopups(this.map);
     } else if (event === 'move' && removePopups !== false) {
-      this.removeAllPopups((item) => {
+      removeAllPopups(this.map, (item) => {
         return item.get('addEvent') === 'pointermove';
       });
     }
 
-    const hasPopup = this.getPopups().find(item => item.getId() === overlay.getId());
+    const hasPopup = getPopups(this.map).find(item => item.getId() === overlay.getId());
     if (hasPopup) {
       this.map.removeOverlay(hasPopup);
     }
@@ -1329,39 +1310,19 @@ export class MapOlService {
     this.map.addOverlay(overlay);
   }
 
+
   /** USED in map-ol.component */
   removeAllPopups(filter?: (item: olOverlay) => boolean) {
-    let popups = this.getPopups();
-    if (filter) {
-      popups = this.getPopups().filter(filter);
-    }
-    popups.forEach((overlay) => {
-      if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
-        this.map.removeOverlay(overlay);
-      }
-    });
+    removeAllPopups(this.map, filter);
   }
 
+  /** DEPRECATED - use this from @dlr-eoc/utils-maps */
   createPopupHtml(obj: IAnyObject) {
-    let htmlStr = '<table>';
-    for (const o in obj) {
-      if (obj.hasOwnProperty(o)) {
-        htmlStr += '<tr><td style="vertical-align: top; padding-right: 7px;"><b>' + o + ': </b></td><td>' + obj[o] +
-          '</td></tr>';
-      }
-    }
-    htmlStr = htmlStr + '</table>';
-    return htmlStr;
+    return createPopupHtml(obj);
   }
 
   getPopups(): olOverlay[] {
-    const popups = [];
-    this.map.getOverlays().getArray().slice(0).forEach((overlay) => {
-      if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
-        popups.push(overlay);
-      }
-    });
-    return popups;
+    return getPopups(this.map);
   }
   /**
    *
@@ -1369,19 +1330,12 @@ export class MapOlService {
    * @param geographic: boolean
    * @param fitOptions: olFitOptions
    * @returns olExtend: [minX, minY, maxX, maxY]
+   *
+   * tries to fit the specified extent on the map.
    */
-  setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
-    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
-    const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
-    const newFitOptions = {
-      size: this.map.getSize(),
-      // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
-    };
-    if (fitOptions) {
-      Object.assign(newFitOptions, fitOptions);
-    }
-    this.map.getView().fit(transfomExtent, fitOptions);
-    return (transfomExtent as TGeoExtent);
+  setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any) {
+    fitExtent(this.map, extent, geographic, fitOptions);
+    return getCurrentExtent(this.map, geographic);
   }
 
   /** USED in map-ol.component */
@@ -1408,18 +1362,8 @@ export class MapOlService {
    * @param geographic: boolean
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  getFeaturesExtent(features: olFeature<any>[], geographic?: boolean): TGeoExtent {
-    const extent = features[0].getGeometry().getExtent().slice(0);
-    features.forEach((feature) => {
-      olExtend(extent, feature.getGeometry().getExtent());
-    });
-    if (geographic) {
-      const projection = getProjection('EPSG:4326');
-      const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
-      return (transfomExtent as TGeoExtent);
-    } else {
-      return extent;
-    }
+  getFeaturesExtent(features: olFeature<any>[], geographic?: boolean) {
+    return getExtentFromFeatures(this.map, features, geographic) as TGeoExtent;
   }
 
   /** USED in map-ol.component */
@@ -1428,10 +1372,7 @@ export class MapOlService {
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   getCurrentExtent(geographic?: boolean): TGeoExtent {
-    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
-    const extent = this.map.getView().calculateExtent();
-    const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
-    return (transfomExtent as TGeoExtent);
+    return getCurrentExtent(this.map, geographic) as TGeoExtent;
   }
 
   /** USED in map-ol.component */
