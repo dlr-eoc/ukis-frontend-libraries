@@ -57,15 +57,28 @@ export function addBboxSelection(map: Map, onBoxStart?: (evt: olEvent) => void, 
   popupFn?: popup['pupupFunktion']; */
 
 /** ------------------------------------------------------------------- */
-const OverlayKey = 'type';
-const OverlayValue = 'popup';
+
+export function createPopupHtml(obj: { [key: string]: any }) {
+  let htmlStr = '<table>';
+  for (const o in obj) {
+    if (obj.hasOwnProperty(o)) {
+      htmlStr += '<tr><td style="vertical-align: top; padding-right: 7px;"><b>' + o + ': </b></td><td>' + obj[o] +
+        '</td></tr>';
+    }
+  }
+  htmlStr = htmlStr + '</table>';
+  return htmlStr;
+}
+
+const OVERLAY_TYPE_KEY = 'type';
+const OVERLAY_TYPE_VALUE = 'popup';
 /**
  * Add an Overlay (Popup) to the map by specifying either
  * This function could be used in map.on('click', ...); or map.on('pointermove', ...);
  */
-export function addPopup(map: Map, args: IPopupOptions, popupObj?: { [key: string]: any }, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
-  /** @dlr-eoc/services-layers - Layer['popup'] */
-  const layerpopup = args.layer.get(OverlayValue);
+/* export function addPopup(map: Map, args: IPopupOptions, popupObj?: { [key: string]: any }, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
+  // @dlr-eoc/services-layers - Layer['popup']
+  const layerpopup = args.layer.get(OVERLAY_TYPE_VALUE);
   const content = document.createElement('div');
   content.className = 'ol-popup-content';
   // console.log(args, popupObj, html)
@@ -76,7 +89,7 @@ export function addPopup(map: Map, args: IPopupOptions, popupObj?: { [key: strin
   else if (html && (!popupObj || Object.keys(popupObj).length === 0)) {
     popupHtml = html;
   } else {
-    popupHtml = this.createPopupHtml(popupObj);
+    popupHtml = createPopupHtml(popupObj);
   }
   content.innerHTML = popupHtml;
 
@@ -128,7 +141,7 @@ export function addPopup(map: Map, args: IPopupOptions, popupObj?: { [key: strin
 
   const overlay = new Overlay(overlayoptions);
   overlay.set('addEvent', args.event.type);
-  overlay.set('type', 'popup');
+  overlay.set(OVERLAY_TYPE_KEY, OVERLAY_TYPE_VALUE);
 
   let coordinate;
   if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
@@ -147,19 +160,18 @@ export function addPopup(map: Map, args: IPopupOptions, popupObj?: { [key: strin
     });
   }
 
-  const hasPopup = getPopups(map,).find(item => item.getId() === overlay.getId());
+  const hasPopup = getPopups(map).find(item => item.getId() === overlay.getId());
   if (hasPopup) {
     map.removeOverlay(hasPopup);
   }
 
   map.addOverlay(overlay);
-}
-
+} */
 
 export function getPopups(map: Map): Overlay[] {
   const popups = [];
   map.getOverlays().getArray().slice(0).forEach((overlay) => {
-    if (overlay.get(OverlayKey) === OverlayValue) {
+    if (overlay.get(OVERLAY_TYPE_KEY) === OVERLAY_TYPE_VALUE) {
       popups.push(overlay);
     }
   });
@@ -172,8 +184,8 @@ export function removeAllPopups(map: Map, filter?: (item: Overlay) => boolean) {
     popups = getPopups(map).filter(filter);
   }
   popups.forEach((overlay) => {
-    if (overlay.get(OverlayKey) === OverlayValue) {
-      this.map.removeOverlay(overlay);
+    if (overlay.get(OVERLAY_TYPE_KEY) === OVERLAY_TYPE_VALUE) {
+      map.removeOverlay(overlay);
     }
   });
 }
