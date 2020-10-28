@@ -703,9 +703,15 @@ describe('MapOlService State', () => {
   it('should set/get projection string', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
+    let newProj = null;
+    const projectionChange = service.projectionChange.subscribe(projLike => {
+      newProj = projLike.getCode();
+    });
     const projectionCode = 'EPSG:4326';
     service.setProjection(projectionCode);
     expect(service.getProjection().getCode()).toBe(projectionCode);
+    expect(newProj).toBe(projectionCode);
+    projectionChange.unsubscribe();
   });
 
   it('should set/get projection obj', () => {
