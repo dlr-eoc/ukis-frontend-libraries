@@ -28,13 +28,14 @@ import testFeatureCollection from '../assets/testFeatureCollection.json';
 import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
 import { get as getProjection } from 'ol/proj';
+import olPoint from 'ol/geom/Point';
 
 
 /** ol/layer/Tile - ID-raster */
 let rasterLayer: olTileLayer;
 
 /** ol/layer/Vector -ID-vector */
-let vectorLayer: olVectorLayer, vetorData;
+let vectorLayer: olVectorLayer;
 
 /** ol/layer/Image - ID-image */
 let imageLayer: olImageLayer;
@@ -80,11 +81,12 @@ const beforeEachFn = () => {
   rasterLayer.set('id', 'ID-raster');
   rasterLayer.set('name', 'OpenStreetMap');
 
-  vetorData = testFeatureCollection;
-
   vectorLayer = new olVectorLayer({
     source: new olVectorSource({
-      features: (new olGeoJSON()).readFeatures(vetorData)
+      features: (new olGeoJSON({
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+      })).readFeatures(testFeatureCollection)
     })
   });
   vectorLayer.set('id', 'ID-vector');
@@ -124,7 +126,10 @@ const beforeEachFn = () => {
   vectorImageLayer = new olVectorImageLayer({
     imageRatio: 2,
     source: new olVectorSource({
-      features: (new olGeoJSON()).readFeatures(vectorImageData)
+      features: (new olGeoJSON({
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+      })).readFeatures(vectorImageData)
     })
   });
   vectorImageLayer.set('id', 'ID-vector-image');
@@ -214,7 +219,7 @@ const beforeEachFn = () => {
     id: 'ID-ukis-vector',
     name: 'GeoJSON Vector Layer',
     type: 'geojson',
-    data: vetorData,
+    data: testFeatureCollection,
     visible: false
   });
 
@@ -675,7 +680,7 @@ describe('MapOlService popup', () => {
 
 
 describe('MapOlService State', () => {
-  // beforeEach(beforeEachFn);
+  beforeEach(beforeEachFn);
   it('should set/get zoom, center', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
@@ -721,4 +726,95 @@ describe('MapOlService State', () => {
     service.setProjection(projection);
     expect(service.getProjection()).toBe(projection);
   });
+
+  it('should update vectors to the correct new projection', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    service.addLayer(vectorLayer, 'layers');
+
+    expect(service.getProjection().getCode()).toEqual('EPSG:3857');
+    const layerBefore = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
+
+    const testFeatureBefore = (layerBefore as olVectorLayer).getSource().getFeatures()[3];
+    // coordinates after Read.Features of vectorLayer
+    const pointCoordinates = [1281696.090285835, 5848349.908155403];
+    expect(testFeatureBefore.getGeometry().getCoordinates()).toEqual(pointCoordinates);
+
+    const projection = getProjection('EPSG:4326');
+    service.setProjection(projection);
+
+    const reprojectedLayer = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
+    const testFeature = (reprojectedLayer as olVectorLayer).getSource().getFeatures()[3];
+    // Test for Point Feature
+    expect(testFeature.getGeometry().getType()).toBe('Point');
+    expect((testFeature.getGeometry() as olPoint).getCoordinates()).toEqual(testFeatureCollection.features[3].geometry.coordinates as number[]);
+  });
 });
+
+
+describe('MapOlService Data', () => {
+  // beforeEach(beforeEachFn);
+
+  it('should create a OpenLayers Feature from a GeoJson Feature', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+
+    const feature = service.geoJsonToFeature(testFeatureCollection.features[0]);
+    expect(feature.getGeometry().getType()).toBe('Polygon');
+  });
+
+  it('should create a Array of OpenLayers Features from a GeoJson FeatureCollection', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+
+    const features = service.geoJsonToFeatures(testFeatureCollection);
+    expect(features.length).toBe(4);
+  });
+
+  it('should get the extent of all features', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    const testFeatures = {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Polygon',
+          coordinates: [[[11, 51], [14, 51], [14, 53], [11, 53], [11, 51]]]
+        }
+      }]
+    };
+    const features = service.geoJsonToFeatures(testFeatures);
+    const featuresExtent = [11, 51, 14, 53];
+    expect(service.getFeaturesExtent(features, true)[0]).toBeCloseTo(featuresExtent[0]);
+    expect(service.getFeaturesExtent(features, true)[1]).toBeCloseTo(featuresExtent[1]);
+    expect(service.getFeaturesExtent(features, true)[2]).toBeCloseTo(featuresExtent[2]);
+    expect(service.getFeaturesExtent(features, true)[3]).toBeCloseTo(featuresExtent[3]);
+  });
+
+  it('should reproject Features', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+
+    // converted to the map projection
+    const features = service.geoJsonToFeatures(testFeatureCollection);
+    const source = new olVectorSource({
+      features
+    });
+    // Test for Point Feature
+    expect(features[3].getGeometry().getType()).toBe('Point');
+    // coordinates after to Features 'EPSG:3857' as default
+    const pointCoordinates = [1281696.090285835, 5848349.908155403];
+    expect((features[3].getGeometry() as olPoint).getCoordinates()).toEqual(pointCoordinates);
+
+
+    service.reprojectFeatures(source, service.getProjection().getCode(), 'EPSG:4326');
+    const reprojectedFeatures = source.getFeatures();
+
+    expect(reprojectedFeatures[3].getGeometry().getType()).toBe('Point');
+    // Test if Pont Feature is reprojected from map projection to WGS84 like before in the geojson
+    expect((reprojectedFeatures[3].getGeometry() as olPoint).getCoordinates()).toEqual(testFeatureCollection.features[3].geometry.coordinates as number[]);
+  });
+});
+
