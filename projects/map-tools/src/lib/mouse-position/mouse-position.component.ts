@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import { transform as olTransform, get as olGetProjection, projection as olProjection } from 'ol/proj';
+import { transform as olTransform, get as olGetProjection, Projection as olProjection } from 'ol/proj';
 import { Subscription } from 'rxjs';
 
 interface ISelectProjection {
@@ -15,7 +15,7 @@ interface ISelectProjection {
 })
 export class MousePositionComponent implements OnInit, OnDestroy {
 
-  public mapCoordinates: [number, number] = [0, 0];
+  public mapCoordinates: [number, number] | number[] = [0, 0];
   public zoom = 0;
   public projections: ISelectProjection[];
   mapProjection: olProjection;
