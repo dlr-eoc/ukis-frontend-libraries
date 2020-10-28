@@ -1,3 +1,9 @@
+### Bug Fixes
+* **@dlr-eoc/map-ol:** 
+  - getLayerByKey() not working on layergroups (recursive).
+  - removeLayerByKey() not working on layergroups (recursive).
+  - addLayer(), addLayers() and setLayers() don't set the filtertype on layergroup children (recursive).
+
 ### Features
 * **@dlr-eoc/utils-maps:**:
   - created new custom renderer `InterpolationRenderer`.
@@ -13,6 +19,12 @@
     - Added ability to overwrite data-decoding with a user-provided method, for cases where a unconventional mime-type or encoding has been used.
 
 ### Refactoring
+* **@dlr-eoc/map-ol:** 
+  - add more tests for get/set layers, import testdata and add few private helper functions.
+  - addBboxSelection() returns DragBox and optional inputs.
+  - use constants to store filtertype strings e.g. `const FILTER_TYPE_KEY = 'filtertype'`.
+  - add ID to Baselayer Groups
+  - private functions: getLayersFromGroup(), setRecursiveKey(), getLayerGroups(), getLayerGroupForLayer() - these should be moved to `utils-maps`.
 * **@dlr-eoc/utils-maps:**:
   - moved existing custom renderers out of `demo-maps` into `utils-maps`, since they have no dependencies on angular and can be used in any openlayers project.
 * **@dlr-eoc/utils-ogc:**:
