@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { IPopupArgs, MapOlService } from './map-ol.service';
-import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup } from '@dlr-eoc/services-layers';
+import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer } from '@dlr-eoc/services-layers';
+
+import olMap from 'ol/Map';
+import olView from 'ol/View';
 
 import olTileLayer from 'ol/layer/Tile';
 import olXYZ from 'ol/source/XYZ';
@@ -28,8 +31,14 @@ import testFeatureCollection from '../assets/testFeatureCollection.json';
 import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
 import { get as getProjection } from 'ol/proj';
+import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
+import { Subject } from 'rxjs';
+import { retry } from 'rxjs/operators';
 
+
+const WebMercator = 'EPSG:3857';
+const WGS84 = 'EPSG:4326';
 
 /** ol/layer/Tile - ID-raster */
 let rasterLayer: olTileLayer;
@@ -48,6 +57,9 @@ let vectorTileLayer: olVectorTileLayer;
 
 /** ID-ukis-raster */
 let ukisRasterLayer: RasterLayer;
+
+/** ID-ukis-wms */
+let ukisWmsLayer: WmsLayer;
 
 /** ID-ukis-wmts */
 let ukisWmtsLayer: WmtsLayer;
@@ -68,6 +80,19 @@ let groupLayer2: olLayerGroup;
 /** ID-group-layer3 */
 let groupLayer3: olLayerGroup;
 
+const createMapTarget = () => {
+  const size = [1024, 768];
+  const container = document.createElement('div');
+  container.id = 'map';
+  container.style.width = `${size[0]}px`;
+  container.style.height = `${size[1]}px`;
+  document.body.appendChild(container);
+  return {
+    size,
+    container
+  };
+};
+
 const beforeEachFn = () => {
   TestBed.configureTestingModule({});
 
@@ -84,8 +109,8 @@ const beforeEachFn = () => {
   vectorLayer = new olVectorLayer({
     source: new olVectorSource({
       features: (new olGeoJSON({
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857'
+        dataProjection: WGS84,
+        featureProjection: WebMercator
       })).readFeatures(testFeatureCollection)
     })
   });
@@ -127,8 +152,8 @@ const beforeEachFn = () => {
     imageRatio: 2,
     source: new olVectorSource({
       features: (new olGeoJSON({
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857'
+        dataProjection: WGS84,
+        featureProjection: WebMercator
       })).readFeatures(vectorImageData)
     })
   });
@@ -168,7 +193,10 @@ const beforeEachFn = () => {
     name: 'Custom Layer KML',
     type: 'custom',
     custom_layer: vectorImageLayer,
-    visible: false
+    visible: false,
+    popup: {
+      single: true
+    },
   });
 
   ukisRasterLayer = new RasterLayer({
@@ -180,8 +208,42 @@ const beforeEachFn = () => {
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     subdomains: ['a', 'b', 'c'],
     attribution: '&copy, <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors',
-    continuousWorld: false,
-    crossOrigin: 'anonymous'
+    continuousWorld: true,
+    crossOrigin: 'anonymous',
+    popup: {
+      event: 'move',
+      options: { autoPan: false }
+    },
+  });
+
+
+  ukisWmsLayer = new WmsLayer({
+    type: 'wms',
+    id: 'ID-ukis-wms',
+    url: 'https://{s}.geoservice.dlr.de/eoc/imagery/wms?',
+    name: 'S2_L3A_WASP_FRC_P1M',
+    subdomains: ['a', 'b', 'c', 'd'],
+    attribution: '| &copy; <a href="http://www.dlr.de" target="_blank">DLR</a> Contains modified Copernicus Sentinel Data [2020]',
+    params: {
+      LAYERS: 'S2_L3A_WASP_FRC_P1M',
+      VERSION: '1.1.0',
+      FORMAT: 'image/png',
+    },
+    styles: [
+      {
+        default: true,
+        legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:S2_L3A_WASP_FRC_P1M',
+        name: 's2-ndvi',
+        title: 'NDVI'
+      },
+      {
+        default: false,
+        legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:S2_L3A_WASP_FRC_P1M',
+        name: 's2-infrared',
+        title: 'Infrared (8,4,3)'
+      }
+    ],
+    popup: true
   });
 
   ukisWmtsLayer = new WmtsLayer({
@@ -189,15 +251,14 @@ const beforeEachFn = () => {
     id: 'ID-ukis-wmts',
     url: 'https://tiles.geoservice.dlr.de/service/wmts?',
     name: 'TDM90_AMP',
-    filtertype: 'Layers',
     params: {
       layer: 'TDM90_AMP',
       version: '1.1.0',
       format: 'image/png',
       style: 'default',
       matrixSetOptions: {
-        matrixSet: 'EPSG:3857',
-        tileMatrixPrefix: 'EPSG:3857',
+        matrixSet: WebMercator,
+        tileMatrixPrefix: WebMercator,
       }
     },
     tileSize: 512,
@@ -212,7 +273,13 @@ const beforeEachFn = () => {
         name: 'none',
         title: 'none'
       }
-    ]
+    ],
+    popup: {
+      event: 'click',
+      pupupFunktion: (obj) => {
+        return `<p>${JSON.stringify(obj)}</p>`;
+      }
+    }
   });
 
   ukisvectorLayer = new VectorLayer({
@@ -226,7 +293,7 @@ const beforeEachFn = () => {
   ukisGroupLayer = new LayerGroup({
     id: 'ID-ukis-group-layer',
     name: 'ukis group',
-    layers: [ukisvectorLayer, ukisWmtsLayer, ukisRasterLayer, ukisCustomLayer]
+    layers: [ukisvectorLayer, ukisWmtsLayer, ukisWmsLayer, ukisRasterLayer, ukisCustomLayer]
   });
 };
 
@@ -237,10 +304,29 @@ describe('MapOlService Core', () => {
     expect(service).toBeTruthy();
   });
 
+  it('should have a default view and map', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    expect(service.view instanceof olView).toBeTruthy();
+    expect(service.map instanceof olMap).toBeTruthy();
+  });
+
+  it('should have a default view, map and EPSG', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    expect(service.view instanceof olView).toBeTruthy();
+    expect(service.map instanceof olMap).toBeTruthy();
+    expect(service.EPSG).toBe(WebMercator);
+
+    expect(service.projectionChange instanceof Subject).toBeTrue();
+
+    expect(service.map.getControls().getLength()).toBe(0);
+  });
+
   it('should create a map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    const mapTarget = createMapTarget();
+    service.createMap(mapTarget.container);
     expect(service.map.getLayers().getArray().length).toEqual(3);
+    expect(service.map.getTargetElement()).toEqual(mapTarget.container);
   });
 
   it('should set a global hit Tolerance for mouse interaction', () => {
@@ -452,10 +538,23 @@ describe('MapOlService ukisLayers', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
     const layers = [ukisvectorLayer, ukisRasterLayer, ukisCustomLayer];
-    service.setUkisLayers(layers, 'Layers');
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-ukis-vector' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-ukis-raster' }, 'layers')).toBeTruthy();
-    expect(service.getLayerByKey({ key: 'id', value: 'ID-ukis-custom' }, 'layers')).toBeTruthy();
+    layers.map(l => {
+      service.setUkisLayer(l, 'Layers');
+    });
+
+    layers.map(l => {
+      expect(service.getLayerByKey({ key: 'id', value: l.id }, 'layers')).toBeTruthy();
+    });
+  });
+
+  it('should add ukisLayer Group from a Type', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    service.setUkisLayers(ukisGroupLayer.layers, 'layers');
+
+    ukisGroupLayer.layers.map(l => {
+      expect(service.getLayerByKey({ key: 'id', value: l.id }, 'layers')).toBeTruthy();
+    });
   });
 
   it('should reset/add one ukisLayer from a Type', () => {
@@ -676,8 +775,89 @@ describe('MapOlService popup', () => {
     service.removeAllPopups((i) => i.get('type') === 'popup');
     expect(service.getPopups().length).toBe(0);
   });
+
+  it('should create html table from a Object', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+
+    const testObj = testFeatureCollection.features[0].properties;
+
+    const htmlString = service.createPopupHtml(testObj);
+    expect(htmlString.includes(`<td style="vertical-align: top; padding-right: 7px;">`)).toBeTrue();
+    Object.keys(testObj).map(k => {
+      expect(htmlString.includes(`${k}:`)).toBeTrue();
+    });
+
+  });
 });
 
+describe('MapOlService Events', () => {
+  beforeEach(beforeEachFn);
+
+  it('should handle all layers on click', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    const mapTarget = createMapTarget();
+    service.createMap(mapTarget.container);
+
+    service.setUkisLayers(ukisGroupLayer.layers, 'layers');
+
+    const browserEvent = {
+      coordinate_: null,
+      dragging: false,
+      frameState: null,
+      map: service.map,
+      originalEvent: null,
+      pixel_: [456, 368],
+      target: service.map,
+      type: 'click',
+      coordinate: [1588172.8451977037, 6138394.826723266],
+      pixel: [456, 368],
+      preventDefault: null,
+      stopPropagation: null,
+      propagationStopped: null
+    };
+
+    service.layers_on_click(browserEvent);
+  });
+
+  it('should handle all layers on pointermove', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    const mapTarget = createMapTarget();
+    service.createMap(mapTarget.container);
+
+
+    service.setUkisLayers(ukisGroupLayer.layers, 'layers');
+
+    const browserEvent = {
+      coordinate_: null,
+      dragging: false,
+      frameState: null,
+      map: service.map,
+      originalEvent: null,
+      pixel_: [456, 368],
+      target: service.map,
+      type: 'pointermove',
+      coordinate: [1588172.8451977037, 6138394.826723266],
+      pixel: [456, 368],
+      preventDefault: null,
+      stopPropagation: null,
+      propagationStopped: null
+    };
+
+    service.layers_on_pointermove(browserEvent);
+  });
+
+  it('should handle vector on click or move', () => {
+    // TODO: layer_on_click
+  });
+  it('should handle vector on click or move', () => {
+    // TODO: vector_on_click
+  });
+
+  it('should handle raster on click or move', () => {
+    // TODO:  raster_on_click
+  });
+});
 
 describe('MapOlService State', () => {
   beforeEach(beforeEachFn);
@@ -692,6 +872,22 @@ describe('MapOlService State', () => {
     // Rounding errors 47.99999999999997 to equal 48
     expect(service.getCenter(true)[0]).toBeCloseTo(center[0], 1);
     expect(service.getCenter(true)[1]).toBeCloseTo(center[1], 1);
+  });
+
+
+  it('should zoom in or out for one step', (done) => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+
+    const oldZoom = service.getZoom();
+    const duration = 250;
+    service.zoomInOut('+');
+
+    setTimeout(() => {
+      const newZoom = service.getZoom();
+      expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
+      done();
+    }, duration + 50);
   });
 
   it('should set/get extent', () => {
@@ -712,7 +908,7 @@ describe('MapOlService State', () => {
     const projectionChange = service.projectionChange.subscribe(projLike => {
       newProj = projLike.getCode();
     });
-    const projectionCode = 'EPSG:4326';
+    const projectionCode = WGS84;
     service.setProjection(projectionCode);
     expect(service.getProjection().getCode()).toBe(projectionCode);
     expect(newProj).toBe(projectionCode);
@@ -722,7 +918,7 @@ describe('MapOlService State', () => {
   it('should set/get projection obj', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap();
-    const projection = getProjection('EPSG:4326');
+    const projection = getProjection(WGS84);
     service.setProjection(projection);
     expect(service.getProjection()).toBe(projection);
   });
@@ -732,7 +928,7 @@ describe('MapOlService State', () => {
     service.createMap();
     service.addLayer(vectorLayer, 'layers');
 
-    expect(service.getProjection().getCode()).toEqual('EPSG:3857');
+    expect(service.getProjection().getCode()).toEqual(WebMercator);
     const layerBefore = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
 
     const testFeatureBefore = (layerBefore as olVectorLayer).getSource().getFeatures()[3];
@@ -740,7 +936,7 @@ describe('MapOlService State', () => {
     const pointCoordinates = [1281696.090285835, 5848349.908155403];
     expect(testFeatureBefore.getGeometry().getCoordinates()).toEqual(pointCoordinates);
 
-    const projection = getProjection('EPSG:4326');
+    const projection = getProjection(WGS84);
     service.setProjection(projection);
 
     const reprojectedLayer = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
@@ -748,6 +944,40 @@ describe('MapOlService State', () => {
     // Test for Point Feature
     expect(testFeature.getGeometry().getType()).toBe('Point');
     expect((testFeature.getGeometry() as olPoint).getCoordinates()).toEqual(testFeatureCollection.features[3].geometry.coordinates as number[]);
+  });
+
+  it('should register a proj4 projection on Openlayers', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    const antarcticPolarStereographic = {
+      code: `EPSG:3031`,
+      proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
+    };
+    const proj = getProjection(antarcticPolarStereographic.code);
+    expect(proj).toBe(null);
+
+    service.registerProjection(antarcticPolarStereographic);
+    const projAfter = getProjection(antarcticPolarStereographic.code);
+    expect(projAfter.getCode()).toBe(antarcticPolarStereographic.code);
+  });
+
+  it('should create a Openlayers projection', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap();
+    const antarcticPolarStereographic: olProjectionOptions = {
+      code: `EPSG:3031`,
+      extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
+      worldExtent: [-180.0, -90.0, 180.0, -60.0],
+      global: false,
+      units: 'm'
+    };
+
+    const proj = service.getOlProjection(antarcticPolarStereographic);
+    expect(proj.getCode()).toBe(antarcticPolarStereographic.code);
+    expect(proj.getExtent()).toBe(antarcticPolarStereographic.extent);
+    expect(proj.getWorldExtent()).toBe(antarcticPolarStereographic.worldExtent);
+    expect(proj.isGlobal()).toBe(antarcticPolarStereographic.global);
+    expect(proj.getUnits()).toBe(antarcticPolarStereographic.units);
   });
 });
 
@@ -809,7 +1039,7 @@ describe('MapOlService Data', () => {
     expect((features[3].getGeometry() as olPoint).getCoordinates()).toEqual(pointCoordinates);
 
 
-    service.reprojectFeatures(source, service.getProjection().getCode(), 'EPSG:4326');
+    service.reprojectFeatures(source, service.getProjection().getCode(), WGS84);
     const reprojectedFeatures = source.getFeatures();
 
     expect(reprojectedFeatures[3].getGeometry().getType()).toBe('Point');
@@ -817,4 +1047,3 @@ describe('MapOlService Data', () => {
     expect((reprojectedFeatures[3].getGeometry() as olPoint).getCoordinates()).toEqual(testFeatureCollection.features[3].geometry.coordinates as number[]);
   });
 });
-
