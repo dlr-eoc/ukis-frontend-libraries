@@ -67,6 +67,8 @@ const OVERLAY_TYPE_KEY = 'type';
 const FILTER_TYPE_KEY = 'filtertype';
 const ID_KEY = 'id';
 const TITLE_KEY = 'title';
+const WebMercator = 'EPSG:3857';
+const WGS84 = 'EPSG:4326';
 
 export interface IPopupArgs {
   modelName: string;
