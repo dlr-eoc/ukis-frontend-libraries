@@ -572,8 +572,10 @@ export class MapOlService {
     const oldLayers = this.getLayers(lowerType);
     const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
-    if (newOlLayer) {
+    if (oldLayer) {
       this.removeLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, filtertype);
+      this.addLayer(newOlLayer, filtertype);
+    }else{
       this.addLayer(newOlLayer, filtertype);
     }
   }
