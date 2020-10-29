@@ -38,6 +38,7 @@ import olFeature from 'ol/Feature';
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olProjection from 'ol/proj/Projection';
+import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
@@ -577,7 +578,7 @@ export class MapOlService {
     if (oldLayer) {
       this.removeLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, filtertype);
       this.addLayer(newOlLayer, filtertype);
-    }else{
+    } else {
       this.addLayer(newOlLayer, filtertype);
     }
   }
@@ -1613,12 +1614,19 @@ export class MapOlService {
     }
   }
 
-  public registerProjection(projDef: any) {
+  /**
+   * @param projDef.code - e.g.: "EPSG:4326"
+   * @param projDef.proj4js - e.g.: "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
+   */
+  public registerProjection(projDef: { code: string, proj4js: string }) {
     proj4.defs(projDef.code, projDef.proj4js);
     olRegister(proj4);
   }
 
-  public getOlProjection(projDef: any): olProjection {
+  /**
+   * Returns a OpenLayers Projection from Options
+   */
+  public getOlProjection(projDef: olProjectionOptions): olProjection {
     return new olProjection({
       code: projDef.code,
       extent: projDef.extent ? projDef.extent : undefined,
