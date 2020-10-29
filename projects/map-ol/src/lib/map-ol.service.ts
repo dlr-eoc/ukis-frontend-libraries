@@ -93,7 +93,7 @@ export class MapOlService {
   constructor() {
     this.map = new olMap({ controls: [] });
     this.view = new olView();
-    this.EPSG = 'EPSG:3857'; // 'EPSG:4326'; EPSG:3857
+    this.EPSG = WebMercator;
   }
 
   /** USED in map-ol.component */
@@ -131,7 +131,7 @@ export class MapOlService {
      * set default viewOptions
      */
     this.viewOptions = {
-      center: transform([center.lon, center.lat], 'EPSG:4326', this.EPSG),
+      center: transform([center.lon, center.lat], WGS84, this.EPSG),
       zoom,
       projection: getProjection(this.EPSG)
     };
@@ -665,7 +665,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
     }
 
     if (l.maxResolution) {
@@ -760,7 +760,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
     }
     const newlayer = new olTileLayer(layeroptions);
     return newlayer;
@@ -857,7 +857,7 @@ export class MapOlService {
       }
 
       if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+        layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
       }
 
       return new olTileLayer(layeroptions);
@@ -923,7 +923,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
     }
 
     if (l.cluster) {
@@ -1020,7 +1020,7 @@ export class MapOlService {
       }
 
       if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+        layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
       }
 
       layer.setProperties(layeroptions);
@@ -1423,7 +1423,7 @@ export class MapOlService {
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
-    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
     const newFitOptions = {
       size: this.map.getSize(),
@@ -1439,7 +1439,7 @@ export class MapOlService {
   /** USED in map-ol.component */
   /** ol.Coordinate xy */
   public setCenter(center: number[], geographic?: boolean): number[] {
-    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
     // console.log('set center in svc', transfomCenter)
     // console.log(this.map.getView().getCenter())
@@ -1449,7 +1449,7 @@ export class MapOlService {
 
   /** USED in map-ol.component */
   public getCenter(geographic?: boolean): any {
-    const dstProjection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const dstProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const srcProjection = getProjection(this.map.getView().getProjection().getCode());
     const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
     return transfomCenter;
@@ -1466,7 +1466,7 @@ export class MapOlService {
       olExtend(extent, feature.getGeometry().getExtent());
     });
     if (geographic) {
-      const projection = getProjection('EPSG:4326');
+      const projection = getProjection(WGS84);
       const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
       return (transfomExtent as TGeoExtent);
     } else {
@@ -1480,7 +1480,7 @@ export class MapOlService {
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public getCurrentExtent(geographic?: boolean): TGeoExtent {
-    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
     const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
     return (transfomExtent as TGeoExtent);
@@ -1525,7 +1525,7 @@ export class MapOlService {
 
   public geoJsonToFeature(geojson: any): olFeature<any> {
     const GEOJSON = new olGeoJSON({
-      dataProjection: 'EPSG:4326',
+      dataProjection: WGS84,
       featureProjection: this.EPSG
     });
     return GEOJSON.readFeature(geojson);
@@ -1533,7 +1533,7 @@ export class MapOlService {
 
   public geoJsonToFeatures(geojson: any): Array<olFeature<any>> {
     const GEOJSON = new olGeoJSON({
-      dataProjection: 'EPSG:4326',
+      dataProjection: WGS84,
       featureProjection: this.EPSG
     });
     return GEOJSON.readFeatures(geojson);
