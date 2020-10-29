@@ -97,7 +97,10 @@ export class MapOlService {
     this.EPSG = WebMercator;
   }
 
-  /** USED in map-ol.component */
+  /**
+   * if this is used in an angular component then set the target after the view is created
+   * e.g. this.map.setTarget(this.mapDivView.nativeElement) in ngAfterViewInit()
+   */
   public createMap(target?: HTMLElement) {
     const zoom = 0;
     const center = {
@@ -208,6 +211,9 @@ export class MapOlService {
     // this.map.getControls().clear();
     this.view = this.map.getView();
     this.setProjection(this.EPSG);
+    if (target) {
+      this.map.setTarget(target);
+    }
     return {
       map: this.map,
       view: this.view
