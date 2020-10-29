@@ -10,7 +10,7 @@ import { MapOlService } from '@dlr-eoc/map-ol';
 })
 export class ProjectionSwitchComponent implements OnInit {
   @Input('mapSvc') mapSvc?: MapOlService;
-  @Input('projectionList') projList: any[];
+  @Input('projectionList') projList: IProjDef[];
   subscription: Subscription;
   selectedProj: IProjDef;
   constructor() { }
@@ -21,7 +21,7 @@ export class ProjectionSwitchComponent implements OnInit {
     }
   }
 
-  setNewProjection(projection) {
+  setNewProjection(projection: IProjDef) {
     this.mapSvc.registerProjection(projection);
 
     const newProj = this.mapSvc.getOlProjection(projection);
