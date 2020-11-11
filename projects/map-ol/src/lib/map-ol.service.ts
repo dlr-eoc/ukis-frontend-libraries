@@ -23,6 +23,8 @@ import olVectorTile from 'ol/source/VectorTile';
 
 
 import olXYZ from 'ol/source/XYZ';
+
+import { ImageWMS as olImageWMS, ImageStatic as olImageStatic } from 'ol/source';
 import { Options as olXYZOptions } from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
 import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
@@ -976,6 +978,16 @@ export class MapOlService {
     return new olVectorLayer(layeroptions);
   }
 
+  /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */
+  private setCrossOrigin(layer) {
+    if (layer instanceof olLayer) {
+      const olSource = layer.getSource();
+      if (olSource instanceof olImageWMS || olSource instanceof olImageStatic) {
+        olSource['crossOrigin_'] = 'anonymous';
+      }
+    }
+  }
+
   private create_custom_layer(l: CustomLayer) {
     if (l.custom_layer) {
       const layer = (l.custom_layer as olBaseLayer);
@@ -983,7 +995,6 @@ export class MapOlService {
       if (layer instanceof olLayer) {
         const olSource = layer.getSource();
         olSource.set('wrapX', false);
-
         if (l.attribution) {
           olSource.setAttributions([l.attribution]);
         }
@@ -991,6 +1002,11 @@ export class MapOlService {
         if (l.continuousWorld) {
           olSource.set('wrapX', l.continuousWorld);
         }
+        this.setCrossOrigin(layer);
+      } else if (layer instanceof olLayerGroup) {
+        layer.getLayers().forEach(gl => this.setCrossOrigin(gl));
+      } else {
+        console.error(`The custom_layer of ${l.id} in not a openlayers Layer`);
       }
 
       const layeroptions = {
@@ -1141,7 +1157,6 @@ export class MapOlService {
       layerFilter
     });
     LayersAtPixel.forEach((item, index) => {
-      // console.log(item, index);
       const topLayer = 0;
       if (index === topLayer) {
         this.layer_on_click(evt, item.layer, item.color);
