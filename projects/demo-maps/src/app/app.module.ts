@@ -35,6 +35,7 @@ import { ExampleLayerActionComponent } from './components/example-layer-action/e
 import { SunlightComponent } from './components/sunlight/sunlight.component';
 import { InterpolationSettingsComponent } from './components/interpolation-settings/interpolation-settings.component';
 import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
+import { LoadDataButtonComponent } from './components/load-data-button/load-data-button.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { RouteMap8Component } from './route-components/route-example-threejs/rou
     ExampleLayerActionComponent,
     SunlightComponent,
     RouteMap8Component,
-    InterpolationSettingsComponent
+    InterpolationSettingsComponent,
+    LoadDataButtonComponent
   ],
   imports: [
     BrowserModule,

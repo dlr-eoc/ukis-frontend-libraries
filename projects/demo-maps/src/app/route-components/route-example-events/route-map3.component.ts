@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, TGeoExtent } from '@dlr-eoc/services-layers';
+import { LayersService, CustomLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
@@ -9,12 +9,15 @@ import olImageLayer from 'ol/layer/Image';
 import olImageWMS from 'ol/source/ImageWMS';
 import olVectorImageLayer from 'ol/layer/VectorImage';
 import olVectorSource from 'ol/source/Vector';
+import olVectorLayer from 'ol/layer/Vector';
+import olGeoJSON from 'ol/format/GeoJSON';
 
 import { parse } from 'url';
 import { regularGrid } from './map.utils';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { LoadDataButtonComponent } from '../../components/load-data-button/load-data-button.component';
 
 
 @Component({
@@ -93,7 +96,62 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const layers = [osmLayer, eventLayer];
+    const updatableFeatureLayer = new VectorLayer({
+      id: 'updatable_feature_layer',
+      name: 'Updatable feature layer',
+      type: 'geojson',
+      data: {
+        type: "FeatureCollection",
+        features: [{
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[[4.658203125, 46.830133640447386], [15.6005859375, 46.830133640447386], [15.6005859375, 55.727110085045986], [4.658203125, 55.727110085045986], [4.658203125, 46.830133640447386]]]
+          }
+        }]
+      },
+      action: {
+        component: LoadDataButtonComponent,
+        inputs: {
+          buttonText: 'Load data',
+          onClickCallback: () => {
+            updatableFeatureLayer.data = {
+              "type": "FeatureCollection",
+              "features": [
+                {
+                  "type": "Feature",
+                  "properties": {},
+                  "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[[4.658203125, 46.830133640447386], [15.6005859375, 46.830133640447386], [15.6005859375, 55.727110085045986], [4.658203125, 55.727110085045986], [4.658203125, 46.830133640447386]]]
+                  }
+                },
+                {
+                  "type": "Feature",
+                  "properties": {},
+                  "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[[4.921875, 51.37178037591737], [15.292968749999998, 51.37178037591737], [15.292968749999998, 55.50374985927514], [4.921875, 55.50374985927514], [4.921875, 51.37178037591737]]]
+                  }
+                },
+                {
+                  "type": "Feature",
+                  "properties": {},
+                  "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[[5.009765625, 47.040182144806664], [15.2490234375, 47.040182144806664], [15.2490234375, 51.26191485308451], [5.009765625, 51.26191485308451], [5.009765625, 47.040182144806664]]]
+                  }
+                }
+              ]
+            };
+            this.layersSvc.updateLayer(updatableFeatureLayer);
+          }
+        }
+      }
+    });
+
+    const layers = [osmLayer, eventLayer, updatableFeatureLayer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
 
   }

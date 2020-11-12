@@ -8,7 +8,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 import { MapOlService, Tgroupfiltertype } from './map-ol.service';
-import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer } from '@dlr-eoc/services-layers';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
 
 import Map from 'ol/Map';
 import { getUid as olGetUid } from 'ol/util';
@@ -34,6 +34,8 @@ import olRotate from 'ol/control/Rotate';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olMapEvent from 'ol/MapEvent';
 import { Control as olControl } from 'ol/control';
+import { GeoJSON } from 'ol/format';
+import VectorSource from 'ol/source/Vector';
 
 
 export interface IMapControls {
@@ -227,9 +229,24 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       case WmtsLayertype:
         this.updateWmtsLayerParamsWith(oldLayer, newLayer as WmtsLayer);
         break;
+      case GeojsonLayertype:
+        this.updateGeojsonLayerParamsWith(oldLayer, newLayer as VectorLayer);
+        break;
       default:
         break;
     }
+  }
+
+  updateGeojsonLayerParamsWith(oldLayer: olLayer<any>, newGeojsonLayer: VectorLayer) {
+    if (newGeojsonLayer.data) {
+      const newSource = new VectorSource({
+        features: new GeoJSON().readFeatures(newGeojsonLayer.data)
+      });
+      oldLayer.setSource(newSource);
+    } else if (newGeojsonLayer.url) {
+      oldLayer.getSource().setUrl(newGeojsonLayer.url);
+    }
+    oldLayer.changed();
   }
 
   private updateWmsLayerParamsWith(oldLayer: olLayer<any>, newWmsLayer: WmsLayer): void {
@@ -241,6 +258,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         oldLayer.getSource().updateParams(newParams);
       }
     }
+    oldLayer.changed();
   }
 
   private updateWmtsLayerParamsWith(oldLayer: olLayer<any>, newWmtsLayer: WmtsLayer): void {
