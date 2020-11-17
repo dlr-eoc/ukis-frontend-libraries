@@ -17,7 +17,6 @@ import { regularGrid } from './map.utils';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { LoadDataButtonComponent } from '../../components/load-data-button/load-data-button.component';
 
 
 @Component({
@@ -111,44 +110,42 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
           }
         }]
       },
-      action: {
-        component: LoadDataButtonComponent,
-        inputs: {
-          buttonText: 'Load data',
-          onClickCallback: () => {
-            updatableFeatureLayer.data = {
-              "type": "FeatureCollection",
-              "features": [
-                {
-                  "type": "Feature",
-                  "properties": {},
-                  "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [[[4.658203125, 46.830133640447386], [15.6005859375, 46.830133640447386], [15.6005859375, 55.727110085045986], [4.658203125, 55.727110085045986], [4.658203125, 46.830133640447386]]]
-                  }
-                },
-                {
-                  "type": "Feature",
-                  "properties": {},
-                  "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [[[4.921875, 51.37178037591737], [15.292968749999998, 51.37178037591737], [15.292968749999998, 55.50374985927514], [4.921875, 55.50374985927514], [4.921875, 51.37178037591737]]]
-                  }
-                },
-                {
-                  "type": "Feature",
-                  "properties": {},
-                  "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [[[5.009765625, 47.040182144806664], [15.2490234375, 47.040182144806664], [15.2490234375, 51.26191485308451], [5.009765625, 51.26191485308451], [5.009765625, 47.040182144806664]]]
-                  }
+      actions: [{
+        action: (layer: any) => {
+          updatableFeatureLayer.data = {
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [[[4.658203125, 46.830133640447386], [15.6005859375, 46.830133640447386], [15.6005859375, 55.727110085045986], [4.658203125, 55.727110085045986], [4.658203125, 46.830133640447386]]]
                 }
-              ]
-            };
-            this.layersSvc.updateLayer(updatableFeatureLayer);
-          }
-        }
-      }
+              },
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [[[4.921875, 51.37178037591737], [15.292968749999998, 51.37178037591737], [15.292968749999998, 55.50374985927514], [4.921875, 55.50374985927514], [4.921875, 51.37178037591737]]]
+                }
+              },
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [[[5.009765625, 47.040182144806664], [15.2490234375, 47.040182144806664], [15.2490234375, 51.26191485308451], [5.009765625, 51.26191485308451], [5.009765625, 47.040182144806664]]]
+                }
+              }
+            ]
+          };
+          this.layersSvc.updateLayer(updatableFeatureLayer);
+        },
+        icon: 'download',
+        title: 'Load data'
+      }]
     });
 
     const layers = [osmLayer, eventLayer, updatableFeatureLayer];
