@@ -56,6 +56,8 @@ export interface IMapControls {
   rotate?: boolean | object;
 }
 
+const ID_KEY = 'id';
+
 @Component({
   selector: 'ukis-map-ol',
   templateUrl: './map-ol.component.html',
@@ -151,7 +153,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     });
   }
 
-  private addUpdateLayers(layers: Layer[], type: Tgroupfiltertype, layersunderneath: Array<Tgroupfiltertype>) {
+  private addUpdateLayers(layers: Layer[], filtertype: Tgroupfiltertype, layersunderneath: Array<Tgroupfiltertype>) {
     /** get all underneath layers for zIndex */
     let otherlayerslength = 0;
     layersunderneath.forEach(itemType => {
@@ -159,12 +161,12 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     });
 
     /** if length of layers has changed add new layers */
-    if (layers.length !== this.mapSvc.getLayers(type).length) {
-      this.mapSvc.setUkisLayers(layers, type);
+    if (layers.length !== this.mapSvc.getLayers(filtertype).length) {
+      this.mapSvc.setUkisLayers(layers, filtertype);
       // if layers underneath add thhen to the zIndex of layer
       if (otherlayerslength > 0) {
         for (const layer of layers) {
-          const ollayer = this.mapSvc.getLayerByKey({ key: 'id', value: layer.id }, type);
+          const ollayer = this.mapSvc.getLayerByKey({ key: ID_KEY, value: layer.id }, filtertype);
           if (ollayer) {
             if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
               ollayer.setZIndex(layers.indexOf(layer) + otherlayerslength);
@@ -175,7 +177,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     } else {
       /** if layers already on the map -length not changed- update them */
       for (const layer of layers) {
-        const ollayer = this.mapSvc.getLayerByKey({ key: 'id', value: layer.id }, type) as olBaseLayer | olLayer<any> | olLayerGroup;
+        const ollayer = this.mapSvc.getLayerByKey({ key: ID_KEY, value: layer.id }, filtertype) as olBaseLayer | olLayer<any> | olLayerGroup;
         if (ollayer) {
           if (ollayer.getVisible() !== layer.visible) {
             ollayer.setVisible(layer.visible);
@@ -325,7 +327,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     } else {
       /** if layers already on the map -length not changed- update them */
       for (const layer of layers) {
-        const bllayer = this.mapSvc.getLayerByKey({ key: 'id', value: layer.id }, 'baselayers');
+        const bllayer = this.mapSvc.getLayerByKey({ key: ID_KEY, value: layer.id }, 'baselayers');
         if (bllayer) {
           if (bllayer.getVisible() !== layer.visible) {
             bllayer.setVisible(layer.visible);

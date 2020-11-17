@@ -5,13 +5,17 @@ import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
 import { Feature as olFeature } from 'ol';
-import { Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer,
-         Group as olLayerGroup, Image as olImageLayer, Tile as olTileLayer, VectorTile as olVectorTileLayer } from 'ol/layer';
-import { ImageStatic as olStatic, Vector as olVectorSource, ImageWMS as olImageWMS, Cluster as olCluster,
-         TileWMS as olTileWMS, VectorTile as olVectorTileSource } from 'ol/source';
+import {
+  Heatmap as olHeatmapLayer, Vector as olVectorLayer, VectorImage as olVectorImageLayer,
+  Group as olLayerGroup, Image as olImageLayer, Tile as olTileLayer, VectorTile as olVectorTileLayer
+} from 'ol/layer';
+import {
+  ImageStatic as olStatic, Vector as olVectorSource, ImageWMS as olImageWMS, Cluster as olCluster,
+  TileWMS as olTileWMS, VectorTile as olVectorTileSource, ImageCanvas as olImageCanvasSource, OSM as olOSM
+} from 'ol/source';
 import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON, MVT as olMVT } from 'ol/format';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle, Circle as olCircle, Text as olText } from 'ol/style';
-import { Point as olPoint } from 'ol/geom';
+import { getUid } from 'ol/util';
 
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
 import { munichPolys, heatMapData, vectorLayerData, crescentPoints } from './resources/features';
@@ -19,6 +23,8 @@ import { SunlightComponent } from '../../components/sunlight/sunlight.component'
 import { InterpolationSettingsComponent } from '../../components/interpolation-settings/interpolation-settings.component';
 import { BarsLayer } from './customRenderers/threejs_renderer';
 import { InterpolationLayer, ColorRamp, DtmLayer } from '@dlr-eoc/utils-maps';
+
+import testData from '../../../assets/data/json/test.json';
 
 
 @Component({
@@ -44,10 +50,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       scaleLine: true,
       overviewMap: true
     };
-
-    /* this.heatMapComp = {
-      component: ExampleLayerActionComponent, inputs: { value: 15 }
-    }; */
   }
 
 
@@ -66,7 +68,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   addLayers() {
     const osmLayer1 = new OsmTileLayer({
       id: 'OSM1',
-      visible: true
+      visible: false
     });
 
     const customHeatmapLayer = new CustomLayer({
@@ -95,8 +97,10 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       name: 'Vector Layer',
       type: 'geojson',
       data: heatMapData,
-      visible: false,
-      popup: true
+      visible: true,
+      popup: {
+        single: true
+      }
     });
 
 
@@ -120,7 +124,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'topo_json_layer',
       name: 'Topo Json - VectorImageLayer',
       popup: {
-        single: true
+        event: 'move'
       },
       custom_layer: new olVectorImageLayer({
         source: new olVectorSource({
@@ -131,9 +135,98 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
             layers: ['countries']
           }),
           overlaps: false
-        })
+        }),
+        style: (feature, resolution) => {
+          const label = `uID: ${getUid(feature)}`;
+          return [new olStyle({
+            stroke: new olStroke({
+              color: 'gray',
+              width: 1
+            }),
+            fill: new olFill({
+              color: 'rgba(0, 153, 255, 0.2)',
+            })
+          }),
+            /* new olStyle({
+              text: new olText({
+                maxAngle: Math.PI / 4,
+                textAlign: 'start',
+                overflow: true,
+                text: label,
+                stroke: new olStroke({
+                  color: 'rgba(20, 20, 20, 0.5)',
+                  width: 1,
+                })
+              })
+            }) */
+          ];
+        }
+      }),
+      visible: false
+    });
+
+
+    const geoJsonLayer = new CustomLayer({
+      id: 'geo_json_layer_ocean',
+      name: 'GeoJson - VectorImageLayer ocean',
+      popup: {
+        event: 'move'
+      },
+      custom_layer: new olVectorImageLayer({
+        source: new olVectorSource({
+          features: this.mapSvc.geoJsonToFeatures(testData),
+          // format: new olGeoJSON(),
+        }),
+        style: (feature, resolution) => {
+          return new olStyle({
+            stroke: new olStroke({
+              color: 'gray',
+              width: 1
+            }),
+            fill: new olFill({
+              color: 'rgba(20,20,20,0.9)'
+            })
+          });
+        }
       }),
       visible: false,
+      bbox: [-180.35156249999997, -22.268764039073968, -129.375, 29.84064389983441],
+    });
+
+
+    const staticImageLayer = new CustomLayer({
+      id: 'static_image_layer',
+      name: 'Static Image',
+      visible: false,
+      popup: {
+        filterkeys: ['id', 'color', 'name']
+      },
+      custom_layer: new olImageLayer({
+        source: new olStatic({
+          url: 'assets/images/srtm_small.png',
+          imageExtent: [10.00, 45.00, 15.00, 50.00],
+          projection: 'EPSG:4326',
+          crossOrigin: 'anonymous' // set this to get data for pixel for cross-origin data
+        })
+      })
+    });
+
+    const osmClipLayer = new CustomLayer({
+      id: 'osm_clip_layer',
+      name: 'OSM Clip',
+      visible: false,
+      popup: {
+        filterkeys: ['id', 'color', 'name']
+      },
+      custom_layer: new olTileLayer({
+        source: new olOSM()
+      }),
+      bbox: [
+        -105.41888884797893,
+        6.480590573390401,
+        -15.540298246016693,
+        42.53496284727569
+      ]
     });
 
     const customLayerGroup = new CustomLayer({
@@ -184,11 +277,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const vectorTile = new CustomLayer({
       id: 'vectorTile',
       name: 'VectorTileLayer',
-      visible: false,
+      visible: true,
       popup: {
         event: 'move',
         filterkeys: ['name', 'region_un', 'region_wb'],
-        properties: { 'name': 'Name' },
+        properties: { name: 'Name' },
         options: { autoPan: false }
       },
       custom_layer: new olVectorTileLayer({
@@ -236,11 +329,14 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         source: new olImageWMS({
           url: 'https://ahocevar.com/geoserver/wms',
           params: { LAYERS: 'topp:states' },
-          serverType: 'geoserver'
+          serverType: 'geoserver',
+          // crossOrigin: 'anonymous' set this to get data for pixel for cross-origin data
         })
       }),
       visible: false,
-      popup: true,
+      popup: {
+        filterkeys: ['id', 'color', 'name']
+      },
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
@@ -252,10 +348,10 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       filtertype: 'Layers',
       custom_layer: new DtmLayer({
         source: new olStatic({
-            url: 'assets/images/srtm_small.png',
-            imageExtent: [10.00, 45.00, 15.00, 50.00],
-            projection: 'EPSG:4326',
-          })
+          url: 'assets/images/srtm_small.png',
+          imageExtent: [10.00, 45.00, 15.00, 50.00],
+          projection: 'EPSG:4326',
+        })
       }),
       action: {
         component: SunlightComponent,
@@ -296,11 +392,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
     const valueParameter = 'SWH';
     const colorRamp: ColorRamp = [
-      { val: 0.0,   rgb: [166, 97, 26]    },
-      { val: 0.4,   rgb: [223, 194, 125]  },
-      { val: 0.8,   rgb: [247, 247, 247]  },
-      { val: 2.0,   rgb: [128, 205, 193]  },
-      { val: 22.5,  rgb: [1, 133, 113]    },
+      { val: 0.0, rgb: [166, 97, 26] },
+      { val: 0.4, rgb: [223, 194, 125] },
+      { val: 0.8, rgb: [247, 247, 247] },
+      { val: 2.0, rgb: [128, 205, 193] },
+      { val: 22.5, rgb: [1, 133, 113] },
     ];
     const interpolationLayer = new CustomLayer({
       id: 'interpolation',
@@ -342,7 +438,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         renderSettings: {
           maxEdgeLength: 15000 / metersPerUnit,
           power: 2.0,
-          colorRamp: colorRamp,
+          colorRamp,
           smooth: true,
           showLabels: false,
           valueProperty: valueParameter,
@@ -370,7 +466,37 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       layers: [dtmLayer, barLayer, interpolationLayer]
     });
 
-    const layers = [osmLayer1, layersGroup1, layerGroup2, clusterLayer, vectorTile, imageWmsLayer, kmlLayer, topoJsonLayer, customLayerGroup];
+
+    const TransparentBackground = new CustomLayer({
+      name: 'Transparenter Hintergrund',
+      id: 'blank',
+      type: 'custom',
+      visible: false,
+      custom_layer: new olImageLayer({
+        source: new olImageCanvasSource({
+          canvasFunction: () => {
+            const canvas = document.createElement('canvas');
+            return canvas;
+          }
+        }),
+        // opacity: 0
+      })
+    });
+
+    const layers = [
+      TransparentBackground,
+      osmLayer1,
+      vectorTile,
+      layersGroup1,
+      layerGroup2,
+      clusterLayer,
+      imageWmsLayer,
+      kmlLayer,
+      staticImageLayer,
+      osmClipLayer,
+      topoJsonLayer,
+      geoJsonLayer,
+      customLayerGroup];
 
     layers.forEach(layer => {
       if (layer instanceof Layer) {
@@ -378,11 +504,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       } else if (layer instanceof LayerGroup) {
         this.layersSvc.addLayerGroup(layer);
       }
-    });
-
-    this.mapStateSvc.setMapState({
-      zoom: 5,
-      center: { lat: 45, lon: 12 }
     });
   }
 
