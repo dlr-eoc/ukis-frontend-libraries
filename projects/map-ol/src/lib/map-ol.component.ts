@@ -34,8 +34,7 @@ import olRotate from 'ol/control/Rotate';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olMapEvent from 'ol/MapEvent';
 import { Control as olControl } from 'ol/control';
-import { GeoJSON } from 'ol/format';
-import VectorSource from 'ol/source/Vector';
+import olVectorSource from 'ol/source/Vector';
 
 
 export interface IMapControls {
@@ -241,7 +240,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   updateGeojsonLayerParamsWith(oldLayer: olLayer<any>, newGeojsonLayer: VectorLayer) {
     if (newGeojsonLayer.data) {
-      const newSource = new VectorSource({
+      const newSource = new olVectorSource({
         features: this.mapSvc.geoJsonToFeatures(newGeojsonLayer.data),
         wrapX: false
       });
