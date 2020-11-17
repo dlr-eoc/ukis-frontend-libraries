@@ -242,13 +242,15 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   updateGeojsonLayerParamsWith(oldLayer: olLayer<any>, newGeojsonLayer: VectorLayer) {
     if (newGeojsonLayer.data) {
       const newSource = new VectorSource({
-        features: new GeoJSON().readFeatures(newGeojsonLayer.data)
+        features: new GeoJSON({
+          dataProjection: 'EPSG:4326', // all geojson must be in 4326
+          featureProjection: this.map.getView().getProjection().getCode()  // target projection == map projection
+        }).readFeatures(newGeojsonLayer.data)
       });
       oldLayer.setSource(newSource);
     } else if (newGeojsonLayer.url) {
       oldLayer.getSource().setUrl(newGeojsonLayer.url);
     }
-    oldLayer.changed();
   }
 
   private updateWmsLayerParamsWith(oldLayer: olLayer<any>, newWmsLayer: WmsLayer): void {
@@ -260,7 +262,6 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         oldLayer.getSource().updateParams(newParams);
       }
     }
-    oldLayer.changed();
   }
 
   private updateWmtsLayerParamsWith(oldLayer: olLayer<any>, newWmtsLayer: WmtsLayer): void {
