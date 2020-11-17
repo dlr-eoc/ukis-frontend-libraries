@@ -65,7 +65,7 @@ describe('MapOlComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update a vector-layer', (done) => {
+  fit('should update a vector-layer', () => {
     const vectorLayer = new VectorLayer({
       id: 'vectorLayer',
       name: 'vectorLayer',
@@ -89,26 +89,20 @@ describe('MapOlComponent', () => {
     // layer has but one feature
     expect((component.layersSvc.getLayerById(vectorLayer.id) as VectorLayer).data.features.length).toEqual(1);
 
-    setTimeout(() => { // After observables have been updated ...
-      // layer is present on map
-      const layer = component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer;
-      expect(layer).toBeTruthy();
-      expect(layer.getProperties()['id']).toEqual(vectorLayer.id);
-      expect(layer.getSource().getFeatures().length).toEqual(1);
+    // layer is present on map
+    const layer = component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer;
+    expect(layer).toBeTruthy();
+    expect(layer.getProperties()['id']).toEqual(vectorLayer.id);
+    expect(layer.getSource().getFeatures().length).toEqual(1);
 
-      // updating data
-      vectorLayer.data = testFeatureData;
-      // the layers new data has *not yet* been passed through to the ol-layer.
-      // this ensures that there is no spooky-action-at-a-distance.
-      expect(layer.getSource().getFeatures().length).toEqual(1);
+    // updating data
+    vectorLayer.data = testFeatureData;
+    // the layers new data has *not yet* been passed through to the ol-layer.
+    // this ensures that there is no spooky-action-at-a-distance.
+    expect(layer.getSource().getFeatures().length).toEqual(1);
 
-      setTimeout(() => { // After observables have been updated ...
-        component.layersSvc.updateLayer(vectorLayer);
-        // now, after calling `updateLayer`, the data is present on the ol-layer
-        expect((component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer).getSource().getFeatures().length).toEqual(4);
-        done();
-      }, 0);
-    }, 0);
-
+    component.layersSvc.updateLayer(vectorLayer);
+    // now, after calling `updateLayer`, the data is present on the ol-layer
+    expect((component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer).getSource().getFeatures().length).toEqual(4);
   });
 });
