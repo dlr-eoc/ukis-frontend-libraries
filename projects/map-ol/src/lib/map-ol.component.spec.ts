@@ -65,7 +65,7 @@ describe('MapOlComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  fit('should update a vector-layer', () => {
+  it('should update a vector-layer', () => {
     const vectorLayer = new VectorLayer({
       id: 'vectorLayer',
       name: 'vectorLayer',
