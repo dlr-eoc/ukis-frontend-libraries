@@ -9,8 +9,6 @@ import olImageLayer from 'ol/layer/Image';
 import olImageWMS from 'ol/source/ImageWMS';
 import olVectorImageLayer from 'ol/layer/VectorImage';
 import olVectorSource from 'ol/source/Vector';
-import olVectorLayer from 'ol/layer/Vector';
-import olGeoJSON from 'ol/format/GeoJSON';
 
 import { parse } from 'url';
 import { regularGrid } from './map.utils';
@@ -18,12 +16,13 @@ import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
+import testData from '../../../assets/data/json/test.json';
 
 @Component({
   selector: 'app-route-map3',
   templateUrl: './route-map3.component.html',
   styleUrls: ['./route-map3.component.scss'],
-  /** use differnt instances of the services only for testing with diffenr routs  */
+  /** use different instances of the services only for testing with different routes  */
   providers: [LayersService, MapStateService, MapOlService]
 })
 export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
@@ -106,41 +105,19 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
           "properties": {},
           "geometry": {
             "type": "Polygon",
-            "coordinates": [[[4.658203125, 46.830133640447386], [15.6005859375, 46.830133640447386], [15.6005859375, 55.727110085045986], [4.658203125, 55.727110085045986], [4.658203125, 46.830133640447386]]]
+            "coordinates": [[
+              [-192.48046875, -24.686952411999144 ],
+              [-88.06640625, -24.686952411999144],
+              [-88.06640625, 50.28933925329178],
+              [-192.48046875, 50.28933925329178],
+              [-192.48046875, -24.686952411999144]
+            ]]
           }
         }]
       },
       actions: [{
         action: (layer: any) => {
-          updatableFeatureLayer.data = {
-            "type": "FeatureCollection",
-            "features": [
-              {
-                "type": "Feature",
-                "properties": {},
-                "geometry": {
-                  "type": "Polygon",
-                  "coordinates": [[[4.658203125, 46.830133640447386], [15.6005859375, 46.830133640447386], [15.6005859375, 55.727110085045986], [4.658203125, 55.727110085045986], [4.658203125, 46.830133640447386]]]
-                }
-              },
-              {
-                "type": "Feature",
-                "properties": {},
-                "geometry": {
-                  "type": "Polygon",
-                  "coordinates": [[[4.921875, 51.37178037591737], [15.292968749999998, 51.37178037591737], [15.292968749999998, 55.50374985927514], [4.921875, 55.50374985927514], [4.921875, 51.37178037591737]]]
-                }
-              },
-              {
-                "type": "Feature",
-                "properties": {},
-                "geometry": {
-                  "type": "Polygon",
-                  "coordinates": [[[5.009765625, 47.040182144806664], [15.2490234375, 47.040182144806664], [15.2490234375, 51.26191485308451], [5.009765625, 51.26191485308451], [5.009765625, 47.040182144806664]]]
-                }
-              }
-            ]
-          };
+          updatableFeatureLayer.data = testData;
           this.layersSvc.updateLayer(updatableFeatureLayer);
         },
         icon: 'download',
