@@ -242,10 +242,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   updateGeojsonLayerParamsWith(oldLayer: olLayer<any>, newGeojsonLayer: VectorLayer) {
     if (newGeojsonLayer.data) {
       const newSource = new VectorSource({
-        features: new GeoJSON({
-          dataProjection: 'EPSG:4326', // all geojson must be in 4326
-          featureProjection: this.map.getView().getProjection().getCode()  // target projection == map projection
-        }).readFeatures(newGeojsonLayer.data)
+        features: this.mapSvc.geoJsonToFeatures(newGeojsonLayer.data),
+        wrapX: false
       });
       oldLayer.setSource(newSource);
     } else if (newGeojsonLayer.url) {
