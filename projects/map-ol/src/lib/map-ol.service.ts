@@ -23,6 +23,8 @@ import olVectorTile from 'ol/source/VectorTile';
 
 
 import olXYZ from 'ol/source/XYZ';
+
+import { ImageWMS as olImageWMS, ImageStatic as olImageStatic } from 'ol/source';
 import { Options as olXYZOptions } from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
 import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
@@ -38,6 +40,7 @@ import olFeature from 'ol/Feature';
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olProjection from 'ol/proj/Projection';
+import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
@@ -55,11 +58,20 @@ import olStroke from 'ol/style/Stroke';
 import { DragBox } from 'ol/interaction';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olRenderFeature from 'ol/render/Feature';
+import olEvent from 'ol/events/Event';
+import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
+import { flattenLayers } from '@dlr-eoc/utils-maps/src/public-api';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
+const OVERLAY_TYPE_KEY = 'type';
+const FILTER_TYPE_KEY = 'filtertype';
+const ID_KEY = 'id';
+const TITLE_KEY = 'title';
+const WebMercator = 'EPSG:3857';
+const WGS84 = 'EPSG:4326';
 
 export interface IPopupArgs {
   modelName: string;
@@ -84,11 +96,13 @@ export class MapOlService {
   constructor() {
     this.map = new olMap({ controls: [] });
     this.view = new olView();
-    this.EPSG = 'EPSG:3857'; // 'EPSG:4326'; EPSG:3857
-    // this.createMap();
+    this.EPSG = WebMercator;
   }
 
-  /** USED in map-ol.component */
+  /**
+   * if this is used in an angular component then set the target after the view is created
+   * e.g. this.map.setTarget(this.mapDivView.nativeElement) in ngAfterViewInit()
+   */
   public createMap(target?: HTMLElement) {
     const zoom = 0;
     const center = {
@@ -97,30 +111,33 @@ export class MapOlService {
     };
 
     const baselayerGroup = new olLayerGroup({
-      title: 'Base maps',
-      type: 'baselayers',
       layers: []
-    } as any);
+    });
+    baselayerGroup.set(FILTER_TYPE_KEY, 'baselayers');
+    baselayerGroup.set(TITLE_KEY, 'Base maps');
+    baselayerGroup.set(ID_KEY, 'ID_filtertype_baselayers');
 
 
     const layersGroup = new olLayerGroup({
-      title: 'Layers',
-      type: 'layers',
       layers: []
-    } as any);
+    });
+    layersGroup.set(FILTER_TYPE_KEY, 'layers');
+    layersGroup.set(TITLE_KEY, 'Layers');
+    layersGroup.set(ID_KEY, 'ID_filtertype_layers');
 
     // ---------------------------------------------------------------------------------------------------
     const overlayGroup = new olLayerGroup({
-      title: 'Overlays',
-      type: 'overlays',
       layers: []
-    } as any);
+    });
+    overlayGroup.set(FILTER_TYPE_KEY, 'overlays');
+    overlayGroup.set(TITLE_KEY, 'Overlays');
+    overlayGroup.set(ID_KEY, 'ID_filtertype_overlays');
 
     /**
      * set default viewOptions
      */
     this.viewOptions = {
-      center: transform([center.lon, center.lat], 'EPSG:4326', this.EPSG),
+      center: transform([center.lon, center.lat], WGS84, this.EPSG),
       zoom,
       projection: getProjection(this.EPSG)
     };
@@ -196,6 +213,9 @@ export class MapOlService {
     // this.map.getControls().clear();
     this.view = this.map.getView();
     this.setProjection(this.EPSG);
+    if (target) {
+      this.map.setTarget(target);
+    }
     return {
       map: this.map,
       view: this.view
@@ -214,61 +234,122 @@ export class MapOlService {
    * See this example:
    * https://openlayers.org/en/latest/examples/box-selection.html
    */
-  public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart: () => void, onBoxEnd: (ext) => void) {
-
-    const dragBox = new DragBox({
+  public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart?: (evt: olEvent) => void, onBoxEnd?: (ext, evt: olEvent) => void, dragBoxOptions?: DragBoxOptions) {
+    const options = {
+      className: 'ol-drag-select',
       condition: conditionForDrawing,
-      className: 'ol-drag-select'
-    });
+    };
+    Object.assign(options, dragBoxOptions);
+    const dragBox = new DragBox(dragBoxOptions);
+    if (onBoxStart) {
+      dragBox.on('boxstart', (evt) => {
+        onBoxStart(evt);
+      });
+    }
 
-    dragBox.on('boxstart', () => {
-      onBoxStart();
-    });
-
-    dragBox.on('boxend', () => {
-      const extent = dragBox.getGeometry().getExtent();
-      onBoxEnd(extent);
-    });
+    if (onBoxEnd) {
+      dragBox.on('boxend', (evt) => {
+        const extent = dragBox.getGeometry().getExtent();
+        onBoxEnd(extent, evt);
+      });
+    }
 
     this.map.addInteraction(dragBox);
+    return dragBox;
   }
 
   /**
    * get an array of olLayers from a group type
    */
-  public getLayers(type: Tgroupfiltertype) {
-    const lowerType = type.toLowerCase() as Tgroupfiltertype;
+  public getLayers(filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     let layers: olBaseLayer[];
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         layers = layerGroup.getLayers().getArray();
       }
     });
     return layers;
   }
 
-  public getLayerByKey(key: { key: string, value: string }, type: Tgroupfiltertype) {
-    const lowerType = type.toLowerCase() as Tgroupfiltertype;
-    const layers = this.getLayers(lowerType);
-    let layer;
-    layers.forEach((item) => {
+  private getLayersFromGroup(group: olLayerGroup, filtertype?: string, recursive = false) {
+    const layers = group.getLayers().getArray();
+    let tempLayers = layers;
+    if (recursive) {
+      let groups: olBaseLayer[] = [].concat(layers);
+      layers.forEach(l => {
+        if (l instanceof olLayerGroup) {
+          groups = groups.concat(this.getLayersFromGroup(l, filtertype, true));
+        }
+      });
+      tempLayers = groups;
+    }
+
+    if (filtertype) {
+      return tempLayers.filter(l => l.get(FILTER_TYPE_KEY) && l.get(FILTER_TYPE_KEY).toLowerCase() === filtertype.toLowerCase());
+    } else {
+      return tempLayers;
+    }
+  }
+
+  public getLayerByKey(key: { key: string, value: string }, filtertype?: Tgroupfiltertype) {
+    const layers = this.getLayersFromGroup(this.map.getLayerGroup(), filtertype);
+    const flattenedLayers = flattenLayers(layers);
+    const keyLayers: olBaseLayer[] = [];
+    flattenedLayers.forEach((item) => {
       if (item.get(key.key) && item.get(key.key) === key.value) {
-        layer = item;
+        if (keyLayers.indexOf(item) === -1) {
+          keyLayers.push(item);
+        }
       }
     });
-    return layer;
+    if (!keyLayers.length) {
+      const subLayers = this.getLayersFromGroup(this.map.getLayerGroup(), filtertype, true); // (map.getLayerGroup(), filtertype, filtertypeKey, true);
+      if (subLayers.length) {
+        subLayers.forEach((item) => {
+          if (item.get(key.key) && item.get(key.key) === key.value) {
+            if (keyLayers.indexOf(item) === -1) {
+              keyLayers.push(item);
+            }
+          }
+        });
+      }
+    }
+
+    // there could maybe more the one layers with the same key!!!!
+    if (keyLayers.length === 1) {
+      return keyLayers[0];
+    } else {
+      return null;
+    }
+  }
+
+
+  /**
+   * set a FilterType to a Layer or Group recursively
+   *
+   * @param key [key='filtertype']
+   */
+  private setRecursiveKey(layer: olBaseLayer, value: string, key = FILTER_TYPE_KEY) {
+    layer.set(key, value);
+    if (layer instanceof olLayerGroup) {
+      layer.getLayers().forEach(l => {
+        this.setRecursiveKey(l, value, key);
+      });
+    }
   }
 
   /**
    * add a olLayer to a group if it is not there
    */
-  public addLayer(layer: olBaseLayer, type: Tgroupfiltertype) {
-    const lowerType = type.toLowerCase() as Tgroupfiltertype;
+  public addLayer(layer: olBaseLayer, filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         if (!this.isLayerInGroup(layer, layerGroup)) {
           layers = layerGroup.getLayers().getArray();
+          this.setRecursiveKey(layer, lowerType, FILTER_TYPE_KEY);
           layers.push(layer);
           layerGroup.setLayers(new olCollection(layers));
         }
@@ -289,67 +370,114 @@ export class MapOlService {
 
 
   /**
-   * add a array of olLayers to a group if they are not there
-   */
-  public addLayers(layers: olBaseLayer[], type: Tgroupfiltertype) {
-    const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
-    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
-        const groupLayers = layerGroup.getLayers();
-
-        if (groupLayers.getLength() > 0) {
-          const mergLayers = layerGroup.getLayers().getArray();
-          layers.map(layer => {
-            if (!this.isLayerInGroup(layer, layerGroup)) {
-              mergLayers.push(layer);
-            }
-          });
-          layerGroup.setLayers(new olCollection(mergLayers));
+    * Get all direkt Layer Groups added to the map
+    *
+    * @param filtertypeKey [filtertypeKey='filtertype']
+    */
+  private getLayerGroups(filtertype?: string) {
+    const layerGroups: olLayerGroup[] = [];
+    this.map.getLayers().forEach((lg: olLayerGroup | olBaseLayer) => {
+      if (lg instanceof olLayerGroup) {
+        if (filtertype) {
+          if (lg.get(FILTER_TYPE_KEY) && lg.get(FILTER_TYPE_KEY).toLowerCase() === filtertype.toLowerCase()) {
+            layerGroups.push(lg);
+          }
         } else {
-          layerGroup.setLayers(new olCollection(layers));
+          layerGroups.push(lg);
         }
       }
     });
-    return layers;
+    return layerGroups;
+  }
+
+
+  /**
+   * add a array of olLayers to a group if they are not there
+   */
+  public addLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
+    let newLayers: olBaseLayer[];
+    const layerGroups = this.getLayerGroups(lowerType);
+    layerGroups.forEach(lg => {
+      const groupLayers = lg.getLayers();
+      if (groupLayers.getLength() > 0) {
+        // I think doing it like this should be more performant like as using the addLayer in a loop
+        newLayers = lg.getLayers().getArray();
+        layers.map(layer => {
+          if (!this.isLayerInGroup(layer, lg)) {
+            newLayers.push(layer);
+          }
+        });
+      } else {
+        newLayers = layers;
+      }
+      newLayers.forEach(l => {
+        if (l instanceof olLayerGroup) {
+          this.setRecursiveKey(l, lowerType, FILTER_TYPE_KEY);
+        }
+      });
+      lg.setLayers(new olCollection(newLayers));
+    });
+    return newLayers;
   }
 
   /**
    * reset a group with an array of olLayers
    */
-  public setLayers(layers: olBaseLayer[], type: Tgroupfiltertype) {
-    const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
-    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
-        layerGroup.setLayers(new olCollection(layers));
+  public setLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
+    const layerGroups = this.getLayerGroups(lowerType);
+    layers.forEach(l => {
+      if (l instanceof olLayerGroup) {
+        this.setRecursiveKey(l, filtertype.toLocaleLowerCase(), FILTER_TYPE_KEY);
       }
+    });
+    layerGroups.forEach(l => {
+      l.setLayers(new olCollection(layers));
     });
     return layers;
   }
 
 
-  public removeLayerByKey(key: { key: string, value: string }, type: Tgroupfiltertype) {
-    const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
-    this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
-        const groupLayers = layerGroup.getLayers();
-        let removeLayer;
-        groupLayers.forEach((layer) => {
-          if (layer.get(key.key) && layer.get(key.key) === key.value) {
-            removeLayer = layer;
-          }
-        });
-        if (removeLayer) {
-          groupLayers.remove(removeLayer);
-          layerGroup.setLayers(groupLayers);
+  /**
+   * get corresponding Layer Group on which the layer is added
+   */
+  private getLayerGroupForLayer(layer: olBaseLayer) {
+    const subLayers = this.getLayersFromGroup(this.map.getLayerGroup(), null, true);
+    subLayers.push(this.map.getLayerGroup());
+    let lyerGroup: { group: olLayerGroup, layer: olBaseLayer } | null = null;
+    subLayers.forEach((l) => {
+      if (l instanceof olLayerGroup) {
+        const groupLayers = this.getLayersFromGroup(l);
+        const hasLayer = groupLayers.find(i => i === layer);
+        if (hasLayer) {
+          lyerGroup = {
+            group: l,
+            layer: hasLayer
+          };
         }
       }
     });
+    return lyerGroup;
   }
 
-  public updateLayerByKey(key: { key: string, value: string }, newLayer: olBaseLayer, type: Tgroupfiltertype) {
-    const lowerType = type.toLocaleLowerCase() as Tgroupfiltertype;
+
+  public removeLayerByKey(key: { key: string, value: string }, filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
+    const layer = this.getLayerByKey(key, lowerType);
+    if (layer) {
+      const gropObj = this.getLayerGroupForLayer(layer);
+      if (gropObj.group) {
+        const filterdLayers = this.getLayersFromGroup(gropObj.group).filter(i => i !== layer);
+        gropObj.group.setLayers(new olCollection(filterdLayers));
+      }
+    }
+  }
+
+  public updateLayerByKey(key: { key: string, value: string }, newLayer: olBaseLayer, filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
     this.map.getLayers().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         const groupLayers = layerGroup.getLayers();
         groupLayers.forEach((oldLayer, index) => {
           if (oldLayer.get(key.key) && oldLayer.get(key.key) === key.value) {
@@ -399,11 +527,11 @@ export class MapOlService {
     });
   }
 
-  public removeAllLayers(type: Tgroupfiltertype) {
-    const lowerType = type.toLowerCase() as Tgroupfiltertype;
+  public removeAllLayers(filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     let layers;
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-      if (layerGroup.get('type') === lowerType) {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType) {
         layers = layerGroup.getLayers();
         layers.clear();
       }
@@ -417,8 +545,8 @@ export class MapOlService {
    * if only one group of them map is used and setLayers is called then the map flickers!
    * this is because of all layers are new created and the have all new ol_uid's
    */
-  public setUkisLayers(layers: Array<Layer>, type: Tgroupfiltertype) {
-    const lowerType = type.toLowerCase() as Tgroupfiltertype;
+  public setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const tempLayers: olBaseLayer[] = [];
     // TODO try to deep check if a layer if exactly the same and dont create it new
 
@@ -438,6 +566,7 @@ export class MapOlService {
 
     if (tempLayers.length > 0) {
       this.setLayers(tempLayers, lowerType);
+      // TODO: checkt to replace type with filtertype -> but breaking Change!!
       const newTempLayer: { type: Tgroupfiltertype, layers: olBaseLayer[] } = {
         type: lowerType, layers: tempLayers
       };
@@ -446,30 +575,32 @@ export class MapOlService {
   }
 
   /** This function resets/adds a olLayer of a type with the new UKIS-Layer */
-  public setUkisLayer(newLayer: Layer, type?: Tgroupfiltertype): void {
-    if (!type) {
-      type = newLayer.filtertype;
+  public setUkisLayer(newLayer: Layer, filtertype?: Tgroupfiltertype): void {
+    if (!filtertype) {
+      filtertype = newLayer.filtertype;
     }
-    const lowerType = type.toLowerCase() as Tgroupfiltertype;
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const oldLayers = this.getLayers(lowerType);
     const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
-    if (newOlLayer) {
-      this.removeLayerByKey({ key: 'id', value: oldLayer.get('id') }, type);
-      this.addLayer(newOlLayer, type);
+    if (oldLayer) {
+      this.removeLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, filtertype);
+      this.addLayer(newOlLayer, filtertype);
+    } else {
+      this.addLayer(newOlLayer, filtertype);
     }
   }
 
-  public updateUkisLayer(newLayer: Layer, type?: Tgroupfiltertype): void {
-    if (!type) {
-      type = newLayer.filtertype;
+  public updateUkisLayer(newLayer: Layer, filtertype?: Tgroupfiltertype): void {
+    if (!filtertype) {
+      filtertype = newLayer.filtertype;
     }
-    const lowerType = type.toLowerCase() as Tgroupfiltertype;
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const oldLayers = this.getLayers(lowerType);
     const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
     if (newOlLayer) {
-      this.updateLayerByKey({ key: 'id', value: oldLayer.get('id') }, newOlLayer, type);
+      this.updateLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, newOlLayer, filtertype);
     }
   }
 
@@ -528,6 +659,7 @@ export class MapOlService {
 
     const layeroptions: any = {
       type: 'xyz',
+      filtertype: l.filtertype,
       name: l.name,
       id: l.id,
       visible: l.visible,
@@ -542,7 +674,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
     }
 
     if (l.maxResolution) {
@@ -571,12 +703,9 @@ export class MapOlService {
     };
 
     if (l.tileSize) {
-      // console.log(l.tileSize)
       tileOptions['tileGrid'] = this.getTileGrid<olTileGrid>('default', null, l.tileSize);
       delete tileOptions.params['tileSize'];
     }
-
-    // console.log(tile_options);
 
     if (l.crossOrigin) {
       tileOptions.crossOrigin = l.crossOrigin;
@@ -603,6 +732,7 @@ export class MapOlService {
 
     const layeroptions: any = {
       type: 'wms',
+      filtertype: l.filtertype,
       name: l.name,
       id: l.id,
       visible: l.visible,
@@ -636,7 +766,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
     }
     const newlayer = new olTileLayer(layeroptions);
     return newlayer;
@@ -699,6 +829,7 @@ export class MapOlService {
 
       const layeroptions: any = {
         type: 'wmts',
+        filtertype: l.filtertype,
         name: l.name,
         id: l.id,
         visible: l.visible,
@@ -732,7 +863,7 @@ export class MapOlService {
       }
 
       if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+        layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
       }
 
       return new olTileLayer(layeroptions);
@@ -798,7 +929,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
     }
 
     if (l.cluster) {
@@ -844,6 +975,16 @@ export class MapOlService {
     return new olVectorLayer(layeroptions);
   }
 
+  /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */
+  private setCrossOrigin(layer) {
+    if (layer instanceof olLayer) {
+      const olSource = layer.getSource();
+      if (olSource instanceof olImageWMS || olSource instanceof olImageStatic) {
+        olSource['crossOrigin_'] = 'anonymous';
+      }
+    }
+  }
+
   private create_custom_layer(l: CustomLayer) {
     if (l.custom_layer) {
       const layer = (l.custom_layer as olBaseLayer);
@@ -851,7 +992,6 @@ export class MapOlService {
       if (layer instanceof olLayer) {
         const olSource = layer.getSource();
         olSource.set('wrapX', false);
-
         if (l.attribution) {
           olSource.setAttributions([l.attribution]);
         }
@@ -859,6 +999,11 @@ export class MapOlService {
         if (l.continuousWorld) {
           olSource.set('wrapX', l.continuousWorld);
         }
+        this.setCrossOrigin(layer);
+      } else if (layer instanceof olLayerGroup) {
+        layer.getLayers().forEach(gl => this.setCrossOrigin(gl));
+      } else {
+        console.error(`The custom_layer of ${l.id} in not a openlayers Layer`);
       }
 
       const layeroptions = {
@@ -872,17 +1017,17 @@ export class MapOlService {
       } as any;
 
       if (l.maxResolution) {
-        layeroptions.maxResolution = l.maxResolution;
+        layer.setMaxResolution(l.maxResolution);
       }
       if (l.minResolution) {
-        layeroptions.minResolution = l.minResolution;
+        layer.setMinResolution(l.minResolution);
       }
 
       if (l.maxZoom) {
-        layeroptions.maxZoom = l.maxZoom;
+        layer.setMaxZoom(l.maxZoom);
       }
       if (l.minZoom) {
-        layeroptions.minZoom = l.minZoom;
+        layer.setMinZoom(l.minZoom);
       }
 
       if (l.popup) {
@@ -891,11 +1036,12 @@ export class MapOlService {
          * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
          * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
          */
-        layeroptions.className = l.id;
+        layer['className_'] = l.id;
       }
 
       if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox, 'EPSG:4326', this.map.getView().getProjection().getCode());
+        const extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
+        layer.setExtent(extent);
       }
 
       layer.setProperties(layeroptions);
@@ -961,38 +1107,55 @@ export class MapOlService {
     }
   }
 
+  private isMovePopup(layerpopup) {
+    return (layerpopup && 'event' in layerpopup && layerpopup.event === 'move');
+  }
+
   /** USED in map-ol.component */
   public layers_on_click(evt: olMapBrowserEvent<PointerEvent>) {
     const layerFilter = (layer) => {
-      // try to catch CORS error in getImageData!!!
-      // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
       const layerpopup: Layer['popup'] = layer.get('popup');
-      if (layerpopup) {
+      if (layerpopup === true) {
         return true;
+      } else if (!this.isMovePopup(layerpopup)) {
+        return true;
+      } else {
+        return false;
       }
     };
     this.layers_on_click_move(evt, layerFilter);
   }
+
+
 
   public layers_on_pointermove(evt: olMapBrowserEvent<PointerEvent>) {
     const layerFilter = (layer) => {
-      // try to catch CORS error in getImageData!!!
-      // layer.sourceChangeKey_ && layer.sourceChangeKey_.target && layer.sourceChangeKey_.target.crossOrigin != "anonymous"
       const layerpopup: Layer['popup'] = layer.get('popup');
-      if (layerpopup && typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.event === 'move') {
-        return true;
-      }
+      return this.isMovePopup(layerpopup);
     };
     this.layers_on_click_move(evt, layerFilter);
   }
 
+  /**
+   * TODO:
+   * - check the pointer event
+   * - on move event set cursor -> depends on which kind of layer??
+   *   layers with features and only color pixel
+   *
+   * - forEachFeatureAtPixel: Detect features that intersect a pixel on the viewport
+   *   Vector Layers???
+   *
+   * - forEachLayerAtPixel: Detect layers that have a color value at a pixel on the viewport (false positives unless the map layers have had different className)
+   *   Raster Layers???
+   */
   private layers_on_click_move(evt: olMapBrowserEvent<PointerEvent>, layerFilter: (layer: olLayer<any>) => boolean) {
     /** set cursor for features */
-    if (evt.type === 'pointermove') {
-      const hit = this.map.forEachFeatureAtPixel(evt.pixel, () => {
+    // TODO: do this only in vector vector_on_click???
+    /* if (evt.type === 'pointermove') {
+      const featureHit = this.map.forEachFeatureAtPixel(evt.pixel, () => {
         return true;
       });
-      if (hit) {
+      if (featureHit) {
         this.map.getTargetElement().style.cursor = 'pointer';
       } else {
         this.removeAllPopups((item) => {
@@ -1000,27 +1163,45 @@ export class MapOlService {
         });
         this.map.getTargetElement().style.cursor = '';
       }
-    }
+    } */
+    // -----------------------------------------------
 
     const LayersAtPixel: { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array }[] = [];
+    let layerHit = false;
+    /**
+     * Detect layers that have a color value at a pixel on the viewport, and execute a callback with each matching layer.
+     * Layers included in the detection can be configured through opt_layerFilter.
+     *
+     * Note: this may give false positives unless the map layers have had different *className* properties assigned to them.
+     * Also there could be cross-origin data, so set crossOrigin: 'anonymous' for layers where you want get pixel data!!
+     *
+     * If forEachLayerAtPixel is using return, it is only fired once!!!
+     */
     this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
+      layerHit = true;
       LayersAtPixel.push({ layer, color });
     }, {
       layerFilter
     });
     LayersAtPixel.forEach((item, index) => {
-      // console.log(item, index);
       const topLayer = 0;
       if (index === topLayer) {
         this.layer_on_click(evt, item.layer, item.color);
       }
     });
+
+    if (layerHit) {
+      this.map.getTargetElement().style.cursor = 'pointer';
+    } else {
+      this.removeAllPopups((item) => {
+        return item.get('addEvent') === 'pointermove';
+      });
+      this.map.getTargetElement().style.cursor = '';
+    }
   }
 
   public layer_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
-    if (layer instanceof olBaseImageLayer) {
-      this.raster_on_click(evt, layer, color);
-    } else if (layer instanceof olBaseTileLayer) {
+    if (layer instanceof olBaseImageLayer || layer instanceof olBaseTileLayer) {
       this.raster_on_click(evt, layer, color);
     } else if (layer instanceof olBaseVectorLayer) {
       this.vector_on_click(evt);
@@ -1059,9 +1240,6 @@ export class MapOlService {
             const childFeature = childFeatures[0];
             properties = childFeature.getProperties();
           } else if (childFeatures && childFeatures.length > 1) {
-            // zoom in TODO
-            // _layer.getProperties()
-            // _layer.getGeometry().getExtent()
             const extent = this.getFeaturesExtent(feature.getProperties().features);
             this.setExtent(extent);
             return false;
@@ -1167,9 +1345,93 @@ export class MapOlService {
 
   public addPopup(args: IPopupArgs, popupObj: any, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
     const layerpopup: Layer['popup'] = args.layer.get('popup');
+    // check if popup is already there and event is move
+    const moveID = 'popup_move_ID';
+    const movePopup = this.getPopups().find(item => item.getId() === moveID);
+    /**
+     * If event move and the map already has a Overlay for move
+     * then only create new html container and set the position
+     */
+    if (event === 'move' && movePopup) {
+      let coordinate;
+      if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
+        coordinate = args.properties.geometry.getCoordinates();
+      } else {
+        coordinate = args.event.coordinate;
+      }
+      const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
+      movePopup.setElement(container);
+      movePopup.setPosition(coordinate);
+    } else if (args.event.type === 'pointermove' && !event) {
+      /** remove move popup if move on a click layer */
+      if (movePopup) {
+        this.removeAllPopups((item) => {
+          return item.get('addEvent') === 'pointermove';
+        });
+      }
+    } else {
+      let popupID = null;
+      if (event === 'move') {
+        popupID = moveID;
+      } else {
+        if (args.feature) {
+          popupID = olGetUid(args.feature);
+        } else if (args.layer) {
+          popupID = olGetUid(args.layer);
+        } else {
+          popupID = `popup_${new Date().getTime()}`;
+        }
+      }
+
+      const defaultOptions: olOverlayOptions = {
+        // element: container,
+        autoPan: true,
+        id: popupID,
+        autoPanAnimation: {
+          duration: 250
+        },
+        positioning: 'bottom-center',
+        stopEvent: true,
+        insertFirst: false,
+      };
+
+      let overlayoptions = defaultOptions;
+
+      if (layerpopup && typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.options) {
+        overlayoptions = Object.assign(defaultOptions, layerpopup.options);
+      }
+
+      const overlay = new olOverlay(overlayoptions);
+
+      const container = this.createPopupContainer(overlay, args, popupObj, html, event);
+      overlay.set('addEvent', args.event.type);
+      overlay.set(OVERLAY_TYPE_KEY, 'popup');
+      overlay.setElement(container);
+
+      let coordinate;
+      if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
+        coordinate = args.properties.geometry.getCoordinates();
+      } else {
+        coordinate = args.event.coordinate;
+      }
+
+      overlay.setPosition(coordinate);
+
+      if (removePopups) {
+        this.removeAllPopups();
+      }
+
+      const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
+      if (hasPopup) {
+        this.map.removeOverlay(hasPopup);
+      }
+      this.map.addOverlay(overlay);
+    }
+  }
+
+  private createPopupContainer(overlay: olOverlay, args: IPopupArgs, popupObj: any, html?: string, event?: 'click' | 'move') {
     const content = document.createElement('div');
     content.className = 'ol-popup-content';
-    // console.log(args, popupObj, html)
     let popupHtml = '';
     if (args.popupFn) {
       popupHtml = args.popupFn(popupObj);
@@ -1183,7 +1445,7 @@ export class MapOlService {
 
     const container = document.createElement('div');
     container.className = 'ol-popup';
-    container.id = `popup_${new Date().getTime()}`;
+    container.id = overlay.getId().toString();
     container.style.display = 'block';
 
     if (!event || event !== 'move') {
@@ -1197,63 +1459,8 @@ export class MapOlService {
       };
       closer.addEventListener('click', closeFunction, false);
     }
-
-
     container.appendChild(content);
-    let popupID = null;
-    if (args.feature) {
-      popupID = olGetUid(args.feature);
-    } else if (args.layer) {
-      popupID = olGetUid(args.layer);
-    } else {
-      popupID = `popup_${new Date().getTime()}`;
-    }
-
-    const defaultOptions: olOverlayOptions = {
-      element: container,
-      autoPan: true,
-      id: popupID,
-      autoPanAnimation: {
-        duration: 250
-      },
-      positioning: 'bottom-center',
-      stopEvent: true,
-      insertFirst: false,
-    };
-
-    let overlayoptions = defaultOptions;
-
-    if (layerpopup && typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.options) {
-      overlayoptions = Object.assign(defaultOptions, layerpopup.options);
-    }
-
-    const overlay = new olOverlay(overlayoptions);
-    overlay.set('addEvent', args.event.type);
-    overlay.set('type', 'popup');
-
-    let coordinate;
-    if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
-      coordinate = args.properties.geometry.getCoordinates();
-    } else {
-      coordinate = args.event.coordinate;
-    }
-
-    overlay.setPosition(coordinate);
-
-    if (removePopups) {
-      this.removeAllPopups();
-    } else if (event === 'move' && removePopups !== false) {
-      this.removeAllPopups((item) => {
-        return item.get('addEvent') === 'pointermove';
-      });
-    }
-
-    const hasPopup = this.getPopups().find(item => item.getId() === overlay.getId());
-    if (hasPopup) {
-      this.map.removeOverlay(hasPopup);
-    }
-
-    this.map.addOverlay(overlay);
+    return container;
   }
 
   /** USED in map-ol.component */
@@ -1263,7 +1470,7 @@ export class MapOlService {
       popups = this.getPopups().filter(filter);
     }
     popups.forEach((overlay) => {
-      if (overlay.get('type') === 'popup') {
+      if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
         this.map.removeOverlay(overlay);
       }
     });
@@ -1284,7 +1491,7 @@ export class MapOlService {
   public getPopups(): olOverlay[] {
     const popups = [];
     this.map.getOverlays().getArray().slice(0).forEach((overlay) => {
-      if (overlay.get('type') === 'popup') {
+      if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
         popups.push(overlay);
       }
     });
@@ -1298,7 +1505,7 @@ export class MapOlService {
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
-    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
     const newFitOptions = {
       size: this.map.getSize(),
@@ -1314,7 +1521,7 @@ export class MapOlService {
   /** USED in map-ol.component */
   /** ol.Coordinate xy */
   public setCenter(center: number[], geographic?: boolean): number[] {
-    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
     // console.log('set center in svc', transfomCenter)
     // console.log(this.map.getView().getCenter())
@@ -1324,7 +1531,7 @@ export class MapOlService {
 
   /** USED in map-ol.component */
   public getCenter(geographic?: boolean): any {
-    const dstProjection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const dstProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const srcProjection = getProjection(this.map.getView().getProjection().getCode());
     const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
     return transfomCenter;
@@ -1341,7 +1548,7 @@ export class MapOlService {
       olExtend(extent, feature.getGeometry().getExtent());
     });
     if (geographic) {
-      const projection = getProjection('EPSG:4326');
+      const projection = getProjection(WGS84);
       const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
       return (transfomExtent as TGeoExtent);
     } else {
@@ -1355,7 +1562,7 @@ export class MapOlService {
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public getCurrentExtent(geographic?: boolean): TGeoExtent {
-    const projection = (geographic) ? getProjection('EPSG:4326') : getProjection(this.EPSG);
+    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
     const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
     return (transfomExtent as TGeoExtent);
@@ -1400,7 +1607,7 @@ export class MapOlService {
 
   public geoJsonToFeature(geojson: any): olFeature<any> {
     const GEOJSON = new olGeoJSON({
-      dataProjection: 'EPSG:4326',
+      dataProjection: WGS84,
       featureProjection: this.EPSG
     });
     return GEOJSON.readFeature(geojson);
@@ -1408,7 +1615,7 @@ export class MapOlService {
 
   public geoJsonToFeatures(geojson: any): Array<olFeature<any>> {
     const GEOJSON = new olGeoJSON({
-      dataProjection: 'EPSG:4326',
+      dataProjection: WGS84,
       featureProjection: this.EPSG
     });
     return GEOJSON.readFeatures(geojson);
@@ -1488,12 +1695,19 @@ export class MapOlService {
     }
   }
 
-  public registerProjection(projDef: any) {
+  /**
+   * @param projDef.code - e.g.: "EPSG:4326"
+   * @param projDef.proj4js - e.g.: "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
+   */
+  public registerProjection(projDef: { code: string, proj4js: string }) {
     proj4.defs(projDef.code, projDef.proj4js);
     olRegister(proj4);
   }
 
-  public getOlProjection(projDef: any): olProjection {
+  /**
+   * Returns a OpenLayers Projection from Options
+   */
+  public getOlProjection(projDef: olProjectionOptions): olProjection {
     return new olProjection({
       code: projDef.code,
       extent: projDef.extent ? projDef.extent : undefined,
