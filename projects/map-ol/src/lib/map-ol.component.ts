@@ -242,7 +242,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     if (newGeojsonLayer.data) {
       const newSource = new olVectorSource({
         features: this.mapSvc.geoJsonToFeatures(newGeojsonLayer.data),
-        wrapX: false
+        wrapX: oldLayer.getSource().getWrapX() || false
       });
       oldLayer.setSource(newSource);
     } else if (newGeojsonLayer.url) {
