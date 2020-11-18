@@ -132,17 +132,17 @@ export class LayersService {
     }
   }
 
-  private updateLayerOrGroupInStore(layerOrGrup: Layer | LayerGroup) {
+  private updateLayerOrGroupInStore(layerOrGroup: Layer | LayerGroup) {
     this.store.getValue().filter((lg, index, array) => {
       // check if both from the same type then check same id
-      if (lg instanceof Layer && layerOrGrup instanceof Layer) {
-        if (lg.id === layerOrGrup.id) {
-          array[index] = layerOrGrup;
+      if (lg instanceof Layer && layerOrGroup instanceof Layer) {
+        if (lg.id === layerOrGroup.id) {
+          array[index] = layerOrGroup;
           this.store.next(array);
         }
-      } else if (lg instanceof LayerGroup && layerOrGrup instanceof LayerGroup) {
-        if (lg.id === layerOrGrup.id) {
-          array[index] = layerOrGrup;
+      } else if (lg instanceof LayerGroup && layerOrGroup instanceof LayerGroup) {
+        if (lg.id === layerOrGroup.id) {
+          array[index] = layerOrGroup;
           this.store.next(array);
         }
       }

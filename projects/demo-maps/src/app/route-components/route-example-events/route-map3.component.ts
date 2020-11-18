@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, TGeoExtent } from '@dlr-eoc/services-layers';
+import { LayersService, CustomLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
@@ -16,12 +16,13 @@ import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
+import testData from '../../../assets/data/json/test.json';
 
 @Component({
   selector: 'app-route-map3',
   templateUrl: './route-map3.component.html',
   styleUrls: ['./route-map3.component.scss'],
-  /** use differnt instances of the services only for testing with diffenr routs  */
+  /** use different instances of the services only for testing with different routes  */
   providers: [LayersService, MapStateService, MapOlService]
 })
 export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
@@ -93,7 +94,38 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
 
-    const layers = [osmLayer, eventLayer];
+    const updatableFeatureLayer = new VectorLayer({
+      id: 'updatable_feature_layer',
+      name: 'Updatable feature layer',
+      type: 'geojson',
+      data: {
+        type: "FeatureCollection",
+        features: [{
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [[
+              [-192.48046875, -24.686952411999144 ],
+              [-88.06640625, -24.686952411999144],
+              [-88.06640625, 50.28933925329178],
+              [-192.48046875, 50.28933925329178],
+              [-192.48046875, -24.686952411999144]
+            ]]
+          }
+        }]
+      },
+      actions: [{
+        action: (layer: any) => {
+          updatableFeatureLayer.data = testData;
+          this.layersSvc.updateLayer(updatableFeatureLayer);
+        },
+        icon: 'download',
+        title: 'Load data'
+      }]
+    });
+
+    const layers = [osmLayer, eventLayer, updatableFeatureLayer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
 
   }

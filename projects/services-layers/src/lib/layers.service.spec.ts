@@ -1,10 +1,12 @@
 import { TestBed, async } from '@angular/core/testing';
-import { RasterLayer, Layer, CustomLayer, TGeoExtent } from './types/Layers';
+import { RasterLayer, Layer, CustomLayer, TGeoExtent, VectorLayer } from './types/Layers';
 import { WmsLayer, WmtsLayer } from './types/RasterLayers';
 import { LayerGroup } from './types/LayerGroup';
 import { LayersService } from './layers.service';
 import { first } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import testData1 from '../../assets/testData1.json';
+import testData2 from '../../assets/testData2.json';
 
 
 let layer1: Layer,
@@ -16,7 +18,8 @@ let layer1: Layer,
   layer5: CustomLayer,
   layergroup3: LayerGroup,
   layer6: WmsLayer,
-  layer7: WmtsLayer;
+  layer7: WmtsLayer,
+  layer8: VectorLayer;
 
 
 
@@ -126,6 +129,13 @@ describe('LayersService', () => {
           tileMatrixPrefix: 'EPSG:3857'
         }
       }
+    });
+
+    layer8 = new VectorLayer({
+      name: 'test layer8',
+      type: 'geojson',
+      id: 'layer8',
+      data: testData1
     });
 
     const service: LayersService = TestBed.inject(LayersService);
@@ -463,6 +473,21 @@ describe('LayersService', () => {
 
     expect(layerFromSvc.visible).toEqual(true);
     expect((layerFromSvc as CustomLayer).custom_layer.ol_uid).toEqual(600);
+  }));
+
+  it('should update a VectorLayer', async(() => {
+    const service: LayersService = TestBed.inject(LayersService);
+    service.addLayer(layer8, 'Layers');
+
+    // layer has been added
+    expect(service.getLayerById(layer8.id)).toBeTruthy();
+    // layer data has 1 feature
+    expect((service.getLayerById(layer8.id) as VectorLayer).data.features.length).toEqual(1);
+
+    // after `service.updateLayer`, layer data has indeed been updated.
+    layer8.data = testData2;
+    service.updateLayer(layer8, 'Layers');
+    expect((service.getLayerById(layer8.id) as VectorLayer).data.features.length).toEqual(5);
   }));
 
 

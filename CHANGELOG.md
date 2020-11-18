@@ -4,6 +4,7 @@
   - getLayerByKey() not working on layergroups (recursive).
   - removeLayerByKey() not working on layergroups (recursive).
   - addLayer(), addLayers() and setLayers() don't set the filtertype on layergroup children (recursive).
+  - `updateLayerParamsWith` now also works with GeojsonLayers: [issue 51](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/51)
 
 ### Features
 * **@dlr-eoc/utils-maps:**:
