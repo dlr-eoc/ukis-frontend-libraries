@@ -1240,15 +1240,25 @@ export class MapOlService {
             const childFeature = childFeatures[0];
             properties = childFeature.getProperties();
           } else if (childFeatures && childFeatures.length > 1) {
-            const extent = this.getFeaturesExtent(feature.getProperties().features);
-            this.setExtent(extent);
-            return false;
+            /** or check for layerpopup.event !== move */
+            if (evt.type === 'click') {
+              const extent = this.getFeaturesExtent(feature.getProperties().features);
+              this.setExtent(extent);
+              return false;
+            } else {
+              return true;
+            }
           } else {
             // type no cluster
             properties = feature.getProperties();
           }
 
-          this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
+          if ((typeof layerpopup === 'boolean' || Array.isArray(layerpopup)) ||
+            (layerpopup.event === 'click' && evt.type === 'click') ||
+            (!layerpopup.event && evt.type === 'click') ||
+            (layerpopup.event === 'move' && evt.type === 'pointermove')) {
+            this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
+          }
         }
       }
     });
@@ -1326,7 +1336,10 @@ export class MapOlService {
       }
     }
 
-    if (typeof layerpopup === 'object' && !Array.isArray(layerpopup)) {
+    /** popup is boolean or array */
+    if (typeof layerpopup === 'boolean' || Array.isArray(layerpopup)) {
+      this.addPopup(args, popupProperties, null);
+    } else if (layerpopup) {
       /** async function where you can paste a html string to the callback */
       if ('asyncPupup' in layerpopup) {
         layerpopup.asyncPupup(popupProperties, (html) => {
@@ -1336,10 +1349,6 @@ export class MapOlService {
       } else {
         this.addPopup(args, popupProperties, null, layerpopup.event, layerpopup.single);
       }
-
-      /** popup is boolean */
-    } else {
-      this.addPopup(args, popupProperties, null);
     }
   }
 
