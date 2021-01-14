@@ -1,5 +1,6 @@
 ### Bug Fixes
-* **@dlr-eoc/map-ol:** 
+* **@dlr-eoc/map-ol:**
+  - Do not automatically zoom in on Clusters if Popup event is move.
   - reuse popup on move [12f77a80](https://github.com/dlr-eoc/ukis-frontend-libraries/pull/50/commits/12f77a80dc333471be3ea6431a21e6bcbeed487f) [#47](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/47)
   - getLayerByKey() not working on layergroups (recursive).
   - removeLayerByKey() not working on layergroups (recursive).
