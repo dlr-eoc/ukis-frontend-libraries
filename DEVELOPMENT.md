@@ -11,6 +11,7 @@
 - all versions in package.json should be fixed! 
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies. (similar to hardware upgrades)
 - check for new versions `npm outdated -l` and `ng update`
+- update versions `npm update <pkg>` and `ng update <pkg>`
 
 ## General Development Workflow
 
