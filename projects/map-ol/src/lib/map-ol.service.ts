@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 
 
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent } from '@dlr-eoc/services-layers';
@@ -80,6 +80,10 @@ export interface IPopupArgs {
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
   popupFn?: popup['pupupFunktion'];
+  dynamicPopup?: {
+    component: Type<any>;
+    attributes: object;
+  };
 }
 
 @Injectable({
@@ -1333,6 +1337,8 @@ export class MapOlService {
         /** function to create html string */
       } else if (layerpopup.pupupFunktion) {
         args.popupFn = layerpopup.pupupFunktion;
+      } else if (layerpopup.dynamicPopup) {
+        args.dynamicPopup = layerpopup.dynamicPopup;
       }
     }
 
@@ -1444,8 +1450,9 @@ export class MapOlService {
     let popupHtml = '';
     if (args.popupFn) {
       popupHtml = args.popupFn(popupObj);
-    }
-    else if (html && (!popupObj || Object.keys(popupObj).length === 0)) {
+    } else if (args.dynamicPopup) {
+      // @TODO: insert angular component into `content` element.
+    } else if (html && (!popupObj || Object.keys(popupObj).length === 0)) {
       popupHtml = html;
     } else {
       popupHtml = this.createPopupHtml(popupObj);

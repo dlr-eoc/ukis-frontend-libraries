@@ -5,6 +5,7 @@ import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverla
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { ZommNumberControl } from './ol-custom-control';
 import { getFeatureInfoPopup } from './map-helpers';
+import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
 
 @Component({
   selector: 'app-route-map',
@@ -233,7 +234,13 @@ export class RouteMapComponent implements OnInit {
         ]
       },
       visible: false,
-      popup: { event: 'move' }
+      popup: {
+        event: 'move',
+        dynamicPopup: {
+          component: TablePopupComponent,
+          attributes: {}
+        }
+      }
     });
 
     const vectorLayer3 = new VectorLayer({

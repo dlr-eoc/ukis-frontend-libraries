@@ -37,6 +37,11 @@ export interface popup {
   pupupFunktion?: (popupobj: IAnyObject) => string;
   /** async function where you can paste a html string to the callback - popupobj: nativeLayer */
   asyncPupup?: (popupobj: any, cb: (html: any) => void) => void;
+  /** create popup using angular component */
+  dynamicPopup?: {
+    component: Type<any>;
+    attributes: object;
+  };
   /** default event is click - use move for a popup on hover */
   event?: 'move' | 'click';
   /** default is false - removes the other popups if the next is added */
