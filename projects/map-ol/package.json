@@ -11,6 +11,7 @@
   "dependencies": {
     "@dlr-eoc/services-map-state": "0.0.0-PLACEHOLDER",
     "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/utils-maps": "0.0.0-PLACEHOLDER",
     "ol": "0.0.0-PLACEHOLDER-VENDOR",
     "proj4": "0.0.0-PLACEHOLDER-VENDOR",
     "tslib": "0.0.0-PLACEHOLDER-VENDOR"
