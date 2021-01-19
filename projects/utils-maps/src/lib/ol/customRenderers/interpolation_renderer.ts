@@ -178,6 +178,9 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
         return this.container;
     }
 
+    renderDeclutter(frameState: FrameState) {
+    }
+
     public updateSettings(newSettings: InterpolationRendererSettings) {
         const oldSettings = this.settings;
         this.settings = newSettings;
