@@ -16,6 +16,7 @@ import {
 import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON, MVT as olMVT } from 'ol/format';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle, Circle as olCircle, Text as olText } from 'ol/style';
 import { getUid } from 'ol/util';
+import { Projection } from 'ol/proj';
 
 import { ExampleLayerActionComponent } from '../../components/example-layer-action/example-layer-action.component';
 import { munichPolys, heatMapData, vectorLayerData, crescentPoints } from './resources/features';
@@ -367,6 +368,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       <p>Use the controls to dynamically change the sun's angle.</p>`
     });
 
+    const metersPerUnit = this.mapSvc.map.getView().getProjection().getMetersPerUnit();
+    const metersPerUnitWSG84 = new Projection({code: 'EPSG:4326', units: 'degrees'}).getMetersPerUnit();
+    munichPolys.features.map(f => f.properties.height = f.properties.height * metersPerUnitWSG84 / metersPerUnit);
+    console.log(munichPolys)
+
     const barLayer = new CustomLayer({
       id: 'three',
       name: 'Bars layer',
@@ -382,7 +388,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
 
 
-    const metersPerUnit = this.mapSvc.map.getView().getProjection().getMetersPerUnit();
+    
     const crescentSource = new olVectorSource({
       features: this.mapSvc.geoJsonToFeatures(crescentPoints)
     });

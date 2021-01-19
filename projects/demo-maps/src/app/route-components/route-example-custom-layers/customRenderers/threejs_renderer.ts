@@ -109,6 +109,9 @@ export class ThreeJsRenderer extends LayerRenderer<VectorLayer> {
         return this.canvas;
     }
 
+    renderDeclutter(frameState: FrameState) {
+    }
+
     private featuresToMeshes(features: Feature<olPolygonGeometry>[]): Mesh[] {
         const meshes: Mesh[] = [];
         for (const feature of features) {
