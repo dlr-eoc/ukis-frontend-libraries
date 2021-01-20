@@ -13,6 +13,7 @@
     - Takes a vector-source (or a clustered vector-source) and does inverse-distance-interpolation on every pixel between the data points.
     - Allows user to optionally style data-point-labels just like any other openlayers vector-layer.
   - extended webgl-utils to handle textures that are not intended for display, but for data-transmission to and from shaders.
+  - updated all renderers to implement ol-6.5's new `renderDeclutter` method.
 * **@dlr-eoc/utils-ogc:**:
   - Created new package `@dlr-eoc/utils-ogc`. Provides our OGC-services that have been made independent of angular.
   - Created first service `WpsClient` for accessing [WPS 1.0.0 and 2.0.0](https://www.ogc.org/standards/wps) services.
