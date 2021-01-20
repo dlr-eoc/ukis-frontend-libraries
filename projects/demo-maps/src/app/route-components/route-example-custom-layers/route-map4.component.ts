@@ -371,7 +371,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const metersPerUnit = this.mapSvc.map.getView().getProjection().getMetersPerUnit();
     const metersPerUnitWSG84 = new Projection({code: 'EPSG:4326', units: 'degrees'}).getMetersPerUnit();
     munichPolys.features.map(f => f.properties.height = f.properties.height * metersPerUnitWSG84 / metersPerUnit);
-    console.log(munichPolys)
 
     const barLayer = new CustomLayer({
       id: 'three',
