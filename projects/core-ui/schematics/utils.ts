@@ -128,7 +128,7 @@ export function addServiceComponentModule(options: UkisNgAddSchema, item: Imodul
     // test
     if (modulePathStr) {
       const nodes = getSourceNodes(moduleSource);
-      console.log(nodes);
+      // console.log(nodes);
     }
     if (item.provide) {
       const changes = addProviderToModule(moduleSource, modulePath, item.classifiedName, item.path);
