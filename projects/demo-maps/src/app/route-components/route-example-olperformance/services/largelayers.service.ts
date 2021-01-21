@@ -12,8 +12,8 @@ import {get as getProjection, getTransform} from 'ol/proj';
 import {register} from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import { HttpClient } from '@angular/common/http';
-import { LayersService, VectorLayer, CustomLayer } from '@dlr-eoc/services-layers/src/public-api';
-import { MapOlService } from '@dlr-eoc/map-ol/src/public-api';
+import { LayersService, VectorLayer, CustomLayer } from '@dlr-eoc/services-layers';
+import { MapOlService } from '@dlr-eoc/map-ol';
 import { Observable } from 'rxjs';
 import { all, bbox, tile } from 'ol/loadingstrategy';
 
@@ -47,7 +47,7 @@ export class LargeLayersService {
     });
   }
 
-  private getWfsSource(strategy: DataStrategy): VectorSource {
+  private getWfsSource(strategy: DataStrategy) {
 
     switch (strategy) {
       case 'all':

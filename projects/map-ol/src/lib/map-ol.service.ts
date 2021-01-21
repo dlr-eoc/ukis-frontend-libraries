@@ -62,7 +62,7 @@ import olEvent from 'ol/events/Event';
 import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
-import { flattenLayers } from '@dlr-eoc/utils-maps/src/public-api';
+import { flattenLayers } from '@dlr-eoc/utils-maps';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -1108,7 +1108,7 @@ export class MapOlService {
   }
 
   private isMovePopup(layerpopup) {
-    return (layerpopup && 'event' in layerpopup && layerpopup.event === 'move');
+    return (layerpopup && typeof layerpopup === 'object' && 'event' in layerpopup && layerpopup.event === 'move');
   }
 
   /** USED in map-ol.component */
