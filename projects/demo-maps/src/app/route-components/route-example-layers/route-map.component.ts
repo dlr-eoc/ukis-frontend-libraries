@@ -1,10 +1,15 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { ZommNumberControl } from './ol-custom-control';
 import { getFeatureInfoPopup } from './map-helpers';
+import testCities from '../../../assets/data/json/test-cities.json';
+import olStyle from 'ol/style/Style';
+import olFill from 'ol/style/Fill';
+import olCircleStyle from 'ol/style/Circle';
+import olStroke from 'ol/style/Stroke';
 
 @Component({
   selector: 'app-route-map',
@@ -322,6 +327,51 @@ export class RouteMapComponent implements OnInit {
       actions: [{ title: 'download', icon: 'download-cloud', action: (layer) => { console.log(layer); } }]
     });
 
+    const vectorLayerCluster = new VectorLayer({
+      id: "geojson_test_cluster",
+      name: "Cluster - GeoJSON Vector Layer",
+      type: "geojson",
+      cluster: {
+        distance: 20
+      },
+      data: testCities,
+      visible: true,
+      actions: [
+        {
+          title: 'update Layer',
+          icon: 'sync',
+          action: (layer) => {
+            layer.cluster.distance = 25;
+            if (!layer.options) {
+              layer.options = {};
+            }
+            layer.options.style = (feature) => {
+              const size = feature.get('features').length;
+              const style = new olStyle({
+                image: new olCircleStyle({
+                  radius: (size <= 1) ? 6 : 10,
+                  stroke: new olStroke({
+                    color: '#fff'
+                  }),
+                  fill: new olFill({
+                    color: (size <= 1) ? 'green' : 'red'
+                  })
+                })
+              });
+              return style;
+            }
+
+            this.layersSvc.updateLayer(layer);
+          }
+        }
+      ],
+      popup: {
+        pupupFunktion: options => {
+          return `<div>${JSON.stringify(options)} </div>`;
+        }
+      }
+    });
+
     const eocBasemap = new EocBasemapTile();
 
     const eocBaseoverlay = new EocBaseoverlayTile();
@@ -370,7 +420,7 @@ export class RouteMapComponent implements OnInit {
       }
     });
 
-    const overlays = [gufLayer, hillshade, groupLayer2, vectorLayer, vectorLayer3, groupLayer];
+    const overlays = [gufLayer, hillshade, groupLayer2, vectorLayer, vectorLayer3, groupLayer, vectorLayerCluster];
     overlays.map(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');

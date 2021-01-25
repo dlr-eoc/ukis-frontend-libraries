@@ -34,7 +34,8 @@ import olRotate from 'ol/control/Rotate';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olMapEvent from 'ol/MapEvent';
 import { Control as olControl } from 'ol/control';
-import olVectorSource from 'ol/source/Vector';
+import olSourceCluster from 'ol/source/Cluster';
+import olVectorLayer from 'ol/layer/Vector';
 
 
 export interface IMapControls {
@@ -231,22 +232,46 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         this.updateWmtsLayerParamsWith(oldLayer, newLayer as WmtsLayer);
         break;
       case GeojsonLayertype:
-        this.updateGeojsonLayerParamsWith(oldLayer, newLayer as VectorLayer);
+        this.updateGeojsonLayerParamsWith(oldLayer as any, newLayer as VectorLayer);
         break;
       default:
         break;
     }
   }
 
-  updateGeojsonLayerParamsWith(oldLayer: olLayer<any>, newGeojsonLayer: VectorLayer) {
-    if (newGeojsonLayer.data) {
-      const newSource = new olVectorSource({
-        features: this.mapSvc.geoJsonToFeatures(newGeojsonLayer.data),
-        wrapX: oldLayer.getSource().getWrapX() || false
-      });
-      oldLayer.setSource(newSource);
-    } else if (newGeojsonLayer.url) {
-      oldLayer.getSource().setUrl(newGeojsonLayer.url);
+  /**
+   * TODO: set all other props of GeoJsonLayer.options and GeoJsonLayer.cluster (see: IVectorLayerOptions)
+   */
+  updateGeojsonLayerParamsWith(oldLayer: olVectorLayer, newGeojsonLayer: VectorLayer) {
+    const oldSource = oldLayer.getSource();
+    if (oldSource) {
+      if (newGeojsonLayer.data) {
+        const features = this.mapSvc.geoJsonToFeatures(newGeojsonLayer.data)
+        if (oldSource instanceof olSourceCluster) {
+          const vectorSource = oldSource.getSource();
+          vectorSource.clear();
+          vectorSource.addFeatures(features);
+        } else {
+          oldSource.clear();
+          oldSource.addFeatures(features);
+        }
+      } else if (newGeojsonLayer.url) {
+        if (oldSource instanceof olSourceCluster) {
+          const vectorSource = oldSource.getSource();
+          vectorSource.setUrl(newGeojsonLayer.url);
+        } else {
+          oldSource.setUrl(newGeojsonLayer.url);
+        }
+      }
+
+      // 'distance' in also checks for 0 values
+      if (typeof newGeojsonLayer?.cluster === 'object' && 'distance' in newGeojsonLayer.cluster && oldSource instanceof olSourceCluster) {
+        oldSource.setDistance(newGeojsonLayer.cluster.distance);
+      }
+    }
+
+    if (newGeojsonLayer?.options?.style) {
+      oldLayer.setStyle(newGeojsonLayer.options.style);
     }
   }
 
