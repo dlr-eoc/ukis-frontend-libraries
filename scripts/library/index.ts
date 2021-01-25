@@ -99,11 +99,13 @@ function runBuilds(offset = 0, projects) {
  * Builds all projects from projectType = "library" and architect.build
  */
 async function buildAll() {
+  runCheckDeps()
   const result = await checkDeps(ANGULARJSON, packageScope);
   /** build ony if there are no missing deps */
   if (result.length) {
     result.map(e => formatCheckDepsOutput(e, false));
-    throw new Error(`check for missing dependencies`);
+    console.error(`check for missing dependencies`)
+    process.exit(1);
   } else {
     const buildableProjects = getProjects(ANGULARJSON).filter(item => item.build && item.type === 'library');
     const flattdepsAndProjects = getSortedProjects(buildableProjects, packageScope);
