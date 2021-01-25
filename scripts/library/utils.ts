@@ -96,7 +96,7 @@ export interface IcheckDepsOutput {
   usedDependencies?: string;
 }
 
-type RecursiveNode = Map<string, RecursiveNode>;
+type RecursiveMap = Map<string, RecursiveMap>;
 
 export function setVersionsforDependencies(paths: string[], MAINPACKAGE: IPackageJSON, placeholders: Iplaceholders, version = MAINPACKAGE.version) {
   const packageAllDeps = Object.assign(MAINPACKAGE.dependencies, MAINPACKAGE.devDependencies);
@@ -212,7 +212,7 @@ export function getProjects(angularJson: WorkspaceSchema) {
  * Use all Projects to get child dependencies as well
  */
 export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScope: string, withPeerDeps = false) {
-  const nodesmapGraph: Map<string, RecursiveNode> = new Map();
+  const nodesmapGraph: Map<string, RecursiveMap> = new Map();
   const edges: [string, string][] = [];
   /**
    * Map of depName: projectName
@@ -246,21 +246,31 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
       }
     }
   });
-  // console.log(testEdges);
-
-  // fill all null childs not get in the first iteration -> TODO: ist this really filling app all or do some deeper childs get missed
-  Array.from(nodesmapGraph.keys()).map(k => {
-    const childs = nodesmapGraph.get(k);
-    if (childs) {
-      Array.from(childs.keys()).map(ck => {
-        if (nodesmapGraph.has(ck)) {
-          childs.set(ck, nodesmapGraph.get(ck));
-        }
-      });
-    }
-  });
+  // fill all null childs not get in the first iteration
+  traverseUpdate(nodesmapGraph, nodesmapGraph);
   return { edges, nodes, nodesmapGraph };
 }
+
+
+function traverseUpdate(map: RecursiveMap, lookupTree: Map<string, RecursiveMap>) {
+  if (map.size) {
+    for (const [key, value] of map.entries()) {
+      if (!value) {
+        // if value of the key is null and the key is in the tree, replace the map key with the tree key if it is not null
+        if (lookupTree.has(key)) {
+          const treeKey = lookupTree.get(key);
+          if (treeKey) {
+            map.set(key, treeKey);
+          }
+        }
+      }
+      if (value instanceof Map) {
+        traverseUpdate(value, lookupTree);
+      }
+    }
+  }
+}
+
 
 export function getSortedProjects(projects: ICustomWorkspaceProject[], packageScope: string) {
   const graph = dependencyGraph(projects, packageScope);
@@ -365,7 +375,7 @@ export function formatCheckDepsOutput(error: IcheckDepsOutput, showUsed = false)
 
   if (error.invalidFiles.length > 2) {
     str += `
-  invalidFiles: ${ error.invalidFiles}`;
+  invalidFiles: ${error.invalidFiles}`;
   }
 
   if (showUsed) {
