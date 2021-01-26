@@ -4,9 +4,10 @@
  * node scripts/projectsVersion.js -l
  */
 
-import * as NG from '@angular/cli';
+import { fork } from 'child_process';
 import * as PATH from 'path';
 import * as FS from 'fs';
+import * as minimist from 'minimist';
 import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 import { IPackageJSON } from './npm-package.interface';
 import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
@@ -45,22 +46,24 @@ async function runCheckDeps() {
 
 function runTests(offset = 0, projects, headless = false) {
   const project = projects[offset];
-  const options = {
-    cliArgs: ['test', project, '--watch=false']
-  };
+  const cliArgs = ['test', project, '--watch=false'];
   if (headless) {
-    options.cliArgs.push('--browsers=ChromeHeadless');
+    cliArgs.push('--browsers=ChromeHeadless');
   }
-
   if (project) {
-    console.log(consoleLogColors.Bright, `>>> run ng ${options.cliArgs.join(' ')}`);
-    NG.default(options).then((result) => {
+    console.log(consoleLogColors.Bright, `>>> run ng ${cliArgs.join(' ')}`);
+    const child = fork(`${__dirname}/run-ng.js`, cliArgs);
+    child.on('close', (code, signal) => {
       offset++;
       if (offset >= projects.length) {
         process.exit(0);
       } else {
         runTests(offset, projects, headless);
       }
+    });
+    child.on('error', (err) => {
+      console.error(err);
+      process.exit(1);
     });
   }
 }
@@ -73,15 +76,11 @@ function testAll(headless = false) {
 
 function runBuilds(offset = 0, projects) {
   const project = projects[offset];
-
-  const options = {
-    cliArgs: ['build', '--prod=true', '--watch=false', project]
-  };
-
+  const cliArgs = ['build', '--prod=true', '--watch=false', project];
   if (project) {
-    console.log(consoleLogColors.Bright, `>>> run ng ${options.cliArgs.join(' ')}`);
-    // TODO: check if all deps build before
-    NG.default(options).then((result) => {
+    console.log(consoleLogColors.Bright, `---------------------->>> ${offset + 1}: run ng ${cliArgs.join(' ')}`);
+    const child = fork(`${__dirname}/run-ng.js`, cliArgs);
+    child.on('close', (code, signal) => {
       offset++;
       if (offset >= projects.length) {
         process.exit(0);
@@ -89,16 +88,24 @@ function runBuilds(offset = 0, projects) {
         runBuilds(offset, projects);
       }
     });
+    child.on('error', (err) => {
+      console.error(err);
+      process.exit(1);
+    });
   }
 }
 
-
+/**
+ * Builds all projects from projectType = "library" and architect.build
+ */
 async function buildAll() {
+  runCheckDeps()
   const result = await checkDeps(ANGULARJSON, packageScope);
   /** build ony if there are no missing deps */
   if (result.length) {
     result.map(e => formatCheckDepsOutput(e, false));
-    throw new Error(`check for missing dependencies`);
+    console.error(`check for missing dependencies`)
+    process.exit(1);
   } else {
     const buildableProjects = getProjects(ANGULARJSON).filter(item => item.build && item.type === 'library');
     const flattdepsAndProjects = getSortedProjects(buildableProjects, packageScope);
@@ -235,25 +242,26 @@ Options:
 /** TODO: maybe use yargs - it is installed anyway by other modules */
 export function run() {
   const args = process.argv.slice(2);
-  if (args.includes('-h') || args.includes('--help')) {
+  const argsObj = minimist(args);
+  if (argsObj.h || argsObj.help) {
     showHelp();
-  } else if (args.includes('-l') || args.includes('--list')) {
+  } else if (argsObj.l || argsObj.list) {
     listAllProjects();
-  } else if ((args.includes('-d') || args.includes('--deps')) && args.includes('--peer')) {
+  } else if ((argsObj.d || argsObj.deps) && argsObj.peer) {
     showProjectsAndDependencies(false, true);
-  } else if (args.includes('-d') || args.includes('--deps')) {
+  } else if (argsObj.d || argsObj.deps) {
     showProjectsAndDependencies();
-  } else if (args.includes('-s') || args.includes('--set')) {
+  } else if (argsObj.s || argsObj.set) {
     setVersionsOfProjects(true);
-  } else if (args.includes('-g') || args.includes('--graph')) {
+  } else if (argsObj.g || argsObj.graph) {
     showDependencyGraph();
-  } else if (args.includes('-c') || args.includes('--check')) {
+  } else if (argsObj.c || argsObj.check) {
     runCheckDeps();
-  } else if ((args.includes('-t') || args.includes('--test')) && args.includes('--headless')) {
+  } else if ((argsObj.t || argsObj.test) && argsObj.headless) {
     testAll(true);
-  } else if (args.includes('-t') || args.includes('--test')) {
+  } else if (argsObj.t || argsObj.test) {
     testAll();
-  } else if (args.includes('-b') || args.includes('--build')) {
+  } else if (argsObj.b || argsObj.build) {
     buildAll().catch(err => {
       console.log(err);
     });
