@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Type, ComponentFactoryResolver, ApplicationRef, Injector } from '@angular/core';
 
 
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent } from '@dlr-eoc/services-layers';
@@ -97,7 +97,11 @@ export class MapOlService {
   private hitTolerance = 0;
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
-  constructor() {
+  constructor(
+    private crf: ComponentFactoryResolver,
+    private app: ApplicationRef,
+    private injector: Injector
+  ) {
     this.map = new olMap({ controls: [] });
     this.view = new olView();
     this.EPSG = WebMercator;
@@ -1450,14 +1454,22 @@ export class MapOlService {
     let popupHtml = '';
     if (args.popupFn) {
       popupHtml = args.popupFn(popupObj);
-    } else if (args.dynamicPopup) {
-      // @TODO: insert angular component into `content` element.
     } else if (html && (!popupObj || Object.keys(popupObj).length === 0)) {
       popupHtml = html;
     } else {
       popupHtml = this.createPopupHtml(popupObj);
     }
     content.innerHTML = popupHtml;
+    if (args.dynamicPopup) {
+      const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
+      const popupBody = factory.create(this.injector, [], content);
+      for (const key in args.dynamicPopup.attributes) {
+        if (args.dynamicPopup.attributes[key] !== 'undefined') {
+          popupBody.instance[key] = args.dynamicPopup.attributes[key];
+        }
+      }
+      this.app.attachView(popupBody.hostView);
+    }
 
     const container = document.createElement('div');
     container.className = 'ol-popup';

@@ -238,7 +238,9 @@ export class RouteMapComponent implements OnInit {
         event: 'move',
         dynamicPopup: {
           component: TablePopupComponent,
-          attributes: {}
+          attributes: {
+            data: [1, 2, 3]
+          }
         }
       }
     });
