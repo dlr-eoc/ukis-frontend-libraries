@@ -1,4 +1,4 @@
-import { Injectable, Type, ComponentFactoryResolver, ApplicationRef, Injector } from '@angular/core';
+import { Injectable, Type, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
 
 
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent } from '@dlr-eoc/services-layers';
@@ -82,7 +82,7 @@ export interface IPopupArgs {
   popupFn?: popup['pupupFunktion'];
   dynamicPopup?: {
     component: Type<any>;
-    attributes: object;
+    getAttributes: (args: IPopupArgs) => object;
   };
 }
 
@@ -1463,9 +1463,10 @@ export class MapOlService {
     if (args.dynamicPopup) {
       const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
       const popupBody = factory.create(this.injector, [], content);
-      for (const key in args.dynamicPopup.attributes) {
-        if (args.dynamicPopup.attributes[key] !== 'undefined') {
-          popupBody.instance[key] = args.dynamicPopup.attributes[key];
+      const attributes = args.dynamicPopup.getAttributes(args);
+      for (const key in attributes) {
+        if (attributes[key] !== 'undefined') {
+          popupBody.instance[key] = attributes[key];
         }
       }
       this.app.attachView(popupBody.hostView);

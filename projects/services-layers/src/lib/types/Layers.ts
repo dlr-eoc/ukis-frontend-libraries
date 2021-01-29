@@ -40,7 +40,7 @@ export interface popup {
   /** create popup using angular component */
   dynamicPopup?: {
     component: Type<any>;
-    attributes: object;
+    getAttributes: (args: any) => object;
   };
   /** default event is click - use move for a popup on hover */
   event?: 'move' | 'click';
