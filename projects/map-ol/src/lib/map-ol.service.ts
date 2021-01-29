@@ -97,7 +97,12 @@ export class MapOlService {
   private hitTolerance = 0;
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
+  /**
+   * This object keeps track of currently bound angular-components that are being used as popups.
+   * We keep a reference to them here so that we can remove them again after they are no longer displayed.
+   */
   private dynamicPopupComponents: {[key: string]: ComponentRef<any>} = {};
+  
   constructor(
     private crf: ComponentFactoryResolver,
     private app: ApplicationRef,
