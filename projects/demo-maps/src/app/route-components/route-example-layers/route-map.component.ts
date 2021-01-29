@@ -239,7 +239,7 @@ export class RouteMapComponent implements OnInit {
         dynamicPopup: {
           component: TablePopupComponent,
           attributes: {
-            data: [1, 2, 3]
+            data: {'a': 1, 'b': 2, 'c': 3}
           }
         }
       }
