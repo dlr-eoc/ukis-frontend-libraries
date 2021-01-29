@@ -35,6 +35,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
 import { Subject } from 'rxjs';
 import { retry } from 'rxjs/operators';
+import { ApplicationRef, Component, Input } from '@angular/core';
 
 
 const WebMercator = 'EPSG:3857';
@@ -93,8 +94,20 @@ const createMapTarget = () => {
   };
 };
 
+
+@Component({
+  selector: 'app-mock-popup',
+  template: `<div>{{ data | json }}</div>`
+})
+class MockPopupComponent {
+  @Input() data: any;
+  constructor() {}
+}
+
 const beforeEachFn = () => {
-  TestBed.configureTestingModule({});
+  TestBed.configureTestingModule({
+    declarations: [MockPopupComponent]
+  });
 
   rasterLayer = new olTileLayer({
     source: new olXYZ({
@@ -789,6 +802,41 @@ describe('MapOlService popup', () => {
     });
 
   });
+
+  it('should not leak any angular-components when creating & removing dynamic-component-popups', () => {
+
+    const service: MapOlService = TestBed.inject(MapOlService);
+    const appRef = TestBed.get(ApplicationRef) as ApplicationRef;
+    service.createMap();
+
+    expect(service.getPopups().length).toBe(0);
+    expect(appRef.viewCount).toEqual(0);
+
+    const feature = vectorLayer.getSource().getFeatures()[0];
+    const popupProperties = feature.getProperties();
+    const popupArgs: IPopupArgs = {
+      modelName: vectorLayer.get('id'),
+      properties: popupProperties,
+      layer: vectorLayer,
+      feature,
+      event: { type: 'click', coordinate: [1312192.0073726526, 5444712.8273727745] } as any,
+      dynamicPopup: {
+        component: MockPopupComponent,
+        getAttributes: (args: any) => {
+          return {data: [1, 2, 3]};
+        }
+      }
+    };
+    service.addPopup(popupArgs, popupProperties, null);
+
+    expect(service.getPopups().length).toBe(1);
+    expect(appRef.viewCount).toEqual(1);
+
+    service.removeAllPopups();
+
+    expect(service.getPopups().length).toBe(0);
+    expect(appRef.viewCount).toEqual(0);
+  })
 });
 
 describe('MapOlService Events', () => {
