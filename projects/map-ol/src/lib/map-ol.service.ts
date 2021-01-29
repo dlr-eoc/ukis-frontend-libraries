@@ -1444,12 +1444,7 @@ export class MapOlService {
       const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
       if (hasPopup) {
         this.map.removeOverlay(hasPopup);
-        const id = hasPopup.getId().toString();
-        if (this.dynamicPopupComponents[id]) {
-          const compRef = this.dynamicPopupComponents[id];
-          compRef.destroy();
-          delete this.dynamicPopupComponents[id];
-        }
+        this.destroyDynamicPopupComponent(hasPopup.getId().toString());
       }
       this.map.addOverlay(overlay);
     }
@@ -1472,20 +1467,8 @@ export class MapOlService {
       // if a popup already has been created (for example `popup_move_ID`),
       // then destroy it before creating a new one.
       const id = overlay.getId().toString();
-      if (this.dynamicPopupComponents[id]) {
-        this.dynamicPopupComponents[id].destroy();
-        delete this.dynamicPopupComponents[id];
-      }
-      const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
-      const popupBody = factory.create(this.injector, [], content);
-      const attributes = args.dynamicPopup.getAttributes(args);
-      for (const key in attributes) {
-        if (attributes[key] !== 'undefined') {
-          popupBody.instance[key] = attributes[key];
-        }
-      }
-      this.app.attachView(popupBody.hostView);
-      this.dynamicPopupComponents[id] = popupBody;
+      this.destroyDynamicPopupComponent(id);
+      this.createDynamicPopupComponent(id, content, args);
     }
 
     const container = document.createElement('div');
@@ -1501,12 +1484,7 @@ export class MapOlService {
       const closeFunction = () => {
         closer.removeEventListener('click', closeFunction, false);
         this.map.removeOverlay(overlay);
-        const id = overlay.getId().toString();
-        if (this.dynamicPopupComponents[id]) {
-          const compRef = this.dynamicPopupComponents[id];
-          compRef.destroy();
-          delete this.dynamicPopupComponents[id];
-        }
+        this.destroyDynamicPopupComponent(overlay.getId().toString());
       };
       closer.addEventListener('click', closeFunction, false);
     }
@@ -1523,12 +1501,7 @@ export class MapOlService {
     popups.forEach((overlay) => {
       if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
         this.map.removeOverlay(overlay);
-        const id = overlay.getId().toString();
-        if (this.dynamicPopupComponents[id]) {
-          const compRef = this.dynamicPopupComponents[id];
-          compRef.destroy();
-          delete this.dynamicPopupComponents[id];
-        }
+        this.destroyDynamicPopupComponent(overlay.getId().toString());
       }
     });
   }
@@ -1554,6 +1527,29 @@ export class MapOlService {
     });
     return popups;
   }
+
+  private destroyDynamicPopupComponent(id: string): void {
+    if (this.dynamicPopupComponents[id]) {
+      this.dynamicPopupComponents[id].destroy();
+      delete this.dynamicPopupComponents[id];
+    }
+  }
+
+  private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, args: IPopupArgs): void {
+    if (args.dynamicPopup) {
+      const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
+      const popupBody = factory.create(this.injector, [], anchorElement);
+      const attributes = args.dynamicPopup.getAttributes(args);
+      for (const key in attributes) {
+        if (attributes[key] !== 'undefined') {
+          popupBody.instance[key] = attributes[key];
+        }
+      }
+      this.app.attachView(popupBody.hostView);
+      this.dynamicPopupComponents[id] = popupBody;
+    }
+  }
+
   /**
    *
    * @param extent: [minX, minY, maxX, maxY]
