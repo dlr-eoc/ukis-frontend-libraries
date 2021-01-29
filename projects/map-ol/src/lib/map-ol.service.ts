@@ -82,7 +82,7 @@ export interface IPopupArgs {
   popupFn?: popup['pupupFunktion'];
   dynamicPopup?: {
     component: Type<any>;
-    getAttributes: (args: IPopupArgs) => object;
+    getAttributes?: (args: IPopupArgs) => object;
   };
 }
 
@@ -1443,7 +1443,9 @@ export class MapOlService {
 
       const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
       if (hasPopup) {
+        // removes ol-part of popup
         this.map.removeOverlay(hasPopup);
+        // removes angular-part of popup
         this.destroyDynamicPopupComponent(hasPopup.getId().toString());
       }
       this.map.addOverlay(overlay);
@@ -1464,10 +1466,11 @@ export class MapOlService {
     content.innerHTML = popupHtml;
     if (args.dynamicPopup) {
       // To prevent memory leak:
-      // if a popup already has been created (for example `popup_move_ID`),
+      // if this very popup already has been created (for example `popup_move_ID`),
       // then destroy it before creating a new one.
       const id = overlay.getId().toString();
       this.destroyDynamicPopupComponent(id);
+      // Only now create a new one.
       this.createDynamicPopupComponent(id, content, args);
     }
 
@@ -1483,7 +1486,9 @@ export class MapOlService {
 
       const closeFunction = () => {
         closer.removeEventListener('click', closeFunction, false);
+        // removes ol-part of popup
         this.map.removeOverlay(overlay);
+        // removes angular-part of popup
         this.destroyDynamicPopupComponent(overlay.getId().toString());
       };
       closer.addEventListener('click', closeFunction, false);
@@ -1500,7 +1505,9 @@ export class MapOlService {
     }
     popups.forEach((overlay) => {
       if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
+        // removes ol-part of popup
         this.map.removeOverlay(overlay);
+        // removes angular-part of popup
         this.destroyDynamicPopupComponent(overlay.getId().toString());
       }
     });
@@ -1528,6 +1535,13 @@ export class MapOlService {
     return popups;
   }
 
+  /**
+   * Destroys a popup-component.
+   *  - kills the component (with `.destroy()`)
+   *  - detaches it from angular-application (with `.destroy()`)
+   *  - removes the entry from `this.dynamicPopupComponents`
+   * @param id : The string under which the popup-component has been stored in `this.dynamicPopupComponents`
+   */
   private destroyDynamicPopupComponent(id: string): void {
     if (this.dynamicPopupComponents[id]) {
       this.dynamicPopupComponents[id].destroy();
@@ -1535,6 +1549,16 @@ export class MapOlService {
     }
   }
 
+  /**
+   * Creates an angular component to be used as popup-body.
+   *  - creates component
+   *  - attaches component-view to angular-application
+   *  - keeps reference to component in `this.dynamicPopupComponents` for later removal.
+   *
+   * @param id : The container-id. Also the id under which the component will be stored in `this.dynamicPopupComponents`.
+   * @param anchorElement : The html-element to which the popup-component shall be attached
+   * @param args : Must contain `dynamicPopup`
+   */
   private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, args: IPopupArgs): void {
     if (args.dynamicPopup) {
       const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
