@@ -1379,8 +1379,8 @@ export class MapOlService {
       } else {
         coordinate = args.event.coordinate;
       }
-      // const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
-      // movePopup.setElement(container);
+      const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
+      movePopup.setElement(container);
       movePopup.setPosition(coordinate);
     } else if (args.event.type === 'pointermove' && !event) {
       /** remove move popup if move on a click layer */
@@ -1468,6 +1468,14 @@ export class MapOlService {
     }
     content.innerHTML = popupHtml;
     if (args.dynamicPopup) {
+      // To prevent memory leak:
+      // if a popup already has been created (for example `popup_move_ID`),
+      // then destroy it before creating a new one.
+      const id = overlay.getId().toString();
+      if (this.dynamicPopupComponents[id]) {
+        this.dynamicPopupComponents[id].destroy();
+        delete this.dynamicPopupComponents[id];
+      }
       const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
       const popupBody = factory.create(this.injector, [], content);
       const attributes = args.dynamicPopup.getAttributes(args);
@@ -1477,7 +1485,6 @@ export class MapOlService {
         }
       }
       this.app.attachView(popupBody.hostView);
-      const id = overlay.getId().toString();
       this.dynamicPopupComponents[id] = popupBody;
     }
 
