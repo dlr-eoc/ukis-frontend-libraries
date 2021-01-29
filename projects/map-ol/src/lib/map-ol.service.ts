@@ -97,6 +97,7 @@ export class MapOlService {
   private hitTolerance = 0;
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
+  private dynamicPopupComponents: {[key: string]: ComponentRef<any>} = {};
   constructor(
     private crf: ComponentFactoryResolver,
     private app: ApplicationRef,
@@ -1443,6 +1444,12 @@ export class MapOlService {
       const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
       if (hasPopup) {
         this.map.removeOverlay(hasPopup);
+        const id = hasPopup.getId().toString();
+        if (this.dynamicPopupComponents[id]) {
+          const compRef = this.dynamicPopupComponents[id];
+          compRef.destroy();
+          delete this.dynamicPopupComponents[id];
+        }
       }
       this.map.addOverlay(overlay);
     }
@@ -1470,6 +1477,8 @@ export class MapOlService {
         }
       }
       this.app.attachView(popupBody.hostView);
+      const id = overlay.getId().toString();
+      this.dynamicPopupComponents[id] = popupBody;
     }
 
     const container = document.createElement('div');
@@ -1485,6 +1494,12 @@ export class MapOlService {
       const closeFunction = () => {
         closer.removeEventListener('click', closeFunction, false);
         this.map.removeOverlay(overlay);
+        const id = overlay.getId().toString();
+        if (this.dynamicPopupComponents[id]) {
+          const compRef = this.dynamicPopupComponents[id];
+          compRef.destroy();
+          delete this.dynamicPopupComponents[id];
+        }
       };
       closer.addEventListener('click', closeFunction, false);
     }
@@ -1501,6 +1516,12 @@ export class MapOlService {
     popups.forEach((overlay) => {
       if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
         this.map.removeOverlay(overlay);
+        const id = overlay.getId().toString();
+        if (this.dynamicPopupComponents[id]) {
+          const compRef = this.dynamicPopupComponents[id];
+          compRef.destroy();
+          delete this.dynamicPopupComponents[id];
+        }
       }
     });
   }
