@@ -1379,8 +1379,8 @@ export class MapOlService {
       } else {
         coordinate = args.event.coordinate;
       }
-      const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
-      movePopup.setElement(container);
+      // const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
+      // movePopup.setElement(container);
       movePopup.setPosition(coordinate);
     } else if (args.event.type === 'pointermove' && !event) {
       /** remove move popup if move on a click layer */
