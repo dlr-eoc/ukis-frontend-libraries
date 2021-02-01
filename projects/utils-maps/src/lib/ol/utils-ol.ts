@@ -11,8 +11,8 @@ import Interaction from 'ol/interaction/Interaction';
 
 
 
-export function flattenLayers(layers: BaseLayer[]): Layer[] {
-    let flattenedLayers: Layer[] = [];
+export function flattenLayers(layers: BaseLayer[]): Layer<any>[] {
+    let flattenedLayers: Layer<any>[] = [];
     for (const layer of layers) {
         if (layer instanceof LayerGroup) {
             const subLayers = layer.getLayers().getArray();
@@ -21,7 +21,7 @@ export function flattenLayers(layers: BaseLayer[]): Layer[] {
         } else {
             // this cast is ok: since `layer` is no LayerGroup, it must be a Layer.
             // See the `Subclasses` section here: https://openlayers.org/en/latest/apidoc/module-ol_layer_Base-BaseLayer.html
-            flattenedLayers.push(layer as Layer);
+            flattenedLayers.push(layer as Layer<any>);
         }
     }
     return flattenedLayers;
@@ -75,7 +75,11 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
                 // Step 3: copy source bitmap to target-canvas.
                 targetContext.drawImage(sourceCanvas, 0, 0, sourceCanvas.clientWidth, sourceCanvas.clientHeight, 0, 0, targetCanvas.width, targetCanvas.height);
             });
-            subscriptions.push(key);
+            if (Array.isArray(key)){
+              key.map(k => subscriptions.push(k));
+            }else{
+              subscriptions.push(key);
+            }
         }
     }
 
@@ -142,7 +146,7 @@ export function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElemen
 /**
  * A comfort-function for getting a snapshot of a map into a canvas.
  * Halts all map-interactions to prevent the user from panning the map during rendering.
- * Sets the canvas' internal drawing-buffer-size: this way, the canvas' contents can be exported 
+ * Sets the canvas' internal drawing-buffer-size: this way, the canvas' contents can be exported
  * in the drawing-buffer-size, which may differ from the display-size (the latter is set by the DOM/CSS).
  *
  * Example usage:

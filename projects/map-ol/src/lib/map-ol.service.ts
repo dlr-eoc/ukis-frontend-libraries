@@ -1122,7 +1122,7 @@ export class MapOlService {
   }
 
   private isMovePopup(layerpopup) {
-    return (layerpopup && 'event' in layerpopup && layerpopup.event === 'move');
+    return (layerpopup && typeof layerpopup === 'object' && 'event' in layerpopup && layerpopup.event === 'move');
   }
 
   /** USED in map-ol.component */

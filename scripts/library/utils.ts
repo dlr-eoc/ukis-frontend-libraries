@@ -96,7 +96,7 @@ export interface IcheckDepsOutput {
   usedDependencies?: string;
 }
 
-
+type RecursiveMap = Map<string, RecursiveMap>;
 
 export function setVersionsforDependencies(paths: string[], MAINPACKAGE: IPackageJSON, placeholders: Iplaceholders, version = MAINPACKAGE.version) {
   const packageAllDeps = Object.assign(MAINPACKAGE.dependencies, MAINPACKAGE.devDependencies);
@@ -204,26 +204,28 @@ export function getProjects(angularJson: WorkspaceSchema) {
   return projects;
 }
 
+
 /**
- * build dependency graph from projects
- * TODO check dependencies in libs project name!!!!
+ * build dependency graph from all Projects in angular.json 'projects'
+ * get the dependencies for each project from it'spackage.json
+ *
+ * Use all Projects to get child dependencies as well
  */
 export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScope: string, withPeerDeps = false) {
-  const nodesmapGraph: Map<string, any> = new Map();
+  const nodesmapGraph: Map<string, RecursiveMap> = new Map();
   const edges: [string, string][] = [];
   /**
    * Map of depName: projectName
    */
-  const nodes: Map<string, string> = new Map();
+  const nodes: string[] = [];
   projects.forEach((project) => {
     if (FS.existsSync(project.packagePath)) { // check not working ???
       const projectPackage = require(project.packagePath);
       const packageProjectName = projectPackage.name.replace(packageScope, '');
-      nodes.set(packageProjectName, project.name);
+      nodes.push(packageProjectName);
       if (projectPackage.dependencies) {
-
         const projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
-        if (projectDeps.length > 0) {
+        if (projectDeps.length) {
           const depsObj: Map<string, any> = new Map();
           projectDeps.forEach((dep) => {
             if (nodesmapGraph.has(dep)) {
@@ -234,31 +236,48 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
             edges.push([dep, packageProjectName]);
           });
           nodesmapGraph.set(packageProjectName, depsObj);
+        } else {
+          // if project has no dependencies with packageScope
+          nodesmapGraph.set(packageProjectName, null);
         }
       } else {
+        // if project has no dependencies at all
         nodesmapGraph.set(packageProjectName, null);
       }
     }
   });
+  // fill all null childs not get in the first iteration
+  traverseUpdate(nodesmapGraph, nodesmapGraph);
   return { edges, nodes, nodesmapGraph };
 }
+
+
+function traverseUpdate(map: RecursiveMap, lookupTree: Map<string, RecursiveMap>) {
+  if (map.size) {
+    for (const [key, value] of map.entries()) {
+      if (!value) {
+        // if value of the key is null and the key is in the tree, replace the map key with the tree key if it is not null
+        if (lookupTree.has(key)) {
+          const treeKey = lookupTree.get(key);
+          if (treeKey) {
+            map.set(key, treeKey);
+          }
+        }
+      }
+      if (value instanceof Map) {
+        traverseUpdate(value, lookupTree);
+      }
+    }
+  }
+}
+
 
 export function getSortedProjects(projects: ICustomWorkspaceProject[], packageScope: string) {
   const graph = dependencyGraph(projects, packageScope);
   const edges = graph.edges;
-  const nodes = Array.from(graph.nodes.keys());
-  /** toposort array nodes:string[], edges: string[][] */
+  const nodes = graph.nodes;
   const flattdeps = toposort.array(nodes, edges);
-  const flattdepsAndProjects: string[] = flattdeps.map(i => {
-    const hasKey = graph.nodes.has(i);
-    if (hasKey) {
-      return graph.nodes.get(i);
-    } else {
-      return i;
-    }
-  });
-
-  return flattdepsAndProjects;
+  return flattdeps;
 }
 
 /**
@@ -356,7 +375,7 @@ export function formatCheckDepsOutput(error: IcheckDepsOutput, showUsed = false)
 
   if (error.invalidFiles.length > 2) {
     str += `
-  invalidFiles: ${ error.invalidFiles}`;
+  invalidFiles: ${error.invalidFiles}`;
   }
 
   if (showUsed) {
