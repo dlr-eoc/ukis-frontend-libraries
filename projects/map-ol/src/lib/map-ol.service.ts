@@ -73,6 +73,10 @@ const TITLE_KEY = 'title';
 const WebMercator = 'EPSG:3857';
 const WGS84 = 'EPSG:4326';
 
+/**
+ * While @dlr-eoc/services-layers.popup already contains instructions about how to build a popup,
+ * IPopupArgs adds additional, map-ol-specific context like the olLayer, the feature, and the olMapBrowserEvent.
+ */
 export interface IPopupArgs {
   modelName: string;
   properties: any;
@@ -81,6 +85,16 @@ export interface IPopupArgs {
   event: olMapBrowserEvent<PointerEvent>;
   popupFn?: popup['pupupFunktion'];
   dynamicPopup?: popup['dynamicPopup'];
+}
+
+/**
+ * In dynamic popups we want even more context-information than in static popups.
+ * Most notably, we want @dlr-eoc/services-layers.popup.filterkeys and
+ * @dlr-eoc/services-layers.popup.properties to be available, too.
+ */
+export interface IDynamicPopupArgs extends IPopupArgs {
+  properties: popup;
+  dynamicPopup: popup['dynamicPopup'];
 }
 
 @Injectable({
@@ -1473,7 +1487,15 @@ export class MapOlService {
       const id = overlay.getId().toString();
       this.destroyDynamicPopupComponent(id);
       // Only now create a new one.
-      this.createDynamicPopupComponent(id, content, args);
+      const dArgs: IDynamicPopupArgs = {
+        modelName: args.modelName,
+        event: args.event,
+        layer: args.layer,
+        feature: args.feature || null,
+        dynamicPopup: args.dynamicPopup,
+        properties: popupObj,
+      };
+      this.createDynamicPopupComponent(id, content, dArgs);
     }
 
     const container = document.createElement('div');
@@ -1561,19 +1583,17 @@ export class MapOlService {
    * @param anchorElement : The html-element to which the popup-component shall be attached
    * @param args : Must contain `dynamicPopup`
    */
-  private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, args: IPopupArgs): void {
-    if (args.dynamicPopup) {
-      const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
-      const popupBody = factory.create(this.injector, [], anchorElement);
-      const attributes = args.dynamicPopup.getAttributes(args);
-      for (const key in attributes) {
-        if (attributes[key] !== 'undefined') {
-          popupBody.instance[key] = attributes[key];
-        }
+  private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, args: IDynamicPopupArgs): void {
+    const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
+    const popupBody = factory.create(this.injector, [], anchorElement);
+    const attributes = args.dynamicPopup.getAttributes(args);
+    for (const key in attributes) {
+      if (attributes[key] !== 'undefined') {
+        popupBody.instance[key] = attributes[key];
       }
-      this.app.attachView(popupBody.hostView);
-      this.dynamicPopupComponents[id] = popupBody;
     }
+    this.app.attachView(popupBody.hostView);
+    this.dynamicPopupComponents[id] = popupBody;
   }
 
   /**
