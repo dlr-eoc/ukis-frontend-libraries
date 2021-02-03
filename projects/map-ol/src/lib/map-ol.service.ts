@@ -80,10 +80,7 @@ export interface IPopupArgs {
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
   popupFn?: popup['pupupFunktion'];
-  dynamicPopup?: {
-    component: Type<any>;
-    getAttributes?: (args: IPopupArgs) => object;
-  };
+  dynamicPopup?: popup['dynamicPopup'];
 }
 
 @Injectable({
@@ -101,8 +98,8 @@ export class MapOlService {
    * This object keeps track of currently bound angular-components that are being used as popups.
    * We keep a reference to them here so that we can remove them again after they are no longer displayed.
    */
-  private dynamicPopupComponents: {[key: string]: ComponentRef<any>} = {};
-  
+  private dynamicPopupComponents: Map<string, ComponentRef<any>> = new Map();
+
   constructor(
     private crf: ComponentFactoryResolver,
     private app: ApplicationRef,
@@ -1548,9 +1545,9 @@ export class MapOlService {
    * @param id : The string under which the popup-component has been stored in `this.dynamicPopupComponents`
    */
   private destroyDynamicPopupComponent(id: string): void {
-    if (this.dynamicPopupComponents[id]) {
-      this.dynamicPopupComponents[id].destroy();
-      delete this.dynamicPopupComponents[id];
+    if (this.dynamicPopupComponents.has(id)) {
+      this.dynamicPopupComponents.get(id).destroy();
+      this.dynamicPopupComponents.delete(id);
     }
   }
 
