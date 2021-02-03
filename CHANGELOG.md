@@ -11,18 +11,8 @@
 ### Features
 * **dlr-eoc/map-ol:**:
   - now allows for angular-components in popups. In any Ukis-Layer, just add a `dynamicPopup` field to the `popup` property.
-    ```typescript
-    popup: {
-        ...
-        dynamicPopup: {
-          component: SomeComponent,
-          getAttributes: (args: IPopupArgs) => {
-            return {... allInputsOfSomeComponent};
-          }
-        }
-      }
-    ```
-    If the popup-component requires any `@Input`'s, provide these with `getAttributes(args: IPopupArgs)`.
+    If the popup-component requires any `@Input`'s, provide these with `getAttributes(args: IPopupArgs)`. 
+    Addresses [Issue #14](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/14)
 * **@dlr-eoc/utils-maps:**:
   - created new custom renderer `InterpolationRenderer`.
     - Takes a vector-source (or a clustered vector-source) and does inverse-distance-interpolation on every pixel between the data points.
