@@ -79,7 +79,7 @@ const WGS84 = 'EPSG:4326';
  */
 export interface IPopupArgs {
   modelName: string;
-  properties: popup['properties']; // have been filtered beforehand by popup['filterkeys'] (if given)
+  properties: popup['properties']; // will be filtered by popup['filterkeys'] (if given)
   layer: olLayer<any>;
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
@@ -89,7 +89,7 @@ export interface IPopupArgs {
 
 
 export interface IDynamicPopupArgs {
-  properties: popup['properties']; // have been filtered beforehand by popup['filterkeys'] (if given)
+  properties: popup['properties']; // will be filtered by popup['filterkeys'] (if given)
   layer: IPopupArgs['layer'];
   feature?: IPopupArgs['feature'];
   event: olMapBrowserEvent<PointerEvent>;
