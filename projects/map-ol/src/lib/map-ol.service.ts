@@ -79,7 +79,7 @@ const WGS84 = 'EPSG:4326';
  */
 export interface IPopupArgs {
   modelName: string;
-  properties: any;
+  properties: popup['properties'];
   layer: olLayer<any>;
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
@@ -92,8 +92,11 @@ export interface IPopupArgs {
  * Most notably, we want @dlr-eoc/services-layers.popup.filterkeys and
  * @dlr-eoc/services-layers.popup.properties to be available, too.
  */
-export interface IDynamicPopupArgs extends IPopupArgs {
-  properties: popup;
+export interface IDynamicPopupArgs {
+  properties: popup['properties'];
+  layer: IPopupArgs['layer'];
+  feature?: IPopupArgs['feature'];
+  event: olMapBrowserEvent<PointerEvent>;
   dynamicPopup: popup['dynamicPopup'];
 }
 
@@ -1488,7 +1491,6 @@ export class MapOlService {
       this.destroyDynamicPopupComponent(id);
       // Only now create a new one.
       const dArgs: IDynamicPopupArgs = {
-        modelName: args.modelName,
         event: args.event,
         layer: args.layer,
         feature: args.feature || null,
