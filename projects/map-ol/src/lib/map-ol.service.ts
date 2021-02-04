@@ -79,7 +79,7 @@ const WGS84 = 'EPSG:4326';
  */
 export interface IPopupArgs {
   modelName: string;
-  properties: popup['properties'];
+  properties: popup['properties']; // have been filtered beforehand by popup['filterkeys'] (if given)
   layer: olLayer<any>;
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
@@ -87,13 +87,9 @@ export interface IPopupArgs {
   dynamicPopup?: popup['dynamicPopup'];
 }
 
-/**
- * In dynamic popups we want even more context-information than in static popups.
- * Most notably, we want @dlr-eoc/services-layers.popup.filterkeys and
- * @dlr-eoc/services-layers.popup.properties to be available, too.
- */
+
 export interface IDynamicPopupArgs {
-  properties: popup['properties'];
+  properties: popup['properties']; // have been filtered beforehand by popup['filterkeys'] (if given)
   layer: IPopupArgs['layer'];
   feature?: IPopupArgs['feature'];
   event: olMapBrowserEvent<PointerEvent>;

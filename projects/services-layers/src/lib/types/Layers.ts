@@ -29,9 +29,9 @@ export interface ILayerStyleSet extends IAnyObject {
 }
 
 export interface popup {
-  /** limit properties */
+  /** limit layer or feature properties: only those properties of a layer/feature, that are listed in this array, are being passed through to a popup-render-function */
   filterkeys?: Array<string>;
-  /** To overwrite the keys of the layer properties */
+  /** To overwrite the keys (and only the keys) of the layer/feature properties. Object has the form {"oldKey": "newKey"} */
   properties?: IAnyObject;
   /** function to create html string - popupobj: nativeLayer */
   pupupFunktion?: (popupobj: IAnyObject) => string;
