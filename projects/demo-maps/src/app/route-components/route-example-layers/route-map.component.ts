@@ -2,9 +2,10 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
-import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
 import { ZommNumberControl } from './ol-custom-control';
 import { getFeatureInfoPopup } from './map-helpers';
+import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
 import testCities from '../../../assets/data/json/test-cities.json';
 import olStyle from 'ol/style/Style';
 import olFill from 'ol/style/Fill';
@@ -238,7 +239,15 @@ export class RouteMapComponent implements OnInit {
         ]
       },
       visible: false,
-      popup: { event: 'move' }
+      popup: {
+        event: 'move',
+        dynamicPopup: {
+          component: TablePopupComponent,
+          getAttributes: (args: IDynamicPopupArgs) => {
+            return {data: args.properties};
+          }
+        }
+      }
     });
 
     const vectorLayer3 = new VectorLayer({

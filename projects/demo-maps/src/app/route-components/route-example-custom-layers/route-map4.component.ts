@@ -280,8 +280,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: true,
       popup: {
         event: 'move',
-        filterkeys: ['name', 'region_un', 'region_wb'],
-        properties: { name: 'Name' },
+        filterkeys: ['name', 'region_un', 'region_wb'],  // of all the feature's properties, only pass these to the popup-render-function
+        properties: { name: 'Name' },  // rename the feature.property key "name" to "Name"
         options: { autoPan: false }
       },
       custom_layer: new olVectorTileLayer({
