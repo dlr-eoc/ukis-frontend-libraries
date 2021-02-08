@@ -1,0 +1,50 @@
+name: "Check Tags"
+description: "Check git tag and npm version for a repository to prevent wrong publications."
+inputs:
+  npmPackageName: # id of input
+    description: "The npm package to get the latest version from the npm registry."
+    required: false
+    default: "@dlr-eoc/core-ui"
+  npmPackageVersion:
+    description: "The latest Version of the npm package. Use either this or npmPackageName"
+    required: false
+  packagePath:
+    description: "The path to the package.json in the repository."
+    required: false
+    default: "./package.json"
+
+runs:
+  using: "composite"
+  steps:
+    - run: git fetch --prune --all --unshallow --tags
+      shell: bash
+
+      # Check if the latest git Tag is the same as the repo npm version
+      # Check if the repo npm version is not the same as the latest version on npm (normally it would be better to check if the version is higher but this is more complicated)
+    - run: |
+        path="${GITHUB_ACTION_PATH/.\//''}"
+
+        latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
+
+        reqVersion="require('${{ inputs.packagePath }}').version"
+        packageVersion=$(node -p $reqVersion)
+
+        packageName="${{ inputs.npmPackageName}}"
+        latestNpmVerion=$(npm show "$packageName" version)
+
+        if [ "${{ inputs.npmPackageVersion }}" ]
+        then
+          latestNpmVerion="${{ inputs.npmPackageVersion }}"
+        fi
+
+
+        if [ "${latestTag:1}" == "$packageVersion" ] && [ "$packageVersion"  != "$latestNpmVerion" ]
+        then
+          echo "Tag:${latestTag} == repo:${packageVersion} && repo:${packageVersion} != npm:${latestNpmVerion}"
+          exit 0
+        else
+          echo "Tag:${latestTag} ?== repo:${packageVersion} && repo:${packageVersion} ?== npm:${latestNpmVerion}"
+          exit 1
+        fi
+
+      shell: bash
