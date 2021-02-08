@@ -1,0 +1,36 @@
+name: Pre Release
+on:
+  push:
+    branches-ignore:
+      - master
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-next.[0-9]+"
+
+jobs:
+  checkTags:
+    runs-on: ubuntu-latest
+    steps:
+      # check out before using actions referenced from the same repository!
+      # https://github.com/actions/checkout#usage - defaults to the reference or SHA for that event
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/check-tags
+        with:
+          npmPackageName: "@dlr-eoc/core-ui"
+
+  build:
+    needs: checkTags
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - uses: ./.github/actions/build-test
+      - name: Archive dist artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: "dist"
+          path: dist

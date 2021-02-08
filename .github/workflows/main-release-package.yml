@@ -1,22 +1,31 @@
-name: Node.js Package
+name: Main Release Package
 
 on:
-  push:
-    tags:
-      - '*'
+  pull_request:
+    types: [closed]
+    branches:
+      - main
 
 jobs:
+  checkTags:
+    runs-on: ubuntu-latest
+    steps:
+      # check out before using actions referenced from the same repository!
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/check-tags
+        with:
+          npmPackageName: "@dlr-eoc/core-ui"
+
   build:
+    needs: checkTags
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: npm ci
-      - run: npm run test -- --headless
-      - run: npm run schematics:test
-      - run: npm run build
+      - uses: ./.github/actions/build-test
       - name: Archive dist artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -31,8 +40,8 @@ jobs:
       - name: Download dist result from job build
         uses: actions/download-artifact@v2
         with:
-         name: "dist"
-         path: dist
+          name: "dist"
+          path: dist
       - uses: actions/setup-node@v2
         with:
           node-version: 14
