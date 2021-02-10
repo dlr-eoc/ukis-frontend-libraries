@@ -19,32 +19,10 @@ runs:
     - run: git fetch --prune --all --unshallow --tags
       shell: bash
 
-      # Check if the latest git Tag is the same as the repo npm version
-      # Check if the repo npm version is not the same as the latest version on npm (normally it would be better to check if the version is higher but this is more complicated)
-    - run: |
-        path="${GITHUB_ACTION_PATH/.\//''}"
-
-        latestTag=$(git describe --tags `git rev-list --tags --max-count=1`)
-
-        reqVersion="require('${{ inputs.packagePath }}').version"
-        packageVersion=$(node -p $reqVersion)
-
-        packageName="${{ inputs.npmPackageName}}"
-        latestNpmVerion=$(npm show "$packageName" version)
-
-        if [ "${{ inputs.npmPackageVersion }}" ]
-        then
-          latestNpmVerion="${{ inputs.npmPackageVersion }}"
-        fi
-
-
-        if [ "${latestTag:1}" == "$packageVersion" ] && [ "$packageVersion"  != "$latestNpmVerion" ]
-        then
-          echo "Tag:${latestTag} == repo:${packageVersion} && repo:${packageVersion} != npm:${latestNpmVerion}"
-          exit 0
-        else
-          echo "Tag:${latestTag} ?== repo:${packageVersion} && repo:${packageVersion} ?== npm:${latestNpmVerion}"
-          exit 1
-        fi
-
+    # https://github.com/actions/runner/issues/665
+    - run: ${{ github.action_path }}/index.sh
       shell: bash
+      env:
+        PACKAGE_PATH: ${{ inputs.packagePath }}
+        NPM_PACKAGE_NAME: ${{ inputs.npmPackageName }}
+        NPM_PACKAGE_VERSION: ${{ inputs.npmPackageVersion }}
