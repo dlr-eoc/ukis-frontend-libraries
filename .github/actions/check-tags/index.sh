@@ -49,6 +49,6 @@ elif [ "${latestTag}" == "$repoNpmVersion" ] && [[ ! ${npmTags[*]} =~ (^|[[:spac
   echo "git tag:${latestTag} == repo:${repoNpmVersion} and repo:${repoNpmVersion} !=~ npm tags:${npmTagsStr}"
   exit 0
 else
-  echo "repo:${repoNpmVersion} is in npm tags:${npmTagsStr}"
+  echo "repo version:${repoNpmVersion} is in npm tags:${npmTagsStr}"
   exit 1
 fi

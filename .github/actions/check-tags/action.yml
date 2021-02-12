@@ -16,7 +16,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: git fetch --prune --all --unshallow --tags
+    - run: git fetch --prune --all --tags -f
       shell: bash
 
     # https://github.com/actions/runner/issues/665
