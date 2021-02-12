@@ -15,6 +15,10 @@ jobs:
       # check out before using actions referenced from the same repository!
       # https://github.com/actions/checkout#usage - defaults to the reference or SHA for that event
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: rm -f .npmrc #remove npm config so it checks from the default registry
       - uses: ./.github/actions/check-tags
         with:
           npmPackageName: "@dlr-eoc/core-ui"
