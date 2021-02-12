@@ -12,6 +12,7 @@ jobs:
     steps:
       # check out before using actions referenced from the same repository!
       - uses: actions/checkout@v2
+      - run: rm -f .npmrc #remove npm config so it checks from the default registry
       - uses: ./.github/actions/check-tags
         with:
           npmPackageName: "@dlr-eoc/core-ui"
