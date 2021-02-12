@@ -5,10 +5,10 @@ inputs:
     description: "The npm package to get the latest version from the npm registry."
     required: false
     default: "@dlr-eoc/core-ui"
-  npmPackageVersion:
-    description: "The latest Version of the npm package. Use either this or npmPackageName"
+  npmPackageTags:
+    description: "The latest Versions of the npm package separated by comma. Use either this or npmPackageName"
     required: false
-  packagePath:
+  repoPackagePath:
     description: "The path to the package.json in the repository."
     required: false
     default: "./package.json"
@@ -23,6 +23,6 @@ runs:
     - run: ${{ github.action_path }}/index.sh
       shell: bash
       env:
-        PACKAGE_PATH: ${{ inputs.packagePath }}
+        PACKAGE_PATH: ${{ inputs.repoPackagePath }}
         NPM_PACKAGE_NAME: ${{ inputs.npmPackageName }}
-        NPM_PACKAGE_VERSION: ${{ inputs.npmPackageVersion }}
+        NPM_PACKAGE_TAGS: ${{ inputs.npmPackageTags }}
