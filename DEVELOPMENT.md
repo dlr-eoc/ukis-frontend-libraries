@@ -113,7 +113,7 @@ E.g. if the current npm version is `7.2.0` then you can create a `7.3.0-next.0`
 You can check this with `[semver](https://github.com/npm/node-semver#readme) 7.2.0 -i prerelease --preid next`
 Whereby after semantic versioning the following order exists: 7.2.0 < 7.3.0-alpha.0 < 7.3.0-beta.0 < 7.3.0-next.0
 
-To create a new prerelease, you only have to create a new version from your current branch `npm version prerelease --preid=next -m "prerelease message"`.
+To create a new prerelease, you only have to create a new version from your current branch `npm version <prerelease> --preid=next -m "prerelease message"` (premajor | preminor | prepatch).
 And then `git push origin --tags` which will trigger the [Pre Release](.github/workflows/pre-release-package.yml) workflow.
 **Before doing this you should [locally test and build](#further-you-can-test-and-build-locally)!!!** to prevent failed workflows but created tags.
 
