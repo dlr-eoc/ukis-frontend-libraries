@@ -99,8 +99,23 @@ The general workflow to create a new version:
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Milestone XY"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
 - merge the release branch in the master by making a pull request
-- push the tag (created from `npm version`) by running `git push origin --tags`
-- then github actions will run the workflow [buildAndPublish](.github/workflows/buildAndPublish.yml) for the new tags to *test* , *build* and *publish* the angular projects as github packages.
+- push the tag (created from `npm version`) **shortly before the pull request will be merged** by running `git push origin --tags`
+- If the pull request is merged, github actions will run the workflow [Main Release Package](.github/workflows/main-release-package.yml) and checks if the tag was pushed. If this check works the jobs *test* , *build* and *publish* are execudeted and publish the angular projects as github/npm packages.
+If something is going wrong in the Workflow fix it and create a new pull request.
+
+## Alternative prereleases can be created
+Git tags in the following formats are allowed
+- "v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+"
+- "v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+"
+- "v[0-9]+.[0-9]+.[0-9]+-next.[0-9]+"
+
+E.g. if the current npm version is `7.2.0` then you can create a `7.3.0-next.0`
+You can check this with `[semver](https://github.com/npm/node-semver#readme) 7.2.0 -i prerelease --preid next`
+Whereby after semantic versioning the following order exists: 7.2.0 < 7.3.0-alpha.0 < 7.3.0-beta.0 < 7.3.0-next.0
+
+To create a new prerelease, you only have to create a new version from your current branch `npm version <prerelease> --preid=next -m "prerelease message"` (premajor | preminor | prepatch).
+And then `git push origin --tags` which will trigger the [Pre Release](.github/workflows/pre-release-package.yml) workflow.
+**Before doing this you should [locally test and build](#further-you-can-test-and-build-locally)!!!** to prevent failed workflows but created tags.
 
 
 # Developing libraries and frontend side by side

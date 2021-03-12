@@ -1,0 +1,14 @@
+name: "Build and Test"
+description: "Do a npm build and test"
+
+runs:
+  using: "composite"
+  steps:
+    - run: npm ci
+      shell: bash
+    - run: npm run test -- --headless # --watch=false --browsers=ChromeHeadless
+      shell: bash
+    - run: npm run schematics:test
+      shell: bash
+    - run: npm run build
+      shell: bash

@@ -1,10 +1,16 @@
 # This workflow will do a clean install of node dependencies, test and build the source code.
-name: Node.js Test and Build CI
+name: Test and Build CI
 
 on:
   push:
-    branches:
+    branches-ignore:
+      # run on all branches other then master
+      - master
+    tags-ignore:
+      # And do not run for any tags
       - "*"
+    paths-ignore:
+      - "**.md"
 
 jobs:
   build:
@@ -14,7 +20,4 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: npm ci
-      - run: npm run test -- --headless
-      - run: npm run schematics:test
-      - run: npm run build
+      - uses: ./.github/actions/build-test

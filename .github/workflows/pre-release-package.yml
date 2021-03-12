@@ -1,0 +1,103 @@
+name: Pre Release
+on:
+  push:
+    branches-ignore:
+      - "*"
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-next.[0-9]+"
+
+jobs:
+  checkTags:
+    runs-on: ubuntu-latest
+    steps:
+      # check out before using actions referenced from the same repository!
+      # https://github.com/actions/checkout#usage - defaults to the reference or SHA for that event
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: rm -f .npmrc #remove npm config so it checks from the default registry
+      - uses: ./.github/actions/check-tags
+        with:
+          npmPackageName: "@dlr-eoc/core-ui"
+  build:
+    needs: checkTags
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - uses: ./.github/actions/build-test
+      - name: Archive dist artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: "dist"
+          path: dist
+
+  pre-publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download dist result from job build
+        uses: actions/download-artifact@v2
+        with:
+          name: "dist"
+          path: dist
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: npm ci
+      ### for each module in dist publish frontend-libraries to registry
+      - run: npm run setVersionsInBuild
+      - name: Archive dist prepared for publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: "dist"
+          path: dist
+
+  publish-gpr:
+    needs: pre-publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download dist result from job build
+        uses: actions/download-artifact@v2
+        with:
+          name: "dist"
+          path: dist
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://npm.pkg.github.com/
+          scope: "@dlr-eoc"
+      - run: npm ci
+      ### for each module in dist publish frontend-libraries to registry
+      - run: find ./dist -mindepth 1 -maxdepth 1 -type d -exec bash -c "cd '{}' && node ../../scripts/library/update-package-for-github.js --registry https://npm.pkg.github.com/" \;
+      - run: find ./dist -mindepth 1 -maxdepth 1 -type d -exec bash -c "cd '{}' && npm publish" \;
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  publish-npm:
+    needs: pre-publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download dist result from job build
+        uses: actions/download-artifact@v2
+        with:
+          name: "dist"
+          path: dist
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      ### for each module in dist publish frontend-libraries to registry
+      - run: find ./dist -mindepth 1 -maxdepth 1 -type d -exec bash -c "cd '{}' && node ../../scripts/library/update-package-for-github.js --registry https://registry.npmjs.org/" \;
+      - run: find ./dist -mindepth 1 -maxdepth 1 -type d -exec bash -c "cd '{}' && npm publish --access public" \;
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_NPM_TOKEN}}
