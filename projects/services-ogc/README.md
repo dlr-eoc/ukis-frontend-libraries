@@ -151,6 +151,10 @@ Example:
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
 
+
+## WMS
+While openlayers already has a decent WMS-client, it doesn't quite cover some operations fully. The service `WMSService` allows to make calls to a WMS's `GetCapabilities`, so that existing layers can be parsed automatically.
+
 ## Code scaffolding
 
 Run `ng generate component component-name --project services-ogc` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project services-ogc`.
