@@ -8,3 +8,4 @@ export * from './lib/owc/types/owc-json';
 export * from './lib/owc/types/eoc-owc-json';
 export * from './lib/wps/wpsclient';
 export * from './lib/wmts/wmtsclient.service';
+export * from './lib/wms/wms.service';
