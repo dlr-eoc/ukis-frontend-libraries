@@ -36,6 +36,7 @@ import { SunlightComponent } from './components/sunlight/sunlight.component';
 import { InterpolationSettingsComponent } from './components/interpolation-settings/interpolation-settings.component';
 import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
 import { TablePopupComponent } from './components/table-popup/table-popup.component';
+import { ExampleGroupActionComponent } from './components/example-group-action/example-group-action.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { TablePopupComponent } from './components/table-popup/table-popup.compon
     SunlightComponent,
     RouteMap8Component,
     InterpolationSettingsComponent,
-    TablePopupComponent
+    TablePopupComponent,
+    ExampleGroupActionComponent
   ],
   imports: [
     BrowserModule,
