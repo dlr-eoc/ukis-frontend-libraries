@@ -2,21 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { WMSCapabilities } from 'ol/format';
+import { HttpClient } from '../httpClient/httpclient';
 
 
-export interface WmsHttpClientRequestParameters {
-  headers?: object;
-  [key: string]: any;
-}
 
-/**
-* This library attempts to be largely independent of angular. 
-* As such, we allow other http-clients than @angular/http.
-*/
-export interface WmsHttpClient {
-  get(url: string, paras?: WmsHttpClientRequestParameters): Observable<string>;
-  post(url: string, body: string, paras?: WmsHttpClientRequestParameters): Observable<string>;
-}
 
 
 
@@ -28,7 +17,7 @@ export type WmsVersion = '1.1.0' | '1.1.1' | '1.3.0';
 export class WmsClient {
   private parser: WMSCapabilities;
 
-  constructor(private http: WmsHttpClient) {
+  constructor(private http: HttpClient) {
     this.parser = new WMSCapabilities();
   }
 
@@ -44,7 +33,7 @@ export class WmsClient {
     );
   }
 
-  public getLayerFromCapabilities(name: string, capabilities: any) {
+  public getLayerFromCapabilities(name: string, capabilities: any): any {
     /** http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd - The Layer Element */
     const rootLayer: null | any = capabilities.Capability.Layer;
     return this.getLayerFromCapabilitiesLayer(name, rootLayer);

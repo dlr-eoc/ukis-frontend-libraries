@@ -12,21 +12,8 @@ import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_
 import * as JsonixFactory from '@michaellangbein/jsonix'; const Jsonix = JsonixFactory.Jsonix;
 import { pollUntil, delayedRetry } from './utils/polling';
 import { Cache, FakeCache } from './cache';
+import { HttpClient } from '../httpClient/httpclient';
 
-
-export interface WpsHttpClientRequestParameters {
-    headers?: object;
-    [key: string]: any;
-}
-
-/**
- * This library attempts to be largely independent of angular. 
- * As such, we allow other http-clients than @angular/http.
- */
-export interface WpsHttpClient {
-    get(url: string, paras?: WpsHttpClientRequestParameters): Observable<string>;
-    post(url: string, body: string, paras?: WpsHttpClientRequestParameters): Observable<string>;
-}
 
 
 /**
@@ -47,7 +34,7 @@ export class WpsClient {
 
     constructor(
         version: WpsVersion = '1.0.0',
-        private webclient: WpsHttpClient,
+        private webclient: HttpClient,
         cache?: Cache
     ) {
         this.version = version;
