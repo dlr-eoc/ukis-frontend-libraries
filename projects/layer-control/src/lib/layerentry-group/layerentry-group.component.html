@@ -27,8 +27,7 @@
         (change)="setGroupLayersVisibility()">
       <label [for]="group.id">
         <clr-icon class="iconButton" [ngClass]="{'is-solid':group.visible}"
-          [attr.shape]="group.visible?'eye':'eye-hide'"
-          title="{{group.visible?'Hide observation layers':'Show observation layers'}}"></clr-icon>
+          [attr.shape]="group.visible?'eye':'eye-hide'" title="{{group.visible?'Hide Group':'Show Group'}}"></clr-icon>
       </label>
     </span>
   </div>

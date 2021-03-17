@@ -26,7 +26,8 @@
       [checked]="layer.visible" (change)="setLayerVisibility(layer, group)">
     <label [for]="layer.id">
       <clr-icon *ngIf="checkBaselayer(layer,group); else notBaselayer" class="iconButton"
-        [ngClass]="{'is-solid':layer.visible}" [attr.shape]="'eye'" title="{{layer.visible?'Hide layer':'Show layer'}}">
+        [ngClass]="{'is-solid':layer.visible}" [attr.shape]="(layer.visible)?'dot-circle':'circle'"
+        title="{{layer.visible?'Choose another layer':'Show layer'}}">
       </clr-icon>
       <ng-template #notBaselayer>
         <clr-icon class="iconButton" [ngClass]="{'is-solid':layer.visible}"
