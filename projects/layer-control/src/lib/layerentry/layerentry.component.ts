@@ -56,14 +56,24 @@ export class LayerentryComponent implements OnInit {
   /**
    * obj: {any| IDynamicComponent}
    */
-  checkIsComponentItem(obj: any, layer: Layer) {
+
+  checkIsComponentItem(layer: Layer, compProp: string) {
+    const obj = layer[compProp];
     let isComp = false;
     if (obj && typeof obj === 'object') {
       if ('component' in obj) {
         if (!obj.inputs) {
-          obj.inputs = { layer };
+          const layerClone = Object.assign({}, layer);
+          if (layerClone && layerClone[compProp]) {
+            delete layerClone[compProp];
+          }
+          obj.inputs = { layer: layerClone };
         } else if (obj.inputs && !obj.inputs.layer) {
-          obj.inputs = Object.assign({ layer }, obj.inputs);
+          const layerClone = Object.assign({}, layer);
+          if (layerClone && layerClone[compProp]) {
+            delete layerClone[compProp];
+          }
+          obj.inputs = Object.assign({ layer: layerClone }, obj.inputs);
         }
         isComp = true;
       }
