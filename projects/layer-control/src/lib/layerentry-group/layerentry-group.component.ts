@@ -37,6 +37,7 @@ export class LayerentryGroupComponent implements OnInit {
   public canZoomToGroup = false;
 
   public showInfo = false;
+  public showAction = true;
 
   constructor() { }
 
@@ -44,6 +45,37 @@ export class LayerentryGroupComponent implements OnInit {
     if (this.group.bbox && this.group.bbox.length >= 4) {
       this.canZoomToGroup = true;
     }
+
+    if (!this.group?.action) {
+      this.showAction = false;
+    }
+  }
+
+  /**
+   * obj: {any| IDynamicComponent}
+   */
+  checkIsComponentItem(group: LayerGroup, compProp: string) {
+    const obj = group[compProp];
+    let isComp = false;
+    if (obj && typeof obj === 'object') {
+      if ('component' in obj) {
+        if (!obj.inputs) {
+          const groupClone = Object.assign({}, group);
+          if (groupClone && groupClone[compProp]) {
+            delete groupClone[compProp];
+          }
+          obj.inputs = { group: groupClone };
+        } else if (obj.inputs && !obj.inputs.group) {
+          const groupClone = Object.assign({}, group);
+          if (groupClone && groupClone[compProp]) {
+            delete groupClone[compProp];
+          }
+          obj.inputs = Object.assign({ group: groupClone }, obj.inputs);
+        }
+        isComp = true;
+      }
+    }
+    return isComp;
   }
 
   checkBaselayer(group: LayerGroup) {
@@ -99,6 +131,8 @@ export class LayerentryGroupComponent implements OnInit {
 
   showHideAllDetails() {
     this.openAllLayersProperties = !this.openAllLayersProperties;
+    this.showAction = this.openAllLayersProperties;
+    this.showInfo = this.openAllLayersProperties;
   }
 
   isFirst(group) {
