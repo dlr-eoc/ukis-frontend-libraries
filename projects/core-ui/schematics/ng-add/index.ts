@@ -17,6 +17,8 @@ import { UkisNgAddRoutingSchema } from '../add-routing/schema';
 // https://angular.io/guide/schematics-for-libraries
 // https://dev.to/thisdotmedia/schematics-pt-3-add-tailwind-css-to-your-angular-project-40pp
 export function ngAdd(options: UkisNgAddSchema): Rule {
+  /* return async host => {
+  }; */
   const addRoutingOptions: UkisNgAddRoutingSchema = {
     project: options.project,
     addFiles: options.addFiles,
@@ -68,9 +70,9 @@ function ruleAddFiles(options: UkisNgAddSchema): Rule {
    *
    *  TODO: check for style files and replace them e.g. app.component.styl ...
    */
-  return (tree: Tree, context: SchematicContext) => {
-    const project = getProject(tree, options);
-    const workspace = getWorkspace(tree);
+  return async (tree: Tree, context: SchematicContext) => {
+    const { project } = await getProject(tree, options.project as string);
+    const workspace = await getWorkspace(tree);
 
     if (!project.sourceRoot) {
       project.sourceRoot = 'src';
@@ -205,9 +207,15 @@ function ruleAddImportsInAppModule(options: UkisNgAddSchema): Rule {
  * - styles
  */
 function ruleUpdateAngularJson(options: UkisNgAddSchema): Rule {
-  return (tree: Tree, context: SchematicContext) => {
-    const project = getProject(tree, options);
-    const workspace = getWorkspace(tree);
+  /**
+   * TODO: refactor to use existing angular schematics
+   * set config: ng config schematics['@schematics/angular:component'].style scss
+   * ng config projects[<projectname>].schematics['@schematics/angular:component'].style scss
+   */
+  // externalSchematic('@clr/angular', 'config projects[<projectname>].schematics['@schematics/angular:component'].style scss', options)
+  return async (tree: Tree, context: SchematicContext) => {
+    const { project, projectName } = await getProject(tree, options.project as string);
+    const workspace = await getWorkspace(tree);
     const styleExt = getStyleExt(project, workspace, context);
 
     ['build', 'test'].map(target => {
@@ -228,11 +236,7 @@ function ruleUpdateAngularJson(options: UkisNgAddSchema): Rule {
     }
     project.schematics['@schematics/angular:component'].style = 'scss';
 
-
-    if (!options.project) {
-      throw new SchematicsException(`Could not find Project in the workspace check your --project`);
-    }
-    workspace.projects[options.project] = project;
+    workspace.projects[projectName] = project;
     return updateWorkspace(workspace);
   };
 }
@@ -241,6 +245,13 @@ function ruleUpdateAngularJson(options: UkisNgAddSchema): Rule {
  * this is a helper
  */
 function updateAngularArchitect(project: WorkspaceProject, type: string | 'build' | 'test', styleExt: string) {
+  /**
+   * TODO: refactor to use existing angular schematics
+   * get config: ng config projects[<projectname>].architect.build.options.styles
+   * -> config = await schematicRunner.runExternalSchematicAsync('@schematics/angular', 'config ...', workspaceOptions).toPromise();
+   * ng config projects['test-schematics'].architect.build.options.styles '["src/styles.css", "src/styles.scss"]'
+   *
+   */
   const architect = project.architect;
   if (architect && architect[type]) {
     const target = architect[type];
@@ -271,26 +282,36 @@ function updateAngularArchitect(project: WorkspaceProject, type: string | 'build
  * - compilerOptions.paths
  */
 function ruleUpdateTsConfigFile(): Rule {
-  const path = 'tsconfig.base.json';
-  return updateJsonFile<TsconfigJSON>(path, (json) => {
-    const tsconfigPaths = [
-      { name: '@dlr-eoc/*', paths: ['frontend-libraries/projects/*'] }
-    ];
+  return (tree: Tree) => {
+    let path = 'tsconfig.json';
+    const pathBase = 'tsconfig.base.json';
 
-    if (!json.compilerOptions) {
-      json.compilerOptions = {};
+    if (tree.exists(pathBase)) {
+      path = pathBase;
+    } else if (!tree.exists(pathBase) && !tree.exists(path)) {
+      throw new SchematicsException(`${path} or ${pathBase} is not in the workspace!`);
     }
 
-    if (!json.compilerOptions.paths) {
-      json.compilerOptions.paths = {};
-    }
+    return updateJsonFile<TsconfigJSON>(path, (json) => {
+      const tsconfigPaths = [
+        { name: '@dlr-eoc/*', paths: ['frontend-libraries/projects/*'] }
+      ];
 
-    for (const p of tsconfigPaths) {
-      json.compilerOptions.paths[p.name] = p.paths;
-    }
+      if (!json.compilerOptions) {
+        json.compilerOptions = {};
+      }
 
-    return json;
-  });
+      if (!json.compilerOptions.paths) {
+        json.compilerOptions.paths = {};
+      }
+
+      for (const p of tsconfigPaths) {
+        json.compilerOptions.paths[p.name] = p.paths;
+      }
+
+      return json;
+    });
+  };
 }
 
 /**
@@ -311,7 +332,7 @@ function ruleUpdateTsConfigFile(): Rule {
  */
 function ruleUpdateIndexHtml(options: UkisNgAddSchema): Rule {
   return async (tree: Tree) => {
-    const project = getProject(tree, options);
+    const { project } = await getProject(tree, options.project as string);
 
     if (!project.sourceRoot) {
       project.sourceRoot = 'src';
@@ -319,7 +340,6 @@ function ruleUpdateIndexHtml(options: UkisNgAddSchema): Rule {
     }
 
     const sourcePath = join(normalize(project.root), project.sourceRoot, 'index.html'); // project.sourceRoot
-
 
 
     let projectTitle = 'Your App';

@@ -5,10 +5,11 @@ import { UkisNgAddRoutingSchema } from './schema';
 import * as path from 'path';
 
 
-const collectionPath = path.join(__dirname, '../collection.json');
+const collectionPath = require.resolve(path.join(__dirname, '../collection.json'));
 
 
 describe('add-routing', () => {
+  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
 
   let appTree: UnitTestTree;
 
@@ -21,7 +22,7 @@ describe('add-routing', () => {
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
     newProjectRoot: 'projects',
-    version: '6.0.0',
+    version: '9.0.0',
   };
 
   const appOptions: ApplicationOptions = {
@@ -33,8 +34,6 @@ describe('add-routing', () => {
     style: Style.Scss,
     skipTests: false
   };
-
-  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
 
   beforeEach(async () => {
     appTree = await schematicRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();

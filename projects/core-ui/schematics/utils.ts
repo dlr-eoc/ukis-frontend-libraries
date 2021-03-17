@@ -1,7 +1,6 @@
 import { Tree, SchematicsException, SchematicContext, Rule } from '@angular-devkit/schematics';
 import { UkisNgAddSchema } from './ng-add/schema';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-
 import { getWorkspace } from '@schematics/angular/utility/config';
 
 /**
@@ -13,17 +12,15 @@ import { getWorkspace } from '@schematics/angular/utility/config';
  */
 // import * as ts from 'typescript';
 import * as ts from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
-import { addProviderToModule, insertImport, addImportToModule, addDeclarationToModule, getSourceNodes } from '@schematics/angular/utility/ast-utils';
+import { addProviderToModule, insertImport, addImportToModule, addDeclarationToModule } from '@schematics/angular/utility/ast-utils';
 
 import { InsertChange, Change } from '@schematics/angular/utility/change';
 import { normalize, join, parseJson, JsonParseMode } from '@angular-devkit/core';
 import { getAppModulePath } from '@schematics/angular/utility/ng-ast-utils';
 
-import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
-
 const RewritingStream = require('parse5-html-rewriting-stream');
 import { Readable, Writable } from 'stream';
-import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { WorkspaceSchema, ProjectType, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 
 export interface ImoduleImport {
   classifiedName: string;
@@ -57,20 +54,21 @@ export interface AddInjectionContext {
   // e. g. SideMenuService
 }
 
-export function getProject(tree: Tree, options: UkisNgAddSchema) {
-  const workspace = getWorkspace(tree);
+export async function getProject(tree: Tree, projectName: string) {
+  const workspace = await getWorkspace(tree);
 
-  if (!workspace.defaultProject) {
+  if (!projectName && workspace.defaultProject) {
+    projectName = workspace.defaultProject;
+  } else if (!projectName && !workspace.defaultProject) {
     throw new SchematicsException(`Could not find a default Project in the workspace and you didn't set a project`);
   }
-  if (!options.project) {
-    options.project = workspace.defaultProject;
-  }
 
-  if (!workspace.projects[options.project]) {
+  if (!workspace.projects[projectName]) {
     throw new SchematicsException(`Could not find Project in the workspace check your --project`);
   }
-  const project = workspace.projects[options.project];
+
+  const project = workspace.projects[projectName];
+  // const project = workspace.projects.get(options.project);
 
   if (project && project.projectType === 'library') {
     throw new SchematicsException(`You should ad @dlr-eoc/core-ui only to an angular application not a library!`);
@@ -81,7 +79,10 @@ export function getProject(tree: Tree, options: UkisNgAddSchema) {
     throw new SchematicsException(`Project.sourceRoot is not defined in the workspace!`);
   }
 
-  return project;
+  return {
+    project,
+    projectName
+  };
 }
 
 
@@ -102,9 +103,8 @@ function addInsertChange(changes: Change[] | Change, tree: Tree, modulePath: str
 }
 
 export function addServiceComponentModule(options: UkisNgAddSchema, item: ImoduleImport, modulePathStr?: string): Rule {
-  return (tree: Tree, context: SchematicContext) => {
-    // context.logger.info('Updating appmodule');
-    const project = getProject(tree, options);
+  return async (tree: Tree, context: SchematicContext) => {
+    const { project } = await getProject(tree, options.project as string);
 
     if (!project.sourceRoot) {
       project.sourceRoot = 'src';
@@ -118,18 +118,13 @@ export function addServiceComponentModule(options: UkisNgAddSchema, item: Imodul
     }
 
     let modulePath = getAppModulePath(tree, mainPath);
-    // test
     if (modulePathStr && tree.exists(modulePathStr)) {
       modulePath = modulePathStr;
     }
     context.logger.debug(`module path: ${modulePath}`);
 
     const moduleSource = getTsSourceFile(tree, modulePath);
-    // test
-    if (modulePathStr) {
-      const nodes = getSourceNodes(moduleSource);
-      // console.log(nodes);
-    }
+
     if (item.provide) {
       const changes = addProviderToModule(moduleSource, modulePath, item.classifiedName, item.path);
       addInsertChange(changes, tree, modulePath);
@@ -143,7 +138,6 @@ export function addServiceComponentModule(options: UkisNgAddSchema, item: Imodul
       const change = insertImport(moduleSource, modulePath, item.classifiedName, item.path);
       addInsertChange(change, tree, modulePath);
     }
-    return tree;
   };
 }
 
@@ -159,6 +153,10 @@ function getTsSourceFile(host: Tree, path: string): ts.SourceFile {
   return source;
 }
 
+
+/**
+ * Maybe try to use  externalSchematic('@clr/angular', 'config', options),  //ng config <json-path> <value>
+ */
 export function updateJsonFile<T>(path: string, cb: (pkgJson: T) => T): Rule {
   return (tree: Tree) => {
     if (!tree.exists(path)) {
@@ -205,7 +203,7 @@ export function updateHtmlFile(path: string, startTagStr: string, endTagStr: str
       }
       rewriter.emitEndTag(endTag);
     });
-    context.logger.info(`INFO: update of some Tags in ${path}`);
+    // context.logger.info(`INFO: update of some Tags in ${path}`);
 
 
     return new Promise<void>(resolve => {
@@ -251,7 +249,7 @@ export function updateHtmlFile(path: string, startTagStr: string, endTagStr: str
 }
 
 // TODO if no style is returned it uses css check tis to remove style.css
-export function getStyleExt(project: WorkspaceProject, workspace: WorkspaceSchema, context: SchematicContext) {
+export function getStyleExt(project: WorkspaceProject<ProjectType>, workspace: WorkspaceSchema, context: SchematicContext) {
   let styleExt = 'scss';
   if (project.schematics) {
     const schematics = project.schematics;
