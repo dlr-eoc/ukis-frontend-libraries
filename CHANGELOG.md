@@ -1,4 +1,6 @@
 ### Bug Fixes
+* **@dlr-eoc/layer-control:**
+  - adjust misleading title on hover state [issue 53](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/53).
 * **@dlr-eoc/map-ol:**
   - Fix `updateGeojsonLayerParamsWith()` overwrites cluster source if the layer uses VectorLayer.cluster.
   - Do not automatically zoom in on Clusters if Popup event is move.
@@ -25,6 +27,7 @@
     - Original implementation remains as a wrapper for backwards-compatibility.
     - Added method `describeProcess`
     - Added ability to overwrite data-decoding with a user-provided method, for cases where a unconventional mime-type or encoding has been used.
+  - Expose WmsService [Pull #70](https://github.com/dlr-eoc/ukis-frontend-libraries/pull/70).
 
 ### Refactoring
 * **@dlr-eoc/map-ol:** 
