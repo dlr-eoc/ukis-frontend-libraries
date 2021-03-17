@@ -806,7 +806,7 @@ describe('MapOlService popup', () => {
   it('should not leak any angular-components when creating & removing dynamic-component-popups', () => {
 
     const service: MapOlService = TestBed.inject(MapOlService);
-    const appRef = TestBed.get(ApplicationRef) as ApplicationRef;
+    const appRef = TestBed.inject(ApplicationRef) as ApplicationRef;
     service.createMap();
 
     expect(service.getPopups().length).toBe(0);
