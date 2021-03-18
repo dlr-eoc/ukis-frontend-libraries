@@ -1591,7 +1591,7 @@ export class MapOlService {
       }
     }
     this.app.attachView(popupBody.hostView);
-    this.dynamicPopupComponents[id] = popupBody;
+    this.dynamicPopupComponents.set(id, popupBody);
   }
 
   /**
