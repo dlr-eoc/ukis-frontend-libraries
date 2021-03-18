@@ -137,7 +137,13 @@ export interface ILayerDimensions extends IAnyObject {
 }
 
 export interface ILayerIntervalAndPeriod {
+  /**
+   * Example: "2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z"
+   */
   interval: string;
+  /**
+   * Example: "P1Y"
+   */
   periodicity: string;
 }
 
@@ -317,7 +323,7 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
   data?: any;
   url?: string;
   subdomains?: Array<string>;
-  /** vector options like style, pointToLayer... depends on the map-library, e.g.:
+  /** vector options like style, pointToLayer... depend on the map-library, e.g.:
    * iconUrl: string - to specify icon for points
    * rotationPropName: string - property containing rotation angle in degrees
    */

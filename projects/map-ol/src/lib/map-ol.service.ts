@@ -44,7 +44,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, Extent } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -63,6 +63,9 @@ import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 import { flattenLayers } from '@dlr-eoc/utils-maps';
+import { FakeWmsServer } from '@dlr-eoc/utils-ogc/src/lib/wms/test/fake_wms_server';
+import { Projection } from 'ol/proj';
+import { bbox } from 'ol/loadingstrategy';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -567,7 +570,7 @@ export class MapOlService {
    * This function resets/adds all olLayers of a type with the new UKIS-Layers
    *
    * if only one group of them map is used and setLayers is called then the map flickers!
-   * this is because of all layers are new created and the have all new ol_uid's
+   * this is because all layers are newly created and each get new ol_uid's
    */
   public setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
@@ -643,6 +646,9 @@ export class MapOlService {
         break;
       case 'geojson':
         newOlLayer = this.create_geojson_layer(newLayer as VectorLayer);
+        break;
+      case 'wfs':
+        newOlLayer = this.create_wfs_layer(newLayer as VectorLayer);
         break;
       case 'custom':
         newOlLayer = this.create_custom_layer(newLayer as CustomLayer);
@@ -897,6 +903,32 @@ export class MapOlService {
     }
   }
 
+  private create_wfs_layer(l: VectorLayer): olVectorLayer {
+
+    const wfsSource = new olVectorSource({
+      format: new olGeoJSON(),
+      url: (extent: Extent, resolution: number, projection: Projection) => {
+        const srsCode = projection.getCode();
+
+        let url = l.url + '?service=WFS&version=1.1.0&request=GetFeature';
+        url += `&outputFormat=application/json&srsname=${srsCode}`;
+        url += '&typename=osm:water_areas';
+        url += `&bbox=${extent.join(',')},${srsCode}`;
+
+        return url;
+      },
+      strategy: bbox
+    });
+
+    const styling = l.options.style;
+
+    const wfs = new olVectorLayer({
+      source: wfsSource,
+      style: styling
+    });
+
+    return wfs;
+  }
 
   private create_geojson_layer(l: VectorLayer) {
     let olSource;
