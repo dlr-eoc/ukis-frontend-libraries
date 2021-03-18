@@ -21,7 +21,10 @@ export interface ILayerGroupOptions {
   action?: IDynamicComponent;
   /** UI is expanded */
   expanded?: boolean;
-  /** CSS Class for custom styling */
+  /**
+   * CSS Class for custom styling
+   * if class 'hide' is included in the string then the group is not shown in the UI
+   */
   cssClass?: string;
 }
 
@@ -42,9 +45,7 @@ export class LayerGroup implements ILayerGroupOptions {
   description?: string;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
   action?: IDynamicComponent;
-  /** UI is expanded */
   expanded = false;
-  /** CSS Class for custom styling */
   cssClass?: string;
 
   constructor(options: ILayerGroupOptions) {

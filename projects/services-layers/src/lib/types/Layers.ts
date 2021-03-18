@@ -127,7 +127,10 @@ export interface ILayerOptions {
   crossOrigin?: CrossOriginType;
   /** UI is expanded */
   expanded?: boolean;
-  /** CSS Class for custom styling */
+  /**
+   * CSS Class for custom styling
+   * if class 'hide' is included in the string then the layer is not shown in the UI
+   */
   cssClass?: string;
 }
 
@@ -229,11 +232,8 @@ export class Layer implements ILayerOptions {
   action?: IDynamicComponent;
 
   styles?: ILayerStyleSet[];
-  /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
   crossOrigin?: CrossOriginType;
-  /** UI is expanded */
   expanded = false;
-  /** CSS Class for custom styling */
   cssClass?: string;
 
   constructor(options: ILayerOptions) {
