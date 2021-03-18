@@ -13,6 +13,8 @@
 ### Features
 * **@dlr-eoc/layer-control:**:
   - Add LayerGroup?.action Component to UI `tabsbody` and rearrange icons in `body.tools` [issue 69](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/69).
+  - Hide `Layer` or `LayerGroup` with the attribute `cssClass` `.includes('hide')` [issue 69](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/69).
+  - Expose new Pipe 'itemsfilter' e.g. usage `*ngFor="let item of items | itemsfilter: callbackfn"`
 * **@dlr-eoc/services-layers:**:
   - Adjust LayerGroup types so it can use a Angular Component for `action` [issue 69](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/69).
 * **dlr-eoc/map-ol:**:
