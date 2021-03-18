@@ -44,12 +44,12 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Information about rights held in and over the Context document */
     rights?: string;
     /**
-    * Date or range of dates relevant to the resource 
-    * time range which is expected to be of interest to the user.
-    */
+     * Date or range of dates relevant to the resource 
+     * time range which is expected to be of interest to the user.
+     */
     date?: DateString;
     /** This array is an optional and expresses categories related to this Context document */
-    categories?: IOwsCategorie[];
+    categories?: IOwsCategory[];
     /** Extension Any other element */
     [k: string]: any;
   };
@@ -68,7 +68,7 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
  * is focussed on a particular representation of information.
  * These can be one of a number of OGC Web Services, specifically WMS, WMTS, WFS, WCS, WPS and CSW,
  * or one of a number of inline or referenced formats, specifically GML, KML, GeoTIFF, GMLJP2, GMLCOV,
- * or a custom offering type defined in a profile or by an organisation.
+ * or a custom offering type defined in a profile or by an organization.
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truethe-ows-context-document-structure
  */
 export interface IOwsResource extends GeoJSON.Feature {
@@ -101,7 +101,7 @@ export interface IOwsResourceProperties {
   /** Flag value indicating to the client if the Context resource should be displayed by default */
   active?: boolean;
   /** This array is optional and expresses a category related to the Context resource */
-  categories?: IOwsCategorie[];
+  categories?: IOwsCategory[];
   /** Minimum scale for the display of the Context resource Double */
   minscaledenominator?: number;
   /** Maximum scale for the display of the Context resource Double */
@@ -117,11 +117,11 @@ export interface IOwsResourceProperties {
 
 
 /**
- * In reality a resource can be realised in a number of different ways, and so an OWC document allows various options to be specified.
+ * In reality a resource can be realized in a number of different ways, and so an OWC document allows various options to be specified.
  * These are known as offerings.
  * The intention is that these are, as far as is possible by the format used,
  * equivalent and no priority is assigned to their order in the standard.
- * They are intended to be alternatives that the client can use to allow it to visualise or use the resource.
+ * They are intended to be alternatives that the client can use to allow it to visualize or use the resource.
  *
  * So for example four offerings, a WMS, a WFS with portrayal as SLD, and an inline GML Offering again with portrayal as SLD.
  * Different clients could use these offerings as appropriate:
@@ -163,10 +163,10 @@ export interface IOwsAuthor {
   [k: string]: any;
 }
 
-export interface IOwsCategorie {
+export interface IOwsCategory {
   scheme?: string;
   /** Category related to this context document. It MAY have a related code-list that is identified by the scheme attribute */
-  term?: string;
+  term?: string | number | boolean;
   label?: string;
 }
 
@@ -192,14 +192,15 @@ export interface IOwsCreatorDisplay {
   pixelWidth?: number;
   /** Width measured in pixels of the display showing by the Area of Interest */
   pixelHeight?: number;
-  /** The size of a pixel of the display in milimeters 
-   * (combined with the previous ones allows for the real display size to be calculated) */
+  /** The size of a pixel of the display in millimeters
+   * (combined with the previous ones allows for the real display size to be calculated)
+   */
   mmPerPixel?: number;
   [k: string]: any;
 }
 
 /**
- * Most service offerings have two operations, a ‘GetCapabilities’ operation and a data operation such as ‘GetMap’ for WMS 
+ * Most service offerings have two operations, a ‘GetCapabilities’ operation and a data operation such as ‘GetMap’ for WMS
  */
 export interface IOwsOperation {
   /**

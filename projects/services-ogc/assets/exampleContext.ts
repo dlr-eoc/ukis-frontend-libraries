@@ -409,3 +409,274 @@ export const exampleContext: IOwsContext = {
   type: 'FeatureCollection'
 };
 
+
+// as described here: http://www.owscontext.org/owc_user_guide/C0_userGuide.html
+export const userGuideContext: IOwsContext = {
+  "type": "FeatureCollection",
+  "properties": {
+      "lang": "en",
+      "title": "Export--2016-09-30T16:18:30",
+      "updated": "2016-09-30T16:18:30Z",
+      "links": [{
+          "rel": "profile",
+          "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
+          "title": "This file is compliant with version 1.0 of OWS Context"
+      }],
+      "authors": [{
+          "name": "Envitia",
+          "email": "support@envitia.com",
+          "uri": "http://www.envitia.com"
+      }]
+  },
+  "id": 1475248710263,
+  "bbox": [
+      -154.30193347887,
+      -20.206335142339,
+      57.363088142915,
+      91.295774461995
+  ],
+  "features": [
+      {
+          "properties": {
+              "title": "Intervisibility",
+              "updated": "2016-09-30T16:18:30Z",
+              "content": "Intervisibility",
+              "categories": [
+                  {
+                      "term": true,
+                      "scheme": "http://www.opengis.net/owc/active"
+                  },
+                  {
+                      "term": 1,
+                      "scheme": "http://www.envitia.com/horizon/layer/opacity"
+                  }
+              ],
+              "offerings": [{
+                  "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wps",
+                  "operations": [
+                      {
+                          "code": "GetCapabilities",
+                          "method": "GET",
+                          "type": "text/xml",
+                          "href": "http://10.68.2.68:11080/MapLinkOGCServices/OGC?REQUEST=GetCapabilities&SERVICE=WPS&VERSION=1.0.0"
+                      },
+                      {
+                          "code": "Execute",
+                          "method": "POST",
+                          "href": "http://10.68.2.68:11080/MapLinkOGCServices/OGC?",
+                          "request": {
+                              "type": "text/xml",
+                              "request": "<wps:Execute service=\"WPS\" version=\"1.0.0\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 ..\\schemas\\wps\\1.0.0\\wps\\Execute_request.xsd\"><ows:Identifier>MultiViewShed<\/ows:Identifier><wps:DataInputs><wps:Input><ows:Identifier>source<\/ows:Identifier><ows:Title>source<\/ows:Title><wps:Data><wps:LiteralData>britsouthlatlon<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>view_htype<\/ows:Identifier><ows:Title>view_htype<\/ows:Title><wps:Data><wps:LiteralData>groundHeight<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>view_maxRadius<\/ows:Identifier><ows:Title>view_maxRadius<\/ows:Title><wps:Data><wps:LiteralData>10000<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>target_height<\/ows:Identifier><ows:Title>target_height<\/ows:Title><wps:Data><wps:LiteralData>0<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>target_htype<\/ows:Identifier><ows:Title>target_htype<\/ows:Title><wps:Data><wps:LiteralData>groundHeight<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>requiredDisplayWidth<\/ows:Identifier><ows:Title>requiredDisplayWidth<\/ows:Title><wps:Data><wps:LiteralData>143<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>requiredDisplayHeight<\/ows:Identifier><ows:Title>requiredDisplayHeight<\/ows:Title><wps:Data><wps:LiteralData>89<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>displayStyle<\/ows:Identifier><ows:Title>displayStyle<\/ows:Title><wps:Data><wps:LiteralData>redGreen<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>viewPoints<\/ows:Identifier><ows:Title>viewPoints<\/ows:Title><wps:Data><wps:LiteralData>&lt;gml:LineString srsName=&quot;EPSG:4326&quot;&gt;&lt;gml:posList srsDimension=&quot;3&quot;&gt;51.588791004021 -3.0247492773309 0   &lt;/gml:posList&gt;&lt;/gml:LineString&gt;<\/wps:LiteralData><\/wps:Data><\/wps:Input><wps:Input><ows:Identifier>requiredDisplayExtent<\/ows:Identifier><ows:Title>requiredDisplayExtent<\/ows:Title><wps:Data><wps:BoundingBoxData crs=\"EPSG:4326\"><ows:LowerCorner>-3.11458080574287 51.532798732668745<\/ows:LowerCorner><ows:UpperCorner>-2.934917748918966 51.644713993337504<\/ows:UpperCorner><\/wps:BoundingBoxData><\/wps:Data><\/wps:Input><\/wps:DataInputs><wps:ResponseForm><wps:ResponseDocument><wps:Output mimeType=\"image/png\" asReference=\"true\"><ows:Identifier>image<\/ows:Identifier><\/wps:Output><\/wps:ResponseDocument><\/wps:ResponseForm><\/wps:Execute>"
+                          }
+                      }
+                  ]
+              }]
+          },
+          "type": "Feature",
+          "id": "OpenLayers_Layer_Image_135270",
+          "geometry": {
+              "type": "Polygon",
+              "coordinates": [[
+                  [
+                      -3.11458080574287,
+                      51.532798732668745
+                  ],
+                  [
+                      -3.11458080574287,
+                      51.644713993337504
+                  ],
+                  [
+                      -2.934917748918966,
+                      51.644713993337504
+                  ],
+                  [
+                      -2.934917748918966,
+                      51.532798732668745
+                  ],
+                  [
+                      -3.11458080574287,
+                      51.532798732668745
+                  ]
+              ]]
+          }
+      },
+      {
+          "properties": {
+              "title": "us__countiescountiesType",
+              "updated": "2016-09-30T16:18:30Z",
+              "content": "us__countiescountiesType",
+              "categories": [
+                  {
+                      "term": true,
+                      "scheme": "http://www.opengis.net/owc/active"
+                  },
+                  {
+                      "term": 1,
+                      "scheme": "http://www.envitia.com/horizon/layer/opacity"
+                  }
+              ],
+              "offerings": [{
+                  "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wfs",
+                  "operations": [
+                      {
+                          "code": "GetCapabilities",
+                          "method": "GET",
+                          "href": "http://demo.luciad.com:8080/LuciadFusion/wfs?REQUEST=GetCapabilities&SERVICE=WFS"
+                      },
+                      {
+                          "code": "GetFeature",
+                          "method": "GET",
+                          "href": "http://demo.luciad.com:8080/LuciadFusion/wfs?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0&BBOX=-154.30193347887,-20.206335142339,57.363088142915,91.295774461995&NAMESPACES=xmlns(feature,null)&TYPENAME=feature:us__countiescountiesType"
+                      }
+                  ]
+              }]
+          },
+          "type": "Feature",
+          "id": "OpenLayers_Layer_Vector_134151",
+          "geometry": {
+              "type": "Polygon",
+              "coordinates": [[
+                  [
+                      -180,
+                      -90
+                  ],
+                  [
+                      -180,
+                      90
+                  ],
+                  [
+                      180,
+                      90
+                  ],
+                  [
+                      180,
+                      -90
+                  ],
+                  [
+                      -180,
+                      -90
+                  ]
+              ]]
+          }
+      },
+      {
+          "properties": {
+              "title": "us_counties",
+              "updated": "2016-09-30T16:18:30Z",
+              "content": "us_counties",
+              "categories": [
+                  {
+                      "term": true,
+                      "scheme": "http://www.opengis.net/owc/active"
+                  },
+                  {
+                      "term": 1,
+                      "scheme": "http://www.envitia.com/horizon/layer/opacity"
+                  }
+              ],
+              "offerings": [{
+                  "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+                  "operations": [
+                      {
+                          "code": "GetCapabilities",
+                          "method": "GET",
+                          "href": "http://demo.luciad.com:8080/LuciadFusion/wms?REQUEST=GetCapabilities&SERVICE=WMS"
+                      },
+                      {
+                          "code": "GetMap",
+                          "method": "GET",
+                          "href": "http://demo.luciad.com:8080/LuciadFusion/wms?REQUEST=GetMap&SERVICE=WMS&TRANSPARENT=true&LAYERS=us_counties&FORMAT=image/png&VERSION=1.1.1&STYLES=&SRS=EPSG:4326&WIDTH=1680&HEIGHT=885&BBOX=-154.30193347887,-20.206335142339,57.363088142915,91.295774461995"
+                      }
+                  ]
+              }]
+          },
+          "type": "Feature",
+          "id": "OpenLayers_Layer_WMS_133883",
+          "geometry": {
+              "type": "Polygon",
+              "coordinates": [[
+                  [
+                      -178.21502685547,
+                      18.924781799316
+                  ],
+                  [
+                      -178.21502685547,
+                      71.406646728516
+                  ],
+                  [
+                      -66.969848632813,
+                      71.406646728516
+                  ],
+                  [
+                      -66.969848632813,
+                      18.924781799316
+                  ],
+                  [
+                      -178.21502685547,
+                      18.924781799316
+                  ]
+              ]]
+          }
+      },
+      {
+          "properties": {
+              "title": "BlueMarbleCov",
+              "updated": "2016-09-30T16:18:30Z",
+              "content": "BlueMarbleCov",
+              "categories": [
+                  {
+                      "term": true,
+                      "scheme": "http://www.opengis.net/owc/active"
+                  },
+                  {
+                      "term": 1,
+                      "scheme": "http://www.envitia.com/horizon/layer/opacity"
+                  }
+              ],
+              "offerings": [{
+                  "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wcs",
+                  "operations": [
+                      {
+                          "code": "GetCapabilities",
+                          "method": "GET",
+                          "type": "text/xml",
+                          "href": "http://ows.rasdaman.org/rasdaman/ows?REQUEST=GetCapabilities&SERVICE=WCS&VERSION=2.0.0"
+                      },
+                      {
+                          "code": "GetCoverage",
+                          "method": "GET",
+                          "href": "http://ows.rasdaman.org/rasdaman/ows?SCALEFACTOR=10.174297058223718&format=image/png&CoverageId=BlueMarbleCov&request=GetCoverage&version=2.0.0&service=WCS"
+                      }
+                  ]
+              }]
+          },
+          "type": "Feature",
+          "id": "OpenLayers_Layer_Image_134365",
+          "geometry": {
+              "type": "Polygon",
+              "coordinates": [[
+                  [
+                      -180,
+                      -90
+                  ],
+                  [
+                      -180,
+                      90
+                  ],
+                  [
+                      180,
+                      90
+                  ],
+                  [
+                      180,
+                      -90
+                  ],
+                  [
+                      -180,
+                      -90
+                  ]
+              ]]
+          }
+      }
+  ]
+};
