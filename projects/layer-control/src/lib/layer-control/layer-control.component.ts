@@ -65,4 +65,9 @@ export class LayerControlComponent implements OnInit, OnDestroy {
       return false;
     }
   }
+
+  checkClassHide(layerOrGroup: Layer | LayerGroup) {
+    const hasHide = layerOrGroup?.cssClass?.includes('hide') || false;
+    return !hasHide;
+  }
 }

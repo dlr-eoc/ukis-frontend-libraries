@@ -1,6 +1,7 @@
 <div cdkDropList (cdkDropListDropped)="drop($event)">
   <!-- (cdkDropListSorted)="sort($event)" -->
-  <div class="list-item" *ngFor="let group of layergroups | reverse;" cdkDragLockAxis="y" cdkDrag>
+  <div class="list-item" *ngFor="let group of layergroups | reverse | itemsfilter: checkClassHide" cdkDragLockAxis="y"
+    cdkDrag>
     <ukis-layerentry-group *ngIf="isLayerGroup(group) && group.filtertype === layerfilter" [layersSvc]="layersSvc"
       [mapState]="mapStateSvc" [group]="group" [layerGroups]="layergroups">
       <span class="move-item" cdkDragHandle>
