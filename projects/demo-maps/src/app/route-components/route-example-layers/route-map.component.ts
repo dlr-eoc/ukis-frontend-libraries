@@ -244,7 +244,7 @@ export class RouteMapComponent implements OnInit {
         dynamicPopup: {
           component: TablePopupComponent,
           getAttributes: (args: IDynamicPopupArgs) => {
-            return {data: args.properties};
+            return { data: args.properties };
           }
         }
       }
@@ -332,6 +332,7 @@ export class RouteMapComponent implements OnInit {
         ]
       },
       visible: false,
+      cssClass: 'hide',
       popup: ['type', 'name'],
       actions: [{ title: 'download', icon: 'download-cloud', action: (layer) => { console.log(layer); } }]
     });
@@ -368,7 +369,7 @@ export class RouteMapComponent implements OnInit {
                 })
               });
               return style;
-            }
+            };
 
             this.layersSvc.updateLayer(layer);
           }
@@ -449,6 +450,7 @@ export class RouteMapComponent implements OnInit {
   updateLayerGroup() {
     const test = this.layersSvc.getLayerOrGroupById('group_2') as unknown as LayerGroup;
     test.layers[1].visible = true;
+    test.layers[1].cssClass = null;
     this.layersSvc.updateLayerGroup(test);
   }
 
