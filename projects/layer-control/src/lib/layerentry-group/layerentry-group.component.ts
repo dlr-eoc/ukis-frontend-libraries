@@ -86,6 +86,11 @@ export class LayerentryGroupComponent implements OnInit {
     }
   }
 
+  checkClassHide(layer: Layer) {
+    const hasHide = layer?.cssClass?.includes('hide') || false;
+    return !hasHide;
+  }
+
   getLayerName(group: LayerGroup) {
     if (group.displayName) {
       return group.displayName;
