@@ -368,7 +368,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       <p>Use the controls to dynamically change the sun's angle.</p>`
     });
 
-    const metersPerUnit = this.mapSvc.map.getView().getProjection().getMetersPerUnit();
+    const metersPerUnit = this.mapSvc.getProjection().getMetersPerUnit();
     const metersPerUnitWSG84 = new Projection({code: 'EPSG:4326', units: 'degrees'}).getMetersPerUnit();
     munichPolys.features.map(f => f.properties.height = f.properties.height * metersPerUnitWSG84 / metersPerUnit);
 
