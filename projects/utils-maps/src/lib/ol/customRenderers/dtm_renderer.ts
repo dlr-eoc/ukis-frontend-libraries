@@ -178,6 +178,9 @@ export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
         return this.canvas;
     }
 
+    renderDeclutter(frameState: FrameState) {
+    }
+
 
     updateSunAngle(angle: number[]): void {
         this.shader.updateUniformData(this.gl, 'u_sun', [angle[0], angle[1], 1.0]);
