@@ -6,9 +6,9 @@ To facilitate this new-won freedom, openlayers allows us to create our own custo
 
 A renderer is in principle very simple. It needs to do four things:
  1. provide a canvas
- 2. implement the method `prepareFrame(frameState: FrameState): boolean`
- 3. implement the method `renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement`
- 4. implement the method `renderDeclutter(frameState: FrameState): void`
+ 2. implement the method `prepareFrame(frameState: FrameState): boolean` <-- does preliminary work to set up map for rendering
+ 3. implement the method `renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement` <-- actual changes to the output-element
+ 4. (only if your layer's class, like `VectorLayer`, does have a `getDeclutter` field:) implement the method `renderDeclutter(frameState: FrameState): void` <-- Decluttering is the trimming of some of the rendered features when too many of them overlap. Done for the sake of clarity.
 
 The renderers in this directory serve as an illustration of the wide range of things we can 
 do with this very general model. 
