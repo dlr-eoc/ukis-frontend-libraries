@@ -1,4 +1,4 @@
-import { Mesh, Geometry, BufferGeometry, CanvasTexture, ShaderMaterial } from 'three';
+import { Mesh, BufferGeometry, CanvasTexture, ShaderMaterial } from 'three';
 
 
 
@@ -168,7 +168,7 @@ export class Map2SphereConverter {
 
 
 export class WGS84TextureMesh extends Mesh {
-    constructor(canvas: HTMLCanvasElement, geometry: Geometry | BufferGeometry) {
+    constructor(canvas: HTMLCanvasElement, geometry: BufferGeometry) {
         const texture = new CanvasTexture(canvas);
         const textureMaterial = new ShaderMaterial({
             vertexShader: /* glsl */`
