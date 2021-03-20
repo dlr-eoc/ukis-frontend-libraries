@@ -680,3 +680,202 @@ export const userGuideContext: IOwsContext = {
       }
   ]
 };
+
+
+export const wuekisContext: IOwsContext = {
+  "id": "ndvi",
+  "type": "FeatureCollection",
+  "bbox": [
+      8.0419921875,
+      47.025206001585396,
+      14.809570312499998,
+      50.764259357116465
+  ],
+  "properties": {
+      "lang": "EN",
+      "links": [],
+      "title": "Wuekis NDVI OWC",
+      "updated": "2021-03-10T16:18:30Z"
+  },
+  "features": [
+      {
+          "id": "ndvi:AGRODE_S2_EVI_P1M",
+          "type": "Feature",
+          "geometry": null,
+          "properties": {
+              "title": "AGRODE_S2_EVI_P1M",
+              "updated": null,
+              "links": null,
+              "offerings": [
+                  {
+                      "code": "http://schemas.opengis.net/wms/1.1.1",
+                      "operations": [
+                          {
+                              "code": "GetMap",
+                              "method": "GET",
+                              "type": "image/png",
+                              "href": "https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.1.0&request=GetMap&layers=AGRODE_S2_EVI_P1M&srs=EPSG%3A4326&format=image/png"
+                          }
+                      ],
+                      "styles": [
+                          {
+                              "title": "land:agrode-evi-mean",
+                              "legendURL": "https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.1.0&request=GetLegendGraphic&layer=AGRODE_S2_EVI_P1M&srs=EPSG%3A4326&format=image/png&LEGEND_OPTIONS=forceLabels:on;fontAntiAliasing:true;",
+                              "name": "land:agrode-evi-mean",
+                              "default": true
+                          }
+                      ]
+                  }
+              ],
+              "categories": [],
+              "customAttributes": {}
+          },
+          "bbox": [
+              23.225,
+              54.737,
+              29.838,
+              57.243
+          ]
+      },
+      {
+          "id": "ndvi:AGRODE_S2_NDVI_P1M",
+          "type": "Feature",
+          "geometry": null,
+          "properties": {
+              "title": "AGRODE_S2_NDVI_P1M",
+              "updated": null,
+              "links": null,
+              "offerings": [
+                  {
+                      "code": "http://schemas.opengis.net/wms/1.1.1",
+                      "operations": [
+                          {
+                              "code": "GetMap",
+                              "method": "GET",
+                              "type": "image/png",
+                              "href": "https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.1.0&request=GetMap&layers=AGRODE_S2_NDVI_P1M&srs=EPSG%3A4326&format=image/png"
+                          }
+                      ],
+                      "styles": [
+                          {
+                              "title": "land:agrode-evi-mean",
+                              "legendURL": "https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.1.0&request=GetLegendGraphic&layer=AGRODE_S2_NDVI_P1M&srs=EPSG%3A4326&format=image/png&LEGEND_OPTIONS=forceLabels:on;fontAntiAliasing:true;",
+                              "name": "land:agrode-evi-mean",
+                              "default": true
+                          }
+                      ]
+                  }
+              ],
+              "categories": [],
+              "customAttributes": {}
+          },
+          "bbox": [
+              23.225,
+              54.737,
+              29.838,
+              57.243
+          ]
+      },
+      {
+          "id": "ndvi:GSP_DAILY",
+          "type": "Feature",
+          "geometry": null,
+          "properties": {
+              "title": "GSP_DAILY",
+              "updated": null,
+              "links": null,
+              "offerings": [
+                  {
+                      "code": "http://schemas.opengis.net/wms/1.1.1",
+                      "operations": [
+                          {
+                              "code": "GetMap",
+                              "method": "GET",
+                              "type": "image/png",
+                              "href": "https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.1.0&request=GetMap&layers=GSP_DAILY&srs=EPSG%3A4326&format=image/png"
+                          }
+                      ],
+                      "styles": [
+                          {
+                              "title": "land:gsp_daily",
+                              "legendURL": "https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.1.0&request=GetLegendGraphic&layer=GSP_DAILY&srs=EPSG%3A4326&format=image/png&LEGEND_OPTIONS=forceLabels:on;fontAntiAliasing:true;",
+                              "name": "land:gsp_daily",
+                              "default": true
+                          }
+                      ]
+                  }
+              ],
+              "dimensions": [
+                  {
+                      "display": "P1D",
+                      "name": "time",
+                      "units": "ISO8601",
+                      "value": "2017-01-01/2017-01-01/P1D"
+                  }
+              ],
+              "categories": [],
+              "customAttributes": {}
+          },
+          "bbox": [
+              8.0419921875,
+              47.025206001585396,
+              14.809570312499998,
+              50.764259357116465
+          ]
+      },
+      {
+          "properties": {
+              "title": "NDVI",
+              "updated": "2016-09-30T16:18:30Z",
+              "content": "NDVI",
+              "categories": [],
+              "offerings": [
+                  {
+                      "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wfs",
+                      "operations": [
+                          {
+                              "code": "GetCapabilities",
+                              "method": "GET",
+                              "href": "http://wue-ukis.geographie.uni-wuerzburg.de/geoserver/ows?REQUEST=GetCapabilities&SERVICE=WFS"
+                          },
+                          {
+                              "code": "GetFeature",
+                              "method": "GET",
+                              "href": "http://wue-ukis.geographie.uni-wuerzburg.de/geoserver/ows?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0&BBOX=8.437,47.174,14.414,50.625&NAMESPACES=xmlns(feature,null)&TYPENAME=TRUE_WUEKIS"
+                          }
+                      ]
+                  }
+              ]
+          },
+          "type": "Feature",
+          "id": "OpenLayers_Layer_Vector_134151",
+          "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                  [
+                      [
+                          8.4375,
+                          47.17477833929903
+                      ],
+                      [
+                          14.414062499999998,
+                          47.17477833929903
+                      ],
+                      [
+                          14.414062499999998,
+                          50.62507306341435
+                      ],
+                      [
+                          8.4375,
+                          50.62507306341435
+                      ],
+                      [
+                          8.4375,
+                          47.17477833929903
+                      ]
+                  ]
+              ]
+          }
+      }
+  ]
+};

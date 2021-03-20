@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import {
   IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, WMS_Offering, WFS_Offering, WCS_Offering,
-  CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering
+  CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering, GMLCOV_Offering, isIOwsContext
 } from './types/owc-json';
 import {
   IEocOwsContext, IEocOwsResource, IEocOwsOffering, GeoJson_Offering, Xyz_Offering, IEocOwsWmtsMatrixSet
@@ -117,18 +117,7 @@ export class OwcJsonService {
 
 
   checkContext(context: IOwsContext) {
-    let ISCONTEXT_1_0;
-    if (!Array.isArray(context.properties.links)) {
-      ISCONTEXT_1_0 = context.properties.links.profiles.find(item => item === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
-    } else {
-      ISCONTEXT_1_0 = context.properties.links.find(item => item.href === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
-    }
-
-    if (!ISCONTEXT_1_0) {
-      console.error('this is not a valid OWS Context v1.0!');
-
-    }
-    return ISCONTEXT_1_0;
+    return isIOwsContext(context);
   }
 
   getContextTitle(context: IOwsContext) {
