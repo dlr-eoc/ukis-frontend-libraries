@@ -23,7 +23,8 @@ export interface ILayerGroupOptions {
   expanded?: boolean;
   /**
    * CSS Class for custom styling
-   * if class 'hide' is included in the string then the group is not shown in the UI
+   *
+   * If class 'hide' is included in the string, the group is not shown in the UI - this can probably bring side effects when Layers are reordered, because the hidden layers could be moved on top off all!
    */
   cssClass?: string;
 }

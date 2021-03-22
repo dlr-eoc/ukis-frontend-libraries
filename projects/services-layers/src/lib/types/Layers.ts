@@ -129,7 +129,8 @@ export interface ILayerOptions {
   expanded?: boolean;
   /**
    * CSS Class for custom styling
-   * if class 'hide' is included in the string then the layer is not shown in the UI
+   *
+   * If class 'hide' is included in the string, the layer is not shown in the UI - this can probably bring side effects when Layers are reordered, because the hidden layers could be moved on top off all!
    */
   cssClass?: string;
 }
