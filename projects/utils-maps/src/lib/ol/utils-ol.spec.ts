@@ -6,6 +6,10 @@ import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { flattenLayers, simpleMapToCanvas } from './utils-ol';
+import { MinimalWebGlRenderer } from './customRenderers/minimal_renderer';
+import { InterpolationRenderer } from './customRenderers/interpolation_renderer';
+import { ParticleRenderer } from './customRenderers/particle_renderer';
+import { DtmImageRenderer } from './customRenderers/dtm_renderer';
 
 
 
@@ -79,5 +83,23 @@ describe('mapToCanvas test suite', () => {
             done();
         });
 
+    });
+});
+
+describe('ol-renderer test suite', () => {
+    it('all renderers should have the methods `prepareFrame`, `renderFrame` and `renderDeclutter`', () => {
+        // If ol exported a typescript interface, this test would not be necessary. But the @types repo of ol tends to lag behind, so we're making sure here.
+        expect(MinimalWebGlRenderer.prototype.prepareFrame).toBeTruthy();
+        expect(MinimalWebGlRenderer.prototype.renderFrame).toBeTruthy();
+        expect(MinimalWebGlRenderer.prototype.renderDeclutter).toBeTruthy();
+        expect(InterpolationRenderer.prototype.prepareFrame).toBeTruthy();
+        expect(InterpolationRenderer.prototype.renderFrame).toBeTruthy();
+        expect(InterpolationRenderer.prototype.renderDeclutter).toBeTruthy();
+        expect(ParticleRenderer.prototype.prepareFrame).toBeTruthy();
+        expect(ParticleRenderer.prototype.renderFrame).toBeTruthy();
+        expect(ParticleRenderer.prototype.renderDeclutter).toBeTruthy();
+        expect(DtmImageRenderer.prototype.prepareFrame).toBeTruthy();
+        expect(DtmImageRenderer.prototype.renderFrame).toBeTruthy();
+        expect(DtmImageRenderer.prototype.renderDeclutter).toBeTruthy();
     });
 });

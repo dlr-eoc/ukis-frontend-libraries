@@ -74,5 +74,8 @@ export class MinimalWebGlRenderer extends LayerRenderer<VectorLayer> {
         return this.canvas;
     }
 
+    renderDeclutter(frameState: FrameState) {
+    }
+
 
 }

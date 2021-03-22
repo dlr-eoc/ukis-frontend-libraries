@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { MapThreeService } from './map-three.service';
-import { Mesh } from 'three';
+import { Mesh, BufferGeometry } from 'three';
 import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { HostListener } from '@angular/core';
 
@@ -33,10 +33,10 @@ export class MapThreeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
 
-    const objectGltfPromise = new Promise<Mesh>((resolve) => {
-      const lgtfLoader = new GLTFLoader();
-      lgtfLoader.load(this.modelFilePath, (gltf: GLTF) => {
-        const mesh = gltf.scene.getObjectByName(this.modelName) as Mesh;
+    const objectGltfPromise = new Promise<Mesh<BufferGeometry>>((resolve) => {
+      const gltfLoader = new GLTFLoader();
+      gltfLoader.load(this.modelFilePath, (gltf: GLTF) => {
+        const mesh = gltf.scene.getObjectByName(this.modelName) as Mesh<BufferGeometry>;
         if (!mesh) {
           throw new Error(`No object named ${this.modelName} in glb!`);
         }
@@ -44,7 +44,7 @@ export class MapThreeComponent implements OnInit, AfterViewInit {
       });
     });
 
-    objectGltfPromise.then((mesh: Mesh) => {
+    objectGltfPromise.then((mesh: Mesh<BufferGeometry>) => {
       this.mapThreeSvc.initScene(this.threeCanvas.nativeElement, mesh, this.mapOlSvc.map);
     });
   }

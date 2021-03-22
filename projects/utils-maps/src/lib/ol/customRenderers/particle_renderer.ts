@@ -314,6 +314,10 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
         return this.canvas;
     }
 
+    
+    renderDeclutter(frameState: FrameState) {
+    }
+
 
     private pointsToObservations(features: Feature<Point>[]): number[][] {
 
