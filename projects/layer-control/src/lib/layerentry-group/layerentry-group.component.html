@@ -66,16 +66,19 @@
     </div>
 
 
-    <!-- (cdkDropListSorted)="sort($event)" -->
-    <div cdkDropList (cdkDropListDropped)="drop($event)">
-      <div class="sublayers" *ngFor="let layer of group.layers | reverse | itemsfilter: checkClassHide" cdkDragLockAxis="y" cdkDrag>
-        <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
-          [layer]="layer" [group]="group" (update)="layerUpdate($event, group)">
-          <span class="move-item" cdkDragHandle>
-            {{layer.displayName || layer.name}}
-          </span>
-        </ukis-layerentry>
-      </div>
+    <!-- (cdkDropListSorted)="sort($event)"  -->
+    <div cdkDropList (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="group.layers | itemsfilter: checkClassHide | reverse">
+      <ng-container *ngFor="let layer of group.layers | itemsfilter: checkClassHide | reverse">
+        <div class="sublayers" cdkDragLockAxis="y" cdkDrag [cdkDragData]="{id:layer.id}">
+          <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
+            [layer]="layer" [group]="group" (update)="layerUpdate($event, group)">
+            <span class="move-item" cdkDragHandle>
+              {{layer.displayName || layer.name}}
+            </span>
+          </ukis-layerentry>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
