@@ -33,10 +33,10 @@ export class MapThreeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
 
-    const objectGltfPromise = new Promise<Mesh<BufferGeometry>>((resolve) => {
+    const objectGltfPromise = new Promise<Mesh>((resolve) => {
       const gltfLoader = new GLTFLoader();
       gltfLoader.load(this.modelFilePath, (gltf: GLTF) => {
-        const mesh = gltf.scene.getObjectByName(this.modelName) as Mesh<BufferGeometry>;
+        const mesh = gltf.scene.getObjectByName(this.modelName) as Mesh;
         if (!mesh) {
           throw new Error(`No object named ${this.modelName} in glb!`);
         }
@@ -44,7 +44,7 @@ export class MapThreeComponent implements OnInit, AfterViewInit {
       });
     });
 
-    objectGltfPromise.then((mesh: Mesh<BufferGeometry>) => {
+    objectGltfPromise.then((mesh: Mesh) => {
       this.mapThreeSvc.initScene(this.threeCanvas.nativeElement, mesh, this.mapOlSvc.map);
     });
   }
