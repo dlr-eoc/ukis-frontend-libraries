@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { WMSCapabilities } from 'ol/format';
@@ -11,9 +10,6 @@ import { HttpClient } from '../httpClient/httpclient';
 
 export type WmsVersion = '1.1.0' | '1.1.1' | '1.3.0';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class WmsClient {
   private parser: WMSCapabilities;
 
