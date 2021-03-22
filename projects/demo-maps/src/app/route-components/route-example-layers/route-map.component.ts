@@ -48,8 +48,15 @@ export class RouteMapComponent implements OnInit {
   }
 
   addBaseLayers() {
-    const eocLitemapLayer = new EocLitemapTile({
+    const TransparentBackground = new VectorLayer({
+      name: 'Transparenter Hintergrund',
+      id: 'blank',
+      type: 'custom',
       visible: true
+    });
+
+    const eocLitemapLayer = new EocLitemapTile({
+      visible: false
     });
 
     // not working in WGS84 because
@@ -76,7 +83,7 @@ export class RouteMapComponent implements OnInit {
       id: 'OSM_Base'
     });
 
-    const layers = [eocLitemapLayer, worldRelief, OsmLayer];
+    const layers = [TransparentBackground, eocLitemapLayer, worldRelief, OsmLayer];
 
     /** add layers with the LayersService */
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
@@ -383,6 +390,7 @@ export class RouteMapComponent implements OnInit {
     });
 
     const eocBasemap = new EocBasemapTile();
+    eocBasemap.cssClass = 'hide';
 
     const eocBaseoverlay = new EocBaseoverlayTile();
 
@@ -448,10 +456,14 @@ export class RouteMapComponent implements OnInit {
   }
 
   updateLayerGroup() {
-    const test = this.layersSvc.getLayerOrGroupById('group_2') as unknown as LayerGroup;
-    test.layers[1].visible = true;
-    test.layers[1].cssClass = null;
-    this.layersSvc.updateLayerGroup(test);
+    const group1 = this.layersSvc.getLayerOrGroupById('group_1') as unknown as LayerGroup;
+    group1.expanded = true;
+    group1.layers[1].cssClass = null;
+    this.layersSvc.updateLayerGroup(group1);
+
+    const group2 = this.layersSvc.getLayerOrGroupById('group_2') as unknown as LayerGroup;
+    group2.layers[1].visible = true;
+    this.layersSvc.updateLayerGroup(group2);
   }
 
   addLayerToGroup() {
