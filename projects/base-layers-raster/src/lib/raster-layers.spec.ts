@@ -1,11 +1,11 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RasterLayer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
 
 import { OsmTileLayer, OpenSeaMap, EocLitemap, EocLitemapTile, EocLiteoverlayTile, EocBasemapTile, EocBaseoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from './raster-layers';
 
 describe('BaseLayersRasterComponent', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({})
       .compileComponents();
   }));

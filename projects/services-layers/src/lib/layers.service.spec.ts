@@ -1,4 +1,4 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RasterLayer, Layer, CustomLayer, TGeoExtent, VectorLayer } from './types/Layers';
 import { WmsLayer, WmtsLayer } from './types/RasterLayers';
 import { LayerGroup } from './types/LayerGroup';
@@ -24,7 +24,7 @@ let layer1: Layer,
 
 
 describe('LayersService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({});
     // create test layers
     layer1 = new RasterLayer({
@@ -147,7 +147,7 @@ describe('LayersService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should update a Subject', async(() => {
+  it('should update a Subject', waitForAsync(() => {
     const subject1 = new BehaviorSubject([layer5]);
     expect(subject1.getValue()[0]).toBe(layer5);
 
@@ -166,7 +166,7 @@ describe('LayersService', () => {
   /**
    * logs - 'layer or Group with id: layer1 already exists!
    */
-  it('should not add a layer if the id already exists!', async(() => {
+  it('should not add a layer if the id already exists!', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer1, 'Layers');
     expect(service.getLayersCount()).toEqual(1);
@@ -175,13 +175,13 @@ describe('LayersService', () => {
     expect(service.getLayersCount()).toEqual(1);
   }));
 
-  it('should add a layer to BaseLayers', async(() => {
+  it('should add a layer to BaseLayers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer1, 'Baselayers');
     expect(service.getBaseLayersCount()).toEqual(1);
   }));
 
-  it('should remove a layer from BaseLayers', async(() => {
+  it('should remove a layer from BaseLayers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer1, 'Baselayers');
     service.addLayer(layer2, 'Baselayers');
@@ -192,14 +192,14 @@ describe('LayersService', () => {
   }));
 
 
-  it('should set the filtertype on a layer by adding it to the store', async(() => {
+  it('should set the filtertype on a layer by adding it to the store', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer1, 'Overlays');
     const layer1FromStore = service.getLayerById('layer1');
     expect(layer1FromStore.filtertype).toEqual('Overlays');
   }));
 
-  it('should remove a layer and use its filtertype', async(() => {
+  it('should remove a layer and use its filtertype', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     expect(layer1.filtertype).toEqual('Layers');
     service.addLayer(layer1, 'Overlays');
@@ -211,7 +211,7 @@ describe('LayersService', () => {
     expect(service.getLayerGroupsCount()).toEqual(0);
   }));
 
-  it('should remove a layer by ID', async(() => {
+  it('should remove a layer by ID', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer1, 'Overlays');
     expect(service.getOverlaysCount()).toEqual(1);
@@ -219,13 +219,13 @@ describe('LayersService', () => {
     expect(service.getOverlaysCount()).toEqual(0);
   }));
 
-  it('should add a layer to Layers', async(() => {
+  it('should add a layer to Layers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer1, 'Layers');
     expect(service.getLayersCount()).toEqual(1);
   }));
 
-  it('should remove a layer from Layers', async(() => {
+  it('should remove a layer from Layers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
 
     service.addLayer(layer1, 'Layers');
@@ -235,7 +235,7 @@ describe('LayersService', () => {
     expect(service.getLayersCount()).toEqual(0);
   }));
 
-  it('should add/remove a layer to Overlays', async(() => {
+  it('should add/remove a layer to Overlays', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer1, 'Overlays');
     expect(service.getOverlaysCount()).toEqual(1);
@@ -244,7 +244,7 @@ describe('LayersService', () => {
     expect(service.getOverlaysCount()).toEqual(0);
   }));
 
-  it('should add a layer to a layerGroup', async(() => {
+  it('should add a layer to a layerGroup', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     service.addLayerGroup(layergroup1, 'Layers');
@@ -256,7 +256,7 @@ describe('LayersService', () => {
   }));
 
 
-  it('should add a layerGroup to Layers', async(() => {
+  it('should add a layerGroup to Layers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     service.addLayerGroup(layergroup1, 'Layers');
@@ -264,7 +264,7 @@ describe('LayersService', () => {
     expect(service.getLayerGroupsCount()).toEqual(1);
   }));
 
-  it('should add a layerGroup and replace its filtertype on itself and all layers', async(() => {
+  it('should add a layerGroup and replace its filtertype on itself and all layers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     expect(layer1.filtertype).toEqual('Layers');
@@ -281,7 +281,7 @@ describe('LayersService', () => {
     });
   }));
 
-  it('should remove a layerGroup by ID', async(() => {
+  it('should remove a layerGroup by ID', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.id = 'removable_group';
     layergroup1.layers.push(layer1);
@@ -291,7 +291,7 @@ describe('LayersService', () => {
   }));
 
   // this creates - LOG: 'layerGroup: layergroup1 is not removable!'
-  it('should not remove a non removable layer', async(() => {
+  it('should not remove a non removable layer', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layer1.removable = false;
     service.addLayer(layer1, 'Baselayers');
@@ -300,7 +300,7 @@ describe('LayersService', () => {
   }));
 
   // this creates - LOG: 'layer: layer1 is removed with force!'
-  it('should remove a non removable layer with force', async(() => {
+  it('should remove a non removable layer with force', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layer1.removable = false;
     service.addLayer(layer1, 'Baselayers');
@@ -309,7 +309,7 @@ describe('LayersService', () => {
   }));
 
   // this creates - LOG: 'layerGroup: layergroup1 is not removable!'
-  it('should not remove a non removable layerGroup', async(() => {
+  it('should not remove a non removable layerGroup', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     layergroup1.removable = false;
@@ -319,7 +319,7 @@ describe('LayersService', () => {
   }));
 
   // this creates - LOG: 'layerGroup: layergroup1 is not removable!'
-  it('should remove a non removable layerGroup with force', async(() => {
+  it('should remove a non removable layerGroup with force', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     layergroup1.removable = false;
@@ -328,7 +328,7 @@ describe('LayersService', () => {
     expect(service.getLayerGroupsCount()).toEqual(0);
   }));
 
-  it('should add a layerGroup to Overlays', async(() => {
+  it('should add a layerGroup to Overlays', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     service.addLayerGroup(layergroup1, 'Overlays');
@@ -336,7 +336,7 @@ describe('LayersService', () => {
     expect(service.getLayerGroupsCount()).toEqual(1);
   }));
 
-  it('should remove a layer from a layerGroup but not the group', async(() => {
+  it('should remove a layer from a layerGroup but not the group', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     // layergroup1.removable = false;
@@ -349,7 +349,7 @@ describe('LayersService', () => {
     expect(service.getOverlaysCount()).toEqual(0);
   }));
 
-  it('should remove a layer by Id from a layerGroup and the group if only one layer was on the group', async(() => {
+  it('should remove a layer by Id from a layerGroup and the group if only one layer was on the group', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     layergroup1.removable = true;
@@ -362,7 +362,7 @@ describe('LayersService', () => {
     expect(service.getOverlaysCount()).toEqual(0);
   }));
 
-  it('should remove multiple or all layers from the Overlays-Slot', async(() => {
+  it('should remove multiple or all layers from the Overlays-Slot', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers = [layer1, layer3];
     service.addLayerGroup(layergroup1, 'Overlays');
@@ -376,7 +376,7 @@ describe('LayersService', () => {
     expect(service.getOverlaysCount()).toEqual(0);
   }));
 
-  it('should remove multiple or all layers from the Layers-Slot with a filter', async(() => {
+  it('should remove multiple or all layers from the Layers-Slot with a filter', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     [layer1, layer2, layer3].forEach(l => service.addLayer(l, 'Layers'));
     expect(service.getLayersCount()).toEqual(3);
@@ -387,7 +387,7 @@ describe('LayersService', () => {
     expect(service.getLayersCount()).toEqual(1);
   }));
 
-  it('should remove multiple or all layers from the BaseLayers-Slot with a filter', async(() => {
+  it('should remove multiple or all layers from the BaseLayers-Slot with a filter', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     [layer1, layer2, layer3].forEach(l => service.addLayer(l, 'Baselayers'));
     expect(service.getBaseLayersCount()).toEqual(3);
@@ -398,7 +398,7 @@ describe('LayersService', () => {
     expect(service.getBaseLayersCount()).toEqual(1);
   }));
 
-  it('should get a Layer or Group by Id', async(() => {
+  it('should get a Layer or Group by Id', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     service.addLayerGroup(layergroup1, 'Overlays');
@@ -412,7 +412,7 @@ describe('LayersService', () => {
     expect(layergroup1FromStore).toBe(layergroup1);
   }));
 
-  it('should get all LayerGroups', async(() => {
+  it('should get all LayerGroups', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer1);
     layergroup2.layers = [layer1, layer4];
@@ -424,7 +424,7 @@ describe('LayersService', () => {
     });
   }));
 
-  it('should get all Overlays', async(() => {
+  it('should get all Overlays', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup2.layers = [layer1, layer4];
     service.addLayerGroup(layergroup2, 'Overlays');
@@ -437,7 +437,7 @@ describe('LayersService', () => {
     });
   }));
 
-  it('should get all Layers', async(() => {
+  it('should get all Layers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     [layer1, layer2].map(l => service.addLayer(l, 'Layers'));
 
@@ -446,7 +446,7 @@ describe('LayersService', () => {
     });
   }));
 
-  it('should get all Baselayers', async(() => {
+  it('should get all Baselayers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     [layer1, layer2].map(l => service.addLayer(l, 'Baselayers'));
 
@@ -455,7 +455,7 @@ describe('LayersService', () => {
     });
   }));
 
-  it('should update a Layer', async(() => {
+  it('should update a Layer', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer5, 'Layers');
     expect(service.getLayerById(layer5.id).visible).toEqual(false);
@@ -475,7 +475,7 @@ describe('LayersService', () => {
     expect((layerFromSvc as CustomLayer).custom_layer.ol_uid).toEqual(600);
   }));
 
-  it('should update a VectorLayer', async(() => {
+  it('should update a VectorLayer', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     service.addLayer(layer8, 'Layers');
 
@@ -491,7 +491,7 @@ describe('LayersService', () => {
   }));
 
 
-  it('should update a LayerGroup', async(() => {
+  it('should update a LayerGroup', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layer1.visible = false;
     layergroup1.layers.push(layer1);
@@ -523,7 +523,7 @@ describe('LayersService', () => {
   }));
 
   // test for layer-control arrows up and down
-  it('should move group or layer up and down in the array', async(() => {
+  it('should move group or layer up and down in the array', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup2.layers = [layer1, layer4];
     const layers = [layer2, layergroup2, layer3];
@@ -553,7 +553,7 @@ describe('LayersService', () => {
   }));
 
   // test for layer-control drag and drop
-  it('should set correct zIndex for groups or layers', async(() => {
+  it('should set correct zIndex for groups or layers', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     // layer2 == 0, layer1 == 1, layer4 == 2 layer3 == 3
     layergroup2.layers = [layer1, layer4];
@@ -586,7 +586,7 @@ describe('LayersService', () => {
     });
   }));
 
-  it('should replace all Layers and Groups in LayerGroups', async(() => {
+  it('should replace all Layers and Groups in LayerGroups', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     layergroup1.layers.push(layer3);
     const groups1 = [layergroup1];
@@ -615,7 +615,7 @@ describe('LayersService', () => {
   }));
 
 
-  it('should set/reset all Groups or layers for a filtertype', async(() => {
+  it('should set/reset all Groups or layers for a filtertype', waitForAsync(() => {
     const service: LayersService = TestBed.inject(LayersService);
     // add only Baselayers -----------------------
     const baseLayers = [layer1, layer2];

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MapOlComponent } from './map-ol.component';
 import { LayersService, VectorLayer } from '@dlr-eoc/services-layers';
@@ -42,7 +42,7 @@ describe('MapOlComponent', () => {
   let component: MapOlComponent;
   let fixture: ComponentFixture<MapOlComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MapOlComponent],
       providers: [

@@ -18,7 +18,7 @@
     "OGC"
   ],
   "scripts": {
-    "start": "ng serve demo-maps --sourceMap",
+    "start": "ng serve demo-maps --source-map",
     "build": "node scripts/library/index.js --build",
     "test": "node scripts/library/index.js --test",
     "schematics:test": "jasmine dist/core-ui/schematics/**/*_spec.js",
@@ -84,6 +84,7 @@
     "opensearch-browser - services-ogc"
   ],
   "devDependencies": {
+    "@angular-devkit/architect": "^0.1102.5",
     "@angular-devkit/build-angular": "~0.1102.5",
     "@angular/cli": "~11.2.5",
     "@angular/compiler-cli": "~11.2.6",

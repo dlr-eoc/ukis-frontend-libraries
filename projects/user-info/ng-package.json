@@ -7,7 +7,7 @@
       "@clr/angular": "@clr/angular"
     }
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "tslib"
   ]
 }

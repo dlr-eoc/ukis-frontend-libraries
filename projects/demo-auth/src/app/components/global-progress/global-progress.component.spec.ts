@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GlobalProgressComponent } from './global-progress.component';
 import { ProgressService, IProgress } from './progress.service';
@@ -9,7 +9,7 @@ describe('GlobalProgressComponent', () => {
   let fixture: ComponentFixture<GlobalProgressComponent>;
   let progressSvc: ProgressService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule],
       declarations: [GlobalProgressComponent],

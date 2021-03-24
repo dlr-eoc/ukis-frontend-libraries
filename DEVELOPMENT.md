@@ -65,7 +65,7 @@ If your project depends on a package that is already listed in [frontend-librari
         // ...
     ```
    This placeholder gets replaced with the versions of the main package.json on publish! [see scripts/library (setVersionsOfProjects)](scripts\library\index.ts)
- - list them in your project-specific ng-package.json as whitelistedNonPeerDependencies
+ - list them in your project-specific ng-package.json as allowedNonPeerDependencies
 
 ### 4. Check if dependencies are correct in the package.json
 - run `node scripts/library/index.js -c`

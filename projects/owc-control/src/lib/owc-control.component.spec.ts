@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { OwcControlComponent } from './owc-control.component';
 import { LayersService } from '@dlr-eoc/services-layers';
@@ -10,7 +10,7 @@ describe('OwcControlComponent', () => {
   let component: OwcControlComponent;
   let fixture: ComponentFixture<OwcControlComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [OwcControlComponent],
       imports: [HttpClientTestingModule],

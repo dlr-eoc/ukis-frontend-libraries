@@ -3,7 +3,7 @@ import { UkisNgAddSchema } from './ng-add/schema';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 // import { getWorkspace } from '@schematics/angular/utility/config';
 // import { getWorkspace } from '@schematics/angular/utility';
-import { json, virtualFs, workspaces } from '@angular-devkit/core';
+import { virtualFs, workspaces } from '@angular-devkit/core';
 
 /**
  * Argument of type 'import("..node_modules/typescript/lib/typescript").SourceFile' is not assignable to parameter of type

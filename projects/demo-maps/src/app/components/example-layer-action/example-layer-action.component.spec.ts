@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ExampleLayerActionComponent } from './example-layer-action.component';
 
@@ -6,7 +6,7 @@ describe('ExampleLayerActionComponent', () => {
   let component: ExampleLayerActionComponent;
   let fixture: ComponentFixture<ExampleLayerActionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ExampleLayerActionComponent ]
     })
