@@ -43,6 +43,7 @@
     "@angular/platform-browser": "~10.0.14",
     "@angular/platform-browser-dynamic": "~10.0.14",
     "@angular/router": "~10.0.14",
+    "@cds/core": "^5.1.0",
     "@clr/angular": "^4.0.13",
     "@clr/core": "^4.0.13",
     "@clr/icons": "^4.0.13",
