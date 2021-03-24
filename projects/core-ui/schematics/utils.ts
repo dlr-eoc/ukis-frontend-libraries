@@ -1,7 +1,9 @@
 import { Tree, SchematicsException, SchematicContext, Rule } from '@angular-devkit/schematics';
 import { UkisNgAddSchema } from './ng-add/schema';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import { getWorkspace } from '@schematics/angular/utility/config';
+// import { getWorkspace } from '@schematics/angular/utility/config';
+// import { getWorkspace } from '@schematics/angular/utility';
+import { json, virtualFs, workspaces } from '@angular-devkit/core';
 
 /**
  * Argument of type 'import("..node_modules/typescript/lib/typescript").SourceFile' is not assignable to parameter of type
@@ -44,6 +46,66 @@ interface Iparse5Tag {
   };
 }
 
+/**
+ * fix: migrate Workspace and Project from angular 10 to 11
+ * Angular is not exporting this functions anymore -> Maybe check if getProject() can be done different?
+ */
+
+// https://github.com/angular/angular-cli/blob/v10.2.3/packages/angular_devkit/core/src/experimental/workspace/workspace-schema.ts#L93
+interface WorkspaceTool {
+  /**
+   * Link to schema.
+   */
+  $schema?: string;
+  [k: string]: any;
+}
+
+//https://github.com/angular/angular-cli/blob/v10.2.3/packages/angular_devkit/core/src/experimental/workspace/workspace-schema.ts#L52
+interface CustomWorkspaceProject<P> extends WorkspaceProject {
+  schematics?: WorkspaceTool;
+}
+
+// https://github.com/angular/angular-cli/blob/v10.2.3/packages/angular_devkit/core/src/experimental/workspace/workspace-schema.ts#L9
+interface CustomWorkspaceSchema extends WorkspaceSchema {
+  schematics?: WorkspaceTool;
+}
+
+// https://github.com/angular/angular-cli/blob/11.2.x/packages/schematics/angular/utility/workspace.ts#L12
+function createHost(tree: Tree): workspaces.WorkspaceHost {
+  return {
+    async readFile(path: string): Promise<string> {
+      const data = tree.read(path);
+      if (!data) {
+        throw new Error('File not found.');
+      }
+
+      return virtualFs.fileBufferToString(data);
+    },
+    async writeFile(path: string, data: string): Promise<void> {
+      return tree.overwrite(path, data);
+    },
+    async isDirectory(path: string): Promise<boolean> {
+      // approximate a directory check
+      return !tree.exists(path) && tree.getDir(path).subfiles.length > 0;
+    },
+    async isFile(path: string): Promise<boolean> {
+      return tree.exists(path);
+    },
+  };
+}
+
+/**
+ * https://github.com/angular/angular-cli/blob/11.2.x/packages/schematics/angular/utility/workspace.ts#L65
+ */
+async function getWorkspace(tree: Tree, path = '/') {
+  const host = createHost(tree);
+
+  const { workspace } = await workspaces.readWorkspace(path, host);
+
+  return workspace as any as CustomWorkspaceSchema;
+}
+
+// fix migrate end ------------------------------------------------------
 
 export interface AddInjectionContext {
   componentPath: string;
@@ -249,7 +311,7 @@ export function updateHtmlFile(path: string, startTagStr: string, endTagStr: str
 }
 
 // TODO if no style is returned it uses css check tis to remove style.css
-export function getStyleExt(project: WorkspaceProject<ProjectType>, workspace: WorkspaceSchema, context: SchematicContext) {
+export function getStyleExt(project: CustomWorkspaceProject<ProjectType>, workspace: CustomWorkspaceSchema, context: SchematicContext) {
   let styleExt = 'scss';
   if (project.schematics) {
     const schematics = project.schematics;
