@@ -216,7 +216,7 @@ describe('OwcJsonService: reading data from owc', () => {
                 expect(layer.filtertype).toBe('Layers');
 
                 expect(['geojson', 'wfs'].includes(layer.type)).toBeTrue();
-                expect(layer.url).toBe(operation.href.substr(0, operation.href.indexOf('?')));
+                expect(layer.url.substr(0, layer.url.indexOf('?'))).toBe(operation.href.substr(0, operation.href.indexOf('?')));
 
                 // @TODO: also check vlayerOptions.params
                 done();

@@ -245,7 +245,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   updateWfsLayerParamsWith(oldLayer: olVectorLayer, newLayer: VectorLayer) {
 
     // step 1: update style
-    if (newLayer.options.style !== oldLayer.getStyle()) {
+    if (newLayer.options && newLayer.options.style !== oldLayer.getStyle()) {
       oldLayer.setStyle(newLayer.options.style);
     }
 

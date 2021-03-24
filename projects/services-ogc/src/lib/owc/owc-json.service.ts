@@ -188,17 +188,45 @@ export class OwcJsonService {
     }
   }
 
-  convertOwcTimeToIsoTimeAndPeriodicity(owctime: string): ILayerIntervalAndPeriod | string {
+  /**
+   * e.g.
+   * (array)   value: '1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/PT1S,1990-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z/PT1S,...'
+   * (array)   value: '2000-01-01T00:00:00.000Z,2001-01-01T00:00:00.000Z,2002-01-01T00:00:00.000Z,...'
+   * (single) value: '2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y'
+   *
+   * what is for different values (array  and single combined), are the possible??
+   */
+   convertOwcTimeToIsoTimeAndPeriodicity<P extends string | ILayerIntervalAndPeriod>(owctime: string) {
     /**
      * Convert from
      */
     const arr = owctime.split('/');
-    const t = (arr.length === 3) ? arr[0] + '/' + arr[1] : owctime;
-    const p = (arr.length === 3) ? arr[2] : null;
-    if (p) {
-      return { interval: t, periodicity: p };
+    /** e.g. 1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z */
+    const timeinterval = (arr.length === 3) ? arr[0] + '/' + arr[1] : owctime;
+    /** e.g. P1Y */
+    const periodicity = (arr.length === 3) ? arr[2] : null;
+    if (periodicity) {
+      const intervalPeriod = { interval: timeinterval, periodicity: periodicity };
+      return intervalPeriod as any as P;
     } else {
-      return t;
+      return timeinterval as any as P;
+    }
+  }
+
+  /**
+   * e.g.
+   * (array)   value: '1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/PT1S,1990-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z/PT1S,...'
+   * (array)   value: '2000-01-01T00:00:00.000Z,2001-01-01T00:00:00.000Z,2002-01-01T00:00:00.000Z,...'
+   * (single) value: '2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y'
+   */
+  getTimeValueFromDimensions(value: string | null) {
+    const multiplevalues = RegExp(',', 'g').test(value);
+    if (multiplevalues) {
+      const values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity<string>(v)) : null;
+      return values as string[] | ILayerIntervalAndPeriod[];
+    } else if (!multiplevalues && value) {
+      const singelValue = this.convertOwcTimeToIsoTimeAndPeriodicity<ILayerIntervalAndPeriod>(value);
+      return singelValue;
     }
   }
 
@@ -221,17 +249,7 @@ export class OwcJsonService {
         let dim = {};
         // console.log(name);
         if (name === 'time' || dimensions[name].units === 'ISO8601') {
-          const value = dimensions[name].value;
-          const values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity(v)) : null;
-          dim = {
-            values: ((!values) || values.length > 1) ? values : values[0],
-            units: dimensions[name].units,
-            display: {
-              format: 'YYYMMDD',
-              period: dimensions[name].display,
-              default: 'end'
-            }
-          };
+          dim = this.getTimeDimensions(dimensions);
         } else if (name === 'elevation') {
           dim = dimensions[name];
         } else {
@@ -243,6 +261,36 @@ export class OwcJsonService {
     return dims;
   }
 
+  getTimeDimensions(dimensions: IEocOwsResource['properties']['dimensions']) {
+    let dim: ILayerDimensions['time'] = { values: null, units: null };
+    const value = dimensions.time.value;
+    /** check to get value from OGC Service */
+    if (!value) {
+      console.log('check to get dimensions value from OGC Service later!!', dimensions);
+    }
+
+    const values = this.getTimeValueFromDimensions(value);
+    dim = {
+      values: null,
+      units: dimensions.time.units,
+      display: {
+        format: 'YYYMMDD',
+        period: dimensions.time.display,
+        default: 'end'
+      }
+    };
+
+    /** check if is array or single value */
+    if (Array.isArray(values)) {
+      dim.values = values;
+    } else if (values && typeof values !== 'string' && values.interval && values.periodicity) {
+      dim.values = values;
+    }
+
+    return dim;
+  }
+
+  
   /** Offering --------------------------------------------------- */
   getLayertypeFromOfferingCode(offering: IOwsOffering): TLayertype {
     if (isWmsOffering(offering.code)) {
@@ -306,7 +354,9 @@ export class OwcJsonService {
   }
 
   /**
-   * layer priority: first wms, then wmts, then wfs, then others.
+   * Layer priority: a owc-context might offer a single layer in mulitple ways - as a wms, as a wmts, etc.
+   * We need to chose a single one of those offerings.
+   * The order we chose here is first wms, then wmts, then wfs, then others.
    */
   public getLayers(owc: IOwsContext, targetProjection: string): Observable<Layer[]> {
     const resources = owc.features;
@@ -347,13 +397,18 @@ export class OwcJsonService {
 
     const iconUrl = this.getIconUrl(offering);
 
-    let layerUrl, params;
+    let layerUrl;
     // if we have a operations-offering (vs. a data-offering):
-    if (offering.operations) { layerUrl = this.getUrlFromUri(offering.operations[0].href); }
-    if (offering.operations) { params = this.getJsonFromUri(offering.operations[0].href); }
+    if (offering.operations) {
+      for (const operation of offering.operations) {
+        if (operation.code === 'GetFeature') {
+          layerUrl = operation.href;
+        }
+      }
+    }
 
     let data;
-    // if we have a data-offering:
+    // if we have a data-offering: (i.e. geojson-layer)
     if (offering.contents) {
       data = offering.contents[0].content;
     }

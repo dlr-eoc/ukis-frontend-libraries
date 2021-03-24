@@ -381,6 +381,14 @@ export class RouteMapComponent implements OnInit {
       }
     });
 
+    const wfsLayer = new VectorLayer({
+      id: 'WfsLayer',
+      name: 'WFS Layer',
+      type: 'wfs',
+      url: "https://ahocevar.com/geoserver/wfs?service=WFS&request=GetFeature&outputFormat=application/json&version=1.1.0&srsname=EPSG:3857&typenames=usa:states&cql_filter=STATE_NAME='Pennsylvania'",
+      bbox: [-83.1005859375, 38.37611542403604, -72.50976562499999, 43.03677585761058]
+    });
+
     const eocBasemap = new EocBasemapTile();
 
     const eocBaseoverlay = new EocBaseoverlayTile();
@@ -407,6 +415,13 @@ export class RouteMapComponent implements OnInit {
       layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay]
     });
 
+    const groupVector = new LayerGroup({
+      id: 'group_3',
+      name: 'Test Group Vector-Data',
+      expanded: false,
+      layers: [vectorLayer, vectorLayer3, wfsLayer]
+    });
+
     const hillshade = new HillshadeTile({
       popup: {
         pupupFunktion: (obj) => {
@@ -429,7 +444,7 @@ export class RouteMapComponent implements OnInit {
       }
     });
 
-    const overlays = [gufLayer, hillshade, groupLayer2, vectorLayer, vectorLayer3, groupLayer, vectorLayerCluster];
+    const overlays = [gufLayer, hillshade, groupVector, groupLayer2, groupLayer, vectorLayerCluster];
     overlays.map(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');

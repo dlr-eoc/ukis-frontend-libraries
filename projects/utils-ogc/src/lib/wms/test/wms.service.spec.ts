@@ -24,14 +24,14 @@ describe('WmsService test-suite', () => {
       const fakeHttpClient = TestBed.inject(HttpClient);
       const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
       const wmsClient = new WmsClient(fakeHttpClient);
-      
+
       const capabilities$ = wmsClient.getCapabilities('testServer.com', version);
       capabilities$.subscribe(capabilities => {
         expect(capabilities).toBeTruthy();
 
         const layer0 = wmsClient.getLayerFromCapabilities('nexrad-n0r-wmst', capabilities);
         expect(layer0.MetadataURL[0].OnlineResource).toEqual('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?request=GetMetadata&layer=nexrad-n0r-wmst');
-        
+
         // this property differs between WMS Versions!
         if (version === '1.3.0') {
           expect(layer0.BoundingBox[0].extent).toEqual([24, -126, 50, -66]);
@@ -45,11 +45,11 @@ describe('WmsService test-suite', () => {
 
         done();
       });
-  
+
       const request = httpMockServer.expectOne(`testServer.com?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=${version}`);
       request.flush(fakeWmsServer.getCapabilities(version));
     });
   }
 
-  
+
 });
