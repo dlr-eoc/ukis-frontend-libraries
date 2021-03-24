@@ -29,6 +29,11 @@ export class WmsClient {
     );
   }
 
+  /**
+   * Searches capabilities-document for a layer with given name
+   * @param name
+   * @param capabilities
+   */
   public getLayerFromCapabilities(name: string, capabilities: any): any {
     /** http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd - The Layer Element */
     const rootLayer: null | any = capabilities.Capability.Layer;

@@ -11,6 +11,7 @@ import olStyle from 'ol/style/Style';
 import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
+import { WmsService } from '@dlr-eoc/services-ogc';
 
 @Component({
   selector: 'app-route-map',
@@ -26,7 +27,8 @@ export class RouteMapComponent implements OnInit {
   constructor(
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
-    public mapSvc: MapOlService) {
+    public mapSvc: MapOlService,
+    private wmsSvc: WmsService) {
 
     this.controls = {
       attribution: true,
@@ -45,6 +47,13 @@ export class RouteMapComponent implements OnInit {
   setExtent() {
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
     this.mapStateSvc.setExtent([-14, 33, 40, 57]);
+  }
+
+  parseCapabilities() {
+    this.wmsSvc.getCapabilities('https://geoservice.dlr.de/eoc/land/wms').subscribe(caps => {
+      const layer = this.wmsSvc.getLayerFromCapabilities('AGRODE_S2_EVI_P1M', caps);
+      console.log(layer);
+    });
   }
 
   addBaseLayers() {
