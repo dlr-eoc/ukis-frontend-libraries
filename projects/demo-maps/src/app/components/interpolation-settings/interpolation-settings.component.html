@@ -1,14 +1,14 @@
 <form clrForm [formGroup]="interpolationForm" clrLayout="vertical">
     <clr-input-container>
         <label>Power</label>
-        <input type="range" min="1" max="7" value="1" clrInput formControlName="power">
+        <input type="range" class="ukis-range-input" min="1" max="7" value="1" clrInput formControlName="power">
         <clr-control-helper>inverse distance weighting power</clr-control-helper>
     </clr-input-container>
 
     <clr-checkbox-container>
         <label>Smoothing</label>
         <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox name="options" value="true" formControlName="smooth" />
+          <input type="checkbox" class="ukis-range-input" clrCheckbox name="options" value="true" formControlName="smooth" />
           <label>Smoothing</label>
         </clr-checkbox-wrapper>
     </clr-checkbox-container>
@@ -16,7 +16,7 @@
     <clr-checkbox-container>
         <label>Labels</label>
         <clr-checkbox-wrapper>
-          <input type="checkbox" clrCheckbox name="options" value="false" formControlName="labels" />
+          <input type="checkbox" class="ukis-range-input" clrCheckbox name="options" value="false" formControlName="labels" />
           <label>Show labels</label>
         </clr-checkbox-wrapper>
     </clr-checkbox-container>
