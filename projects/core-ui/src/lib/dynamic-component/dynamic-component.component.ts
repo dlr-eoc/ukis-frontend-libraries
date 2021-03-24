@@ -67,7 +67,6 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
         /** subscribe to output for same name as input */
         if (this.componentRef.instance[outupName] && this.componentRef.instance[outupName] instanceof EventEmitter) {
           const sub = this.componentRef.instance[outupName].subscribe(val => {
-            // console.log('sub to dynamic component output', val)
             this.dynamicComponent.inputs[inputname] = val;
             /** if outputs are defined on IDynamicComponent pass the value to there functions */
             if (this.dynamicComponent.outputs[outupName]) {
@@ -83,7 +82,6 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.dynamicComponent) {
-      console.log('ngOnChanges', changes.dynamicComponent);
       if (Array.isArray(this.subs)) {
         this.subs.map(s => s.unsubscribe());
       }

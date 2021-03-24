@@ -1,4 +1,6 @@
 ### Bug Fixes
+* **@dlr-eoc/layer-control:**
+  - adjust misleading title on hover state [issue 53](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/53).
 * **@dlr-eoc/map-ol:**
   - Fix `updateGeojsonLayerParamsWith()` overwrites cluster source if the layer uses VectorLayer.cluster.
   - Do not automatically zoom in on Clusters if Popup event is move.
@@ -9,6 +11,12 @@
   - `updateLayerParamsWith` now also works with GeojsonLayers: [issue 51](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/51)
 
 ### Features
+* **@dlr-eoc/layer-control:**:
+  - Add LayerGroup?.action Component to UI `tabsbody` and rearrange icons in `body.tools` [issue 69](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/69).
+  - Hide `Layer` or `LayerGroup` with the attribute `cssClass` `.includes('hide')` [issue 69](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/69).
+  - Expose new Pipe 'itemsfilter' e.g. usage `*ngFor="let item of items | itemsfilter: callbackfn"`
+* **@dlr-eoc/services-layers:**:
+  - Adjust LayerGroup types so it can use a Angular Component for `action` [issue 69](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/69).
 * **dlr-eoc/map-ol:**:
   - now allows for angular-components in popups. In any Ukis-Layer, just add a `dynamicPopup` field to the `popup` property.
     If the popup-component requires any `@Input`'s, provide these with `getAttributes(args: IPopupArgs)`. 
@@ -26,6 +34,7 @@
     - Original implementation remains as a wrapper for backwards-compatibility.
     - Added method `describeProcess`
     - Added ability to overwrite data-decoding with a user-provided method, for cases where a unconventional mime-type or encoding has been used.
+  - Expose WmsService [Pull #70](https://github.com/dlr-eoc/ukis-frontend-libraries/pull/70).
 
 ### Refactoring
 * **@dlr-eoc/map-ol:** 

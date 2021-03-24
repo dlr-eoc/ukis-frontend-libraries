@@ -9,6 +9,8 @@ import { Layer, LayerGroup, LayersService } from '@dlr-eoc/services-layers';
 
 import { ReversePipe } from '../utils/array-reverse.pipe';
 import { MapStateService } from '@dlr-eoc/services-map-state';
+import { ItemsFilterPipe } from '../utils/obj-type.pipe';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 describe('LayerentryGroupComponent', () => {
   let component: LayerentryGroupComponent;
@@ -18,8 +20,8 @@ describe('LayerentryGroupComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ClarityModule, FormsModule],
-      declarations: [LayerentryGroupComponent, LayerentryComponent, ReversePipe],
+      imports: [ClarityModule, FormsModule, DragDropModule],
+      declarations: [LayerentryGroupComponent, LayerentryComponent, ReversePipe, ItemsFilterPipe],
       providers: [LayersService, MapStateService]
     }).compileComponents();
   }));

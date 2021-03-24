@@ -51,10 +51,40 @@ export class LayerControlComponent implements OnInit, OnDestroy {
 
   // CDKDRagAndDrop -------------------------------------------------------------
   // https://material.angular.io/cdk/drag-drop/api
-  drop(event: CdkDragDrop<string[]>) {
-    const previousI = this.layergroups.length - event.previousIndex - 1;
-    const currentI = this.layergroups.length - event.currentIndex - 1;
-    this.layersSvc.arrayMove(this.layergroups, previousI, currentI);
+  drop(event: CdkDragDrop<(Layer | LayerGroup)[]>) {
+    const groupLayers = this.layergroups;
+    const groupLeng = groupLayers.length;
+    const fiteredLayers = event.container.data; // filtered by [cdkDropListData]
+    const groupFiteredLeng = fiteredLayers.length;
+    let previousIFinal, newIFinal;
+
+    /**
+     * calc index with pipe reverse order
+     */
+    if (groupLeng === groupFiteredLeng) {
+      const previousIndex = groupLeng - event.previousIndex - 1;
+      const newIndex = groupLeng - event.currentIndex - 1;
+      previousIFinal = previousIndex;
+      newIFinal = newIndex;
+    } else {
+      /**
+       * If array is filtered get previousIndex by item.data and try to calculate ne index
+       * get layers for cdk indexes - 'connect' 'event.container.data' and the original not filtered data
+       */
+      const newLayer = fiteredLayers[event.currentIndex];
+      const previousIndex = groupLayers.findIndex(l => l.id === event.item.data.id);
+      let newIndex = groupLayers.findIndex(l => l.id === newLayer.id);
+
+      // Item is not moved
+      if (event.previousIndex === event.currentIndex) {
+        newIndex = previousIndex;
+      }
+
+      previousIFinal = previousIndex;
+      newIFinal = newIndex;
+    }
+
+    this.layersSvc.arrayMove(this.layergroups, previousIFinal, newIFinal);
     this.layersSvc.setLayerGroups(this.layergroups);
   }
 
@@ -64,5 +94,10 @@ export class LayerControlComponent implements OnInit, OnDestroy {
     } else {
       return false;
     }
+  }
+
+  checkClassHide(layerOrGroup: Layer | LayerGroup) {
+    const hasHide = layerOrGroup?.cssClass?.includes('hide') || false;
+    return !hasHide;
   }
 }

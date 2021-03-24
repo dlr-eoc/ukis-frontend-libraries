@@ -23,7 +23,7 @@ export class MapThreeService implements OnDestroy {
 
   public initScene(
     threeCanvas: HTMLCanvasElement,
-    mesh: Mesh<BufferGeometry>,
+    mesh: Mesh,
     map: Map
   ): void {
 

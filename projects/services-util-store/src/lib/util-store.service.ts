@@ -64,7 +64,7 @@ export class UtilStoreService {
       } catch (e) {
         data = data;
       }
-      console.log(key, data);
+      // console.log(key, data);
       return data;
 
     }
@@ -101,7 +101,7 @@ export class UtilStoreService {
     if (typeof value !== 'undefined' && value !== null) {
       // Set the store
       if (this.runtimeStore.hasOwnProperty(key)) {
-        console.log('url already cashed');
+        console.log(`key ${key} already in the store`);
       }
       this.runtimeStore[key] = value;
     }

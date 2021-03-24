@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { LayerControlComponent } from './layer-control/layer-control.component';
 import { LayerentryComponent } from './layerentry/layerentry.component';
 import { LayerentryGroupComponent } from './layerentry-group/layerentry-group.component';
-import { ObjTypePipe } from './utils/obj-type.pipe';
+import { ObjTypePipe, ItemsFilterPipe } from './utils/obj-type.pipe';
 import { ReversePipe } from './utils/array-reverse.pipe';
 
 
@@ -17,8 +17,8 @@ import { CoreUiModule } from '@dlr-eoc/core-ui';
 
 
 @NgModule({
-  declarations: [LayerControlComponent, LayerentryComponent, LayerentryGroupComponent, ObjTypePipe, ReversePipe, BaseLayerControlComponent],
+  declarations: [LayerControlComponent, LayerentryComponent, LayerentryGroupComponent, ObjTypePipe, ItemsFilterPipe, ReversePipe, BaseLayerControlComponent],
   imports: [CommonModule, ClarityModule, FormsModule, DragDropModule, CoreUiModule],
-  exports: [LayerControlComponent, LayerentryComponent, LayerentryGroupComponent, ObjTypePipe, ReversePipe, BaseLayerControlComponent],
+  exports: [LayerControlComponent, LayerentryComponent, LayerentryGroupComponent, ObjTypePipe, ItemsFilterPipe, ReversePipe, BaseLayerControlComponent],
 })
 export class LayerControlModule { }

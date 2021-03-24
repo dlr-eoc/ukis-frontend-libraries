@@ -27,8 +27,7 @@
         (change)="setGroupLayersVisibility()">
       <label [for]="group.id">
         <clr-icon class="iconButton" [ngClass]="{'is-solid':group.visible}"
-          [attr.shape]="group.visible?'eye':'eye-hide'"
-          title="{{group.visible?'Hide observation layers':'Show observation layers'}}"></clr-icon>
+          [attr.shape]="group.visible?'eye':'eye-hide'" title="{{group.visible?'Hide Group':'Show Group'}}"></clr-icon>
       </label>
     </span>
   </div>
@@ -36,16 +35,20 @@
   <div *ngIf="group.expanded" class="body">
     <!-- tools: zoomTo, remove, open all Tabs -->
     <div class="tools">
-      <span></span>
       <clr-icon *ngFor="let item of group.actions" [attr.shape]="item.icon" class="iconButton"
         (click)="item.action(group)" [title]="item.title">
       </clr-icon>
+
+      <clr-icon *ngIf="group.action" shape="cog" class="iconButton" [ngClass]="{'is-solid':showAction}"
+        (click)="showAction = !showAction" title="{{!showAction?'Show settings': 'Hide settings'}}"></clr-icon>
 
       <clr-icon *ngIf="group.description" shape="info-standard" class="iconButton" [ngClass]="{'is-solid':showInfo}"
         (click)="showInfo = !showInfo" title="{{!showInfo?'Show Info': 'Hide Info'}}"></clr-icon>
       <clr-icon shape="details" class="iconButton" [ngClass]="{'is-solid':openAllLayersProperties}"
         (click)="showHideAllDetails()"
         title="{{!openAllLayersProperties?'Show all layers details': 'Hide all layers details'}}"></clr-icon>
+
+      <span></span>
       <clr-icon *ngIf="canZoomToGroup" shape="zoom-in" class="iconButton" (click)="zoomTo(group)" title="Zoom to group">
       </clr-icon>
       <clr-icon *ngIf="group.removable" shape="trash" class="iconButton" (click)="removeLayerGroup(group)"
@@ -55,17 +58,27 @@
     <div class="info" *ngIf="showInfo">
       <span [innerHTML]="group.description"></span>
     </div>
+    <div *ngIf="group.action && showAction" class="tabsbody">
+      <ng-container *ngIf="checkIsComponentItem(group, 'action');">
+        <ukis-dynamic-component [(dynamicComponent)]="group.action">
+        </ukis-dynamic-component>
+      </ng-container>
+    </div>
 
-    <!-- (cdkDropListSorted)="sort($event)" -->
-    <div cdkDropList (cdkDropListDropped)="drop($event)">
-      <div class="sublayers" *ngFor="let layer of group.layers | reverse;" cdkDragLockAxis="y" cdkDrag>
-        <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
-          [layer]="layer" [group]="group" (update)="layerUpdate($event, group)">
-          <span class="move-item" cdkDragHandle>
-            {{layer.displayName || layer.name}}
-          </span>
-        </ukis-layerentry>
-      </div>
+
+    <!-- (cdkDropListSorted)="sort($event)"  -->
+    <div cdkDropList (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="group.layers | itemsfilter: checkClassHide | reverse">
+      <ng-container *ngFor="let layer of group.layers | itemsfilter: checkClassHide | reverse">
+        <div class="sublayers" cdkDragLockAxis="y" cdkDrag [cdkDragData]="{id:layer.id}">
+          <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
+            [layer]="layer" [group]="group" (update)="layerUpdate($event, group)">
+            <span class="move-item" cdkDragHandle>
+              {{layer.displayName || layer.name}}
+            </span>
+          </ukis-layerentry>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
