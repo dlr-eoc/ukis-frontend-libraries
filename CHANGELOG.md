@@ -7,12 +7,17 @@
   - removeLayerByKey() not working on layergroups (recursive).
   - addLayer(), addLayers() and setLayers() don't set the filtertype on layergroup children (recursive).
   - `updateLayerParamsWith` now also works with GeojsonLayers: [issue 51](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/51)
+* **@dlr-eoc/map-three:**
+  - regarding three-version 125: `Geometry` is now deprecated, replaced with `BufferGeometry`
+
+
 
 ### Features
 * **dlr-eoc/map-ol:**:
   - now allows for angular-components in popups. In any Ukis-Layer, just add a `dynamicPopup` field to the `popup` property.
     If the popup-component requires any `@Input`'s, provide these with `getAttributes(args: IPopupArgs)`. 
     Addresses [Issue #14](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/14)
+  - added basic functionality for WMS-layers to map-ol. As for now, `VectorLayers` of type `wfs` do not have any dedicated own methods or properties. All wfs-specific methods, like CQL-filters, are simply red from the layer's `url` property.
 * **@dlr-eoc/utils-maps:**:
   - created new custom renderer `InterpolationRenderer`.
     - Takes a vector-source (or a clustered vector-source) and does inverse-distance-interpolation on every pixel between the data points.
@@ -26,6 +31,8 @@
     - Original implementation remains as a wrapper for backwards-compatibility.
     - Added method `describeProcess`
     - Added ability to overwrite data-decoding with a user-provided method, for cases where a unconventional mime-type or encoding has been used.
+* **@dlr-eoc/utils-maps:**
+  - updated all custom renderers to implement the method `renderDeclutter` that is required as of ol6.5.
 
 ### Refactoring
 * **@dlr-eoc/map-ol:** 
