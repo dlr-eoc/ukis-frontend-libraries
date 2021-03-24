@@ -11,6 +11,9 @@
     }
   } */
 
+/**
+ * Style the layers on the layerControl with layer/Group attribute cssClass
+ */
 :host ::ng-deep {
   .custom-layer-group {
     .head>.title {

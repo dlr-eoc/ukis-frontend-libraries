@@ -37,6 +37,7 @@ import { InterpolationSettingsComponent } from './components/interpolation-setti
 import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
 import { TablePopupComponent } from './components/table-popup/table-popup.component';
 import { ServicesOgcModule } from '@dlr-eoc/services-ogc';
+import { ExampleGroupActionComponent } from './components/example-group-action/example-group-action.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { ServicesOgcModule } from '@dlr-eoc/services-ogc';
     SunlightComponent,
     RouteMap8Component,
     InterpolationSettingsComponent,
-    TablePopupComponent
+    TablePopupComponent,
+    ExampleGroupActionComponent
   ],
   imports: [
     BrowserModule,

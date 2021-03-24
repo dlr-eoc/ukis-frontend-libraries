@@ -1,4 +1,5 @@
 import { Layer, TGeoExtent, TFiltertypes } from './Layers';
+import { IDynamicComponent } from '@dlr-eoc/core-ui';
 
 /**
  *  LayerGroups
@@ -16,9 +17,15 @@ export interface ILayerGroupOptions {
   bbox?: TGeoExtent;
   description?: string;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
+  /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
+  action?: IDynamicComponent;
   /** UI is expanded */
   expanded?: boolean;
-  /** CSS Class for custom styling */
+  /**
+   * CSS Class for custom styling
+   *
+   * If class 'hide' is included in the string, the group is not shown in the UI - this can probably bring side effects when Layers are reordered, because the hidden layers could be moved on top off all!
+   */
   cssClass?: string;
 }
 
@@ -38,9 +45,8 @@ export class LayerGroup implements ILayerGroupOptions {
   bbox?: [number, number, number, number];
   description?: string;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
-  /** UI is expanded */
+  action?: IDynamicComponent;
   expanded = false;
-  /** CSS Class for custom styling */
   cssClass?: string;
 
   constructor(options: ILayerGroupOptions) {

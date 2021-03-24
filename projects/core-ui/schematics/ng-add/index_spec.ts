@@ -5,10 +5,11 @@ import { UkisNgAddSchema } from './schema';
 import * as path from 'path';
 
 
-const collectionPath = path.join(__dirname, '../collection.json');
+const collectionPath = require.resolve(path.join(__dirname, '../collection.json'));
 
 
 describe('ng-add', () => {
+  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
 
   let appTree: UnitTestTree;
 
@@ -25,7 +26,7 @@ describe('ng-add', () => {
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
     newProjectRoot: 'projects',
-    version: '6.0.0',
+    version: '9.0.0',
   };
 
   const appOptions: ApplicationOptions = {
@@ -37,8 +38,6 @@ describe('ng-add', () => {
     style: Style.Scss,
     skipTests: false
   };
-
-  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
 
   beforeEach(async () => {
     appTree = await schematicRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
@@ -152,8 +151,15 @@ describe('ng-add', () => {
 
   it('should update the tsconfig file', async () => {
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
-    const tsconfigFile = JSON.parse(tree.readContent('/tsconfig.base.json'));
-    expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
+    const tsconfigFilePath = '/tsconfig.json';
+    const baseTsconfigFilePath = '/tsconfig.base.json';
+    if (tree.exists(baseTsconfigFilePath)) {
+      const tsconfigFile = JSON.parse(tree.readContent(baseTsconfigFilePath));
+      expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
+    } else {
+      const tsconfigFile = JSON.parse(tree.readContent(tsconfigFilePath));
+      expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
+    }
   });
 
   it('should update html files', async () => {

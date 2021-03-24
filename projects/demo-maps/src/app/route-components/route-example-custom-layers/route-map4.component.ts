@@ -26,6 +26,7 @@ import { BarsLayer } from './customRenderers/threejs_renderer';
 import { InterpolationLayer, ColorRamp, DtmLayer } from '@dlr-eoc/utils-maps';
 
 import testData from '../../../assets/data/json/test.json';
+import { ExampleGroupActionComponent } from '../../components/example-group-action/example-group-action.component';
 
 
 @Component({
@@ -320,7 +321,11 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       name: 'Heatmap Group',
       filtertype: 'Layers',
       id: 'group1',
-      layers: [customHeatmapLayer, vectorPointsForHeatmap]
+      layers: [customHeatmapLayer, vectorPointsForHeatmap],
+      description: `This is a custom layer group with some custom angular components in the UI`,
+      action: {
+        component: ExampleGroupActionComponent
+      }
     });
 
     const imageWmsLayer = new CustomLayer({

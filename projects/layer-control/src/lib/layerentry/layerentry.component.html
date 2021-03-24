@@ -26,7 +26,8 @@
       [checked]="layer.visible" (change)="setLayerVisibility(layer, group)">
     <label [for]="layer.id">
       <clr-icon *ngIf="checkBaselayer(layer,group); else notBaselayer" class="iconButton"
-        [ngClass]="{'is-solid':layer.visible}" [attr.shape]="'eye'" title="{{layer.visible?'Hide layer':'Show layer'}}">
+        [ngClass]="{'is-solid':layer.visible}" [attr.shape]="(layer.visible)?'dot-circle':'circle'"
+        title="{{layer.visible?'Choose another layer':'Show layer'}}">
       </clr-icon>
       <ng-template #notBaselayer>
         <clr-icon class="iconButton" [ngClass]="{'is-solid':layer.visible}"
@@ -64,19 +65,19 @@
         <!-- setLayerOpacity -->
         <div class="form-group">
           <label [for]="'layer_transparency_slider_'+layer.id">Opacity:</label>
-          <input [id]="'layer_transparency_slider_'+layer.id" type="range" class="ukis-range-input opacity-input" name="points"
-            [value]="layer.opacity" [min]="0.0" [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)"
+          <input [id]="'layer_transparency_slider_'+layer.id" type="range" class="ukis-range-input opacity-input"
+            name="points" [value]="layer.opacity" [min]="0.0" [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)"
             [(ngModel)]="layer.opacity" />
           <span>{{" "+layer.opacity}}</span>
         </div>
-        <ng-container *ngIf="checkIsComponentItem(layer.action, layer);">
+        <ng-container *ngIf="checkIsComponentItem(layer, 'action');">
           <ukis-dynamic-component [(dynamicComponent)]="layer.action">
           </ukis-dynamic-component>
         </ng-container>
       </div>
       <!-- show Legend -->
       <div *ngIf="activeTabs.legend && layer.legendImg">
-        <ng-container *ngIf="checkIsComponentItem(layer.legendImg, layer); else imageUrl">
+        <ng-container *ngIf="checkIsComponentItem(layer,'legendImg'); else imageUrl">
           <ukis-dynamic-component [(dynamicComponent)]="layer.legendImg"></ukis-dynamic-component>
         </ng-container>
 

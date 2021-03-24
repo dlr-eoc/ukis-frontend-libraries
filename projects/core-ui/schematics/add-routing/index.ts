@@ -28,8 +28,8 @@ export function addRouting(options: UkisNgAddRoutingSchema): Rule {
  *  TODO: update app.component.ts not override
  */
 function ruleAddFiles(options: UkisNgAddRoutingSchema): Rule {
-  return (tree: Tree, context: SchematicContext) => {
-    const project = getProject(tree, options);
+  return async (tree: Tree, context: SchematicContext) => {
+    const { project } = await getProject(tree, options.project as string);
 
     if (!project.sourceRoot) {
       project.sourceRoot = 'src';
