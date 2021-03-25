@@ -904,39 +904,33 @@ export class MapOlService {
 
   private create_wfs_layer(l: VectorLayer): olVectorLayer {
 
-    // Update URL with current projection
-    const url = getUrlFromUri(l.url);
-    const paras = getParameterJsonFromUri(l.url);
-    // The below re-projection of the bbox is not required, because in WFS (contrary to WMS)
-    // a bbox ('BBOX') may have another projection than the output-projection ('SRSNAME')
-    // if (paras['SRSNAME'] !== this.EPSG) {
-    //   if (paras['BBOX']) {
-    //     this.reprojectFeatures()
-    //   }
-    // }
-    paras['SRSNAME'] = this.EPSG;
-    let fullUrl = `${url}?`;
-    for (const para in paras) {
-      if (paras[para]) {
-        fullUrl += `&${para}=${paras[para]}`;
-      }
-    }
-
+    const url = new URL(l.url);
+    // making sure that srsname is set to current projection
+    url.searchParams.set('srsname', this.EPSG);
+    // note that we don't need to adjust the bbox. contrary to wms'es, in a wfs,
+    // a bbox may use another projection than the srsname.
 
     const wfsSource = new olVectorSource({
       format: new olGeoJSON(),
-      url: fullUrl
+      url: url.toString()
     });
 
     const styling = l.options?.style || undefined;
 
-    const wfs = new olVectorLayer({
+    const layeroptions: any = {
+      type: 'wfs',
+      filtertype: l.filtertype,
+      name: l.name,
+      id: l.id,
+      visible: l.visible,
+      legendImg: l.legendImg,
+      opacity: l.opacity || 1,
+      zIndex: 1,
       source: wfsSource,
-      style: styling,
-    });
+      style: styling
+    };
 
-    // important: don't forget to set layer-id-property.
-    wfs.set(ID_KEY, l.id);
+    const wfs = new olVectorLayer(layeroptions);
 
     return wfs;
   }
@@ -996,7 +990,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
     }
 
     if (l.cluster) {
