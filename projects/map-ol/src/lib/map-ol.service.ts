@@ -703,7 +703,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
 
     if (l.maxResolution) {
@@ -795,7 +795,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
     const newlayer = new olTileLayer(layeroptions);
     return newlayer;
@@ -892,7 +892,7 @@ export class MapOlService {
       }
 
       if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.map.getView().getProjection().getCode());
+        layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
       }
 
       return new olTileLayer(layeroptions);
@@ -990,7 +990,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
 
     if (l.cluster) {
@@ -1101,7 +1101,7 @@ export class MapOlService {
       }
 
       if (l.bbox) {
-        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.map.getView().getProjection().getCode());
+        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
         layer.setExtent(extent);
       }
 
@@ -1640,7 +1640,7 @@ export class MapOlService {
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.map.getView().getProjection().getCode());
+    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode());
     const newFitOptions = {
       size: this.map.getSize(),
       // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
@@ -1656,7 +1656,7 @@ export class MapOlService {
   /** ol.Coordinate xy */
   public setCenter(center: number[], geographic?: boolean): number[] {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
+    const transfomCenter = transform(center, projection, this.getProjection().getCode());
     // console.log('set center in svc', transfomCenter)
     // console.log(this.map.getView().getCenter())
     this.map.getView().setCenter(transfomCenter);
@@ -1666,7 +1666,7 @@ export class MapOlService {
   /** USED in map-ol.component */
   public getCenter(geographic?: boolean): any {
     const dstProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const srcProjection = getProjection(this.map.getView().getProjection().getCode());
+    const srcProjection = getProjection(this.getProjection().getCode());
     const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
     return transfomCenter;
   }
@@ -1683,7 +1683,7 @@ export class MapOlService {
     });
     if (geographic) {
       const projection = getProjection(WGS84);
-      const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
+      const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
       return (transfomExtent as TGeoExtent);
     } else {
       return extent;
@@ -1698,7 +1698,7 @@ export class MapOlService {
   public getCurrentExtent(geographic?: boolean): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
-    const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
+    const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
     return (transfomExtent as TGeoExtent);
   }
 
