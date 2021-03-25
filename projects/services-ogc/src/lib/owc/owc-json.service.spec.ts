@@ -1,6 +1,6 @@
 import { TestBed, getTestBed } from '@angular/core/testing/';
 import { OwcJsonService } from './owc-json.service';
-import { barebonesContext, basicContext, exampleContext, userGuideContext, wuekisContext } from '../../../assets/exampleContext';
+import { barebonesContext, basicContext, exampleContext, userGuideContext, wfsContext } from '../../../assets/exampleContext';
 import { coastalXTestContext } from '../../../assets/coastalx.test.context';
 import { Fill, Stroke, Style } from 'ol/style.js';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
@@ -13,7 +13,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 
 describe('OwcJsonService: reading data from owc', () => {
-  const allTestContexts = [barebonesContext, basicContext, exampleContext, coastalXTestContext, userGuideContext, wuekisContext];
+  const allTestContexts = [barebonesContext, basicContext, exampleContext, coastalXTestContext, userGuideContext, wfsContext];
   const targetProjection = 'EPSG:4326';
 
   beforeEach(() => {
