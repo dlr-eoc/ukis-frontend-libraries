@@ -3,8 +3,8 @@ import { FrameState } from 'ol/PluggableMap';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import { Polygon as  olPolygonGeometry } from 'ol/geom';
-import { WebGLRenderer, PerspectiveCamera, Scene, Mesh, Renderer, DirectionalLight, MeshPhongMaterial,
-    Geometry as tGeometry, Vector3, Shape, ExtrudeGeometry, Color } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Scene, Mesh, Renderer,
+    DirectionalLight, MeshPhongMaterial, Vector3, Shape, ExtrudeGeometry, Color, BufferGeometry } from 'three';
 import { heightAboveWidth, zoom2width } from '@dlr-eoc/map-three';
 
 
@@ -127,7 +127,7 @@ export class ThreeJsRenderer extends LayerRenderer<VectorLayer> {
         return meshes;
     }
 
-    private fGeom2tGeom(fGeom: olPolygonGeometry, height: number): tGeometry {
+    private fGeom2tGeom(fGeom: olPolygonGeometry, height: number): BufferGeometry {
         const coords = fGeom.getCoordinates()[0];
         const shape = new Shape();
         shape.moveTo(coords[0][0], coords[0][1]);

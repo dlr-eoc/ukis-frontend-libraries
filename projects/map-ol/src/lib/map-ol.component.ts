@@ -8,7 +8,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 import { MapOlService, Tgroupfiltertype } from './map-ol.service';
-import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype, WfsLayertype } from '@dlr-eoc/services-layers';
 
 import Map from 'ol/Map';
 import { getUid as olGetUid } from 'ol/util';
@@ -234,8 +234,24 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       case GeojsonLayertype:
         this.updateGeojsonLayerParamsWith(oldLayer as any, newLayer as VectorLayer);
         break;
+      case WfsLayertype:
+        this.updateWfsLayerParamsWith(oldLayer as any, newLayer as VectorLayer);
+        break;
       default:
         break;
+    }
+  }
+
+  private updateWfsLayerParamsWith(oldLayer: olVectorLayer, newLayer: VectorLayer) {
+
+    // step 1: update style
+    if (newLayer.options && newLayer.options.style !== oldLayer.getStyle()) {
+      oldLayer.setStyle(newLayer.options.style);
+    }
+
+    // step 2: update source
+    if (oldLayer.getSource().getUrl() !== newLayer.url) {
+      oldLayer.getSource().setUrl(newLayer.url);
     }
   }
 
