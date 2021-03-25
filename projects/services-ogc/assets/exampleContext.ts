@@ -682,7 +682,7 @@ export const userGuideContext: IOwsContext = {
 };
 
 
-export const wuekisContext: IOwsContext = {
+export const wfsContext: IOwsContext = {
   "id": "ndvi",
   "type": "FeatureCollection",
   "bbox": [
@@ -836,12 +836,12 @@ export const wuekisContext: IOwsContext = {
                           {
                               "code": "GetCapabilities",
                               "method": "GET",
-                              "href": "http://wue-ukis.geographie.uni-wuerzburg.de/geoserver/ows?REQUEST=GetCapabilities&SERVICE=WFS"
+                              "href": "https://ahocevar.com/geoserver/wfs?service=WFS&request=GetCapabilities"
                           },
                           {
                               "code": "GetFeature",
                               "method": "GET",
-                              "href": "http://wue-ukis.geographie.uni-wuerzburg.de/geoserver/ows?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0&BBOX=8.437,47.174,14.414,50.625&NAMESPACES=xmlns(feature,null)&TYPENAME=TRUE_WUEKIS"
+                              "href": "https://ahocevar.com/geoserver/wfs?service=WFS&request=GetFeature&outputFormat=application/json&version=1.1.0&srsname=EPSG:3857&typenames=usa:states&cql_filter=STATE_NAME=%27Pennsylvania%27"
                           }
                       ]
                   }
