@@ -63,7 +63,6 @@ import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 import { flattenLayers } from '@dlr-eoc/utils-maps';
-import { getUrlFromUri, getParameterJsonFromUri } from './helpers';
 import OverlayPositioning from 'ol/OverlayPositioning';
 
 
