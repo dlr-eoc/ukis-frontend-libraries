@@ -261,7 +261,7 @@ export class OwcJsonService {
     return dims;
   }
 
-  getTimeDimensions(dimensions: IEocOwsResource['properties']['dimensions']) {
+  getTimeDimensions(dimensions: IEocOwsResource['properties']['dimensions']): ILayerDimensions['time'] {
     let dim: ILayerDimensions['time'] = { values: null, units: null };
     const value = dimensions.time.value;
     /** check to get value from OGC Service */
