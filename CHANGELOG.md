@@ -1,3 +1,4 @@
+# [7.3.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.3.0) (2021-04-20) (Layer, Utils Features and bug fixes maps)
 ### Bug Fixes
 * **@dlr-eoc/layer-control:**
   - adjust misleading title on hover state [issue 53](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/53).
