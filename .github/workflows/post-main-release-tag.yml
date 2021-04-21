@@ -1,0 +1,65 @@
+name: Post Main Release Push Tag
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]"
+
+jobs:
+  # Check if the latest git Tag is the same as the repo npm version
+  # Check if the repo npm version is higher the the latest version on npm
+  checkTagInMain:
+    runs-on: ubuntu-latest
+    steps:
+      # check out before using actions reference from the same repository!
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - uses: ./.github/actions/check-branch-contains
+        with:
+          mainBranch: "origin/master"
+
+  test:
+    needs: checkTagInMain
+    runs-on: ubuntu-latest
+    steps:
+      # check out before using actions reference from the same repository!
+      - uses: actions/checkout@v2
+      - run: |
+          echo "run test"
+          echo "${{ github.event_name }}"
+          echo "${{ github.ref }}"
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      # check out before using actions reference from the same repository!
+      - uses: actions/checkout@v2
+      - run: |
+          echo "run build"
+
+  pre-publish:
+    needs: build
+    #    if: startsWith(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "run pre-publish"
+
+  publish-gpr:
+    needs: pre-publish
+    #    if: startsWith(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "run publish-gpr"
+
+  publish-npm:
+    needs: pre-publish
+    #    if: startsWith(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "run publish-npm"
