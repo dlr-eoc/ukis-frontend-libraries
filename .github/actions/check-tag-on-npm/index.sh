@@ -6,6 +6,7 @@
 
 
 #NPM_PACKAGE_NAME=@dlr-eoc/core-ui
+#PACKAGE_PATH="./package.json"
 #TAG="v7.4.0"
 #NPM_PACKAGE_TAGS="v0.4.0-next.1 , v0.4.0-next.2 , v0.9.0, v1.0.0, v1.0.1, v1.0.2, v1.0.3"
 
@@ -15,6 +16,21 @@ if [ ! "$TAG" ];then
   echo "no tag was provided! ${TAG}"
   exit 1
 fi
+
+
+# get version from repo
+repoNpmVersion=$(node -p "require('$PACKAGE_PATH').version")
+if [ ! "${repoNpmVersion}" ];then
+  echo "no repo version:${repoNpmVersion}"
+  exit 1
+fi
+
+
+if [ "${TAG}" != "$repoNpmVersion" ];then
+  echo "git tag:${TAG} !== repo:${repoNpmVersion}"
+  exit 1
+fi
+
 
 if [ ! "$NPM_PACKAGE_NAME" ] || [ ! "$NPM_PACKAGE_TAGS" ];then
   echo "no package $NPM_PACKAGE_NAME or tags $NPM_PACKAGE_TAGS are provided!"

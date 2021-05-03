@@ -11,6 +11,10 @@ inputs:
   tag:
     description: "The Tag which should be published on npm"
     required: true
+  repoPackagePath:
+    description: "The path to the package.json in the repository."
+    required: false
+    default: "./package.json"
 
 runs:
   using: "composite"
@@ -25,3 +29,4 @@ runs:
         NPM_PACKAGE_NAME: ${{ inputs.npmPackageName }}
         NPM_PACKAGE_TAGS: ${{ inputs.npmPackageTags }}
         TAG: ${{ inputs.tag }}
+        PACKAGE_PATH: ${{ inputs.repoPackagePath }}
