@@ -1,0 +1,23 @@
+name: "Check Branch contains Tag or Commit"
+description: "Check git tag or commit is in the main remote branch."
+inputs:
+  branch:
+    description: "The branch to check"
+    required: false
+    default: "origin/master"
+  commitId:
+    description: "The commit-ish which should be included in the Branch - also use github.ref"
+    required: false
+    default: "latestTag"
+runs:
+  using: "composite"
+  steps:
+    - run: git fetch --prune --all --tags -f
+      shell: bash
+
+    # https://github.com/actions/runner/issues/665
+    - run: ${{ github.action_path }}/index.sh
+      shell: bash
+      env:
+        BRANCH: ${{ inputs.branch }}
+        COMMITID: ${{ inputs.commitId }}

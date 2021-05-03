@@ -1,13 +1,16 @@
-name: "Check Tags"
-description: "Check git tag and npm version for a repository to prevent wrong publications."
+name: "Check Tag on Npm"
+description: "Check if the tag is already published on npm"
 inputs:
   npmPackageName: # id of input
     description: "The npm package to get the latest version from the npm registry."
     required: false
     default: "@dlr-eoc/core-ui"
   npmPackageTags:
-    description: "The latest Versions of the npm package separated by comma. Use either this or npmPackageName"
+    description: "A List of tags. Use this instead of npmPackageName if you can't get the tags from the package."
     required: false
+  tag:
+    description: "The Tag which should be published on npm"
+    required: true
   repoPackagePath:
     description: "The path to the package.json in the repository."
     required: false
@@ -23,6 +26,7 @@ runs:
     - run: ${{ github.action_path }}/index.sh
       shell: bash
       env:
-        PACKAGE_PATH: ${{ inputs.repoPackagePath }}
         NPM_PACKAGE_NAME: ${{ inputs.npmPackageName }}
         NPM_PACKAGE_TAGS: ${{ inputs.npmPackageTags }}
+        TAG: ${{ inputs.tag }}
+        PACKAGE_PATH: ${{ inputs.repoPackagePath }}

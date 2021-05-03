@@ -100,9 +100,8 @@ The general workflow to create a new version:
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Milestone XY"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
 - merge the release branch in the master by making a pull request
-- push the tag (created from `npm version`) **shortly before the pull request will be merged** by running `git push origin --tags`
-- If the pull request is merged, github actions will run the workflow [Main Release Package](.github/workflows/main-release-package.yml) and checks if the tag was pushed. If this check works the jobs *test* , *build* and *publish* are execudeted and publish the angular projects as github/npm packages.
-If something is going wrong in the Workflow fix it and create a new pull request.
+- push the tag (created from `npm version`) **after the pull request is be merged** by running `git push origin --tags`
+- If the tag is pushed after the pull request is merged, github actions will run the workflow [Main Release Package](.github/workflows/main-release-package.yml) and checks if the tag is included in the master. If this check works the jobs *test* , *build* and *publish* are execudeted and publish the angular projects as github/npm packages.
 
 ## Alternative prereleases can be created
 Git tags in the following formats are allowed
