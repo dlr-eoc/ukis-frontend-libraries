@@ -10,7 +10,6 @@ on:
 
 jobs:
   checkTagOnNpm:
-    needs: checkTagInMain
     runs-on: ubuntu-latest
     steps:
       # check out before using actions reference from the same repository!
