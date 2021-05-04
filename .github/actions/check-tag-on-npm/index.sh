@@ -7,7 +7,7 @@
 
 #NPM_PACKAGE_NAME=@dlr-eoc/core-ui
 #PACKAGE_PATH="./package.json"
-#TAG="v7.4.0"
+#TAG="v7.3.1"
 #NPM_PACKAGE_TAGS="v0.4.0-next.1 , v0.4.0-next.2 , v0.9.0, v1.0.0, v1.0.1, v1.0.2, v1.0.3"
 
 # remove refs/tags/ and v
@@ -32,13 +32,18 @@ if [ "${TAG}" != "$repoNpmVersion" ];then
 fi
 
 
-if [ ! "$NPM_PACKAGE_NAME" ] || [ ! "$NPM_PACKAGE_TAGS" ];then
-  echo "no package $NPM_PACKAGE_NAME or tags $NPM_PACKAGE_TAGS are provided!"
-  exit 1
+if [ ! "$NPM_PACKAGE_NAME" ];then
+  if [ ! "$NPM_PACKAGE_TAGS" ];then
+    echo "no package $NPM_PACKAGE_NAME or tags $NPM_PACKAGE_TAGS are provided!"
+    exit 1
+  fi
 fi
 
 # get all versions published: npm show <package> versions
-npmTagsList="$(npm show "$NPM_PACKAGE_NAME" versions)"
+if [ "$NPM_PACKAGE_NAME" ];then
+  npmTagsList="$(npm show "$NPM_PACKAGE_NAME" versions)"
+fi
+
 if [ "$NPM_PACKAGE_TAGS" ];then
   npmTagsList="$(printf "%s" "$NPM_PACKAGE_TAGS" | sed -e "s/v//g;" )"
 fi
