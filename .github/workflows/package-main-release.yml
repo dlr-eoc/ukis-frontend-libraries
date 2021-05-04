@@ -4,9 +4,7 @@ name: Package Main Release
 on:
   push:
     tags:
-      - '*'
-#      - "v[0-9]+.[0-9]+.[0-9]"
-  workflow_dispatch:
+      - "v[0-9]+.[0-9]+.[0-9]"
 
 jobs:
   checkTagInMain:
