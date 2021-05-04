@@ -15,8 +15,8 @@ describe('add-routing', () => {
 
   const ngAddOptions: UkisNgAddRoutingSchema = {
     project: 'ukisapp',
-    addFiles: 'true',
-    updateFiles: 'true'
+    addFiles: true,
+    updateFiles: true
   };
 
   const workspaceOptions: WorkspaceOptions = {
@@ -31,7 +31,7 @@ describe('add-routing', () => {
     inlineStyle: false,
     inlineTemplate: false,
     routing: true,
-    style: Style.Scss,
+    style: Style.Css,
     skipTests: false
   };
 
