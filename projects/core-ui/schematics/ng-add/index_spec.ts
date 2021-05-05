@@ -219,15 +219,31 @@ describe('ng-add', () => {
     });
   });
 
-  it('should remove imports for views if routing is true', async () => {
+  it('should remove imports from views if routing is true', async () => {
     const testImports = [
       'ExampleViewComponent'
     ];
     const routingOptions = Object.assign({}, ngAddOptions, { routing: true });
     const tree = await schematicRunner.runSchematicAsync('ng-add', routingOptions, appTree).toPromise();
-    const appModule = tree.readContent('/src/app/app.module.ts');
+    const appModuleSource = tree.readContent('/src/app/app.module.ts').split('@NgModule');
+    const appModule = appModuleSource[0];
+
     testImports.map(i => {
       expect(appModule).not.toContain(i);
+    });
+  });
+
+  it('should remove Declarations from views if routing is true', async () => {
+    const testDeclarations = [
+      'ExampleViewComponent'
+    ];
+    const routingOptions = Object.assign({}, ngAddOptions, { routing: true });
+    const tree = await schematicRunner.runSchematicAsync('ng-add', routingOptions, appTree).toPromise();
+    const appModuleSource = tree.readContent('/src/app/app.module.ts').split('@NgModule');
+    const appNgModule = `@NgModule${appModuleSource[1]}`;
+
+    testDeclarations.map(i => {
+      expect(appNgModule).not.toContain(i);
     });
   });
 });

@@ -133,7 +133,7 @@ export function removeServiceComponentModule(optionsProject: UkisNgAddSchema['pr
           applyChanges(changes, tree, modulePath);
         } else {
           const symbolName = item.classifiedName.replace(/\..*$/, '');
-          const change = [removeImport(moduleSource, modulePath, symbolName, item.path)];
+          const change = [...removeImport(moduleSource, modulePath, symbolName, item.path)];
           applyChanges(change, tree, modulePath);
         }
       }
@@ -159,8 +159,9 @@ function removeDeclarationFromModule(source: ts.SourceFile, modulePath: string, 
  * https://github.com/angular/angular-cli/blob/fb14945c02a3f150d6965e77324416b1ec7cc575/packages/schematics/angular/utility/ast-utils.ts#L22
  * RemoveChange: host.read => content.substring // from pos to remove length
  *
+ * If there are multiple same imports all get removed
  */
-function removeImport(source: ts.SourceFile, fileToEdit: string, symbolName: string, fileName: string, isDefault = false): Change {
+function removeImport(source: ts.SourceFile, fileToEdit: string, symbolName: string, fileName: string, isDefault = false): Change[] {
   const rootNode = source;
   // SyntaxKind: https://github.com/microsoft/TypeScript/blob/v4.2.3/src/compiler/types.ts#L21
   const allImports = findNodes(rootNode, ts.SyntaxKind.ImportDeclaration);
@@ -189,50 +190,30 @@ function removeImport(source: ts.SourceFile, fileToEdit: string, symbolName: str
 
     // if imports * from fileName, don't add symbolName
     if (importsAsterisk) {
-      return new NoopChange();
+      return [new NoopChange()];
     }
 
     const importTextNodes = imports.filter(n => (n as ts.Identifier).text === symbolName);
     // console.log(importTextNodes);
 
     // remove import if it's there
-    if (importTextNodes.length !== 0) {
-      const fallbackPos =
-        findNodes(relevantImports[0], ts.SyntaxKind.CloseBraceToken)[0].getStart() ||
-        findNodes(relevantImports[0], ts.SyntaxKind.FromKeyword)[0].getStart();
-
+    if (importTextNodes.length) {
       const open = isDefault ? '' : '{ ';
       const close = isDefault ? '' : ' }';
 
+      const changes = importTextNodes.map(node => {
+        const position = node.getStart();
+        const toRemove = `import ${open}${symbolName}${close}` +
+          ` from '${fileName}'}`;
+        return new RemoveChange(fileToEdit, position, toRemove);
+      });
 
-
-      // TODO find to remove in code and calculate position
-      const toRemove = `import ${open}${symbolName}${close}` +
-        ` from '${fileName}'${insertAtBeginning ? ';\n' : ''}`;
-      return new RemoveChange(fileToEdit, fallbackPos, `, ${symbolName}`);
+      return changes;
+    } else {
+      return [new NoopChange()];
     }
-
-    return new NoopChange();
   } else {
-    return new NoopChange();
-    // This case can be removed for the remove case???
-
-    // no such import declaration exists
-    /* const useStrict = findNodes(rootNode, ts.isStringLiteral)
-      .filter((n) => n.text === 'use strict');
-    let fallbackPos = 0;
-    if (useStrict.length > 0) {
-      fallbackPos = useStrict[0].end;
-    }
-    const open = isDefault ? '' : '{ ';
-    const close = isDefault ? '' : ' }';
-    // if there are no imports or 'use strict' statement, insert import at beginning of file
-    const insertAtBeginning = allImports.length === 0 && useStrict.length === 0;
-    const separator = insertAtBeginning ? '' : ';\n';
-    const toRemove = `${separator}import ${open}${symbolName}${close}` +
-      ` from '${fileName}'${insertAtBeginning ? ';\n' : ''}`;
-
-    return new RemoveChange(fileToEdit, fallbackPos, toRemove); */
+    return [new NoopChange()];
   }
 }
 
@@ -247,7 +228,8 @@ function removeSymbolFromNgModuleMetadata(
   importPath: string | null = null,
 ): Change[] {
   const nodes = getDecoratorMetadata(source, 'NgModule', '@angular/core');
-  let node: any = nodes[0];  // tslint:disable-line:no-any
+  let nodeArray = null as any as ts.NodeArray<ts.Expression>;
+  let node: ts.Node = nodes[0];  // tslint:disable-line:no-any
 
   /* const printNodes = nodes.map(n => {
     const tempnode: any = n;
@@ -286,28 +268,30 @@ function removeSymbolFromNgModuleMetadata(
       // Forward the property.
       node = arrLiteral;
     } else {
-      node = arrLiteral.elements;
+      nodeArray = arrLiteral.elements;
     }
 
-    // TODO: get correct position to remove node
-    console.log('---------------------- assignment', node);
-
-    if (Array.isArray(node)) {
-      const nodeArray = node as {} as Array<ts.Node>;
+    if (Array.isArray(nodeArray) && nodeArray.length) {
+      // const nodeArray = node;
       const symbolsArray = nodeArray.map(n => tags.oneLine`${n.getText()}`);
-      if (symbolsArray.includes(tags.oneLine`${symbolName}`)) {
+      const hasIndex = symbolsArray.indexOf(tags.oneLine`${symbolName}`);
+      // found symbol in nodes array
+      if (hasIndex !== -1) {
+        node = nodeArray[hasIndex];
+      } else {
+        // not found so return;
         return [];
       }
-
-      node = node[node.length - 1];
     }
 
     let toRemove: string;
-    let position = node.getEnd();
+    let position = node.getStart();
     if (node.kind === ts.SyntaxKind.ArrayLiteralExpression) {
       // We found the field but it's empty. Insert it just before the `]`.
       position--;
       toRemove = `\n${tags.indentBy(4)`${symbolName}`}\n  `;
+      console.log('We found the field but its empty', position, toRemove);
+      return [];
     } else {
       // Get the indentation of the last element, if any.
       const text = node.getFullText(source);
@@ -318,15 +302,14 @@ function removeSymbolFromNgModuleMetadata(
         toRemove = `, ${symbolName}`;
       }
     }
+
     if (importPath !== null) {
-      console.log('---------------------- return new RemoveChange');
       return [
         new RemoveChange(ngModulePath, position, toRemove),
-        removeImport(source, ngModulePath, symbolName.replace(/\..*$/, ''), importPath),
+        ...removeImport(source, ngModulePath, symbolName.replace(/\..*$/, ''), importPath),
       ];
     }
 
-    console.log('---------------------- return new RemoveChange');
     return [new RemoveChange(ngModulePath, position, toRemove)];
   } else {
     return [new NoopChange()];
