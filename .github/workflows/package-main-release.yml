@@ -1,29 +1,42 @@
-name: Pre Release
+# Should run Main Release Package after pull request and tag push
+name: Package Main Release
+
 on:
   push:
-    branches-ignore:
-      - "*"
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+"
-      - "v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+"
-      - "v[0-9]+.[0-9]+.[0-9]+-next.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]"
 
 jobs:
-  checkTags:
+  checkTagInMain:
     runs-on: ubuntu-latest
     steps:
-      # check out before using actions referenced from the same repository!
-      # https://github.com/actions/checkout#usage - defaults to the reference or SHA for that event
+      # check out before using actions reference from the same repository!
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: rm -f .npmrc #remove npm config so it checks from the default registry
-      - uses: ./.github/actions/check-tags
+      - uses: ./.github/actions/check-branch-contains
+        with:
+          branch: "origin/master"
+          commitId: "${{ github.ref }}"
+
+  checkTagOnNpm:
+    needs: checkTagInMain
+    runs-on: ubuntu-latest
+    steps:
+      # check out before using actions reference from the same repository!
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: rm -f .npmrc
+      - uses: ./.github/actions/check-tag-on-npm
         with:
           npmPackageName: "@dlr-eoc/core-ui"
+          tag: "${{ github.ref }}"
+
   build:
-    needs: checkTags
+    needs: checkTagOnNpm
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -44,7 +44,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, Extent } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -63,6 +63,7 @@ import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 import { flattenLayers } from '@dlr-eoc/utils-maps';
+import OverlayPositioning from 'ol/OverlayPositioning';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -567,7 +568,7 @@ export class MapOlService {
    * This function resets/adds all olLayers of a type with the new UKIS-Layers
    *
    * if only one group of them map is used and setLayers is called then the map flickers!
-   * this is because of all layers are new created and the have all new ol_uid's
+   * this is because all layers are newly created and each get new ol_uid's
    */
   public setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
@@ -644,6 +645,9 @@ export class MapOlService {
       case 'geojson':
         newOlLayer = this.create_geojson_layer(newLayer as VectorLayer);
         break;
+      case 'wfs':
+        newOlLayer = this.create_wfs_layer(newLayer as VectorLayer);
+        break;
       case 'custom':
         newOlLayer = this.create_custom_layer(newLayer as CustomLayer);
         break;
@@ -698,7 +702,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
 
     if (l.maxResolution) {
@@ -790,7 +794,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
     const newlayer = new olTileLayer(layeroptions);
     return newlayer;
@@ -887,7 +891,7 @@ export class MapOlService {
       }
 
       if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
+        layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
       }
 
       return new olTileLayer(layeroptions);
@@ -897,6 +901,38 @@ export class MapOlService {
     }
   }
 
+  private create_wfs_layer(l: VectorLayer): olVectorLayer {
+
+    const url = new URL(l.url);
+    // making sure that srsname is set to current projection
+    url.searchParams.set('srsname', this.EPSG);
+    // note that we don't need to adjust the bbox. contrary to wms'es, in a wfs,
+    // a bbox may use another projection than the srsname.
+
+    const wfsSource = new olVectorSource({
+      format: new olGeoJSON(),
+      url: url.toString()
+    });
+
+    const styling = l.options?.style || undefined;
+
+    const layeroptions: any = {
+      type: 'wfs',
+      filtertype: l.filtertype,
+      name: l.name,
+      id: l.id,
+      visible: l.visible,
+      legendImg: l.legendImg,
+      opacity: l.opacity || 1,
+      zIndex: 1,
+      source: wfsSource,
+      style: styling
+    };
+
+    const wfs = new olVectorLayer(layeroptions);
+
+    return wfs;
+  }
 
   private create_geojson_layer(l: VectorLayer) {
     let olSource;
@@ -953,7 +989,7 @@ export class MapOlService {
     }
 
     if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
 
     if (l.cluster) {
@@ -1064,7 +1100,7 @@ export class MapOlService {
       }
 
       if (l.bbox) {
-        const extent = transformExtent(l.bbox, WGS84, this.map.getView().getProjection().getCode());
+        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
         layer.setExtent(extent);
       }
 
@@ -1425,7 +1461,7 @@ export class MapOlService {
         autoPanAnimation: {
           duration: 250
         },
-        positioning: 'bottom-center',
+        positioning: OverlayPositioning.BOTTOM_CENTER,
         stopEvent: true,
         insertFirst: false,
       };
@@ -1603,7 +1639,7 @@ export class MapOlService {
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const transfomExtent = transformExtent(extent, projection, this.map.getView().getProjection().getCode());
+    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode());
     const newFitOptions = {
       size: this.map.getSize(),
       // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
@@ -1619,7 +1655,7 @@ export class MapOlService {
   /** ol.Coordinate xy */
   public setCenter(center: number[], geographic?: boolean): number[] {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const transfomCenter = transform(center, projection, this.map.getView().getProjection().getCode());
+    const transfomCenter = transform(center, projection, this.getProjection().getCode());
     // console.log('set center in svc', transfomCenter)
     // console.log(this.map.getView().getCenter())
     this.map.getView().setCenter(transfomCenter);
@@ -1629,7 +1665,7 @@ export class MapOlService {
   /** USED in map-ol.component */
   public getCenter(geographic?: boolean): any {
     const dstProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const srcProjection = getProjection(this.map.getView().getProjection().getCode());
+    const srcProjection = getProjection(this.getProjection().getCode());
     const transfomCenter = transform(this.map.getView().getCenter(), srcProjection, dstProjection);
     return transfomCenter;
   }
@@ -1646,7 +1682,7 @@ export class MapOlService {
     });
     if (geographic) {
       const projection = getProjection(WGS84);
-      const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
+      const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
       return (transfomExtent as TGeoExtent);
     } else {
       return extent;
@@ -1661,7 +1697,7 @@ export class MapOlService {
   public getCurrentExtent(geographic?: boolean): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
-    const transfomExtent = transformExtent(extent, this.map.getView().getProjection().getCode(), projection);
+    const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
     return (transfomExtent as TGeoExtent);
   }
 

@@ -11,6 +11,7 @@ import olStyle from 'ol/style/Style';
 import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
+import { WmsService } from '@dlr-eoc/services-ogc';
 
 @Component({
   selector: 'app-route-map',
@@ -26,7 +27,8 @@ export class RouteMapComponent implements OnInit {
   constructor(
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
-    public mapSvc: MapOlService) {
+    public mapSvc: MapOlService,
+    private wmsSvc: WmsService) {
 
     this.controls = {
       attribution: true,
@@ -45,6 +47,13 @@ export class RouteMapComponent implements OnInit {
   setExtent() {
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
     this.mapStateSvc.setExtent([-14, 33, 40, 57]);
+  }
+
+  parseCapabilities() {
+    this.wmsSvc.getCapabilities('https://geoservice.dlr.de/eoc/land/wms').subscribe(caps => {
+      const layer = this.wmsSvc.getLayerFromCapabilities('AGRODE_S2_EVI_P1M', caps);
+      console.log(layer);
+    });
   }
 
   addBaseLayers() {
@@ -389,6 +398,14 @@ export class RouteMapComponent implements OnInit {
       }
     });
 
+    const wfsLayer = new VectorLayer({
+      id: 'WfsLayer',
+      name: 'WFS Layer',
+      type: 'wfs',
+      url: "https://ahocevar.com/geoserver/wfs?service=WFS&request=GetFeature&outputFormat=application/json&version=1.1.0&srsname=EPSG:3857&typenames=usa:states&cql_filter=STATE_NAME='Pennsylvania'",
+      bbox: [-83.1005859375, 38.37611542403604, -72.50976562499999, 43.03677585761058]
+    });
+
     const eocBasemap = new EocBasemapTile();
     eocBasemap.cssClass = 'hide';
 
@@ -416,6 +433,13 @@ export class RouteMapComponent implements OnInit {
       layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay]
     });
 
+    const groupVector = new LayerGroup({
+      id: 'group_3',
+      name: 'Test Group Vector-Data',
+      expanded: false,
+      layers: [vectorLayer, vectorLayer3, wfsLayer]
+    });
+
     const hillshade = new HillshadeTile({
       popup: {
         pupupFunktion: (obj) => {
@@ -438,7 +462,7 @@ export class RouteMapComponent implements OnInit {
       }
     });
 
-    const overlays = [gufLayer, hillshade, groupLayer2, vectorLayer, vectorLayer3, groupLayer, vectorLayerCluster];
+    const overlays = [gufLayer, hillshade, groupVector, groupLayer2, groupLayer, vectorLayerCluster];
     overlays.map(layer => {
       if (layer instanceof Layer) {
         this.layersSvc.addLayer(layer, 'Layers');

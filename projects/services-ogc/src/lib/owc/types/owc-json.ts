@@ -9,6 +9,15 @@
 import * as GeoJSON from 'geojson';
 
 
+function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
+  for (const entry of list) {
+    if (!predicate(entry)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 /**
  * The OWS Context describes Metadata, API, Time Range
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truethe-ows-context-document-structure
@@ -44,12 +53,12 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Information about rights held in and over the Context document */
     rights?: string;
     /**
-    * Date or range of dates relevant to the resource 
-    * time range which is expected to be of interest to the user.
-    */
+     * Date or range of dates relevant to the resource 
+     * time range which is expected to be of interest to the user.
+     */
     date?: DateString;
     /** This array is an optional and expresses categories related to this Context document */
-    categories?: IOwsCategorie[];
+    categories?: IOwsCategory[];
     /** Extension Any other element */
     [k: string]: any;
   };
@@ -58,6 +67,21 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
   /** Extension Any other element */
   [k: string]: any;
 }
+
+export function isIOwsContext(object: any): object is IOwsContext {
+  return 'id' in object
+    && 'properties' in object
+    && 'links' in object.properties // && trueForAll(object.properties.links, isIOwsLinks)
+    && 'lang' in object.properties
+    && 'title' in object.properties
+    && 'updated' in object.properties
+    && (object.properties.authors ? trueForAll(object.properties.authors, isIOwsAuthor) : true)
+    && (object.properties.creator ? isIOwsCreator(object.properties.creator) : true)
+    && (object.properties.display ? trueForAll(object.properties.display, isIOwsCreatorDisplay): true)
+    && (object.properties.categories ? trueForAll(object.properties.categories, isIOwsCategory) : true)
+    && 'features' in object && trueForAll(object.features, isIOwsResource);
+}
+
 
 /**
  * Each layer (a.k.a. feature) in a context document is known as a ‘Resource’
@@ -68,7 +92,7 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
  * is focussed on a particular representation of information.
  * These can be one of a number of OGC Web Services, specifically WMS, WMTS, WFS, WCS, WPS and CSW,
  * or one of a number of inline or referenced formats, specifically GML, KML, GeoTIFF, GMLJP2, GMLCOV,
- * or a custom offering type defined in a profile or by an organisation.
+ * or a custom offering type defined in a profile or by an organization.
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truethe-ows-context-document-structure
  */
 export interface IOwsResource extends GeoJSON.Feature {
@@ -79,6 +103,11 @@ export interface IOwsResource extends GeoJSON.Feature {
   id: string | number;
   properties: IOwsResourceProperties;
   [k: string]: any;
+}
+
+export function isIOwsResource(object: any): object is IOwsResource {
+  return 'id' in object
+    && 'properties' in object && isIOwsResourceProperties(object.properties);
 }
 
 export interface IOwsResourceProperties {
@@ -101,7 +130,7 @@ export interface IOwsResourceProperties {
   /** Flag value indicating to the client if the Context resource should be displayed by default */
   active?: boolean;
   /** This array is optional and expresses a category related to the Context resource */
-  categories?: IOwsCategorie[];
+  categories?: IOwsCategory[];
   /** Minimum scale for the display of the Context resource Double */
   minscaledenominator?: number;
   /** Maximum scale for the display of the Context resource Double */
@@ -115,13 +144,21 @@ export interface IOwsResourceProperties {
   [k: string]: any;
 }
 
+export function isIOwsResourceProperties(object: any): object is IOwsResourceProperties {
+  return 'title' in object
+    && 'updated' in object
+    && (object.authors ? trueForAll(object.authors, isIOwsAuthor) : true)
+    && (object.offerings ? trueForAll(object.offerings, isIOwsOffering) : true)
+    && (object.categories ? trueForAll(object.categories, isIOwsCategory) : true);
+}
+
 
 /**
- * In reality a resource can be realised in a number of different ways, and so an OWC document allows various options to be specified.
+ * In reality a resource can be realized in a number of different ways, and so an OWC document allows various options to be specified.
  * These are known as offerings.
  * The intention is that these are, as far as is possible by the format used,
  * equivalent and no priority is assigned to their order in the standard.
- * They are intended to be alternatives that the client can use to allow it to visualise or use the resource.
+ * They are intended to be alternatives that the client can use to allow it to visualize or use the resource.
  *
  * So for example four offerings, a WMS, a WFS with portrayal as SLD, and an inline GML Offering again with portrayal as SLD.
  * Different clients could use these offerings as appropriate:
@@ -148,11 +185,23 @@ export interface IOwsOffering {
   [k: string]: any;
 }
 
+export function isIOwsOffering(object: any): object is IOwsOffering {
+  return 'code' in object
+    && (object.operations ? trueForAll(object.operations, isIOwsOperation) : true)
+    && (object.contents ? trueForAll(object.contents, isIOwsContent) : true)
+    && (object.styles ? trueForAll(object.styles, isIOwsStyleSet) : true)
+}
 
 export interface IOwsCreator {
   title?: string;
   uri?: string;
   version?: string;
+}
+
+export function isIOwsCreator(object: any): object is IOwsCreator {
+  return 'title' in object
+    || 'uri' in object
+    || 'version' in object;
 }
 
 export interface IOwsAuthor {
@@ -163,11 +212,23 @@ export interface IOwsAuthor {
   [k: string]: any;
 }
 
-export interface IOwsCategorie {
+export function isIOwsAuthor(object: any): object is IOwsAuthor {
+  return 'name' in object
+    || 'email' in object
+    || 'uri' in object;
+}
+
+export interface IOwsCategory {
   scheme?: string;
   /** Category related to this context document. It MAY have a related code-list that is identified by the scheme attribute */
-  term?: string;
+  term?: string | number | boolean;
   label?: string;
+}
+
+export function isIOwsCategory(object: any): object is IOwsCategory {
+  return 'scheme' in object
+    || 'term' in object
+    || 'label' in object;
 }
 
 export interface IOwsLinks {
@@ -181,6 +242,10 @@ export interface IOwsLinks {
   [k: string]: any;
 }
 
+export function isIOwsLinks(object: any): object is IOwsLinks {
+  return 'rel' in object;
+}
+
 export interface IOwsCreatorApplication {
   title?: string;
   uri?: string;
@@ -192,14 +257,21 @@ export interface IOwsCreatorDisplay {
   pixelWidth?: number;
   /** Width measured in pixels of the display showing by the Area of Interest */
   pixelHeight?: number;
-  /** The size of a pixel of the display in milimeters 
-   * (combined with the previous ones allows for the real display size to be calculated) */
+  /** The size of a pixel of the display in millimeters
+   * (combined with the previous ones allows for the real display size to be calculated)
+   */
   mmPerPixel?: number;
   [k: string]: any;
 }
 
+export function isIOwsCreatorDisplay(object: any): object is IOwsCreatorDisplay {
+  return 'pixelWidth' in object
+    || 'pixelHeight' in object
+    || 'mmPerPixel' in object;
+}
+
 /**
- * Most service offerings have two operations, a ‘GetCapabilities’ operation and a data operation such as ‘GetMap’ for WMS 
+ * Most service offerings have two operations, a ‘GetCapabilities’ operation and a data operation such as ‘GetMap’ for WMS
  */
 export interface IOwsOperation {
   /**
@@ -218,6 +290,13 @@ export interface IOwsOperation {
   [k: string]: any;
 }
 
+export function isIOwsOperation(object: any): object is IOwsOperation {
+  return 'code' in object
+    && 'method' in object
+    && (object.request ? isIOwsContent(object.request) : true)
+    && (object.result ? isIOwsContent(object.result) : true);
+}
+
 
 export interface IOwsContent {
   /** MIME type of the Content */
@@ -229,6 +308,10 @@ export interface IOwsContent {
   [k: string]: any;
 }
 
+export function isIOwsContent(object: any): object is IOwsContent {
+  return 'type' in object;
+}
+
 export interface IOwsStyleSet {
   name: string;
   title: string;
@@ -237,6 +320,11 @@ export interface IOwsStyleSet {
   legendURL?: string;
   content?: IOwsContent;
   [k: string]: any;
+}
+
+export function isIOwsStyleSet(object: any): object is IOwsStyleSet {
+  return 'name' in object
+    && 'title' in object;
 }
 
 

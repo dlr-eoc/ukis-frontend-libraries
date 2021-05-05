@@ -36,6 +36,7 @@ import { SunlightComponent } from './components/sunlight/sunlight.component';
 import { InterpolationSettingsComponent } from './components/interpolation-settings/interpolation-settings.component';
 import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
 import { TablePopupComponent } from './components/table-popup/table-popup.component';
+import { ServicesOgcModule } from '@dlr-eoc/services-ogc';
 import { ExampleGroupActionComponent } from './components/example-group-action/example-group-action.component';
 
 @NgModule({
@@ -75,7 +76,8 @@ import { ExampleGroupActionComponent } from './components/example-group-action/e
     LayerControlModule,
     MapToolsModule,
     OwcControlModule,
-    HttpClientModule
+    HttpClientModule,
+    ServicesOgcModule
   ],
   providers: [AlertService, ProgressService],
   bootstrap: [AppComponent]
