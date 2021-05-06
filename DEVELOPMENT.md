@@ -23,6 +23,10 @@
 - Internally we use branches in the repository to create new features and bug fixes
 - If you are not member of our organization fork our repository and use branches ([see our guide on contributing](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/CONTRIBUTING.md))
 
+**gh-pages branch:**
+This branch is used to host some demo applications as GitHub Pages.
+Do not push to it or adjust it manually, because it gets updated by a [GitHub Action gh-pages.yml](https://github.com/marketplace/actions/deploy-to-github-pages)
+
 
 # Ho to create a new Project library (UKIS-Module)
 

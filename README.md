@@ -22,6 +22,7 @@ The following libraries/packages are included in this repository:
 - [layer-control](projects/layer-control/README.md)
 - [map-tools](projects/map-tools/README.md)
 - [map-ol](projects/map-ol/README.md)
+- [map-three](projects/map-three/README.md)
 - [owc-control](projects/owc-control/README.md)
 - [user-info](projects/user-info/README.md)
 
@@ -32,7 +33,7 @@ The following libraries/packages are included in this repository:
 
 - [utils-maps](projects/utils-maps/README.md)
 - [utils-browser](projects/utils-browser/README.md)
-- [map-three](projects/map-three/README.md)
+- [utils-ogc](projects/utils-ogc/README.md)
 
 
 ## To use the libraries in your project specific application, you can either use the packaged npm modules or include this repository.
@@ -63,6 +64,15 @@ The following libraries/packages are included in this repository:
 6. [See clarity get-started to use there ui components](https://clarity.design/documentation/get-started)
 
 
+
+## Demos
+
+Check our demos on stackblitz
+- [Basic layout of the application](https://stackblitz.com/edit/clarity-v4-dlr-eoc-ukis-v7)
+- [Map demo with OpenLayers](https://stackblitz.com/edit/clarity-v4-dlr-eoc-ukis-v7-map)
+
+and GitHub Pages
+- [Angular app from projects/demo-maps](https://dlr-eoc.github.io/ukis-frontend-libraries/)
 
 
 
