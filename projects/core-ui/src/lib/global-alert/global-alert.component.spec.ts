@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GlobalAlertComponent } from './global-alert.component';
 import { AlertService, IAlert } from './alert.service';
@@ -8,7 +8,7 @@ describe('GlobalAlertComponent', () => {
   let component: GlobalAlertComponent;
   let fixture: ComponentFixture<GlobalAlertComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule],
       declarations: [GlobalAlertComponent],

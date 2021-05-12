@@ -13,13 +13,13 @@
     },
     "addFiles": {
       "description": "Add files for routing to your application.",
-      "type": "string",
-      "default": "true"
+      "type": "boolean",
+      "default": true
     },
     "updateFiles": {
       "description": "Update files in your application.",
-      "type": "string",
-      "default": "true"
+      "type": "boolean",
+      "default": true
     }
   }
 }

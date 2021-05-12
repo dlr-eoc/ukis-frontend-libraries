@@ -13,33 +13,33 @@
     },
     "addClr": {
       "description": "Runns external Schematic @clr/angular:ng-add",
-      "type": "string",
-      "default": "false"
+      "type": "boolean",
+      "default": false
     },
     "addFiles": {
       "description": "Add assets, styles and app files to your application.",
-      "type": "string",
-      "default": "true"
+      "type": "boolean",
+      "default": true
     },
     "updateFiles": {
       "description": "Update files in your application.",
-      "type": "string",
-      "default": "true"
+      "type": "boolean",
+      "default": true
     },
     "routing": {
       "description": "Add routing with a sample route to your UKIS application.",
-      "type": "string",
-      "default": "false"
+      "type": "boolean",
+      "default": false
     },
     "addMap": {
       "description": "Add @dlr-eoc/map-ol to your UKIS application.",
-      "type": "string",
-      "default": "false"
+      "type": "boolean",
+      "default": false
     },
     "auth": {
       "description": "Add Authentication to your UKIS application.",
-      "type": "string",
-      "default": "false"
+      "type": "boolean",
+      "default": false
     }
   }
 }

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MousePositionComponent } from './mouse-position.component';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ describe('MousePositionComponent', () => {
   let component: MousePositionComponent;
   let fixture: ComponentFixture<MousePositionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MousePositionComponent],
       imports: [FormsModule, ClarityModule],

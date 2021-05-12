@@ -1,10 +1,12 @@
 import {
   Rule, Tree, chain, apply, url, mergeWith, move,
-  filter, noop, SchematicsException, applyTemplates, SchematicContext
+  filter, noop, applyTemplates, SchematicContext
 } from '@angular-devkit/schematics';
 import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
+import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { UkisNgAddRoutingSchema } from './schema';
-import { getProject, addServiceComponentModule, ImoduleImport } from '../utils';
+import { getProjectName, checkProjectSourceRoot } from '../workspace-utils';
+import { addServiceComponentModule, ImoduleImport } from '../ast-utils';
 
 
 
@@ -12,9 +14,9 @@ import { getProject, addServiceComponentModule, ImoduleImport } from '../utils';
 // https://dev.to/thisdotmedia/schematics-pt-3-add-tailwind-css-to-your-angular-project-40pp
 export function addRouting(options: UkisNgAddRoutingSchema): Rule {
   const rules: Rule[] = [
-    (options.addFiles === 'false') ? noop() : ruleAddFiles(options),
-    (options.updateFiles === 'false') ? noop() : ruleAddImportsInAppModule(options),
-    // (_options.skip === 'true') ? noop() : ruleAddImportsInAppComponent(_options)
+    (options.addFiles === false) ? noop() : ruleAddFiles(options),
+    (options.updateFiles === false) ? noop() : ruleAddImportsInAppModule(options.project),
+    // (_options.skip === true) ? noop() : ruleAddImportsInAppComponent(_options)
   ];
 
   return chain(rules);
@@ -29,47 +31,44 @@ export function addRouting(options: UkisNgAddRoutingSchema): Rule {
  */
 function ruleAddFiles(options: UkisNgAddRoutingSchema): Rule {
   return async (tree: Tree, context: SchematicContext) => {
-    const { project } = await getProject(tree, options.project as string);
+    const workspace = await getWorkspace(tree);
+    const projectName = getProjectName(workspace, options.project);
+    if (projectName) {
+      const project = workspace.projects.get(projectName);
 
-    if (!project.sourceRoot) {
-      project.sourceRoot = 'src';
-      throw new SchematicsException(`Project.sourceRoot is not defined in the workspace!`);
-    }
+      if (project && checkProjectSourceRoot(project, context)) {
+        const sourcePath = join(normalize(project.root), project.sourceRoot); // project.sourceRoot
+        const appPath = join(sourcePath, 'app');
+        const templateVariabels = Object.assign(options, {
+          appPrefix: project.prefix
+        });
 
-    const sourcePath = join(normalize(project.root), project.sourceRoot); // project.sourceRoot
-    const appPath = join(sourcePath, 'app');
-    const templateVariabels = Object.assign(options, {
-      appPrefix: project.prefix
-    });
-
-    const appTemplateSource = apply(url('./files/src/app'), [
-      applyTemplates({ ...templateVariabels }),
-      filter((path: Path) => {
-
-        // TODO filter out /app/views if exists
-        context.logger.info(`if you already run 'ng add @dlr-eoc/core-ui' without the routing option, you can move all components from views to 'route-components'`);
-
-        const testFiles = ['app.component.html', 'app.component.ts', 'app-routing.module.ts'];
-        /**
-         * check for existing files the are allowed to overwrite!
-         */
-        const destPath = join(appPath, path);
-        if (tree.exists(destPath)) {
-          for (const f of testFiles) {
-            if (destPath.includes(f)) {
-              tree.delete(destPath);
+        const appTemplateSource = apply(url('./files/src/app'), [
+          applyTemplates({ ...templateVariabels }),
+          filter((path: Path) => {
+            const testFiles = ['app.component.html', 'app.component.ts', 'app-routing.module.ts'];
+            /**
+             * check for existing files the are allowed to overwrite!
+             */
+            const destPath = join(appPath, path);
+            if (tree.exists(destPath)) {
+              for (const f of testFiles) {
+                if (destPath.includes(f)) {
+                  tree.delete(destPath);
+                }
+              }
             }
-          }
-        }
-        return true;
-      }),
-      move(getSystemPath(appPath)),
-    ]);
+            return true;
+          }),
+          move(getSystemPath(appPath)),
+        ]);
 
+        return chain([
+          mergeWith(appTemplateSource)
+        ]);
 
-    return chain([
-      mergeWith(appTemplateSource)
-    ]);
+      }
+    }
   };
 }
 
@@ -79,7 +78,7 @@ function ruleAddFiles(options: UkisNgAddRoutingSchema): Rule {
  * - AppRoutingModule
  * - HttpClientModule?
  */
-function ruleAddImportsInAppModule(options: UkisNgAddRoutingSchema): Rule {
+function ruleAddImportsInAppModule(optionsProject: UkisNgAddRoutingSchema['project']): Rule {
   const rules: Rule[] = [];
   const imports: ImoduleImport[] = [
     { classifiedName: 'AppRoutingModule', path: './app-routing.module', module: true },
@@ -90,7 +89,7 @@ function ruleAddImportsInAppModule(options: UkisNgAddRoutingSchema): Rule {
    * create a rule for each insertImport/addProviderToModule because addProviderToModule is not working multiple times in one Rule???
    */
   imports.map(item => {
-    rules.push(addServiceComponentModule(options, item));
+    rules.push(addServiceComponentModule(optionsProject, item));
   });
 
   // then chain the rules to one

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LayerentryComponent } from './layerentry.component';
 import { ClarityModule } from '@clr/angular';
@@ -13,7 +13,7 @@ describe('LayerentryComponent', () => {
   let layersSvc: LayersService;
   let mapStateSvc: MapStateService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule, FormsModule],
       declarations: [LayerentryComponent],

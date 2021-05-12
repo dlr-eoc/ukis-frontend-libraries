@@ -7,7 +7,7 @@
       "md5": "md5"
     }
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "@types/geojson",
     "@dlr-eoc/services-layers",
     "@dlr-eoc/services-util-store",

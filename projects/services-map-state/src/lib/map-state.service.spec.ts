@@ -1,4 +1,4 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { MapStateService } from './map-state.service';
 import { MapState, TGeoExtent, IMapState } from './types/map-state';
 
@@ -11,7 +11,7 @@ describe('MapStateService', () => {
   });
 
 
-  it('should get the initial MapState', async(() => {
+  it('should get the initial MapState', waitForAsync(() => {
     const service: MapStateService = TestBed.inject(MapStateService);
     service.getMapState().subscribe((state) => {
       expect(state.center.lat).toEqual(0);
@@ -21,7 +21,7 @@ describe('MapStateService', () => {
   }));
 
 
-  it('should set/get the MapState', async(() => {
+  it('should set/get the MapState', waitForAsync(() => {
     const service: MapStateService = TestBed.inject(MapStateService);
     const state = new MapState(4, { lat: 48, lon: 11 });
 
@@ -34,7 +34,7 @@ describe('MapStateService', () => {
   }));
 
 
-  it('should get the initial Extent', async(() => {
+  it('should get the initial Extent', waitForAsync(() => {
     const service: MapStateService = TestBed.inject(MapStateService);
     service.getExtent().subscribe((ext) => {
       expect(ext[0]).toEqual(-180);
@@ -44,7 +44,7 @@ describe('MapStateService', () => {
     });
   }));
 
-  it('should set/get the current Extent', async(() => {
+  it('should set/get the current Extent', waitForAsync(() => {
     const service: MapStateService = TestBed.inject(MapStateService);
     const extent: TGeoExtent = [-10, -10, 10, 10];
 
@@ -58,7 +58,7 @@ describe('MapStateService', () => {
   }));
 
 
-  it('should compare state Extent and Center', async(() => {
+  it('should compare state Extent and Center', waitForAsync(() => {
     const extent: TGeoExtent = [5.075658586129323, 36.56406504906195, 36.05016620655786, 56.96174826062932];
     const center: IMapState['center'] = { lat: 47.750279, lon: 20.562912 };
     const state = new MapState(5, center, { notifier: 'map' }, extent);

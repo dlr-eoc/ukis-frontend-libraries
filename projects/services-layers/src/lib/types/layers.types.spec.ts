@@ -1,4 +1,4 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RasterLayer, Layer, VectorLayer, CustomLayer, TGeoExtent } from './Layers';
 import { LayerGroup } from './LayerGroup';
 
@@ -7,7 +7,7 @@ let rasterlayer: RasterLayer, vectorlayer: VectorLayer, customlayer: CustomLayer
 
 
 describe('Layer Types', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({});
     rasterlayer = new RasterLayer({
       id: 'ID-raster',

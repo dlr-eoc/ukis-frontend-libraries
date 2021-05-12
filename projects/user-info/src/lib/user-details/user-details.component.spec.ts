@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { UserDetailsComponent } from './user-details.component';
 import { UserService, IAuthService, ExampleAuthService } from '../user.service';
@@ -13,7 +13,7 @@ describe('UserDetailsComponent', () => {
   let authService: IAuthService;
 
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     authService = new ExampleAuthService();
     usrSvc = new UserService();
     usrSvc.setAuthService(authService);

@@ -1,12 +1,11 @@
 export interface UkisNgAddSchema {
   // The name of the angular project you want to add @dlr-eoc/core-ui.
   project?: string;
-  addClr?: string;
-  addFiles?: string;
-  updateFiles?: string;
+  addClr?: boolean;
+  addFiles?: boolean;
+  routing?: boolean;
 
-
-  routing?: string;
-  addMap?: string;
-  auth?: string;
+  updateFiles?: boolean;
+  addMap?: boolean;
+  auth?: boolean;
 }

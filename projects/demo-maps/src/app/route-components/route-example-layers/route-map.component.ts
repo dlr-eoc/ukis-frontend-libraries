@@ -60,7 +60,7 @@ export class RouteMapComponent implements OnInit {
     const TransparentBackground = new VectorLayer({
       name: 'Transparenter Hintergrund',
       id: 'blank',
-      type: 'custom',
+      type: 'geojson',
       visible: true
     });
 

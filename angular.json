@@ -10,7 +10,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/base-layers-raster/tsconfig.lib.json",
             "project": "projects/base-layers-raster/ng-package.json"
@@ -50,7 +50,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/cookie-alert/tsconfig.lib.json",
             "project": "projects/cookie-alert/ng-package.json"
@@ -130,7 +130,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/layer-control/tsconfig.lib.json",
             "project": "projects/layer-control/ng-package.json"
@@ -170,7 +170,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/map-tools/tsconfig.lib.json",
             "project": "projects/map-tools/ng-package.json"
@@ -210,7 +210,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/map-ol/tsconfig.lib.json",
             "project": "projects/map-ol/ng-package.json"
@@ -250,7 +250,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/owc-control/tsconfig.lib.json",
             "project": "projects/owc-control/ng-package.json"
@@ -290,7 +290,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/services-layers/tsconfig.lib.json",
             "project": "projects/services-layers/ng-package.json"
@@ -330,7 +330,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/services-map-state/tsconfig.lib.json",
             "project": "projects/services-map-state/ng-package.json"
@@ -370,7 +370,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/services-ogc/tsconfig.lib.json",
             "project": "projects/services-ogc/ng-package.json"
@@ -410,7 +410,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/services-util-store/tsconfig.lib.json",
             "project": "projects/services-util-store/ng-package.json"
@@ -450,7 +450,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/user-info/tsconfig.lib.json",
             "project": "projects/user-info/ng-package.json"
@@ -528,7 +528,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -655,7 +654,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -744,7 +742,7 @@
       "prefix": "dlr-eoc",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/utils-maps/tsconfig.lib.json",
             "project": "projects/utils-maps/ng-package.json"
@@ -784,7 +782,7 @@
       "prefix": "dlr-eoc",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/utils-browser/tsconfig.lib.json",
             "project": "projects/utils-browser/ng-package.json"
@@ -824,7 +822,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/map-three/tsconfig.lib.json",
             "project": "projects/map-three/ng-package.json"
@@ -864,7 +862,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/utils-ogc/tsconfig.lib.json",
             "project": "projects/utils-ogc/ng-package.json"

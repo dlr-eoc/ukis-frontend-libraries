@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ProjectionSwitchComponent } from './projection-switch.component';
 import { ClarityModule } from '@clr/angular';
@@ -12,7 +12,7 @@ describe('ProjectionSwitchComponent', () => {
   const projList: any[] = [];
 
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule, FormsModule],
       declarations: [ProjectionSwitchComponent]

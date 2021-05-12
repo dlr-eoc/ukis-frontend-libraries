@@ -6,13 +6,27 @@ import { normalize, join, getSystemPath, Path } from '@angular-devkit/core';
 import { UkisNgAddSchema } from './schema';
 
 
-import { getProject, addServiceComponentModule, ImoduleImport, updateJsonFile, updateHtmlFile, getStyleExt } from '../utils';
-import { getWorkspace, updateWorkspace } from '@schematics/angular/utility/config';
+
+import {
+  getStyleExt, checkProjectIsApplication, hasSchematicsStyle, getProjectName, checkProjectSourceRoot
+} from '../workspace-utils';
+import { addServiceComponentModule, removeServiceComponentModule, ImoduleImport } from '../ast-utils';
+import { updateJsonFile } from '../json-utils';
+import { updateHtmlFile } from '../html-utils';
 import { TsconfigJSON } from '../schema.tsconfig';
-import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
 import { UkisNgAddRoutingSchema } from '../add-routing/schema';
+import { updateWorkspace, getWorkspace } from '@schematics/angular/utility/workspace';
 
 
+/**
+ * You should add @dlr-eoc/core-ui only to an angular application not a library!
+ */
+function isProjectTypeApplication(projectName?: string): Rule {
+  return async (tree: Tree) => {
+    const workspace = await getWorkspace(tree);
+    checkProjectIsApplication(workspace, projectName);
+  };
+}
 
 // https://angular.io/guide/schematics-for-libraries
 // https://dev.to/thisdotmedia/schematics-pt-3-add-tailwind-css-to-your-angular-project-40pp
@@ -25,12 +39,6 @@ export function ngAdd(options: UkisNgAddSchema): Rule {
     updateFiles: options.updateFiles
   };
 
-  /**
-   * Schematic input does not validate against the Schema: {"routing":"true"}. Data path ".routing" should be boolean.
-   * https://github.com/angular/angular-cli/issues/12150 - @angular-devkit\schematics-cli\bin\schematics.js
-   *
-   * therefore types of schema as string
-   */
   const rules: Rule[] = [
     /**
      * externalSchematic not working with @angular-devkit ^8.3.20 (from 9.0.0 ???)
@@ -41,16 +49,78 @@ export function ngAdd(options: UkisNgAddSchema): Rule {
      * https://medium.com/@coco.boudard/hello-1ab084f63a1
      * https://github.com/BottleRocketStudios/ng-momentum/issues/10
      */
-    (options.addClr === 'false') ? noop() : externalSchematic('@clr/angular', 'ng-add', options),
-    (options.addFiles === 'false') ? noop() : ruleAddFiles(options),
-    (options.updateFiles === 'false') ? noop() : ruleAddImportsInAppModule(options),
-    (options.updateFiles === 'false') ? noop() : ruleUpdateAngularJson(options),
-    (options.updateFiles === 'false') ? noop() : ruleUpdateTsConfigFile(),
-    (options.updateFiles === 'false') ? noop() : ruleUpdateIndexHtml(options),
-    (options.routing === 'false') ? noop() : schematic('add-routing', addRoutingOptions)
+    (options.addClr === false) ? noop() : externalSchematic('@clr/angular', 'ng-add', options),
+    isProjectTypeApplication(options?.project),
+    (options.addFiles === false) ? noop() : ruleAddFiles(options),
+    (options.updateFiles === false) ? noop() : ruleAddImportsInAppModule(options.project),
+    (options.updateFiles === false) ? noop() : ruleUpdateAngularJson(options),
+    (options.updateFiles === false) ? noop() : ruleUpdateTsConfigFile(),
+    (options.updateFiles === false) ? noop() : ruleUpdateIndexHtml(options),
+    (options.routing === false) ? noop() : schematic('add-routing', addRoutingOptions),
+    (options.routing === true) ? removeViewsAfterRouting(options.project) : noop()
   ];
 
   return chain(rules);
+}
+
+/**
+ *
+ */
+function removeViewsFiles(optionsProject: UkisNgAddSchema['project']): Rule {
+  return async (tree: Tree, context: SchematicContext) => {
+    // check if /views/example-view is existing from ng-add
+
+    const workspace = await getWorkspace(tree);
+    const projectName = getProjectName(workspace, optionsProject);
+    if (projectName) {
+      const project = workspace.projects.get(projectName);
+
+      if (project && checkProjectSourceRoot(project, context)) {
+        const sourcePath = join(tree.root.path, normalize(project.root), project.sourceRoot); // project.sourceRoot
+        const appPath = join(sourcePath, 'app');
+        const viewsPath = join(appPath, 'views/example-view/');
+        /**
+         * loop over the tree and then use tree.delete
+         * check that the path is correct src/.. or /src/...
+         */
+        tree.visit(file => {
+          if (file.startsWith(viewsPath)) {
+            tree.delete(file);
+          }
+        });
+      }
+    }
+  };
+}
+
+/**
+ * remove import { ExampleViewComponent } from './views/example-view/example-view.component';
+ */
+function removeViewsImports(optionsProject: UkisNgAddSchema['project']): Rule {
+  const rules: Rule[] = [];
+  const imports: ImoduleImport[] = [
+    { classifiedName: 'ExampleViewComponent', path: './views/example-view/example-view.component', declare: true }
+  ];
+
+  imports.map(item => {
+    rules.push(removeServiceComponentModule(optionsProject, item));
+  });
+
+  // then chain the rules to one
+  return chain(rules);
+}
+
+/**
+ * remove import and files for views/example-view;
+ *
+ * TODO: warnings
+ * In your workspace is no style extension defined use default scss
+ */
+function removeViewsAfterRouting(optionsProject: UkisNgAddSchema['project']): Rule {
+  return chain([
+    removeViewsFiles(optionsProject),
+    removeViewsImports(optionsProject)
+  ]);
 }
 
 /**
@@ -71,102 +141,101 @@ function ruleAddFiles(options: UkisNgAddSchema): Rule {
    *  TODO: check for style files and replace them e.g. app.component.styl ...
    */
   return async (tree: Tree, context: SchematicContext) => {
-    const { project } = await getProject(tree, options.project as string);
     const workspace = await getWorkspace(tree);
+    const projectName = getProjectName(workspace, options.project);
+    if (projectName) {
+      const project = workspace.projects.get(projectName);
 
-    if (!project.sourceRoot) {
-      project.sourceRoot = 'src';
-      throw new SchematicsException(`Project.sourceRoot is not defined in the workspace!`);
-    }
+      if (project && checkProjectSourceRoot(project, context)) {
+        const sourcePath = join(normalize(project.root), project.sourceRoot); // project.sourceRoot
+        const assetsPath = join(sourcePath, 'assets');
+        const stylesPath = join(sourcePath, 'styles');
+        const appPath = join(sourcePath, 'app');
+        const styleExt = getStyleExt(project, workspace, context);
+        const templateVariabels = Object.assign(options, {
+          appPrefix: project.prefix,
+          styleExt
+        });
 
-    const sourcePath = join(normalize(project.root), project.sourceRoot); // project.sourceRoot
-    const assetsPath = join(sourcePath, 'assets');
-    const stylesPath = join(sourcePath, 'styles');
-    const appPath = join(sourcePath, 'app');
-    const styleExt = getStyleExt(project, workspace, context);
-    const templateVariabels = Object.assign(options, {
-      appPrefix: project.prefix,
-      styleExt
-    });
-
-    const srcTemplateSource = apply(url('./files/src/'), [
-      applyTemplates({ ...templateVariabels }),
-      filter((path: Path) => {
-        const separator = /[\\|\/]/g;
-        const pathSeperators = path.match(separator);
-        if (pathSeperators && pathSeperators.length > 1) {
-          return false;
-        } else {
-          const testFiles = ['favicon.ico', 'styles.css', 'styles.scss'];
-          /**
-           * check for existing files the are allowed to overwrite!
-           */
-          const destPath = join(sourcePath, path);
-          if (tree.exists(destPath)) {
-            for (const f of testFiles) {
-              /** delete styles.css file it is replaced with scss */
-              if (f === 'styles.css') {
-                const styleExtTest = join(sourcePath, f);
-                if (tree.exists(styleExtTest)) {
-                  tree.delete(styleExtTest);
+        const srcTemplateSource = apply(url('./files/src/'), [
+          applyTemplates({ ...templateVariabels }),
+          filter((path: Path) => {
+            const separator = /[\\|\/]/g;
+            const pathSeperators = path.match(separator);
+            if (pathSeperators && pathSeperators.length > 1) {
+              return false;
+            } else {
+              const testFiles = ['favicon.ico', 'styles.css', 'styles.scss'];
+              /**
+               * check for existing files the are allowed to overwrite!
+               */
+              const destPath = join(sourcePath, path);
+              if (tree.exists(destPath)) {
+                for (const f of testFiles) {
+                  /** delete styles.css file it is replaced with scss */
+                  if (f === 'styles.css') {
+                    const styleExtTest = join(sourcePath, f);
+                    if (tree.exists(styleExtTest)) {
+                      tree.delete(styleExtTest);
+                    }
+                  }
+                  if (destPath.includes(f)) {
+                    tree.delete(destPath);
+                  }
                 }
               }
-              if (destPath.includes(f)) {
-                tree.delete(destPath);
+              return true;
+            }
+          }),
+          // renameTemplateFiles(), //  Remove every `.template` suffix from file names.
+          move(getSystemPath(sourcePath)),
+        ]);
+
+        const assetsTemplateSource = apply(url('./files/src/assets'), [
+          applyTemplates({ ...templateVariabels }),
+          move(getSystemPath(assetsPath)),
+        ]);
+
+        const stylesTemplateSource = apply(url('./files/src/styles'), [
+          applyTemplates({ ...templateVariabels }),
+          move(getSystemPath(stylesPath)),
+        ]);
+
+        const appTemplateSource = apply(url('./files/src/app'), [
+          applyTemplates({ ...templateVariabels }),
+          filter((path: Path) => {
+            const testFiles = ['app.component.html', 'app.component.ts', 'app.component.css', 'app.component.scss'];
+            /**
+             * check for existing files the are allowed to overwrite!
+             */
+            const destPath = join(appPath, path);
+            if (tree.exists(destPath)) {
+              for (const f of testFiles) {
+                /** delete app.component.css file it is replaced with scss */
+                if (f === 'app.component.css') {
+                  const styleExtTest = join(appPath, f);
+                  if (tree.exists(styleExtTest)) {
+                    tree.delete(styleExtTest);
+                  }
+                }
+                if (destPath.includes(f)) {
+                  tree.delete(destPath);
+                }
               }
             }
-          }
-          return true;
-        }
-      }),
-      // renameTemplateFiles(), //  Remove every `.template` suffix from file names.
-      move(getSystemPath(sourcePath)),
-    ]);
+            return true;
+          }),
+          move(getSystemPath(appPath)),
+        ]);
 
-    const assetsTemplateSource = apply(url('./files/src/assets'), [
-      applyTemplates({ ...templateVariabels }),
-      move(getSystemPath(assetsPath)),
-    ]);
-
-    const stylesTemplateSource = apply(url('./files/src/styles'), [
-      applyTemplates({ ...templateVariabels }),
-      move(getSystemPath(stylesPath)),
-    ]);
-
-    const appTemplateSource = apply(url('./files/src/app'), [
-      applyTemplates({ ...templateVariabels }),
-      filter((path: Path) => {
-        const testFiles = ['app.component.html', 'app.component.ts', 'app.component.css', 'app.component.scss'];
-        /**
-         * check for existing files the are allowed to overwrite!
-         */
-        const destPath = join(appPath, path);
-        if (tree.exists(destPath)) {
-          for (const f of testFiles) {
-            /** delete app.component.css file it is replaced with scss */
-            if (f === 'app.component.css') {
-              const styleExtTest = join(appPath, f);
-              if (tree.exists(styleExtTest)) {
-                tree.delete(styleExtTest);
-              }
-            }
-            if (destPath.includes(f)) {
-              tree.delete(destPath);
-            }
-          }
-        }
-        return true;
-      }),
-      move(getSystemPath(appPath)),
-    ]);
-
-
-    return chain([
-      mergeWith(srcTemplateSource),
-      mergeWith(appTemplateSource),
-      mergeWith(assetsTemplateSource),
-      mergeWith(stylesTemplateSource)
-    ]);
+        return chain([
+          mergeWith(srcTemplateSource),
+          mergeWith(appTemplateSource),
+          mergeWith(assetsTemplateSource),
+          mergeWith(stylesTemplateSource)
+        ]);
+      }
+    }
   };
 }
 
@@ -176,11 +245,10 @@ function ruleAddFiles(options: UkisNgAddSchema): Rule {
  * - core-ui components
  * - HttpClientModule?
  */
-function ruleAddImportsInAppModule(options: UkisNgAddSchema): Rule {
+function ruleAddImportsInAppModule(optionsProject: UkisNgAddSchema['project']): Rule {
   const rules: Rule[] = [];
   const imports: ImoduleImport[] = [
     // { classifiedName: 'HttpClientModule', path: '@angular/common/http', module: true },
-
     { classifiedName: 'HeaderComponent', path: './components/header/header.component', declare: true },
     { classifiedName: 'GlobalAlertComponent', path: './components/global-alert/global-alert.component', declare: true },
     { classifiedName: 'AlertService', path: './components/global-alert/alert.service', provide: true },
@@ -193,7 +261,7 @@ function ruleAddImportsInAppModule(options: UkisNgAddSchema): Rule {
    * create a rule for each insertImport/addProviderToModule because addProviderToModule is not working multiple times in one Rule???
    */
   imports.map(item => {
-    rules.push(addServiceComponentModule(options, item));
+    rules.push(addServiceComponentModule(optionsProject, item));
   });
 
   // then chain the rules to one
@@ -207,73 +275,68 @@ function ruleAddImportsInAppModule(options: UkisNgAddSchema): Rule {
  * - styles
  */
 function ruleUpdateAngularJson(options: UkisNgAddSchema): Rule {
-  /**
-   * TODO: refactor to use existing angular schematics
-   * set config: ng config schematics['@schematics/angular:component'].style scss
-   * ng config projects[<projectname>].schematics['@schematics/angular:component'].style scss
-   */
-  // externalSchematic('@clr/angular', 'config projects[<projectname>].schematics['@schematics/angular:component'].style scss', options)
-  return async (tree: Tree, context: SchematicContext) => {
-    const { project, projectName } = await getProject(tree, options.project as string);
+  return chain([
+    updateProjectStylesExtension(options),
+    updateWorkspaceAndProjectStyleExtension(options)
+  ]);
+}
+
+function updateProjectStylesExtension(options: UkisNgAddSchema) {
+  return async (tree: Tree) => {
     const workspace = await getWorkspace(tree);
-    const styleExt = getStyleExt(project, workspace, context);
-
-    ['build', 'test'].map(target => {
-      updateAngularArchitect(project, target, styleExt);
-    });
-
-    /**
-     * update to use scss
-     */
-    if (!project.schematics) {
-      project.schematics = {};
+    const projectName = getProjectName(workspace, options.project);
+    if (projectName) {
+      const project = workspace.projects.get(projectName);
+      if (project) {
+        project.targets.forEach(target => {
+          if (target?.options?.styles && Array.isArray(target.options.styles)) {
+            target.options.styles = replaceStyles(target.options.styles as string[]);
+          }
+        });
+        return updateWorkspace(workspace);
+      }
     }
-
-    if (!project.schematics['@schematics/angular:component']) {
-      project.schematics['@schematics/angular:component'] = {
-        style: 'scss'
-      };
-    }
-    project.schematics['@schematics/angular:component'].style = 'scss';
-
-    workspace.projects[projectName] = project;
-    return updateWorkspace(workspace);
   };
 }
 
 /**
- * this is a helper
+ * replace styles.css in array if it exists
  */
-function updateAngularArchitect(project: WorkspaceProject, type: string | 'build' | 'test', styleExt: string) {
-  /**
-   * TODO: refactor to use existing angular schematics
-   * get config: ng config projects[<projectname>].architect.build.options.styles
-   * -> config = await schematicRunner.runExternalSchematicAsync('@schematics/angular', 'config ...', workspaceOptions).toPromise();
-   * ng config projects['test-schematics'].architect.build.options.styles '["src/styles.css", "src/styles.scss"]'
-   *
-   */
-  const architect = project.architect;
-  if (architect && architect[type]) {
-    const target = architect[type];
+function replaceStyles(styles: string[]) {
+  return styles.map(i => {
+    if (i.includes('styles.css')) {
+      return i.replace('.css', '.scss');
+    } else {
+      return i;
+    }
+  });
+}
 
-    if (target.options && 'styles' in target.options) {
-      /** replace styles.css if it exists */
-      if (Array.isArray(target.options.styles) && target.options.styles.includes('src/styles.css')) {
-        const found = target.options.styles.findIndex((i: string) => i === `src/styles.css`);
-        if (found !== -1) {
-          target.options.styles[found] = 'src/styles.scss';
-        }
-      } else if (Array.isArray(target.options.styles) && !target.options.styles.includes('src/styles.scss')) {
-        const found = target.options.styles.findIndex((i: string) => i === `src/styles.${styleExt}`);
-        if (found !== -1) {
-          target.options.styles[found] = 'src/styles.scss';
+/**
+ * Update Workspace file extension for style files.
+ */
+function updateWorkspaceAndProjectStyleExtension(options: UkisNgAddSchema) {
+  return async (tree: Tree) => {
+    const workspace = await getWorkspace(tree);
+    const projectName = getProjectName(workspace, options.project);
+    if (projectName) {
+      const project = workspace.projects.get(projectName);
+      if (project) {
+        if (hasSchematicsStyle(project.extensions)) {
+          project.extensions.schematics['@schematics/angular:component'].style = 'scss';
         } else {
-          target.options.styles.push('src/styles.scss');
+          if (typeof project.extensions === 'object') {
+            project.extensions.schematics = {
+              '@schematics/angular:component': {
+                style: 'scss'
+              }
+            };
+          }
         }
-
+        return updateWorkspace(workspace);
       }
     }
-  }
+  };
 }
 
 /**
@@ -331,34 +394,33 @@ function ruleUpdateTsConfigFile(): Rule {
  * - manifest
  */
 function ruleUpdateIndexHtml(options: UkisNgAddSchema): Rule {
-  return async (tree: Tree) => {
-    const { project } = await getProject(tree, options.project as string);
+  return async (tree: Tree, context: SchematicContext) => {
+    const workspace = await getWorkspace(tree);
+    const projectName = getProjectName(workspace, options.project);
+    if (projectName) {
+      const project = workspace.projects.get(projectName);
+      if (project && checkProjectSourceRoot(project, context)) {
+        const sourcePath = join(normalize(project.root), project.sourceRoot, 'index.html'); // project.sourceRoot
 
-    if (!project.sourceRoot) {
-      project.sourceRoot = 'src';
-      throw new SchematicsException(`Project.sourceRoot is not defined in the workspace!`);
+        let projectTitle = 'Your App';
+        if (options.project) {
+          projectTitle = options.project;
+        }
+
+        const headerTags = [
+          `  <meta name="title" content="${projectTitle}">\n`,
+          `  <meta name="short-title" content="This should be a shorter title like - ${projectTitle}">\n`,
+          `  <meta name="description" content="This should be the description for - ${projectTitle}">\n`,
+          `  <meta name="version" content="This should be the version of - ${projectTitle}">\n`,
+          `  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">\n`,
+          `  <link rel="icon" type="image/x-icon" href="favicon.ico">\n`
+        ];
+
+        return chain([
+          updateHtmlFile(sourcePath, 'head', 'head', headerTags)
+        ]);
+      }
     }
-
-    const sourcePath = join(normalize(project.root), project.sourceRoot, 'index.html'); // project.sourceRoot
-
-
-    let projectTitle = 'Your App';
-    if (options.project) {
-      projectTitle = options.project;
-    }
-
-    const headerTags = [
-      `  <meta name="title" content="${projectTitle}">\n`,
-      `  <meta name="short-title" content="This should be a shorter title like - ${projectTitle}">\n`,
-      `  <meta name="description" content="This should be the description for - ${projectTitle}">\n`,
-      `  <meta name="version" content="This should be the version of - ${projectTitle}">\n`,
-      `  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">\n`,
-      `  <link rel="icon" type="image/x-icon" href="favicon.ico">\n`
-    ];
-
-    return chain([
-      updateHtmlFile(sourcePath, 'head', 'head', headerTags)
-    ]);
   };
 }
 

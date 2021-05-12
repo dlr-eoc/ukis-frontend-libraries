@@ -62,20 +62,27 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
       const inputs = Object.keys(this.dynamicComponent.inputs);
       inputs.map(i => {
         const inputname = i;
-        this.componentRef.instance[inputname] = this.dynamicComponent.inputs[inputname];
-        const outupName = `${inputname}Change`;
-        /** subscribe to output for same name as input */
-        if (this.componentRef.instance[outupName] && this.componentRef.instance[outupName] instanceof EventEmitter) {
-          const sub = this.componentRef.instance[outupName].subscribe(val => {
-            this.dynamicComponent.inputs[inputname] = val;
-            /** if outputs are defined on IDynamicComponent pass the value to there functions */
-            if (this.dynamicComponent.outputs[outupName]) {
-              this.dynamicComponent.outputs[outupName](val);
-            }
-            this.dynamicComponentChange.emit(this.dynamicComponent);
-          });
-          this.subs.push(sub);
+        if (this.dynamicComponent.inputs) {
+          this.componentRef.instance[inputname] = this.dynamicComponent.inputs[inputname];
+          const outupName = `${inputname}Change`;
+          /** subscribe to output for same name as input */
+          if (this.componentRef.instance[outupName] && this.componentRef.instance[outupName] instanceof EventEmitter) {
+            const sub = this.componentRef.instance[outupName].subscribe(val => {
+              if (this.dynamicComponent.inputs) {
+                this.dynamicComponent.inputs[inputname] = val;
+                /** if outputs are defined on IDynamicComponent pass the value to there functions */
+              }
+              if (this.dynamicComponent.outputs) {
+                if (this.dynamicComponent.outputs[outupName]) {
+                  this.dynamicComponent.outputs[outupName](val);
+                }
+              }
+              this.dynamicComponentChange.emit(this.dynamicComponent);
+            });
+            this.subs.push(sub);
+          }
         }
+
       });
     }
   }
@@ -98,7 +105,7 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
     if (this.componentRef) {
       this.subs.map(s => s.unsubscribe());
       this.componentRef.destroy();
-      this.componentRef = null;
+      this.componentRef = null as any;
     }
   }
 }

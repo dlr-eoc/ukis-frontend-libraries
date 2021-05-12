@@ -15,18 +15,18 @@ describe('ng-add', () => {
 
   const ngAddOptions: UkisNgAddSchema = {
     project: 'ukisapp',
-    routing: 'false',
-    addClr: 'false',
-    addFiles: 'true',
-    updateFiles: 'true',
-    addMap: 'false', // TODO: this has to be implemented first
-    auth: 'false', // TODO: this has to be implemented first
+    routing: false,
+    addClr: false,
+    addFiles: true,
+    updateFiles: true, // TODO: this has to be implemented first
+    addMap: false, // TODO: this has to be implemented first
+    auth: false, // TODO: this has to be implemented first
   };
 
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
     newProjectRoot: 'projects',
-    version: '9.0.0',
+    version: '9.0.0'
   };
 
   const appOptions: ApplicationOptions = {
@@ -35,7 +35,7 @@ describe('ng-add', () => {
     inlineStyle: false,
     inlineTemplate: false,
     routing: true,
-    style: Style.Scss,
+    style: Style.Css,
     skipTests: false
   };
 
@@ -48,10 +48,21 @@ describe('ng-add', () => {
       appTree).toPromise();
   });
 
+  it('should have no workspace schematics', async () => {
+    const projectFile = JSON.parse(appTree.readContent('/angular.json'));
+    expect(projectFile.schematics).toBeFalsy();
+  });
+
+  it('should have no projects schematics because -> app style: Style.Css', async () => {
+    const projectFile = JSON.parse(appTree.readContent('/angular.json'));
+    expect(projectFile.projects[appOptions.name].schematics).toEqual({});
+  });
+
   it('should include the angular project file', async () => {
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
     expect(tree.files.includes('/angular.json')).toBe(true);
   });
+
 
   it('should add assets', async () => {
     const dimensions = [72, 96, 128, 144, 152, 192, 384, 512];
@@ -143,10 +154,17 @@ describe('ng-add', () => {
     });
   });
 
-  it('should update the angular project file', async () => {
+  /* it('should add workspace schematics', async () => {
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
     const projectFile = JSON.parse(tree.readContent('/angular.json'));
-    expect(projectFile.projects[appOptions.name].schematics['@schematics/angular:component'].style).toBe('scss');
+    console.log(projectFile);
+    expect(projectFile?.schematics['@schematics/angular:component']?.style).toBe('scss');
+  }); */
+
+  it('should add project schematics', async () => {
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+    const projectFile = JSON.parse(tree.readContent('/angular.json'));
+    expect(projectFile.projects[appOptions.name]?.schematics['@schematics/angular:component']?.style).toBe('scss');
   });
 
   it('should update the tsconfig file', async () => {
@@ -179,11 +197,53 @@ describe('ng-add', () => {
       '/src/styles/_ukis-theme.scss',
       '/src/styles/_ukis-variables.scss',
     ];
-    const skipOptions = Object.assign({}, ngAddOptions, { addFiles: 'false' });
+    const skipOptions = Object.assign({}, ngAddOptions, { addFiles: false });
     const tree = await schematicRunner.runSchematicAsync('ng-add', skipOptions, appTree).toPromise();
     testFiles.map(f => {
       expect(tree.files.includes(f)).toBe(false);
-      // expect(tree.exists(f)).toBeFalsy();
+    });
+  });
+
+  it('should remove /src/app/views files if routing is true', async () => {
+    const testFiles = [
+      '/src/app/views/example-view/example-view.component.html',
+      '/src/app/views/example-view/example-view.component.scss',
+      '/src/app/views/example-view/example-view.component.spec.ts',
+      '/src/app/views/example-view/example-view.component.ts',
+    ];
+    const routingOptions = Object.assign({}, ngAddOptions, { routing: true });
+    const tree = await schematicRunner.runSchematicAsync('ng-add', routingOptions, appTree).toPromise();
+    testFiles.every(f => {
+      expect(tree.files).not.toContain(f);
+      // expect(tree.files).toContain(f);
+    });
+  });
+
+  it('should remove imports from views if routing is true', async () => {
+    const testImports = [
+      'ExampleViewComponent'
+    ];
+    const routingOptions = Object.assign({}, ngAddOptions, { routing: true });
+    const tree = await schematicRunner.runSchematicAsync('ng-add', routingOptions, appTree).toPromise();
+    const appModuleSource = tree.readContent('/src/app/app.module.ts').split('@NgModule');
+    const appModule = appModuleSource[0];
+
+    testImports.map(i => {
+      expect(appModule).not.toContain(i);
+    });
+  });
+
+  it('should remove Declarations from views if routing is true', async () => {
+    const testDeclarations = [
+      'ExampleViewComponent'
+    ];
+    const routingOptions = Object.assign({}, ngAddOptions, { routing: true });
+    const tree = await schematicRunner.runSchematicAsync('ng-add', routingOptions, appTree).toPromise();
+    const appModuleSource = tree.readContent('/src/app/app.module.ts').split('@NgModule');
+    const appNgModule = `@NgModule${appModuleSource[1]}`;
+
+    testDeclarations.map(i => {
+      expect(appNgModule).not.toContain(i);
     });
   });
 });

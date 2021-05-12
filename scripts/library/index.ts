@@ -8,9 +8,8 @@ import { fork } from 'child_process';
 import * as PATH from 'path';
 import * as FS from 'fs';
 import * as minimist from 'minimist';
-import { WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
 import { IPackageJSON } from './npm-package.interface';
-import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
+import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 
 
 import {
