@@ -1,8 +1,8 @@
 <img src="projects/core-ui/schematics/ng-add/files/src/assets/icons/icon-72x72.png" alt="UKIS Logo"> Frontend Libraries for DLR UKIS (Map) Applications
 ========================
 
-![CI](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/Node.js%20Test%20and%20Build%20CI/badge.svg)
-![Node.js Package](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/Node.js%20Package/badge.svg)
+![CI](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/Test%20and%20Build%20CI/badge.svg)
+![Npm Package](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/Package%20Main%20Release/badge.svg) ![Package Version](https://img.shields.io/github/v/tag/dlr-eoc/ukis-frontend-libraries?sort=semver)
 
 
 
