@@ -1,3 +1,8 @@
+### Bug Fixes
+* **@dlr-eoc/map-ol:**
+  - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.
+
+
 # [7.3.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.3.0) (2021-04-20) (Layer, Utils Features and bug fixes maps)
 ### Bug Fixes
 * **@dlr-eoc/layer-control:**
