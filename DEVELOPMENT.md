@@ -12,6 +12,7 @@
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies. (similar to hardware upgrades)
 - check for new versions `npm outdated -l` and `ng update`
 - update versions `npm update <pkg>` and `ng update <pkg>`
+- make angular migrations manually `ng update @angular/cli --from <version> --to <version> --migrate-only` and `ng update @angular/core --from <version> --to <version> --migrate-only`
 
 ## General Development Workflow
 
