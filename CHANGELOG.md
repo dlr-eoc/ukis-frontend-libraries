@@ -1,7 +1,12 @@
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
   - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.
+* **@dlr-eoc/layer-control:** 
+  - Dynamic component layer Input lost its Instance (Type) [issue 80](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/80).
 
+
+# [7.3.1](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.3.1) (2021-04-20) (fix package)
+* **Fix:** create `@dlr-eoc/` npm packages for 7.3.0 did not work.
 
 # [7.3.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.3.0) (2021-04-20) (Layer, Utils Features and bug fixes maps)
 ### Bug Fixes

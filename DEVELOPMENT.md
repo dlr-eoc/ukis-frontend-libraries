@@ -12,6 +12,7 @@
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies. (similar to hardware upgrades)
 - check for new versions `npm outdated -l` and `ng update`
 - update versions `npm update <pkg>` and `ng update <pkg>`
+- make angular migrations manually `ng update @angular/cli --from <version> --to <version> --migrate-only` and `ng update @angular/core --from <version> --to <version> --migrate-only`
 
 ## General Development Workflow
 
@@ -22,6 +23,10 @@
 ### Branch and Fork
 - Internally we use branches in the repository to create new features and bug fixes
 - If you are not member of our organization fork our repository and use branches ([see our guide on contributing](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/CONTRIBUTING.md))
+
+**gh-pages branch:**
+This branch is used to host some demo applications as GitHub Pages.
+Do not push to it or adjust it manually, because it gets updated by a [GitHub Action gh-pages.yml](https://github.com/marketplace/actions/deploy-to-github-pages)
 
 
 # Ho to create a new Project library (UKIS-Module)

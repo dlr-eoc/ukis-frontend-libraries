@@ -1,0 +1,25 @@
+name: Build and Deploy pages
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+
+      # This builds the project for projects/demo-maps and outputs the result to the 'dist' folder.
+      # https://github.com/angular/angular-cli/issues/9016#issuecomment-526825531
+      - name: Install and Build
+        run: |
+          npm ci
+          npx ng build demo-maps --prod --aot --vendor-chunk --common-chunk --delete-output-path --build-optimizer --base-href=/ukis-frontend-libraries/
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.1
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: dist/demo-maps # The folder the action should deploy.
