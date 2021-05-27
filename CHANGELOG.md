@@ -1,3 +1,11 @@
+### Bug Fixes
+* **@dlr-eoc/layer-control:** 
+  - Dynamic component layer Input lost its Instance (Type) [issue 80](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/80).
+
+
+# [7.3.1](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.3.1) (2021-04-20) (fix package)
+* **Fix:** create `@dlr-eoc/` npm packages for 7.3.0 did not work.
+
 # [7.3.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.3.0) (2021-04-20) (Layer, Utils Features and bug fixes maps)
 ### Bug Fixes
 * **@dlr-eoc/layer-control:**

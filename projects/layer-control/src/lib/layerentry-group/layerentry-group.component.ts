@@ -60,13 +60,15 @@ export class LayerentryGroupComponent implements OnInit {
     if (obj && typeof obj === 'object') {
       if ('component' in obj) {
         if (!obj.inputs) {
-          const groupClone = Object.assign({}, group);
+          // https://2ality.com/2014/01/object-assign.html#2.3
+          const groupClone = Object.assign({ __proto__: this.group['__proto__'] }, group);
           if (groupClone && groupClone[compProp]) {
             delete groupClone[compProp];
           }
           obj.inputs = { group: groupClone };
         } else if (obj.inputs && !obj.inputs.group) {
-          const groupClone = Object.assign({}, group);
+          // https://2ality.com/2014/01/object-assign.html#2.3
+          const groupClone = Object.assign({ __proto__: this.group['__proto__'] }, group);
           if (groupClone && groupClone[compProp]) {
             delete groupClone[compProp];
           }

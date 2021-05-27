@@ -63,13 +63,17 @@ export class LayerentryComponent implements OnInit {
     if (obj && typeof obj === 'object') {
       if ('component' in obj) {
         if (!obj.inputs) {
-          const layerClone = Object.assign({}, layer);
+          // https://2ality.com/2014/01/object-assign.html#2.3
+          const layerClone = Object.assign({ __proto__: this.layer['__proto__'] }, layer);
+          console.log(layerClone)
           if (layerClone && layerClone[compProp]) {
             delete layerClone[compProp];
           }
           obj.inputs = { layer: layerClone };
         } else if (obj.inputs && !obj.inputs.layer) {
-          const layerClone = Object.assign({}, layer);
+          // https://2ality.com/2014/01/object-assign.html#2.3
+          const layerClone = Object.assign({ __proto__: this.layer['__proto__'] }, layer);
+          console.log(layerClone)
           if (layerClone && layerClone[compProp]) {
             delete layerClone[compProp];
           }
