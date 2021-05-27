@@ -1,0 +1,151 @@
+{
+  "type": "FeatureCollection",
+  "poperties": {
+    "description": "This are a few test cities and locations collected with geojson.io"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Munich"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.575899124145508,
+          48.137740422322295
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Landshut"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.152938842773436,
+          48.5370678355958
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ulm"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.986572265624998,
+          48.40003249610685
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ingolstadt"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.42578125,
+          48.75618876280552
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Paris"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.3291015625,
+          48.83579746243093
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dreux"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1.3677978515625,
+          48.73445537176822
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Meaux"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.8729248046875,
+          48.95497369808868
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rome"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.480468749999998,
+          41.86956082699455
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Anzio"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.6287841796875,
+          41.4509614012039
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Berlin"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.403320312499998,
+          52.50953477032727
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Potsdam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.058624267578125,
+          52.40074312027673
+        ]
+      }
+    }
+  ]
+}
