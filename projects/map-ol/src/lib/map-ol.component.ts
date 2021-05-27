@@ -170,6 +170,12 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (ollayer) {
             if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
               ollayer.setZIndex(layers.indexOf(layer) + otherlayerslength);
+              // addresses an issue in openlayers: https://github.com/openlayers/openlayers/issues/6654
+              if (ollayer instanceof olLayerGroup) {
+                (ollayer as olLayerGroup).getLayers().forEach(l => {
+                  l.setZIndex(layers.indexOf(layer) + otherlayerslength);
+                });
+              }
             }
           }
         }
