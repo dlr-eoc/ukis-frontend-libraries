@@ -116,8 +116,11 @@ export interface ILayerOptions {
   /** geographic coordinates */
   bbox?: TGeoExtent;
   dimensions?: ILayerDimensions;
-  /** true: show popup on click | array: show popup on click and limit properties | or use a popup object to configure the popup */
-  popup?: boolean | Array<string> | popup;
+  /** true: show popup on click | array: show popup on click and limit properties | or use a popup object to configure the popup
+   * if a popup should be shown on multiple events use an array of popup object (only unique events)
+   */
+  // https://stackoverflow.com/questions/57016728/is-there-a-way-to-define-type-for-array-with-unique-items-in-typescript
+  popup?: boolean | Array<string> | popup | popup[];
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
   /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
   action?: IDynamicComponent;
@@ -233,7 +236,7 @@ export class Layer implements ILayerOptions {
   bbox?: TGeoExtent;
   dimensions?: ILayerDimensions;
 
-  popup?: boolean | Array<string> | popup;
+  popup?: ILayerOptions['popup'];
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
 
   action?: IDynamicComponent;
