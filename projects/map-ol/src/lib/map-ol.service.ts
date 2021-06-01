@@ -1167,20 +1167,51 @@ export class MapOlService {
     }
   }
 
-  private isMovePopup(layerpopup) {
-    return (layerpopup && typeof layerpopup === 'object' && 'event' in layerpopup && layerpopup.event === 'move');
+  private isPopupObj(layerpopup: Layer['popup'] | string): layerpopup is popup {
+    return (layerpopup && typeof layerpopup === 'object') && !Array.isArray(layerpopup);
+  }
+
+  private isPopupObjMove(layerpopup: Layer['popup']): layerpopup is popup {
+    return (this.isPopupObj(layerpopup) && layerpopup.event === 'move');
+  }
+
+  private isPopupObjClick(layerpopup: Layer['popup']): layerpopup is popup {
+    return (this.isPopupObj(layerpopup) && layerpopup.event === 'click');
+  }
+
+  private isPopupObjArray(layerpopup: Layer['popup']): layerpopup is popup[] {
+    return Array.isArray(layerpopup) && layerpopup.length && this.isPopupObj(layerpopup[0]);
+  }
+
+  private isPopupStringArray(layerpopup: Layer['popup']): layerpopup is string[] {
+    return Array.isArray(layerpopup) && layerpopup.length && typeof layerpopup[0] === 'string';
+  }
+
+  private popupEventIsBrowserEvent(popup: popup, evt: olMapBrowserEvent<PointerEvent>) {
+    if (popup.event === 'move' && evt.type === 'pointermove') {
+      return true;
+    } else if (popup.event === 'click' && evt.type === 'click') {
+      return true;
+    }
   }
 
   /** USED in map-ol.component */
   public layers_on_click(evt: olMapBrowserEvent<PointerEvent>) {
     const layerFilter = (layer) => {
       const layerpopup: Layer['popup'] = layer.get('popup');
+      if (this.isPopupObjArray(layerpopup)) {
+        const cilickPopup = layerpopup.find(p => this.popupEventIsBrowserEvent(p, evt));
+        if (cilickPopup) {
+          return true;
+        }
+      } else {
       if (layerpopup === true) {
         return true;
-      } else if (!this.isMovePopup(layerpopup)) {
+        } else if (!this.isPopupObjMove(layerpopup)) {
         return true;
       } else {
         return false;
+      }
       }
     };
     this.layers_on_click_move(evt, layerFilter);
@@ -1191,7 +1222,14 @@ export class MapOlService {
   public layers_on_pointermove(evt: olMapBrowserEvent<PointerEvent>) {
     const layerFilter = (layer) => {
       const layerpopup: Layer['popup'] = layer.get('popup');
-      return this.isMovePopup(layerpopup);
+      if (this.isPopupObjArray(layerpopup)) {
+        const cilickPopups = layerpopup.filter(p => this.isPopupObjMove(p));
+        if (cilickPopups.length) {
+          return true;
+        }
+      } else {
+        return this.isPopupObjMove(layerpopup);
+      }
     };
     this.layers_on_click_move(evt, layerFilter);
   }
@@ -1312,15 +1350,9 @@ export class MapOlService {
             // type no cluster
             properties = feature.getProperties();
           }
-
-          if ((typeof layerpopup === 'boolean' || Array.isArray(layerpopup)) ||
-            (layerpopup.event === 'click' && evt.type === 'click') ||
-            (!layerpopup.event && evt.type === 'click') ||
-            (layerpopup.event === 'move' && evt.type === 'pointermove')) {
             this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
           }
         }
-      }
     });
   }
 
@@ -1353,8 +1385,19 @@ export class MapOlService {
       delete popupProperties.geometry;
     }
 
+    const limitPopupObjProperties = (popupObj: popup) => {
+      if (popupObj && popupObj.filterkeys) {
+      popupProperties = Object.keys(popupProperties)
+          .filter(key => popupObj.filterkeys.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = popupProperties[key];
+          return obj;
+        }, {});
+    }
+    }
+
     /** Popup is array - limit properties */
-    if (Array.isArray(layerpopup)) {
+    if (this.isPopupStringArray(layerpopup)) {
       popupProperties = Object.keys(popupProperties)
         .filter(key => layerpopup.includes(key))
         .reduce((obj, key) => {
@@ -1362,25 +1405,27 @@ export class MapOlService {
           return obj;
         }, {});
     }
+    /** Popup is array of popupObj - limit properties */
+    else if (this.isPopupObjArray(layerpopup)) {
+      // is the first popupObj in the array with the same event as evt.type
+      const popupObj = layerpopup.find(p => this.popupEventIsBrowserEvent(p, evt));
+      limitPopupObjProperties(popupObj);
+    }
     /** Popup is object - limit properties */
-    if (typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.filterkeys) {
-      popupProperties = Object.keys(popupProperties)
-        .filter(key => layerpopup.filterkeys.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = popupProperties[key];
-          return obj;
-        }, {});
+    else if (this.isPopupObj(layerpopup)) {
+      limitPopupObjProperties(layerpopup);
     }
 
-    if (typeof layerpopup === 'object' && !Array.isArray(layerpopup)) {
+
+    const overwritePopup = (popupObj: popup) => {
       /** overwrite the keys of the layer properties */
-      if (layerpopup.properties) {
-        const usedProperties = Object.keys(layerpopup.properties);
+      if (popupObj.properties) {
+        const usedProperties = Object.keys(popupObj.properties);
         if (Array.isArray(usedProperties)) {
           popupProperties = Object.keys(popupProperties)
             /* .filter(key => usedProperties.includes(key)) */
             .reduce((obj, key) => {
-              const newKey = layerpopup.properties[key];
+              const newKey = popupObj.properties[key];
               if (newKey) {
                 obj[newKey] = popupProperties[key];
               } else {
@@ -1391,26 +1436,52 @@ export class MapOlService {
         }
 
         /** function to create html string */
-      } else if (layerpopup.pupupFunktion) {
-        args.popupFn = layerpopup.pupupFunktion;
-      } else if (layerpopup.dynamicPopup) {
-        args.dynamicPopup = layerpopup.dynamicPopup;
+      } else if (popupObj.pupupFunktion) {
+        args.popupFn = popupObj.pupupFunktion;
+      } else if (popupObj.dynamicPopup) {
+        args.dynamicPopup = popupObj.dynamicPopup;
       }
     }
 
-    /** popup is boolean or array */
-    if (typeof layerpopup === 'boolean' || Array.isArray(layerpopup)) {
-      this.addPopup(args, popupProperties, null);
-    } else if (layerpopup) {
+    /** overwrite and us popupFunction or dynamicPopup */
+    if (this.isPopupObjArray(layerpopup)) {
+      layerpopup.forEach(p => {
+        if (this.popupEventIsBrowserEvent(p, evt)) {
+          overwritePopup(p);
+        }
+      })
+    } else if (this.isPopupObj(layerpopup)) {
+      overwritePopup(layerpopup);
+    }
+
+    const addPopupObj = (popupObj: popup) => {
       /** async function where you can paste a html string to the callback */
-      if ('asyncPupup' in layerpopup) {
-        layerpopup.asyncPupup(popupProperties, (html) => {
-          this.addPopup(args, null, html, layerpopup.event, layerpopup.single);
+      if ('asyncPupup' in popupObj) {
+        popupObj.asyncPupup(popupProperties, (html) => {
+          this.addPopup(args, null, html, popupObj.event, popupObj.single);
         });
         /** add event if popup object */
       } else {
-        this.addPopup(args, popupProperties, null, layerpopup.event, layerpopup.single);
+        this.addPopup(args, popupProperties, null, popupObj.event, popupObj.single);
       }
+    }
+
+    /** popup is boolean or string array */
+    if (typeof layerpopup === 'boolean' || this.isPopupStringArray(layerpopup)) {
+      this.addPopup(args, popupProperties, null);
+    }
+    /** popup array of popupObj */
+    else if (this.isPopupObjArray(layerpopup)) {
+      layerpopup.forEach(p => {
+        // filter that browser event and popup event are the same
+        if (this.popupEventIsBrowserEvent(p, evt)) {
+          addPopupObj(p);
+        }
+      });
+      }
+    /** popup is a popupObj */
+    else if (layerpopup) {
+      addPopupObj(layerpopup);
     }
   }
 
@@ -1419,21 +1490,22 @@ export class MapOlService {
     // check if popup is already there and event is move
     const moveID = 'popup_move_ID';
     const movePopup = this.getPopups().find(item => item.getId() === moveID);
+    const browserEvent = args.event;
     /**
      * If event move and the map already has a Overlay for move
      * then only create new html container and set the position
      */
-    if (event === 'move' && movePopup) {
+    if (event === 'move' && browserEvent.type === 'pointermove' && movePopup) {
       let coordinate;
       if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
         coordinate = args.properties.geometry.getCoordinates();
       } else {
-        coordinate = args.event.coordinate;
+        coordinate = browserEvent.coordinate;
       }
       const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
       movePopup.setElement(container);
       movePopup.setPosition(coordinate);
-    } else if (args.event.type === 'pointermove' && !event) {
+    } else if (browserEvent.type === 'pointermove' && !event) {
       /** remove move popup if move on a click layer */
       if (movePopup) {
         this.removeAllPopups((item) => {
@@ -1468,14 +1540,14 @@ export class MapOlService {
 
       let overlayoptions = defaultOptions;
 
-      if (layerpopup && typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.options) {
+      if (this.isPopupObj(layerpopup) && layerpopup.options) {
         overlayoptions = Object.assign(defaultOptions, layerpopup.options);
       }
 
       const overlay = new olOverlay(overlayoptions);
 
       const container = this.createPopupContainer(overlay, args, popupObj, html, event);
-      overlay.set('addEvent', args.event.type);
+      overlay.set('addEvent', browserEvent.type);
       overlay.set(OVERLAY_TYPE_KEY, 'popup');
       overlay.setElement(container);
 
@@ -1483,7 +1555,7 @@ export class MapOlService {
       if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
         coordinate = args.properties.geometry.getCoordinates();
       } else {
-        coordinate = args.event.coordinate;
+        coordinate = browserEvent.coordinate;
       }
 
       overlay.setPosition(coordinate);
