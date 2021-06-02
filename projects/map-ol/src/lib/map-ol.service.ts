@@ -1541,10 +1541,12 @@ export class MapOlService {
     }
   }
 
+  // TODO: overlapping layers - move popup is added on click ???
   public addPopup(args: IPopupArgs, popupObj: any, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
     const layerpopup: Layer['popup'] = args.layer.get('popup');
     // check if popup is already there and event is move
-    const moveID = 'popup_move_ID';
+    const layerID = args.layer.get('id');
+    const moveID = `popup_move_ID`;
     const movePopup = this.getPopups().find(item => item.getId() === moveID);
     const browserEvent = args.event;
     /**
@@ -1574,11 +1576,11 @@ export class MapOlService {
         popupID = moveID;
       } else {
         if (args.feature) {
-          popupID = olGetUid(args.feature);
+          popupID = `${layerID}:${olGetUid(args.feature)}`;
         } else if (args.layer) {
-          popupID = olGetUid(args.layer);
+          popupID = `${layerID}:${olGetUid(args.layer)}`;
         } else {
-          popupID = `popup_${new Date().getTime()}`;
+          popupID = `${layerID}:popup_${new Date().getTime()}`;
         }
       }
 
@@ -1617,7 +1619,18 @@ export class MapOlService {
       overlay.setPosition(coordinate);
 
       if (removePopups) {
-        this.removeAllPopups();
+        this.removeAllPopups((item) => {
+          // only remove the popups from the current layer
+          const elementID = item.getId();
+          const layer = elementID.toString().split(':')[0];
+          if (layer) {
+            if (layerID === layer) {
+              return layerID === layer;
+            }
+          } else {
+            return true;
+          }
+        });
       }
 
       const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
