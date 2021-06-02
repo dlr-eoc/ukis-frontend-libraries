@@ -1,4 +1,4 @@
-import { Injectable, Type, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
+import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
 
 
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent } from '@dlr-eoc/services-layers';
@@ -8,6 +8,7 @@ import olView from 'ol/View';
 import { ViewOptions as olViewOptions } from 'ol/View';
 
 import olBaseLayer from 'ol/layer/Base';
+import olSource from 'ol/source/Source';
 import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
@@ -44,7 +45,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, Extent } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, Extent, returnOrUpdate } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -458,11 +459,58 @@ export class MapOlService {
       }
     });
     layerGroups.forEach(l => {
+      // is this needed? when layers or sources are removed, then there is no Target anymore which listens for events?
+      // there are also other functions like removeLayerByKey(), removeAllLayers()
+      this.removeListenersFromOldLayers(l);
       l.setLayers(new olCollection(layers));
     });
     return layers;
   }
 
+  /**
+   * on() and un() are functions of olObservable which extends EventTarget
+   *
+   * https://github.com/openlayers/openlayers/blob/v6.5.0/src/ol/events/Target.js#L145
+   * https://github.com/openlayers/openlayers/blob/v6.5.0/src/ol/events/Target.js#L134
+   */
+  private addEventsToLayer(ukisLayer: Layer, olLayer: olLayer<any>, olSource: olSource) {
+    if (ukisLayer.events) {
+      if (ukisLayer.events.layer) {
+        ukisLayer.events.layer.forEach(e => {
+          olLayer.on(e.event, e.listener);
+        });
+      }
+
+      if (ukisLayer.events.source) {
+        ukisLayer.events.source.forEach(e => {
+          olSource.on(e.event, e.listener);
+        });
+      }
+    }
+  }
+
+
+  private removeListenersFromOldLayers(layerGroup: olLayerGroup) {
+    layerGroup.getLayers().forEach(l => {
+      if (l.hasListener()) {
+        const listeners = (l as any).listeners_;
+        console.log(listeners)
+        Object.keys(listeners).forEach(key => l.removeEventListener(key, listeners[key]));
+        // l.disposeInternal();
+      }
+      if (typeof (l as any).getSource === 'function') {
+        const source = (l as any).getSource() as olSource;
+        if (source) {
+          if (source.hasListener()) {
+            const listeners = (source as any).listeners_;
+            console.log(listeners)
+            Object.keys(listeners).forEach(key => source.removeEventListener(key, listeners[key]));
+            // source.disposeInternal();
+          }
+        }
+      }
+    });
+  }
 
   /**
    * get corresponding Layer Group on which the layer is added
@@ -574,6 +622,7 @@ export class MapOlService {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const tempLayers: olBaseLayer[] = [];
     // TODO try to deep check if a layer if exactly the same and dont create it new
+    // create hash from layer???
 
     if (layers.length < 1 && lowerType !== 'baselayers') {
       // this.removeAllLayers('overlays');
@@ -719,7 +768,9 @@ export class MapOlService {
       layeroptions.minZoom = l.minZoom;
     }
 
-    return new olTileLayer(layeroptions);
+    const newlayer = new olTileLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, olSource);
+    return newlayer;
   }
 
   private create_wms_layer(l: WmsLayer): olTileLayer {
@@ -797,6 +848,7 @@ export class MapOlService {
       layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
     const newlayer = new olTileLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, olSource);
     return newlayer;
   }
 
@@ -894,7 +946,9 @@ export class MapOlService {
         layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
       }
 
-      return new olTileLayer(layeroptions);
+      const newlayer = new olTileLayer(layeroptions);
+      this.addEventsToLayer(l, newlayer, olSource);
+      return newlayer;
     } else {
       const layer = l as Layer;
       console.error(`layer with id: ${layer.id} and type ${layer.type} is no instanceof WmtsLayer!`);
@@ -929,9 +983,9 @@ export class MapOlService {
       style: styling
     };
 
-    const wfs = new olVectorLayer(layeroptions);
-
-    return wfs;
+    const newlayer = new olVectorLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, wfsSource);
+    return newlayer;
   }
 
   private create_geojson_layer(l: VectorLayer) {
@@ -1032,7 +1086,9 @@ export class MapOlService {
       Object.assign(layeroptions, l.options);
     }
 
-    return new olVectorLayer(layeroptions);
+    const newlayer = new olVectorLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, layeroptions.source);
+    return newlayer;
   }
 
   /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */

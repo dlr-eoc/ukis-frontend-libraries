@@ -51,6 +51,14 @@ export interface popup {
 }
 
 
+/**
+ * Layer events like rendering or Source events like data load, change, error...
+ */
+export interface ILayerEvent {
+  event: string;
+  listener: (args?: any) => void;
+}
+
 export const WmsLayertype = 'wms';
 export const WmtsLayertype = 'wmts';
 export const XyzLayertype = 'xyz';
@@ -121,6 +129,12 @@ export interface ILayerOptions {
    */
   // https://stackoverflow.com/questions/57016728/is-there-a-way-to-define-type-for-array-with-unique-items-in-typescript
   popup?: boolean | Array<string> | popup | popup[];
+  events?: {
+    /** e.g. https://openlayers.org/en/v6.5.0/apidoc/module-ol_layer_Layer-Layer.html Fires */
+    layer?: ILayerEvent[];
+    /** e.g. https://openlayers.org/en/v6.5.0/apidoc/module-ol_source_Source.html Tile | Image | Raster | Vector */
+    source?: ILayerEvent[];
+  };
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
   /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
   action?: IDynamicComponent;
@@ -237,6 +251,7 @@ export class Layer implements ILayerOptions {
   dimensions?: ILayerDimensions;
 
   popup?: ILayerOptions['popup'];
+  events?: ILayerOptions['events'];
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
 
   action?: IDynamicComponent;
