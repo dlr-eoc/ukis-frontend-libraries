@@ -4,6 +4,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
+import { RasterFeatureInfoComponent } from '../../components/raster-feature-info/raster-feature-info.component';
 
 @Component({
   selector: 'app-route-map6',
@@ -111,7 +112,16 @@ export class RouteMap6Component implements OnInit, OnDestroy {
           name: 's2-l3a-wasp-frc',
           title: 'Style for L3A MAJA/WASP Ground Reflectances'
         }
-      ]
+      ],
+      popup: {
+        dynamicPopup: {
+          component: RasterFeatureInfoComponent,
+          getAttributes: (args) => ({
+            layer: args.layer,
+            event: args.event
+          })
+        }
+      }
     });
 
     this.layersSvc.addLayer(agrodeLayer, agrodeLayer.filtertype);
