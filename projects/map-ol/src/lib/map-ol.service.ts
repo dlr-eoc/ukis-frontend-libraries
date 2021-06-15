@@ -929,6 +929,40 @@ export class MapOlService {
       style: styling
     };
 
+
+    if (l.popup) {
+      layeroptions.popup = l.popup;
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
+    }
+
+    if (l.bbox) {
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+    }
+
+    if (l.options) {
+      Object.assign(layeroptions, l.options);
+    }
+
+
+
     const wfs = new olVectorLayer(layeroptions);
 
     return wfs;
@@ -1474,6 +1508,18 @@ export class MapOlService {
 
       const overlay = new olOverlay(overlayoptions);
 
+      if (removePopups) {
+        this.removeAllPopups();
+      }
+
+      const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
+      if (hasPopup) {
+        // removes ol-part of popup
+        this.map.removeOverlay(hasPopup);
+        // removes angular-part of popup
+        this.destroyDynamicPopupComponent(hasPopup.getId().toString());
+      }
+
       const container = this.createPopupContainer(overlay, args, popupObj, html, event);
       overlay.set('addEvent', args.event.type);
       overlay.set(OVERLAY_TYPE_KEY, 'popup');
@@ -1488,17 +1534,6 @@ export class MapOlService {
 
       overlay.setPosition(coordinate);
 
-      if (removePopups) {
-        this.removeAllPopups();
-      }
-
-      const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
-      if (hasPopup) {
-        // removes ol-part of popup
-        this.map.removeOverlay(hasPopup);
-        // removes angular-part of popup
-        this.destroyDynamicPopupComponent(hasPopup.getId().toString());
-      }
       this.map.addOverlay(overlay);
     }
   }
@@ -1602,6 +1637,7 @@ export class MapOlService {
    */
   private destroyDynamicPopupComponent(id: string): void {
     if (this.dynamicPopupComponents.has(id)) {
+      const comp = this.dynamicPopupComponents.get(id);
       this.dynamicPopupComponents.get(id).destroy();
       this.dynamicPopupComponents.delete(id);
     }
@@ -1620,10 +1656,13 @@ export class MapOlService {
   private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, args: IDynamicPopupArgs): void {
     const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
     const popupBody = factory.create(this.injector, [], anchorElement);
-    const attributes = args.dynamicPopup.getAttributes(args);
-    for (const key in attributes) {
-      if (attributes[key] !== 'undefined') {
-        popupBody.instance[key] = attributes[key];
+
+    if (args.dynamicPopup.getAttributes) {
+      const attributes = args.dynamicPopup.getAttributes(args);
+      for (const key in attributes) {
+        if (attributes[key] !== 'undefined') {
+          popupBody.instance[key] = attributes[key];
+        }
       }
     }
     this.app.attachView(popupBody.hostView);

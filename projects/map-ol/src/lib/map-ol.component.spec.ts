@@ -1,15 +1,16 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MapOlComponent } from './map-ol.component';
-import { LayersService, VectorLayer } from '@dlr-eoc/services-layers';
+import { LayersService, VectorLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { RasterLayer } from '@dlr-eoc/services-layers';
 import { LayerGroup, CustomLayer } from '@dlr-eoc/services-layers';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { of } from 'rxjs';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { Injectable } from '@angular/core';
+import { ApplicationRef, Component, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
 import testFeatureData from '../assets/testFeatureCollection.json';
 import olVectorLayer from 'ol/layer/Vector';
+import olTileLayer from 'ol/layer/Tile';
 import olLayerGroup from 'ol/layer/Group';
 import olVectorSource from 'ol/source/Vector';
 import olGeoJSON from 'ol/format/GeoJSON';
@@ -43,13 +44,38 @@ class MockLayersService extends LayersService {
 }
 
 
+let instrumentedMockupCompId = 0;
+@Component({
+  selector: 'app-mock-popup',
+  template: `<div>{{ data | json }}</div>`
+})
+class InstrumentedMockPopupComponent implements OnInit, OnDestroy {
+  @Input() initCallback: (id: number) => void;
+  @Input() destroyCallback: (id: number) => void;
+  private id: number;
+
+  constructor() {
+    this.id = instrumentedMockupCompId;
+    instrumentedMockupCompId++;
+  }
+
+  ngOnInit(): void {
+    this.initCallback(this.id);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyCallback(this.id);
+  }
+}
+
+
 describe('MapOlComponent', () => {
   let component: MapOlComponent;
   let fixture: ComponentFixture<MapOlComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MapOlComponent],
+      declarations: [MapOlComponent, InstrumentedMockPopupComponent],
       providers: [
         MapOlService,
         { provide: LayersService, useClass: MockLayersService },
@@ -79,13 +105,13 @@ describe('MapOlComponent', () => {
       data: {
         type: 'FeatureCollection',
         features: [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Point',
-              coordinates: [11.71142578125, 46.5739667965278]
-            }
-          }]
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [11.71142578125, 46.5739667965278]
+          }
+        }]
       }
     });
     component.layersSvc.addLayer(vectorLayer, 'Layers');
@@ -126,13 +152,13 @@ describe('MapOlComponent', () => {
       data: {
         type: 'FeatureCollection',
         features: [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Point',
-              coordinates: [11.71142578125, 46.5739667965278]
-            }
-          }]
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [11.71142578125, 46.5739667965278]
+          }
+        }]
       }
     });
     component.layersSvc.addLayer(baseLayer, 'Layers');
@@ -227,8 +253,8 @@ describe('MapOlComponent', () => {
 
     component.layersSvc.addLayer(ukisLayer, 'Layers');
 
-    const lowLayer = service.getLayerByKey({key: 'id', value: baseLayer.id});
-    const higherLayer = service.getLayerByKey({key: 'id', value: 'olGroupLayer'});
+    const lowLayer = service.getLayerByKey({ key: 'id', value: baseLayer.id });
+    const higherLayer = service.getLayerByKey({ key: 'id', value: 'olGroupLayer' });
     const higherLayersChild = higherLayer.getLayersArray()[0];
 
     expect(lowLayer.getZIndex()).toBeDefined();
@@ -237,5 +263,95 @@ describe('MapOlComponent', () => {
     expect(lowLayer.getZIndex() <= higherLayer.getZIndex()).toBeTrue();
     expect(lowLayer.getZIndex() <= higherLayersChild.getZIndex()).toBeTrue();
     expect(higherLayer.getZIndex() <= higherLayersChild.getZIndex()).toBeTrue();
+  });
+
+  /**
+   * This test is executed in map-ol.component instead of map-ol.service
+   * because here we're guaranteed that the map-div does exist
+   * and is part of a change-detected angular-component-tree.
+   */
+  it('should rebuild dynamic popups with each click', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    const appRef = TestBed.inject(ApplicationRef) as ApplicationRef;
+    service.createMap();
+
+
+    // adding a layer with a dynamic popup
+    const ukisWmtsLayer = new WmtsLayer({
+      type: 'wmts',
+      id: 'ID-ukis-wmts',
+      url: 'https://tiles.geoservice.dlr.de/service/wmts?',
+      name: 'TDM90_AMP',
+      params: {
+        layer: 'TDM90_AMP',
+        version: '1.1.0',
+        format: 'image/png',
+        style: 'default',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857',
+        }
+      },
+      popup: {
+        dynamicPopup: {
+          component: InstrumentedMockPopupComponent,
+          getAttributes: (args: any) => ({
+            initCallback: (id: number) => counters[id].created += 1,
+            destroyCallback: (id: number) => counters[id].destroyed += 1,
+          })
+        }
+      }
+    });
+    service.setUkisLayer(ukisWmtsLayer, 'Layers');
+    const olWmtsLayer = service.getLayerByKey({ key: 'id', value: 'ID-ukis-wmts' }) as olTileLayer;
+
+    // this data-structure keeps track of the state of the dynamic components
+    // that are being created inside popups
+    const counters = [{
+      created: 0,
+      destroyed: 0
+    }, {
+      created: 0,
+      destroyed: 0
+    }];
+
+    // click 0
+    service.layer_on_click({
+      coordinate: [991316.4996485114, 6165355.908612549],
+      dragging: false,
+      frameState: {
+        animate: false,
+        size: [1568, 897],
+      },
+      map: service.map,
+      target: service.map,
+      type: 'click',
+      pixel: [825.7376098632812, 231.36881256103516]
+    } as any, olWmtsLayer);
+
+    // components are only created on angular.tick
+    appRef.tick();
+
+    // click 1
+    service.layer_on_click({
+      coordinate: [1312192.0073726526, 5444712.8273727745],
+      dragging: false,
+      frameState: {
+        animate: false,
+        size: [1568, 897],
+      },
+      map: service.map,
+      target: service.map,
+      type: 'click',
+      pixel: [825.7376098632812, 231.36881256103516]
+    } as any, olWmtsLayer);
+
+    // components are only created on angular.tick
+    appRef.tick();
+
+    expect(counters[0].created).toEqual(1);
+    expect(counters[0].destroyed).toEqual(1);
+    expect(counters[1].created).toEqual(1);
+    expect(counters[1].destroyed).toEqual(0);
   });
 });
