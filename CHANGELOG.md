@@ -7,6 +7,9 @@
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 
 ### Bug Fixes
+* **@dlr-eoc/map-ol:**
+  - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.
+  - Fixed an issue with dynamic popups, where only the first popup on a raster-layer would be created, whereas all subsequent clicks would not lead to a new popup appearing.
 * **@dlr-eoc/layer-control:** 
   - Dynamic component layer Input lost its Instance (Type) [issue 80](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/80).
 

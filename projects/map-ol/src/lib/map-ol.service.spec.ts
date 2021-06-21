@@ -34,8 +34,8 @@ import { get as getProjection } from 'ol/proj';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
 import { Subject } from 'rxjs';
-import { retry } from 'rxjs/operators';
 import { ApplicationRef, Component, Input } from '@angular/core';
+
 
 
 const WebMercator = 'EPSG:3857';
@@ -836,7 +836,8 @@ describe('MapOlService popup', () => {
 
     expect(service.getPopups().length).toBe(0);
     expect(appRef.viewCount).toEqual(0);
-  })
+  });
+
 });
 
 describe('MapOlService Events', () => {

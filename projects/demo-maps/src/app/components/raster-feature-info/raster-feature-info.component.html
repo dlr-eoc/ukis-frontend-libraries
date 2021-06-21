@@ -1,0 +1,15 @@
+<table class="table table-vertical">
+  <caption>
+    Feature properties
+  </caption>
+  <tbody *ngIf="(data$ | async) as data; else loading">
+    <tr *ngFor="let item of data | keyvalue">
+      <th>{{ item.key }}</th>
+      <td>{{ item.value }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #loading>
+  <clr-spinner [clrInline]="true">Loading ...</clr-spinner>
+</ng-template>

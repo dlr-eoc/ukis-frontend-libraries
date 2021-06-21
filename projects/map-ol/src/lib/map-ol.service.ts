@@ -492,9 +492,8 @@ export class MapOlService {
         ukisLayer.events.layer.forEach(e => {
           const listeners = olLayer.getListeners(e.event);
           /** only add listener if it was not registered on the olLayer object (for CustomLayer) */
-          console.log('layer listeners',listeners)
           if (!listeners) {
-          olLayer.on(e.event, e.listener);
+            olLayer.on(e.event, e.listener);
           }
         });
       }
@@ -503,9 +502,8 @@ export class MapOlService {
         ukisLayer.events.source.forEach(e => {
           const listeners = olSource.getListeners(e.event);
           /** only add listener if it was not registered on the olSource object (for CustomLayer) */
-          console.log('Source listeners',listeners)
           if (!listeners) {
-          olSource.on(e.event, e.listener);
+            olSource.on(e.event, e.listener);
           }
         });
       }
@@ -1010,6 +1008,37 @@ export class MapOlService {
       style: styling
     };
 
+    if (l.popup) {
+      layeroptions.popup = l.popup;
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
+    }
+
+    if (l.bbox) {
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+    }
+
+    if (l.options) {
+      Object.assign(layeroptions, l.options);
+    }
+
     const newlayer = new olVectorLayer(layeroptions);
     this.addEventsToLayer(l, newlayer, wfsSource);
     return newlayer;
@@ -1294,13 +1323,13 @@ export class MapOlService {
           return true;
         }
       } else {
-      if (layerpopup === true) {
-        return true;
+        if (layerpopup === true) {
+          return true;
         } else if (!this.isPopupObjMove(layerpopup)) {
-        return true;
-      } else {
-        return false;
-      }
+          return true;
+        } else {
+          return false;
+        }
       }
     };
     this.layers_on_click_move(evt, layerFilter);
@@ -1439,9 +1468,9 @@ export class MapOlService {
             // type no cluster
             properties = feature.getProperties();
           }
-            this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
-          }
+          this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
         }
+      }
     });
   }
 
@@ -1476,13 +1505,13 @@ export class MapOlService {
 
     const limitPopupObjProperties = (popupObj: popup) => {
       if (popupObj && popupObj.filterkeys) {
-      popupProperties = Object.keys(popupProperties)
+        popupProperties = Object.keys(popupProperties)
           .filter(key => popupObj.filterkeys.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = popupProperties[key];
-          return obj;
-        }, {});
-    }
+          .reduce((obj, key) => {
+            obj[key] = popupProperties[key];
+            return obj;
+          }, {});
+      }
     }
 
     /** Popup is array - limit properties */
@@ -1567,7 +1596,7 @@ export class MapOlService {
           addPopupObj(p);
         }
       });
-      }
+    }
     /** popup is a popupObj */
     else if (layerpopup) {
       addPopupObj(layerpopup);
@@ -1637,20 +1666,6 @@ export class MapOlService {
 
       const overlay = new olOverlay(overlayoptions);
 
-      const container = this.createPopupContainer(overlay, args, popupObj, html, event);
-      overlay.set('addEvent', browserEvent.type);
-      overlay.set(OVERLAY_TYPE_KEY, 'popup');
-      overlay.setElement(container);
-
-      let coordinate;
-      if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
-        coordinate = args.properties.geometry.getCoordinates();
-      } else {
-        coordinate = browserEvent.coordinate;
-      }
-
-      overlay.setPosition(coordinate);
-
       if (removePopups) {
         this.removeAllPopups((item) => {
           // only remove the popups from the current layer
@@ -1673,6 +1688,21 @@ export class MapOlService {
         // removes angular-part of popup
         this.destroyDynamicPopupComponent(hasPopup.getId().toString());
       }
+
+      const container = this.createPopupContainer(overlay, args, popupObj, html, event);
+      overlay.set('addEvent', browserEvent.type);
+      overlay.set(OVERLAY_TYPE_KEY, 'popup');
+      overlay.setElement(container);
+
+      let coordinate;
+      if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
+        coordinate = args.properties.geometry.getCoordinates();
+      } else {
+        coordinate = browserEvent.coordinate;
+      }
+
+      overlay.setPosition(coordinate);
+
       this.map.addOverlay(overlay);
     }
   }
@@ -1794,10 +1824,13 @@ export class MapOlService {
   private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, args: IDynamicPopupArgs): void {
     const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
     const popupBody = factory.create(this.injector, [], anchorElement);
-    const attributes = args.dynamicPopup.getAttributes(args);
-    for (const key in attributes) {
-      if (attributes[key] !== 'undefined') {
-        popupBody.instance[key] = attributes[key];
+
+    if (args.dynamicPopup.getAttributes) {
+      const attributes = args.dynamicPopup.getAttributes(args);
+      for (const key in attributes) {
+        if (attributes[key] !== 'undefined') {
+          popupBody.instance[key] = attributes[key];
+        }
       }
     }
     this.app.attachView(popupBody.hostView);
