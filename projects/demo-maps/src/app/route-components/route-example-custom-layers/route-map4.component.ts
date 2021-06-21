@@ -26,6 +26,8 @@ import { BarsLayer } from './customRenderers/threejs_renderer';
 import { InterpolationLayer, ColorRamp, DtmLayer } from '@dlr-eoc/utils-maps';
 
 import testData from '../../../assets/data/json/test.json';
+import testPolys from '../../../assets/data/json/test.polys.json';
+import testCollection from '../../../assets/data/json/test.collection.json';
 import { ExampleGroupActionComponent } from '../../components/example-group-action/example-group-action.component';
 
 
@@ -125,9 +127,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const topoJsonLayer = new CustomLayer({
       id: 'topo_json_layer',
       name: 'Topo Json - VectorImageLayer',
-      popup: {
-        event: 'move'
-      },
       custom_layer: new olVectorImageLayer({
         source: new olVectorSource({
           url: 'https://openlayers.org/en/latest/examples/data/topojson/world-110m.json',
@@ -191,8 +190,79 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           });
         }
       }),
-      visible: false,
+      visible: true,
       bbox: [-180.35156249999997, -22.268764039073968, -129.375, 29.84064389983441],
+    });
+
+    const geoJsonLayer2 = new CustomLayer({
+      id: 'geo_json_layer_polys',
+      name: 'GeoJson polys - VectorImageLayer',
+      popup: [
+        {
+          event: 'click',
+          single: true,
+          options: { autoPan: false },
+          pupupFunktion: (args) => { return `<div> on click </div>` }
+        },
+        {
+          event: 'move',
+          options: { autoPan: false },
+          pupupFunktion: (args) => { return `<div> on move </div>` }
+        }
+      ],
+      custom_layer: new olVectorImageLayer({
+        source: new olVectorSource({
+          features: this.mapSvc.geoJsonToFeatures(testPolys),
+          // format: new olGeoJSON(),
+        }),
+        style: (feature, resolution) => {
+          return new olStyle({
+            stroke: new olStroke({
+              color: 'gray',
+              width: 1
+            }),
+            fill: new olFill({
+              color: 'rgba(51,153,51,1)'
+            })
+          });
+        }
+      }),
+      visible: true,
+    });
+
+
+    const geoJsonLayer3 = new CustomLayer({
+      id: 'geo_json_layer_collection',
+      name: 'GeoJson Collection - VectorImageLayer',
+      popup: {
+        event: 'click',
+        single: true,
+        options: { autoPan: false }
+      },
+      custom_layer: new olVectorImageLayer({
+        source: new olVectorSource({
+          features: this.mapSvc.geoJsonToFeatures(testCollection),
+          // format: new olGeoJSON(),
+        }),
+        style: (feature, resolution) => {
+          return new olStyle({
+            stroke: new olStroke({
+              color: 'rgba(153,51,51,1)',
+              width: 2
+            }),
+            fill: new olFill({
+              color: 'rgba(153,51,51,1)'
+            }),
+            image: new olCircle({
+              radius: 5,
+              fill: new olFill({
+                color: 'rgba(153,51,51,1)'
+              })
+            })
+          });
+        }
+      }),
+      visible: true,
     });
 
 
@@ -216,7 +286,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const osmClipLayer = new CustomLayer({
       id: 'osm_clip_layer',
       name: 'OSM Clip',
-      visible: false,
+      visible: true,
       popup: {
         filterkeys: ['id', 'color', 'name']
       },
@@ -279,7 +349,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const vectorTile = new CustomLayer({
       id: 'vectorTile',
       name: 'VectorTileLayer',
-      visible: true,
+      visible: false,
       popup: {
         event: 'move',
         filterkeys: ['name', 'region_un', 'region_wb'],  // of all the feature's properties, only pass these to the popup-render-function
@@ -374,7 +444,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
 
     const metersPerUnit = this.mapSvc.getProjection().getMetersPerUnit();
-    const metersPerUnitWSG84 = new Projection({code: 'EPSG:4326', units: 'degrees'}).getMetersPerUnit();
+    const metersPerUnitWSG84 = new Projection({ code: 'EPSG:4326', units: 'degrees' }).getMetersPerUnit();
     munichPolys.features.map(f => f.properties.height = f.properties.height * metersPerUnitWSG84 / metersPerUnit);
 
     const barLayer = new CustomLayer({
@@ -392,7 +462,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
 
 
-    
+
     const crescentSource = new olVectorSource({
       features: this.mapSvc.geoJsonToFeatures(crescentPoints)
     });
@@ -497,7 +567,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       TransparentBackground,
       osmLayer1,
       vectorTile,
-      layersGroup1,
       layerGroup2,
       clusterLayer,
       imageWmsLayer,
@@ -505,6 +574,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       staticImageLayer,
       osmClipLayer,
       topoJsonLayer,
+      geoJsonLayer2,
+      geoJsonLayer3,
+      layersGroup1,
       geoJsonLayer,
       customLayerGroup];
 
