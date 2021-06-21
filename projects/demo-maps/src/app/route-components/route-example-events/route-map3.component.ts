@@ -13,10 +13,16 @@ import olVectorSource from 'ol/source/Vector';
 import { parse } from 'url';
 import { regularGrid } from './map.utils';
 import { ActivatedRoute } from '@angular/router';
-import { first } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { debounceTime, first } from 'rxjs/operators';
+import { Subscription, Subject } from 'rxjs';
 
 import testData from '../../../assets/data/json/test.json';
+
+
+import olTileLayer from 'ol/layer/Tile';
+import olTileWMS from 'ol/source/TileWMS';
+import { getRenderPixel } from 'ol/render';
+import olLayerGroup from 'ol/layer/Group';
 
 @Component({
   selector: 'app-route-map3',
@@ -127,7 +133,94 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
 
     const layers = [osmLayer, eventLayer, updatableFeatureLayer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
+  }
 
+  removeLayer() {
+    this.layersSvc.removeLayerOrGroupById('event_layer2');
+  }
+
+  addLayer() {
+    const onTileLoadStart = new Subject<any>()
+    const onTileLoadEnd = new Subject<any>()
+
+    const olevent_layer2 = new olTileLayer({
+      source: new olTileWMS({
+        url: 'https://geoservice.dlr.de/eoc/land/wms',
+        params: {
+          LAYERS: 'GUF28_DLR_v1_Mosaic'
+        }
+      })
+    });
+
+    const onPrerender = (arg) => {
+      var ctx = arg.context;
+      var mapSize = this.mapSvc.map.getSize();
+      var width = mapSize[0] * (50 / 100);
+      var tl = getRenderPixel(arg, [width, 0]);
+      var tr = getRenderPixel(arg, [mapSize[0], 0]);
+      var bl = getRenderPixel(arg, [width, mapSize[1]]);
+      var br = getRenderPixel(arg, mapSize);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(tl[0], tl[1]);
+      ctx.lineTo(bl[0], bl[1]);
+      ctx.lineTo(br[0], br[1]);
+      ctx.lineTo(tr[0], tr[1]);
+      ctx.closePath();
+      ctx.clip();
+    };
+
+    const onPostrender = (arg) => {
+      const ctx = arg.context;
+      ctx.restore();
+    };
+
+    olevent_layer2.on('prerender', (arg) => {
+      onPrerender(arg);
+    });
+
+    olevent_layer2.on('postrender', (arg) => {
+      onPostrender(arg);
+    });
+
+    const eventLayer2 = new CustomLayer({
+      id: 'event_layer2',
+      name: 'Image load Layer 2',
+      type: 'custom',
+      custom_layer: new olLayerGroup({
+        layers: [olevent_layer2]
+      }),
+      visible: true,
+      removable: true,
+      events: {
+        source: [{
+          event: 'tileloadstart', listener: (arg) => {
+            onTileLoadStart.next(arg)
+          }
+        },
+        {
+          event: 'tileloadend', listener: (arg) => {
+            onTileLoadEnd.next(arg);
+          }
+        }],
+        layer: [
+          {
+            event: 'prerender', listener: (arg) => {
+              onPrerender(arg);
+            }
+          },
+          {
+            event: 'postrender', listener: (arg) => {
+              onPrerender(arg);
+            }
+          }
+        ]
+      }
+    });
+    onTileLoadStart.subscribe(e => this.progressService.progress({ indeterminate: true }));
+    onTileLoadEnd.pipe(debounceTime(200)).subscribe(e => this.progressService.progress(null));
+    this.layersSvc.addLayer(eventLayer2, 'Layers');
   }
 
   updateSearchParamsHashRouting(params: { [key: string]: string }) {
@@ -190,9 +283,9 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     });
 
     const olGridLayer = new olVectorImageLayer({
-      id: layerID,
       source: gridLayerSource
     });
+    olGridLayer.set('id', layerID);
 
     const oldGridLayer = this.layersSvc.getLayerById(layerID) as CustomLayer;
     if (!oldGridLayer) {
