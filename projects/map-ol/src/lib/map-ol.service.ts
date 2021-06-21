@@ -459,12 +459,25 @@ export class MapOlService {
       }
     });
     layerGroups.forEach(l => {
-      // is this needed? when layers or sources are removed, then there is no Target anymore which listens for events?
-      // there are also other functions like removeLayerByKey(), removeAllLayers()
-      this.removeListenersFromOldLayers(l);
+      this.cleanUpEventListeners(l, layers);
       l.setLayers(new olCollection(layers));
     });
     return layers;
+  }
+
+  /**
+   * Clean up event listeners from layers and sources
+   *
+   * TODO: is this needed? when layers or sources are removed, then there is no Target anymore which listens for events?
+   * there are also other functions like removeLayerByKey(), removeAllLayers()
+   */
+  private cleanUpEventListeners(layerGroup: olLayerGroup, newLayers) {
+    /** get Difference of old layers and new layers */
+    const layersToRemove = layerGroup.getLayers().getArray().filter(x => !newLayers.map(l => l.get('id')).includes(x.get('id')));
+    this.removeListenersFromOldLayers(layersToRemove);
+
+    // TODO: is this done by setLayers??
+    layersToRemove.forEach(l => layerGroup.getLayers().remove(l));
   }
 
   /**
@@ -477,37 +490,51 @@ export class MapOlService {
     if (ukisLayer.events) {
       if (ukisLayer.events.layer) {
         ukisLayer.events.layer.forEach(e => {
+          const listeners = olLayer.getListeners(e.event);
+          /** only add listener if it was not registered on the olLayer object (for CustomLayer) */
+          console.log('layer listeners',listeners)
+          if (!listeners) {
           olLayer.on(e.event, e.listener);
+          }
         });
       }
 
       if (ukisLayer.events.source) {
         ukisLayer.events.source.forEach(e => {
+          const listeners = olSource.getListeners(e.event);
+          /** only add listener if it was not registered on the olSource object (for CustomLayer) */
+          console.log('Source listeners',listeners)
+          if (!listeners) {
           olSource.on(e.event, e.listener);
+          }
         });
       }
     }
   }
 
 
-  private removeListenersFromOldLayers(layerGroup: olLayerGroup) {
-    layerGroup.getLayers().forEach(l => {
-      if (l.hasListener()) {
-        const listeners = (l as any).listeners_;
-        console.log(listeners)
-        Object.keys(listeners).forEach(key => l.removeEventListener(key, listeners[key]));
-        // l.disposeInternal();
+  private removeListenersFromOldLayers(layers: Array<olBaseLayer | olLayerGroup>) {
+    const disposeLayerInternal = (layer: olBaseLayer) => {
+      if (layer.hasListener()) {
+        layer.disposeInternal();
       }
-      if (typeof (l as any).getSource === 'function') {
-        const source = (l as any).getSource() as olSource;
+      if (typeof (layer as any).getSource === 'function') {
+        const source = (layer as any).getSource() as olSource;
         if (source) {
           if (source.hasListener()) {
-            const listeners = (source as any).listeners_;
-            console.log(listeners)
-            Object.keys(listeners).forEach(key => source.removeEventListener(key, listeners[key]));
-            // source.disposeInternal();
+            source.disposeInternal();
           }
         }
+      }
+    };
+
+    layers.forEach(l => {
+      if (l instanceof olLayerGroup) {
+        l.getLayers().forEach(subL => {
+          disposeLayerInternal(subL);
+        });
+      } else if (l instanceof olBaseLayer) {
+        disposeLayerInternal(l);
       }
     });
   }
@@ -1116,8 +1143,14 @@ export class MapOlService {
           olSource.set('wrapX', l.continuousWorld);
         }
         this.setCrossOrigin(layer);
+        this.addEventsToLayer(l, layer, olSource);
       } else if (layer instanceof olLayerGroup) {
-        layer.getLayers().forEach(gl => this.setCrossOrigin(gl));
+        layer.getLayers().forEach(gl => {
+          this.setCrossOrigin(gl);
+          if (gl instanceof olLayer) {
+            this.addEventsToLayer(l, gl, gl.getSource());
+          }
+        });
       } else {
         console.error(`The custom_layer of ${l.id} in not a openlayers Layer`);
       }
