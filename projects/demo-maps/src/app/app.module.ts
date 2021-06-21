@@ -38,6 +38,7 @@ import { RouteMap8Component } from './route-components/route-example-threejs/rou
 import { TablePopupComponent } from './components/table-popup/table-popup.component';
 import { ServicesOgcModule } from '@dlr-eoc/services-ogc';
 import { ExampleGroupActionComponent } from './components/example-group-action/example-group-action.component';
+import { RasterFeatureInfoComponent } from './components/raster-feature-info/raster-feature-info.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { ExampleGroupActionComponent } from './components/example-group-action/e
     RouteMap8Component,
     InterpolationSettingsComponent,
     TablePopupComponent,
-    ExampleGroupActionComponent
+    ExampleGroupActionComponent,
+    RasterFeatureInfoComponent
   ],
   imports: [
     BrowserModule,

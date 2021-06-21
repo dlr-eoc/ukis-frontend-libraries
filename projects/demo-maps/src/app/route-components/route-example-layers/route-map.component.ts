@@ -17,7 +17,7 @@ import { WmsService } from '@dlr-eoc/services-ogc';
   selector: 'app-route-map',
   templateUrl: './route-map.component.html',
   styleUrls: ['./route-map.component.scss'],
-  /** use differnt instances of the services only for testing with diffenr routs  */
+  /** use different instances of the services only for testing with different routes  */
   providers: [LayersService, MapStateService, MapOlService]
 })
 export class RouteMapComponent implements OnInit {
@@ -400,10 +400,16 @@ export class RouteMapComponent implements OnInit {
 
     const wfsLayer = new VectorLayer({
       id: 'WfsLayer',
-      name: 'WFS Layer',
+      name: 'WFS Pennsylvania',
       type: 'wfs',
       url: "https://ahocevar.com/geoserver/wfs?service=WFS&request=GetFeature&outputFormat=application/json&version=1.1.0&srsname=EPSG:3857&typenames=usa:states&cql_filter=STATE_NAME='Pennsylvania'",
-      bbox: [-83.1005859375, 38.37611542403604, -72.50976562499999, 43.03677585761058]
+      bbox: [-83.1005859375, 38.37611542403604, -72.50976562499999, 43.03677585761058],
+      popup: {
+        dynamicPopup: {
+          component: TablePopupComponent,
+          getAttributes: (args) => ({data: args})
+        }
+      }
     });
 
     const eocBasemap = new EocBasemapTile();
