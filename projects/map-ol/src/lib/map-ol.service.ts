@@ -1637,7 +1637,6 @@ export class MapOlService {
    */
   private destroyDynamicPopupComponent(id: string): void {
     if (this.dynamicPopupComponents.has(id)) {
-      const comp = this.dynamicPopupComponents.get(id);
       this.dynamicPopupComponents.get(id).destroy();
       this.dynamicPopupComponents.delete(id);
     }
