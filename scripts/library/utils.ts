@@ -297,7 +297,7 @@ export async function checkDeps(angularJson: WorkspaceSchema, packageScope: stri
       'geojson' // @types/geojson imports geojson
     ],
     parsers: { // the target parsers
-      '*.ts': depcheck.parser.typescript
+      '**/*.ts': depcheck.parser.typescript
     },
     detectors: [ // the target detectors
       depcheck.detector.requireCallExpression,
