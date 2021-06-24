@@ -18,4 +18,13 @@
       <ukis-mouse-position></ukis-mouse-position>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Test">
+    <clr-icon shape="cog" clrVerticalNavIcon></clr-icon>
+    Test
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <button class="btn btn-primary" (click)="removeLayer()">remove Layer</button>
+      <button class="btn btn-primary" (click)="addLayer()">add Layer</button>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
 </clr-vertical-nav>

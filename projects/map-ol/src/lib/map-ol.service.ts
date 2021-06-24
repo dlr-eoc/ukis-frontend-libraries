@@ -1,4 +1,4 @@
-import { Injectable, Type, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
+import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
 
 
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent } from '@dlr-eoc/services-layers';
@@ -8,6 +8,7 @@ import olView from 'ol/View';
 import { ViewOptions as olViewOptions } from 'ol/View';
 
 import olBaseLayer from 'ol/layer/Base';
+import olSource from 'ol/source/Source';
 import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
@@ -44,7 +45,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, Extent } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, Extent, returnOrUpdate } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -458,11 +459,83 @@ export class MapOlService {
       }
     });
     layerGroups.forEach(l => {
+      this.cleanUpEventListeners(l, layers);
       l.setLayers(new olCollection(layers));
     });
     return layers;
   }
 
+  /**
+   * Clean up event listeners from layers and sources
+   *
+   * TODO: is this needed? when layers or sources are removed, then there is no Target anymore which listens for events?
+   * there are also other functions like removeLayerByKey(), removeAllLayers()
+   */
+  private cleanUpEventListeners(layerGroup: olLayerGroup, newLayers) {
+    /** get Difference of old layers and new layers */
+    const layersToRemove = layerGroup.getLayers().getArray().filter(x => !newLayers.map(l => l.get('id')).includes(x.get('id')));
+    this.removeListenersFromOldLayers(layersToRemove);
+
+    // TODO: is this done by setLayers??
+    layersToRemove.forEach(l => layerGroup.getLayers().remove(l));
+  }
+
+  /**
+   * on() and un() are functions of olObservable which extends EventTarget
+   *
+   * https://github.com/openlayers/openlayers/blob/v6.5.0/src/ol/events/Target.js#L145
+   * https://github.com/openlayers/openlayers/blob/v6.5.0/src/ol/events/Target.js#L134
+   */
+  private addEventsToLayer(ukisLayer: Layer, olLayer: olLayer<any>, olSource: olSource) {
+    if (ukisLayer.events) {
+      if (ukisLayer.events.layer) {
+        ukisLayer.events.layer.forEach(e => {
+          const listeners = olLayer.getListeners(e.event);
+          /** only add listener if it was not registered on the olLayer object (for CustomLayer) */
+          if (!listeners) {
+            olLayer.on(e.event, e.listener);
+          }
+        });
+      }
+
+      if (ukisLayer.events.source) {
+        ukisLayer.events.source.forEach(e => {
+          const listeners = olSource.getListeners(e.event);
+          /** only add listener if it was not registered on the olSource object (for CustomLayer) */
+          if (!listeners) {
+            olSource.on(e.event, e.listener);
+          }
+        });
+      }
+    }
+  }
+
+
+  private removeListenersFromOldLayers(layers: Array<olBaseLayer | olLayerGroup>) {
+    const disposeLayerInternal = (layer: olBaseLayer) => {
+      if (layer.hasListener()) {
+        layer.disposeInternal();
+      }
+      if (typeof (layer as any).getSource === 'function') {
+        const source = (layer as any).getSource() as olSource;
+        if (source) {
+          if (source.hasListener()) {
+            source.disposeInternal();
+          }
+        }
+      }
+    };
+
+    layers.forEach(l => {
+      if (l instanceof olLayerGroup) {
+        l.getLayers().forEach(subL => {
+          disposeLayerInternal(subL);
+        });
+      } else if (l instanceof olBaseLayer) {
+        disposeLayerInternal(l);
+      }
+    });
+  }
 
   /**
    * get corresponding Layer Group on which the layer is added
@@ -574,6 +647,7 @@ export class MapOlService {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const tempLayers: olBaseLayer[] = [];
     // TODO try to deep check if a layer if exactly the same and dont create it new
+    // create hash from layer???
 
     if (layers.length < 1 && lowerType !== 'baselayers') {
       // this.removeAllLayers('overlays');
@@ -719,7 +793,9 @@ export class MapOlService {
       layeroptions.minZoom = l.minZoom;
     }
 
-    return new olTileLayer(layeroptions);
+    const newlayer = new olTileLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, olSource);
+    return newlayer;
   }
 
   private create_wms_layer(l: WmsLayer): olTileLayer {
@@ -797,6 +873,7 @@ export class MapOlService {
       layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
     const newlayer = new olTileLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, olSource);
     return newlayer;
   }
 
@@ -894,7 +971,9 @@ export class MapOlService {
         layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
       }
 
-      return new olTileLayer(layeroptions);
+      const newlayer = new olTileLayer(layeroptions);
+      this.addEventsToLayer(l, newlayer, olSource);
+      return newlayer;
     } else {
       const layer = l as Layer;
       console.error(`layer with id: ${layer.id} and type ${layer.type} is no instanceof WmtsLayer!`);
@@ -929,7 +1008,6 @@ export class MapOlService {
       style: styling
     };
 
-
     if (l.popup) {
       layeroptions.popup = l.popup;
       /**
@@ -961,11 +1039,9 @@ export class MapOlService {
       Object.assign(layeroptions, l.options);
     }
 
-
-
-    const wfs = new olVectorLayer(layeroptions);
-
-    return wfs;
+    const newlayer = new olVectorLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, wfsSource);
+    return newlayer;
   }
 
   private create_geojson_layer(l: VectorLayer) {
@@ -1066,7 +1142,9 @@ export class MapOlService {
       Object.assign(layeroptions, l.options);
     }
 
-    return new olVectorLayer(layeroptions);
+    const newlayer = new olVectorLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, layeroptions.source);
+    return newlayer;
   }
 
   /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */
@@ -1094,8 +1172,14 @@ export class MapOlService {
           olSource.set('wrapX', l.continuousWorld);
         }
         this.setCrossOrigin(layer);
+        this.addEventsToLayer(l, layer, olSource);
       } else if (layer instanceof olLayerGroup) {
-        layer.getLayers().forEach(gl => this.setCrossOrigin(gl));
+        layer.getLayers().forEach(gl => {
+          this.setCrossOrigin(gl);
+          if (gl instanceof olLayer) {
+            this.addEventsToLayer(l, gl, gl.getSource());
+          }
+        });
       } else {
         console.error(`The custom_layer of ${l.id} in not a openlayers Layer`);
       }
@@ -1201,20 +1285,51 @@ export class MapOlService {
     }
   }
 
-  private isMovePopup(layerpopup) {
-    return (layerpopup && typeof layerpopup === 'object' && 'event' in layerpopup && layerpopup.event === 'move');
+  private isPopupObj(layerpopup: Layer['popup'] | string): layerpopup is popup {
+    return (layerpopup && typeof layerpopup === 'object') && !Array.isArray(layerpopup);
+  }
+
+  private isPopupObjMove(layerpopup: Layer['popup']): layerpopup is popup {
+    return (this.isPopupObj(layerpopup) && layerpopup.event === 'move');
+  }
+
+  private isPopupObjClick(layerpopup: Layer['popup']): layerpopup is popup {
+    return (this.isPopupObj(layerpopup) && layerpopup.event === 'click');
+  }
+
+  private isPopupObjArray(layerpopup: Layer['popup']): layerpopup is popup[] {
+    return Array.isArray(layerpopup) && layerpopup.length && this.isPopupObj(layerpopup[0]);
+  }
+
+  private isPopupStringArray(layerpopup: Layer['popup']): layerpopup is string[] {
+    return Array.isArray(layerpopup) && layerpopup.length && typeof layerpopup[0] === 'string';
+  }
+
+  private popupEventIsBrowserEvent(popup: popup, evt: olMapBrowserEvent<PointerEvent>) {
+    if (popup.event === 'move' && evt.type === 'pointermove') {
+      return true;
+    } else if (popup.event === 'click' && evt.type === 'click') {
+      return true;
+    }
   }
 
   /** USED in map-ol.component */
   public layers_on_click(evt: olMapBrowserEvent<PointerEvent>) {
     const layerFilter = (layer) => {
       const layerpopup: Layer['popup'] = layer.get('popup');
-      if (layerpopup === true) {
-        return true;
-      } else if (!this.isMovePopup(layerpopup)) {
-        return true;
+      if (this.isPopupObjArray(layerpopup)) {
+        const cilickPopup = layerpopup.find(p => this.popupEventIsBrowserEvent(p, evt));
+        if (cilickPopup) {
+          return true;
+        }
       } else {
-        return false;
+        if (layerpopup === true) {
+          return true;
+        } else if (!this.isPopupObjMove(layerpopup)) {
+          return true;
+        } else {
+          return false;
+        }
       }
     };
     this.layers_on_click_move(evt, layerFilter);
@@ -1225,7 +1340,14 @@ export class MapOlService {
   public layers_on_pointermove(evt: olMapBrowserEvent<PointerEvent>) {
     const layerFilter = (layer) => {
       const layerpopup: Layer['popup'] = layer.get('popup');
-      return this.isMovePopup(layerpopup);
+      if (this.isPopupObjArray(layerpopup)) {
+        const cilickPopups = layerpopup.filter(p => this.isPopupObjMove(p));
+        if (cilickPopups.length) {
+          return true;
+        }
+      } else {
+        return this.isPopupObjMove(layerpopup);
+      }
     };
     this.layers_on_click_move(evt, layerFilter);
   }
@@ -1346,13 +1468,7 @@ export class MapOlService {
             // type no cluster
             properties = feature.getProperties();
           }
-
-          if ((typeof layerpopup === 'boolean' || Array.isArray(layerpopup)) ||
-            (layerpopup.event === 'click' && evt.type === 'click') ||
-            (!layerpopup.event && evt.type === 'click') ||
-            (layerpopup.event === 'move' && evt.type === 'pointermove')) {
-            this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
-          }
+          this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
         }
       }
     });
@@ -1387,8 +1503,19 @@ export class MapOlService {
       delete popupProperties.geometry;
     }
 
+    const limitPopupObjProperties = (popupObj: popup) => {
+      if (popupObj && popupObj.filterkeys) {
+        popupProperties = Object.keys(popupProperties)
+          .filter(key => popupObj.filterkeys.includes(key))
+          .reduce((obj, key) => {
+            obj[key] = popupProperties[key];
+            return obj;
+          }, {});
+      }
+    }
+
     /** Popup is array - limit properties */
-    if (Array.isArray(layerpopup)) {
+    if (this.isPopupStringArray(layerpopup)) {
       popupProperties = Object.keys(popupProperties)
         .filter(key => layerpopup.includes(key))
         .reduce((obj, key) => {
@@ -1396,25 +1523,27 @@ export class MapOlService {
           return obj;
         }, {});
     }
+    /** Popup is array of popupObj - limit properties */
+    else if (this.isPopupObjArray(layerpopup)) {
+      // is the first popupObj in the array with the same event as evt.type
+      const popupObj = layerpopup.find(p => this.popupEventIsBrowserEvent(p, evt));
+      limitPopupObjProperties(popupObj);
+    }
     /** Popup is object - limit properties */
-    if (typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.filterkeys) {
-      popupProperties = Object.keys(popupProperties)
-        .filter(key => layerpopup.filterkeys.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = popupProperties[key];
-          return obj;
-        }, {});
+    else if (this.isPopupObj(layerpopup)) {
+      limitPopupObjProperties(layerpopup);
     }
 
-    if (typeof layerpopup === 'object' && !Array.isArray(layerpopup)) {
+
+    const overwritePopup = (popupObj: popup) => {
       /** overwrite the keys of the layer properties */
-      if (layerpopup.properties) {
-        const usedProperties = Object.keys(layerpopup.properties);
+      if (popupObj.properties) {
+        const usedProperties = Object.keys(popupObj.properties);
         if (Array.isArray(usedProperties)) {
           popupProperties = Object.keys(popupProperties)
             /* .filter(key => usedProperties.includes(key)) */
             .reduce((obj, key) => {
-              const newKey = layerpopup.properties[key];
+              const newKey = popupObj.properties[key];
               if (newKey) {
                 obj[newKey] = popupProperties[key];
               } else {
@@ -1425,49 +1554,78 @@ export class MapOlService {
         }
 
         /** function to create html string */
-      } else if (layerpopup.pupupFunktion) {
-        args.popupFn = layerpopup.pupupFunktion;
-      } else if (layerpopup.dynamicPopup) {
-        args.dynamicPopup = layerpopup.dynamicPopup;
+      } else if (popupObj.pupupFunktion) {
+        args.popupFn = popupObj.pupupFunktion;
+      } else if (popupObj.dynamicPopup) {
+        args.dynamicPopup = popupObj.dynamicPopup;
       }
     }
 
-    /** popup is boolean or array */
-    if (typeof layerpopup === 'boolean' || Array.isArray(layerpopup)) {
-      this.addPopup(args, popupProperties, null);
-    } else if (layerpopup) {
+    /** overwrite and us popupFunction or dynamicPopup */
+    if (this.isPopupObjArray(layerpopup)) {
+      layerpopup.forEach(p => {
+        if (this.popupEventIsBrowserEvent(p, evt)) {
+          overwritePopup(p);
+        }
+      })
+    } else if (this.isPopupObj(layerpopup)) {
+      overwritePopup(layerpopup);
+    }
+
+    const addPopupObj = (popupObj: popup) => {
       /** async function where you can paste a html string to the callback */
-      if ('asyncPupup' in layerpopup) {
-        layerpopup.asyncPupup(popupProperties, (html) => {
-          this.addPopup(args, null, html, layerpopup.event, layerpopup.single);
+      if ('asyncPupup' in popupObj) {
+        popupObj.asyncPupup(popupProperties, (html) => {
+          this.addPopup(args, null, html, popupObj.event, popupObj.single);
         });
         /** add event if popup object */
       } else {
-        this.addPopup(args, popupProperties, null, layerpopup.event, layerpopup.single);
+        this.addPopup(args, popupProperties, null, popupObj.event, popupObj.single);
       }
+    }
+
+    /** popup is boolean or string array */
+    if (typeof layerpopup === 'boolean' || this.isPopupStringArray(layerpopup)) {
+      this.addPopup(args, popupProperties, null);
+    }
+    /** popup array of popupObj */
+    else if (this.isPopupObjArray(layerpopup)) {
+      layerpopup.forEach(p => {
+        // filter that browser event and popup event are the same
+        if (this.popupEventIsBrowserEvent(p, evt)) {
+          addPopupObj(p);
+        }
+      });
+    }
+    /** popup is a popupObj */
+    else if (layerpopup) {
+      addPopupObj(layerpopup);
     }
   }
 
+  // TODO: overlapping layers - move popup is added on click ???
   public addPopup(args: IPopupArgs, popupObj: any, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
     const layerpopup: Layer['popup'] = args.layer.get('popup');
     // check if popup is already there and event is move
-    const moveID = 'popup_move_ID';
+    const layerID = args.layer.get('id');
+    const moveID = `popup_move_ID`;
     const movePopup = this.getPopups().find(item => item.getId() === moveID);
+    const browserEvent = args.event;
     /**
      * If event move and the map already has a Overlay for move
      * then only create new html container and set the position
      */
-    if (event === 'move' && movePopup) {
+    if (event === 'move' && browserEvent.type === 'pointermove' && movePopup) {
       let coordinate;
       if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
         coordinate = args.properties.geometry.getCoordinates();
       } else {
-        coordinate = args.event.coordinate;
+        coordinate = browserEvent.coordinate;
       }
       const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
       movePopup.setElement(container);
       movePopup.setPosition(coordinate);
-    } else if (args.event.type === 'pointermove' && !event) {
+    } else if (browserEvent.type === 'pointermove' && !event) {
       /** remove move popup if move on a click layer */
       if (movePopup) {
         this.removeAllPopups((item) => {
@@ -1480,11 +1638,11 @@ export class MapOlService {
         popupID = moveID;
       } else {
         if (args.feature) {
-          popupID = olGetUid(args.feature);
+          popupID = `${layerID}:${olGetUid(args.feature)}`;
         } else if (args.layer) {
-          popupID = olGetUid(args.layer);
+          popupID = `${layerID}:${olGetUid(args.layer)}`;
         } else {
-          popupID = `popup_${new Date().getTime()}`;
+          popupID = `${layerID}:popup_${new Date().getTime()}`;
         }
       }
 
@@ -1502,14 +1660,25 @@ export class MapOlService {
 
       let overlayoptions = defaultOptions;
 
-      if (layerpopup && typeof layerpopup === 'object' && !Array.isArray(layerpopup) && layerpopup.options) {
+      if (this.isPopupObj(layerpopup) && layerpopup.options) {
         overlayoptions = Object.assign(defaultOptions, layerpopup.options);
       }
 
       const overlay = new olOverlay(overlayoptions);
 
       if (removePopups) {
-        this.removeAllPopups();
+        this.removeAllPopups((item) => {
+          // only remove the popups from the current layer
+          const elementID = item.getId();
+          const layer = elementID.toString().split(':')[0];
+          if (layer) {
+            if (layerID === layer) {
+              return layerID === layer;
+            }
+          } else {
+            return true;
+          }
+        });
       }
 
       const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
@@ -1521,7 +1690,7 @@ export class MapOlService {
       }
 
       const container = this.createPopupContainer(overlay, args, popupObj, html, event);
-      overlay.set('addEvent', args.event.type);
+      overlay.set('addEvent', browserEvent.type);
       overlay.set(OVERLAY_TYPE_KEY, 'popup');
       overlay.setElement(container);
 
@@ -1529,7 +1698,7 @@ export class MapOlService {
       if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
         coordinate = args.properties.geometry.getCoordinates();
       } else {
-        coordinate = args.event.coordinate;
+        coordinate = browserEvent.coordinate;
       }
 
       overlay.setPosition(coordinate);
