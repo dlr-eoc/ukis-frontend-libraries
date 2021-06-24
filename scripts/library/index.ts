@@ -75,7 +75,7 @@ function testAll(headless = false) {
 
 function runBuilds(offset = 0, projects) {
   const project = projects[offset];
-  const cliArgs = ['build', '--prod=true', '--watch=false', project];
+  const cliArgs = ['build', '--configuration=production', '--watch=false', project];
   if (project) {
     console.log(consoleLogColors.Bright, `---------------------->>> ${offset + 1}: run ng ${cliArgs.join(' ')}`);
     const child = fork(`${__dirname}/run-ng.js`, cliArgs);
