@@ -30,7 +30,7 @@ Do not push to it or adjust it manually, because it gets updated by a [GitHub Ac
 
 
 # Ho to create a new Project library (UKIS-Module)
-The angular workspace was created by ``ng new < name > --create-application=false --prefix=ukis --style=scss``
+The angular workspace was created by ``ng new < name > --create-application=false --prefix=ukis --style=scss`` with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.14.
 
 ### 1. Generate a new library with the cli
 run ``ng generate library < name > --prefix ukis``
