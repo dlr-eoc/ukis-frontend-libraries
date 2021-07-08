@@ -30,6 +30,7 @@ Do not push to it or adjust it manually, because it gets updated by a [GitHub Ac
 
 
 # Ho to create a new Project library (UKIS-Module)
+The angular workspace was created by ``ng new < name > --create-application=false --prefix=ukis --style=scss``
 
 ### 1. Generate a new library with the cli
 run ``ng generate library < name > --prefix ukis``
@@ -85,6 +86,14 @@ If your project depends on a package that is already listed in [frontend-librari
 - add your library to the README
 - add important/breaking changes to the CHANGELOG
 
+
+
+
+
+
+
+### Generate a new application with the cli
+run ``ng g application < name > --prefix=app --style=scss``
 
 # How to publish a new version for all projects
 The general workflow to create a new version:
