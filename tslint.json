@@ -10,30 +10,28 @@
         "statements"
       ]
     },
+    "array-type": false,
     "arrow-return-shorthand": true,
     "curly": true,
+    "deprecation": {
+      "severity": "warning"
+    },
     "eofline": true,
+    "import-blacklist": [
+      true,
+      "rxjs/Rx"
+    ],
     "import-spacing": true,
     "indent": {
       "options": [
         "spaces"
       ]
     },
-    "no-string-literal": false,
-    "class-name": false,
-    "array-type": false,
-    "arrow-parens": false,
-    "deprecation": {
-      "severity": "warning"
-    },
-    "import-blacklist": [
-      true,
-      "rxjs/Rx"
-    ],
-    "interface-name": false,
     "max-classes-per-file": false,
-    "max-line-length": false,
-    "member-access": false,
+    "max-line-length": [
+      false,
+      140
+    ],
     "member-ordering": [
       true,
       {
@@ -45,7 +43,6 @@
         ]
       }
     ],
-    "no-consecutive-blank-lines": false,
     "no-console": [
       true,
       "debug",
@@ -67,8 +64,6 @@
       true,
       "as-needed"
     ],
-    "object-literal-sort-keys": false,
-    "ordered-imports": false,
     "quotemark": [
       true,
       "single"
@@ -87,20 +82,10 @@
         "named": "never"
       }
     },
-    "trailing-comma": false,
-    "component-class-suffix": true,
-    "contextual-lifecycle": true,
-    "directive-class-suffix": true,
-    "no-conflicting-lifecycle": true,
-    "no-host-metadata-property": true,
-    "no-input-rename": false,
-    "no-inputs-metadata-property": true,
-    "no-output-native": true,
-    "no-output-on-prefix": true,
-    "no-output-rename": true,
-    "no-outputs-metadata-property": true,
-    "template-banana-in-box": true,
-    "template-no-negated-async": true,
+    "typedef": [
+      true,
+      "call-signature"
+    ],
     "typedef-whitespace": {
       "options": [
         {
@@ -119,11 +104,7 @@
         }
       ]
     },
-    "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true,
-    "one-variable-per-declaration": false,
-    "only-arrow-functions": false
-  ,    "variable-name": {
+    "variable-name": {
       "options": [
         "ban-keywords",
         "check-format",
@@ -139,6 +120,21 @@
         "check-type",
         "check-typecast"
       ]
-    }
-}
+    },
+    "component-class-suffix": true,
+    "contextual-lifecycle": true,
+    "directive-class-suffix": true,
+    "no-conflicting-lifecycle": true,
+    "no-host-metadata-property": true,
+    "no-input-rename": true,
+    "no-inputs-metadata-property": true,
+    "no-output-native": true,
+    "no-output-on-prefix": true,
+    "no-output-rename": true,
+    "no-outputs-metadata-property": true,
+    "template-banana-in-box": true,
+    "template-no-negated-async": true,
+    "use-lifecycle-interface": true,
+    "use-pipe-transform-interface": true
+  }
 }

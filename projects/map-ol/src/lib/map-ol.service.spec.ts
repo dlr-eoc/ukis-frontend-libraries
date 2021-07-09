@@ -101,7 +101,7 @@ const createMapTarget = () => {
 })
 class MockPopupComponent {
   @Input() data: any;
-  constructor() {}
+  constructor() { }
 }
 
 const beforeEachFn = () => {
@@ -730,7 +730,7 @@ describe('MapOlService popup', () => {
     expect(popupOnMap instanceof olOverlay).toBeTrue();
     /** OVERLAY_TYPE_KEY, OVERLAY_TYPE_VALUE */
     expect(popupOnMap.get('type')).toBe('popup');
-    expect(popupOnMap.getId()).toBe(olGetUid(feature));
+    expect(popupOnMap.getId()).toBe(`ID-vector:${olGetUid(feature)}`);
     expect(popupOnMap.get('addEvent')).toBe(args.event.type);
   });
 
@@ -823,7 +823,7 @@ describe('MapOlService popup', () => {
       dynamicPopup: {
         component: MockPopupComponent,
         getAttributes: (args: any) => {
-          return {data: [1, 2, 3]};
+          return { data: [1, 2, 3] };
         }
       }
     };
@@ -929,14 +929,15 @@ describe('MapOlService State', () => {
     service.createMap();
 
     const oldZoom = service.getZoom();
-    const duration = 250;
+    expect(oldZoom).toBeCloseTo(0, 0);
+    const duration = 400;
     service.zoomInOut('+');
 
     setTimeout(() => {
       const newZoom = service.getZoom();
       expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
       done();
-    }, duration + 50);
+    }, duration);
   });
 
   it('should set/get extent', () => {
