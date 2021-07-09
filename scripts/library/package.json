@@ -8,8 +8,8 @@
   "main": "index.js",
   "private": true,
   "peerDependencies": {
-    "@angular/cli": "~11.2.5",
-    "@schematics/angular": "^11.2.5",
+    "@angular/cli": "~11.2.14",
+    "@schematics/angular": "^11.2.14",
     "typescript": "~4.1.5"
   },
   "dependencies": {
