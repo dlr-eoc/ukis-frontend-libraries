@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
       - uses: ./.github/actions/check-branch-contains
         with:
           branch: "origin/master"
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
       - uses: ./.github/actions/build-test
       - name: Archive dist artifacts
         uses: actions/upload-artifact@v2
@@ -62,7 +62,7 @@ jobs:
           path: dist
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
       - run: npm ci
       ### for each module in dist publish frontend-libraries to registry
       - run: npm run setVersionsInBuild
@@ -84,7 +84,7 @@ jobs:
           path: dist
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -106,7 +106,7 @@ jobs:
           path: dist
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       ### for each module in dist publish frontend-libraries to registry
