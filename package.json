@@ -22,7 +22,7 @@
     "build": "node scripts/library/index.js --build",
     "test": "node scripts/library/index.js --test",
     "schematics:test": "jasmine dist/core-ui/schematics/**/*_spec.js",
-    "preschematics:test": "ng build core-ui",
+    "preschematics:test": "ng build --configuration=production --watch=false core-ui",
     "setVersionsInBuild": "node scripts/library/index.js --set",
     "build:scripts": "npx tsc -p scripts/library/tsconfig.json",
     "lint": "ng lint",
