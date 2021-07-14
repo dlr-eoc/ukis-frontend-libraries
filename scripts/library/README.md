@@ -7,7 +7,7 @@ It is based on [depcheck](https://github.com/depcheck/depcheck) and [toposort](h
 It uses the package scope `@dlr-eoc`, `main package.json` and the angular config file `angular.json`.
 
 
-- To get the list of all projects is reads the the angular config file (angular.json).
+- To get the list of all projects it reads the angular config file (angular.json).
 - To check all dependencies it uses the package scope `@dlr-eoc` and `depcheck`.
 - To get the build order it used `depcheck` and `toposort`.
 - To run build and test it uses `await NG.default(options)` in a child process for each project.
