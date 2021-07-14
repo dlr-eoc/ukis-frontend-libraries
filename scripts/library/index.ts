@@ -7,7 +7,6 @@
 import { fork } from 'child_process';
 import * as PATH from 'path';
 import * as FS from 'fs';
-import * as minimist from 'minimist';
 import { IPackageJSON } from './npm-package.interface';
 import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 
@@ -17,6 +16,7 @@ import {
   checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput
 } from './utils';
 
+import { Command } from 'commander';
 
 
 const packageScope = '@dlr-eoc/';
@@ -220,55 +220,49 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
   return errors;
 }
 
-
-function showHelp() {
-  console.log(`
-Syntax:   node  [options]
-
-Options:
-  -h, --help              Print this message.
-  -l, --list              List all projects
-  -d, --deps              List all projects in a table with dependencies
-      & --peer            List all projects with dependencies and peerDependencies
-  -s, --set               Set versions of all projects in dist folder
-  -g, --graph             Show a dependency graph
-  -c, --check             Check if all dependencies are listed in the package.json of the project
-  -t, --test              Run ng test for all projects
-      & --headless        Run ng test for all projects with ChromeHeadless
-  -b, --build             Run ng build for all projects with toposort dependencies`);
-}
-
-/** TODO: maybe use yargs - it is installed anyway by other modules */
 export function run() {
-  const args = process.argv.slice(2);
-  const argsObj = minimist(args);
-  if (argsObj.h || argsObj.help) {
-    showHelp();
-  } else if (argsObj.l || argsObj.list) {
+  const privPackage = require(PATH.join(__dirname, 'package.json'));
+  const program = new Command(`node ${privPackage.main}`);
+  program.version(privPackage.version, '-v, --vers', 'output the current version')
+    .description('Run this script inside of an angular workspace')
+    .option('-h, --help ', 'display help for command')
+    .option('-l, --list', 'List all projects')
+    .option('-d, --deps', 'List all projects in a table with dependencies')
+    .option('--peer', '-d --peer: List all projects with dependencies and peerDependencies')
+    .option('-s, --set', 'Set versions of all projects in dist folder')
+    .option('-u, --update-package <registry>', 'Update package of all projects in dist folder with repo and npm config')
+    .option('-g, --graph', 'Set versions of all projects in dist folder')
+    .option('-c, --check', 'Check if all dependencies are listed in the package.json of the project')
+    .option('-t, --test', 'Run ng test for all projects')
+    .option('--headless', '-t --headless: Run ng test for all projects with ChromeHeadless')
+    .option('-b, --build', 'Run ng build for all projects with toposort dependencies')
+    .parse(process.argv);
+  const options = program.opts();
+
+  if (options.help || !Object.keys(options).length) {
+    program.outputHelp();
+  }
+
+  if (options.list) {
     listAllProjects();
-  } else if ((argsObj.d || argsObj.deps) && argsObj.peer) {
+  } else if (options.deps && options.peer) {
     showProjectsAndDependencies(false, true);
-  } else if (argsObj.d || argsObj.deps) {
+  } else if (options.deps) {
     showProjectsAndDependencies();
-  } else if (argsObj.s || argsObj.set) {
+  } else if (options.set) {
     setVersionsOfProjects(true);
-  } else if (argsObj.g || argsObj.graph) {
+  } else if (options.graph) {
     showDependencyGraph();
-  } else if (argsObj.c || argsObj.check) {
+  } else if (options.check) {
     runCheckDeps();
-  } else if ((argsObj.t || argsObj.test) && argsObj.headless) {
+  } else if (options.test && options.headless) {
     testAll(true);
-  } else if (argsObj.t || argsObj.test) {
+  } else if (options.test) {
     testAll();
-  } else if (argsObj.b || argsObj.build) {
+  } else if (options.build) {
     buildAll().catch(err => {
       console.log(err);
     });
-  }
-
-
-  if (!args.length) {
-    showHelp();
   }
 }
 run();
