@@ -84,7 +84,7 @@ jobs:
           path: dist
       - uses: actions/setup-node@v2
         with:
-          node-version: 15
+          node-version: 14
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -111,7 +111,7 @@ jobs:
           path: dist
       - uses: actions/setup-node@v2
         with:
-          node-version: 15
+          node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       ### for each module in dist publish frontend-libraries to registry
