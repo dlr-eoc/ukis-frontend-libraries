@@ -13,7 +13,7 @@ import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/w
 
 import {
   setVersionsforDependencies, Iplaceholders, getProjects, dependencyGraph, Iproject,
-  checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput
+  checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput, updatePackageJson, createNpmrc
 } from './utils';
 
 import { Command } from 'commander';
@@ -135,6 +135,48 @@ function setVersionsOfProjects(useDistPath = false) {
   }
 }
 
+/**
+ * replace versions of all dependencies in projects which have placeholders
+ */
+function updateBuildPackages(registry?: string) {
+  let projects = getProjects(ANGULARJSON).filter(item => item.type === 'library')
+  let projectsPaths = projects.map(p => p.path.replace('projects', 'dist'));
+
+  projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
+  if (!projectsPaths.length) {
+    console.log(`there are no build projects, run npm run build first!`);
+  }
+
+  if (projectsPaths.length) {
+
+    const packageScope = '@dlr-eoc';
+    const repositoryUrl = `git+https://github.com/${process.env.GITHUB_REPOSITORY}.git`;
+
+    projectsPaths.map(p => {
+      const packagePath = PATH.join(p, 'package.json');
+      updatePackageJson(packagePath, (json) => {
+        if (!json.repository) {
+          json.repository = {} as any;
+        }
+
+        if (typeof json.repository === 'object') {
+          json.repository.url = repositoryUrl;
+          json.repository.type = `git`;
+        }
+        return json;
+      });
+
+      if (typeof registry === 'string') {
+        createNpmrc(PATH.join(p, '.npmrc'), packageScope, registry);
+      } else {
+        createNpmrc(PATH.join(p, '.npmrc'), packageScope);
+      }
+    });
+
+    console.log(`update all build projects with repository '${repositoryUrl}' and .npmrc`);
+  }
+}
+
 function listAllProjects() {
   const projectsPaths = getProjects(ANGULARJSON);
   const list = projectsPaths.reduce((p, n) => {
@@ -251,6 +293,8 @@ export function run() {
     showProjectsAndDependencies();
   } else if (options.set) {
     setVersionsOfProjects(true);
+  } else if (options.updatePackage) {
+    updateBuildPackages(options.updatePackage)
   } else if (options.graph) {
     showDependencyGraph();
   } else if (options.check) {
