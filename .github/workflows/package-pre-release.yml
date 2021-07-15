@@ -38,30 +38,8 @@ jobs:
           name: "dist"
           path: dist
 
-  pre-publish:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Download dist result from job build
-        uses: actions/download-artifact@v2
-        with:
-          name: "dist"
-          path: dist
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 15
-      - run: npm ci
-      ### for each module in dist publish frontend-libraries to registry
-      - run: npm run setVersionsInBuild
-      - name: Archive dist prepared for publish
-        uses: actions/upload-artifact@v2
-        with:
-          name: "dist"
-          path: dist
-
   publish-gpr:
-    needs: pre-publish
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -78,19 +56,23 @@ jobs:
       - run: npm ci
       ### install npm 6 for publish https://github.com/npm/cli/issues/2453
       - run: npm i -g npm@6.14.13
-      ### for each module in dist publish frontend-libraries to registry
+      - run: rm -f .npmrc
+      ### for each module in dist set version from repository package.json
+      - run: node scripts/library/index.js --set
+      ### for each module in dist update package.json and create .npmrc
       - run: node scripts/library/index.js --update-package=https://npm.pkg.github.com/
+      ### for each module in dist publish frontend-libraries to registry
       - run: |
           for dir in ./dist/*/
           do
               dir=${dir%*/}
-              npm publish "$dir" --access public
+              npm publish "$dir"
           done
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   publish-npm:
-    needs: pre-publish
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -103,11 +85,16 @@ jobs:
         with:
           node-version: 15
           registry-url: https://registry.npmjs.org/
+          scope: "@dlr-eoc"
       - run: npm ci
       ### install npm 6 for publish https://github.com/npm/cli/issues/2453
       - run: npm i -g npm@6.14.13
-      ### for each module in dist publish frontend-libraries to registry
+      - run: rm -f .npmrc
+      ### for each module in dist set version from repository package.json
+      - run: node scripts/library/index.js --set
+      ### for each module in dist update package.json and create .npmrc
       - run: node scripts/library/index.js --update-package=https://registry.npmjs.org/
+      ### for each module in dist publish frontend-libraries to registry
       - run: |
           for dir in ./dist/*/
           do
