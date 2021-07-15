@@ -159,8 +159,9 @@ export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPac
 }
 
 export function createNpmrc(path: string, scope: string, registry = 'https://npm.pkg.github.com') {
+  /** https://github.com/actions/setup-node/blob/v2/src/authutil.ts */
   const npmrc = `
-    ${scope}:registry=${registry}
+    ${scope}:registry=${registry}:_authToken=${process.env.NODE_AUTH_TOKEN}
     loglevel = "verbose"`;
 
   try {
