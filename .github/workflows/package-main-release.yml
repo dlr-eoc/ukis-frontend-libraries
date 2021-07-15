@@ -84,10 +84,12 @@ jobs:
           path: dist
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 15
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
+      ### install npm 6 for publish https://github.com/npm/cli/issues/2453
+      - run: npm i -g npm@6.14.13
       ### for each module in dist publish frontend-libraries to registry
       - run: node scripts/library/index.js --update-package=https://npm.pkg.github.com/
       - run: |
@@ -111,9 +113,11 @@ jobs:
           path: dist
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 15
           registry-url: https://registry.npmjs.org/
       - run: npm ci
+      ### install npm 6 for publish https://github.com/npm/cli/issues/2453
+      - run: npm i -g npm@6.14.13
       ### for each module in dist publish frontend-libraries to registry
       - run: node scripts/library/index.js --update-package=https://registry.npmjs.org/
       - run: |
