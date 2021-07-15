@@ -8,6 +8,7 @@
     "w3c-schemas",
     "ogc-schemas",
     "@michaellangbein/jsonix",
-    "xmlserializer"
+    "xmlserializer",
+    "ol"
   ]
 }

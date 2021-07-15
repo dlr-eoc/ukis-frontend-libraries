@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { WpsVersion } from '@dlr-eoc/services-ogc/src/public-api';
 import { WmsClient, WmsVersion } from '../wms.service';
 import { FakeWmsServer } from './fake_wms_server';
 
