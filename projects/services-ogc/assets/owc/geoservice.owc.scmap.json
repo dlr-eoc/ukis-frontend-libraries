@@ -17,7 +17,7 @@
             "display": "P1Y",
             "name": "time",
             "units": "ISO8601",
-            "value": "1984-01-01T00:00:00.000Z,1990-01-01T00:00:00.000Z,1995-01-01T00:00:00.000Z,2000-01-01T00:00:00.000Z,2005-01-01T00:00:00.000Z,2010-01-01T00:00:00.000Z"
+            "values": "1984-01-01T00:00:00.000Z,1990-01-01T00:00:00.000Z,1995-01-01T00:00:00.000Z,2000-01-01T00:00:00.000Z,2005-01-01T00:00:00.000Z,2010-01-01T00:00:00.000Z"
           }
         ],
         "groupName": "products",
@@ -75,7 +75,7 @@
             "display": "P1Y",
             "name": "time",
             "units": "ISO8601",
-            "value": null
+            "values": null
           }
         ],
         "groupName": "products",
@@ -133,7 +133,7 @@
             "display": "P1Y",
             "name": "time",
             "units": "ISO8601",
-            "value": null
+            "values": null
           }
         ],
         "groupName": "products",
@@ -191,7 +191,7 @@
             "display": "P1Y",
             "name": "time",
             "units": "ISO8601",
-            "value": null
+            "values": null
           }
         ],
         "groupName": "products",

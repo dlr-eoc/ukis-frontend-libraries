@@ -17,7 +17,7 @@
             "display": "P1M",
             "name": "time",
             "units": "ISO8601",
-            "value": null
+            "values": null
           }
         ],
         "groupName": "products",

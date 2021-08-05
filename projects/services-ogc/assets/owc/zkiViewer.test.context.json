@@ -1,0 +1,563 @@
+{
+  "$schema": "https://raw.githubusercontent.com/opengeospatial/owscontext/master/json/dev/validation/owc-schema.json",
+  "type": "FeatureCollection",
+  "bbox": [
+    6.433,
+    50.483,
+    6.905,
+    50.661
+  ],
+  "projections": [
+    {
+      "code": "EPSG:4326",
+      "unit": "degrees"
+    }
+  ],
+  "legendURL": "",
+  "descriptionURL": "",
+  "id": "Eifel",
+  "properties": {
+    "title": "Storms and heavy rain cause floods in Western Germany",
+    "lang": "en",
+    "updated": "",
+    "links": {
+      "profiles": ["http://www.opengis.net/spec/owcgeojson/1.0/req/core"]
+    }
+  },
+  "features": [
+    {
+      "geometry": null,
+      "id": "zki152:dlr_aerial_olef_20210715",
+      "type": "Feature",
+      "properties": {
+        "active": true,
+        "title": "DLR Aerial Olef 15.07.2021",
+        "folder": "Layers/aerial",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.1",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/zki152/wms?service=WMS&version=1.1.0&request=GetMap&layers=zki152%3Adlr_aerial_olef_20210715&srs=EPSG%3A4326&format=image/png"
+              }
+            ]
+          }
+        ],
+        "categories": [
+          { "term": "dlr_aerial_olef_20210715" },
+          { "term": "wcs" },
+          { "term": "geotiff" }
+        ],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2016-01-01T00:00:00Z/2016-12-31T00:00:00Z/P1Y"
+        }],
+        "abstract": "Layer-Group type layer: dlr_aerial_sauer_20210716"
+      },
+      "bbox": [
+        6.451250397855204,
+        50.51446951324351,
+        6.54233617431093,
+        50.602470028140516
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:dlr_aerial_erft_20210715",
+      "type": "Feature",
+      "properties": {
+        "active": true,
+        "title": "DLR Aerial Erft 15.07.2021",
+        "folder": "Layers/aerial",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.1",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/zki152/wms?service=WMS&version=1.1.0&request=GetMap&layers=zki152%3Adlr_aerial_erft_20210715&srs=EPSG%3A4326&format=image/png"
+              }
+            ]
+          }
+        ],
+        "categories": [
+          { "term": "dlr_aerial_erft_20210715" },
+          { "term": "wcs" },
+          { "term": "geotiff" }
+        ],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2016-01-01T00:00:00Z/2016-12-31T00:00:00Z/P1Y"
+        }],
+        "abstract": "Layer-Group type layer: dlr_aerial_sauer_20210716"
+      },
+      "bbox": [
+        6.717558607352603,
+        50.53643794477393,
+        6.804373875060644,
+        50.61098274768985
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:dlr_aerial_ahr_20210716",
+      "type": "Feature",
+      "properties": {
+        "active": true,
+        "title": "DLR Aerial Ahr 16.07.2021",
+        "folder": "Layers/aerial",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "operations": [
+              {
+                "code": "GetTile",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/gwc/service/wmts?SERVICE=WMTS&REQUEST=GetTile&FORMAT=image%2Fpng&LAYER=zki152:dlr_aerial_ahr_20210716&VERSION=1.1.0",
+                "method": "GET",
+                "type": "image/png"
+              },
+              {
+                "code": "GetCapabilities",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/gwc/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0",
+                "method": "GET",
+                "type": "application/xml"
+              }
+            ]
+          }
+        ],
+        "categories": [],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2021-07-16T00:00:00Z"
+        }]
+      },
+      "bbox": [
+        6.771601326339797,
+        50.3669197186389,
+        7.159463768897562,
+        50.55151934867549
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:dlr_aerial_sauer_20210716",
+      "type": "Feature",
+      "properties": {
+        "active": true,
+        "title": "DLR Aerial Sauer 16.07.2021",
+        "folder": "Layers/aerial",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "operations": [
+              {
+                "code": "GetTile",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/gwc/service/wmts?SERVICE=WMTS&REQUEST=GetTile&FORMAT=image%2Fpng&LAYER=zki152:dlr_aerial_sauer_20210716&VERSION=1.1.0",
+                "method": "GET",
+                "type": "image/png"
+              },
+              {
+                "code": "GetCapabilities",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/gwc/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0",
+                "method": "GET",
+                "type": "application/xml"
+              }
+            ]
+          }
+        ],
+        "categories": [],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2021-07-16T00:00:00Z"
+        }]
+      },
+      "bbox": [
+        6.3879581890597645,
+        49.72094437380317,
+        6.537373298918955,
+        49.83141729747873
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:dlr_aerial_kyll_20210716",
+      "type": "Feature",
+      "properties": {
+        "active": true,
+        "title": "DLR Aerial Kyll 16.07.2021",
+        "folder": "Layers/aerial",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "operations": [
+              {
+                "code": "GetTile",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/gwc/service/wmts?SERVICE=WMTS&REQUEST=GetTile&FORMAT=image%2Fpng&LAYER=zki152:dlr_aerial_kyll_20210716&VERSION=1.1.0",
+                "method": "GET",
+                "type": "image/png"
+              },
+              {
+                "code": "GetCapabilities",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/gwc/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0",
+                "method": "GET",
+                "type": "application/xml"
+              }
+            ]
+          }
+        ],
+        "categories": [],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2021-07-16T00:00:00Z"
+        }]
+      },
+      "bbox": [
+        6.562324055086157,
+        49.798797121374044,
+        6.693321059894677,
+        50.164407160911054
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:dlr_aerial_erftstadt_20210716",
+      "type": "Feature",
+      "properties": {
+        "title": "DLR Aerial Erftstadt 16.07.2021",
+        "folder": "Layers/aerial",
+        "active": true,
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.1",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/zki152/wms?service=WMS&version=1.1.0&request=GetMap&layers=zki152%3Adlr_aerial_erftstadt_20210716&srs=EPSG%3A4326&format=image/png"
+              }
+            ]
+          }
+        ],
+        "categories": [
+          { "term": "eoc" },
+          { "term": "zki" },
+          { "term": "dlr" },
+          { "term": "aerialimage" },
+          { "term": "geoservice" }
+        ],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2016-01-01T00:00:00Z/2016-12-31T00:00:00Z/P1Y"
+        }],
+        "abstract": "Layer-Group type layer: dlr_aerial_erftstadt_20210716"
+      },
+      "bbox": [
+        6.728932688989659,
+        50.74491247363744,
+        6.847459959967933,
+        50.8538097643501
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:s1_water_20210715",
+      "type": "Feature",
+      "properties": {
+        "title": "S1 Water mask 15.07.2021",
+        "folder": "Layers/water",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.1",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/zki152/wms?service=WMS&version=1.1.0&request=GetMap&layers=zki152%3As1_water_20210715&srs=EPSG%3A4326&format=image/png"
+              }
+            ]
+          }
+        ],
+        "categories": [
+          { "term": "s1_water_20210715" },
+          { "term": "wcs" },
+          { "term": "vrt" }
+        ],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2016-01-01T00:00:00Z/2016-12-31T00:00:00Z/P1Y"
+        }]
+      },
+      "bbox": [
+        5.255018326207443,
+        48.00767524351541,
+        9.997134879545982,
+        52.88426959488664
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:s1_water_20210716",
+      "type": "Feature",
+      "properties": {
+        "title": "S1 Water mask 16.07.2021",
+        "folder": "Layers/water",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.1",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/zki152/wms?service=WMS&version=1.1.0&request=GetMap&layers=zki152%3As1_water_20210716&srs=EPSG%3A4326&format=image/png"
+              }
+            ]
+          }
+        ],
+        "categories": [
+          { "term": "s1_water_20210716" },
+          { "term": "wcs" },
+          { "term": "vrt" }
+        ],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2016-01-01T00:00:00Z/2016-12-31T00:00:00Z/P1Y"
+        }]
+      },
+      "bbox": [
+        5.255018326207443,
+        48.00767524351541,
+        9.997134879545982,
+        52.88426959488664
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:s1_water_20210718",
+      "type": "Feature",
+      "properties": {
+        "title": "S1 Water mask 18.07.2021",
+        "folder": "Layers/water",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.1",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/zki152/wms?service=WMS&version=1.1.0&request=GetMap&layers=zki152%3As1_water_20210718&srs=EPSG%3A4326&format=image/png"
+              }
+            ]
+          }
+        ],
+        "categories": [
+          { "term": "s1_water_20210718" },
+          { "term": "wcs" },
+          { "term": "vrt" }
+        ],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2016-01-01T00:00:00Z/2016-12-31T00:00:00Z/P1Y"
+        }]
+      },
+      "bbox": [
+        4.042556021869075,
+        48.420076397794304,
+        8.329496220744254,
+        51.80214361097589
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:s2_valid_20210718",
+      "type": "Feature",
+      "properties": {
+        "title": "S2 Valid mask 18.07.2021",
+        "folder": "Layers/water",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.1",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/zki152/wms?service=WMS&version=1.1.0&request=GetMap&layers=zki152%3As2_valid_20210718&srs=EPSG%3A4326&format=image/png"
+              }
+            ]
+          }
+        ],
+        "categories": [
+          { "term": "s2_valid_20210718" },
+          { "term": "wcs" },
+          { "term": "geotiff" }
+        ],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2016-01-01T00:00:00Z/2016-12-31T00:00:00Z/P1Y"
+        }]
+      },
+      "bbox": [
+        6.23463206300017,
+        48.775382192522706,
+        8.77573206300017,
+        51.43508219252271
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "zki152:s2_water_20210718",
+      "type": "Feature",
+      "properties": {
+        "title": "S2 Water mask 18.07.2021",
+        "folder": "Layers/water",
+        "updated": null,
+        "links": null,
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.1",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://geoservice.dlr.de/eoc/zki/service/zki152/wms?service=WMS&version=1.1.0&request=GetMap&layers=zki152%3As2_water_20210718&srs=EPSG%3A4326&format=image/png"
+              }
+            ]
+          }
+        ],
+        "categories": [
+          { "term": "s2_water_20210718" },
+          { "term": "wcs" },
+          { "term": "vrt" }
+        ],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2016-01-01T00:00:00Z/2016-12-31T00:00:00Z/P1Y"
+        }]
+      },
+      "bbox": [
+        6.23463206300017,
+        48.775382192522706,
+        8.77573206300017,
+        51.43508219252271
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "wms_dop__a8bb3cf7-fcb2-46d2-b392-3e613393f3da",
+      "type": "Feature",
+      "properties": {
+        "active": false,
+        "title": "DOP20 (BKG)",
+        "updated": null,
+        "links": null,
+        "abstract": "Der Dienst stellt die Digitalen Orthophotos in 20 cm Bodenauflösung für das Gebiet der Bundesrepublik Deutschland bereit.",
+        "rights": "&amp;copy; GeoBasis-DE / BKG &amp;lt;Jahr&amp;gt",
+        "offerings": [
+          {
+            "code": "http://schemas.opengis.net/wms/1.1.0",
+            "operations": [
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "type": "image/png",
+                "href": "https://sg.geodatenzentrum.de/wms_dop__a8bb3cf7-fcb2-46d2-b392-3e613393f3da?service=WMS&version=1.1.0&request=GetMap&layers=rgb&STYLES=default&srs=EPSG%3A4326&format=image/png"
+              },
+              {
+                "code": "GetCapabilities",
+                "href": "https://sg.geodatenzentrum.de/wms_dop__a8bb3cf7-fcb2-46d2-b392-3e613393f3da?request=GetCapabilities&Version=1.1.0&service=WMS",
+                "method": "GET",
+                "type": "application/xml"
+              }
+            ]
+          }
+        ],
+        "categories": [],
+        "dimensions": [{
+          "name": "time",
+          "units": "ISO8601",
+          "values": "2021-06-28T00:00:00Z/2021-06-29T23:59:59Z/P2D"
+        }]
+      },
+      "bbox": [
+        5.42587260523,
+        46.9672880527,
+        15.7908768234,
+        55.1764096793
+      ]
+    },
+    {
+      "geometry": null,
+      "id": "vectortile",
+      "properties": {
+        "active": true,
+        "offerings": [
+          {
+            "code": "https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification",
+            "operations": [
+              {
+                "code": "GetTiles",
+                "href": "https://tiles.geotest.eoc.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true",
+                "method": "GET"
+              }
+            ],
+            "styles": [{
+              "name": "geotest_xyz_planet_eoc",
+              "title": "grayscale",
+              "content": {
+                "type": "mapbox-style",
+                "href": "assets/others/greyscale.style.json",
+                "mapbox-source-key": "geotest_xyz_planet_eoc"
+              }
+            }]
+          }
+        ],
+        "opacity": 1.0,
+        "title": "This should be an overlay",
+        "updated": "2019-02-15T11:21:59",
+        "folder": "Overlays"
+      },
+      "type": "Feature"
+    }
+  ]
+}
