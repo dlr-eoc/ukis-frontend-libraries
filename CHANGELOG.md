@@ -5,6 +5,11 @@
 * **@dlr-eoc/map-ol:**
   - Add events from Layer to olLayer and olSource [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
+* **@dlr-eoc/services-ogc:**
+  - Removed `customAttributes`
+  - Overhaul of `dimensions`
+  - Allows sub-groups
+  - Allows Tms-Layers
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
