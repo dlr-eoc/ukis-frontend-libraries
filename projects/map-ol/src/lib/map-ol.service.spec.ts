@@ -930,7 +930,7 @@ describe('MapOlService State', () => {
 
     const oldZoom = service.getZoom();
     expect(oldZoom).toBeCloseTo(0, 0);
-    const duration = 400;
+    const duration = 250;
     service.zoomInOut('+');
 
     setTimeout(() => {
@@ -938,7 +938,7 @@ describe('MapOlService State', () => {
       expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
       done();
     }, duration);
-  });
+  }, 10000);
 
   it('should set/get extent', () => {
     const service: MapOlService = TestBed.inject(MapOlService);

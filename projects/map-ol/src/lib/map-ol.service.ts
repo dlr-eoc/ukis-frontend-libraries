@@ -1926,7 +1926,8 @@ export class MapOlService {
       // upon it
       return;
     }
-    const delta = 1, duration = 250;
+    const duration = 250;
+    const delta = value === '+' ? 1 : -1;
     const currentZoom = view.getZoom();
     if (currentZoom !== undefined) {
       const newZoom = view.getConstrainedZoom(currentZoom + delta);
