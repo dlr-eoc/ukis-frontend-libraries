@@ -262,4 +262,4 @@ export type KML_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml'
 export type GeoTIFF_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff';
 export type GMLJP2_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
 export type GMLCOV_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
-export type TMS_Offering = 'https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification';
+export type TMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms';

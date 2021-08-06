@@ -536,7 +536,7 @@ export const zkiViewerContext: IOwsContext = {
         "active": true,
         "offerings": [
           {
-            "code": "https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/tms",
             "operations": [
               {
                 "code": "GetTiles",

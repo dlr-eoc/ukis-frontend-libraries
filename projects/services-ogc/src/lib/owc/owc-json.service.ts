@@ -82,7 +82,7 @@ export function isGeoJsonOffering(str: string): str is GeoJson_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 }
 export function isTMSOffering(str: string): str is TMS_Offering {
-  return str === 'https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms';
 }
 export function shardsExpand(v: string) {
   if (!v) { return; }
@@ -1030,7 +1030,7 @@ export class OwcJsonService {
   }
 
   getTmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
-    // @TODO: what operations are defined on TMS? https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification
+    // @TODO: what operations are defined on TMS? http://www.opengis.net/spec/owc-geojson/1.0/req/tms
     return [];
   }
 
