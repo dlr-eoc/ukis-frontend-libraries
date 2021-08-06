@@ -26,7 +26,7 @@
     "sources": {
         "geotest_xyz_planet_eoc": {
             "type": "vector",
-            "url": "https://pyxis.eoc.dlr.de/tileserver/planet0-12.json"
+            "url": "https://geotest.eoc.dlr.de/eoc/basemap/ogc/tiles/collections/planet_eoc/tiles/EPSG:900913/metadata?f=application%2Fjson"
         }
     },
     "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
