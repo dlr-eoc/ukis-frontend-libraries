@@ -270,7 +270,7 @@ export class OwcJsonService {
    * (array)   value: '2000-01-01T00:00:00.000Z,2001-01-01T00:00:00.000Z,2002-01-01T00:00:00.000Z,...'
    * (single) value: '2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y'
    */
-  parseISO8601Values(value: string | null) {
+  getTimeValueFromDimensions(value: string | null) {
     const multiplevalues = RegExp(',', 'g').test(value);
     if (multiplevalues) {
       const values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity<string>(v)) : null;
@@ -314,7 +314,7 @@ export class OwcJsonService {
       console.log('check to get dimensions value from OGC Service later!!', dimensions);
     }
 
-    const values = this.parseISO8601Values(value.values);
+    const values = this.getTimeValueFromDimensions(value.values);
     const period = this.parseISO8601Period(value.values);
     dim = {
       values: null,
