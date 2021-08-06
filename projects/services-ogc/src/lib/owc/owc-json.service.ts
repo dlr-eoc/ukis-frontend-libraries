@@ -572,9 +572,7 @@ export class OwcJsonService {
             minZoom: 0,
             maxZoom: 12
           }),
-          tilePixelRatio: 16,
           url: tmsServerUrl,
-          crossOrigin: 'anonymous'
         }),
         renderMode: 'hybrid'
       }),
