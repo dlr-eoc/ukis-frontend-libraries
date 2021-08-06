@@ -1,10 +1,9 @@
 import { TestBed } from '@angular/core/testing/';
 import { OwcJsonService, TmsLayertype } from './owc-json.service';
 import { barebonesContext, basicContext, exampleContext } from '../../../assets/exampleContext';
-import { zkiViewerContext } from '../../../assets/zkiViewer.test.context';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { isRasterLayertype, isVectorLayertype, LayersService, RasterLayer, WmsLayertype, WmtsLayertype, XyzLayertype } from '@dlr-eoc/services-layers';
-import { VectorLayer, WfsLayertype, GeojsonLayertype } from '@dlr-eoc/services-layers';
+import { isRasterLayertype, isVectorLayertype, LayersService, RasterLayer } from '@dlr-eoc/services-layers';
+import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsContext } from './types/owc-json';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -13,7 +12,7 @@ import { EocLitemap } from '@dlr-eoc/base-layers-raster';
 
 
 describe('OwcJsonService: reading data from owc', () => {
-  const allTestContexts = [barebonesContext, basicContext, exampleContext, zkiViewerContext];
+  const allTestContexts = [barebonesContext, basicContext, exampleContext];
   const targetProjection = 'EPSG:4326';
 
   beforeEach(() => {
@@ -254,7 +253,7 @@ describe('OwcJsonService: reading data from owc', () => {
 });
 
 describe('OwcJsonService: writing data into owc', () => {
-  const allTestContexts = [barebonesContext, basicContext, exampleContext, zkiViewerContext];
+  const allTestContexts = [barebonesContext, basicContext, exampleContext];
   const targetProjection = 'EPSG:4326';
 
   beforeEach(() => {

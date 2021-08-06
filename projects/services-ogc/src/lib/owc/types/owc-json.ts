@@ -333,8 +333,7 @@ export type DateString = string;
 export type LangString = string;
 
 
-export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' |
-  'http://schemas.opengis.net/wms/1.1.1' | 'http://schemas.opengis.net/wms/1.1.0';
+export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
 export type WFS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
 export type WCS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs';
 export type WPS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wps';
@@ -345,4 +344,3 @@ export type KML_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml'
 export type GeoTIFF_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff';
 export type GMLJP2_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
 export type GMLCOV_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
-export type TMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms';
