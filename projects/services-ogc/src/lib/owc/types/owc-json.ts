@@ -9,6 +9,15 @@
 import * as GeoJSON from 'geojson';
 
 
+function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
+  for (const entry of list) {
+    if (!predicate(entry)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 /**
  * The OWS Context describes Metadata, API, Time Range
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truethe-ows-context-document-structure
@@ -49,7 +58,7 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
      */
     date?: DateString;
     /** This array is an optional and expresses categories related to this Context document */
-    categories?: IOwsCategorie[];
+    categories?: IOwsCategory[];
     /** Extension Any other element */
     [k: string]: any;
   };
@@ -58,6 +67,20 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
   /** Extension Any other element */
   [k: string]: any;
 }
+
+export function isIOwsContext(object: any): object is IOwsContext {
+   return 'id' in object
+     && 'properties' in object
+     && 'links' in object.properties // && trueForAll(object.properties.links, isIOwsLinks)
+     && 'lang' in object.properties
+     && 'title' in object.properties
+     && 'updated' in object.properties
+     && (object.properties.authors ? trueForAll(object.properties.authors, isIOwsAuthor) : true)
+     && (object.properties.creator ? isIOwsCreator(object.properties.creator) : true)
+     && (object.properties.display ? trueForAll(object.properties.display, isIOwsCreatorDisplay): true)
+     && (object.properties.categories ? trueForAll(object.properties.categories, isIOwsCategory) : true)
+     && 'features' in object && trueForAll(object.features, isIOwsResource);
+ }
 
 /**
  * Each layer (a.k.a. feature) in a context document is known as a ‘Resource’
@@ -81,6 +104,11 @@ export interface IOwsResource extends GeoJSON.Feature {
   [k: string]: any;
 }
 
+export function isIOwsResource(object: any): object is IOwsResource {
+  return 'id' in object
+    && 'properties' in object && isIOwsResourceProperties(object.properties);
+}
+
 export interface IOwsResourceProperties {
   /** Title given to the Context resource */
   title: string;
@@ -101,7 +129,7 @@ export interface IOwsResourceProperties {
   /** Flag value indicating to the client if the Context resource should be displayed by default */
   active?: boolean;
   /** This array is optional and expresses a category related to the Context resource */
-  categories?: IOwsCategorie[];
+  categories?: IOwsCategory[];
   /** Minimum scale for the display of the Context resource Double */
   minscaledenominator?: number;
   /** Maximum scale for the display of the Context resource Double */
@@ -113,6 +141,14 @@ export interface IOwsResourceProperties {
   /** TODO!!! links is defined as Object but in the examples as Array  */
   links?: IOwsLinks[];
   [k: string]: any;
+}
+
+export function isIOwsResourceProperties(object: any): object is IOwsResourceProperties {
+  return 'title' in object
+    && 'updated' in object
+    && (object.authors ? trueForAll(object.authors, isIOwsAuthor) : true)
+    && (object.offerings ? trueForAll(object.offerings, isIOwsOffering) : true)
+    && (object.categories ? trueForAll(object.categories, isIOwsCategory) : true);
 }
 
 
@@ -148,11 +184,23 @@ export interface IOwsOffering {
   [k: string]: any;
 }
 
+export function isIOwsOffering(object: any): object is IOwsOffering {
+  return 'code' in object
+    && (object.operations ? trueForAll(object.operations, isIOwsOperation) : true)
+    && (object.contents ? trueForAll(object.contents, isIOwsContent) : true)
+    && (object.styles ? trueForAll(object.styles, isIOwsStyleSet) : true)
+}
 
 export interface IOwsCreator {
   title?: string;
   uri?: string;
   version?: string;
+}
+
+export function isIOwsCreator(object: any): object is IOwsCreator {
+  return 'title' in object
+    || 'uri' in object
+    || 'version' in object;
 }
 
 export interface IOwsAuthor {
@@ -163,11 +211,23 @@ export interface IOwsAuthor {
   [k: string]: any;
 }
 
-export interface IOwsCategorie {
+export function isIOwsAuthor(object: any): object is IOwsAuthor {
+  return 'name' in object
+    || 'email' in object
+    || 'uri' in object;
+}
+
+export interface IOwsCategory {
   scheme?: string;
   /** Category related to this context document. It MAY have a related code-list that is identified by the scheme attribute */
   term?: string;
   label?: string;
+}
+
+export function isIOwsCategory(object: any): object is IOwsCategory {
+  return 'scheme' in object
+    || 'term' in object
+    || 'label' in object;
 }
 
 export interface IOwsLinks {
@@ -181,6 +241,10 @@ export interface IOwsLinks {
   [k: string]: any;
 }
 
+export function isIOwsLinks(object: any): object is IOwsLinks {
+  return 'rel' in object;
+}
+
 export interface IOwsCreatorApplication {
   title?: string;
   uri?: string;
@@ -192,11 +256,17 @@ export interface IOwsCreatorDisplay {
   pixelWidth?: number;
   /** Width measured in pixels of the display showing by the Area of Interest */
   pixelHeight?: number;
-  /** The size of a pixel of the display in milimeters
+  /** The size of a pixel of the display in millimeters
    * (combined with the previous ones allows for the real display size to be calculated)
    */
   mmPerPixel?: number;
   [k: string]: any;
+}
+
+export function isIOwsCreatorDisplay(object: any): object is IOwsCreatorDisplay {
+  return 'pixelWidth' in object
+    || 'pixelHeight' in object
+    || 'mmPerPixel' in object;
 }
 
 /**
@@ -219,6 +289,12 @@ export interface IOwsOperation {
   [k: string]: any;
 }
 
+export function isIOwsOperation(object: any): object is IOwsOperation {
+  return 'code' in object
+    && 'method' in object
+    && (object.request ? isIOwsContent(object.request) : true)
+    && (object.result ? isIOwsContent(object.result) : true);
+}
 
 export interface IOwsContent {
   /** MIME type of the Content */
@@ -228,6 +304,10 @@ export interface IOwsContent {
   /** String type, not empty that can contain any text encoded media type */
   content?: string;
   [k: string]: any;
+}
+
+export function isIOwsContent(object: any): object is IOwsContent {
+  return 'type' in object;
 }
 
 export interface IOwsStyleSet {
@@ -240,7 +320,10 @@ export interface IOwsStyleSet {
   [k: string]: any;
 }
 
-
+export function isIOwsStyleSet(object: any): object is IOwsStyleSet {
+  return 'name' in object
+    && 'title' in object;
+}
 
 /** ISO-8601 format e.g. YYYY-MM-DDThh:mm:ssZ or YYYY-MM-DDThh:mm:ssZ/YYYY-MM-DDThh:mm:ssZ */
 export type DateString = string;
