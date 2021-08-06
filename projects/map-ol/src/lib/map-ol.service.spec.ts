@@ -938,7 +938,7 @@ describe('MapOlService State', () => {
       expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
       done();
     }, duration);
-  }, 10000);
+  });
 
   it('should set/get extent', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
