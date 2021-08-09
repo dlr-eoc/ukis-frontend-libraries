@@ -42,7 +42,7 @@ export const basicContext: IOwsContext = {
         groupName: 'products',
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -86,7 +86,7 @@ export const basicContext: IOwsContext = {
         groupName: 'products',
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -138,7 +138,7 @@ export const basicContext: IOwsContext = {
         groupName: 'products',
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -182,7 +182,7 @@ export const basicContext: IOwsContext = {
         groupName: 'products',
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -291,7 +291,7 @@ export const exampleContext: IOwsContext = {
         groupName: 'products',
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.0',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -332,6 +332,8 @@ export const exampleContext: IOwsContext = {
       id: 'vectortile',
       properties: {
         active: true,
+        minscaledenominator: 1,
+        maxscaledenominator: 10,
         offerings: [
           {
             code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms',

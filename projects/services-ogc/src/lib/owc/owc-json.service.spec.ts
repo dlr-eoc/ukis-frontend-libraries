@@ -220,6 +220,10 @@ describe('OwcJsonService: reading data from owc', () => {
                   expect(cLayer.description).toEqual(resource.properties.abstract);
                 }
 
+                if (resource.properties.minscaledenominator) {
+                  expect
+                }
+
                 done();
               });
             }

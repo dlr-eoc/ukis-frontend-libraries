@@ -1,7 +1,7 @@
 import {
   IOwsContext, IOwsResource, IOwsOffering, WFS_Offering, WCS_Offering, WPS_Offering,
   CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering,
-  GMLCOV_Offering, IOwsResourceProperties
+  GMLCOV_Offering, IOwsResourceProperties, WMS_Offering
 } from './owc-json';
 
 
@@ -91,5 +91,3 @@ export interface IEocOwsProjection {
 export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 export type Xyz_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
 export type TMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms';
-export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' |
-  'http://schemas.opengis.net/wms/1.1.1' | 'http://schemas.opengis.net/wms/1.1.0';

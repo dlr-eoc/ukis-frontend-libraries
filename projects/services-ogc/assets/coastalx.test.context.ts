@@ -23,7 +23,7 @@ export const coastalXTestContext: IEocOwsContext = {
         links: null,
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -70,7 +70,7 @@ export const coastalXTestContext: IEocOwsContext = {
         links: null,
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -124,7 +124,7 @@ export const coastalXTestContext: IEocOwsContext = {
         links: null,
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -181,7 +181,7 @@ export const coastalXTestContext: IEocOwsContext = {
         links: null,
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -267,7 +267,7 @@ export const coastalXTestContext: IEocOwsContext = {
         links: null,
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -325,7 +325,7 @@ export const coastalXTestContext: IEocOwsContext = {
         links: null,
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -416,7 +416,7 @@ export const coastalXTestContext: IEocOwsContext = {
         links: null,
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',
@@ -472,7 +472,7 @@ export const coastalXTestContext: IEocOwsContext = {
         links: null,
         offerings: [
           {
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [
               {
                 code: 'GetMap',

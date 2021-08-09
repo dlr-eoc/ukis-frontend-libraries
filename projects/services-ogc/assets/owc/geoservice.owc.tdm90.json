@@ -16,7 +16,7 @@
         "groupName": "products",
         "offerings": [
           {
-            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
             "operations": [
               {
                 "code": "GetTile",
@@ -59,7 +59,7 @@
         "groupName": "products",
         "offerings": [
           {
-            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
             "operations": [
               {
                 "code": "GetTile",
@@ -102,7 +102,7 @@
         "groupName": "products",
         "offerings": [
           {
-            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
             "operations": [
               {
                 "code": "GetTile",
@@ -165,7 +165,7 @@
         "groupName": "products",
         "offerings": [
           {
-            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
             "operations": [
               {
                 "code": "GetTile",
@@ -228,7 +228,7 @@
         "groupName": "products",
         "offerings": [
           {
-            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
             "operations": [
               {
                 "code": "GetTile",
@@ -271,7 +271,7 @@
         "groupName": "products",
         "offerings": [
           {
-            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
             "operations": [
               {
                 "code": "GetTile",
@@ -314,7 +314,7 @@
         "groupName": "products",
         "offerings": [
           {
-            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
             "operations": [
               {
                 "code": "GetTile",
@@ -357,7 +357,7 @@
         "groupName": "products",
         "offerings": [
           {
-            "code": "http://schemas.opengis.net/wmts/1.1.0",
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
             "operations": [
               {
                 "code": "GetTile",

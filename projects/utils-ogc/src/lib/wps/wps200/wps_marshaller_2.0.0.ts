@@ -185,7 +185,9 @@ export class WpsMarshaller200 implements WpsMarshaller {
     if (description.type === 'complex') {
 
       if (data.encoding === 'base64') {
+        // @ts-ignore
         if (typeof module !== 'undefined' && module.exports) { // node
+          // @ts-ignore
           data.content.map(c => new Buffer(c, 'base64').toString('ascii'));
         } else { // browser
           data.content.map((c: any) => atob(c));

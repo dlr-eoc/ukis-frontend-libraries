@@ -43,9 +43,7 @@ export type Layertype = 'tms' | TLayertype;
 
 
 export function isWmsOffering(str: string): str is WMS_Offering {
-  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms'
-    || str === 'http://schemas.opengis.net/wms/1.1.1'
-    || str === 'http://schemas.opengis.net/wms/1.1.0';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
 }
 export function isWfsOffering(str: string): str is WFS_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
@@ -57,9 +55,7 @@ export function isCswOffering(str: string): str is CSW_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw';
 }
 export function isWmtsOffering(str: string): str is WMTS_Offering {
-  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts'
-    || str === 'http://schemas.opengis.net/wmts/1.0.0'
-    || str === 'http://schemas.opengis.net/wmts/1.1.0';
+  return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
 }
 export function isGmlOffering(str: string): str is GML_Offering {
   return str === 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
@@ -570,8 +566,8 @@ export class OwcJsonService {
           attributions: this.getResourceAttribution(resource),
           format: new olMVT(),
           tileGrid: createXYZ({
-            minZoom: 0,
-            maxZoom: 12
+            minZoom: resource.properties.minscaledenominator ? resource.properties.minscaledenominator : 0,
+            maxZoom: resource.properties.maxscaledenominator ? resource.properties.maxscaledenominator : 12
           }),
           url: tmsServerUrl,
         }),
@@ -787,6 +783,8 @@ export class OwcJsonService {
       legendImg: this.getLegendUrl(offering),
       styles: offering.styles,
       description: this.getResourceDescription(resource),
+      minZoom: resource.properties.minscaledenominator,
+      maxZoom: resource.properties.maxscaledenominator,
     };
 
     if (resource.bbox) {

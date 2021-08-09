@@ -35,7 +35,7 @@ const context: IOwsContext = {
           }],
         groupName: 'products',
         offerings: [{
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [{
                 code: 'GetMap',
                 href: 'https://geoservice.code-de.org/Sentinel3/wms?TRANSPARENT=TRUE&LAYERS=S3_OLCI_L2_LAN&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS',
