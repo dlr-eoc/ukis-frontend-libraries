@@ -113,6 +113,19 @@ describe('OwcJsonService: reading data from owc', () => {
                   expect(rLayer.description).toEqual(resource.properties.abstract);
                 }
 
+                if (resource.properties.minscaledenominator) {
+                  expect(rLayer.minZoom).toBeDefined();
+                }
+                if (resource.properties.minZoom) {
+                  expect(rLayer.minZoom).toEqual(resource.properties.minZoom);
+                }
+                if (resource.properties.maxscaledenominator) {
+                  expect(rLayer.maxZoom).toBeDefined();
+                }
+                if (resource.properties.maxZoom) {
+                  expect(rLayer.maxZoom).toEqual(resource.properties.maxZoom);
+                }
+
                 done();
               });
             }
@@ -221,7 +234,16 @@ describe('OwcJsonService: reading data from owc', () => {
                 }
 
                 if (resource.properties.minscaledenominator) {
-                  expect
+                  expect(cLayer.minZoom).toBeDefined();
+                }
+                if (resource.properties.minZoom) {
+                  expect(cLayer.minZoom).toEqual(resource.properties.minZoom);
+                }
+                if (resource.properties.maxscaledenominator) {
+                  expect(cLayer.maxZoom).toBeDefined();
+                }
+                if (resource.properties.maxZoom) {
+                  expect(cLayer.maxZoom).toEqual(resource.properties.maxZoom);
                 }
 
                 done();

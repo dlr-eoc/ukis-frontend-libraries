@@ -36,6 +36,7 @@ import { createXYZ } from 'ol/tilegrid';
 import olMVT from 'ol/format/MVT';
 import { off } from 'process';
 import { HttpClient } from '@angular/common/http';
+import { Projection } from 'ol/src/proj';
 
 // @TODO: once we have a dedicated ukis-TMSLayer, integrate this type into services-layers
 export const TmsLayertype = 'tms';
@@ -470,7 +471,7 @@ export class OwcJsonService {
     } else if (isVectorLayertype(layerType)) {
       return this.createVectorLayerFromOffering(offering, resource, context);
     } else if (layerType === TmsLayertype) {
-      return this.createTmsLayerFromOffering(offering, resource, context);
+      return this.createTmsLayerFromOffering(offering, resource, context, targetProjection);
     } else {
       console.error(`This type of service (${layerType}) has not been implemented yet.`);
     }
@@ -525,9 +526,10 @@ export class OwcJsonService {
 
     return of(layer);
   }
-  
+
   createRasterLayerFromOffering(
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
+
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isRasterLayertype(layerType)) {
@@ -538,7 +540,7 @@ export class OwcJsonService {
     let rasterLayer$: Observable<RasterLayer>;
     switch (layerType) {
       case WmsLayertype:
-        rasterLayer$ = this.createWmsLayerFromOffering(offering, resource, context);
+        rasterLayer$ = this.createWmsLayerFromOffering(offering, resource, context, targetProjection);
         break;
       case WmtsLayertype:
         rasterLayer$ = this.createWmtsLayerFromOffering(offering, resource, context, targetProjection);
@@ -554,9 +556,10 @@ export class OwcJsonService {
     return rasterLayer$;
   }
 
-  createTmsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): Observable<CustomLayer> {
+  createTmsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<CustomLayer> {
     const layerOptions = this.getLayerOptions(offering, resource, context);
     const tmsServerUrl = offering.operations.find(o => o.code === 'GetTiles').href;
+    const { minZoom, maxZoom } = this.getMinMaxZoom(resource, targetProjection);
     const layer = new CustomLayer({
       ... layerOptions,
       type: 'custom',
@@ -565,10 +568,7 @@ export class OwcJsonService {
         source: new olVectorTileSource({
           attributions: this.getResourceAttribution(resource),
           format: new olMVT(),
-          tileGrid: createXYZ({
-            minZoom: resource.properties.minscaledenominator ? resource.properties.minscaledenominator : 0,
-            maxZoom: resource.properties.maxscaledenominator ? resource.properties.maxscaledenominator : 12
-          }),
+          tileGrid: createXYZ({ minZoom, maxZoom }),
           url: tmsServerUrl,
         }),
         renderMode: 'hybrid'
@@ -606,15 +606,18 @@ export class OwcJsonService {
     }));
   }
 
-  private createWmsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): Observable<WmsLayer> {
-    const options: IWmsOptions = this.getWmsOptions(offering, resource, context);
+  private createWmsLayerFromOffering(
+    offering: IOwsOffering, resource: IOwsResource,
+    context: IOwsContext, targetProjection: string): Observable<WmsLayer> {
+
+    const options: IWmsOptions = this.getWmsOptions(offering, resource, context, targetProjection);
     const layer = new WmsLayer(options);
     return of(layer);
   }
 
   private getWmtsOptions(
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<IWmtsOptions> {
-    const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context);
+    const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context, targetProjection);
 
     const layer = this.getLayerForWMTS(offering, resource);
 
@@ -705,8 +708,10 @@ export class OwcJsonService {
     }
   }
 
-  private getWmsOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): IWmsOptions {
-    const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context);
+  private getWmsOptions(
+    offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): IWmsOptions {
+
+    const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context, targetProjection);
     if (rasterOptions.type === WmsLayertype) {
 
       const urlParams = this.getJsonFromUri(offering.operations[0].href);
@@ -738,7 +743,7 @@ export class OwcJsonService {
     }
   }
 
-  private getRasterLayerOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): IRasterLayerOptions {
+  private getRasterLayerOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): IRasterLayerOptions {
     const layerOptions: ILayerOptions = this.getLayerOptions(offering, resource, context);
     if (isRasterLayertype(layerOptions.type)) {
       let time, elevation;
@@ -755,12 +760,15 @@ export class OwcJsonService {
         }
       }
 
+      const { minZoom, maxZoom } = this.getMinMaxZoom(resource, targetProjection);
+
       const rasterLayerOptions: IRasterLayerOptions = {
         ...layerOptions,
         type: layerOptions.type as TRasterLayertype,
         url: this.getUrlFromUri(offering.operations[0].href),
         subdomains: shardsExpand(this.getResourceShards(resource)),
-        dimensions: { time, elevation }
+        dimensions: { time, elevation },
+        minZoom, maxZoom
       };
       return rasterLayerOptions;
     } else {
@@ -782,9 +790,7 @@ export class OwcJsonService {
       dimensions: this.getResourceDimensions(resource),
       legendImg: this.getLegendUrl(offering),
       styles: offering.styles,
-      description: this.getResourceDescription(resource),
-      minZoom: resource.properties.minscaledenominator,
-      maxZoom: resource.properties.maxscaledenominator,
+      description: this.getResourceDescription(resource)
     };
 
     if (resource.bbox) {
@@ -802,6 +808,42 @@ export class OwcJsonService {
   }
 
   /** Misc --------------------------------------------------- */
+
+  private getMinMaxZoom(resource: IOwsResource, targetProjection: string = 'EPSG:4326'): { minZoom: number; maxZoom: number; } {
+    const zooms = {minZoom: 0, maxZoom: 12};
+    if (resource.properties.minZoom) {
+      zooms.minZoom = resource.properties.minZoom;
+    }  else if (resource.properties.minscaledenominator) {
+      zooms.minZoom = this.scaleDenominatorToZoom(resource.properties.minscaledenominator, targetProjection);
+    }
+    if (resource.properties.minZoom) {
+      zooms.maxZoom = resource.properties.maxZoom;
+    } else if (resource.properties.minscaledenominator) {
+      zooms.maxZoom = this.scaleDenominatorToZoom(resource.properties.maxscaledenominator, targetProjection);
+    }
+    return zooms;
+  }
+
+  /**
+   * Based on the WMS Standard (https://portal.ogc.org/files/?artifact_id=14416),
+   * to which the OWC Standard refers for the scale-denominator-field,
+   * and the way that openlayers calculates zoom and resolution
+   * (https://openlayers.org/en/latest/doc/tutorials/concepts.html)
+   */
+  private scaleDenominatorToZoom(scaleDenominator: number, targetProjectionCode: string): number {
+    const projection = new Projection({code: targetProjectionCode});
+
+    const unitsPerMeter = 1.0 / projection.getMetersPerUnit();
+    const projectionExtent = projection.getExtent();
+    const projectionWidth = projectionExtent[2] - projectionExtent[0];
+    const projectionHeight = projectionExtent[3] - projectionExtent[1];
+    const projectionMaxExtent = Math.max(projectionWidth, projectionHeight);
+    const pixelsOn1mScreen = 2571.42;  // using the default assumption of 0.28mm/pixel
+    const resolution = scaleDenominator * unitsPerMeter / pixelsOn1mScreen;
+    const zoom = Math.log2(projectionMaxExtent / (resolution * 256));
+
+    return zoom;
+  }
 
   private getUrlFromUri(uri: string) {
     return uri.substring(0, uri.indexOf('?'));
