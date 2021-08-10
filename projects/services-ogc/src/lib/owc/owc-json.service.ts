@@ -34,9 +34,10 @@ import olVectorTileSource from 'ol/source/VectorTile';
 import { applyStyle } from 'ol-mapbox-style';
 import { createXYZ } from 'ol/tilegrid';
 import olMVT from 'ol/format/MVT';
-import { off } from 'process';
 import { HttpClient } from '@angular/common/http';
-import { Projection } from 'ol/src/proj';
+import {get as getProjection} from 'ol/proj';
+import { DateTime } from 'luxon';
+
 
 // @TODO: once we have a dedicated ukis-TMSLayer, integrate this type into services-layers
 export const TmsLayertype = 'tms';
@@ -268,7 +269,14 @@ export class OwcJsonService {
    * (array)   value: '2000-01-01T00:00:00.000Z,2001-01-01T00:00:00.000Z,2002-01-01T00:00:00.000Z,...'
    * (single) value: '2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y'
    */
-  getTimeValueFromDimensions(value: string | null) {
+  getTimeValueFromDimensions(value: string | null): string[] | ILayerIntervalAndPeriod | ILayerIntervalAndPeriod[] {
+    if (value) {
+      const time = DateTime.fromISO(value);
+      return null;
+    } else {
+      return null;
+    }
+
     const multiplevalues = RegExp(',', 'g').test(value);
     if (multiplevalues) {
       const values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity<string>(v)) : null;
@@ -280,6 +288,7 @@ export class OwcJsonService {
   }
 
   parseISO8601Period(value: string) {
+    const time = DateTime.fromISO(value);
     const periodMatches = value.match(/P\d*[YMWD](T\d\d[HMS])*/);
     if (periodMatches) return periodMatches[0];
   }
@@ -378,9 +387,9 @@ export class OwcJsonService {
     let legendUrl = '';
 
     if (offering.hasOwnProperty('styles')) {
-      const defaultStyle = offering.styles.filter(style => style.default);
-      if (defaultStyle.length > 0) {
-        return defaultStyle[0].legendURL;
+      const defaultStyle = offering.styles.find(style => style.default);
+      if (defaultStyle) {
+        return defaultStyle.legendURL;
       }
     } else if (offering.hasOwnProperty('legendUrl')) {
       legendUrl = offering.legendUrl;
@@ -622,7 +631,7 @@ export class OwcJsonService {
     const layer = this.getLayerForWMTS(offering, resource);
 
     let style: string;
-    if (offering.styles) {
+    if (offering.styles && offering.styles.length > 0) {
       const styleInfo = offering.styles.find(s => s.default);
       if (styleInfo) {
         style = styleInfo.name;
@@ -716,7 +725,7 @@ export class OwcJsonService {
 
       const urlParams = this.getJsonFromUri(offering.operations[0].href);
       let defaultStyle;
-      if (offering.styles) {
+      if (offering.styles && offering.styles.length > 0) {
         defaultStyle = offering.styles.find(s => s.default).name;
       } else if (urlParams['STYLES']) {
         defaultStyle = urlParams['STYLES'];
@@ -813,13 +822,13 @@ export class OwcJsonService {
     const zooms = {minZoom: 0, maxZoom: 12};
     if (resource.properties.minZoom) {
       zooms.minZoom = resource.properties.minZoom;
-    }  else if (resource.properties.minscaledenominator) {
-      zooms.minZoom = this.scaleDenominatorToZoom(resource.properties.minscaledenominator, targetProjection);
+    } else if (resource.properties.maxscaledenominator) {  // *Max*ScaleDenom ~ *Min*Zoom
+      zooms.minZoom = this.scaleDenominatorToZoom(resource.properties.maxscaledenominator, targetProjection) || 0;
     }
-    if (resource.properties.minZoom) {
+    if (resource.properties.maxZoom) {
       zooms.maxZoom = resource.properties.maxZoom;
-    } else if (resource.properties.minscaledenominator) {
-      zooms.maxZoom = this.scaleDenominatorToZoom(resource.properties.maxscaledenominator, targetProjection);
+    }  else if (resource.properties.minscaledenominator) {  // *Min*ScaleDenom ~ *Max*Zoom
+      zooms.maxZoom = this.scaleDenominatorToZoom(resource.properties.minscaledenominator, targetProjection) || 12;
     }
     return zooms;
   }
@@ -831,10 +840,18 @@ export class OwcJsonService {
    * (https://openlayers.org/en/latest/doc/tutorials/concepts.html)
    */
   private scaleDenominatorToZoom(scaleDenominator: number, targetProjectionCode: string): number {
-    const projection = new Projection({code: targetProjectionCode});
+    const projection = getProjection(targetProjectionCode);
+    if (!projection) {
+      console.error(`The projection '${targetProjectionCode}' is unknown. You'll have to manually register it with 'proj4.defs'.`);
+      return null;
+    }
+    if (!projection.getWorldExtent()) {
+      console.error(`No world extent given for projection '${targetProjectionCode}'.`);
+      return null;
+    }
 
     const unitsPerMeter = 1.0 / projection.getMetersPerUnit();
-    const projectionExtent = projection.getExtent();
+    const projectionExtent = projection.getWorldExtent();
     const projectionWidth = projectionExtent[2] - projectionExtent[0];
     const projectionHeight = projectionExtent[3] - projectionExtent[1];
     const projectionMaxExtent = Math.max(projectionWidth, projectionHeight);

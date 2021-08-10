@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing/';
 import { OwcJsonService, TmsLayertype } from './owc-json.service';
-import { barebonesContext, basicContext, exampleContext } from '../../../assets/exampleContext';
+import { barebonesContext, basicContext, exampleContext, zoomedContext } from '../../../assets/exampleContext';
 import { Fill, Stroke, Style } from 'ol/style.js';
 import { isRasterLayertype, isVectorLayertype, LayersService, RasterLayer } from '@dlr-eoc/services-layers';
 import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
@@ -8,17 +8,28 @@ import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsContext } from './types/owc-json';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
-
+import proj4 from 'proj4';
+import { register } from 'ol/proj/proj4';
 
 
 describe('OwcJsonService: reading data from owc', () => {
-  const allTestContexts = [barebonesContext, basicContext, exampleContext];
+  const allTestContexts = [barebonesContext, basicContext, zoomedContext, exampleContext];
   const targetProjection = 'EPSG:4326';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
+
+    proj4.defs(
+      'EPSG:25832',
+      '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+    );
+    proj4.defs(
+      'EPSG:3035',
+      '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+    );
+    register(proj4);
   });
 
   afterEach(() => {
@@ -42,31 +53,6 @@ describe('OwcJsonService: reading data from owc', () => {
     };
     expect(service.checkContext(context)).toBeTruthy();
   });
-
-
-  // @TODO: this method seems to be a stub.
-  // it('#layerGroupFromResource should properly create a LayerGroup-configuration', () => {
-  //   const service: OwcJsonService = TestBed.inject(OwcJsonService);
-  //   for(const context of allTestContexts) {
-  //     for(const resource of service.getResources(context)){
-
-  //       const layergroup = service.layerGroupFromResource(resource);
-
-  //       expect(layergroup.filtertype).toBe('Overlays');
-  //       // type is always 'overlays' per default - though this might change in the future.
-  //       expect(layergroup.id).toBe(resource.id as string);
-  //       expect(layergroup.name).toBe(resource.properties.title);
-  //       expect(layergroup.removable).toBe(true); // default
-  //       expect(layergroup.layerRemovable).toBe(false); // default
-  //       expect(layergroup.layers).toEqual([]); // layers initially not set. @TODO: is this deliberate?
-  //     }
-  //   }
-  // });
-
-
-  // @TODO: this method seems to be a stub. Shouldn't it return an array of ILayerOptions?
-  it('#getlayersFromResource should properly create an array of ILayerOptions?', () => { });
-
 
   it('#createRasterLayerFromOffering should return an IRasterLayerOptions instance', (done) => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
@@ -141,7 +127,6 @@ describe('OwcJsonService: reading data from owc', () => {
 
   });
 
-
   it('#createVectorLayerFromOffering should return a VectorLayer instance', (done) => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
@@ -210,7 +195,8 @@ describe('OwcJsonService: reading data from owc', () => {
             if (layertype === TmsLayertype) {
               foundCustomLayer = true;
 
-              service.createTmsLayerFromOffering(offering, resource, context).subscribe((cLayer) => {
+              const targetProjection = context.projections[0]?.code || 'EPSG:4326';
+              service.createTmsLayerFromOffering(offering, resource, context, targetProjection).subscribe((cLayer) => {
                 expect(cLayer.name).toBe(resource.properties.title);
                 expect(cLayer.id as string).toBe(resource.id as string);
                 expect(['Baselayers', 'Layers', 'Overlays'].includes(cLayer.filtertype)).toBeTrue();
@@ -231,19 +217,6 @@ describe('OwcJsonService: reading data from owc', () => {
 
                 if (resource.properties.abstract) {
                   expect(cLayer.description).toEqual(resource.properties.abstract);
-                }
-
-                if (resource.properties.minscaledenominator) {
-                  expect(cLayer.minZoom).toBeDefined();
-                }
-                if (resource.properties.minZoom) {
-                  expect(cLayer.minZoom).toEqual(resource.properties.minZoom);
-                }
-                if (resource.properties.maxscaledenominator) {
-                  expect(cLayer.maxZoom).toBeDefined();
-                }
-                if (resource.properties.maxZoom) {
-                  expect(cLayer.maxZoom).toEqual(resource.properties.maxZoom);
                 }
 
                 done();

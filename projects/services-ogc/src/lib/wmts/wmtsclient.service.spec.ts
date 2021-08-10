@@ -19,7 +19,6 @@ describe('WmtsClientService: reading data from server', () => {
     const url = 'https://theserver.com';
 
     service.getCapabilities(url).subscribe((capabilities: object) => {
-      console.log(capabilities);
       expect(capabilities).toBeTruthy();
       done();
     });

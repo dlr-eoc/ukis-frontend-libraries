@@ -19,6 +19,8 @@
     "w3c-schemas",
     "ogc-schemas",
     "@michaellangbein/jsonix",
-    "opensearch-browser"
+    "opensearch-browser",
+    "luxon",
+    "proj4"
   ]
 }

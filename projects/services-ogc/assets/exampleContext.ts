@@ -273,6 +273,58 @@ export const basicContext: IOwsContext = {
   type: 'FeatureCollection'
 };
 
+
+export const zoomedContext: IOwsContext = {
+  id: 'zoomed context',
+  type: 'FeatureCollection',
+  properties: {
+    links: {
+      profiles: ['http://www.opengis.net/spec/owc-geojson/1.0/req/core'],
+    },
+    lang: 'en',
+    title: 'zoomed context',
+    updated: '2018-11-28T00:00:00'
+  },
+  features: [{
+    geometry: null,
+    id: 'vectortile',
+    properties: {
+      active: true,
+      minscaledenominator: 1000,
+      maxscaledenominator: 100000,
+      offerings: [{
+          code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
+          operations: [
+            {
+              code: 'GetMap',
+              href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetMap&LAYERS=RESA_L3M_GERMANY_2015&TILED=False&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS&TRANSPARENT=TRUE',
+              method: 'GET',
+              type: 'image/vnd.jpeg-png'
+            },
+            {
+              code: 'GetCapabilities',
+              href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetCapabilities&SERVICE=WMS',
+              method: 'GET',
+              type: 'application/xml'
+            },
+            {
+              code: 'GetFeatureInfo',
+              href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetFeatureInfo&SERVICE=WMS',
+              method: 'GET',
+              type: 'text/html'
+            }
+          ],
+          styles: []
+      }],
+      opacity: 1.0,
+      title: 'This should be an overlay',
+      updated: '2019-02-15T11:21:59',
+      folder: 'Overlays'
+    },
+    type: 'Feature'
+  }]
+};
+
 export const exampleContext: IOwsContext = {
 
   bbox: [
@@ -332,8 +384,8 @@ export const exampleContext: IOwsContext = {
       id: 'vectortile',
       properties: {
         active: true,
-        minscaledenominator: 1,
-        maxscaledenominator: 10,
+        minZoom: 1,
+        maxZoom: 10,
         offerings: [
           {
             code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms',
