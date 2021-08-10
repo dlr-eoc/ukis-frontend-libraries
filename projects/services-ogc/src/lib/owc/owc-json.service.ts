@@ -36,7 +36,7 @@ import { createXYZ } from 'ol/tilegrid';
 import olMVT from 'ol/format/MVT';
 import { HttpClient } from '@angular/common/http';
 import {get as getProjection} from 'ol/proj';
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 
 
 // @TODO: once we have a dedicated ukis-TMSLayer, integrate this type into services-layers
@@ -269,28 +269,58 @@ export class OwcJsonService {
    * (array)   value: '2000-01-01T00:00:00.000Z,2001-01-01T00:00:00.000Z,2002-01-01T00:00:00.000Z,...'
    * (single) value: '2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y'
    */
-  getTimeValueFromDimensions(value: string | null): string[] | ILayerIntervalAndPeriod | ILayerIntervalAndPeriod[] {
-    if (value) {
-      const time = DateTime.fromISO(value);
-      return null;
-    } else {
+  getTimeValueFromDimensions(input: string | null): string | string[] | ILayerIntervalAndPeriod | ILayerIntervalAndPeriod[] {
+    if (!input) {
       return null;
     }
 
-    const multiplevalues = RegExp(',', 'g').test(value);
-    if (multiplevalues) {
-      const values = (value) ? value.split(',').map((v: string) => this.convertOwcTimeToIsoTimeAndPeriodicity<string>(v)) : null;
-      return values as string[] | ILayerIntervalAndPeriod[];
-    } else if (!multiplevalues && value) {
-      const singelValue = this.convertOwcTimeToIsoTimeAndPeriodicity<ILayerIntervalAndPeriod>(value);
-      return singelValue;
+    const splitValues = input.split(',');
+    if (splitValues.length > 0) {
+      const outputs = [];
+      for (const value of splitValues) {
+        const parsed = this.parseSingleTimeOrPeriod(value);
+        outputs.push(parsed);
+      }
+      return outputs;
     }
+
+    const parsed = this.parseSingleTimeOrPeriod(input);
+    return parsed;
+
   }
 
-  parseISO8601Period(value: string) {
-    const time = DateTime.fromISO(value);
+  private parseSingleTime(timeString: string): DateTime {
+    return DateTime.fromISO(timeString);
+  }
+
+  private parsePeriod(periodString: string): Interval {
+    return Interval.fromISO(periodString);
+  }
+
+  private parseSingleTimeOrPeriod(time: string): string | ILayerIntervalAndPeriod | null {
+    const dateTime = this.parseSingleTime(time);
+    if (dateTime.isValid) {
+      return dateTime.toISO();
+    }
+
+    const interval = this.parsePeriod(time);
+    if (interval.isValid) {
+      const period = this.parseISO8601Period(time);
+      const intervalObject: ILayerIntervalAndPeriod = {
+        periodicity: period,
+        interval: `${interval.start.toISO()}/${interval.end.toISO()}`
+      };
+      return intervalObject;
+    }
+
+    return null;
+  }
+
+  private parseISO8601Period(value: string): string {
     const periodMatches = value.match(/P\d*[YMWD](T\d\d[HMS])*/);
-    if (periodMatches) return periodMatches[0];
+    if (periodMatches) {
+      return periodMatches[0];
+    }
   }
 
   getResourceDimensions(resource: IEocOwsResource) {

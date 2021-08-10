@@ -53,6 +53,7 @@
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "delaunator": "^4.0.1",
     "jsonc-parser": "^3.0.0",
+    "luxon": "^2.0.2",
     "md5": "^2.2.1",
     "ogc-schemas": "^2.6.1",
     "ol": "^6.5.0",
