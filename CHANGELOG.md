@@ -10,6 +10,7 @@
   - Overhaul of `dimensions`
   - Allows sub-groups
   - Allows Tms-Layers
+  - Parses ISO8601 strings using `luxon`
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
