@@ -401,7 +401,7 @@ export class OwcJsonService {
       const resource = resources[i];
 
       const groupName = this.getLayerGroup(resource);
-      if (groupName && !['Baselayers', 'Layers', 'Overlays'].includes(groupName)) {
+      if (groupName && !Object.keys(Filtertypes).includes(groupName)) {
         const includedResources = resources.filter(r => r.properties.folder === resource.properties.folder);
         const layerGroup$ = this.createLayerGroup(groupName, includedResources, owc, targetProjection);
         layers$.push(layerGroup$);

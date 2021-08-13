@@ -70,7 +70,7 @@ export type TRasterLayertype = 'wms' | 'wmts' | 'xyz' | 'custom';
 export type TLayertype = TRasterLayertype | TVectorLayertype | string;
 
 export const Filtertypes = {
-  Baselayer: 'Baselayer',
+  Baselayers: 'Baselayers',
   Overlays: 'Overlays',
   Layers: 'Layers'
 } as const;
