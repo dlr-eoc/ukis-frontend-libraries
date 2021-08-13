@@ -1,4 +1,4 @@
-import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsBboxValue, WpsData, 
+import { WpsMarshaller, WpsInput, WpsOutputDescription, WpsResult, WpsCapability, WpsBboxValue, WpsData,
   WpsDataDescription, WpsState, WpsDataFormat, WpsProcessDescription } from '../wps_datatypes';
 import {
   WPSCapabilitiesType, IWpsExecuteProcessBody, Execute, DataInputsType,
@@ -135,10 +135,8 @@ export class WpsMarshaller100 implements WpsMarshaller {
     if (data.complexData) {
 
       if (data.complexData.encoding === 'base64') {
-        // @ts-ignore
         if (typeof module !== 'undefined' && module.exports) { // node
-          // @ts-ignore
-          data.complexData.content.map(c => new Buffer(c, 'base64').toString('ascii'));
+          data.complexData.content.map(c => Buffer.from(c, 'base64').toString('ascii'));
         } else { // browser
           data.complexData.content.map(c => atob(c));
         }
