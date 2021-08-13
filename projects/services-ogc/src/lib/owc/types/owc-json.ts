@@ -114,10 +114,10 @@ export interface IOwsResourceProperties {
    */
   folder?: string;
   links?: {
-    previews: IOwsLinks[],
-    alternates: IOwsLinks[],
-    data: IOwsLinks[],
-    via: IOwsLinks[]
+    previews?: IOwsLinks[],
+    alternates?: IOwsLinks[],
+    data?: IOwsLinks[],
+    via?: IOwsLinks[]
   };
   [k: string]: any;
 }
