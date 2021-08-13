@@ -287,7 +287,7 @@ export const zoomedContext: IOwsContext = {
   },
   features: [{
     geometry: null,
-    id: 'vectortile',
+    id: 'RESA_L3M_GERMANY_2015',
     properties: {
       active: true,
       minscaledenominator: 1000,
@@ -313,8 +313,7 @@ export const zoomedContext: IOwsContext = {
               method: 'GET',
               type: 'text/html'
             }
-          ],
-          styles: []
+          ]
       }],
       opacity: 1.0,
       title: 'This should be an overlay',
@@ -399,6 +398,7 @@ export const exampleContext: IOwsContext = {
             styles: [{
               name: 'geotest_xyz_planet_eoc',
               title: 'grayscale',
+              abstract: 'This is a slightly modified version of Positron style @see: https://github.com/openmaptiles/positron-gl-style/blob/master/LICENSE.md',
               content: {
                 type: 'mapbox-style',
                 'mapbox-source-key': 'geotest_xyz_planet_eoc',
@@ -410,6 +410,7 @@ export const exampleContext: IOwsContext = {
         opacity: 1.0,
         title: 'This should be an overlay',
         updated: '2019-02-15T11:21:59',
+        rights: '© OpenMapTiles © OpenStreetMap contributors',
         folder: 'Overlays'
       },
       type: 'Feature'
