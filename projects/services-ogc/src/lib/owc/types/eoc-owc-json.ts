@@ -20,6 +20,7 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
   attribution?: string;
   shards?: string;
   dimensions?: IEocOwsResourceDimension[];
+  /** preview image for the Resource */
   previewUrl?: string;
   /** Alternative to IOwsResourceProperties.minscaledenominator; easier to calculate in browser-apps */
   minZoom?: number;
