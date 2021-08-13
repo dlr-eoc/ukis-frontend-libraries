@@ -95,3 +95,14 @@ export interface IEocOwsProjection {
 export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
 export type Xyz_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
 export type TMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms';
+
+
+
+/** list of context files */
+export interface IEocOwsContextListItem {
+  id: IEocOwsContext['id'];
+  /** relative or absolute link/path to context file */
+  url: string;
+}
+
+export type EocOwsContextList = IEocOwsContextListItem[];
