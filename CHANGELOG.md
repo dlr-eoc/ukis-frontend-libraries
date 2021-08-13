@@ -1,3 +1,15 @@
+### Breaking Changes
+* **@dlr-eoc/services-ogc:** 
+- `IEocOwsResourceDimensions` is removed.
+- `IEocOwsResourceDimension` [is changed](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L30).
+- `IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimension[]` is changed. Before it was [`IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimensions`](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L24)
+- `IEocOwsOffering.legendUrl?` is removed.
+- `OwcJsonService.getLayers()` returns now `Observable<(Layer | LayerGroup)[]>`.
+- `IOwsContext.properties.creator?: IOwsCreator` corrected to schema `IOwsContext.properties.generator?: IOwsGenerator;`.
+- `IOwsContext.properties.links: IOwsLinks[]` corrected to schema `IOwsContext.properties.links.profiles`
+- `IOwsAuthor`, `IOwsCategory` and `IOwsOperation` corrected to schema.
+
+
 ### Features
 * **@dlr-eoc/services-layers:**:
   - Extend Layer Type for events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
@@ -10,10 +22,13 @@
   - Overhaul of `dimensions`
   - Allows sub-groups
   - Allows Tms-Layers
-  - Parses ISO8601 strings using `luxon`
+  - Extend types for `IEocOwsContext`
+  - Parses ISO8601 strings using `luxon` (new dependency)
+  - New functin `OwcJsonService.createLayerFromDefaultOffering()`
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
+  - Fixed an issue in `MapOlService.zoomInOut()`
   - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.
   - Fixed an issue with dynamic popups, where only the first popup on a raster-layer would be created, whereas all subsequent clicks would not lead to a new popup appearing.
 * **@dlr-eoc/layer-control:** 
