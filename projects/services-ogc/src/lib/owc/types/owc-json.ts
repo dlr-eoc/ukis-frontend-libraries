@@ -99,7 +99,9 @@ export interface IOwsResourceProperties {
   date?: DateString;
   /** This element is optional and can contain a number of offerings defined by the class OWC:Offering */
   offerings?: IOwsOffering[];
-  /** Flag value indicating to the client if the Context resource should be displayed by default */
+  /** Flag value indicating to the client if the Context resource should be displayed by default.
+   * E.g. Layer is visible
+   */
   active?: boolean;
   /** This array is optional and expresses a category related to the Context resource */
   categories?: IOwsCategory[];
@@ -159,17 +161,19 @@ export interface IOwsGenerator {
 }
 
 export interface IOwsAuthor {
-  /** Entity primarily responsible for making the Context document */
-  name?: string;
+  /** Entity primarily responsible for making the Context document
+   * Properties that all types of authors have. It mimics the Atom author
+   */
+  name: string;
   email?: string;
   uri?: string;
   [k: string]: any;
 }
 
 export interface IOwsCategory {
-  scheme?: string;
   /** Category related to this context document. It MAY have a related code-list that is identified by the scheme attribute */
-  term?: string;
+  term: string;
+  scheme?: string;
   label?: string;
 }
 
@@ -212,9 +216,9 @@ export interface IOwsOperation {
   code: string;
   /** method defines the access method, for example GET or POST. */
   method: string;
-  type?: string;
   /** href is the URI containing the definition of the request */
-  href?: string;
+  href: string;
+  type?: string;
   request?: IOwsContent;
   result?: IOwsContent;
   /** Extension of Operation */
