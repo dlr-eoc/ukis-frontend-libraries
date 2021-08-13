@@ -242,15 +242,35 @@ export type DateString = string;
 /** RFC-3066 code e.g. en,de */
 export type LangString = string;
 
+export const wmsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' as const;
+export type WMS_Offering = typeof wmsOffering;
 
-export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
-export type WFS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
-export type WCS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs';
-export type WPS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wps';
-export type CSW_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw';
-export type WMTS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
-export type GML_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
-export type KML_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml';
-export type GeoTIFF_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff';
-export type GMLJP2_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
-export type GMLCOV_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
+export const wfsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs' as const;
+export type WFS_Offering = typeof wfsOffering;
+
+export const wcsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs' as const;
+export type WCS_Offering = typeof wcsOffering;
+
+export const wpsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wps' as const;
+export type WPS_Offering = typeof wpsOffering;
+
+export const cswOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw' as const;
+export type CSW_Offering = typeof cswOffering;
+
+export const wmtsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts' as const;
+export type WMTS_Offering = typeof wmtsOffering;
+
+export const gmlOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml' as const;
+export type GML_Offering = typeof gmlOffering;
+
+export const kmlOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml' as const;
+export type KML_Offering = typeof kmlOffering;
+
+export const GeoTIFFOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff' as const;
+export type GeoTIFF_Offering = typeof GeoTIFFOffering;
+
+export const GMLJP2Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2' as const;
+export type GMLJP2_Offering = typeof GMLJP2Offering;
+
+export const GMLCOVOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov' as const;
+export type GMLCOV_Offering = typeof GMLCOVOffering;

@@ -93,10 +93,14 @@ export interface IEocOwsProjection {
 /**
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#trueextension-offerings
  */
-export type GeoJson_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
-export type Xyz_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
-export type TMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms';
+export const GeoJsonOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson' as const;
+export type GeoJson_Offering = typeof GeoJsonOffering;
 
+export const xyzOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz' as const;
+export type Xyz_Offering = typeof xyzOffering;
+
+export const tmsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms' as const;
+export type TMS_Offering = typeof tmsOffering;
 
 
 /** list of context files */
