@@ -6,7 +6,9 @@ export const barebonesContext: IOwsContext = {
   type: 'FeatureCollection',
   properties: {
     links: {
-      profiles: ['http://www.opengis.net/spec/owc-geojson/1.0/req/core'],
+      profiles: [{
+        href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
+      }],
     },
     lang: 'de',
     title: 'test context',
@@ -279,7 +281,9 @@ export const zoomedContext: IOwsContext = {
   type: 'FeatureCollection',
   properties: {
     links: {
-      profiles: ['http://www.opengis.net/spec/owc-geojson/1.0/req/core'],
+      profiles: [{
+        href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
+      }],
     },
     lang: 'en',
     title: 'zoomed context',
@@ -293,27 +297,27 @@ export const zoomedContext: IOwsContext = {
       minscaledenominator: 1000,
       maxscaledenominator: 100000,
       offerings: [{
-          code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
-          operations: [
-            {
-              code: 'GetMap',
-              href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetMap&LAYERS=RESA_L3M_GERMANY_2015&TILED=False&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS&TRANSPARENT=TRUE',
-              method: 'GET',
-              type: 'image/vnd.jpeg-png'
-            },
-            {
-              code: 'GetCapabilities',
-              href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetCapabilities&SERVICE=WMS',
-              method: 'GET',
-              type: 'application/xml'
-            },
-            {
-              code: 'GetFeatureInfo',
-              href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetFeatureInfo&SERVICE=WMS',
-              method: 'GET',
-              type: 'text/html'
-            }
-          ]
+        code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
+        operations: [
+          {
+            code: 'GetMap',
+            href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetMap&LAYERS=RESA_L3M_GERMANY_2015&TILED=False&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS&TRANSPARENT=TRUE',
+            method: 'GET',
+            type: 'image/vnd.jpeg-png'
+          },
+          {
+            code: 'GetCapabilities',
+            href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetCapabilities&SERVICE=WMS',
+            method: 'GET',
+            type: 'application/xml'
+          },
+          {
+            code: 'GetFeatureInfo',
+            href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetFeatureInfo&SERVICE=WMS',
+            method: 'GET',
+            type: 'text/html'
+          }
+        ]
       }],
       opacity: 1.0,
       title: 'This should be an overlay',

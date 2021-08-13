@@ -1,7 +1,7 @@
 /** This file contains functions (Type Guards) to test for types in owc-json.ts */
 
 import { Xyz_Offering, GeoJson_Offering, TMS_Offering, GeoJsonOffering, tmsOffering, xyzOffering } from './eoc-owc-json';
-import { cswOffering, CSW_Offering, GeoTIFFOffering, GeoTIFF_Offering, GMLCOVOffering, GMLCOV_Offering, GMLJP2Offering, GMLJP2_Offering, gmlOffering, GML_Offering, IOwsAuthor, IOwsCategory, IOwsContent, IOwsContext, IOwsCreator, IOwsCreatorDisplay, IOwsLinks, IOwsOffering, IOwsOperation, IOwsResource, IOwsResourceProperties, IOwsStyleSet, kmlOffering, KML_Offering, wcsOffering, WCS_Offering, wfsOffering, WFS_Offering, wmsOffering, WMS_Offering, wmtsOffering, WMTS_Offering } from './owc-json';
+import { cswOffering, CSW_Offering, GeoTIFFOffering, GeoTIFF_Offering, GMLCOVOffering, GMLCOV_Offering, GMLJP2Offering, GMLJP2_Offering, gmlOffering, GML_Offering, IOwsAuthor, IOwsCategory, IOwsContent, IOwsContext, IOwsGenerator, IOwsCreatorDisplay, IOwsLinks, IOwsOffering, IOwsOperation, IOwsResource, IOwsResourceProperties, IOwsStyleSet, kmlOffering, KML_Offering, wcsOffering, WCS_Offering, wfsOffering, WFS_Offering, wmsOffering, WMS_Offering, wmtsOffering, WMTS_Offering } from './owc-json';
 
 function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
   for (const entry of list) {
@@ -12,12 +12,10 @@ function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
   return true;
 }
 
-export function isIOwsContext(object: any): object is IOwsContext {
+export function isIOwsContext(object: IOwsContext): object is IOwsContext {
   let ISCONTEXT_1_0;
-  if (!Array.isArray(object?.properties?.links)) {
-    ISCONTEXT_1_0 = object?.properties?.links.profiles.find(item => item === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
-  } else {
-    ISCONTEXT_1_0 = object.properties.links.find(item => item.href === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
+  if (object?.properties?.links) {
+    ISCONTEXT_1_0 = object.properties.links.profiles.find(item => item.href === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
   }
 
   if (!ISCONTEXT_1_0) {
@@ -29,7 +27,7 @@ export function isIOwsContext(object: any): object is IOwsContext {
 }
 
 export function isIOwsResource(object: any): object is IOwsResource {
-  return 'id' in object
+  return 'id' in object && 'type' in object
     && 'properties' in object && isIOwsResourceProperties(object.properties);
 }
 
@@ -48,7 +46,7 @@ export function isIOwsOffering(object: any): object is IOwsOffering {
     && (object.styles ? trueForAll(object.styles, isIOwsStyleSet) : true)
 }
 
-export function isIOwsCreator(object: any): object is IOwsCreator {
+export function isIOwsGenerator(object: any): object is IOwsGenerator {
   return 'title' in object
     || 'uri' in object
     || 'version' in object;

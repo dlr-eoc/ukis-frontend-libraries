@@ -43,7 +43,9 @@ describe('OwcJsonService: reading data from owc', () => {
       type: 'FeatureCollection',
       properties: {
         links: {
-          profiles: ['http://www.opengis.net/spec/owc-geojson/1.0/req/core'],
+          profiles: [{
+            href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
+          }],
         },
         lang: 'de',
         title: 'test context',
