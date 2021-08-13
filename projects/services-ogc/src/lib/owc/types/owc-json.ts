@@ -20,7 +20,10 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
    */
   id: string | number;
   properties: {
-    links: { profiles: ('http://www.opengis.net/spec/owcgeojson/1.0/req/core' | string)[] } | IOwsLinks[];
+    links: {
+      profiles: IOwsLinks[],
+      via?: IOwsLinks[]
+    };
     /** Language of Context document content */
     lang: LangString;
     /** Title for the Context document */
@@ -34,7 +37,7 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Identifier for the publisher of the Context document */
     publisher?: string;
     /** Tool/application used to create the Context document and its properties */
-    creator?: IOwsCreator;
+    generator?: IOwsGenerator;
     /**
      * Properties of the display in use when the context document was created (for display based applications only).
      * This class is optional and intended for creator applications that use a graphical user interface with a geographical display within a fixed pixel size and not scalable to different computational devices
@@ -108,8 +111,12 @@ export interface IOwsResourceProperties {
    * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
    */
   folder?: string;
-  /** TODO!!! links is defined as Object but in the examples as Array  */
-  links?: IOwsLinks[];
+  links?: {
+    previews: IOwsLinks[],
+    alternates: IOwsLinks[],
+    data: IOwsLinks[],
+    via: IOwsLinks[]
+  };
   [k: string]: any;
 }
 
@@ -145,7 +152,7 @@ export interface IOwsOffering {
   [k: string]: any;
 }
 
-export interface IOwsCreator {
+export interface IOwsGenerator {
   title?: string;
   uri?: string;
   version?: string;
@@ -166,14 +173,13 @@ export interface IOwsCategory {
   label?: string;
 }
 
+/** Properties that all types of links have. It mimics the Atom link */
 export interface IOwsLinks {
-  rel: string;
-  href?: string;
+  href: string;
   type?: string;
   title?: string;
-  /** Reference to a description of the Context resource in alternative format */
-  alternates?: string;
   lang?: LangString;
+  length?: number;
   [k: string]: any;
 }
 
