@@ -930,7 +930,7 @@ describe('MapOlService State', () => {
 
     const oldZoom = service.getZoom();
     expect(oldZoom).toBeCloseTo(0, 0);
-    const duration = 400;
+    const duration = 250;
     service.zoomInOut('+');
 
     setTimeout(() => {

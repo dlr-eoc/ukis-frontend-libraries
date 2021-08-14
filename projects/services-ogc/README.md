@@ -2,10 +2,20 @@
 
 This library bundles our clients for OGC standards. 
 
+## WPS
+This is a client to communicate with WPS-servers. With it, remote procedures can be called, their status monitored and their results fetched.
+The service is intended to abstract away the differences between the versions of the WPS protocol. It currently supports both WPS 1.0.0 and WPS 2.0.0.
+
+```
+const c = new WpsClient('1.0.0', httpClient);
+const exec$ = c.execute('http://testserver.com/wps', 'processId', inputs, outputDescriptions);
+exec$.subscribe(results => console.log(results) );
+```
+
 ## OWC
 This is a parser to read from / write to OWC files. OWC can be used to share information about a map-context (such as extent, visible layers, zoom, ...) across multiple clients.
 This parser converts to / from UKIS-specific datatypes, like UKIS-rasterlayers, UKIS-vectorlayers etc.
-The OWC format is written to be easily extendable. We made use of this capability by adding some UKIS-specific semantic information - this information is encoded in the interfaces found in the file `eoc-owc-json.ts`.
+The OWC format is written to be easily extendable. We made use of this capability by adding some UKIS-specific semantic information - this information is encoded in the interfaces found in the file `eoc-owc-json.ts`. For more details see [OGC OWS Context](src/lib/owc/README.md)
 
 
 ```
@@ -25,7 +35,7 @@ const context: IOwsContext = {
           }],
         groupName: 'products',
         offerings: [{
-            code: 'http://schemas.opengis.net/wms/1.1.1',
+            code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
             operations: [{
                 code: 'GetMap',
                 href: 'https://geoservice.code-de.org/Sentinel3/wms?TRANSPARENT=TRUE&LAYERS=S3_OLCI_L2_LAN&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS',
@@ -161,6 +171,10 @@ Run `ng generate component component-name --project services-ogc` to generate a 
 > Note: Don't forget to add `--project services-ogc` or else it will be added to the default project in your `angular.json` file. 
 
 ## Build
+
+Run `ng build services-ogc` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+## Publishing
 
 After building your library with `ng build services-ogc`, go to the dist folder `cd dist/services-ogc` and run `npm publish`.
 

@@ -8,16 +8,6 @@
  */
 import * as GeoJSON from 'geojson';
 
-
-function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
-  for (const entry of list) {
-    if (!predicate(entry)) {
-      return false;
-    }
-  }
-  return true;
-}
-
 /**
  * The OWS Context describes Metadata, API, Time Range
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truethe-ows-context-document-structure
@@ -30,7 +20,10 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
    */
   id: string | number;
   properties: {
-    links: { profiles: string[] } | IOwsLinks[];
+    links: {
+      profiles: IOwsLinks[],
+      via?: IOwsLinks[]
+    };
     /** Language of Context document content */
     lang: LangString;
     /** Title for the Context document */
@@ -44,16 +37,16 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Identifier for the publisher of the Context document */
     publisher?: string;
     /** Tool/application used to create the Context document and its properties */
-    creator?: IOwsCreator;
+    generator?: IOwsGenerator;
     /**
      * Properties of the display in use when the context document was created (for display based applications only).
-     * This class is optional and intended for creator applications that use a graphical user interface with a geographical display within a fixed pixel size and not scalable to different computational devices 
+     * This class is optional and intended for creator applications that use a graphical user interface with a geographical display within a fixed pixel size and not scalable to different computational devices
      */
     display?: IOwsCreatorDisplay[];
     /** Information about rights held in and over the Context document */
     rights?: string;
     /**
-     * Date or range of dates relevant to the resource 
+     * Date or range of dates relevant to the resource
      * time range which is expected to be of interest to the user.
      */
     date?: DateString;
@@ -68,21 +61,6 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
   [k: string]: any;
 }
 
-export function isIOwsContext(object: any): object is IOwsContext {
-  return 'id' in object
-    && 'properties' in object
-    && 'links' in object.properties // && trueForAll(object.properties.links, isIOwsLinks)
-    && 'lang' in object.properties
-    && 'title' in object.properties
-    && 'updated' in object.properties
-    && (object.properties.authors ? trueForAll(object.properties.authors, isIOwsAuthor) : true)
-    && (object.properties.creator ? isIOwsCreator(object.properties.creator) : true)
-    && (object.properties.display ? trueForAll(object.properties.display, isIOwsCreatorDisplay): true)
-    && (object.properties.categories ? trueForAll(object.properties.categories, isIOwsCategory) : true)
-    && 'features' in object && trueForAll(object.features, isIOwsResource);
-}
-
-
 /**
  * Each layer (a.k.a. feature) in a context document is known as a ‘Resource’
  * A Resource reference a set of geospatial information to be treated as a logical element.
@@ -92,7 +70,7 @@ export function isIOwsContext(object: any): object is IOwsContext {
  * is focussed on a particular representation of information.
  * These can be one of a number of OGC Web Services, specifically WMS, WMTS, WFS, WCS, WPS and CSW,
  * or one of a number of inline or referenced formats, specifically GML, KML, GeoTIFF, GMLJP2, GMLCOV,
- * or a custom offering type defined in a profile or by an organization.
+ * or a custom offering type defined in a profile or by an organisation.
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truethe-ows-context-document-structure
  */
 export interface IOwsResource extends GeoJSON.Feature {
@@ -104,12 +82,6 @@ export interface IOwsResource extends GeoJSON.Feature {
   properties: IOwsResourceProperties;
   [k: string]: any;
 }
-
-export function isIOwsResource(object: any): object is IOwsResource {
-  return 'id' in object
-    && 'properties' in object && isIOwsResourceProperties(object.properties);
-}
-
 export interface IOwsResourceProperties {
   /** Title given to the Context resource */
   title: string;
@@ -127,7 +99,9 @@ export interface IOwsResourceProperties {
   date?: DateString;
   /** This element is optional and can contain a number of offerings defined by the class OWC:Offering */
   offerings?: IOwsOffering[];
-  /** Flag value indicating to the client if the Context resource should be displayed by default */
+  /** Flag value indicating to the client if the Context resource should be displayed by default.
+   * E.g. Layer is visible
+   */
   active?: boolean;
   /** This array is optional and expresses a category related to the Context resource */
   categories?: IOwsCategory[];
@@ -135,23 +109,18 @@ export interface IOwsResourceProperties {
   minscaledenominator?: number;
   /** Maximum scale for the display of the Context resource Double */
   maxscaledenominator?: number;
-  /** Definition of the folder in which the resource is placed 
-  * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
-  */
+  /** Definition of the folder in which the resource is placed
+   * The folder attribute is intended to support the concept present in many clients or organising layers into folders.
+   */
   folder?: string;
-  /** TODO!!! links is defined as Object but in the examples as Array  */
-  links?: IOwsLinks[];
+  links?: {
+    previews?: IOwsLinks[],
+    alternates?: IOwsLinks[],
+    data?: IOwsLinks[],
+    via?: IOwsLinks[]
+  };
   [k: string]: any;
 }
-
-export function isIOwsResourceProperties(object: any): object is IOwsResourceProperties {
-  return 'title' in object
-    && 'updated' in object
-    && (object.authors ? trueForAll(object.authors, isIOwsAuthor) : true)
-    && (object.offerings ? trueForAll(object.offerings, isIOwsOffering) : true)
-    && (object.categories ? trueForAll(object.categories, isIOwsCategory) : true);
-}
-
 
 /**
  * In reality a resource can be realized in a number of different ways, and so an OWC document allows various options to be specified.
@@ -185,65 +154,37 @@ export interface IOwsOffering {
   [k: string]: any;
 }
 
-export function isIOwsOffering(object: any): object is IOwsOffering {
-  return 'code' in object
-    && (object.operations ? trueForAll(object.operations, isIOwsOperation) : true)
-    && (object.contents ? trueForAll(object.contents, isIOwsContent) : true)
-    && (object.styles ? trueForAll(object.styles, isIOwsStyleSet) : true)
-}
-
-export interface IOwsCreator {
+export interface IOwsGenerator {
   title?: string;
   uri?: string;
   version?: string;
 }
 
-export function isIOwsCreator(object: any): object is IOwsCreator {
-  return 'title' in object
-    || 'uri' in object
-    || 'version' in object;
-}
-
 export interface IOwsAuthor {
-  /** Entity primarily responsible for making the Context document */
-  name?: string;
+  /** Entity primarily responsible for making the Context document
+   * Properties that all types of authors have. It mimics the Atom author
+   */
+  name: string;
   email?: string;
   uri?: string;
   [k: string]: any;
 }
 
-export function isIOwsAuthor(object: any): object is IOwsAuthor {
-  return 'name' in object
-    || 'email' in object
-    || 'uri' in object;
-}
-
 export interface IOwsCategory {
-  scheme?: string;
   /** Category related to this context document. It MAY have a related code-list that is identified by the scheme attribute */
-  term?: string | number | boolean;
+  term: string;
+  scheme?: string;
   label?: string;
 }
 
-export function isIOwsCategory(object: any): object is IOwsCategory {
-  return 'scheme' in object
-    || 'term' in object
-    || 'label' in object;
-}
-
+/** Properties that all types of links have. It mimics the Atom link */
 export interface IOwsLinks {
-  rel: string;
-  href?: string;
+  href: string;
   type?: string;
   title?: string;
-  /** Reference to a description of the Context resource in alternative format */
-  alternates?: string;
   lang?: LangString;
+  length?: number;
   [k: string]: any;
-}
-
-export function isIOwsLinks(object: any): object is IOwsLinks {
-  return 'rel' in object;
 }
 
 export interface IOwsCreatorApplication {
@@ -264,12 +205,6 @@ export interface IOwsCreatorDisplay {
   [k: string]: any;
 }
 
-export function isIOwsCreatorDisplay(object: any): object is IOwsCreatorDisplay {
-  return 'pixelWidth' in object
-    || 'pixelHeight' in object
-    || 'mmPerPixel' in object;
-}
-
 /**
  * Most service offerings have two operations, a ‘GetCapabilities’ operation and a data operation such as ‘GetMap’ for WMS
  */
@@ -281,22 +216,14 @@ export interface IOwsOperation {
   code: string;
   /** method defines the access method, for example GET or POST. */
   method: string;
-  type?: string;
   /** href is the URI containing the definition of the request */
-  href?: string;
+  href: string;
+  type?: string;
   request?: IOwsContent;
   result?: IOwsContent;
   /** Extension of Operation */
   [k: string]: any;
 }
-
-export function isIOwsOperation(object: any): object is IOwsOperation {
-  return 'code' in object
-    && 'method' in object
-    && (object.request ? isIOwsContent(object.request) : true)
-    && (object.result ? isIOwsContent(object.result) : true);
-}
-
 
 export interface IOwsContent {
   /** MIME type of the Content */
@@ -306,10 +233,6 @@ export interface IOwsContent {
   /** String type, not empty that can contain any text encoded media type */
   content?: string;
   [k: string]: any;
-}
-
-export function isIOwsContent(object: any): object is IOwsContent {
-  return 'type' in object;
 }
 
 export interface IOwsStyleSet {
@@ -322,13 +245,6 @@ export interface IOwsStyleSet {
   [k: string]: any;
 }
 
-export function isIOwsStyleSet(object: any): object is IOwsStyleSet {
-  return 'name' in object
-    && 'title' in object;
-}
-
-
-
 /** ISO-8601 format e.g. YYYY-MM-DDThh:mm:ssZ or YYYY-MM-DDThh:mm:ssZ/YYYY-MM-DDThh:mm:ssZ */
 export type DateString = string;
 
@@ -336,16 +252,35 @@ export type DateString = string;
 /** RFC-3066 code e.g. en,de */
 export type LangString = string;
 
+export const wmsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' as const;
+export type WMS_Offering = typeof wmsOffering;
 
-export type WMS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms' |
-    'http://schemas.opengis.net/wms/1.1.1' | 'http://schemas.opengis.net/wms/1.1.0';
-export type WFS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
-export type WCS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs';
-export type WPS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wps';
-export type CSW_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw';
-export type WMTS_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
-export type GML_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml';
-export type KML_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml';
-export type GeoTIFF_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff';
-export type GMLJP2_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2';
-export type GMLCOV_Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov';
+export const wfsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs' as const;
+export type WFS_Offering = typeof wfsOffering;
+
+export const wcsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wcs' as const;
+export type WCS_Offering = typeof wcsOffering;
+
+export const wpsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wps' as const;
+export type WPS_Offering = typeof wpsOffering;
+
+export const cswOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/csw' as const;
+export type CSW_Offering = typeof cswOffering;
+
+export const wmtsOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts' as const;
+export type WMTS_Offering = typeof wmtsOffering;
+
+export const gmlOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gml' as const;
+export type GML_Offering = typeof gmlOffering;
+
+export const kmlOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/kml' as const;
+export type KML_Offering = typeof kmlOffering;
+
+export const GeoTIFFOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff' as const;
+export type GeoTIFF_Offering = typeof GeoTIFFOffering;
+
+export const GMLJP2Offering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2' as const;
+export type GMLJP2_Offering = typeof GMLJP2Offering;
+
+export const GMLCOVOffering = 'http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov' as const;
+export type GMLCOV_Offering = typeof GMLCOVOffering;

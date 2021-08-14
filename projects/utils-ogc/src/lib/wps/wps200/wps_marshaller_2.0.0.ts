@@ -21,7 +21,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
 
   unmarshalProcessDescription(processDescriptionJson: ProcessOfferings): WpsProcessDescription {
     const description = processDescriptionJson.processOffering[0];
-  
+
     const inputs: WpsInput[] = [];
     for (const dataInput of description.process.input) {
       inputs.push({
@@ -186,7 +186,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
 
       if (data.encoding === 'base64') {
         if (typeof module !== 'undefined' && module.exports) { // node
-          data.content.map(c => new Buffer(c, 'base64').toString('ascii'));
+          data.content.map(c => Buffer.from(c, 'base64').toString('ascii'));
         } else { // browser
           data.content.map((c: any) => atob(c));
         }

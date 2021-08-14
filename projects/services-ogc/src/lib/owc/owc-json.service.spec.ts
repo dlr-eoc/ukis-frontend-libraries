@@ -1,25 +1,35 @@
-import { TestBed, getTestBed } from '@angular/core/testing/';
-import { OwcJsonService } from './owc-json.service';
-import { barebonesContext, basicContext, exampleContext, userGuideContext, wfsContext } from '../../../assets/exampleContext';
-import { coastalXTestContext } from '../../../assets/coastalx.test.context';
+import { TestBed } from '@angular/core/testing/';
+import { OwcJsonService, TmsLayertype } from './owc-json.service';
+import { barebonesContext, basicContext, exampleContext, zoomedContext } from '../../../assets/exampleContext';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { EocLitemap } from '@dlr-eoc/base-layers-raster';
-import { LayersService, RasterLayer, WmsLayertype, WmtsLayertype, Layer, 
-  VectorLayer, WfsLayertype, GeojsonLayertype } from '@dlr-eoc/services-layers';
+import { isRasterLayertype, isVectorLayertype, LayersService, RasterLayer } from '@dlr-eoc/services-layers';
+import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsContext } from './types/owc-json';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-
+import { EocLitemap } from '@dlr-eoc/base-layers-raster';
+import proj4 from 'proj4';
+import { register } from 'ol/proj/proj4';
 
 
 describe('OwcJsonService: reading data from owc', () => {
-  const allTestContexts = [barebonesContext, basicContext, exampleContext, coastalXTestContext, userGuideContext, wfsContext];
+  const allTestContexts = [barebonesContext, basicContext, zoomedContext, exampleContext];
   const targetProjection = 'EPSG:4326';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
+
+    proj4.defs(
+      'EPSG:25832',
+      '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+    );
+    proj4.defs(
+      'EPSG:3035',
+      '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+    );
+    register(proj4);
   });
 
   afterEach(() => {
@@ -33,7 +43,9 @@ describe('OwcJsonService: reading data from owc', () => {
       type: 'FeatureCollection',
       properties: {
         links: {
-          profiles: ['http://www.opengis.net/spec/owc-geojson/1.0/req/core'],
+          profiles: [{
+            href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
+          }],
         },
         lang: 'de',
         title: 'test context',
@@ -42,130 +54,66 @@ describe('OwcJsonService: reading data from owc', () => {
       features: []
     };
     expect(service.checkContext(context)).toBeTruthy();
-
-
-    const falseContext: any = {
-      "id": "ndvi",
-      "type": "FeatureCollection",
-      "bbox": [
-          8.0419921875,
-          47.025206001585396,
-          14.809570312499998,
-          50.764259357116465
-      ],
-      "properties": {
-          // "lang": "EN",
-          "links": [],
-          "title": "Wuekis NDVI OWC",
-          "updated": "2021-03-10T16:18:30Z"
-      },
-      "features": [
-          {
-              "id": "ndvi:AGRODE_S2_EVI_P1M",
-              "type": "Feature",
-              "geometry": null,
-              "properties": {
-                  "title": "AGRODE_S2_EVI_P1M",
-                  "updated": null,
-                  "links": null,
-                  "offerings": [
-                      {
-                          "code": "http://schemas.opengis.net/wms/1.1.1",
-                          "operations": [
-                              {
-                                  "code": "GetMap",
-                                  "method": "GET",
-                                  "type": "image/png",
-                                  "href": "https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.1.0&request=GetMap&layers=AGRODE_S2_EVI_P1M&srs=EPSG%3A4326&format=image/png"
-                              }
-                          ],
-                          "styles": [
-                              {
-                                  "title": "land:agrode-evi-mean",
-                                  "legendURL": "https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.1.0&request=GetLegendGraphic&layer=AGRODE_S2_EVI_P1M&srs=EPSG%3A4326&format=image/png&LEGEND_OPTIONS=forceLabels:on;fontAntiAliasing:true;",
-                                  "name": "land:agrode-evi-mean",
-                                  "default": true
-                              }
-                          ]
-                      }
-                  ],
-                  "categories": [],
-                  "customAttributes": {}
-              },
-              "bbox": [
-                  23.225,
-                  54.737,
-                  29.838,
-                  57.243
-              ]
-          }
-      ]
-    };
-    expect(service.checkContext(falseContext)).toBeFalsy();
-
   });
 
+  it('#createRasterLayerFromOffering should return an IRasterLayerOptions instance', (done) => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
-  // it('#layerGroupFromResource should properly create a LayerGroup-configuration', () => {
-  //   const service: OwcJsonService = TestBed.inject(OwcJsonService);
-  //   for(const context of allTestContexts) {
-  //     for(const resource of service.getResources(context)){
-
-  //       const layergroup = service.layerGroupFromResource(resource);
-
-  //       expect(layergroup.filtertype).toBe('Overlays');
-  //       // type is always 'overlays' per default - though this might change in the future.
-  //       expect(layergroup.id).toBe(resource.id as string);
-  //       expect(layergroup.name).toBe(resource.properties.title);
-  //       expect(layergroup.removable).toBe(true); // default
-  //       expect(layergroup.layerRemovable).toBe(false); // default
-  //       expect(layergroup.layers).toEqual([]); // layers initially not set. @TODO: is this deliberate?
-  //     }
-  //   }
-  // });
-
-
-  // @TODO: this method seems to be a stub. Shouldn't it return an array of ILayerOptions?
-  it('#getLayersFromResource should properly create an array of ILayerOptions?', () => { });
-
-
-  for (const context of allTestContexts) {
-    it(`#createRasterLayerFromOffering should return an IRasterLayerOptions instance for context ${context.id}`, (done) => {
-      const service: OwcJsonService = TestBed.inject(OwcJsonService);
-      let foundRasterLayer = false;
-
+    for (const context of allTestContexts) {
       for (const resource of service.getResources(context)) {
         for (const offering of resource.properties.offerings) {
           if (service.checkIfServiceOffering(offering)) {
 
             const operation = offering.operations[0];
             expect(operation).toBeTruthy();
-
             const layertype = service.getLayertypeFromOfferingCode(offering);
-            if (layertype === WmsLayertype || layertype === WmtsLayertype) {
-              foundRasterLayer = true;
+            if (isRasterLayertype(layertype)) {
+              const rLayer$ = service.createRasterLayerFromOffering(offering, resource, context, targetProjection);
 
-              const rlayerOptions$ = service.createRasterLayerFromOffering(offering, resource, context, targetProjection);
+              rLayer$.subscribe((rLayer: RasterLayer) => {
+                expect(rLayer.name).toBe(resource.properties.title);
+                expect(rLayer.id as string).toBe(resource.id as string);
+                expect(['Baselayers', 'Layers', 'Overlays'].includes(rLayer.filtertype)).toBeTrue();
+                expect(rLayer.type).toBe('wms');
+                expect(rLayer.url).toBe(operation.href.substr(0, operation.href.indexOf('?')));
 
-              rlayerOptions$.subscribe((layer: RasterLayer) => {
-                expect(layer instanceof Layer).toBeTrue();
-                expect(layer instanceof RasterLayer).toBeTrue();
+                // opacity is not encoded in owc-json per default. Always falling back to 1.
+                expect(rLayer.opacity).toBe(1);
 
-                expect(layer.name).toBe(resource.properties.title);
-                expect(layer.id as string).toBe(resource.id as string);
-                expect(layer.opacity).toBe(1); // opacity is not encoded in owc-json per default. Always falling back to 1.
-                // if active is not set in conext file, then it must default to true
-                expect(layer.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active);
+                // if active is not set in context file, then it must default to true
+                expect(rLayer.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active);
 
                 // 'removable' is not encoded in owc-json; falling back to 'true'
-                expect(layer.removable).toBe(true);
-                // all data in owc-json will - for now - be in 'Layers'. Might be changed in the future.
-                expect(layer.filtertype).toBe('Layers');
+                expect(rLayer.removable).toBe(true);
 
-                expect(layer.type).toBe('wms');
-                expect(layer.url).toBe(operation.href.substr(0, operation.href.indexOf('?')));
+                if (resource.properties.dimensions) {
+                  const timeDimension = resource.properties.dimensions.find(d => d.name === 'time');
+                  if (timeDimension) {
+                    expect(rLayer.dimensions.time).toBeTruthy();
+                  }
+                }
 
-                // @TODO: also check rlayerOptions.params
+                if (offering.styles && offering.styles[0]?.legendURL) {
+                  expect(rLayer.legendImg).toEqual(offering.styles[0].legendURL);
+                }
+
+                if (resource.properties.abstract) {
+                  expect(rLayer.description).toEqual(resource.properties.abstract);
+                }
+
+                if (resource.properties.minscaledenominator) {
+                  expect(rLayer.minZoom).toBeDefined();
+                }
+                if (resource.properties.minZoom) {
+                  expect(rLayer.minZoom).toEqual(resource.properties.minZoom);
+                }
+                if (resource.properties.maxscaledenominator) {
+                  expect(rLayer.maxZoom).toBeDefined();
+                }
+                if (resource.properties.maxZoom) {
+                  expect(rLayer.maxZoom).toEqual(resource.properties.maxZoom);
+                }
+
                 done();
               });
             }
@@ -173,23 +121,20 @@ describe('OwcJsonService: reading data from owc', () => {
           }
         }
       }
-      if (!foundRasterLayer) {
-        done();
-      }
-    }, 3000);
-  }
+    }
+  }, 3000);
 
   it('#createRasterLayerFromOffering should work properly with WMTS', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
   });
 
+  it('#createVectorLayerFromOffering should return a VectorLayer instance', (done) => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
-  for (const context of allTestContexts) {
-    it(`#createVectorLayerFromOffering should return an IVectorLayerOptions instance for context ${context.id}`, (done) => {
-      const service: OwcJsonService = TestBed.inject(OwcJsonService);
-      let foundVectorLayer = false;
+    let foundVectorLayer = false;
 
+    for (const context of allTestContexts) {
       for (const resource of service.getResources(context)) {
         for (const offering of resource.properties.offerings) {
           if (service.checkIfServiceOffering(offering)) {
@@ -197,40 +142,98 @@ describe('OwcJsonService: reading data from owc', () => {
             const operation = offering.operations[0];
             expect(operation).toBeTruthy();
             const layertype = service.getLayertypeFromOfferingCode(offering);
-            if (layertype === WfsLayertype || layertype === GeojsonLayertype) {
+            if (isVectorLayertype(layertype)) {
               foundVectorLayer = true;
 
-              service.createVectorLayerFromOffering(offering, resource).subscribe((layer) => {
-                expect(layer instanceof Layer).toBeTrue();
-                expect(layer instanceof VectorLayer).toBeTrue();
+              service.createVectorLayerFromOffering(offering, resource, context).subscribe((vLayer) => {
+                expect(vLayer.name).toBe(resource.properties.title);
+                expect(vLayer.id as string).toBe(resource.id as string);
+                expect(vLayer.removable).toBe(true); // 'removable' is not encoded in owc-json; falling back to 'true'
+                expect(['Baselayers', 'Layers', 'Overlays'].includes(vLayer.filtertype)).toBeTrue();
+                expect(vLayer.type).toBe('geojson'); // default
+                expect(vLayer.url).toBe(operation.href.substr(0, operation.href.indexOf('?')));
 
-                expect(layer.name).toBe(resource.properties.title);
-                expect(layer.id as string).toBe(resource.id as string);
-                expect(layer.opacity).toBe(1); // opacity is not encoded in owc-json per default. Always falling back to 1.
+                // opacity is not encoded in owc-json per default. Always falling back to 1.
+                expect(vLayer.opacity).toBe(1);
 
                 // if active is not set in context file, then it must default to true
-                expect(layer.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active);
-                // 'removable' is not encoded in owc-json; falling back to 'true'
-                expect(layer.removable).toBe(true);
-                // all data in owc-json will - for now - be in 'Layers'. Might be changed in the future.
-                expect(layer.filtertype).toBe('Layers');
+                expect(vLayer.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active);
 
-                expect(['geojson', 'wfs'].includes(layer.type)).toBeTrue();
-                expect(layer.url.substr(0, layer.url.indexOf('?'))).toBe(operation.href.substr(0, operation.href.indexOf('?')));
+                if (offering.styles && offering.styles[0]?.legendURL) {
+                  expect(vLayer.legendImg).toEqual(offering.styles[0].legendURL);
+                }
 
-                // @TODO: also check vlayerOptions.params
+                if (resource.properties.abstract) {
+                  expect(vLayer.description).toEqual(resource.properties.abstract);
+                }
+
                 done();
               });
             }
           }
         }
       }
-      if (!foundVectorLayer) {
-        done();
-      }
-    }, 3000);
-  }
+    }
 
+    if (!foundVectorLayer) {
+      done();
+    }
+
+  }, 3000);
+
+  it('#createLayerFromOffering should work with CustomLayers', (done) => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+
+    let foundCustomLayer = false;
+
+    for (const context of allTestContexts) {
+      for (const resource of service.getResources(context)) {
+        for (const offering of resource.properties.offerings) {
+          if (service.checkIfServiceOffering(offering)) {
+
+            const operation = offering.operations[0];
+            expect(operation).toBeTruthy();
+            const layertype = service.getLayertypeFromOfferingCode(offering);
+            if (layertype === TmsLayertype) {
+              foundCustomLayer = true;
+
+              const targetProjection = context.projections[0]?.code || 'EPSG:4326';
+              service.createTmsLayerFromOffering(offering, resource, context, targetProjection).subscribe((cLayer) => {
+                expect(cLayer.name).toBe(resource.properties.title);
+                expect(cLayer.id as string).toBe(resource.id as string);
+                expect(['Baselayers', 'Layers', 'Overlays'].includes(cLayer.filtertype)).toBeTrue();
+                expect(cLayer.type).toBe('custom');
+
+                // opacity is not encoded in owc-json per default. Always falling back to 1.
+                expect(cLayer.opacity).toBe(1);
+
+                // if active is not set in context file, then it must default to true
+                expect(cLayer.visible).toBe(resource.properties.active === undefined ? true : resource.properties.active);
+
+                // 'removable' is not encoded in owc-json; falling back to 'true'
+                expect(cLayer.removable).toBe(true);
+
+                if (offering.styles && offering.styles[0]?.legendURL) {
+                  expect(cLayer.legendImg).toEqual(offering.styles[0].legendURL);
+                }
+
+                if (resource.properties.abstract) {
+                  expect(cLayer.description).toEqual(resource.properties.abstract);
+                }
+
+                done();
+              });
+            }
+          }
+        }
+      }
+    }
+
+    if (!foundCustomLayer) {
+      done();
+    }
+
+  }, 3000);
 
   it('#getLegendUrl should return a proper url', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
@@ -248,25 +251,10 @@ describe('OwcJsonService: reading data from owc', () => {
   });
 
 
-  it('#getLayers should handle dimensions', (done) => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-
-    service.getLayers(basicContext, 'EPSG:4326').subscribe((layers: Layer[]) => {
-      for (const layer of layers) {
-        expect(layer instanceof Layer).toBeTrue();
-
-        expect(layer.dimensions).toBeTruthy();
-        expect(layer.dimensions.time?.units).toEqual('ISO8601');
-        expect(layer.dimensions.time?.values).toBeTruthy();
-      }
-      done();
-    });
-  }, 3000);
-
 });
 
 describe('OwcJsonService: writing data into owc', () => {
-  const allTestContexts = [barebonesContext, basicContext, exampleContext, coastalXTestContext];
+  const allTestContexts = [barebonesContext, basicContext, exampleContext];
   const targetProjection = 'EPSG:4326';
 
   beforeEach(() => {
@@ -279,63 +267,17 @@ describe('OwcJsonService: writing data into owc', () => {
   });
 
   it('#getLayers should properly restore a selection of layers from owc format created with #generateOwsContextFrom', (done) => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    const layersService: LayersService = TestBed.inject(LayersService);
-
-    const osmLayer = new EocLitemap({
+    const service: OwcJsonService = TestBed.get(OwcJsonService);
+    const layersService: LayersService = TestBed.get(LayersService);
+    const osm_layer = new EocLitemap(<any>{
       visible: true,
       legendImg: null
     });
-    layersService.addLayer(osmLayer, 'Baselayers');
-
-    const vectorLayer = new VectorLayer({
-      id: 'testLayer',
-      name: 'Test Layer',
-      type: 'geojson',
-      data: {
-        "type": "FeatureCollection",
-        "features": [
-          {
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-              "type": "Polygon",
-              "coordinates": [
-                [
-                  [
-                    -1.0546875,
-                    44.59046718130883
-                  ],
-                  [
-                    8.7890625,
-                    44.59046718130883
-                  ],
-                  [
-                    8.7890625,
-                    53.54030739150022
-                  ],
-                  [
-                    -1.0546875,
-                    53.54030739150022
-                  ],
-                  [
-                    -1.0546875,
-                    44.59046718130883
-                  ]
-                ]
-              ]
-            }
-          }
-        ]
-      },
-    });
-    layersService.addLayer(vectorLayer, 'Baselayers');
-
-
+    layersService.addLayer(osm_layer, 'Baselayers');
     layersService.getBaseLayers().subscribe(baselayers => {
       const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);
       service.getLayers(owc, targetProjection).subscribe((layers) => {
-        expect(layers.length).toEqual(2);
+        expect(layers.length).toBeTruthy();
         done();
       });
     });
@@ -391,15 +333,11 @@ describe('OwcJsonService: writing data into owc', () => {
     const context = service.generateOwsContextFrom('testcontext', [geojsonLayer], [-190, -90, 190, 90]);
 
     service.getLayers(context, targetProjection).subscribe(recoveredLayers => {
-      for (const layer of recoveredLayers) {
-        expect(layer instanceof Layer).toBeTrue();
-      }
-
       const recoveredLayer = recoveredLayers[0] as VectorLayer;
       // testing
       expect(recoveredLayer.id).toEqual(geojsonLayer.id);
       expect(JSON.parse(recoveredLayer.data)).toEqual(geojsonLayer.data);
-      // expect(recoveredLayer.options).toEqual(geojsonLayer.options); // we don't encode style.
+      // expect(recoveredLayer.options).toEqual(geojsonLayer.options); // we dont encode style.
 
       done();
     });

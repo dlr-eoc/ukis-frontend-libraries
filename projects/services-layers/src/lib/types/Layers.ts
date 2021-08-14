@@ -68,7 +68,13 @@ export const CustomLayertype = 'custom';
 export type TVectorLayertype = 'geojson' | 'wfs' | 'custom';
 export type TRasterLayertype = 'wms' | 'wmts' | 'xyz' | 'custom';
 export type TLayertype = TRasterLayertype | TVectorLayertype | string;
-export type TFiltertypes = 'Baselayers' | 'Overlays' | 'Layers';
+
+export const Filtertypes = {
+  Baselayers: 'Baselayers',
+  Overlays: 'Overlays',
+  Layers: 'Layers'
+} as const;
+export type TFiltertypes = keyof typeof Filtertypes;
 
 
 

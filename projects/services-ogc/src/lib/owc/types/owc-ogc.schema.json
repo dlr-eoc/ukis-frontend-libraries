@@ -1,0 +1,515 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "OWS Context JSON schema",
+  "type": "object",
+  "required": [
+    "type",
+    "id",
+    "properties"
+  ],
+  "properties": {
+    "type": {
+      "enum": [
+        "FeatureCollection"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "format": "uri"
+    },
+    "properties": {
+      "type": "object",
+      "required": [
+        "links",
+        "lang",
+        "title",
+        "updated"
+      ],
+      "properties": {
+        "links": {
+          "type": "object",
+          "required": [
+            "profiles"
+          ],
+          "properties": {
+            "profiles": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/links"
+              }
+            },
+            "via": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/links"
+              }
+            }
+          }
+        },
+        "lang": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "updated": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "authors": {
+          "$ref": "#/definitions/authors"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "generator": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "uri": {
+              "type": "string",
+              "format": "uri"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "display": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pixelWidth": {
+                "type": "number"
+              },
+              "pixelHeight": {
+                "type": "number"
+              },
+              "mmPerPixel": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "rights": {
+          "type": "string"
+        },
+        "bbox": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "number"
+          }
+        },
+        "date": {
+          "type": "string"
+        },
+        "categories": {
+          "$ref": "#/definitions/categories"
+        }
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "id",
+          "properties"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "enum": [
+              "Feature"
+            ]
+          },
+          "geometry": {
+            "$ref": "#/definitions/geometry"
+          },
+          "properties": {
+            "type": "object",
+            "required": [
+              "title",
+              "updated"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "abstract": {
+                "type": "string"
+              },
+              "updated": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "authors": {
+                "$ref": "#/definitions/authors"
+              },
+              "publisher": {
+                "type": "string"
+              },
+              "rights": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string"
+              },
+              "links": {
+                "type": "object",
+                "properties": {
+                  "previews": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/links"
+                    }
+                  },
+                  "alternates": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/links"
+                    }
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/links"
+                    }
+                  },
+                  "via": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/links"
+                    }
+                  }
+                }
+              },
+              "active": {
+                "enum": [
+                  true,
+                  false
+                ]
+              },
+              "categories": {
+                "$ref": "#/definitions/categories"
+              },
+              "minscaledenominator": {
+                "type": "number"
+              },
+              "maxscaledenominator": {
+                "type": "number"
+              },
+              "folder": {
+                "type": "string"
+              },
+              "offerings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "code"
+                  ],
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "operations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "code",
+                          "method",
+                          "href"
+                        ],
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "method": {
+                            "enum": [
+                              "GET",
+                              "POST",
+                              "PUT",
+                              "DELETE",
+                              "HEAD"
+                            ]
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "href": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "request": {
+                            "$ref": "#/definitions/content"
+                          },
+                          "result": {
+                            "$ref": "#/definitions/content"
+                          }
+                        }
+                      }
+                    },
+                    "contents": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/content"
+                      }
+                    },
+                    "styles": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "title"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "abstract": {
+                            "type": "string"
+                          },
+                          "default": {
+                            "enum": [
+                              true,
+                              false
+                            ]
+                          },
+                          "legendURL": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "content": {
+                            "$ref": "#/definitions/content"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "links": {
+      "title": "links",
+      "description": "Properties that all types of links have. It mimics the Atom link",
+      "required": [
+        "href"
+      ],
+      "properties": {
+        "href": {
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        }
+      }
+    },
+    "authors": {
+      "title": "authors",
+      "description": "Properties that all types of authors have. It mimics the Atom author",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "uri": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "categories": {
+      "title": "categories",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "term"
+        ],
+        "properties": {
+          "term": {
+            "type": "string"
+          },
+          "scheme": {
+            "type": "string",
+            "format": "uri"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "content": {
+      "title": "content",
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "geometry": {
+      "title": "geometry",
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "Point"
+              ]
+            },
+            "coordinates": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "LineString",
+                "Multipoint"
+              ]
+            },
+            "coordinates": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "Polygon",
+                "MultiLineString"
+              ]
+            },
+            "coordinates": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "MultiPolygon"
+              ]
+            },
+            "coordinates": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": [
+                "GeometryCollection"
+              ]
+            },
+            "geometries": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/geometry"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
