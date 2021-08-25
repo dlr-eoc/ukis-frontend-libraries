@@ -57,6 +57,7 @@
     "md5": "^2.2.1",
     "ogc-schemas": "^2.6.1",
     "ol": "~6.5.0",
+    "ol-mapbox-style": "^6.4.1",
     "opensearch-browser": "^2.0.0-alpha.5",
     "parse5-html-rewriting-stream": "^5.1.1",
     "proj4": "^2.7.2",
