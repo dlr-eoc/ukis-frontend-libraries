@@ -21,6 +21,7 @@
     "@michaellangbein/jsonix",
     "opensearch-browser",
     "luxon",
-    "proj4"
+    "proj4",
+    "ol-mapbox-style"
   ]
 }
