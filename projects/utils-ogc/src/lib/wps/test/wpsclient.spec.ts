@@ -139,7 +139,7 @@ describe(`Testing wps-client version 1.0.0 functionality`, () => {
 
 
 
-fdescribe(`Testing wps-client version 2.0.0 functionality`, () => {
+describe(`Testing wps-client version 2.0.0 functionality`, () => {
   const fakeWpsServer = new FakeWpsServer();
 
   beforeEach(() => {
@@ -179,7 +179,7 @@ fdescribe(`Testing wps-client version 2.0.0 functionality`, () => {
     expect(cl).toBeTruthy();
   });
 
-  fit('execute should work', (done) => {
+  it('execute should work', (done) => {
     const fakeHttpClient = TestBed.inject(HttpClient);
     const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
 
