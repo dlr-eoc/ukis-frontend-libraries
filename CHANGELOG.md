@@ -33,6 +33,9 @@
   - Fixed an issue with dynamic popups, where only the first popup on a raster-layer would be created, whereas all subsequent clicks would not lead to a new popup appearing.
 * **@dlr-eoc/layer-control:** 
   - Dynamic component layer Input lost its Instance (Type) [issue 80](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/80).
+* **@dlr-eoc/layer-control:**
+  - WPS 2.0.0: The encoding of literal inputs has been fixed. Previously, inputs of type "text/plain" were not anoted with the correct mime-type
+  - WPS 2.0.0: the `executeUrl` no longer contains url-parameters (conform with the JavaPS reference implementation)
 
 
 # [7.3.1](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v7.3.1) (2021-04-20) (fix package)

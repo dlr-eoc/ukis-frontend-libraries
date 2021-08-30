@@ -113,7 +113,8 @@ export class WpsMarshaller200 implements WpsMarshaller {
   }
 
   executeUrl(baseurl: string, processId: string): string {
-    return `${baseurl}?service=WPS&request=Execute&version=2.0.0&identifier=${processId}`;
+    // return `${baseurl}?service=WPS&request=Execute&version=2.0.0&identifier=${processId}`;
+    return baseurl;
   }
 
   unmarshalCapabilities(capabilities: WPSCapabilitiesType): WpsCapability[] {
@@ -259,6 +260,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
   }
 
   private marshalInputs(inputs: WpsData[]): DataInputType[] {
+
     return inputs.map(i => {
       if (i.description.reference) {
         return {
@@ -266,18 +268,30 @@ export class WpsMarshaller200 implements WpsMarshaller {
           reference: {
             href: i.value,
             mimeType: i.description.format,
+            schema: i.description.schema,
+            encoding: i.description.encoding || "UTF-8"
           }
         };
       } else {
         return {
           id: i.description.id,
           data: {
-            content: [JSON.stringify(i.value)],
-            mimeType: i.description.format
+            content: this.marshalInput(i),
+            mimeType: i.description.format,
+            // schema: i.description.schema,
+            // encoding: i.description.encoding || "UTF-8"
           }
         };
       }
     });
+  }
+
+  private marshalInput(i: WpsData): any {
+    if (i.description.type === 'literal') {
+      return [i.value];
+    } else {
+      return [JSON.stringify(i.value)];
+    }
   }
 
   private marshalOutputs(outputs: WpsDataDescription[]): OutputDefinitionType[] {

@@ -21,7 +21,8 @@
     "@michaellangbein/jsonix": "0.0.0-PLACEHOLDER-VENDOR",
     "tslib": "0.0.0-PLACEHOLDER-VENDOR",
     "opensearch-browser": "0.0.0-PLACEHOLDER-VENDOR",
-    "luxon": "0.0.0-PLACEHOLDER-VENDOR"
+    "luxon": "0.0.0-PLACEHOLDER-VENDOR",
+    "ol-mapbox-style": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",

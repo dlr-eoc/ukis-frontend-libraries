@@ -12,6 +12,10 @@ export interface WpsDataDescription {
   title: string;
   type: 'literal' | 'complex' | 'bbox' | 'status' | 'error';
   reference: boolean;
+  /** http://earthquake.usgs.gov/eqcenter/shakemap , ... */
+  schema?: string;
+  /** UTF-8, ... */
+  encoding?: string;
   format?: WpsDataFormat;
   description?: string;
   defaultValue?: any;
