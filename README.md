@@ -3,6 +3,7 @@
 
 ![CI](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/Test%20and%20Build%20CI/badge.svg)
 ![Npm Package](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/Package%20Main%20Release/badge.svg) ![Package Version](https://img.shields.io/github/v/tag/dlr-eoc/ukis-frontend-libraries?sort=semver)
+[![DOI](https://zenodo.org/badge/246639318.svg)](https://zenodo.org/badge/latestdoi/246639318)
 
 
 
