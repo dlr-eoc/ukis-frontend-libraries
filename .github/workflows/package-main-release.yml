@@ -35,6 +35,15 @@ jobs:
           npmPackageName: "@dlr-eoc/core-ui"
           tag: "${{ github.ref }}"
 
+  # create Release on tag push https://github.com/softprops/action-gh-release
+  gh-release:
+    needs: checkTagOnNpm
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Release
+        uses: softprops/action-gh-release@v1
+
   build:
     needs: checkTagOnNpm
     runs-on: ubuntu-latest
