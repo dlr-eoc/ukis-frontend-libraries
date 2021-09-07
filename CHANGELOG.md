@@ -28,6 +28,7 @@
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
+  - Remove popup if layer above has not the same popup event [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-914312627).
   - Popup `Popup.options` are not applied when using `PopupObjArray` [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94).
   - Fixed an issue in `MapOlService.zoomInOut()`
   - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.
