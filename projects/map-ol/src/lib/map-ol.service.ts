@@ -1660,7 +1660,12 @@ export class MapOlService {
 
       let overlayoptions = defaultOptions;
 
-      if (this.isPopupObj(layerpopup) && layerpopup.options) {
+      if (this.isPopupObjArray(layerpopup)) {
+        const objForEvent = layerpopup.find(p => this.popupEventIsBrowserEvent(p, browserEvent));
+        if (objForEvent.options) {
+          overlayoptions = Object.assign(defaultOptions, objForEvent.options);
+        }
+      } else if (this.isPopupObj(layerpopup) && layerpopup.options) {
         overlayoptions = Object.assign(defaultOptions, layerpopup.options);
       }
 
