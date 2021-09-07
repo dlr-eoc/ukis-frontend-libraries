@@ -1341,8 +1341,8 @@ export class MapOlService {
     const layerFilter = (layer) => {
       const layerpopup: Layer['popup'] = layer.get('popup');
       if (this.isPopupObjArray(layerpopup)) {
-        const cilickPopups = layerpopup.filter(p => this.isPopupObjMove(p));
-        if (cilickPopups.length) {
+        const movePopups = layerpopup.filter(p => this.isPopupObjMove(p));
+        if (movePopups.length) {
           return true;
         }
       } else {
@@ -1627,6 +1627,12 @@ export class MapOlService {
       movePopup.setPosition(coordinate);
     } else if (browserEvent.type === 'pointermove' && !event) {
       /** remove move popup if move on a click layer */
+      if (movePopup) {
+        this.removeAllPopups((item) => {
+          return item.get('addEvent') === 'pointermove';
+        });
+      }
+    } else if (browserEvent.type === 'pointermove' && event === 'click') {
       if (movePopup) {
         this.removeAllPopups((item) => {
           return item.get('addEvent') === 'pointermove';
