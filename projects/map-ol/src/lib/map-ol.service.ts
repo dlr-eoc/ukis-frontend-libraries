@@ -1701,7 +1701,12 @@ export class MapOlService {
       }
 
       const container = this.createPopupContainer(overlay, args, popupObj, html, event);
-      overlay.set('addEvent', browserEvent.type);
+      /** edge case when moving and clicking sometimes the browser event is not like the popup event */
+      if(overlay.getId() === moveID){
+        overlay.set('addEvent', 'pointermove');
+      }else{
+        overlay.set('addEvent', browserEvent.type);
+      }
       overlay.set(OVERLAY_TYPE_KEY, 'popup');
       overlay.setElement(container);
 
@@ -1714,7 +1719,13 @@ export class MapOlService {
 
       overlay.setPosition(coordinate);
 
-      this.map.addOverlay(overlay);
+      /**
+       * edge case prevent add multiple movePopup's
+       * only add a new popup if it's not a movePopup or there isn't a already existing movePopup
+       */
+      if(!(movePopup && event === 'move')){
+        this.map.addOverlay(overlay);
+      }
     }
   }
 
