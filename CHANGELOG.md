@@ -28,6 +28,7 @@
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
+  - Popups with event `move` are rendered under existing Popups with event `click` [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915283092).
   - Prevent popup with event `move` to get added multiple times in some cases [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915067198).
   - Remove popup if layer above has not the same popup event [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-914312627).
   - Popup `Popup.options` are not applied when using `PopupObjArray` [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94).

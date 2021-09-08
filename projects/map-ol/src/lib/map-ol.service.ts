@@ -1625,6 +1625,8 @@ export class MapOlService {
       const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
       movePopup.setElement(container);
       movePopup.setPosition(coordinate);
+      /** update movePopup to be rendered over the previous added popup */
+      movePopup.getElement().parentElement.style.zIndex = '1';
     } else if (browserEvent.type === 'pointermove' && !event) {
       /** remove move popup if move on a click layer */
       if (movePopup) {
