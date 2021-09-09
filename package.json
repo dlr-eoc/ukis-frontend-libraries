@@ -43,10 +43,9 @@
     "@angular/platform-browser": "^12.2.5",
     "@angular/platform-browser-dynamic": "^12.2.5",
     "@angular/router": "^12.2.5",
-    "@cds/core": "~5.1.1",
+    "@cds/core": "~5.5.3",
     "@clr/angular": "~12.0.3",
-    "@clr/core": "~4.0.13",
-    "@clr/icons": "~5.1.1",
+    "@clr/icons": "~12.0.3",
     "@clr/ui": "~12.0.3",
     "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
     "@schematics/angular": "^12.2.5",
@@ -59,7 +58,7 @@
     "ol": "~6.5.0",
     "ol-mapbox-style": "^6.4.1",
     "opensearch-browser": "^2.0.0-alpha.5",
-    "parse5-html-rewriting-stream": "^5.1.1",
+    "parse5-html-rewriting-stream": "^6.0.1",
     "proj4": "^2.7.2",
     "rxjs": "~6.6.7",
     "three": "^0.125.0",
@@ -133,7 +132,7 @@
     "karma-junit-reporter -tests"
   ],
   "engines": {
-    "node": ">= 10.13.0",
-    "npm": ">= 6.11.0"
+    "node": ">= 12.13.0",
+    "npm": ">= 6.12.0"
   }
 }
