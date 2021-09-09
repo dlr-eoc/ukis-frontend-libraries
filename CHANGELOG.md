@@ -1,13 +1,16 @@
 ### Breaking Changes
+* **@dlr-eoc/services-layers:**
+  - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
+
 * **@dlr-eoc/services-ogc:** 
-- `IEocOwsResourceDimensions` is removed.
-- `IEocOwsResourceDimension` [is changed](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L30).
-- `IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimension[]` is changed. Before it was [`IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimensions`](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L24)
-- `IEocOwsOffering.legendUrl?` is removed.
-- `OwcJsonService.getLayers()` returns now `Observable<(Layer | LayerGroup)[]>`.
-- `IOwsContext.properties.creator?: IOwsCreator` corrected to schema `IOwsContext.properties.generator?: IOwsGenerator;`.
-- `IOwsContext.properties.links: IOwsLinks[]` corrected to schema `IOwsContext.properties.links.profiles`
-- `IOwsAuthor`, `IOwsCategory` and `IOwsOperation` corrected to schema.
+  - `IEocOwsResourceDimensions` is removed.
+  - `IEocOwsResourceDimension` [is changed](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L30).
+  - `IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimension[]` is changed. Before it was [`IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimensions`](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L24)
+  - `IEocOwsOffering.legendUrl?` is removed.
+  - `OwcJsonService.getLayers()` returns now `Observable<(Layer | LayerGroup)[]>`.
+  - `IOwsContext.properties.creator?: IOwsCreator` corrected to schema `IOwsContext.properties.generator?: IOwsGenerator;`.
+  - `IOwsContext.properties.links: IOwsLinks[]` corrected to schema `IOwsContext.properties.links.profiles`
+  - `IOwsAuthor`, `IOwsCategory` and `IOwsOperation` corrected to schema.
 
 
 ### Features

@@ -119,8 +119,6 @@ export interface ILayerOptions {
   displayName?: string;
   description?: string;
   time?: string;
-  /** zIndex: DEPRECIATED handeld internal by the layer service */
-  zIndex?: number;
   minResolution?: number;
   maxResolution?: number;
   minZoom?: number;
