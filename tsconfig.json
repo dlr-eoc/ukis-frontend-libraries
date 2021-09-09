@@ -28,6 +28,9 @@
       ],
       "ol/*": [
         "node_modules/ol/src/*"
+      ],
+      "path": [
+        "./node_modules/path-browserify"
       ]
     },
     "allowJs": true
