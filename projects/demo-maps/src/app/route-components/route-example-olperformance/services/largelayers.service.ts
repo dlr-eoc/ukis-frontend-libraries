@@ -6,19 +6,17 @@ import { Vector as OlVectorLayer } from 'ol/layer';
 import { MVT } from 'ol/format';
 import { VectorTile as VectorTileLayer } from 'ol/layer';
 import { VectorTile as VectorTileSource } from 'ol/source';
-import { WFS, GeoJSON } from 'ol/format';
-import { equalTo, like, and } from 'ol/format/filter';
-import {get as getProjection, getTransform} from 'ol/proj';
-import {register} from 'ol/proj/proj4';
+import { GeoJSON } from 'ol/format';
+import { get as getProjection, getTransform } from 'ol/proj';
+import { register } from 'ol/proj/proj4';
 import proj4 from 'proj4';
 import { HttpClient } from '@angular/common/http';
-import { LayersService, VectorLayer, CustomLayer } from '@dlr-eoc/services-layers';
+import { CustomLayer } from '@dlr-eoc/services-layers';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import { Observable } from 'rxjs';
-import { all, bbox, tile } from 'ol/loadingstrategy';
+import { all, bbox } from 'ol/loadingstrategy';
 
 
-export type DataStrategy =  'all' | 'bbox' | 'tile' | 'simplifyGeometry' | 'noProps';
+export type DataStrategy = 'all' | 'bbox' | 'tile' | 'simplifyGeometry' | 'noProps';
 
 
 @Injectable({
@@ -74,7 +72,7 @@ export class LargeLayersService {
             this.http.get(this.getRequestUrl(srsCode, extent)).subscribe((data) => {
               const features = new GeoJSON().readFeatures(data);
               for (const feature of features) {
-                feature.geometry = feature.getGeometry().simplify(1000);
+                (feature as any).geometry = feature.getGeometry().simplify(1000);
               }
               simplifiedSource.addFeatures(features);
             });

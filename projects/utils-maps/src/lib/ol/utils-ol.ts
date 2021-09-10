@@ -29,6 +29,7 @@ export function flattenLayers(layers: BaseLayer[]): Layer<any>[] {
 
 
 
+/** Experimental: This is an experimental technology Check the Browser compatibility table carefully before using this in production. */
 /**
  * Merges all layers of a map into one canvas image.
  * Assumes that the ``targetCanvas`` has the same size as the map! If it doesn't, use `scaledMapToSingleCanvas` instead.

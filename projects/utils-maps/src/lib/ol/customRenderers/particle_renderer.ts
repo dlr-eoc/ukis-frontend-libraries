@@ -2,6 +2,8 @@ import { Feature } from 'ol';
 import { FrameState } from 'ol/PluggableMap';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorLayer from 'ol/layer/Vector';
+import Geometry from 'ol/geom/Geometry';
+import { Vector as VectorSource } from 'ol/source';
 import Point from 'ol/geom/Point';
 import Delaunator from 'delaunator';
 import { Shader, Framebuffer, Program, Uniform, Texture, renderLoop, Attribute } from '../../webgl/engine.core';
@@ -9,7 +11,7 @@ import { rectangleA } from '../../webgl/engine.shapes';
 import { flattenRecursive } from '../../webgl/utils';
 
 
-export class WindFieldLayer extends VectorLayer {
+export class WindFieldLayer extends VectorLayer<VectorSource<Geometry>> {
     constructor(options) {
         super(options);
     }
@@ -38,7 +40,7 @@ export class WindFieldLayer extends VectorLayer {
  * With this, we can create a multi-step-pipeline, where each shader uses the previous
  * one's output as its own input.
  */
-export class ParticleRenderer extends LayerRenderer<VectorLayer> {
+export class ParticleRenderer extends LayerRenderer<VectorLayer<VectorSource<Geometry>>> {
 
 
     readonly canvas: HTMLCanvasElement;
@@ -51,7 +53,7 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
     readonly particleFb2: Framebuffer;
     private fps = 30;
 
-    constructor(layer: VectorLayer) {
+    constructor(layer: VectorLayer<VectorSource<Geometry>>) {
         super(layer);
 
         // setting up canvas
@@ -314,7 +316,7 @@ export class ParticleRenderer extends LayerRenderer<VectorLayer> {
         return this.canvas;
     }
 
-    
+
     renderDeclutter(frameState: FrameState) {
     }
 

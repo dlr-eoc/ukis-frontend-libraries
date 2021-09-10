@@ -3,6 +3,7 @@ import { FrameState } from 'ol/PluggableMap';
 import LayerRenderer from 'ol/renderer/Layer';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import VectorLayer from 'ol/layer/Vector';
+import Geometry from 'ol/geom/Geometry';
 import Point from 'ol/geom/Point';
 import { Vector as VectorSource, Cluster as olCluster } from 'ol/source';
 import { replaceChildren } from 'ol/dom';
@@ -41,7 +42,7 @@ export interface InterpolationRendererSettings {
 }
 
 
-export class InterpolationLayer extends VectorLayer {
+export class InterpolationLayer extends VectorLayer<VectorSource<Geometry>> {
 
     readonly options: InterpolationLayerOptions;
 
@@ -85,7 +86,7 @@ export class InterpolationLayer extends VectorLayer {
  * While you can change the color-ramp at runtime, it's length is hardcoded in the colorization shader, so you'd have to recompile it to properly reflect the new ramp.
  * In the same way, the interpolation-shader has the number of observations baked into it. When new data becomes available, you must recompile the interpolation shader.
  */
-export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
+export class InterpolationRenderer extends LayerRenderer< VectorLayer<VectorSource<Geometry>>> {
 
     private container: HTMLDivElement;
     private pointRenderer: CanvasVectorLayerRenderer;
@@ -101,7 +102,7 @@ export class InterpolationRenderer extends LayerRenderer<VectorLayer> {
     private projection: Projection;
     private bbox: number[];
 
-    constructor(layer: VectorLayer, private settings: InterpolationRendererSettings) {
+    constructor(layer: VectorLayer<VectorSource<Geometry>>, private settings: InterpolationRendererSettings) {
         super(layer);
 
         // setting up HTML element

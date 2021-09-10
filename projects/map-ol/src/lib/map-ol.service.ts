@@ -9,6 +9,7 @@ import { ViewOptions as olViewOptions } from 'ol/View';
 
 import olBaseLayer from 'ol/layer/Base';
 import olSource from 'ol/source/Source';
+import olGeometry from 'ol/geom/Geometry';
 import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
@@ -24,6 +25,7 @@ import olVectorTile from 'ol/source/VectorTile';
 
 
 import olXYZ from 'ol/source/XYZ';
+import olTileSource from 'ol/source/Tile';
 
 import { ImageWMS as olImageWMS, ImageStatic as olImageStatic } from 'ol/source';
 import { Options as olXYZOptions } from 'ol/source/XYZ';
@@ -268,7 +270,8 @@ export class MapOlService {
     Object.assign(options, dragBoxOptions);
     const dragBox = new DragBox(dragBoxOptions);
     if (onBoxStart) {
-      dragBox.on('boxstart', (evt) => {
+      /** TODO: check Types on the next ol update */
+      (dragBox as any).on('boxstart', (evt) => {
         onBoxStart(evt);
       });
     }
@@ -493,7 +496,8 @@ export class MapOlService {
           const listeners = olLayer.getListeners(e.event);
           /** only add listener if it was not registered on the olLayer object (for CustomLayer) */
           if (!listeners) {
-            olLayer.on(e.event, e.listener);
+            /** TODO: check Types on the next ol update - we only define a string so the user has to check if the right event is used */
+            olLayer.on(e.event as any, e.listener);
           }
         });
       }
@@ -503,24 +507,25 @@ export class MapOlService {
           const listeners = olSource.getListeners(e.event);
           /** only add listener if it was not registered on the olSource object (for CustomLayer) */
           if (!listeners) {
-            olSource.on(e.event, e.listener);
+            /** TODO: check Types on the next ol update - we only define a string so the user has to check if the right event is used */
+            olSource.on(e.event as any, e.listener);
           }
         });
       }
     }
   }
 
-
+  /** TODO: try to remove/replace this function - Property 'disposeInternal' is protected ol function */
   private removeListenersFromOldLayers(layers: Array<olBaseLayer | olLayerGroup>) {
     const disposeLayerInternal = (layer: olBaseLayer) => {
       if (layer.hasListener()) {
-        layer.disposeInternal();
+        (layer as any).disposeInternal();
       }
       if (typeof (layer as any).getSource === 'function') {
         const source = (layer as any).getSource() as olSource;
         if (source) {
           if (source.hasListener()) {
-            source.disposeInternal();
+            (source as any).disposeInternal();
           }
         }
       }
@@ -705,7 +710,7 @@ export class MapOlService {
 
 
   private create_layers(newLayer: Layer) {
-    let newOlLayer: olTileLayer | olVectorLayer | olBaseLayer;
+    let newOlLayer: olTileLayer<olTileSource> | olVectorLayer<olVectorSource<olGeometry>> | olBaseLayer;
     switch (newLayer.type) {
       case 'xyz':
         newOlLayer = this.create_xyz_layer(newLayer as RasterLayer);
@@ -732,7 +737,7 @@ export class MapOlService {
   /**
    * define layer types
    */
-  private create_xyz_layer(l: RasterLayer): olTileLayer {
+  private create_xyz_layer(l: RasterLayer): olTileLayer<olTileSource> {
     const xyzOptions: olXYZOptions = {
       wrapX: false
     };
@@ -798,7 +803,7 @@ export class MapOlService {
     return newlayer;
   }
 
-  private create_wms_layer(l: WmsLayer): olTileLayer {
+  private create_wms_layer(l: WmsLayer): olTileLayer<olTileSource> {
 
     const tileOptions: olTileWMSOptions = {
       /** use assign here otherwise params is passed by object reference to the openlayers layer! */
@@ -877,7 +882,7 @@ export class MapOlService {
     return newlayer;
   }
 
-  private create_wmts_layer(l: WmtsLayer): olTileLayer {
+  private create_wmts_layer(l: WmtsLayer): olTileLayer<olTileSource> {
     if (l instanceof WmtsLayer) {
 
       let tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts');
@@ -980,7 +985,7 @@ export class MapOlService {
     }
   }
 
-  private create_wfs_layer(l: VectorLayer): olVectorLayer {
+  private create_wfs_layer(l: VectorLayer): olVectorLayer<olVectorSource<olGeometry>> {
 
     const url = new URL(l.url);
     // making sure that srsname is set to current projection
@@ -1704,9 +1709,9 @@ export class MapOlService {
 
       const container = this.createPopupContainer(overlay, args, popupObj, html, event);
       /** edge case when moving and clicking sometimes the browser event is not like the popup event */
-      if(overlay.getId() === moveID){
+      if (overlay.getId() === moveID) {
         overlay.set('addEvent', 'pointermove');
-      }else{
+      } else {
         overlay.set('addEvent', browserEvent.type);
       }
       overlay.set(OVERLAY_TYPE_KEY, 'popup');
@@ -1725,7 +1730,7 @@ export class MapOlService {
        * edge case prevent add multiple movePopup's
        * only add a new popup if it's not a movePopup or there isn't a already existing movePopup
        */
-      if(!(movePopup && event === 'move')){
+      if (!(movePopup && event === 'move')) {
         this.map.addOverlay(overlay);
       }
     }

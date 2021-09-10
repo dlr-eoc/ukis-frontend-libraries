@@ -34,6 +34,8 @@ import olRotate from 'ol/control/Rotate';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olMapEvent from 'ol/MapEvent';
 import { Control as olControl } from 'ol/control';
+import olVectorSource from 'ol/source/Vector';
+import olGeometry from 'ol/geom/Geometry';
 import olSourceCluster from 'ol/source/Cluster';
 import olVectorLayer from 'ol/layer/Vector';
 
@@ -258,7 +260,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
-  private updateWfsLayerParamsWith(oldLayer: olVectorLayer, newLayer: VectorLayer) {
+  private updateWfsLayerParamsWith(oldLayer: olVectorLayer<olVectorSource<olGeometry>>, newLayer: VectorLayer) {
 
     // step 1: update style
     if (newLayer.options && newLayer.options.style !== oldLayer.getStyle()) {
@@ -274,7 +276,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   /**
    * TODO: set all other props of GeoJsonLayer.options and GeoJsonLayer.cluster (see: IVectorLayerOptions)
    */
-  updateGeojsonLayerParamsWith(oldLayer: olVectorLayer, newGeojsonLayer: VectorLayer) {
+  updateGeojsonLayerParamsWith(oldLayer: olVectorLayer<olVectorSource<olGeometry>>, newGeojsonLayer: VectorLayer) {
     const oldSource = oldLayer.getSource();
     if (oldSource) {
       if (newGeojsonLayer.data) {
