@@ -13,6 +13,8 @@ import olVectorLayer from 'ol/layer/Vector';
 import olTileLayer from 'ol/layer/Tile';
 import olLayerGroup from 'ol/layer/Group';
 import olVectorSource from 'ol/source/Vector';
+import olTileSource from 'ol/source/Tile';
+import olGeometry from 'ol/geom/Geometry';
 import olGeoJSON from 'ol/format/GeoJSON';
 import { MapOlService } from './map-ol.service';
 
@@ -122,7 +124,7 @@ describe('MapOlComponent', () => {
     expect((component.layersSvc.getLayerById(vectorLayer.id) as VectorLayer).data.features.length).toEqual(1);
 
     // layer is present on map
-    const layer = component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer;
+    const layer = component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer<olVectorSource<olGeometry>>;
     expect(layer).toBeTruthy();
     expect(layer.getProperties()['id']).toEqual(vectorLayer.id);
     expect(layer.getSource().getFeatures().length).toEqual(1);
@@ -135,7 +137,7 @@ describe('MapOlComponent', () => {
 
     component.layersSvc.updateLayer(vectorLayer);
     // now, after calling `updateLayer`, the data is present on the ol-layer
-    expect((component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer).getSource().getFeatures().length).toEqual(4);
+    expect((component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer<olVectorSource<olGeometry>>).getSource().getFeatures().length).toEqual(4);
   });
 
   it('should use the correct z-index for Ukis-custom-layers even if they contain an olLayerGroup', () => {
@@ -303,7 +305,7 @@ describe('MapOlComponent', () => {
       }
     });
     service.setUkisLayer(ukisWmtsLayer, 'Layers');
-    const olWmtsLayer = service.getLayerByKey({ key: 'id', value: 'ID-ukis-wmts' }) as olTileLayer;
+    const olWmtsLayer = service.getLayerByKey({ key: 'id', value: 'ID-ukis-wmts' }) as olTileLayer<olTileSource>;
 
     // this data-structure keeps track of the state of the dynamic components
     // that are being created inside popups

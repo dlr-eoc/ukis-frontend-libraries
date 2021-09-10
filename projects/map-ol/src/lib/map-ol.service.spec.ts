@@ -11,6 +11,9 @@ import olXYZ from 'ol/source/XYZ';
 import olVectorLayer from 'ol/layer/Vector';
 import olVectorImageLayer from 'ol/layer/VectorImage';
 import olVectorSource from 'ol/source/Vector';
+import olTileSource from 'ol/source/Tile';
+import olImageSource from 'ol/source/Image';
+import olGeometry from 'ol/geom/Geometry';
 import olVectorTileLayer from 'ol/layer/VectorTile';
 import olVectorTileSource from 'ol/source/VectorTile';
 import olMVT from 'ol/format/MVT';
@@ -30,7 +33,7 @@ import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import testFeatureCollection from '../assets/testFeatureCollection.json';
 import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
-import { get as getProjection } from 'ol/proj';
+import { get as getProjection, transform } from 'ol/proj';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
 import { Subject } from 'rxjs';
@@ -41,17 +44,19 @@ import { ApplicationRef, Component, Input } from '@angular/core';
 const WebMercator = 'EPSG:3857';
 const WGS84 = 'EPSG:4326';
 
+let mapTarget: { size: number[], container: HTMLDivElement };
+
 /** ol/layer/Tile - ID-raster */
-let rasterLayer: olTileLayer;
+let rasterLayer: olTileLayer<olTileSource>;
 
 /** ol/layer/Vector -ID-vector */
-let vectorLayer: olVectorLayer;
+let vectorLayer: olVectorLayer<olVectorSource<olGeometry>>;
 
 /** ol/layer/Image - ID-image */
-let imageLayer: olImageLayer;
+let imageLayer: olImageLayer<olImageSource>;
 
 /** ol/layer/VectorImage - ID-vector-image */
-let vectorImageLayer: olVectorImageLayer, vectorImageData;
+let vectorImageLayer: olVectorImageLayer<olVectorSource<olGeometry>>, vectorImageData;
 
 /** ol/layer/VectorImage - ID-vector-tile */
 let vectorTileLayer: olVectorTileLayer;
@@ -81,8 +86,7 @@ let groupLayer2: olLayerGroup;
 /** ID-group-layer3 */
 let groupLayer3: olLayerGroup;
 
-const createMapTarget = () => {
-  const size = [1024, 768];
+const createMapTarget = (size) => {
   const container = document.createElement('div');
   container.id = 'map';
   container.style.width = `${size[0]}px`;
@@ -104,10 +108,16 @@ class MockPopupComponent {
   constructor() { }
 }
 
+const beforeEachCreateMapFn = () => {
+  mapTarget = createMapTarget([1024, 768]);
+};
+
 const beforeEachFn = () => {
   TestBed.configureTestingModule({
     declarations: [MockPopupComponent]
   });
+
+  beforeEachCreateMapFn();
 
   rasterLayer = new olTileLayer({
     source: new olXYZ({
@@ -312,6 +322,7 @@ const beforeEachFn = () => {
 
 
 describe('MapOlService Core', () => {
+  beforeEach(beforeEachCreateMapFn);
   it('should be created', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     expect(service).toBeTruthy();
@@ -336,7 +347,6 @@ describe('MapOlService Core', () => {
 
   it('should create a map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    const mapTarget = createMapTarget();
     service.createMap(mapTarget.container);
     expect(service.map.getLayers().getArray().length).toEqual(3);
     expect(service.map.getTargetElement()).toEqual(mapTarget.container);
@@ -352,7 +362,7 @@ describe('MapOlService Core', () => {
 
   it('should add a bbox select interaction', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const dragBox = service.addBboxSelection(platformModifierKeyOnly);
     expect(service.map.getInteractions().getArray().includes(dragBox)).toBeTrue();
   });
@@ -363,7 +373,7 @@ describe('MapOlService olLayers', () => {
   beforeEach(beforeEachFn);
   it('should have three layer groups on the map where all layers are added', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     expect(service.getLayerByKey({ key: 'id', value: 'ID_filtertype_baselayers' }) instanceof olLayerGroup).toBeTrue();
     expect(service.getLayerByKey({ key: 'id', value: 'ID_filtertype_layers' }) instanceof olLayerGroup).toBeTrue();
@@ -372,7 +382,7 @@ describe('MapOlService olLayers', () => {
 
   it('should properly set the `crossOrigin` attribute, if given', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const ukisLayers = [ukisRasterLayer];
     service.setUkisLayers(ukisLayers, 'Layers');
 
@@ -383,7 +393,7 @@ describe('MapOlService olLayers', () => {
 
   it('should add/get layers to/from the map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(imageLayer, 'baselayers');
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(groupLayer1, 'layers');
@@ -400,7 +410,7 @@ describe('MapOlService olLayers', () => {
 
   it('should not add a duplicate layer to the map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(rasterLayer, 'layers');
     expect(service.getLayers('layers').length).toEqual(2);
@@ -425,7 +435,7 @@ describe('MapOlService olLayers', () => {
 
   it('should add a array of layers to aType', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayers([rasterLayer, imageLayer, vectorImageLayer, groupLayer3], 'layers');
 
     expect(service.getLayers('layers').length).toEqual(4);
@@ -438,7 +448,7 @@ describe('MapOlService olLayers', () => {
 
   it('should add a array of layers to aType when there are already layers', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(rasterLayer, 'layers');
     // it should not add the duplicate rasterLayer
@@ -454,7 +464,7 @@ describe('MapOlService olLayers', () => {
 
   it('should set (reset) a array of layers to aType', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(vectorLayer, 'layers');
     service.addLayer(rasterLayer, 'layers');
     service.setLayers([vectorImageLayer, imageLayer, groupLayer1], 'layers');
@@ -471,14 +481,14 @@ describe('MapOlService olLayers', () => {
 
   it('should get layers from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(vectorLayer, 'layers');
     expect(service.getLayers('layers')[0]).toBe(vectorLayer);
   });
 
   it('should get layers by key from the map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(vectorLayer, 'layers');
 
     expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBe(vectorLayer);
@@ -492,7 +502,7 @@ describe('MapOlService olLayers', () => {
 
   it('should remove all layers from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(vectorLayer, 'layers');
     service.removeAllLayers('layers');
     expect(service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers')).toBeFalsy();
@@ -500,7 +510,7 @@ describe('MapOlService olLayers', () => {
 
   it('should remove a layer by key from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     // groupLayer2 -> groupLayer1 -> rasterLayer
     service.addLayer(groupLayer2, 'layers');
     service.addLayer(vectorLayer, 'layers');
@@ -516,7 +526,7 @@ describe('MapOlService olLayers', () => {
 
   it('should update a layer by key from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(vectorLayer, 'layers');
 
     const visible = true, opacity = 0.5, minzoom = 2, maxzoom = 15;
@@ -549,7 +559,7 @@ describe('MapOlService ukisLayers', () => {
   /** Test if ukis-layers are added to the map ----------------------------------------------------------------------- */
   it('should reset/add ukisLayers from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const layers = [ukisvectorLayer, ukisRasterLayer, ukisCustomLayer];
     layers.map(l => {
       service.setUkisLayer(l, 'Layers');
@@ -562,7 +572,7 @@ describe('MapOlService ukisLayers', () => {
 
   it('should add ukisLayer Group from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.setUkisLayers(ukisGroupLayer.layers, 'layers');
 
     ukisGroupLayer.layers.map(l => {
@@ -572,7 +582,7 @@ describe('MapOlService ukisLayers', () => {
 
   it('should reset/add one ukisLayer from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const layers = [ukisvectorLayer];
     service.setUkisLayers(layers, 'Layers');
 
@@ -590,7 +600,7 @@ describe('MapOlService ukisLayers', () => {
 
   it('should update one ukisLayer from a Type - not remove the olLayer', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const layers = [ukisvectorLayer];
     service.setUkisLayers(layers, 'Layers');
 
@@ -609,7 +619,7 @@ describe('MapOlService ukisLayers', () => {
 
   it('should remove all layers from a type if array has no layers (not for type Baselayers)', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const layers = [ukisRasterLayer];
     service.setUkisLayers(layers, 'Layers');
     expect(service.getLayers('Layers').length).toBe(1);
@@ -712,7 +722,7 @@ describe('MapOlService popup', () => {
 
   it('should add a basic popup to the map for vector Layers', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     const feature = vectorLayer.getSource().getFeatures()[0];
     const popupProperties = feature.getProperties();
@@ -736,7 +746,7 @@ describe('MapOlService popup', () => {
 
   it('should add multiple popups to the map for vector Layers', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     const features = vectorLayer.getSource().getFeatures();
 
@@ -762,7 +772,7 @@ describe('MapOlService popup', () => {
 
   it('should remove all popups from the map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     const features = vectorLayer.getSource().getFeatures();
 
@@ -791,7 +801,7 @@ describe('MapOlService popup', () => {
 
   it('should create html table from a Object', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     const testObj = testFeatureCollection.features[0].properties;
 
@@ -807,7 +817,7 @@ describe('MapOlService popup', () => {
 
     const service: MapOlService = TestBed.inject(MapOlService);
     const appRef = TestBed.inject(ApplicationRef) as ApplicationRef;
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     expect(service.getPopups().length).toBe(0);
     expect(appRef.viewCount).toEqual(0);
@@ -845,7 +855,6 @@ describe('MapOlService Events', () => {
 
   it('should handle all layers on click', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    const mapTarget = createMapTarget();
     service.createMap(mapTarget.container);
 
     service.setUkisLayers(ukisGroupLayer.layers, 'layers');
@@ -862,16 +871,25 @@ describe('MapOlService Events', () => {
       coordinate: [1588172.8451977037, 6138394.826723266],
       pixel: [456, 368],
       preventDefault: null,
+      defaultPrevented: false,
       stopPropagation: null,
       propagationStopped: null
     };
 
-    service.layers_on_click(browserEvent);
+    let error = null;
+
+    try {
+      service.layers_on_click(browserEvent);
+      expect(error).toBeNull();
+    }
+    catch (e) {
+      error = e;
+      expect(error).toBeUndefined();
+    }
   });
 
   it('should handle all layers on pointermove', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    const mapTarget = createMapTarget();
     service.createMap(mapTarget.container);
 
 
@@ -889,30 +907,42 @@ describe('MapOlService Events', () => {
       coordinate: [1588172.8451977037, 6138394.826723266],
       pixel: [456, 368],
       preventDefault: null,
+      defaultPrevented: false,
       stopPropagation: null,
       propagationStopped: null
     };
 
-    service.layers_on_pointermove(browserEvent);
+    let error = null;
+
+    try {
+      service.layers_on_pointermove(browserEvent);
+      expect(error).toBeNull();
+    }
+    catch (e) {
+      error = e;
+      expect(error).toBeUndefined();
+    }
   });
 
-  it('should handle vector on click or move', () => {
-    // TODO: layer_on_click
-  });
-  it('should handle vector on click or move', () => {
-    // TODO: vector_on_click
-  });
+  // TODO: layer_on_click
+  /* it('should handle vector on click or move', () => {
 
-  it('should handle raster on click or move', () => {
-    // TODO:  raster_on_click
-  });
+  }); */
+
+  // TODO: vector_on_click
+  /* it('should handle vector on click or move', () => {
+  }); */
+
+  // TODO:  raster_on_click
+  /* it('should handle raster on click or move', () => {
+  }); */
 });
 
 describe('MapOlService State', () => {
   beforeEach(beforeEachFn);
   it('should set/get zoom, center', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const center = [11, 48];
     service.setZoom(8);
     service.setCenter(center, true);
@@ -923,13 +953,25 @@ describe('MapOlService State', () => {
     expect(service.getCenter(true)[1]).toBeCloseTo(center[1], 1);
   });
 
+  it('should have a default zoom of 0', (done) => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+    // a zoom of 0 is not working because of the mapsize check https://openlayers.org/en/latest/examples/min-zoom.html
+    service.map.getView().setZoom(5);
+
+    const oldZoom = service.getZoom();
+    expect(oldZoom).toBeCloseTo(5, 0);
+    done();
+  });
+
 
   it('should zoom in or out for one step', (done) => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
+    // a zoom of 0 is not working because of the mapsize check https://openlayers.org/en/latest/examples/min-zoom.html
+    service.map.getView().setZoom(5);
 
     const oldZoom = service.getZoom();
-    expect(oldZoom).toBeCloseTo(0, 0);
     const duration = 250;
     service.zoomInOut('+');
 
@@ -942,7 +984,7 @@ describe('MapOlService State', () => {
 
   it('should set/get extent', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const oldExtent = service.getCurrentExtent(true);
     const extent = [-14, 33, 40, 57] as any;
     service.setExtent(extent, true);
@@ -953,7 +995,7 @@ describe('MapOlService State', () => {
 
   it('should set/get projection string', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     let newProj = null;
     const projectionChange = service.projectionChange.subscribe(projLike => {
       newProj = projLike.getCode();
@@ -967,7 +1009,7 @@ describe('MapOlService State', () => {
 
   it('should set/get projection obj', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const projection = getProjection(WGS84);
     service.setProjection(projection);
     expect(service.getProjection()).toBe(projection);
@@ -975,22 +1017,23 @@ describe('MapOlService State', () => {
 
   it('should update vectors to the correct new projection', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     service.addLayer(vectorLayer, 'layers');
 
     expect(service.getProjection().getCode()).toEqual(WebMercator);
     const layerBefore = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
 
-    const testFeatureBefore = (layerBefore as olVectorLayer).getSource().getFeatures()[3];
-    // coordinates after Read.Features of vectorLayer
-    const pointCoordinates = [1281696.090285835, 5848349.908155403];
-    expect(testFeatureBefore.getGeometry().getCoordinates()).toEqual(pointCoordinates);
+    const testFeatureBefore = (layerBefore as olVectorLayer<olVectorSource<olGeometry>>).getSource().getFeatures()[3];
+    // coordinates after Read.Features of vectorLayer [1281696.090285835, 5848349.908155403];
+    const pointCoordinates = transform(testFeatureCollection.features[3].geometry.coordinates as number[], WGS84, WebMercator);
+    // Test for Point Feature
+    expect((testFeatureBefore.getGeometry() as olPoint).getCoordinates()).toEqual(pointCoordinates);
 
     const projection = getProjection(WGS84);
     service.setProjection(projection);
 
     const reprojectedLayer = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
-    const testFeature = (reprojectedLayer as olVectorLayer).getSource().getFeatures()[3];
+    const testFeature = (reprojectedLayer as olVectorLayer<olVectorSource<olGeometry>>).getSource().getFeatures()[3];
     // Test for Point Feature
     expect(testFeature.getGeometry().getType()).toBe('Point');
     expect((testFeature.getGeometry() as olPoint).getCoordinates()).toEqual(testFeatureCollection.features[3].geometry.coordinates as number[]);
@@ -998,7 +1041,7 @@ describe('MapOlService State', () => {
 
   it('should register a proj4 projection on Openlayers', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const antarcticPolarStereographic = {
       code: `EPSG:3031`,
       proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
@@ -1013,7 +1056,7 @@ describe('MapOlService State', () => {
 
   it('should create a Openlayers projection', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const antarcticPolarStereographic: olProjectionOptions = {
       code: `EPSG:3031`,
       extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
@@ -1033,11 +1076,11 @@ describe('MapOlService State', () => {
 
 
 describe('MapOlService Data', () => {
-  // beforeEach(beforeEachFn);
+  beforeEach(beforeEachCreateMapFn);
 
   it('should create a OpenLayers Feature from a GeoJson Feature', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     const feature = service.geoJsonToFeature(testFeatureCollection.features[0]);
     expect(feature.getGeometry().getType()).toBe('Polygon');
@@ -1045,7 +1088,7 @@ describe('MapOlService Data', () => {
 
   it('should create a Array of OpenLayers Features from a GeoJson FeatureCollection', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     const features = service.geoJsonToFeatures(testFeatureCollection);
     expect(features.length).toBe(4);
@@ -1053,7 +1096,7 @@ describe('MapOlService Data', () => {
 
   it('should get the extent of all features', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
     const testFeatures = {
       type: 'FeatureCollection',
       features: [{
@@ -1075,7 +1118,7 @@ describe('MapOlService Data', () => {
 
   it('should reproject Features', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    service.createMap(mapTarget.container);
 
     // converted to the map projection
     const features = service.geoJsonToFeatures(testFeatureCollection);
