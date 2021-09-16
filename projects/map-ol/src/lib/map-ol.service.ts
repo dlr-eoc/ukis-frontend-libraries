@@ -1673,6 +1673,10 @@ export class MapOlService {
 
       let overlayoptions = defaultOptions;
 
+      /**
+       * Check if popup is an array of popup obj's or a popup obj
+       * then merge the popup?.options with the default ol/overlay options
+       */
       if (this.isPopupObjArray(layerpopup)) {
         const objForEvent = layerpopup.find(p => this.popupEventIsBrowserEvent(p, browserEvent));
         if (objForEvent.options) {
