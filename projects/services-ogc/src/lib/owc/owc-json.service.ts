@@ -494,6 +494,7 @@ export class OwcJsonService {
       name: this.getResourceTitle(resource),
       displayName: this.getDisplayName(offering, resource),
       visible: this.isActive(resource),
+      description: this.getResourceDescription(resource),
       type: layerType,
       removable: true,
       attribution: this.getResourceAttribution(resource),

@@ -443,16 +443,7 @@ export const exampleContext: IOwsContext = {
               "href": "",
               "status": "403"
           },
-          "customAttributes": {
-              "categoryIds": [
-                   "features","global_owt_"
-              ],
-              "previewUrl": "",
-              "endDate": "not a temporal data set",
-              "description": "wind turbines detected from Sentinel-1 using a deep learning approach",
-              "type": "polygon",
-              "startDate": "not a temporal data set"
-          }
+          "abstract": "wind turbines detected from Sentinel-1 using a deep learning approach",
       },
       "type": "Feature",
       "geometry": null,
