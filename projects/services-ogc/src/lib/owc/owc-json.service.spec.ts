@@ -129,7 +129,7 @@ describe('OwcJsonService: reading data from owc', () => {
 
   });
 
-  fit('#createVectorLayerFromOffering should return a VectorLayer instance', (done) => {
+  it('#createVectorLayerFromOffering should return a VectorLayer instance', (done) => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
     let foundVectorLayer = false;
