@@ -472,15 +472,14 @@ export class OwcJsonService {
       return null;
     }
 
-    const iconUrl = this.getIconUrl(offering);
+    // Case 1: data-offering
+    let layerUrl;
+    if (offering.operations) {
+      layerUrl = offering.operations.find(o => isWfsOffering(o.code)).href;
+    }
 
-    let layerUrl, params;
-    // if we have a operations-offering (vs. a data-offering):
-    if (offering.operations) { layerUrl = this.getUrlFromUri(offering.operations[0].href); }
-    if (offering.operations) { params = this.getJsonFromUri(offering.operations[0].href); }
-
+    // Case 2: data-offering
     let data;
-    // if we have a data-offering:
     if (offering.contents) {
       data = offering.contents[0].content;
     }
