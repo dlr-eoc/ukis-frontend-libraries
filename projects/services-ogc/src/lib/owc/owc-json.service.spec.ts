@@ -129,7 +129,7 @@ describe('OwcJsonService: reading data from owc', () => {
 
   });
 
-  it('#createVectorLayerFromOffering should return a VectorLayer instance', (done) => {
+  fit('#createVectorLayerFromOffering should return a VectorLayer instance', (done) => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
     let foundVectorLayer = false;
@@ -139,8 +139,6 @@ describe('OwcJsonService: reading data from owc', () => {
         for (const offering of resource.properties.offerings) {
           if (service.checkIfServiceOffering(offering)) {
 
-            const operation = offering.operations[0];
-            expect(operation).toBeTruthy();
             const layertype = service.getLayertypeFromOfferingCode(offering);
             if (isVectorLayertype(layertype)) {
               foundVectorLayer = true;
@@ -150,8 +148,13 @@ describe('OwcJsonService: reading data from owc', () => {
                 expect(vLayer.id as string).toBe(resource.id as string);
                 expect(vLayer.removable).toBe(true); // 'removable' is not encoded in owc-json; falling back to 'true'
                 expect(['Baselayers', 'Layers', 'Overlays'].includes(vLayer.filtertype)).toBeTrue();
-                expect(vLayer.type).toBe('geojson'); // default
-                expect(vLayer.url).toBe(operation.href.substr(0, operation.href.indexOf('?')));
+                expect(['wfs', 'geojson'].includes(vLayer.type)).toBeTrue();
+
+                if (vLayer.type === 'wfs') {
+                  const getFeatureOp = offering.operations?.find(o => o.code === 'GetFeature');
+                  expect(getFeatureOp).toBeTruthy();
+                  expect(vLayer.url).toBe(getFeatureOp.href);
+                }
 
                 // opacity is not encoded in owc-json per default. Always falling back to 1.
                 expect(vLayer.opacity).toBe(1);

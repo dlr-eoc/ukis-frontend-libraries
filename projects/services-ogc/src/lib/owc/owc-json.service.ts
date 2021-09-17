@@ -475,7 +475,10 @@ export class OwcJsonService {
     // Case 1: data-offering
     let layerUrl;
     if (offering.operations) {
-      layerUrl = offering.operations.find(o => isWfsOffering(o.code)).href;
+      const getFeatureOperation = offering.operations.find(o => o.code === 'GetFeature');
+      if (getFeatureOperation) {
+        layerUrl = getFeatureOperation.href;
+      }
     }
 
     // Case 2: data-offering
