@@ -346,7 +346,7 @@ describe('OwcJsonService: writing data into owc', () => {
     });
   }, 3000);
 
-  fit('#generateOwcContextFrom should work with all layers in test-contexts', (done) => {
+  it('#generateOwcContextFrom should work with all layers in test-contexts', (done) => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
     for (const context of allTestContexts) {
@@ -355,12 +355,19 @@ describe('OwcJsonService: writing data into owc', () => {
         const regeneratedContext = service.generateOwsContextFrom('someId', layers);
 
         for (const feature of context.features) {
+          const generatedLayer = layers.find(l => l.id === feature.id);
           const regeneratedFeature = regeneratedContext.features.find(f => f.id === feature.id);
 
-          expect(regeneratedFeature).toBeTruthy();
-          expect(regeneratedFeature.properties.offerings.length > 0).toBeTrue();
-          expect(regeneratedFeature.properties.offerings[0].operations.length > 0).toBeTrue();
+          if (!(generatedLayer instanceof LayerGroup)) {
+            if (generatedLayer.type !== 'custom') {
+              expect(regeneratedFeature).toBeTruthy();
+              expect(regeneratedFeature.properties.offerings.length > 0).toBeTrue();
+              expect(regeneratedFeature.properties.offerings[0].operations.length > 0).toBeTrue();
+            }
+          }
         }
+
+        done();
 
       });
     }
