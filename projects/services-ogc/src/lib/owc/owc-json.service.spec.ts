@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing/';
 import { OwcJsonService, TmsLayertype } from './owc-json.service';
 import { barebonesContext, basicContext, exampleContext, zoomedContext } from '../../../assets/exampleContext';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { isRasterLayertype, isVectorLayertype, LayersService, RasterLayer } from '@dlr-eoc/services-layers';
+import { isRasterLayertype, isVectorLayertype, LayersService, RasterLayer, LayerGroup } from '@dlr-eoc/services-layers';
 import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsContext } from './types/owc-json';
@@ -270,13 +270,13 @@ describe('OwcJsonService: writing data into owc', () => {
   });
 
   it('#getLayers should properly restore a selection of layers from owc format created with #generateOwsContextFrom', (done) => {
-    const service: OwcJsonService = TestBed.get(OwcJsonService);
-    const layersService: LayersService = TestBed.get(LayersService);
-    const osm_layer = new EocLitemap(<any>{
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const layersService: LayersService = TestBed.inject(LayersService);
+    const osmLayer = new EocLitemap({
       visible: true,
       legendImg: null
     });
-    layersService.addLayer(osm_layer, 'Baselayers');
+    layersService.addLayer(osmLayer, 'Baselayers');
     layersService.getBaseLayers().subscribe(baselayers => {
       const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);
       service.getLayers(owc, targetProjection).subscribe((layers) => {
@@ -344,5 +344,45 @@ describe('OwcJsonService: writing data into owc', () => {
 
       done();
     });
+  }, 3000);
+
+  fit('#generateOwcContextFrom should work with all layers in test-contexts', (done) => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+
+    for (const context of allTestContexts) {
+      service.getLayers(context, 'EPSG:4326').subscribe((layers) => {
+
+        const regeneratedContext = service.generateOwsContextFrom('someId', layers);
+
+        for (const feature of context.features) {
+          const regeneratedFeature = regeneratedContext.features.find(f => f.id === feature.id);
+
+          expect(regeneratedFeature).toBeTruthy();
+          expect(regeneratedFeature.properties.offerings.length > 0).toBeTrue();
+          expect(regeneratedFeature.properties.offerings[0].operations.length > 0).toBeTrue();
+        }
+
+      });
+    }
+
+  }, 3000);
+
+  it('#generateOwcContextFrom should honor (nested) layer-groups', (done) => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+
+    const group = new LayerGroup({
+      id: 'parent',
+      name: 'parent',
+      layers: [
+        new EocLitemap({
+          name: 'child'
+        }),
+      ],
+    });
+
+    const context = service.generateOwsContextFrom('someId', [group]);
+
+    expect(context.features[0].properties.folder).toEqual('parent');
+
   }, 3000);
 });

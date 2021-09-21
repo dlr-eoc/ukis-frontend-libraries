@@ -925,7 +925,7 @@ export class OwcJsonService {
    * @TODO:
    *   - properties
    */
-  generateOwsContextFrom(id: string, layers: Layer[], extent?: TGeoExtent, properties?): IEocOwsContext {
+  generateOwsContextFrom(id: string, layers: (Layer | LayerGroup)[], extent?: TGeoExtent, properties?): IEocOwsContext {
 
     if (!properties) {
       properties = {
@@ -947,16 +947,28 @@ export class OwcJsonService {
       owc['bbox'] = extent;
     }
 
+    const addLayerToArray = (layer: Layer | LayerGroup, array: IEocOwsResource[], groupName?: string) => {
+      if (layer instanceof LayerGroup) {
+        const layerGroupName = groupName ? groupName + '/' + layer.name : layer.name;
+        for (const subLayer of layer.layers) {
+          addLayerToArray(subLayer, array, layerGroupName);
+        }
+      } else {
+        const resource: IEocOwsResource = this.generateResourceFromLayer(layer, groupName);
+        array.push(resource);
+      }
+    };
+
+    const resources = [];
     for (const layer of layers) {
-      const resource: IEocOwsResource = this.generateResourceFromLayer(layer);
-      // TODO check for layer types
-      owc.features.push(resource);
+      addLayerToArray(layer, resources);
     }
+    owc.features = resources;
 
     return owc;
   }
 
-  generateResourceFromLayer(layer: Layer): IEocOwsResource {
+  generateResourceFromLayer(layer: Layer, folderName?: string): IEocOwsResource {
     const resource: IEocOwsResource = {
       id: layer.id,
       properties: {
@@ -965,6 +977,7 @@ export class OwcJsonService {
         offerings: [this.generateOfferingFromLayer(layer)],
         opacity: layer.opacity,
         attribution: layer.attribution,
+        folder: folderName
       },
       type: 'Feature',
       geometry: null
@@ -1000,6 +1013,8 @@ export class OwcJsonService {
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
       case XyzLayertype:
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
+      case WfsLayertype:
+        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
       default:
         console.error(`This type of layer (${layer.type}) has not been implemented yet.`);
         return null;
@@ -1037,8 +1052,8 @@ export class OwcJsonService {
       }
     } else if (layer instanceof VectorLayer) {
       switch (layer.type) {
-        // case 'wfs': <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts
-        //   return this.getWfsOperationsFromLayer(layer);
+        case WfsLayertype:
+          return this.getWfsOperationsFromLayer(layer);
         default:
           console.error(`This type of service (${layer.type}) has not been implemented yet.`);
           return [];
@@ -1073,18 +1088,33 @@ export class OwcJsonService {
 
     const url = layer.url;
     const layerName = layer.name;
-    const version = layer.options.version ? layer.options.version : '1.1.0';
+    const version = layer.options?.version ? layer.options.version : '1.1.0';
+    const urlObject = new URL(url);
+    const typeName = urlObject.searchParams.get('typeName') || urlObject.searchParams.get('TypeName') || urlObject.searchParams.get('typename')
+                  || urlObject.searchParams.get('typeNames') || urlObject.searchParams.get('TypeNames') || urlObject.searchParams.get('typenames');
 
 
     const GetFeature: IOwsOperation = {
       code: 'GetFeature',
       method: 'GET',
       type: 'application/json',
-      href: `${url}?service=WFS&version=${version}&request=GetFeature`
+      href: url
     };
 
-    // let DescribeFeatureType: IOwsOperation = null;
-    // let GetCapabilities: IOwsOperation = null;
+    const GetCapabilities: IOwsOperation = {
+      code: 'GetCapabilities',
+      method: 'GET',
+      type: 'application/xml',
+      href: urlObject.origin + urlObject.pathname + '?service=WFS&request=GetCapabilities'
+    };
+
+    const DescribeFeatureType: IOwsOperation = {
+      code: 'DescribeFeatureType',
+      method: 'GET',
+      type: 'application/json',
+      href: urlObject.origin + urlObject.pathname + `?service=WFS&request=DescribeFeatureType&version=${version}&typeNames=${typeName}&outputFormat=application/json`
+    };
+
     // let GetPropertyValue: IOwsOperation = null;
     // let GetFeatureWithLock: IOwsOperation = null;
     // let LockFeature: IOwsOperation = null;
@@ -1096,8 +1126,8 @@ export class OwcJsonService {
 
     const operations = [
       GetFeature,
-      // GetCapabilities,
-      // DescribeFeatureType,
+      GetCapabilities,
+      DescribeFeatureType,
       // GetPropertyValue,
       // GetFeatureWithLock,
       // LockFeature,
