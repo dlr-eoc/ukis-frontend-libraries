@@ -24,7 +24,8 @@
   - Allows Tms-Layers
   - Extend types for `IEocOwsContext`
   - Parses ISO8601 strings using `luxon` (new dependency)
-  - New functin `OwcJsonService.createLayerFromDefaultOffering()`
+  - New function `OwcJsonService.createLayerFromDefaultOffering()`
+  - `OwcJsonService.generateOwcContextFrom()` now also exports WFS-layers.
 
 ### Bug Fixes
 * **@dlr-eoc/services-ogc:**

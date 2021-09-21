@@ -253,6 +253,42 @@ describe('OwcJsonService: reading data from owc', () => {
     }
   });
 
+  fit('#getLayers should not stop working even if an unknown offering-code has been given', (done) => {
+
+    const context: IOwsContext = {
+      id: 'test context',
+      type: 'FeatureCollection',
+      properties: {
+        links: {
+          profiles: [{
+            href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
+          }],
+        },
+        lang: 'de',
+        title: 'test context',
+        updated: '2018-11-28T00:00:00'
+      },
+      features: [{
+        id: 'weirdLayer',
+        properties: {
+          title: 'weird layer',
+          updated: 'today',
+          offerings: [{
+            code: 'https://some.unknown/protocol'
+          }]
+        },
+        geometry: null,
+        type: 'Feature'
+      }]
+    };
+
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    service.getLayers(context, 'EPSG:4326').subscribe((layers) => {
+      expect(layers).toBeTruthy();
+      done();
+    });
+
+  }, 3000);
 
 });
 

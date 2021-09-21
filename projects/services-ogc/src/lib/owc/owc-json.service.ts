@@ -461,6 +461,7 @@ export class OwcJsonService {
       return this.createTmsLayerFromOffering(offering, resource, context, targetProjection);
     } else {
       console.error(`This type of service (${layerType}) has not been implemented yet.`);
+      return of();
     }
   }
 
@@ -484,7 +485,13 @@ export class OwcJsonService {
     // Case 2: data-offering
     let data;
     if (offering.contents) {
-      data = offering.contents[0].content;
+      // currently, Ukis only knows about these data-types for vector-layers:
+      const content = offering.contents.find(c =>
+             c.type === 'application/geo+json'
+          || c.type === 'application/kml');
+      if (content) {
+        data = content.content;
+      }
     }
 
     const legendUrl = this.getLegendUrl(offering);
@@ -701,7 +708,9 @@ export class OwcJsonService {
     const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context, targetProjection);
     if (rasterOptions.type === WmsLayertype) {
 
-      const urlParams = this.getJsonFromUri(offering.operations[0].href);
+      const getMapOperation = offering.operations.find(o => o.code === 'GetMap');
+
+      const urlParams = getMapOperation.href;
       let defaultStyle;
       if (offering.styles && offering.styles.length > 0) {
         defaultStyle = offering.styles.find(s => s.default).name;
@@ -749,10 +758,12 @@ export class OwcJsonService {
 
       const { minZoom, maxZoom } = this.getMinMaxZoom(resource, targetProjection);
 
+      const getMapOperation = offering.operations.find(o => o.code === 'GetMap');
+
       const rasterLayerOptions: IRasterLayerOptions = {
         ...layerOptions,
         type: layerOptions.type as TRasterLayertype,
-        url: this.getUrlFromUri(offering.operations[0].href),
+        url: this.getUrlFromUri(getMapOperation.href),
         subdomains: shardsExpand(this.getResourceShards(resource)),
         dimensions: { time, elevation },
         minZoom, maxZoom
@@ -1092,6 +1103,10 @@ export class OwcJsonService {
     const urlObject = new URL(url);
     const typeName = urlObject.searchParams.get('typeName') || urlObject.searchParams.get('TypeName') || urlObject.searchParams.get('typename')
                   || urlObject.searchParams.get('typeNames') || urlObject.searchParams.get('TypeNames') || urlObject.searchParams.get('typenames');
+    if (!typeName) {
+      console.error(`URL does not contain the minimum required arguments for a WFS layer: ${url}`);
+      return [];
+    }
 
 
     const GetFeature: IOwsOperation = {
