@@ -28,6 +28,11 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
   maxZoom?: number;
 }
 
+
+
+type isoInterval = `${string}/${string}`;
+type intervalPeriod = `${isoInterval}/P${string}`;
+
 export interface IEocOwsResourceDimension {
   name: 'time' | 'elevation';
   /**
@@ -35,7 +40,7 @@ export interface IEocOwsResourceDimension {
    *  - '1984-01-01T00:00:00.000Z,1990-01-01T00:00:00.000Z,1995-01-01T00:00:00.000Z'
    *  - '2000-09-01T00:00:00.000Z/2017-08-31T00:00:00.000Z/P1D'
    */
-  values: string;
+  values: `${string},` | isoInterval | intervalPeriod;
   /**
    * For time: 'ISO8601'
    * ISO8601 has been chosen because this is how
