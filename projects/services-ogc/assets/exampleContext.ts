@@ -48,7 +48,7 @@ export const basicContext: IOwsContext = {
             operations: [
               {
                 code: 'GetMap',
-                href: 'https://geoservice.code-de.org/Sentinel1/wms?TRANSPARENT=TRUE&LAYERS=S1_SAR_L1_GRD&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS',
+                href: 'https://geoservice.code-de.org/Sentinel1/wms?TRANSPARENT=TRUE&LAYERS=S1_SAR_L1_GRD&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS&STYLES=someStyle',
                 method: 'GET',
                 type: 'image/vnd.jpeg-png'
               },

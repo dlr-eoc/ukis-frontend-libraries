@@ -93,8 +93,21 @@ describe('OwcJsonService: reading data from owc', () => {
                   }
                 }
 
-                if (offering.styles && offering.styles[0]?.legendURL) {
-                  expect(rLayer.legendImg).toEqual(offering.styles[0].legendURL);
+                const styles = offering.styles;
+                if (styles) {
+                  const defaultStyle = styles.find(s => s.default);
+                  if (defaultStyle) {
+                    expect(rLayer.params.STYLES).toEqual(defaultStyle.name);
+                  }
+                } else {
+                  const getMapOperation = offering.operations?.find(o => o.code === 'GetMap');
+                  if (getMapOperation) {
+                    const urlParas = new URL(getMapOperation.href).searchParams;
+                    const style = urlParas.get('STYLES');
+                    if (style) {
+                      expect(rLayer.params.STYLES).toEqual(style);
+                    }
+                  }
                 }
 
                 if (resource.properties.abstract) {

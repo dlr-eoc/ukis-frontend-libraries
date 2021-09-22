@@ -707,24 +707,29 @@ export class OwcJsonService {
     if (rasterOptions.type === WmsLayertype) {
 
       const getMapOperation = offering.operations.find(o => o.code === 'GetMap');
-
-      const urlParams = getMapOperation.href;
-      let defaultStyle;
-      if (offering.styles && offering.styles.length > 0) {
-        defaultStyle = offering.styles.find(s => s.default).name;
-      } else if (urlParams['STYLES']) {
-        defaultStyle = urlParams['STYLES'];
-      }
+      const urlParams = this.getJsonFromUri(getMapOperation.href);
 
       const params: IWmsParams = {
         LAYERS: urlParams['LAYERS'],
-        FORMAT: urlParams['FORMAT'],
-        TIME: urlParams['TIME'],
-        VERSION: urlParams['VERSION'],
-        TILED: urlParams['TILED'],
-        TRANSPARENT: true,
-        STYLES: defaultStyle
+        TRANSPARENT: true
       };
+      if (offering.styles && offering.styles.length > 0 && offering.styles.find(s => s.default)) {
+        params.STYLES = offering.styles.find(s => s.default).name;
+      } else if (urlParams['STYLES']) {
+        params.STYLES = urlParams['STYLES'];
+      }
+      if (urlParams['FORMAT']) {
+        params.FORMAT = urlParams['FORMAT'];
+      }
+      if (urlParams['TIME']) {
+        params.TIME = params.urlParams['TIME'];
+      }
+      if (urlParams['VERSION']) {
+        params.VERSION = urlParams['VERSION'];
+      }
+      if (urlParams['TILED']) {
+        params.TILED = urlParams['TILED'];
+      }
 
       const wmsOptions: IWmsOptions = {
         ...rasterOptions,
