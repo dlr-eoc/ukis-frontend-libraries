@@ -284,7 +284,7 @@ export class OwcJsonService {
       if (name === 'time') {
         dims.time = this.getTimeDimensions(resource.properties.dimensions);
       } else if (name === 'elevation') {
-        console.error('Not yet implemented: `getElevationDimension`');
+        console.warn('Not yet implemented: `getElevationDimension`', resource);
       } else {
         dims[name] = d;
       }
@@ -293,12 +293,13 @@ export class OwcJsonService {
     return dims;
   }
 
-  getTimeDimensions(dimensions: IEocOwsResource['properties']['dimensions']): ILayerDimensions['time'] {
-    let dim: ILayerDimensions['time'] = { values: null, units: null };
+  getTimeDimensions(dimensions: IEocOwsResourceDimension[]): ILayerTimeDimension {
+    let dim: ILayerTimeDimension = { values: null, units: null };
     const value = dimensions.find(d => d.name === 'time');
 
     if (!value) {
       console.log('check to get dimensions value from OGC Service later!!', dimensions);
+      return;
     }
 
     const values = this.getTimeValueFromDimensions(value.values);
@@ -468,7 +469,7 @@ export class OwcJsonService {
     } else if (layerType === TmsLayertype) {
       return this.createTmsLayerFromOffering(offering, resource, context, targetProjection);
     } else {
-      console.error(`This type of service (${layerType}) has not been implemented yet.`);
+      console.warn(`This type of service (${layerType}) has not been implemented yet.`, offering);
       return of(null);
     }
   }
@@ -477,8 +478,8 @@ export class OwcJsonService {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isVectorLayertype(layerType)) {
-      console.error(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a Vectorlayer`);
-      return null;
+      console.warn(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a VectorLayer`, offering);
+      return of(null);
     }
 
     // Case 1: service-offering
@@ -487,8 +488,20 @@ export class OwcJsonService {
       const getFeatureOperation = offering.operations.find(o => o.code === 'GetFeature');
       if (getFeatureOperation) {
         layerUrl = getFeatureOperation.href;
+
+        const urlObject = new URL(layerUrl);
+        const request = urlObject.searchParams.get('request') || urlObject.searchParams.get('Request');
+        const service = urlObject.searchParams.get('service') || urlObject.searchParams.get('Service');
+        const version = urlObject.searchParams.get('version') || urlObject.searchParams.get('Version');
+        const typeName = urlObject.searchParams.get('typeName') || urlObject.searchParams.get('TypeName') || urlObject.searchParams.get('typename')
+                      || urlObject.searchParams.get('typeNames') || urlObject.searchParams.get('TypeNames') || urlObject.searchParams.get('typenames');
+        if (!typeName || !version || !service || !request) {
+          console.warn(`URL does not contain the minimum required arguments for a WFS layer: ${layerUrl}`);
+          return of(null);
+        }
       }
     }
+
 
     // Case 2: data-offering
     let data;
@@ -535,8 +548,8 @@ export class OwcJsonService {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isRasterLayertype(layerType)) {
-      console.error(`This type of offering '${offering.code}' cannot be converted into a raster-layer.`);
-      return null;
+      console.warn(`This type of offering '${offering.code}' cannot be converted into a RasterLayer.`, offering);
+      return of(null);
     }
 
     let rasterLayer$: Observable<RasterLayer>;
@@ -741,7 +754,7 @@ export class OwcJsonService {
       };
       return wmsOptions;
     } else {
-      console.error(`resource ${resource.id} cannot be converted into a WMS-Layer`, offering);
+      console.warn(`resource ${resource.id} cannot be converted into a WMS-Layer`, offering);
     }
   }
 
@@ -776,7 +789,7 @@ export class OwcJsonService {
       };
       return rasterLayerOptions;
     } else {
-      console.error(`The layer ${layerOptions.id} is not a rasterlayer`, layerOptions);
+      console.error(`The layer ${layerOptions.id} is not a RasterLayer`, layerOptions);
     }
   }
 
@@ -1033,7 +1046,7 @@ export class OwcJsonService {
       case WfsLayertype:
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
       default:
-        console.error(`This type of layer (${layer.type}) has not been implemented yet.`);
+        console.warn(`This type of layer (${layer.type}) has not been implemented yet.`);
         return null;
     }
   }
@@ -1049,7 +1062,7 @@ export class OwcJsonService {
         contents.push(content);
         break;
       default:
-        console.error(`Cannot get contents for this type of VectorLayer: (${layer.type})`);
+        console.warn(`Cannot get contents for this type of VectorLayer: (${layer.type})`);
     }
     return contents;
   }
@@ -1064,7 +1077,7 @@ export class OwcJsonService {
         case XyzLayertype:
           return this.getXyzOperationsFromLayer(layer);
         default:
-          console.error(`Cannot get operations for this type of layer: (${layer.type})`);
+          console.warn(`Cannot get operations for this type of layer: (${layer.type})`);
           return [];
       }
     } else if (layer instanceof VectorLayer) {
@@ -1072,7 +1085,7 @@ export class OwcJsonService {
         case WfsLayertype:
           return this.getWfsOperationsFromLayer(layer);
         default:
-          console.error(`This type of service (${layer.type}) has not been implemented yet.`);
+          console.warn(`Cannot get operations for this type of layer: (${layer.type})`);
           return [];
       }
     }
@@ -1110,7 +1123,7 @@ export class OwcJsonService {
     const typeName = urlObject.searchParams.get('typeName') || urlObject.searchParams.get('TypeName') || urlObject.searchParams.get('typename')
                   || urlObject.searchParams.get('typeNames') || urlObject.searchParams.get('TypeNames') || urlObject.searchParams.get('typenames');
     if (!typeName) {
-      console.error(`URL does not contain the minimum required arguments for a WFS layer: ${url}`);
+      console.warn(`URL does not contain the minimum required arguments for a WFS layer: ${url}`);
       return [];
     }
 
