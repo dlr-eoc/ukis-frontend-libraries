@@ -32,6 +32,7 @@
 * **@dlr-eoc/services-ogc:**
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with WFS'es: only a substring of the `GetFeature`-operation.href had been used. Now fixed.
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with GeoJson-layers: GeoJson data had been incorrectly stringified (and parsed again).
+  - `OwcJsonService.getTimeDimensions`: `period` only added to dimension if actually given in `IEocOwsResourceDimension`.
 * **@dlr-eoc/map-ol:**
   - Fixed an issue in `MapOlService.zoomInOut()`
   - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.

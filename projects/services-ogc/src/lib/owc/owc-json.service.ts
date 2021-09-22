@@ -279,13 +279,11 @@ export class OwcJsonService {
     }
 
     const values = this.getTimeValueFromDimensions(value.values);
-    const period = this.parseISO8601Period(value.values);
     dim = {
       values: null,
       units: value.units,
       display: {
         format: 'YYYMMDD',
-        period: period,
         default: 'end'
       }
     };
@@ -295,6 +293,11 @@ export class OwcJsonService {
       dim.values = values;
     } else if (values && typeof values !== 'string' && values.interval && values.periodicity) {
       dim.values = values;
+    }
+
+    const period = this.parseISO8601Period(value.values);
+    if (period) {
+      dim.display.period = period;
     }
 
     return dim;
