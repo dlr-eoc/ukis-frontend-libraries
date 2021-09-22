@@ -188,30 +188,6 @@ export class OwcJsonService {
     }
   }
 
-  /**
-   * e.g.
-   * (array)   value: '1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/PT1S,1990-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z/PT1S,...'
-   * (array)   value: '2000-01-01T00:00:00.000Z,2001-01-01T00:00:00.000Z,2002-01-01T00:00:00.000Z,...'
-   * (single) value: '2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y'
-   *
-   * what is for different values (array  and single combined), are the possible??
-   */
-  convertOwcTimeToIsoTimeAndPeriodicity<P extends string | ILayerIntervalAndPeriod>(owctime: string) {
-    /**
-     * Convert from
-     */
-    const arr = owctime.split('/');
-    /** e.g. 1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z */
-    const timeinterval = (arr.length === 3) ? arr[0] + '/' + arr[1] : owctime;
-    /** e.g. P1Y */
-    const periodicity = (arr.length === 3) ? arr[2] : null;
-    if (periodicity) {
-      const intervalPeriod = { interval: timeinterval, periodicity: periodicity };
-      return intervalPeriod as any as P;
-    } else {
-      return timeinterval as any as P;
-    }
-  }
 
   /**
    * e.g.

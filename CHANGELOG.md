@@ -8,6 +8,7 @@
 - `IOwsContext.properties.creator?: IOwsCreator` corrected to schema `IOwsContext.properties.generator?: IOwsGenerator;`.
 - `IOwsContext.properties.links: IOwsLinks[]` corrected to schema `IOwsContext.properties.links.profiles`
 - `IOwsAuthor`, `IOwsCategory` and `IOwsOperation` corrected to schema.
+- Removed the function `convertOwcTimeToIsoTimeAndPeriodicity`. Has been replaced by `getTimeDimensions`
 
 
 ### Features
