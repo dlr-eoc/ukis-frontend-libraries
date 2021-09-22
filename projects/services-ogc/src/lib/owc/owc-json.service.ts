@@ -413,7 +413,10 @@ export class OwcJsonService {
       }
     }
 
-    return forkJoin(layers$);
+    return forkJoin(layers$).pipe(
+      // making sure no undefined layers are returned
+      map((layers: Layer[]) => layers.filter(layer => layer))
+    );
   }
 
   createLayerGroup(
@@ -424,19 +427,24 @@ export class OwcJsonService {
       layers$.push(this.createLayerFromDefaultOffering(resource, owc, targetProjection));
     }
 
-    const layerGroup$ = forkJoin(layers$).pipe(map((layers: Layer[]) => {
-      const parts = groupName.split('/');
-      const groupNameLast = parts[parts.length - 1];
-      const layerGroup = new LayerGroup({
-        id: groupName,
-        name: groupNameLast,
-        layers,
-        visible: !!Math.max(...layers.map(l => +l.visible)),
-        filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type?
-      });
+    const layerGroup$ = forkJoin(layers$).pipe(
+      // making sure no undefined layers are returned
+      map((layers: Layer[]) => layers.filter(layer => layer)),
+      // putting layers in a LayerGroup
+      map((layers: Layer[]) => {
+        const parts = groupName.split('/');
+        const groupNameLast = parts[parts.length - 1];
+        const layerGroup = new LayerGroup({
+          id: groupName,
+          name: groupNameLast,
+          layers,
+          visible: !!Math.max(...layers.map(l => +l.visible)),
+          filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type?
+        });
 
-      return layerGroup;
-    }));
+        return layerGroup;
+      })
+    );
 
     return layerGroup$;
   }
@@ -461,7 +469,7 @@ export class OwcJsonService {
       return this.createTmsLayerFromOffering(offering, resource, context, targetProjection);
     } else {
       console.error(`This type of service (${layerType}) has not been implemented yet.`);
-      return of();
+      return of(null);
     }
   }
 
@@ -473,7 +481,7 @@ export class OwcJsonService {
       return null;
     }
 
-    // Case 1: data-offering
+    // Case 1: service-offering
     let layerUrl;
     if (offering.operations) {
       const getFeatureOperation = offering.operations.find(o => o.code === 'GetFeature');
@@ -485,12 +493,10 @@ export class OwcJsonService {
     // Case 2: data-offering
     let data;
     if (offering.contents) {
-      // currently, Ukis only knows about these data-types for vector-layers:
-      const content = offering.contents.find(c =>
-             c.type === 'application/geo+json'
-          || c.type === 'application/kml');
+      // currently, Ukis only knows about one data-types for vector-layers:
+      const content = offering.contents.find(c => c.type === 'application/geo+json');
       if (content) {
-        data = content.content;
+        data = JSON.parse(content.content);
       }
     }
 
@@ -1037,13 +1043,13 @@ export class OwcJsonService {
     switch (layer.type) {
       case GeojsonLayertype:
         const content = {
-          type: 'FeatureCollection',
+          type: 'application/geo+json',
           content: JSON.stringify(layer.data)
         };
         contents.push(content);
         break;
       default:
-        console.error(`Cannot get contents for this type of vectorlayer: (${layer.type})`);
+        console.error(`Cannot get contents for this type of VectorLayer: (${layer.type})`);
     }
     return contents;
   }

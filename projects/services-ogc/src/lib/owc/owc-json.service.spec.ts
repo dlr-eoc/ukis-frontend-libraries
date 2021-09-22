@@ -253,7 +253,7 @@ describe('OwcJsonService: reading data from owc', () => {
     }
   });
 
-  fit('#getLayers should not stop working even if an unknown offering-code has been given', (done) => {
+  it('#getLayers should not stop working even if an unknown offering-code has been given', (done) => {
 
     const context: IOwsContext = {
       id: 'test context',
@@ -368,14 +368,14 @@ describe('OwcJsonService: writing data into owc', () => {
       options
     });
 
-    // enconding and deconding
+    // encoding and decoding
     const context = service.generateOwsContextFrom('testcontext', [geojsonLayer], [-190, -90, 190, 90]);
 
     service.getLayers(context, targetProjection).subscribe(recoveredLayers => {
       const recoveredLayer = recoveredLayers[0] as VectorLayer;
       // testing
       expect(recoveredLayer.id).toEqual(geojsonLayer.id);
-      expect(JSON.parse(recoveredLayer.data)).toEqual(geojsonLayer.data);
+      expect(recoveredLayer.data).toEqual(geojsonLayer.data);
       // expect(recoveredLayer.options).toEqual(geojsonLayer.options); // we dont encode style.
 
       done();
@@ -410,7 +410,7 @@ describe('OwcJsonService: writing data into owc', () => {
 
   }, 3000);
 
-  it('#generateOwcContextFrom should honor (nested) layer-groups', (done) => {
+  it('#generateOwcContextFrom should honor (nested) layer-groups', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
 
     const group = new LayerGroup({
@@ -427,5 +427,5 @@ describe('OwcJsonService: writing data into owc', () => {
 
     expect(context.features[0].properties.folder).toEqual('parent');
 
-  }, 3000);
+  });
 });
