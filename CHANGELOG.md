@@ -8,6 +8,7 @@
 - `IOwsContext.properties.creator?: IOwsCreator` corrected to schema `IOwsContext.properties.generator?: IOwsGenerator;`.
 - `IOwsContext.properties.links: IOwsLinks[]` corrected to schema `IOwsContext.properties.links.profiles`
 - `IOwsAuthor`, `IOwsCategory` and `IOwsOperation` corrected to schema.
+- Removed the function `convertOwcTimeToIsoTimeAndPeriodicity`. Has been replaced by `getTimeDimensions`
 
 
 ### Features
@@ -24,9 +25,15 @@
   - Allows Tms-Layers
   - Extend types for `IEocOwsContext`
   - Parses ISO8601 strings using `luxon` (new dependency)
-  - New functin `OwcJsonService.createLayerFromDefaultOffering()`
+  - New function `OwcJsonService.createLayerFromDefaultOffering()`
+  - `OwcJsonService.generateOwcContextFrom()` now also exports WFS-layers.
 
 ### Bug Fixes
+* **@dlr-eoc/services-ogc:**
+  - `OwcJsonService.createVectorLayerFromOffering` did not work properly with WFS'es: only a substring of the `GetFeature`-operation.href had been used. Now fixed.
+  - `OwcJsonService.createVectorLayerFromOffering` did not work properly with GeoJson-layers: GeoJson data had been incorrectly stringified (and parsed again).
+  - `OwcJsonService.getTimeDimensions`: `period` only added to dimension if actually given in `IEocOwsResourceDimension`.
+  - `OwcJsonService.getWmsOptions`: now respects `STYLES` property either via `offering.styles` or via `GetMap` operation. All WMS-paras only set when actually present.
 * **@dlr-eoc/map-ol:**
   - Fixed an issue in `MapOlService.zoomInOut()`
   - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.
