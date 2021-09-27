@@ -3,14 +3,15 @@
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
 
 * **@dlr-eoc/services-ogc:** 
-  - `IEocOwsResourceDimensions` is removed.
-  - `IEocOwsResourceDimension` [is changed](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L30).
-  - `IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimension[]` is changed. Before it was [`IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimensions`](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L24)
-  - `IEocOwsOffering.legendUrl?` is removed.
-  - `OwcJsonService.getLayers()` returns now `Observable<(Layer | LayerGroup)[]>`.
-  - `IOwsContext.properties.creator?: IOwsCreator` corrected to schema `IOwsContext.properties.generator?: IOwsGenerator;`.
-  - `IOwsContext.properties.links: IOwsLinks[]` corrected to schema `IOwsContext.properties.links.profiles`
-  - `IOwsAuthor`, `IOwsCategory` and `IOwsOperation` corrected to schema.
+- `IEocOwsResourceDimensions` is removed.
+- `IEocOwsResourceDimension` [is changed](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L30).
+- `IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimension[]` is changed. Before it was [`IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimensions`](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L24)
+- `IEocOwsOffering.legendUrl?` is removed.
+- `OwcJsonService.getLayers()` returns now `Observable<(Layer | LayerGroup)[]>`.
+- `IOwsContext.properties.creator?: IOwsCreator` corrected to schema `IOwsContext.properties.generator?: IOwsGenerator;`.
+- `IOwsContext.properties.links: IOwsLinks[]` corrected to schema `IOwsContext.properties.links.profiles`
+- `IOwsAuthor`, `IOwsCategory` and `IOwsOperation` corrected to schema.
+- Removed the function `convertOwcTimeToIsoTimeAndPeriodicity`. Has been replaced by `getTimeDimensions`
 
 
 ### Features
@@ -27,9 +28,15 @@
   - Allows Tms-Layers
   - Extend types for `IEocOwsContext`
   - Parses ISO8601 strings using `luxon` (new dependency)
-  - New functin `OwcJsonService.createLayerFromDefaultOffering()`
+  - New function `OwcJsonService.createLayerFromDefaultOffering()`
+  - `OwcJsonService.generateOwcContextFrom()` now also exports WFS-layers.
 
 ### Bug Fixes
+* **@dlr-eoc/services-ogc:**
+  - `OwcJsonService.createVectorLayerFromOffering` did not work properly with WFS'es: only a substring of the `GetFeature`-operation.href had been used. Now fixed.
+  - `OwcJsonService.createVectorLayerFromOffering` did not work properly with GeoJson-layers: GeoJson data had been incorrectly stringified (and parsed again).
+  - `OwcJsonService.getTimeDimensions`: `period` only added to dimension if actually given in `IEocOwsResourceDimension`.
+  - `OwcJsonService.getWmsOptions`: now respects `STYLES` property either via `offering.styles` or via `GetMap` operation. All WMS-paras only set when actually present.
 * **@dlr-eoc/map-ol:**
   - Popups with event `move` are rendered under existing Popups with event `click` [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915283092).
   - Prevent popup with event `move` to get added multiple times in some cases [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915067198).

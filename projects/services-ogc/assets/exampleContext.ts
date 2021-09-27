@@ -48,7 +48,7 @@ export const basicContext: IOwsContext = {
             operations: [
               {
                 code: 'GetMap',
-                href: 'https://geoservice.code-de.org/Sentinel1/wms?TRANSPARENT=TRUE&LAYERS=S1_SAR_L1_GRD&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS',
+                href: 'https://geoservice.code-de.org/Sentinel1/wms?TRANSPARENT=TRUE&LAYERS=S1_SAR_L1_GRD&VERSION=1.1.1&REQUEST=GetMap&TILED=True&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS&STYLES=someStyle',
                 method: 'GET',
                 type: 'image/vnd.jpeg-png'
               },
@@ -418,7 +418,42 @@ export const exampleContext: IOwsContext = {
         folder: 'Overlays'
       },
       type: 'Feature'
-    }
+    },{
+      "id": "OffshoreWindParks:wind turbines",
+      "properties": {
+          "title": "wind turbines",
+          "updated": null,
+          "links": null,
+          "offerings": [
+              {
+                  "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wfs",
+                  "operations": [
+                      {
+                          "code": "GetFeature",
+                          "method": "GET",
+                          "type": "application/json",
+                          "href": "https://someTestServer.de/geoserver/OffshoreWindParks/wfs?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&typeName=wind%20turbines"
+                      }
+                  ]
+              }
+          ],
+          "opacity": 1,
+          "categories": [],
+          "download": {
+              "href": "",
+              "status": "403"
+          },
+          "abstract": "wind turbines detected from Sentinel-1 using a deep learning approach",
+      },
+      "type": "Feature",
+      "geometry": null,
+      "bbox": [
+          -71.5402563310422,
+          9.20713003232199,
+          126.34360664519528,
+          61.646203287709156
+      ]
+  }
   ],
   id: 'de:resa:mosaic',
   logoURL: 'https://geoservice.dlr.de/static/logos/planet_dlr_logo.png',

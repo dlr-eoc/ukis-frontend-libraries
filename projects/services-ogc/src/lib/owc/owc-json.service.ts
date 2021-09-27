@@ -188,30 +188,6 @@ export class OwcJsonService {
     }
   }
 
-  /**
-   * e.g.
-   * (array)   value: '1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/PT1S,1990-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z/PT1S,...'
-   * (array)   value: '2000-01-01T00:00:00.000Z,2001-01-01T00:00:00.000Z,2002-01-01T00:00:00.000Z,...'
-   * (single) value: '2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y'
-   *
-   * what is for different values (array  and single combined), are the possible??
-   */
-  convertOwcTimeToIsoTimeAndPeriodicity<P extends string | ILayerIntervalAndPeriod>(owctime: string) {
-    /**
-     * Convert from
-     */
-    const arr = owctime.split('/');
-    /** e.g. 1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z */
-    const timeinterval = (arr.length === 3) ? arr[0] + '/' + arr[1] : owctime;
-    /** e.g. P1Y */
-    const periodicity = (arr.length === 3) ? arr[2] : null;
-    if (periodicity) {
-      const intervalPeriod = { interval: timeinterval, periodicity: periodicity };
-      return intervalPeriod as any as P;
-    } else {
-      return timeinterval as any as P;
-    }
-  }
 
   /**
    * e.g.
@@ -284,7 +260,7 @@ export class OwcJsonService {
       if (name === 'time') {
         dims.time = this.getTimeDimensions(resource.properties.dimensions);
       } else if (name === 'elevation') {
-        console.error('Not yet implemented: `getElevationDimension`');
+        console.warn('Not yet implemented: `getElevationDimension`', resource);
       } else {
         dims[name] = d;
       }
@@ -293,22 +269,21 @@ export class OwcJsonService {
     return dims;
   }
 
-  getTimeDimensions(dimensions: IEocOwsResource['properties']['dimensions']): ILayerDimensions['time'] {
-    let dim: ILayerDimensions['time'] = { values: null, units: null };
+  getTimeDimensions(dimensions: IEocOwsResourceDimension[]): ILayerTimeDimension {
+    let dim: ILayerTimeDimension = { values: null, units: null };
     const value = dimensions.find(d => d.name === 'time');
 
     if (!value) {
       console.log('check to get dimensions value from OGC Service later!!', dimensions);
+      return;
     }
 
     const values = this.getTimeValueFromDimensions(value.values);
-    const period = this.parseISO8601Period(value.values);
     dim = {
       values: null,
       units: value.units,
       display: {
         format: 'YYYMMDD',
-        period: period,
         default: 'end'
       }
     };
@@ -318,6 +293,11 @@ export class OwcJsonService {
       dim.values = values;
     } else if (values && typeof values !== 'string' && values.interval && values.periodicity) {
       dim.values = values;
+    }
+
+    const period = this.parseISO8601Period(value.values);
+    if (period) {
+      dim.display.period = period;
     }
 
     return dim;
@@ -413,7 +393,10 @@ export class OwcJsonService {
       }
     }
 
-    return forkJoin(layers$);
+    return forkJoin(layers$).pipe(
+      // making sure no undefined layers are returned
+      map((layers: Layer[]) => layers.filter(layer => layer))
+    );
   }
 
   createLayerGroup(
@@ -424,19 +407,24 @@ export class OwcJsonService {
       layers$.push(this.createLayerFromDefaultOffering(resource, owc, targetProjection));
     }
 
-    const layerGroup$ = forkJoin(layers$).pipe(map((layers: Layer[]) => {
-      const parts = groupName.split('/');
-      const groupNameLast = parts[parts.length - 1];
-      const layerGroup = new LayerGroup({
-        id: groupName,
-        name: groupNameLast,
-        layers,
-        visible: !!Math.max(...layers.map(l => +l.visible)),
-        filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type?
-      });
+    const layerGroup$ = forkJoin(layers$).pipe(
+      // making sure no undefined layers are returned
+      map((layers: Layer[]) => layers.filter(layer => layer)),
+      // putting layers in a LayerGroup
+      map((layers: Layer[]) => {
+        const parts = groupName.split('/');
+        const groupNameLast = parts[parts.length - 1];
+        const layerGroup = new LayerGroup({
+          id: groupName,
+          name: groupNameLast,
+          layers,
+          visible: !!Math.max(...layers.map(l => +l.visible)),
+          filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type?
+        });
 
-      return layerGroup;
-    }));
+        return layerGroup;
+      })
+    );
 
     return layerGroup$;
   }
@@ -460,7 +448,8 @@ export class OwcJsonService {
     } else if (layerType === TmsLayertype) {
       return this.createTmsLayerFromOffering(offering, resource, context, targetProjection);
     } else {
-      console.error(`This type of service (${layerType}) has not been implemented yet.`);
+      console.warn(`This type of service (${layerType}) has not been implemented yet.`, offering);
+      return of(null);
     }
   }
 
@@ -468,21 +457,39 @@ export class OwcJsonService {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isVectorLayertype(layerType)) {
-      console.error(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a Vectorlayer`);
-      return null;
+      console.warn(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a VectorLayer`, offering);
+      return of(null);
     }
 
-    const iconUrl = this.getIconUrl(offering);
+    // Case 1: service-offering
+    let layerUrl;
+    if (offering.operations) {
+      const getFeatureOperation = offering.operations.find(o => o.code === 'GetFeature');
+      if (getFeatureOperation) {
+        layerUrl = getFeatureOperation.href;
 
-    let layerUrl, params;
-    // if we have a operations-offering (vs. a data-offering):
-    if (offering.operations) { layerUrl = this.getUrlFromUri(offering.operations[0].href); }
-    if (offering.operations) { params = this.getJsonFromUri(offering.operations[0].href); }
+        const urlObject = new URL(layerUrl);
+        const request = urlObject.searchParams.get('request') || urlObject.searchParams.get('Request');
+        const service = urlObject.searchParams.get('service') || urlObject.searchParams.get('Service');
+        const version = urlObject.searchParams.get('version') || urlObject.searchParams.get('Version');
+        const typeName = urlObject.searchParams.get('typeName') || urlObject.searchParams.get('TypeName') || urlObject.searchParams.get('typename')
+                      || urlObject.searchParams.get('typeNames') || urlObject.searchParams.get('TypeNames') || urlObject.searchParams.get('typenames');
+        if (!typeName || !version || !service || !request) {
+          console.warn(`URL does not contain the minimum required arguments for a WFS layer: ${layerUrl}`);
+          return of(null);
+        }
+      }
+    }
 
+
+    // Case 2: data-offering
     let data;
-    // if we have a data-offering:
     if (offering.contents) {
-      data = offering.contents[0].content;
+      // currently, Ukis only knows about one data-types for vector-layers:
+      const content = offering.contents.find(c => c.type === 'application/geo+json');
+      if (content) {
+        data = JSON.parse(content.content);
+      }
     }
 
     const legendUrl = this.getLegendUrl(offering);
@@ -492,6 +499,7 @@ export class OwcJsonService {
       name: this.getResourceTitle(resource),
       displayName: this.getDisplayName(offering, resource),
       visible: this.isActive(resource),
+      description: this.getResourceDescription(resource),
       type: layerType,
       removable: true,
       attribution: this.getResourceAttribution(resource),
@@ -519,8 +527,8 @@ export class OwcJsonService {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isRasterLayertype(layerType)) {
-      console.error(`This type of offering '${offering.code}' cannot be converted into a raster-layer.`);
-      return null;
+      console.warn(`This type of offering '${offering.code}' cannot be converted into a RasterLayer.`, offering);
+      return of(null);
     }
 
     let rasterLayer$: Observable<RasterLayer>;
@@ -698,23 +706,30 @@ export class OwcJsonService {
     const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context, targetProjection);
     if (rasterOptions.type === WmsLayertype) {
 
-      const urlParams = this.getJsonFromUri(offering.operations[0].href);
-      let defaultStyle;
-      if (offering.styles && offering.styles.length > 0) {
-        defaultStyle = offering.styles.find(s => s.default).name;
-      } else if (urlParams['STYLES']) {
-        defaultStyle = urlParams['STYLES'];
-      }
+      const getMapOperation = offering.operations.find(o => o.code === 'GetMap');
+      const urlParams = this.getJsonFromUri(getMapOperation.href);
 
       const params: IWmsParams = {
         LAYERS: urlParams['LAYERS'],
-        FORMAT: urlParams['FORMAT'],
-        TIME: urlParams['TIME'],
-        VERSION: urlParams['VERSION'],
-        TILED: urlParams['TILED'],
-        TRANSPARENT: true,
-        STYLES: defaultStyle
+        TRANSPARENT: true
       };
+      if (offering.styles && offering.styles.length > 0 && offering.styles.find(s => s.default)) {
+        params.STYLES = offering.styles.find(s => s.default).name;
+      } else if (urlParams['STYLES']) {
+        params.STYLES = urlParams['STYLES'];
+      }
+      if (urlParams['FORMAT']) {
+        params.FORMAT = urlParams['FORMAT'];
+      }
+      if (urlParams['TIME']) {
+        params.TIME = params.urlParams['TIME'];
+      }
+      if (urlParams['VERSION']) {
+        params.VERSION = urlParams['VERSION'];
+      }
+      if (urlParams['TILED']) {
+        params.TILED = urlParams['TILED'];
+      }
 
       const wmsOptions: IWmsOptions = {
         ...rasterOptions,
@@ -723,7 +738,7 @@ export class OwcJsonService {
       };
       return wmsOptions;
     } else {
-      console.error(`resource ${resource.id} cannot be converted into a WMS-Layer`, offering);
+      console.warn(`resource ${resource.id} cannot be converted into a WMS-Layer`, offering);
     }
   }
 
@@ -746,17 +761,19 @@ export class OwcJsonService {
 
       const { minZoom, maxZoom } = this.getMinMaxZoom(resource, targetProjection);
 
+      const getMapOperation = offering.operations.find(o => o.code === 'GetMap');
+
       const rasterLayerOptions: IRasterLayerOptions = {
         ...layerOptions,
         type: layerOptions.type as TRasterLayertype,
-        url: this.getUrlFromUri(offering.operations[0].href),
+        url: this.getUrlFromUri(getMapOperation.href),
         subdomains: shardsExpand(this.getResourceShards(resource)),
         dimensions: { time, elevation },
         minZoom, maxZoom
       };
       return rasterLayerOptions;
     } else {
-      console.error(`The layer ${layerOptions.id} is not a rasterlayer`, layerOptions);
+      console.error(`The layer ${layerOptions.id} is not a RasterLayer`, layerOptions);
     }
   }
 
@@ -922,7 +939,7 @@ export class OwcJsonService {
    * @TODO:
    *   - properties
    */
-  generateOwsContextFrom(id: string, layers: Layer[], extent?: TGeoExtent, properties?): IEocOwsContext {
+  generateOwsContextFrom(id: string, layers: (Layer | LayerGroup)[], extent?: TGeoExtent, properties?): IEocOwsContext {
 
     if (!properties) {
       properties = {
@@ -944,16 +961,28 @@ export class OwcJsonService {
       owc['bbox'] = extent;
     }
 
+    const addLayerToArray = (layer: Layer | LayerGroup, array: IEocOwsResource[], groupName?: string) => {
+      if (layer instanceof LayerGroup) {
+        const layerGroupName = groupName ? groupName + '/' + layer.name : layer.name;
+        for (const subLayer of layer.layers) {
+          addLayerToArray(subLayer, array, layerGroupName);
+        }
+      } else {
+        const resource: IEocOwsResource = this.generateResourceFromLayer(layer, groupName);
+        array.push(resource);
+      }
+    };
+
+    const resources = [];
     for (const layer of layers) {
-      const resource: IEocOwsResource = this.generateResourceFromLayer(layer);
-      // TODO check for layer types
-      owc.features.push(resource);
+      addLayerToArray(layer, resources);
     }
+    owc.features = resources;
 
     return owc;
   }
 
-  generateResourceFromLayer(layer: Layer): IEocOwsResource {
+  generateResourceFromLayer(layer: Layer, folderName?: string): IEocOwsResource {
     const resource: IEocOwsResource = {
       id: layer.id,
       properties: {
@@ -962,6 +991,7 @@ export class OwcJsonService {
         offerings: [this.generateOfferingFromLayer(layer)],
         opacity: layer.opacity,
         attribution: layer.attribution,
+        folder: folderName
       },
       type: 'Feature',
       geometry: null
@@ -997,8 +1027,10 @@ export class OwcJsonService {
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
       case XyzLayertype:
         return 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
+      case WfsLayertype:
+        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
       default:
-        console.error(`This type of layer (${layer.type}) has not been implemented yet.`);
+        console.warn(`This type of layer (${layer.type}) has not been implemented yet.`);
         return null;
     }
   }
@@ -1008,13 +1040,13 @@ export class OwcJsonService {
     switch (layer.type) {
       case GeojsonLayertype:
         const content = {
-          type: 'FeatureCollection',
+          type: 'application/geo+json',
           content: JSON.stringify(layer.data)
         };
         contents.push(content);
         break;
       default:
-        console.error(`Cannot get contents for this type of vectorlayer: (${layer.type})`);
+        console.warn(`Cannot get contents for this type of VectorLayer: (${layer.type})`);
     }
     return contents;
   }
@@ -1029,15 +1061,15 @@ export class OwcJsonService {
         case XyzLayertype:
           return this.getXyzOperationsFromLayer(layer);
         default:
-          console.error(`Cannot get operations for this type of layer: (${layer.type})`);
+          console.warn(`Cannot get operations for this type of layer: (${layer.type})`);
           return [];
       }
     } else if (layer instanceof VectorLayer) {
       switch (layer.type) {
-        // case 'wfs': <--- this type of layer has not been implemented yet in datatypes-layers/Layers.ts
-        //   return this.getWfsOperationsFromLayer(layer);
+        case WfsLayertype:
+          return this.getWfsOperationsFromLayer(layer);
         default:
-          console.error(`This type of service (${layer.type}) has not been implemented yet.`);
+          console.warn(`Cannot get operations for this type of layer: (${layer.type})`);
           return [];
       }
     }
@@ -1070,18 +1102,37 @@ export class OwcJsonService {
 
     const url = layer.url;
     const layerName = layer.name;
-    const version = layer.options.version ? layer.options.version : '1.1.0';
+    const version = layer.options?.version ? layer.options.version : '1.1.0';
+    const urlObject = new URL(url);
+    const typeName = urlObject.searchParams.get('typeName') || urlObject.searchParams.get('TypeName') || urlObject.searchParams.get('typename')
+                  || urlObject.searchParams.get('typeNames') || urlObject.searchParams.get('TypeNames') || urlObject.searchParams.get('typenames');
+    if (!typeName) {
+      console.warn(`URL does not contain the minimum required arguments for a WFS layer: ${url}`);
+      return [];
+    }
 
 
     const GetFeature: IOwsOperation = {
       code: 'GetFeature',
       method: 'GET',
       type: 'application/json',
-      href: `${url}?service=WFS&version=${version}&request=GetFeature`
+      href: url
     };
 
-    // let DescribeFeatureType: IOwsOperation = null;
-    // let GetCapabilities: IOwsOperation = null;
+    const GetCapabilities: IOwsOperation = {
+      code: 'GetCapabilities',
+      method: 'GET',
+      type: 'application/xml',
+      href: urlObject.origin + urlObject.pathname + '?service=WFS&request=GetCapabilities'
+    };
+
+    const DescribeFeatureType: IOwsOperation = {
+      code: 'DescribeFeatureType',
+      method: 'GET',
+      type: 'application/json',
+      href: urlObject.origin + urlObject.pathname + `?service=WFS&request=DescribeFeatureType&version=${version}&typeNames=${typeName}&outputFormat=application/json`
+    };
+
     // let GetPropertyValue: IOwsOperation = null;
     // let GetFeatureWithLock: IOwsOperation = null;
     // let LockFeature: IOwsOperation = null;
@@ -1093,8 +1144,8 @@ export class OwcJsonService {
 
     const operations = [
       GetFeature,
-      // GetCapabilities,
-      // DescribeFeatureType,
+      GetCapabilities,
+      DescribeFeatureType,
       // GetPropertyValue,
       // GetFeatureWithLock,
       // LockFeature,
