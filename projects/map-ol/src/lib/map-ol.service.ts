@@ -1454,8 +1454,14 @@ export class MapOlService {
           layerHit = false;
           this.hitLayerPrev = this.hitLayerCurr;
         }
-
-        this.layer_on_click(evt, item.layer, item.color);
+          const useEvent = this.topLayerCheckEvent(evt, hasPopup);
+          if (useEvent) {
+            if (useEvent === 'click') {
+              this.layer_on_click(evt, item.layer, item.color);
+            } else if (useEvent === 'move') {
+              this.layer_on_click(evt, item.layer, item.color);
+            }
+          }
         }
       }
     });
@@ -1468,6 +1474,43 @@ export class MapOlService {
       });
       this.map.getTargetElement().style.cursor = '';
     }
+  }
+
+  private topLayerCheckEvent(evt: olMapBrowserEvent<PointerEvent>, popup: Layer['popup']) {
+    let useEvent: 'click' | 'move' = null;
+    const clickOrMove = (evt: olMapBrowserEvent<PointerEvent>, popup: popup) => {
+      if (popup.event) {
+        if (this.popupEventIsBrowserEvent(popup, evt) && this.isPopupObjClick(popup)) {
+          useEvent = 'click';
+        } else if (this.popupEventIsBrowserEvent(popup, evt) && this.isPopupObjMove(popup)) {
+          useEvent = 'move';
+        }
+      } else {
+        /** only show popups without an event for browser click  */
+        if (evt.type === 'click') {
+          useEvent = 'click';
+        }
+      }
+    }
+    // check event is browser event
+    if (typeof popup === 'boolean') {
+      if (popup === true) {
+        useEvent = 'click';
+      }
+    } else if (this.isPopupStringArray(popup)) {
+      useEvent = 'click';
+    } else {
+      /** popup is  popup | popup[] */
+      if (this.isPopupObjArray(popup)) {
+        popup.map(p => {
+          clickOrMove(evt, p);
+        });
+      } else {
+        clickOrMove(evt, popup);
+      }
+    }
+
+    return useEvent;
   }
 
   public layer_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
