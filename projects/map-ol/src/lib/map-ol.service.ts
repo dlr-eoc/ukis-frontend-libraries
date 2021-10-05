@@ -1372,10 +1372,18 @@ export class MapOlService {
    *
    *  6. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
    *  7. overwrite properties if popup property is: popup | popup[]
-   *  7. check for pupupFunktion, asyncPupup and dynamicPopup
-   *  8. use addPopup() or addPopupObj()
+   *  8. check for pupupFunktion, asyncPupup and dynamicPopup
+   *  9. use addPopup() or addPopupObj()
    *
-   * 6. prepare popup properties and check if popup property is: boolean | Array<string> | popup | popup[]
+   *  10. check popup event and if move popup exists => reuse old popup
+   *  11. remove move popups if different event or !popup.event
+   *  12. create new popup if not 9. or 10.
+   *  13. prepare ol overlayoptions
+   *  14. remove DynamicPopup if exists
+   *  15. createPopupContainer
+   *  16. set ol overlay addEvent and type = popup
+   *  17. get coordinate from geometry or map.event
+   *  18. set Position and map.addOverlay(overlay) if popup not exists
    */
   public layersOnMapEvent(evt: olMapBrowserEvent<PointerEvent>) {
     const LayersAtPixel: ItemAtPixel[] = [];
