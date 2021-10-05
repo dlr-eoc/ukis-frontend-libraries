@@ -1192,6 +1192,14 @@ export class MapOlService {
           if (gl instanceof olLayer) {
             this.addEventsToLayer(l, gl, gl.getSource());
           }
+          /**
+           * groups are flattened in map.forEachLayerAtPixel so add popup to each layer
+           * popup will be shown for top layer in the Group if there is a pixel color
+           */
+          if (l.popup) {
+            gl.set('popup', l.popup);
+            gl['className_'] = `${l.id}_${olGetUid(gl)}`;
+          }
         });
       } else {
         console.error(`The custom_layer of ${l.id} in not a openlayers Layer`);
@@ -1221,10 +1229,11 @@ export class MapOlService {
         layer.setMinZoom(l.minZoom);
       }
 
-      if (l.popup) {
+      if (l.popup && !(layer instanceof olLayerGroup)) {
         layeroptions.popup = l.popup;
         /**
          * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * needs the class Name to detect if it is a different layer at the pixel value
          * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
          */
         layer['className_'] = l.id;
