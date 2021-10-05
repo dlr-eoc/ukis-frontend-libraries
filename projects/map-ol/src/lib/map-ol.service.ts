@@ -27,9 +27,10 @@ import olVectorTile from 'ol/source/VectorTile';
 import olXYZ from 'ol/source/XYZ';
 import olTileSource from 'ol/source/Tile';
 
-import { ImageWMS as olImageWMS, ImageStatic as olImageStatic } from 'ol/source';
 import { Options as olXYZOptions } from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
+import olTileImageSource from 'ol/source/TileImage';
+import olImageSource from "ol/source/Image";
 import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
 import olWMTS from 'ol/source/WMTS';
 import { Options as olWMTSOptions } from 'ol/source/WMTS';
@@ -1153,11 +1154,18 @@ export class MapOlService {
   }
 
   /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */
-  private setCrossOrigin(layer) {
+  private setCrossOrigin(l: Layer, layer) {
     if (layer instanceof olLayer) {
       const olSource = layer.getSource();
-      if (olSource instanceof olImageWMS || olSource instanceof olImageStatic) {
-        olSource['crossOrigin_'] = 'anonymous';
+      /** set crossOrigin for popup layers  */
+      if (l.crossOrigin || l.crossOrigin === null) {
+        if (olSource instanceof olImageSource || olSource instanceof olTileImageSource || olSource instanceof olTileSource) {
+          olSource['crossOrigin'] = l.crossOrigin
+        }
+      } else if (l.popup && !l.crossOrigin) {
+        if (olSource instanceof olImageSource || olSource instanceof olTileImageSource || olSource instanceof olTileSource) {
+          olSource['crossOrigin'] = 'anonymous';
+        }
       }
     }
   }
@@ -1176,11 +1184,11 @@ export class MapOlService {
         if (l.continuousWorld) {
           olSource.set('wrapX', l.continuousWorld);
         }
-        this.setCrossOrigin(layer);
+        this.setCrossOrigin(l, layer);
         this.addEventsToLayer(l, layer, olSource);
       } else if (layer instanceof olLayerGroup) {
         layer.getLayers().forEach(gl => {
-          this.setCrossOrigin(gl);
+          this.setCrossOrigin(l, gl);
           if (gl instanceof olLayer) {
             this.addEventsToLayer(l, gl, gl.getSource());
           }
