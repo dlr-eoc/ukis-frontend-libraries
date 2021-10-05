@@ -101,6 +101,8 @@ export interface IDynamicPopupArgs {
   dynamicPopup: popup['dynamicPopup'];
 }
 
+type ItemAtPixel = { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array };
+
 @Injectable({
   providedIn: 'root'
 })
@@ -1388,26 +1390,33 @@ export class MapOlService {
    * - forEachLayerAtPixel: Detect layers that have a color value at a pixel on the viewport (false positives unless the map layers have had different className)
    *   Raster Layers???
    */
-  private layers_on_click_move(evt: olMapBrowserEvent<PointerEvent>, layerFilter: (layer: olLayer<any>) => boolean) {
-    /** set cursor for features */
-    // TODO: do this only in vector vector_on_click???
-    /* if (evt.type === 'pointermove') {
-      const featureHit = this.map.forEachFeatureAtPixel(evt.pixel, () => {
-        return true;
-      });
-      if (featureHit) {
-        this.map.getTargetElement().style.cursor = 'pointer';
-      } else {
-        this.removeAllPopups((item) => {
-          return item.get('addEvent') === 'pointermove';
-        });
-        this.map.getTargetElement().style.cursor = '';
-      }
-    } */
-    // -----------------------------------------------
 
-    const LayersAtPixel: { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array }[] = [];
+  /**
+   *  layers_on_click() and layers_on_pointermove() should be removed
+   *  this filtering must be done later
+   *
+   *  1. on a Map event Filter if map has layers on the pixel
+   *  forEachLayerAtPixel: Detect layers that have a color value at a pixel on the viewport (false positives unless the map layers have had different className)
+   *  check layer source crossOrigin = anonymous
+   *
+   *  2. Filter if it is the top visible layer - so no popups are shown for layers beneath https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-916759628
+   *  3. check if the top visible layer has a popup property
+   *  4. For this Layers change the cursor on forEachLayerAtPixel -> hit
+   *
+   *  5. Differentiate between raster and vector to get features or layer.color for the properties passed to the popup
+   *  For Features change the cursor on forEachFeatureAtPixel -> hit
+   *
+   *  6. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
+   *  7. overwrite properties if popup property is: popup | popup[]
+   *  7. check for pupupFunktion, asyncPupup and dynamicPopup
+   *  8. use addPopup() or addPopupObj()
+   *
+   * 6. prepare popup properties and check if popup property is: boolean | Array<string> | popup | popup[]
+   */
+  public layers_on_click_move(evt: olMapBrowserEvent<PointerEvent>, layerFilter: (layer: olLayer<any>) => boolean) {
+    const LayersAtPixel: ItemAtPixel[] = [];
     let layerHit = false;
+
     /**
      * Detect layers that have a color value at a pixel on the viewport, and execute a callback with each matching layer.
      * Layers included in the detection can be configured through opt_layerFilter.
@@ -1418,14 +1427,17 @@ export class MapOlService {
      * If forEachLayerAtPixel is using return, it is only fired once!!!
      */
     this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
-      layerHit = true;
       LayersAtPixel.push({ layer, color });
-    }, {
-      layerFilter
     });
     LayersAtPixel.forEach((item, index) => {
+      /**
+       * only show for top layer and if top layer has popup
+       * should this be configurable at the layer ??
+       */
       const topLayer = 0;
       if (index === topLayer) {
+        const hasPopup = (item.layer.get('popup'));
+        if (hasPopup) {
         /** check if cursor was set (we need this only on move?) */
         this.hitLayerCurr = item.layer.get('id');
         if (!this.hitLayerPrev) {
@@ -1444,6 +1456,7 @@ export class MapOlService {
         }
 
         this.layer_on_click(evt, item.layer, item.color);
+        }
       }
     });
 
