@@ -219,11 +219,10 @@ export interface IVectorLayerOptions extends ILayerOptions {
 }
 
 /**
- * Deliberately does not have the `crossOrigin` property.
- * When using openlayers as a map-engine, `crossOrigin` is a property that UKIS just passes on to the layersource.
- * Since that layersource is provided by the user in a CustomLayer, setting `crossOrigin` in the ICustomLayerOptions would have no effect.
+ * The `crossOrigin` property can overwrite the one set in the layersource of the custom_layer if there is such a property e.g. when using OpenLayers as a map-engine
+ * It also can be used to disable get color values for a OpenLayers layer in the layer popup when set to crossOrigin: null
  */
-export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type' | 'crossOrigin'> {
+export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type'> {
   type?: TLayertype;
   custom_layer: any;
 }

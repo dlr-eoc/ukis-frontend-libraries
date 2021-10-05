@@ -16,6 +16,7 @@
 
 ### Features
 * **@dlr-eoc/services-layers:**:
+  - `CustomLayer` can now overwrite `crossOrigin` property if used with a OpenLayers Layer.
   - Extend Layer Type for events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Extend Layer Popup Type for multiple Popups [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/map-ol:**
