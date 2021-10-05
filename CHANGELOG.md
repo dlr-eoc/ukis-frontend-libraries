@@ -1,4 +1,8 @@
 ### Breaking Changes
+* **@dlr-eoc/map-ol:**
+  - Removed `MapOlService.layers_on_click(evt)` and `MapOlService.layers_on_pointermove(evt)` -> replace them by `MapOlService.layersOnMapEvent(evt)`.
+  - Renamed `MapOlService.layers_on_click_move(evt, layerFilter)` -> `MapOlService.layersOnMapEvent(evt)` layer filtering is now done later.
+
 * **@dlr-eoc/services-layers:**
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
 

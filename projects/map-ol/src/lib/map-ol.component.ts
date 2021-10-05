@@ -76,8 +76,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   map: Map;
   subs: Subscription[] = [];
   mapOnMoveend;
-  mapOnPointermove;
-  mapOnClick;
+  mapOnClickMove;
   mapOnDclick;
 
   private privMapwidth = 0;
@@ -139,9 +138,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     this.subs.forEach(sub => sub.unsubscribe());
     if (this.map) {
       this.map.un('moveend', this.mapOnMoveend);
-      this.map.un('click', this.mapOnClick);
+      this.map.un('click', this.mapOnClickMove);
       this.map.un('dblclick', this.mapOnDclick);
-      this.map.un('pointermove', this.mapOnPointermove);
       this.map.getTargetElement().removeEventListener('mouseleave', this.removePopupsOnMouseLeave);
       this.map.getInteractions().forEach((i) => {
         this.map.removeInteraction(i);
@@ -450,23 +448,17 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     };
     this.map.on('moveend', this.mapOnMoveend);
 
-    /** handle click on vektor layers */
-    this.mapOnClick = (evt: olMapBrowserEvent<PointerEvent>) => {
-      this.mapSvc.layers_on_click(evt);
+    /** handle click and pointermove/mousemove */
+    this.mapOnClickMove = (evt: olMapBrowserEvent<PointerEvent>) => {
+      this.mapSvc.layersOnMapEvent(evt);
     };
-    this.map.on('click', this.mapOnClick);
+    this.map.on(['click','pointermove'], this.mapOnClickMove);
 
     /** handle double click */
     this.mapOnDclick = (evt: olMapBrowserEvent<PointerEvent>) => {
       this.mapSvc.removeAllPopups();
     };
     this.map.on('dblclick', this.mapOnDclick);
-
-    /** handle pointermove/mousemove */
-    this.mapOnPointermove = (evt: olMapBrowserEvent<PointerEvent>) => {
-      this.mapSvc.layers_on_pointermove(evt);
-    };
-    this.map.on('pointermove', this.mapOnPointermove);
   }
 
 
