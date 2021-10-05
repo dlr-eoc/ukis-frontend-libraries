@@ -48,7 +48,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, Extent, returnOrUpdate } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -1339,45 +1339,9 @@ export class MapOlService {
     }
   }
 
+
+
   /** USED in map-ol.component */
-  public layers_on_click(evt: olMapBrowserEvent<PointerEvent>) {
-    const layerFilter = (layer) => {
-      const layerpopup: Layer['popup'] = layer.get('popup');
-      if (this.isPopupObjArray(layerpopup)) {
-        const cilickPopup = layerpopup.find(p => this.popupEventIsBrowserEvent(p, evt));
-        if (cilickPopup) {
-          return true;
-        }
-      } else {
-        if (layerpopup === true) {
-          return true;
-        } else if (!this.isPopupObjMove(layerpopup)) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    };
-    this.layers_on_click_move(evt, layerFilter);
-  }
-
-
-
-  public layers_on_pointermove(evt: olMapBrowserEvent<PointerEvent>) {
-    const layerFilter = (layer) => {
-      const layerpopup: Layer['popup'] = layer.get('popup');
-      if (this.isPopupObjArray(layerpopup)) {
-        const movePopups = layerpopup.filter(p => this.isPopupObjMove(p));
-        if (movePopups.length) {
-          return true;
-        }
-      } else {
-        return this.isPopupObjMove(layerpopup);
-      }
-    };
-    this.layers_on_click_move(evt, layerFilter);
-  }
-
   /**
    * TODO:
    * - check the pointer event
@@ -1413,7 +1377,7 @@ export class MapOlService {
    *
    * 6. prepare popup properties and check if popup property is: boolean | Array<string> | popup | popup[]
    */
-  public layers_on_click_move(evt: olMapBrowserEvent<PointerEvent>, layerFilter: (layer: olLayer<any>) => boolean) {
+  public layersOnMapEvent(evt: olMapBrowserEvent<PointerEvent>) {
     const LayersAtPixel: ItemAtPixel[] = [];
     let layerHit = false;
 
