@@ -1645,11 +1645,7 @@ export class MapOlService {
             }, {});
         }
 
-        /** function to create html string */
-      } else if (popupObj.pupupFunktion) {
-        args.popupFn = popupObj.pupupFunktion;
-      } else if (popupObj.dynamicPopup) {
-        args.dynamicPopup = popupObj.dynamicPopup;
+
       }
     }
 
@@ -1672,6 +1668,14 @@ export class MapOlService {
         });
         /** add event if popup object */
       } else {
+
+        /** adjust args if pupupFunktion or dynamicPopup*/
+        if (popupObj.pupupFunktion) {
+          args.popupFn = popupObj.pupupFunktion; //This could be done in createPopupContainer()
+        } else if (popupObj.dynamicPopup) {
+          args.dynamicPopup = popupObj.dynamicPopup; // This could be done in createPopupContainer()
+        }
+
         this.addPopup(args, popupProperties, null, popupObj.event, popupObj.single);
       }
     }
