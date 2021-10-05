@@ -1477,10 +1477,32 @@ export class MapOlService {
     return useEvent;
   }
 
-  public layer_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html#Subclasses
+   */
+  private checkIsRaster(layer: olLayer<any>): layer is olBaseImageLayer<olImageSource> | olBaseTileLayer<olTileSource> {
     if (layer instanceof olBaseImageLayer || layer instanceof olBaseTileLayer) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html#Subclasses
+   */
+  private checkIsVector(layer: olLayer<any>): layer is olBaseVectorLayer<olVectorSource<any>> {
+    if (layer instanceof olBaseVectorLayer && !this.checkIsRaster(layer)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public layer_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
+    if (this.checkIsRaster(layer)) {
       this.raster_on_click(evt, layer, color);
-    } else if (layer instanceof olBaseVectorLayer) {
+      } else if (this.checkIsVector(layer)) {
       this.vector_on_click(evt);
     }
   }
