@@ -110,6 +110,8 @@ export class MapOlService {
   private viewOptions: olViewOptions;
   public EPSG: string;
   private hitTolerance = 0;
+  private hitLayerCurr = null;
+  private hitLayerPrev = null;
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
   /**
@@ -1424,6 +1426,23 @@ export class MapOlService {
     LayersAtPixel.forEach((item, index) => {
       const topLayer = 0;
       if (index === topLayer) {
+        /** check if cursor was set (we need this only on move?) */
+        this.hitLayerCurr = item.layer.get('id');
+        if (!this.hitLayerPrev) {
+          this.hitLayerPrev = this.hitLayerCurr;
+        }
+
+        /** set cursor for Layers with a color value */
+        if (item.color) {
+          layerHit = true;
+        }
+
+        /** remove cursor and move-popups on layer change */
+        if (this.hitLayerPrev && this.hitLayerPrev !== this.hitLayerCurr) {
+          layerHit = false;
+          this.hitLayerPrev = this.hitLayerCurr;
+        }
+
         this.layer_on_click(evt, item.layer, item.color);
       }
     });

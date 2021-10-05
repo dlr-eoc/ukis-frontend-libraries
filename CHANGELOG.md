@@ -39,6 +39,7 @@
   - `OwcJsonService.getTimeDimensions`: `period` only added to dimension if actually given in `IEocOwsResourceDimension`.
   - `OwcJsonService.getWmsOptions`: now respects `STYLES` property either via `offering.styles` or via `GetMap` operation. All WMS-paras only set when actually present.
 * **@dlr-eoc/map-ol:**
+  - Display cursor pointer for Popups only if the top layer has pixels.
   - Popups with event `move` are rendered under existing Popups with event `click` [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915283092).
   - Prevent popup with event `move` to get added multiple times in some cases [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915067198).
   - Remove popup if layer above has not the same popup event [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-914312627).
