@@ -1467,7 +1467,10 @@ export class MapOlService {
 
   public vector_on_click(evt: olMapBrowserEvent<PointerEvent>) {
     const FeaturesAtPixel: { feature: olFeature<any> | olRenderFeature, layer: olLayer<any> }[] = [];
+    let featureHit = false;
     this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+      /** set cursor for features with a color value */
+      featureHit = true;
       FeaturesAtPixel.push({ feature, layer });
     }, {
       layerFilter: (layer) => {
@@ -1513,6 +1516,12 @@ export class MapOlService {
         }
       }
     });
+
+    if (featureHit) {
+      this.map.getTargetElement().style.cursor = 'pointer';
+    } else {
+      this.map.getTargetElement().style.cursor = '';
+    }
   }
 
   public raster_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
