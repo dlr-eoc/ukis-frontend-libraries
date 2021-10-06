@@ -1411,6 +1411,8 @@ export class MapOlService {
      */
     this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
       LayersAtPixel.push({ layer, color });
+    }, {
+      layerFilter: this.filterLayerNoPopup
     });
     LayersAtPixel.forEach((item, index) => {
       /**
@@ -1421,22 +1423,22 @@ export class MapOlService {
       if (index === topLayer) {
         const hasPopup = (item.layer.get('popup'));
         if (hasPopup) {
-        /** check if cursor was set (we need this only on move?) */
-        this.hitLayerCurr = item.layer.get('id');
-        if (!this.hitLayerPrev) {
-          this.hitLayerPrev = this.hitLayerCurr;
-        }
+          /** check if cursor was set (we need this only on move?) */
+          this.hitLayerCurr = item.layer.get('id');
+          if (!this.hitLayerPrev) {
+            this.hitLayerPrev = this.hitLayerCurr;
+          }
 
-        /** set cursor for Layers with a color value */
-        if (item.color) {
-          layerHit = true;
-        }
+          /** set cursor for Layers with a color value */
+          if (item.color) {
+            layerHit = true;
+          }
 
-        /** remove cursor and move-popups on layer change */
-        if (this.hitLayerPrev && this.hitLayerPrev !== this.hitLayerCurr) {
-          layerHit = false;
-          this.hitLayerPrev = this.hitLayerCurr;
-        }
+          /** remove cursor and move-popups on layer change */
+          if (this.hitLayerPrev && this.hitLayerPrev !== this.hitLayerCurr) {
+            layerHit = false;
+            this.hitLayerPrev = this.hitLayerCurr;
+          }
           const useEvent = this.topLayerCheckEvent(evt, hasPopup);
           if (useEvent) {
             if (useEvent === 'click') {
@@ -1457,6 +1459,21 @@ export class MapOlService {
       });
       this.map.getTargetElement().style.cursor = '';
     }
+  }
+
+  /**
+   * To filtered out layers and show the popup beneath e.g. text overlays
+   * in map.forEachLayerAtPixel for raster and map.forEachFeatureAtPixel for vector
+   */
+  private filterLayerNoPopup = (l: olLayer<olSource>) => {
+    const popup: Layer['popup'] = (l.get('popup'));
+    let shouldNotFilterLayer = true;
+    if (popup && this.isPopupObj(popup)) {
+      if (popup.filterLayer === true) {
+        shouldNotFilterLayer = false;
+      }
+    }
+    return shouldNotFilterLayer;
   }
 
   private topLayerCheckEvent(evt: olMapBrowserEvent<PointerEvent>, popup: Layer['popup']) {
@@ -1521,7 +1538,7 @@ export class MapOlService {
   public layer_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
     if (this.checkIsRaster(layer)) {
       this.raster_on_click(evt, layer, color);
-      } else if (this.checkIsVector(layer)) {
+    } else if (this.checkIsVector(layer)) {
       this.vector_on_click(evt);
     }
   }
@@ -1535,14 +1552,21 @@ export class MapOlService {
       FeaturesAtPixel.push({ feature, layer });
     }, {
       layerFilter: (layer) => {
+        let shouldNotFilterLayer = true;
         if (layer instanceof olBaseVectorLayer) {
           const olSource: olCluster | olVectorSource<any> | olVectorTile = layer.getSource();
           if (olSource instanceof olCluster) {
-            return (olSource as any).getSource() instanceof olVectorSource;
+            shouldNotFilterLayer = (olSource as any).getSource() instanceof olVectorSource;
           } else {
-            return olSource instanceof olVectorSource || olSource instanceof olVectorTile;
+            shouldNotFilterLayer = olSource instanceof olVectorSource || olSource instanceof olVectorTile;
           }
         }
+
+        const filter = this.filterLayerNoPopup(layer);
+        if (filter === false) {
+          shouldNotFilterLayer = false;
+        }
+        return shouldNotFilterLayer;
       },
       hitTolerance: this.hitTolerance
     });
