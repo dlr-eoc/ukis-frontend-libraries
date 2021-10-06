@@ -1162,13 +1162,17 @@ export class MapOlService {
     if (layer instanceof olLayer) {
       const olSource = layer.getSource();
       /** set crossOrigin for popup layers  */
-      if (l.crossOrigin || l.crossOrigin === null) {
-        if (olSource instanceof olImageSource || olSource instanceof olTileImageSource || olSource instanceof olTileSource) {
-          olSource['crossOrigin'] = l.crossOrigin
-        }
-      } else if (l.popup && !l.crossOrigin) {
+      if (l.popup && !l.crossOrigin) {
         if (olSource instanceof olImageSource || olSource instanceof olTileImageSource || olSource instanceof olTileSource) {
           olSource['crossOrigin'] = 'anonymous';
+          olSource['crossOrigin_'] = 'anonymous';
+        }
+      }
+
+      if (l.crossOrigin || l.crossOrigin === null) {
+        if (olSource instanceof olImageSource || olSource instanceof olTileImageSource || olSource instanceof olTileSource) {
+          olSource['crossOrigin'] = l.crossOrigin;
+          olSource['crossOrigin_'] = l.crossOrigin;
         }
       }
     }
@@ -1192,6 +1196,10 @@ export class MapOlService {
         this.addEventsToLayer(l, layer, olSource);
       } else if (layer instanceof olLayerGroup) {
         layer.getLayers().forEach(gl => {
+          const layerId = `${l.id}_${olGetUid(gl)}`;
+          if (!gl.get('id')) {
+            gl.set('id', layerId);
+          }
           this.setCrossOrigin(l, gl);
           if (gl instanceof olLayer) {
             this.addEventsToLayer(l, gl, gl.getSource());
@@ -1200,9 +1208,12 @@ export class MapOlService {
            * groups are flattened in map.forEachLayerAtPixel so add popup to each layer
            * popup will be shown for top layer in the Group if there is a pixel color
            */
-          if (l.popup) {
+          if (l.popup && !gl.get('popup')) {
             gl.set('popup', l.popup);
-            gl['className_'] = `${l.id}_${olGetUid(gl)}`;
+            /** set className if not default ol-layer */
+            if (gl.getClassName() === 'ol-layer') {
+              gl['className_'] = layerId;
+            }
           }
         });
       } else {
