@@ -101,8 +101,6 @@ export interface IDynamicPopupArgs {
   dynamicPopup: popup['dynamicPopup'];
 }
 
-type ItemAtPixel = { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array };
-
 @Injectable({
   providedIn: 'root'
 })
@@ -1397,8 +1395,8 @@ export class MapOlService {
    *  18. set Position and map.addOverlay(overlay) if popup not exists
    */
   public layersOnMapEvent(evt: olMapBrowserEvent<PointerEvent>) {
-    const LayersAtPixel: ItemAtPixel[] = [];
     let layerHit = false;
+
 
     /**
      * Detect layers that have a color value at a pixel on the viewport, and execute a callback with each matching layer.
@@ -1406,50 +1404,49 @@ export class MapOlService {
      *
      * Note: this may give false positives unless the map layers have had different *className* properties assigned to them.
      * Also there could be cross-origin data, so set crossOrigin: 'anonymous' for layers where you want get pixel data!!
-     *
-     * If forEachLayerAtPixel is using return, it is only fired once!!!
      */
-    this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
-      LayersAtPixel.push({ layer, color });
+    const item = this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
+      /**
+       * return to stop detection and use the top (first detected) layer
+       * This is faster than pushing the layers into an array and iterate over it.
+       * And normally the user is only interested in the top Layer. If it is still necessary to detect several layers at the same time, then use a new function for map.on()
+       */
+      return { layer, color };
     }, {
       layerFilter: this.filterLayerNoPopup
     });
-    LayersAtPixel.forEach((item, index) => {
+    if (item) {
       /**
        * only show for top layer and if top layer has popup
-       * should this be configurable at the layer ??
        */
-      const topLayer = 0;
-      if (index === topLayer) {
-        const hasPopup = (item.layer.get('popup'));
-        if (hasPopup) {
-          /** check if cursor was set (we need this only on move?) */
-          this.hitLayerCurr = item.layer.get('id');
-          if (!this.hitLayerPrev) {
-            this.hitLayerPrev = this.hitLayerCurr;
-          }
+      const hasPopup: Layer['popup'] = (item.layer.get('popup'));
+      if (hasPopup) {
+        /** check if cursor was set (we need this only on move?) */
+        this.hitLayerCurr = item.layer.get('id');
+        if (!this.hitLayerPrev) {
+          this.hitLayerPrev = this.hitLayerCurr;
+        }
 
-          /** set cursor for Layers with a color value */
-          if (item.color) {
-            layerHit = true;
-          }
+        /** set cursor for Layers with a color value */
+        if (item.color) {
+          layerHit = true;
+        }
 
-          /** remove cursor and move-popups on layer change */
-          if (this.hitLayerPrev && this.hitLayerPrev !== this.hitLayerCurr) {
-            layerHit = false;
-            this.hitLayerPrev = this.hitLayerCurr;
-          }
-          const useEvent = this.topLayerCheckEvent(evt, hasPopup);
-          if (useEvent) {
-            if (useEvent === 'click') {
-              this.layer_on_click(evt, item.layer, item.color);
-            } else if (useEvent === 'move') {
-              this.layer_on_click(evt, item.layer, item.color);
-            }
+        /** remove cursor and move-popups on layer change */
+        if (this.hitLayerPrev && this.hitLayerPrev !== this.hitLayerCurr) {
+          layerHit = false;
+          this.hitLayerPrev = this.hitLayerCurr;
+        }
+        const useEvent = this.topLayerCheckEvent(evt, hasPopup);
+        if (useEvent) {
+          if (useEvent === 'click') {
+            this.layer_on_click(evt, item.layer, item.color);
+          } else if (useEvent === 'move') {
+            this.layer_on_click(evt, item.layer, item.color);
           }
         }
       }
-    });
+    }
 
     if (layerHit) {
       this.map.getTargetElement().style.cursor = 'pointer';
@@ -1544,12 +1541,16 @@ export class MapOlService {
   }
 
   public vector_on_click(evt: olMapBrowserEvent<PointerEvent>) {
-    const FeaturesAtPixel: { feature: olFeature<any> | olRenderFeature, layer: olLayer<any> }[] = [];
     let featureHit = false;
-    this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+    const item = this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
       /** set cursor for features with a color value */
       featureHit = true;
-      FeaturesAtPixel.push({ feature, layer });
+
+      /**
+       * return to stop detection and use the top (first detected) feature
+       * This is faster than pushing the feature into an array and iterate over it.
+       */
+      return { feature, layer };
     }, {
       layerFilter: (layer) => {
         let shouldNotFilterLayer = true;
@@ -1571,36 +1572,40 @@ export class MapOlService {
       hitTolerance: this.hitTolerance
     });
 
-    FeaturesAtPixel.forEach((item, index) => {
-      const topFeature = 0;
-      if (index === topFeature) {
+    if (item) {
+      /**
+       * only show for top feature and if top layer has popup
+       */
+      const hasPopup: Layer['popup'] = (item.layer.get('popup'));
+      if (hasPopup) {
         const layer = item.layer;
         const feature = item.feature;
-        const layerpopup: Layer['popup'] = layer.get('popup');
+
         let properties: any = {};
 
-        if (layer instanceof olBaseVectorLayer && layerpopup) {
-          const childFeatures = feature.getProperties().features;
-          if (childFeatures && childFeatures.length === 1) {
-            const childFeature = childFeatures[0];
-            properties = childFeature.getProperties();
-          } else if (childFeatures && childFeatures.length > 1) {
-            /** or check for layerpopup.event !== move */
-            if (evt.type === 'click') {
-              const extent = this.getFeaturesExtent(feature.getProperties().features);
-              this.setExtent(extent);
-              return false;
-            } else {
-              return true;
-            }
+        const childFeatures = feature.getProperties().features;
+        if (childFeatures && childFeatures.length === 1) {
+          const childFeature = childFeatures[0];
+          properties = childFeature.getProperties();
+        } else if (childFeatures && childFeatures.length > 1) {
+          /**
+           * zoom to cluster on click
+           * or check for layerpopup.event !== move
+           */
+          if (evt.type === 'click') {
+            const extent = this.getFeaturesExtent(feature.getProperties().features);
+            this.setExtent(extent);
+            return false;
           } else {
-            // type no cluster
-            properties = feature.getProperties();
+            return true;
           }
-          this.prepareAddPopup(properties, layer, feature, evt, layerpopup);
+        } else {
+          // type no cluster
+          properties = feature.getProperties();
         }
+        this.prepareAddPopup(properties, layer, feature, evt, hasPopup);
       }
-    });
+    }
 
     if (featureHit) {
       this.map.getTargetElement().style.cursor = 'pointer';
