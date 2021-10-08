@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { IPopupArgs, MapOlService } from './map-ol.service';
-import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer } from '@dlr-eoc/services-layers';
+import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
 
 import olTileLayer from 'ol/layer/Tile';
 import olXYZ from 'ol/source/XYZ';
+import olOSM from 'ol/source/OSM';
 
 import olVectorLayer from 'ol/layer/Vector';
 import olVectorImageLayer from 'ol/layer/VectorImage';
@@ -33,12 +34,13 @@ import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import testFeatureCollection from '../assets/testFeatureCollection.json';
 import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
-import { get as getProjection, transform } from 'ol/proj';
+import { get as getProjection, transform, transformExtent } from 'ol/proj';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
 import { Subject } from 'rxjs';
 import { ApplicationRef, Component, Input } from '@angular/core';
-
+import { getCenter as olGetCenter } from 'ol/extent';
+import olMapBrowserEvent from 'ol/MapBrowserEvent';
 
 
 const WebMercator = 'EPSG:3857';
@@ -74,7 +76,10 @@ let ukisWmtsLayer: WmtsLayer;
 let ukisvectorLayer: VectorLayer;
 
 /** ID-ukis-vector-image */
-let ukisCustomLayer: CustomLayer;
+let ukisCustomLayerVector: CustomLayer;
+
+/** ID-ukis-raster-image */
+let ukisCustomLayerRaster: CustomLayer;
 
 /** ID-ukis-group-layer */
 let ukisGroupLayer: LayerGroup;
@@ -86,8 +91,9 @@ let groupLayer2: olLayerGroup;
 /** ID-group-layer3 */
 let groupLayer3: olLayerGroup;
 
-const createMapTarget = (size) => {
+const createMapTarget = (size: number[]) => {
   const container = document.createElement('div');
+  container.style.border = 'solid 1px #000';
   container.id = 'map';
   container.style.width = `${size[0]}px`;
   container.style.height = `${size[1]}px`;
@@ -97,7 +103,6 @@ const createMapTarget = (size) => {
     container
   };
 };
-
 
 @Component({
   selector: 'app-mock-popup',
@@ -140,17 +145,20 @@ const beforeEachFn = () => {
   vectorLayer.set('id', 'ID-vector');
   vectorLayer.set('name', 'GeoJSON Vector Layer');
 
+  const imageExtent = [
+    -105.41888884797893,
+    6.480590573390401,
+    -15.540298246016693,
+    42.53496284727569
+  ];
   imageLayer = new olImageLayer({
     source: new olImageStaticSource({
-      attributions: '© <a href="http://xkcd.com/license.html">xkcd</a>',
-      url: 'https://imgs.xkcd.com/comics/online_communities.png',
-      imageExtent: [0, 0, 1024, 968],
-      projection: new olProjection({
-        code: 'xkcd-image',
-        units: 'pixels',
-        extent: [0, 0, 1024, 968]
-      })
-    })
+      attributions: '© OpenStreetMap contributors',
+      url: 'base/src/assets/osmTestImg.jpg',
+      imageExtent: imageExtent,
+      projection: 'EPSG:4326'
+    }),
+    extent: transformExtent(imageExtent, WGS84, WebMercator)
   });
   imageLayer.set('id', 'ID-image');
 
@@ -211,7 +219,7 @@ const beforeEachFn = () => {
   groupLayer3.set('id', 'ID-group-layer3');
 
   /** UKIS Layers ----------------------- */
-  ukisCustomLayer = new CustomLayer({
+  ukisCustomLayerVector = new CustomLayer({
     id: 'ID-ukis-custom',
     name: 'Custom Layer KML',
     type: 'custom',
@@ -220,6 +228,21 @@ const beforeEachFn = () => {
     popup: {
       single: true
     },
+  });
+
+  ukisCustomLayerRaster = new CustomLayer({
+    id: 'ID-ukis-raster-image',
+    name: 'OSM Clip',
+    visible: true,
+    custom_layer: new olTileLayer({
+      source: new olOSM()
+    }),
+    bbox: [
+      -105.41888884797893,
+      6.480590573390401,
+      -15.540298246016693,
+      42.53496284727569
+    ]
   });
 
   ukisRasterLayer = new RasterLayer({
@@ -316,7 +339,7 @@ const beforeEachFn = () => {
   ukisGroupLayer = new LayerGroup({
     id: 'ID-ukis-group-layer',
     name: 'ukis group',
-    layers: [ukisvectorLayer, ukisWmtsLayer, ukisWmsLayer, ukisRasterLayer, ukisCustomLayer]
+    layers: [ukisvectorLayer, ukisWmtsLayer, ukisWmsLayer, ukisRasterLayer, ukisCustomLayerVector]
   });
 };
 
@@ -560,7 +583,7 @@ describe('MapOlService ukisLayers', () => {
   it('should reset/add ukisLayers from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
-    const layers = [ukisvectorLayer, ukisRasterLayer, ukisCustomLayer];
+    const layers = [ukisvectorLayer, ukisRasterLayer, ukisCustomLayerVector];
     layers.map(l => {
       service.setUkisLayer(l, 'Layers');
     });
@@ -627,6 +650,27 @@ describe('MapOlService ukisLayers', () => {
     service.setUkisLayers([], 'Layers');
     expect(service.getLayers('Layers').length).toBe(0);
   });
+
+  it('should set crossOrigin and className for CutomLayers with a Popup', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+    const popupOb: popup = {
+      event: 'click'
+    }
+    ukisCustomLayerRaster.popup = popupOb;
+    service.setUkisLayer(ukisCustomLayerRaster, 'Layers');
+
+
+    const mapLayers = service.getLayers('Layers');
+    expect(mapLayers.length).toBe(1);
+    const olLayerFromMap = mapLayers[0] as olTileLayer<olTileSource>;
+    expect(olLayerFromMap.get('id')).toBe(ukisCustomLayerRaster.id);
+    expect(olLayerFromMap instanceof olTileLayer).toBe(true);
+    expect(olLayerFromMap.getClassName()).toBe(ukisCustomLayerRaster.id);
+    const olSource = olLayerFromMap.getSource();
+    expect(olSource['crossOrigin'] && olSource['crossOrigin_']).toBe('anonymous');
+  })
 });
 
 describe('MapOlService TileGrid', () => {
@@ -847,95 +891,184 @@ describe('MapOlService popup', () => {
     expect(service.getPopups().length).toBe(0);
     expect(appRef.viewCount).toEqual(0);
   });
-
 });
 
 describe('MapOlService Events', () => {
   beforeEach(beforeEachFn);
 
-  it('should handle all layers on click', () => {
+  it('should only show a popup for the top visible layer with a popup property - layersOnMapEvent()', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
 
-    service.setUkisLayers(ukisGroupLayer.layers, 'layers');
 
-    const browserEvent = {
-      coordinate_: null,
-      dragging: false,
-      frameState: null,
-      map: service.map,
-      originalEvent: null,
-      pixel_: [456, 368],
-      target: service.map,
+    /** add popup prop to olLayer for hasPopup in layersOnMapEvent */
+    const popupObj: popup = {
+      event: 'click',
+      options: { autoPan: false }
+    };
+    rasterLayer.set('popup', popupObj);
+    vectorLayer.set('popup', popupObj);
+
+    service.addLayer(rasterLayer, 'layers');
+    /** add vector layer above the raster layer */
+    service.addLayer(vectorLayer, 'layers');
+
+    /** render map so map.frameState exists */
+    service.map.renderSync();
+
+    const testFeature = vectorLayer.getSource().getFeatures()[0];
+    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
       type: 'click',
-      coordinate: [1588172.8451977037, 6138394.826723266],
-      pixel: [456, 368],
-      preventDefault: null,
-      defaultPrevented: false,
-      stopPropagation: null,
-      propagationStopped: null
-    };
-
-    let error = null;
-
-    try {
-      service.layers_on_click(browserEvent);
-      expect(error).toBeNull();
+      map: service.map,
+      originalEvent: null,
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
     }
-    catch (e) {
-      error = e;
-      expect(error).toBeUndefined();
-    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+    service.layersOnMapEvent(browserEvent);
+
+    const popups = service.getPopups();
+    expect(popups.length).toBe(1);
+    const popupOnMap = popups[0];
+    expect(popupOnMap instanceof olOverlay).toBeTrue();
+    expect(popupOnMap.getId()).toBe(`${vectorLayer.get('id')}:${olGetUid(testFeature)}`);
   });
 
-  it('should handle all layers on pointermove', () => {
+  it('should distinguish between on click or move ', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
 
+    const popupObj: Layer['popup'] = [
+      {
+        event: 'click',
+        pupupFunktion: () => `<p>test</p>`,
+        options: { autoPan: false }
+      },
+      {
+        event: 'move',
+        options: { autoPan: false }
+      }
+    ];
 
-    service.setUkisLayers(ukisGroupLayer.layers, 'layers');
+    vectorLayer.set('popup', popupObj);
+    service.addLayer(vectorLayer, 'layers');
 
-    const browserEvent = {
-      coordinate_: null,
-      dragging: false,
-      frameState: null,
+    /** render map so map.frameState exists */
+    service.map.renderSync();
+
+    const testFeature = vectorLayer.getSource().getFeatures()[0];
+    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
+      type: 'click',
       map: service.map,
       originalEvent: null,
-      pixel_: [456, 368],
-      target: service.map,
-      type: 'pointermove',
-      coordinate: [1588172.8451977037, 6138394.826723266],
-      pixel: [456, 368],
-      preventDefault: null,
-      defaultPrevented: false,
-      stopPropagation: null,
-      propagationStopped: null
-    };
-
-    let error = null;
-
-    try {
-      service.layers_on_pointermove(browserEvent);
-      expect(error).toBeNull();
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
     }
-    catch (e) {
-      error = e;
-      expect(error).toBeUndefined();
-    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+    const isEvent = service['topLayerCheckEvent'](browserEvent, popupObj);
+    expect(isEvent).toBe(browserEvent.type);
   });
 
-  // TODO: layer_on_click
-  /* it('should handle vector on click or move', () => {
 
-  }); */
+  it('should handle vector on click', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
 
-  // TODO: vector_on_click
-  /* it('should handle vector on click or move', () => {
-  }); */
+    /** add popup prop to olLayer for hasPopup in layers_on_click_move */
+    const popupObj: popup = {
+      event: 'click',
+      options: { autoPan: false }
+    };
+    vectorLayer.set('popup', popupObj);
+    service.addLayer(vectorLayer, 'layers');
 
-  // TODO:  raster_on_click
-  /* it('should handle raster on click or move', () => {
-  }); */
+
+    /** render map so map.frameState exists */
+    service.map.renderSync();
+
+    const testFeature = vectorLayer.getSource().getFeatures()[0];
+    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
+      type: 'click',
+      map: service.map,
+      originalEvent: null,
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
+    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+    service.vectorOnEvent(browserEvent);
+
+    const popups = service.getPopups();
+    expect(popups.length).toBe(1);
+
+    const popupOnMap = popups[0];
+    expect(popupOnMap instanceof olOverlay).toBeTrue();
+    /** OVERLAY_TYPE_KEY, OVERLAY_TYPE_VALUE */
+    expect(popupOnMap.get('type')).toBe('popup');
+    expect(popupOnMap.getId()).toBe(`${vectorLayer.get('id')}:${olGetUid(testFeature)}`);
+    expect(popupOnMap.get('addEvent')).toBe(popupObj.event);
+  });
+
+  /*
+   * This test is complicated because async loading of the image is not working properly
+  it('should handle raster on click', () => {
+  });
+  */
+
+  it('should filter out layers for popup', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+    const filterPopup: popup = {
+      filterLayer: true
+    };
+    vectorLayer.set('popup', filterPopup);
+    service.addLayer(vectorLayer, 'layers');
+
+
+    service.map.renderSync();
+
+    const testFeature = vectorLayer.getSource().getFeatures()[0];
+    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
+      type: 'click',
+      map: service.map,
+      originalEvent: null,
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
+    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+    service.vectorOnEvent(browserEvent);
+
+    const popups = service.getPopups();
+    expect(popups.length).toBe(0);
+  })
 });
 
 describe('MapOlService State', () => {
