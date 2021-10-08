@@ -1063,7 +1063,7 @@ export class MapOlService {
     } else if (l.url) {
       olSource = new olTileJSON({
         url: l.url,
-        crossOrigin: 'anonymous',
+        crossOrigin: (l.crossOrigin && l.crossOrigin === null) ? l.crossOrigin : 'anonymous',
         wrapX: false
       });
     }
