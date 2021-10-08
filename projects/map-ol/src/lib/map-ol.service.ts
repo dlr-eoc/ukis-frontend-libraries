@@ -1340,10 +1340,10 @@ export class MapOlService {
     return Array.isArray(layerpopup) && layerpopup.length && typeof layerpopup[0] === 'string';
   }
 
-  private popupEventIsBrowserEvent(popup: popup, evt: olMapBrowserEvent<PointerEvent>) {
-    if (popup.event === 'move' && evt.type === 'pointermove') {
+  private eventIsBrowserEvent(popupEvt: popup['event'], evt: olMapBrowserEvent<PointerEvent>) {
+    if (popupEvt === 'move' && evt.type === 'pointermove') {
       return true;
-    } else if (popup.event === 'click' && evt.type === 'click') {
+    } else if (popupEvt === 'click' && evt.type === 'click') {
       return true;
     }
   }
@@ -1473,9 +1473,9 @@ export class MapOlService {
     let useEvent: 'click' | 'move' = null;
     const clickOrMove = (evt: olMapBrowserEvent<PointerEvent>, popup: popup) => {
       if (popup.event) {
-        if (this.popupEventIsBrowserEvent(popup, evt) && this.isPopupObjClick(popup)) {
+        if (this.eventIsBrowserEvent(popup.event, evt) && this.isPopupObjClick(popup)) {
           useEvent = 'click';
-        } else if (this.popupEventIsBrowserEvent(popup, evt) && this.isPopupObjMove(popup)) {
+        } else if (this.eventIsBrowserEvent(popup.event, evt) && this.isPopupObjMove(popup)) {
           useEvent = 'move';
         }
       } else {
@@ -1488,10 +1488,16 @@ export class MapOlService {
     // check event is browser event
     if (typeof popup === 'boolean') {
       if (popup === true) {
-        useEvent = 'click';
+        /** only show popups without an event for browser click  */
+        if (evt.type === 'click') {
+          useEvent = 'click';
+        }
       }
     } else if (this.isPopupStringArray(popup)) {
-      useEvent = 'click';
+      /** only show popups without an event for browser click  */
+      if (evt.type === 'click') {
+        useEvent = 'click';
+      }
     } else {
       /** popup is  popup | popup[] */
       if (this.isPopupObjArray(popup)) {
@@ -1662,7 +1668,7 @@ export class MapOlService {
     /** Popup is array of popupObj - limit properties */
     else if (this.isPopupObjArray(layerpopup)) {
       // is the first popupObj in the array with the same event as evt.type
-      const popupObj = layerpopup.find(p => this.popupEventIsBrowserEvent(p, evt));
+      const popupObj = layerpopup.find(p => this.eventIsBrowserEvent(p.event, evt));
       limitPopupObjProperties(popupObj);
     }
     /** Popup is object - limit properties */
@@ -1696,7 +1702,7 @@ export class MapOlService {
     /** overwrite and us popupFunction or dynamicPopup */
     if (this.isPopupObjArray(layerpopup)) {
       layerpopup.forEach(p => {
-        if (this.popupEventIsBrowserEvent(p, evt)) {
+        if (this.eventIsBrowserEvent(p.event, evt)) {
           overwritePopup(p);
         }
       })
@@ -1732,7 +1738,7 @@ export class MapOlService {
     else if (this.isPopupObjArray(layerpopup)) {
       layerpopup.forEach(p => {
         // filter that browser event and popup event are the same
-        if (this.popupEventIsBrowserEvent(p, evt)) {
+        if (this.eventIsBrowserEvent(p.event, evt)) {
           addPopupObj(p);
         }
       });
@@ -1813,7 +1819,7 @@ export class MapOlService {
        * then merge the popup?.options with the default ol/overlay options
        */
       if (this.isPopupObjArray(layerpopup)) {
-        const objForEvent = layerpopup.find(p => this.popupEventIsBrowserEvent(p, browserEvent));
+        const objForEvent = layerpopup.find(p => this.eventIsBrowserEvent(p.event, browserEvent));
         if (objForEvent.options) {
           overlayoptions = Object.assign(defaultOptions, objForEvent.options);
         }
