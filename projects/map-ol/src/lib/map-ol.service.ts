@@ -1439,11 +1439,7 @@ export class MapOlService {
         }
         const useEvent = this.topLayerCheckEvent(evt, hasPopup);
         if (useEvent) {
-          if (useEvent === 'click') {
-            this.layer_on_click(evt, item.layer, item.color);
-          } else if (useEvent === 'move') {
-            this.layer_on_click(evt, item.layer, item.color);
-          }
+          this.layerOnEvent(evt, item.layer, item.color);
         }
       }
     }
@@ -1532,15 +1528,15 @@ export class MapOlService {
     }
   }
 
-  public layer_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
+  public layerOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
     if (this.checkIsRaster(layer)) {
-      this.raster_on_click(evt, layer, color);
+      this.rasterOnEvent(evt, layer, color);
     } else if (this.checkIsVector(layer)) {
-      this.vector_on_click(evt);
+      this.vectorOnEvent(evt);
     }
   }
 
-  public vector_on_click(evt: olMapBrowserEvent<PointerEvent>) {
+  public vectorOnEvent(evt: olMapBrowserEvent<PointerEvent>) {
     let featureHit = false;
     const item = this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
       /** set cursor for features with a color value */
@@ -1614,7 +1610,7 @@ export class MapOlService {
     }
   }
 
-  public raster_on_click(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
+  public rasterOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
     const layerpopup: Layer['popup'] = layer.get('popup');
     let properties: any = {};
 
