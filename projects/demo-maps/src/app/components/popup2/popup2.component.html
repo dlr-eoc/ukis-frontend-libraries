@@ -1,0 +1,15 @@
+<table class="table">
+  <caption>
+    Demo for a basic Clarity table.
+  </caption>
+  <thead>
+    <tr>
+      <th *ngFor="let kv of data | keyvalue">{{ kv.key }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td *ngFor="let kv of data | keyvalue">{{ kv.value }}</td>
+    </tr>
+  </tbody>
+</table>
