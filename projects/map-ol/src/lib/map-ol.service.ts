@@ -48,7 +48,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -1569,6 +1569,16 @@ export class MapOlService {
         if (filter === false) {
           shouldNotFilterLayer = false;
         }
+
+        /** fix for https://github.com/openlayers/openlayers/issues/12886 */
+        const layerExtent = layer.getExtent();
+        if (layerExtent) {
+          const pixelCoordinate = this.map.getCoordinateFromPixel(evt.pixel);
+          if (!olContainsCoordinate(layerExtent, pixelCoordinate)) {
+            shouldNotFilterLayer = false;
+          }
+        }
+
         return shouldNotFilterLayer;
       },
       hitTolerance: this.hitTolerance
@@ -1755,8 +1765,24 @@ export class MapOlService {
     // check if popup is already there and event is move
     const layerID = args.layer.get('id');
     const moveID = `popup_move_ID`;
+    const moveKeyLayerFeature = 'move_ID_L_F';
     const movePopup = this.getPopups().find(item => item.getId() === moveID);
     const browserEvent = args.event;
+
+    let moveIDlf = null;
+    if (event === 'move') {
+      /** only on raster color is added - see rasterOnEvent()*/
+      if (args.properties?.color) {
+        moveIDlf = `${layerID}:${args.properties?.color.toString()}`;
+      } else {
+        if (args.feature) {
+          moveIDlf = `${layerID}:${olGetUid(args.feature)}`;
+        } else if (args.layer) {
+          moveIDlf = `${layerID}:${olGetUid(args.layer)}`;
+        }
+      }
+    }
+
     /**
      * If event move and the map already has a Overlay for move
      * then only create new html container and set the position
@@ -1768,8 +1794,13 @@ export class MapOlService {
       } else {
         coordinate = browserEvent.coordinate;
       }
+
+      /** check if layer or feature changes, then only create new container */
+      if (moveIDlf !== movePopup.get(moveKeyLayerFeature)) {
       const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
       movePopup.setElement(container);
+      }
+
       movePopup.setPosition(coordinate);
       /** update movePopup to be rendered over the previous added popup */
       movePopup.getElement().parentElement.style.zIndex = '1';
@@ -1828,6 +1859,9 @@ export class MapOlService {
       }
 
       const overlay = new olOverlay(overlayoptions);
+      if (moveIDlf) {
+        overlay.set(moveKeyLayerFeature, moveIDlf);
+      }
 
       if (removePopups) {
         this.removeAllPopups((item) => {
