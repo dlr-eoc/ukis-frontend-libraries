@@ -319,7 +319,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const customLayerGroup = new CustomLayer({
       id: 'customLayerOlGroup',
       name: 'Custom Layer OlGroup',
-      visible: true,
+      visible: false,
       opacity: 0.6,
       popup: {
         event: 'move',
@@ -402,12 +402,12 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
                 })
               });
             } else if (mvtlayer === 'boundary') {
-            return new olStyle({
-              stroke: new olStroke({
-                color: 'gray',
-                width: 1
-              }),
-              fill: new olFill({
+              return new olStyle({
+                stroke: new olStroke({
+                  color: 'gray',
+                  width: 1
+                }),
+                fill: new olFill({
                   color: 'rgba(0,0,0,0)',
                 })
               });
@@ -423,10 +423,10 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
                   return new olStyle({
                     fill: new olFill({
                       color: 'rgba(168,221,181,0.7)',
-              })
-            });
-          }
-        }
+                    })
+                  });
+                }
+              }
             }
           }
         }
