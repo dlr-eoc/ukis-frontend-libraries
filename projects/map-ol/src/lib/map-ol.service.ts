@@ -1181,14 +1181,14 @@ export class MapOlService {
       const layer = (l.custom_layer as olBaseLayer);
 
       if (layer instanceof olLayer) {
-        const olSource = layer.getSource();
-        olSource.set('wrapX', false);
+        const olSource = layer.getSource() as olSource;
+        olSource['wrapX_'] = false;
         if (l.attribution) {
           olSource.setAttributions([l.attribution]);
         }
 
         if (l.continuousWorld) {
-          olSource.set('wrapX', l.continuousWorld);
+          olSource['wrapX_'] = l.continuousWorld;
         }
         this.setCrossOrigin(l, layer);
         this.addEventsToLayer(l, layer, olSource);
@@ -1797,8 +1797,8 @@ export class MapOlService {
 
       /** check if layer or feature changes, then only create new container */
       if (moveIDlf !== movePopup.get(moveKeyLayerFeature)) {
-      const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
-      movePopup.setElement(container);
+        const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
+        movePopup.setElement(container);
       }
 
       movePopup.setPosition(coordinate);
