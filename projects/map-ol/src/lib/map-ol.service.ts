@@ -1156,7 +1156,7 @@ export class MapOlService {
   }
 
   /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */
-  private setCrossOrigin(l: Layer, layer) {
+  private setCrossOrigin(l: Layer, layer: olLayer<olSource>) {
     if (layer instanceof olLayer) {
       const olSource = layer.getSource();
       /** set crossOrigin for popup layers  */
@@ -1198,8 +1198,8 @@ export class MapOlService {
           if (!gl.get('id')) {
             gl.set('id', layerId);
           }
-          this.setCrossOrigin(l, gl);
           if (gl instanceof olLayer) {
+            this.setCrossOrigin(l, gl);
             this.addEventsToLayer(l, gl, gl.getSource());
           }
           /**
