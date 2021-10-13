@@ -1160,7 +1160,7 @@ export class MapOlService {
     if (layer instanceof olLayer) {
       const olSource = layer.getSource();
       /** set crossOrigin for popup layers  */
-      if (l.popup && !l.crossOrigin) {
+      if (l.popup && !l.crossOrigin && l.crossOrigin !== null) {
         if (olSource instanceof olImageSource || olSource instanceof olTileImageSource || olSource instanceof olTileSource) {
           olSource['crossOrigin'] = 'anonymous';
           olSource['crossOrigin_'] = 'anonymous';
