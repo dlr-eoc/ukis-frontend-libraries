@@ -1374,7 +1374,7 @@ export class MapOlService {
    *
    *  2. Filter if it is the top visible layer - so no popups are shown for layers beneath https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-916759628
    *  3. check if the top visible layer has a popup property
-   *  4. For this Layers change the cursor on forEachLayerAtPixel -> hit
+   *  4. For this Layer change the cursor on forEachLayerAtPixel -> hit
    *
    *  5. Differentiate between raster and vector to get features or layer.color for the properties passed to the popup
    *  For Features change the cursor on forEachFeatureAtPixel -> hit
@@ -1386,7 +1386,7 @@ export class MapOlService {
    *
    *  10. check popup event and if move popup exists => reuse old popup
    *  11. remove move popups if different event or !popup.event
-   *  12. create new popup if not 9. or 10.
+   *  12. create new popup if not 10. or 11.
    *  13. prepare ol overlayoptions
    *  14. remove DynamicPopup if exists
    *  15. createPopupContainer
