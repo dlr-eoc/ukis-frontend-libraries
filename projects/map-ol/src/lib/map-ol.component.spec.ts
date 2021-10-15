@@ -318,7 +318,7 @@ describe('MapOlComponent', () => {
     }];
 
     // click 0
-    service.layer_on_click({
+    service.layerOnEvent({
       coordinate: [991316.4996485114, 6165355.908612549],
       dragging: false,
       frameState: {
@@ -335,7 +335,7 @@ describe('MapOlComponent', () => {
     appRef.tick();
 
     // click 1
-    service.layer_on_click({
+    service.layerOnEvent({
       coordinate: [1312192.0073726526, 5444712.8273727745],
       dragging: false,
       frameState: {
