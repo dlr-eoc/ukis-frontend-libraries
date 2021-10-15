@@ -781,6 +781,11 @@ export class MapOlService {
 
     if (l.popup) {
       layeroptions.popup = l.popup;
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      layeroptions.className = l.id;
     }
 
     if (l.bbox) {
@@ -802,6 +807,7 @@ export class MapOlService {
     }
 
     const newlayer = new olTileLayer(layeroptions);
+    this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olSource);
     return newlayer;
   }
@@ -881,6 +887,7 @@ export class MapOlService {
       layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
     const newlayer = new olTileLayer(layeroptions);
+    this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olSource);
     return newlayer;
   }
@@ -980,6 +987,7 @@ export class MapOlService {
       }
 
       const newlayer = new olTileLayer(layeroptions);
+      this.setCrossOrigin(l, newlayer);
       this.addEventsToLayer(l, newlayer, olSource);
       return newlayer;
     } else {
@@ -988,6 +996,10 @@ export class MapOlService {
     }
   }
 
+  /**
+   * check projects/demo-maps/src/app/route-components/route-example-olperformance/services/largelayers.service.ts
+   * for WFS examples.
+   */
   private create_wfs_layer(l: VectorLayer): olVectorLayer<olVectorSource<olGeometry>> {
 
     const url = new URL(l.url);
@@ -996,7 +1008,7 @@ export class MapOlService {
     // note that we don't need to adjust the bbox. contrary to wms'es, in a wfs,
     // a bbox may use another projection than the srsname.
 
-    const wfsSource = new olVectorSource({
+    const olSource = new olVectorSource({
       format: new olGeoJSON(),
       url: url.toString()
     });
@@ -1012,7 +1024,7 @@ export class MapOlService {
       legendImg: l.legendImg,
       opacity: l.opacity || 1,
       zIndex: 1,
-      source: wfsSource,
+      source: olSource,
       style: styling
     };
 
@@ -1048,7 +1060,8 @@ export class MapOlService {
     }
 
     const newlayer = new olVectorLayer(layeroptions);
-    this.addEventsToLayer(l, newlayer, wfsSource);
+    this.setCrossOrigin(l, newlayer);
+    this.addEventsToLayer(l, newlayer, olSource);
     return newlayer;
   }
 
@@ -1151,6 +1164,7 @@ export class MapOlService {
     }
 
     const newlayer = new olVectorLayer(layeroptions);
+    this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, layeroptions.source);
     return newlayer;
   }
@@ -1161,18 +1175,22 @@ export class MapOlService {
       const olSource = layer.getSource();
       /** set crossOrigin for popup layers  */
       if (l.popup && !l.crossOrigin && l.crossOrigin !== null) {
-        if (olSource instanceof olImageSource || olSource instanceof olTileImageSource || olSource instanceof olTileSource) {
-          olSource['crossOrigin'] = 'anonymous';
-          olSource['crossOrigin_'] = 'anonymous';
-        }
+        this.sourceSetCross(olSource);
       }
 
       if (l.crossOrigin || l.crossOrigin === null) {
-        if (olSource instanceof olImageSource || olSource instanceof olTileImageSource || olSource instanceof olTileSource) {
-          olSource['crossOrigin'] = l.crossOrigin;
-          olSource['crossOrigin_'] = l.crossOrigin;
-        }
+        this.sourceSetCross(olSource);
       }
+    }
+  }
+
+  private sourceSetCross(source: olSource) {
+    /**
+     * https://github.com/search?q=crossOrigin+repo%3Aopenlayers%2Fopenlayers+path%3Asrc%2Fol%2Fsource%2F&type=Code&ref=advsearch&l=&l=
+     */
+    if (source instanceof olImageSource || source instanceof olTileImageSource || source instanceof olTileSource) {
+      source['crossOrigin'] = 'anonymous';
+      source['crossOrigin_'] = 'anonymous';
     }
   }
 
