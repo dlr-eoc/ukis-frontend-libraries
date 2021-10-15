@@ -21,7 +21,6 @@ import olMVT from 'ol/format/MVT';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olImageLayer from 'ol/layer/Image';
 import olImageStaticSource from 'ol/source/ImageStatic';
-import olProjection from 'ol/proj/Projection';
 import olLayerGroup from 'ol/layer/Group';
 
 import { getUid } from 'ol/util';
@@ -73,7 +72,10 @@ let ukisWmsLayer: WmsLayer;
 let ukisWmtsLayer: WmtsLayer;
 
 /** ID-ukis-vector */
-let ukisvectorLayer: VectorLayer;
+let ukisVectorLayerJson: VectorLayer;
+
+/** ID-ukis-vector-wfs */
+let ukisVectorLayerWfs: VectorLayer;
 
 /** ID-ukis-vector-image */
 let ukisCustomLayerVector: CustomLayer;
@@ -255,7 +257,6 @@ const beforeEachFn = () => {
     subdomains: ['a', 'b', 'c'],
     attribution: '&copy, <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors',
     continuousWorld: true,
-    crossOrigin: 'anonymous',
     popup: {
       event: 'move',
       options: { autoPan: false }
@@ -328,7 +329,7 @@ const beforeEachFn = () => {
     }
   });
 
-  ukisvectorLayer = new VectorLayer({
+  ukisVectorLayerJson = new VectorLayer({
     id: 'ID-ukis-vector',
     name: 'GeoJSON Vector Layer',
     type: 'geojson',
@@ -336,10 +337,20 @@ const beforeEachFn = () => {
     visible: false
   });
 
+
+  ukisVectorLayerWfs = new VectorLayer({
+    id: 'ID-ukis-vector-wfs',
+    name: 'WFS Vector Layer',
+    type: 'wfs',
+    url: "https://ahocevar.com/geoserver/wfs?service=WFS&request=GetFeature&outputFormat=application/json&version=1.1.0&srsname=EPSG:3857&typenames=usa:states&cql_filter=STATE_NAME='Pennsylvania'",
+    bbox: [-83.1005859375, 38.37611542403604, -72.50976562499999, 43.03677585761058],
+    visible: false
+  });
+
   ukisGroupLayer = new LayerGroup({
     id: 'ID-ukis-group-layer',
     name: 'ukis group',
-    layers: [ukisvectorLayer, ukisWmtsLayer, ukisWmsLayer, ukisRasterLayer, ukisCustomLayerVector]
+    layers: [ukisVectorLayerJson, ukisWmtsLayer, ukisWmsLayer, ukisRasterLayer, ukisCustomLayerVector]
   });
 };
 
@@ -406,6 +417,7 @@ describe('MapOlService olLayers', () => {
   it('should properly set the `crossOrigin` attribute, if given', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
+    ukisRasterLayer.crossOrigin = 'anonymous';
     const ukisLayers = [ukisRasterLayer];
     service.setUkisLayers(ukisLayers, 'Layers');
 
@@ -583,7 +595,7 @@ describe('MapOlService ukisLayers', () => {
   it('should reset/add ukisLayers from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
-    const layers = [ukisvectorLayer, ukisRasterLayer, ukisCustomLayerVector];
+    const layers = [ukisVectorLayerJson, ukisRasterLayer, ukisCustomLayerVector];
     layers.map(l => {
       service.setUkisLayer(l, 'Layers');
     });
@@ -606,7 +618,7 @@ describe('MapOlService ukisLayers', () => {
   it('should reset/add one ukisLayer from a Type', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
-    const layers = [ukisvectorLayer];
+    const layers = [ukisVectorLayerJson];
     service.setUkisLayers(layers, 'Layers');
 
     const layerBeforUpdate = service.getLayerByKey({ key: 'id', value: 'ID-ukis-vector' }, 'layers');
@@ -614,8 +626,8 @@ describe('MapOlService ukisLayers', () => {
     expect(layerBeforUpdate.getVisible()).toBeFalsy();
 
 
-    ukisvectorLayer.visible = true;
-    service.setUkisLayer(ukisvectorLayer);
+    ukisVectorLayerJson.visible = true;
+    service.setUkisLayer(ukisVectorLayerJson);
     const layerAfterUpdate = service.getLayerByKey({ key: 'id', value: 'ID-ukis-vector' }, 'layers');
     expect(layerAfterUpdate.getVisible()).toBeTruthy();
     expect(getUid(layerAfterUpdate) !== olUid).toBeTruthy();
@@ -624,7 +636,7 @@ describe('MapOlService ukisLayers', () => {
   it('should update one ukisLayer from a Type - not remove the olLayer', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
-    const layers = [ukisvectorLayer];
+    const layers = [ukisVectorLayerJson];
     service.setUkisLayers(layers, 'Layers');
 
     const layerBeforUpdate = service.getLayerByKey({ key: 'id', value: 'ID-ukis-vector' }, 'layers');
@@ -632,8 +644,8 @@ describe('MapOlService ukisLayers', () => {
     expect(layerBeforUpdate.getVisible()).toBeFalsy();
 
 
-    ukisvectorLayer.visible = true;
-    service.updateUkisLayer(ukisvectorLayer);
+    ukisVectorLayerJson.visible = true;
+    service.updateUkisLayer(ukisVectorLayerJson);
     const layerAfterUpdate = service.getLayerByKey({ key: 'id', value: 'ID-ukis-vector' }, 'layers');
     expect(layerAfterUpdate.getVisible()).toBeTruthy();
     expect(getUid(layerAfterUpdate)).toBe(olUid);
@@ -651,7 +663,7 @@ describe('MapOlService ukisLayers', () => {
     expect(service.getLayers('Layers').length).toBe(0);
   });
 
-  it('should set crossOrigin and className for CutomLayers with a Popup', () => {
+  it('should set crossOrigin and className for UkisLayers with a Popup', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
 
@@ -659,17 +671,55 @@ describe('MapOlService ukisLayers', () => {
       event: 'click'
     }
     ukisCustomLayerRaster.popup = popupOb;
-    service.setUkisLayer(ukisCustomLayerRaster, 'Layers');
+    ukisRasterLayer.popup = popupOb;
+    ukisWmsLayer.popup = popupOb;
+    ukisWmtsLayer.popup = popupOb;
+
+    /* ukisVectorLayerJson.data = null;
+    ukisVectorLayerJson.url = 'https://a.tiles.mapbox.com/v3/aj.1x1-degrees.json'; */
+    ukisVectorLayerJson.popup = popupOb;
+    ukisVectorLayerWfs.popup = popupOb;
+    const layers = [ukisCustomLayerRaster, ukisRasterLayer, ukisWmsLayer, ukisWmtsLayer, ukisVectorLayerJson, ukisVectorLayerWfs];
+    service.setUkisLayers(layers, 'Layers')
 
 
     const mapLayers = service.getLayers('Layers');
-    expect(mapLayers.length).toBe(1);
-    const olLayerFromMap = mapLayers[0] as olTileLayer<olTileSource>;
-    expect(olLayerFromMap.get('id')).toBe(ukisCustomLayerRaster.id);
-    expect(olLayerFromMap instanceof olTileLayer).toBe(true);
-    expect(olLayerFromMap.getClassName()).toBe(ukisCustomLayerRaster.id);
-    const olSource = olLayerFromMap.getSource();
-    expect(olSource['crossOrigin'] && olSource['crossOrigin_']).toBe('anonymous');
+    expect(mapLayers.length).toBe(layers.length);
+
+    const olLayerCustom = mapLayers[0] as olTileLayer<olTileSource>;
+    expect(olLayerCustom.get('id')).toBe(ukisCustomLayerRaster.id);
+    expect(olLayerCustom instanceof olTileLayer).toBe(true);
+    expect(olLayerCustom.getClassName()).toBe(ukisCustomLayerRaster.id);
+    const olSourceCustom = olLayerCustom.getSource();
+    expect(olSourceCustom instanceof olTileSource).toBe(true);
+    expect(olSourceCustom['crossOrigin'] && olSourceCustom['crossOrigin_']).toBe('anonymous');
+
+
+    const olLayerRaster = mapLayers[1] as olTileLayer<olXYZ>;
+    expect(olLayerRaster.getClassName()).toBe(ukisRasterLayer.id);
+    const olSourceRaster = olLayerRaster.getSource();
+    expect(olSourceRaster['crossOrigin'] && olSourceRaster['crossOrigin_']).toBe('anonymous');
+
+    const olLayerWms = mapLayers[2] as olTileLayer<olTileSource>;
+    expect(olLayerWms.getClassName()).toBe(ukisWmsLayer.id);
+    const olSourceWms = olLayerWms.getSource();
+    expect(olSourceWms['crossOrigin'] && olSourceWms['crossOrigin_']).toBe('anonymous');
+
+
+    const olLayerWmts = mapLayers[3] as olTileLayer<olTileSource>;
+    expect(olLayerWmts.getClassName()).toBe(ukisWmtsLayer.id);
+    const olSourceWmts = olLayerWmts.getSource();
+    expect(olSourceWmts['crossOrigin'] && olSourceWmts['crossOrigin_']).toBe('anonymous');
+
+    const olLayerJson = mapLayers[4] as olVectorLayer<olVectorSource<olGeometry>>;
+    expect(olLayerJson.getClassName()).toBe(ukisVectorLayerJson.id);
+    const olSourceJson = olLayerJson.getSource();
+    expect(olSourceJson['crossOrigin'] && olSourceJson['crossOrigin_']).toBe(undefined); // this is only set if Layer.url -> olTileJSON()
+
+    const olLayerWfs = mapLayers[5] as olVectorLayer<olVectorSource<olGeometry>>;
+    expect(olLayerWfs.getClassName()).toBe(ukisVectorLayerWfs.id);
+    const olSourceWfs = olLayerWfs.getSource();
+    expect(olSourceWfs['crossOrigin'] && olSourceWfs['crossOrigin_']).toBe(undefined); // WFS does not need crossOrigin??
   })
 });
 
