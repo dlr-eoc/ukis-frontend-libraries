@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
 import { Feature as olFeature } from 'ol';
@@ -29,6 +29,8 @@ import testData from '../../../assets/data/json/test.json';
 import testPolys from '../../../assets/data/json/test.polys.json';
 import testCollection from '../../../assets/data/json/test.collection.json';
 import { ExampleGroupActionComponent } from '../../components/example-group-action/example-group-action.component';
+import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
+import { Popup2Component } from '../../components/popup2/popup2.component';
 
 
 @Component({
@@ -172,6 +174,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       name: 'GeoJson - VectorImageLayer ocean',
       popup: {
         event: 'move'
+        // filterLayer: true
       },
       custom_layer: new olVectorImageLayer({
         source: new olVectorSource({
@@ -202,12 +205,22 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           event: 'click',
           single: true,
           options: { autoPan: false },
-          pupupFunktion: (args) => { return `<div> on click </div>` }
+          dynamicPopup: {
+            component: TablePopupComponent,
+            getAttributes: (args: IDynamicPopupArgs) => {
+              return { data: args.properties };
+            }
+          }
         },
         {
           event: 'move',
           options: { autoPan: false },
-          pupupFunktion: (args) => { return `<div> on move </div>` }
+          dynamicPopup: {
+            component: Popup2Component,
+            getAttributes: (args: IDynamicPopupArgs) => {
+              return { data: args.properties };
+            }
+          }
         }
       ],
       custom_layer: new olVectorImageLayer({
@@ -273,12 +286,13 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       popup: {
         filterkeys: ['id', 'color', 'name']
       },
+      // crossOrigin: null, // set this to get data for pixel for cross-origin data or not if null
       custom_layer: new olImageLayer({
         source: new olStatic({
           url: 'assets/images/srtm_small.png',
           imageExtent: [10.00, 45.00, 15.00, 50.00],
           projection: 'EPSG:4326',
-          crossOrigin: 'anonymous' // set this to get data for pixel for cross-origin data
+          // crossOrigin: 'anonymous' // set this to get data for pixel for cross-origin data
         })
       })
     });
@@ -289,6 +303,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: true,
       popup: {
         filterkeys: ['id', 'color', 'name']
+        // filterLayer: true
       },
       custom_layer: new olTileLayer({
         source: new olOSM()
@@ -305,7 +320,12 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'customLayerOlGroup',
       name: 'Custom Layer OlGroup',
       visible: false,
-      popup: true,
+      opacity: 0.6,
+      popup: {
+        event: 'move',
+        filterkeys: ['id', 'color', 'name'],
+        options: { autoPan: false }
+      },
       custom_layer: new olLayerGroup({
         layers: [
           new olTileLayer({
@@ -352,7 +372,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       visible: false,
       popup: {
         event: 'move',
-        filterkeys: ['name', 'region_un', 'region_wb'],  // of all the feature's properties, only pass these to the popup-render-function
+        filterkeys: ['name', 'layer', 'class'],  // of all the feature's properties, only pass these to the popup-render-function
         properties: { name: 'Name' },  // rename the feature.property key "name" to "Name"
         options: { autoPan: false }
       },
@@ -363,25 +383,51 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           /** EOC Geoservice TMS
            * https://github.com/openlayers/openlayers/issues/3923
            */
-          url: 'https://tiles.geoservice.dlr.de/service/tms/1.0.0/eoc:litemap@EPSG%3A3857@pbf/{z}/{x}/{-y}.pbf'
-          // url: 'https://ahocevar.com/geoserver/gwc/service/tms/1.0.0/ne:ne_10m_admin_0_countries@EPSG%3A900913@pbf/{z}/{x}/{-y}.pbf'
+          url: 'https://tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true'
         }),
         style: (feature, resolution) => {
           const mvtlayer = feature.get('layer');
+          const mvtClass = feature.get('class');
           if (!this.test.includes(mvtlayer)) {
             this.test.push(mvtlayer);
           }
-          // && layer === 'ne_50m_land'  // ne_50m_admin_0_countries // ne_10m_admin_0_countries
-          if (mvtlayer && (mvtlayer === 'ne_50m_land' || mvtlayer === 'ne_50m_admin_0_countries' || mvtlayer === 'ne_10m_admin_0_countries')) {
-            return new olStyle({
-              stroke: new olStroke({
-                color: 'gray',
-                width: 1
-              }),
-              fill: new olFill({
-                color: 'rgba(20,20,20,0.9)'
-              })
-            });
+          /**
+           * water, landcover, boundary, water_name, place
+           */
+          if (mvtlayer) {
+            if (mvtlayer === 'water') {
+              return new olStyle({
+                fill: new olFill({
+                  color: 'rgba(67,162,202,0.9)'
+                })
+              });
+            } else if (mvtlayer === 'boundary') {
+              return new olStyle({
+                stroke: new olStroke({
+                  color: 'gray',
+                  width: 1
+                }),
+                fill: new olFill({
+                  color: 'rgba(0,0,0,0)',
+                })
+              });
+            } else if (mvtlayer === 'landcover') {
+              if (mvtClass) {
+                if (mvtClass === 'wood') {
+                  return new olStyle({
+                    fill: new olFill({
+                      color: 'rgba(53,151,143,0.7)',
+                    })
+                  });
+                } else if (mvtClass === 'grass') {
+                  return new olStyle({
+                    fill: new olFill({
+                      color: 'rgba(168,221,181,0.7)',
+                    })
+                  });
+                }
+              }
+            }
           }
         }
       }),
@@ -405,8 +451,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         source: new olImageWMS({
           url: 'https://ahocevar.com/geoserver/wms',
           params: { LAYERS: 'topp:states' },
-          serverType: 'geoserver',
-          // crossOrigin: 'anonymous' set this to get data for pixel for cross-origin data
+          serverType: 'geoserver'
         })
       }),
       visible: false,

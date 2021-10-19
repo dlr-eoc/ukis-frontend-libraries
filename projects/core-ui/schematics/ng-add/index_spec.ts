@@ -53,9 +53,9 @@ describe('ng-add', () => {
     expect(projectFile.schematics).toBeFalsy();
   });
 
-  it('should have no projects schematics because -> app style: Style.Css', async () => {
+  it('should have no projects schematics for style because -> app style: Style.Css', async () => {
     const projectFile = JSON.parse(appTree.readContent('/angular.json'));
-    expect(projectFile.projects[appOptions.name].schematics).toEqual({});
+    expect(projectFile.projects[appOptions.name].schematics['@schematics/angular:component']?.style).toBeUndefined();
   });
 
   it('should include the angular project file', async () => {

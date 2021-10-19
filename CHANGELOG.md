@@ -1,4 +1,14 @@
 ### Breaking Changes
+* **@dlr-eoc/map-ol:**
+  - Removed `MapOlService.layers_on_click(evt)` and `MapOlService.layers_on_pointermove(evt)` -> replace them by `MapOlService.layersOnMapEvent(evt)`.
+  - Renamed `MapOlService.layers_on_click_move(evt, layerFilter)` -> `MapOlService.layersOnMapEvent(evt)` layer filtering is now done later.
+  - Renamed `MapOlService.layer_on_click(evt, layer, color?)` -> `MapOlService.layerOnEvent(evt, layer, color?)`.
+  - Renamed `MapOlService.raster_on_click(evt, layer, color?)` -> `MapOlService.rasterOnEvent(evt, layer, color?)`.
+  - Renamed `MapOlService.vector_on_click(evt)` -> `MapOlService.vectorOnEvent(evt)`.
+
+* **@dlr-eoc/services-layers:**
+  - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
+
 * **@dlr-eoc/services-ogc:** 
 - `IEocOwsResourceDimensions` is removed.
 - `IEocOwsResourceDimension` [is changed](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L30).
@@ -13,6 +23,8 @@
 
 ### Features
 * **@dlr-eoc/services-layers:**:
+  - Extend Type for Popup `Layer['popup']?.filterLayer` to filter out layers in `map.forEachLayerAtPixel` and `map.forEachFeatureAtPixel`.
+  - `CustomLayer` can now overwrite `crossOrigin` property if used with a OpenLayers Layer.
   - Extend Layer Type for events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Extend Layer Popup Type for multiple Popups [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/map-ol:**
@@ -35,6 +47,12 @@
   - `OwcJsonService.getTimeDimensions`: `period` only added to dimension if actually given in `IEocOwsResourceDimension`.
   - `OwcJsonService.getWmsOptions`: now respects `STYLES` property either via `offering.styles` or via `GetMap` operation. All WMS-paras only set when actually present.
 * **@dlr-eoc/map-ol:**
+  - Set `crossOrigin` on `olSource` (olImageSource | olTileImageSource | olTileSource) for all layers with `Layer.popup` as default to **anonymous** 
+  - Display cursor pointer for Popups only if the top layer has pixels.
+  - Popups with event `move` are rendered under existing Popups with event `click` [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915283092).
+  - Prevent popup with event `move` to get added multiple times in some cases [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915067198).
+  - Remove popup if layer above has not the same popup event [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-914312627).
+  - Popup `Popup.options` are not applied when using `PopupObjArray` [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94).
   - Fixed an issue in `MapOlService.zoomInOut()`
   - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.
   - Fixed an issue with dynamic popups, where only the first popup on a raster-layer would be created, whereas all subsequent clicks would not lead to a new popup appearing.

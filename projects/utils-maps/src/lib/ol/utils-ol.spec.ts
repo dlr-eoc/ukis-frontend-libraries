@@ -11,11 +11,26 @@ import { InterpolationRenderer } from './customRenderers/interpolation_renderer'
 import { ParticleRenderer } from './customRenderers/particle_renderer';
 import { DtmImageRenderer } from './customRenderers/dtm_renderer';
 
+const createMapTarget = (size) => {
+  const container = document.createElement('div');
+  container.id = 'map';
+  container.style.width = `${size[0]}px`;
+  container.style.height = `${size[1]}px`;
+  document.body.appendChild(container);
+  return {
+    size,
+    container
+  };
+};
+let mapTarget: HTMLElement = null;
 
+const beforeEachFn = () => {
+  mapTarget = createMapTarget([300, 200]).container;
+};
 
 describe('flattenLayers test suite', () => {
+    beforeEach(beforeEachFn);
     it('flattenLayers should work with nested groups', () => {
-
         const map = new Map({
             layers: [
                 new TileLayer({
@@ -40,7 +55,7 @@ describe('flattenLayers test suite', () => {
                     ]
                 })
             ],
-            target: 'map',
+            target: mapTarget,
             view: new View({
                 center: fromLonLat([37.40570, 8.81566]),
                 zoom: 4
@@ -54,12 +69,8 @@ describe('flattenLayers test suite', () => {
 
 
 describe('mapToCanvas test suite', () => {
+    beforeEach(beforeEachFn);
     it('simpleMapToCanvas should create an image in a canvas', (done) => {
-
-        const mapTarget = document.createElement('div');
-        mapTarget.style.setProperty('width', '300px');
-        mapTarget.style.setProperty('height', '200px');
-
         const map = new Map({
             layers: [
                 new TileLayer({
@@ -74,6 +85,7 @@ describe('mapToCanvas test suite', () => {
         });
 
         // For testing purposes: using an offscreen-canvas as render-target because it doesn't need to be attached to the DOM to allow drawing.
+        /** Experimental: This is an experimental technology Check the Browser compatibility table carefully before using this in production. */
         const imageTargetCanvas = new OffscreenCanvas(300, 400);
 
         simpleMapToCanvas(map, imageTargetCanvas, 600, 800, (updatedCanvas: OffscreenCanvas) => {

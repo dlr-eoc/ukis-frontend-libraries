@@ -2,6 +2,8 @@ import { Feature } from 'ol';
 import { FrameState } from 'ol/PluggableMap';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorLayer from 'ol/layer/Vector';
+import Geometry from 'ol/geom/Geometry';
+import { Vector as VectorSource } from 'ol/source';
 import { Polygon as olPolygonGeometry } from 'ol/geom';
 import {
   WebGLRenderer, PerspectiveCamera, Scene, Mesh, Renderer,
@@ -10,7 +12,7 @@ import {
 import { heightAboveWidth } from '@dlr-eoc/map-three';
 
 
-export class BarsLayer extends VectorLayer {
+export class BarsLayer extends VectorLayer<VectorSource<Geometry>> {
   constructor(options) {
     super(options);
   }
@@ -31,7 +33,7 @@ export class BarsLayer extends VectorLayer {
  * There we transformed geographic coordinates into pixels, and then pixels into WebGL-clipping-space.
  * Here instead all objects retain their geographic coordinates.
  */
-export class ThreeJsRenderer extends LayerRenderer<VectorLayer> {
+export class ThreeJsRenderer extends LayerRenderer<VectorLayer<VectorSource<Geometry>>> {
 
   readonly canvas: HTMLCanvasElement;
   readonly scene: Scene;
@@ -39,7 +41,7 @@ export class ThreeJsRenderer extends LayerRenderer<VectorLayer> {
   readonly renderer: Renderer;
   readonly camera: PerspectiveCamera;
 
-  constructor(layer: VectorLayer) {
+  constructor(layer: VectorLayer<VectorSource<Geometry>>) {
     super(layer);
 
     // setting up canvas

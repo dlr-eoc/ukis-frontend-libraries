@@ -39,6 +39,7 @@ import { TablePopupComponent } from './components/table-popup/table-popup.compon
 import { ServicesOgcModule } from '@dlr-eoc/services-ogc';
 import { ExampleGroupActionComponent } from './components/example-group-action/example-group-action.component';
 import { RasterFeatureInfoComponent } from './components/raster-feature-info/raster-feature-info.component';
+import { Popup2Component } from './components/popup2/popup2.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { RasterFeatureInfoComponent } from './components/raster-feature-info/ras
     InterpolationSettingsComponent,
     TablePopupComponent,
     ExampleGroupActionComponent,
-    RasterFeatureInfoComponent
+    RasterFeatureInfoComponent,
+    Popup2Component
   ],
   imports: [
     BrowserModule,

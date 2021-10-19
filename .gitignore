@@ -3,6 +3,7 @@
 # local files
 /TODO.md
 scripts/library/**/*.js
+.vscode
 
 
 # compiled output

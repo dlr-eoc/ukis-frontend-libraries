@@ -48,6 +48,8 @@ export interface popup {
   single?: boolean;
   /** options which get assigned on the popup creations e.g. ol/Overlay */
   options?: IAnyObject;
+  /** If the layer should be filtered out and the popup beneath should be shown e.g. text overlays */
+  filterLayer?: boolean;
 }
 
 
@@ -119,8 +121,6 @@ export interface ILayerOptions {
   displayName?: string;
   description?: string;
   time?: string;
-  /** zIndex: DEPRECIATED handeld internal by the layer service */
-  zIndex?: number;
   minResolution?: number;
   maxResolution?: number;
   minZoom?: number;
@@ -221,11 +221,10 @@ export interface IVectorLayerOptions extends ILayerOptions {
 }
 
 /**
- * Deliberately does not have the `crossOrigin` property.
- * When using openlayers as a map-engine, `crossOrigin` is a property that UKIS just passes on to the layersource.
- * Since that layersource is provided by the user in a CustomLayer, setting `crossOrigin` in the ICustomLayerOptions would have no effect.
+ * The `crossOrigin` property can overwrite the one set in the layersource of the custom_layer if there is such a property e.g. when using OpenLayers as a map-engine
+ * It also can be used to disable get color values for a OpenLayers layer in the layer popup when set to crossOrigin: null
  */
-export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type' | 'crossOrigin'> {
+export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type'> {
   type?: TLayertype;
   custom_layer: any;
 }

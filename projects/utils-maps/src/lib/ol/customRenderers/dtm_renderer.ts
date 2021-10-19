@@ -1,5 +1,6 @@
 import LayerRenderer from 'ol/renderer/Layer';
 import ImageLayer from 'ol/layer/Image';
+import ImageSource from 'ol/source/Image';
 import { FrameState } from 'ol/PluggableMap';
 import { transformExtent } from 'ol/proj';
 import Static from 'ol/source/ImageStatic';
@@ -11,7 +12,7 @@ import { flattenRecursive } from '../../webgl/utils';
 
 
 
-export class DtmLayer extends ImageLayer {
+export class DtmLayer extends ImageLayer<ImageSource> {
     private renderer: DtmImageRenderer;
 
     constructor(options) {
@@ -40,7 +41,7 @@ export class DtmLayer extends ImageLayer {
  *  - occlusion maps,
  *  - ...
  */
-export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
+export class DtmImageRenderer extends LayerRenderer<ImageLayer<ImageSource>> {
 
     readonly canvas: HTMLCanvasElement;
     readonly gl: WebGLRenderingContext;
@@ -48,7 +49,7 @@ export class DtmImageRenderer extends LayerRenderer<ImageLayer> {
     readonly projection;
     private state: 'loading' | 'ready' = 'loading';
 
-    constructor(layer: ImageLayer) {
+    constructor(layer: ImageLayer<ImageSource>) {
         super(layer);
 
         // Step 1: setting up canvas
