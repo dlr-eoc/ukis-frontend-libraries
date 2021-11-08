@@ -82,7 +82,7 @@
         </ng-container>
 
         <ng-template #imageUrl>
-          <img [src]="layer.legendImg" />
+          <a [href]="layer.legendImg" target="_blank" title="Show full Image"><img [src]="layer.legendImg" /></a>
         </ng-template>
       </div>
       <!-- show Description -->

@@ -22,6 +22,8 @@
 
 
 ### Features
+* **@dlr-eoc/layer-control:**:
+  - Open legend image as a link in a new tab for a larger view
 * **@dlr-eoc/services-layers:**:
   - Extend Type for Popup `Layer['popup']?.filterLayer` to filter out layers in `map.forEachLayerAtPixel` and `map.forEachFeatureAtPixel`.
   - `CustomLayer` can now overwrite `crossOrigin` property if used with a OpenLayers Layer.
