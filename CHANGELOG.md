@@ -10,6 +10,8 @@
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
 
 * **@dlr-eoc/services-ogc:** 
+- Remove `previewUrl` from `IEocOwsResourceProperties` because this is is already in `IOwsResourceProperties.links.previews`.
+- Remove `IEocWmsOffering` and `IEocOwsWmtsOffering` for them you can use the generall `IEocOwsOffering` and check for the code `WMS_Offering` or `WMTS_Offering`.
 - `IEocOwsResourceDimensions` is removed.
 - `IEocOwsResourceDimension` [is changed](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L30).
 - `IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimension[]` is changed. Before it was [`IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimensions`](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L24)

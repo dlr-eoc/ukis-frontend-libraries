@@ -8,6 +8,7 @@ import {
 import * as GeoJSON from 'geojson';
 export interface IEocOwsContext extends IOwsContext {
   features: IEocOwsResource[];
+  /** @deprecated we do not use this currently */
   projections?: IEocOwsProjection[];
 }
 
@@ -17,11 +18,9 @@ export interface IEocOwsResource extends IOwsResource {
 
 export interface IEocOwsResourceProperties extends IOwsResourceProperties {
   opacity?: number;
-  attribution?: string;
+  attribution?: string; /** maybe this should be in IOwsResourceProperties.rights */
   shards?: string;
   dimensions?: IEocOwsResourceDimension[];
-  /** preview image for the Resource */
-  previewUrl?: string;
   /** Alternative to IOwsResourceProperties.minscaledenominator; easier to calculate in browser-apps */
   minZoom?: number;
   /** Alternative to IOwsResourceProperties.maxscaledenominator; easier to calculate in browser-apps */
@@ -37,10 +36,13 @@ export interface IEocOwsResourceDimension {
   name: 'time' | 'elevation';
   /**
    * For time:
-   *  - '1984-01-01T00:00:00.000Z,1990-01-01T00:00:00.000Z,1995-01-01T00:00:00.000Z'
+   *  - '1984-01-01T00:00:00.000Z,1990-01-01T00:00:00.000Z,1995-01-01T00:00:00.000Z,...'
    *  - '2000-09-01T00:00:00.000Z/2017-08-31T00:00:00.000Z/P1D'
+   *  - '2000-09-01T00:00:00.000Z/2010-08-31T00:00:00.000Z/P1D,2010-09-01T00:00:00.000Z/2020-08-31T00:00:00.000Z/P1D,...'
+   *  - '1984-01-01T00:00:00.000Z/P1Y,1985-01-01T00:00:00.000Z/P1Y...'
+   *  also see https://moment.github.io/luxon/api-docs/index.html#intervalfromiso
    */
-  values: `${string},` | isoInterval | intervalPeriod;
+  values: `${string | isoInterval | intervalPeriod},` | isoInterval | intervalPeriod;
   /**
    * For time: 'ISO8601'
    * ISO8601 has been chosen because this is how
@@ -49,10 +51,12 @@ export interface IEocOwsResourceDimension {
    */
   units: 'ISO8601' | string;
   display?: {
+    /** format how to display the values e.g. YYYY-MM-DD */
     format?: string;
     /** in case the app should display data at a different period than what is available on the server */
     period?: string;
-    default?: boolean;
+    /** The value which should be shown/used as default */
+    default?: string;
   };
 }
 
@@ -60,16 +64,11 @@ export interface IEocOwsOffering extends IOwsOffering {
   code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering |
   WMTS_Offering | GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering |
   GMLCOV_Offering | GeoJson_Offering | TMS_Offering | string;
+  /** @deprecated we do not use this currently */
   iconUrl?: string;
+  /** @deprecated we do not use this currently */
   title?: string;
-}
-
-export interface IEocWmsOffering extends IEocOwsOffering {
-  code: WMS_Offering;
-}
-
-export interface IEocOwsWmtsOffering extends IEocOwsOffering {
-  code: WMTS_Offering;
+  /** only for WMTS_Offering */
   matrixSets?: IEocOwsWmtsMatrixSet[];
 }
 
@@ -89,6 +88,9 @@ export interface IEocOwsWmtsMatrixSet {
   };
 }
 
+/**
+ * @deprecated we do not use this currently
+ */
 export interface IEocOwsProjection {
   bbox?: GeoJSON.BBox;
   code: string;
@@ -113,6 +115,8 @@ export interface IEocOwsContextListItem {
   id: IEocOwsContext['id'];
   /** relative or absolute link/path to context file */
   url: string;
+  /** default is true */
+  enabled?: boolean;
 }
 
 export type EocOwsContextList = IEocOwsContextListItem[];
