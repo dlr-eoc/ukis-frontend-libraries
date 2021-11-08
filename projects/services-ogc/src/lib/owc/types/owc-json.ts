@@ -46,8 +46,8 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Information about rights held in and over the Context document */
     rights?: string;
     /**
-     * Date or range of dates relevant to the resource
-     * time range which is expected to be of interest to the user.
+     * This element is optional and expressed a date or range of dates relevant to the Context document.
+     * It can contain the element start, stop and instant. The values of these elements SHALL conform to the "date-time" production of ISO-8601[5]. An uppercase "T" character SHALL be used to separate date and time, and an uppercase "Z" character SHALL be present in the absence of a numeric time zone offset. To specify a range of dates the "/" character SHALL be used.
      */
     date?: DateString;
     /** This array is an optional and expresses categories related to this Context document */
@@ -55,7 +55,10 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Extension Any other element */
     [k: string]: any;
   };
-  /** Ordered List of Resources available on the Context document */
+  /** Ordered List of Resources available on the Context document
+   * The order of the member of the features MAY be used to identify the drawing order of the resources.
+   * In that case, the first item of the array represents the top most layer
+   */
   features: IOwsResource[];
   /** Extension Any other element */
   [k: string]: any;
@@ -95,7 +98,7 @@ export interface IOwsResourceProperties {
   publisher?: string;
   /** Information about rights held in and over the Context resource */
   rights?: string;
-  /** Date or range of dates relevant to the Context resource */
+  /** Date or range of dates relevant to the Context resource. The values of these elements SHALL conform to the "date-time" production of ISO-8601[5]*/
   date?: DateString;
   /** This element is optional and can contain a number of offerings defined by the class OWC:Offering */
   offerings?: IOwsOffering[];

@@ -35,7 +35,8 @@
   - Add events from Layer to olLayer and olSource [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/services-ogc:**
-  - Removed `customAttributes`
+  - Functions to check `isIOwsRasterOperation()` and `isIOwsVectorOperation()`.
+  - Export Operation Codes for Offerings (`WMS_Code`, `WMTS_Code`, `WFS_Code`, `TMS_Code` and `XYZ_Code`):
   - Overhaul of `dimensions`
   - Allows sub-groups
   - Allows Tms-Layers
@@ -46,6 +47,7 @@
 
 ### Bug Fixes
 * **@dlr-eoc/services-ogc:**
+  - Removed not used `customAttributes`
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with WFS'es: only a substring of the `GetFeature`-operation.href had been used. Now fixed.
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with GeoJson-layers: GeoJson data had been incorrectly stringified (and parsed again).
   - `OwcJsonService.getTimeDimensions`: `period` only added to dimension if actually given in `IEocOwsResourceDimension`.
