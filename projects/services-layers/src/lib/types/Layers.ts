@@ -61,14 +61,15 @@ export interface ILayerEvent {
   listener: (args?: any) => void;
 }
 
+export const TmsLayertype = 'tms';
 export const WmsLayertype = 'wms';
 export const WmtsLayertype = 'wmts';
 export const XyzLayertype = 'xyz';
 export const GeojsonLayertype = 'geojson';
 export const WfsLayertype = 'wfs';
 export const CustomLayertype = 'custom';
-export type TVectorLayertype = 'geojson' | 'wfs' | 'custom';
-export type TRasterLayertype = 'wms' | 'wmts' | 'xyz' | 'custom';
+export type TVectorLayertype = typeof GeojsonLayertype | typeof WfsLayertype | typeof CustomLayertype;
+export type TRasterLayertype = typeof WmsLayertype | typeof WmtsLayertype | typeof XyzLayertype | typeof TmsLayertype | typeof CustomLayertype;
 export type TLayertype = TRasterLayertype | TVectorLayertype | string;
 
 export const Filtertypes = {
