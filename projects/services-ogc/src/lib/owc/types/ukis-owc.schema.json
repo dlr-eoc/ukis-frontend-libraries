@@ -408,7 +408,7 @@
           "description": "Reference to OGC standard reference (requirements class) identifying that this is an OWC Context document.",
           "default": [
             {
-              "href": "http://www.opengis.net/spec/owcgeojson/1.0/req/core",
+              "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
               "type": null,
               "lang": null,
               "title": null,
@@ -578,7 +578,7 @@
           "default": {
             "profiles": [
               {
-                "href": "http://www.opengis.net/spec/owcgeojson/1.0/req/core",
+                "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
                 "type": null,
                 "lang": null,
                 "title": null,
