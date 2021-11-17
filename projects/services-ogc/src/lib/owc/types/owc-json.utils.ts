@@ -20,6 +20,8 @@ export const RESTOperationCode = 'REST' as const;
 export type TMS_Code = typeof RESTOperationCode;
 export type XYZ_Code = typeof RESTOperationCode;
 
+export const GetCapabilitiesOperationCode = 'GetCapabilities' as const;
+
 
 function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
   for (const entry of list) {
