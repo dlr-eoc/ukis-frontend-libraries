@@ -189,7 +189,7 @@ export interface ILayerElevationDimension {
   /** Default steps to display in elevation slider */
   display?: string;
   units: string;
-  value?: string;
+  };
 }
 
 
