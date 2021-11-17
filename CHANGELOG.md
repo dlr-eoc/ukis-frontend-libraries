@@ -37,6 +37,7 @@
   - Add events from Layer to olLayer and olSource [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/services-ogc:**
+  - Export separate interfaces for `IEocOwsTimeDimension` and `IEocOwsElevationDimension`.
   - Functions to check `isIOwsRasterOperation()` and `isIOwsVectorOperation()`.
   - Export Operation Codes for Offerings (`WMS_Code`, `WMTS_Code`, `WFS_Code`, `TMS_Code` and `XYZ_Code`):
   - Overhaul of `dimensions`
