@@ -1,12 +1,17 @@
 
 import { Injectable } from '@angular/core';
 import {
-  IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent
+  IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, kmlOffering, wfsOffering, wmsOffering, wmtsOffering
 } from './types/owc-json';
-import { isGeoJsonOffering, isIOwsContext, isTMSOffering, isWfsOffering, isWmsOffering, isWmtsOffering, isXyzOffering } from './types/owc-json.utils';
+import { GetCapabilitiesOperationCode, GetFeatureOperationCode, GetMapOperationCode, GetTileOperationCode, isGeoJsonOffering, isIOwsContext, isIOwsRasterOperation, isKmlOffering, isTMSOffering, isWfsOffering, isWmsOffering, isWmtsOffering, isXyzOffering, RESTOperationCode } from './types/owc-json.utils';
 import {
   IEocOwsContext, IEocOwsResource, IEocOwsOffering, IEocOwsWmtsMatrixSet,
-  IEocOwsResourceDimension
+  IEocOwsResourceDimension,
+  IEocOwsTimeDimension,
+  IEocOwsElevationDimension,
+  GeoJsonOffering,
+  xyzOffering,
+  tmsOffering
 } from './types/eoc-owc-json';
 import {
   ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
@@ -24,7 +29,11 @@ import {
   ILayerTimeDimension,
   ILayerElevationDimension,
   CustomLayer,
-  Filtertypes
+  Filtertypes,
+  TmsLayertype,
+  KmlLayertype,
+  IWmtsParams,
+  TVectorLayertype
 } from '@dlr-eoc/services-layers';
 import { TGeoExtent } from '@dlr-eoc/services-map-state';
 import { WmtsClientService } from '../wmts/wmtsclient.service';
@@ -1020,17 +1029,21 @@ export class OwcJsonService {
   getOfferingCodeFromLayer(layer: Layer): string {
     switch (layer.type) {
       case WmsLayertype:
-        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms';
+        return wmsOffering;
       case WmtsLayertype:
-        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts';
+        return wmtsOffering;
       case GeojsonLayertype:
-        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/geojson';
+        return GeoJsonOffering;
       case XyzLayertype:
-        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/xyz';
+        return xyzOffering;
       case WfsLayertype:
-        return 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs';
+        return wfsOffering;
+      case KmlLayertype:
+        return kmlOffering;
+      case TmsLayertype:
+        return tmsOffering;
       default:
-        console.warn(`This type of layer (${layer.type}) has not been implemented yet.`);
+        console.warn(`This type of layer (${layer.type}) has not been implemented yet.`, layer);
         return null;
     }
   }
@@ -1113,7 +1126,7 @@ export class OwcJsonService {
 
 
     const GetFeature: IOwsOperation = {
-      code: 'GetFeature',
+      code: GetFeatureOperationCode,
       method: 'GET',
       type: 'application/json',
       href: url
@@ -1170,7 +1183,7 @@ export class OwcJsonService {
     if (layer.params && layer.params.FORMAT) { format = layer.params.FORMAT; }
 
     const getMap: IOwsOperation = {
-      code: 'GetMap',
+      code: GetMapOperationCode,
       method: 'GET',
       type: format,
       href: `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}&TILED=true`
@@ -1209,7 +1222,7 @@ export class OwcJsonService {
     if (layer.params && layer.params.FORMAT) { format = layer.params.FORMAT; }
 
     const getTile: IOwsOperation = {
-      code: 'GetTile',
+      code: GetTileOperationCode,
       href: `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=${format}&LAYER=${layerId}&VERSION=${wmtsVersion}`,
       method: 'GET',
       type: format
