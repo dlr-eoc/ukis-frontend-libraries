@@ -32,17 +32,17 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
 type isoInterval = `${string}/${string}`;
 type intervalPeriod = `${isoInterval}/P${string}`;
 
-export interface IEocOwsResourceDimension {
-  name: 'time' | 'elevation';
+export interface IEocOwsTimeDimension {
+  name: 'time';
   /**
    * For time:
    *  - '1984-01-01T00:00:00.000Z,1990-01-01T00:00:00.000Z,1995-01-01T00:00:00.000Z,...'
    *  - '2000-09-01T00:00:00.000Z/2017-08-31T00:00:00.000Z/P1D'
    *  - '2000-09-01T00:00:00.000Z/2010-08-31T00:00:00.000Z/P1D,2010-09-01T00:00:00.000Z/2020-08-31T00:00:00.000Z/P1D,...'
-   *  - '1984-01-01T00:00:00.000Z/P1Y,1985-01-01T00:00:00.000Z/P1Y...'
+   *  - '1984-01-01T00:00:00.000Z/P1Y,1985-01-01T00:00:00.000Z/P1Y,1986-01-01T00:00:00.000Z,1987-01-01T00:00:00.000Z,...'
    *  also see https://moment.github.io/luxon/api-docs/index.html#intervalfromiso
    */
-  values: `${string | isoInterval | intervalPeriod},` | isoInterval | intervalPeriod;
+  values: `${string | isoInterval | intervalPeriod},${string | isoInterval | intervalPeriod}` | isoInterval | intervalPeriod;
   /**
    * For time: 'ISO8601'
    * ISO8601 has been chosen because this is how
@@ -59,6 +59,31 @@ export interface IEocOwsResourceDimension {
     default?: string;
   };
 }
+
+/** 12-111r1_Best_Practices_for_WMS_with_Time_or_Elevation_dependent_data.pdf - https://portal.ogc.org/files/?artifact_id=56394 */
+export interface IEocOwsElevationDimension {
+  name: 'elevation';
+  /**
+   *
+   */
+  value: string;
+  /**
+   * string or range
+   * 100,200,300...
+   * 100/1000
+   */
+  units: string;
+  display?: {
+    unitSymbol?: string;
+    format?: string;
+    /** in case the app should display data at a different elevation step */
+    step?: string;
+    /** The value which should be shown/used as default */
+    default?: string;
+  };
+}
+
+export type IEocOwsResourceDimension = IEocOwsTimeDimension | IEocOwsElevationDimension;
 
 export interface IEocOwsOffering extends IOwsOffering {
   code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering |
