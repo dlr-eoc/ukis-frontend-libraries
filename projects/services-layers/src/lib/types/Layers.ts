@@ -61,11 +61,12 @@ export interface ILayerEvent {
   listener: (args?: any) => void;
 }
 
-export const TmsLayertype = 'tms';
+export const TmsLayertype = 'tms'; // can be raster and Vector
 export const WmsLayertype = 'wms';
 export const WmtsLayertype = 'wmts';
 export const XyzLayertype = 'xyz';
 export const GeojsonLayertype = 'geojson';
+export const KmlLayertype = 'kml';
 export const WfsLayertype = 'wfs';
 export const CustomLayertype = 'custom';
 export type TVectorLayertype = typeof GeojsonLayertype | typeof WfsLayertype | typeof CustomLayertype;

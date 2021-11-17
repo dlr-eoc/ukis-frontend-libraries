@@ -27,6 +27,7 @@
 * **@dlr-eoc/layer-control:**:
   - Open legend image as a link in a new tab for a larger view
 * **@dlr-eoc/services-layers:**:
+  - Export `const TmsLayertype = 'tms'` and integrate this in `TLayertype`.
   - Extend Type for Popup `Layer['popup']?.filterLayer` to filter out layers in `map.forEachLayerAtPixel` and `map.forEachFeatureAtPixel`.
   - `CustomLayer` can now overwrite `crossOrigin` property if used with a OpenLayers Layer.
   - Extend Layer Type for events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
