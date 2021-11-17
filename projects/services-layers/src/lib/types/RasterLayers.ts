@@ -28,7 +28,7 @@ export class WmtsLayer extends RasterLayer implements IWmtsOptions {
 
 
 export interface IBaseMatrixSet {
-  /** the MatrixSet ID in WMTS Capabilities */
+  /** the MatrixSet ID in WMTS Capabilities - used for GetTile Request */
   matrixSet: string;
 }
 export interface IListMatrixSet extends IBaseMatrixSet {
