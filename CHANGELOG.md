@@ -48,6 +48,8 @@
   - `OwcJsonService.generateOwcContextFrom()` now also exports WFS-layers.
 
 ### Bug Fixes
+* **@dlr-eoc/core-ui:**
+  - Add missing Output to `GlobalProgressComponent`.
 * **@dlr-eoc/services-ogc:**
   - Removed not used `customAttributes`
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with WFS'es: only a substring of the `GetFeature`-operation.href had been used. Now fixed.
