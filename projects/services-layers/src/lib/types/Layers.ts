@@ -68,8 +68,8 @@ export const XyzLayertype = 'xyz';
 export const GeojsonLayertype = 'geojson';
 export const KmlLayertype = 'kml';
 export const WfsLayertype = 'wfs';
-export const CustomLayertype = 'custom';
-export type TVectorLayertype = typeof GeojsonLayertype | typeof WfsLayertype | typeof CustomLayertype;
+export const CustomLayertype = 'custom'; // can be raster and Vector
+export type TVectorLayertype = typeof GeojsonLayertype | typeof WfsLayertype | typeof TmsLayertype | typeof KmlLayertype | typeof CustomLayertype;
 export type TRasterLayertype = typeof WmsLayertype | typeof WmtsLayertype | typeof XyzLayertype | typeof TmsLayertype | typeof CustomLayertype;
 export type TLayertype = TRasterLayertype | TVectorLayertype | string;
 
@@ -81,13 +81,20 @@ export const Filtertypes = {
 export type TFiltertypes = keyof typeof Filtertypes;
 
 
-
+/**
+ * CustomLayertype and TmsLayertype can be raster and vector.
+ * You have to double check by yourself later!
+ */
 export function isVectorLayertype(inpt: string): inpt is TVectorLayertype {
-  return [GeojsonLayertype, WfsLayertype, CustomLayertype].includes(inpt);
+  return [GeojsonLayertype, WfsLayertype, CustomLayertype, KmlLayertype, TmsLayertype].includes(inpt);
 }
 
+/**
+ * CustomLayertype and TmsLayertype can be raster and vector.
+ * You have to double check by yourself later!
+ */
 export function isRasterLayertype(inpt: string): inpt is TRasterLayertype {
-  return [WmsLayertype, WmtsLayertype, XyzLayertype, CustomLayertype].includes(inpt);
+  return [WmsLayertype, WmtsLayertype, XyzLayertype, CustomLayertype, TmsLayertype].includes(inpt);
 }
 
 export function isLayertype(inpt: string): inpt is TLayertype {
