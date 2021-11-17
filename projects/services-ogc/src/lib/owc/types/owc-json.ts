@@ -146,13 +146,14 @@ export interface IOwsResourceProperties {
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truemultiple-offerings-and-priority
  */
 export interface IOwsOffering {
-  /** Extension Offerings with type - string */
+  /** Code identifying the type of offering - Extension Offerings with type - string */
   code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering | WMTS_Offering |
   GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering | GMLCOV_Offering | string;
-  /** Web Service Offerings provide their operations */
+  /** Web Service Offerings provide their operations - Array of operations used to invoke the service */
   operations?: IOwsOperation[];
-  /** Content Offerings allow content to be embedded in an OWS Context document. */
+  /** Content Offerings allow content to be embedded in an OWS Context document (inline or byRef) */
   contents?: IOwsContent[];
+  /** Array of style sets - A style representation for a resource (inline or service derived) content */
   styles?: IOwsStyleSet[];
   [k: string]: any;
 }
@@ -219,10 +220,13 @@ export interface IOwsOperation {
   code: string;
   /** method defines the access method, for example GET or POST. */
   method: string;
-  /** href is the URI containing the definition of the request */
+  /** Service Request URL - The URI containing the definition of the request */
   href: string;
+  /** MIME type of the expected results */
   type?: string;
+  /** Optional request body content */
   request?: IOwsContent;
+  /** Optional Result Payload of the operationc */
   result?: IOwsContent;
   /** Extension of Operation */
   [k: string]: any;
@@ -231,19 +235,27 @@ export interface IOwsOperation {
 export interface IOwsContent {
   /** MIME type of the Content */
   type: string;
+  /** URL of the Content */
   href?: string;
+  /** Title of the Content */
   title?: string;
-  /** String type, not empty that can contain any text encoded media type */
+  /** In-line content for the Content element- String type, not empty that can contain any text encoded media type */
   content?: string;
   [k: string]: any;
 }
 
 export interface IOwsStyleSet {
+  /** Unique name of the styleSet within a given offering */
   name: string;
+  /** Human Readable title of the styleSet within a given offering */
   title: string;
+  /** Description of the styleSet */
   abstract?: string;
+  /** Whether this styleSet is the one to be defined by default */
   default?: boolean;
+  /** URL of a legend image for the styleSet */
   legendURL?: string;
+  /** The inline or a external reference to the styleSet definition */
   content?: IOwsContent;
   [k: string]: any;
 }
