@@ -30,14 +30,13 @@ import olTileSource from 'ol/source/Tile';
 import { Options as olXYZOptions } from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
 import olTileImageSource from 'ol/source/TileImage';
-import olImageSource from "ol/source/Image";
+import olImageSource from 'ol/source/Image';
 import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
 import olWMTS from 'ol/source/WMTS';
 import { Options as olWMTSOptions } from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olVectorSource from 'ol/source/Vector';
-import olTileJSON from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
 import olFeature from 'ol/Feature';
 
@@ -1074,9 +1073,12 @@ export class MapOlService {
         wrapX: false
       });
     } else if (l.url) {
-      olSource = new olTileJSON({
+      olSource = new olVectorSource({
         url: l.url,
-        crossOrigin: (l.crossOrigin && l.crossOrigin === null) ? l.crossOrigin : 'anonymous',
+        format: new olGeoJSON({
+          dataProjection: WGS84,
+          featureProjection: this.EPSG
+        }),
         wrapX: false
       });
     }
