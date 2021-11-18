@@ -42,6 +42,7 @@ import olFeature from 'ol/Feature';
 
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
+import olKML from 'ol/format/KML';
 import olProjection from 'ol/proj/Projection';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
@@ -726,6 +727,9 @@ export class MapOlService {
       case 'geojson':
         newOlLayer = this.create_geojson_layer(newLayer as VectorLayer);
         break;
+      case 'kml':
+        newOlLayer = this.create_kml_layer(newLayer as VectorLayer);
+        break;
       case 'wfs':
         newOlLayer = this.create_wfs_layer(newLayer as VectorLayer);
         break;
@@ -1089,6 +1093,116 @@ export class MapOlService {
 
     const layeroptions = {
       type: 'geojson',
+      name: l.name,
+      id: l.id,
+      visible: l.visible,
+      legendImg: l.legendImg,
+      opacity: l.opacity || 1,
+      zIndex: 1,
+      source: olSource
+    } as any;
+
+    if (l.popup) {
+      layeroptions.popup = l.popup;
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
+    }
+
+    if (l.bbox) {
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+    }
+
+    if (l.cluster) {
+      const clusteroptions: any = {};
+      if (typeof l.cluster === 'object') {
+        Object.assign(clusteroptions, l.cluster);
+      }
+      clusteroptions.source = olSource;
+      const clusterSource = new olCluster(clusteroptions);
+      layeroptions.source = clusterSource;
+      const styleCache = {};
+      layeroptions.style = (feature) => {
+        const size = feature.get('features').length;
+        let style = styleCache[size];
+        if (!style) {
+          style = new olStyle({
+            image: new olCircleStyle({
+              radius: 10,
+              stroke: new olStroke({
+                color: '#fff'
+              }),
+              fill: new olFill({
+                color: '#3399CC'
+              })
+            }),
+            text: new olText({
+              text: size.toString(),
+              fill: new olFill({
+                color: '#fff'
+              })
+            })
+          });
+          styleCache[size] = style;
+        }
+        return style;
+      };
+    }
+
+    if (l.options) {
+      Object.assign(layeroptions, l.options);
+    }
+
+    const newlayer = new olVectorLayer(layeroptions);
+    this.setCrossOrigin(l, newlayer);
+    this.addEventsToLayer(l, newlayer, layeroptions.source);
+    return newlayer;
+  }
+
+  private create_kml_layer(l: VectorLayer) {
+    let olSource;
+    if (l.data) {
+      olSource = new olVectorSource({
+        features: new olKML({ extractStyles: true }).readFeatures(l.data, {
+          dataProjection: WGS84,
+          featureProjection: this.EPSG
+        }),
+        format: new olKML(),
+        wrapX: false
+      });
+    } else if (l.url) {
+      olSource = new olVectorSource({
+        url: l.url,
+        format: new olKML({
+          extractStyles: true,
+          crossOrigin: (l.crossOrigin && l.crossOrigin === null) ? l.crossOrigin : 'anonymous',
+        }),
+        wrapX: false
+      });
+    }
+
+    if (l.continuousWorld) {
+      olSource.set('wrapX', l.continuousWorld);
+    }
+
+    const layeroptions = {
+      type: 'kml',
       name: l.name,
       id: l.id,
       visible: l.visible,
