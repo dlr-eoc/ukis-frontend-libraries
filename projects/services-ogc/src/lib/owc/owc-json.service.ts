@@ -28,7 +28,6 @@ import {
   LayerGroup,
   ILayerTimeDimension,
   ILayerElevationDimension,
-  CustomLayer,
   Filtertypes,
   TmsLayertype,
   KmlLayertype,
@@ -37,21 +36,10 @@ import {
 } from '@dlr-eoc/services-layers';
 import { TGeoExtent } from '@dlr-eoc/services-map-state';
 import { WmtsClientService } from '../wmts/wmtsclient.service';
-import { of, Observable, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
-import olVectorTileLayer from 'ol/layer/VectorTile';
-import olVectorTileSource from 'ol/source/VectorTile';
-import { applyStyle } from 'ol-mapbox-style';
-import { createXYZ } from 'ol/tilegrid';
-import olMVT from 'ol/format/MVT';
+
 import { HttpClient } from '@angular/common/http';
 import { get as getProjection } from 'ol/proj';
-import { DateTime, Interval } from 'luxon';
 
-
-// @TODO: once we have a dedicated ukis-TMSLayer, integrate this type into services-layers
-export const TmsLayertype = 'tms';
-export type Layertype = 'tms' | TLayertype;
 
 export function shardsExpand(v: string) {
   if (!v) { return; }
@@ -559,44 +547,64 @@ export class OwcJsonService {
     return rasterLayer$;
   }
 
-  createTmsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<CustomLayer> {
-    const layerOptions = this.getLayerOptions(offering, resource, context);
-    const tmsServerUrl = offering.operations.find(o => o.code === 'GetTiles').href;
-    const { minZoom, maxZoom } = this.getMinMaxZoom(resource, targetProjection);
-    const layer = new CustomLayer({
-      ...layerOptions,
-      type: 'custom',
-      custom_layer: new olVectorTileLayer({
-        declutter: true,
-        source: new olVectorTileSource({
-          attributions: this.getResourceAttribution(resource),
-          format: new olMVT(),
-          tileGrid: createXYZ({ minZoom, maxZoom }),
-          url: tmsServerUrl,
-        }),
-        renderMode: 'hybrid'
-      }),
-    });
+  private createVectorTileLayerFromOffering(offering: IEocOwsOffering, resource: IEocOwsResource, context: IEocOwsContext, targetProjection: string) {
+    if (isTMSOffering(offering.code)) {
+      const vectorTileOperation = offering.operations.find(o => o.type === 'application/vnd.mapbox-vector-tile');
+      if (vectorTileOperation) {
+        const layerOptions = this.getVectorLayerOptions(offering, resource, context);
 
-    if (offering.styles && offering.styles[0]?.content.type === 'mapbox-style') {
+        const tmsServerUrl = offering.operations.find(o => o.code === RESTOperationCode).href;
+        layerOptions.url = tmsServerUrl;
+
+        if (offering.styles && offering.styles[0]?.content.type === 'OpenMapStyle') {
       const content = offering.styles[0].content;
 
+          // we need the sourceKey to apply t5he style later
+          if (content?.styleSource) {
+            if (!layerOptions.options) {
+              layerOptions.options = {
+                styleSource: content.styleSource,
+                style: null
+              };
+            } else if (!layerOptions.options.style) {
+              layerOptions.options.style = {};
+              layerOptions.options.styleSource = content.styleSource;
+            }
+
       let styleObj$: Observable<any>;
-      if (content.content) {
+            if (content?.content) {
         styleObj$ = of(JSON.parse(content.content));
-      } else if (content.href) {
+            } else if (content?.href) {
         const url = content.href;
         styleObj$ = this.http.get(url);
       } else {
-        console.error('Couldn\'t find style for Tms-Offering ', offering);
+              console.warn(`Couldn't find style for Tms-Offering`, offering);
       }
 
-      return styleObj$.pipe(map((styleObj) => {
-        applyStyle(layer.custom_layer, styleObj, content['mapbox-source-key']);
-        return layer;
+            if (styleObj$) {
+              return styleObj$.pipe(map((obj) => {
+                layerOptions.options.style = obj;
+                const newLayer = new VectorLayer(layerOptions);
+                return newLayer;
       }));
+            } else {
+              const newLayer = new VectorLayer(layerOptions);
+              return of(newLayer);
+            }
+          }
+        } else {
+          const newLayer = new VectorLayer(layerOptions);
+          return of(newLayer);
+        }
+      } else {
+        return of(null);
+      }
 
     } else {
+      return of(null);
+    }
+  }
+
       return of(layer);
     }
   }
