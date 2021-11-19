@@ -34,6 +34,7 @@
   - Extend Layer Type for events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Extend Layer Popup Type for multiple Popups [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/map-ol:**
+  - Support new `VectorLayer.type = tms` for VetrorTile Layers with `VectorLayer.options.style` as the OpenMapStyle obj and `VectorLayer.options.styleSource` for the style SourceKey.
   - Support new `VectorLayer.type = kml`.
   - Add events from Layer to olLayer and olSource [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).

@@ -24,6 +24,13 @@ import olVectorLayer from 'ol/layer/Vector';
 import olVectorTile from 'ol/source/VectorTile';
 
 
+import olVectorTileLayer from 'ol/layer/VectorTile';
+import olVectorTileSource from 'ol/source/VectorTile';
+import { applyStyle } from 'ol-mapbox-style';
+import { createXYZ } from 'ol/tilegrid';
+import olMVT from 'ol/format/MVT';
+
+
 import olXYZ from 'ol/source/XYZ';
 import olTileSource from 'ol/source/Tile';
 
@@ -724,6 +731,9 @@ export class MapOlService {
       case 'wmts':
         newOlLayer = this.create_wmts_layer(newLayer as WmtsLayer);
         break;
+      case 'tms':
+        newOlLayer = this.create_tms_layer(newLayer as VectorLayer | RasterLayer);
+        break;
       case 'geojson':
         newOlLayer = this.create_geojson_layer(newLayer as VectorLayer);
         break;
@@ -812,6 +822,94 @@ export class MapOlService {
     const newlayer = new olTileLayer(layeroptions);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olSource);
+    return newlayer;
+  }
+
+  private create_tms_layer(l: RasterLayer | VectorLayer): olTileLayer<olTileSource> {
+    let newlayer = null;
+    let newOlSource = null;
+    if (l instanceof RasterLayer) {
+      newlayer = this.create_xyz_layer(l);
+      newlayer.set('type', 'tms');
+
+    } else if (l instanceof VectorLayer) {
+      newOlSource = new olVectorTileSource({
+        format: new olMVT(),
+        tileGrid: createXYZ({ minZoom: l.minZoom || undefined, maxZoom: l.maxZoom || undefined }),
+        url: l.url,
+        wrapX: false
+      });
+
+
+      if (l.attribution) {
+        newOlSource.setAttributions([l.attribution]);
+      }
+
+      if (l.continuousWorld) {
+        newOlSource.set('wrapX', l.continuousWorld);
+      }
+
+      if (l.subdomains) {
+        const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
+        newOlSource.setUrls(urls);
+
+      } else {
+        newOlSource.setUrl(l.url);
+      }
+
+
+      const layeroptions: any = {
+        type: 'tms',
+        filtertype: l.filtertype,
+        name: l.name,
+        id: l.id,
+        visible: l.visible,
+        legendImg: l.legendImg,
+        opacity: l.opacity || 1,
+        zIndex: 1,
+        source: newOlSource,
+        declutter: true,
+        renderMode: 'hybrid'
+      };
+
+      if (l.popup) {
+        layeroptions.popup = l.popup;
+        /**
+         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+         */
+        layeroptions.className = l.id;
+      }
+
+      if (l.bbox) {
+        layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+      }
+
+      if (l.maxResolution) {
+        layeroptions.maxResolution = l.maxResolution;
+      }
+      if (l.minResolution) {
+        layeroptions.minResolution = l.minResolution;
+      }
+
+      if (l.maxZoom) {
+        layeroptions.maxZoom = l.maxZoom;
+      }
+      if (l.minZoom) {
+        layeroptions.minZoom = l.minZoom;
+      }
+
+      newlayer = new olVectorTileLayer(layeroptions);
+      this.setCrossOrigin(l, newlayer);
+      this.addEventsToLayer(l, newlayer, newOlSource);
+
+
+      const style = l?.options?.style;
+      const mapboxSourceKey = l?.options?.styleSource;
+      if (style && mapboxSourceKey) {
+        applyStyle(newlayer, style, mapboxSourceKey);
+      }
+    }
     return newlayer;
   }
 
@@ -1056,6 +1154,11 @@ export class MapOlService {
 
     if (l.bbox) {
       layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+    }
+
+    if (l.subdomains) {
+      l.url = l.url.replace('{s}', `${l.subdomains[0]}-${l.subdomains[l.subdomains.length - 1]}`);
+      olSource.setUrl(l.url);
     }
 
     if (l.options) {
