@@ -11,6 +11,7 @@
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
 
 * **@dlr-eoc/services-ogc:** 
+- Remove old custom extension `IOwsOffering.iconUrl` and `getIconUrl()`.
 - Remove not used `getOfferingContents()`.
 - Remove old custom extension `IOwsOffering.title` - use `IOwsResource` as layers.
 - Change `createTmsLayerFromOffering()` to `private createVectorTileLayerFromOffering()` and `private createTmsRasterLayerFromOffering()`.

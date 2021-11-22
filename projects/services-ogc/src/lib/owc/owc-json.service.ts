@@ -424,16 +424,6 @@ export class OwcJsonService {
     return legendUrl;
   }
 
-  /**
-   * retrieve iconUrl based on IOwsOffering
-   */
-  getIconUrl(offering: IOwsOffering) {
-    let iconUrl = '';
-    if (offering.hasOwnProperty('iconUrl')) {
-      iconUrl = offering.iconUrl;
-    }
-    return iconUrl;
-  }
 
   /**
    * layer priority: first wms, then wmts, then wfs, then others.
