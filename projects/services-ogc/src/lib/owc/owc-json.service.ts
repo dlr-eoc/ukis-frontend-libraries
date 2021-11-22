@@ -517,12 +517,16 @@ export class OwcJsonService {
 
   createLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<Layer> {
     const layerType = this.getLayertypeFromOfferingCode(offering);
-    if (isRasterLayertype(layerType)) {
+    if (isRasterLayertype(layerType) && isVectorLayertype(layerType)) {
+      // tms and Custom layer can both be raster or vector so create both and filter out of(null)
+      const raster = this.createRasterLayerFromOffering(offering, resource, context, targetProjection);
+      const vector = this.createVectorLayerFromOffering(offering, resource, context, targetProjection);
+      const layer = concat(raster, vector).pipe(filter(l => l instanceof Layer));
+      return layer;
+    } else if (isRasterLayertype(layerType)) {
       return this.createRasterLayerFromOffering(offering, resource, context, targetProjection);
     } else if (isVectorLayertype(layerType)) {
-      return this.createVectorLayerFromOffering(offering, resource, context);
-    } else if (layerType === TmsLayertype) {
-      return this.createTmsLayerFromOffering(offering, resource, context, targetProjection);
+      return this.createVectorLayerFromOffering(offering, resource, context, targetProjection);
     } else {
       console.warn(`This type of service (${layerType}) has not been implemented yet.`, offering);
       return of(null);
