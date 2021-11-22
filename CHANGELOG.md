@@ -61,7 +61,8 @@
 * **@dlr-eoc/core-ui:**
   - Add missing Output to `GlobalProgressComponent`.
 * **@dlr-eoc/services-ogc:**
-  - Removed not used `customAttributes`
+  - Preserve order of Layers and Groups from `IOwsContext` - `getLayers()`.
+  - Removed not used `customAttributes`.
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with WFS'es: only a substring of the `GetFeature`-operation.href had been used. Now fixed.
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with GeoJson-layers: GeoJson data had been incorrectly stringified (and parsed again).
   - `OwcJsonService.getTimeDimensions`: `period` only added to dimension if actually given in `IEocOwsResourceDimension`.

@@ -426,29 +426,48 @@ export class OwcJsonService {
 
 
   /**
-   * layer priority: first wms, then wmts, then wfs, then others.
+   * Get all Layers from the IOwsContext
    */
   getLayers(owc: IOwsContext, targetProjection: string): Observable<(Layer | LayerGroup)[]> {
     const resources = owc.features;
     const layers$: Observable<Layer | LayerGroup>[] = [];
+    /** For the order of Layers see IOwsContext['features'] */
 
-    resources.sort((r1, r2) => r1.properties.folder > r2.properties.folder ? 1 : -1);
+    /**
+     * LayerGroups
+     *
+     * e.g. if groupName: Layers/test -> a group "test" in the slot Layers will be created with the layer in it
+     * e.g. if groupName: Overlays/test -> a group "test" in the slot Overlays will be created with the layer in it
+     * if groupName is only: Layers | Overlays | Baselayers use layerResources
+     */
+    const layergroupResources = this.getGroupResources(owc);
 
-    for (let i = 0; i < resources.length; i++) {
-      const resource = resources[i];
+    const layerGroupIDs = layergroupResources.map(f => this.getLayerGroup(f)) // get ids
+      .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
 
-      const groupName = this.getLayerGroup(resource);
-      if (groupName && !Object.keys(Filtertypes).includes(groupName)) {
-        const includedResources = resources.filter(r => r.properties.folder === resource.properties.folder);
+    /** unique layergroupResources */
+    layerGroupIDs.forEach(groupName => {
+      /** reverse so layer order is like in the context */
+      const includedResources = layergroupResources.filter(r => r.properties?.folder === groupName).reverse();
         const layerGroup$ = this.createLayerGroup(groupName, includedResources, owc, targetProjection);
         layers$.push(layerGroup$);
-        i += includedResources.length - 1;
-      }
-      else {
-        const layer$ = this.createLayerFromDefaultOffering(resource, owc, targetProjection);
+    });
+
+    /**
+     * Single Layers
+     */
+    const layerResources = this.getSingleResources(owc);
+    layerResources.forEach(lr => {
+      const layer$ = this.createLayerFromDefaultOffering(lr, owc, targetProjection);
         layers$.push(layer$);
+    });
+
+    return forkJoin(layers$).pipe(
+      // making sure no undefined layers are returned
+      map(layers => layers.filter(layer => layer))
+    );
       }
-    }
+
 
     return forkJoin(layers$).pipe(
       // making sure no undefined layers are returned
