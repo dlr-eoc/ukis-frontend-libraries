@@ -118,6 +118,28 @@ export class OwcJsonService {
     return context.features;
   }
 
+  /**
+   * Get Resources whith Folder property but not including Layer-Filtertypes
+   */
+  getGroupResources(context: IOwsContext): IOwsResource[] {
+    const resources = context.features;
+    return resources.filter(r => {
+      const groupName = this.getLayerGroup(r);
+      return groupName && !Object.keys(Filtertypes).includes(groupName);
+    });
+  }
+
+  /**
+   * Get Resources without Folder property or Folder is only Layer-Filtertypes
+   */
+  getSingleResources(context: IOwsContext): IOwsResource[] {
+    const resources = context.features;
+    return resources.filter(r => {
+      const groupName = this.getLayerGroup(r);
+      return !groupName || Object.keys(Filtertypes).includes(groupName);
+    });
+  }
+
   /** Resource --------------------------------------------------- */
   getResourceTitle(resource: IOwsResource): string {
     return resource.properties.title;
@@ -183,6 +205,22 @@ export class OwcJsonService {
     if (resource.properties.hasOwnProperty('shards')) {
       return resource.properties.shards;
     }
+  }
+
+  /** OWS Extenson IEocOwsResource */
+  getResourceMinMaxZoom(resource: IEocOwsResource, targetProjection: string = 'EPSG:4326'): { minZoom: number; maxZoom: number; } {
+    const zooms = { minZoom: null, maxZoom: null };
+    if (resource.properties.minZoom) {
+      zooms.minZoom = resource.properties.minZoom;
+    } else if (resource.properties.maxscaledenominator) {  // *Max*ScaleDenom ~ *Min*Zoom
+      zooms.minZoom = this.scaleDenominatorToZoom(resource.properties.maxscaledenominator, targetProjection) || null;
+    }
+    if (resource.properties.maxZoom) {
+      zooms.maxZoom = resource.properties.maxZoom;
+    } else if (resource.properties.minscaledenominator) {  // *Min*ScaleDenom ~ *Max*Zoom
+      zooms.maxZoom = this.scaleDenominatorToZoom(resource.properties.minscaledenominator, targetProjection) || null;
+    }
+    return zooms;
   }
 
 
