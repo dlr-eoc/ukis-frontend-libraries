@@ -560,26 +560,26 @@ export class OwcJsonService {
     return vectorLayer$;
     }
 
-    const legendUrl = this.getLegendUrl(offering);
+  private getVectorLayerOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection?: string): IVectorLayerOptions {
+    const layerOptions: ILayerOptions = this.getLayerOptions(offering, resource, context);
 
-    const layerOptions: IVectorLayerOptions = {
-      id: resource.id as string,
-      name: this.getResourceTitle(resource),
-      displayName: this.getDisplayName(offering, resource),
-      visible: this.isActive(resource),
-      description: this.getResourceDescription(resource),
-      type: layerType,
-      removable: true,
-      attribution: this.getResourceAttribution(resource),
-      continuousWorld: false,
-      opacity: this.getResourceOpacity(resource),
-      url: layerUrl ? layerUrl : null,
-      legendImg: legendUrl ? legendUrl : null,
-      data
+    if (isVectorLayertype(layerOptions.type)) {
+
+      const { minZoom, maxZoom } = this.getResourceMinMaxZoom(resource, targetProjection);
+      const subdomains = shardsExpand(this.getResourceShards(resource));
+      const vectorLayerOptions: IVectorLayerOptions = {
+        ...layerOptions,
+        type: layerOptions.type as TVectorLayertype,
+        subdomains,
+        maxZoom,
+        minZoom
     };
 
-
-    const layer = new VectorLayer(layerOptions);
+      return vectorLayerOptions;
+    } else {
+      console.error(`The layer ${layerOptions.id} is not a VectorLayer`, layerOptions);
+    }
+  }
 
     if (resource.bbox) {
       layer.bbox = resource.bbox;
