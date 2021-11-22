@@ -529,7 +529,7 @@ export class OwcJsonService {
     }
   }
 
-  createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext): Observable<VectorLayer> {
+  createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext, targetProjection?: string): Observable<VectorLayer> {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
     if (!isVectorLayertype(layerType)) {
@@ -537,35 +537,27 @@ export class OwcJsonService {
       return of(null);
     }
 
-    // Case 1: service-offering
-    let layerUrl;
-    if (offering.operations) {
-      const getFeatureOperation = offering.operations.find(o => o.code === 'GetFeature');
-      if (getFeatureOperation) {
-        layerUrl = getFeatureOperation.href;
 
-        const urlObject = new URL(layerUrl);
-        const request = urlObject.searchParams.get('request') || urlObject.searchParams.get('Request');
-        const service = urlObject.searchParams.get('service') || urlObject.searchParams.get('Service');
-        const version = urlObject.searchParams.get('version') || urlObject.searchParams.get('Version');
-        const typeName = urlObject.searchParams.get('typeName') || urlObject.searchParams.get('TypeName') || urlObject.searchParams.get('typename')
-                      || urlObject.searchParams.get('typeNames') || urlObject.searchParams.get('TypeNames') || urlObject.searchParams.get('typenames');
-        if (!typeName || !version || !service || !request) {
-          console.warn(`URL does not contain the minimum required arguments for a WFS layer: ${layerUrl}`);
-          return of(null);
-        }
+    let vectorLayer$: Observable<VectorLayer> = of(null);
+
+    switch (layerType) {
+      case WfsLayertype:
+        vectorLayer$ = this.createWfsLayerFromOffering(offering, resource, context);
+        break;
+      case TmsLayertype:
+        vectorLayer$ = this.createVectorTileLayerFromOffering(offering, resource, context, targetProjection);
+        break;
+      case GeojsonLayertype:
+        vectorLayer$ = this.createDataVectorLayerFromOffering(offering, resource, context);
+        break;
+      case KmlLayertype:
+        vectorLayer$ = this.createDataVectorLayerFromOffering(offering, resource, context);
+        break;
+      case CustomLayertype:
+        // custom layers are meant to be user-defined and not easily encoded in a OWC.
+        break;
       }
-    }
-
-
-    // Case 2: data-offering
-    let data;
-    if (offering.contents) {
-      // currently, Ukis only knows about one data-types for vector-layers:
-      const content = offering.contents.find(c => c.type === 'application/geo+json');
-      if (content) {
-        data = JSON.parse(content.content);
-      }
+    return vectorLayer$;
     }
 
     const legendUrl = this.getLegendUrl(offering);
