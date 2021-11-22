@@ -434,12 +434,12 @@ export class OwcJsonService {
   getLegendUrl(offering: IOwsOffering) {
     let legendUrl = '';
 
-    if (offering.hasOwnProperty('styles')) {
+    if (offering.styles) {
       const defaultStyle = offering.styles.find(style => style.default);
       if (defaultStyle) {
         return defaultStyle.legendURL;
       }
-    } else if (offering.hasOwnProperty('legendUrl')) {
+    } else if (offering.legendUrl) {
       legendUrl = offering.legendUrl;
     }
     return legendUrl;
@@ -450,7 +450,6 @@ export class OwcJsonService {
    * Get all Layers from the IOwsContext
    */
   getLayers(owc: IOwsContext, targetProjection: string): Observable<(Layer | LayerGroup)[]> {
-    const resources = owc.features;
     const layers$: Observable<Layer | LayerGroup>[] = [];
     /** For the order of Layers see IOwsContext['features'] */
 
@@ -496,8 +495,13 @@ export class OwcJsonService {
     );
   }
 
-  createLayerGroup(
-    groupName: string, includedResources: IOwsResource[], owc: IOwsContext, targetProjection: string): Observable<LayerGroup> {
+
+
+  /**
+   *
+   * @param groupName string | `${TFiltertypes}/string`
+   */
+  createLayerGroup(groupName: string, includedResources: IOwsResource[], owc: IOwsContext, targetProjection: string): Observable<LayerGroup> {
 
     const layers$: Observable<Layer>[] = [];
     for (const resource of includedResources) {
@@ -510,12 +514,12 @@ export class OwcJsonService {
       // putting layers in a LayerGroup
       map((layers: Layer[]) => {
         const parts = groupName.split('/');
+        // TODO: if parts[0] includes Baselayers -> create a merged LayerGroup -> extend ukis-LayerGroup to allow merged layers
         const groupNameLast = parts[parts.length - 1];
         const layerGroup = new LayerGroup({
           id: groupName,
           name: groupNameLast,
           layers,
-          visible: !!Math.max(...layers.map(l => +l.visible)),
           filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type?
         });
 
@@ -527,13 +531,18 @@ export class OwcJsonService {
   }
 
   createLayerFromDefaultOffering(resource: IOwsResource, owc: IOwsContext, targetProjection: string): Observable<Layer> {
-    const offerings = resource.properties.offerings;
+    const offerings = resource.properties?.offerings;
+    if (offerings) {
+      // TODO: allow Multiple offerings ???
     const offering = offerings.find(o => isWmsOffering(o.code))
       || offerings.find(o => isWmtsOffering(o.code))
       || offerings.find(o => isWfsOffering(o.code))
       || offerings.find(o => isTMSOffering(o.code))
       || offerings[0];
     return this.createLayerFromOffering(offering, resource, owc, targetProjection);
+    } else {
+      return of(null);
+  }
   }
 
   createLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<Layer> {
@@ -648,7 +657,7 @@ export class OwcJsonService {
       return of(null);
     }
 
-    let rasterLayer$: Observable<RasterLayer>;
+    let rasterLayer$: Observable<RasterLayer> = of(null);
     switch (layerType) {
       case WmsLayertype:
         rasterLayer$ = this.createWmsLayerFromOffering(offering, resource, context, targetProjection);
@@ -666,7 +675,6 @@ export class OwcJsonService {
         // custom layers are meant to be user-defined and not easily encoded in a OWC.
         break;
     }
-
     return rasterLayer$;
   }
 
@@ -819,17 +827,24 @@ export class OwcJsonService {
 
   private createWmtsLayerFromOffering(
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<WmtsLayer> {
+    if (isWmtsOffering(offering.code)) {
     return this.getWmtsOptions(offering, resource, context, targetProjection).pipe(map((options: IWmtsOptions) => {
       const layer = new WmtsLayer(options);
       return layer;
     }));
+    } else {
+      return of(null);
+  }
   }
 
   private createWmsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<WmsLayer> {
-
+    if (isWmsOffering(offering.code)) {
     const options: IWmsOptions = this.getWmsOptions(offering, resource, context, targetProjection);
     const layer = new WmsLayer(options);
     return of(layer);
+    } else {
+      return of(null);
+  }
   }
 
   private createXyzLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
@@ -1141,7 +1156,7 @@ export class OwcJsonService {
   private scaleDenominatorToZoom(scaleDenominator: number, targetProjectionCode: string): number {
     const projection = getProjection(targetProjectionCode);
     if (!projection) {
-      console.error(`The projection '${targetProjectionCode}' is unknown. You'll have to manually register it with 'proj4.defs'.`);
+      console.error(`The projection '${targetProjectionCode}' is unknown.You'll have to manually register it with 'proj4.defs'.`);
       return null;
     }
     if (!projection.getWorldExtent()) {
