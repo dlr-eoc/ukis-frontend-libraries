@@ -378,13 +378,15 @@ export class OwcJsonService {
 
 
   /** Offering --------------------------------------------------- */
-  getLayertypeFromOfferingCode(offering: IOwsOffering): Layertype {
+  getLayertypeFromOfferingCode(offering: IOwsOffering): TLayertype {
     if (isWmsOffering(offering.code)) {
       return WmsLayertype;
     } else if (isWmtsOffering(offering.code)) {
       return WmtsLayertype;
     } else if (isWfsOffering(offering.code)) {
       return WfsLayertype;
+    } else if (isKmlOffering(offering.code)) {
+      return KmlLayertype;
     } else if (isGeoJsonOffering(offering.code)) {
       return GeojsonLayertype;
     } else if (isXyzOffering(offering.code)) {
@@ -613,7 +615,10 @@ export class OwcJsonService {
         rasterLayer$ = this.createWmtsLayerFromOffering(offering, resource, context, targetProjection);
         break;
       case XyzLayertype:
-        // @TODO
+        rasterLayer$ = this.createXyzLayerFromOffering(offering, resource, context, targetProjection);
+        break;
+      case TmsLayertype:
+        rasterLayer$ = this.createTmsRasterLayerFromOffering(offering, resource, context, targetProjection);
         break;
       case CustomLayertype:
         // custom layers are meant to be user-defined and not easily encoded in a OWC.
@@ -683,6 +688,24 @@ export class OwcJsonService {
 
       return of(layer);
     }
+  private createTmsRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
+    if (isTMSOffering(offering.code)) {
+      // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      // subdomains: ['a', 'b', 'c'], OR shards?: string; a-d
+      const rasterOperation = offering.operations.find(o => o.type === 'image/png' || o.type === 'image/jpeg');
+      if (rasterOperation) {
+        const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context, targetProjection);
+        // TODO: use new function on map-ol to create tms not xyz type
+        rasterOptions.type = 'xyz';
+        const layer = new RasterLayer(rasterOptions);
+        return of(layer);
+      } else {
+        // no Raster TMS, maybe VectorTile
+        return of(null);
+      }
+    } else {
+      return of(null);
+  }
   }
 
   private createWmtsLayerFromOffering(
@@ -698,6 +721,20 @@ export class OwcJsonService {
     const options: IWmsOptions = this.getWmsOptions(offering, resource, context, targetProjection);
     const layer = new WmsLayer(options);
     return of(layer);
+  }
+
+  private createXyzLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
+    if (isXyzOffering(offering.code)) {
+      // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      // subdomains: ['a', 'b', 'c'], OR shards?: string; a-d
+      const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context, targetProjection);
+      rasterOptions.type = 'xyz';
+      const layer = new RasterLayer(rasterOptions);
+      return of(layer);
+    } else {
+      return of(null);
+    }
+
   }
 
   private getWmtsOptions(
