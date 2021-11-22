@@ -729,6 +729,49 @@ export class OwcJsonService {
     }
   }
 
+  private createDataVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext) {
+    // Case 2: data-offering
+    if (offering.contents) {
+      let data: any;
+      let url: string;
+      // currently, Ukis only supports geojson and kml as data-offering
+      offering.contents.forEach(content => {
+        if (content?.content) {
+          if (content.type === 'application/geo+json') {
+            if (typeof content.content === 'string') {
+              data = JSON.parse(content.content);
+            } else {
+              data = content.content;
+            }
+          } else if (content.type === 'application/vnd.google-earth.kml+xml') {
+            data = content.content;
+          }
+        } else if (content?.href) {
+          url = content.href;
+        }
+      });
+
+      const layerOptions = this.getVectorLayerOptions(offering, resource, context);
+
+      if (data) {
+        layerOptions.data = data;
+      } else if (url) {
+        layerOptions.url = url;
+      }
+
+      if (resource.bbox) {
+        layerOptions.bbox = resource.bbox;
+      } else if (context && context.bbox) {
+        layerOptions.bbox = context.bbox;
+      }
+
+      const layer = new VectorLayer(layerOptions);
+      return of(layer);
+    } else {
+      return of(null);
+    }
+  }
+
   private createTmsRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
     if (isTMSOffering(offering.code)) {
       // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
