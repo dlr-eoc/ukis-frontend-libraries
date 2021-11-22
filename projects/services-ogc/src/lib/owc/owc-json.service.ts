@@ -933,31 +933,30 @@ export class OwcJsonService {
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): IWmsOptions {
 
     const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context, targetProjection);
-    if (rasterOptions.type === WmsLayertype) {
+    if (rasterOptions?.type === WmsLayertype) {
 
-      const getMapOperation = offering.operations.find(o => o.code === 'GetMap');
-      const urlParams = this.getJsonFromUri(getMapOperation.href);
+      const { searchParams } = this.parseOperationUrl(offering, GetMapOperationCode);
 
       const params: IWmsParams = {
-        LAYERS: urlParams['LAYERS'],
+        LAYERS: searchParams.get('LAYERS'),
         TRANSPARENT: true
       };
       if (offering.styles && offering.styles.length > 0 && offering.styles.find(s => s.default)) {
         params.STYLES = offering.styles.find(s => s.default).name;
-      } else if (urlParams['STYLES']) {
-        params.STYLES = urlParams['STYLES'];
+      } else if (searchParams.has('STYLES')) {
+        params.STYLES = searchParams.get('STYLES');
       }
-      if (urlParams['FORMAT']) {
-        params.FORMAT = urlParams['FORMAT'];
+      if (searchParams.has('FORMAT')) {
+        params.FORMAT = searchParams.get('FORMAT');
       }
-      if (urlParams['TIME']) {
-        params.TIME = params.urlParams['TIME'];
+      if (searchParams.has('TIME')) {
+        params.TIME = searchParams.get('TIME');
       }
-      if (urlParams['VERSION']) {
-        params.VERSION = urlParams['VERSION'];
+      if (searchParams.has('VERSION')) {
+        params.VERSION = searchParams.get('VERSION');
       }
-      if (urlParams['TILED']) {
-        params.TILED = urlParams['TILED'];
+      if (searchParams.has('TILED')) {
+        params.TILED = searchParams.get('TILED');
       }
 
       const wmsOptions: IWmsOptions = {
@@ -967,7 +966,7 @@ export class OwcJsonService {
       };
       return wmsOptions;
     } else {
-      console.warn(`resource ${resource.id} cannot be converted into a WMS-Layer`, offering);
+      console.warn(`resource ${resource.id} cannot be converted into a WMS - Layer`, offering);
     }
   }
 
