@@ -323,33 +323,36 @@ export class OwcJsonService {
 
   getTimeDimensions(dimensions: IEocOwsResourceDimension[]): ILayerTimeDimension {
     let dim: ILayerTimeDimension = { values: null, units: null };
-    const value = dimensions.find(d => d.name === 'time');
+    const value = dimensions.find(d => d.name === 'time') as IEocOwsTimeDimension;
 
     if (!value) {
       console.log('check to get dimensions value from OGC Service later!!', dimensions);
       return;
     }
 
-    const values = this.getTimeValueFromDimensions(value.values);
+    const values = this.getTimeValueFromDimensions(value.values, value?.display?.period);
     dim = {
       values: null,
       units: value.units,
-      display: {
-        format: 'YYYMMDD',
-        default: 'end'
-      }
+      display: {}
     };
 
     /** check if is array or single value */
     if (Array.isArray(values)) {
-      dim.values = values;
+      dim.values = values as (string[] | ILayerIntervalAndPeriod[]);
     } else if (values && typeof values !== 'string' && values.interval && values.periodicity) {
       dim.values = values;
     }
 
-    const period = this.parseISO8601Period(value.values);
+    if (value?.display?.format) {
+      dim.display.format = value.display.format;
+    }
+
+    const period = this.parseISO8601Period(value.values) || value?.display?.period;
     if (period) {
       dim.display.period = period;
+    } else {
+      console.warn(`Interval without a period`, value);
     }
 
     return dim;
