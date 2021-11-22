@@ -1089,76 +1089,23 @@ export class OwcJsonService {
 
   /**
    * helper to pack query-parameters of a uri into a JSON
+   * Makes all Params UpperCase
+   *
    * @param uri any uri with query-parameters
    */
-  private getJsonFromUri(uri: string): object {
-    const query = uri.substr(uri.lastIndexOf('?') + 1);
-    const result = {};
-    query.split('&').forEach((part) => {
-      const item = part.split('=');
-      result[item[0].toUpperCase()] = decodeURIComponent(item[1]);
+  private getJsonFromUri(uri: string) {
+    const url = new URL(uri);
+    // Make all Params UpperCase
+    url.searchParams.forEach((v, k) => {
+      url.searchParams.delete(k);
+      url.searchParams.set(k.toUpperCase(), v);
     });
-    return result;
-  }
 
-
-  /**
-   * retrieve display name of layer, based on IOwsResource and IOwsOffering
-   */
-  private getDisplayName(offering: IOwsOffering, resource: IOwsResource) {
-    let displayName = '';
-    if (offering.hasOwnProperty('title')) {
-      if (offering.title) {
-        displayName = offering.title;
-      } else {
-        displayName = this.getResourceTitle(resource);
-      }
-    }
-    return displayName;
-  }
-
-  getResourceDescription(resource: IOwsResource): string {
-    let description = '';
-    if (resource.properties.abstract) {
-      description = resource.properties.abstract;
-    }
-    return description;
-  }
-
-  getLayerElevationDimension(elevationDimension: IEocOwsResourceDimension): ILayerElevationDimension {
-    throw new Error('Method not implemented.');
-  }
-
-  getLayerTimeDimension(time: IEocOwsResourceDimension): ILayerTimeDimension {
-    if (time.name !== 'time') {
-      console.error('Not a time-dimension: ', time);
-      return;
-    }
-
-    const out: ILayerTimeDimension = {
-      units: time.units,
-      values: null
-    };
-
-    if (time.values.includes(',')) {
-      const values = time.values.split(',');
-      out.values = values;
-
-    } else if (time.values.includes('/')) { // period
-      const matches = time.values.match(/\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\d.\d\d\dZ)*/gm);
-      const startDate = matches[0];
-      const endDate = matches[1];
-      const period = time.values.match(/P(\d*[YMDW])*(T\d*[HMS])*/)[0];
-
-      out.values = {
-        interval: `${startDate}/${endDate}`,
-        periodicity: period
+    const queryIndex = (uri.indexOf('?') !== -1) ? uri.indexOf('?') : uri.length;
+    return {
+      url: uri.substring(0, queryIndex),
+      searchParams: url.searchParams
       };
-    } else { // single entry
-      out.values = [time.values];
-    }
-
-    return out;
   }
 
   /** ------------ DATA TO FILE ----------------------------------------- */
