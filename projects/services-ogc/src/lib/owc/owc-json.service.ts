@@ -581,13 +581,37 @@ export class OwcJsonService {
     }
   }
 
-    if (resource.bbox) {
-      layer.bbox = resource.bbox;
-    } else if (context && context.bbox) {
-      layer.bbox = context.bbox;
+  /**
+   * https://opengeospatial.github.io/e-learning/wfs/text/operations.html#getfeature
+   */
+  // offering, resource, context, targetProjection
+  private getWfsOptions(offering: IOwsOffering) {
+    const getFeatureOperation = offering.operations.find(o => o.code === GetFeatureOperationCode);
+    let layerUrl: string = null;
+    /** check for mandatory wfs params */
+    if (getFeatureOperation) {
+      const { url, searchParams } = this.checkWfsParams(offering);
+      if (url && searchParams) {
+        layerUrl = `${url}?${searchParams.toString()}`;
     }
+    }
+    return layerUrl;
+  }
 
-    return of(layer);
+  private checkWfsParams(offering: IOwsOffering) {
+    const { url, searchParams } = this.parseOperationUrl(offering, GetFeatureOperationCode);
+    const params = {
+      typeNames: searchParams.get('TYPENAME') || searchParams.get('TYPENAMES'),
+      version: searchParams.get('VERSION'),
+      service: searchParams.get('SERVICE'),
+      request: searchParams.get('REQUEST')
+    };
+    if (!params.typeNames && !params.version || !params.service || !params.request) {
+      console.warn(`URL does not contain the minimum required arguments for a WFS typeName: ${params.typeNames}, version: ${params.version}, service: ${params.service}, request: ${params.request}`, `${url}?${searchParams.toString()}`);
+      return { url: null, searchParams: null };
+    } else {
+      return { url, searchParams };
+  }
   }
 
   createRasterLayerFromOffering(
@@ -679,8 +703,32 @@ export class OwcJsonService {
     }
   }
 
+  private createWfsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext) {
+    // Case 1: service-offering
+    let layerUrl;
+    if (offering.operations) {
+      /** currently, Ukis only supports wfs as service vector offering */
+      layerUrl = this.getWfsOptions(offering);
+
+      const layerOptions = this.getVectorLayerOptions(offering, resource, context);
+      layerOptions.url = layerUrl;
+
+      const layer = new VectorLayer(layerOptions);
+
+      if (resource.bbox) {
+        layer.bbox = resource.bbox;
+      } else if (context && context.bbox) {
+        layer.bbox = context.bbox;
+      }
       return of(layer);
     }
+
+
+    if (layerUrl === null) {
+      return of(null);
+    }
+  }
+
   private createTmsRasterLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
     if (isTMSOffering(offering.code)) {
       // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
