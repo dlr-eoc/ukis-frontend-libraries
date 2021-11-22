@@ -875,29 +875,24 @@ export class OwcJsonService {
     })));
   }
 
-  private getLayerForWMTS(offering: IOwsOffering, resource: IOwsResource): string {
-    const [url, urlParams] = this.parseOperationUrl(offering, 'GetTile');
-    if (urlParams['LAYER']) {
-      return urlParams['LAYER'];
-    } else {
-      console.error(`There is no layer-parameter in the offering ${offering.code} for resource ${resource.id}.
-      Cannot infer layer.`, offering);
-    }
-  }
-
-  private parseOperationUrl(offering: IOwsOffering, opCode: string): [string, object] {
+  private parseOperationUrl(offering: IOwsOffering, opCode: string) {
+    const up: { url: string, searchParams: URLSearchParams } = {
+      url: null,
+      searchParams: null
+    };
     if (offering.operations) {
       const operation = offering.operations.find(op => op.code === opCode);
       if (operation) {
-        const url = this.getUrlFromUri(operation.href);
-        const urlParams = this.getJsonFromUri(operation.href);
-        return [url, urlParams];
+        const { url, searchParams } = this.getJsonFromUri(operation.href);
+        up.url = url;
+        up.searchParams = searchParams;
       } else {
-        console.error(`There is no ${opCode}-operation in the offering ${offering.code}.`, offering);
+        console.error(`There is no ${opCode} -operation in the offering ${offering.code}.`, offering);
       }
     } else {
       console.error(`The offering ${offering.code} has no operations.`, offering);
     }
+    return up;
   }
 
   private getMatrixSetForWMTS(offering: IOwsOffering, resource: IOwsResource, targetProjection: string): Observable<IEocOwsWmtsMatrixSet> {
