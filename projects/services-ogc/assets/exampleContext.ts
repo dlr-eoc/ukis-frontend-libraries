@@ -9,7 +9,7 @@ import testGeojson from '../assets/testGeoJson.json';
  */
 
 export const barebonesContext: IOwsContext = {
-  id: 'test context',
+  id: 'barebonesContext',
   type: 'FeatureCollection',
   properties: {
     links: {
@@ -17,24 +17,26 @@ export const barebonesContext: IOwsContext = {
         href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
       }],
     },
-    lang: 'de',
-    title: 'test context',
+    lang: 'en',
+    title: 'Minimal Context with mandatory properties',
     updated: '2018-11-28T00:00:00'
   },
   features: []
 };
+
+export const baseWMSGetMapParams = new URLSearchParams('SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=WSF_2015');
 export const baseWMSOffering: IOwsOffering = {
   code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
   operations: [
     {
       code: 'GetCapabilities',
       method: 'GET',
-      href: 'https://geoservice.dlr.de/eoc/land/wms/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities'
+      href: `https://geoservice.dlr.de/eoc/land/wms/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities`
     },
     {
       code: 'GetMap',
       method: 'GET',
-      href: 'https://geoservice.dlr.de/eoc/land/wms/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=WSF_2015'
+      href: `https://geoservice.dlr.de/eoc/land/wms/wms?${baseWMSGetMapParams.toString()}`
     },
     {
       code: 'GetFeatureInfo',
@@ -53,26 +55,27 @@ export const baseWMSOffering: IOwsOffering = {
 };
 export const baseWMSLayer: IOwsResource = {
   type: 'Feature',
-  id: 'WMS-Layer_WSF_2015',
+  id: 'baseWMSLayer',
   geometry: null,
   properties: {
-    title: 'World Settlement Footprint (WSF) 2015',
+    title: 'WMS Offering',
     updated: '2021-11-09T09:02:20Z',
+    active: true,
     abstract: 'World Settlement Footprint 2015',
     folder: 'RasterLayers',
+    rights: '&copy; <a href="http://www.dlr.de" target="_blank">DLR</a>',
     offerings: [
       baseWMSOffering
     ],
-    active: true,
     categories: [
       {
-        'term': 'land'
+        term: 'land'
       },
       {
-        'term': 'urbanization'
+        term: 'urbanization'
       },
       {
-        'term': 'global'
+        term: 'global'
       }
     ]
   },
@@ -84,6 +87,7 @@ export const baseWMSLayer: IOwsResource = {
   ]
 };
 
+export const baseWMTSGetTileParams = new URLSearchParams('SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=eoc%3Abasemap&FORMAT=image/png');
 export const baseWMTSOffering: IOwsOffering = {
   code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts',
   operations: [
@@ -95,7 +99,7 @@ export const baseWMTSOffering: IOwsOffering = {
     {
       code: 'GetTile',
       method: 'GET',
-      href: 'https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=eoc%3Abasemap'
+      href: `https://tiles.geoservice.dlr.de/service/wmts?${baseWMTSGetTileParams.toString()}`
     },
     {
       code: 'GetFeatureInfo',
@@ -108,17 +112,17 @@ export const baseWMTSOffering: IOwsOffering = {
 };
 export const baseWMTSLayer: IOwsResource = {
   type: 'Feature',
-  id: 'WMTS-Layer_eoc:basemap',
+  id: 'baseWMTSLayer',
   geometry: null,
   properties: {
-    title: 'EOC Basemap',
+    title: 'WMTS Offering',
     updated: '2021-11-09T09:43:37Z',
+    active: true,
     abstract: 'This is the basemap for DLR Service Portals',
     folder: 'RasterLayers',
     offerings: [
       baseWMTSOffering
-    ],
-    active: true
+    ]
   },
   bbox: [
     -180,
@@ -128,6 +132,7 @@ export const baseWMTSLayer: IOwsResource = {
   ]
 };
 
+export const baseWFSGetFeatureParams = new URLSearchParams('SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAME=osm%3Aosm_boundaries_gen1&OUTPUTFORMAT=application%2Fjson');
 export const baseWFSOffering: IOwsOffering = {
   code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wfs',
   operations: [
@@ -139,17 +144,17 @@ export const baseWFSOffering: IOwsOffering = {
     {
       code: 'GetFeature',
       method: 'GET',
-      href: 'https://geoservice.dlr.de/eoc/basemap/wfs/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAME=osm%3Aosm_boundaries_gen1&OUTPUTFORMAT=application%2Fjson',
+      href: `https://geoservice.dlr.de/eoc/basemap/wfs/wfs?${baseWFSGetFeatureParams.toString()}`,
       type: 'application/json'
     }
   ]
 };
 export const baseWFSLayer: IOwsResource = {
   type: 'Feature',
-  id: 'WFS-Layer_osm:osm_boundaries_gen1',
+  id: 'baseWFSLayer',
   geometry: null,
   properties: {
-    title: 'osm_boundaries_gen1',
+    title: 'WFS Offering',
     updated: '2021-11-09T09:34:51Z',
     folder: 'VectorLayers',
     offerings: [
@@ -170,65 +175,16 @@ export const baseKMLOffering: IOwsOffering = {
   contents: [
     {
       type: 'application/vnd.google-earth.kml+xml',
-      content: `<kml xmlns='http://www.opengis.net/kml/2.2' xmlns:ns2='http://www.google.com/kml/ext/2.2' xmlns:ns3='http://www.w3.org/2005/Atom' xmlns:ns4='urn:oasis:names:tc:ciq:xsdschema:xAL:2.0'>
-      <Document>
-          <Schema name='cities_1' id='cities_1'>
-              <SimpleField type='string' name='name'/>
-              <SimpleField type='string' name='asciiname'/>
-              <SimpleField type='string' name='alternatenames'/>
-              <SimpleField type='double' name='latitude'/>
-              <SimpleField type='double' name='longitude'/>
-              <SimpleField type='string' name='fclass'/>
-              <SimpleField type='string' name='fcode'/>
-              <SimpleField type='string' name='country'/>
-              <SimpleField type='string' name='cc2'/>
-              <SimpleField type='string' name='admin1'/>
-              <SimpleField type='string' name='admin2'/>
-              <SimpleField type='string' name='admin3'/>
-              <SimpleField type='string' name='admin4'/>
-              <SimpleField type='string' name='population'/>
-              <SimpleField type='int' name='elevation'/>
-              <SimpleField type='int' name='gtopo30'/>
-              <SimpleField type='string' name='timezone'/>
-              <SimpleField type='string' name='moddate'/>
-          </Schema>
-          <Folder>
-              <name>cities</name>
-              <Placemark id='cities.6290315'>
-                  <ExtendedData>
-                      <SchemaData schemaUrl='#cities_1'>
-                          <SimpleData name='name'>Müliberg</SimpleData>
-                          <SimpleData name='asciiname'>Mueliberg</SimpleData>
-                          <SimpleData name='latitude'>47.2818</SimpleData>
-                          <SimpleData name='longitude'>8.48029</SimpleData>
-                          <SimpleData name='fclass'>P</SimpleData>
-                          <SimpleData name='fcode'>PPL</SimpleData>
-                          <SimpleData name='country'>CH</SimpleData>
-                          <SimpleData name='admin1'>ZH</SimpleData>
-                          <SimpleData name='admin2'>101</SimpleData>
-                          <SimpleData name='admin3'>1</SimpleData>
-                          <SimpleData name='population'>101</SimpleData>
-                          <SimpleData name='gtopo30'>672</SimpleData>
-                          <SimpleData name='timezone'>Europe/Zurich</SimpleData>
-                          <SimpleData name='moddate'>2006-10-05Z</SimpleData>
-                      </SchemaData>
-                  </ExtendedData>
-                  <Point>
-                      <coordinates>8.48029,47.2818</coordinates>
-                  </Point>
-              </Placemark>
-          </Folder>
-      </Document>
-  </kml>`
+      href: 'assets/data/kml/TimeZones.kml'
     }
   ]
 };
 export const baseKMLLayer: IOwsResource = {
   type: 'Feature',
-  id: 'KML-Layer_gn:cities',
+  id: 'baseKMLLayer',
   geometry: null,
   properties: {
-    title: 'Example KML',
+    title: 'KML Offering - url',
     updated: '2021-11-09T12:00:00',
     authors: [
       {
@@ -237,15 +193,8 @@ export const baseKMLLayer: IOwsResource = {
         uri: 'https://geoservice.dlr.de/web/contact'
       }
     ],
-    links: {
-      via: [
-        {
-          title: 'Example Feature of Geonames cities',
-          href: 'https://geoservice.dlr.de/eoc/basemap/wfs/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAME=gn%3Acities&count=1&OUTPUTFORMAT=application/vnd.google-earth.kml+xml'
-        }
-      ]
-    },
     folder: 'VectorLayers',
+    abstract: 'KML Data Offering from url',
     offerings: [
       baseKMLOffering
     ]
@@ -315,7 +264,7 @@ export const eocTMSOffering: IEocOwsOffering = {
   operations: [
     {
       code: 'REST',
-      href: 'https://tiles.geoservice.dlr.de/service/tms/1.0.0/eoc%3Abasemap@EPSG%3A3857@png/{z}/{x}/{y}.png',
+      href: 'https://tiles.geoservice.dlr.de/service/tms/1.0.0/eoc%3Abasemap@EPSG%3A3857@png/{z}/{x}/{-y}.png',
       method: 'GET',
       type: 'image/png'
     }
@@ -323,13 +272,13 @@ export const eocTMSOffering: IEocOwsOffering = {
 };
 export const eocTMSLayer: IEocOwsResource = {
   geometry: null,
-  id: 'EOC_Basemap_TMS',
+  id: 'eocRasterTMSLayer',
   properties: {
     active: false,
     offerings: [
       eocTMSOffering
     ],
-    title: 'EOC Basemap TMS',
+    title: 'TMS - EOC Basemap',
     updated: '2021-11-30T12:00:00'
   },
   type: 'Feature'
@@ -340,37 +289,35 @@ export const eocVectortileOffering: IEocOwsOffering = {
   operations: [
     {
       code: 'REST',
-      href: 'https://tiles.geotest.eoc.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true',
+      href: 'https://{s}.tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true',
       method: 'GET',
       type: 'application/vnd.mapbox-vector-tile'
     }
   ],
   styles: [{
-    name: 'geotest_xyz_planet_eoc',
+    name: 'planet_eoc',
     title: 'grayscale',
     abstract: 'This is a slightly modified version of Positron style @see: https://github.com/openmaptiles/positron-gl-style/blob/master/LICENSE.md',
     content: {
-      type: 'mapbox-style',
-      'mapbox-source-key': 'geotest_xyz_planet_eoc',
+      type: 'OpenMapStyle',
+      styleSource: 'planet0-12',
       content: JSON.stringify(customPositron)
     }
   }]
 };
 export const eocVectortileLayer: IEocOwsResource = {
   geometry: null,
-  id: 'vectortile',
+  id: 'eocVectorTMSLayer',
   properties: {
     active: true,
-    minZoom: 1,
-    maxZoom: 10,
+    opacity: 1.0,
+    title: 'VectorTile Layer',
+    updated: '2019-02-15T11:21:59',
+    shards: 'a-d',
+    rights: '© OpenMapTiles © OpenStreetMap contributors',
     offerings: [
       eocVectortileOffering
-    ],
-    opacity: 1.0,
-    title: 'This should be an overlay',
-    updated: '2019-02-15T11:21:59',
-    rights: '© OpenMapTiles © OpenStreetMap contributors',
-    folder: 'Overlays'
+    ]
   },
   type: 'Feature'
 };
@@ -408,7 +355,7 @@ export const eocWMSOffering: IEocOwsOffering = {
 };
 export const eocWMSLayer: IEocOwsResource = {
   geometry: null,
-  id: 'RESA_L3M_GERMANY_2015',
+  id: 'eocWMSLayer',
   properties: {
     active: false,
     offerings: [
@@ -440,7 +387,7 @@ export const eocWFSoffering: IEocOwsOffering = {
 export const eocWFSLayer: IEocOwsResource = {
   type: 'Feature',
   geometry: null,
-  id: 'tm:tm_world_borders_simpl',
+  id: 'eocWFSLayer',
   properties: {
     title: 'tm world borders simpl',
     updated: '2021-11-09T09:34:51Z',
@@ -472,24 +419,24 @@ export const eocXyzOffering: IEocOwsOffering = {
   styles: [
     {
       default: true,
-      legendURL: 'http://my/dummy/legendUrl',
+      legendURL: 'https://c.tile.openstreetmap.org/11/1221/1142.png',
       name: 'raster',
       title: 'raster'
     }
   ]
-}
+};
 export const eocXyzLayer: IEocOwsResource = {
   geometry: null,
-  id: 'XYZ_OSM',
+  id: 'eocXyzLayer',
   properties: {
     active: false,
-    groupName: 'products',
+    shards: 'a-c',
+    title: 'XYZ - OSM Tiles',
+    rights: '© OpenStreetMap contributors',
+    updated: '2019-02-15T11:22:07',
     offerings: [
       eocXyzOffering
-    ],
-    title: 'OSM XYZ Tiles',
-    rights: '© OpenStreetMap contributors',
-    updated: '2019-02-15T11:22:07'
+    ]
   },
   type: 'Feature'
 };
@@ -505,21 +452,60 @@ export const eocGeojsonOffering: IEocOwsOffering = {
 };
 export const eocGeojsonLayer: IEocOwsResource = {
   geometry: null,
-  id: 'GeoJsonOffering',
+  id: 'eocGeojsonLayer',
   properties: {
     active: false,
-    groupName: 'products',
+    title: 'GeoJson Offering - inline',
+    updated: '2019-02-15T11:22:07',
+    abstract: 'GeoJson Data Offering from inline content',
     offerings: [
       eocGeojsonOffering
-    ],
-    title: 'GeoJson Offering',
-    updated: '2019-02-15T11:22:07'
+    ]
   },
   type: 'Feature'
 };
 
 
-/**----------------Context Fragments-----------------*/
+
+const zoomedLayer: IEocOwsResource = {
+  geometry: null,
+  id: 'zoomedLayer',
+  properties: {
+    active: true,
+    minscaledenominator: 1000,
+    maxscaledenominator: 100000,
+    offerings: [{
+      code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
+      operations: [
+        {
+          code: 'GetMap',
+          href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetMap&LAYERS=RESA_L3M_GERMANY_2015&TILED=False&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS&TRANSPARENT=TRUE',
+          method: 'GET',
+          type: 'image/vnd.jpeg-png'
+        },
+        {
+          code: 'GetCapabilities',
+          href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetCapabilities&SERVICE=WMS',
+          method: 'GET',
+          type: 'application/xml'
+        },
+        {
+          code: 'GetFeatureInfo',
+          href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetFeatureInfo&SERVICE=WMS',
+          method: 'GET',
+          type: 'text/html'
+        }
+      ]
+    }],
+    opacity: 1.0,
+    title: 'This should be an overlay',
+    updated: '2019-02-15T11:21:59'
+  },
+  type: 'Feature'
+};
+
+
+/** ----------------Context Fragments----------------- */
 
 export const eocTimeDimensionsSteps: IEocOwsTimeDimension = {
   name: 'time',
@@ -627,6 +613,22 @@ export const eocOwsContext: IEocOwsContext = {
 };
 
 /** ------------------------------------------ */
+export const folderMixedContext: IEocOwsContext = {
+  id: 'folderMixedContext',
+  type: 'FeatureCollection',
+  properties: {
+    links: {
+      profiles: [{
+        href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
+      }],
+    },
+    lang: 'de',
+    title: 'Test context for folders',
+    updated: '2018-11-28T00:00:00',
+    subtitle: 'Includes folder and not folder resources'
+  },
+  features: [baseWMSLayer, baseWFSLayer, baseWMTSLayer, baseKMLLayer, eocWMSLayer, eocWFSLayer, eocXyzLayer, eocGeojsonLayer]
+};
 
 export const eocProjContext: IEocOwsContext = {
   id: 'test_context_proj',
@@ -652,11 +654,11 @@ export const eocProjContext: IEocOwsContext = {
       }],
     },
     lang: 'de',
-    title: 'test context projections',
+    title: 'Test context projections',
     updated: '2018-11-28T00:00:00'
   },
   features: []
-}
+};
 
 export const zoomedContext: IEocOwsContext = {
   id: 'zoomed context',
@@ -671,42 +673,6 @@ export const zoomedContext: IEocOwsContext = {
     title: 'zoomed context',
     updated: '2018-11-28T00:00:00'
   },
-  features: [{
-    geometry: null,
-    id: 'RESA_L3M_GERMANY_2015',
-    properties: {
-      active: true,
-      minscaledenominator: 1000,
-      maxscaledenominator: 100000,
-      offerings: [{
-        code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wms',
-        operations: [
-          {
-            code: 'GetMap',
-            href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetMap&LAYERS=RESA_L3M_GERMANY_2015&TILED=False&FORMAT=image%2Fvnd.jpeg-png&SERVICE=WMS&TRANSPARENT=TRUE',
-            method: 'GET',
-            type: 'image/vnd.jpeg-png'
-          },
-          {
-            code: 'GetCapabilities',
-            href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetCapabilities&SERVICE=WMS',
-            method: 'GET',
-            type: 'application/xml'
-          },
-          {
-            code: 'GetFeatureInfo',
-            href: 'https://geoservice.dlr.de/eoc/imagery/wms?VERSION=1.1.0&REQUEST=GetFeatureInfo&SERVICE=WMS',
-            method: 'GET',
-            type: 'text/html'
-          }
-        ]
-      }],
-      opacity: 1.0,
-      title: 'This should be an overlay',
-      updated: '2019-02-15T11:21:59',
-      folder: 'Overlays'
-    },
-    type: 'Feature'
-  }]
+  features: []
 };
 

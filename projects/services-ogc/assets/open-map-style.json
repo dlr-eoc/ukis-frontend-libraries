@@ -24,13 +24,13 @@
     "maputnik:thunderforest_access_token": ""
   },
   "sources": {
-    "geotest_xyz_planet_eoc": {
+    "planet0-12": {
       "type": "vector",
       "url": "https://pyxis.eoc.dlr.de/tileserver/planet0-12.json"
     }
   },
   "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key={key}",
+  "glyphs": "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -42,7 +42,7 @@
     {
       "id": "park",
       "type": "fill",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "park",
       "filter": [
         "==",
@@ -59,7 +59,7 @@
     {
       "id": "water",
       "type": "fill",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "water",
       "filter": [
         "all",
@@ -85,7 +85,7 @@
     {
       "id": "landcover_ice_shelf",
       "type": "fill",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "landcover",
       "maxzoom": 8,
       "filter": [
@@ -112,7 +112,7 @@
     {
       "id": "landcover_glacier",
       "type": "fill",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "landcover",
       "maxzoom": 8,
       "filter": [
@@ -151,7 +151,7 @@
     {
       "id": "landuse_residential",
       "type": "fill",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "landuse",
       "minzoom": 0,
       "maxzoom": 24,
@@ -191,9 +191,9 @@
     {
       "id": "landcover_wood",
       "type": "fill",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "landcover",
-      "minzoom": 10,
+      "minzoom": 0,
       "filter": [
         "all",
         [
@@ -216,8 +216,8 @@
           "base": 1,
           "stops": [
             [
-              8,
-              0
+              0,
+              1
             ],
             [
               12,
@@ -230,7 +230,7 @@
     {
       "id": "waterway",
       "type": "line",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "waterway",
       "filter": [
         "==",
@@ -247,7 +247,7 @@
     {
       "id": "water_name",
       "type": "symbol",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "water_name",
       "filter": [
         "==",
@@ -275,7 +275,7 @@
     {
       "id": "building",
       "type": "fill",
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "building",
       "minzoom": 12,
       "paint": {
@@ -290,7 +290,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 6,
       "filter": [
@@ -347,7 +347,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 6,
       "filter": [
@@ -403,7 +403,7 @@
       "metadata": {
         "mapbox:group": "1444849345966.4436"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "aeroway",
       "minzoom": 12,
       "filter": [
@@ -443,7 +443,7 @@
       "metadata": {
         "mapbox:group": "1444849345966.4436"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "aeroway",
       "minzoom": 11,
       "filter": [
@@ -483,7 +483,7 @@
       "metadata": {
         "mapbox:group": "1444849345966.4436"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "aeroway",
       "minzoom": 4,
       "filter": [
@@ -526,7 +526,7 @@
       "metadata": {
         "mapbox:group": "1444849345966.4436"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "aeroway",
       "minzoom": 11,
       "filter": [
@@ -569,7 +569,7 @@
       "id": "road_area_pier",
       "type": "fill",
       "metadata": {},
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -585,7 +585,7 @@
         ]
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-antialias": true,
@@ -596,7 +596,7 @@
       "id": "road_pier",
       "type": "line",
       "metadata": {},
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -614,7 +614,7 @@
       "layout": {
         "line-cap": "round",
         "line-join": "round",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "rgb(242,243,240)",
@@ -639,7 +639,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -657,7 +657,7 @@
       "layout": {
         "line-cap": "round",
         "line-join": "round",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "rgba(238, 235, 235, 1)",
@@ -683,9 +683,9 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
-      "minzoom": 8,
+      "minzoom": 0,
       "filter": [
         "all",
         [
@@ -704,7 +704,7 @@
       "layout": {
         "line-cap": "round",
         "line-join": "round",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "rgba(245, 244, 244, 1)",
@@ -730,7 +730,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 11,
       "filter": [
@@ -752,7 +752,7 @@
       "layout": {
         "line-cap": "butt",
         "line-join": "miter",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "rgb(213, 213, 213)",
@@ -781,7 +781,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 11,
       "filter": [
@@ -803,7 +803,7 @@
       "layout": {
         "line-cap": "round",
         "line-join": "round",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "#fff",
@@ -828,9 +828,9 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
-      "minzoom": 6,
+      "minzoom": 0,
       "filter": [
         "all",
         [
@@ -856,7 +856,7 @@
       "layout": {
         "line-cap": "butt",
         "line-join": "miter",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "rgb(213, 213, 213)",
@@ -890,9 +890,9 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
-      "minzoom": 6,
+      "minzoom": 0,
       "filter": [
         "all",
         [
@@ -918,7 +918,7 @@
       "layout": {
         "line-cap": "round",
         "line-join": "round",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": {
@@ -959,10 +959,10 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
-      "minzoom": 6,
-      "maxzoom": 9,
+      "minzoom": 0,
+      "maxzoom": 20,
       "filter": [
         "all",
         [
@@ -979,7 +979,7 @@
       "layout": {
         "line-cap": "round",
         "line-join": "round",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "hsla(0, 0%, 85%, 0.53)",
@@ -1004,7 +1004,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 16,
       "filter": [
@@ -1043,7 +1043,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 16,
       "filter": [
@@ -1086,7 +1086,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 16,
       "filter": [
@@ -1124,7 +1124,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 16,
       "filter": [
@@ -1163,7 +1163,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 13,
       "filter": [
@@ -1213,7 +1213,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
       "minzoom": 13,
       "filter": [
@@ -1267,9 +1267,9 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
-      "minzoom": 6,
+      "minzoom": 0,
       "filter": [
         "all",
         [
@@ -1294,7 +1294,7 @@
       "layout": {
         "line-cap": "butt",
         "line-join": "miter",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": "rgb(213, 213, 213)",
@@ -1328,9 +1328,9 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation",
-      "minzoom": 6,
+      "minzoom": 0,
       "filter": [
         "all",
         [
@@ -1355,7 +1355,7 @@
       "layout": {
         "line-cap": "round",
         "line-join": "round",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "line-color": {
@@ -1396,7 +1396,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation_name",
       "filter": [
         "all",
@@ -1424,7 +1424,7 @@
         "text-rotation-alignment": "map",
         "text-size": 10,
         "text-transform": "uppercase",
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "text-color": "#bbb",
@@ -1443,7 +1443,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "transportation_name",
       "minzoom": 9,
       "filter": [
@@ -1470,7 +1470,7 @@
         "text-pitch-alignment": "viewport",
         "text-rotation-alignment": "viewport",
         "text-size": 10,
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "text-color": "rgb(117, 129, 145)",
@@ -1489,7 +1489,7 @@
       "metadata": {
         "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "boundary",
       "filter": [
         "==",
@@ -1530,7 +1530,7 @@
       "metadata": {
         "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "boundary",
       "maxzoom": 5,
       "filter": [
@@ -1586,7 +1586,7 @@
       "metadata": {
         "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "boundary",
       "minzoom": 5,
       "filter": [
@@ -1635,7 +1635,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "minzoom": 9,
       "maxzoom": 15,
@@ -1681,7 +1681,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "minzoom": 11,
       "maxzoom": 24,
@@ -1729,7 +1729,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "minzoom": 9,
       "maxzoom": 15,
@@ -1802,7 +1802,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "minzoom": 7,
       "maxzoom": 14,
@@ -1888,7 +1888,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "minzoom": 3,
       "maxzoom": 12,
@@ -1969,7 +1969,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "minzoom": 4,
       "maxzoom": 12,
@@ -2055,7 +2055,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "maxzoom": 12,
       "filter": [
@@ -2094,7 +2094,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "maxzoom": 8,
       "filter": [
@@ -2160,7 +2160,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "maxzoom": 8,
       "filter": [
@@ -2231,7 +2231,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "geotest_xyz_planet_eoc",
+      "source": "planet0-12",
       "source-layer": "place",
       "maxzoom": 6,
       "filter": [
