@@ -358,6 +358,24 @@ export class OwcJsonService {
     return dim;
   }
 
+  getElevationDimension(dimensions: IEocOwsResourceDimension[]): ILayerElevationDimension {
+    const dim: ILayerElevationDimension = { value: null, units: null };
+    const value = dimensions.find(d => d.name === 'elevation') as IEocOwsElevationDimension;
+    if (!value) {
+      console.log('check to get dimensions value from OGC Service later!!', dimensions);
+      return;
+    } else {
+      dim.value = value.value;
+      dim.units = value.units;
+
+      if (value.display) {
+        dim.display = value.display;
+      }
+
+      return dim;
+    }
+  }
+
 
   /** Offering --------------------------------------------------- */
   getLayertypeFromOfferingCode(offering: IOwsOffering): Layertype {
@@ -830,7 +848,7 @@ export class OwcJsonService {
 
         const elevationDimension = dimensions.find(d => d.name === 'elevation');
         if (elevationDimension) {
-          elevation = this.getLayerElevationDimension(elevationDimension);
+          elevation = this.getElevationDimension(elevationDimension);
         }
       }
 

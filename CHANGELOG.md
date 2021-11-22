@@ -40,6 +40,7 @@
   - Add events from Layer to olLayer and olSource [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/services-ogc:**
+  - New basic Implementation of `getElevationDimension()`
   - New Functions to get Properties from `IOwsContext` and `IEocOWsResource` - `getGroupResources(), getSingleResources(), getResourceMinMaxZoom()`
   - Export separate interfaces for `IEocOwsTimeDimension` and `IEocOwsElevationDimension`.
   - Functions to check `isIOwsRasterOperation()` and `isIOwsVectorOperation()`.
