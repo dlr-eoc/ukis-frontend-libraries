@@ -895,20 +895,74 @@ export class OwcJsonService {
     return up;
   }
 
-  private getMatrixSetForWMTS(offering: IOwsOffering, resource: IOwsResource, targetProjection: string): Observable<IEocOwsWmtsMatrixSet> {
-    if (offering.matrixSets) {
+  /* TODO: check correctness of this function and add it to utils-ogc
+
+    getDefaultMatrixSet(projection: { extent: [number, number, number, number], srs: string }, matrixSet: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>,
+    resolutionLevels: number = 42, tileSize: number = 256, matrixIdPrefix: string = '') {
+    const resolutionsFromExtent = (extent, optMaxZoom: number, ts: number) => {
+      const maxZoom = optMaxZoom;
+      const height = extent[3] - extent[1]; // getHeight
+      const width = extent[2] - extent[0]; // getWidth
+      const maxResolution = Math.max(width / ts, height / ts);
+      const length = maxZoom + 1;
+      const res = new Array(length);
+      for (let z = 0; z < length; ++z) {
+        res[z] = maxResolution / Math.pow(2, z);
+      }
+      return res;
+    };
+
+    const matrixIdsFromResolutions = (resLev: number, maPre?: string) => {
+      return Array.from(Array(resLev).keys()).map(l => {
+        if (maPre) {
+          return `${maPre}:${l} `;
+        } else {
+          return l;
+        }
+      });
+    };
+
+    const defaultResolutions = resolutionsFromExtent(projection.extent, resolutionLevels, tileSize);
+    const defaultMatrixIds = matrixIdsFromResolutions(defaultResolutions.length, matrixIdPrefix);
+
+    const defaultSet: IEocOwsWmtsMatrixSet = {
+      srs: projection.srs,
+      matrixSet,
+      origin: {
+        x: projection.extent[0],
+        y: projection.extent[3]
+      },
+      resolutions: resolutions || defaultResolutions,
+      tilesize: {
+        height: tileSize,
+        width: tileSize
+      },
+      matrixIds: matrixIds || defaultMatrixIds as any
+    };
+    defaultSet.matrixIds = defaultSet.matrixIds.map(i => i.toString());
+    return defaultSet;
+  } */
+
+  private getMatrixSetForWMTS(offering: IEocOwsOffering, targetProjection: string): Observable<IEocOwsWmtsMatrixSet> {
+    if (offering?.matrixSets) {
       const matrixSet = offering.matrixSets.find(m => m.srs === targetProjection);
       return of(matrixSet);
+    } else if (offering.matrixSets === null) {
+      /**
+       * If offering.matrixSets === null use a default set for EPSG:3857 and 256 tiles
+       * Create this in the mapping library when the WMTS is created.
+       */
+      return of(null);
     } else {
-      const [url, urlParams] = this.parseOperationUrl(offering, 'GetCapabilities');
+      const url = this.parseOperationUrl(offering, 'GetCapabilities').url;
       return this.wmtsClient.getCapabilities(url).pipe(
-        map((capabilities: object) => {
-          const matrixSets = capabilities['value']['contents']['tileMatrixSet'];
-          let matrixSet = matrixSets.find(ms => ms['identifier']['value'] === targetProjection);
+      map((capabilities: any) => {
+          const matrixSets = capabilities.value.contents.tileMatrixSet;
+          let matrixSet = matrixSets.find(ms => ms.identifier.value === targetProjection);
 
           if (!matrixSet && targetProjection === 'EPSG:3857') {
             const altTargetProjection = 'EPSG:900913';
-            matrixSet = matrixSets.find(ms => ms['identifier']['value'] === altTargetProjection);
+            matrixSet = matrixSets.find(ms => ms.identifier.value === altTargetProjection);
           }
 
           const owsMatrixSet: IEocOwsWmtsMatrixSet = {
