@@ -227,35 +227,42 @@ export class OwcJsonService {
   /**
    * e.g.
    * (array)   value: '1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/PT1S,1990-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z/PT1S,...'
+   * (array)   value: '1984-01-01T00:00:00.000Z/P1D,P1D/2000-01-01T00:00:00.000Z,...'
    * (array)   value: '2000-01-01T00:00:00.000Z,2001-01-01T00:00:00.000Z,2002-01-01T00:00:00.000Z,...'
    * (single) value: '2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y'
    */
-  getTimeValueFromDimensions(input: string | null): string | string[] | ILayerIntervalAndPeriod | ILayerIntervalAndPeriod[] {
-    if (!input) {
-      return null;
-    }
-
-    const splitValues = input.split(',');
+  getTimeValueFromDimensions(values: IEocOwsTimeDimension['values'], period?: IEocOwsTimeDimension['display']['period']): ILayerIntervalAndPeriod | Array<string | ILayerIntervalAndPeriod> {
+    if (values === null) {
+      return;
+    } else {
+      const isList = /,/g.test(values);
+      if (isList) {
+        const splitValues = values.split(',');
     if (splitValues.length > 0) {
-      const outputs = [];
+          const parsed: Array<string | ILayerIntervalAndPeriod> = []; //
       for (const value of splitValues) {
-        const parsed = this.parseSingleTimeOrPeriod(value);
-        outputs.push(parsed);
+            const parsedSingle = this.parseSingleTimeOrPeriod(value);
+            if (typeof parsedSingle === 'object' && parsedSingle.interval) {
+              if (!parsedSingle.periodicity && period) {
+                parsedSingle.periodicity = period;
       }
-      return outputs;
     }
-
-    const parsed = this.parseSingleTimeOrPeriod(input);
+            parsed.push(parsedSingle);
+          }
     return parsed;
-
   }
-
-  private parseSingleTime(timeString: string): DateTime {
-    return DateTime.fromISO(timeString);
+      } else {
+        const parsedSingle = this.parseSingleTimeOrPeriod(values);
+        if (typeof parsedSingle === 'object' && parsedSingle.interval) {
+          if (!parsedSingle.periodicity && period) {
+            parsedSingle.periodicity = period;
   }
-
-  private parsePeriod(periodString: string): Interval {
-    return Interval.fromISO(periodString);
+          return parsedSingle;
+        } else if (typeof parsedSingle === 'string') {
+          return [parsedSingle];
+  }
+      }
+    }
   }
 
   private parseSingleTimeOrPeriod(time: string): string | ILayerIntervalAndPeriod | null {
