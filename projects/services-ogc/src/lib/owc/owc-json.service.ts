@@ -1059,36 +1059,54 @@ export class OwcJsonService {
     }
   }
 
-  private getRasterLayerOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): IRasterLayerOptions {
+  private getRasterLayerOptions(offering: IOwsOffering, resource: IEocOwsResource, context: IOwsContext, targetProjection: string): IRasterLayerOptions {
     const layerOptions: ILayerOptions = this.getLayerOptions(offering, resource, context);
     if (isRasterLayertype(layerOptions.type)) {
-      let time, elevation;
-      const dimensions = resource.properties.dimensions;
+      let time;
+      let elevation;
+      const dimensions = resource.properties?.dimensions;
       if (dimensions) {
-        const timeDimension = dimensions.find(d => d.name === 'time');
-        if (timeDimension) {
-          time = this.getLayerTimeDimension(timeDimension);
+        time = this.getTimeDimensions(dimensions);
+        elevation = this.getElevationDimension(dimensions);
         }
 
-        const elevationDimension = dimensions.find(d => d.name === 'elevation');
-        if (elevationDimension) {
-          elevation = this.getElevationDimension(elevationDimension);
-        }
-      }
-
-      const { minZoom, maxZoom } = this.getMinMaxZoom(resource, targetProjection);
-
-      const getMapOperation = offering.operations.find(o => o.code === 'GetMap');
-
+      const { minZoom, maxZoom } = this.getResourceMinMaxZoom(resource, targetProjection);
+      const subdomains = shardsExpand(this.getResourceShards(resource));
+      const getRasterOperation = offering.operations.find(o => isIOwsRasterOperation(o));
+      if (getRasterOperation) {
       const rasterLayerOptions: IRasterLayerOptions = {
         ...layerOptions,
         type: layerOptions.type as TRasterLayertype,
-        url: this.getUrlFromUri(getMapOperation.href),
-        subdomains: shardsExpand(this.getResourceShards(resource)),
-        dimensions: { time, elevation },
-        minZoom, maxZoom
+          url: this.getJsonFromUri(getRasterOperation.href).url
       };
+
+        if (minZoom) {
+          rasterLayerOptions.minZoom = minZoom;
+        }
+        if (maxZoom) {
+          rasterLayerOptions.maxZoom = maxZoom;
+        }
+
+        if (subdomains?.length) {
+          rasterLayerOptions.subdomains = subdomains;
+        }
+
+        if (time) {
+          if (!rasterLayerOptions.dimensions) {
+            rasterLayerOptions.dimensions = {};
+          }
+          rasterLayerOptions.dimensions.time = time;
+        }
+        if (elevation) {
+          if (!rasterLayerOptions.dimensions) {
+            rasterLayerOptions.dimensions = {};
+          }
+          rasterLayerOptions.dimensions.elevation = elevation;
+        }
       return rasterLayerOptions;
+    } else {
+        console.warn(`There is no Raster operation for the offering`, offering);
+      }
     } else {
       console.error(`The layer ${layerOptions.id} is not a RasterLayer`, layerOptions);
     }
