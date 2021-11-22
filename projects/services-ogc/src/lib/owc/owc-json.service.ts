@@ -1029,6 +1029,11 @@ export class OwcJsonService {
       layerOptions.bbox = context.bbox;
     }
 
+    /** skip bbox for baselayers */
+    if (resource.properties?.folder === Filtertypes.Baselayers && !resource.bbox) {
+      layerOptions.bbox = null;
+    }
+
     const filterType = this.getFilterType(resource);
     if (filterType) {
       layerOptions.filtertype = filterType;

@@ -61,6 +61,7 @@
 * **@dlr-eoc/core-ui:**
   - Add missing Output to `GlobalProgressComponent`.
 * **@dlr-eoc/services-ogc:**
+  - Do not use **bbox** of `IOwsContext` for Baselayers.
   - Preserve order of Layers and Groups from `IOwsContext` - `getLayers()`.
   - Removed not used `customAttributes`.
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with WFS'es: only a substring of the `GetFeature`-operation.href had been used. Now fixed.
