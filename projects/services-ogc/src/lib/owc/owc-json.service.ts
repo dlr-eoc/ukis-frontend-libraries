@@ -46,7 +46,7 @@ import { get as getProjection } from 'ol/proj';
 
 export function shardsExpand(v: string) {
   if (!v) { return; }
-  const o = [];
+  const o: string[] = [];
   const shardsSplit = v.split(',');
   for (const i in shardsSplit) {
     if (shardsSplit[i]) {
@@ -148,10 +148,17 @@ export class OwcJsonService {
     return resource.properties.title;
   }
 
+  /**
+   * The Folder property of IOwsResource
+   * @returns string | `${TFiltertypes}/string`
+   */
   getLayerGroup(resource: IOwsResource): string {
     return resource.properties.folder;
   }
 
+  /**
+   * FilterType in IOwsResource Folder property
+   */
   getFilterType(resource: IOwsResource): TFiltertypes {
     if (resource.properties.folder) {
       const pathParts = resource.properties.folder.split('/');
@@ -180,23 +187,33 @@ export class OwcJsonService {
    */
   isActive(resource: IOwsResource) {
     let active = true;
-    if (resource.properties.hasOwnProperty('active')) {
+    if (resource.properties.active === false || resource.properties?.active) {
       active = resource.properties.active;
     }
     return active;
   }
 
-  getResourceOpacity(resource: IOwsResource): number {
+  getResourceDescription(resource: IOwsResource): string {
+    let description = '';
+    if (resource.properties.abstract) {
+      description = resource.properties.abstract;
+    }
+    return description;
+  }
+
+  /** OWS Extenson IEocOwsResource */
+  getResourceOpacity(resource: IEocOwsResource): number {
     let opacity = 1;
-    if (resource.properties.hasOwnProperty('opacity')) {
+    if (resource.properties?.opacity) {
       opacity = resource.properties.opacity;
     }
     return opacity;
   }
 
-  getResourceAttribution(resource: IOwsResource): string {
+  /** OWS Extenson IEocOwsResource */
+  getResourceAttribution(resource: IEocOwsResource): string {
     let attribution = '';
-    if (resource.properties.hasOwnProperty('attribution')) {
+    if (resource.properties?.attribution) {
       attribution = resource.properties.attribution;
     } else if (resource.properties.rights) {
       attribution = resource.properties.rights;
@@ -204,8 +221,9 @@ export class OwcJsonService {
     return attribution;
   }
 
-  getResourceShards(resource: IOwsResource): string {
-    if (resource.properties.hasOwnProperty('shards')) {
+  /** OWS Extenson IEocOwsResource */
+  getResourceShards(resource: IEocOwsResource): string {
+    if (resource.properties?.shards) {
       return resource.properties.shards;
     }
   }
