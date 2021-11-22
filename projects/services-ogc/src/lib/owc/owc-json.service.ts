@@ -265,23 +265,33 @@ export class OwcJsonService {
     }
   }
 
+  /**
+   * time could be:
+   *
+   * - date
+   * - start/end/duration //Geoserver specific
+   * - start/end
+   * - start/duration, and duration/end
+   */
   private parseSingleTimeOrPeriod(time: string): string | ILayerIntervalAndPeriod | null {
-    const dateTime = this.parseSingleTime(time);
+    const dateTime = DateTime.fromISO(time);
     if (dateTime.isValid) {
-      return dateTime.toISO();
-    }
-
-    const interval = this.parsePeriod(time);
+      return dateTime.toUTC().toISO();
+    } else {
+      // is Interval ----------------------------
+      const interval = Interval.fromISO(time);
     if (interval.isValid) {
       const period = this.parseISO8601Period(time);
       const intervalObject: ILayerIntervalAndPeriod = {
         periodicity: period,
-        interval: `${interval.start.toISO()}/${interval.end.toISO()}`
+          interval: `${interval.start.toUTC().toISO()}/${interval.end.toUTC().toISO()}`
       };
       return intervalObject;
-    }
-
+      } else {
+        console.warn(`no Interval or not valid`, time);
     return null;
+  }
+    }
   }
 
   private parseISO8601Period(value: string): string {
