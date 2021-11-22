@@ -821,37 +821,52 @@ export class OwcJsonService {
 
   }
 
+  /**
+   * https://docs.opengeospatial.org/is/13-082r2/13-082r2.html - OGC WMTS Simple Profile
+   * http://schemas.opengis.net/wmts/1.0/wmtsGetTile_request.xsd
+   * https://opengeospatial.github.io/e-learning/wmts/text/main.html#example-gettile-request
+   */
   private getWmtsOptions(
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<IWmtsOptions> {
     const rasterOptions: IRasterLayerOptions = this.getRasterLayerOptions(offering, resource, context, targetProjection);
 
-    const layer = this.getLayerForWMTS(offering, resource);
+    const { searchParams } = this.parseOperationUrl(offering, GetTileOperationCode);
 
-    let style: string;
-    if (offering.styles && offering.styles.length > 0) {
-      const styleInfo = offering.styles.find(s => s.default);
-      if (styleInfo) {
-        style = styleInfo.name;
+    const params: IWmtsParams = {
+      layer: searchParams.get('LAYER'),
+      style: 'default',
+      projection: targetProjection // TODO: alow this also from URL???
+    };
+
+    if (offering.styles && offering.styles.length > 0 && offering.styles.find(s => s.default)) {
+      params.style = offering.styles.find(s => s.default).name;
+    } else if (searchParams.has('STYLE')) {
+      params.style = searchParams.get('STYLE');
       }
+
+    if (searchParams.has('FORMAT')) {
+      params.format = searchParams.get('FORMAT');
+    }
+    if (searchParams.has('VERSION')) {
+      params.version = searchParams.get('VERSION');
     }
 
-    return this.getMatrixSetForWMTS(offering, resource, targetProjection).pipe(map(((matrixSet: IEocOwsWmtsMatrixSet) => {
+    return this.getMatrixSetForWMTS(offering, targetProjection).pipe(map(((matrixSet: IEocOwsWmtsMatrixSet) => {
+      const wmtsOptions: IWmtsOptions = {
+        ...rasterOptions,
+        type: 'wmts',
+        params
+      };
+
+      if (matrixSet) {
       const matrixSetOptions: IListMatrixSet = {
         matrixSet: matrixSet.matrixSet,
         matrixIds: matrixSet.matrixIds,
         resolutions: matrixSet.resolutions
       };
-      const wmtsOptions: IWmtsOptions = {
-        ...rasterOptions,
-        type: 'wmts',
-        params: {
-          layer,
-          matrixSetOptions,
-          projection: targetProjection,
-          style,
-          format: 'image/png'
+        wmtsOptions.params.matrixSetOptions = matrixSetOptions;
         }
-      };
+
       return wmtsOptions;
     })));
   }
