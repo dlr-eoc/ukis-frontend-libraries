@@ -11,7 +11,9 @@
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
 
 * **@dlr-eoc/services-ogc:** 
-- Change `createTmsLayerFromOffering()` to `private createVectorTileLayerFromOffering()` and `private createTmsRasterLayerFromOffering()`
+- Remove not used `getOfferingContents()`.
+- Remove old custom extension `IOwsOffering.title` - use `IOwsResource` as layers.
+- Change `createTmsLayerFromOffering()` to `private createVectorTileLayerFromOffering()` and `private createTmsRasterLayerFromOffering()`.
 - Remove `previewUrl` from `IEocOwsResourceProperties` because this is is already in `IOwsResourceProperties.links.previews`.
 - Remove `IEocWmsOffering` and `IEocOwsWmtsOffering` for them you can use the generall `IEocOwsOffering` and check for the code `WMS_Offering` or `WMTS_Offering`.
 - `IEocOwsResourceDimensions` is removed.

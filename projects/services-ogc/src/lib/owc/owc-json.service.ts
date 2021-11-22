@@ -406,14 +406,6 @@ export class OwcJsonService {
     return (offering.contents && !offering.operations) ? true : false;
   }
 
-  getOfferingContents(offering: IOwsOffering): IOwsOperation[] | IOwsContent[] {
-    if (this.checkIfServiceOffering(offering)) {
-      return offering.operations;
-    } else if (this.checkIfDataOffering(offering)) {
-      return offering.contents;
-    }
-  }
-
   /**
    * Helper function to extract legendURL from project specific ows Context
    * @param offering layer offering
