@@ -36,8 +36,11 @@ import {
 } from '@dlr-eoc/services-layers';
 import { TGeoExtent } from '@dlr-eoc/services-map-state';
 import { WmtsClientService } from '../wmts/wmtsclient.service';
+import { of, Observable, forkJoin, concat } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 import { HttpClient } from '@angular/common/http';
+import { DateTime, Interval } from 'luxon';
 import { get as getProjection } from 'ol/proj';
 
 
