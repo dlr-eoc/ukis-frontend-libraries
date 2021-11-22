@@ -312,7 +312,7 @@ export class OwcJsonService {
       if (name === 'time') {
         dims.time = this.getTimeDimensions(resource.properties.dimensions);
       } else if (name === 'elevation') {
-        console.warn('Not yet implemented: `getElevationDimension`', resource);
+        dims.elevation = this.getElevationDimension(resource.properties.dimensions);
       } else {
         dims[name] = d;
       }
