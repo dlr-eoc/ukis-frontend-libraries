@@ -254,8 +254,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       },
       custom_layer: new olVectorImageLayer({
         source: new olVectorSource({
-          features: this.mapSvc.geoJsonToFeatures(testCollection),
-          // format: new olGeoJSON(),
+          // features: this.mapSvc.geoJsonToFeatures(testCollection),
+          url: 'assets/data/json/test.collection.json',
+          format: new olGeoJSON(),
         }),
         style: (feature, resolution) => {
           return new olStyle({

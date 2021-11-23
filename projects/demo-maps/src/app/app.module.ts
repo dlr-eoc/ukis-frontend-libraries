@@ -40,6 +40,7 @@ import { ServicesOgcModule } from '@dlr-eoc/services-ogc';
 import { ExampleGroupActionComponent } from './components/example-group-action/example-group-action.component';
 import { RasterFeatureInfoComponent } from './components/raster-feature-info/raster-feature-info.component';
 import { Popup2Component } from './components/popup2/popup2.component';
+import { RouteExampleOwcLayersComponent } from './route-components/route-example-owc-layers/route-example-owc-layers.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { Popup2Component } from './components/popup2/popup2.component';
     TablePopupComponent,
     ExampleGroupActionComponent,
     RasterFeatureInfoComponent,
-    Popup2Component
+    Popup2Component,
+    RouteExampleOwcLayersComponent
   ],
   imports: [
     BrowserModule,

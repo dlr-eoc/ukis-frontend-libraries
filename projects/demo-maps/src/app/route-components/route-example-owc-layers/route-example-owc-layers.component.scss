@@ -1,0 +1,12 @@
+/**
+ * Style the layers on the layerControl with layer/Group attribute cssClass
+ */
+ :host ::ng-deep {
+  .zoom-number {
+    /* top: 65px;
+    left: .5em; */
+
+    bottom: 2.5em;
+    left: 8px;
+  }
+}
