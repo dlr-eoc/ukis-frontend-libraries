@@ -1505,13 +1505,16 @@ export class OwcJsonService {
   }
 
   getWmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
-
-    const url = layer.url;
+    let url = layer.url;
     const wmsVersion = layer.params.VERSION;
-    const layerName = layer.name;
     const layerId = layer.id;
-    let format = 'image/vnd.jpeg-png';
+    let format = 'image/png'; // 'image/jpeg'
     if (layer.params && layer.params.FORMAT) { format = layer.params.FORMAT; }
+
+
+    if (url.endsWith('?')) {
+      url = url.substr(0, url.length - 1);
+    }
 
     const getMap: IOwsOperation = {
       code: GetMapOperationCode,
@@ -1521,14 +1524,14 @@ export class OwcJsonService {
     };
 
     const getCapabilities: IOwsOperation = {
-      code: 'GetCapabilities',
+      code: GetCapabilitiesOperationCode,
       method: 'GET',
       type: 'application/xml',
       href: `${url}?service=WMS&version=${wmsVersion}&request=GetCapabilities`
     };
 
     const getFeatureInfo: IOwsOperation = {
-      code: 'GetFeatureInfo',
+      code: GetFeatureInfoOperationCode,
       method: 'GET',
       type: 'text/html',
       href: `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}`
