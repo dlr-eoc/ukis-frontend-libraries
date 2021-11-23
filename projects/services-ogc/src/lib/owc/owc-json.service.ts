@@ -1207,14 +1207,19 @@ export class OwcJsonService {
    * @TODO:
    *   - properties
    */
-  generateOwsContextFrom(id: string, layers: (Layer | LayerGroup)[], extent?: TGeoExtent, properties?): IEocOwsContext {
+  generateOwsContextFrom(id: string, layers: (Layer | LayerGroup)[], extent?: TGeoExtent, properties?: IEocOwsContext['properties']): IEocOwsContext {
 
     if (!properties) {
       properties = {
-        lang: '',
-        links: [],
-        title: '',
-        updated: ''
+        links: {
+          profiles: [{
+            href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
+          }],
+        },
+        lang: 'en',
+        title: 'This is an automatically created context',
+        updated: new Date().toISOString(),
+        subtitle: `Context created from ${layers.map(l => `Layer:${l.id}`).join(', ')}`
       };
     }
 
@@ -1226,7 +1231,7 @@ export class OwcJsonService {
     };
 
     if (extent) {
-      owc['bbox'] = extent;
+      owc.bbox = extent;
     }
 
     const addLayerToArray = (layer: Layer | LayerGroup, array: IEocOwsResource[], groupName?: string) => {
