@@ -1363,6 +1363,9 @@ export class OwcJsonService {
     return contents;
   }
 
+  /**
+   * For Service Offerings
+   */
   getOperationsFromLayer(layer: Layer): IOwsOperation[] {
     if (layer instanceof RasterLayer) {
       switch (layer.type) {
@@ -1372,16 +1375,20 @@ export class OwcJsonService {
           return this.getWmtsOperationsFromLayer(layer);
         case XyzLayertype:
           return this.getXyzOperationsFromLayer(layer);
+        case TmsLayertype:
+          return this.getTMSRasterOperationsFromLayer(layer);
         default:
-          console.warn(`Cannot get operations for this type of layer: (${layer.type})`);
+          console.warn(`Cannot get operations for this type of layer: (${layer.type})`, layer);
           return [];
       }
     } else if (layer instanceof VectorLayer) {
       switch (layer.type) {
         case WfsLayertype:
           return this.getWfsOperationsFromLayer(layer);
+        case TmsLayertype:
+          return this.getTMSVectorOperationsFromLayer(layer);
         default:
-          console.warn(`Cannot get operations for this type of layer: (${layer.type})`);
+          console.warn(`Cannot get operations for this type of layer: (${layer.type})`, layer);
           return [];
       }
     }
