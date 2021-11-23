@@ -21,6 +21,8 @@ export type TMS_Code = typeof RESTOperationCode;
 export type XYZ_Code = typeof RESTOperationCode;
 
 export const GetCapabilitiesOperationCode = 'GetCapabilities' as const;
+export const DescribeFeatureTypeOperationCode = 'DescribeFeatureType' as const;
+export const GetFeatureInfoOperationCode = 'GetFeatureInfo' as const;
 
 
 function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
