@@ -1411,11 +1411,20 @@ export class OwcJsonService {
     return operations;
   }
 
-  getTmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
-    // @TODO: what operations are defined on TMS? http://www.opengis.net/spec/owc-geojson/1.0/req/tms
-    return [];
-  }
+  private getTMSRasterOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
+    const restCall: IOwsOperation = {
+      code: RESTOperationCode,
+      method: 'GET',
+      type: 'image/png', // or other image types e.g. 'image/jpeg'
+      href: `${layer.url}`
+    };
 
+    const operations: IOwsOperation[] = [
+      restCall
+    ];
+
+    return operations;
+  }
 
   getWfsOperationsFromLayer(layer: VectorLayer): IOwsOperation[] {
 
