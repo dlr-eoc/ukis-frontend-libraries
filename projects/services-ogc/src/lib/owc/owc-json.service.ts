@@ -1293,20 +1293,29 @@ export class OwcJsonService {
     return resource;
   }
 
-  generateOfferingFromLayer(layer: Layer, legendUrl?: string, iconUrl?: string): IEocOwsOffering {
+  generateOfferingFromLayer(layer: Layer): IEocOwsOffering {
     const offering: IEocOwsOffering = {
       code: this.getOfferingCodeFromLayer(layer),
       title: layer.name
     };
 
-    if (layer.type === GeojsonLayertype) {
+    if (layer.type === GeojsonLayertype || layer.type === KmlLayertype) {
       offering.contents = this.getContentsFromLayer(layer as VectorLayer);
     } else {
       offering.operations = this.getOperationsFromLayer(layer);
     }
 
-    if (legendUrl) { offering.legendUrl = legendUrl; }
-    if (iconUrl) { offering.iconUrl = iconUrl; }
+    if (layer.legendImg && typeof layer.legendImg === 'string') {
+      if (!offering.styles) {
+        offering.styles = [];
+      }
+      offering.styles.push({
+        name: `${layer.name}-Legend`,
+        title: `${layer.name}-Legend`,
+        default: true,
+        legendURL: layer.legendImg
+      });
+    }
 
     return offering;
   }
