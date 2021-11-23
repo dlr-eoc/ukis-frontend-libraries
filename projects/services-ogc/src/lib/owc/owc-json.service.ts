@@ -1346,14 +1346,19 @@ export class OwcJsonService {
     const contents = [];
     switch (layer.type) {
       case GeojsonLayertype:
-        const content = {
+        contents.push({
           type: 'application/geo+json',
           content: JSON.stringify(layer.data)
-        };
-        contents.push(content);
+        });
+        break;
+      case KmlLayertype:
+        contents.push({
+          type: 'application/vnd.google-earth.kml+xml',
+          content: layer.data
+        });
         break;
       default:
-        console.warn(`Cannot get contents for this type of VectorLayer: (${layer.type})`);
+        console.warn(`Cannot get contents for this type of VectorLayer: (${layer.type})`, layer);
     }
     return contents;
   }
