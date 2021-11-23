@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import {
   IOwsContext, IOwsResource, IOwsOffering, IOwsOperation, IOwsContent, kmlOffering, wfsOffering, wmsOffering, wmtsOffering
 } from './types/owc-json';
-import { GetCapabilitiesOperationCode, GetFeatureOperationCode, GetMapOperationCode, GetTileOperationCode, isGeoJsonOffering, isIOwsContext, isIOwsRasterOperation, isKmlOffering, isTMSOffering, isWfsOffering, isWmsOffering, isWmtsOffering, isXyzOffering, RESTOperationCode } from './types/owc-json.utils';
+import { DescribeFeatureTypeOperationCode, GetCapabilitiesOperationCode, GetFeatureInfoOperationCode, GetFeatureOperationCode, GetMapOperationCode, GetTileOperationCode, isGeoJsonOffering, isIOwsContext, isIOwsRasterOperation, isKmlOffering, isTMSOffering, isWfsOffering, isWmsOffering, isWmtsOffering, isXyzOffering, RESTOperationCode } from './types/owc-json.utils';
 import {
   IEocOwsContext, IEocOwsResource, IEocOwsOffering, IEocOwsWmtsMatrixSet,
   IEocOwsResourceDimension,
@@ -488,6 +488,15 @@ export class OwcJsonService {
     );
       }
 
+  // TODO: replace createLayerFromDefaultOffering with this function
+  private createLayersFromResource(resource: IOwsResource, context: IOwsContext, targetProjection: string) {
+    const offerings = this.getResourceOfferings(resource);
+    const layers$: Observable<Layer>[] = [];
+
+    offerings.forEach(o => {
+      const layer = this.createLayerFromOffering(o, resource, context, targetProjection);
+      layers$.push(layer);
+    });
 
     return forkJoin(layers$).pipe(
       // making sure no undefined layers are returned
@@ -1018,6 +1027,10 @@ export class OwcJsonService {
     }
   }
 
+  /**
+   * TODO: add more vendor params ??
+   * https://docs.geoserver.org/latest/en/user/services/wms/reference.html#getmap
+   */
   private getWmsOptions(
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): IWmsOptions {
 
@@ -1236,6 +1249,7 @@ export class OwcJsonService {
 
     const addLayerToArray = (layer: Layer | LayerGroup, array: IEocOwsResource[], groupName?: string) => {
       if (layer instanceof LayerGroup) {
+        // TODO: is this correct like groups now working ????  string | ${TFiltertypes}/string // this.getLayerGroup
         const layerGroupName = groupName ? groupName + '/' + layer.name : layer.name;
         for (const subLayer of layer.layers) {
           addLayerToArray(subLayer, array, layerGroupName);
@@ -1317,6 +1331,10 @@ export class OwcJsonService {
       });
     }
 
+    // TODO: create styles
+    /* if (layer.styles || (layer as VectorLayer).options.style) {
+
+    } */
     return offering;
   }
 
