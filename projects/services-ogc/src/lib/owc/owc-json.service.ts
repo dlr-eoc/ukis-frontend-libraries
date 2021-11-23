@@ -1150,21 +1150,6 @@ export class OwcJsonService {
 
   /** Misc --------------------------------------------------- */
 
-  private getMinMaxZoom(resource: IOwsResource, targetProjection: string = 'EPSG:4326'): { minZoom: number; maxZoom: number; } {
-    const zooms = { minZoom: 0, maxZoom: 12 };
-    if (resource.properties.minZoom) {
-      zooms.minZoom = resource.properties.minZoom;
-    } else if (resource.properties.maxscaledenominator) {  // *Max*ScaleDenom ~ *Min*Zoom
-      zooms.minZoom = this.scaleDenominatorToZoom(resource.properties.maxscaledenominator, targetProjection) || 0;
-    }
-    if (resource.properties.maxZoom) {
-      zooms.maxZoom = resource.properties.maxZoom;
-    } else if (resource.properties.minscaledenominator) {  // *Min*ScaleDenom ~ *Max*Zoom
-      zooms.maxZoom = this.scaleDenominatorToZoom(resource.properties.minscaledenominator, targetProjection) || 12;
-    }
-    return zooms;
-  }
-
   /**
    * Based on the WMS Standard (https://portal.ogc.org/files/?artifact_id=14416),
    * to which the OWC Standard refers for the scale-denominator-field,
@@ -1192,10 +1177,6 @@ export class OwcJsonService {
     const zoom = Math.log2(projectionMaxExtent / (resolution * 256));
 
     return zoom;
-  }
-
-  private getUrlFromUri(uri: string) {
-    return uri.substring(0, uri.indexOf('?'));
   }
 
   /**
