@@ -1120,7 +1120,7 @@ export class OwcJsonService {
       removable: true,
       continuousWorld: false,
       opacity: this.getResourceOpacity(resource),
-      displayName: this.getDisplayName(offering, resource),
+      displayName: this.getResourceTitle(resource),
       visible: this.isActive(resource),
       attribution: this.getResourceAttribution(resource),
       dimensions: this.getResourceDimensions(resource),
