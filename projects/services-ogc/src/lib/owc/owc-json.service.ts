@@ -1398,9 +1398,9 @@ export class OwcJsonService {
 
   getXyzOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
     const restCall: IOwsOperation = {
-      code: 'REST',
+      code: RESTOperationCode,
       method: 'GET',
-      type: 'text/html',
+      type: 'image/png', // or other image types e.g. 'image/jpeg'
       href: `${layer.url}`
     };
 
