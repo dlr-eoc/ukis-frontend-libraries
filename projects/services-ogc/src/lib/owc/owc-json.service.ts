@@ -1275,6 +1275,21 @@ export class OwcJsonService {
       geometry: null
     };
 
+    // TODO convert to scaledenominator??
+    /* if (layer.minResolution) {
+      resource.properties.minscaledenominator = layer.minResolution;
+    }
+    if (layer.maxResolution) {
+      resource.properties.maxscaledenominator = layer.maxResolution;
+    } */
+
+    if (layer instanceof RasterLayer && layer.subdomains) {
+      resource.properties.shards = `${layer.subdomains[0]}-${layer.subdomains[layer.subdomains.length - 1]}`;
+    }
+
+    if (layer.dimensions) {
+      resource.properties.dimensions = this.generateDimensionsFromLayer(layer);
+    }
     return resource;
   }
 
