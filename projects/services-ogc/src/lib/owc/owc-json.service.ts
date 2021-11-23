@@ -1591,4 +1591,47 @@ export class OwcJsonService {
     return operations;
   }
 
+  private generateDimensionsFromLayer(layer: Layer) {
+    const dimensions: IEocOwsResourceDimension[] = [];
+
+    if (layer?.dimensions?.time) {
+      const td: IEocOwsTimeDimension = {
+        name: 'time',
+        values: null,
+        units: 'ISO8601'
+      };
+      if (layer.dimensions.time.display) {
+        td.display = layer.dimensions.time.display;
+      }
+
+      if (Array.isArray(layer.dimensions.time.values)) {
+        if (typeof layer.dimensions.time.values[0] === 'string') {
+          td.values = layer.dimensions.time.values.join(',') as IEocOwsTimeDimension['values'];
+        } else {
+          td.values = (layer.dimensions.time.values as ILayerIntervalAndPeriod[]).map(i => `${i.interval}/${i.periodicity}`).join(',') as IEocOwsTimeDimension['values'];
+        }
+      } else {
+        td.values = `${layer.dimensions.time.values.interval}/${layer.dimensions.time.values.periodicity}`;
+      }
+      dimensions.push(td);
+    }
+
+    if (layer?.dimensions?.elevation) {
+      const td: IEocOwsElevationDimension = {
+        name: 'elevation',
+        value: layer.dimensions.elevation.value,
+        units: layer.dimensions.elevation.units
+      };
+      if (layer.dimensions.elevation.display) {
+        td.display = layer.dimensions.elevation.display;
+      }
+      dimensions.push(td);
+    }
+
+    if (dimensions.length) {
+      return dimensions;
+    } else {
+      return null;
+    }
+  }
 }
