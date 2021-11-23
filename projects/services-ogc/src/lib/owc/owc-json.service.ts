@@ -1259,16 +1259,22 @@ export class OwcJsonService {
     const resource: IEocOwsResource = {
       id: layer.id,
       properties: {
-        title: layer.name,
-        updated: null,
-        offerings: [this.generateOfferingFromLayer(layer)],
+        title: layer.displayName || layer.name,
         opacity: layer.opacity,
-        attribution: layer.attribution,
+        active: layer.visible,
+        abstract: layer.description,
+        rights: layer.attribution,
+        minZoom: layer.minZoom,
+        maxZoom: layer.maxZoom,
+        updated: new Date().toISOString(),
+        offerings: [this.generateOfferingFromLayer(layer)],
         folder: folderName
       },
+      bbox: layer.bbox,
       type: 'Feature',
       geometry: null
     };
+
     return resource;
   }
 
