@@ -1482,6 +1482,27 @@ export class OwcJsonService {
     return operations;
   }
 
+  private getTMSVectorOperationsFromLayer(layer: VectorLayer): IOwsOperation[] {
+    const restCall: IOwsOperation = {
+      code: RESTOperationCode,
+      method: 'GET',
+      type: 'application/vnd.mapbox-vector-tile', // or other image types e.g. 'image/jpeg'
+      href: `${layer.url}`
+    };
+
+    // TODO: Get Styles - Offering
+    /* content: {
+      type: 'OpenMapStyle',
+      styleSource: string,
+      content: content
+    } */
+
+    const operations: IOwsOperation[] = [
+      restCall
+    ];
+
+    return operations;
+  }
 
   getWmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
 
