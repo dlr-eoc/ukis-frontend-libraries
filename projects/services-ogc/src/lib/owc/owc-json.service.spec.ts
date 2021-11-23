@@ -2,16 +2,16 @@ import { TestBed, waitForAsync } from '@angular/core/testing/';
 import { OwcJsonService, shardsExpand } from './owc-json.service';
 import { barebonesContext, baseWMTSLayer, baseWMSLayer, baseWFSLayer, basicOgcOwsContext, eocOwsContext, eocProjContext, zoomedContext, baseKMLLayer, eocTMSLayer, eocTimeDimensionsSteps, eocTimeDimensionsInterval, eocTimeDimensionsIntervalPeriod, eocTimeDimensionsIntervalPeriodSteps, eocTimeDimensionsIntervalPeriodStepsAndSteps, baseWMSOffering, baseWMSGetMapParams, baseWMTSOffering, baseWMTSGetTileParams, baseWFSOffering, baseWFSGetFeatureParams, baseKMLOffering, eocGeojsonOffering, eocGeojsonLayer, eocXyzLayer, eocXyzOffering, eocVectortileLayer, eocVectortileOffering, eocTMSOffering, folderMixedContext } from '../../../assets/exampleContext';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { isRasterLayertype, isVectorLayertype, LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayertype, WfsLayertype, WmtsLayertype, KmlLayertype, XyzLayertype, ILayerIntervalAndPeriod, WmsLayer, WmtsLayer, CustomLayer } from '@dlr-eoc/services-layers';
+import { LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayertype, WfsLayertype, WmtsLayertype, KmlLayertype, XyzLayertype, ILayerIntervalAndPeriod, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
-import { IOwsContext, IOwsOffering, IOwsResource } from './types/owc-json';
+import { IOwsOffering, IOwsResource, kmlOffering, wfsOffering, wmsOffering, wmtsOffering } from './types/owc-json';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
-import { GetFeatureOperationCode, GetMapOperationCode, isKmlOffering, isWfsOffering } from './types/owc-json.utils';
-import { IEocOwsOffering, IEocOwsResource } from './types/eoc-owc-json';
+import { GetFeatureOperationCode, GetMapOperationCode, GetTileOperationCode, RESTOperationCode } from './types/owc-json.utils';
+import { GeoJsonOffering, IEocOwsOffering, IEocOwsResource, tmsOffering, xyzOffering } from './types/eoc-owc-json';
 
 import { DateTime } from 'luxon';
 
@@ -753,11 +753,70 @@ describe('OwcJsonService: writing data into owc', () => {
     expect(resource.properties.minZoom).toBe(ukisWmsLayer.minZoom);
     expect(resource.properties.opacity).toBe(ukisWmsLayer.opacity);
     expect(resource.properties.title).toBe(ukisWmsLayer.name);
-
     expect(resource.properties.offerings.length).toBe(1);
   });
 
+  /** Offerings Types ----------------------------------  */
+  it('should generate WMS Offerings from a layer', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const offering = service.generateOfferingFromLayer(ukisWmsLayer);
+    expect(offering.code).toBe(wmsOffering);
+    expect(offering.operations.length).toBeTruthy();
+    expect(offering.operations.find(o => o.code === GetMapOperationCode).code).toBe(GetMapOperationCode);
+  });
 
+  it('should generate WMTS Offerings from a layer', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const offering = service.generateOfferingFromLayer(ukisWMTSLayer);
+    expect(offering.code).toBe(wmtsOffering);
+    expect(offering.operations.length).toBeTruthy();
+    expect(offering.operations.find(o => o.code === GetTileOperationCode).code).toBe(GetTileOperationCode);
+  });
+
+  it('should generate WFS Offerings from a layer', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const offering = service.generateOfferingFromLayer(ukisWFSLayer);
+    expect(offering.code).toBe(wfsOffering);
+    expect(offering.operations.length).toBeTruthy();
+    expect(offering.operations.find(o => o.code === GetFeatureOperationCode).href).toBeTruthy();
+  });
+
+  it('should generate Data (GeoJson) Offering from a layer', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const offering = service.generateOfferingFromLayer(ukisDataLayer);
+    expect(offering.code).toBe(GeoJsonOffering || kmlOffering);
+    expect(offering.contents.length).toBeTruthy();
+    expect(offering.contents.find(c => c.type === 'application/geo+json').content).toBeTruthy();
+  });
+
+  it('should generate TMS Raster Offerings from a layer', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const offering = service.generateOfferingFromLayer(ukisTMSRasterLayer);
+    expect(offering.code).toBe(tmsOffering);
+    expect(offering.operations.length).toBeTruthy();
+    expect(offering.operations.find(o => o.code === RESTOperationCode).href).toBe(ukisTMSRasterLayer.url);
+  });
+
+  it('should generate TMS Vector Offerings from a layer', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const offering = service.generateOfferingFromLayer(ukisTMSVectorLayer);
+    expect(offering.code).toBe(tmsOffering);
+    expect(offering.operations.length).toBeTruthy();
+    expect(offering.operations.find(o => o.code === RESTOperationCode).href).toBe(ukisTMSVectorLayer.url);
+    // TODO: get Style for VectorTileLayer
+    // expect(offering.styles.find(s => s.content && s.content.type === 'OpenMapStyle')).toBe(ukisTMSVectorLayer.url);
+  });
+
+  it('should generate XYZ Offerings from a layer', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const offering = service.generateOfferingFromLayer(ukisXyzLayer);
+    expect(offering.code).toBe(xyzOffering);
+    expect(offering.operations.length).toBeTruthy();
+    expect(offering.operations.find(o => o.code === RESTOperationCode).href).toBe(ukisXyzLayer.url);
+  });
+
+
+  /** Resource  Types ----------------------------------  */
   it('should generate a Resource from a YXZ layer', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const resource = service.generateResourceFromLayer(ukisXyzLayer);
@@ -766,9 +825,7 @@ describe('OwcJsonService: writing data into owc', () => {
   });
 
 
-
-
-
+  /** general ------------------------------------------  */
   it('should properly restore a selection of layers from owc format created with #generateOwsContextFrom', waitForAsync(() => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const layersService: LayersService = TestBed.inject(LayersService);
