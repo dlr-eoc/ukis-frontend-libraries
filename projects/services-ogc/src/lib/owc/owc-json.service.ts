@@ -1427,18 +1427,13 @@ export class OwcJsonService {
   }
 
   getWfsOperationsFromLayer(layer: VectorLayer): IOwsOperation[] {
-
-    const url = layer.url;
-    const layerName = layer.name;
     const version = layer.options?.version ? layer.options.version : '1.1.0';
-    const urlObject = new URL(url);
-    const typeName = urlObject.searchParams.get('typeName') || urlObject.searchParams.get('TypeName') || urlObject.searchParams.get('typename')
-                  || urlObject.searchParams.get('typeNames') || urlObject.searchParams.get('TypeNames') || urlObject.searchParams.get('typenames');
+    const { url, searchParams } = this.getJsonFromUri(layer.url);
+    const typeName = searchParams.get('TYPENAME') || searchParams.get('TYPENAMES');
     if (!typeName) {
-      console.warn(`URL does not contain the minimum required arguments for a WFS layer: ${url}`);
+      console.warn(`URL does not contain the minimum required arguments for a WFS typeName: ${typeName}`, url);
       return [];
     }
-
 
     const GetFeature: IOwsOperation = {
       code: GetFeatureOperationCode,
@@ -1448,17 +1443,17 @@ export class OwcJsonService {
     };
 
     const GetCapabilities: IOwsOperation = {
-      code: 'GetCapabilities',
+      code: GetCapabilitiesOperationCode,
       method: 'GET',
       type: 'application/xml',
-      href: urlObject.origin + urlObject.pathname + '?service=WFS&request=GetCapabilities'
+      href: `${url}?service=WFS&request=GetCapabilities`
     };
 
     const DescribeFeatureType: IOwsOperation = {
-      code: 'DescribeFeatureType',
+      code: DescribeFeatureTypeOperationCode,
       method: 'GET',
       type: 'application/json',
-      href: urlObject.origin + urlObject.pathname + `?service=WFS&request=DescribeFeatureType&version=${version}&typeNames=${typeName}&outputFormat=application/json`
+      href: `${url}?service=WFS&request=DescribeFeatureType&version=${version}&typeNames=${typeName}&outputFormat=application/json`
     };
 
     // let GetPropertyValue: IOwsOperation = null;
