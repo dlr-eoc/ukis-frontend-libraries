@@ -1547,13 +1547,17 @@ export class OwcJsonService {
   }
 
   getWmtsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
-
-    const url = layer.url;
+    let url = layer.url;
     const wmtsVersion = layer.params.version;
-    const layerName = layer.name;
     const layerId = layer.id;
-    let format = 'image/vnd.jpeg-png';
-    if (layer.params && layer.params.FORMAT) { format = layer.params.FORMAT; }
+    let format = 'image/png'; // 'image/jpeg'
+    if (layer.params && layer.params.FORMAT) {
+      format = layer.params.FORMAT;
+    }
+
+    if (url.endsWith('?')) {
+      url = url.substr(0, url.length - 1);
+    }
 
     const getTile: IOwsOperation = {
       code: GetTileOperationCode,
@@ -1563,7 +1567,7 @@ export class OwcJsonService {
     };
 
     const getCapabilities: IOwsOperation = {
-      code: 'GetCapabilities',
+      code: GetCapabilitiesOperationCode,
       href: `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
       method: 'GET',
       type: 'application/xml'
@@ -1572,7 +1576,7 @@ export class OwcJsonService {
     // Note: we deliberately use the WMS protocol here instead of WMTS.
     // Reason: WMTS delivers RGB-values, wheras WMS delivers the actual value that was used to create a tile.
     const getFeatureInfo: IOwsOperation = {
-      code: 'GetFeatureInfo',
+      code: GetFeatureInfoOperationCode,
       href: `${url}?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
       method: 'GET',
       type: 'text/html'
@@ -1586,4 +1590,5 @@ export class OwcJsonService {
 
     return operations;
   }
+
 }
