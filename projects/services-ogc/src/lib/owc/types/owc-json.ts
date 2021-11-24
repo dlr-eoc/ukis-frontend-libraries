@@ -226,7 +226,7 @@ export interface IOwsOperation {
   type?: string;
   /** Optional request body content */
   request?: IOwsContent;
-  /** Optional Result Payload of the operationc */
+  /** Optional Result Payload of the operation */
   result?: IOwsContent;
   /** Extension of Operation */
   [k: string]: any;

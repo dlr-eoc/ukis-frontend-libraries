@@ -17,9 +17,14 @@ export interface IEocOwsResource extends IOwsResource {
 }
 
 export interface IEocOwsResourceProperties extends IOwsResourceProperties {
+  /** The opacity of the displayed Layer */
   opacity?: number;
   attribution?: string; /** maybe this should be in IOwsResourceProperties.rights */
+  /** Subdomains for urls in layers - e.g. 'a-d' is placed in https://{s}.tiles.geoservice.dlr.de/... as {a-d} or multiple urls are generated
+   * e.g. https://a.tiles..., https://b.tiles...
+   */
   shards?: string;
+  /** Layer Dimension like Time and Elevation - To define e.g. the available Time data points/ranges in the Layer and a hint how to display them */
   dimensions?: IEocOwsResourceDimension[];
   /** Alternative to IOwsResourceProperties.minscaledenominator; easier to calculate in browser-apps */
   minZoom?: number;
