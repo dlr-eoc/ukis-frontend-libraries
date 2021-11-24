@@ -18,7 +18,6 @@ import { PerformanceComponent } from './components/performance/performance.compo
 import { MapOlModule } from '@dlr-eoc/map-ol';
 import { LayerControlModule } from '@dlr-eoc/layer-control';
 import { MapToolsModule } from '@dlr-eoc/map-tools';
-import { OwcControlModule } from '@dlr-eoc/owc-control';
 import { MapThreeModule } from '@dlr-eoc/map-three';
 
 import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
@@ -81,7 +80,6 @@ import { RouteExampleOwcLayersComponent } from './route-components/route-example
     MapThreeModule,
     LayerControlModule,
     MapToolsModule,
-    OwcControlModule,
     HttpClientModule,
     ServicesOgcModule
   ],

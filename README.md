@@ -24,7 +24,6 @@ The following libraries/packages are included in this repository:
 - [map-tools](projects/map-tools/README.md)
 - [map-ol](projects/map-ol/README.md)
 - [map-three](projects/map-three/README.md)
-- [owc-control](projects/owc-control/README.md)
 - [user-info](projects/user-info/README.md)
 
 - [services-layers](projects/services-layers/README.md)

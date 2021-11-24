@@ -1,4 +1,5 @@
 ### Breaking Changes
+* **@dlr-eoc/owc-control:** This package is removed. Use `owcSvc.generateOwsContextFrom(id, currentLayers, currentExtent)` and `downloadJson` from `@dlr-eoc/utils-browser`;
 * **@dlr-eoc/map-ol:**
   - Removed `MapOlService.layers_on_click(evt)` and `MapOlService.layers_on_pointermove(evt)` -> replace them by `MapOlService.layersOnMapEvent(evt)`.
   - Renamed `MapOlService.layers_on_click_move(evt, layerFilter)` -> `MapOlService.layersOnMapEvent(evt)` layer filtering is now done later.

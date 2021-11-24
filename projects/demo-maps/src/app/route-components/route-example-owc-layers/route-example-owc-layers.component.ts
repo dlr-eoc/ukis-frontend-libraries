@@ -62,4 +62,15 @@ export class RouteExampleOwcLayersComponent implements OnInit {
       this.mapStateSvc.setExtent(context.bbox);
     }
   }
+
+
+  async downloadOwc() {
+    const layers = await this.layersSvc.getLayers().pipe(first()).toPromise();
+    const baselayers = await this.layersSvc.getBaseLayers().pipe(first()).toPromise();
+    const overlays = await this.layersSvc.getOverlays().pipe(first()).toPromise();
+    const extent = await this.mapStateSvc.getExtent().pipe(first()).toPromise();
+
+    const owc = this.owcSvc.generateOwsContextFrom('Test_OWC', [...baselayers, ...layers, ...overlays], extent);
+    console.log(owc);
+  }
 }
