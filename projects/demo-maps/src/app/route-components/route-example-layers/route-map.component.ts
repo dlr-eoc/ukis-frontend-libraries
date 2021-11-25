@@ -64,8 +64,17 @@ export class RouteMapComponent implements OnInit {
       visible: true
     });
 
-    const eocLitemapLayer = new EocLitemapTile({
-      visible: false
+    const eocLitemapLayer = new EocLitemapTile();
+
+    const eocLiteOverlay = new EocBaseoverlayTile();
+
+    const eocLiteMerge = new Layer({
+      id: 'eocLiteAndOverlay',
+      name: 'EOC Lite with Overlay',
+      type: 'custom',
+      description: 'merged Layers EOC Lite with Overlay',
+      legendImg: eocLitemapLayer.legendImg,
+      mergedLayers: [eocLitemapLayer, eocLiteOverlay]
     });
 
     // not working in WGS84 because
@@ -92,7 +101,7 @@ export class RouteMapComponent implements OnInit {
       id: 'OSM_Base'
     });
 
-    const layers = [TransparentBackground, eocLitemapLayer, worldRelief, OsmLayer];
+    const layers = [TransparentBackground, eocLiteMerge, worldRelief, OsmLayer];
 
     /** add layers with the LayersService */
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
@@ -407,7 +416,7 @@ export class RouteMapComponent implements OnInit {
       popup: {
         dynamicPopup: {
           component: TablePopupComponent,
-          getAttributes: (args) => ({data: args})
+          getAttributes: (args) => ({ data: args })
         }
       }
     });
@@ -483,6 +492,19 @@ export class RouteMapComponent implements OnInit {
     const openSeaMapOnTop = new OpenSeaMap({ crossOrigin: 'anonymous' });
     this.layersSvc.addLayer(layerOnTopOfAll, 'Overlays');
     this.layersSvc.addLayer(openSeaMapOnTop, 'Overlays');
+
+    const blueMarble = new BlueMarbleTile({ id: 'merge_BlueMarble' });
+    const eocLiteoverlay2 = new EocLiteoverlayTile({ id: 'merge_Liteoverlay' });
+    const mergeLayer = new Layer({
+      id: 'BlueMarbleTile_Overlay',
+      name: 'BlueMarble with Overlay',
+      type: 'custom',
+      visible: false,
+      legendImg: blueMarble.legendImg,
+      description: 'merged Layers BlueMarble with Overlay',
+      mergedLayers: [blueMarble, eocLiteoverlay2]
+    });
+    this.layersSvc.addLayer(mergeLayer, 'Overlays');
   }
 
   updateLayerGroup() {
