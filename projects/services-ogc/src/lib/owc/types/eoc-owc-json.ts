@@ -30,6 +30,12 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
   minZoom?: number;
   /** Alternative to IOwsResourceProperties.maxscaledenominator; easier to calculate in browser-apps */
   maxZoom?: number;
+  /**
+   * Folder is already defined on IOwsResourceProperties, this should only show how ukis is using it.
+   * - string - Single Folder inside the Layers Slot `Layers`
+   * - `${TFiltertypes}/string` - Single Folder inside one of the Layers Slots `TFiltertypes`
+   */
+  folder?: string;
 }
 
 
