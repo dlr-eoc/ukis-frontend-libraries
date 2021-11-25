@@ -752,21 +752,23 @@ export class MapOlService {
   }
 
   /** TODO: adjust this so it can be generally used for all layers */
-  private adjustLayerOptions(l: Layer, source: olSource, type: Layer['type']) {
-    if (l.attribution) {
-      source.setAttributions([l.attribution]);
-    }
+  private adjustLayerOptions(l: Layer, type: Layer['type'], source?: olSource) {
+    if (source) {
+      if (l.attribution) {
+        source.setAttributions([l.attribution]);
+      }
 
-    if (l.continuousWorld) {
-      source.set('wrapX', l.continuousWorld);
-    }
+      if (l.continuousWorld) {
+        source.set('wrapX', l.continuousWorld);
+      }
 
-    /** set crossOrigin for popup layers  */
-    if (l.popup && !l.crossOrigin && l.crossOrigin !== null) {
-      this.sourceSetCross(source);
-    }
-    if (l.crossOrigin || l.crossOrigin === null) {
-      this.sourceSetCross(source);
+      /** set crossOrigin for popup layers  */
+      if (l.popup && !l.crossOrigin && l.crossOrigin !== null) {
+        this.sourceSetCross(source);
+      }
+      if (l.crossOrigin || l.crossOrigin === null) {
+        this.sourceSetCross(source);
+      }
     }
     // ------------------------------------------
 
@@ -780,7 +782,10 @@ export class MapOlService {
       opacity: l.opacity || 1
     };
     (layeroptions as any).zIndex = 1;
-    (layeroptions as any).source = source;
+
+    if (source) {
+      (layeroptions as any).source = source;
+    }
 
     if (l.popup) {
       layeroptions.popup = l.popup;
@@ -1007,7 +1012,7 @@ export class MapOlService {
       olsource.setUrl(l.url);
     }
 
-    const layeroptions = this.adjustLayerOptions(l, olsource, 'wms');
+    const layeroptions = this.adjustLayerOptions(l, 'wms', olsource);
     const newlayer = new olTileLayer(layeroptions);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
@@ -1020,7 +1025,7 @@ export class MapOlService {
       url: l.url
     };
     const olsource = new olImageWMS(options);
-    const layeroptions = this.adjustLayerOptions(l, olsource, 'wms');
+    const layeroptions = this.adjustLayerOptions(l, 'wms', olsource);
     const newlayer = new olImageLayer(layeroptions);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
@@ -1534,8 +1539,22 @@ export class MapOlService {
       // delete l.custom_layer;
       return layer;
 
+    } else if (l?.mergedLayers?.length) {
+      const layers = l.mergedLayers.map(ml => {
+        /** Set all to visible because the visibility of merge layers cannot be controlled later */
+        ml.visible = true;
+        /** popups are get from the olLayer later so add them */
+        ml.popup = l.popup;
+        /** events are get from the olLayer later so add them */
+        ml.events = l.events;
+        return this.create_layers(ml);
+      });
+      const groupOptions = this.adjustLayerOptions(l, 'custom');
+      (groupOptions as any).layers = layers;
+      const layerGroup = new olLayerGroup(groupOptions);
+      return layerGroup;
     } else {
-      console.log('attribute custom_layer not set on layer type custom!');
+      console.log('attribute custom_layer not set on layer type custom! And it is not a Layer with mergedLayers!');
     }
   }
 

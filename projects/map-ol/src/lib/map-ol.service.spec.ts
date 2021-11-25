@@ -86,6 +86,9 @@ let ukisCustomLayerRaster: CustomLayer;
 /** ID-ukis-group-layer */
 let ukisGroupLayer: LayerGroup;
 
+/** ID-ukis-merge-layer */
+let ukisMergeLayer: Layer;
+
 /** ID-group-layer1 */
 let groupLayer1: olLayerGroup;
 /** ID-group-layer2 */
@@ -352,6 +355,13 @@ const beforeEachFn = () => {
     name: 'ukis group',
     layers: [ukisVectorLayerJson, ukisWmtsLayer, ukisWmsLayer, ukisRasterLayer, ukisCustomLayerVector]
   });
+
+  ukisMergeLayer = new Layer({
+    id: 'ID-ukis-merge-layer',
+    name: 'ukis merge layer',
+    type: 'custom',
+    mergedLayers: [ukisWmsLayer, ukisWmtsLayer]
+  });
 };
 
 
@@ -613,6 +623,17 @@ describe('MapOlService ukisLayers', () => {
     ukisGroupLayer.layers.map(l => {
       expect(service.getLayerByKey({ key: 'id', value: l.id }, 'layers')).toBeTruthy();
     });
+  });
+
+  it('should add mergedLayer as a olLayerGroup', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+    service.setUkisLayer(ukisMergeLayer, 'Layers');
+
+    const getMergeLayer = service.getLayerByKey({ key: 'id', value: ukisMergeLayer.id }, 'layers');
+    expect(getMergeLayer).toBeTruthy();
+    expect(getMergeLayer instanceof olLayerGroup).toBeTrue();
+    expect((getMergeLayer as olLayerGroup).getLayersArray()[0].get('id')).toBe(ukisMergeLayer.mergedLayers[0].id);
   });
 
   it('should reset/add one ukisLayer from a Type', () => {
