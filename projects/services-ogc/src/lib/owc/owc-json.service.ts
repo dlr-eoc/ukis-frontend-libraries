@@ -1641,27 +1641,38 @@ export class OwcJsonService {
 
   getWmtsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
     let url = layer.url;
-    const wmtsVersion = layer.params.version;
-    const layerId = layer.id;
-    let format = 'image/png'; // 'image/jpeg'
-    if (layer.params && layer.params.FORMAT) {
-      format = layer.params.FORMAT;
-    }
-
     if (url.endsWith('?')) {
       url = url.substr(0, url.length - 1);
     }
 
+    const searchParams = new URLSearchParams();
+    Object.keys(layer.params).forEach(k => {
+      const v = layer.params[k];
+      if (v) {
+        searchParams.set(k.toUpperCase(), v);
+    }
+    });
+    searchParams.set('REQUEST', 'GetTile');
+    searchParams.set('SERVICE', 'WMTS');
+
+    if (!searchParams.get('FORMAT')) {
+      searchParams.set('FORMAT', 'image/png'); // 'image/jpeg'
+    }
+
+    if (searchParams.has('MATRIXSETOPTIONS')) {
+      searchParams.delete('MATRIXSETOPTIONS');
+    }
+
     const getTile: IOwsOperation = {
       code: GetTileOperationCode,
-      href: `${url}?SERVICE=WMTS&REQUEST=GetTile&FORMAT=${format}&LAYER=${layerId}&VERSION=${wmtsVersion}`,
+      href: `${url}?${searchParams.toString()}`,
       method: 'GET',
-      type: format
+      type: searchParams.get('FORMAT'),
     };
 
     const getCapabilities: IOwsOperation = {
       code: GetCapabilitiesOperationCode,
-      href: `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${wmtsVersion}`,
+      href: `${url}?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=${searchParams.get('VERSION')}`,
       method: 'GET',
       type: 'application/xml'
     };
@@ -1670,7 +1681,7 @@ export class OwcJsonService {
     // Reason: WMTS delivers RGB-values, wheras WMS delivers the actual value that was used to create a tile.
     const getFeatureInfo: IOwsOperation = {
       code: GetFeatureInfoOperationCode,
-      href: `${url}?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${wmtsVersion}`,
+      href: `${url}?SERVICE=WMS&REQUEST=GetFeatureInfo&VERSION=${searchParams.get('VERSION')}`,
       method: 'GET',
       type: 'text/html'
     };
