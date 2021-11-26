@@ -1227,6 +1227,23 @@ export class OwcJsonService {
    */
   generateOwsContextFrom(id: string, layers: (Layer | LayerGroup)[], extent?: TGeoExtent, properties?: IEocOwsContext['properties']): IEocOwsContext {
 
+    /** sort layerGroups so the order is Overlays, Layers, Baselayers */
+    const Overlays: (Layer | LayerGroup)[] = [];
+    const Layers: (Layer | LayerGroup)[] = [];
+    const Baselayers: (Layer | LayerGroup)[] = [];
+
+    layers.forEach(l => {
+      if (l.filtertype === Filtertypes.Overlays) {
+        Overlays.push(l);
+      } else if (l.filtertype === Filtertypes.Layers) {
+        Layers.push(l);
+      } else if (l.filtertype === Filtertypes.Baselayers) {
+        Baselayers.push(l);
+      }
+    });
+    /** Spread so layers Object is not mutated and reverse so order is like in OWC */
+    const sortedLayers = [...Overlays.reverse(), ...Layers.reverse(), ...Baselayers.reverse()];
+
     if (!properties) {
       properties = {
         links: {
@@ -1237,7 +1254,7 @@ export class OwcJsonService {
         lang: 'en',
         title: 'This is an automatically created context',
         updated: new Date().toISOString(),
-        subtitle: `Context created from ${layers.map(l => `Layer:${l.id}`).join(', ')}`
+        subtitle: `Context created from ${sortedLayers.map(l => `Layer:${l.id}`).join(', ')}`
       };
     }
 
@@ -1252,24 +1269,22 @@ export class OwcJsonService {
       owc.bbox = extent;
     }
 
-    const addLayerToArray = (layer: Layer | LayerGroup, array: IEocOwsResource[], groupName?: string) => {
-      if (layer instanceof LayerGroup) {
-        // TODO: is this correct like groups now working ????  string | ${TFiltertypes}/string // this.getLayerGroup
-        const layerGroupName = groupName ? groupName + '/' + layer.name : layer.name;
-        for (const subLayer of layer.layers) {
-          addLayerToArray(subLayer, array, layerGroupName);
-        }
-      } else {
-        const resource: IEocOwsResource = this.generateResourceFromLayer(layer, groupName);
-        array.push(resource);
-      }
-    };
+    sortedLayers.forEach(lg => {
 
-    const resources = [];
-    for (const layer of layers) {
-      addLayerToArray(layer, resources);
-    }
-    owc.features = resources;
+      if (lg instanceof LayerGroup) {
+        const folderName = lg.name;
+        /** Spread so layers Object is not mutated in the reverse */
+        const groupLayers = [...lg.layers];
+        /** reverse so order is like in OWC */
+        groupLayers.reverse().forEach(l => {
+          const res = this.generateResourceFromLayer(l, folderName);
+          owc.features.push(res);
+        });
+      } else {
+        const res = this.generateResourceFromLayer(lg);
+        owc.features.push(res);
+      }
+    });
 
     return owc;
   }
