@@ -713,7 +713,11 @@ export class OwcJsonService {
 
       let styleObj$: Observable<any>;
             if (content?.content) {
+              if (typeof content.content === 'string') {
         styleObj$ = of(JSON.parse(content.content));
+              } else {
+                styleObj$ = of(content.content);
+              }
             } else if (content?.href) {
         const url = content.href;
         styleObj$ = this.http.get(url);
