@@ -1591,35 +1591,43 @@ export class OwcJsonService {
 
   getWmsOperationsFromLayer(layer: RasterLayer): IOwsOperation[] {
     let url = layer.url;
-    const wmsVersion = layer.params.VERSION;
-    const layerId = layer.id;
-    let format = 'image/png'; // 'image/jpeg'
-    if (layer.params && layer.params.FORMAT) { format = layer.params.FORMAT; }
-
 
     if (url.endsWith('?')) {
       url = url.substr(0, url.length - 1);
     }
 
+    const searchParams = new URLSearchParams();
+    Object.keys(layer.params).forEach(k => {
+      const v = layer.params[k];
+      if (v) {
+        searchParams.set(k, v);
+      }
+    });
+
+    // searchParams.set('LAYERS', layer.id);
+    if (!searchParams.get('FORMAT')) {
+      searchParams.set('FORMAT', 'image/png'); // 'image/jpeg'
+    }
+
     const getMap: IOwsOperation = {
       code: GetMapOperationCode,
       method: 'GET',
-      type: format,
-      href: `${url}?service=WMS&version=${wmsVersion}&request=GetMap&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}&TILED=true`
+      type: searchParams.get('FORMAT'),
+      href: `${url}?${searchParams.toString()}`
     };
 
     const getCapabilities: IOwsOperation = {
       code: GetCapabilitiesOperationCode,
       method: 'GET',
       type: 'application/xml',
-      href: `${url}?service=WMS&version=${wmsVersion}&request=GetCapabilities`
+      href: `${url}?service=WMS&version=${searchParams.get('VERSION')}&request=GetCapabilities`
     };
 
     const getFeatureInfo: IOwsOperation = {
       code: GetFeatureInfoOperationCode,
       method: 'GET',
-      type: 'text/html',
-      href: `${url}?service=WMS&version=${wmsVersion}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${layerId}&FORMAT=${format}`
+      type: 'application/json',
+      href: `${url}?service=WMS&version=${searchParams.get('VERSION')}&request=GetFeatureInfo&TRANSPARENT=TRUE&LAYERS=${searchParams.get('LAYERS')}&INFO_FORMAT=application/json`
     };
 
     const operations: IOwsOperation[] = [
