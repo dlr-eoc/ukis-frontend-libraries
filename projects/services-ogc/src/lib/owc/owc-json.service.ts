@@ -259,29 +259,29 @@ export class OwcJsonService {
       const isList = /,/g.test(values);
       if (isList) {
         const splitValues = values.split(',');
-    if (splitValues.length > 0) {
+        if (splitValues.length > 0) {
           const parsed: Array<string | ILayerIntervalAndPeriod> = []; //
-      for (const value of splitValues) {
+          for (const value of splitValues) {
             const parsedSingle = this.parseSingleTimeOrPeriod(value);
             if (typeof parsedSingle === 'object' && parsedSingle.interval) {
               if (!parsedSingle.periodicity && period) {
                 parsedSingle.periodicity = period;
-      }
-    }
+              }
+            }
             parsed.push(parsedSingle);
           }
-    return parsed;
-  }
+          return parsed;
+        }
       } else {
         const parsedSingle = this.parseSingleTimeOrPeriod(values);
         if (typeof parsedSingle === 'object' && parsedSingle.interval) {
           if (!parsedSingle.periodicity && period) {
             parsedSingle.periodicity = period;
-  }
+          }
           return parsedSingle;
         } else if (typeof parsedSingle === 'string') {
           return [parsedSingle];
-  }
+        }
       }
     }
   }
@@ -301,17 +301,17 @@ export class OwcJsonService {
     } else {
       // is Interval ----------------------------
       const interval = Interval.fromISO(time);
-    if (interval.isValid) {
-      const period = this.parseISO8601Period(time);
-      const intervalObject: ILayerIntervalAndPeriod = {
-        periodicity: period,
+      if (interval.isValid) {
+        const period = this.parseISO8601Period(time);
+        const intervalObject: ILayerIntervalAndPeriod = {
+          periodicity: period,
           interval: `${interval.start.toUTC().toISO()}/${interval.end.toUTC().toISO()}`
-      };
-      return intervalObject;
+        };
+        return intervalObject;
       } else {
         console.warn(`no Interval or not valid`, time);
-    return null;
-  }
+        return null;
+      }
     }
   }
 
@@ -469,8 +469,8 @@ export class OwcJsonService {
     layerGroupIDs.forEach(groupName => {
       /** reverse so layer order is like in the context */
       const includedResources = layergroupResources.filter(r => r.properties?.folder === groupName).reverse();
-        const layerGroup$ = this.createLayerGroup(groupName, includedResources, owc, targetProjection);
-        layers$.push(layerGroup$);
+      const layerGroup$ = this.createLayerGroup(groupName, includedResources, owc, targetProjection);
+      layers$.push(layerGroup$);
     });
 
     /**
@@ -479,14 +479,14 @@ export class OwcJsonService {
     const layerResources = this.getSingleResources(owc);
     layerResources.forEach(lr => {
       const layer$ = this.createLayerFromDefaultOffering(lr, owc, targetProjection);
-        layers$.push(layer$);
+      layers$.push(layer$);
     });
 
     return forkJoin(layers$).pipe(
       // making sure no undefined layers are returned
       map(layers => layers.filter(layer => layer))
     );
-      }
+  }
 
   // TODO: replace createLayerFromDefaultOffering with this function
   private createLayersFromResource(resource: IOwsResource, context: IOwsContext, targetProjection: string) {
@@ -543,15 +543,15 @@ export class OwcJsonService {
     const offerings = resource.properties?.offerings;
     if (offerings) {
       // TODO: allow Multiple offerings ???
-    const offering = offerings.find(o => isWmsOffering(o.code))
-      || offerings.find(o => isWmtsOffering(o.code))
-      || offerings.find(o => isWfsOffering(o.code))
-      || offerings.find(o => isTMSOffering(o.code))
-      || offerings[0];
-    return this.createLayerFromOffering(offering, resource, owc, targetProjection);
+      const offering = offerings.find(o => isWmsOffering(o.code))
+        || offerings.find(o => isWmtsOffering(o.code))
+        || offerings.find(o => isWfsOffering(o.code))
+        || offerings.find(o => isTMSOffering(o.code))
+        || offerings[0];
+      return this.createLayerFromOffering(offering, resource, owc, targetProjection);
     } else {
       return of(null);
-  }
+    }
   }
 
   createLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<Layer> {
@@ -599,9 +599,9 @@ export class OwcJsonService {
       case CustomLayertype:
         // custom layers are meant to be user-defined and not easily encoded in a OWC.
         break;
-      }
-    return vectorLayer$;
     }
+    return vectorLayer$;
+  }
 
   private getVectorLayerOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection?: string): IVectorLayerOptions {
     const layerOptions: ILayerOptions = this.getLayerOptions(offering, resource, context);
@@ -616,7 +616,7 @@ export class OwcJsonService {
         subdomains,
         maxZoom,
         minZoom
-    };
+      };
 
       return vectorLayerOptions;
     } else {
@@ -636,7 +636,7 @@ export class OwcJsonService {
       const { url, searchParams } = this.checkWfsParams(offering);
       if (url && searchParams) {
         layerUrl = `${url}?${searchParams.toString()}`;
-    }
+      }
     }
     return layerUrl;
   }
@@ -654,7 +654,7 @@ export class OwcJsonService {
       return { url: null, searchParams: null };
     } else {
       return { url, searchParams };
-  }
+    }
   }
 
   createRasterLayerFromOffering(
@@ -697,7 +697,7 @@ export class OwcJsonService {
         layerOptions.url = tmsServerUrl;
 
         if (offering.styles && offering.styles[0]?.content.type === 'OpenMapStyle') {
-      const content = offering.styles[0].content;
+          const content = offering.styles[0].content;
 
           // we need the sourceKey to apply t5he style later
           if (content?.styleSource) {
@@ -711,26 +711,26 @@ export class OwcJsonService {
               layerOptions.options.styleSource = content.styleSource;
             }
 
-      let styleObj$: Observable<any>;
+            let styleObj$: Observable<any>;
             if (content?.content) {
               if (typeof content.content === 'string') {
-        styleObj$ = of(JSON.parse(content.content));
+                styleObj$ = of(JSON.parse(content.content));
               } else {
                 styleObj$ = of(content.content);
               }
             } else if (content?.href) {
-        const url = content.href;
-        styleObj$ = this.http.get(url);
-      } else {
+              const url = content.href;
+              styleObj$ = this.http.get(url);
+            } else {
               console.warn(`Couldn't find style for Tms-Offering`, offering);
-      }
+            }
 
             if (styleObj$) {
               return styleObj$.pipe(map((obj) => {
                 layerOptions.options.style = obj;
                 const newLayer = new VectorLayer(layerOptions);
                 return newLayer;
-      }));
+              }));
             } else {
               const newLayer = new VectorLayer(layerOptions);
               return of(newLayer);
@@ -835,29 +835,29 @@ export class OwcJsonService {
       }
     } else {
       return of(null);
-  }
+    }
   }
 
   private createWmtsLayerFromOffering(
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<WmtsLayer> {
     if (isWmtsOffering(offering.code)) {
-    return this.getWmtsOptions(offering, resource, context, targetProjection).pipe(map((options: IWmtsOptions) => {
-      const layer = new WmtsLayer(options);
-      return layer;
-    }));
+      return this.getWmtsOptions(offering, resource, context, targetProjection).pipe(map((options: IWmtsOptions) => {
+        const layer = new WmtsLayer(options);
+        return layer;
+      }));
     } else {
       return of(null);
-  }
+    }
   }
 
   private createWmsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<WmsLayer> {
     if (isWmsOffering(offering.code)) {
-    const options: IWmsOptions = this.getWmsOptions(offering, resource, context, targetProjection);
-    const layer = new WmsLayer(options);
-    return of(layer);
+      const options: IWmsOptions = this.getWmsOptions(offering, resource, context, targetProjection);
+      const layer = new WmsLayer(options);
+      return of(layer);
     } else {
       return of(null);
-  }
+    }
   }
 
   private createXyzLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
@@ -895,7 +895,7 @@ export class OwcJsonService {
       params.style = offering.styles.find(s => s.default).name;
     } else if (searchParams.has('STYLE')) {
       params.style = searchParams.get('STYLE');
-      }
+    }
 
     if (searchParams.has('FORMAT')) {
       params.format = searchParams.get('FORMAT');
@@ -912,13 +912,13 @@ export class OwcJsonService {
       };
 
       if (matrixSet) {
-      const matrixSetOptions: IListMatrixSet = {
-        matrixSet: matrixSet.matrixSet,
-        matrixIds: matrixSet.matrixIds,
-        resolutions: matrixSet.resolutions
-      };
+        const matrixSetOptions: IListMatrixSet = {
+          matrixSet: matrixSet.matrixSet,
+          matrixIds: matrixSet.matrixIds,
+          resolutions: matrixSet.resolutions
+        };
         wmtsOptions.params.matrixSetOptions = matrixSetOptions;
-        }
+      }
 
       return wmtsOptions;
     })));
@@ -1005,7 +1005,7 @@ export class OwcJsonService {
     } else {
       const url = this.parseOperationUrl(offering, 'GetCapabilities').url;
       return this.wmtsClient.getCapabilities(url).pipe(
-      map((capabilities: any) => {
+        map((capabilities: any) => {
           const matrixSets = capabilities.value.contents.tileMatrixSet;
           let matrixSet = matrixSets.find(ms => ms.identifier.value === targetProjection);
 
@@ -1086,17 +1086,17 @@ export class OwcJsonService {
       if (dimensions) {
         time = this.getTimeDimensions(dimensions);
         elevation = this.getElevationDimension(dimensions);
-        }
+      }
 
       const { minZoom, maxZoom } = this.getResourceMinMaxZoom(resource, targetProjection);
       const subdomains = shardsExpand(this.getResourceShards(resource));
       const getRasterOperation = offering.operations.find(o => isIOwsRasterOperation(o));
       if (getRasterOperation) {
-      const rasterLayerOptions: IRasterLayerOptions = {
-        ...layerOptions,
-        type: layerOptions.type as TRasterLayertype,
+        const rasterLayerOptions: IRasterLayerOptions = {
+          ...layerOptions,
+          type: layerOptions.type as TRasterLayertype,
           url: this.getJsonFromUri(getRasterOperation.href).url
-      };
+        };
 
         if (minZoom) {
           rasterLayerOptions.minZoom = minZoom;
@@ -1121,8 +1121,8 @@ export class OwcJsonService {
           }
           rasterLayerOptions.dimensions.elevation = elevation;
         }
-      return rasterLayerOptions;
-    } else {
+        return rasterLayerOptions;
+      } else {
         console.warn(`There is no Raster operation for the offering`, offering);
       }
     } else {
@@ -1215,7 +1215,7 @@ export class OwcJsonService {
     return {
       url: uri.substring(0, queryIndex),
       searchParams: url.searchParams
-      };
+    };
   }
 
   /** ------------ DATA TO FILE ----------------------------------------- */
@@ -1364,18 +1364,18 @@ export class OwcJsonService {
       }
     } else if (layer instanceof VectorLayer && layer.type === 'tms') {
       if (layer?.options?.style && layer?.options?.styleSource) {
-      offering.styles.push({
+        offering.styles.push({
           name: null,
           title: `${layer.name}-StyleTitle`,
-        default: true,
+          default: true,
           legendURL: (typeof layer.legendImg === 'string') ? layer.legendImg : null,
           content: {
             type: 'OpenMapStyle',
             styleSource: layer.options.styleSource,
             content: layer.options.style
           }
-      });
-    }
+        });
+      }
     } else { // e.g. Layer.type=xyz only for getLegendUrl
       offering.styles.push({
         name: null,
@@ -1418,10 +1418,10 @@ export class OwcJsonService {
     switch (layer.type) {
       case GeojsonLayertype:
         if (layer.data) {
-        contents.push({
-          type: 'application/geo+json',
-          content: JSON.stringify(layer.data)
-        });
+          contents.push({
+            type: 'application/geo+json',
+            content: JSON.stringify(layer.data)
+          });
         } else if (layer.url) {
           contents.push({
             type: 'application/geo+json',
@@ -1431,10 +1431,10 @@ export class OwcJsonService {
         break;
       case KmlLayertype:
         if (layer.data) {
-        contents.push({
-          type: 'application/vnd.google-earth.kml+xml',
-          content: layer.data
-        });
+          contents.push({
+            type: 'application/vnd.google-earth.kml+xml',
+            content: layer.data
+          });
         } else if (layer.url) {
           contents.push({
             type: 'application/vnd.google-earth.kml+xml',
@@ -1653,7 +1653,7 @@ export class OwcJsonService {
       const v = layer.params[k];
       if (v) {
         searchParams.set(k.toUpperCase(), v);
-    }
+      }
     });
     searchParams.set('REQUEST', 'GetTile');
     searchParams.set('SERVICE', 'WMTS');
