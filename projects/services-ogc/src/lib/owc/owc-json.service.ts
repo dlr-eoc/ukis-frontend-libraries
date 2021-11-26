@@ -1524,7 +1524,7 @@ export class OwcJsonService {
       code: GetFeatureOperationCode,
       method: 'GET',
       type: 'application/json',
-      href: url
+      href: `${url}?${searchParams.toString()}`
     };
 
     const GetCapabilities: IOwsOperation = {
