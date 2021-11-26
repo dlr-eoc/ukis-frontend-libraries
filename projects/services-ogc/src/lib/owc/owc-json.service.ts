@@ -1337,7 +1337,8 @@ export class OwcJsonService {
   generateOfferingFromLayer(layer: Layer): IEocOwsOffering {
     const offering: IEocOwsOffering = {
       code: this.getOfferingCodeFromLayer(layer),
-      title: layer.name
+      title: layer.name,
+      styles: []
     };
 
     if (layer.type === GeojsonLayertype || layer.type === KmlLayertype) {
@@ -1346,22 +1347,47 @@ export class OwcJsonService {
       offering.operations = this.getOperationsFromLayer(layer);
     }
 
-    if (layer.legendImg && typeof layer.legendImg === 'string') {
-      if (!offering.styles) {
-        offering.styles = [];
+    /**
+     * Get Styles
+     * - If only Legend images
+     * - If params.style or params.STYLES
+     * - If options?.style
+     */
+    if (layer instanceof RasterLayer) {
+      if (layer?.params?.STYLES || layer?.params?.style || layer.legendImg) {
+        offering.styles.push({
+          name: layer?.params?.STYLES || layer?.params?.style || null,
+          title: `${layer.name}-StyleTitle`,
+          default: (layer?.params?.STYLES || layer?.params?.style || layer.legendImg) ? true : false,
+          legendURL: (typeof layer.legendImg === 'string') ? layer.legendImg : null,
+        });
       }
+    } else if (layer instanceof VectorLayer && layer.type === 'tms') {
+      if (layer?.options?.style && layer?.options?.styleSource) {
       offering.styles.push({
-        name: `${layer.name}-Legend`,
-        title: `${layer.name}-Legend`,
+          name: null,
+          title: `${layer.name}-StyleTitle`,
         default: true,
-        legendURL: layer.legendImg
+          legendURL: (typeof layer.legendImg === 'string') ? layer.legendImg : null,
+          content: {
+            type: 'OpenMapStyle',
+            styleSource: layer.options.styleSource,
+            content: layer.options.style
+          }
+      });
+    }
+    } else { // e.g. Layer.type=xyz only for getLegendUrl
+      offering.styles.push({
+        name: null,
+        title: `${layer.name}-StyleTitle`,
+        default: true,
+        legendURL: (typeof layer.legendImg === 'string') ? layer.legendImg : null,
       });
     }
 
-    // TODO: create styles
-    /* if (layer.styles || (layer as VectorLayer).options.style) {
-
-    } */
+    if (!offering.styles.length) {
+      delete offering.styles;
+    }
     return offering;
   }
 
