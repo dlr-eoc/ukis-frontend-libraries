@@ -1301,8 +1301,7 @@ export class OwcJsonService {
         minZoom: layer.minZoom,
         maxZoom: layer.maxZoom,
         updated: new Date().toISOString(),
-        offerings: [this.generateOfferingFromLayer(layer)],
-        folder: folderName
+        offerings: [this.generateOfferingFromLayer(layer)]
       },
       bbox: layer.bbox,
       type: 'Feature',
@@ -1316,6 +1315,12 @@ export class OwcJsonService {
     if (layer.maxResolution) {
       resource.properties.maxscaledenominator = layer.maxResolution;
     } */
+
+    if (folderName) {
+      resource.properties.folder = `${layer.filtertype}/${folderName}`;
+    } else {
+      resource.properties.folder = `${layer.filtertype}`;
+    }
 
     if (layer instanceof RasterLayer && layer.subdomains) {
       resource.properties.shards = `${layer.subdomains[0]}-${layer.subdomains[layer.subdomains.length - 1]}`;
