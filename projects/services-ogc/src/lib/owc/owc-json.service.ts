@@ -1417,16 +1417,30 @@ export class OwcJsonService {
     const contents = [];
     switch (layer.type) {
       case GeojsonLayertype:
+        if (layer.data) {
         contents.push({
           type: 'application/geo+json',
           content: JSON.stringify(layer.data)
         });
+        } else if (layer.url) {
+          contents.push({
+            type: 'application/geo+json',
+            href: layer.url
+          });
+        }
         break;
       case KmlLayertype:
+        if (layer.data) {
         contents.push({
           type: 'application/vnd.google-earth.kml+xml',
           content: layer.data
         });
+        } else if (layer.url) {
+          contents.push({
+            type: 'application/vnd.google-earth.kml+xml',
+            href: layer.url
+          });
+        }
         break;
       default:
         console.warn(`Cannot get contents for this type of VectorLayer: (${layer.type})`, layer);
