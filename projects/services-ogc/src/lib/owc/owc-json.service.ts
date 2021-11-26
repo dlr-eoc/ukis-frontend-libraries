@@ -887,7 +887,7 @@ export class OwcJsonService {
 
     const params: IWmtsParams = {
       layer: searchParams.get('LAYER'),
-      style: 'default',
+      style: 'default', // (mandatory) -> 07-057r7_Web_Map_Tile_Service_Standard.pdf
       projection: targetProjection // TODO: alow this also from URL???
     };
 
@@ -1047,8 +1047,9 @@ export class OwcJsonService {
         LAYERS: searchParams.get('LAYERS'),
         TRANSPARENT: true
       };
-      if (offering.styles && offering.styles.length > 0 && offering.styles.find(s => s.default)) {
-        params.STYLES = offering.styles.find(s => s.default).name;
+      const defaultStyle = offering?.styles.find(s => s.default);
+      if (defaultStyle && defaultStyle.name) {
+        params.STYLES = defaultStyle.name;
       } else if (searchParams.has('STYLES')) {
         params.STYLES = searchParams.get('STYLES');
       }
