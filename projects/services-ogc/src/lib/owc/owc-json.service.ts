@@ -1324,6 +1324,8 @@ export class OwcJsonService {
 
     if (layer instanceof RasterLayer && layer.subdomains) {
       resource.properties.shards = `${layer.subdomains[0]}-${layer.subdomains[layer.subdomains.length - 1]}`;
+    } else if (layer instanceof VectorLayer && layer.subdomains) {
+      resource.properties.shards = `${layer.subdomains[0]}-${layer.subdomains[layer.subdomains.length - 1]}`;
     }
 
     if (layer.dimensions) {
