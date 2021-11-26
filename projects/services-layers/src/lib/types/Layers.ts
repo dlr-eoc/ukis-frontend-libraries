@@ -232,6 +232,8 @@ export interface IVectorLayerOptions extends ILayerOptions {
   options?: {
     /** ol/style/Style */
     style: any;
+    /** styleSource=OpenMapStyle.sourceKey if style is a OpenMapStyle Obj */
+    styleSource?: string;
     [k: string]: any;
   };
   /** if true clusters points | or set a Object with cluster options e.g. distance ... depends on the map-library */
