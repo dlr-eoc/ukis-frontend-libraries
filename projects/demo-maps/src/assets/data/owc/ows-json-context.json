@@ -193,8 +193,8 @@
             ],
             "styles": [
               {
-                "name": "wsf",
-                "title": "World Settlement Footprint 2015",
+                "name": null,
+                "title": "No Style only Legend",
                 "default": true,
                 "legendURL": "https://geoservice.dlr.de/eoc/land/wms/wms?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=WSF_2015&style=wsf"
               }
@@ -319,10 +319,10 @@
             ],
             "styles": [
               {
+                "name": null,
+                "title": "No Style only Legend",
                 "default": true,
-                "legendURL": "https://c.tile.openstreetmap.org/11/1221/1142.png",
-                "name": "raster",
-                "title": "raster"
+                "legendURL": "https://c.tile.openstreetmap.org/11/1221/1142.png"
               }
             ]
           }
