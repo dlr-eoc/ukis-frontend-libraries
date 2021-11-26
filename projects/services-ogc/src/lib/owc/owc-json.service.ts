@@ -1604,6 +1604,9 @@ export class OwcJsonService {
       }
     });
 
+    searchParams.set('REQUEST', 'GetMap');
+    searchParams.set('SERVICE', 'WMS');
+
     // searchParams.set('LAYERS', layer.id);
     if (!searchParams.get('FORMAT')) {
       searchParams.set('FORMAT', 'image/png'); // 'image/jpeg'
