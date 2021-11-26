@@ -1047,7 +1047,7 @@ export class OwcJsonService {
         LAYERS: searchParams.get('LAYERS'),
         TRANSPARENT: true
       };
-      const defaultStyle = offering?.styles.find(s => s.default);
+      const defaultStyle = offering?.styles?.find(s => s?.default);
       if (defaultStyle && defaultStyle.name) {
         params.STYLES = defaultStyle.name;
       } else if (searchParams.has('STYLES')) {
