@@ -338,8 +338,16 @@ export class OwcJsonService {
       const name = d.name;
       if (name === 'time') {
         dims.time = this.getTimeDimensions(resource.properties.dimensions);
+        /** if dimensions are defined but the values are null */
+        if (dims.time.values === null) {
+          console.log('check to get time dimensions value from OGC Service later!!', resource);
+        }
       } else if (name === 'elevation') {
         dims.elevation = this.getElevationDimension(resource.properties.dimensions);
+        /** if dimensions are defined but the values are null */
+        if (dims.elevation.value === null) {
+          console.log('check to get elevation dimensions value from OGC Service later!!', resource);
+        }
       } else {
         dims[name] = d;
       }
@@ -351,9 +359,7 @@ export class OwcJsonService {
   getTimeDimensions(dimensions: IEocOwsResourceDimension[]): ILayerTimeDimension {
     let dim: ILayerTimeDimension = { values: null, units: null };
     const value = dimensions.find(d => d.name === 'time') as IEocOwsTimeDimension;
-
     if (!value) {
-      console.log('check to get dimensions value from OGC Service later!!', dimensions);
       return;
     }
 
@@ -388,7 +394,6 @@ export class OwcJsonService {
     const dim: ILayerElevationDimension = { value: null, units: null };
     const value = dimensions.find(d => d.name === 'elevation') as IEocOwsElevationDimension;
     if (!value) {
-      console.log('check to get dimensions value from OGC Service later!!', dimensions);
       return;
     } else {
       dim.value = value.value;
