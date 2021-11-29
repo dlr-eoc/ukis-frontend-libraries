@@ -940,7 +940,6 @@ describe('OwcJsonService: writing data into owc', () => {
 
     const context = service.generateOwsContextFrom('someId', [group]);
 
-    expect(context.features[0].properties.folder).toEqual('parent');
-
+    expect(context.features[0].properties.folder).toEqual(`${group.filtertype}/parent`);
   });
 });
