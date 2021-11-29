@@ -891,8 +891,10 @@ export class OwcJsonService {
       projection: targetProjection // TODO: alow this also from URL???
     };
 
-    if (offering.styles && offering.styles.length > 0 && offering.styles.find(s => s.default)) {
-      params.style = offering.styles.find(s => s.default).name;
+
+    const defaultStyle = offering?.styles?.find(s => s.default);
+    if (defaultStyle && defaultStyle.name) {
+      params.style = defaultStyle.name;
     } else if (searchParams.has('STYLE')) {
       params.style = searchParams.get('STYLE');
     }
@@ -1047,7 +1049,7 @@ export class OwcJsonService {
         LAYERS: searchParams.get('LAYERS'),
         TRANSPARENT: true
       };
-      const defaultStyle = offering?.styles?.find(s => s?.default);
+      const defaultStyle = offering?.styles?.find(s => s.default);
       if (defaultStyle && defaultStyle.name) {
         params.STYLES = defaultStyle.name;
       } else if (searchParams.has('STYLES')) {
