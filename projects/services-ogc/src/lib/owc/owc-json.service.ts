@@ -258,6 +258,7 @@ export class OwcJsonService {
     } else {
       const isList = /,/g.test(values);
       if (isList) {
+        // values: `${string},${string}`
         const splitValues = values.split(',');
         if (splitValues.length > 0) {
           const parsed: Array<string | ILayerIntervalAndPeriod> = []; //
@@ -266,6 +267,8 @@ export class OwcJsonService {
             if (typeof parsedSingle === 'object' && parsedSingle.interval) {
               if (!parsedSingle.periodicity && period) {
                 parsedSingle.periodicity = period;
+              } else if (!parsedSingle.periodicity && !period) {
+                console.warn(`Interval without a period`, values, period);
               }
             }
             parsed.push(parsedSingle);
@@ -273,10 +276,13 @@ export class OwcJsonService {
           return parsed;
         }
       } else {
+        // `${string}/${string}` | `${string}/${string}/P${string}`
         const parsedSingle = this.parseSingleTimeOrPeriod(values);
         if (typeof parsedSingle === 'object' && parsedSingle.interval) {
           if (!parsedSingle.periodicity && period) {
             parsedSingle.periodicity = period;
+          } else if (!parsedSingle.periodicity && !period) {
+            console.warn(`Interval without a period`, values, period);
           }
           return parsedSingle;
         } else if (typeof parsedSingle === 'string') {
@@ -351,7 +357,7 @@ export class OwcJsonService {
       return;
     }
 
-    const values = this.getTimeValueFromDimensions(value.values, value?.display?.period);
+    const parsedValues = this.getTimeValueFromDimensions(value.values, value?.display?.period);
     dim = {
       values: null,
       units: value.units,
@@ -359,21 +365,20 @@ export class OwcJsonService {
     };
 
     /** check if is array or single value */
-    if (Array.isArray(values)) {
-      dim.values = values as (string[] | ILayerIntervalAndPeriod[]);
-    } else if (values && typeof values !== 'string' && values.interval && values.periodicity) {
-      dim.values = values;
+    if (Array.isArray(parsedValues)) {
+      dim.values = parsedValues as (string[] | ILayerIntervalAndPeriod[]);
+      /** don't set dim.display.period if it is an array because there could be different periods */
+      // dim.display.period = ...
+    } else if (parsedValues && typeof parsedValues !== 'string' && parsedValues.interval && parsedValues.periodicity) {
+      dim.values = parsedValues;
+      /** set dim.display.period from the parsed values */
+      if (parsedValues.periodicity) {
+        dim.display.period = parsedValues.periodicity;
+      }
     }
 
     if (value?.display?.format) {
       dim.display.format = value.display.format;
-    }
-
-    const period = this.parseISO8601Period(value.values) || value?.display?.period;
-    if (period) {
-      dim.display.period = period;
-    } else {
-      console.warn(`Interval without a period`, value);
     }
 
     return dim;
