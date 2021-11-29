@@ -1256,24 +1256,26 @@ export class OwcJsonService {
     /** Spread so layers Object is not mutated and reverse so order is like in OWC */
     const sortedLayers = [...Overlays.reverse(), ...Layers.reverse(), ...Baselayers.reverse()];
 
-    if (!properties) {
-      properties = {
-        links: {
-          profiles: [{
-            href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
-          }],
-        },
-        lang: 'en',
-        title: 'This is an automatically created context',
-        updated: new Date().toISOString(),
-        subtitle: `Context created from ${sortedLayers.map(l => `Layer:${l.id}`).join(', ')}`
-      };
+    let defaultProperties = {
+      links: {
+        profiles: [{
+          href: 'http://www.opengis.net/spec/owc-geojson/1.0/req/core'
+        }],
+      },
+      lang: 'en',
+      title: 'This is an automatically created context',
+      updated: new Date().toISOString(),
+      subtitle: `Context created from ${sortedLayers.map(l => `Layer:${l.id}`).join(', ')}`
+    }
+
+    if (properties) {
+      defaultProperties = Object.assign(defaultProperties, properties);
     }
 
     const owc: IEocOwsContext = {
       id,
       type: 'FeatureCollection',
-      properties,
+      properties: defaultProperties,
       features: []
     };
 
