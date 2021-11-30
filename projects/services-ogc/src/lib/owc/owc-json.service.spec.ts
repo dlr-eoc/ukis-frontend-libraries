@@ -2,7 +2,7 @@ import { TestBed, waitForAsync } from '@angular/core/testing/';
 import { OwcJsonService, shardsExpand } from './owc-json.service';
 import { barebonesContext, baseWMTSLayer, baseWMSLayer, baseWFSLayer, basicOgcOwsContext, eocOwsContext, eocProjContext, zoomedContext, baseKMLLayer, eocTMSLayer, eocTimeDimensionsSteps, eocTimeDimensionsInterval, eocTimeDimensionsIntervalPeriod, eocTimeDimensionsIntervalPeriodSteps, eocTimeDimensionsIntervalPeriodStepsAndSteps, baseWMSOffering, baseWMSGetMapParams, baseWMTSOffering, baseWMTSGetTileParams, baseWFSOffering, baseWFSGetFeatureParams, baseKMLOffering, eocGeojsonOffering, eocGeojsonLayer, eocXyzLayer, eocXyzOffering, eocVectortileLayer, eocVectortileOffering, eocTMSOffering, folderMixedContext } from '../../../assets/exampleContext';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayertype, WfsLayertype, WmtsLayertype, KmlLayertype, XyzLayertype, ILayerIntervalAndPeriod, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
+import { LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayertype, WfsLayertype, WmtsLayertype, KmlLayertype, XyzLayertype, ILayerIntervalAndPeriod, WmsLayer, WmtsLayer, Filtertypes } from '@dlr-eoc/services-layers';
 import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsOffering, IOwsResource, kmlOffering, wfsOffering, wmsOffering, wmtsOffering } from './types/owc-json';
@@ -117,7 +117,7 @@ describe('OwcJsonService: reading basic data from owc Resource', () => {
     allResources.forEach(r => {
       const filterType = service.getFilterType(r);
       if (filterType) {
-        expect(service.getFilterType(r)).toBe('Baselayers' || 'Overlays' || 'Layers');
+        expect(Filtertypes[filterType]).toBe(filterType);
       } else {
         expect(filterType).toBe(undefined);
       }
