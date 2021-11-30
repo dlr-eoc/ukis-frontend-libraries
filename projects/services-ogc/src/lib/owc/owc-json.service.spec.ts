@@ -1,6 +1,6 @@
 import { TestBed, waitForAsync } from '@angular/core/testing/';
 import { OwcJsonService, shardsExpand } from './owc-json.service';
-import { barebonesContext, baseWMTSLayer, baseWMSLayer, baseWFSLayer, basicOgcOwsContext, eocOwsContext, eocProjContext, zoomedContext, baseKMLLayer, eocTMSLayer, eocTimeDimensionsSteps, eocTimeDimensionsInterval, eocTimeDimensionsIntervalPeriod, eocTimeDimensionsIntervalPeriodSteps, eocTimeDimensionsIntervalPeriodStepsAndSteps, baseWMSOffering, baseWMSGetMapParams, baseWMTSOffering, baseWMTSGetTileParams, baseWFSOffering, baseWFSGetFeatureParams, baseKMLOffering, eocGeojsonOffering, eocGeojsonLayer, eocXyzLayer, eocXyzOffering, eocVectortileLayer, eocVectortileOffering, eocTMSOffering, folderMixedContext } from '../../../assets/exampleContext';
+import { barebonesContext, baseWMTSLayer, baseWMSLayer, baseWFSLayer, basicOgcOwsContext, eocOwsContext, eocProjContext, zoomedContext, baseKMLLayer, eocTMSLayer, eocTimeDimensionsSteps, eocTimeDimensionsInterval, eocTimeDimensionsIntervalPeriod, eocTimeDimensionsIntervalPeriodSteps, eocTimeDimensionsIntervalPeriodStepsAndSteps, baseWMSOffering, baseWMSGetMapParams, baseWMTSOffering, baseWMTSGetTileParams, baseWFSOffering, baseWFSGetFeatureParams, baseKMLOffering, eocGeojsonOffering, eocGeojsonLayer, eocXyzLayer, eocXyzOffering, eocVectortileLayer, eocVectortileOffering, eocTMSOffering, folderMixedContext, eocWMTSLayer, eocWMTSOffering } from '../../../assets/exampleContext';
 import { Fill, Stroke, Style } from 'ol/style.js';
 import { LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayertype, WfsLayertype, WmtsLayertype, KmlLayertype, XyzLayertype, ILayerIntervalAndPeriod, WmsLayer, WmtsLayer, Filtertypes } from '@dlr-eoc/services-layers';
 import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
@@ -369,14 +369,14 @@ describe('OwcJsonService: reading basic data from owc Offering', () => {
 
   it('should check the ows Offering is a ServiceOffering', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
-
-
+    expect(service.checkIfServiceOffering(baseKMLOffering)).toBe(false);
+    expect(service.checkIfServiceOffering(baseWFSOffering)).toBe(true);
   });
 
   it('should check the ows Offering is a DataOffering', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
-
-
+    expect(service.checkIfDataOffering(baseKMLOffering)).toBe(true);
+    expect(service.checkIfDataOffering(baseWFSOffering)).toBe(false);
   });
 
   it('should get LegendUrl from the ows Offering', () => {
@@ -414,10 +414,12 @@ describe('OwcJsonService: reading data from IEocOwsOffering', () => {
     });
   });
 
-  it('should get the ows Offering matrixSets', () => {
+  it('should get the ows Offering matrixSets - private function', waitForAsync(() => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
-
-  });
+    service['getMatrixSetForWMTS'](eocWMTSOffering, eocWMTSOffering.matrixSets[0].srs).subscribe(ms => {
+      expect(ms).toEqual(eocWMTSOffering.matrixSets[0]);
+    });
+  }));
 });
 
 
@@ -501,7 +503,7 @@ describe('OwcJsonService: reading layer data from owc', () => {
             /** for features with folder: Layers/<folderName> */
             const hasFiltertype = service.getFilterType(r);
             if (hasFiltertype) {
-              index = `${ service['getLayerGroupFromFolder'](r)}/${r.properties.title}`;
+              index = `${service['getLayerGroupFromFolder'](r)}/${r.properties.title}`;
             }
 
             if (!contextFeaturesIds.includes(index)) {

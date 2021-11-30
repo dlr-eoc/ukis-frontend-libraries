@@ -60,9 +60,10 @@ export const baseWMSLayer: IOwsResource = {
   properties: {
     title: 'WMS Offering',
     updated: '2021-11-09T09:02:20Z',
+    date: '2015',
     active: true,
     abstract: 'World Settlement Footprint 2015',
-    folder: 'RasterLayers',
+    folder: 'Layers/RasterLayers',
     rights: '&copy; <a href="http://www.dlr.de" target="_blank">DLR</a>',
     offerings: [
       baseWMSOffering
@@ -259,6 +260,55 @@ export const basicOgcOwsContext: IOwsContext = {
 };
 
 /** ---------IEoc Extensions----------------------- */
+/** Context Fragments */
+
+export const eocTimeDimensionsSteps: IEocOwsTimeDimension = {
+  name: 'time',
+  values: `2020-01-08T16:07:00.000Z,2020-01-20T16:07:00.000Z,2020-02-01T16:07:00.000Z`,
+  units: 'ISO8601',
+  display: {
+    format: 'yyyy-MM-dd'
+  }
+};
+
+export const eocTimeDimensionsInterval: IEocOwsTimeDimension = {
+  name: 'time',
+  values: `2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z`,
+  units: 'ISO8601',
+  display: {
+    period: 'P1Y',
+    format: 'yyyy-MM-dd'
+  }
+};
+
+export const eocTimeDimensionsIntervalPeriod: IEocOwsTimeDimension = {
+  name: 'time',
+  values: `2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y`,
+  units: 'ISO8601',
+  display: {
+    format: 'yyyy-MM-dd'
+  }
+};
+
+export const eocTimeDimensionsIntervalPeriodSteps: IEocOwsTimeDimension = {
+  name: 'time',
+  values: `1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/P1Y,1990-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z/P1Y,1995-01-01T00:00:00.000Z/1999-12-31T23:59:59.000Z/P1Y`,
+  units: 'ISO8601',
+  display: {
+    format: 'yyyy-MM-dd'
+  }
+};
+
+export const eocTimeDimensionsIntervalPeriodStepsAndSteps: IEocOwsTimeDimension = {
+  name: 'time',
+  values: `1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/P1Y,1990-01-01T00:00:00.000Z,1991-01-01T00:00:00.000Z,1992-01-01T00:00:00.000Z,1993-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z`,
+  units: 'ISO8601',
+  display: {
+    format: 'yyyy-MM-dd'
+  }
+};
+
+/** Context Resources */
 export const eocTMSOffering: IEocOwsOffering = {
   code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/tms',
   operations: [
@@ -361,10 +411,84 @@ export const eocWMSLayer: IEocOwsResource = {
     offerings: [
       eocWMSOffering
     ],
+    minZoom: 4,
+    maxZoom: 16,
     title: 'RapidEye RESA - L3M Mosaic - Germany, 2015',
-    updated: '2019-02-15T11:22:07'
+    updated: '2019-02-15T11:22:07',
+    dimensions: [eocTimeDimensionsSteps]
   },
   type: 'Feature'
+};
+
+export const eoxWMTSGetTileParams = new URLSearchParams('SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=eoc%3Abasemap&FORMAT=image/png');
+export const eocWMTSOffering: IEocOwsOffering = {
+  code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts',
+  operations: [
+    {
+      code: 'GetCapabilities',
+      method: 'GET',
+      href: 'https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities'
+    },
+    {
+      code: 'GetTile',
+      method: 'GET',
+      href: `https://tiles.geoservice.dlr.de/service/wmts?${eoxWMTSGetTileParams.toString()}`
+    },
+    {
+      code: 'GetFeatureInfo',
+      method: 'GET',
+      href: 'https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetFeatureInfo&LAYERS=eoc%3Abasemap'
+    }
+  ],
+  matrixSets: [
+    {
+      "srs": "EPSG:3857",
+      "matrixSet": "GoogleMapsCompatible",
+      "matrixIds": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "origin": {
+        "x": 20037508.342789,
+        "y": -20037508.342789
+      },
+      "resolutions": [
+        279541132.01435887813568115234,
+        139770566.00717940926551818848,
+        69885283.00358971953392028809,
+        34942641.50179485976696014404,
+        17471320.75089742988348007202,
+      ],
+      "tilesize": {
+        "height": 256,
+        "width": 256
+      }
+    }
+  ]
+}
+export const eocWMTSLayer: IEocOwsResource = {
+  type: 'Feature',
+  id: 'eocWMTSLayer',
+  geometry: null,
+  properties: {
+    title: 'WMTS Offering - matrixSet',
+    updated: '2021-11-09T09:43:37Z',
+    active: true,
+    abstract: 'This is the basemap for DLR Service Portals',
+    folder: 'RasterLayers',
+    offerings: [
+      eocWMTSOffering
+    ]
+  },
+  bbox: [
+    -180,
+    -90,
+    180,
+    90
+  ]
 };
 
 export const eocWFSoffering: IEocOwsOffering = {
@@ -503,56 +627,6 @@ const zoomedLayer: IEocOwsResource = {
   },
   type: 'Feature'
 };
-
-
-/** ----------------Context Fragments----------------- */
-
-export const eocTimeDimensionsSteps: IEocOwsTimeDimension = {
-  name: 'time',
-  values: `2020-01-08T16:07:00.000Z,2020-01-20T16:07:00.000Z,2020-02-01T16:07:00.000Z`,
-  units: 'ISO8601',
-  display: {
-    format: 'yyyy-MM-dd'
-  }
-};
-
-export const eocTimeDimensionsInterval: IEocOwsTimeDimension = {
-  name: 'time',
-  values: `2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z`,
-  units: 'ISO8601',
-  display: {
-    period: 'P1Y',
-    format: 'yyyy-MM-dd'
-  }
-};
-
-export const eocTimeDimensionsIntervalPeriod: IEocOwsTimeDimension = {
-  name: 'time',
-  values: `2016-01-01T00:00:00.000Z/2018-01-01T00:00:00.000Z/P1Y`,
-  units: 'ISO8601',
-  display: {
-    format: 'yyyy-MM-dd'
-  }
-};
-
-export const eocTimeDimensionsIntervalPeriodSteps: IEocOwsTimeDimension = {
-  name: 'time',
-  values: `1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/P1Y,1990-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z/P1Y,1995-01-01T00:00:00.000Z/1999-12-31T23:59:59.000Z/P1Y`,
-  units: 'ISO8601',
-  display: {
-    format: 'yyyy-MM-dd'
-  }
-};
-
-export const eocTimeDimensionsIntervalPeriodStepsAndSteps: IEocOwsTimeDimension = {
-  name: 'time',
-  values: `1984-01-01T00:00:00.000Z/1989-12-31T23:59:59.000Z/P1Y,1990-01-01T00:00:00.000Z,1991-01-01T00:00:00.000Z,1992-01-01T00:00:00.000Z,1993-01-01T00:00:00.000Z/1994-12-31T23:59:59.000Z`,
-  units: 'ISO8601',
-  display: {
-    format: 'yyyy-MM-dd'
-  }
-};
-
 
 
 export const eocOwsContext: IEocOwsContext = {
