@@ -12,6 +12,7 @@
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
 
 * **@dlr-eoc/services-ogc:** 
+- Replace function `getLayerGroup()` with `getResourceFolder()` - and a private function to get folders which should be a `LayerGroup`,
 - Remove old custom extension `IOwsOffering.iconUrl` and `getIconUrl()`.
 - Remove not used `getOfferingContents()`.
 - Remove old custom extension `IOwsOffering.title` - use `IOwsResource` as layers.

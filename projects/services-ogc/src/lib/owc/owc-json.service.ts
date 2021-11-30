@@ -127,7 +127,7 @@ export class OwcJsonService {
   getGroupResources(context: IOwsContext): IOwsResource[] {
     const resources = context.features;
     return resources.filter(r => {
-      const groupName = this.getLayerGroup(r);
+      const groupName = this.getLayerGroupFromFolder(r);
       return groupName && !Object.keys(Filtertypes).includes(groupName);
     });
   }
@@ -138,7 +138,7 @@ export class OwcJsonService {
   getSingleResources(context: IOwsContext): IOwsResource[] {
     const resources = context.features;
     return resources.filter(r => {
-      const groupName = this.getLayerGroup(r);
+      const groupName = this.getLayerGroupFromFolder(r);
       return !groupName || Object.keys(Filtertypes).includes(groupName);
     });
   }
@@ -152,8 +152,31 @@ export class OwcJsonService {
    * The Folder property of IOwsResource
    * @returns string | `${TFiltertypes}/string`
    */
-  getLayerGroup(resource: IOwsResource): string {
+  getResourceFolder(resource: IOwsResource): string {
     return resource.properties.folder;
+  }
+
+  /**
+   * returns name from Resource Folder if it is not only a Filtertype `TFiltertypes`
+   */
+  private getLayerGroupFromFolder(resource: IOwsResource) {
+    const folderName = this.getResourceFolder(resource);
+    if (folderName) {
+      const folderParts = folderName.split('/');
+      if (folderParts.length === 1) {
+        if (!Filtertypes[folderName]) {
+          return folderName
+        }
+      } else if (folderParts.length === 2) {
+        const filtertype = folderParts[0];
+        if (!Filtertypes[filtertype]) {
+          console.warn(`Folder (${folderName}) should be named like: ${Object.keys(Filtertypes).map(k => `${k}/<FolderName>`).join(' | ')}`);
+        }
+        return folderParts[1];
+      } else {
+        console.log(`only one Folder hierarchy is implemented`, folderParts);
+      }
+    }
   }
 
   /**

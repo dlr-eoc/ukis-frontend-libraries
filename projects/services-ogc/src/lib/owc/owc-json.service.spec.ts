@@ -108,7 +108,7 @@ describe('OwcJsonService: reading basic data from owc Resource', () => {
   it('should get the ows context Resource Folder for Layer Grouping', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
-      expect(service.getLayerGroup(r)).toBe(r.properties.folder);
+      expect(service.getResourceFolder(r)).toBe(r.properties.folder);
     });
   });
 
@@ -122,6 +122,29 @@ describe('OwcJsonService: reading basic data from owc Resource', () => {
         expect(filterType).toBe(undefined);
       }
     });
+  });
+
+
+  it('should get groupName from Folder - private function', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    allResources.forEach(r => {
+
+      const groupName = service['getLayerGroupFromFolder'](r);
+      if (groupName) {
+        const filterType = service.getFilterType(r);
+        if (filterType) {
+          const folderParts = r.properties.folder.split('/');
+          expect(folderParts[0]).toBe(filterType);
+          expect(folderParts[1]).toBe(groupName);
+
+        } else {
+          expect(r.properties.folder).toBe(groupName);
+        }
+      } else {
+        expect(groupName).toBe(undefined);
+      }
+    });
+
   });
 
   it('should get the ows context Resource Updated', () => {
@@ -413,11 +436,11 @@ describe('OwcJsonService: reading layer data from owc', () => {
     service.getLayers(basicOgcOwsContext, targetProjection).subscribe(contextLayers => {
 
       const layerGroupIDs = service.getGroupResources(basicOgcOwsContext)
-        .map(f => service.getLayerGroup(f)) // get ids
+        .map(f => service['getLayerGroupFromFolder'](f)) // get ids
         .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
 
       const layerIDs = service.getSingleResources(basicOgcOwsContext)
-        .map(f => service.getLayerGroup(f));  // get ids
+        .map(f => service['getLayerGroupFromFolder'](f));  // get ids
 
       expect(contextLayers.length).toBe(layerGroupIDs.length + layerIDs.length);
     });
@@ -428,11 +451,11 @@ describe('OwcJsonService: reading layer data from owc', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     service.getLayers(eocOwsContext, targetProjection).subscribe(eocOwsContextLayers => {
       const layerGroupIDs = service.getGroupResources(eocOwsContext)
-        .map(f => service.getLayerGroup(f)) // get ids
+        .map(f => service['getLayerGroupFromFolder'](f)) // get ids
         .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
 
       const layerIDs = service.getSingleResources(eocOwsContext)
-        .map(f => service.getLayerGroup(f));  // get ids
+        .map(f => service['getLayerGroupFromFolder'](f));  // get ids
 
       expect(eocOwsContextLayers.length).toBe(layerGroupIDs.length + layerIDs.length);
     });
@@ -443,11 +466,11 @@ describe('OwcJsonService: reading layer data from owc', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     service.getLayers(folderMixedContext, targetProjection).subscribe(contextLayers => {
       const layerGroupIDs = service.getGroupResources(folderMixedContext)
-        .map(f => service.getLayerGroup(f)) // get ids
+        .map(f => service['getLayerGroupFromFolder'](f)) // get ids
         .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
 
       const layerIDs = service.getSingleResources(folderMixedContext)
-        .map(f => service.getLayerGroup(f));  // get ids
+        .map(f => service['getLayerGroupFromFolder'](f));  // get ids
 
       expect(contextLayers.length).toBe(layerGroupIDs.length + layerIDs.length);
     });
@@ -473,7 +496,13 @@ describe('OwcJsonService: reading layer data from owc', () => {
           const groupName = service['getLayerGroupFromFolder'](f);
           const groupResources = folderMixedContext.features.filter(r => service['getLayerGroupFromFolder'](r) === groupName);
           groupResources.forEach(r => {
-            const index = `${r.properties?.folder}/${r.properties.title}`;
+            let index = `${r.properties?.folder}/${r.properties.title}`;
+
+            /** for features with folder: Layers/<folderName> */
+            const hasFiltertype = service.getFilterType(r);
+            if (hasFiltertype) {
+              index = `${ service['getLayerGroupFromFolder'](r)}/${r.properties.title}`;
+            }
 
             if (!contextFeaturesIds.includes(index)) {
               contextFeaturesIds.push(index);
@@ -520,7 +549,7 @@ describe('OwcJsonService: reading layer data from owc', () => {
     service.getLayers(basicOgcOwsContext, targetProjection).subscribe(owsContextLayers => {
 
       const layerGroupIDs = service.getGroupResources(basicOgcOwsContext)
-        .map(f => service.getLayerGroup(f)) // get ids
+        .map(f => service['getLayerGroupFromFolder'](f)) // get ids
         .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
 
       const findLayerGroups = owsContextLayers.filter(l => layerGroupIDs.includes(l.id));
