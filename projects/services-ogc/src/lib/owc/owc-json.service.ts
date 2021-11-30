@@ -480,7 +480,9 @@ export class OwcJsonService {
 
 
   /**
-   * Get all Layers from the IOwsContext
+   * Get all Layers from the IOwsContext.
+   *
+   * The order of the layers is reversed to get the context drawing order!
    */
   getLayers(owc: IOwsContext, targetProjection: string): Observable<(Layer | LayerGroup)[]> {
     const layers$: Observable<Layer | LayerGroup>[] = [];
@@ -493,48 +495,46 @@ export class OwcJsonService {
      * e.g. if groupName: Overlays/test -> a group "test" in the slot Overlays will be created with the layer in it
      * if groupName is only: Layers | Overlays | Baselayers use layerResources
      */
-    const layergroupResources = this.getGroupResources(owc);
 
-    const layerGroupIDs = layergroupResources.map(f => this.getLayerGroup(f)) // get ids
-      .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
-
-    /** unique layergroupResources */
-    layerGroupIDs.forEach(groupName => {
-      /** reverse so layer order is like in the context */
-      const includedResources = layergroupResources.filter(r => r.properties?.folder === groupName).reverse();
-      const layerGroup$ = this.createLayerGroup(groupName, includedResources, owc, targetProjection);
-      layers$.push(layerGroup$);
+    const resources = this.getResources(owc);
+    const groups = [];
+    resources.forEach(r => {
+      const lg = this.createLayerOrGroupFromResource(r, owc, targetProjection, groups);
+      layers$.push(lg);
     });
 
-    /**
-     * Single Layers
-     */
-    const layerResources = this.getSingleResources(owc);
-    layerResources.forEach(lr => {
-      const layer$ = this.createLayerFromDefaultOffering(lr, owc, targetProjection);
-      layers$.push(layer$);
-    });
-
-    return forkJoin(layers$).pipe(
-      // making sure no undefined layers are returned
-      map(layers => layers.filter(layer => layer))
-    );
+    return forkJoin(layers$)
+      // making sure no undefined/null layers are returned
+      .pipe(map(layers => layers.filter(layer => layer)))
+      // reverse so layer order is like in the context
+      .pipe(map(layers => layers.reverse()));
   }
 
-  // TODO: replace createLayerFromDefaultOffering with this function
-  private createLayersFromResource(resource: IOwsResource, context: IOwsContext, targetProjection: string) {
-    const offerings = this.getResourceOfferings(resource);
-    const layers$: Observable<Layer>[] = [];
+  /**
+   * Creates Layers or LayerGroups from IOwsResource and IOwsContext
+   * Add uniqueGroups array to track already created groups
+   */
+  private createLayerOrGroupFromResource(resource: IOwsResource, context: IOwsContext, targetProjection: string, uniqueGroups: string[]) {
+    const layergroupResources = this.getGroupResources(context);
+    const groupName = this.getLayerGroupFromFolder(resource);
 
-    offerings.forEach(o => {
-      const layer = this.createLayerFromOffering(o, resource, context, targetProjection);
-      layers$.push(layer);
-    });
-
-    return forkJoin(layers$).pipe(
-      // making sure no undefined layers are returned
-      map((layers: Layer[]) => layers.filter(layer => layer))
-    );
+    /** Layers with folder property */
+    if (groupName) {
+      /** unique layergroupResources */
+      if (!uniqueGroups.includes(groupName)) {
+        uniqueGroups.push(groupName);
+        /** reverse so layer order is like in the context */
+        const includedResources = layergroupResources.filter(r => this.getLayerGroupFromFolder(r) === groupName).reverse();
+        const layerGroup$ = this.createLayerGroup(groupName, includedResources, context, targetProjection);
+        return layerGroup$;
+      } else {
+        return of<null>(null);
+      }
+    } else {
+      /** Single Layers */
+      const layer$ = this.createLayerFromDefaultOffering(resource, context, targetProjection);
+      return layer$;
+    }
   }
 
 
