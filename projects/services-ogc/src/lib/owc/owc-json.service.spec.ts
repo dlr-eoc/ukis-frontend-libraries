@@ -453,6 +453,66 @@ describe('OwcJsonService: reading layer data from owc', () => {
     });
   });
 
+  it('should get all layers in correct order', () => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    service.getLayers(folderMixedContext, targetProjection).subscribe(createdLayers => {
+
+      /**
+       * Sort context Features with Folders not in correct order
+       * - L1    - L1
+       * - L2    - L2
+       * - F1.1  - F1.1
+       * - L3    - F1.2
+       * - F1.2  - L3
+       * - F2    - F2
+       */
+      const contextFeaturesIds = [];
+      folderMixedContext.features.forEach((f) => {
+        if (f.properties?.folder) {
+          /** private function getLayerGroupFromFolder */
+          const groupName = service['getLayerGroupFromFolder'](f);
+          const groupResources = folderMixedContext.features.filter(r => service['getLayerGroupFromFolder'](r) === groupName);
+          groupResources.forEach(r => {
+            const index = `${r.properties?.folder}/${r.properties.title}`;
+
+            if (!contextFeaturesIds.includes(index)) {
+              contextFeaturesIds.push(index);
+            }
+          })
+        } else {
+          const index = `null/${f.properties.title}`;
+
+          if (!contextFeaturesIds.includes(index)) {
+            contextFeaturesIds.push(index);
+          }
+        }
+      });
+
+      /**
+       * Create flat array from layers and groups
+       */
+      const createdLayerIds = createdLayers.reduce((p: string[], lg) => {
+        if (lg instanceof LayerGroup) {
+          return p.concat(lg.layers.map(l => `${lg.name}/${l.name}`));
+        } else {
+          return p.concat(`null/${lg.name}`);
+        }
+      }, []);
+
+
+      /**
+       * Because context drawing order is from top to bottom
+       * and layers in the Layerservice are added from bottom to top reverse ids
+       */
+      const len = createdLayerIds.length - 1;
+      contextFeaturesIds.forEach((id, index) => {
+        const id2 = createdLayerIds[len - index];
+        expect(id).toBe(id2);
+      })
+
+    });
+  });
+
 
   // this is also testing service.createLayerGroup()
   it('should create LayerGroups for Resources with properties.folder', waitForAsync(() => {
