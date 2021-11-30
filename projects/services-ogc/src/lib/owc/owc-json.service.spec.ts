@@ -978,23 +978,64 @@ describe('OwcJsonService: writing data into owc', () => {
     }
   }));
 
-        const regeneratedContext = service.generateOwsContextFrom('someId', layers);
 
-        for (const feature of context.features) {
-          const generatedLayer = layers.find(l => l.id === feature.id);
-          const regeneratedFeature = regeneratedContext.features.find(f => f.id === feature.id);
+  it('should regenerated layers in same order', waitForAsync(() => {
+    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const allTestContexts = [basicOgcOwsContext, eocOwsContext];
 
-          /* if (!(generatedLayer instanceof LayerGroup)) {
-            if (generatedLayer.type !== 'custom') {
-              expect(regeneratedFeature).toBeTruthy();
-              expect(regeneratedFeature.properties.offerings.length > 0).toBeTrue();
-              expect(regeneratedFeature.properties.offerings[0].operations.length > 0).toBeTrue();
-            }
-          } */
-        }
+    /** This is not possible!!! because groups are sorted together for the generation and we can not where the features have been in the original array*/
+    /**
+       * Sort context Features with Folders not in correct order
+       * - L1     - L1     - L1
+       * - L2     - L2     - L2
+       * - F1.1   - F1.1   - F1.1
+       * - L3     - F1.2   - ? L3 | F1.2
+       * - F2     - L3     - ? L3 | F1.2 | F2
+       * - F1.2   - F2
+       */
+
+
+    /** we can only check if the order is like the created layers  */
+    for (const context of allTestContexts) {
+      service.getLayers(context, 'EPSG:4326').subscribe((createdLayers) => {
+
+        /**
+         * Create flat array from layers and groups
+         */
+        const createdLayerIds = createdLayers.reduce((p: string[], lg) => {
+          if (lg instanceof LayerGroup) {
+            return p.concat(lg.layers.map(l => `${lg.name}/${l.name}`));
+          } else {
+            return p.concat(`null/${lg.name}`);
+          }
+        }, []);
+
+
+
+        const regeneratedContext = service.generateOwsContextFrom(context.id.toString(), createdLayers);
+        /**
+         * Create array from features with groupName
+         */
+        const regeneratedLayerIds = regeneratedContext.features.reduce((p: string[], r) => {
+          const groupName = service['getLayerGroupFromFolder'](r);
+          if (groupName) {
+            return p.concat(`${groupName}/${r.properties.title}`);
+          } else {
+            return p.concat(`null/${r.properties.title}`);
+          }
+        }, []);
+
+        /**
+         * Because context drawing order is from top to bottom
+         * and layers in the Layerservice are added from bottom to top reverse ids
+         */
+        const len = createdLayerIds.length - 1;
+        regeneratedLayerIds.forEach((id, index) => {
+          const id2 = createdLayerIds[len - index];
+          expect(id).toBe(id2);
+        })
       });
     }
-
   }));
 
   it('#generateOwcContextFrom should honor (nested) layer-groups', () => {
