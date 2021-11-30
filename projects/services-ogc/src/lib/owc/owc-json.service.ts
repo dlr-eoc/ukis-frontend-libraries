@@ -585,7 +585,7 @@ export class OwcJsonService {
         || offerings[0];
       return this.createLayerFromOffering(offering, resource, owc, targetProjection);
     } else {
-      return of(null);
+      return of<null>(null);
     }
   }
 
@@ -603,7 +603,7 @@ export class OwcJsonService {
       return this.createVectorLayerFromOffering(offering, resource, context, targetProjection);
     } else {
       console.warn(`This type of service (${layerType}) has not been implemented yet.`, offering);
-      return of(null);
+      return of<null>(null);
     }
   }
 
@@ -612,7 +612,7 @@ export class OwcJsonService {
 
     if (!isVectorLayertype(layerType)) {
       console.warn(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a VectorLayer`, offering);
-      return of(null);
+      return of<null>(null);
     }
 
 
@@ -698,7 +698,7 @@ export class OwcJsonService {
 
     if (!isRasterLayertype(layerType)) {
       console.warn(`This type of offering '${offering.code}' cannot be converted into a RasterLayer.`, offering);
-      return of(null);
+      return of<null>(null);
     }
 
     let rasterLayer$: Observable<RasterLayer> = of(null);
@@ -722,7 +722,7 @@ export class OwcJsonService {
     return rasterLayer$;
   }
 
-  private createVectorTileLayerFromOffering(offering: IEocOwsOffering, resource: IEocOwsResource, context: IEocOwsContext, targetProjection: string) {
+  private createVectorTileLayerFromOffering(offering: IEocOwsOffering, resource: IEocOwsResource, context: IEocOwsContext, targetProjection: string): Observable<VectorLayer> {
     if (isTMSOffering(offering.code)) {
       const vectorTileOperation = offering.operations.find(o => o.type === 'application/vnd.mapbox-vector-tile');
       if (vectorTileOperation) {
@@ -776,15 +776,15 @@ export class OwcJsonService {
           return of(newLayer);
         }
       } else {
-        return of(null);
+        return of<null>(null);
       }
 
     } else {
-      return of(null);
+      return of<null>(null);
     }
   }
 
-  private createWfsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext) {
+  private createWfsLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): Observable<VectorLayer> {
     // Case 1: service-offering
     let layerUrl;
     if (offering.operations) {
@@ -804,13 +804,12 @@ export class OwcJsonService {
       return of(layer);
     }
 
-
     if (layerUrl === null) {
-      return of(null);
+      return of<null>(null);
     }
   }
 
-  private createDataVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext) {
+  private createDataVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext): Observable<VectorLayer> {
     // Case 2: data-offering
     if (offering.contents) {
       let data: any;
@@ -849,7 +848,7 @@ export class OwcJsonService {
       const layer = new VectorLayer(layerOptions);
       return of(layer);
     } else {
-      return of(null);
+      return of<null>(null);
     }
   }
 
@@ -866,22 +865,22 @@ export class OwcJsonService {
         return of(layer);
       } else {
         // no Raster TMS, maybe VectorTile
-        return of(null);
+        return of<null>(null);
       }
     } else {
-      return of(null);
+      return of<null>(null);
     }
   }
 
   private createWmtsLayerFromOffering(
-    offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<WmtsLayer> {
+    offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string) {
     if (isWmtsOffering(offering.code)) {
       return this.getWmtsOptions(offering, resource, context, targetProjection).pipe(map((options: IWmtsOptions) => {
         const layer = new WmtsLayer(options);
         return layer;
       }));
     } else {
-      return of(null);
+      return of<null>(null);
     }
   }
 
@@ -891,7 +890,7 @@ export class OwcJsonService {
       const layer = new WmsLayer(options);
       return of(layer);
     } else {
-      return of(null);
+      return of<null>(null);
     }
   }
 
@@ -904,7 +903,7 @@ export class OwcJsonService {
       const layer = new RasterLayer(rasterOptions);
       return of(layer);
     } else {
-      return of(null);
+      return of<null>(null);
     }
 
   }
@@ -941,24 +940,25 @@ export class OwcJsonService {
       params.version = searchParams.get('VERSION');
     }
 
-    return this.getMatrixSetForWMTS(offering, targetProjection).pipe(map(((matrixSet: IEocOwsWmtsMatrixSet) => {
-      const wmtsOptions: IWmtsOptions = {
-        ...rasterOptions,
-        type: 'wmts',
-        params
-      };
-
-      if (matrixSet) {
-        const matrixSetOptions: IListMatrixSet = {
-          matrixSet: matrixSet.matrixSet,
-          matrixIds: matrixSet.matrixIds,
-          resolutions: matrixSet.resolutions
+    return this.getMatrixSetForWMTS(offering, targetProjection)
+      .pipe(map((matrixSet: IEocOwsWmtsMatrixSet | null) => {
+        const wmtsOptions: IWmtsOptions = {
+          ...rasterOptions,
+          type: 'wmts',
+          params
         };
-        wmtsOptions.params.matrixSetOptions = matrixSetOptions;
-      }
 
-      return wmtsOptions;
-    })));
+        if (matrixSet) {
+          const matrixSetOptions: IListMatrixSet = {
+            matrixSet: matrixSet.matrixSet,
+            matrixIds: matrixSet.matrixIds,
+            resolutions: matrixSet.resolutions
+          };
+          wmtsOptions.params.matrixSetOptions = matrixSetOptions;
+        }
+
+        return wmtsOptions;
+      }));
   }
 
   private parseOperationUrl(offering: IOwsOffering, opCode: string) {
@@ -1030,6 +1030,7 @@ export class OwcJsonService {
   } */
 
   private getMatrixSetForWMTS(offering: IEocOwsOffering, targetProjection: string): Observable<IEocOwsWmtsMatrixSet> {
+    // Observable<IEocOwsWmtsMatrixSet | null> vs. Observable<IEocOwsWmtsMatrixSet> https://github.com/ReactiveX/rxjs/issues/3388
     if (offering?.matrixSets) {
       const matrixSet = offering.matrixSets.find(m => m.srs === targetProjection);
       return of(matrixSet);
@@ -1038,7 +1039,7 @@ export class OwcJsonService {
        * If offering.matrixSets === null use a default set for EPSG:3857 and 256 tiles
        * Create this in the mapping library when the WMTS is created.
        */
-      return of(null);
+      return of<null>(null)
     } else {
       const url = this.parseOperationUrl(offering, 'GetCapabilities').url;
       return this.wmtsClient.getCapabilities(url).pipe(
@@ -1259,8 +1260,8 @@ export class OwcJsonService {
 
 
   /**
-   * @TODO:
-   *   - properties
+   * The order of created features is Overlays, Layers, Baselayers from top to bottom
+   * set on the folder property
    */
   generateOwsContextFrom(id: string, layers: (Layer | LayerGroup)[], extent?: TGeoExtent, properties?: IEocOwsContext['properties']): IEocOwsContext {
 
