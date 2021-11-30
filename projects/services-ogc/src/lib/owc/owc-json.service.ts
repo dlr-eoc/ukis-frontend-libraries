@@ -1243,16 +1243,16 @@ export class OwcJsonService {
    */
   private getJsonFromUri(uri: string) {
     const url = new URL(uri);
+    const searchParams = new URLSearchParams();
     // Make all Params UpperCase
     url.searchParams.forEach((v, k) => {
-      url.searchParams.delete(k);
-      url.searchParams.set(k.toUpperCase(), v);
+      searchParams.set(k.toUpperCase(), v);
     });
 
     const queryIndex = (uri.indexOf('?') !== -1) ? uri.indexOf('?') : uri.length;
     return {
       url: uri.substring(0, queryIndex),
-      searchParams: url.searchParams
+      searchParams: searchParams
     };
   }
 
