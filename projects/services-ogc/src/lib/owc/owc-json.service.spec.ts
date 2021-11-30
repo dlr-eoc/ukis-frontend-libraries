@@ -608,13 +608,10 @@ describe('OwcJsonService: reading layer data from owc', () => {
     service.createLayerFromOffering(baseWFSOffering, baseWFSLayer, basicOgcOwsContext, targetProjection).subscribe((layer: VectorLayer) => {
       expect(layer instanceof VectorLayer).toBeTrue();
 
-      // Make all Params UpperCase like service.getJsonFromUri()
-      baseWFSGetFeatureParams.forEach((v, k) => {
-        baseWFSGetFeatureParams.delete(k);
-        baseWFSGetFeatureParams.set(k.toUpperCase(), v);
-      });
+      // Make all Params UpperCase like
+      const { searchParams } = service['getJsonFromUri'](baseWFSOffering.operations.find(o => o.code === GetFeatureOperationCode).href);
 
-      expect(layer.url.split('?')[1]).toBe(baseWFSGetFeatureParams.toString());
+      expect(layer.url.split('?')[1]).toBe(searchParams.toString());
     });
   }));
 
