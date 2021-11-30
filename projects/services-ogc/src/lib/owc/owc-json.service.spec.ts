@@ -664,7 +664,6 @@ describe('OwcJsonService: reading layer data from owc', () => {
 /** ------------------------------------------------------------------------------------------------------------------------- */
 
 describe('OwcJsonService: writing data into owc', () => {
-  const allTestContexts = [barebonesContext, basicOgcOwsContext, eocOwsContext];
   const targetProjection = 'EPSG:4326';
   let ukisWmsLayer: WmsLayer;
   let ukisWMTSLayer: WmtsLayer;
@@ -904,6 +903,7 @@ describe('OwcJsonService: writing data into owc', () => {
       const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);
       service.getLayers(owc, targetProjection).subscribe((layers) => {
         expect(layers.length).toBe(baselayers.length);
+        expect(layers.find(l => l.id === osmLayer.id).id).toBe(osmLayer.id);
       });
     });
   }));
@@ -968,9 +968,15 @@ describe('OwcJsonService: writing data into owc', () => {
 
   it('#generateOwcContextFrom should work with all layers in test-contexts', waitForAsync(() => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const allTestContexts = [barebonesContext, basicOgcOwsContext, eocOwsContext];
 
     for (const context of allTestContexts) {
       service.getLayers(context, 'EPSG:4326').subscribe((layers) => {
+        const regeneratedContext = service.generateOwsContextFrom(context.id.toString(), layers);
+        expect(regeneratedContext.features.length).toBe(context.features.length);
+      });
+    }
+  }));
 
         const regeneratedContext = service.generateOwsContextFrom('someId', layers);
 
