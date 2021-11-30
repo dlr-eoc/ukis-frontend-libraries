@@ -8,8 +8,6 @@ import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsOffering, IOwsResource, kmlOffering, wfsOffering, wmsOffering, wmtsOffering } from './types/owc-json';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
-import proj4 from 'proj4';
-import { register } from 'ol/proj/proj4';
 import { GetFeatureOperationCode, GetMapOperationCode, GetTileOperationCode, RESTOperationCode } from './types/owc-json.utils';
 import { GeoJsonOffering, IEocOwsOffering, IEocOwsResource, tmsOffering, xyzOffering } from './types/eoc-owc-json';
 
@@ -391,15 +389,6 @@ describe('OwcJsonService: reading layer data from owc', () => {
       imports: [HttpClientTestingModule]
     });
 
-    proj4.defs(
-      'EPSG:25832',
-      '+proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
-    );
-    proj4.defs(
-      'EPSG:3035',
-      '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
-    );
-    register(proj4);
   }));
 
   it('should get all layers fom the base OWS context', () => {
