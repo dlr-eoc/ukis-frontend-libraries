@@ -550,24 +550,26 @@ export class OwcJsonService {
       layers$.push(this.createLayerFromDefaultOffering(resource, owc, targetProjection));
     }
 
-    const layerGroup$ = forkJoin(layers$).pipe(
+    const layerGroup$ = forkJoin(layers$)
       // making sure no undefined layers are returned
-      map((layers: Layer[]) => layers.filter(layer => layer)),
+      .pipe(map((layers: Layer[]) => layers.filter(layer => layer)))
       // putting layers in a LayerGroup
-      map((layers: Layer[]) => {
-        const parts = groupName.split('/');
-        // TODO: if parts[0] includes Baselayers -> create a merged LayerGroup -> extend ukis-LayerGroup to allow merged layers
-        const groupNameLast = parts[parts.length - 1];
-        const layerGroup = new LayerGroup({
-          id: groupName,
-          name: groupNameLast,
-          layers,
-          filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type?
-        });
-
-        return layerGroup;
-      })
-    );
+      .pipe(map((layers: Layer[]) => {
+        if (layers.length) {
+          const parts = groupName.split('/');
+          // TODO: if parts[0] includes Baselayers -> create a merged LayerGroup -> extend ukis-LayerGroup to allow merged layers
+          const groupNameLast = parts[parts.length - 1];
+          const layerGroup = new LayerGroup({
+            id: groupName,
+            name: groupNameLast,
+            layers,
+            filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type?
+          });
+          return layerGroup;
+        }
+      }))
+      // making sure no undefined layers are returned
+      .pipe(filter(lg => lg instanceof LayerGroup));
 
     return layerGroup$;
   }
