@@ -238,11 +238,14 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
     const dimensionsSteps = service.getTimeValueFromDimensions(eocTimeDimensionsSteps.values);
     const stepArray = eocTimeDimensionsSteps.values.split(',');
     expect(Array.isArray(dimensionsSteps)).toBeTrue();
-    expect((dimensionsSteps as string[]).length).toBe(stepArray.length);
-    expect(dimensionsSteps).toEqual(stepArray);
+    if (Array.isArray(dimensionsSteps)) {
+      expect(typeof dimensionsSteps[0]).toEqual('string');
+      expect((dimensionsSteps as string[]).length).toBe(stepArray.length);
+      expect(dimensionsSteps).toEqual(stepArray);
+    }
   });
 
-  it('it should get Interval from Dimensions values', () => {
+  it('it should get Interval from Dimensions values and period from display', () => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const dimensionsInterval = service.getTimeValueFromDimensions(eocTimeDimensionsInterval.values, eocTimeDimensionsInterval?.display?.period);
     expect(typeof dimensionsInterval).toBe('object');
@@ -279,9 +282,23 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
     const dimensionsIntervalPeriodStepsAndSteps = service.getTimeValueFromDimensions(eocTimeDimensionsIntervalPeriodStepsAndSteps.values);
     const intervalPeriodStepsArray = eocTimeDimensionsIntervalPeriodStepsAndSteps.values.split(',');
     expect(Array.isArray(dimensionsIntervalPeriodStepsAndSteps)).toBeTrue();
-    expect((dimensionsIntervalPeriodStepsAndSteps as any[]).length).toBe(intervalPeriodStepsArray.length);
-    expect(typeof dimensionsIntervalPeriodStepsAndSteps[0]).toBe('object');
-    expect(typeof dimensionsIntervalPeriodStepsAndSteps[1]).toBe('string');
+    if (Array.isArray(dimensionsIntervalPeriodStepsAndSteps)) {
+      expect((dimensionsIntervalPeriodStepsAndSteps as any[]).length).toBe(intervalPeriodStepsArray.length);
+      expect(typeof dimensionsIntervalPeriodStepsAndSteps[0]).toBe('object');
+
+      const intervalPeriodArray0 = intervalPeriodStepsArray[0].split('/');
+      expect((dimensionsIntervalPeriodStepsAndSteps[0] as ILayerIntervalAndPeriod).interval).toBe(`${intervalPeriodArray0[0]}/${intervalPeriodArray0[1]}`);
+
+      /**
+       * TODO: is it allowed to override the period of an Interval??
+       * currently we only do this if it is a single interval without a period so we can generate timestamps for it later
+       *
+      */
+      /* if(eocTimeDimensionsIntervalPeriodStepsAndSteps?.display?.period){
+        expect((dimensionsIntervalPeriodStepsAndSteps[0] as ILayerIntervalAndPeriod).periodicity).toBe(eocTimeDimensionsIntervalPeriodStepsAndSteps?.display?.period);
+      } */
+      expect(typeof dimensionsIntervalPeriodStepsAndSteps[1]).toBe('string');
+    }
   });
 
 
