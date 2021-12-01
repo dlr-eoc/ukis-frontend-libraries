@@ -549,16 +549,15 @@ describe('OwcJsonService: reading layer data from owc', () => {
   it('should create LayerGroups for Resources with properties.folder', waitForAsync(() => {
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     service.getLayers(basicOgcOwsContext, targetProjection).subscribe(owsContextLayers => {
-
-      const layerGroupIDs = service.getGroupResources(basicOgcOwsContext)
-        .map(f => service['getLayerGroupFromFolder'](f)) // get ids
+      const layerGroupNames = service.getGroupResources(basicOgcOwsContext)
+        .map(f => service['getLayerGroupFromFolder'](f)) // get Names
         .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
 
-      const findLayerGroups = owsContextLayers.filter(l => layerGroupIDs.includes(l.id));
+      const findLayerGroups = owsContextLayers.filter(l => layerGroupNames.includes(l.name));
       findLayerGroups.forEach(lg => {
         expect(lg instanceof LayerGroup).toBeTrue();
       });
-      expect(findLayerGroups.length).toBe(layerGroupIDs.length);
+      expect(findLayerGroups.length).toBe(layerGroupNames.length);
     });
   }));
 

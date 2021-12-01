@@ -543,10 +543,11 @@ export class OwcJsonService {
    *
    * @param groupName string | `${TFiltertypes}/string`
    */
-  createLayerGroup(groupName: string, includedResources: IOwsResource[], owc: IOwsContext, targetProjection: string): Observable<LayerGroup> {
-
+  createLayerGroup(groupName: string, includedResources: IOwsResource[], owc: IOwsContext, targetProjection: string): Observable<LayerGroup | Layer> {
     const layers$: Observable<Layer>[] = [];
+    let filterType = null;
     for (const resource of includedResources) {
+      filterType = this.getFilterType(resource);
       layers$.push(this.createLayerFromDefaultOffering(resource, owc, targetProjection));
     }
 
@@ -556,20 +557,39 @@ export class OwcJsonService {
       // putting layers in a LayerGroup
       .pipe(map((layers: Layer[]) => {
         if (layers.length) {
-          const parts = groupName.split('/');
-          // TODO: if parts[0] includes Baselayers -> create a merged LayerGroup -> extend ukis-LayerGroup to allow merged layers
-          const groupNameLast = parts[parts.length - 1];
-          const layerGroup = new LayerGroup({
-            id: groupName,
-            name: groupNameLast,
-            layers,
-            filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type?
-          });
-          return layerGroup;
+          /** if filterType is Baselayers -> create a merged Layer */
+          if (filterType === Filtertypes.Baselayers) {
+            const mergedDescription = layers.map(i => i.description).filter(d => d); // filter empty elements
+            const legendImages = layers.map(i => i.legendImg).filter(d => d);
+            const layerOptions: ILayerOptions = {
+              type: 'custom',
+              id: `${groupName}_${layers.map(i => i.id).join(' ')}`.replace(/\s/g, '_'),
+              name: groupName,
+              mergedLayers: layers,
+              filtertype: Filtertypes.Baselayers
+            };
+            if (mergedDescription.length) {
+              layerOptions.description = mergedDescription.join(';\r\n');
+            }
+            if (legendImages) {
+              layerOptions.legendImg = legendImages[0];
+            }
+
+            const mergedLayer = new Layer(layerOptions);
+            return mergedLayer;
+          } else {
+            const layerGroup = new LayerGroup({
+              id: `${groupName}_${layers.map(i => i.id).join(' ')}`.replace(/\s/g, '_'),
+              name: groupName,
+              layers,
+              filtertype: layers[0].filtertype  // @TODO: can some layers have a different filter-type? -> All layers in a Group must be from the same filter type
+            });
+            return layerGroup;
+          }
         }
       }))
       // making sure no undefined layers are returned
-      .pipe(filter(lg => lg instanceof LayerGroup));
+      .pipe(filter(lg => lg instanceof LayerGroup || lg instanceof Layer));
 
     return layerGroup$;
   }

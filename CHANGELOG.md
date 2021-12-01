@@ -48,6 +48,7 @@
   - Add events from Layer to olLayer and olSource [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/services-ogc:**
+  - Support `mergedLayers` for resources with folder `Baselayers/<layerName>`. For `legendImg` the image furthest down is used.
   - Better support to convert UKIS layers to OWC. 
   - Support new Layer Types **KML, Xyz and Tms (Raster)**
   - New basic Implementation of `getElevationDimension()`
