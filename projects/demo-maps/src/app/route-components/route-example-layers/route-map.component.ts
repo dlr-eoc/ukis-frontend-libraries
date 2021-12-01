@@ -60,8 +60,7 @@ export class RouteMapComponent implements OnInit {
     const TransparentBackground = new VectorLayer({
       name: 'Transparenter Hintergrund',
       id: 'blank',
-      type: 'geojson',
-      visible: true
+      type: 'geojson'
     });
 
     const eocLitemapLayer = new EocLitemapTile();
@@ -101,7 +100,7 @@ export class RouteMapComponent implements OnInit {
       id: 'OSM_Base'
     });
 
-    const layers = [TransparentBackground, eocLiteMerge, worldRelief, OsmLayer];
+    const layers = [OsmLayer, TransparentBackground, eocLiteMerge, worldRelief];
 
     /** add layers with the LayersService */
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
@@ -411,6 +410,7 @@ export class RouteMapComponent implements OnInit {
       id: 'WfsLayer',
       name: 'WFS Pennsylvania',
       type: 'wfs',
+      visible: false,
       url: "https://ahocevar.com/geoserver/wfs?service=WFS&request=GetFeature&outputFormat=application/json&version=1.1.0&srsname=EPSG:3857&typenames=usa:states&cql_filter=STATE_NAME='Pennsylvania'",
       bbox: [-83.1005859375, 38.37611542403604, -72.50976562499999, 43.03677585761058],
       popup: {
