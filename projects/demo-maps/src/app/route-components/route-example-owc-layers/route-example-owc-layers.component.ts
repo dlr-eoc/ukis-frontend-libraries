@@ -48,7 +48,6 @@ export class RouteExampleOwcLayersComponent implements OnInit {
       return l.id !== 'osm' && l.id !== 'ContextSelectionLayer';
     });
     this.owcSvc.getLayers(context, this.mapSvc.EPSG).pipe(first()).subscribe((layers) => {
-      layers.reverse();
       for (const layer of layers) {
         if (layer instanceof LayerGroup) {
           this.layersSvc.addLayerGroup(layer, layer.filtertype);
