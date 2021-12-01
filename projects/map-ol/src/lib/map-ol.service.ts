@@ -1142,8 +1142,13 @@ export class MapOlService {
    * for WFS examples.
    */
   private create_wfs_layer(l: VectorLayer): olVectorLayer<olVectorSource<olGeometry>> {
+    let url = null;
+    if (l.url.indexOf('http://') === 0 || l.url.indexOf('https://') === 0) {
+      url = new URL(l.url);
+    } else {
+      url = new URL(l.url, window.location.origin);
+    }
 
-    const url = new URL(l.url);
     // making sure that srsname is set to current projection
     url.searchParams.set('srsname', this.EPSG);
     // note that we don't need to adjust the bbox. contrary to wms'es, in a wfs,

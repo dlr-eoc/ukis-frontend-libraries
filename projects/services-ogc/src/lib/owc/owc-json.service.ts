@@ -1242,7 +1242,12 @@ export class OwcJsonService {
    * @param uri any uri with query-parameters
    */
   private getJsonFromUri(uri: string) {
-    const url = new URL(uri);
+    let url = null;
+    if (uri.indexOf('http://') === 0 || uri.indexOf('https://') === 0) {
+      url = new URL(uri);
+    } else {
+      url = new URL(uri, window.location.origin);
+    }
     const searchParams = new URLSearchParams();
     // Make all Params UpperCase
     url.searchParams.forEach((v, k) => {
