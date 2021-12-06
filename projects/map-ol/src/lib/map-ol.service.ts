@@ -96,7 +96,7 @@ export interface IPopupArgs {
   layer: olLayer<any>;
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
-  popupFn?: popup['pupupFunction'];
+  popupFn?: popup['popupFunction'];
   dynamicPopup?: popup['dynamicPopup'];
 }
 
