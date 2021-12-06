@@ -420,7 +420,7 @@ export const eocWMSLayer: IEocOwsResource = {
   type: 'Feature'
 };
 
-export const eoxWMTSGetTileParams = new URLSearchParams('SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=eoc%3Abasemap&FORMAT=image/png');
+export const eocWMTSGetTileParams = new URLSearchParams('SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=eoc%3Abasemap&FORMAT=image/png');
 export const eocWMTSOffering: IEocOwsOffering = {
   code: 'http://www.opengis.net/spec/owc-geojson/1.0/req/wmts',
   operations: [
@@ -432,7 +432,7 @@ export const eocWMTSOffering: IEocOwsOffering = {
     {
       code: 'GetTile',
       method: 'GET',
-      href: `https://tiles.geoservice.dlr.de/service/wmts?${eoxWMTSGetTileParams.toString()}`
+      href: `https://tiles.geoservice.dlr.de/service/wmts?${eocWMTSGetTileParams.toString()}`
     },
     {
       code: 'GetFeatureInfo',
