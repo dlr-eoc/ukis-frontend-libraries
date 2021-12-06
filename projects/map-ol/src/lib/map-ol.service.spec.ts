@@ -630,7 +630,6 @@ describe('MapOlService ukisLayers', () => {
     service.setUkisLayer(ukisMergeLayer, 'Layers');
 
     const getMergeLayer = service.getLayerByKey({ key: 'id', value: ukisMergeLayer.id }, 'layers');
-    expect(getMergeLayer instanceof StackedLayer).toBeTrue();
     expect(getMergeLayer).toBeTruthy();
     expect(getMergeLayer instanceof olLayerGroup).toBeTrue();
 
