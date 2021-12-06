@@ -1677,7 +1677,7 @@ export class MapOlService {
    *
    *  6. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
    *  7. overwrite properties if popup property is: popup | popup[]
-   *  8. check for pupupFunction, asyncPupup and dynamicPopup
+   *  8. check for popupFunction, asyncPopup and dynamicPopup
    *  9. use addPopup() or addPopupObj()
    *
    *  10. check popup event and if move popup exists => reuse old popup
@@ -2018,16 +2018,16 @@ export class MapOlService {
 
     const addPopupObj = (popupObj: popup) => {
       /** async function where you can paste a html string to the callback */
-      if ('asyncPupup' in popupObj) {
-        popupObj.asyncPupup(popupProperties, (html) => {
+      if ('asyncPopup' in popupObj) {
+        popupObj.asyncPopup(popupProperties, (html) => {
           this.addPopup(args, null, html, popupObj.event, popupObj.single);
         });
         /** add event if popup object */
       } else {
 
-        /** adjust args if pupupFunction or dynamicPopup*/
-        if (popupObj.pupupFunction) {
-          args.popupFn = popupObj.pupupFunction; //This could be done in createPopupContainer()
+        /** adjust args if popupFunction or dynamicPopup*/
+        if (popupObj.popupFunction) {
+          args.popupFn = popupObj.popupFunction; //This could be done in createPopupContainer()
         } else if (popupObj.dynamicPopup) {
           args.dynamicPopup = popupObj.dynamicPopup; // This could be done in createPopupContainer()
         }
