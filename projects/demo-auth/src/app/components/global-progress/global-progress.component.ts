@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { IProgress } from './progress.service';
 
 @Component({
@@ -7,7 +7,8 @@ import { IProgress } from './progress.service';
   styleUrls: ['./global-progress.component.scss']
 })
 export class GlobalProgressComponent implements OnInit {
-  @Input() progress: null | IProgress;
+  @Input() progress!: null | IProgress;
+  @Output() progressChange = new EventEmitter();
   constructor() { }
 
   ngOnInit() {

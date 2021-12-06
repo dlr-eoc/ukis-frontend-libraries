@@ -7,7 +7,7 @@ import { IProgress } from './progress.service';
   styleUrls: ['./global-progress.component.scss']
 })
 export class GlobalProgressComponent implements OnInit {
-  @Input() progress: null | IProgress;
+  @Input() progress!: null | IProgress;
   @Output() progressChange = new EventEmitter();
   constructor() { }
 

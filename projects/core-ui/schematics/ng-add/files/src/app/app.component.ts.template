@@ -28,7 +28,7 @@ export class AppComponent implements OnDestroy {
     flipped: false,
     alert: null,
     progress: null,
-    subs: null
+    subs: []
   };
 
   constructor(
@@ -54,8 +54,11 @@ export class AppComponent implements OnDestroy {
     for (let i = 0, len = ref.length; i < len; i++) {
       const meta = ref[i];
       const name = meta.getAttribute('name');
-      if (names.includes(name)) {
-        obj[name] = meta.getAttribute('content') || meta.getAttribute('value');
+      if (name && names.includes(name)) {
+        const cv = meta.getAttribute('content') || meta.getAttribute('value');
+        if (cv) {
+          obj[name] = cv;
+        }
       }
     }
     return obj;
