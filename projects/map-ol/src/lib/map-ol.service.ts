@@ -981,9 +981,11 @@ export class MapOlService {
   }
 
   private create_wms_layer(l: WmsLayer) {
-    let newlayer: olTileLayer<olTileSource> | olImageLayer<olImageSource> = this.create_tiled_wms_layer(l);
+    let newlayer: olTileLayer<olTileSource> | olImageLayer<olImageSource>;
     if (l.params?.TILED === 'false') {
       newlayer = this.create_image_wms_layer(l);
+    } else {
+      newlayer == this.create_tiled_wms_layer(l);
     }
     return newlayer;
   }
