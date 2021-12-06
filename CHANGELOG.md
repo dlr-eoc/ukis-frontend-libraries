@@ -34,14 +34,14 @@
 * **@dlr-eoc/layer-control:**:
   - Open legend image as a link in a new tab for a larger view
 * **@dlr-eoc/services-layers:**:
-  - Add optional `mergedLayers` array to `Layer` to support merged Layers as a single Layer.
+  - New layer type `StackedLayer``to support merged/stacked Layers as a single Layer.
   - Export `const TmsLayertype = 'tms'` and integrate this in `TLayertype`.
   - Extend Type for Popup `Layer['popup']?.filterLayer` to filter out layers in `map.forEachLayerAtPixel` and `map.forEachFeatureAtPixel`.
   - `CustomLayer` can now overwrite `crossOrigin` property if used with a OpenLayers Layer.
   - Extend Layer Type for events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Extend Layer Popup Type for multiple Popups [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/map-ol:**
-  - Support merged Layers as a single Layer. For this use Layer and `type=custom` with the optional `Layer[]` `mergedLayers`.
+  - Support merged/stacked Layers as a single Layer.
   - Support Tiled- and Image-WMS Layers - Single Image-WMS Layers are created when `Layer.params.TILED == false`,
   - Support new `VectorLayer.type = tms` for VetrorTile Layers with `VectorLayer.options.style` as the OpenMapStyle obj and `VectorLayer.options.styleSource` for the style SourceKey.
   - Support new `VectorLayer.type = kml`.
@@ -49,7 +49,7 @@
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/services-ogc:**
   - Support WMS Filters `CQL_FILTER` and `FILTER` (For WFS you can already pass the full url).
-  - Support `mergedLayers` for resources with folder `Baselayers/<layerName>`. For `legendImg` the image furthest down is used.
+  - Support merged/stacked Layers for resources with folder `Baselayers/<layerName>`. For `legendImg` the image furthest down is used.
   - Better support to convert UKIS layers to OWC. 
   - Support new Layer Types **KML, Xyz and Tms (Raster)**
   - New basic Implementation of `getElevationDimension()`

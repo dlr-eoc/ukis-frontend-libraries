@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer } from '@dlr-eoc/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, StackedLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
 import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
@@ -67,13 +67,12 @@ export class RouteMapComponent implements OnInit {
 
     const eocLiteOverlay = new EocBaseoverlayTile();
 
-    const eocLiteMerge = new Layer({
+    const eocLiteMerge = new StackedLayer({
       id: 'eocLiteAndOverlay',
       name: 'EOC Lite with Overlay',
-      type: 'custom',
-      description: 'merged Layers EOC Lite with Overlay',
+      description: 'merged/stacked Layers EOC Lite with Overlay',
       legendImg: eocLitemapLayer.legendImg,
-      mergedLayers: [eocLitemapLayer, eocLiteOverlay]
+      layers: [eocLitemapLayer, eocLiteOverlay]
     });
 
     // not working in WGS84 because
@@ -495,14 +494,13 @@ export class RouteMapComponent implements OnInit {
 
     const blueMarble = new BlueMarbleTile({ id: 'merge_BlueMarble' });
     const eocLiteoverlay2 = new EocLiteoverlayTile({ id: 'merge_Liteoverlay' });
-    const mergeLayer = new Layer({
+    const mergeLayer = new StackedLayer({
       id: 'BlueMarbleTile_Overlay',
       name: 'BlueMarble with Overlay',
-      type: 'custom',
       visible: false,
       legendImg: blueMarble.legendImg,
-      description: 'merged Layers BlueMarble with Overlay',
-      mergedLayers: [blueMarble, eocLiteoverlay2]
+      description: 'merged/stacked Layers BlueMarble with Overlay',
+      layers: [blueMarble, eocLiteoverlay2]
     });
     this.layersSvc.addLayer(mergeLayer, 'Overlays');
   }

@@ -1,9 +1,11 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
-import { RasterLayer, Layer, VectorLayer, CustomLayer, TGeoExtent } from './Layers';
+import { RasterLayer, Layer, VectorLayer, CustomLayer, TGeoExtent, StackedLayer, StackedLayertype } from './Layers';
 import { LayerGroup } from './LayerGroup';
 
 
-let rasterlayer: RasterLayer, vectorlayer: VectorLayer, customlayer: CustomLayer;
+let rasterlayer: RasterLayer;
+let vectorlayer: VectorLayer;
+let customlayer: CustomLayer;
 
 
 describe('Layer Types', () => {
@@ -278,5 +280,58 @@ describe('Layer Types', () => {
     });
 
     expect(newRasterlayer.crossOrigin).toBe(corsMode);
+  });
+
+
+  it('should created a StackedLayer with options merged', () => {
+
+    const id = 'ID-stacked', name = 'Stacked',
+      removable = true,
+      visible = true,
+      cssClass = 'custom-class',
+      layers = [rasterlayer, vectorlayer];
+
+    const stackedLayer = new StackedLayer({
+      id,
+      name,
+      removable,
+      visible,
+      cssClass,
+      layers: layers
+    });
+
+
+    /** mandatory */
+    expect(stackedLayer.id).toBe(id);
+    expect(stackedLayer.name).toBe(name);
+    expect(stackedLayer.type).toBe(StackedLayertype);
+
+    /** optional or defaults */
+    expect(stackedLayer.opacity).toBe(1);
+    expect(stackedLayer.visible).toBe(visible);
+    expect(stackedLayer.expanded).toBe(false);
+    expect(stackedLayer.removable).toBe(removable);
+    expect(stackedLayer.filtertype).toBe('Layers');
+    expect(stackedLayer.continuousWorld).toBe(false);
+
+    expect(stackedLayer.attribution).toBe(undefined);
+    expect(stackedLayer.displayName).toBe(undefined);
+    expect(stackedLayer.description).toBe(undefined);
+    expect(stackedLayer.time).toBe(undefined);
+    expect(stackedLayer.minResolution).toBe(undefined);
+    expect(stackedLayer.maxResolution).toBe(undefined);
+    expect(stackedLayer.minZoom).toBe(undefined);
+    expect(stackedLayer.maxZoom).toBe(undefined);
+    expect(stackedLayer.legendImg).toBe(undefined);
+    expect(stackedLayer.bbox).toBe(undefined);
+    expect(stackedLayer.dimensions).toBe(undefined);
+    expect(stackedLayer.popup).toBe(undefined);
+    expect(stackedLayer.actions).toBe(undefined);
+    expect(stackedLayer.styles).toBe(undefined);
+    expect(stackedLayer.crossOrigin).toBe(undefined);
+    expect(stackedLayer.cssClass).toBe(cssClass);
+
+    /** raster Stacked*/
+    expect(stackedLayer.layers).toBe(layers);
   });
 });

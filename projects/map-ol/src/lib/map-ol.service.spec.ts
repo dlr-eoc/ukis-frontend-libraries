@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { IPopupArgs, MapOlService } from './map-ol.service';
-import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer } from '@dlr-eoc/services-layers';
+import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer, StackedLayer } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -87,7 +87,7 @@ let ukisCustomLayerRaster: CustomLayer;
 let ukisGroupLayer: LayerGroup;
 
 /** ID-ukis-merge-layer */
-let ukisMergeLayer: Layer;
+let ukisMergeLayer: StackedLayer;
 
 /** ID-group-layer1 */
 let groupLayer1: olLayerGroup;
@@ -356,11 +356,10 @@ const beforeEachFn = () => {
     layers: [ukisVectorLayerJson, ukisWmtsLayer, ukisWmsLayer, ukisRasterLayer, ukisCustomLayerVector]
   });
 
-  ukisMergeLayer = new Layer({
+  ukisMergeLayer = new StackedLayer({
     id: 'ID-ukis-merge-layer',
     name: 'ukis merge layer',
-    type: 'custom',
-    mergedLayers: [ukisWmsLayer, ukisWmtsLayer]
+    layers: [ukisWmsLayer, ukisWmtsLayer]
   });
 };
 
@@ -625,18 +624,19 @@ describe('MapOlService ukisLayers', () => {
     });
   });
 
-  it('should add mergedLayer as a olLayerGroup', () => {
+  it('should add merged/stacked Layer as a olLayerGroup', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
     service.setUkisLayer(ukisMergeLayer, 'Layers');
 
     const getMergeLayer = service.getLayerByKey({ key: 'id', value: ukisMergeLayer.id }, 'layers');
+    expect(getMergeLayer instanceof StackedLayer).toBeTrue();
     expect(getMergeLayer).toBeTruthy();
     expect(getMergeLayer instanceof olLayerGroup).toBeTrue();
 
     const groupLayers = (getMergeLayer as olLayerGroup).getLayersArray();
     groupLayers.forEach((l, i) => {
-      expect(l.get('id')).toBe(ukisMergeLayer.mergedLayers[i].id);
+      expect(l.get('id')).toBe(ukisMergeLayer.layers[i].id);
     })
   });
 

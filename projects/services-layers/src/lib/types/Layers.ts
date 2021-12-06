@@ -61,14 +61,18 @@ export interface ILayerEvent {
   listener: (args?: any) => void;
 }
 
-export const TmsLayertype = 'tms'; // can be raster and Vector
+/** can be raster and vector */
+export const TmsLayertype = 'tms';
 export const WmsLayertype = 'wms';
 export const WmtsLayertype = 'wmts';
 export const XyzLayertype = 'xyz';
 export const GeojsonLayertype = 'geojson';
 export const KmlLayertype = 'kml';
 export const WfsLayertype = 'wfs';
-export const CustomLayertype = 'custom'; // can be raster and Vector
+/** can be raster and vector */
+export const CustomLayertype = 'custom';
+/** can have multiple layers raster, vector... */
+export const StackedLayertype = 'stacked';
 export type TVectorLayertype = typeof GeojsonLayertype | typeof WfsLayertype | typeof TmsLayertype | typeof KmlLayertype | typeof CustomLayertype;
 export type TRasterLayertype = typeof WmsLayertype | typeof WmtsLayertype | typeof XyzLayertype | typeof TmsLayertype | typeof CustomLayertype;
 export type TLayertype = TRasterLayertype | TVectorLayertype | string;
@@ -169,14 +173,6 @@ export interface ILayerOptions {
    * If class 'hide' is included in the string, the layer is not shown in the UI - this can probably bring side effects when Layers are reordered, because the hidden layers could be moved on top off all!
    */
   cssClass?: string;
-  /**
-   * If the Layer consists of multiple layers but only one should be shown in the LayerControl
-   *
-   * If you use this then Layer.type must be 'custom' on this Layer. The merged Layers are overwritten for some attributes.
-   *
-   * Higher indexes get drawn above lower indexes
-   */
-  mergedLayers?: Layer[];
 }
 
 export interface ILayerDimensions extends IAnyObject {
@@ -255,6 +251,15 @@ export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type'> {
 }
 
 /**
+ * Layers is an array of layers which get stacked together and shown as one layer
+ */
+export interface IStackedLayerOptions extends Omit<ILayerOptions, 'type'> {
+  type?: TLayertype;
+  layers: Layer[];
+}
+
+
+/**
  * Classes for layer construction
  */
 export class Layer implements ILayerOptions {
@@ -290,7 +295,6 @@ export class Layer implements ILayerOptions {
   crossOrigin?: CrossOriginType;
   expanded = false;
   cssClass?: string;
-  mergedLayers?: Layer[];
 
   constructor(options: ILayerOptions) {
     Object.assign(this, options);
@@ -399,9 +403,18 @@ export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
 };
 
 export class CustomLayer extends Layer implements ICustomLayerOptions {
-  type = 'custom';
+  type = CustomLayertype;
   custom_layer: ICustomLayerOptions['custom_layer'] = {};
   constructor(options: ICustomLayerOptions) {
+    super(options as ILayerOptions);
+    Object.assign(this, options);
+  }
+}
+
+export class StackedLayer extends Layer implements IStackedLayerOptions {
+  type = StackedLayertype;
+  layers: Layer[] = [];
+  constructor(options: IStackedLayerOptions) {
     super(options as ILayerOptions);
     Object.assign(this, options);
   }

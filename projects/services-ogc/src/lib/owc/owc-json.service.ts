@@ -32,7 +32,9 @@ import {
   TmsLayertype,
   KmlLayertype,
   IWmtsParams,
-  TVectorLayertype
+  TVectorLayertype,
+  StackedLayer,
+  IStackedLayerOptions
 } from '@dlr-eoc/services-layers';
 import { TGeoExtent } from '@dlr-eoc/services-map-state';
 import { WmtsClientService } from '../wmts/wmtsclient.service';
@@ -543,7 +545,7 @@ export class OwcJsonService {
    *
    * @param groupName string | `${TFiltertypes}/string`
    */
-  createLayerGroup(groupName: string, includedResources: IOwsResource[], owc: IOwsContext, targetProjection: string): Observable<LayerGroup | Layer> {
+  createLayerGroup(groupName: string, includedResources: IOwsResource[], owc: IOwsContext, targetProjection: string): Observable<LayerGroup | StackedLayer> {
     const layers$: Observable<Layer>[] = [];
     let filterType = null;
     for (const resource of includedResources) {
@@ -561,11 +563,10 @@ export class OwcJsonService {
           if (filterType === Filtertypes.Baselayers) {
             const mergedDescription = layers.map(i => i.description).filter(d => d); // filter empty elements
             const legendImages = layers.map(i => i.legendImg).filter(d => d);
-            const layerOptions: ILayerOptions = {
-              type: 'custom',
+            const layerOptions: IStackedLayerOptions = {
               id: `${groupName}_${layers.map(i => i.id).join(' ')}`.replace(/\s/g, '_'),
               name: groupName,
-              mergedLayers: layers,
+              layers: layers,
               filtertype: Filtertypes.Baselayers
             };
             if (mergedDescription.length) {
@@ -575,8 +576,8 @@ export class OwcJsonService {
               layerOptions.legendImg = legendImages[0];
             }
 
-            const mergedLayer = new Layer(layerOptions);
-            return mergedLayer;
+            const stackedLayer = new StackedLayer(layerOptions);
+            return stackedLayer;
           } else {
             const layerGroup = new LayerGroup({
               id: `${groupName}_${layers.map(i => i.id).join(' ')}`.replace(/\s/g, '_'),

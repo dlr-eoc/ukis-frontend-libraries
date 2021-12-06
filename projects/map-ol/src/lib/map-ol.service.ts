@@ -1,7 +1,7 @@
 import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions } from '@dlr-eoc/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -723,29 +723,32 @@ export class MapOlService {
   private create_layers(newLayer: Layer) {
     let newOlLayer: olTileLayer<olTileSource> | olVectorLayer<olVectorSource<olGeometry>> | olBaseLayer;
     switch (newLayer.type) {
-      case 'xyz':
+      case XyzLayertype:
         newOlLayer = this.create_xyz_layer(newLayer as RasterLayer);
         break;
-      case 'wms':
+      case WmsLayertype:
         newOlLayer = this.create_wms_layer(newLayer as WmsLayer);
         break;
-      case 'wmts':
+      case WmtsLayertype:
         newOlLayer = this.create_wmts_layer(newLayer as WmtsLayer);
         break;
-      case 'tms':
+      case TmsLayertype:
         newOlLayer = this.create_tms_layer(newLayer as VectorLayer | RasterLayer);
         break;
-      case 'geojson':
+      case GeojsonLayertype:
         newOlLayer = this.create_geojson_layer(newLayer as VectorLayer);
         break;
-      case 'kml':
+      case KmlLayertype:
         newOlLayer = this.create_kml_layer(newLayer as VectorLayer);
         break;
-      case 'wfs':
+      case WfsLayertype:
         newOlLayer = this.create_wfs_layer(newLayer as VectorLayer);
         break;
-      case 'custom':
+      case CustomLayertype:
         newOlLayer = this.create_custom_layer(newLayer as CustomLayer);
+        break;
+      case StackedLayertype:
+        newOlLayer = this.create_stacked_layer(newLayer as StackedLayer);
         break;
     }
     return newOlLayer;
@@ -1546,8 +1549,14 @@ export class MapOlService {
       // delete l.custom_layer;
       return layer;
 
-    } else if (l?.mergedLayers?.length) {
-      const layers = l.mergedLayers.map(ml => {
+    } else {
+      console.log('attribute custom_layer not set on layer type custom!', l);
+    }
+  }
+
+  private create_stacked_layer(l: StackedLayer) {
+    if (l instanceof StackedLayer) {
+      const layers = l.layers.map(ml => {
         /** Set all to visible because the visibility of merge layers cannot be controlled later */
         ml.visible = true;
         /** popups are get from the olLayer later so add them */
@@ -1561,7 +1570,7 @@ export class MapOlService {
       const layerGroup = new olLayerGroup(groupOptions);
       return layerGroup;
     } else {
-      console.log('attribute custom_layer not set on layer type custom! And it is not a Layer with mergedLayers!');
+      console.log('layer is not of type StackedLayer!', l);
     }
   }
 
