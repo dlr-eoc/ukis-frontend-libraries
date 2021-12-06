@@ -400,7 +400,7 @@ export class RouteMapComponent implements OnInit {
         }
       ],
       popup: {
-        pupupFunktion: options => {
+        pupupFunction: options => {
           return `<div>${JSON.stringify(options)} </div>`;
         }
       }
