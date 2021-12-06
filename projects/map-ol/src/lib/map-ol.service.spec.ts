@@ -633,7 +633,11 @@ describe('MapOlService ukisLayers', () => {
     const getMergeLayer = service.getLayerByKey({ key: 'id', value: ukisMergeLayer.id }, 'layers');
     expect(getMergeLayer).toBeTruthy();
     expect(getMergeLayer instanceof olLayerGroup).toBeTrue();
-    expect((getMergeLayer as olLayerGroup).getLayersArray()[0].get('id')).toBe(ukisMergeLayer.mergedLayers[0].id);
+
+    const groupLayers = (getMergeLayer as olLayerGroup).getLayersArray();
+    groupLayers.forEach((l, i) => {
+      expect(l.get('id')).toBe(ukisMergeLayer.mergedLayers[i].id);
+    })
   });
 
   it('should reset/add one ukisLayer from a Type', () => {
