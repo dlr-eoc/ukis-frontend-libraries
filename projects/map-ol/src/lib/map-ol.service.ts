@@ -96,7 +96,7 @@ export interface IPopupArgs {
   layer: olLayer<any>;
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
-  popupFn?: popup['pupupFunktion'];
+  popupFn?: popup['pupupFunction'];
   dynamicPopup?: popup['dynamicPopup'];
 }
 
@@ -1677,7 +1677,7 @@ export class MapOlService {
    *
    *  6. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
    *  7. overwrite properties if popup property is: popup | popup[]
-   *  8. check for pupupFunktion, asyncPupup and dynamicPopup
+   *  8. check for pupupFunction, asyncPupup and dynamicPopup
    *  9. use addPopup() or addPopupObj()
    *
    *  10. check popup event and if move popup exists => reuse old popup
@@ -2025,9 +2025,9 @@ export class MapOlService {
         /** add event if popup object */
       } else {
 
-        /** adjust args if pupupFunktion or dynamicPopup*/
-        if (popupObj.pupupFunktion) {
-          args.popupFn = popupObj.pupupFunktion; //This could be done in createPopupContainer()
+        /** adjust args if pupupFunction or dynamicPopup*/
+        if (popupObj.pupupFunction) {
+          args.popupFn = popupObj.pupupFunction; //This could be done in createPopupContainer()
         } else if (popupObj.dynamicPopup) {
           args.dynamicPopup = popupObj.dynamicPopup; // This could be done in createPopupContainer()
         }
