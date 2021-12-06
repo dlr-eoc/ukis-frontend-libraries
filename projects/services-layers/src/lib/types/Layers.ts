@@ -208,7 +208,7 @@ export interface ILayerTimeDimension {
 export interface ILayerElevationDimension {
   /** Default steps to display in elevation slider */
   units: string;
-  value: string;
+  values: string;
   display?: {
     format?: string;
     step?: string;

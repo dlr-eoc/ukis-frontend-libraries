@@ -249,7 +249,7 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
         expect(dimensions.time.values).toBeTruthy();
         expect(dimensions.time.units).toBeTruthy();
       } else if (dimensions?.elevation) {
-        expect(dimensions.elevation.value).toBeTruthy();
+        expect(dimensions.elevation.values).toBeTruthy();
         expect(dimensions.elevation.units).toBeTruthy();
       }
     });

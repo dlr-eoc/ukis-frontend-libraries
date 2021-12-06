@@ -368,7 +368,7 @@ export class OwcJsonService {
       } else if (name === 'elevation') {
         dims.elevation = this.getElevationDimension(resource.properties.dimensions);
         /** if dimensions are defined but the values are null */
-        if (dims.elevation.value === null) {
+        if (dims.elevation.values === null) {
           console.log('check to get elevation dimensions value from OGC Service later!!', resource);
         }
       } else {
@@ -414,12 +414,12 @@ export class OwcJsonService {
   }
 
   getElevationDimension(dimensions: IEocOwsResourceDimension[]): ILayerElevationDimension {
-    const dim: ILayerElevationDimension = { value: null, units: null };
+    const dim: ILayerElevationDimension = { values: null, units: null };
     const value = dimensions.find(d => d.name === 'elevation') as IEocOwsElevationDimension;
     if (!value) {
       return;
     } else {
-      dim.value = value.value;
+      dim.values = value.value;
       dim.units = value.units;
 
       if (value.display) {
@@ -1793,7 +1793,7 @@ export class OwcJsonService {
     if (layer?.dimensions?.elevation) {
       const td: IEocOwsElevationDimension = {
         name: 'elevation',
-        value: layer.dimensions.elevation.value,
+        value: layer.dimensions.elevation.values,
         units: layer.dimensions.elevation.units
       };
       if (layer.dimensions.elevation.display) {
