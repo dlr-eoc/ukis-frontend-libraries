@@ -10,7 +10,8 @@
 * **@dlr-eoc/services-layers:**
   - `isVectorLayertype()` and `isRasterLayertype()` can both be raster and vector! So for `CustomLayertype` and `TmsLayertype` you have to check this later!
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
-  - Renamed layer's popup property `pupupFunktion` to `pupupFunction`
+  - Renamed (typo fix) layer's popup property `pupupFunktion` to `popupFunction`
+  - Renamed (typo fix) layer's popup property `asyncPupup` to `asyncPopup`
 
 * **@dlr-eoc/services-ogc:** 
 - Replace function `getLayerGroup()` with `getResourceFolder()` - and a private function to get folders which should be a `LayerGroup`,
