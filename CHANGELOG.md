@@ -8,7 +8,7 @@
   - Renamed `MapOlService.vector_on_click(evt)` -> `MapOlService.vectorOnEvent(evt)`.
 
 * **@dlr-eoc/services-layers:**
-  - `isVectorLayertype()` and `isRasterLayertype()` can both be raster and vector! So for `CustomLayertype` and `TmsLayertype` you have to check this later!
+  - Deprecated: `isVectorLayer()`/`isVectorLayertype()` and `isRasterLayer()`/`isRasterLayertype()` can both be raster and vector for `CustomLayertype` and `TmsLayertype`;
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
 
 * **@dlr-eoc/services-ogc:** 

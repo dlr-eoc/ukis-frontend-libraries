@@ -15,8 +15,8 @@ import {
 } from './types/eoc-owc-json';
 import {
   ILayerOptions, IRasterLayerOptions, VectorLayer, RasterLayer, IVectorLayerOptions,
-  Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, CustomLayertype, XyzLayertype,
-  TRasterLayertype, isRasterLayertype, isVectorLayertype, ILayerDimensions,
+  Layer, TLayertype, WmsLayertype, WmtsLayertype, WfsLayertype, GeojsonLayertype, XyzLayertype,
+  TRasterLayertype, ILayerDimensions,
   ILayerIntervalAndPeriod,
   WmtsLayer,
   IWmtsOptions,
@@ -611,15 +611,15 @@ export class OwcJsonService {
 
   createLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<Layer> {
     const layerType = this.getLayertypeFromOfferingCode(offering);
-    if (isRasterLayertype(layerType) && isVectorLayertype(layerType)) {
-      // tms and Custom layer can both be raster or vector so create both and filter out of(null)
+    if (this.isRasterLayerType(layerType) && this.isVectorLayerType(layerType)) {
+      // Some layers (tms) can both be raster or vector so create both and filter out of(null)
       const raster = this.createRasterLayerFromOffering(offering, resource, context, targetProjection);
       const vector = this.createVectorLayerFromOffering(offering, resource, context, targetProjection);
       const layer = concat(raster, vector).pipe(filter(l => l instanceof Layer));
       return layer;
-    } else if (isRasterLayertype(layerType)) {
+    } else if (this.isRasterLayerType(layerType)) {
       return this.createRasterLayerFromOffering(offering, resource, context, targetProjection);
-    } else if (isVectorLayertype(layerType)) {
+    } else if (this.isVectorLayerType(layerType)) {
       return this.createVectorLayerFromOffering(offering, resource, context, targetProjection);
     } else {
       console.warn(`This type of service (${layerType}) has not been implemented yet.`, offering);
@@ -629,14 +629,7 @@ export class OwcJsonService {
 
   createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext, targetProjection?: string): Observable<VectorLayer> {
     const layerType = this.getLayertypeFromOfferingCode(offering);
-
-    if (!isVectorLayertype(layerType)) {
-      console.warn(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a VectorLayer`, offering);
-      return of<null>(null);
-    }
-
-
-    let vectorLayer$: Observable<VectorLayer> = of(null);
+    let vectorLayer$: Observable<VectorLayer> = of<null>(null);
 
     switch (layerType) {
       case WfsLayertype:
@@ -651,17 +644,24 @@ export class OwcJsonService {
       case KmlLayertype:
         vectorLayer$ = this.createDataVectorLayerFromOffering(offering, resource, context);
         break;
-      case CustomLayertype:
-        // custom layers are meant to be user-defined and not easily encoded in a OWC.
+      default:
+        console.warn(`This type of layer '${layerType}' / offering '${offering.code}' cannot be converted into a VectorLayer`, offering);
         break;
     }
     return vectorLayer$;
   }
 
+  /**
+   * TmsLayertype can be raster and vector
+   */
+  private isVectorLayerType(type: TLayertype) {
+    return [WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype].includes(type);
+  }
+
   private getVectorLayerOptions(offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection?: string): IVectorLayerOptions {
     const layerOptions: ILayerOptions = this.getLayerOptions(offering, resource, context);
 
-    if (isVectorLayertype(layerOptions.type)) {
+    if (this.isVectorLayerType(layerOptions.type)) {
 
       const { minZoom, maxZoom } = this.getResourceMinMaxZoom(resource, targetProjection);
       const subdomains = shardsExpand(this.getResourceShards(resource));
@@ -716,12 +716,7 @@ export class OwcJsonService {
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
-    if (!isRasterLayertype(layerType)) {
-      console.warn(`This type of offering '${offering.code}' cannot be converted into a RasterLayer.`, offering);
-      return of<null>(null);
-    }
-
-    let rasterLayer$: Observable<RasterLayer> = of(null);
+    let rasterLayer$: Observable<RasterLayer> = of<null>(null);
     switch (layerType) {
       case WmsLayertype:
         rasterLayer$ = this.createWmsLayerFromOffering(offering, resource, context, targetProjection);
@@ -735,11 +730,18 @@ export class OwcJsonService {
       case TmsLayertype:
         rasterLayer$ = this.createTmsRasterLayerFromOffering(offering, resource, context, targetProjection);
         break;
-      case CustomLayertype:
-        // custom layers are meant to be user-defined and not easily encoded in a OWC.
+      default:
+        console.warn(`This type of offering '${offering.code}' cannot be converted into a RasterLayer.`, offering);
         break;
     }
     return rasterLayer$;
+  }
+
+  /**
+   * TmsLayertype can be raster and vector
+   */
+  private isRasterLayerType(type: TLayertype) {
+    return [WmsLayertype, WmtsLayertype, XyzLayertype, TmsLayertype].includes(type);
   }
 
   private createVectorTileLayerFromOffering(offering: IEocOwsOffering, resource: IEocOwsResource, context: IEocOwsContext, targetProjection: string): Observable<VectorLayer> {
@@ -1137,7 +1139,7 @@ export class OwcJsonService {
 
   private getRasterLayerOptions(offering: IOwsOffering, resource: IEocOwsResource, context: IOwsContext, targetProjection: string): IRasterLayerOptions {
     const layerOptions: ILayerOptions = this.getLayerOptions(offering, resource, context);
-    if (isRasterLayertype(layerOptions.type)) {
+    if (this.isRasterLayerType(layerOptions.type)) {
       let time;
       let elevation;
       const dimensions = resource.properties?.dimensions;

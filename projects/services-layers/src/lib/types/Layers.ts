@@ -82,6 +82,8 @@ export type TFiltertypes = keyof typeof Filtertypes;
 
 
 /**
+ * @deprecated The method should not be used because it can be false positive
+ *
  * CustomLayertype and TmsLayertype can be raster and vector.
  * You have to double check by yourself later!
  */
@@ -89,7 +91,10 @@ export function isVectorLayertype(inpt: string): inpt is TVectorLayertype {
   return [GeojsonLayertype, WfsLayertype, CustomLayertype, KmlLayertype, TmsLayertype].includes(inpt);
 }
 
+
 /**
+ * @deprecated The method should not be used because it can be false positive
+ *
  * CustomLayertype and TmsLayertype can be raster and vector.
  * You have to double check by yourself later!
  */
@@ -97,10 +102,9 @@ export function isRasterLayertype(inpt: string): inpt is TRasterLayertype {
   return [WmsLayertype, WmtsLayertype, XyzLayertype, CustomLayertype, TmsLayertype].includes(inpt);
 }
 
-export function isLayertype(inpt: string): inpt is TLayertype {
-  return (isRasterLayertype(inpt) || isVectorLayertype(inpt));
+export function isLayertype(type: string): type is TLayertype {
+  return [TmsLayertype, WmsLayertype, WmtsLayertype, XyzLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype].includes(type);
 }
-
 
 /**
  * geographic coordinates
@@ -358,6 +362,9 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
   }
 }
 
+/**
+ * @deprecated The method should not be used because it can be false positive
+ */
 export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
   return isRasterLayertype(layer.type);
 };
@@ -380,6 +387,9 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
   }
 }
 
+/**
+ * @deprecated The method should not be used because it can be false positive
+ */
 export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
   return isVectorLayertype(layer.type);
 };
