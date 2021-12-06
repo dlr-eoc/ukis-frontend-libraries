@@ -312,6 +312,10 @@ export interface IRasterLayerParams extends IAnyObject {
   TILED?: string;
   TRANSPARENT?: boolean;
   STYLES?: string;
+  /** https://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html#cql-tutorial */
+  CQL_FILTER?: string;
+  /** https://docs.geoserver.org/latest/en/user/styling/sld/reference/filters.html */
+  FILTER?: string;
 }
 
 export class RasterLayer extends Layer implements IRasterLayerOptions {

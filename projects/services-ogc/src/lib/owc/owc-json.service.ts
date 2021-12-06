@@ -1125,6 +1125,14 @@ export class OwcJsonService {
       if (searchParams.has('TILED')) {
         params.TILED = searchParams.get('TILED');
       }
+      /** https://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html#cql-tutorial */
+      if (searchParams.has('CQL_FILTER')) {
+        params.CQL_FILTER = searchParams.get('CQL_FILTER');
+      }
+      /** https://docs.geoserver.org/latest/en/user/styling/sld/reference/filters.html */
+      if (searchParams.has('FILTER')) {
+        params.FILTER = searchParams.get('FILTER');
+      }
 
       const wmsOptions: IWmsOptions = {
         ...rasterOptions,
