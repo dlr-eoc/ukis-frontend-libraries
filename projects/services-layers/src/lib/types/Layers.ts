@@ -34,9 +34,9 @@ export interface popup {
   /** To overwrite the keys (and only the keys) of the layer/feature properties. Object has the form {"oldKey": "newKey"} */
   properties?: IAnyObject;
   /** function to create html string - popupobj: nativeLayer */
-  pupupFunktion?: (popupobj: IAnyObject) => string;
+  popupFunction?: (popupobj: IAnyObject) => string;
   /** async function where you can paste a html string to the callback - popupobj: nativeLayer */
-  asyncPupup?: (popupobj: any, cb: (html: any) => void) => void;
+  asyncPopup?: (popupobj: any, cb: (html: any) => void) => void;
   /** create popup using angular component */
   dynamicPopup?: {
     component: Type<any>;

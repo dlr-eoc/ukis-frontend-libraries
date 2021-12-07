@@ -326,7 +326,7 @@ const beforeEachFn = () => {
     ],
     popup: {
       event: 'click',
-      pupupFunktion: (obj) => {
+      popupFunction: (obj) => {
         return `<p>${JSON.stringify(obj)}</p>`;
       }
     }
@@ -1023,7 +1023,7 @@ describe('MapOlService Events', () => {
     const popupObj: Layer['popup'] = [
       {
         event: 'click',
-        pupupFunktion: () => `<p>test</p>`,
+        popupFunction: () => `<p>test</p>`,
         options: { autoPan: false }
       },
       {
