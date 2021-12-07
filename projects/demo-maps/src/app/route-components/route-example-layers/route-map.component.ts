@@ -121,7 +121,7 @@ export class RouteMapComponent implements OnInit {
       attribution: ' | GUF®: <a href="https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-9628/16557_read-40454/">DLR License</a>',
       legendImg: '',
       popup: {
-        asyncPupup: (obj, cb) => {
+        asyncPopup: (obj, cb) => {
           getFeatureInfoPopup(obj, this.mapSvc, cb);
         }
       }
@@ -399,7 +399,7 @@ export class RouteMapComponent implements OnInit {
         }
       ],
       popup: {
-        pupupFunktion: options => {
+        popupFunction: options => {
           return `<div>${JSON.stringify(options)} </div>`;
         }
       }
@@ -456,7 +456,7 @@ export class RouteMapComponent implements OnInit {
 
     const hillshade = new HillshadeTile({
       popup: {
-        pupupFunktion: (obj) => {
+        popupFunction: (obj) => {
           return `
             <table>
               <tbody>
