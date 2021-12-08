@@ -91,7 +91,7 @@
       </div>
       <!-- show style-switcher -->
       <div *ngIf="activeTabs.changeStyle && layer.styles && layer.styles?.length > 1">
-        <select clrSelect (change)="executeChangeStyle($event.target.value)">
+        <select clrSelect (change)="executeChangeStyle($event)">
           <option *ngFor="let style of layer.styles" [value]="style.name"
             [attr.selected]="isSelectedStyle(style.name) ? true : null">{{style.title}}</option>
         </select>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { IDynamicComponent } from '@dlr-eoc/core-ui';
 
 // imports only for typings...
 import {
@@ -20,7 +21,7 @@ export class LayerentryComponent implements OnInit {
   @Input('layer') layer: Layer;
 
   @Input('group') group?: LayerGroup;
-  @Input('layerGroups') layerGroups?: LayerGroup[];
+  @Input('layerGroups') layerGroups?: Array<Layer | LayerGroup>;;
   @Input('expanded') set expanded(value: boolean) {
     if (this.layer) {
       this.layer.expanded = value;
@@ -55,8 +56,8 @@ export class LayerentryComponent implements OnInit {
   /**
    * obj: {any| IDynamicComponent}
    */
-
-  checkIsComponentItem(layer: Layer, compProp: string) {
+  checkIsComponentItem(layer: Layer, compProp: string): layer is Omit<Layer, 'legendImg' | 'action'> & { legendImg: IDynamicComponent, action: IDynamicComponent } {
+    // https://stackoverflow.com/a/65347533/10850021
     const obj = layer[compProp];
     let isComp = false;
     if (obj && typeof obj === 'object') {
@@ -249,7 +250,8 @@ export class LayerentryComponent implements OnInit {
     }
   }
 
-  executeChangeStyle(newStyleName: string) {
+  executeChangeStyle(evt: Event) {
+    const newStyleName = (evt.target as HTMLInputElement).value;
     if (this.layer.styles) {
       const newStyle = (this.layer as RasterLayer).styles.find(s => s.name === newStyleName);
       if (newStyle) {

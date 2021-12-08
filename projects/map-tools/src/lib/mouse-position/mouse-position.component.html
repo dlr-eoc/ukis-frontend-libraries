@@ -12,7 +12,7 @@
       <div class="input-container">
         <clr-select-container>
           <label>Projection </label>
-          <select (change)="onChangeProj($event.target.value)" clrSelect>
+          <select (change)="onChangeProj($event)" clrSelect>
             <option *ngFor="let projection of projections" [value]="projection.value">{{projection.title}}</option>
           </select>
         </clr-select-container>

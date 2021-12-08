@@ -14,4 +14,7 @@ export class GlobalProgressComponent implements OnInit {
   ngOnInit() {
   }
 
+  getProgressClass() {
+    return (this.progress?.class) ? this.progress?.class : '';
+  }
 }

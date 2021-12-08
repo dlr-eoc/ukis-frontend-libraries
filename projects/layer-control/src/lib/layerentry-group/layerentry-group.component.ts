@@ -19,7 +19,7 @@ export class LayerentryGroupComponent implements OnInit {
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapState?: MapStateService;
   @Input('group') group: LayerGroup;
-  @Input('layerGroups') layerGroups: LayerGroup[];
+  @Input('layerGroups') layerGroups: Array<Layer | LayerGroup>;
 
   public set openAllLayersProperties(value: boolean) {
     if (this.group && this.group.layers.length) {
