@@ -15,6 +15,8 @@ export class MapThreeService implements OnDestroy {
 
   private subs: Subscription[] = [];
   private needsResize = false;
+  /** This default only works if your Folder Structure contains the following path */
+  public skyTexturePath = 'assets/image/zpos.png';
 
   constructor(
     private mapStateSvc: MapStateService,
@@ -40,7 +42,7 @@ export class MapThreeService implements OnDestroy {
     camera.position.set(-40, 40, 40);
     const controls = new OrbitControls(camera, renderer.domElement);
     const textureLoader = new CubeTextureLoader();
-    const skyTexture = textureLoader.load(new Array(6).fill('assets/images/zpos.png'));
+    const skyTexture = textureLoader.load(new Array(6).fill(this.skyTexturePath));
     scene.background = skyTexture;
 
 
@@ -49,7 +51,7 @@ export class MapThreeService implements OnDestroy {
      **********************************************************************************/
 
     const mapOlCanvas = document.createElement('canvas');
-    mapToSingleCanvas(map, mapOlCanvas, () => {}, true);
+    mapToSingleCanvas(map, mapOlCanvas, () => { }, true);
     const model: WGS84TextureMesh = new WGS84TextureMesh(mapOlCanvas, mesh.geometry);
     scene.add(model);
 
@@ -97,7 +99,7 @@ export class MapThreeService implements OnDestroy {
       const camPos = camera.position;
       const [lon, lat, zoom] = converter.xyz2LonLatZoom(camPos.x, camPos.y, camPos.z);
       this.mapStateSvc.setMapState({
-        center: {lon, lat},
+        center: { lon, lat },
         zoom: zoom
       });
     });

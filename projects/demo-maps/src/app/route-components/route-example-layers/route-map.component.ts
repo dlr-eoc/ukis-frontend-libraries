@@ -6,7 +6,7 @@ import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
 import { ZommNumberControl } from './ol-custom-control';
 import { getFeatureInfoPopup } from './map-helpers';
 import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
-import testCities from '../../../assets/data/json/test-cities.json';
+import testCities from '@dlr-eoc/shared-assets/geojson/test-cities.json';
 import olStyle from 'ol/style/Style';
 import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';

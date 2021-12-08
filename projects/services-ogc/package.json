@@ -27,6 +27,7 @@
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR",
-    "proj4": "0.0.0-PLACEHOLDER-VENDOR"
+    "proj4": "0.0.0-PLACEHOLDER-VENDOR",
+    "@dlr-eoc/shared-assets": "0.0.0-PLACEHOLDER"
   }
 }

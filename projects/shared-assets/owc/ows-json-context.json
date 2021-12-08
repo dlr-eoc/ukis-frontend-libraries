@@ -48,7 +48,7 @@
             "contents": [
               {
                 "type": "application/vnd.google-earth.kml+xml",
-                "href": "assets/data/kml/TimeZones.kml"
+                "href": "assets/kml/TimeZones.kml"
               }
             ]
           }
@@ -118,7 +118,7 @@
                 "content": {
                   "type": "OpenMapStyle",
                   "styleSource": "planet0-12",
-                  "href": "assets/data/styles/open-map-style.json"
+                  "href": "assets/open-map-styles/open-map-style.json"
                 }
               }
             ]

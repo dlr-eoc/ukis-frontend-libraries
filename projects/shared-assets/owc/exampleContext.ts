@@ -1,8 +1,6 @@
-import { IOwsContext, IOwsOffering, IOwsResource } from '../src/lib/owc/types/owc-json';
-import { IEocOwsContext, IEocOwsOffering, IEocOwsResource, IEocOwsTimeDimension } from '../src/lib/owc/types/eoc-owc-json';
-import customPositron from '../assets/open-map-style.json';
-import testGeojson from '../assets/testGeoJson.json';
-
+import customPositron from '../open-map-styles/open-map-style.json';
+import testGeojson from '../geojson/testGeoJson.json';
+import { IOwsContext, IOwsOffering, IOwsResource, IEocOwsTimeDimension, IEocOwsOffering, IEocOwsResource, IEocOwsContext } from '@dlr-eoc/services-ogc';
 
 /**
  * check https://github.com/opengeospatial/owscontext/tree/master/json/dev/trax/json
@@ -176,7 +174,7 @@ export const baseKMLOffering: IOwsOffering = {
   contents: [
     {
       type: 'application/vnd.google-earth.kml+xml',
-      href: 'assets/data/kml/TimeZones.kml'
+      href: 'assets/kml/TimeZones.kml'
     }
   ]
 };

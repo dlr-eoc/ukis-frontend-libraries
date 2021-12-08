@@ -20,7 +20,8 @@
     "@dlr-eoc/base-layers-raster": "0.0.0-PLACEHOLDER",
     "@dlr-eoc/map-three": "0.0.0-PLACEHOLDER",
     "@dlr-eoc/utils-maps": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/services-ogc": "0.0.0-PLACEHOLDER"
+    "@dlr-eoc/services-ogc": "0.0.0-PLACEHOLDER",
+    "@dlr-eoc/shared-assets": "0.0.0-PLACEHOLDER"
   },
   "devDependencies": {
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",

@@ -33,9 +33,11 @@
 
 
 ### Features
-* **@dlr-eoc/layer-control:**:
+* **shared-assets:**
+  - Add new Folder to share assets between all @dlr-eoc-projects.
+* **@dlr-eoc/layer-control:**
   - Open legend image as a link in a new tab for a larger view
-* **@dlr-eoc/services-layers:**:
+* **@dlr-eoc/services-layers:**
   - New layer type `StackedLayer``to support merged/stacked Layers as a single Layer.
   - Export `const TmsLayertype = 'tms'` and integrate this in `TLayertype`.
   - Extend Type for Popup `Layer['popup']?.filterLayer` to filter out layers in `map.forEachLayerAtPixel` and `map.forEachFeatureAtPixel`.

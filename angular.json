@@ -464,7 +464,17 @@
             "tsConfig": "projects/demo-maps/tsconfig.app.json",
             "assets": [
               "projects/demo-maps/src/favicon.ico",
-              "projects/demo-maps/src/assets"
+              "projects/demo-maps/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./projects/shared-assets/",
+                "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "./projects/core-ui/schematics/ng-add/files/src/assets",
+                "output": "./assets"
+              }
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",
@@ -595,7 +605,17 @@
             "tsConfig": "projects/demo-auth/tsconfig.app.json",
             "assets": [
               "projects/demo-auth/src/favicon.ico",
-              "projects/demo-auth/src/assets"
+              "projects/demo-auth/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./projects/shared-assets/",
+                "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "./projects/core-ui/schematics/ng-add/files/src/assets",
+                "output": "./assets"
+              }
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",

@@ -34,7 +34,7 @@ export class RouteExampleOwcLayersComponent implements OnInit {
 
   ngOnInit(): void {
     this.mapSvc.map.addControl(new ZommNumberControl());
-    this.getOwcContext('assets/data/owc/ows-json-context.json');
+    this.getOwcContext('assets/owc/ows-json-context.json');
   }
 
   getOwcContext(url: string) {

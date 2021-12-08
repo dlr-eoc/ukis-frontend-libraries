@@ -1,5 +1,6 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
+const PATH = require('path');
 
 module.exports = function (config) {
   config.set({
@@ -12,6 +13,14 @@ module.exports = function (config) {
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
+    // // https://karma-runner.github.io/6.3/config/files.html#loading-assets
+    files: [
+      { pattern: '../shared-assets/**', watched: false, included: false, served: true },
+    ],
+    // https://github.com/karma-runner/karma/issues/2703#issuecomment-421987843
+    proxies: {
+      '/assets/': `/absolute${PATH.normalize(PATH.resolve('projects/shared-assets/'))}`
+    },
     client: {
       jasmine: {
         // you can add configuration options for Jasmine here
@@ -35,7 +44,8 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_INFO,
+    //logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
     autoWatch: true,
     browsers: ['Chrome'],
     singleRun: false,

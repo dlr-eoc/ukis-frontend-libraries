@@ -30,7 +30,7 @@ import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 
-import testFeatureCollection from '../assets/testFeatureCollection.json';
+import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
 import { get as getProjection, transform, transformExtent } from 'ol/proj';
@@ -159,7 +159,10 @@ const beforeEachFn = () => {
   imageLayer = new olImageLayer({
     source: new olImageStaticSource({
       attributions: '© OpenStreetMap contributors',
-      url: 'base/src/assets/osmTestImg.jpg',
+      // https://karma-runner.github.io/6.3/config/files.html#loading-assets
+      // url: 'base/src/assets/osmTestImg.jpg',
+      // See: projects\map-ol\karma.conf.js for the url
+      url: 'assets/image/osmTestImg.jpg',
       imageExtent: imageExtent,
       projection: 'EPSG:4326'
     }),
