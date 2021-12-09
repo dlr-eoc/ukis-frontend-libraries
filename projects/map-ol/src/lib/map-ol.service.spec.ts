@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { IPopupArgs, MapOlService } from './map-ol.service';
-import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer } from '@dlr-eoc/services-layers';
+import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer, StackedLayer } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -30,7 +30,7 @@ import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 
-import testFeatureCollection from '../assets/testFeatureCollection.json';
+import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
 import { get as getProjection, transform, transformExtent } from 'ol/proj';
@@ -85,6 +85,9 @@ let ukisCustomLayerRaster: CustomLayer;
 
 /** ID-ukis-group-layer */
 let ukisGroupLayer: LayerGroup;
+
+/** ID-ukis-merge-layer */
+let ukisMergeLayer: StackedLayer;
 
 /** ID-group-layer1 */
 let groupLayer1: olLayerGroup;
@@ -156,7 +159,10 @@ const beforeEachFn = () => {
   imageLayer = new olImageLayer({
     source: new olImageStaticSource({
       attributions: '© OpenStreetMap contributors',
-      url: 'base/src/assets/osmTestImg.jpg',
+      // https://karma-runner.github.io/6.3/config/files.html#loading-assets
+      // url: 'base/src/assets/osmTestImg.jpg',
+      // See: projects\map-ol\karma.conf.js for the url
+      url: 'assets/image/osmTestImg.jpg',
       imageExtent: imageExtent,
       projection: 'EPSG:4326'
     }),
@@ -323,7 +329,7 @@ const beforeEachFn = () => {
     ],
     popup: {
       event: 'click',
-      pupupFunktion: (obj) => {
+      popupFunction: (obj) => {
         return `<p>${JSON.stringify(obj)}</p>`;
       }
     }
@@ -351,6 +357,12 @@ const beforeEachFn = () => {
     id: 'ID-ukis-group-layer',
     name: 'ukis group',
     layers: [ukisVectorLayerJson, ukisWmtsLayer, ukisWmsLayer, ukisRasterLayer, ukisCustomLayerVector]
+  });
+
+  ukisMergeLayer = new StackedLayer({
+    id: 'ID-ukis-merge-layer',
+    name: 'ukis merge layer',
+    layers: [ukisWmsLayer, ukisWmtsLayer]
   });
 };
 
@@ -613,6 +625,21 @@ describe('MapOlService ukisLayers', () => {
     ukisGroupLayer.layers.map(l => {
       expect(service.getLayerByKey({ key: 'id', value: l.id }, 'layers')).toBeTruthy();
     });
+  });
+
+  it('should add merged/stacked Layer as a olLayerGroup', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+    service.setUkisLayer(ukisMergeLayer, 'Layers');
+
+    const getMergeLayer = service.getLayerByKey({ key: 'id', value: ukisMergeLayer.id }, 'layers');
+    expect(getMergeLayer).toBeTruthy();
+    expect(getMergeLayer instanceof olLayerGroup).toBeTrue();
+
+    const groupLayers = (getMergeLayer as olLayerGroup).getLayersArray();
+    groupLayers.forEach((l, i) => {
+      expect(l.get('id')).toBe(ukisMergeLayer.layers[i].id);
+    })
   });
 
   it('should reset/add one ukisLayer from a Type', () => {
@@ -998,7 +1025,7 @@ describe('MapOlService Events', () => {
     const popupObj: Layer['popup'] = [
       {
         event: 'click',
-        pupupFunktion: () => `<p>test</p>`,
+        popupFunction: () => `<p>test</p>`,
         options: { autoPan: false }
       },
       {

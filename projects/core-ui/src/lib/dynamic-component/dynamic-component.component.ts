@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 export interface IDynamicComponent {
   component: Type<any>;
   inputs?: { [input: string]: any };
-  outputs?: { [inputChange: string]: (value) => void };
+  outputs?: { [inputChange: string]: (value: any) => void };
 }
 
 @Directive({
@@ -23,12 +23,12 @@ export class ViewRefDirective {
   template: `<ng-template ukisAddHost></ng-template>`
 })
 export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() dynamicComponent: IDynamicComponent;
+  @Input() dynamicComponent!: IDynamicComponent;
   @Output() dynamicComponentChange = new EventEmitter<IDynamicComponent>();
-  @ViewChild(ViewRefDirective, { static: true }) ukisAddHost: ViewRefDirective;
+  @ViewChild(ViewRefDirective, { static: true }) ukisAddHost!: ViewRefDirective;
 
-  componentRef: ComponentRef<any>;
-  subs: Subscription[];
+  componentRef!: ComponentRef<any>;
+  subs!: Subscription[];
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
   loadComponent() {
@@ -67,7 +67,7 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
           const outupName = `${inputname}Change`;
           /** subscribe to output for same name as input */
           if (this.componentRef.instance[outupName] && this.componentRef.instance[outupName] instanceof EventEmitter) {
-            const sub = this.componentRef.instance[outupName].subscribe(val => {
+            const sub = this.componentRef.instance[outupName].subscribe((val: any) => {
               if (this.dynamicComponent.inputs) {
                 this.dynamicComponent.inputs[inputname] = val;
                 /** if outputs are defined on IDynamicComponent pass the value to there functions */

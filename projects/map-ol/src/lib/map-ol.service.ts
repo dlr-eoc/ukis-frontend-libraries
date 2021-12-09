@@ -1,7 +1,7 @@
 import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent } from '@dlr-eoc/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -19,30 +19,39 @@ import olBaseTileLayer from 'ol/layer/BaseTile';
 import olBaseVectorLayer from 'ol/layer/BaseVector';
 import olBaseImageLayer from 'ol/layer/BaseImage';
 
+import olImageLayer from 'ol/layer/Image';
+
 import olTileLayer from 'ol/layer/Tile';
 import olVectorLayer from 'ol/layer/Vector';
 import olVectorTile from 'ol/source/VectorTile';
 
+import olVectorTileLayer from 'ol/layer/VectorTile';
+import olVectorTileSource from 'ol/source/VectorTile';
+import { applyStyle } from 'ol-mapbox-style';
+import { createXYZ } from 'ol/tilegrid';
+import olMVT from 'ol/format/MVT';
 
 import olXYZ from 'ol/source/XYZ';
 import olTileSource from 'ol/source/Tile';
 
 import { Options as olXYZOptions } from 'ol/source/XYZ';
 import olTileWMS from 'ol/source/TileWMS';
-import olTileImageSource from 'ol/source/TileImage';
-import olImageSource from "ol/source/Image";
 import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
+import olImageWMS from 'ol/source/ImageWMS';
+import { Options as olImageWMSOptions } from 'ol/source/ImageWMS';
+import olTileImageSource from 'ol/source/TileImage';
+import olImageSource from 'ol/source/Image';
 import olWMTS from 'ol/source/WMTS';
 import { Options as olWMTSOptions } from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olVectorSource from 'ol/source/Vector';
-import olTileJSON from 'ol/source/TileJSON';
 import olCluster from 'ol/source/Cluster';
 import olFeature from 'ol/Feature';
 
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
+import olKML from 'ol/format/KML';
 import olProjection from 'ol/proj/Projection';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
@@ -51,7 +60,6 @@ import proj4 from 'proj4';
 import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
-
 
 import olStyle from 'ol/style/Style';
 import olText from 'ol/style/Text';
@@ -88,7 +96,7 @@ export interface IPopupArgs {
   layer: olLayer<any>;
   feature?: olFeature<any> | olRenderFeature;
   event: olMapBrowserEvent<PointerEvent>;
-  popupFn?: popup['pupupFunktion'];
+  popupFn?: popup['popupFunction'];
   dynamicPopup?: popup['dynamicPopup'];
 }
 
@@ -715,26 +723,101 @@ export class MapOlService {
   private create_layers(newLayer: Layer) {
     let newOlLayer: olTileLayer<olTileSource> | olVectorLayer<olVectorSource<olGeometry>> | olBaseLayer;
     switch (newLayer.type) {
-      case 'xyz':
+      case XyzLayertype:
         newOlLayer = this.create_xyz_layer(newLayer as RasterLayer);
         break;
-      case 'wms':
+      case WmsLayertype:
         newOlLayer = this.create_wms_layer(newLayer as WmsLayer);
         break;
-      case 'wmts':
+      case WmtsLayertype:
         newOlLayer = this.create_wmts_layer(newLayer as WmtsLayer);
         break;
-      case 'geojson':
+      case TmsLayertype:
+        newOlLayer = this.create_tms_layer(newLayer as VectorLayer | RasterLayer);
+        break;
+      case GeojsonLayertype:
         newOlLayer = this.create_geojson_layer(newLayer as VectorLayer);
         break;
-      case 'wfs':
+      case KmlLayertype:
+        newOlLayer = this.create_kml_layer(newLayer as VectorLayer);
+        break;
+      case WfsLayertype:
         newOlLayer = this.create_wfs_layer(newLayer as VectorLayer);
         break;
-      case 'custom':
+      case CustomLayertype:
         newOlLayer = this.create_custom_layer(newLayer as CustomLayer);
+        break;
+      case StackedLayertype:
+        newOlLayer = this.create_stacked_layer(newLayer as StackedLayer);
         break;
     }
     return newOlLayer;
+  }
+
+  /** TODO: adjust this so it can be generally used for all layers */
+  private adjustLayerOptions(l: Layer, type: Layer['type'], source?: olSource) {
+    if (source) {
+      if (l.attribution) {
+        source.setAttributions([l.attribution]);
+      }
+
+      if (l.continuousWorld) {
+        source.set('wrapX', l.continuousWorld);
+      }
+
+      /** set crossOrigin for popup layers  */
+      if (l.popup && !l.crossOrigin && l.crossOrigin !== null) {
+        this.sourceSetCross(source);
+      }
+      if (l.crossOrigin || l.crossOrigin === null) {
+        this.sourceSetCross(source);
+      }
+    }
+    // ------------------------------------------
+
+    const layeroptions: ILayerOptions = {
+      type,
+      filtertype: l.filtertype,
+      name: l.name,
+      id: l.id,
+      visible: l.visible,
+      legendImg: l.legendImg,
+      opacity: l.opacity || 1
+    };
+    (layeroptions as any).zIndex = 1;
+
+    if (source) {
+      (layeroptions as any).source = source;
+    }
+
+    if (l.popup) {
+      layeroptions.popup = l.popup;
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      (layeroptions as any).className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
+    }
+
+    if (l.bbox) {
+      (layeroptions as any).extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+    }
+
+    return layeroptions;
   }
 
   /**
@@ -812,11 +895,108 @@ export class MapOlService {
     return newlayer;
   }
 
-  private create_wms_layer(l: WmsLayer): olTileLayer<olTileSource> {
+  private create_tms_layer(l: RasterLayer | VectorLayer): olTileLayer<olTileSource> {
+    let newlayer = null;
+    let newOlSource = null;
+    if (l instanceof RasterLayer) {
+      newlayer = this.create_xyz_layer(l);
+      newlayer.set('type', 'tms');
 
+    } else if (l instanceof VectorLayer) {
+      newOlSource = new olVectorTileSource({
+        format: new olMVT(),
+        tileGrid: createXYZ({ minZoom: l.minZoom || undefined, maxZoom: l.maxZoom || undefined }),
+        url: l.url,
+        wrapX: false
+      });
+
+
+      if (l.attribution) {
+        newOlSource.setAttributions([l.attribution]);
+      }
+
+      if (l.continuousWorld) {
+        newOlSource.set('wrapX', l.continuousWorld);
+      }
+
+      if (l.subdomains) {
+        const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
+        newOlSource.setUrls(urls);
+
+      } else {
+        newOlSource.setUrl(l.url);
+      }
+
+
+      const layeroptions: any = {
+        type: 'tms',
+        filtertype: l.filtertype,
+        name: l.name,
+        id: l.id,
+        visible: l.visible,
+        legendImg: l.legendImg,
+        opacity: l.opacity || 1,
+        zIndex: 1,
+        source: newOlSource,
+        declutter: true,
+        renderMode: 'hybrid'
+      };
+
+      if (l.popup) {
+        layeroptions.popup = l.popup;
+        /**
+         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+         */
+        layeroptions.className = l.id;
+      }
+
+      if (l.bbox) {
+        layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+      }
+
+      if (l.maxResolution) {
+        layeroptions.maxResolution = l.maxResolution;
+      }
+      if (l.minResolution) {
+        layeroptions.minResolution = l.minResolution;
+      }
+
+      if (l.maxZoom) {
+        layeroptions.maxZoom = l.maxZoom;
+      }
+      if (l.minZoom) {
+        layeroptions.minZoom = l.minZoom;
+      }
+
+      newlayer = new olVectorTileLayer(layeroptions);
+      this.setCrossOrigin(l, newlayer);
+      this.addEventsToLayer(l, newlayer, newOlSource);
+
+
+      const style = l?.options?.style;
+      const mapboxSourceKey = l?.options?.styleSource;
+      if (style && mapboxSourceKey) {
+        applyStyle(newlayer, style, mapboxSourceKey);
+      }
+    }
+    return newlayer;
+  }
+
+  private create_wms_layer(l: WmsLayer) {
+    let newlayer: olTileLayer<olTileSource> | olImageLayer<olImageSource>;
+    if (l.params?.TILED === 'true' || l.params?.TILED === undefined || l.params?.TILED === null) {
+      newlayer = this.create_tiled_wms_layer(l);
+    } else if (l.params?.TILED === 'false') {
+      newlayer = this.create_image_wms_layer(l);
+    }
+    return newlayer;
+  }
+
+  private create_tiled_wms_layer(l: WmsLayer): olTileLayer<olTileSource> {
     const tileOptions: olTileWMSOptions = {
       /** use assign here otherwise params is passed by object reference to the openlayers layer! */
-      params: Object.assign({}, l.params), // params: {} = { ...l.params } ~ same as assign destructuring
+      params: Object.assign({}, this.keysToUppercase(l.params)), // params: {} = { ...l.params } ~ same as assign destructuring
       wrapX: false
     };
 
@@ -828,69 +1008,35 @@ export class MapOlService {
     if (l.crossOrigin) {
       tileOptions.crossOrigin = l.crossOrigin;
     }
-
-    tileOptions.params = this.keysToUppercase(tileOptions.params);
-    const olSource = new olTileWMS(tileOptions);
-
-    if (l.attribution) {
-      olSource.setAttributions([l.attribution]);
-    }
-
-    if (l.continuousWorld) {
-      olSource.set('wrapX', l.continuousWorld);
-    }
+    const olsource = new olTileWMS(tileOptions);
 
     if (l.subdomains) {
       const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
-      olSource.setUrls(urls);
-
+      olsource.setUrls(urls);
     } else {
-      olSource.setUrl(l.url);
+      olsource.setUrl(l.url);
     }
 
-    const layeroptions: any = {
-      type: 'wms',
-      filtertype: l.filtertype,
-      name: l.name,
-      id: l.id,
-      visible: l.visible,
-      legendImg: l.legendImg,
-      opacity: l.opacity || 1,
-      zIndex: 1,
-      source: olSource
-    };
-
-    if (l.popup) {
-      layeroptions.popup = l.popup;
-      /**
-       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
-       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
-       */
-      layeroptions.className = l.id;
-    }
-
-    if (l.maxResolution) {
-      layeroptions.maxResolution = l.maxResolution;
-    }
-    if (l.minResolution) {
-      layeroptions.minResolution = l.minResolution;
-    }
-
-    if (l.maxZoom) {
-      layeroptions.maxZoom = l.maxZoom;
-    }
-    if (l.minZoom) {
-      layeroptions.minZoom = l.minZoom;
-    }
-
-    if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
-    }
+    const layeroptions = this.adjustLayerOptions(l, 'wms', olsource);
     const newlayer = new olTileLayer(layeroptions);
-    this.setCrossOrigin(l, newlayer);
-    this.addEventsToLayer(l, newlayer, olSource);
+    this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
   }
+
+  private create_image_wms_layer(l: WmsLayer): olImageLayer<olImageSource> {
+    const options: olImageWMSOptions = {
+      /** use assign here otherwise params is passed by object reference to the openlayers layer! */
+      params: Object.assign({}, this.keysToUppercase(l.params)), // params: {} = { ...l.params } ~ same as assign destructuring
+      url: l.url
+    };
+    const olsource = new olImageWMS(options);
+    const layeroptions = this.adjustLayerOptions(l, 'wms', olsource);
+    const newlayer = new olImageLayer(layeroptions);
+    this.addEventsToLayer(l, newlayer, olsource);
+    return newlayer;
+  }
+
+
 
   private create_wmts_layer(l: WmtsLayer): olTileLayer<olTileSource> {
     if (l instanceof WmtsLayer) {
@@ -1001,8 +1147,13 @@ export class MapOlService {
    * for WFS examples.
    */
   private create_wfs_layer(l: VectorLayer): olVectorLayer<olVectorSource<olGeometry>> {
+    let url = null;
+    if (l.url.indexOf('http://') === 0 || l.url.indexOf('https://') === 0) {
+      url = new URL(l.url);
+    } else {
+      url = new URL(l.url, window.location.origin);
+    }
 
-    const url = new URL(l.url);
     // making sure that srsname is set to current projection
     url.searchParams.set('srsname', this.EPSG);
     // note that we don't need to adjust the bbox. contrary to wms'es, in a wfs,
@@ -1055,6 +1206,11 @@ export class MapOlService {
       layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
     }
 
+    if (l.subdomains) {
+      l.url = l.url.replace('{s}', `${l.subdomains[0]}-${l.subdomains[l.subdomains.length - 1]}`);
+      olSource.setUrl(l.url);
+    }
+
     if (l.options) {
       Object.assign(layeroptions, l.options);
     }
@@ -1074,9 +1230,12 @@ export class MapOlService {
         wrapX: false
       });
     } else if (l.url) {
-      olSource = new olTileJSON({
+      olSource = new olVectorSource({
         url: l.url,
-        crossOrigin: (l.crossOrigin && l.crossOrigin === null) ? l.crossOrigin : 'anonymous',
+        format: new olGeoJSON({
+          dataProjection: WGS84,
+          featureProjection: this.EPSG
+        }),
         wrapX: false
       });
     }
@@ -1087,6 +1246,116 @@ export class MapOlService {
 
     const layeroptions = {
       type: 'geojson',
+      name: l.name,
+      id: l.id,
+      visible: l.visible,
+      legendImg: l.legendImg,
+      opacity: l.opacity || 1,
+      zIndex: 1,
+      source: olSource
+    } as any;
+
+    if (l.popup) {
+      layeroptions.popup = l.popup;
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
+    }
+
+    if (l.bbox) {
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+    }
+
+    if (l.cluster) {
+      const clusteroptions: any = {};
+      if (typeof l.cluster === 'object') {
+        Object.assign(clusteroptions, l.cluster);
+      }
+      clusteroptions.source = olSource;
+      const clusterSource = new olCluster(clusteroptions);
+      layeroptions.source = clusterSource;
+      const styleCache = {};
+      layeroptions.style = (feature) => {
+        const size = feature.get('features').length;
+        let style = styleCache[size];
+        if (!style) {
+          style = new olStyle({
+            image: new olCircleStyle({
+              radius: 10,
+              stroke: new olStroke({
+                color: '#fff'
+              }),
+              fill: new olFill({
+                color: '#3399CC'
+              })
+            }),
+            text: new olText({
+              text: size.toString(),
+              fill: new olFill({
+                color: '#fff'
+              })
+            })
+          });
+          styleCache[size] = style;
+        }
+        return style;
+      };
+    }
+
+    if (l.options) {
+      Object.assign(layeroptions, l.options);
+    }
+
+    const newlayer = new olVectorLayer(layeroptions);
+    this.setCrossOrigin(l, newlayer);
+    this.addEventsToLayer(l, newlayer, layeroptions.source);
+    return newlayer;
+  }
+
+  private create_kml_layer(l: VectorLayer) {
+    let olSource;
+    if (l.data) {
+      olSource = new olVectorSource({
+        features: new olKML({ extractStyles: true }).readFeatures(l.data, {
+          dataProjection: WGS84,
+          featureProjection: this.EPSG
+        }),
+        format: new olKML(),
+        wrapX: false
+      });
+    } else if (l.url) {
+      olSource = new olVectorSource({
+        url: l.url,
+        format: new olKML({
+          extractStyles: true,
+          crossOrigin: (l.crossOrigin && l.crossOrigin === null) ? l.crossOrigin : 'anonymous',
+        }),
+        wrapX: false
+      });
+    }
+
+    if (l.continuousWorld) {
+      olSource.set('wrapX', l.continuousWorld);
+    }
+
+    const layeroptions = {
+      type: 'kml',
       name: l.name,
       id: l.id,
       visible: l.visible,
@@ -1281,7 +1550,27 @@ export class MapOlService {
       return layer;
 
     } else {
-      console.log('attribute custom_layer not set on layer type custom!');
+      console.log('attribute custom_layer not set on layer type custom!', l);
+    }
+  }
+
+  private create_stacked_layer(l: StackedLayer) {
+    if (l instanceof StackedLayer) {
+      const layers = l.layers.map(ml => {
+        /** Set all to visible because the visibility of merge layers cannot be controlled later */
+        ml.visible = true;
+        /** popups are get from the olLayer later so add them */
+        ml.popup = l.popup;
+        /** events are get from the olLayer later so add them */
+        ml.events = l.events;
+        return this.create_layers(ml);
+      });
+      const groupOptions = this.adjustLayerOptions(l, 'custom');
+      (groupOptions as any).layers = layers;
+      const layerGroup = new olLayerGroup(groupOptions);
+      return layerGroup;
+    } else {
+      console.log('layer is not of type StackedLayer!', l);
     }
   }
 
@@ -1399,7 +1688,7 @@ export class MapOlService {
    *
    *  6. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
    *  7. overwrite properties if popup property is: popup | popup[]
-   *  8. check for pupupFunktion, asyncPupup and dynamicPopup
+   *  8. check for popupFunction, asyncPopup and dynamicPopup
    *  9. use addPopup() or addPopupObj()
    *
    *  10. check popup event and if move popup exists => reuse old popup
@@ -1740,16 +2029,16 @@ export class MapOlService {
 
     const addPopupObj = (popupObj: popup) => {
       /** async function where you can paste a html string to the callback */
-      if ('asyncPupup' in popupObj) {
-        popupObj.asyncPupup(popupProperties, (html) => {
+      if ('asyncPopup' in popupObj) {
+        popupObj.asyncPopup(popupProperties, (html) => {
           this.addPopup(args, null, html, popupObj.event, popupObj.single);
         });
         /** add event if popup object */
       } else {
 
-        /** adjust args if pupupFunktion or dynamicPopup*/
-        if (popupObj.pupupFunktion) {
-          args.popupFn = popupObj.pupupFunktion; //This could be done in createPopupContainer()
+        /** adjust args if popupFunction or dynamicPopup*/
+        if (popupObj.popupFunction) {
+          args.popupFn = popupObj.popupFunction; //This could be done in createPopupContainer()
         } else if (popupObj.dynamicPopup) {
           args.dynamicPopup = popupObj.dynamicPopup; // This could be done in createPopupContainer()
         }

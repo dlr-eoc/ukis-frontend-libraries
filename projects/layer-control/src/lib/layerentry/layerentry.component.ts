@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { IDynamicComponent } from '@dlr-eoc/core-ui';
 
 // imports only for typings...
 import {
-  LayerGroup, Layer, RasterLayer, isRasterLayertype, WmsLayertype, WmtsLayertype, isRasterLayer,
-  isVectorLayer, LayersService
+  LayerGroup, Layer, RasterLayer, LayersService, WmsLayer, WmtsLayer
 } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
@@ -21,7 +21,7 @@ export class LayerentryComponent implements OnInit {
   @Input('layer') layer: Layer;
 
   @Input('group') group?: LayerGroup;
-  @Input('layerGroups') layerGroups?: LayerGroup[];
+  @Input('layerGroups') layerGroups?: Array<Layer | LayerGroup>;;
   @Input('expanded') set expanded(value: boolean) {
     if (this.layer) {
       this.layer.expanded = value;
@@ -56,8 +56,8 @@ export class LayerentryComponent implements OnInit {
   /**
    * obj: {any| IDynamicComponent}
    */
-
-  checkIsComponentItem(layer: Layer, compProp: string) {
+  checkIsComponentItem(layer: Layer, compProp: string): layer is Omit<Layer, 'legendImg' | 'action'> & { legendImg: IDynamicComponent, action: IDynamicComponent } {
+    // https://stackoverflow.com/a/65347533/10850021
     const obj = layer[compProp];
     let isComp = false;
     if (obj && typeof obj === 'object') {
@@ -240,33 +240,28 @@ export class LayerentryComponent implements OnInit {
   }
 
   isSelectedStyle(styleName: string): boolean {
-    if (isRasterLayer(this.layer)) {
-      if (this.layer.type === WmsLayertype) {
-        return (this.layer as RasterLayer).params.STYLES === styleName;
-      } else if (this.layer.type === WmtsLayertype) {
-        return (this.layer as RasterLayer).params.style === styleName;
-      }
-    } else if (isVectorLayer(this.layer)) {
-      // TODO: how to compare styles for vector layers?
+    if (this.layer instanceof WmsLayer) {
+      return this.layer.params.STYLES === styleName;
+    } else if (this.layer instanceof WmtsLayer) {
+      return this.layer.params.style === styleName;
+    } else {
+      // TODO: how to compare styles for vector layers and custom layers?
       return false;
     }
-    // TODO: how to compare styles for custom layers?
-    return false;
   }
 
-  executeChangeStyle(newStyleName: string) {
-    if (isRasterLayertype(this.layer.type)) {
-      if ((this.layer as RasterLayer).styles) {
-        const newStyle = (this.layer as RasterLayer).styles.find(s => s.name === newStyleName);
-        if (newStyle) {
-          this.layer.legendImg = newStyle.legendURL;
-          if (this.layer.type === WmsLayertype) {
-            (this.layer as RasterLayer).params.STYLES = newStyle.name;
-          } else if (this.layer.type === WmtsLayertype) {
-            (this.layer as RasterLayer).params.style = newStyle.name;
-          }
-          this.layersSvc.updateLayer(this.layer, this.layer.filtertype);
+  executeChangeStyle(evt: Event) {
+    const newStyleName = (evt.target as HTMLInputElement).value;
+    if (this.layer.styles) {
+      const newStyle = (this.layer as RasterLayer).styles.find(s => s.name === newStyleName);
+      if (newStyle) {
+        this.layer.legendImg = newStyle.legendURL;
+        if (this.layer instanceof WmsLayer) {
+          this.layer.params.STYLES = newStyle.name;
+        } else if (this.layer instanceof WmtsLayer) {
+          this.layer.params.style = newStyle.name;
         }
+        this.layersSvc.updateLayer(this.layer, this.layer.filtertype);
       }
     }
   }

@@ -243,46 +243,6 @@
         }
       }
     },
-    "owc-control": {
-      "projectType": "library",
-      "root": "projects/owc-control",
-      "sourceRoot": "projects/owc-control/src",
-      "prefix": "ukis",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/owc-control/tsconfig.lib.json",
-            "project": "projects/owc-control/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/owc-control/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/owc-control/src/test.ts",
-            "tsConfig": "projects/owc-control/tsconfig.spec.json",
-            "karmaConfig": "projects/owc-control/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/owc-control/tsconfig.lib.json",
-              "projects/owc-control/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "services-layers": {
       "projectType": "library",
       "root": "projects/services-layers",
@@ -504,7 +464,17 @@
             "tsConfig": "projects/demo-maps/tsconfig.app.json",
             "assets": [
               "projects/demo-maps/src/favicon.ico",
-              "projects/demo-maps/src/assets"
+              "projects/demo-maps/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./projects/shared-assets/",
+                "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "./projects/core-ui/schematics/ng-add/files/src/assets",
+                "output": "./assets"
+              }
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",
@@ -635,7 +605,17 @@
             "tsConfig": "projects/demo-auth/tsconfig.app.json",
             "assets": [
               "projects/demo-auth/src/favicon.ico",
-              "projects/demo-auth/src/assets"
+              "projects/demo-auth/src/assets",
+              {
+                "glob": "**/*",
+                "input": "./projects/shared-assets/",
+                "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "./projects/core-ui/schematics/ng-add/files/src/assets",
+                "output": "./assets"
+              }
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",

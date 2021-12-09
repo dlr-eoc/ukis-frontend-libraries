@@ -19,7 +19,6 @@ ngOnInit(){
 
 For examples see:
 - [demo maps](../demo-maps/README.md)
-- [map-tools](../owc-control/src/lib/owc-control.component.ts)
 - [map-ol](../layer-control/src/lib/base-layer-control/base-layer-control.component.ts)
 
 

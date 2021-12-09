@@ -6,7 +6,16 @@
   display: none;
 }
 
+.body {
+  cursor: default;
+}
+
 .tabsbody {
   overflow: hidden;
   word-break: break-all;
+
+  img {
+    height: auto;
+    max-width: 100%;
+  }
 }

@@ -1,4 +1,5 @@
 ### Breaking Changes
+* **@dlr-eoc/owc-control:** This package is removed. Use `owcSvc.generateOwsContextFrom(id, currentLayers, currentExtent)` and `downloadJson` from `@dlr-eoc/utils-browser`;
 * **@dlr-eoc/map-ol:**
   - Removed `MapOlService.layers_on_click(evt)` and `MapOlService.layers_on_pointermove(evt)` -> replace them by `MapOlService.layersOnMapEvent(evt)`.
   - Renamed `MapOlService.layers_on_click_move(evt, layerFilter)` -> `MapOlService.layersOnMapEvent(evt)` layer filtering is now done later.
@@ -7,9 +8,19 @@
   - Renamed `MapOlService.vector_on_click(evt)` -> `MapOlService.vectorOnEvent(evt)`.
 
 * **@dlr-eoc/services-layers:**
+  - Deprecated: `isVectorLayer()`/`isVectorLayertype()` and `isRasterLayer()`/`isRasterLayertype()` can both be raster and vector for `CustomLayertype` and `TmsLayertype`;
   - Removed zIndex from types `ILayerOptions` which was forgotten to do at breaking version `6.0.0`.
+  - Renamed (typo fix) layer's popup property `pupupFunktion` to `popupFunction`
+  - Renamed (typo fix) layer's popup property `asyncPupup` to `asyncPopup`
 
 * **@dlr-eoc/services-ogc:** 
+- Replace function `getLayerGroup()` with `getResourceFolder()` - and a private function to get folders which should be a `LayerGroup`,
+- Remove old custom extension `IOwsOffering.iconUrl` and `getIconUrl()`.
+- Remove not used `getOfferingContents()`.
+- Remove old custom extension `IOwsOffering.title` - use `IOwsResource` as layers.
+- Change `createTmsLayerFromOffering()` to `private createVectorTileLayerFromOffering()` and `private createTmsRasterLayerFromOffering()`.
+- Remove `previewUrl` from `IEocOwsResourceProperties` because this is is already in `IOwsResourceProperties.links.previews`.
+- Remove `IEocWmsOffering` and `IEocOwsWmtsOffering` for them you can use the generall `IEocOwsOffering` and check for the code `WMS_Offering` or `WMTS_Offering`.
 - `IEocOwsResourceDimensions` is removed.
 - `IEocOwsResourceDimension` [is changed](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L30).
 - `IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimension[]` is changed. Before it was [`IEocOwsResourceProperties.dimensions?: IEocOwsResourceDimensions`](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/v7.3.1/projects/services-ogc/src/lib/owc/types/eoc-owc-json.ts#L24)
@@ -22,16 +33,34 @@
 
 
 ### Features
-* **@dlr-eoc/services-layers:**:
+* **shared-assets:**
+  - Add new Folder to share assets between all @dlr-eoc-projects.
+* **@dlr-eoc/layer-control:**
+  - Open legend image as a link in a new tab for a larger view
+* **@dlr-eoc/services-layers:**
+  - New layer type `StackedLayer``to support merged/stacked Layers as a single Layer.
+  - Export `const TmsLayertype = 'tms'` and integrate this in `TLayertype`.
   - Extend Type for Popup `Layer['popup']?.filterLayer` to filter out layers in `map.forEachLayerAtPixel` and `map.forEachFeatureAtPixel`.
   - `CustomLayer` can now overwrite `crossOrigin` property if used with a OpenLayers Layer.
   - Extend Layer Type for events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Extend Layer Popup Type for multiple Popups [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/map-ol:**
+  - Support merged/stacked Layers as a single Layer.
+  - Support Tiled- and Image-WMS Layers - Single Image-WMS Layers are created when `Layer.params.TILED == false`,
+  - Support new `VectorLayer.type = tms` for VetrorTile Layers with `VectorLayer.options.style` as the OpenMapStyle obj and `VectorLayer.options.styleSource` for the style SourceKey.
+  - Support new `VectorLayer.type = kml`.
   - Add events from Layer to olLayer and olSource [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
   - Allow Popups for several events [issue 85](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/85).
 * **@dlr-eoc/services-ogc:**
-  - Removed `customAttributes`
+  - Support WMS Filters `CQL_FILTER` and `FILTER` (For WFS you can already pass the full url).
+  - Support merged/stacked Layers for resources with folder `Baselayers/<layerName>`. For `legendImg` the image furthest down is used.
+  - Better support to convert UKIS layers to OWC. 
+  - Support new Layer Types **KML, Xyz and Tms (Raster)**
+  - New basic Implementation of `getElevationDimension()`
+  - New Functions to get Properties from `IOwsContext` and `IEocOWsResource` - `getGroupResources(), getSingleResources(), getResourceMinMaxZoom()`
+  - Export separate interfaces for `IEocOwsTimeDimension` and `IEocOwsElevationDimension`.
+  - Functions to check `isIOwsRasterOperation()` and `isIOwsVectorOperation()`.
+  - Export Operation Codes for Offerings (`WMS_Code`, `WMTS_Code`, `WFS_Code`, `TMS_Code` and `XYZ_Code`):
   - Overhaul of `dimensions`
   - Allows sub-groups
   - Allows Tms-Layers
@@ -41,12 +70,18 @@
   - `OwcJsonService.generateOwcContextFrom()` now also exports WFS-layers.
 
 ### Bug Fixes
+* **@dlr-eoc/core-ui:**
+  - Add missing Output to `GlobalProgressComponent`.
 * **@dlr-eoc/services-ogc:**
+  - Do not use **bbox** of `IOwsContext` for Baselayers.
+  - Preserve order of Layers and Groups from `IOwsContext` - `getLayers()`.
+  - Removed not used `customAttributes`.
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with WFS'es: only a substring of the `GetFeature`-operation.href had been used. Now fixed.
   - `OwcJsonService.createVectorLayerFromOffering` did not work properly with GeoJson-layers: GeoJson data had been incorrectly stringified (and parsed again).
   - `OwcJsonService.getTimeDimensions`: `period` only added to dimension if actually given in `IEocOwsResourceDimension`.
   - `OwcJsonService.getWmsOptions`: now respects `STYLES` property either via `offering.styles` or via `GetMap` operation. All WMS-paras only set when actually present.
 * **@dlr-eoc/map-ol:**
+  - Fix GeoJSON layer from url - it used `olTileJSON` bevor.
   - Set `crossOrigin` on `olSource` (olImageSource | olTileImageSource | olTileSource) for all layers with `Layer.popup` as default to **anonymous** 
   - Display cursor pointer for Popups only if the top layer has pixels.
   - Popups with event `move` are rendered under existing Popups with event `click` [issue 94](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-915283092).
@@ -57,6 +92,7 @@
   - Fixed an issue with z-index of UkisCustomLayers containing an OlLayerGroup. Before the fix the layergroup's layers would always appear at the very bottom of the map, even below base-layers.
   - Fixed an issue with dynamic popups, where only the first popup on a raster-layer would be created, whereas all subsequent clicks would not lead to a new popup appearing.
 * **@dlr-eoc/layer-control:** 
+  - Set Cursor to default for `body` of layerentry. 
   - Dynamic component layer Input lost its Instance (Type) [issue 80](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/80).
 * **@dlr-eoc/layer-control:**
   - WPS 2.0.0: The encoding of literal inputs has been fixed. Previously, inputs of type "text/plain" were not anoted with the correct mime-type

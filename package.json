@@ -1,6 +1,6 @@
 {
   "name": "ukis-frontend-libraries",
-  "version": "8.0.0-next.0",
+  "version": "8.0.0-next.4",
   "license": "Apache-2.0",
   "author": "Team UKIS",
   "bugs": {
@@ -133,7 +133,7 @@
     "karma-junit-reporter -tests"
   ],
   "engines": {
-    "node": ">= 12.13.0",
-    "npm": ">= 6.12.0"
+    "node": ">= 14.15.0",
+    "npm": ">= 6.14.8"
   }
 }

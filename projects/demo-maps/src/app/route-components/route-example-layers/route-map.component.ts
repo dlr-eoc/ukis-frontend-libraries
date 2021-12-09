@@ -1,12 +1,12 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer } from '@dlr-eoc/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, StackedLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
 import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
 import { ZommNumberControl } from './ol-custom-control';
 import { getFeatureInfoPopup } from './map-helpers';
 import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
-import testCities from '../../../assets/data/json/test-cities.json';
+import testCities from '@dlr-eoc/shared-assets/geojson/test-cities.json';
 import olStyle from 'ol/style/Style';
 import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';
@@ -60,12 +60,19 @@ export class RouteMapComponent implements OnInit {
     const TransparentBackground = new VectorLayer({
       name: 'Transparenter Hintergrund',
       id: 'blank',
-      type: 'geojson',
-      visible: true
+      type: 'geojson'
     });
 
-    const eocLitemapLayer = new EocLitemapTile({
-      visible: false
+    const eocLitemapLayer = new EocLitemapTile();
+
+    const eocLiteOverlay = new EocBaseoverlayTile();
+
+    const eocLiteMerge = new StackedLayer({
+      id: 'eocLiteAndOverlay',
+      name: 'EOC Lite with Overlay',
+      description: 'merged/stacked Layers EOC Lite with Overlay',
+      legendImg: eocLitemapLayer.legendImg,
+      layers: [eocLitemapLayer, eocLiteOverlay]
     });
 
     // not working in WGS84 because
@@ -92,7 +99,7 @@ export class RouteMapComponent implements OnInit {
       id: 'OSM_Base'
     });
 
-    const layers = [TransparentBackground, eocLitemapLayer, worldRelief, OsmLayer];
+    const layers = [OsmLayer, TransparentBackground, eocLiteMerge, worldRelief];
 
     /** add layers with the LayersService */
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));
@@ -114,7 +121,7 @@ export class RouteMapComponent implements OnInit {
       attribution: ' | GUF®: <a href="https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-9628/16557_read-40454/">DLR License</a>',
       legendImg: '',
       popup: {
-        asyncPupup: (obj, cb) => {
+        asyncPopup: (obj, cb) => {
           getFeatureInfoPopup(obj, this.mapSvc, cb);
         }
       }
@@ -392,7 +399,7 @@ export class RouteMapComponent implements OnInit {
         }
       ],
       popup: {
-        pupupFunktion: options => {
+        popupFunction: options => {
           return `<div>${JSON.stringify(options)} </div>`;
         }
       }
@@ -402,12 +409,13 @@ export class RouteMapComponent implements OnInit {
       id: 'WfsLayer',
       name: 'WFS Pennsylvania',
       type: 'wfs',
+      visible: false,
       url: "https://ahocevar.com/geoserver/wfs?service=WFS&request=GetFeature&outputFormat=application/json&version=1.1.0&srsname=EPSG:3857&typenames=usa:states&cql_filter=STATE_NAME='Pennsylvania'",
       bbox: [-83.1005859375, 38.37611542403604, -72.50976562499999, 43.03677585761058],
       popup: {
         dynamicPopup: {
           component: TablePopupComponent,
-          getAttributes: (args) => ({data: args})
+          getAttributes: (args) => ({ data: args })
         }
       }
     });
@@ -448,7 +456,7 @@ export class RouteMapComponent implements OnInit {
 
     const hillshade = new HillshadeTile({
       popup: {
-        pupupFunktion: (obj) => {
+        popupFunction: (obj) => {
           return `
             <table>
               <tbody>
@@ -483,6 +491,18 @@ export class RouteMapComponent implements OnInit {
     const openSeaMapOnTop = new OpenSeaMap({ crossOrigin: 'anonymous' });
     this.layersSvc.addLayer(layerOnTopOfAll, 'Overlays');
     this.layersSvc.addLayer(openSeaMapOnTop, 'Overlays');
+
+    const blueMarble = new BlueMarbleTile({ id: 'merge_BlueMarble' });
+    const eocLiteoverlay2 = new EocLiteoverlayTile({ id: 'merge_Liteoverlay' });
+    const mergeLayer = new StackedLayer({
+      id: 'BlueMarbleTile_Overlay',
+      name: 'BlueMarble with Overlay',
+      visible: false,
+      legendImg: blueMarble.legendImg,
+      description: 'merged/stacked Layers BlueMarble with Overlay',
+      layers: [blueMarble, eocLiteoverlay2]
+    });
+    this.layersSvc.addLayer(mergeLayer, 'Overlays');
   }
 
   updateLayerGroup() {

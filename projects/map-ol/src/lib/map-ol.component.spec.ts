@@ -8,7 +8,7 @@ import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { of } from 'rxjs';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { ApplicationRef, Component, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
-import testFeatureData from '../assets/testFeatureCollection.json';
+import testFeatureData from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import olVectorLayer from 'ol/layer/Vector';
 import olTileLayer from 'ol/layer/Tile';
 import olLayerGroup from 'ol/layer/Group';

@@ -16,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 import { debounceTime, first } from 'rxjs/operators';
 import { Subscription, Subject } from 'rxjs';
 
-import testData from '../../../assets/data/json/test.json';
+import testData from '@dlr-eoc/shared-assets/geojson/test.json';
 
 
 import olTileLayer from 'ol/layer/Tile';

@@ -74,7 +74,8 @@ export class MousePositionComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onChangeProj(epsgcode) {
+  public onChangeProj(evt: Event) {
+    const epsgcode = (evt.target as HTMLInputElement).value;
     if (epsgcode === 'EPSG:4326') {
       this.x = 'Lon';
       this.y = 'Lat';

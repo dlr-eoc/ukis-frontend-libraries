@@ -43,12 +43,10 @@ The main functions you will work with are:
 
 For examples see:
 - [demo maps](../demo-maps/README.md)
-- [owc-control](../owc-control/src/lib/owc-control.component.ts)
 - [layer-control](../layer-control/src/lib/base-layer-control/base-layer-control.component.ts)
 
 
 This module is used by components like:
-- @dlr-eoc/owc-control
 - @dlr-eoc/layer-control
 - @dlr-eoc/base-layers-raster
 - ...

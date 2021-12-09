@@ -9,6 +9,7 @@ import { RouteMap6Component } from './route-components/route-example-layer-style
 import { RouteLicensesComponent } from './route-components/route-licenses/route-licenses.component';
 import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
 import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
+import { RouteExampleOwcLayersComponent } from './route-components/route-example-owc-layers/route-example-owc-layers.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'example-layers', pathMatch: 'full' },
@@ -34,6 +35,12 @@ const routes: Routes = [
     path: 'example-custom-layers', component: RouteMap4Component,
     data: {
       title: 'Custom Layers'
+    }
+  },
+  {
+    path: 'example-owc-layers', component: RouteExampleOwcLayersComponent,
+    data: {
+      title: 'OWS Context layers'
     }
   },
   {

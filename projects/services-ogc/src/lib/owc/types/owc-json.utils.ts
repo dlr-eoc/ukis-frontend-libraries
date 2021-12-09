@@ -3,6 +3,28 @@
 import { Xyz_Offering, GeoJson_Offering, TMS_Offering, GeoJsonOffering, tmsOffering, xyzOffering } from './eoc-owc-json';
 import { cswOffering, CSW_Offering, GeoTIFFOffering, GeoTIFF_Offering, GMLCOVOffering, GMLCOV_Offering, GMLJP2Offering, GMLJP2_Offering, gmlOffering, GML_Offering, IOwsAuthor, IOwsCategory, IOwsContent, IOwsContext, IOwsGenerator, IOwsCreatorDisplay, IOwsLinks, IOwsOffering, IOwsOperation, IOwsResource, IOwsResourceProperties, IOwsStyleSet, kmlOffering, KML_Offering, wcsOffering, WCS_Offering, wfsOffering, WFS_Offering, wmsOffering, WMS_Offering, wmtsOffering, WMTS_Offering } from './owc-json';
 
+
+/**
+ * export types to create layers from Offerings
+ */
+export const GetMapOperationCode = 'GetMap' as const;
+export type WMS_Code = typeof GetMapOperationCode;
+
+export const GetFeatureOperationCode = 'GetFeature' as const;
+export type WFS_Code = typeof GetFeatureOperationCode;
+
+export const GetTileOperationCode = 'GetTile' as const;
+export type WMTS_Code = typeof GetTileOperationCode;
+
+export const RESTOperationCode = 'REST' as const;
+export type TMS_Code = typeof RESTOperationCode;
+export type XYZ_Code = typeof RESTOperationCode;
+
+export const GetCapabilitiesOperationCode = 'GetCapabilities' as const;
+export const DescribeFeatureTypeOperationCode = 'DescribeFeatureType' as const;
+export const GetFeatureInfoOperationCode = 'GetFeatureInfo' as const;
+
+
 function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
   for (const entry of list) {
     if (!predicate(entry)) {
@@ -79,6 +101,22 @@ export function isIOwsOperation(object: any): object is IOwsOperation {
     && 'method' in object
     && (object.request ? isIOwsContent(object.request) : true)
     && (object.result ? isIOwsContent(object.result) : true);
+}
+
+export function isIOwsRasterOperation(object: any): object is IOwsOperation {
+  if (isIOwsOperation(object)) {
+    return [GetMapOperationCode, GetTileOperationCode, RESTOperationCode].includes(object.code as any);
+  } else {
+    return false;
+  }
+}
+
+export function isIOwsVectorOperation(object: any): object is IOwsOperation {
+  if (isIOwsOperation(object)) {
+    return [GetFeatureOperationCode].includes(object.code as any);
+  } else {
+    return false;
+  }
 }
 
 export function isIOwsContent(object: any): object is IOwsContent {

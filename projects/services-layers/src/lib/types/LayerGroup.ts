@@ -7,6 +7,7 @@ import { IDynamicComponent } from '@dlr-eoc/core-ui';
 export interface ILayerGroupOptions {
   id: string;
   name: string;
+  /** Layers to group - Higher indexes get drawn above lower indexes */
   layers: Layer[];
 
   visible?: boolean;

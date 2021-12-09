@@ -24,7 +24,6 @@ The following libraries/packages are included in this repository:
 - [map-tools](projects/map-tools/README.md)
 - [map-ol](projects/map-ol/README.md)
 - [map-three](projects/map-three/README.md)
-- [owc-control](projects/owc-control/README.md)
 - [user-info](projects/user-info/README.md)
 
 - [services-layers](projects/services-layers/README.md)
@@ -46,7 +45,11 @@ The following libraries/packages are included in this repository:
 
 ## Getting Started (setup a new UKIS-Client)
 
-1. Generate a new [Angular application](https://angular.io/cli/new)
+1. Generate a new [Angular application](https://angular.io/cli/new) in the same Version like specified in our package.json [@angular/core](package.json).
+For this you have to install `@angular/cli` in this specific Version first. 
+- `npm install -g @angular/cli@<version>`
+
+Then run:
 - `ng new project-<name> --style=scss`
 
 2. Move into the directory

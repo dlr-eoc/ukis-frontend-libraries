@@ -1,0 +1,1485 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id":"https://ukis-frontend.pages.gitlab.dlr.de/other-projects/ows-context/ukis-owc.schema.json",
+  "title": "OWCCollection with UKIS extensions",
+  "description": "This class is the overall container class for the context document as a GEOJson Feature collection using the UKIS Resource definition.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "title": "Type",
+      "const": "FeatureCollection",
+      "type": "string"
+    },
+    "id": {
+      "title": "Identification reference of the Context",
+      "description": "Unambiguous reference to the identification of the Context document (IRI).",
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "format": "uri"
+        }
+      ]
+    },
+    "properties": {
+      "title": "The OWC:Context Class is mapping",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Context"
+        }
+      ]
+    },
+    "features": {
+      "title": "A list of GeoJSON Features with additional Fields",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/UKISOWCFeature"
+      }
+    },
+    "bbox": {
+      "title": "Geographic Area of interest",
+      "description": "Geographic Area of interest of the users of the Context document according to the GeoJSON \u201cbbox\u201d definition.",
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "properties",
+    "features"
+  ],
+  "definitions": {
+    "LangCode": {
+      "title": "LangCode",
+      "description": "ISO 639-1 Language code",
+      "enum": [
+        "aa",
+        "ab",
+        "ae",
+        "af",
+        "ak",
+        "am",
+        "an",
+        "ar",
+        "as",
+        "av",
+        "ay",
+        "az",
+        "ba",
+        "be",
+        "bg",
+        "bh",
+        "bi",
+        "bm",
+        "bn",
+        "bo",
+        "br",
+        "bs",
+        "ca",
+        "ce",
+        "ch",
+        "co",
+        "cr",
+        "cs",
+        "cu",
+        "cv",
+        "cy",
+        "da",
+        "de",
+        "dv",
+        "dz",
+        "ee",
+        "el",
+        "en",
+        "eo",
+        "es",
+        "et",
+        "eu",
+        "fa",
+        "ff",
+        "fi",
+        "fj",
+        "fo",
+        "fr",
+        "fy",
+        "ga",
+        "gd",
+        "gl",
+        "gn",
+        "gu",
+        "gv",
+        "ha",
+        "he",
+        "hi",
+        "ho",
+        "hr",
+        "ht",
+        "hu",
+        "hy",
+        "hz",
+        "ia",
+        "id",
+        "ie",
+        "ig",
+        "ii",
+        "ik",
+        "io",
+        "is",
+        "it",
+        "iu",
+        "ja",
+        "jv",
+        "ka",
+        "kg",
+        "ki",
+        "kj",
+        "kk",
+        "kl",
+        "km",
+        "kn",
+        "ko",
+        "kr",
+        "ks",
+        "ku",
+        "kv",
+        "kw",
+        "ky",
+        "la",
+        "lb",
+        "lg",
+        "li",
+        "ln",
+        "lo",
+        "lt",
+        "lu",
+        "lv",
+        "mg",
+        "mh",
+        "mi",
+        "mk",
+        "ml",
+        "mn",
+        "mr",
+        "ms",
+        "mt",
+        "my",
+        "na",
+        "nb",
+        "nd",
+        "ne",
+        "ng",
+        "nl",
+        "nn",
+        "no",
+        "nr",
+        "nv",
+        "ny",
+        "oc",
+        "oj",
+        "om",
+        "or",
+        "os",
+        "pa",
+        "pi",
+        "pl",
+        "ps",
+        "pt",
+        "qu",
+        "rm",
+        "rn",
+        "ro",
+        "ru",
+        "rw",
+        "sa",
+        "sc",
+        "sd",
+        "se",
+        "sg",
+        "si",
+        "sk",
+        "sl",
+        "sm",
+        "sn",
+        "so",
+        "sq",
+        "sr",
+        "ss",
+        "st",
+        "su",
+        "sv",
+        "sw",
+        "ta",
+        "te",
+        "tg",
+        "th",
+        "ti",
+        "tk",
+        "tl",
+        "tn",
+        "to",
+        "tr",
+        "ts",
+        "tt",
+        "tw",
+        "ty",
+        "ug",
+        "uk",
+        "ur",
+        "uz",
+        "ve",
+        "vi",
+        "vo",
+        "wa",
+        "wo",
+        "xh",
+        "yi",
+        "yo",
+        "za",
+        "zh",
+        "zu"
+      ],
+      "type": "string"
+    },
+    "Link": {
+      "title": "Link",
+      "description": "The links class provides place to encode link relations in a OWS Context document.",
+      "type": "object",
+      "properties": {
+        "href": {
+          "title": "URL",
+          "description": "Reference to a resource related to this one.",
+          "minLength": 1,
+          "maxLength": 65536,
+          "format": "uri",
+          "type": "string"
+        },
+        "type": {
+          "title": "MIME-type",
+          "description": "Expected MIME-type of resource pointed by the href.",
+          "type": "string"
+        },
+        "lang": {
+          "title": "ISO 639-1 language code",
+          "description": "Expected language of resource pointed by the href.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/LangCode"
+            }
+          ]
+        },
+        "title": {
+          "title": "Description",
+          "description": "This element contains the title of resource pointed by the href. This element conveys a human-readable title.",
+          "type": "string"
+        },
+        "length": {
+          "title": "File size in bytes",
+          "description": "Expected length of resource pointed by the href.",
+          "exclusiveMinimum": true,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "href"
+      ]
+    },
+    "ContextLinks": {
+      "title": "ContextLinks",
+      "description": "A Reference to OGC standard reference (requirements class) identifying that this is an OWC Context document and its version ('links.profiles')\nand optionally a Reference to a resource (e.g. source of the information) from which the present resource is derived ('links.via').",
+      "type": "object",
+      "properties": {
+        "profiles": {
+          "title": "Reference to OGC standard reference",
+          "description": "Reference to OGC standard reference (requirements class) identifying that this is an OWC Context document.",
+          "default": [
+            {
+              "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
+              "type": null,
+              "lang": null,
+              "title": null,
+              "length": null
+            }
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "via": {
+          "title": "Reference to a resource",
+          "description": "Reference to a resource (e.g. source of the information) from which the present resource is derived.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "Author": {
+      "title": "Author",
+      "description": "This element is optional and indicates the authors of the Context document.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "description": "Human-readable name for the person.",
+          "type": "string"
+        },
+        "email": {
+          "title": "Email",
+          "description": "Email address for the person.",
+          "type": "string",
+          "format": "email"
+        },
+        "uri": {
+          "title": "Home page",
+          "description": "Home page for the person.",
+          "minLength": 1,
+          "maxLength": 65536,
+          "format": "uri",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "CreatorApplication": {
+      "title": "CreatorApplication",
+      "description": "This class provides place to encode information related to the application responsible to the creation of the context document.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Name",
+          "description": "Title or name of the application.",
+          "type": "string"
+        },
+        "uri": {
+          "title": "Description link",
+          "description": "URI describing the creator application.",
+          "minLength": 1,
+          "maxLength": 65536,
+          "format": "uri",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "description": "Version of the creator application.",
+          "type": "string"
+        }
+      }
+    },
+    "CreatorDisplay": {
+      "title": "CreatorDisplay",
+      "description": "This class provides a place to encode information related to the display area used in the creator application when the OWS Context document was produced.",
+      "type": "object",
+      "properties": {
+        "pixelWidth": {
+          "title": "Width in pixels",
+          "description": "Width measured in pixels of the display showing the Area of Interest.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "pixelHeight": {
+          "title": "Height in pixels",
+          "description": "Height measured in pixels of the display showing the Area of Interest.",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mmPerPixel": {
+          "title": "Size of Pixel",
+          "description": "The size of a pixel of the display in millimeters (combined with the previous ones allows for the real display size to be calculated).",
+          "minimum": 0,
+          "type": "number"
+        }
+      }
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Expresses a category related to the Context resource. Keyword may have a related code-list that is identified by the scheme attribute.",
+      "type": "object",
+      "properties": {
+        "term": {
+          "title": "Keyword",
+          "description": "Identifies the category.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "scheme": {
+          "title": "Scheme",
+          "description": "Identifies the categorization scheme via a URI.",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "description": "Provides a human-readable label for displaying.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "term"
+      ]
+    },
+    "Context": {
+      "title": "Context",
+      "description": "This class is the overall container class for the context document.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Title.",
+          "description": "Title for the Context document.",
+          "type": "string"
+        },
+        "lang": {
+          "title": "ISO 639-1 language code",
+          "description": "Language of Context document content",
+          "allOf": [
+            {
+              "$ref": "#/definitions/LangCode"
+            }
+          ]
+        },
+        "updated": {
+          "title": "Creation or update Date",
+          "description": "Date of the last update of the Context document.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "links": {
+          "title": "Title.",
+          "description": "Title for the Context document.",
+          "default": {
+            "profiles": [
+              {
+                "href": "http://www.opengis.net/spec/owc-geojson/1.0/req/core",
+                "type": null,
+                "lang": null,
+                "title": null,
+                "length": null
+              }
+            ],
+            "via": null
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ContextLinks"
+            }
+          ]
+        },
+        "subtitle": {
+          "title": "Abstract",
+          "description": "Description of the Context document purpose or content.",
+          "type": "string"
+        },
+        "authors": {
+          "title": "Author",
+          "description": "Entity primarily responsible for making the Context document.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Author"
+          }
+        },
+        "publisher": {
+          "title": "Publisher",
+          "description": "Identifier for the publisher of the Context document.",
+          "type": "string"
+        },
+        "generator": {
+          "title": "Application",
+          "description": "Tool/application used to create the Context document and its properties",
+          "allOf": [
+            {
+              "$ref": "#/definitions/CreatorApplication"
+            }
+          ]
+        },
+        "display": {
+          "title": "Display",
+          "description": "Information related to the display area used in the creator application.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/CreatorDisplay"
+            }
+          ]
+        },
+        "rights": {
+          "title": "Information about rights held in and over the Context document",
+          "description": "Contains information about rights held in and over the Context document.  Please note that this element SHALL NOT be used to convey machine readable licensing information.",
+          "type": "string"
+        },
+        "categories": {
+          "title": "Keywords",
+          "description": "Categories related to this document.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          }
+        },
+        "date": {
+          "title": "Temporal extend",
+          "description": "Date or range of dates relevant to the Context document.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "lang",
+        "updated"
+      ]
+    },
+    "OfferingCode": {
+      "title": "OfferingCode",
+      "description": "OWS Requirement Class as specified in 14-055r2_OGC_OWS_Context_GeoJSON_Encoding_Standard.pdf. It is extended to match UKIS implementation.",
+      "enum": [
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/wfs",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/wcs",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/wps",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/csw",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/gml",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/kml",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/geotiff",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/gmljp2",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/gmlcov",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/geojson",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/xyz",
+        "http://www.opengis.net/spec/owc-geojson/1.0/req/tms"
+      ],
+      "type": "string"
+    },
+    "OperationCode": {
+      "title": "OperationCode",
+      "description": "An enumeration.",
+      "enum": [
+        "GetCapabilities",
+        "GetMap",
+        "GetTile",
+        "GetFeature",
+        "GetFeatureInfo"
+      ],
+      "type": "string"
+    },
+    "HttpMethod": {
+      "title": "HttpMethod",
+      "description": "A set of request methods to indicate the desired action to be performed for a given resource.",
+      "enum": [
+        "GET",
+        "HEAD",
+        "POST",
+        "PUT",
+        "DELETE",
+        "CONNECT",
+        "OPTIONS",
+        "TRACE",
+        "PATCH"
+      ],
+      "type": "string"
+    },
+    "Content": {
+      "title": "Content",
+      "description": "This class defines a generic container for any content.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "MIME-type",
+          "description": "MIME-type of the Content",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "description": "Title of the Content.",
+          "type": "string"
+        },
+        "href": {
+          "title": "URL",
+          "description": "URL of the Content.",
+          "minLength": 1,
+          "maxLength": 65536,
+          "format": "uri",
+          "type": "string"
+        },
+        "content": {
+          "title": "Content",
+          "description": "In-line content for the Content element.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "Operation": {
+      "title": "Operation",
+      "description": "Operations used to invoke the service.",
+      "type": "object",
+      "properties": {
+        "code": {
+          "title": "Request code",
+          "description": "Code identifying the type of Operation.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/OperationCode"
+            }
+          ]
+        },
+        "method": {
+          "title": "HTTP verb",
+          "description": "Code identifying the HTTP verb type of Operation.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/HttpMethod"
+            }
+          ]
+        },
+        "href": {
+          "title": "URL",
+          "description": "Service Request URL.",
+          "minLength": 1,
+          "maxLength": 65536,
+          "format": "uri",
+          "type": "string"
+        },
+        "type": {
+          "title": "MIME-type",
+          "description": "MIME-type of the expected results.",
+          "type": "string"
+        },
+        "request": {
+          "title": "Request body",
+          "description": "Optional request body content.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Content"
+            }
+          ]
+        },
+        "result": {
+          "title": "Response body",
+          "description": "Optional response body content.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Content"
+            }
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "method",
+        "href"
+      ]
+    },
+    "StyleSet": {
+      "title": "StyleSet",
+      "description": "This class defines a portrayal style for a resource inline or service derived content.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Unique name",
+          "description": "Unique name of the styleSet within a given offering.",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "description": "Human Readable title of the styleSet within a given offering.",
+          "type": "string"
+        },
+        "abstract": {
+          "title": "Description",
+          "description": "Human Readable description of the styleSet.",
+          "type": "string"
+        },
+        "default": {
+          "title": "Default Style",
+          "description": "Whether this styleSet is the one to be defined by default.",
+          "default": false,
+          "type": "boolean"
+        },
+        "legendURL": {
+          "title": "Legend",
+          "description": "URL of a legend image for the styleSet.",
+          "minLength": 1,
+          "maxLength": 65536,
+          "format": "uri",
+          "type": "string"
+        },
+        "content": {
+          "title": "Content",
+          "description": "The inline or a external reference to the styleSet definition.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Content"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "title"
+      ]
+    },
+    "MatrixSetOrigin": {
+      "title": "MatrixSetOrigin",
+      "description": "Origin of the tile matrix",
+      "type": "object",
+      "properties": {
+        "x": {
+          "title": "X coordinate",
+          "description": "X coordinate of the tile grid origin",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y coordinate",
+          "description": "Y coordinate of the tile grid origin",
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "MatrixSetTileSize": {
+      "title": "MatrixSetTileSize",
+      "description": "Size of Tile",
+      "type": "object",
+      "properties": {
+        "height": {
+          "title": "Height",
+          "description": "Height of tile in pixels",
+          "type": "number"
+        },
+        "width": {
+          "title": "Width",
+          "description": "Width of tile in pixels",
+          "type": "number"
+        }
+      },
+      "required": [
+        "height",
+        "width"
+      ]
+    },
+    "WMTSMatrixSet": {
+      "title": "WMTSMatrixSet",
+      "description": "Alternative definition of a WMTS Matrix Set.",
+      "type": "object",
+      "properties": {
+        "srs": {
+          "title": "Spatial Reference",
+          "description": "EPSG Code identifying the Spatial reference of this set.",
+          "type": "string"
+        },
+        "matrixSet": {
+          "title": "Name",
+          "description": "Identifier for this set.",
+          "type": "string"
+        },
+        "matrixIds": {
+          "title": "Tile Matrix identifiers ",
+          "description": "A list of valid Tile Matrix identifiers.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "origin": {
+          "title": "Origin of the tile matrix",
+          "description": "Origin of the tile matrix set.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/MatrixSetOrigin"
+            }
+          ]
+        },
+        "resolutions": {
+          "title": "Tile resolution",
+          "description": "A list of valid tile resolutions.",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "tilesize": {
+          "title": "Tile size",
+          "description": "Pixels size of a tile.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/MatrixSetTileSize"
+            }
+          ]
+        }
+      },
+      "required": [
+        "srs",
+        "matrixSet",
+        "matrixIds",
+        "origin",
+        "resolutions",
+        "tilesize"
+      ]
+    },
+    "UKISOffering": {
+      "title": "UKISOffering",
+      "description": "UKIS extension of the OWC Offering.",
+      "type": "object",
+      "properties": {
+        "code": {
+          "title": "OWS Requirement Class",
+          "description": "Code identifying the type of offering.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/OfferingCode"
+            }
+          ]
+        },
+        "operations": {
+          "title": "Operations",
+          "description": "Operations used to invoke the service.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Operation"
+          }
+        },
+        "styles": {
+          "title": "Style sets",
+          "description": "One or more portrayal styles for a resource.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StyleSet"
+          }
+        },
+        "contents": {
+          "title": "Content",
+          "description": "Inline or reference contents.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Content"
+          }
+        },
+        "matrixSets": {
+          "title": "WMTS Matrix Sets",
+          "description": "List of alternative definitions for a WMTS Matrix Set.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WMTSMatrixSet"
+          }
+        }
+      },
+      "required": [
+        "code"
+      ]
+    },
+    "ResourceLinks": {
+      "title": "ResourceLinks",
+      "description": "Additional links describing the Resource.",
+      "type": "object",
+      "properties": {
+        "preview": {
+          "title": "Reference to a quick-look",
+          "description": "Reference to a preview images for the resource.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "data": {
+          "title": "Reference to the location of the data",
+          "description": "Reference to a location where the data is stored.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "via": {
+          "title": "Reference to a resource",
+          "description": "Reference to a resource (e.g. source of the information) from which the present resource is derived.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        },
+        "alternates": {
+          "title": "Reference to a description in alternative format",
+          "description": "Reference to alternative formates of the resource.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Link"
+          }
+        }
+      }
+    },
+    "UKISDisplayHints": {
+      "title": "UKISDisplayHints",
+      "description": "UKIS display hints.",
+      "type": "object",
+      "properties": {
+        "format": {
+          "title": "Format hint",
+          "description": "Hint for the GUI how to format the Dimension.",
+          "type": "string"
+        },
+        "period": {
+          "title": "Display period",
+          "description": "In case the app should display data at a different period than what is available on the server",
+          "type": "string"
+        },
+        "default": {
+          "title": "Default",
+          "type": "string"
+        }
+      }
+    },
+    "UKISDimension": {
+      "title": "UKISDimension",
+      "description": "This class describes the data dimension provided the feature.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Dimension type",
+          "description": "Name of the dimension (e.g. 'time', 'elevation').",
+          "type": "string"
+        },
+        "values": {
+          "title": "Dimension values",
+          "description": "A formatted string holding the values. This can be an RFC: 3339 timestamp ('YYYY-MM-DDThh:mm:ssZ'), an explicit period('YYYY-MM-DDThh:mm:ssZ/YYYY-MM-DDThh:mm:ssZ' or comma separated values (timestamps or periods).",
+          "type": "string"
+        },
+        "units": {
+          "title": "Value type",
+          "description": "Hint for the applications how to parse the values. In UKIS for time 'ISO-8610' is the prefered option.",
+          "type": "string"
+        },
+        "display": {
+          "title": "Display hints for the applications.",
+          "description": "A dictionary with addition information for applications how to display the data. Expected keys are 'format', 'period' and 'default'.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UKISDisplayHints"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "values",
+        "units"
+      ]
+    },
+    "UKISResource": {
+      "title": "UKISResource",
+      "description": "The description of a resource and its access parameters and configuration with additional UKIS specific properties.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Title",
+          "description": "Title given to the Context resource.",
+          "type": "string"
+        },
+        "updated": {
+          "title": "Creation or update Date",
+          "description": "Date of the last update of the Context resource.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "abstract": {
+          "title": "Account of the content of the Context resource",
+          "description": "The purpose is to provide a generic description of the content in a format understandable by generic readers.",
+          "type": "string"
+        },
+        "authors": {
+          "title": "Authors",
+          "description": "Entity primarily responsible for making the content of the Context resource.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Author"
+          }
+        },
+        "publisher": {
+          "title": "Publisher",
+          "description": "Entity responsible for making the Context resource available.",
+          "type": "string"
+        },
+        "rights": {
+          "title": "Rights held in and over the Context resource",
+          "description": "Contains information about rights held in and over the Context resource.  Please note that this element SHALL NOT be used to convey machine readable licensing information.",
+          "type": "string"
+        },
+        "date": {
+          "title": "Temporal extend",
+          "description": "Date or range of dates relevant to the Context resource.",
+          "type": "string"
+        },
+        "offerings": {
+          "title": "Service or inline content offering",
+          "description": "Service or inline content offering for the resource targeted at OGC compliant clients.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UKISOffering"
+          }
+        },
+        "active": {
+          "title": "Displayed by default",
+          "description": "Flag value indicating to the client if the Context resource should be displayed by default.",
+          "default": true,
+          "type": "boolean"
+        },
+        "categories": {
+          "title": "Keywords",
+          "description": "Categories related to this resource.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          }
+        },
+        "minscaledenominator": {
+          "title": "Minimum scale",
+          "description": "Minimum scale for the display of the Context resource.",
+          "exclusiveMinimum": true,
+          "minimum": 0,
+          "type": "number"
+        },
+        "maxscaledenominator": {
+          "title": "Maximum scale",
+          "description": "Maximum scale for the display of the Context resource.",
+          "exclusiveMinimum": true,
+          "minimum": 0,
+          "type": "number"
+        },
+        "folder": {
+          "title": "Display group",
+          "description": "Definition of the folder in which the resource is placed.",
+          "type": "string"
+        },
+        "links": {
+          "title": "Additional links",
+          "description": "A Reference to a quick-look or browse image ('links.preview'), a Reference to the location of the data ('links.data'), a Reference to a resource (e.g. source of the information) from which the Context resource is derived ('links.via') or a Reference to a description of the Context resource in alternative format ('links.alternates').",
+          "allOf": [
+            {
+              "$ref": "#/definitions/ResourceLinks"
+            }
+          ]
+        },
+        "opacity": {
+          "title": "Opacity",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "type": "number"
+        },
+        "attribution": {
+          "title": "Attribution",
+          "type": "string"
+        },
+        "shards": {
+          "title": "WebMap shards hint",
+          "description": "Values to be used to shard map tile requests across subdomains.",
+          "type": "string"
+        },
+        "minZoom": {
+          "title": "Minimum Zoom Level",
+          "description": "The minimum available OpenLayers zoom level.",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "maxZoom": {
+          "title": "Maximum Zoom Level",
+          "description": "The maximum available OpenLayers zoom level.",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "dimensions": {
+          "title": "Data dimension",
+          "description": "Temporal and Spatial dimensions provided by the data.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UKISDimension"
+          }
+        }
+      },
+      "required": [
+        "title"
+      ]
+    },
+    "Polygon": {
+      "title": "Polygon",
+      "description": "Polygon Model",
+      "type": "object",
+      "properties": {
+        "coordinates": {
+          "title": "Coordinates",
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": [
+                    {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "array",
+                  "items": [
+                    {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "type": {
+          "title": "Type",
+          "const": "Polygon",
+          "type": "string"
+        }
+      },
+      "required": [
+        "coordinates"
+      ]
+    },
+    "UKISOWCFeature": {
+      "title": "UKISOWCFeature",
+      "description": "Mapping of the OWC:Resource Class with UKIS extensions",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "const": "Feature",
+          "type": "string"
+        },
+        "id": {
+          "title": "Identification reference of the Feature",
+          "description": "Unambiguous reference to the identification of the Feature (IRI).",
+          "type": "string"
+        },
+        "properties": {
+          "title": "Description",
+          "description": "Description of the resource.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UKISResource"
+            }
+          ]
+        },
+        "geometry": {
+          "title": "GeoJSON geometry object",
+          "description": "Spatial extent or scope of the content of the Context resource.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Polygon"
+            }
+          ]
+        },
+        "bbox": {
+          "title": "Geographic Area of interest",
+          "description": "Geographic Area of interest of the users of the Context resource according to the GeoJSON \u201cbbox\u201d definition.",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": [
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "array",
+              "items": [
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "properties"
+      ]
+    }
+  }
+}

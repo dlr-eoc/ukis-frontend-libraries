@@ -5,8 +5,8 @@ import { LayerGroup } from './types/LayerGroup';
 import { LayersService } from './layers.service';
 import { first } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-import testData1 from '../../assets/testData1.json';
-import testData2 from '../../assets/testData2.json';
+import testData1 from '@dlr-eoc/shared-assets/geojson/testData1.json';
+import testData2 from '@dlr-eoc/shared-assets/geojson/testData2.json';
 
 
 let layer1: Layer,

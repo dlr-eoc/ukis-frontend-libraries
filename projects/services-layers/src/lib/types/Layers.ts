@@ -34,9 +34,9 @@ export interface popup {
   /** To overwrite the keys (and only the keys) of the layer/feature properties. Object has the form {"oldKey": "newKey"} */
   properties?: IAnyObject;
   /** function to create html string - popupobj: nativeLayer */
-  pupupFunktion?: (popupobj: IAnyObject) => string;
+  popupFunction?: (popupobj: IAnyObject) => string;
   /** async function where you can paste a html string to the callback - popupobj: nativeLayer */
-  asyncPupup?: (popupobj: any, cb: (html: any) => void) => void;
+  asyncPopup?: (popupobj: any, cb: (html: any) => void) => void;
   /** create popup using angular component */
   dynamicPopup?: {
     component: Type<any>;
@@ -61,14 +61,20 @@ export interface ILayerEvent {
   listener: (args?: any) => void;
 }
 
+/** can be raster and vector */
+export const TmsLayertype = 'tms';
 export const WmsLayertype = 'wms';
 export const WmtsLayertype = 'wmts';
 export const XyzLayertype = 'xyz';
 export const GeojsonLayertype = 'geojson';
+export const KmlLayertype = 'kml';
 export const WfsLayertype = 'wfs';
+/** can be raster and vector */
 export const CustomLayertype = 'custom';
-export type TVectorLayertype = 'geojson' | 'wfs' | 'custom';
-export type TRasterLayertype = 'wms' | 'wmts' | 'xyz' | 'custom';
+/** can have multiple layers raster, vector... */
+export const StackedLayertype = 'stacked';
+export type TVectorLayertype = typeof GeojsonLayertype | typeof WfsLayertype | typeof TmsLayertype | typeof KmlLayertype | typeof CustomLayertype;
+export type TRasterLayertype = typeof WmsLayertype | typeof WmtsLayertype | typeof XyzLayertype | typeof TmsLayertype | typeof CustomLayertype;
 export type TLayertype = TRasterLayertype | TVectorLayertype | string;
 
 export const Filtertypes = {
@@ -79,19 +85,30 @@ export const Filtertypes = {
 export type TFiltertypes = keyof typeof Filtertypes;
 
 
-
+/**
+ * @deprecated The method should not be used because it can be false positive
+ *
+ * CustomLayertype and TmsLayertype can be raster and vector.
+ * You have to double check by yourself later!
+ */
 export function isVectorLayertype(inpt: string): inpt is TVectorLayertype {
-  return [GeojsonLayertype, WfsLayertype, CustomLayertype].includes(inpt);
+  return [GeojsonLayertype, WfsLayertype, CustomLayertype, KmlLayertype, TmsLayertype].includes(inpt);
 }
 
+
+/**
+ * @deprecated The method should not be used because it can be false positive
+ *
+ * CustomLayertype and TmsLayertype can be raster and vector.
+ * You have to double check by yourself later!
+ */
 export function isRasterLayertype(inpt: string): inpt is TRasterLayertype {
-  return [WmsLayertype, WmtsLayertype, XyzLayertype, CustomLayertype].includes(inpt);
+  return [WmsLayertype, WmtsLayertype, XyzLayertype, CustomLayertype, TmsLayertype].includes(inpt);
 }
 
-export function isLayertype(inpt: string): inpt is TLayertype {
-  return (isRasterLayertype(inpt) || isVectorLayertype(inpt));
+export function isLayertype(type: string): type is TLayertype {
+  return [TmsLayertype, WmsLayertype, WmtsLayertype, XyzLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype].includes(type);
 }
-
 
 /**
  * geographic coordinates
@@ -186,12 +203,14 @@ export interface ILayerTimeDimension {
 
 export interface ILayerElevationDimension {
   /** Default steps to display in elevation slider */
-  display?: string;
   units: string;
-  value?: string;
+  values: string;
+  display?: {
+    format?: string;
+    step?: string;
+    default?: string;
+  };
 }
-
-
 
 
 export interface IRasterLayerOptions extends ILayerOptions {
@@ -213,6 +232,8 @@ export interface IVectorLayerOptions extends ILayerOptions {
   options?: {
     /** ol/style/Style */
     style: any;
+    /** styleSource=OpenMapStyle.sourceKey if style is a OpenMapStyle Obj */
+    styleSource?: string;
     [k: string]: any;
   };
   /** if true clusters points | or set a Object with cluster options e.g. distance ... depends on the map-library */
@@ -228,6 +249,15 @@ export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type'> {
   type?: TLayertype;
   custom_layer: any;
 }
+
+/**
+ * Layers is an array of layers which get stacked together and shown as one layer
+ */
+export interface IStackedLayerOptions extends Omit<ILayerOptions, 'type'> {
+  type?: TLayertype;
+  layers: Layer[];
+}
+
 
 /**
  * Classes for layer construction
@@ -286,6 +316,10 @@ export interface IRasterLayerParams extends IAnyObject {
   TILED?: string;
   TRANSPARENT?: boolean;
   STYLES?: string;
+  /** https://docs.geoserver.org/latest/en/user/tutorials/cql/cql_tutorial.html#cql-tutorial */
+  CQL_FILTER?: string;
+  /** https://docs.geoserver.org/latest/en/user/styling/sld/reference/filters.html */
+  FILTER?: string;
 }
 
 export class RasterLayer extends Layer implements IRasterLayerOptions {
@@ -336,6 +370,9 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
   }
 }
 
+/**
+ * @deprecated The method should not be used because it can be false positive
+ */
 export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
   return isRasterLayertype(layer.type);
 };
@@ -358,14 +395,26 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
   }
 }
 
+/**
+ * @deprecated The method should not be used because it can be false positive
+ */
 export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
   return isVectorLayertype(layer.type);
 };
 
 export class CustomLayer extends Layer implements ICustomLayerOptions {
-  type = 'custom';
+  type = CustomLayertype;
   custom_layer: ICustomLayerOptions['custom_layer'] = {};
   constructor(options: ICustomLayerOptions) {
+    super(options as ILayerOptions);
+    Object.assign(this, options);
+  }
+}
+
+export class StackedLayer extends Layer implements IStackedLayerOptions {
+  type = StackedLayertype;
+  layers: Layer[] = [];
+  constructor(options: IStackedLayerOptions) {
     super(options as ILayerOptions);
     Object.assign(this, options);
   }

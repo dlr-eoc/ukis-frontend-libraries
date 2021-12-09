@@ -46,8 +46,8 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Information about rights held in and over the Context document */
     rights?: string;
     /**
-     * Date or range of dates relevant to the resource
-     * time range which is expected to be of interest to the user.
+     * This element is optional and expressed a date or range of dates relevant to the Context document.
+     * It can contain the element start, stop and instant. The values of these elements SHALL conform to the "date-time" production of ISO-8601[5]. An uppercase "T" character SHALL be used to separate date and time, and an uppercase "Z" character SHALL be present in the absence of a numeric time zone offset. To specify a range of dates the "/" character SHALL be used.
      */
     date?: DateString;
     /** This array is an optional and expresses categories related to this Context document */
@@ -55,7 +55,10 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
     /** Extension Any other element */
     [k: string]: any;
   };
-  /** Ordered List of Resources available on the Context document */
+  /** Ordered List of Resources available on the Context document
+   * The order of the member of the features MAY be used to identify the drawing order of the resources.
+   * In that case, the first item of the array represents the top most layer
+   */
   features: IOwsResource[];
   /** Extension Any other element */
   [k: string]: any;
@@ -95,7 +98,7 @@ export interface IOwsResourceProperties {
   publisher?: string;
   /** Information about rights held in and over the Context resource */
   rights?: string;
-  /** Date or range of dates relevant to the Context resource */
+  /** Date or range of dates relevant to the Context resource. The values of these elements SHALL conform to the "date-time" production of ISO-8601[5]*/
   date?: DateString;
   /** This element is optional and can contain a number of offerings defined by the class OWC:Offering */
   offerings?: IOwsOffering[];
@@ -143,13 +146,14 @@ export interface IOwsResourceProperties {
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truemultiple-offerings-and-priority
  */
 export interface IOwsOffering {
-  /** Extension Offerings with type - string */
+  /** Code identifying the type of offering - Extension Offerings with type - string */
   code: WMS_Offering | WFS_Offering | WCS_Offering | WPS_Offering | CSW_Offering | WMTS_Offering |
   GML_Offering | KML_Offering | GeoTIFF_Offering | GMLJP2_Offering | GMLCOV_Offering | string;
-  /** Web Service Offerings provide their operations */
+  /** Web Service Offerings provide their operations - Array of operations used to invoke the service */
   operations?: IOwsOperation[];
-  /** Content Offerings allow content to be embedded in an OWS Context document. */
+  /** Content Offerings allow content to be embedded in an OWS Context document (inline or byRef) */
   contents?: IOwsContent[];
+  /** Array of style sets - A style representation for a resource (inline or service derived) content */
   styles?: IOwsStyleSet[];
   [k: string]: any;
 }
@@ -216,10 +220,13 @@ export interface IOwsOperation {
   code: string;
   /** method defines the access method, for example GET or POST. */
   method: string;
-  /** href is the URI containing the definition of the request */
+  /** Service Request URL - The URI containing the definition of the request */
   href: string;
+  /** MIME type of the expected results */
   type?: string;
+  /** Optional request body content */
   request?: IOwsContent;
+  /** Optional Result Payload of the operation */
   result?: IOwsContent;
   /** Extension of Operation */
   [k: string]: any;
@@ -228,19 +235,27 @@ export interface IOwsOperation {
 export interface IOwsContent {
   /** MIME type of the Content */
   type: string;
+  /** URL of the Content */
   href?: string;
+  /** Title of the Content */
   title?: string;
-  /** String type, not empty that can contain any text encoded media type */
+  /** In-line content for the Content element- String type, not empty that can contain any text encoded media type */
   content?: string;
   [k: string]: any;
 }
 
 export interface IOwsStyleSet {
+  /** Unique name of the styleSet within a given offering */
   name: string;
+  /** Human Readable title of the styleSet within a given offering */
   title: string;
+  /** Description of the styleSet */
   abstract?: string;
+  /** Whether this styleSet is the one to be defined by default */
   default?: boolean;
+  /** URL of a legend image for the styleSet */
   legendURL?: string;
+  /** The inline or a external reference to the styleSet definition */
   content?: IOwsContent;
   [k: string]: any;
 }

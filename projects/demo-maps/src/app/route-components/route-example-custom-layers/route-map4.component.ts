@@ -25,9 +25,9 @@ import { InterpolationSettingsComponent } from '../../components/interpolation-s
 import { BarsLayer } from './customRenderers/threejs_renderer';
 import { InterpolationLayer, ColorRamp, DtmLayer } from '@dlr-eoc/utils-maps';
 
-import testData from '../../../assets/data/json/test.json';
-import testPolys from '../../../assets/data/json/test.polys.json';
-import testCollection from '../../../assets/data/json/test.collection.json';
+import testData from '@dlr-eoc/shared-assets/geojson/test.json';
+import testPolys from '@dlr-eoc/shared-assets/geojson/test.polys.json';
+import testCollection from '@dlr-eoc/shared-assets/geojson/test.collection.json';
 import { ExampleGroupActionComponent } from '../../components/example-group-action/example-group-action.component';
 import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
 import { Popup2Component } from '../../components/popup2/popup2.component';
@@ -116,7 +116,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       popup: true,
       custom_layer: new olVectorLayer({
         source: new olVectorSource({
-          url: 'assets/data/kml/TimeZones.kml',
+          url: 'assets/kml/TimeZones.kml',
           format: new olKML({
             extractStyles: true
           }),
@@ -254,8 +254,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       },
       custom_layer: new olVectorImageLayer({
         source: new olVectorSource({
-          features: this.mapSvc.geoJsonToFeatures(testCollection),
-          // format: new olGeoJSON(),
+          // features: this.mapSvc.geoJsonToFeatures(testCollection),
+          url: 'assets/geojson/test.collection.json',
+          format: new olGeoJSON(),
         }),
         style: (feature, resolution) => {
           return new olStyle({
@@ -289,7 +290,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       // crossOrigin: null, // set this to get data for pixel for cross-origin data or not if null
       custom_layer: new olImageLayer({
         source: new olStatic({
-          url: 'assets/images/srtm_small.png',
+          url: 'assets/image/srtm_small.png',
           imageExtent: [10.00, 45.00, 15.00, 50.00],
           projection: 'EPSG:4326',
           // crossOrigin: 'anonymous' // set this to get data for pixel for cross-origin data
@@ -469,7 +470,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       filtertype: 'Layers',
       custom_layer: new DtmLayer({
         source: new olStatic({
-          url: 'assets/images/srtm_small.png',
+          url: 'assets/image/srtm_small.png',
           imageExtent: [10.00, 45.00, 15.00, 50.00],
           projection: 'EPSG:4326',
         })
