@@ -12,3 +12,6 @@ runs:
       shell: bash
     - run: npm run build
       shell: bash
+      # also test build of demo app
+    - run: npx ng build demo-maps --configuration=production --base-href=/ukis-frontend-libraries/
+      shell: bash
