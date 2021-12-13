@@ -1,0 +1,358 @@
+{
+  "$schema": "../../../../../../projects/services-ogc/src/lib/owc/types/ukis-owc.schema.json",
+  "type": "FeatureCollection",
+  "bbox": [
+    -180,
+    -90,
+    180,
+    90
+  ],
+  "id": "Test_OWC_Context",
+  "properties": {
+    "title": "Cyclone Idai - Mozambique 2019, crisis data collection",
+    "description": "In the project \"Demand-driven Data Services for Humanitarian Aid\" (Data4Human), remote sensing data and other data sources are to be analysed in order to identify and demonstrate their possible use in the humanitarian context. This bookmark shows a collection of data for the tropical cyclone Idai in Mozambique 2019 on water extent, damage detection and social media activity.",
+    "lang": "en",
+    "updated": "",
+    "links": {
+      "profiles": [
+        "http://www.opengis.net/spec/owcgeojson/1.0/req/core"
+      ],
+      "previews": [
+        {
+          "href": "data/owc/bookmark_preview_idai.jpg"
+        }
+      ]
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "baseKMLLayer",
+      "geometry": null,
+      "properties": {
+        "title": "KML Offering - url",
+        "updated": "2021-11-09T12:00:00",
+        "authors": [
+          {
+            "email": "geoservice@dlr.de",
+            "name": "Earth Observation Center (EOC), DLR",
+            "uri": "https://geoservice.dlr.de/web/contact"
+          }
+        ],
+        "active": false,
+        "folder": "VectorLayers",
+        "abstract": "KML Data Offering from url",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/kml",
+            "contents": [
+              {
+                "type": "application/vnd.google-earth.kml+xml",
+                "href": "assets/kml/TimeZones.kml"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "geometry": null,
+      "id": "eocGeojsonLayer",
+      "type": "Feature",
+      "properties": {
+        "active": false,
+        "title": "GeoJson Offering - inline",
+        "updated": "2019-02-15T11:22:07",
+        "folder": "VectorLayers",
+        "abstract": "GeoJson Data Offering from inline content",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/geojson",
+            "contents": [
+              {
+                "type": "application/geo+json",
+                "content": {
+                  "type": "Feature",
+                  "properties": {},
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                      10.458984375,
+                      49.83798245308484
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "geometry": null,
+      "type": "Feature",
+      "id": "eocVectorTMSLayer",
+      "properties": {
+        "active": false,
+        "opacity": 1.0,
+        "title": "Vector Tile Offering",
+        "updated": "2019-02-15T11:21:59",
+        "shards": "a-d",
+        "rights": "© OpenMapTiles © OpenStreetMap contributors",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/tms",
+            "operations": [
+              {
+                "code": "REST",
+                "href": "https://{s}.tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true",
+                "method": "GET",
+                "type": "application/vnd.mapbox-vector-tile"
+              }
+            ],
+            "styles": [
+              {
+                "name": "planet_eoc",
+                "title": "grayscale",
+                "abstract": "This is a slightly modified version of Positron style @see: https://github.com/openmaptiles/positron-gl-style/blob/master/LICENSE.md",
+                "content": {
+                  "type": "OpenMapStyle",
+                  "styleSource": "planet0-12",
+                  "href": "assets/open-map-styles/open-map-style.json"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "baseWFSLayer",
+      "geometry": null,
+      "properties": {
+        "title": "WFS Offering",
+        "updated": "2021-11-09T09:34:51Z",
+        "active": false,
+        "folder": "VectorLayers",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wfs",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "href": "https://geoservice.dlr.de/eoc/basemap/wfs/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetFeature",
+                "method": "GET",
+                "href": "https://geoservice.dlr.de/eoc/basemap/wfs/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAME=tm%3Atm_world_borders_simpl&OUTPUTFORMAT=application%2Fjson",
+                "type": "application/json"
+              }
+            ]
+          }
+        ]
+      },
+      "bbox": [
+        -180,
+        -89.0000000381628,
+        179.999999917187,
+        83.8751719209928
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "baseWMSLayer",
+      "geometry": null,
+      "properties": {
+        "title": "WMS Offering",
+        "updated": "2021-11-09T09:02:20Z",
+        "active": false,
+        "abstract": "World Settlement Footprint 2015",
+        "folder": "RasterLayers",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wms",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "href": "https://geoservice.dlr.de/eoc/land/wms/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetMap",
+                "method": "GET",
+                "href": "https://geoservice.dlr.de/eoc/land/wms/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=WSF_2015"
+              },
+              {
+                "code": "GetFeatureInfo",
+                "method": "GET",
+                "href": "https://geoservice.dlr.de/eoc/land/wms/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&LAYERS=WSF_2015"
+              }
+            ],
+            "styles": [
+              {
+                "name": null,
+                "title": "No Style only Legend",
+                "default": true,
+                "legendURL": "https://geoservice.dlr.de/eoc/land/wms/wms?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=WSF_2015&style=wsf"
+              }
+            ]
+          }
+        ]
+      },
+      "bbox": [
+        -180.01007601815968,
+        -60.01006609352275,
+        180.01007601819816,
+        78.0100585990529
+      ]
+    },
+    {
+      "type": "Feature",
+      "id": "baseWMTSLayer",
+      "geometry": null,
+      "properties": {
+        "title": "WMTS Offering",
+        "updated": "2021-11-09T09:43:37Z",
+        "active": false,
+        "abstract": "This is the basemap for DLR Service Portals",
+        "folder": "RasterLayers",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/wmts",
+            "operations": [
+              {
+                "code": "GetCapabilities",
+                "method": "GET",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities"
+              },
+              {
+                "code": "GetTile",
+                "method": "GET",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=eoc%3Abasemap&FORMAT=image/png"
+              },
+              {
+                "code": "GetFeatureInfo",
+                "method": "GET",
+                "href": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetFeatureInfo&LAYERS=eoc%3Abasemap"
+              }
+            ]
+          }
+        ]
+      },
+      "bbox": [
+        -180,
+        -90,
+        180,
+        90
+      ]
+    },
+    {
+      "geometry": null,
+      "type": "Feature",
+      "id": "eocRasterTMS3Layer",
+      "properties": {
+        "active": false,
+        "folder": "Overlays",
+        "title": "TMS - EOC baseoverlay",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/tms",
+            "operations": [
+              {
+                "code": "REST",
+                "href": "https://tiles.geoservice.dlr.de/service/tms/1.0.0/eoc%3Abaseoverlay@EPSG%3A3857@png/{z}/{x}/{-y}.png",
+                "method": "GET",
+                "type": "image/png"
+              }
+            ]
+          }
+        ],
+        "updated": "2021-11-30T12:00:00"
+      }
+    },
+    {
+      "geometry": null,
+      "type": "Feature",
+      "id": "eocRasterTMS1Layer",
+      "properties": {
+        "active": false,
+        "title": "TMS - EOC world relief",
+        "updated": "2021-11-30T12:00:00",
+        "folder": "Baselayers",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/tms",
+            "operations": [
+              {
+                "code": "REST",
+                "href": "https://tiles.geoservice.dlr.de/service/tms/1.0.0/eoc%3Aworld_relief_bw@EPSG%3A3857@png/{z}/{x}/{-y}.png",
+                "method": "GET",
+                "type": "image/png"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "geometry": null,
+      "id": "eocXyzLayer",
+      "properties": {
+        "active": false,
+        "shards": "a-c",
+        "title": "XYZ - OSM Tiles",
+        "rights": "© OpenStreetMap contributors",
+        "updated": "2019-02-15T11:22:07",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/xyz",
+            "operations": [
+              {
+                "code": "REST",
+                "href": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                "method": "GET",
+                "type": "image/png"
+              }
+            ],
+            "styles": [
+              {
+                "name": null,
+                "title": "No Style only Legend",
+                "default": true,
+                "legendURL": "https://c.tile.openstreetmap.org/11/1221/1142.png"
+              }
+            ]
+          }
+        ]
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": null,
+      "type": "Feature",
+      "id": "eocRasterTMS2Layer",
+      "properties": {
+        "active": false,
+        "title": "TMS - EOC litemap",
+        "updated": "2021-11-30T12:00:00",
+        "folder": "Baselayers",
+        "offerings": [
+          {
+            "code": "http://www.opengis.net/spec/owc-geojson/1.0/req/tms",
+            "operations": [
+              {
+                "code": "REST",
+                "href": "https://tiles.geoservice.dlr.de/service/tms/1.0.0/eoc%3Alitemap@EPSG%3A3857@png/{z}/{x}/{-y}.png",
+                "method": "GET",
+                "type": "image/png"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
