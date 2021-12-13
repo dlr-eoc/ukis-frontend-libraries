@@ -1,3 +1,4 @@
+# [8.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v8.0.0) (2021-12-09) (services-ogc and angular update)
 ### Breaking Changes
 * **@dlr-eoc/owc-control:** This package is removed. Use `owcSvc.generateOwsContextFrom(id, currentLayers, currentExtent)` and `downloadJson` from `@dlr-eoc/utils-browser`;
 * **@dlr-eoc/map-ol:**

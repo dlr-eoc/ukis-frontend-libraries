@@ -10,13 +10,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.1
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.10.0
 
       # This builds the project for projects/demo-maps and outputs the result to the 'dist' folder.
       # https://github.com/angular/angular-cli/issues/9016#issuecomment-526825531
       - name: Install and Build
         run: |
           npm ci
-          npx ng build demo-maps --prod --aot --vendor-chunk --common-chunk --delete-output-path --build-optimizer --base-href=/ukis-frontend-libraries/
+          npx ng build demo-maps --configuration=production --base-href=/ukis-frontend-libraries/
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.1
