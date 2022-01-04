@@ -64,9 +64,26 @@ jobs:
           npmPackageName: "@dlr-eoc/core-ui"
           tag: ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
 
+  # check if the branch follows the naming conventions
+  checkBranch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkBranch
+        uses: actions/github-script@v5
+        with:
+          script: |
+            if(context.payload.pull_request.head){
+              const startsWith = context.payload.pull_request.head.ref.startsWith('release-');
+              if(!startsWith){
+                core.setFailed(`pull_request branch (head_ref) startsWith 'release-' === ${startsWith}`)
+              }
+            }else{
+              core.setFailed(`context.payload does not have a pull_request" ${context.payload}`);
+            }
+
   # check out the tag, build packages and store them as artifacts
   build:
-    needs: [checkTitelTag, checkTagOnNpm]
+    needs: [checkTitelTag, checkTagOnNpm, checkBranch]
     runs-on: ubuntu-latest
     if: ${{ needs.checkTitelTag.outputs.VERSION_TAG != '' }}
     steps:
@@ -86,19 +103,18 @@ jobs:
           path: dist
 
   # if build works fine we can proceed, add a label and create the release
-  checkBranchAndLabel:
+  checkLabel:
     runs-on: ubuntu-latest
+    needs: build
     steps:
-      - name: checkBranchAndLabel
+      - name: checkLabel
         uses: actions/github-script@v5
         with:
           script: |
-            // https://github.com/actions/github-script/issues/56#issuecomment-642188313
-            if(context.payload.pull_request.head && context.payload.pull_request.labels){
+            if(context.payload.pull_request.labels){
               const hasLabel = context.payload.pull_request.labels.find(i => i.name === 'RELEASE');
-              const startsWith = context.payload.pull_request.head.ref.startsWith('release-')
-              if(!(hasLabel && startsWith)){
-                core.setFailed(`pull_request head_ref startsWith 'release-' === ${startsWith} and labels hasLabel 'RELEASE' ===  ${hasLabel}`)
+              if(!hasLabel){
+                core.setFailed(`pull_request hasLabel 'RELEASE' ===  ${hasLabel}`)
               }
             }else{
               core.setFailed(`context.payload does not have a pull_request" ${context.payload}`);
@@ -106,7 +122,7 @@ jobs:
 
   # check out the tag and create GH release with tag_name (https://github.com/softprops/action-gh-release)
   gh-release:
-    needs: [checkTitelTag, checkTagOnNpm, build, checkBranchAndLabel]
+    needs: [checkTitelTag, checkTagOnNpm, checkBranch, build, checkLabel]
     if: ${{ needs.checkTitelTag.outputs.VERSION_TAG != '' }}
     runs-on: ubuntu-latest
     steps:
