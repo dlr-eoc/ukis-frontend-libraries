@@ -57,7 +57,7 @@ jobs:
           git checkout ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 15
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
