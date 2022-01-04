@@ -1,66 +1,128 @@
-# Should run Main Release Package after pull request and tag push
+# Should run Main Release Package on pull request [opened, synchronize, reopened, labeled, unlabeled, review_requested] - check release
 name: Package Main Release
 
 on:
-  push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]"
+  pull_request:
+    # https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#pull_request
+    types: [opened, synchronize, reopened, labeled, unlabeled, review_requested]
+    branches:
+      - main
 
 jobs:
-  checkTagInMain:
+  # get the tag to release from the PR title
+  checkTitelTag:
     runs-on: ubuntu-latest
     steps:
-      # check out before using actions reference from the same repository!
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      # - uses: actions/checkout@v2
+      # needs uses: actions/checkout@ if script/module is required
+      - name: checkTitelTag
+        uses: actions/github-script@v5
+        id: get-tag
         with:
-          node-version: 15
-      - uses: ./.github/actions/check-branch-contains
-        with:
-          branch: "origin/master"
-          commitId: "${{ github.ref }}"
+          result-encoding: string
+          script: |
+            if (context.payload.pull_request && context.payload.pull_request.title) {
+              const title = context.payload.pull_request.title;
+              const parts = title.split('release-');
+              if (parts.length === 2) {
+                const versionTag = parts[1];
+                core.info(`title contains version ${versionTag}`);
 
+                if(versionTag.startsWith('v')){
+                  return versionTag;
+                }else{
+                  core.setFailed(`Your PR title does not follow the naming convention of the version with "release-v..." ${title}`)
+                }
+              } else {
+                core.setFailed(`Your PR title does not follow the naming convention "release-v[0-9]+.[0-9]+.[0-9]" ${title}`)
+              }
+            }else{
+              core.setFailed(`context.payload does not have a pull_request" ${context.payload}`)
+            }
+      - name: log output
+        run: echo "${{ steps.get-tag.outputs.result }}"
+    outputs:
+      VERSION_TAG: ${{ steps.get-tag.outputs.result }}
+
+  # check if the tag is already published - uses @dlr-eoc/core-ui for test
   checkTagOnNpm:
-    needs: checkTagInMain
     runs-on: ubuntu-latest
+    needs: checkTitelTag
+    if: ${{ needs.checkTitelTag.outputs.VERSION_TAG != '' }}
     steps:
-      # check out before using actions reference from the same repository!
       - uses: actions/checkout@v2
+      - name: checkout tag
+        run: |
+          git fetch --all --tags
+          git checkout ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
       - uses: actions/setup-node@v2
         with:
-          node-version: 15
+          node-version: 14
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
           npmPackageName: "@dlr-eoc/core-ui"
-          tag: "${{ github.ref }}"
+          tag: ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
 
-  # create Release on tag push https://github.com/softprops/action-gh-release
-  gh-release:
-    needs: checkTagOnNpm
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    steps:
-      - name: Release
-        uses: softprops/action-gh-release@v1
-
+  # check out the tag, build packages and store them as artifacts
   build:
-    needs: checkTagOnNpm
+    needs: [checkTitelTag, checkTagOnNpm]
     runs-on: ubuntu-latest
+    if: ${{ needs.checkTitelTag.outputs.VERSION_TAG != '' }}
     steps:
       - uses: actions/checkout@v2
+      - name: checkout tag
+        run: |
+          git fetch --all --tags
+          git checkout ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
       - uses: actions/setup-node@v2
         with:
           node-version: 15
-      - uses: ./.github/actions/build-test
+      - uses: ./.github/actions/build
       - name: Archive dist artifacts
         uses: actions/upload-artifact@v2
         with:
           name: "dist"
           path: dist
 
+  # if build works fine we can proceed, add a label and create the release
+  checkBranchAndLabel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkBranchAndLabel
+        uses: actions/github-script@v5
+        with:
+          script: |
+            // https://github.com/actions/github-script/issues/56#issuecomment-642188313
+            if(context.payload.pull_request.head && context.payload.pull_request.labels){
+              const hasLabel = context.payload.pull_request.labels.find(i => i.name === 'RELEASE');
+              const startsWith = context.payload.pull_request.head.ref.startsWith('release-')
+              if(!(hasLabel && startsWith)){
+                core.setFailed(`pull_request head_ref startsWith 'release-' === ${startsWith} and labels hasLabel 'RELEASE' ===  ${hasLabel}`)
+              }
+            }else{
+              core.setFailed(`context.payload does not have a pull_request" ${context.payload}`);
+            }
+
+  # check out the tag and create GH release with tag_name (https://github.com/softprops/action-gh-release)
+  gh-release:
+    needs: [checkTitelTag, checkTagOnNpm, build, checkBranchAndLabel]
+    if: ${{ needs.checkTitelTag.outputs.VERSION_TAG != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: checkout tag
+        run: |
+          git fetch --all --tags
+          git checkout ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
+
+  # download artifacts and publish packages
   publish-gpr:
-    needs: build
+    needs: [build, gh-release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -93,7 +155,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   publish-npm:
-    needs: build
+    needs: [build, gh-release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
