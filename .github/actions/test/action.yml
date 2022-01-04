@@ -1,0 +1,12 @@
+name: "Test"
+description: "Do a npm test"
+
+runs:
+  using: "composite"
+  steps:
+    - run: npm ci
+      shell: bash
+    - run: npm run test -- --headless # --watch=false --browsers=ChromeHeadless
+      shell: bash
+    - run: npm run schematics:test
+      shell: bash

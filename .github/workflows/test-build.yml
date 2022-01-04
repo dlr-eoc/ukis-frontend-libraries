@@ -24,4 +24,5 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 15
-      - uses: ./.github/actions/build-test
+      - uses: ./.github/actions/test
+      - uses: ./.github/actions/build
