@@ -106,16 +106,18 @@ The general workflow to create a new version:
 - run `node scripts/library/index.js -t` to test all projects. (node_modules must be installed for this)
 - run `node scripts/library/index.js -b` to test all projects are building locally. (node_modules must be installed for this)
 
-3. create a [pull request on the master](https://github.com/dlr-eoc/ukis-frontend-libraries/pulls)
+4. create a [release pull request](https://github.com/dlr-eoc/ukis-frontend-libraries/pulls) on the master.
 
-## Then the UKIS Team will publish a new version
+## Release pull request [see release_pull_request.md](.github/PULL_REQUEST_TEMPLATE/release_pull_request.md)
 - based on the new master create a release branch e.g `git checkout -b release-v7.1.0`
 - set version, date and description in the CHANGELOG.md e.g. `# [<version>](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v<version>) (<date>) (<description>)`
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Milestone XY"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
-- merge the release branch in the master by making a pull request. Use `Create a merge commit` (not Squash and merge) so the created tag (all commits from this branch) will be added to the base branch via a merge commit.
-- push the tag (created from `npm version`) `after the pull request is be merged` by running `git push origin --tags`
-- If the tag is pushed after the pull request is merged, github actions will run the workflow [Package Main Release](.github/workflows/main-release-package.yml) and checks if the tag is included in the master. If this check works the jobs *test* , *build* and *publish* are execudeted and publish the angular projects as github/npm packages.
+- merge the release branch in the master by making a pull request.
+- push the tag (created from `npm version`) by running `git push origin --tags`
+
+Changes on the PR trigger the workflow [Package Main Release](.github/workflows/main-release-package.yml). If all jobs succeed the angular projects are published as github/npm packages.
+
 
 ## Alternative prereleases can be created
 Git tags in the following formats are allowed
