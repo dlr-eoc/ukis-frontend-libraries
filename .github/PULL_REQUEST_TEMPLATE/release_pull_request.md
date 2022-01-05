@@ -1,7 +1,7 @@
 ## Release PR Checklist
 
 
-For creating a new version see [DEVELOPMENT new version](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/DEVELOPMENT.md#How-to-publish-a-new-version-for-all-projects) and see [Release pull request](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/DEVELOPMENT.md#Release-pull-request).
+For creating a new version see [DEVELOPMENT/new version](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/DEVELOPMENT.md#How-to-publish-a-new-version-for-all-projects) and see [Release pull request](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/DEVELOPMENT.md#Release-pull-request).
 
 
 Please check if your PR fulfills the following requirements:
@@ -14,6 +14,6 @@ Please check if your PR fulfills the following requirements:
 6. [ ] The Project is building without errors [see](https://github.com/dlr-eoc/ukis-frontend-libraries/actions/workflows/package-main-release.yml) and check if the build job was successful.
 7. [ ] Add the Label `RELEASE` to the PR.
 
-Then a release on GitHub is created and the build packages are published.
+Then a release on GitHub is created and the built packages are published.
 
 If everything works fine the PR can be merged.
