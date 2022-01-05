@@ -46,6 +46,7 @@ import { Options as olWMTSOptions } from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olVectorSource from 'ol/source/Vector';
+import olRasterSource from 'ol/source/Raster';
 import olCluster from 'ol/source/Cluster';
 import olFeature from 'ol/Feature';
 
@@ -529,16 +530,20 @@ export class MapOlService {
   /** TODO: try to remove/replace this function - Property 'disposeInternal' is protected ol function */
   private removeListenersFromOldLayers(layers: Array<olBaseLayer | olLayerGroup>) {
     const disposeLayerInternal = (layer: olBaseLayer) => {
-      if (layer.hasListener()) {
-        (layer as any).disposeInternal();
-      }
       if (typeof (layer as any).getSource === 'function') {
         const source = (layer as any).getSource() as olSource;
         if (source) {
+          // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+          if(source instanceof olRasterSource){
+            source.dispose();
+          }
           if (source.hasListener()) {
             (source as any).disposeInternal();
           }
         }
+      }
+      if (layer.hasListener()) {
+        (layer as any).disposeInternal();
       }
     };
 
@@ -1479,6 +1484,13 @@ export class MapOlService {
         }
         this.setCrossOrigin(l, layer);
         this.addEventsToLayer(l, layer, olSource);
+
+        // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+        if(olSource instanceof olRasterSource){
+          layer.on('change:source', (evt)=>{
+            evt.oldValue.dispose();
+          });
+        }
       } else if (layer instanceof olLayerGroup) {
         layer.getLayers().forEach(gl => {
           const layerId = `${l.id}_${olGetUid(gl)}`;

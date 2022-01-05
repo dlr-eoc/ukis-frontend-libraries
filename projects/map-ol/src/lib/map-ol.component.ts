@@ -35,6 +35,7 @@ import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import olMapEvent from 'ol/MapEvent';
 import { Control as olControl } from 'ol/control';
 import olVectorSource from 'ol/source/Vector';
+import olRasterSource from 'ol/source/Raster';
 import olGeometry from 'ol/geom/Geometry';
 import olSourceCluster from 'ol/source/Cluster';
 import olVectorLayer from 'ol/layer/Vector';
@@ -191,6 +192,10 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
             const oldSource = ollayer.getSource();
             if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
               ollayer.setSource(newSource);
+              // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+              if(oldSource instanceof olRasterSource){
+                oldSource.dispose();
+              }
             }
           } else if (layer instanceof CustomLayer && layer.custom_layer instanceof olLayerGroup && ollayer instanceof olLayerGroup) {
             const newLayers = layer.custom_layer.getLayers().getArray();

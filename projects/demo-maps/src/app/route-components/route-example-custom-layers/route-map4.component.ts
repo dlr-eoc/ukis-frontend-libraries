@@ -11,7 +11,7 @@ import {
 } from 'ol/layer';
 import {
   ImageStatic as olStatic, Vector as olVectorSource, ImageWMS as olImageWMS, Cluster as olCluster,
-  TileWMS as olTileWMS, VectorTile as olVectorTileSource, ImageCanvas as olImageCanvasSource, OSM as olOSM
+  TileWMS as olTileWMS, VectorTile as olVectorTileSource, ImageCanvas as olImageCanvasSource, OSM as olOSM, Raster as olRasterSource
 } from 'ol/source';
 import { GeoJSON as olGeoJSON, KML as olKML, TopoJSON as olTopoJSON, MVT as olMVT } from 'ol/format';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle, Circle as olCircle, Text as olText } from 'ol/style';
@@ -606,7 +606,26 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           }
         }),
         // opacity: 0
-      })
+      }),
+    });
+
+    // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+    const rasterSourceLayer = new CustomLayer({
+      name: "Ol Raster Source OSM",
+      id: "rasterSourceLayer",
+      type: "custom",
+      visible: false,
+      removable: true,
+      custom_layer: new olImageLayer({
+        source: new olRasterSource({
+          sources: [new olOSM()],
+          operation: (pixels) => {
+            const pixel = pixels[0];
+            return pixel;
+          },
+          operationType: "image",
+        }),
+      }),
     });
 
     const layers = [
@@ -624,7 +643,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       geoJsonLayer3,
       layersGroup1,
       geoJsonLayer,
-      customLayerGroup];
+      customLayerGroup,
+      rasterSourceLayer];
 
     layers.forEach(layer => {
       if (layer instanceof Layer) {
@@ -633,6 +653,20 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         this.layersSvc.addLayerGroup(layer);
       }
     });
+
+    // Test for https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+    setTimeout(() => {
+      rasterSourceLayer.visible = true;
+      rasterSourceLayer.custom_layer.setSource(new olRasterSource({
+        sources: [new olOSM()],
+        operation: (pixels) => {
+          const pixel = pixels[0];
+          return pixel;
+        },
+        operationType: "image",
+      }));
+      this.layersSvc.updateLayer(rasterSourceLayer);
+    }, 2000);
   }
 
   ngAfterViewInit() {
