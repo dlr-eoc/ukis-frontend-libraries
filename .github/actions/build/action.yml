@@ -1,0 +1,13 @@
+name: "Build and Test"
+description: "Do a npm build and test"
+
+runs:
+  using: "composite"
+  steps:
+    - run: npm ci
+      shell: bash
+      # First build the demo app so that the later build is not recompiled
+    - run: npx ng build demo-maps --configuration=production --base-href=/ukis-frontend-libraries/
+      shell: bash
+    - run: npm run build
+      shell: bash
