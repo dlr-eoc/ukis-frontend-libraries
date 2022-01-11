@@ -113,7 +113,7 @@ The general workflow to create a new version:
 - set version, date and description in the CHANGELOG.md e.g. `# [<version>](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v<version>) (<date>) (<description>)`
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Milestone XY"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
-- merge the release branch in the master by making a pull request.
+- merge the release branch in the master by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/master...release-v8.0.1?template=release_pull_request.md` the PR body is populated with the template)
 - push the tag (created from `npm version`) by running `git push origin --tags`
 
 Changes on the PR trigger the workflow [Package Main Release](.github/workflows/main-release-package.yml). If all jobs succeed the angular projects are published as github/npm packages.

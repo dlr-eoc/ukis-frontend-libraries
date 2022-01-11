@@ -1,3 +1,9 @@
+
+# [8.0.1](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v8.0.1) (2022-01-05) (map-ol bug and PR template)
+### Bug Fixes
+* **@dlr-eoc/map-ol:**
+  - Dispose `olRasterSource` for `CustomLayer` if it is removed, updated or the source gets changed [issue 100](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100).
+
 # [8.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v8.0.0) (2021-12-09) (services-ogc and angular update)
 ### Breaking Changes
 * **@dlr-eoc/owc-control:** This package is removed. Use `owcSvc.generateOwsContextFrom(id, currentLayers, currentExtent)` and `downloadJson` from `@dlr-eoc/utils-browser`;
