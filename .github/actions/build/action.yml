@@ -1,5 +1,5 @@
-name: "Build and Test"
-description: "Do a npm build and test"
+name: "Build"
+description: "Do a npm build and for demo app"
 
 runs:
   using: "composite"
