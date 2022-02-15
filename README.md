@@ -38,7 +38,7 @@ The following libraries/packages are included in this repository:
 
 ## To use the libraries in your project specific application, you can either use the packaged npm modules or include this repository.
 
-- Use the frontend-libraries as npm modules **Recommended**
+- Use the frontend-libraries as [npm modules](https://www.npmjs.com/search?q=%40dlr-eoc) **Recommended**
 - Use the frontend-libraries as npm modules (GitHub Packages) [see How to install Packages from GitHub](DEVELOPMENT.md)
 - or use the modules in typescript source via path mapping [see Developing libraries and frontend side by side](DEVELOPMENT.md)
 
