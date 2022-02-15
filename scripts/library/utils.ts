@@ -8,6 +8,8 @@ import * as toposort from 'toposort';
 
 const CWD = process.cwd();
 
+import { sync as browserifyResolve } from 'resolve';
+
 /** https://en.wikipedia.org/wiki/ANSI_escape_code#Colors */
 export const consoleLogColors = {
   Reset: '\x1b[0m',
@@ -415,8 +417,12 @@ function checkTransitiveDependencies(depcheckResults: depcheck.Results, packageS
     if (key.includes(packageScope)) {
       packagePath = PATH.join(CWD, packagePath.replace(packageScope, 'projects/'));
     }
-    const depPackage: IPackageJSON = require(packagePath); // require(`${key}/package.json`); //
     const allPackageDeps = [];
+    // Resolve package path and then read package.json with FS because some packages do not list ./package.json on there exports so if we require the package.json an error occurres.
+    // Package subpath './package.json' is not defined by "exports"
+    const resPackagePath = browserifyResolve(packagePath);
+    const depPackage: IPackageJSON = JSON.parse(FS.readFileSync(resPackagePath, 'utf-8'));
+
     if (depPackage.dependencies) {
       Object.keys(depPackage.dependencies).map(i => allPackageDeps.push(i));
     }
