@@ -1,8 +1,9 @@
+<!-- workaround for footer inside a route: [ngStyle]="{'height': '95%'}"  -->
 <main class="content-area" [ngStyle]="{'height': '95%'}">
   <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
 </main>
 
-<clr-vertical-nav [clrVerticalNavCollapsible]="true" class="right" [clr-nav-level]="2">
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" class="right" [clr-nav-level]="2" [ngStyle]="{'height': '95%'}">
 
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
     <clr-icon shape="world" title="Overlays" clrVerticalNavIcon></clr-icon>
@@ -32,7 +33,7 @@
 </clr-vertical-nav>
 
 
-<clr-vertical-nav [clrVerticalNavCollapsible]="true">
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" [ngStyle]="{'height': '95%'}">
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="showTable">
     <clr-icon shape="table" title="Overlays" clrVerticalNavIcon></clr-icon>
     Table
