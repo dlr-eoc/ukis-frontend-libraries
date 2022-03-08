@@ -8,17 +8,15 @@
   .branding {
     flex: 0 1 auto;
     overflow: hidden;
+    //  min-width: 10.2rem;
 
     a {
       clr-icon {
         color: var(--header-branding-icon-color);
       }
-    }
 
-    .nav-link {
-      overflow: hidden;
-      &:not(.short) {
-        min-width: 100px;
+      &.nav-link{
+        overflow: hidden;
       }
     }
 
@@ -26,6 +24,10 @@
       font-size: 1rem;
       text-overflow: ellipsis;
       overflow: hidden;
+
+      &.short {
+        display: none;
+      }
     }
 
     .version {
@@ -47,6 +49,15 @@
       a {
         clr-icon {
           color: var(--header-branding-icon-color-mobile);
+        }
+      }
+
+      &.short-title {
+        .title.short {
+          display: flex;
+        }
+        .title {
+          display: none;
         }
       }
     }
