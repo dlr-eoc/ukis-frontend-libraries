@@ -15,11 +15,28 @@
       }
     }
 
+    .nav-link {
+      overflow: hidden;
+      &:not(.short) {
+        min-width: 100px;
+      }
+    }
+
     .title {
-      min-width: 100px;
       font-size: 1rem;
       text-overflow: ellipsis;
       overflow: hidden;
+    }
+
+    .version {
+      margin-left: 0.3rem;
+      font-size: 1rem;
+      color: var(--clr-header-title-color, #fafafa);
+      font-weight: var(--clr-header-title-font-weight, 400);
+      font-family: var(--clr-header-title-font-family, Metropolis, "Avenir Next", "Helvetica Neue", Arial, sans-serif);
+      letter-spacing: 0.01em;
+      line-height: 3rem;
+      text-decoration: none;
     }
   }
 }

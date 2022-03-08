@@ -1,3 +1,7 @@
+### Features
+* **@dlr-eoc/core-ui:**
+  - Add inputs version and short title to `ukis-header`.
+
 ### Bug Fixes
 * **@dlr-eoc/core-ui:**
   - Fix Styles for `clr-vertical-nav.right` icon direction.

@@ -23,3 +23,8 @@ For examples [see demo maps](../demo-maps/README.md)
 </clr-main-container>
 ```
 
+#### Inputs
+- ukis-title
+- ukis-short-title
+- ukis-version
+
