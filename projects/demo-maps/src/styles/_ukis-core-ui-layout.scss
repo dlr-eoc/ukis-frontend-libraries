@@ -8,6 +8,7 @@
   .branding {
     flex: 0 1 auto;
     overflow: hidden;
+    //  min-width: 10.2rem;
 
     a {
       clr-icon {
@@ -16,10 +17,24 @@
     }
 
     .title {
-      min-width: 100px;
       font-size: 1rem;
       text-overflow: ellipsis;
       overflow: hidden;
+
+      &.short {
+        display: none;
+      }
+    }
+
+    .version {
+      margin-left: 0.3rem;
+      font-size: 1rem;
+      color: var(--clr-header-title-color, #fafafa);
+      font-weight: var(--clr-header-title-font-weight, 400);
+      font-family: var(--clr-header-title-font-family, Metropolis, "Avenir Next", "Helvetica Neue", Arial, sans-serif);
+      letter-spacing: 0.01em;
+      line-height: 3rem;
+      text-decoration: none;
     }
   }
 }
@@ -30,6 +45,15 @@
       a {
         clr-icon {
           color: var(--header-branding-icon-color-mobile);
+        }
+      }
+
+      &.short-title {
+        .title.short {
+          display: flex;
+        }
+        .title {
+          display: none;
         }
       }
     }

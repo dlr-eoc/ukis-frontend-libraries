@@ -5,6 +5,7 @@ import './components/icons/ukis';
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
 import { Router, Routes } from '@angular/router';
+import { appVersion } from '../environments/version';
 
 interface IUi {
   floating: boolean;
@@ -21,6 +22,7 @@ interface IUi {
 export class AppComponent {
   title = '';
   shortTitle = '';
+  version = (appVersion === '0.0.0-PLACEHOLDER') ? null : appVersion;
 
   ui: IUi = {
     floating: false,
