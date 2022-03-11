@@ -28,7 +28,7 @@
     "lint": "ng lint",
     "compodoc": "compodoc -p tsconfig.doc.json -a projects/core-ui/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
     "compodoc-serve": "compodoc -r 8081 -s",
-    "postinstall": "cd scripts/library && npm i && cd ../../ && npm run build:scripts"
+    "postinstall": "cd scripts/library && npm ci && cd ../../ && npm run build:scripts"
   },
   "private": true,
   "dependencies": {
@@ -61,7 +61,7 @@
     "parse5-html-rewriting-stream": "^6.0.1",
     "proj4": "^2.7.2",
     "rxjs": "~6.6.7",
-    "three": "^0.132.2",
+    "three": "^0.137.5",
     "tslib": "^2.2.0",
     "w3c-schemas": "^1.4.0",
     "xmlserializer": "^0.6.1",

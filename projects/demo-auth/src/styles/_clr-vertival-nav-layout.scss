@@ -71,11 +71,11 @@
       margin-left: 0.5rem;
       margin-right: auto;
 
-      &[dir="right"] svg {
+      &[direction="right"] {
         transform: rotate(270deg);
       }
 
-      &[dir="left"] svg {
+      &[direction="left"] {
         transform: rotate(90deg);
       }
     }
