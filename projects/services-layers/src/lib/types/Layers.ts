@@ -245,9 +245,9 @@ export interface IVectorLayerOptions extends ILayerOptions {
  * The `crossOrigin` property can overwrite the one set in the layersource of the custom_layer if there is such a property e.g. when using OpenLayers as a map-engine
  * It also can be used to disable get color values for a OpenLayers layer in the layer popup when set to crossOrigin: null
  */
-export interface ICustomLayerOptions extends Omit<ILayerOptions, 'type'> {
+export interface ICustomLayerOptions<T = any> extends Omit<ILayerOptions, 'type'> {
   type?: TLayertype;
-  custom_layer: any;
+  custom_layer: T;
 }
 
 /**
@@ -402,10 +402,11 @@ export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
   return isVectorLayertype(layer.type);
 };
 
-export class CustomLayer extends Layer implements ICustomLayerOptions {
+export class CustomLayer<T = any> extends Layer implements ICustomLayerOptions<T> {
   type = CustomLayertype;
-  custom_layer: ICustomLayerOptions['custom_layer'] = {};
-  constructor(options: ICustomLayerOptions) {
+  // tslint:disable-next-line: variable-name
+  custom_layer: T = {} as T;
+  constructor(options: ICustomLayerOptions<T>) {
     super(options as ILayerOptions);
     Object.assign(this, options);
   }

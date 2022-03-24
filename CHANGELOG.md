@@ -1,4 +1,7 @@
 ### Features
+* **@dlr-eoc/services-layers:**
+  - Add optional type for CustomLayer [Issue #112](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/112) for better type checking.
+
 * **@dlr-eoc/core-ui:**
   - Add inputs version and short title to `ukis-header`.
 
