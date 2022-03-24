@@ -1298,27 +1298,33 @@ export class MapOlService {
     return newlayer;
   }
 
-    if (l.maxZoom) {
-      layeroptions.maxZoom = l.maxZoom;
-    }
-    if (l.minZoom) {
-      layeroptions.minZoom = l.minZoom;
-    }
+  /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */
+  private setCrossOrigin(l: Layer, layer: olLayer<olSource>): void {
+    if (layer instanceof olLayer) {
+      const olsource = layer.getSource();
+      /** set crossOrigin for popup layers  */
+      if (l.popup && !l.crossOrigin && l.crossOrigin !== null) {
+        this.sourceSetCross(olsource);
+      }
 
-    if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+      if (l.crossOrigin || l.crossOrigin === null) {
+        this.sourceSetCross(olsource);
+      }
     }
+  }
 
+  private setCluster(l: VectorLayer, layer: olVectorLayer<olVectorSource>, source: olVectorSource, styleCache: { [key: string]: any }): void {
     if (l.cluster) {
-      const clusteroptions: any = {};
+      const clusteroptions: olClusterOptions = {};
       if (typeof l.cluster === 'object') {
+        // here Object.assign modifies the target object
         Object.assign(clusteroptions, l.cluster);
       }
-      clusteroptions.source = olSource;
+      clusteroptions.source = source;
       const clusterSource = new olCluster(clusteroptions);
-      layeroptions.source = clusterSource;
-      const styleCache = {};
-      layeroptions.style = (feature) => {
+      // layeroptions.source = clusterSource;
+      layer.setSource(clusterSource);
+      layer.setStyle((feature) => {
         const size = feature.get('features').length;
         let style = styleCache[size];
         if (!style) {
@@ -1342,30 +1348,24 @@ export class MapOlService {
           styleCache[size] = style;
         }
         return style;
-      };
+      });
     }
-
-    if (l.options) {
-      Object.assign(layeroptions, l.options);
-    }
-
-    const newlayer = new olVectorLayer(layeroptions);
-    this.setCrossOrigin(l, newlayer);
-    this.addEventsToLayer(l, newlayer, layeroptions.source);
-    return newlayer;
   }
 
-  /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */
-  private setCrossOrigin(l: Layer, layer: olLayer<olSource>) {
-    if (layer instanceof olLayer) {
-      const olSource = layer.getSource();
-      /** set crossOrigin for popup layers  */
-      if (l.popup && !l.crossOrigin && l.crossOrigin !== null) {
-        this.sourceSetCross(olSource);
-      }
-
-      if (l.crossOrigin || l.crossOrigin === null) {
-        this.sourceSetCross(olSource);
+  /** use subdomains to setUrl/s on source */
+  private setSubdomains(l: Layer, layer: olLayer<olSource>): void {
+    if (l instanceof VectorLayer || l instanceof RasterLayer) {
+      const source = layer.getSource() as olXYZ | olVectorTile | olTileWMS | olWMTS | olVectorSource<olGeometry>;
+      if (l.subdomains) {
+        if (l.type === 'wfs' && (source instanceof olVectorSource)) {
+          l.url = l.url.replace('{s}', `${l.subdomains[0]}-${l.subdomains[l.subdomains.length - 1]}`);
+          source.setUrl(l.url);
+        } else if (!(source instanceof olVectorSource)) {
+          const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
+          source.setUrls(urls);
+        }
+      } else {
+        source.setUrl(l.url);
       }
     }
   }
