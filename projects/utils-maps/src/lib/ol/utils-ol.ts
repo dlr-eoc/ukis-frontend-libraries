@@ -72,7 +72,7 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
             // in `renderFrame` - so heatmaps won't be copied here!
             const key = layer.on('postrender', (event: RenderEvent) => {
                 const sourceContext = event.context;
-                const sourceCanvas = sourceContext.canvas;
+                const sourceCanvas = sourceContext.canvas as HTMLCanvasElement;
                 // Step 3: copy source bitmap to target-canvas.
                 targetContext.drawImage(sourceCanvas, 0, 0, sourceCanvas.clientWidth, sourceCanvas.clientHeight, 0, 0, targetCanvas.width, targetCanvas.height);
             });

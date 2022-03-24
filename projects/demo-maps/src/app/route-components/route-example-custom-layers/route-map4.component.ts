@@ -528,7 +528,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       id: 'interpolation',
       name: 'Interpolation',
       custom_layer: new InterpolationLayer({
-        source: clusteredCrescentSource,
+        source: clusteredCrescentSource as any,
         style: (feature: olFeature<any>, resolution: number): olStyle => {
           const features = feature.getProperties().features;
           let labelText: string;

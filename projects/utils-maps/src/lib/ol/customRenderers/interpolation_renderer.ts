@@ -65,7 +65,7 @@ export class InterpolationLayer extends VectorLayer<VectorSource<Geometry>> {
             showLabels: showLabels,
             smooth: smooth,
         };
-        (super.getRenderer() as InterpolationRenderer).updateSettings(newSettings);
+        (super.getRenderer() as never as InterpolationRenderer).updateSettings(newSettings);
         this.options.renderSettings = newSettings;
     }
 }
