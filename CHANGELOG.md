@@ -6,6 +6,9 @@
   - Add inputs version and short title to `ukis-header`.
 
 ### Bug Fixes
+* **@dlr-eoc/map-ol:**
+  - Show attributions for Vector Layers [Issue #119](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/119).
+
 * **@dlr-eoc/core-ui:**
   - Fix Styles for `clr-vertical-nav.right` trigger margin.
   - Fix Styles for `clr-vertical-nav.right` icon direction.
