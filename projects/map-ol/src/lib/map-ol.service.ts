@@ -1,7 +1,7 @@
 import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype } from '@dlr-eoc/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IVectorLayerOptions, IAnyObject } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -12,13 +12,20 @@ import olSource from 'ol/source/Source';
 import olGeometry from 'ol/geom/Geometry';
 import olLayer from 'ol/layer/Layer';
 import { Options as olLayerOptions } from 'ol/layer/Layer';
+import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
+import CanvasTileLayerRenderer from 'ol/renderer/canvas/TileLayer';
+import CanvasImageLayerRenderer from 'ol/renderer/canvas/ImageLayer';
 import olLayerGroup from 'ol/layer/Group';
+import { Options as olLayerGroupOptions } from 'ol/layer/Group';
 import olOverlay from 'ol/Overlay';
 import { Options as olOverlayOptions } from 'ol/Overlay';
 
 import olBaseTileLayer from 'ol/layer/BaseTile';
+import { Options as olBaseTileLayerOptions } from 'ol/layer/BaseTile';
 import olBaseVectorLayer from 'ol/layer/BaseVector';
+import { Options as olBaseVectorLayerOptions } from 'ol/layer/BaseVector';
 import olBaseImageLayer from 'ol/layer/BaseImage';
+import { Options as olBaseImageLayerOptions } from 'ol/layer/BaseImage';
 
 import olImageLayer from 'ol/layer/Image';
 
@@ -27,6 +34,7 @@ import olVectorLayer from 'ol/layer/Vector';
 import olVectorTile from 'ol/source/VectorTile';
 
 import olVectorTileLayer from 'ol/layer/VectorTile';
+import { Options as olVectorTileLayerOptions } from 'ol/layer/VectorTile';
 import olVectorTileSource from 'ol/source/VectorTile';
 import { applyStyle } from 'ol-mapbox-style';
 import { createXYZ } from 'ol/tilegrid';
@@ -45,10 +53,12 @@ import olImageSource from 'ol/source/Image';
 import olWMTS from 'ol/source/WMTS';
 import { Options as olWMTSOptions } from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
+import { Options as olWMTSTileGridOptions } from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olVectorSource from 'ol/source/Vector';
 import olRasterSource from 'ol/source/Raster';
 import olCluster from 'ol/source/Cluster';
+import { Options as olClusterOptions } from 'ol/source/Cluster';
 import olFeature from 'ol/Feature';
 
 import olCollection from 'ol/Collection';
@@ -111,6 +121,9 @@ export interface IDynamicPopupArgs {
   dynamicPopup: popup['dynamicPopup'];
 }
 
+
+type tmsReturnType<T> = T extends RasterLayer ? olTileLayer<olTileSource> :
+  T extends VectorLayer ? olVectorTileLayer : never;
 
 type LayerOptionsSources = olTileSource | olVectorTileSource | olImageSource | olSource;
 
@@ -490,7 +503,7 @@ export class MapOlService {
    * TODO: is this needed? when layers or sources are removed, then there is no Target anymore which listens for events?
    * there are also other functions like removeLayerByKey(), removeAllLayers()
    */
-  private cleanUpEventListeners(layerGroup: olLayerGroup, newLayers) {
+  private cleanUpEventListeners(layerGroup: olLayerGroup, newLayers: olBaseLayer[]) {
     /** get Difference of old layers and new layers */
     const layersToRemove = layerGroup.getLayers().getArray().filter(x => !newLayers.map(l => l.get('id')).includes(x.get('id')));
     this.removeListenersFromOldLayers(layersToRemove);
@@ -538,7 +551,7 @@ export class MapOlService {
         const source = (layer as any).getSource() as olSource;
         if (source) {
           // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
-          if(source instanceof olRasterSource){
+          if (source instanceof olRasterSource) {
             source.dispose();
           }
           if (source.hasListener()) {
@@ -864,6 +877,11 @@ export class MapOlService {
   /**
    * define layer types
    */
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Tile-TileLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_XYZ-XYZ.html
+   */
   private create_xyz_layer(l: RasterLayer): olTileLayer<olTileSource> {
     const xyzOptions: olXYZOptions = {
       wrapX: false
@@ -873,155 +891,66 @@ export class MapOlService {
       xyzOptions.crossOrigin = l.crossOrigin;
     }
 
-    const olSource = new olXYZ(xyzOptions);
+    const olsource = new olXYZ(xyzOptions);
 
-    if (l.attribution) {
-      olSource.setAttributions([l.attribution]);
-    }
+    const layeroptions = this.createOlLayerOptions(l, 'xyz', olsource);
 
-    if (l.continuousWorld) {
-      olSource.set('wrapX', l.continuousWorld);
-    }
-
-    if (l.subdomains) {
-      const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
-      olSource.setUrls(urls);
-
-    } else {
-      olSource.setUrl(l.url);
-    }
-
-    const layeroptions: any = {
-      type: 'xyz',
-      filtertype: l.filtertype,
-      name: l.name,
-      id: l.id,
-      visible: l.visible,
-      legendImg: l.legendImg,
-      opacity: l.opacity || 1,
-      zIndex: 1,
-      source: olSource
+    const baseTileLayerOptions: olBaseTileLayerOptions<olTileSource> = {
+      preload: 0,
+      useInterimTilesOnError: true
     };
-
-    if (l.popup) {
-      layeroptions.popup = l.popup;
-      /**
-       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
-       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
-       */
-      layeroptions.className = l.id;
-    }
-
-    if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
-    }
-
-    if (l.maxResolution) {
-      layeroptions.maxResolution = l.maxResolution;
-    }
-    if (l.minResolution) {
-      layeroptions.minResolution = l.minResolution;
-    }
-
-    if (l.maxZoom) {
-      layeroptions.maxZoom = l.maxZoom;
-    }
-    if (l.minZoom) {
-      layeroptions.minZoom = l.minZoom;
-    }
-
-    const newlayer = new olTileLayer(layeroptions);
+    const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+    this.setSubdomains(l, newlayer);
     this.setCrossOrigin(l, newlayer);
-    this.addEventsToLayer(l, newlayer, olSource);
+    this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
   }
 
-  private create_tms_layer(l: RasterLayer | VectorLayer): olTileLayer<olTileSource> {
+
+  /**
+   * create_xyz_layer for Raster
+   *
+   * or
+   *
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_VectorTile-VectorTileLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_VectorTile-VectorTile.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_format_MVT-MVT.html
+   */
+  private create_tms_layer<T extends RasterLayer | VectorLayer>(l: T): tmsReturnType<T> {
     let newlayer = null;
-    let newOlSource = null;
     if (l instanceof RasterLayer) {
       newlayer = this.create_xyz_layer(l);
       newlayer.set('type', 'tms');
+      return newlayer;
 
     } else if (l instanceof VectorLayer) {
-      newOlSource = new olVectorTileSource({
+      const olsource = new olVectorTileSource({
         format: new olMVT(),
         tileGrid: createXYZ({ minZoom: l.minZoom || undefined, maxZoom: l.maxZoom || undefined }),
         url: l.url,
         wrapX: false
       });
 
+      const layeroptions = this.createOlLayerOptions(l, 'tms', olsource);
 
-      if (l.attribution) {
-        newOlSource.setAttributions([l.attribution]);
-      }
-
-      if (l.continuousWorld) {
-        newOlSource.set('wrapX', l.continuousWorld);
-      }
-
-      if (l.subdomains) {
-        const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
-        newOlSource.setUrls(urls);
-
-      } else {
-        newOlSource.setUrl(l.url);
-      }
-
-
-      const layeroptions: any = {
-        type: 'tms',
-        filtertype: l.filtertype,
-        name: l.name,
-        id: l.id,
-        visible: l.visible,
-        legendImg: l.legendImg,
-        opacity: l.opacity || 1,
-        zIndex: 1,
-        source: newOlSource,
+      const vectorTileLayerOptions: olVectorTileLayerOptions = {
         declutter: true,
         renderMode: 'hybrid'
       };
 
-      if (l.popup) {
-        layeroptions.popup = l.popup;
-        /**
-         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
-         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
-         */
-        layeroptions.className = l.id;
-      }
-
-      if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
-      }
-
-      if (l.maxResolution) {
-        layeroptions.maxResolution = l.maxResolution;
-      }
-      if (l.minResolution) {
-        layeroptions.minResolution = l.minResolution;
-      }
-
-      if (l.maxZoom) {
-        layeroptions.maxZoom = l.maxZoom;
-      }
-      if (l.minZoom) {
-        layeroptions.minZoom = l.minZoom;
-      }
-
-      newlayer = new olVectorTileLayer(layeroptions);
+      newlayer = new olVectorTileLayer(Object.assign(layeroptions, vectorTileLayerOptions));
+      this.setSubdomains(l, newlayer);
       this.setCrossOrigin(l, newlayer);
-      this.addEventsToLayer(l, newlayer, newOlSource);
-
+      this.addEventsToLayer(l, newlayer, olsource);
 
       const style = l?.options?.style;
       const mapboxSourceKey = l?.options?.styleSource;
       if (style && mapboxSourceKey) {
         applyStyle(newlayer, style, mapboxSourceKey);
       }
+
+      return newlayer;
     }
-    return newlayer;
   }
 
   private create_wms_layer(l: WmsLayer) {
@@ -1034,6 +963,10 @@ export class MapOlService {
     return newlayer;
   }
 
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Tile-TileLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_TileWMS-TileWMS.html
+   */
   private create_tiled_wms_layer(l: WmsLayer): olTileLayer<olTileSource> {
     const tileOptions: olTileWMSOptions = {
       /** use assign here otherwise params is passed by object reference to the openlayers layer! */
@@ -1050,35 +983,45 @@ export class MapOlService {
       tileOptions.crossOrigin = l.crossOrigin;
     }
     const olsource = new olTileWMS(tileOptions);
+    const baseTileLayerOptions: olBaseTileLayerOptions<olTileSource> = {
+      preload: 0,
+      useInterimTilesOnError: true
+    };
 
-    if (l.subdomains) {
-      const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
-      olsource.setUrls(urls);
-    } else {
-      olsource.setUrl(l.url);
-    }
-
-    const layeroptions = this.adjustLayerOptions(l, 'wms', olsource);
-    const newlayer = new olTileLayer(layeroptions);
+    const layeroptions = this.createOlLayerOptions(l, 'wms', olsource);
+    const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+    this.setSubdomains(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
   }
 
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Image-ImageLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_ImageWMS-ImageWMS.html
+   */
   private create_image_wms_layer(l: WmsLayer): olImageLayer<olImageSource> {
     const options: olImageWMSOptions = {
-      /** use assign here otherwise params is passed by object reference to the openlayers layer! */
+      /**
+       * use assign here otherwise params is passed by object reference to the openlayers layer!
+       * https://thecodebarbarian.com/object-assign-vs-object-spread.html
+       */
       params: Object.assign({}, this.keysToUppercase(l.params)), // params: {} = { ...l.params } ~ same as assign destructuring
       url: l.url
     };
     const olsource = new olImageWMS(options);
-    const layeroptions = this.adjustLayerOptions(l, 'wms', olsource);
-    const newlayer = new olImageLayer(layeroptions);
+    const layeroptions = this.createOlLayerOptions(l, 'wms', olsource);
+    const baseImageLayerOptions: olBaseImageLayerOptions<olImageSource> = {
+
+    };
+    const newlayer = new olImageLayer(Object.assign(layeroptions, baseImageLayerOptions));
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
   }
 
-
-
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Tile-TileLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_WMTS-WMTS.html
+   */
   private create_wmts_layer(l: WmtsLayer): olTileLayer<olTileSource> {
     if (l instanceof WmtsLayer) {
 
@@ -1108,74 +1051,21 @@ export class MapOlService {
         layer: l.params.layer,
         style: l.params.style
       };
-      wmtsOptions = Object.assign(wmtsOptions, l.params);
+      wmtsOptions = Object.assign({}, wmtsOptions, l.params);
 
 
       if (l.crossOrigin) {
         wmtsOptions.crossOrigin = l.crossOrigin;
       }
 
-      const olSource = new olWMTS(wmtsOptions);
+      const olsource = new olWMTS(wmtsOptions);
+      const layeroptions = this.createOlLayerOptions(l, 'wmts', olsource);
+      const baseTileLayerOptions: olBaseTileLayerOptions<olTileSource> = {};
 
-      if (l.attribution) {
-        olSource.setAttributions([l.attribution]);
-      }
-
-      if (l.continuousWorld) {
-        olSource.set('wrapX', l.continuousWorld);
-      }
-
-
-      if (l.subdomains) {
-        const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
-        olSource.setUrls(urls);
-
-      } else {
-        olSource.setUrl(l.url);
-      }
-
-      const layeroptions: any = {
-        type: 'wmts',
-        filtertype: l.filtertype,
-        name: l.name,
-        id: l.id,
-        visible: l.visible,
-        legendImg: l.legendImg,
-        opacity: l.opacity || 1,
-        zIndex: 1,
-        source: olSource
-      };
-
-      if (l.popup) {
-        layeroptions.popup = l.popup;
-        /**
-         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
-         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
-         */
-        layeroptions.className = l.id;
-      }
-
-      if (l.maxResolution) {
-        layeroptions.maxResolution = l.maxResolution;
-      }
-      if (l.minResolution) {
-        layeroptions.minResolution = l.minResolution;
-      }
-
-      if (l.maxZoom) {
-        layeroptions.maxZoom = l.maxZoom;
-      }
-      if (l.minZoom) {
-        layeroptions.minZoom = l.minZoom;
-      }
-
-      if (l.bbox) {
-        layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
-      }
-
-      const newlayer = new olTileLayer(layeroptions);
+      const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+      this.setSubdomains(l, newlayer);
       this.setCrossOrigin(l, newlayer);
-      this.addEventsToLayer(l, newlayer, olSource);
+      this.addEventsToLayer(l, newlayer, olsource);
       return newlayer;
     } else {
       const layer = l as Layer;
@@ -1186,6 +1076,9 @@ export class MapOlService {
   /**
    * check projects/demo-maps/src/app/route-components/route-example-olperformance/services/largelayers.service.ts
    * for WFS examples.
+   *
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
    */
   private create_wfs_layer(l: VectorLayer): olVectorLayer<olVectorSource<olGeometry>> {
     let url = null;
@@ -1223,6 +1116,11 @@ export class MapOlService {
     return newlayer;
   }
 
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_format_GeoJSON-GeoJSON.html
+   */
   private create_geojson_layer(l: VectorLayer) {
     let olsource: olVectorSource;
     if (l.data) {
@@ -1259,6 +1157,11 @@ export class MapOlService {
     return newlayer;
   }
 
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_format_KML-KML.html
+   */
   private create_kml_layer(l: VectorLayer) {
     let olsource: olVectorSource;
     if (l.data) {
@@ -1313,6 +1216,9 @@ export class MapOlService {
     }
   }
 
+  /**
+   * set cluster source and style for point layers
+   */
   private setCluster(l: VectorLayer, layer: olVectorLayer<olVectorSource>, source: olVectorSource, styleCache: { [key: string]: any }): void {
     if (l.cluster) {
       const clusteroptions: olClusterOptions = {};
@@ -1370,7 +1276,7 @@ export class MapOlService {
     }
   }
 
-  private sourceSetCross(source: olSource) {
+  private sourceSetCross(source: olSource): void {
     /**
      * https://github.com/search?q=crossOrigin+repo%3Aopenlayers%2Fopenlayers+path%3Asrc%2Fol%2Fsource%2F&type=Code&ref=advsearch&l=&l=
      */
@@ -1380,26 +1286,39 @@ export class MapOlService {
     }
   }
 
-  private create_custom_layer(l: CustomLayer) {
+  /**
+   * Use this Layer to add a not supported OpenLayers layer
+   *
+   * custom_layer: olBaseLayer
+   */
+  private create_custom_layer(l: CustomLayer<olBaseLayer>) {
     if (l.custom_layer) {
-      const layer = (l.custom_layer as olBaseLayer);
+      const layer = l.custom_layer;
 
       if (layer instanceof olLayer) {
-        const olSource = layer.getSource() as olSource;
-        olSource['wrapX_'] = false;
+        const olsource = layer.getSource() as olSource;
         if (l.attribution) {
-          olSource.setAttributions([l.attribution]);
+          olsource.setAttributions([l.attribution]);
         }
 
         if (l.continuousWorld) {
-          olSource['wrapX_'] = l.continuousWorld;
+          /**
+           * set wrapX after source creation is not possible so we have to use the private property
+           * It works based on a test in codesandbox.io
+           * https://github.com/openlayers/openlayers/blob/v6.13.0/src/ol/source/Source.js#L48
+           */
+          // tslint:disable-next-line: no-string-literal
+          olsource['wrapX_'] = l.continuousWorld;
+        } else {
+          // tslint:disable-next-line: no-string-literal
+          olsource['wrapX_'] = false;
         }
         this.setCrossOrigin(l, layer);
-        this.addEventsToLayer(l, layer, olSource);
+        this.addEventsToLayer(l, layer, olsource);
 
         // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
-        if(olSource instanceof olRasterSource){
-          layer.on('change:source', (evt)=>{
+        if (olsource instanceof olRasterSource) {
+          layer.on('change:source', (evt) => {
             evt.oldValue.dispose();
           });
         }
@@ -1429,16 +1348,6 @@ export class MapOlService {
         console.error(`The custom_layer of ${l.id} in not a openlayers Layer`);
       }
 
-      const layeroptions = {
-        type: 'custom',
-        name: l.name,
-        id: l.id,
-        visible: l.visible,
-        legendImg: l.legendImg,
-        opacity: l.opacity || 1,
-        zIndex: 1,
-      } as any;
-
       if (l.maxResolution) {
         layer.setMaxResolution(l.maxResolution);
       }
@@ -1453,6 +1362,16 @@ export class MapOlService {
         layer.setMinZoom(l.minZoom);
       }
 
+      const layeroptions: ILayerOptions & olLayerOptions<LayerOptionsSources> = {
+        type: 'custom',
+        name: l.name,
+        id: l.id,
+        visible: l.visible,
+        legendImg: l.legendImg,
+        opacity: l.opacity || 1,
+        zIndex: 1,
+      };
+
       if (l.popup && !(layer instanceof olLayerGroup)) {
         layeroptions.popup = l.popup;
         /**
@@ -1460,6 +1379,7 @@ export class MapOlService {
          * needs the class Name to detect if it is a different layer at the pixel value
          * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
          */
+        // tslint:disable-next-line: no-string-literal
         layer['className_'] = l.id;
       }
 
@@ -1469,7 +1389,7 @@ export class MapOlService {
       }
 
       layer.setProperties(layeroptions);
-      // don't delete the custom Layer, it is used to newly create all layer from layerservice after map all layers removed!
+      // don't delete the custom Layer, it is used to newly create all layers from layerservice after map all layers removed!
       // delete l.custom_layer;
       return layer;
 
@@ -1478,6 +1398,10 @@ export class MapOlService {
     }
   }
 
+  /**
+   * Use this Layer to stack multiple ukis layers in one.
+   * creates a olLayerGroup from create_layers
+   */
   private create_stacked_layer(l: StackedLayer) {
     if (l instanceof StackedLayer) {
       const layers = l.layers.map(ml => {
@@ -1489,9 +1413,13 @@ export class MapOlService {
         ml.events = l.events;
         return this.create_layers(ml);
       });
-      const groupOptions = this.adjustLayerOptions(l, 'custom');
-      (groupOptions as any).layers = layers;
-      const layerGroup = new olLayerGroup(groupOptions);
+
+      const baseLayerOptions = this.createOlLayerOptions(l, 'custom');
+      const groupOptions: olLayerGroupOptions = {
+        layers
+      };
+
+      const layerGroup = new olLayerGroup(Object.assign(baseLayerOptions, groupOptions));
       return layerGroup;
     } else {
       console.log('layer is not of type StackedLayer!', l);
@@ -1746,7 +1674,7 @@ export class MapOlService {
   /**
    * https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html#Subclasses
    */
-  private checkIsRaster(layer: olLayer<any>): layer is olBaseImageLayer<olImageSource> | olBaseTileLayer<olTileSource> {
+  private checkIsRaster(layer: olLayer<any>): layer is olBaseImageLayer<olImageSource, CanvasImageLayerRenderer> | olBaseTileLayer<olTileSource, CanvasTileLayerRenderer> {
     if (layer instanceof olBaseImageLayer || layer instanceof olBaseTileLayer) {
       return true;
     } else {
@@ -1757,7 +1685,7 @@ export class MapOlService {
   /**
    * https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html#Subclasses
    */
-  private checkIsVector(layer: olLayer<any>): layer is olBaseVectorLayer<olVectorSource<any>> {
+  private checkIsVector(layer: olLayer<any>): layer is olBaseVectorLayer<olVectorSource<any>, CanvasVectorLayerRenderer> {
     if (layer instanceof olBaseVectorLayer && !this.checkIsRaster(layer)) {
       return true;
     } else {
