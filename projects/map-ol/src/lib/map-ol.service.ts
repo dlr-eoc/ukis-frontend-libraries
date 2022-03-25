@@ -779,6 +779,7 @@ export class MapOlService {
   /**
    * create layeroptions olLayerOptions<OptionSources> & ILayerOptions
    * - id
+   * - name
    * - filtertype
    * - type
    * - legendImg

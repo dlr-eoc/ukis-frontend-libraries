@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { IPopupArgs, MapOlService } from './map-ol.service';
-import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer, StackedLayer } from '@dlr-eoc/services-layers';
+import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer, StackedLayer, ILayerOptions } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -435,7 +435,12 @@ describe('MapOlService olLayers', () => {
 
     const olLayerGroups = service.map.getLayers().getArray();
     const olRasterLayer = olLayerGroups[1].getLayersArray()[0];
-    expect(olRasterLayer.getSource().crossOrigin).toEqual('anonymous');
+
+    expect(olRasterLayer.get('type')).toEqual('xyz');
+    expect(olRasterLayer instanceof olTileLayer).toBeTrue();
+    if (olRasterLayer instanceof olTileLayer) {
+      expect(olRasterLayer.getSource().crossOrigin).toEqual('anonymous');
+    }
   });
 
   it('should add/get layers to/from the map', () => {
@@ -747,7 +752,69 @@ describe('MapOlService ukisLayers', () => {
     expect(olLayerWfs.getClassName()).toBe(ukisVectorLayerWfs.id);
     const olSourceWfs = olLayerWfs.getSource();
     expect(olSourceWfs['crossOrigin'] && olSourceWfs['crossOrigin_']).toBe(undefined); // WFS does not need crossOrigin??
-  })
+  });
+
+  it('should set ILayerOptions on the olLayer', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+    const layerOptions: ILayerOptions = {
+      id: 'ID-ukis-base-layer',
+      name: 'ukis base layer',
+      filtertype: 'Layers',
+      type: 'xyz',
+      legendImg: 'link/to/legend.png',
+      visible: true,
+      opacity: 0.8,
+      attribution: 'attribution for ukisBaseLayer',
+      continuousWorld: true,
+      popup: true, // * - set crossOrigin for popup layers
+      // * - set source on layeroptions
+      minResolution: 2000, // set resolution and zoom at the same time only here for the test, normally there should only be set one of them
+      maxResolution: 20000,
+      maxZoom: 10,
+      minZoom: 5,
+      bbox: [-180, -90, 180, 90]
+    };
+    const ukisBaseLayer = new Layer(layerOptions);
+    const layers = [ukisBaseLayer];
+    service.setUkisLayers(layers, 'Layers');
+
+
+    const mapLayers = service.getLayers('Layers');
+    expect(mapLayers.length).toBe(layers.length);
+
+    const olLayerCustom = mapLayers[0] as olTileLayer<olTileSource>; // because of type: xyz
+    expect(olLayerCustom.get('id')).toBe(ukisBaseLayer.id);
+    expect(olLayerCustom.get('name')).toBe(ukisBaseLayer.name);
+    expect(olLayerCustom.get('filtertype')).toBe(ukisBaseLayer.filtertype);
+    expect(olLayerCustom.get('type')).toBe(ukisBaseLayer.type);
+    expect(olLayerCustom.get('legendImg')).toBe(ukisBaseLayer.legendImg);
+    expect(olLayerCustom.get('popup')).toBe(ukisBaseLayer.popup);
+
+
+    // ol properties
+    expect(olLayerCustom.getVisible()).toBe(ukisBaseLayer.visible);
+    expect(olLayerCustom.getOpacity()).toBe(ukisBaseLayer.opacity);
+    // https://github.com/openlayers/openlayers/blob/7bf014f7478be55e3baa034d3c6a9f2d1d1c0704/src/ol/source/Source.js#L224
+    // getAttributions: function (frameState):string[]
+    const attributions = olLayerCustom.getSource().getAttributions()({} as any);
+    expect(attributions.includes(ukisBaseLayer.attribution)).toBeTrue();
+    expect(olLayerCustom.getSource().getWrapX()).toBe(ukisBaseLayer.continuousWorld);
+    expect(olLayerCustom.getSource().getWrapX()).toBe(ukisBaseLayer.continuousWorld);
+
+    expect(olLayerCustom.getSource()['crossOrigin']).toBe('anonymous'); // because of popup: true
+    expect(olLayerCustom.getSource()['crossOrigin_']).toBe('anonymous'); // because of popup: true
+
+    expect(olLayerCustom.getMinResolution()).toBe(ukisBaseLayer.minResolution);
+    expect(olLayerCustom.getMaxResolution()).toBe(ukisBaseLayer.maxResolution);
+
+    expect(olLayerCustom.getMinZoom()).toBe(ukisBaseLayer.minZoom);
+    expect(olLayerCustom.getMaxZoom()).toBe(ukisBaseLayer.maxZoom);
+
+    const webMercatorBbox = transformExtent(ukisBaseLayer.bbox, WGS84, WebMercator);
+    expect(olLayerCustom.getExtent()).toEqual(webMercatorBbox);
+  });
 });
 
 describe('MapOlService TileGrid', () => {
