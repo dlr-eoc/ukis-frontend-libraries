@@ -44,9 +44,9 @@ Projects on stackblitz
 
 Libraries/packages and demo applications can be found in the [projects folder](projects).
 
-Here are e view examples:
-- [A OpenLayers map component](projects/map-ol/README.md)
-- [A UI component to manage layers on a map](projects/layer-control/README.md)
+Here are a few examples:
+- [THe OpenLayers map component](projects/map-ol/README.md)
+- [The UI component to manage layers on a map](projects/layer-control/README.md)
 - [Tools for the map like "mouse position" or "projection-switch"](projects/map-tools/README.md)
 - [The angular service which handles layers (add/remove and update)](projects/services-layers/README.md)
 - ...
