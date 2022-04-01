@@ -65,7 +65,6 @@
 
   .nav-trigger {
     margin-right: auto;
-    margin-left: 0.15rem;
 
     .nav-trigger-icon {
       margin-left: 0.5rem;
@@ -85,6 +84,10 @@
     .nav-icon {
       margin-left: auto !important;
       margin-right: var(--nav-items-distance-side) !important;
+    }
+
+    .nav-trigger {
+      margin-left: 0.15rem;
     }
   }
 }

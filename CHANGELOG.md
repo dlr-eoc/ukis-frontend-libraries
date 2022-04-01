@@ -1,5 +1,16 @@
-### Bug Fixes
+### Features
+* **@dlr-eoc/services-layers:**
+  - Add optional type for CustomLayer [Issue #112](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/112) for better type checking.
+
 * **@dlr-eoc/core-ui:**
+  - Add inputs version and short title to `ukis-header`.
+
+### Bug Fixes
+* **@dlr-eoc/map-ol:**
+  - Show attributions for Vector Layers [Issue #119](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/119).
+
+* **@dlr-eoc/core-ui:**
+  - Fix Styles for `clr-vertical-nav.right` trigger margin.
   - Fix Styles for `clr-vertical-nav.right` icon direction.
 
 # [8.0.1](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v8.0.1) (2022-01-05) (map-ol bug and PR template)

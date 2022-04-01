@@ -2,7 +2,7 @@
   <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
   <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
 
-  <ukis-header [ukis-title]="title">
+  <ukis-header [ukis-title]="title" [ukis-short-title]="shortTitle" [ukis-version]="version">
     <a *ngFor="let route of routes" routerLink="/{{route.path}}" routerLinkActive="active"
       class="nav-link nav-text header-nav-el">{{route.data.title}}</a>
   </ukis-header>

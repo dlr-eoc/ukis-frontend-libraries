@@ -5,42 +5,53 @@
 ![Npm Package](https://github.com/dlr-eoc/ukis-frontend-libraries/workflows/Package%20Main%20Release/badge.svg) ![Package Version](https://img.shields.io/github/v/tag/dlr-eoc/ukis-frontend-libraries?sort=semver)
 [![DOI](https://zenodo.org/badge/246639318.svg)](https://zenodo.org/badge/latestdoi/246639318)
 
+## About the UKIS Frontend?
+
+The project Environmental and Crisis Information Systems (UKIS - the German abbreviation for Umwelt- und Kriseninformationssysteme) aims at harmonizing and simplifying the development of geospatial web information systems by setting up a framework of modularized and generalized software components. UKIS is divided into the open source UKIS Frontend (dlr-eoc/ukis-frontend-libraries) for the visualization of geodata on the web and a UKIS backend that provides geodata through web services and analysis functionalities. Some of these [backend services](https://github.com/orgs/dlr-eoc/repositories?q=ukis) are also open source.
+
+The UKIS Frontend is a combination of multiple open source software libraries and frameworks to simplify the rapid creation of intuitive geospatial web apps. This is achieved as follows:
+Specification of a consistent user interface using the [Clarity Design System](https://clarity.design) with many UI components and styling guidelines.
+Web standards such as component-based development, single-page application routing, client-server communication, and tools to build, test, and update the software using the [Angular development platform](https://angular.io).
+Visualization of geodata using the mapping library [OpenLayers](https://openlayers.org), making it possible to integrate all kinds of data and standards such as those from OGC.
+An abstraction layer for the mapping library describes all types and interfaces, so that it is possible to integrate other mapping libraries using the same UI components. Furthermore, there are utility functions, components for map controls and tools as well as interfaces to OGC standards.
+
+UKIS is developed at the German Remote Sensing Data Center (DFD), an institute at the German Aerospace Center (DLR). Examples of past and current developments based on UKIS are in the context of natural hazards (e.g. for floods, forest fires, tsunami), environmental monitoring (e.g. for snow cover, coastal usage, land cover), civil security (e.g. maritime surveillance, ship detection, ice monitoring), health applications (e.g. COVID-19) as well as planetary sciences (e.g. planetary geology).
 
 
 
-This repository (UKIS Frontend Libraries) is a collection of angular components, services, interfaces... which are often used in UKIS mapping applications.
 
-It is the base to create a project specific UKIS Frontend Application.
+## Demos
 
-It uses [angular](https://angular.io/) and the [Clarity Design System](https://vmware.github.io/clarity/).
- 
+GitHub Pages: [The application for projects/demo-maps](https://dlr-eoc.github.io/ukis-frontend-libraries/)
 
-The following libraries/packages are included in this repository:
-
-- [base-layers-raster](projects/base-layers-raster/README.md)
-- [cookie-alert](projects/cookie-alert/README.md)
-- [core-ui](projects/core-ui/README.md)
-- [layer-control](projects/layer-control/README.md)
-- [map-tools](projects/map-tools/README.md)
-- [map-ol](projects/map-ol/README.md)
-- [map-three](projects/map-three/README.md)
-- [user-info](projects/user-info/README.md)
-
-- [services-layers](projects/services-layers/README.md)
-- [services-map-state](projects/services-map-state/README.md)
-- [services-ogc](projects/services-ogc/README.md)
-- [services-util-store](projects/services-util-store/README.md)
-
-- [utils-maps](projects/utils-maps/README.md)
-- [utils-browser](projects/utils-browser/README.md)
-- [utils-ogc](projects/utils-ogc/README.md)
+Projects on stackblitz
+- [Basic layout of the application](https://stackblitz.com/edit/clarity-v4-dlr-eoc-ukis-v7)
+- [Map demo with OpenLayers](https://stackblitz.com/edit/clarity-v4-dlr-eoc-ukis-v7-map)
 
 
-## To use the libraries in your project specific application, you can either use the packaged npm modules or include this repository.
+
+
+## To use the libraries in your angular application, you can either use the packaged npm modules or include this repository.
 
 - Use the frontend-libraries as [npm modules](https://www.npmjs.com/search?q=%40dlr-eoc) **Recommended**
+
 - Use the frontend-libraries as npm modules (GitHub Packages) [see How to install Packages from GitHub](DEVELOPMENT.md)
+
 - or use the modules in typescript source via path mapping [see Developing libraries and frontend side by side](DEVELOPMENT.md)
+
+
+
+
+Libraries/packages and demo applications can be found in the [projects folder](projects).
+
+Here are a few examples:
+- [THe OpenLayers map component](projects/map-ol/README.md)
+- [The UI component to manage layers on a map](projects/layer-control/README.md)
+- [Tools for the map like "mouse position" or "projection-switch"](projects/map-tools/README.md)
+- [The angular service which handles layers (add/remove and update)](projects/services-layers/README.md)
+- ...
+
+
 
 
 ## Getting Started (setup a new UKIS-Client)
@@ -56,7 +67,7 @@ Then run:
 - `cd project-<name>`
 
 3. Add Clarity Angular
-- `ng add @clr/angular`
+- `ng add @clr/angular` (also see [clarity get started with angular](https://clarity.design/get-started/developing/angular/))
 
 4. Run the ng add command for the UKIS core-ui
 - `ng add @dlr-eoc/core-ui [options]` 
@@ -67,16 +78,6 @@ Then run:
 
 6. [See clarity get-started to use there ui components](https://clarity.design/documentation/get-started)
 
-
-
-## Demos
-
-Check our demos on stackblitz
-- [Basic layout of the application](https://stackblitz.com/edit/clarity-v4-dlr-eoc-ukis-v7)
-- [Map demo with OpenLayers](https://stackblitz.com/edit/clarity-v4-dlr-eoc-ukis-v7-map)
-
-and GitHub Pages
-- [Angular app from projects/demo-maps](https://dlr-eoc.github.io/ukis-frontend-libraries/)
 
 
 
@@ -119,12 +120,4 @@ Copyright (c) 2020 German Aerospace Center (DLR) * German Remote Sensing Data Ce
 The UKIS team welcomes contributions from the community.
 For more detailed information, see our [guide on contributing](CONTRIBUTING.md) and [development](DEVELOPMENT.md) if you're interested in getting involved.
 
-
-## What is UKIS?
-
-The DLR project Environmental and Crisis Information System (the German abbreviation is UKIS, standing for [Umwelt- und Kriseninformationssysteme](https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-5413/10560_read-21914/)) aims at harmonizing the development of information systems at the German Remote Sensing Data Center (DFD) and setting up a framework of modularized and generalized software components.
-
-UKIS is intended to ease and standardize the process of setting up specific information systems and thus bridging the gap from EO product generation and information fusion to the delivery of products and information to end users.
-
-Furthermore the intention is to save and broaden know-how that was and is invested and earned in the development of information systems and components in several ongoing and future DFD projects.
 
