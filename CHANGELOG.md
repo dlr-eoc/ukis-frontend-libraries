@@ -1,3 +1,5 @@
+# [8.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v8.1.0) (2022-04-04) (Type for CustomLayer and bug fixes)
+
 ### Features
 * **@dlr-eoc/services-layers:**
   - Add optional type for CustomLayer [Issue #112](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/112) for better type checking.
