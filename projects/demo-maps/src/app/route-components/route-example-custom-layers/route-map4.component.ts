@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
+import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer, WmtsLayer, RasterLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
@@ -74,7 +74,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   addLayers() {
     const osmLayer1 = new OsmTileLayer({
       id: 'OSM1',
-      visible: false
+      visible: false,
+      popup: true
     });
 
     const customHeatmapLayer = new CustomLayer({
@@ -628,6 +629,74 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       }),
     });
 
+
+    const tandemWmts = new WmtsLayer({
+      type: 'wmts',
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      name: 'TDM90 DEM',
+      id: 'TDM90_DEM',
+      params: {
+        layer: 'TDM90_DEM',
+        style: 'default',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3857',
+          tileMatrixPrefix: 'EPSG:3857'
+        },
+        format: 'image/png'
+      },
+      visible: false,
+      // maxZoom: 8,
+      description: 'TDM90_DEM maxZoom: 8',
+      attribution: ' | TDM90 Data ©: <a href="http://www.dlr.de" target="_blank">DLR</a>  licensed for <a rel="license" target="_blank" href="https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf">scientific use</a>',
+      legendImg: '',
+      expanded: true,
+      cssClass: 'custom-layer'
+    })
+    const tandemOlLayer = this.mapSvc['create_wmts_layer'](tandemWmts);
+    tandemOlLayer.on('postrender', function (evt) {
+      /* const ctx = evt.context.canvas.getContext('2d');
+      ctx.globalCompositeOperation = 'multiply' */ // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Compositing
+
+      // https://www.sarasoueidan.com/blog/compositing-and-blending-in-css/
+
+      ((evt.context.canvas as HTMLCanvasElement).parentNode as any).style['mix-blend-mode'] = 'multiply'; // https://developer.mozilla.org/de/docs/Web/CSS/mix-blend-mode
+      // mix-blend-mode css is only working if all ol layers have e different className https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html
+      ((evt.context.canvas as HTMLCanvasElement).parentNode as any).style['filter'] = 'blur' // https://developer.mozilla.org/de/docs/Web/CSS/filter;
+    });
+
+    const TDM90DEMLayer = new CustomLayer({
+      type: "custom",
+      name: 'TDM90 DEM',
+      id: 'TDM90_DEM',
+      visible: true,
+      // maxZoom: 8,
+      description: 'TDM90_DEM maxZoom: 8',
+      attribution: ' | TDM90 Data ©: <a href="http://www.dlr.de" target="_blank">DLR</a>  licensed for <a rel="license" target="_blank" href="https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf">scientific use</a>',
+      legendImg: '',
+      expanded: true,
+      cssClass: 'custom-layer',
+      popup: true,
+      custom_layer: tandemOlLayer
+      /* events: {
+        layer: [
+          {
+            // https://github.com/Viglino/ol-ext/blob/master/src/filter/CSS.js
+            // https://github.com/Viglino/ol-ext/blob/master/examples/filter/map.filter.css.html
+            // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
+            event: 'postrender', listener: (evt) => {
+              // evt.context.canvas.parentNode.style['mix-blend-mode'] = 'multiply';
+              const ctx =  evt.context.canvas.getContext('2d');
+              ctx.globalCompositeOperation = 'multiply';
+            }
+          }
+        ]
+      } */
+    });
+
+
+
+    const test = { ...osmLayer1 } as any;
+
     const layers = [
       TransparentBackground,
       osmLayer1,
@@ -644,7 +713,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       layersGroup1,
       geoJsonLayer,
       customLayerGroup,
-      rasterSourceLayer];
+      rasterSourceLayer,
+      TDM90DEMLayer];
 
     layers.forEach(layer => {
       if (layer instanceof Layer) {
@@ -653,6 +723,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
         this.layersSvc.addLayerGroup(layer);
       }
     });
+
+
+    this.layersSvc.addLayer(test, 'Layers');
 
     // Test for https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
     setTimeout(() => {
