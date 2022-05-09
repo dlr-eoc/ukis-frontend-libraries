@@ -10,7 +10,6 @@ import olImageWMS from 'ol/source/ImageWMS';
 import olVectorImageLayer from 'ol/layer/VectorImage';
 import olVectorSource from 'ol/source/Vector';
 
-import { parse } from 'url';
 import { regularGrid } from './map.utils';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, first } from 'rxjs/operators';
@@ -223,21 +222,38 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     this.layersSvc.addLayer(eventLayer2, 'Layers');
   }
 
-  updateSearchParamsHashRouting(params: { [key: string]: string }) {
-    const url = parse(window.location.href.replace('#/', ''));
-    const urlHashRouting = parse(window.location.href);
-    const queryString = urlHashRouting.hash.split('?')[1];
+  getSearchParamsHashRouting(url = window.location.href) {
+    if (url.indexOf('http') === -1) {
+      url = new URL(url, `${window.location.origin}${window.location.pathname}`).toString();
+    }
+
+    const urlHashRouting = new URL(window.location.href, window.location.origin);
+    const [hash, queryString] = urlHashRouting.hash.split('?');
+
     let query = new URLSearchParams();
     if (queryString) {
       query = new URLSearchParams(queryString);
     }
+
+    return {
+      query,
+      urlHashRouting,
+      hash
+    };
+  }
+
+
+
+  updateSearchParamsHashRouting(params: { [key: string]: string }) {
+    const { query, urlHashRouting, hash } = this.getSearchParamsHashRouting();
     Object.keys(params).map(key => {
       query.set(key, params[key]);
     });
     const newQueryString = decodeURIComponent(`${query}`);
-    const newurl = `${urlHashRouting.protocol}//${urlHashRouting.host}${urlHashRouting.pathname || ''}#${url.pathname}?${newQueryString}`; // &time=${state.time}
+    const newurl = `${urlHashRouting.protocol}//${urlHashRouting.host}${urlHashRouting.pathname || '/'}${hash || '#/'}?${newQueryString}`;
     return newurl;
   }
+
 
   /** set url from MapState */
   subscribeToMapState() {

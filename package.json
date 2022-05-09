@@ -18,7 +18,7 @@
     "OGC"
   ],
   "scripts": {
-    "start": "ng serve demo-maps --source-map",
+    "start": "ng serve demo-maps",
     "build": "node scripts/library/index.js --build",
     "test": "node scripts/library/index.js --test",
     "schematics:test": "jasmine dist/core-ui/schematics/**/*_spec.js",
