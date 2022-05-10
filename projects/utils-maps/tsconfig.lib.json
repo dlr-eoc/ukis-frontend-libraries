@@ -7,11 +7,11 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": [],
     "lib": [
-      "dom",
-      "es2018"
-    ]
+      "es2018",
+      "dom"
+    ],
+    "types": ["offscreencanvas"]
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,

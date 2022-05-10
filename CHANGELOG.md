@@ -1,3 +1,7 @@
+### Bug Fixes
+* **@dlr-eoc/utils-maps:**
+  - Type Errors due to `@types/offscreencanvas`. All modules which use `@dlr-eoc/utils-maps` (which makse use of OffscreenCanvas) have to include `offscreencanvas` in there tsconfig types array. We cannot set this once at the main tsconfig because the types array in tsconfig.spec already [overrides](https://www.typescriptlang.org/tsconfig#extends) the main config.
+
 # [8.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v8.1.0) (2022-04-04) (Type for CustomLayer and bug fixes)
 
 ### Features
