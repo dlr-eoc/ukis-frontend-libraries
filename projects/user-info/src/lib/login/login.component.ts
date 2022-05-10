@@ -9,12 +9,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnDestroy {
-
-  usrInfoForm = new FormGroup({
+  usrInfoFormOptions = {
     usrName: new FormControl('', Validators.required),
     usrPass: new FormControl('', [Validators.required, Validators.minLength(4)]),
     remember: new FormControl(false)
-  }, { updateOn: 'blur' });
+  };
+  usrInfoForm = new FormGroup(this.usrInfoFormOptions, { updateOn: 'blur' });
 
   usrSubsription: Subscription;
   user: IUser;
