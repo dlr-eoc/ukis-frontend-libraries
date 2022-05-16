@@ -1,3 +1,9 @@
+
+### Breaking Changes
+* **@dlr-eoc:** 
+- Update angular from `^12.2.5` to `^13.3.5`
+- Update ol-mapbox-style from `^7.0.0` to `^8.0.7`
+
 ### Bug Fixes
 * **@dlr-eoc/utils-maps:**
   - Type Errors due to `@types/offscreencanvas`. All modules which use `@dlr-eoc/utils-maps` (which makse use of OffscreenCanvas) have to include `offscreencanvas` in there tsconfig types array. We cannot set this once at the main tsconfig because the types array in tsconfig.spec already [overrides](https://www.typescriptlang.org/tsconfig#extends) the main config.
