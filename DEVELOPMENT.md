@@ -7,12 +7,12 @@
 - Create a new branch for your feature specific changes based on master: e.g. `git checkout -b feature-XXX`
 - Install dependencies: `npm install`
 
-## Note
-- all versions in package.json should be fixed! 
-- reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies. (similar to hardware upgrades)
+## Update dependencies
+- reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies.
 - check for new versions `npm outdated -l` and `ng update`
 - update versions `npm update <pkg>` and `ng update <pkg>`
 - make angular migrations manually `ng update @angular/cli --from <version> --to <version> --migrate-only` and `ng update @angular/core --from <version> --to <version> --migrate-only`
+- an update of a `major` version in the dependencies should introduce a **BREAKING CHANGE!**
 
 ## General Development Workflow
 
