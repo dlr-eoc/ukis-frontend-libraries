@@ -372,6 +372,11 @@ function ruleUpdateTsConfigFile(): Rule {
         json.compilerOptions.paths[p.name] = p.paths;
       }
 
+      // skipLibCheck for libraries like OpenLayers
+      if (!json.compilerOptions.skipLibCheck) {
+        json.compilerOptions.skipLibCheck = true;
+      }
+
       return json;
     });
   };
