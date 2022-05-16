@@ -1,4 +1,4 @@
-import { TestBed, getTestBed } from '@angular/core/testing/';
+import { TestBed, getTestBed } from '@angular/core/testing';
 import { WmtsClientService } from './wmtsclient.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
