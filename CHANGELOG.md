@@ -1,4 +1,5 @@
 
+# [9.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v9.0.0) (2022-05-20) (Update dependencies and documentation)
 ### Breaking Changes
 * **@dlr-eoc:** 
 - Update angular from `^12.2.5` to `^13.3.5`
