@@ -14,7 +14,7 @@
     "core-ui"
   ],
   "ng-add": {
-    "save": false
+    "save": "dependencies"
   },
   "dependencies": {
     "@angular-devkit/core": "0.0.0-PLACEHOLDER-VENDOR",

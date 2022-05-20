@@ -3,6 +3,7 @@ import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema
 import { Schema as ApplicationOptions, Style } from '@schematics/angular/application/schema';
 import { UkisNgAddSchema } from './schema';
 import * as path from 'path';
+import { TsconfigJSON } from '../schema.tsconfig';
 
 
 const collectionPath = require.resolve(path.join(__dirname, '../collection.json'));
@@ -169,15 +170,23 @@ describe('ng-add', () => {
 
   it('should update the tsconfig file', async () => {
     const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
-    const tsconfigFilePath = '/tsconfig.json';
-    const baseTsconfigFilePath = '/tsconfig.base.json';
-    if (tree.exists(baseTsconfigFilePath)) {
-      const tsconfigFile = JSON.parse(tree.readContent(baseTsconfigFilePath));
-      expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
-    } else {
-      const tsconfigFile = JSON.parse(tree.readContent(tsconfigFilePath));
-      expect('@dlr-eoc/*' in tsconfigFile.compilerOptions.paths).toBe(true);
-    }
+    const configs = ['/tsconfig.json', '/tsconfig.base.json'];
+    configs.forEach(configFilePath => {
+      if (tree.exists(configFilePath)) {
+        const tsconfigFile = JSON.parse(tree.readContent(configFilePath)) as TsconfigJSON;
+        const paths = tsconfigFile?.compilerOptions?.paths;
+        expect(paths).toBeTruthy();
+        if (paths) {
+          expect('@dlr-eoc/*' in paths).toBe(true);
+        }
+
+        const skipLibCheck = tsconfigFile?.compilerOptions?.skipLibCheck;
+        expect(skipLibCheck).toBeTruthy();
+        if (skipLibCheck !== undefined) {
+          expect(skipLibCheck).toBe(true);
+        }
+      }
+    });
   });
 
   it('should update html files', async () => {

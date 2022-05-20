@@ -9,14 +9,14 @@ import { UserService, IRegisterUser, IUser } from '../user.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnDestroy {
-
-  usrInfoForm = new FormGroup({
+  usrInfoFormOptions = {
     usrName: new FormControl('', Validators.required),
     usrPass: new FormControl('', [Validators.required, Validators.minLength(4)]),
     firstName: new FormControl(''),
     lastName: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
-  });
+  };
+  usrInfoForm = new FormGroup(this.usrInfoFormOptions);
 
   usrSubsription: Subscription;
   user: IUser;

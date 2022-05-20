@@ -36,8 +36,8 @@ export class AppComponent implements OnDestroy {
     private progressService: ProgressService
   ) {
     const meta = this.getHtmlMeta(['title', 'version', 'description', 'short-title']);
-    if (meta.title) {
-      this.title = meta.title;
+    if (meta['title']) {
+      this.title = meta['title'];
     }
     if (meta['short-title']) {
       this.shortTitle = meta['short-title'];

@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer } from '@dlr-eoc/services-layers';
+import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer, WmtsLayer, RasterLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
@@ -74,7 +74,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   addLayers() {
     const osmLayer1 = new OsmTileLayer({
       id: 'OSM1',
-      visible: false
+      visible: false,
+      popup: true
     });
 
     const customHeatmapLayer = new CustomLayer({

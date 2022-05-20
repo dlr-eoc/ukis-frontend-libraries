@@ -1,12 +1,11 @@
-import { TestBed, waitForAsync } from '@angular/core/testing/';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { OwcJsonService, shardsExpand } from './owc-json.service';
 import {
   barebonesContext, baseWMTSLayer, baseWMSLayer, baseWFSLayer, basicOgcOwsContext, eocOwsContext,
   eocProjContext, zoomedContext, baseKMLLayer, eocTMSLayer, eocTimeDimensionsSteps, eocTimeDimensionsInterval,
   eocTimeDimensionsIntervalPeriod, eocTimeDimensionsIntervalPeriodSteps, eocTimeDimensionsIntervalPeriodStepsAndSteps,
-  baseWMSOffering, baseWMSGetMapParams, baseWMTSOffering, baseWMTSGetTileParams, baseWFSOffering,
-  baseWFSGetFeatureParams, baseKMLOffering, eocGeojsonOffering, eocGeojsonLayer, eocXyzLayer,
-  eocXyzOffering, eocVectortileLayer, eocVectortileOffering, eocTMSOffering, folderMixedContext, eocWMTSLayer, eocWMTSOffering
+  baseWMSOffering, baseWMSGetMapParams, baseWMTSOffering, baseWMTSGetTileParams, baseWFSOffering, baseKMLOffering, eocGeojsonOffering, eocGeojsonLayer, eocXyzLayer,
+  eocXyzOffering, eocVectortileLayer, eocVectortileOffering, eocTMSOffering, folderMixedContext, eocWMTSOffering
 } from '@dlr-eoc/shared-assets';
 import { Fill, Stroke, Style } from 'ol/style.js';
 import { LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayertype, WfsLayertype, WmtsLayertype, KmlLayertype, XyzLayertype, ILayerIntervalAndPeriod, WmsLayer, WmtsLayer, Filtertypes } from '@dlr-eoc/services-layers';

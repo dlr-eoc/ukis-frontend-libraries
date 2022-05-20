@@ -2,10 +2,7 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/services-ogc",
   "lib": {
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "md5": "md5"
-    }
+    "entryFile": "src/public-api.ts"
   },
   "allowedNonPeerDependencies": [
     "@types/geojson",

@@ -2,17 +2,17 @@
   <form class="login" [formGroup]="usrInfoForm" (ngSubmit)="login()">
     <div class="login-group">
       <clr-input-container>
-        <input type="text" name="usrName" clrInput placeholder="Username" [formControl]="usrInfoForm.get('usrName')" />
+        <input type="text" name="usrName" clrInput placeholder="Username" [formControl]="usrInfoFormOptions.usrName" />
         <clr-control-error>Username is {{getFormError('usrName')}}</clr-control-error>
       </clr-input-container>
       <clr-password-container>
         <input type="password" name="usrPass" clrPassword placeholder="Password"
-          [formControl]="usrInfoForm.get('usrPass')" />
+          [formControl]="usrInfoFormOptions.usrPass" />
         <clr-control-error>Password is {{getFormError('usrPass')}}</clr-control-error>
       </clr-password-container>
       <clr-checkbox-wrapper>
         <label>Remember me</label>
-        <input type="checkbox" name="rememberMe" clrCheckbox [formControl]="usrInfoForm.get('remember')" />
+        <input type="checkbox" name="rememberMe" clrCheckbox [formControl]="usrInfoFormOptions.remember" />
       </clr-checkbox-wrapper>
       <button type="submit" class="btn btn-primary" [disabled]="usrInfoForm.invalid" (click)="login()">Login</button>
     </div>

@@ -142,17 +142,18 @@ export class RouteMapComponent implements OnInit {
         format: 'image/png'
       },
       visible: false,
-      maxZoom: 8,
+      // maxZoom: 8,
       description: 'TDM90_DEM maxZoom: 8',
       attribution: ' | TDM90 Data ©: <a href="http://www.dlr.de" target="_blank">DLR</a>  licensed for <a rel="license" target="_blank" href="https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf">scientific use</a>',
       legendImg: '',
       expanded: true,
-      cssClass: 'custom-layer',
+      cssClass: 'custom-layer'
     });
 
     const vectorLayer = new VectorLayer({
       id: 'geojson_test',
       name: 'GeoJSON Vector Layer',
+      attribution: `© DLR GeoJSON`,
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
