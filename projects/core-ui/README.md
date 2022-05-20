@@ -78,7 +78,7 @@ main-container
     content-area
 ```
 
-and keep in mind that the router is placing the routes outside of the router-outlet (so they are not childs)
+and keep in mind that the router is placing the routes outside of the router-outlet (so they are not children)
 ```
 main-container
   router-outlet
