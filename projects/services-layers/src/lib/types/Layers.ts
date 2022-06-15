@@ -4,6 +4,10 @@ export interface IAnyObject {
   [k: string]: any;
 }
 
+/**
+ * When using dynamic components for layers you should keep in mind to handle the state (with a service or object binding) if needed,
+ * because `legendIng` or `action` are placed inside `ngIf` directives in the template and are destroyed when they are hidden.
+ */
 interface IDynamicComponent {
   component: Type<any>;
   inputs?: { [input: string]: any };
