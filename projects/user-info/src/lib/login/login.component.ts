@@ -27,7 +27,7 @@ export class LoginComponent implements OnDestroy {
       usrPass: new FormControl('', [Validators.required, Validators.minLength(4)]),
       remember: new FormControl(false)
     };
-    this.usrInfoForm = new FormGroup(this.usrInfoFormOptions, { updateOn: 'blur' });
+    this.usrInfoForm = new FormGroup<IusrInfoForm>(this.usrInfoFormOptions, { updateOn: 'blur' });
 
     this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
       this.user = userinfo.current_user;

@@ -19,7 +19,7 @@ export class InterpolationSettingsComponent implements OnInit {
   public interpolationForm: FormGroup<IinterpolationForm>;
 
   constructor() {
-    this.interpolationForm = new FormGroup({
+    this.interpolationForm = new FormGroup<IinterpolationForm>({
       power: new FormControl(2, Validators.required),
       smooth: new FormControl(true, Validators.required),
       labels: new FormControl(false, Validators.required)

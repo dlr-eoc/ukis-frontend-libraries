@@ -31,7 +31,7 @@ export class RegisterComponent implements OnDestroy {
       lastName: new FormControl(''),
       email: new FormControl('', [Validators.required, Validators.email]),
     };
-    this.usrInfoForm = new FormGroup(this.usrInfoFormOptions);
+    this.usrInfoForm = new FormGroup<IusrInfoForm>(this.usrInfoFormOptions);
 
     this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
       this.user = userinfo.current_user;

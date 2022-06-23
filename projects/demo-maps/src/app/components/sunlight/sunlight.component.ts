@@ -18,7 +18,7 @@ export class SunlightComponent implements OnInit {
   public sunlightForm: FormGroup<IsunlightForm>
 
   constructor() {
-    this.sunlightForm = new FormGroup({
+    this.sunlightForm = new FormGroup<IsunlightForm>({
       x: new FormControl(0, Validators.required),
       y: new FormControl(0, Validators.required),
     });
