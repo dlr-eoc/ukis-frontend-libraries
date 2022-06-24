@@ -819,7 +819,7 @@ describe('OwcJsonService: writing data into owc', () => {
       attribution: '© OpenMapTiles © OpenStreetMap contributors',
       url: 'https://{s}.tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true',
       options: {
-        styleSource: 'planet0-12',
+        styleSource: 'planet_eoc',
         style: {} // OpenMapStyle
       }
     });
