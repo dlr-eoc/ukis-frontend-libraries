@@ -288,12 +288,15 @@ function updateProjectStylesExtension(options: UkisNgAddSchema) {
     if (projectName) {
       const project = workspace.projects.get(projectName);
       if (project) {
-        project.targets.forEach(target => {
+        project.targets.forEach((target, key) => {
           if (target?.options?.styles && Array.isArray(target.options.styles)) {
             target.options.styles = replaceStyles(target.options.styles as string[]);
+            project.targets.set(key, target);
           }
         });
-        return updateWorkspace(workspace);
+        return updateWorkspace((workspace) => {
+          workspace.projects.set(projectName, project);
+        });
       }
     }
   };
@@ -333,7 +336,9 @@ function updateWorkspaceAndProjectStyleExtension(options: UkisNgAddSchema) {
             };
           }
         }
-        return updateWorkspace(workspace);
+        return updateWorkspace((workspace) => {
+          workspace.projects.set(projectName, project);
+        });
       }
     }
   };
