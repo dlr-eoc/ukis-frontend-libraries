@@ -16,6 +16,9 @@
   "ng-add": {
     "save": "dependencies"
   },
+  "ng-update": {
+    "migrations": "./schematics/migrations/migration.json"
+  },
   "dependencies": {
     "@angular-devkit/core": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular-devkit/schematics": "0.0.0-PLACEHOLDER-VENDOR",
