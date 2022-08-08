@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angul
 import { LayersService, CustomLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
-import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
+import { EocLitemap, OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { ProgressService } from '../../components/global-progress/progress.service';
 
 import olImageLayer from 'ol/layer/Image';
@@ -22,6 +22,7 @@ import olTileLayer from 'ol/layer/Tile';
 import olTileWMS from 'ol/source/TileWMS';
 import { getRenderPixel } from 'ol/render';
 import olLayerGroup from 'ol/layer/Group';
+import { AlertService } from '../../components/global-alert/alert.service';
 
 @Component({
   selector: 'app-route-map3',
@@ -39,6 +40,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     public layersSvc: LayersService,
     public mapStateSvc: MapStateService,
     public mapSvc: MapOlService,
+    public alertSvc: AlertService,
     private progressService: ProgressService,
     public route: ActivatedRoute) {
 
@@ -51,6 +53,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.addLayers();
+    this.subscribeToLayers();
     this.subscribeToMapState();
     this.subscribeToRoute();
     if (this.startBbox) {
@@ -70,7 +73,12 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
 
   addLayers() {
     const osmLayer = new OsmTileLayer({
-      visible: true
+      visible: false
+    });
+
+    const eocLitemapLayer = new EocLitemap({
+      visible: true,
+      tileSize: 512
     });
 
     const source = new olImageWMS({
@@ -103,6 +111,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       id: 'updatable_feature_layer',
       name: 'Updatable feature layer',
       type: 'geojson',
+      visible: false,
       data: {
         type: "FeatureCollection",
         features: [{
@@ -111,7 +120,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
           "geometry": {
             "type": "Polygon",
             "coordinates": [[
-              [-192.48046875, -24.686952411999144 ],
+              [-192.48046875, -24.686952411999144],
               [-88.06640625, -24.686952411999144],
               [-88.06640625, 50.28933925329178],
               [-192.48046875, 50.28933925329178],
@@ -130,7 +139,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       }]
     });
 
-    const layers = [osmLayer, eventLayer, updatableFeatureLayer];
+    const layers = [eocLitemapLayer, osmLayer, eventLayer, updatableFeatureLayer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 
@@ -282,6 +291,29 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     });
     this.subs.push(queryParamsSub);
   }
+
+  subscribeToLayers() {
+    if (this.layersSvc) {
+      const onLayers = this.layersSvc.getLayers().subscribe(layers => {
+        const visiblelayers = layers.filter(l => l.visible === true);
+        visiblelayers.forEach(layer => {
+          if (layer.id === 'updatable_feature_layer') {
+            const vLayer = layer as VectorLayer;
+            // if length > 1 features already loaded
+            if (vLayer.data.features.length <= 1) {
+              this.alertSvc.alert({
+                type: 'info',
+                text: `Click the layer setting down arrow icon to load new features.`,
+                closeable: true
+              });
+            }
+          }
+        });
+      });
+      this.subs.push(onLayers);
+    }
+  }
+
 
 
   updateLayerOnZoom = (evt) => {

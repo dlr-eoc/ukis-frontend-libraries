@@ -63,7 +63,9 @@ export class RouteMapComponent implements OnInit {
       type: 'geojson'
     });
 
-    const eocLitemapLayer = new EocLitemapTile();
+    const eocLitemapLayer = new EocLitemapTile({
+      tileSize: 512
+    });
 
     const eocLiteOverlay = new EocBaseoverlayTile();
 
@@ -72,7 +74,8 @@ export class RouteMapComponent implements OnInit {
       name: 'EOC Lite with Overlay',
       description: 'merged/stacked Layers EOC Lite with Overlay',
       legendImg: eocLitemapLayer.legendImg,
-      layers: [eocLitemapLayer, eocLiteOverlay]
+      layers: [eocLitemapLayer, eocLiteOverlay],
+      visible: true
     });
 
     // not working in WGS84 because
@@ -99,7 +102,7 @@ export class RouteMapComponent implements OnInit {
       id: 'OSM_Base'
     });
 
-    const layers = [OsmLayer, TransparentBackground, eocLiteMerge, worldRelief];
+    const layers = [eocLiteMerge, OsmLayer, TransparentBackground, worldRelief];
 
     /** add layers with the LayersService */
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));

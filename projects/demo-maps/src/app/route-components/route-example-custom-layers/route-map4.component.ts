@@ -302,7 +302,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const osmClipLayer = new CustomLayer({
       id: 'osm_clip_layer',
       name: 'OSM Clip',
-      visible: true,
+      visible: false,
       popup: {
         filterkeys: ['id', 'color', 'name']
         // filterLayer: true
@@ -631,6 +631,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
     const layers = [
       TransparentBackground,
+      rasterSourceLayer,
       osmLayer1,
       vectorTile,
       layerGroup2,
@@ -644,8 +645,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       geoJsonLayer3,
       layersGroup1,
       geoJsonLayer,
-      customLayerGroup,
-      rasterSourceLayer];
+      customLayerGroup];
 
     layers.forEach(layer => {
       if (layer instanceof Layer) {

@@ -3,8 +3,16 @@
   <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
 
   <ukis-header [ukis-title]="title" [ukis-short-title]="shortTitle" [ukis-version]="version">
-    <a *ngFor="let route of routes" routerLink="/{{route.path}}" routerLinkActive="active"
-      class="nav-link nav-text header-nav-el">{{route.data.title}}</a>
+
+    <a routerLink="/examples" routerLinkActive="active"
+      class="nav-link nav-text header-nav-el">Examples</a>
+
+    <ng-container *ngFor="let route of routes" class="nav-link nav-text header-nav-el">
+      <a *ngIf="currentRoute === route.path" routerLink="/{{route.path}}" routerLinkActive="active"
+        class="nav-link nav-text header-nav-el">{{route.data.title}}</a>
+    </ng-container>
+
+
   </ukis-header>
   <router-outlet></router-outlet>
 </clr-main-container>
