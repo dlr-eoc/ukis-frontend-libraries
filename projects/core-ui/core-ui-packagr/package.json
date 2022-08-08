@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Builder for Architect",
   "builders": "builders.json",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
   "devDependencies": {
     "@angular-devkit/architect": "^1.0.0"
   }
