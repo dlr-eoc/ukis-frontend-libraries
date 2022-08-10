@@ -67,7 +67,7 @@ Then run:
 - `cd project-<name>`
 
 3. Add Clarity Angular
-- `ng add @clr/angular` (also see [clarity get started with angular](https://clarity.design/get-started/developing/angular/))
+- See [Adding Clarity to an Angular project](https://clarity.design/documentation/get-started#seedProjectAngular)
 
 4. Run the ng add command for the UKIS core-ui
 - `ng add @dlr-eoc/core-ui [options]` 
@@ -76,7 +76,7 @@ Then run:
 
 5. [See layout structure of the core-ui](projects/core-ui/README.md#layout-structure-of-the-core-ui)
 
-6. [See clarity get-started to use there ui components](https://clarity.design/documentation/get-started)
+6. [See clarity get-started to use there components](https://clarity.design/documentation/get-started)
 
 
 
