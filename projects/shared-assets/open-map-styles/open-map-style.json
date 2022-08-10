@@ -24,9 +24,11 @@
     "maputnik:thunderforest_access_token": ""
   },
   "sources": {
-    "planet0-12": {
+    "planet_eoc": {
       "type": "vector",
-      "url": "https://pyxis.eoc.dlr.de/tileserver/planet0-12.json"
+      "__Comment": "The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109",
+      "url": "",
+      "tiles": []
     }
   },
   "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
@@ -42,7 +44,7 @@
     {
       "id": "park",
       "type": "fill",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "park",
       "filter": [
         "==",
@@ -59,7 +61,7 @@
     {
       "id": "water",
       "type": "fill",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "water",
       "filter": [
         "all",
@@ -85,7 +87,7 @@
     {
       "id": "landcover_ice_shelf",
       "type": "fill",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "landcover",
       "maxzoom": 8,
       "filter": [
@@ -112,7 +114,7 @@
     {
       "id": "landcover_glacier",
       "type": "fill",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "landcover",
       "maxzoom": 8,
       "filter": [
@@ -151,7 +153,7 @@
     {
       "id": "landuse_residential",
       "type": "fill",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "landuse",
       "minzoom": 0,
       "maxzoom": 24,
@@ -191,7 +193,7 @@
     {
       "id": "landcover_wood",
       "type": "fill",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "landcover",
       "minzoom": 0,
       "filter": [
@@ -230,7 +232,7 @@
     {
       "id": "waterway",
       "type": "line",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "waterway",
       "filter": [
         "==",
@@ -247,7 +249,7 @@
     {
       "id": "water_name",
       "type": "symbol",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "water_name",
       "filter": [
         "==",
@@ -275,7 +277,7 @@
     {
       "id": "building",
       "type": "fill",
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "building",
       "minzoom": 12,
       "paint": {
@@ -290,7 +292,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 6,
       "filter": [
@@ -347,7 +349,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 6,
       "filter": [
@@ -403,7 +405,7 @@
       "metadata": {
         "mapbox:group": "1444849345966.4436"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "aeroway",
       "minzoom": 12,
       "filter": [
@@ -443,7 +445,7 @@
       "metadata": {
         "mapbox:group": "1444849345966.4436"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "aeroway",
       "minzoom": 11,
       "filter": [
@@ -483,7 +485,7 @@
       "metadata": {
         "mapbox:group": "1444849345966.4436"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "aeroway",
       "minzoom": 4,
       "filter": [
@@ -526,7 +528,7 @@
       "metadata": {
         "mapbox:group": "1444849345966.4436"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "aeroway",
       "minzoom": 11,
       "filter": [
@@ -569,7 +571,7 @@
       "id": "road_area_pier",
       "type": "fill",
       "metadata": {},
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -596,7 +598,7 @@
       "id": "road_pier",
       "type": "line",
       "metadata": {},
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -639,7 +641,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -683,7 +685,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 0,
       "filter": [
@@ -730,7 +732,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 11,
       "filter": [
@@ -781,7 +783,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 11,
       "filter": [
@@ -828,7 +830,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 0,
       "filter": [
@@ -890,7 +892,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 0,
       "filter": [
@@ -959,7 +961,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 0,
       "maxzoom": 20,
@@ -1004,7 +1006,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 16,
       "filter": [
@@ -1043,7 +1045,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 16,
       "filter": [
@@ -1086,7 +1088,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 16,
       "filter": [
@@ -1124,7 +1126,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 16,
       "filter": [
@@ -1163,7 +1165,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 13,
       "filter": [
@@ -1213,7 +1215,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 13,
       "filter": [
@@ -1267,7 +1269,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 0,
       "filter": [
@@ -1328,7 +1330,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation",
       "minzoom": 0,
       "filter": [
@@ -1396,7 +1398,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation_name",
       "filter": [
         "all",
@@ -1443,7 +1445,7 @@
       "metadata": {
         "mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "transportation_name",
       "minzoom": 9,
       "filter": [
@@ -1489,7 +1491,7 @@
       "metadata": {
         "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "boundary",
       "filter": [
         "==",
@@ -1530,7 +1532,7 @@
       "metadata": {
         "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "boundary",
       "maxzoom": 5,
       "filter": [
@@ -1586,7 +1588,7 @@
       "metadata": {
         "mapbox:group": "a14c9607bc7954ba1df7205bf660433f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "boundary",
       "minzoom": 5,
       "filter": [
@@ -1635,7 +1637,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "minzoom": 9,
       "maxzoom": 15,
@@ -1681,7 +1683,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "minzoom": 11,
       "maxzoom": 24,
@@ -1729,7 +1731,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "minzoom": 9,
       "maxzoom": 15,
@@ -1802,7 +1804,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "minzoom": 7,
       "maxzoom": 14,
@@ -1888,7 +1890,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "minzoom": 3,
       "maxzoom": 12,
@@ -1969,7 +1971,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "minzoom": 4,
       "maxzoom": 12,
@@ -2055,7 +2057,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "maxzoom": 12,
       "filter": [
@@ -2094,7 +2096,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "maxzoom": 8,
       "filter": [
@@ -2160,7 +2162,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "maxzoom": 8,
       "filter": [
@@ -2231,7 +2233,7 @@
       "metadata": {
         "mapbox:group": "101da9f13b64a08fa4b6ac1168e89e5f"
       },
-      "source": "planet0-12",
+      "source": "planet_eoc",
       "source-layer": "place",
       "maxzoom": 6,
       "filter": [

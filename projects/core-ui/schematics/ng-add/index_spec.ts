@@ -64,6 +64,20 @@ describe('ng-add', () => {
     expect(tree.files.includes('/angular.json')).toBe(true);
   });
 
+  it('should replace style extension in project.targets.options.styles', async () => {
+    const tree = await schematicRunner.runSchematicAsync('ng-add', ngAddOptions, appTree).toPromise();
+
+    const projectFile = JSON.parse(tree.readContent('/angular.json'));
+    ['build', 'test'].forEach(target => {
+      const styles: string[] = projectFile.projects[appOptions.name].architect[target].options.styles;
+      styles.forEach(path => {
+        if(path.includes('styles.')){
+          expect(path.includes('.scss')).toBeTrue();
+        }
+      });
+    });
+
+  });
 
   it('should add assets', async () => {
     const dimensions = [72, 96, 128, 144, 152, 192, 384, 512];

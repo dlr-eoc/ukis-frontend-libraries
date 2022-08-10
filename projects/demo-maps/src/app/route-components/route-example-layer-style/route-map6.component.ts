@@ -84,7 +84,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
       type: 'wms',
       id: 'S2_L3A_WASP_FRC_P1M',
       url: 'https://{s}.geoservice.dlr.de/eoc/imagery/wms?',
-      name: 'S2_L3A_WASP_FRC_P1M',
+      name: 'Sentinel-2 L3A FRC (WASP)',
       subdomains: ['a', 'b', 'c', 'd'],
       filtertype: 'Layers',
       attribution: '| &copy; <a href="http://www.dlr.de" target="_blank">DLR</a> Contains modified Copernicus Sentinel Data [2020]',
@@ -93,6 +93,9 @@ export class RouteMap6Component implements OnInit, OnDestroy {
         VERSION: '1.1.0',
         FORMAT: 'image/png',
       },
+      expanded: true,
+      //bbox: [5.763545147601, 46.793670688196, 15.152753273727, 55.945635321533],
+      bbox: [2.183, 47.076, 8.206, 49.287],
       styles: [
         {
           default: true,
@@ -125,6 +128,63 @@ export class RouteMap6Component implements OnInit, OnDestroy {
     });
 
     this.layersSvc.addLayer(agrodeLayer, agrodeLayer.filtertype);
+
+
+    const Sentinel2L2AFRE = new WmsLayer({
+      type: 'wms',
+      id: 'S2_L2A_MAJA_FRE',
+      url: 'https://{s}.geoservice.dlr.de/eoc/imagery/wms?',
+      name: 'Sentinel-2 L2A FRE (MAJA)',
+      subdomains: ['a', 'b', 'c', 'd'],
+      filtertype: 'Layers',
+      attribution: '| &copy; <a href="http://www.dlr.de" target="_blank">DLR</a> Sentinel-2 L2A MAJA (MACCS-ATCOR Joint Algorithm) ground reflectance with the correction of slope effects (FRE) in 10m resolution based on the MAJA processor (https://doi.org/10.5281/zenodo.1209633)',
+      bbox: [
+        5.763545147601, 46.793670688196, 15.152753273727, 55.945635321533
+      ],
+      params: {
+        LAYERS: 'S2_L2A_MAJA_FRE',
+        VERSION: '1.1.0',
+        FORMAT: 'image/png',
+      },
+      expanded: true,
+      styles: [
+        {
+          default: true,
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=S2_L2A_MAJA_FRE',
+          name: 's2-l2a-maja-fre',
+          title: 'True Color Image (FRE)'
+        },
+        {
+          default: false,
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=S2_L2A_MAJA_FRE&style=s2-swir',
+          name: 's2-swir',
+          title: 'S2 Short-Wave Infrared'
+        },
+        {
+          default: false,
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=S2_L2A_MAJA_FRE&style=s2-land-water',
+          name: 's2-land-water',
+          title: 'S2 Land/Water'
+        },
+        {
+          default: false,
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=S2_L2A_MAJA_FRE&style=s2-vegetation-analysis',
+          name: 's2-vegetation-analysis',
+          title: 'S2 vegetation analysis'
+        }
+      ],
+      popup: {
+        dynamicPopup: {
+          component: RasterFeatureInfoComponent,
+          getAttributes: (args) => ({
+            layer: args.layer,
+            event: args.event
+          })
+        }
+      }
+    });
+
+    this.layersSvc.addLayer(Sentinel2L2AFRE, Sentinel2L2AFRE.filtertype);
   }
 
   ngOnDestroy() {

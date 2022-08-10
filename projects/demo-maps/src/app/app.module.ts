@@ -40,6 +40,7 @@ import { ExampleGroupActionComponent } from './components/example-group-action/e
 import { RasterFeatureInfoComponent } from './components/raster-feature-info/raster-feature-info.component';
 import { Popup2Component } from './components/popup2/popup2.component';
 import { RouteExampleOwcLayersComponent } from './route-components/route-example-owc-layers/route-example-owc-layers.component';
+import { BookmarksComponent } from './route-components/bookmarks/bookmarks.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { RouteExampleOwcLayersComponent } from './route-components/route-example
     ExampleGroupActionComponent,
     RasterFeatureInfoComponent,
     Popup2Component,
-    RouteExampleOwcLayersComponent
+    RouteExampleOwcLayersComponent,
+    BookmarksComponent
   ],
   imports: [
     BrowserModule,

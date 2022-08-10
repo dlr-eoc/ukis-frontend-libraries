@@ -940,14 +940,19 @@ export class MapOlService {
       };
 
       newlayer = new olVectorTileLayer(Object.assign(layeroptions, vectorTileLayerOptions));
-      this.setSubdomains(l, newlayer);
       this.setCrossOrigin(l, newlayer);
       this.addEventsToLayer(l, newlayer, olsource);
 
       const style = l?.options?.style;
       const mapboxSourceKey = l?.options?.styleSource;
       if (style && mapboxSourceKey) {
-        applyStyle(newlayer, style, mapboxSourceKey);
+        /**
+         * The urls from olsource are not used if sources.<source>.url are set in the open map style
+         * if tms service is used or no correct TileJSON is available we have to override the urls
+         */
+        applyStyle(newlayer, style, mapboxSourceKey).then(res => {
+          this.setSubdomains(l, newlayer);
+        });
       }
 
       return newlayer;

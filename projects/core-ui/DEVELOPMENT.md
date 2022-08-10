@@ -64,3 +64,10 @@ This is done by a [custom builder](core-ui-packagr/index.js)
 
 
 For further information how to build custom schematics see [angular schematics](https://angular.io/guide/schematics) and [@angular-devkit](https://github.com/angular/angular-cli/tree/master/packages/angular_devkit).
+
+
+## Update schematics
+- https://timdeschryver.dev/blog/ng-update-the-setup
+
+- https://github.com/angular/angular/blob/14.0.5/packages/core/package.json#L28
+- https://github.com/angular/angular/blob/14.0.5/packages/core/schematics/migrations.json

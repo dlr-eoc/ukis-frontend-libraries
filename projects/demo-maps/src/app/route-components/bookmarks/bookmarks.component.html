@@ -1,0 +1,37 @@
+<main class="content-area">
+  <div class="content-inner">
+    <h3 class="overview-title">This example application shows how to work with the <a
+        href="https://github.com/dlr-eoc/ukis-frontend-libraries" target="_blank">ukis-frontend-libraries</a></h3>
+    <p class="overview-description">Each card brings you to a route component rendered inside a <code>`router-outlet`</code>.
+      The components have a <code>`content-container`</code> class binding to make the layout structure of <a href="https://clarity.design/documentation/app-layout" target="_blank">Clarity Application Layout</a> correct.
+      Each map component uses providers for <code>`LayersService`, `MapStateService`...</code> so they are encapsulated and not shared between all the routes.
+    </p>
+  </div>
+  <div class="clr-row content-inner">
+    <div *ngFor="let bookmark of availableBookmarks" class="clr-col-sm-4 clr-col-md-4 clr-col-lg-4">
+      <div class="card">
+
+        <a [routerLink]="['/'+bookmark.route]" [title]="bookmark.title">
+
+          <div class="card-img">
+            <img [src]="bookmark.previewUrl" alt="preview image">
+          </div>
+        </a>
+
+
+        <div class="card-block">
+          <a [routerLink]="['/'+bookmark.route]" [title]="bookmark.title">
+            <div class="card-title">
+              {{bookmark.title}}
+            </div>
+          </a>
+
+          <div class="card-text" *ngIf="bookmark?.description">
+            {{bookmark.description}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>

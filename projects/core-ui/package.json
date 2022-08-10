@@ -16,6 +16,9 @@
   "ng-add": {
     "save": "dependencies"
   },
+  "ng-update": {
+    "migrations": "./schematics/migrations/migration.json"
+  },
   "dependencies": {
     "@angular-devkit/core": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular-devkit/schematics": "0.0.0-PLACEHOLDER-VENDOR",
@@ -33,7 +36,8 @@
     "jsonc-parser": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "devDependencies": {
-    "cpx": "^1.5.0",
+    "cpx": "0.0.0-PLACEHOLDER-VENDOR",
+    "@types/cpx": "0.0.0-PLACEHOLDER-VENDOR",
     "typescript": "0.0.0-PLACEHOLDER-VENDOR",
     "jasmine": "^2.8.0",
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",

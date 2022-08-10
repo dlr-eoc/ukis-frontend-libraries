@@ -1,0 +1,73 @@
+.content-inner {
+  margin: 0.5rem;
+  padding-bottom: 0.5rem;
+
+
+  .overview-title,
+  .overview-description {
+    text-align: center;
+    margin: 0.5rem;
+  }
+
+  .clr-col-sm-4,
+  .clr-col-md-4,
+  .clr-col-lg-4 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .card {
+    margin-top: 0;
+    overflow: hidden;
+
+    &>a {
+      display: flex;
+      justify-content: space-around
+    }
+
+    .card-img {
+      max-width: 400px;
+    }
+  }
+
+  @media screen and (min-width: 575px) {
+    .card {
+      min-height: 100%;
+    }
+  }
+
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-footer {
+    display: flex;
+    padding: 0 0.5rem;
+    max-height: 1.75rem;
+    justify-content: space-between;
+
+    .card-text {
+      min-height: 200px !important; // to adjust height same as firtst card Text
+      margin-top: 0.4rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      h4 {
+        margin: 0;
+      }
+    }
+
+    .info-icon {
+      margin: 0;
+      padding-top: 0.5em;
+      padding-left: 0.5em;
+
+      clr-icon {
+        height: 20px;
+        width: 20px;
+      }
+    }
+  }
+}

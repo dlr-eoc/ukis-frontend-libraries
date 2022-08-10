@@ -1,26 +1,34 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
 import { UserService, IUserinfo, IUser } from '../user.service';
 import { Subscription } from 'rxjs';
 
+interface IusrInfoForm {
+  usrName: FormControl<string>;
+  usrPass: FormControl<string>;
+  remember: FormControl<boolean>;
+}
 @Component({
   selector: 'ukis-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnDestroy {
-  usrInfoFormOptions = {
-    usrName: new FormControl('', Validators.required),
-    usrPass: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    remember: new FormControl(false)
-  };
-  usrInfoForm = new FormGroup(this.usrInfoFormOptions, { updateOn: 'blur' });
+  public usrInfoFormOptions: IusrInfoForm;
+  public usrInfoForm: FormGroup<IusrInfoForm>;
 
   usrSubsription: Subscription;
   user: IUser;
   submitted: boolean;
 
   constructor(public usrSvc: UserService) {
+    this.usrInfoFormOptions = {
+      usrName: new FormControl('', Validators.required),
+      usrPass: new FormControl('', [Validators.required, Validators.minLength(4)]),
+      remember: new FormControl(false)
+    };
+    this.usrInfoForm = new FormGroup<IusrInfoForm>(this.usrInfoFormOptions, { updateOn: 'blur' });
+
     this.usrSubsription = this.usrSvc.getUserInfo().subscribe((userinfo) => {
       this.user = userinfo.current_user;
     }, (error) => {

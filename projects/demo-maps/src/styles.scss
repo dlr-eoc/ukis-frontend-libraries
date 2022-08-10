@@ -4,7 +4,7 @@
 /**
  * When there are many items in the header, they may disappear behind the browser window's right edge on smaller screens
  * *before* clarity switches over to displaying the header items in a burger menu. To avoid this, we use a scroll bar
- * for screens that are bigger than the burger menu threshold but smaller than the width required to fully show all items. 
+ * for screens that are bigger than the burger menu threshold but smaller than the width required to fully show all items.
  *
  * set Clarity header to scroll for overflow
  * remove this if Issue (https://github.com/vmware/clarity/issues/3843) is fixed!
@@ -12,11 +12,12 @@
  * @media screen and (min-width: 768px) and (max-width:1305px)
  */
 
-$max-header-width: 1305px; // CSS native variables not working in media queries
+ // CSS native variables not working in media queries
+/* $max-header-width: 1305px;
 @media screen and (min-width: 768px + 1) and (max-width: $max-header-width) {
   .header-1 {
     overflow-x: auto;
     overflow-y: hidden;
     height: 3.7rem;
   }
-}
+} */

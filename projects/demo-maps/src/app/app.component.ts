@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import './components/icons/ukis';
 
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
-import { Router, Routes } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, Routes } from '@angular/router';
 import { appVersion } from '../environments/version';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 interface IUi {
   floating: boolean;
@@ -19,7 +21,7 @@ interface IUi {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   title = '';
   shortTitle = '';
   version = (appVersion === '0.0.0-PLACEHOLDER') ? null : appVersion;
@@ -31,7 +33,10 @@ export class AppComponent {
     progress: null
   };
 
+  subs: Subscription[] = [];
+
   routes: Routes;
+  currentRoute: string;
 
   constructor(
     private alertService: AlertService,
@@ -40,6 +45,25 @@ export class AppComponent {
   ) {
     this.init();
     this.routes = this.router.config.filter(r => r.data);
+  }
+
+  ngOnInit(): void {
+    /** get current route to show in header */
+    //
+    const routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
+      .subscribe((event: NavigationEnd | NavigationStart) => {
+        const url = new URL(event.url, `${window.location.origin}${window.location.pathname}`);
+        if (url.pathname !== '/examples') {
+          this.currentRoute = url.pathname.slice(1);
+        } else {
+          this.currentRoute = null;
+        }
+      });
+    this.subs.push(routerSub);
+  }
+
+  ngOnDestroy(): void {
+    this.subs.map(s => s.unsubscribe());
   }
 
   init() {

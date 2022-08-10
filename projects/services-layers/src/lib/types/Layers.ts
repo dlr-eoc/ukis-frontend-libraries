@@ -4,6 +4,10 @@ export interface IAnyObject {
   [k: string]: any;
 }
 
+/**
+ * When using dynamic components for layers you should keep in mind to handle the state (with a service or object binding) if needed,
+ * because `legendIng` or `action` are placed inside `ngIf` directives in the template and are destroyed when they are hidden.
+ */
 interface IDynamicComponent {
   component: Type<any>;
   inputs?: { [input: string]: any };
@@ -48,7 +52,7 @@ export interface popup {
   single?: boolean;
   /** options which get assigned on the popup creations e.g. ol/Overlay */
   options?: IAnyObject;
-  /** If the layer should be filtered out and the popup beneath should be shown e.g. text overlays */
+  /** If the layer should be filtered out and the popup beneath should be shown e.g. text overlays use filterLayer: true */
   filterLayer?: boolean;
 }
 
