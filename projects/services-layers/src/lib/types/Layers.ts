@@ -52,7 +52,7 @@ export interface popup {
   single?: boolean;
   /** options which get assigned on the popup creations e.g. ol/Overlay */
   options?: IAnyObject;
-  /** If the layer should be filtered out and the popup beneath should be shown e.g. text overlays */
+  /** If the layer should be filtered out and the popup beneath should be shown e.g. text overlays use filterLayer: true */
   filterLayer?: boolean;
 }
 
