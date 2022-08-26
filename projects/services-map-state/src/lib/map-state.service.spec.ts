@@ -23,13 +23,16 @@ describe('MapStateService', () => {
 
   it('should set/get the MapState', waitForAsync(() => {
     const service: MapStateService = TestBed.inject(MapStateService);
+    const stateTime = new Date().toISOString(); // this is passed on new MapState()
     const state = new MapState(4, { lat: 48, lon: 11 });
+
 
     service.setMapState(state);
     service.getMapState().subscribe((sta) => {
       expect(sta.center.lat).toEqual(48);
       expect(sta.center.lon).toEqual(11);
       expect(sta.zoom).toEqual(4);
+      expect(sta.time).toEqual(stateTime);
     });
   }));
 
@@ -54,6 +57,17 @@ describe('MapStateService', () => {
       expect(ext[1]).toEqual(-10);
       expect(ext[2]).toEqual(10);
       expect(ext[3]).toEqual(10);
+    });
+  }));
+
+
+  it('should set/get the current time', waitForAsync(() => {
+    const service: MapStateService = TestBed.inject(MapStateService);
+
+    const time = new Date('2022-01-01').toISOString();
+    service.setTime(time);
+    service.getMapState().subscribe((sta) => {
+      expect(sta.time).toEqual(time);
     });
   }));
 
