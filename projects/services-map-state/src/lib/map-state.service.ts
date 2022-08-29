@@ -24,11 +24,11 @@ export class MapStateService {
     }
     this.lastAction.next('setState');
     if (state instanceof MapState) {
-      const newState = new MapState(state.zoom, state.center, state.options, state.extent);
+      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.time);
       this.mapState.next(newState);
     } else {
       const stateOptions: IMapStateOptions = { ...{ notifier: 'user' }, ...state.options };
-      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent);
+      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.time);
       this.mapState.next(newState);
     }
   }
@@ -46,6 +46,17 @@ export class MapStateService {
     state.options.notifier = notifier;
     const newState = new MapState(state.zoom, state.center, state.options, extent);
     this.mapState.next(newState);
+  }
+
+  public setTime(time: Date | string) {
+    const state = this.getMapState().getValue();
+
+    if (time instanceof Date) {
+      state.time = time.toISOString();
+    } else {
+      state.time = time;
+    }
+    this.setMapState(state);
   }
 
 
