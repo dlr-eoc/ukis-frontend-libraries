@@ -1,7 +1,7 @@
 <div class="layer">
   <div class="head">
     <!-- layer expand icon -->
-    <clr-icon shape="angle" [ngStyle]="getExpandShape()" class="iconButton" [ngClass]="{'disabled': is_expandable()}"
+    <clr-icon *ngIf="hasTabsbody" shape="angle" [ngStyle]="getExpandShape()" class="iconButton" [ngClass]="{'disabled': is_expandable()}"
       (click)="showProperties()" title="Details"></clr-icon>
 
     <!-- layer title -->
@@ -60,10 +60,10 @@
       <clr-icon *ngIf="layer.removable" shape="trash" class="iconButton" (click)="removeLayer(group, layer)"
         title="Remove layer"></clr-icon>
     </div>
-    <div class="tabsbody">
+    <div class="tabsbody" *ngIf="hasTabsbody">
       <div *ngIf="activeTabs.settings" class="layersettings">
         <!-- setLayerOpacity -->
-        <div class="form-group">
+        <div class="form-group" *ngIf="!checkBaselayer(layer,group)">
           <label [for]="'layer_transparency_slider_'+layer.id">Opacity:</label>
           <input [id]="'layer_transparency_slider_'+layer.id" type="range" class="ukis-range-input opacity-input"
             name="points" [value]="layer.opacity" [min]="0.0" [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)"

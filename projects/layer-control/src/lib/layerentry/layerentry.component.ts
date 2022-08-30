@@ -48,6 +48,8 @@ export class LayerentryComponent implements OnInit {
     changeStyle: false
   };
 
+  public hasTabsbody = true;
+
 
   constructor() {
 
@@ -113,6 +115,10 @@ export class LayerentryComponent implements OnInit {
 
     if (this.layer.bbox && this.layer.bbox.length >= 4) {
       this.canZoomToLayer = true;
+    }
+
+    if (!this.layer.legendImg && !this.layer.description && !this.layer.action && !this.layer.actions && !this.layer.styles && !(this.layer.styles?.length > 1)) {
+      this.hasTabsbody = false;
     }
   }
 
@@ -223,7 +229,7 @@ export class LayerentryComponent implements OnInit {
     if (this.group) {
       return !this.layer.legendImg && this.group.filtertype === 'Baselayers';
     } else {
-      return false; // !this.layer.legendImg; //this.layer.description
+      return !this.hasTabsbody;
     }
   }
 
