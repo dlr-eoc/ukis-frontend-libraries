@@ -46,8 +46,6 @@
         [ngClass]="{'active': activeTabs['legend']}" (click)="switchTab('legend')"></clr-icon>
       <clr-icon *ngIf="layer.description" title="Layer info" shape="info-standard" class="iconButton"
         [ngClass]="{'active': activeTabs['description']}" (click)="switchTab('description')"></clr-icon>
-      <clr-icon *ngIf="layer.styles?.length > 1" title="Change style" shape="cloud-chart" class="iconButton"
-        [ngClass]="{'active': activeTabs['changeStyle']}" (click)="switchTab('changeStyle')"></clr-icon>
 
       <clr-icon *ngFor="let item of layer.actions" [attr.shape]="item.icon" class="iconButton"
         (click)="item.action(layer)" [title]="item.title">
@@ -70,6 +68,14 @@
             [(ngModel)]="layer.opacity" />
           <span>{{" "+layer.opacity}}</span>
         </div>
+        <!-- show style-switcher -->
+        <ng-container *ngIf="layer.styles && layer.styles?.length > 1">
+          <select clrSelect (change)="executeChangeStyle($event)">
+            <option *ngFor="let style of layer.styles" [value]="style.name"
+              [attr.selected]="isSelectedStyle(style.name) ? true : null">{{style.title}}</option>
+          </select>
+        </ng-container>
+        <!-- show layer action -->
         <ng-container *ngIf="checkIsComponentItem(layer, 'action');">
           <ukis-dynamic-component [(dynamicComponent)]="layer.action">
           </ukis-dynamic-component>
