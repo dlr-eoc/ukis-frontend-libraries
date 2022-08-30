@@ -95,7 +95,7 @@
       <div *ngIf="activeTabs.description && layer.description">
 
         <ng-container *ngIf="checkIsComponentItem(layer,'description'); else descriptionText">
-          <ukis-dynamic-component [(dynamicComponent)]="layer.legendImg"></ukis-dynamic-component>
+          <ukis-dynamic-component [(dynamicComponent)]="layer.description"></ukis-dynamic-component>
         </ng-container>
 
         <ng-template #descriptionText>
