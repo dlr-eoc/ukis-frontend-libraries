@@ -1372,7 +1372,7 @@ export class OwcJsonService {
         title: layer.displayName || layer.name,
         opacity: layer.opacity,
         active: layer.visible,
-        abstract: layer.description,
+        abstract: (typeof layer.description === 'string') ? layer.description : '',
         rights: layer.attribution,
         minZoom: layer.minZoom,
         maxZoom: layer.maxZoom,

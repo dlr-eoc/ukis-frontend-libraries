@@ -93,14 +93,14 @@
       </div>
       <!-- show Description -->
       <div *ngIf="activeTabs.description && layer.description">
-        <span [innerHTML]="layer.description"></span>
-      </div>
-      <!-- show style-switcher -->
-      <div *ngIf="activeTabs.changeStyle && layer.styles && layer.styles?.length > 1">
-        <select clrSelect (change)="executeChangeStyle($event)">
-          <option *ngFor="let style of layer.styles" [value]="style.name"
-            [attr.selected]="isSelectedStyle(style.name) ? true : null">{{style.title}}</option>
-        </select>
+
+        <ng-container *ngIf="checkIsComponentItem(layer,'description'); else descriptionText">
+          <ukis-dynamic-component [(dynamicComponent)]="layer.legendImg"></ukis-dynamic-component>
+        </ng-container>
+
+        <ng-template #descriptionText>
+          <span [innerHTML]="layer.description"></span>
+        </ng-template>
       </div>
     </div>
 
