@@ -40,8 +40,8 @@
   <div *ngIf="expandable && expanded" class="body">
     <!-- tools: zoomTo, remove, switch Tab -->
     <div class="tools">
-      <clr-icon *ngIf="!checkBaselayer(layer, group)" title="Layer settings" shape="cog" class="iconButton"
-        [ngClass]="{'active': activeTabs['settings']}" (click)="switchTab('settings')"></clr-icon>
+      <clr-icon *ngIf="!checkBaselayer(layer, group) || layer.action" title="Layer settings" shape="cog"
+        class="iconButton" [ngClass]="{'active': activeTabs['settings']}" (click)="switchTab('settings')"></clr-icon>
       <clr-icon *ngIf="layer.legendImg" title="Layer Legend" shape="image" class="iconButton"
         [ngClass]="{'active': activeTabs['legend']}" (click)="switchTab('legend')"></clr-icon>
       <clr-icon *ngIf="layer.description" title="Layer info" shape="info-standard" class="iconButton"
