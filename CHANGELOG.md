@@ -5,6 +5,7 @@
 
 ### Bug Fixes
 * **@dlr-eoc/layer-control:**
+  - Do not change the layer object binding in `layerentry` when creating a dynamic component from the layer.
   - For Baselayers also show button to switch to the settings tab if layer has action [Issue #135](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/135).
   - Show layer expand icon only when the layer has some things to expand (`legendImg`, `description`, `action`, `actions` or `styles` as array to show a style switch).
 

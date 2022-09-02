@@ -77,14 +77,14 @@
         </ng-container>
         <!-- show layer action -->
         <ng-container *ngIf="checkIsComponentItem(layer, 'action');">
-          <ukis-dynamic-component [(dynamicComponent)]="layer.action">
+          <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.action">
           </ukis-dynamic-component>
         </ng-container>
       </div>
       <!-- show Legend -->
       <div *ngIf="activeTabs.legend && layer.legendImg">
         <ng-container *ngIf="checkIsComponentItem(layer,'legendImg'); else imageUrl">
-          <ukis-dynamic-component [(dynamicComponent)]="layer.legendImg"></ukis-dynamic-component>
+          <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
         </ng-container>
 
         <ng-template #imageUrl>
@@ -95,7 +95,7 @@
       <div *ngIf="activeTabs.description && layer.description">
 
         <ng-container *ngIf="checkIsComponentItem(layer,'description'); else descriptionText">
-          <ukis-dynamic-component [(dynamicComponent)]="layer.description"></ukis-dynamic-component>
+          <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>
         </ng-container>
 
         <ng-template #descriptionText>

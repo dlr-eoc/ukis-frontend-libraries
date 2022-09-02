@@ -49,6 +49,11 @@ export class LayerentryComponent implements OnInit {
 
   public hasTabsbody = true;
 
+  public dynamicComponents: {
+    legendImg: IDynamicComponent
+    action: IDynamicComponent
+    description: IDynamicComponent;
+  } = { legendImg: null, action: null, description: null };
 
   constructor() {
 
@@ -56,29 +61,54 @@ export class LayerentryComponent implements OnInit {
 
   /**
    * obj: {any| IDynamicComponent}
+   *
+   * Check if the compProp on the layer is a dynamic Component, if yes pass it to `<ukis-dynamic-component>` so the component from the layer can be inserted here.
    */
-  checkIsComponentItem(layer: Layer, compProp: string): layer is Omit<Layer, 'legendImg' | 'action'> & { legendImg: IDynamicComponent, action: IDynamicComponent } {
+  checkIsComponentItem(layer: Layer, compProp: string): layer is Omit<Layer, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent } {
+    /**
+     * TODO: This function is executed quite often!!! even if a user moves on tha map. Try to minimize work here or prevent calling it so often.
+     *
+     * creating new objects is needed to pass and change Inputs from the layers DynamicComponent to the dynamically created component bound on the layer.
+     * There is a new object created to hold the component, inputs and outputs so the layer can be passed to the inputs without adding it recursively to itself.
+     **/
+
     // https://stackoverflow.com/a/65347533/10850021
-    const obj = layer[compProp];
+    const obj: IDynamicComponent = layer[compProp];
     let isComp = false;
     if (obj && typeof obj === 'object') {
       if ('component' in obj) {
+        const component = obj.component;
+
         if (!obj.inputs) {
-          // https://2ality.com/2014/01/object-assign.html#2.3
-          const layerClone = Object.assign({ __proto__: this.layer['__proto__'] }, layer);
-          console.log(layerClone)
-          if (layerClone && layerClone[compProp]) {
-            delete layerClone[compProp];
+          this.dynamicComponents[compProp] = {
+            component: component,
+            inputs: { layer: layer }
           }
-          obj.inputs = { layer: layerClone };
+
         } else if (obj.inputs && !obj.inputs.layer) {
+          this.dynamicComponents[compProp] = {
+            component: obj.component,
+            // create a shallow copy of inputs so they are not changed on the original layer
+            // keep in mind changing some deeper properties will reflect to the original layer!
+            // https://2ality.com/2014/01/object-assign.html#2.3
+            inputs: Object.assign({}, obj.inputs, { layer: layer })
+          };
+
+        } else if (obj.inputs && obj.inputs.layer) {
+          this.dynamicComponents[compProp] = {
+            component: obj.component,
+            // create a shallow copy of inputs so they are not changed on the original layer
+            // keep in mind changing some deeper properties will reflect to the original layer!
+            // https://2ality.com/2014/01/object-assign.html#2.3
+            inputs: Object.assign({}, obj.inputs)
+          };
+        }
+
+        if (obj.outputs) {
+          // create a shallow copy of outputs so they are not changed on the original layer
+          // keep in mind changing some deeper properties will reflect to the original layer!
           // https://2ality.com/2014/01/object-assign.html#2.3
-          const layerClone = Object.assign({ __proto__: this.layer['__proto__'] }, layer);
-          console.log(layerClone)
-          if (layerClone && layerClone[compProp]) {
-            delete layerClone[compProp];
-          }
-          obj.inputs = Object.assign({ layer: layerClone }, obj.inputs);
+          this.dynamicComponents[compProp].outputs = Object.assign({}, obj.outputs);
         }
         isComp = true;
       }
