@@ -35,3 +35,14 @@
 .info {
   padding-left: 0.2rem;
 }
+
+
+.tabsbody {
+  overflow: hidden;
+  word-break: break-all;
+
+  img {
+    height: auto;
+    max-width: 100%;
+  }
+}

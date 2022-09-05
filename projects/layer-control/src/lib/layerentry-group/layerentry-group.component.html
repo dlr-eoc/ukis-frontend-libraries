@@ -43,11 +43,13 @@
         [ngClass]="{'is-solid': activeTabs.description}" (click)="switchTab('description')"
         title="{{!activeTabs.description?'Show Info': 'Hide Info'}}"></clr-icon>
 
-      <clr-icon *ngIf="group.description" shape="info-standard" class="iconButton" [ngClass]="{'is-solid':showInfo}"
-        (click)="showInfo = !showInfo" title="{{!showInfo?'Show Info': 'Hide Info'}}"></clr-icon>
       <clr-icon shape="details" class="iconButton" [ngClass]="{'is-solid':openAllLayersProperties}"
         (click)="showHideAllDetails()"
         title="{{!openAllLayersProperties?'Show all layers details': 'Hide all layers details'}}"></clr-icon>
+
+      <clr-icon *ngFor="let item of group.actions" [attr.shape]="item.icon" class="iconButton"
+        (click)="item.action(group)" [title]="item.title">
+      </clr-icon>
 
       <span></span>
       <clr-icon *ngIf="canZoomToGroup" shape="zoom-in" class="iconButton" (click)="zoomTo(group)" title="Zoom to group">

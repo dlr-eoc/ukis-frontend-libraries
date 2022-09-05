@@ -66,7 +66,7 @@ export class LayerentryGroupComponent implements OnInit {
   /**
    * obj: {any| IDynamicComponent}
    */
-  checkIsComponentItem(group: LayerGroup,compProp: string): group is Omit<LayerGroup, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent }{
+  checkIsComponentItem(group: LayerGroup, compProp: string): group is Omit<LayerGroup, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent } {
     /**
      * TODO: This function is executed quite often!!! even if a user moves on tha map. Try to minimize work here or prevent calling it so often.
      *
