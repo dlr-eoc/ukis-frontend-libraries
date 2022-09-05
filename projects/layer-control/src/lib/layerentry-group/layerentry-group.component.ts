@@ -174,20 +174,34 @@ export class LayerentryGroupComponent implements OnInit {
     this.group.expanded = !this.group.expanded;
   }
 
-  switchTab(tabName: TactiveTabs) {
+  switchTab(tabName: TactiveTabs, toggle = true) {
     for (const key of Object.keys(this.activeTabs)) {
-      this.activeTabs[key] = tabName === key;
+      const isTabName = tabName === key;
+      if (this.activeTabs[key] && toggle) {
+        this.activeTabs[key] = false;
+      } else {
+        this.activeTabs[key] = isTabName;
+      }
     }
   }
 
   showHideAllDetails() {
-    this.openAllLayersProperties = !this.openAllLayersProperties;
-    if (this.group.legendImg) {
-      this.switchTab('legend');
-    } else if (this.group.description) {
-      this.switchTab('description');
-    } else if (this.group.action) {
-      this.switchTab('settings');
+    if (this.openAllLayersProperties) {
+      this.openAllLayersProperties = false;
+      for (const key of Object.keys(this.activeTabs)) {
+        this.activeTabs[key] = false;
+      }
+
+    } else {
+      this.openAllLayersProperties = true;
+
+      if (this.group.legendImg) {
+        this.switchTab('legend', false);
+      } else if (this.group.description) {
+        this.switchTab('description', false);
+      } else if (this.group.action) {
+        this.switchTab('settings', false);
+      }
     }
   }
 

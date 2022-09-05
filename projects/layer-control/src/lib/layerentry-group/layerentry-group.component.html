@@ -38,7 +38,7 @@
       <clr-icon *ngIf="group.action" shape="cog" class="iconButton" [ngClass]="{'is-solid':activeTabs.settings}"
         (click)="switchTab('settings')" title="{{!activeTabs.settings?'Show settings': 'Hide settings'}}"></clr-icon>
       <clr-icon *ngIf="group.legendImg" title="{{!activeTabs.legend?'Show Legend': 'Hide Legend'}}" shape="image"
-        class="iconButton" [ngClass]="{'active': activeTabs.legend}" (click)="switchTab('legend')"></clr-icon>
+        class="iconButton" [ngClass]="{'is-solid': activeTabs.legend}" (click)="switchTab('legend')"></clr-icon>
       <clr-icon *ngIf="group.description" shape="info-standard" class="iconButton"
         [ngClass]="{'is-solid': activeTabs.description}" (click)="switchTab('description')"
         title="{{!activeTabs.description?'Show Info': 'Hide Info'}}"></clr-icon>
