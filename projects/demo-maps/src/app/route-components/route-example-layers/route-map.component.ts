@@ -12,6 +12,8 @@ import olFill from 'ol/style/Fill';
 import olCircleStyle from 'ol/style/Circle';
 import olStroke from 'ol/style/Stroke';
 import { WmsService } from '@dlr-eoc/services-ogc';
+import { ExampleLayerDescriptionComponent } from '../../components/example-layer-description/example-layer-description.component';
+import { ExampleGroupLegendComponent } from '../../components/example-group-legend/example-group-legend.component';
 
 @Component({
   selector: 'app-route-map',
@@ -93,7 +95,10 @@ export class RouteMapComponent implements OnInit {
         }
       },
       visible: false,
-      description: 'eoc:world_relief_bw as web map tile service',
+      description: {
+        component: ExampleLayerDescriptionComponent,
+        inputs: { description: 'eoc:world_relief_bw as web map tile service' }
+      },
       attribution: 'Relief: <a src="https://www.dlr.de/eoc">DLR/EOC</>',
       legendImg: ''
     });
@@ -148,8 +153,7 @@ export class RouteMapComponent implements OnInit {
       // maxZoom: 8,
       description: 'TDM90_DEM maxZoom: 8',
       attribution: ' | TDM90 Data ©: <a href="http://www.dlr.de" target="_blank">DLR</a>  licensed for <a rel="license" target="_blank" href="https://geoservice.dlr.de/resources/licenses/tdm90/License_for_the_Utilization_of_90m_DEM_for_Scientific_Use.pdf">scientific use</a>',
-      legendImg: '',
-      expanded: true,
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=TDM90_DEM&style=default&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A4&TileCol=8&TileRow=5',
       cssClass: 'custom-layer'
     });
 
@@ -430,6 +434,7 @@ export class RouteMapComponent implements OnInit {
     const eocBaseoverlay = new EocBaseoverlayTile();
 
     const eocLiteoverlay = new EocLiteoverlayTile();
+    eocLiteoverlay.legendImg = 'https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Aliteoverlay&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A4&TileCol=8&TileRow=5';
 
     const OsmLayer = new OsmTileLayer();
     /** add a Group of layers */
@@ -440,13 +445,20 @@ export class RouteMapComponent implements OnInit {
       name: 'Test Group',
       layers: [OsmLayer, eocBasemap, eocBaseoverlay],
       description: 'this is a group with OsmLayer, eocBasemap, eocBaseoverlay',
+      expanded: true,
       actions: [{ title: 'download', icon: 'download-cloud', action: (group) => { console.log(group); } }]
     });
 
     const groupLayer2 = new LayerGroup({
       id: 'group_2',
       name: 'Test Group 2',
-      expanded: true,
+      description: {
+        component: ExampleLayerDescriptionComponent,
+        inputs: { description: `A LayerGroup with a hidden vectorLayer2.` }
+      },
+      legendImg: {
+        component: ExampleGroupLegendComponent,
+      },
       cssClass: 'custom-layer-group',
       layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay]
     });

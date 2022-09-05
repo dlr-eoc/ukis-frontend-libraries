@@ -42,6 +42,7 @@ import { Popup2Component } from './components/popup2/popup2.component';
 import { RouteExampleOwcLayersComponent } from './route-components/route-example-owc-layers/route-example-owc-layers.component';
 import { BookmarksComponent } from './route-components/bookmarks/bookmarks.component';
 import { ExampleLayerDescriptionComponent } from './components/example-layer-description/example-layer-description.component';
+import { ExampleGroupLegendComponent } from './components/example-group-legend/example-group-legend.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,9 @@ import { ExampleLayerDescriptionComponent } from './components/example-layer-des
     RasterFeatureInfoComponent,
     Popup2Component,
     RouteExampleOwcLayersComponent,
-    ExampleLayerDescriptionComponent
+    BookmarksComponent,
+    ExampleLayerDescriptionComponent,
+    ExampleGroupLegendComponent
   ],
   imports: [
     BrowserModule,
