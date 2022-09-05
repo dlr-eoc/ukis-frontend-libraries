@@ -18,6 +18,8 @@ export interface ILayerGroupOptions {
   bbox?: TGeoExtent;
   /** description for the group as string/html or a angular component */
   description?: string | IDynamicComponent;
+  /** legend for the group as image or a angular component */
+  legendImg?: string | IDynamicComponent;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
   /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
   action?: IDynamicComponent;
@@ -46,6 +48,7 @@ export class LayerGroup implements ILayerGroupOptions {
   layerRemovable = true;
   bbox?: [number, number, number, number];
   description?: string | IDynamicComponent;
+  legendImg?: string | IDynamicComponent;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
   action?: IDynamicComponent;
   expanded = false;

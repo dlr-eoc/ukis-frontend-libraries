@@ -1,5 +1,6 @@
 ### Features
 * **@dlr-eoc/layer-control:**
+  - Allow legend on LayerGroup like on the layer - if one legend fits for all layers.
   - Allow Dynamic components for Group description to display specific formatted descriptions.
   - Allow Dynamic components for Layer description to display specific formatted descriptions (keep in mind that this breaks @dlr-eoc/services-ogc `generateResourceFromLayer` for this layer!!! - If you pass inputs.description to `IDynamicComponent` it will try to take this).
 

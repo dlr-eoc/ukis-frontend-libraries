@@ -76,6 +76,16 @@
       </ng-container>
     </div>
 
+    <!-- show Legend -->
+    <div *ngIf="group.legendImg && activeTabs.legend" class="tabsbody">
+      <ng-container *ngIf="checkIsComponentItem(group,'legendImg'); else imageUrl">
+        <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
+      </ng-container>
+
+      <ng-template #imageUrl>
+        <a [href]="group.legendImg" target="_blank" title="Show full Image"><img [src]="group.legendImg" /></a>
+      </ng-template>
+    </div>
 
     <!-- (cdkDropListSorted)="sort($event)"  -->
     <div cdkDropList (cdkDropListDropped)="drop($event)"
