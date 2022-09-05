@@ -145,7 +145,7 @@ export class LayerentryComponent implements OnInit {
       this.canZoomToLayer = true;
     }
 
-    if (!this.layer.legendImg && !this.layer.description && !this.layer.action && !this.layer.actions && !this.layer.styles && !(this.layer.styles?.length > 1)) {
+    if (this.layer.filtertype === 'Baselayers' && !this.layer.legendImg && !this.layer.description && !this.layer.action && !this.layer.actions && !this.layer.styles && !(this.layer.styles?.length > 1)) {
       this.hasTabsbody = false;
     }
   }
