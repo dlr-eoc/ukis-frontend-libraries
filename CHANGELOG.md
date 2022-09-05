@@ -4,6 +4,9 @@
 
 
 ### Bug Fixes
+* **@dlr-eoc/core-ui:**
+  - Fix style: remove right border on tabsbody for layers inside a group.
+
 * **@dlr-eoc/layer-control:**
   - Do not change the layer object binding in `layerentry` when creating a dynamic component from the layer.
   - For Baselayers also show button to switch to the settings tab if layer has action [Issue #135](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/135).
