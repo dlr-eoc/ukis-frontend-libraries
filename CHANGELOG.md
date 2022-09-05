@@ -1,6 +1,6 @@
 ### Features
 * **@dlr-eoc/layer-control:**
-  - Allow Dynamic components for layer description to display specific formatted descriptions (keep in mind that this breaks @dlr-eoc/services-ogc `generateResourceFromLayer` for this layer!!!).
+  - Allow Dynamic components for layer description to display specific formatted descriptions (keep in mind that this breaks @dlr-eoc/services-ogc `generateResourceFromLayer` for this layer!!! - If you pass inputs.description to `IDynamicComponent` it will try to take this).
 
 
 ### Bug Fixes

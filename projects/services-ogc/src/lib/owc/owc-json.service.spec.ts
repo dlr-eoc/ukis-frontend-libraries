@@ -846,7 +846,7 @@ describe('OwcJsonService: writing data into owc', () => {
     expect(resource.bbox).toEqual(ukisWmsLayer.bbox);
     expect(resource.properties.active).toBe(ukisWmsLayer.visible);
     expect(resource.properties.rights).toBe(ukisWmsLayer.attribution);
-    expect(resource.properties.abstract).toBe(ukisWmsLayer.description);
+    expect(resource.properties.abstract).toBe(ukisWmsLayer.description as string);
     expect(resource.properties.maxZoom).toBe(ukisWmsLayer.maxZoom);
     expect(resource.properties.minZoom).toBe(ukisWmsLayer.minZoom);
     expect(resource.properties.opacity).toBe(ukisWmsLayer.opacity);
