@@ -57,8 +57,15 @@
     </div>
 
     <!-- show Description -->
-    <div class="info" *ngIf="group.description && activeTabs.description">
-      <span [innerHTML]="group.description"></span>
+    <div *ngIf="group.description && activeTabs.description" class="tabsbody">
+
+      <ng-container *ngIf="checkIsComponentItem(group,'description'); else descriptionText">
+        <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>
+      </ng-container>
+
+      <ng-template #descriptionText>
+        <span [innerHTML]="group.description"></span>
+      </ng-template>
     </div>
 
     <!-- show group action -->
