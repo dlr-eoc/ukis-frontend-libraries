@@ -4,7 +4,7 @@ inputs:
   branch:
     description: "The branch to check"
     required: false
-    default: "origin/master"
+    default: "origin/main"
   commitId:
     description: "The commit-ish which should be included in the Branch - also use github.ref"
     required: false
