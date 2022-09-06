@@ -28,16 +28,15 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild(ViewRefDirective, { static: true }) ukisAddHost!: ViewRefDirective;
 
   componentRef!: ComponentRef<any>;
-  subs!: Subscription[];
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
+  viewContainerRef!: ViewContainerRef;
+  subs: Subscription[] = [];
+  constructor() { }
 
   loadComponent() {
     if (this.dynamicComponent) {
-      this.subs = [];
-      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.dynamicComponent.component);
-      const viewContainerRef = this.ukisAddHost.viewContainerRef;
-      viewContainerRef.clear();
-      this.componentRef = viewContainerRef.createComponent(componentFactory);
+      this.viewContainerRef = this.ukisAddHost.viewContainerRef;
+      this.viewContainerRef.clear();
+      this.componentRef = this.viewContainerRef.createComponent(this.dynamicComponent.component);
       this.setInputOutputs();
     }
   }
@@ -82,7 +81,6 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
             this.subs.push(sub);
           }
         }
-
       });
     }
   }
@@ -92,6 +90,9 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
       if (Array.isArray(this.subs)) {
         this.subs.map(s => s.unsubscribe());
       }
+      // unsub befor new sub on changes
+      this.subs.map(s => s.unsubscribe());
+      this.subs = [];
       this.setInputOutputs();
     }
   }
@@ -106,6 +107,10 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
       this.subs.map(s => s.unsubscribe());
       this.componentRef.destroy();
       this.componentRef = null as any;
+    }
+    if (this.viewContainerRef) {
+      this.viewContainerRef.clear();
+      this.viewContainerRef = null as any;
     }
   }
 }
