@@ -14,6 +14,8 @@
   - Do not change the layer object binding in `layerentry` when creating a dynamic component from the layer.
   - For Baselayers also show button to switch to the settings tab if layer has action [Issue #135](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/135).
   - Show layer expand icon for 'Baselayers' only when the layer has some things to expand (`legendImg`, `description`, `action`, `actions` or `styles` as array to show a style switch).
+* **@dlr-eoc/services-map-state:**
+  - Add missing time value in function `setMapState` on state initialization [issue 133](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/133).
 
 * **@dlr-eoc/map-ol:**
   - Set urls for vector tile layers after apply style to override them when tilejson is not provided. This is helpful to use `tms` services where no tilejson is available. Then set the url of the sourceId in your style file to `"url": ""` and add `"tiles": []`. This [skips the request](https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109) to tilejson.

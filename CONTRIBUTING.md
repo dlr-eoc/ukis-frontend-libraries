@@ -65,11 +65,11 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 2. Make a new local topic branch for your chnages:
   ```shell
-    git checkout master
+    git checkout main
 
-    git pull upstream master && git push origin master //Sync your local repository and fork with the upstream
+    git pull upstream main && git push origin main //Sync your local repository and fork with the upstream
 
-    git checkout -b my-fix-branch master
+    git checkout -b my-fix-branch main
   ```
 
   - Follow our [Coding Rules](#rules).
@@ -91,16 +91,16 @@ Before you submit your Pull Request (PR) consider the following guidelines:
     ```
 
 
-4. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis-frontend-libraries:master`.
+4. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis-frontend-libraries:main`.
   * If we suggest changes then:
     * Make the required updates and push it back to the same branch you opened the Pull Request on.
     * This will automatically re-run the UKIS test suites ([configured in the GitHub Actions](.github/workflows/testAndBuild.yml)) to ensure tests are still passing.
 
-**Do not, rebase your local branch on newer versions of the master before your work is complete and all requested changes are made!!!** [The Perils of Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
+**Do not, rebase your local branch on newer versions of main before your work is complete and all requested changes are made!!!** [The Perils of Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
 
 
-#### Bring the changes into the `ukis-frontend-libraries:master`.
-  - Once everything is **finished and reviewed** we will rebase the topic branch on the newest master if it's needed.
+#### Bring the changes into `ukis-frontend-libraries:main`.
+  - Once everything is **finished and reviewed** we will rebase the topic branch on the newest main branch if it's needed.
   - If we want to rebase the topic branch, we push the rebased branch to a new branch on GitHub and open a brand new Pull Request referencing the old one, then close the original one.
 
 
@@ -129,10 +129,10 @@ from the main (upstream) repository:
     git branch -D my-fix-branch
     ```
 
-* Update your master with the latest upstream version:
+* Update your main branch with the latest upstream version:
 
     ```shell
-    git pull --ff upstream master
+    git pull --ff upstream main
     ```
 
 
