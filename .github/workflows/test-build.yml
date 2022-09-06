@@ -4,8 +4,8 @@ name: Test and Build CI
 on:
   push:
     branches-ignore:
-      # run on all branches other then master
-      - master
+      # run on all branches other then main
+      - main
     tags-ignore:
       # And do not run for any tags
       - "*"
@@ -14,7 +14,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - master
+      - main
 
 jobs:
   build:
