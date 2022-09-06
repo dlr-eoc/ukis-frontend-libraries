@@ -4,7 +4,7 @@
 - Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` . 
 - Check if [Node.js](https://nodejs.org/) and npm are installed.
 - Move into project: `cd frontend-libraries`
-- Create a new branch for your feature specific changes based on master: e.g. `git checkout -b feature-XXX`
+- Create a new branch for your feature specific changes based on the main branch: e.g. `git checkout -b feature-XXX`
 - Install dependencies: `npm install`
 
 ## Update dependencies
@@ -18,11 +18,11 @@
 
 ### Issues and Milestones
 - Collect Ideas, then Sum them up to Issues which we can then sort into different [Milestones](https://github.com/dlr-eoc/ukis-frontend-libraries/milestones)
-- Label Issues and use the [Commit Message Guidelines](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/CONTRIBUTING.md#-commit-message-guidelines)
+- Label Issues and use the [Commit Message Guidelines](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/CONTRIBUTING.md#-commit-message-guidelines)
 
 ### Branch and Fork
 - Internally we use branches in the repository to create new features and bug fixes
-- If you are not member of our organization fork our repository and use branches ([see our guide on contributing](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/CONTRIBUTING.md))
+- If you are not member of our organization fork our repository and use branches ([see our guide on contributing](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/CONTRIBUTING.md))
 
 **gh-pages branch:**
 This branch is used to host some demo applications as GitHub Pages.
@@ -97,7 +97,7 @@ run ``ng g application < name > --prefix=app --style=scss``
 
 # How to publish a new version for all projects
 The general workflow to create a new version:
-1. clone the repository and create a new branch for your feature specific changes based on master.
+1. clone the repository and create a new branch for your feature specific changes based on the main branch.
 2. make sure you have updated CHANGELOG and README and commit all your stuff.
 3. push your branch `git push origin <branch>` and check if the github actions test and build correctly.
 
@@ -106,14 +106,14 @@ The general workflow to create a new version:
 - run `node scripts/library/index.js -t` to test all projects. (node_modules must be installed for this)
 - run `node scripts/library/index.js -b` to test all projects are building locally. (node_modules must be installed for this)
 
-4. create a [release pull request](https://github.com/dlr-eoc/ukis-frontend-libraries/pulls) on the master.
+4. create a [release pull request](https://github.com/dlr-eoc/ukis-frontend-libraries/pulls) on the main branch.
 
 ## Release pull request [see release_pull_request.md](.github/PULL_REQUEST_TEMPLATE/release_pull_request.md)
-- based on the new master create a release branch e.g `git checkout -b release-v7.1.0`
+- based on the new main branch create a release branch e.g `git checkout -b release-v7.1.0`
 - set version, date and description in the CHANGELOG.md e.g. `# [<version>](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v<version>) (<date>) (<description>)`
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Milestone XY"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
-- merge the release branch in the master by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/master...release-v8.0.1?template=release_pull_request.md` the PR body is populated with the template)
+- merge the release branch in the main branch by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/main...release-v8.0.1?template=release_pull_request.md` the PR body is populated with the template)
 - push the tag (created from `npm version`) by running `git push origin --tags`
 
 Changes on the PR trigger the workflow [Package Main Release](.github/workflows/main-release-package.yml). If all jobs succeed the angular projects are published as github/npm packages.

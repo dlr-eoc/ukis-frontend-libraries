@@ -1,10 +1,10 @@
 ## PR Checklist
 Please check if your PR fulfills the following requirements:
 
-- [ ] The commit message follows our guidelines: https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/CONTRIBUTING.md#-commit-message-guidelines
+- [ ] The commit message follows our guidelines: https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/CONTRIBUTING.md#-commit-message-guidelines
 - [ ] Tests for the changes have been added (for bug fixes / features)
 - [ ] Docs have been added / updated (for bug fixes / features)
-- [ ] The Project is [building and passes all tests](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/DEVELOPMENT.md#further-you-can-test-and-build-locally) without errors
+- [ ] The Project is [building and passes all tests](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/DEVELOPMENT.md#further-you-can-test-and-build-locally) without errors
 
 
 ## PR Type

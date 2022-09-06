@@ -1,7 +1,7 @@
 ## Release PR Checklist
 
 
-For creating a new version see [DEVELOPMENT/new version](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/DEVELOPMENT.md#How-to-publish-a-new-version-for-all-projects) and see [Release pull request](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/master/DEVELOPMENT.md#Release-pull-request).
+For creating a new version see [DEVELOPMENT/new version](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/DEVELOPMENT.md#How-to-publish-a-new-version-for-all-projects) and see [Release pull request](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/DEVELOPMENT.md#Release-pull-request).
 
 
 Please check if your PR fulfills the following requirements:
