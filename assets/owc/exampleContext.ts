@@ -348,7 +348,7 @@ export const eocVectortileOffering: IEocOwsOffering = {
     abstract: 'This is a slightly modified version of Positron style @see: https://github.com/openmaptiles/positron-gl-style/blob/master/LICENSE.md',
     content: {
       type: 'OpenMapStyle',
-      styleSource: 'planet0-12',
+      styleSource: 'planet_eoc',
       content: JSON.stringify(customPositron)
     }
   }]
