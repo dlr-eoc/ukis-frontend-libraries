@@ -140,7 +140,7 @@ export interface ILayerOptions {
   continuousWorld?: boolean;
   attribution?: string;
   displayName?: string;
-  description?: string;
+  description?: string | IDynamicComponent;
   time?: string;
   minResolution?: number;
   maxResolution?: number;
@@ -278,7 +278,7 @@ export class Layer implements ILayerOptions {
   continuousWorld = false;
   attribution?: string;
   displayName?: string;
-  description?: string;
+  description?: string | IDynamicComponent;
   protected protTime?: string;
   minResolution?: number;
   maxResolution?: number;

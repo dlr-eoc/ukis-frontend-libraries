@@ -1,4 +1,19 @@
+### Features
+* **@dlr-eoc/layer-control:**
+  - Allow legend on LayerGroup like on the layer - if one legend fits for all layers.
+  - Allow Dynamic components for Group description to display specific formatted descriptions.
+  - Allow Dynamic components for Layer description to display specific formatted descriptions (keep in mind that this breaks @dlr-eoc/services-ogc `generateResourceFromLayer` for this layer!!! - If you pass inputs.description to `IDynamicComponent` it will try to take this).
+
+
 ### Bug Fixes
+* **@dlr-eoc/core-ui:**
+  - Fix style: remove right border on tabsbody for layers inside a group.
+
+* **@dlr-eoc/layer-control:**
+  - Do not change the group object binding in `layerentry-group` when creating a dynamic component from the group.
+  - Do not change the layer object binding in `layerentry` when creating a dynamic component from the layer.
+  - For Baselayers also show button to switch to the settings tab if layer has action [Issue #135](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/135).
+  - Show layer expand icon for 'Baselayers' only when the layer has some things to expand (`legendImg`, `description`, `action`, `actions` or `styles` as array to show a style switch).
 * **@dlr-eoc/services-map-state:**
   - Add missing time value in function `setMapState` on state initialization [issue 133](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/133).
 

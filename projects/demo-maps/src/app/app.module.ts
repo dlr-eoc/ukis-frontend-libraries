@@ -41,6 +41,8 @@ import { RasterFeatureInfoComponent } from './components/raster-feature-info/ras
 import { Popup2Component } from './components/popup2/popup2.component';
 import { RouteExampleOwcLayersComponent } from './route-components/route-example-owc-layers/route-example-owc-layers.component';
 import { BookmarksComponent } from './route-components/bookmarks/bookmarks.component';
+import { ExampleLayerDescriptionComponent } from './components/example-layer-description/example-layer-description.component';
+import { ExampleGroupLegendComponent } from './components/example-group-legend/example-group-legend.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import { BookmarksComponent } from './route-components/bookmarks/bookmarks.compo
     RasterFeatureInfoComponent,
     Popup2Component,
     RouteExampleOwcLayersComponent,
-    BookmarksComponent
+    BookmarksComponent,
+    ExampleLayerDescriptionComponent,
+    ExampleGroupLegendComponent
   ],
   imports: [
     BrowserModule,

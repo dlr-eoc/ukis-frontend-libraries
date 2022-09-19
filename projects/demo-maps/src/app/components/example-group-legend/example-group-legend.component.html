@@ -1,0 +1,11 @@
+<div class="wrapper">
+  <!-- title="Show full Image"  target="_blank" -->
+  <img [src]="legendImages[0].url" class="stacked" width="256" height="256" />
+  <img [src]="legendImages[1].url" usemap="#legendmap" />
+
+
+  <map name="legendmap">
+    <area shape="rect" coords="0,0,256,128" alt="top" title="Show full Image overlay" [href]="legendImages[0].url" target="_blank">
+    <area shape="rect" coords="0,128,256,256" alt="below" title="Show full Image base" [href]="legendImages[1].url" target="_blank">
+  </map>
+</div>

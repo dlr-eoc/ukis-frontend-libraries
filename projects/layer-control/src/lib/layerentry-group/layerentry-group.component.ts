@@ -6,6 +6,9 @@ import { LayerGroup, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { IDynamicComponent } from '@dlr-eoc/core-ui';
+
+type TactiveTabs = 'settings' | 'legend' | 'description';
 
 @Component({
   selector: 'ukis-layerentry-group',
@@ -36,8 +39,17 @@ export class LayerentryGroupComponent implements OnInit {
   // public visible: boolean = true;
   public canZoomToGroup = false;
 
-  public showInfo = false;
-  public showAction = true;
+  public activeTabs = {
+    settings: false,
+    legend: true,
+    description: false
+  };
+
+  public dynamicComponents: {
+    legendImg: IDynamicComponent
+    action: IDynamicComponent
+    description: IDynamicComponent;
+  } = { legendImg: null, action: null, description: null };
 
   constructor() { }
 
@@ -47,32 +59,58 @@ export class LayerentryGroupComponent implements OnInit {
     }
 
     if (!this.group?.action) {
-      this.showAction = false;
+      this.activeTabs.settings = false;
     }
   }
 
   /**
    * obj: {any| IDynamicComponent}
    */
-  checkIsComponentItem(group: LayerGroup, compProp: string) {
-    const obj = group[compProp];
+  checkIsComponentItem(group: LayerGroup, compProp: string): group is Omit<LayerGroup, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent } {
+    /**
+     * TODO: This function is executed quite often!!! even if a user moves on tha map. Try to minimize work here or prevent calling it so often.
+     *
+     * creating new objects is needed to pass and change Inputs from the groups DynamicComponent to the dynamically created component bound on the layer.
+     * There is a new object created to hold the component, inputs and outputs so the group can be passed to the inputs without adding it recursively to itself.
+     **/
+
+    // https://stackoverflow.com/a/65347533/10850021
+    const obj: IDynamicComponent = group[compProp];
     let isComp = false;
     if (obj && typeof obj === 'object') {
       if ('component' in obj) {
+        const component = obj.component;
+
         if (!obj.inputs) {
-          // https://2ality.com/2014/01/object-assign.html#2.3
-          const groupClone = Object.assign({ __proto__: this.group['__proto__'] }, group);
-          if (groupClone && groupClone[compProp]) {
-            delete groupClone[compProp];
+          this.dynamicComponents[compProp] = {
+            component: component,
+            inputs: { group: group }
           }
-          obj.inputs = { group: groupClone };
+
         } else if (obj.inputs && !obj.inputs.group) {
+          this.dynamicComponents[compProp] = {
+            component: obj.component,
+            // create a shallow copy of inputs so they are not changed on the original group
+            // keep in mind changing some deeper properties will reflect to the original group!
+            // https://2ality.com/2014/01/object-assign.html#2.3
+            inputs: Object.assign({}, obj.inputs, { group: group })
+          };
+
+        } else if (obj.inputs && obj.inputs.group) {
+          this.dynamicComponents[compProp] = {
+            component: obj.component,
+            // create a shallow copy of inputs so they are not changed on the original group
+            // keep in mind changing some deeper properties will reflect to the original group!
+            // https://2ality.com/2014/01/object-assign.html#2.3
+            inputs: Object.assign({}, obj.inputs)
+          };
+        }
+
+        if (obj.outputs) {
+          // create a shallow copy of outputs so they are not changed on the original group
+          // keep in mind changing some deeper properties will reflect to the original group!
           // https://2ality.com/2014/01/object-assign.html#2.3
-          const groupClone = Object.assign({ __proto__: this.group['__proto__'] }, group);
-          if (groupClone && groupClone[compProp]) {
-            delete groupClone[compProp];
-          }
-          obj.inputs = Object.assign({ group: groupClone }, obj.inputs);
+          this.dynamicComponents[compProp].outputs = Object.assign({}, obj.outputs);
         }
         isComp = true;
       }
@@ -136,10 +174,35 @@ export class LayerentryGroupComponent implements OnInit {
     this.group.expanded = !this.group.expanded;
   }
 
+  switchTab(tabName: TactiveTabs, toggle = true) {
+    for (const key of Object.keys(this.activeTabs)) {
+      const isTabName = tabName === key;
+      if (this.activeTabs[key] && toggle) {
+        this.activeTabs[key] = false;
+      } else {
+        this.activeTabs[key] = isTabName;
+      }
+    }
+  }
+
   showHideAllDetails() {
-    this.openAllLayersProperties = !this.openAllLayersProperties;
-    this.showAction = this.openAllLayersProperties;
-    this.showInfo = this.openAllLayersProperties;
+    if (this.openAllLayersProperties) {
+      this.openAllLayersProperties = false;
+      for (const key of Object.keys(this.activeTabs)) {
+        this.activeTabs[key] = false;
+      }
+
+    } else {
+      this.openAllLayersProperties = true;
+
+      if (this.group.legendImg) {
+        this.switchTab('legend', false);
+      } else if (this.group.description) {
+        this.switchTab('description', false);
+      } else if (this.group.action) {
+        this.switchTab('settings', false);
+      }
+    }
   }
 
   isFirst(group) {

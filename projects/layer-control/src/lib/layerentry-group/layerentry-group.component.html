@@ -35,18 +35,21 @@
   <div *ngIf="group.expanded" class="body">
     <!-- tools: zoomTo, remove, open all Tabs -->
     <div class="tools">
-      <clr-icon *ngFor="let item of group.actions" [attr.shape]="item.icon" class="iconButton"
-        (click)="item.action(group)" [title]="item.title">
-      </clr-icon>
+      <clr-icon *ngIf="group.action" shape="cog" class="iconButton" [ngClass]="{'is-solid':activeTabs.settings}"
+        (click)="switchTab('settings')" title="{{!activeTabs.settings?'Show settings': 'Hide settings'}}"></clr-icon>
+      <clr-icon *ngIf="group.legendImg" title="{{!activeTabs.legend?'Show Legend': 'Hide Legend'}}" shape="image"
+        class="iconButton" [ngClass]="{'is-solid': activeTabs.legend}" (click)="switchTab('legend')"></clr-icon>
+      <clr-icon *ngIf="group.description" shape="info-standard" class="iconButton"
+        [ngClass]="{'is-solid': activeTabs.description}" (click)="switchTab('description')"
+        title="{{!activeTabs.description?'Show Info': 'Hide Info'}}"></clr-icon>
 
-      <clr-icon *ngIf="group.action" shape="cog" class="iconButton" [ngClass]="{'is-solid':showAction}"
-        (click)="showAction = !showAction" title="{{!showAction?'Show settings': 'Hide settings'}}"></clr-icon>
-
-      <clr-icon *ngIf="group.description" shape="info-standard" class="iconButton" [ngClass]="{'is-solid':showInfo}"
-        (click)="showInfo = !showInfo" title="{{!showInfo?'Show Info': 'Hide Info'}}"></clr-icon>
       <clr-icon shape="details" class="iconButton" [ngClass]="{'is-solid':openAllLayersProperties}"
         (click)="showHideAllDetails()"
         title="{{!openAllLayersProperties?'Show all layers details': 'Hide all layers details'}}"></clr-icon>
+
+      <clr-icon *ngFor="let item of group.actions" [attr.shape]="item.icon" class="iconButton"
+        (click)="item.action(group)" [title]="item.title">
+      </clr-icon>
 
       <span></span>
       <clr-icon *ngIf="canZoomToGroup" shape="zoom-in" class="iconButton" (click)="zoomTo(group)" title="Zoom to group">
@@ -55,16 +58,36 @@
         title="Remove group"></clr-icon>
     </div>
 
-    <div class="info" *ngIf="showInfo">
-      <span [innerHTML]="group.description"></span>
+    <!-- show Description -->
+    <div *ngIf="group.description && activeTabs.description" class="tabsbody">
+
+      <ng-container *ngIf="checkIsComponentItem(group,'description'); else descriptionText">
+        <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>
+      </ng-container>
+
+      <ng-template #descriptionText>
+        <span [innerHTML]="group.description"></span>
+      </ng-template>
     </div>
-    <div *ngIf="group.action && showAction" class="tabsbody">
+
+    <!-- show group action -->
+    <div *ngIf="group.action && activeTabs.settings" class="tabsbody">
       <ng-container *ngIf="checkIsComponentItem(group, 'action');">
         <ukis-dynamic-component [(dynamicComponent)]="group.action">
         </ukis-dynamic-component>
       </ng-container>
     </div>
 
+    <!-- show Legend -->
+    <div *ngIf="group.legendImg && activeTabs.legend" class="tabsbody">
+      <ng-container *ngIf="checkIsComponentItem(group,'legendImg'); else imageUrl">
+        <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
+      </ng-container>
+
+      <ng-template #imageUrl>
+        <a [href]="group.legendImg" target="_blank" title="Show full Image"><img [src]="group.legendImg" /></a>
+      </ng-template>
+    </div>
 
     <!-- (cdkDropListSorted)="sort($event)"  -->
     <div cdkDropList (cdkDropListDropped)="drop($event)"

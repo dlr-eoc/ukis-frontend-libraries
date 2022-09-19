@@ -561,8 +561,9 @@ export class OwcJsonService {
         if (layers.length) {
           /** if filterType is Baselayers -> create a merged Layer */
           if (filterType === Filtertypes.Baselayers) {
-            const mergedDescription = layers.map(i => i.description).filter(d => d); // filter empty elements
-            const legendImages = layers.map(i => i.legendImg).filter(d => d);
+            const descriptionLayers = layers.filter(l => l.description); // filter empty elements
+            const mergedDescription = descriptionLayers.map(i => i.description);
+            const legendImages = layers.map(i => i.legendImg).filter(d => d); // filter empty elements
             const layerOptions: IStackedLayerOptions = {
               id: `${groupName}_${layers.map(i => i.id).join(' ')}`.replace(/\s/g, '_'),
               name: groupName,
@@ -570,7 +571,7 @@ export class OwcJsonService {
               filtertype: Filtertypes.Baselayers
             };
             if (mergedDescription.length) {
-              layerOptions.description = mergedDescription.join(';\r\n');
+              layerOptions.description = mergedDescription.map((d, index) => this.generateAbstractFromLayerDescription(d, descriptionLayers[index].id)).join(';\r\n');
             }
             if (legendImages) {
               layerOptions.legendImg = legendImages[0];
@@ -1365,6 +1366,18 @@ export class OwcJsonService {
     return owc;
   }
 
+  private generateAbstractFromLayerDescription(description: Layer['description'], layerID?: Layer['id']) {
+    if (typeof description === 'string') {
+      return description
+    } else {
+      if (description.inputs?.description) {
+        return JSON.stringify(description);
+      } else {
+        return `Could not generate description from layer: ${layerID} - dynamic component`
+      }
+    }
+  }
+
   generateResourceFromLayer(layer: Layer, folderName?: string): IEocOwsResource {
     const resource: IEocOwsResource = {
       id: layer.id,
@@ -1372,7 +1385,7 @@ export class OwcJsonService {
         title: layer.displayName || layer.name,
         opacity: layer.opacity,
         active: layer.visible,
-        abstract: layer.description,
+        abstract: this.generateAbstractFromLayerDescription(layer.description, layer.id),
         rights: layer.attribution,
         minZoom: layer.minZoom,
         maxZoom: layer.maxZoom,

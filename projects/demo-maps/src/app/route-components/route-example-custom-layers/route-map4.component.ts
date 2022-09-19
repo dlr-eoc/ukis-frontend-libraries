@@ -66,9 +66,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
   setInput() {
     const layer = this.layersSvc.getLayerById('heatmap_layer') as CustomLayer;
     this.inputValue.value = 40;
-    layer.action.inputs = this.inputValue;
-    /** change object ref to trigger input change */
-    layer.action = Object.assign({}, layer.action);
+    layer.action.inputs.value = this.inputValue.value;
   }
 
   addLayers() {

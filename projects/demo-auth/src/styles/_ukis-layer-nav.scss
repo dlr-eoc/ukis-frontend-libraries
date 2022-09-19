@@ -109,9 +109,11 @@
     }
 
     .layergroup {
-      .body {
-        .tabsbody {
-          border-right: none;
+      .layer{
+        .body {
+          .tabsbody {
+            border-right: none;
+          }
         }
       }
     }
