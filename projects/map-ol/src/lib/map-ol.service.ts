@@ -1,4 +1,4 @@
-import { Injectable, ComponentFactoryResolver, ApplicationRef, Injector, ComponentRef } from '@angular/core';
+import { Injectable, ApplicationRef, Injector, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
 
 
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IVectorLayerOptions, IAnyObject } from '@dlr-eoc/services-layers';
@@ -147,9 +147,8 @@ export class MapOlService {
   private dynamicPopupComponents: Map<string, ComponentRef<any>> = new Map();
 
   constructor(
-    private crf: ComponentFactoryResolver,
     private app: ApplicationRef,
-    private injector: Injector
+    private envInjector: EnvironmentInjector
   ) {
     this.map = new olMap({ controls: [] });
     this.view = new olView();
@@ -2195,8 +2194,10 @@ export class MapOlService {
    * @param args : Must contain `dynamicPopup`
    */
   private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, args: IDynamicPopupArgs): void {
-    const factory = this.crf.resolveComponentFactory(args.dynamicPopup.component);
-    const popupBody = factory.create(this.injector, [], anchorElement);
+    const popupBody = createComponent(args.dynamicPopup.component, {
+      environmentInjector: this.envInjector,
+      hostElement: anchorElement
+    });
 
     if (args.dynamicPopup.getAttributes) {
       const attributes = args.dynamicPopup.getAttributes(args);
