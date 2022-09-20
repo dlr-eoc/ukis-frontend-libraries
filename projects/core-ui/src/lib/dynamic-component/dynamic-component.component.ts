@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, ViewChild, ComponentFactoryResolver, ComponentRef, OnDestroy, Input, SimpleChanges, OnChanges,
+  Component, OnInit, ViewChild, ComponentRef, OnDestroy, Input, SimpleChanges, OnChanges,
   EventEmitter, Directive, ViewContainerRef, Type, Output
 } from '@angular/core';
 import { Subscription } from 'rxjs';
