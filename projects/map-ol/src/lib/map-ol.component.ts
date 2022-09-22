@@ -187,32 +187,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (ollayer.getOpacity() !== layer.opacity) {
             ollayer.setOpacity(layer.opacity);
           }
-          if (layer instanceof CustomLayer && ollayer instanceof olLayer) {
-            const newSource = layer.custom_layer.getSource();
-            const oldSource = ollayer.getSource();
-            if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
-              ollayer.setSource(newSource);
-              // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
-              if(oldSource instanceof olRasterSource){
-                oldSource.dispose();
-              }
-            }
-          } else if (layer instanceof CustomLayer && layer.custom_layer instanceof olLayerGroup && ollayer instanceof olLayerGroup) {
-            const newLayers = layer.custom_layer.getLayers().getArray();
-            const oldLayers = ollayer.getLayers().getArray();
-
-            /** assume the order and length of layers is not changing and no more grouping!!! */
-            oldLayers.forEach((l, i) => {
-              const newLayer = newLayers[i];
-              if (l instanceof olLayer && newLayer instanceof olLayer) {
-                const oldSource = l.getSource();
-                const newSource = newLayer.getSource();
-                if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
-                  l.setSource(newSource);
-                }
-              }
-            });
-          }
+          this.updateLayerSource(layer, ollayer);
           if (otherlayerslength > 0) {
             if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
               ollayer.setZIndex(layers.indexOf(layer) + otherlayerslength);
@@ -239,6 +214,35 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           l.setZIndex(layers.indexOf(layer) + otherlayerslength);
         } else {
           l.setZIndex(layers.indexOf(layer));
+        }
+      });
+    }
+  }
+
+  private updateLayerSource(layer: Layer, ollayer: olBaseLayer | olLayer<any> | olLayerGroup) {
+    if (layer instanceof CustomLayer && ollayer instanceof olLayer) {
+      const newSource = layer.custom_layer.getSource();
+      const oldSource = ollayer.getSource();
+      if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
+        ollayer.setSource(newSource);
+        // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+        if (oldSource instanceof olRasterSource) {
+          oldSource.dispose();
+        }
+      }
+    } else if (layer instanceof CustomLayer && layer.custom_layer instanceof olLayerGroup && ollayer instanceof olLayerGroup) {
+      const newLayers = layer.custom_layer.getLayers().getArray();
+      const oldLayers = ollayer.getLayers().getArray();
+
+      /** assume the order and length of layers is not changing and no more grouping!!! */
+      oldLayers.forEach((l, i) => {
+        const newLayer = newLayers[i];
+        if (l instanceof olLayer && newLayer instanceof olLayer) {
+          const oldSource = l.getSource();
+          const newSource = newLayer.getSource();
+          if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
+            l.setSource(newSource);
+          }
         }
       });
     }
