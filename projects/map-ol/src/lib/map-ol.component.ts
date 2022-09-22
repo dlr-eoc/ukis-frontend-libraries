@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterViewChecked, AfterContentChecked, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecked, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 
 
 
