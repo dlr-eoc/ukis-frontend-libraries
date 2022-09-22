@@ -8,7 +8,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 import { MapOlService, Tgroupfiltertype } from './map-ol.service';
-import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype, WfsLayertype } from '@dlr-eoc/services-layers';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype, WfsLayertype, TmsLayertype } from '@dlr-eoc/services-layers';
 
 import Map from 'ol/Map';
 import { getUid as olGetUid } from 'ol/util';
@@ -39,6 +39,7 @@ import olRasterSource from 'ol/source/Raster';
 import olGeometry from 'ol/geom/Geometry';
 import olSourceCluster from 'ol/source/Cluster';
 import olVectorLayer from 'ol/layer/Vector';
+import { applyStyle } from 'ol-mapbox-style';
 
 
 export interface IMapControls {
@@ -262,8 +263,18 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       case WfsLayertype:
         this.updateWfsLayerParamsWith(oldLayer as any, newLayer as VectorLayer);
         break;
+      case TmsLayertype:
+        this.updateTmsLayerParamsWith(oldLayer as any, newLayer);
       default:
         break;
+    }
+  }
+
+  private updateTmsLayerParamsWith(oldLayer: olVectorLayer<olVectorSource<olGeometry>>, newLayer: Layer) {
+    if (newLayer instanceof VectorLayer) {
+      const style = newLayer.options.style;
+      const mapboxSourceKey = newLayer.options.styleSource;
+      applyStyle(oldLayer, style, mapboxSourceKey);
     }
   }
 
@@ -402,6 +413,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (bllayer.getOpacity() !== layer.opacity) {
             bllayer.setOpacity(layer.opacity);
           }
+          this.updateLayerSource(layer, bllayer);
+          this.updateLayerParamsWith(bllayer as olLayer<any>, layer);
         }
       }
     }

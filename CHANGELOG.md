@@ -20,6 +20,8 @@
   - Add missing time value in function `setMapState` on state initialization [Issue #133](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/133).
 
 * **@dlr-eoc/map-ol:**
+  - Update `TmsLayer` for vector tile style update.
+  - Update `Params` and `Source` for `baselayers`.
   - Replace deprecated ComponentFactory in `createDynamicPopupComponent` [angular 45263](https://github.com/angular/angular/issues/45263).
   - Set urls for vector tile layers after apply style to override them when tilejson is not provided. This is helpful to use `tms` services where no tilejson is available. Then set the url of the sourceId in your style file to `"url": ""` and add `"tiles": []`. This [skips the request](https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109) to tilejson.
 
