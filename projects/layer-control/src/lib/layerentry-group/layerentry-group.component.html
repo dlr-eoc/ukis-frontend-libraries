@@ -23,11 +23,11 @@
 
     <!-- setGroupLayersVisibility -->
     <span *ngIf="!checkBaselayer(group)">
-      <input class="hide" [type]="'checkbox'" [checked]="group.visible" [name]="'group'" [id]="group.id"
-        (change)="setGroupLayersVisibility()">
-      <label [for]="group.id">
+      <label>
         <clr-icon class="iconButton" [ngClass]="{'is-solid':group.visible}"
           [attr.shape]="group.visible?'eye':'eye-hide'" title="{{group.visible?'Hide Group':'Show Group'}}"></clr-icon>
+        <input class="hide" [type]="'checkbox'" [checked]="group.visible" [name]="'group'"
+          (change)="setGroupLayersVisibility()">
       </label>
     </span>
   </div>
