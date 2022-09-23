@@ -23,7 +23,7 @@
     "@angular-devkit/core": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular-devkit/schematics": "0.0.0-PLACEHOLDER-VENDOR",
     "@schematics/angular": "0.0.0-PLACEHOLDER-VENDOR",
-    "parse5-html-rewriting-stream": "^6.0.1",
+    "parse5-html-rewriting-stream": "0.0.0-PLACEHOLDER-VENDOR",
     "tslib": "0.0.0-PLACEHOLDER-VENDOR"
   },
   "peerDependencies": {
@@ -39,7 +39,7 @@
     "cpx": "0.0.0-PLACEHOLDER-VENDOR",
     "@types/cpx": "0.0.0-PLACEHOLDER-VENDOR",
     "typescript": "0.0.0-PLACEHOLDER-VENDOR",
-    "jasmine": "^2.8.0",
+    "jasmine": "0.0.0-PLACEHOLDER-VENDOR",
     "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular-devkit/architect": "0.0.0-PLACEHOLDER-VENDOR"
