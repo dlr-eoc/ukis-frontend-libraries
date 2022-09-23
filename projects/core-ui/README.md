@@ -43,7 +43,7 @@ It uses the angular components from Clarity to get a responsive navigation.
 ### For an application with routes:
 Use a basic layout like the following, containing the router-outlet which then shows route components as the Clarity `content-container`.
 ```
-<clr-main-container [ngClass]="{'floating':ui.floating}">
+<clr-main-container>
   <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
   <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
   <ukis-header [ukis-title]="title">
@@ -56,7 +56,7 @@ Use a basic layout like the following, containing the router-outlet which then s
 ### For an application without routes:
 Replace the router-outlet with a view component which also adds the Clarity `content-container` class as HostBinding.
 ```
-<clr-main-container [ngClass]="{'floating':ui.floating}">
+<clr-main-container>
   <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
   <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
   <ukis-header [ukis-title]="title">
@@ -66,7 +66,7 @@ Replace the router-outlet with a view component which also adds the Clarity `con
 </clr-main-container>
 ```
 
-- The css class `floating` on the `main-container` makes the [Clarity Vertical Nav](https://clarity.design/documentation/vertical-nav/collapsible-nav/normal) floating above the `content-container` so it takes less space. For this, however, you have to worry about the placement of the elements in the `content-container` if the `vertical-nav` is expanded.
+- A css class `floating` on the `content-container` (which is mostly placed in your route components) makes the [Clarity Vertical Nav](https://clarity.design/documentation/vertical-nav/collapsible-nav/normal) floating above the `content-container` so it takes less space. For this, however, you have to worry about the placement of the elements in the `content-container` if the `vertical-nav` is expanded.
 - The `global-alert` and `global-progress` can be activated with their responsible services which you can inject in your components.
 - For more doku about the `ukis-header` [see the header README](src/lib/header/README.md)
 

@@ -26,6 +26,7 @@
   - Set urls for vector tile layers after apply style to override them when tilejson is not provided. This is helpful to use `tms` services where no tilejson is available. Then set the url of the sourceId in your style file to `"url": ""` and add `"tiles": []`. This [skips the request](https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109) to tilejson.
 
 ### Breaking Changes
+- Remove class `floating` from `clr-main-container`, this is now set on `content-container` e.g. in a route component `@HostBinding('class') class = 'content-container floating';`
 - Update angular from `^13.3.5` to `^14.0.2` automatic migrations are made by ng update and forms use types now.
 
 # [9.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v9.0.0) (2022-05-20) (Update dependencies and documentation)
