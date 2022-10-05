@@ -42,7 +42,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-      - uses: ./.github/actions/build-test
+      - uses: ./.github/actions/build
       - name: Archive dist artifacts
         uses: actions/upload-artifact@v2
         with:
