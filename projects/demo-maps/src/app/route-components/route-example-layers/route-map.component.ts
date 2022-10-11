@@ -14,6 +14,8 @@ import olStroke from 'ol/style/Stroke';
 import { WmsService } from '@dlr-eoc/services-ogc';
 import { ExampleLayerDescriptionComponent } from '../../components/example-layer-description/example-layer-description.component';
 import { ExampleGroupLegendComponent } from '../../components/example-group-legend/example-group-legend.component';
+import greyscale from '@dlr-eoc/shared-assets/open-map-styles/open-map-style.json';
+import { VtileLayerActionComponent } from '../../components/vtile-layer-action/vtile-layer-action.component';
 
 @Component({
   selector: 'app-route-map',
@@ -107,7 +109,23 @@ export class RouteMapComponent implements OnInit {
       id: 'OSM_Base'
     });
 
-    const layers = [eocLiteMerge, OsmLayer, TransparentBackground, worldRelief];
+    const geoserviceVTiles = new VectorLayer({
+      name: 'Open Map Styles',
+      id: 'planet_eoc_vector_tiles',
+      attribution: `© <a href="http://openmaptiles.org/" target="_blank">OpenMapTiles</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank"> OpenStreetMap contributors</a>`,
+      description: `EOC-Geoservice TMS-Service, Vector Tiles with OpenMapTiles and customised <a href="https://openmaptiles.org/styles/#positron">positron</a> Style.`,
+      type: 'tms',
+      url: 'https://{s}.tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true',
+      subdomains: ['a', 'b', 'c', 'd'],
+      options: {
+        style: greyscale,
+        styleSource: 'planet_eoc'
+      },
+      visible: false,
+      action: { component: VtileLayerActionComponent, inputs: { layersSvc: this.layersSvc } },
+    });
+
+    const layers = [eocLiteMerge, OsmLayer, TransparentBackground, worldRelief, geoserviceVTiles];
 
     /** add layers with the LayersService */
     layers.map(layer => this.layersSvc.addLayer(layer, 'Baselayers'));

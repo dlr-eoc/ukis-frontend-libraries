@@ -10,8 +10,6 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 interface IUi {
-  floating: boolean;
-  flipped: boolean;
   alert: null | IAlert;
   progress: null | IProgress;
 }
@@ -27,8 +25,6 @@ export class AppComponent implements OnInit, OnDestroy {
   version = (appVersion === '0.0.0-PLACEHOLDER') ? null : appVersion;
 
   ui: IUi = {
-    floating: false,
-    flipped: false,
     alert: null,
     progress: null
   };

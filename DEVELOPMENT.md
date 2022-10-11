@@ -153,7 +153,9 @@ There are two ways to include libraries in a frontend-project:
         }
         ...
     ```
-
+  - add `frontend-libraries` to `.gitignore` so you do not commit it unintentionally to your code.
+  - temporarily add all missing dependencies from `frontend-libraries` in your project's package.json (so you have all dependencies installed which the project needs for the transpilation)
+  - check that the tsconfig file from your project is compatible with that of `frontend-libraries`
 ### 2nd method: build libraries and project side by side
 - compile the library on changes and link the compiled library into the frontend-projects `node_modules/@dlr-eoc` directory. 
 

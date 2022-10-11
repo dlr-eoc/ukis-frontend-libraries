@@ -22,9 +22,7 @@
     </span>
 
     <!-- setLayerVisibility -->
-    <input class="hide" [type]="(checkBaselayer(layer,group))?'radio':'checkbox'" [name]="'layer'" [id]="layer.id"
-      [checked]="layer.visible" (change)="setLayerVisibility(layer, group)">
-    <label [for]="layer.id">
+    <label>
       <clr-icon *ngIf="checkBaselayer(layer,group); else notBaselayer" class="iconButton"
         [ngClass]="{'is-solid':layer.visible}" [attr.shape]="(layer.visible)?'dot-circle':'circle'"
         title="{{layer.visible?'Choose another layer':'Show layer'}}">
@@ -34,6 +32,8 @@
           [attr.shape]="(layer.visible)?'eye':'eye-hide'" title="{{layer.visible?'Hide layer':'Show layer'}}">
         </clr-icon>
       </ng-template>
+      <input class="hide" [type]="(checkBaselayer(layer,group))?'radio':'checkbox'" [name]="'layer'"
+        [checked]="layer.visible" (change)="setLayerVisibility(layer, group)">
     </label>
 
   </div>
@@ -62,10 +62,10 @@
       <div *ngIf="activeTabs.settings" class="layersettings">
         <!-- setLayerOpacity -->
         <div class="form-group" *ngIf="!checkBaselayer(layer,group)">
-          <label [for]="'layer_transparency_slider_'+layer.id">Opacity:</label>
-          <input [id]="'layer_transparency_slider_'+layer.id" type="range" class="ukis-range-input opacity-input"
-            name="points" [value]="layer.opacity" [min]="0.0" [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)"
-            [(ngModel)]="layer.opacity" />
+          <label>Opacity:
+            <input type="range" class="ukis-range-input opacity-input" name="points" [value]="layer.opacity" [min]="0.0"
+              [max]="1.0" [step]="0.1" (change)="setLayerOpacity(layer)" [(ngModel)]="layer.opacity" />
+          </label>
           <span>{{" "+layer.opacity}}</span>
         </div>
         <!-- show style-switcher -->

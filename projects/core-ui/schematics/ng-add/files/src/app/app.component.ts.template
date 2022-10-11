@@ -7,8 +7,6 @@ import { ProgressService, IProgress } from './components/global-progress/progres
 import { Subscription } from 'rxjs';
 
 interface IUi {
-  floating: boolean;
-  flipped: boolean;
   alert: null | IAlert;
   progress: null | IProgress;
   subs: Subscription[];
@@ -24,8 +22,6 @@ export class AppComponent implements OnDestroy {
   shortTitle = '';
 
   ui: IUi = {
-    floating: false,
-    flipped: false,
     alert: null,
     progress: null,
     subs: []

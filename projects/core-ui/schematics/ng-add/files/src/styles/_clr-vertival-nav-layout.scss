@@ -95,39 +95,37 @@
 
 /** floating vertical nav only not mobile -------------------------- */
 @media screen and (min-width: 768px) {
-  .floating {
-    .content-container {
-      display: block;
-      position: relative;
+  .content-container.floating {
+    display: block;
+    position: relative;
 
-      .content-area {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-      }
+    .content-area {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
 
-      .clr-vertical-nav.right {
-        position: absolute;
-        margin: 0.5rem;
-        max-height: calc(100% - 2.5rem); //0.5 for map-controls
-        left: auto;
-        right: 0;
-      }
+    .clr-vertical-nav.right {
+      position: absolute;
+      margin: 0.5rem;
+      max-height: calc(100% - 2.5rem); //0.5 for map-controls
+      left: auto;
+      right: 0;
+    }
 
-      .clr-vertical-nav {
-        position: absolute;
-        margin: 0.5rem;
-        max-height: calc(100% - 2.5rem); //0.5 for map-controls
-        left: 0;
-      }
+    .clr-vertical-nav {
+      position: absolute;
+      margin: 0.5rem;
+      max-height: calc(100% - 2.5rem); //0.5 for map-controls
+      left: 0;
+    }
 
-      nav.sidenav {
-        position: absolute;
-        //right: 0;
-        left: 0;
-        height: calc(100vh - (24px * 2.5));
-        background: var(--clr-vertical-nav-bg-color, --fallback-color-no-clr);
-      }
+    nav.sidenav {
+      position: absolute;
+      //right: 0;
+      left: 0;
+      height: calc(100vh - (24px * 2.5));
+      background: var(--clr-vertical-nav-bg-color, --fallback-color-no-clr);
     }
   }
 }

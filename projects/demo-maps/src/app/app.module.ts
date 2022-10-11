@@ -43,6 +43,7 @@ import { RouteExampleOwcLayersComponent } from './route-components/route-example
 import { BookmarksComponent } from './route-components/bookmarks/bookmarks.component';
 import { ExampleLayerDescriptionComponent } from './components/example-layer-description/example-layer-description.component';
 import { ExampleGroupLegendComponent } from './components/example-group-legend/example-group-legend.component';
+import { VtileLayerActionComponent } from './components/vtile-layer-action/vtile-layer-action.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { ExampleGroupLegendComponent } from './components/example-group-legend/e
     RouteExampleOwcLayersComponent,
     BookmarksComponent,
     ExampleLayerDescriptionComponent,
-    ExampleGroupLegendComponent
+    ExampleGroupLegendComponent,
+    VtileLayerActionComponent
   ],
   imports: [
     BrowserModule,

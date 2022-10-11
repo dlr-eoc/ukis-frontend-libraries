@@ -12,8 +12,6 @@ import { UserService, IUser } from '@dlr-eoc/user-info';
 import { BasicAuthService } from './auth/basic-auth.service';
 
 interface IUi {
-  floating: boolean;
-  flipped: boolean;
   alert: null | IAlert;
   progress: null | IProgress;
 }
@@ -28,8 +26,6 @@ export class AppComponent implements OnDestroy, OnInit {
   shortTitle = '';
 
   ui: IUi = {
-    floating: false,
-    flipped: false,
     alert: null,
     progress: null
   };

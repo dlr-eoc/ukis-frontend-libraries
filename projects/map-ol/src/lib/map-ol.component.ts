@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, Inject, OnDestroy, AfterViewChecked, AfterContentChecked, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecked, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 
 
 
@@ -8,7 +8,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 import { MapOlService, Tgroupfiltertype } from './map-ol.service';
-import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype, WfsLayertype } from '@dlr-eoc/services-layers';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype, WfsLayertype, TmsLayertype } from '@dlr-eoc/services-layers';
 
 import Map from 'ol/Map';
 import { getUid as olGetUid } from 'ol/util';
@@ -39,6 +39,7 @@ import olRasterSource from 'ol/source/Raster';
 import olGeometry from 'ol/geom/Geometry';
 import olSourceCluster from 'ol/source/Cluster';
 import olVectorLayer from 'ol/layer/Vector';
+import { applyStyle } from 'ol-mapbox-style';
 
 
 export interface IMapControls {
@@ -187,32 +188,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (ollayer.getOpacity() !== layer.opacity) {
             ollayer.setOpacity(layer.opacity);
           }
-          if (layer instanceof CustomLayer && ollayer instanceof olLayer) {
-            const newSource = layer.custom_layer.getSource();
-            const oldSource = ollayer.getSource();
-            if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
-              ollayer.setSource(newSource);
-              // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
-              if(oldSource instanceof olRasterSource){
-                oldSource.dispose();
-              }
-            }
-          } else if (layer instanceof CustomLayer && layer.custom_layer instanceof olLayerGroup && ollayer instanceof olLayerGroup) {
-            const newLayers = layer.custom_layer.getLayers().getArray();
-            const oldLayers = ollayer.getLayers().getArray();
-
-            /** assume the order and length of layers is not changing and no more grouping!!! */
-            oldLayers.forEach((l, i) => {
-              const newLayer = newLayers[i];
-              if (l instanceof olLayer && newLayer instanceof olLayer) {
-                const oldSource = l.getSource();
-                const newSource = newLayer.getSource();
-                if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
-                  l.setSource(newSource);
-                }
-              }
-            });
-          }
+          this.updateLayerSource(layer, ollayer);
           if (otherlayerslength > 0) {
             if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
               ollayer.setZIndex(layers.indexOf(layer) + otherlayerslength);
@@ -244,6 +220,35 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
+  private updateLayerSource(layer: Layer, ollayer: olBaseLayer | olLayer<any> | olLayerGroup) {
+    if (layer instanceof CustomLayer && ollayer instanceof olLayer) {
+      const newSource = layer.custom_layer.getSource();
+      const oldSource = ollayer.getSource();
+      if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
+        ollayer.setSource(newSource);
+        // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+        if (oldSource instanceof olRasterSource) {
+          oldSource.dispose();
+        }
+      }
+    } else if (layer instanceof CustomLayer && layer.custom_layer instanceof olLayerGroup && ollayer instanceof olLayerGroup) {
+      const newLayers = layer.custom_layer.getLayers().getArray();
+      const oldLayers = ollayer.getLayers().getArray();
+
+      /** assume the order and length of layers is not changing and no more grouping!!! */
+      oldLayers.forEach((l, i) => {
+        const newLayer = newLayers[i];
+        if (l instanceof olLayer && newLayer instanceof olLayer) {
+          const oldSource = l.getSource();
+          const newSource = newLayer.getSource();
+          if (newSource && olGetUid(oldSource) !== olGetUid(newSource)) {
+            l.setSource(newSource);
+          }
+        }
+      });
+    }
+  }
+
   private updateLayerParamsWith(oldLayer: olLayer<any>, newLayer: Layer): void {
     switch (newLayer.type) {
       case WmsLayertype:
@@ -258,8 +263,18 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       case WfsLayertype:
         this.updateWfsLayerParamsWith(oldLayer as any, newLayer as VectorLayer);
         break;
+      case TmsLayertype:
+        this.updateTmsLayerParamsWith(oldLayer as any, newLayer);
       default:
         break;
+    }
+  }
+
+  private updateTmsLayerParamsWith(oldLayer: olVectorLayer<olVectorSource<olGeometry>>, newLayer: Layer) {
+    if (newLayer instanceof VectorLayer) {
+      const style = newLayer.options.style;
+      const mapboxSourceKey = newLayer.options.styleSource;
+      applyStyle(oldLayer, style, mapboxSourceKey);
     }
   }
 
@@ -398,6 +413,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
           if (bllayer.getOpacity() !== layer.opacity) {
             bllayer.setOpacity(layer.opacity);
           }
+          this.updateLayerSource(layer, bllayer);
+          this.updateLayerParamsWith(bllayer as olLayer<any>, layer);
         }
       }
     }

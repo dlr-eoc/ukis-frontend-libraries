@@ -1367,6 +1367,9 @@ export class OwcJsonService {
   }
 
   private generateAbstractFromLayerDescription(description: Layer['description'], layerID?: Layer['id']) {
+    if(!description){
+      return '';
+    }
     if (typeof description === 'string') {
       return description
     } else {

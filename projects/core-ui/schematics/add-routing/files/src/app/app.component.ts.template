@@ -8,8 +8,6 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 interface IUi {
-  floating: boolean;
-  flipped: boolean;
   alert: null | IAlert;
   progress: null | IProgress;
   subs: Subscription[];
@@ -25,8 +23,6 @@ export class AppComponent {
   shortTitle = '';
 
   ui: IUi = {
-    floating: false,
-    flipped: false,
     alert: null,
     progress: null,
     subs: []

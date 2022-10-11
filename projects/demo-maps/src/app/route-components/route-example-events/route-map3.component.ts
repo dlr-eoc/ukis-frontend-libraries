@@ -32,7 +32,7 @@ import { AlertService } from '../../components/global-alert/alert.service';
   providers: [LayersService, MapStateService, MapOlService]
 })
 export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
-  @HostBinding('class') class = 'content-container';
+  @HostBinding('class') class = 'content-container floating';
   controls: IMapControls;
   subs: Subscription[] = [];
   private startBbox = null;

@@ -10,7 +10,7 @@ For examples [see demo maps](../demo-maps/README.md)
 
 #### in the app.component.html 
 ```
-<clr-main-container [ngClass]="{'floating':ui.floating}">
+<clr-main-container>
   ...
   <ukis-header [ukis-title]="title">
     <a class="nav-link nav-text header-nav-el" routerLink="/{{route.path}}" routerLinkActive="active">{{route.data.title}}</a>
