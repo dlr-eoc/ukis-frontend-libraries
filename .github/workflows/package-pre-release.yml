@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # check out before using actions reference from the same repository!
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: rm -f .npmrc
@@ -38,8 +38,8 @@ jobs:
     needs: checkTagOnNpm
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - uses: ./.github/actions/test
@@ -48,7 +48,7 @@ jobs:
            npm ci
            npm run build
       - name: Archive dist artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "dist"
           path: dist
@@ -57,13 +57,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download dist result from job build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
@@ -90,13 +90,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download dist result from job build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
