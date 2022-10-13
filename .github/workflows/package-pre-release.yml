@@ -69,8 +69,8 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
-      ### install npm 6 for publish https://github.com/npm/cli/issues/2453
-      - run: npm i -g npm@6.14.13
+      ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
+      - run: npm i -g npm@8.19.2
       - run: rm -f .npmrc
       ### for each module in dist set version from repository package.json
       - run: node scripts/library/index.js --set
@@ -102,8 +102,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci
-      ### install npm 6 for publish https://github.com/npm/cli/issues/2453
-      - run: npm i -g npm@6.14.13
+      ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
+      - run: npm i -g npm@8.19.2
       - run: rm -f .npmrc
       ### for each module in dist set version from repository package.json
       - run: node scripts/library/index.js --set
