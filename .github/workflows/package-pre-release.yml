@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # check out before using actions reference from the same repository!
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: rm -f .npmrc
@@ -38,13 +38,17 @@ jobs:
     needs: checkTagOnNpm
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - uses: ./.github/actions/build
+      - uses: ./.github/actions/test
+      - name: build
+        run: |
+           npm ci
+           npm run build
       - name: Archive dist artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "dist"
           path: dist
@@ -53,20 +57,20 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download dist result from job build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
-      ### install npm 6 for publish https://github.com/npm/cli/issues/2453
-      - run: npm i -g npm@6.14.13
+      ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
+      - run: npm i -g npm@8.19.2
       - run: rm -f .npmrc
       ### for each module in dist set version from repository package.json
       - run: node scripts/library/index.js --set
@@ -86,20 +90,20 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download dist result from job build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci
-      ### install npm 6 for publish https://github.com/npm/cli/issues/2453
-      - run: npm i -g npm@6.14.13
+      ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
+      - run: npm i -g npm@8.19.2
       - run: rm -f .npmrc
       ### for each module in dist set version from repository package.json
       - run: node scripts/library/index.js --set
