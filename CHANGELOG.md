@@ -1,3 +1,4 @@
+# [10.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.0.0) (2022-10-13) (Update to angular 14, Features and Bug Fixes)
 ### Features
 * **@dlr-eoc/layer-control:**
   - Allow legend on LayerGroup like on the layer - if one legend fits for all layers.
