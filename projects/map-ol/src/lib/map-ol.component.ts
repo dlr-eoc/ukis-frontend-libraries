@@ -81,25 +81,17 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   mapOnClickMove;
   mapOnDclick;
 
-  private privMapwidth = 0;
-  private get mapwidth() {
-    return this.privMapwidth;
-  }
-
-  private set mapwidth(width) {
-    this.privMapwidth = width;
-    this.map.updateSize();
-  }
+  /** [width, height] */
+  private mapSize = [0, 0];
+  private initialMapStateSet = false;
 
   constructor(private mapSvc: MapOlService, private ngZone: NgZone) {
   }
-  /**
-   * - subscribe to layers oninit so they get pulled after view init
-   */
   ngOnInit() {
     /** Subscribe to mapStateSvc before map is created */
     this.subscribeToMapState();
     this.initMap();
+    /** subscribe to layers oninit so they get pulled after view init */
     this.subscribeToLayers();
   }
 
@@ -110,10 +102,6 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   ngAfterViewInit() {
     this.map.setTarget(this.mapDivView.nativeElement);
 
-    /** Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit */
-    const oldMapState = this.mapStateSvc.getMapState().getValue();
-    this.setMapState(oldMapState);
-
     /** Subscribe to map events when the map completely created  */
     this.subscribeToMapEvents();
     this.map.getTargetElement().addEventListener('mouseleave', this.removePopupsOnMouseLeave);
@@ -121,19 +109,9 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   ngAfterViewChecked() {
     /**
-     * - compare map size to update Map Size on container resize
-     * - set Timeout to also resize map on route change
+     * compare map and container size to update Map Size on container resize
      */
-    if (this.mapDivView) {
-      const mapWidth = this.mapDivView.nativeElement.offsetWidth;
-      if (mapWidth !== this.mapwidth) {
-        this.ngZone.runOutsideAngular(() => {
-          setTimeout(() => {
-            this.mapwidth = mapWidth;
-          }, 100);
-        });
-      }
-    }
+    this.updateMapSize();
   }
 
   ngOnDestroy() {
@@ -146,6 +124,41 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       this.map.getInteractions().forEach((i) => {
         this.map.removeInteraction(i);
       });
+    }
+  }
+
+  private getMapDiv() {
+    if (this.mapDivView && this.mapDivView.nativeElement) {
+      return {
+        width: this.mapDivView.nativeElement.offsetWidth,
+        height: this.mapDivView.nativeElement.offsetHeight
+      }
+    } else {
+      return null;
+    }
+  }
+
+  private updateMapSize() {
+    const mapDiv = this.getMapDiv();
+    if (mapDiv) {
+      if (mapDiv.width === this.mapSize[0] && mapDiv.height === this.mapSize[1]) {
+        if (!this.initialMapStateSet) {
+          /**
+           * If container size and map size are equal (map size 'stable')
+           * Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit 
+           * Update map size before so view.fit can calculate correct center
+           */
+          const oldMapState = this.mapStateSvc.getMapState().getValue();
+          this.setMapState(oldMapState);
+          this.initialMapStateSet = true;
+        }
+      } else {
+        /** update map size till container size and map size are equal */
+        this.ngZone.runOutsideAngular(() => {
+          this.map.updateSize();
+          this.mapSize = this.map.getSize();
+        })
+      }
     }
   }
 
@@ -474,7 +487,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     this.mapOnClickMove = (evt: olMapBrowserEvent<PointerEvent>) => {
       this.mapSvc.layersOnMapEvent(evt);
     };
-    this.map.on(['click','pointermove'], this.mapOnClickMove);
+    this.map.on(['click', 'pointermove'], this.mapOnClickMove);
 
     /** handle double click */
     this.mapOnDclick = (evt: olMapBrowserEvent<PointerEvent>) => {

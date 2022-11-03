@@ -1,3 +1,7 @@
+### Bug Fixes
+* **@dlr-eoc/map-ol:**
+  - Fix `setExtent` from `MapStateService` after map init. Due to responsive map size it takes some time till the map has reached its full size and `view.fit` can calculate the correct extent.
+
 # [10.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.0.0) (2022-10-13) (Update to angular 14, Features and Bug Fixes)
 ### Breaking Changes
 - Package dependencies are set to allow Minor releases (which normally shouldn't break anything but can sometimes be) to simplify updates and usage when creating new apps.
