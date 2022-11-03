@@ -1,4 +1,9 @@
 # [10.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.0.0) (2022-10-13) (Update to angular 14, Features and Bug Fixes)
+### Breaking Changes
+- Package dependencies are set to allow Minor releases (which normally shouldn't break anything but can sometimes be) to simplify updates and usage when creating new apps.
+- Remove class `floating` from `clr-main-container`, this is now set on `content-container` e.g. in a route component `@HostBinding('class') class = 'content-container floating';`
+- Update angular from `^13.3.5` to `^14.0.2` automatic migrations are made by ng update and forms use types now.
+
 ### Features
 * **@dlr-eoc/layer-control:**
   - Allow legend on LayerGroup like on the layer - if one legend fits for all layers.
@@ -26,10 +31,6 @@
   - Replace deprecated ComponentFactory in `createDynamicPopupComponent` [angular 45263](https://github.com/angular/angular/issues/45263).
   - Set urls for vector tile layers after apply style to override them when tilejson is not provided. This is helpful to use `tms` services where no tilejson is available. Then set the url of the sourceId in your style file to `"url": ""` and add `"tiles": []`. This [skips the request](https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109) to tilejson.
 
-### Breaking Changes
-- Package dependencies are set to allow Minor releases (which normally shouldn't break anything but can sometimes be) to simplify updates and usage when creating new apps.
-- Remove class `floating` from `clr-main-container`, this is now set on `content-container` e.g. in a route component `@HostBinding('class') class = 'content-container floating';`
-- Update angular from `^13.3.5` to `^14.0.2` automatic migrations are made by ng update and forms use types now.
 
 # [9.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v9.0.0) (2022-05-20) (Update dependencies and documentation)
 ### Breaking Changes
