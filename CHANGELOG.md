@@ -5,7 +5,7 @@
 * **@dlr-eoc/map-ol:**
   - Use string for `ol/OverlayPositioning` change on [OpenLayers v6.15.0](https://github.com/openlayers/openlayers/releases/tag/v6.15.0).
   - Reuse `time` from last state when `setExtent [Issue #148](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/148).
-  - Remove id `map` and `crosshair` from the map div. If the map is used multiple times the ids are are no longer unique and for styling classes are already there.
+  - Remove id `map` and `crosshair` from the map div. If the map is used multiple times the ids are no longer unique and for styling classes are already there.
   - Fix `setExtent` from `MapStateService` after map init. Due to responsive map size it takes some time till the map has reached its full size and `view.fit` can calculate the correct extent.
 
 # [10.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.0.0) (2022-10-13) (Update to angular 14, Features and Bug Fixes)
