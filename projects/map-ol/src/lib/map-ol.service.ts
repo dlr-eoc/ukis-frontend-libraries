@@ -1,7 +1,7 @@
-import { Injectable, ApplicationRef, Injector, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
+import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IVectorLayerOptions, IAnyObject } from '@dlr-eoc/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -53,7 +53,6 @@ import olImageSource from 'ol/source/Image';
 import olWMTS from 'ol/source/WMTS';
 import { Options as olWMTSOptions } from 'ol/source/WMTS';
 import olWMTSTileGrid from 'ol/tilegrid/WMTS';
-import { Options as olWMTSTileGridOptions } from 'ol/tilegrid/WMTS';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olVectorSource from 'ol/source/Vector';
 import olRasterSource from 'ol/source/Raster';
@@ -87,7 +86,6 @@ import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 import { flattenLayers } from '@dlr-eoc/utils-maps';
-import OverlayPositioning from 'ol/OverlayPositioning';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -2002,7 +2000,7 @@ export class MapOlService {
         autoPanAnimation: {
           duration: 250
         },
-        positioning: OverlayPositioning.BOTTOM_CENTER,
+        positioning: 'bottom-center',
         stopEvent: true,
         insertFirst: false,
       };
