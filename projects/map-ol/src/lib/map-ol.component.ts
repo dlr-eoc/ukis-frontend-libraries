@@ -471,14 +471,13 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   private subscribeToMapEvents() {
     this.mapOnMoveend = (evt: olMapEvent) => {
-      // const zoom = Math.round(this.mapSvc.getZoom());
+      const oldMapState = this.mapStateSvc.getMapState().getValue();
       const zoom = this.mapSvc.getZoom();
       const center = this.mapSvc.getCenter(true);
       const extent = this.mapSvc.getCurrentExtent(true);
 
-      // const newCenter = { lat: parseFloat(center[1].toFixed(6)), lon: parseFloat(center[0].toFixed(6)) };
       const newCenter = { lat: parseFloat(center[1]), lon: parseFloat(center[0]) };
-      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent);
+      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time);
       this.mapStateSvc.setMapState(ms);
     };
     this.map.on('moveend', this.mapOnMoveend);

@@ -1,5 +1,9 @@
 ### Bug Fixes
+* **@dlr-eoc/services-map-state:**
+  - Reuse `time` from last state when `setExtent [Issue #148](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/148).
+
 * **@dlr-eoc/map-ol:**
+  - Reuse `time` from last state when `setExtent [Issue #148](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/148).
   - Remove id `map` and `crosshair` from the map div. If the map is used multiple times the ids are are no longer unique and for styling classes are already there.
   - Fix `setExtent` from `MapStateService` after map init. Due to responsive map size it takes some time till the map has reached its full size and `view.fit` can calculate the correct extent.
 
