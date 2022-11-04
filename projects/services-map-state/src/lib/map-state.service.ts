@@ -44,7 +44,7 @@ export class MapStateService {
     this.lastAction.next('setExtent');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, extent);
+    const newState = new MapState(state.zoom, state.center, state.options, extent, state.time);
     this.mapState.next(newState);
   }
 

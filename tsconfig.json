@@ -16,7 +16,7 @@
     "module": "es2020",
     "skipLibCheck": true,
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
     ],
     "paths": {
@@ -29,15 +29,6 @@
       ]
     },
     "allowJs": true
-  },
-  "include": [
-    "**/*.ts",
-    "node_modules/ol/**/*"
-  ],
-  "typeAcquisition": {
-    "exclude": [
-      "ol"
-    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
