@@ -1,4 +1,4 @@
-import { Layer, TGeoExtent, TFiltertypes } from './Layers';
+import { Layer, TGeoExtent, TFiltertypes, ILayerExpanded } from './Layers';
 import { IDynamicComponent } from '@dlr-eoc/core-ui';
 
 /**
@@ -24,7 +24,7 @@ export interface ILayerGroupOptions {
   /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
   action?: IDynamicComponent;
   /** UI is expanded */
-  expanded?: boolean;
+  expanded?: boolean | ILayerExpanded;
   /**
    * CSS Class for custom styling
    *
@@ -51,7 +51,7 @@ export class LayerGroup implements ILayerGroupOptions {
   legendImg?: string | IDynamicComponent;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
   action?: IDynamicComponent;
-  expanded = false;
+  expanded: boolean | ILayerExpanded = false;
   cssClass?: string;
 
   constructor(options: ILayerGroupOptions) {

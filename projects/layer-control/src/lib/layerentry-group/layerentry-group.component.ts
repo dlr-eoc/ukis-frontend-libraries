@@ -8,7 +8,12 @@ import { LayersService } from '@dlr-eoc/services-layers';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { IDynamicComponent } from '@dlr-eoc/core-ui';
 
-type TactiveTabs = 'settings' | 'legend' | 'description';
+enum EactiveTabs {
+  settings = 'settings',
+  legend = 'legend',
+  description = 'description'
+}
+type TactiveTabs = keyof typeof EactiveTabs;
 
 @Component({
   selector: 'ukis-layerentry-group',
@@ -58,6 +63,24 @@ export class LayerentryGroupComponent implements OnInit {
       this.canZoomToGroup = true;
     }
 
+    if (typeof this.group?.expanded === 'object') {
+      if (Object.keys(EactiveTabs).includes(this.group.expanded.tab)) {
+        this.switchTab(this.group.expanded.tab as TactiveTabs);
+        /** let the user reset the default open tab */
+        if(this.group.expanded.expanded === false){
+          this.activeTabs[this.group.expanded.tab] = false;
+        }
+      } else {
+        this.setDefaultActiveTabs();
+      }
+
+    } else {
+      this.setDefaultActiveTabs();
+    }
+
+  }
+
+  private setDefaultActiveTabs() {
     if (!this.group?.action) {
       this.activeTabs.settings = false;
     }

@@ -428,6 +428,10 @@ export class RouteMapComponent implements OnInit {
         popupFunction: options => {
           return `<div>${JSON.stringify(options)} </div>`;
         }
+      },
+      expanded: {
+        tab: 'settings',
+        expanded: false
       }
     });
 
@@ -454,18 +458,21 @@ export class RouteMapComponent implements OnInit {
     const eocLiteoverlay = new EocLiteoverlayTile();
     eocLiteoverlay.legendImg = 'https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Aliteoverlay&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A4&TileCol=8&TileRow=5';
 
-    const OsmLayer = new OsmTileLayer();
     /** add a Group of layers */
-
-
     const groupLayer = new LayerGroup({
       id: 'group_1',
       name: 'Test Group',
-      layers: [OsmLayer, eocBasemap, eocBaseoverlay],
-      description: 'this is a group with OsmLayer, eocBasemap, eocBaseoverlay',
-      expanded: true,
+      layers: [eocBasemap, eocBaseoverlay, eocLiteoverlay],
+      description: 'This is a group with a hidden eocBasemap (layer.cssClass = hide), eocBaseoverlay and a eocLiteoverlay',
+      expanded: {
+        tab: 'description'
+      },
       actions: [{ title: 'download', icon: 'download-cloud', action: (group) => { console.log(group); } }]
     });
+
+
+    const eocLiteoverlay2 = new EocLiteoverlayTile();
+    eocLiteoverlay2.id = 'eoc_Liteoverlay_2';
 
     const groupLayer2 = new LayerGroup({
       id: 'group_2',
@@ -478,7 +485,7 @@ export class RouteMapComponent implements OnInit {
         component: ExampleGroupLegendComponent,
       },
       cssClass: 'custom-layer-group',
-      layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay]
+      layers: [TDM90DEMLayer, vectorLayer2, eocLiteoverlay2]
     });
 
     const groupVector = new LayerGroup({

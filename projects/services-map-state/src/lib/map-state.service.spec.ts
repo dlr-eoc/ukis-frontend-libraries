@@ -25,6 +25,7 @@ describe('MapStateService', () => {
     const service: MapStateService = TestBed.inject(MapStateService);
     const stateTime = new Date().toISOString(); // this is passed on new MapState()
     const state = new MapState(4, { lat: 48, lon: 11 });
+    state.time = stateTime;
 
 
     service.setMapState(state);

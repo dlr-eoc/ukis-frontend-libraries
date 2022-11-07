@@ -1,4 +1,4 @@
-<div class="layer">
+<div class="layer" [ngClass]="{'expanded': expanded}">
   <div class="head">
     <!-- layer expand icon -->
     <clr-icon *ngIf="hasTabsbody" shape="angle" [ngStyle]="getExpandShape()" class="iconButton" [ngClass]="{'disabled': is_expandable()}"
@@ -58,7 +58,7 @@
       <clr-icon *ngIf="layer.removable" shape="trash" class="iconButton" (click)="removeLayer(group, layer)"
         title="Remove layer"></clr-icon>
     </div>
-    <div class="tabsbody" *ngIf="hasTabsbody">
+    <div class="tabsbody" *ngIf="hasTabsbody && hasActiveTabs()">
       <div *ngIf="activeTabs.settings" class="layersettings">
         <!-- setLayerOpacity -->
         <div class="form-group" *ngIf="!checkBaselayer(layer,group)">
@@ -82,7 +82,7 @@
         </ng-container>
       </div>
       <!-- show Legend -->
-      <div *ngIf="activeTabs.legend && layer.legendImg">
+      <div *ngIf="activeTabs.legend && layer.legendImg" class="legend">
         <ng-container *ngIf="checkIsComponentItem(layer,'legendImg'); else imageUrl">
           <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
         </ng-container>
@@ -92,7 +92,7 @@
         </ng-template>
       </div>
       <!-- show Description -->
-      <div *ngIf="activeTabs.description && layer.description">
+      <div *ngIf="activeTabs.description && layer.description" class="description">
 
         <ng-container *ngIf="checkIsComponentItem(layer,'description'); else descriptionText">
           <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>

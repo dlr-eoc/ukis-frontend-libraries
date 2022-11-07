@@ -1,3 +1,14 @@
+### Features
+* **@dlr-eoc/core-ui:**
+  - Update styles for `layer-control` - spacing and borders between layers and groups.
+
+* **@dlr-eoc/layer-control:**
+  - Extend UI with some classes and style updates of `layer-control`.
+  - Expand layers and groups on start based on the configuration in `Layer.expanded` and `LayerGroup.expanded` Issue #139](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/139).
+
+* **@dlr-eoc/services-layers:**
+  - Extend Types of `Layer` and `LayerGroup` to allow configuration of an expanded user interface to show or hide some details at startup [Issue #139](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/139).
+
 ### Bug Fixes
 * **@dlr-eoc/services-map-state:**
   - Reuse `time` from last state when `setExtent [Issue #148](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/148).

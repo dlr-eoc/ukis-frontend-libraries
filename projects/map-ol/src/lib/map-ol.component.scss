@@ -1,10 +1,4 @@
-//@import url("~ol/ol.css");
-
-/** fix css not included in bundles
-* DEPRECATION WARNING: Including .css files with @import is non-standard behaviour which will be removed in future versions of LibSass.
-* Use a custom importer to maintain this behaviour. Check your implementations documentation on how to create a custom importer.
-*/
-@import '~ol/ol';
+@import 'ol/ol.css';
 
 :root {
   --ukis-crosshair-color: #ff0004;

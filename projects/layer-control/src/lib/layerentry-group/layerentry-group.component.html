@@ -59,7 +59,7 @@
     </div>
 
     <!-- show Description -->
-    <div *ngIf="group.description && activeTabs.description" class="tabsbody">
+    <div *ngIf="group.description && activeTabs.description" class="tabsbody description">
 
       <ng-container *ngIf="checkIsComponentItem(group,'description'); else descriptionText">
         <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>
@@ -71,7 +71,7 @@
     </div>
 
     <!-- show group action -->
-    <div *ngIf="group.action && activeTabs.settings" class="tabsbody">
+    <div *ngIf="group.action && activeTabs.settings" class="tabsbody layersettings">
       <ng-container *ngIf="checkIsComponentItem(group, 'action');">
         <ukis-dynamic-component [(dynamicComponent)]="group.action">
         </ukis-dynamic-component>
@@ -79,7 +79,7 @@
     </div>
 
     <!-- show Legend -->
-    <div *ngIf="group.legendImg && activeTabs.legend" class="tabsbody">
+    <div *ngIf="group.legendImg && activeTabs.legend" class="tabsbody legend">
       <ng-container *ngIf="checkIsComponentItem(group,'legendImg'); else imageUrl">
         <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
       </ng-container>
