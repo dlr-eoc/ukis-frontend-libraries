@@ -1,4 +1,7 @@
 ### Features
+* **@dlr-eoc/layer-control:**
+  - Expand layers and groups on start based on the configuration in `Layer.expanded` and `LayerGroup.expanded` Issue #139](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/139).
+
 * **@dlr-eoc/services-layers:**
   - Extend Types of `Layer` and `LayerGroup` to allow configuration of an expanded user interface to show or hide some details at startup [Issue #139](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/139).
 

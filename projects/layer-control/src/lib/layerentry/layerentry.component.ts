@@ -7,6 +7,14 @@ import {
 } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
+
+enum EactiveTabs {
+  settings = 'settings',
+  legend = 'legend',
+  description = 'description',
+}
+type TactiveTabs = keyof typeof EactiveTabs;
+
 @Component({
   selector: 'ukis-layerentry',
   templateUrl: './layerentry.component.html',
@@ -29,7 +37,7 @@ export class LayerentryComponent implements OnInit {
   }
   get expanded() {
     if (this.layer) {
-      return this.layer.expanded;
+      return (this.layer.expanded) ? true : false;
     } else {
       return false;
     }
@@ -128,25 +136,40 @@ export class LayerentryComponent implements OnInit {
     if (!this.layersSvc) {
       console.error('you need to provide a layersService!');
     }
-    // console.log(this.layer)
-    if (!this.layer.legendImg) {
-      this.activeTabs.description = true;
-      this.activeTabs.legend = false;
-      this.activeTabs.settings = false;
+
+    if (typeof this.layer?.expanded === 'object') {
+      if (Object.keys(EactiveTabs).includes(this.layer.expanded.tab)) {
+        this.switchTab(this.layer.expanded.tab as TactiveTabs);
+        /** let the user reset the default open tab */
+        if (this.layer.expanded.expanded === false) {
+          this.activeTabs[this.layer.expanded.tab] = false;
+        }
+      } else {
+        this.setDefaultActiveTabs();
+      }
+
+    } else {
+      this.setDefaultActiveTabs();
     }
 
-    if (!this.layer.legendImg && !this.layer.description) {
-      this.activeTabs.description = false;
-      this.activeTabs.legend = false;
-      this.activeTabs.settings = true;
-    }
 
     if (this.layer.bbox && this.layer.bbox.length >= 4) {
       this.canZoomToLayer = true;
     }
 
+
     if (this.layer.filtertype === 'Baselayers' && !this.layer.legendImg && !this.layer.description && !this.layer.action && !this.layer.actions && !this.layer.styles && !(this.layer.styles?.length > 1)) {
       this.hasTabsbody = false;
+    }
+  }
+
+  private setDefaultActiveTabs() {
+    if (!this.layer.legendImg) {
+      this.switchTab('description');
+    }
+
+    if (!this.layer.legendImg && !this.layer.description) {
+      this.switchTab('settings');
     }
   }
 
@@ -267,10 +290,19 @@ export class LayerentryComponent implements OnInit {
     }
   }
 
-  switchTab(tabName: string) {
+  switchTab(tabName: TactiveTabs, toggle = true) {
     for (const key of Object.keys(this.activeTabs)) {
-      this.activeTabs[key] = tabName === key;
+      const isTabName = tabName === key;
+      if (this.activeTabs[key] && toggle) {
+        this.activeTabs[key] = false;
+      } else {
+        this.activeTabs[key] = isTabName;
+      }
     }
+  }
+
+  hasActiveTabs(){
+    return Object.values(this.activeTabs).filter(v => v).length > 0;
   }
 
   isSelectedStyle(styleName: string): boolean {
