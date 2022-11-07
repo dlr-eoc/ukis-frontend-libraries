@@ -1,3 +1,7 @@
+### Features
+* **@dlr-eoc/services-layers:**
+  - Extend Types of `Layer` and `LayerGroup` to allow configuration of an expanded user interface to show or hide some details at startup [Issue #139](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/139).
+
 ### Bug Fixes
 * **@dlr-eoc/services-map-state:**
   - Reuse `time` from last state when `setExtent [Issue #148](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/148).

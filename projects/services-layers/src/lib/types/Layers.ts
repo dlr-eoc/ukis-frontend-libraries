@@ -127,6 +127,13 @@ export type TGeoExtent = [number, number, number, number] | [number, number, num
 export type CrossOriginType = 'anonymous' | 'use-credentials';
 
 
+export interface ILayerExpanded{
+  /** tab: settings | legend | description */
+  tab: string;
+  /** optional to not expand the tab - for overriding defaults */
+  expanded?: boolean;
+}
+
 export interface ILayerOptions {
   name: string;
   id: string;
@@ -170,7 +177,7 @@ export interface ILayerOptions {
   /** The crossOrigin attribute for loaded images if you want to access pixel data with the Canvas renderer */
   crossOrigin?: CrossOriginType;
   /** UI is expanded */
-  expanded?: boolean;
+  expanded?: boolean | ILayerExpanded;
   /**
    * CSS Class for custom styling
    *
@@ -297,7 +304,7 @@ export class Layer implements ILayerOptions {
 
   styles?: ILayerStyleSet[];
   crossOrigin?: CrossOriginType;
-  expanded = false;
+  expanded: boolean | ILayerExpanded  = false;
   cssClass?: string;
 
   constructor(options: ILayerOptions) {
