@@ -1,4 +1,7 @@
 ### Features
+* **@dlr-eoc/core-ui:**
+  - Update styles for `layer-control` - spacing and borders between layers and groups.
+
 * **@dlr-eoc/layer-control:**
   - Extend UI with some classes and style updates of `layer-control`.
   - Expand layers and groups on start based on the configuration in `Layer.expanded` and `LayerGroup.expanded` Issue #139](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/139).
