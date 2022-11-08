@@ -1,3 +1,4 @@
+# [10.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.1.0) (2022-11-07) (Features and Bug Fixes)
 ### Features
 * **@dlr-eoc/core-ui:**
   - Update styles for `layer-control` - spacing and borders between layers and groups.
