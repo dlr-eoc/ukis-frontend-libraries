@@ -1,4 +1,4 @@
-import { Map, View } from 'ol';
+import { Map } from 'ol';
 import { Layer } from 'ol/layer';
 import BaseLayer from 'ol/layer/Base';
 import LayerGroup from 'ol/layer/Group';
@@ -56,10 +56,15 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
     if (!targetCanvas.width || !targetCanvas.height) {
         throw new Error('TargetCanvas: width or height have not been set.');
     }
-    targetContext.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+
+    if (targetContext instanceof CanvasRenderingContext2D) {
+        targetContext.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+    } else if (targetContext.canvas) {
+        // TODO: handle OffscreenCanvas
+    }
+
 
     const mapSize = map.getSize();
-    const mapResolution = map.getView().getResolution();
     targetCanvas.width = mapSize[0];
     targetCanvas.height = mapSize[1];
 
@@ -74,12 +79,18 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
                 const sourceContext = event.context;
                 const sourceCanvas = sourceContext.canvas as HTMLCanvasElement;
                 // Step 3: copy source bitmap to target-canvas.
-                targetContext.drawImage(sourceCanvas, 0, 0, sourceCanvas.clientWidth, sourceCanvas.clientHeight, 0, 0, targetCanvas.width, targetCanvas.height);
+                if (targetContext instanceof CanvasRenderingContext2D) {
+                    targetContext.beginPath()
+                    targetContext.drawImage(sourceCanvas, 0, 0, sourceCanvas.clientWidth, sourceCanvas.clientHeight, 0, 0, targetCanvas.width, targetCanvas.height);
+                    targetContext.closePath()
+                } else if (targetContext.canvas) {
+                    // TODO: handle OffscreenCanvas
+                }
             });
-            if (Array.isArray(key)){
-              key.map(k => subscriptions.push(k));
-            }else{
-              subscriptions.push(key);
+            if (Array.isArray(key)) {
+                key.map(k => subscriptions.push(k));
+            } else {
+                subscriptions.push(key);
             }
         }
     }

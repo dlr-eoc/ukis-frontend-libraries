@@ -1,6 +1,4 @@
 import { Feature } from 'ol';
-import { FrameState } from 'ol/PluggableMap';
-import LayerRenderer from 'ol/renderer/Layer';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import VectorLayer from 'ol/layer/Vector';
 import Geometry from 'ol/geom/Geometry';
@@ -12,6 +10,7 @@ import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataT
 import { FramebufferObject, getCurrentFramebuffersPixels } from '../../webgl/webgl';
 import { rectangleA, rectangleE } from '../../webgl/engine.shapes';
 import { nextPowerOf, flattenRecursive, createNDimArray } from '../../webgl/utils';
+import { FrameState } from 'ol/Map';
 
 
 
@@ -86,9 +85,9 @@ export class InterpolationLayer extends VectorLayer<VectorSource<Geometry>> {
  * While you can change the color-ramp at runtime, it's length is hardcoded in the colorization shader, so you'd have to recompile it to properly reflect the new ramp.
  * In the same way, the interpolation-shader has the number of observations baked into it. When new data becomes available, you must recompile the interpolation shader.
  */
-export class InterpolationRenderer extends LayerRenderer< VectorLayer<VectorSource<Geometry>>> {
+export class InterpolationRenderer extends CanvasVectorLayerRenderer {
 
-    private container: HTMLDivElement;
+    public container: HTMLDivElement;
     private pointRenderer: CanvasVectorLayerRenderer;
     private webGlCanvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;

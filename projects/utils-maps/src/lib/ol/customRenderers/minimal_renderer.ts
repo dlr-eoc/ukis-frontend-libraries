@@ -1,9 +1,9 @@
-import { FrameState } from 'ol/PluggableMap';
+import { FrameState } from 'ol/Map';
 import VectorLayer from 'ol/layer/Vector';
 import Geometry from 'ol/geom/Geometry';
 import { Vector as VectorSource } from 'ol/source';
-import LayerRenderer from 'ol/renderer/Layer';
 import { createShaderProgram, bindProgram, clearBackground } from '../../webgl/webgl';
+import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 
 
 export class CustomWebGlVectorLayer extends VectorLayer<VectorSource<Geometry>> {
@@ -18,7 +18,7 @@ export class CustomWebGlVectorLayer extends VectorLayer<VectorSource<Geometry>> 
  * It doesn't even do word-coordinate to canvas-coordinate transformation.
  * All it tries to show is what interfaces to implement to display *something* on the map with webgl.
  */
-export class MinimalWebGlRenderer extends LayerRenderer<VectorLayer<VectorSource<Geometry>>> {
+export class MinimalWebGlRenderer extends CanvasVectorLayerRenderer  {
 
     private canvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;

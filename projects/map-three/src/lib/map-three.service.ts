@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { Scene, PerspectiveCamera, WebGLRenderer, Mesh, CubeTextureLoader, BufferGeometry } from 'three';
+import { Scene, PerspectiveCamera, WebGLRenderer, Mesh, CubeTextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mapToSingleCanvas, renderLoop } from '@dlr-eoc/utils-maps';
 import { WGS84TextureMesh, Map2SphereConverter } from './utils/utils-three';
