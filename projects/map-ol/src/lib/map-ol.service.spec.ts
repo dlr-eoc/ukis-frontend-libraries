@@ -394,6 +394,8 @@ describe('MapOlService Core', () => {
   it('should create a map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
+    /** creating the map should not add multiple baselayer groups */
+    service.createMap(mapTarget.container);
     expect(service.map.getLayers().getArray().length).toEqual(3);
     expect(service.map.getTargetElement()).toEqual(mapTarget.container);
   });

@@ -262,6 +262,9 @@ export class MapOlService {
     const tempview = new olView(this.viewOptions);
 
     /** define map in constructor so it is created before to use it in projects onInit Method  */
+    /** if the map has already been created remove all layers before adding the layer groups  */
+    this.map.getLayerGroup().getLayers().clear();
+
     [baselayerGroup, layersGroup, overlayGroup].map(layer => this.map.addLayer(layer));
     this.map.setView(tempview);
     // this.map.getControls().clear();

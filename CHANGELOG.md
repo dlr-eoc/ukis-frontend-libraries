@@ -4,6 +4,9 @@
 * **@dlr-eoc/map-ol:**
   - Styles from OpenLayers are no longer included in this component [e3e98c1](https://github.com/dlr-eoc/ukis-frontend-libraries/pull/151/commits/e3e98c1a9a04a23c2109a509e902d14c1b6bdc9d). You have to add them to your application manually see [`@dlr-eoc/map-ol/README.md`](projects/map-ol/README.md).
 
+### Bug Fixes
+* **@dlr-eoc/map-ol:**
+ - remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.
 
 # [10.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.1.0) (2022-11-07) (Features and Bug Fixes)
 ### Features
