@@ -6,7 +6,8 @@
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
- - remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.
+ - Remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.
+ - Set bbox for olLayerGroup layers in `create_custom_layer`.
 
 # [10.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.1.0) (2022-11-07) (Features and Bug Fixes)
 ### Features

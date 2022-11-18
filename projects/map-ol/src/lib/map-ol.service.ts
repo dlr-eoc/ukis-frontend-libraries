@@ -1349,6 +1349,12 @@ export class MapOlService {
               gl['className_'] = layerId;
             }
           }
+
+          /** fix set bbox for layers in olLayerGroup not only for the group */
+          if (l.bbox) {
+            const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+            gl.setExtent(extent);
+          }
         });
       } else {
         console.error(`The custom_layer of ${l.id} in not a openlayers Layer`);
