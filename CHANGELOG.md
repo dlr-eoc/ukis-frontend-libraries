@@ -7,6 +7,8 @@
 * **@dlr-eoc/map-ol:**
  - The function `zoomInOut` now accepts an optional object with `callback`, `duration`, `easing` and `zoomStep`.
  - Add types for `FitOptions` on `setExtent`.
+ - Add function `hideAllPopups` which adds a css class to the popup element [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
+ 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
  - Remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.

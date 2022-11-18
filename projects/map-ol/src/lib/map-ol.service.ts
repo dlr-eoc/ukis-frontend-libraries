@@ -2154,6 +2154,23 @@ export class MapOlService {
     });
   }
 
+  public hideAllPopups(hide: boolean, filter?: (item: olOverlay) => boolean) {
+    let popups = this.getPopups();
+    if (filter) {
+      popups = this.getPopups().filter(filter);
+    }
+    popups.forEach((overlay) => {
+      if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
+        const element = overlay.getElement();
+        if (hide) {
+          element.classList.add('hidden');
+        } else {
+          element.classList.remove('hidden');
+        }
+      }
+    });
+  }
+
   public createPopupHtml(obj: any) {
     let htmlStr = '<table>';
     for (const o in obj) {

@@ -1215,6 +1215,73 @@ describe('MapOlService Events', () => {
     const popups = service.getPopups();
     expect(popups.length).toBe(0);
   })
+  it('should show/hide popups', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+    const features = vectorLayer.getSource().getFeatures();
+
+    const addPopups = (feature) => {
+      const popupProperties = feature.getProperties();
+      const args: IPopupArgs = {
+        modelName: vectorLayer.get('id'),
+        properties: popupProperties,
+        layer: vectorLayer,
+        feature,
+        event: { type: 'click' } as any
+      };
+
+      service.addPopup(args, popupProperties, null);
+    };
+
+    features.forEach(f => {
+      addPopups(f);
+    });
+
+
+    const popupsOnMap = service.getPopups();
+    expect(popupsOnMap.length).toBe(features.length);
+
+    // hide all popups
+    service.hideAllPopups(true, (item) => {
+      const elementID = item.getId();
+      const layerID = elementID.toString().split(':')[0];
+      if (layerID) {
+        if (layerID === vectorLayer.get('id')) {
+          return layerID === vectorLayer.get('id');
+        }
+      } else {
+        return true;
+      }
+    });
+    expect(service.getPopups().length).toBe(features.length);
+
+    popupsOnMap.forEach(p => {
+      const element = p.getElement();
+      const hasHiddenClass = element.classList.contains('hidden')
+      expect(hasHiddenClass).toBe(true);
+    });
+
+    // show all popups
+    service.hideAllPopups(false, (item) => {
+      const elementID = item.getId();
+      const layerID = elementID.toString().split(':')[0];
+      if (layerID) {
+        if (layerID === vectorLayer.get('id')) {
+          return layerID === vectorLayer.get('id');
+        }
+      } else {
+        return true;
+      }
+    });
+
+    popupsOnMap.forEach(p => {
+      const element = p.getElement();
+      const hasHiddenClass = element.classList.contains('hidden')
+      expect(hasHiddenClass).toBe(false);
+    });
+  });
+
 });
 
 describe('MapOlService State', () => {
