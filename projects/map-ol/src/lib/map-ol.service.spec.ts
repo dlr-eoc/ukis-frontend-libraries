@@ -1244,21 +1244,23 @@ describe('MapOlService State', () => {
   });
 
 
-  it('should zoom in or out for one step', (done) => {
+  it('should zoom in or out for one step', async () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
     // a zoom of 0 is not working because of the mapsize check https://openlayers.org/en/latest/examples/min-zoom.html
-    service.map.getView().setZoom(5);
-
+    service.map.getView().setZoom(8);
     const oldZoom = service.getZoom();
-    const duration = 250;
-    service.zoomInOut('+');
 
-    setTimeout(() => {
-      const newZoom = service.getZoom();
-      expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
-      done();
-    }, duration);
+    await new Promise((resolve, reject) => {
+      service.zoomInOut('+', {
+        callback: (complete) => {
+          resolve(complete);
+        }
+      });
+    });
+
+    const newZoom = service.getZoom();
+    expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
   });
 
   it('should set/get extent', () => {

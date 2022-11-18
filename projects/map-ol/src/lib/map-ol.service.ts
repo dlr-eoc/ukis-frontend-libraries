@@ -2300,30 +2300,31 @@ export class MapOlService {
     return this.map.getView().getZoom();
   }
 
-  public zoomInOut(value: '-' | '+') {
+  public zoomInOut(value: '-' | '+', animateOptions?: { callback?: (complete) => void, duration?: number, easing?: (arg: number) => number, zoomStep?: number }) {
     const view = this.map.getView();
     if (!view) {
       // the map does not have a view, so we can't act
       // upon it
       return;
     }
-    const duration = 250;
-    const delta = value === '+' ? 1 : -1;
+
+    const zoomStep = animateOptions?.zoomStep || 1;
+    const delta = value === '+' ? zoomStep : -1 * zoomStep;
     const currentZoom = view.getZoom();
     if (currentZoom !== undefined) {
       const newZoom = view.getConstrainedZoom(currentZoom + delta);
-      if (duration > 0) {
-        if (view.getAnimating()) {
-          view.cancelAnimations();
-        }
-        view.animate({
-          zoom: newZoom,
-          duration,
-          easing: easeOut
-        });
-      } else {
-        view.setZoom(newZoom);
+      if (view.getAnimating()) {
+        view.cancelAnimations();
       }
+      view.animate({
+        zoom: newZoom,
+        duration: animateOptions?.duration || 250,
+        easing: animateOptions?.easing || easeOut
+      }, (complete) => {
+        if (animateOptions.callback) {
+          animateOptions.callback(complete);
+        }
+      });
     }
   }
 
