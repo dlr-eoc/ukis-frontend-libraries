@@ -1330,7 +1330,8 @@ export class MapOlService {
         }
       } else if (layer instanceof olLayerGroup) {
         layer.getLayers().forEach(gl => {
-          const layerId = `${l.id}_${olGetUid(gl)}`;
+          /** fix add olUID to check if a group layer */
+          const layerId = `${l.id}_olUID:Layer_${olGetUid(gl)}`;
           if (!gl.get('id')) {
             gl.set('id', layerId);
           }
@@ -1339,8 +1340,8 @@ export class MapOlService {
             this.addEventsToLayer(l, gl, gl.getSource());
           }
           /**
-           * groups are flattened in map.forEachLayerAtPixel so add popup to each layer
-           * popup will be shown for top layer in the Group if there is a pixel color
+           * groups are flattened in map.getAllLayers so add popup to each layer
+           * will show the popup for top layer in the Group if there is a pixel color or feature
            */
           if (l.popup && !gl.get('popup')) {
             gl.set('popup', l.popup);
@@ -1523,96 +1524,123 @@ export class MapOlService {
 
   /** USED in map-ol.component */
   /**
-   * TODO:
-   * - check the pointer event
-   * - on move event set cursor -> depends on which kind of layer??
-   *   layers with features and only color pixel
    *
-   * - forEachFeatureAtPixel: Detect features that intersect a pixel on the viewport
-   *   Vector Layers???
+   * - map.getFeaturesAtPixel: Detect features that intersect a pixel on the viewport
+   *   Vector Layers
    *
-   * - forEachLayerAtPixel: Detect layers that have a color value at a pixel on the viewport (false positives unless the map layers have had different className)
-   *   Raster Layers???
+   * - layer.getData: Detect layers that have a color value at a pixel on the viewport
+   *   Raster Layers
+   *   Data for an image can only be retrieved if the source's crossOrigin property is set.
    */
 
   /**
-   *  layers_on_click() and layers_on_pointermove() should be removed
-   *  this filtering must be done later
+   *  1. on a Map event iterate through map.getAllLayers if:
+   *  - layer visible
+   *  - opacity > 0
+   *  - pixel coordinate in layer extent
+   *  - layer has popup
+   * 
+   *  - filterLayerNoPopup
+   *  - layer has pixel data
+   *  - pixel data alpha value > 0
+   *  - layer is raster
+   * 
+   *  - filterLayerNoPopup
+   *  - pixel coordinate in layer extent
+   *  - layer is vector
+   *  - layer has features at pixel
+   * 
+   * returns top visible layer - so no popups are shown for layers beneath if layer.opacity > 0 https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-916759628
+   *  2. check top layer event (click or move)
+   *  3. set cursor for Layers with a color value or feature
+   *  4. differentiate between raster and vector
+   * 
+   *  5. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
+   *  6. overwrite properties if popup property is: popup | popup[]
+   *  7. check for popupFunction, asyncPopup and dynamicPopup
+   *  8. use addPopup() or addPopupObj()
    *
-   *  1. on a Map event Filter if map has layers on the pixel
-   *  forEachLayerAtPixel: Detect layers that have a color value at a pixel on the viewport (false positives unless the map layers have had different className)
-   *  check layer source crossOrigin = anonymous
-   *
-   *  2. Filter if it is the top visible layer - so no popups are shown for layers beneath https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-916759628
-   *  3. check if the top visible layer has a popup property
-   *  4. For this Layer change the cursor on forEachLayerAtPixel -> hit
-   *
-   *  5. Differentiate between raster and vector to get features or layer.color for the properties passed to the popup
-   *  For Features change the cursor on forEachFeatureAtPixel -> hit
-   *
-   *  6. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
-   *  7. overwrite properties if popup property is: popup | popup[]
-   *  8. check for popupFunction, asyncPopup and dynamicPopup
-   *  9. use addPopup() or addPopupObj()
-   *
-   *  10. check popup event and if move popup exists => reuse old popup
-   *  11. remove move popups if different event or !popup.event
-   *  12. create new popup if not 10. or 11.
-   *  13. prepare ol overlayoptions
-   *  14. remove DynamicPopup if exists
-   *  15. createPopupContainer
-   *  16. set ol overlay addEvent and type = popup
-   *  17. get coordinate from geometry or map.event
-   *  18. set Position and map.addOverlay(overlay) if popup not exists
+   *  9. check popup event and if move popup exists => reuse old popup
+   *  10. remove move popups if different event or !popup.event
+   *  11. create new popup if not 9. or 10.
+   *  12. prepare ol overlayoptions
+   *  13. remove DynamicPopup if exists
+   *  14. createPopupContainer
+   *  15. set ol overlay addEvent and type = popup
+   *  16. get coordinate from geometry or map.event
+   *  17. set Position and map.addOverlay(overlay) if popup not exists
    */
   public layersOnMapEvent(evt: olMapBrowserEvent<PointerEvent>) {
     let layerHit = false;
+    const allMapLayers = this.map.getAllLayers();
+    let layersLength = allMapLayers.length;
 
-
-    /**
-     * Detect layers that have a color value at a pixel on the viewport, and execute a callback with each matching layer.
-     * Layers included in the detection can be configured through opt_layerFilter.
-     *
-     * Note: this may give false positives unless the map layers have had different *className* properties assigned to them.
-     * Also there could be cross-origin data, so set crossOrigin: 'anonymous' for layers where you want get pixel data!!
-     */
-    const item = this.map.forEachLayerAtPixel(evt.pixel, (layer, color) => {
-      /**
-       * return to stop detection and use the top (first detected) layer
-       * This is faster than pushing the layers into an array and iterate over it.
-       * And normally the user is only interested in the top Layer. If it is still necessary to detect several layers at the same time, then use a new function for map.on()
-       */
-      return { layer, color };
-    }, {
-      layerFilter: this.filterLayerNoPopup
-    });
-    if (item) {
-      /**
-       * only show for top layer and if top layer has popup
-       */
-      const hasPopup: Layer['popup'] = (item.layer.get('popup'));
-      if (hasPopup) {
-        /** check if cursor was set (we need this only on move?) */
-        this.hitLayerCurr = item.layer.get('id');
-        if (!this.hitLayerPrev) {
-          this.hitLayerPrev = this.hitLayerCurr;
+    /** iterate in reverse order (from top to bottom) if a layer has data/feature at the pixel, if a layer is found break out to only use top layer  */
+    let item: { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView, feature?: olFeature | olRenderFeature } = null;
+    while (layersLength--) {
+      const layer = allMapLayers[layersLength];
+      const layerVisible = layer.getVisible();
+      const layerOpacity = layer.getOpacity();
+      // check for layers with no popup above others
+      if (layerVisible && layerOpacity !== 0 && this.filterLayerExtent(layer, evt.pixel) && !layer.get('popup')) {
+        break;
+      } else if (this.filterLayerNoPopup(layer) && layer.getData && layer.getData(evt.pixel) && this.checkIsRaster(layer)) {
+        // rgba Data
+        const pixelData = layer.getData(evt.pixel);
+        let a
+        if (pixelData instanceof Uint8ClampedArray || pixelData instanceof Uint8Array || pixelData instanceof Float32Array) {
+          a = pixelData[3];
         }
 
-        /** set cursor for Layers with a color value */
-        if (item.color) {
-          layerHit = true;
+        if (a || pixelData instanceof DataView) {
+          item = {
+            layer,
+            color: pixelData
+          };
+          break;
         }
 
-        /** remove cursor and move-popups on layer change */
-        if (this.hitLayerPrev && this.hitLayerPrev !== this.hitLayerCurr) {
-          layerHit = false;
-          this.hitLayerPrev = this.hitLayerCurr;
-        }
-        const useEvent = this.topLayerCheckEvent(evt, hasPopup);
-        if (useEvent) {
-          this.layerOnEvent(evt, item.layer, item.color);
+      } else if (this.filterLayerNoPopup(layer) && this.filterLayerExtent(layer, evt.pixel) && this.checkIsVector(layer)) {
+        // fixes: https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120
+        const features = this.map.getFeaturesAtPixel(evt.pixel, {
+          layerFilter: (l) => {
+            return layer.get('id') === l.get('id')
+          }
+        });
+        if (features.length) {
+          item = {
+            layer,
+            feature: features[0]
+          };
+          break;
         }
       }
+    }
+
+    if (item) {
+      const popup: Layer['popup'] = (item.layer.get('popup'));
+
+      /** check if cursor was set (we need this only on move?) */
+      this.hitLayerCurr = item.layer.get('id');
+      if (!this.hitLayerPrev) {
+        this.hitLayerPrev = this.hitLayerCurr;
+      }
+
+      /** set cursor for Layers with a color value */
+      if (item.color || item.feature) {
+        layerHit = true;
+      }
+
+      /** remove cursor and move-popups on layer change */
+      if (this.hitLayerPrev && this.hitLayerPrev !== this.hitLayerCurr) {
+        layerHit = false;
+        this.hitLayerPrev = this.hitLayerCurr;
+      }
+      const useEvent = this.checkTopLayerEvent(evt, popup);
+      if (useEvent) {
+        this.layerOnEvent(evt, item.layer, item.color, item.feature);
+      }
+
     }
 
     if (layerHit) {
@@ -1626,12 +1654,15 @@ export class MapOlService {
   }
 
   /**
-   * To filtered out layers and show the popup beneath e.g. text overlays
+   * To filtered out layers with no popup or show the popup beneath e.g. text overlays
    * in map.forEachLayerAtPixel for raster and map.forEachFeatureAtPixel for vector
    */
   private filterLayerNoPopup = (l: olLayer<olSource>) => {
     const popup: Layer['popup'] = (l.get('popup'));
     let shouldNotFilterLayer = true;
+    if (!popup) {
+      shouldNotFilterLayer = false;
+    }
     if (popup && this.isPopupObj(popup)) {
       if (popup.filterLayer === true) {
         shouldNotFilterLayer = false;
@@ -1640,7 +1671,7 @@ export class MapOlService {
     return shouldNotFilterLayer;
   }
 
-  private topLayerCheckEvent(evt: olMapBrowserEvent<PointerEvent>, popup: Layer['popup']) {
+  private checkTopLayerEvent(evt: olMapBrowserEvent<PointerEvent>, popup: Layer['popup']) {
     let useEvent: 'click' | 'move' = null;
     const clickOrMove = (evt: olMapBrowserEvent<PointerEvent>, popup: popup) => {
       if (popup.event) {
@@ -1761,14 +1792,14 @@ export class MapOlService {
     const popup: Layer['popup'] = layer.get('popup');
     let properties: any = {};
 
-    if (layerpopup) {
+    if (popup) {
       properties = layer.getProperties();
       properties.evt = evt;
       if (color) {
         properties.color = color;
       }
 
-      this.prepareAddPopup(properties, layer, null, evt, layerpopup);
+      this.prepareAddPopup(properties, layer, null, evt, popup);
     }
   }
 
@@ -1964,10 +1995,11 @@ export class MapOlService {
 
       const defaultOptions: olOverlayOptions = {
         // element: container,
-        autoPan: true,
         id: popupID,
-        autoPanAnimation: {
-          duration: 250
+        autoPan: {
+          animation: {
+            duration: 250
+          }
         },
         positioning: 'bottom-center',
         stopEvent: true,

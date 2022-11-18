@@ -4,6 +4,7 @@
 * **@dlr-eoc/map-ol:**
   - Styles from OpenLayers are no longer included in this component [e3e98c1](https://github.com/dlr-eoc/ukis-frontend-libraries/pull/151/commits/e3e98c1a9a04a23c2109a509e902d14c1b6bdc9d). You have to add them to your application manually see [`@dlr-eoc/map-ol/README.md`](projects/map-ol/README.md).
   - The function `vectorOnEvent` now needs two parameters more `layer: olLayer` and `feature: olFeature | olRenderFeature`.
+  - Refactor function `layersOnMapEvent`. Due to the removal of [map.forEachLayerAtPixel](https://github.com/openlayers/openlayers/releases/tag/v7.0.0) in OpenLayers 7, the function works completely differently now. Iterate over all layers and test for `feature` or `getData` instead of just testing for color at a pixel. This also fixes [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
 
 ### Features
 * **@dlr-eoc/map-ol:**
@@ -16,6 +17,7 @@
 * **@dlr-eoc/map-ol:**
  - Remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.
  - Set bbox for olLayerGroup layers in `create_custom_layer`.
+ - Show popups on transparent features [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
 
 # [10.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.1.0) (2022-11-07) (Features and Bug Fixes)
 ### Features
