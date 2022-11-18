@@ -1709,96 +1709,56 @@ export class MapOlService {
     if (this.checkIsRaster(layer)) {
       this.rasterOnEvent(evt, layer, color);
     } else if (this.checkIsVector(layer)) {
-      this.vectorOnEvent(evt);
+      this.vectorOnEvent(evt, layer, feature);
     }
   }
 
-  public vectorOnEvent(evt: olMapBrowserEvent<PointerEvent>) {
-    let featureHit = false;
-    const item = this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
-      /** set cursor for features with a color value */
-      featureHit = true;
-
-      /**
-       * return to stop detection and use the top (first detected) feature
-       * This is faster than pushing the feature into an array and iterate over it.
-       */
-      return { feature, layer };
-    }, {
-      layerFilter: (layer) => {
-        let shouldNotFilterLayer = true;
-        if (layer instanceof olBaseVectorLayer) {
-          const olSource: olCluster | olVectorSource<any> | olVectorTile = layer.getSource();
-          if (olSource instanceof olCluster) {
-            shouldNotFilterLayer = (olSource as any).getSource() instanceof olVectorSource;
-          } else {
-            shouldNotFilterLayer = olSource instanceof olVectorSource || olSource instanceof olVectorTile;
-          }
-        }
-
-        const filter = this.filterLayerNoPopup(layer);
-        if (filter === false) {
-          shouldNotFilterLayer = false;
-        }
-
-        /** fix for https://github.com/openlayers/openlayers/issues/12886 */
-        const layerExtent = layer.getExtent();
-        if (layerExtent) {
-          const pixelCoordinate = this.map.getCoordinateFromPixel(evt.pixel);
-          if (!olContainsCoordinate(layerExtent, pixelCoordinate)) {
-            shouldNotFilterLayer = false;
-          }
-        }
-
-        return shouldNotFilterLayer;
-      },
-      hitTolerance: this.hitTolerance
-    });
-
-    if (item) {
-      /**
-       * only show for top feature and if top layer has popup
-       */
-      const hasPopup: Layer['popup'] = (item.layer.get('popup'));
-      if (hasPopup) {
-        const layer = item.layer;
-        const feature = item.feature;
-
-        let properties: any = {};
-
-        const childFeatures = feature.getProperties().features;
-        if (childFeatures && childFeatures.length === 1) {
-          const childFeature = childFeatures[0];
-          properties = childFeature.getProperties();
-        } else if (childFeatures && childFeatures.length > 1) {
-          /**
-           * zoom to cluster on click
-           * or check for layerpopup.event !== move
-           */
-          if (evt.type === 'click') {
-            const extent = this.getFeaturesExtent(feature.getProperties().features);
-            this.setExtent(extent);
-            return false;
-          } else {
-            return true;
-          }
-        } else {
-          // type no cluster
-          properties = feature.getProperties();
-        }
-        this.prepareAddPopup(properties, layer, feature, evt, hasPopup);
+  private filterLayerExtent(layer, pixel) {
+    let shouldNotFilterLayer = true;
+    /** fix for https://github.com/openlayers/openlayers/issues/12886 */
+    const layerExtent = layer.getExtent();
+    if (layerExtent) {
+      const pixelCoordinate = this.map.getCoordinateFromPixel(pixel);
+      if (!olContainsCoordinate(layerExtent, pixelCoordinate)) {
+        shouldNotFilterLayer = false;
       }
     }
 
-    if (featureHit) {
-      this.map.getTargetElement().style.cursor = 'pointer';
-    } else {
-      this.map.getTargetElement().style.cursor = '';
+    return shouldNotFilterLayer;
+  }
+
+  public vectorOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, feature: olFeature | olRenderFeature) {
+    if (layer && feature) {
+      const popup: Layer['popup'] = layer.get('popup');
+      /** add layername and layerid to feature properties */
+      let properties: any = {};
+
+      const childFeatures = feature.getProperties().features;
+      if (childFeatures && childFeatures.length === 1) {
+        const childFeature = childFeatures[0];
+        properties = childFeature.getProperties();
+      } else if (childFeatures && childFeatures.length > 1) {
+        /**
+         * zoom to cluster on click
+         * or check for layerpopup.event !== move
+         */
+        if (evt.type === 'click') {
+          const extent = this.getFeaturesExtent(feature.getProperties().features);
+          this.setExtent(extent);
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        // type no cluster
+        properties = feature.getProperties();
+      }
+      this.prepareAddPopup(properties, layer, feature, evt, popup);
     }
   }
 
-  public rasterOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
-    const layerpopup: Layer['popup'] = layer.get('popup');
+  public rasterOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView) {
+    const popup: Layer['popup'] = layer.get('popup');
     let properties: any = {};
 
     if (layerpopup) {

@@ -1078,7 +1078,7 @@ describe('MapOlService Events', () => {
     browserEvent.coordinate = coordinate;
     browserEvent.pixel = mapPixel;
 
-    service.layersOnMapEvent(browserEvent);
+    service.vectorOnEvent(browserEvent, vectorLayer, testFeature);
 
     const popups = service.getPopups();
     expect(popups.length).toBe(1);
