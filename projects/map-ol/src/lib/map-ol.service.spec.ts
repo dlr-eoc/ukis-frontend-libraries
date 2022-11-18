@@ -1263,12 +1263,20 @@ describe('MapOlService State', () => {
     expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
   });
 
-  it('should set/get extent', () => {
+  it('should set/get extent', async () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
     const oldExtent = service.getCurrentExtent(true);
     const extent = [-14, 33, 40, 57] as any;
-    service.setExtent(extent, true);
+
+    await new Promise((resolve, reject) => {
+      service.setExtent(extent, true, {
+        callback: (complete) => {
+          resolve(complete);
+        }
+      });
+    });
+
     // map.getView().fit() tries to fit the specified extent on the map -> [-14.000000000000002, 24.562357322635023, 40, 61.890976149402576]
     // therefore only check if the extent has changed!!!
     expect(service.getCurrentExtent(true) !== oldExtent).toBeTrue();

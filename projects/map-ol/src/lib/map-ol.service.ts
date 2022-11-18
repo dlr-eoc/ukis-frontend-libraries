@@ -4,7 +4,7 @@ import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentI
 import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
-import olView from 'ol/View';
+import olView, { FitOptions as olFitOptions } from 'ol/View';
 import { ViewOptions as olViewOptions } from 'ol/View';
 
 import olBaseLayer from 'ol/layer/Base';
@@ -2225,10 +2225,10 @@ export class MapOlService {
    * @param fitOptions: olFitOptions
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
+  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: olFitOptions): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode());
-    const newFitOptions = {
+    const newFitOptions: olFitOptions = {
       size: this.map.getSize(),
       // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
     };
