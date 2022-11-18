@@ -1705,7 +1705,7 @@ export class MapOlService {
     }
   }
 
-  public layerOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array) {
+  public layerOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView, feature?: olFeature | olRenderFeature) {
     if (this.checkIsRaster(layer)) {
       this.rasterOnEvent(evt, layer, color);
     } else if (this.checkIsVector(layer)) {
