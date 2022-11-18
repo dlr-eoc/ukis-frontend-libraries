@@ -353,7 +353,7 @@ export class MapOlService {
   public getLayerByKey(key: { key: string, value: string }, filtertype?: Tgroupfiltertype) {
     const layers = this.getLayersFromGroup(this.map.getLayerGroup(), filtertype);
     const flattenedLayers = flattenLayers(layers);
-    const keyLayers: olBaseLayer[] = [];
+    const keyLayers: (olBaseLayer | olLayerGroup)[] = [];
     flattenedLayers.forEach((item) => {
       if (item.get(key.key) && item.get(key.key) === key.value) {
         if (keyLayers.indexOf(item) === -1) {
@@ -361,6 +361,7 @@ export class MapOlService {
         }
       }
     });
+    /** if the layer is not in flattenedLayers it could be a olLayerGroup */
     if (!keyLayers.length) {
       const subLayers = this.getLayersFromGroup(this.map.getLayerGroup(), filtertype, true); // (map.getLayerGroup(), filtertype, filtertypeKey, true);
       if (subLayers.length) {
@@ -652,7 +653,7 @@ export class MapOlService {
               oldLayer.setVisible(newVisible);
             }
             if (newZIndex) {
-              oldLayer.setZIndex(newZIndex);
+              this.setZIndexForLayerAndGroup(oldLayer, newZIndex, true);
             }
             oldLayer.changed();
             groupLayers.setAt(index, oldLayer);
@@ -681,21 +682,22 @@ export class MapOlService {
    * if only one group of them map is used and setLayers is called then the map flickers!
    * this is because all layers are newly created and each get new ol_uid's
    */
-  public setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
+  public setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype, appendToZIndex?: number) {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const tempLayers: olBaseLayer[] = [];
-    // TODO try to deep check if a layer if exactly the same and dont create it new
-    // create hash from layer???
 
     if (layers.length < 1 && lowerType !== 'baselayers') {
-      // this.removeAllLayers('overlays');
-      // this.removeAllLayers('layers');
       this.removeAllLayers(lowerType);
     } else {
-      layers.forEach((newLayer) => {
+      layers.forEach((newLayer, index) => {
         const layer = this.create_layers(newLayer);
         // check if layer not undefined
         if (layer) {
+          if (appendToZIndex > 0) {
+            this.setZIndexForLayerAndGroup(layer, index, false, appendToZIndex);
+          } else {
+            this.setZIndexForLayerAndGroup(layer, index);
+          }
           tempLayers.push(layer);
         }
       });
@@ -704,10 +706,43 @@ export class MapOlService {
     if (tempLayers.length > 0) {
       this.setLayers(tempLayers, lowerType);
       // TODO: checkt to replace type with filtertype -> but breaking Change!!
-      const newTempLayer: { type: Tgroupfiltertype, layers: olBaseLayer[] } = {
+      const newTempLayers: { type: Tgroupfiltertype, layers: olBaseLayer[] } = {
         type: lowerType, layers: tempLayers
       };
-      return newTempLayer;
+      return newTempLayers;
+    }
+  }
+
+  /**
+   * this function is more for internal use in MapOlComponent
+   * 
+   * set zIndex for olLayer and olLayerGroup layers
+   * if updateCollection = true - moves items in the collection to the index
+   * this should only be use in map ol
+   */
+  public setZIndexForLayerAndGroup(ollayer: olBaseLayer | olLayerGroup, index: number, updateCollection = false, appendToZIndex?: number) {
+    if (appendToZIndex > 0) {
+      ollayer.setZIndex(index + appendToZIndex);
+    } else {
+      ollayer.setZIndex(index);
+    }
+
+    // addresses an issue in openlayers: https://github.com/openlayers/openlayers/issues/6654
+    if (ollayer instanceof olLayerGroup) {
+      const collection = (ollayer as olLayerGroup).getLayers();
+      if (updateCollection) {
+        collection.getArray().forEach(l => {
+          collection.remove(l);
+          collection.insertAt(index, l);
+        });
+      }
+      collection.forEach(l => {
+        if (appendToZIndex > 0) {
+          l.setZIndex(index + appendToZIndex);
+        } else {
+          l.setZIndex(index);
+        }
+      });
     }
   }
 
