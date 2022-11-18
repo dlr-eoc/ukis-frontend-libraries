@@ -12,6 +12,7 @@
  - Add types for `FitOptions` on `setExtent`.
  - Add function `hideAllPopups` which adds a css class to the popup element [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
  - The function `layerOnEvent` (for popups) now accepts an optional `feature` as the last parameter.
+ - The function `getLayerGroups` is now public to retrieve the LayerGroups and Collections from the map.
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**

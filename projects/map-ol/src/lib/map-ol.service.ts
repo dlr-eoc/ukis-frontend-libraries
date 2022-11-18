@@ -432,7 +432,7 @@ export class MapOlService {
     *
     * @param filtertypeKey [filtertypeKey='filtertype']
     */
-  private getLayerGroups(filtertype?: string) {
+  public getLayerGroups(filtertype?: string) {
     const layerGroups: olLayerGroup[] = [];
     this.map.getLayers().forEach((lg: olLayerGroup | olBaseLayer) => {
       if (lg instanceof olLayerGroup) {
