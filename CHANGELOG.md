@@ -16,6 +16,9 @@
  - Add function `setZIndexForLayerAndGroup` (for internal use). This now moves items in collections so the popup detection works in the new implementation.
  - Use `hideAllPopups` on `layer.visible` change and add css styles [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
 
+* **@dlr-eoc/utils-maps:**
+ - Add function `getCollectionItem` from `ol/Collection`. This returns the item and the index of the item if found otherwise `null`.
+
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
  - Remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.

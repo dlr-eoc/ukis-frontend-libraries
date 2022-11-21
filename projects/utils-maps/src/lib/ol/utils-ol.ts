@@ -6,6 +6,7 @@ import RenderEvent from 'ol/render/Event';
 import { EventsKey } from 'ol/events';
 import { unByKey } from 'ol/Observable';
 import Interaction from 'ol/interaction/Interaction';
+import Collection from 'ol/Collection';
 
 
 
@@ -201,4 +202,25 @@ export function simpleMapToCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
             onDone(updatedCanvas);
         }
     }, keepSynced);
+}
+
+
+
+/**
+ * Get a item from ol/Collection by ID
+ * @returns ol/Collection item and the index in the collection array
+ */
+export function getCollectionItem(id: string, collection: Collection<BaseLayer>, idKey = 'id') {
+    let item: null | { index: number, layer: BaseLayer } = null;
+    collection.getArray().find((l, index) => {
+        const lID = l.get(idKey);
+        if (lID === id) {
+            item = {
+                index: index,
+                layer: l
+            };
+            return true;
+        }
+    });
+    return item;
 }
