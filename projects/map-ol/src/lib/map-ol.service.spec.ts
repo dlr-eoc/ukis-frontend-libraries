@@ -1411,15 +1411,15 @@ describe('MapOlService State', () => {
     expect(service.getCenter(true)[1]).toBeCloseTo(center[1], 1);
   });
 
-  it('should have a default zoom of 0', (done) => {
+  it('should have a default zoom of 0', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
     // a zoom of 0 is not working because of the mapsize check https://openlayers.org/en/latest/examples/min-zoom.html
     service.map.getView().setZoom(5);
+    service.map.renderSync();
 
     const oldZoom = service.getZoom();
     expect(oldZoom).toBeCloseTo(5, 0);
-    done();
   });
 
 

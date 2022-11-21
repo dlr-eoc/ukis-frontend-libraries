@@ -17,6 +17,7 @@ import olTileSource from 'ol/source/Tile';
 import olGeometry from 'ol/geom/Geometry';
 import olGeoJSON from 'ol/format/GeoJSON';
 import olMap from 'ol/Map';
+import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import { MapOlService } from './map-ol.service';
 
 /**
@@ -467,9 +468,6 @@ describe('MapOlComponent', () => {
    */
   it('should rebuild dynamic popups with each click', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
-    const appRef = TestBed.inject(ApplicationRef) as ApplicationRef;
-    service.createMap();
-
 
     // adding a layer with a dynamic popup
     const ukisWmtsLayer = new WmtsLayer({
@@ -513,6 +511,7 @@ describe('MapOlComponent', () => {
     // click 0
     service.layerOnEvent({
       coordinate: [991316.4996485114, 6165355.908612549],
+      originalEvent: null,
       dragging: false,
       frameState: {
         animate: false,
@@ -522,10 +521,10 @@ describe('MapOlComponent', () => {
       target: service.map,
       type: 'click',
       pixel: [825.7376098632812, 231.36881256103516]
-    } as any, olWmtsLayer);
+    } as olMapBrowserEvent<PointerEvent>, olWmtsLayer);
 
-    // components are only created on angular.tick
-    appRef.tick();
+    // detect changes for dynamic components in the popup
+    fixture.detectChanges();
 
     // click 1
     service.layerOnEvent({
@@ -539,10 +538,9 @@ describe('MapOlComponent', () => {
       target: service.map,
       type: 'click',
       pixel: [825.7376098632812, 231.36881256103516]
-    } as any, olWmtsLayer);
-
-    // components are only created on angular.tick
-    appRef.tick();
+    } as olMapBrowserEvent<PointerEvent>, olWmtsLayer);
+    // detect changes for dynamic components in the popup
+    fixture.detectChanges();
 
     expect(counters[0].created).toEqual(1);
     expect(counters[0].destroyed).toEqual(1);
