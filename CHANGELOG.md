@@ -8,22 +8,22 @@
 
 ### Features
 * **@dlr-eoc/map-ol:**
- - The function `zoomInOut` now accepts an optional object with `callback`, `duration`, `easing` and `zoomStep`.
- - Add types for `FitOptions` on `setExtent`.
- - Add function `hideAllPopups` which adds a css class to the popup element [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
- - The function `layerOnEvent` (for popups) now accepts an optional `feature` as the last parameter.
- - The function `getLayerGroups` is now public to retrieve the LayerGroups and Collections from the map.
- - Add function `setZIndexForLayerAndGroup` (for internal use). This now moves items in collections so the popup detection works in the new implementation.
- - Use `hideAllPopups` on `layer.visible` change and add css styles [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
+  - The function `zoomInOut` now accepts an optional object with `callback`, `duration`, `easing` and `zoomStep`.
+  - Add types for `FitOptions` on `setExtent`.
+  - Add function `hideAllPopups` which adds a css class to the popup element [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
+  - The function `layerOnEvent` (for popups) now accepts an optional `feature` as the last parameter.
+  - The function `getLayerGroups` is now public to retrieve the LayerGroups and Collections from the map.
+  - Add function `setZIndexForLayerAndGroup` (for internal use). This now moves items in collections so the popup detection works in the new implementation.
+  - Use `hideAllPopups` on `layer.visible` change and add css styles [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
 
 * **@dlr-eoc/utils-maps:**
- - Add function `getCollectionItem` from `ol/Collection`. This returns the item and the index of the item if found otherwise `null`.
+  - Add function `getCollectionItem` from `ol/Collection`. This returns the item and the index of the item if found otherwise `null`.
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
- - Remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.
- - Set bbox for olLayerGroup layers in `create_custom_layer`.
- - Show popups on transparent features [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
+  - Remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.
+  - Set bbox for olLayerGroup layers in `create_custom_layer`.
+  - Show popups on transparent features [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
 
 # [10.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.1.0) (2022-11-07) (Features and Bug Fixes)
 ### Features
