@@ -27,7 +27,6 @@ import { InterpolationLayer, ColorRamp, DtmLayer } from '@dlr-eoc/utils-maps';
 
 import testData from '@dlr-eoc/shared-assets/geojson/test.json';
 import testPolys from '@dlr-eoc/shared-assets/geojson/test.polys.json';
-import testCollection from '@dlr-eoc/shared-assets/geojson/test.collection.json';
 import { ExampleGroupActionComponent } from '../../components/example-group-action/example-group-action.component';
 import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
 import { Popup2Component } from '../../components/popup2/popup2.component';
@@ -73,13 +72,16 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const osmLayer1 = new OsmTileLayer({
       id: 'OSM1',
       visible: false,
-      popup: true
+      bbox: [-66.408, 3.577, 113.592, 64.940]
     });
 
     const customHeatmapLayer = new CustomLayer({
       id: 'heatmap_layer',
       name: 'Heatmap Layer',
       actions: [{ title: 'test', icon: '', action: (layer) => { } }],
+      popup: {
+        filterkeys: ['id', 'color', 'name']
+      },
       action: {
         component: ExampleLayerActionComponent, inputs: this.inputValue, outputs: {
           valueChange: (value) => {
@@ -148,19 +150,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
             fill: new olFill({
               color: 'rgba(0, 153, 255, 0.2)',
             })
-          }),
-            /* new olStyle({
-              text: new olText({
-                maxAngle: Math.PI / 4,
-                textAlign: 'start',
-                overflow: true,
-                text: label,
-                stroke: new olStroke({
-                  color: 'rgba(20, 20, 20, 0.5)',
-                  width: 1,
-                })
-              })
-            }) */
+          })
           ];
         }
       }),
@@ -253,7 +243,6 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       },
       custom_layer: new olVectorImageLayer({
         source: new olVectorSource({
-          // features: this.mapSvc.geoJsonToFeatures(testCollection),
           url: 'assets/geojson/test.collection.json',
           format: new olGeoJSON(),
         }),
@@ -300,7 +289,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const osmClipLayer = new CustomLayer({
       id: 'osm_clip_layer',
       name: 'OSM Clip',
-      visible: false,
+      visible: true,
       popup: {
         filterkeys: ['id', 'color', 'name']
         // filterLayer: true
@@ -319,7 +308,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const customLayerGroup = new CustomLayer({
       id: 'customLayerOlGroup',
       name: 'Custom Layer OlGroup',
-      visible: false,
+      visible: true,
       opacity: 0.6,
       popup: {
         event: 'move',
@@ -347,7 +336,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
             }),
           })
         ]
-      })
+      }),
+      bbox: [-18.213, -26.814, 68.344, 11.783]
     });
 
     const clusterLayer = new CustomLayer({
