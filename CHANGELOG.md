@@ -14,6 +14,7 @@
  - The function `layerOnEvent` (for popups) now accepts an optional `feature` as the last parameter.
  - The function `getLayerGroups` is now public to retrieve the LayerGroups and Collections from the map.
  - Add function `setZIndexForLayerAndGroup` (for internal use). This now moves items in collections so the popup detection works in the new implementation.
+ - Use `hideAllPopups` on `layer.visible` change and add css styles [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**

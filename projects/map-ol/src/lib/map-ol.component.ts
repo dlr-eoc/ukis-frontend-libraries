@@ -193,6 +193,22 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       if (ollayer) {
         if (ollayer.getVisible() !== layer.visible) {
           ollayer.setVisible(layer.visible);
+          
+          // fixes https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120
+          // When a layer is set hidden, it's associated popups get a hidden class.
+          this.mapSvc.hideAllPopups(!layer.visible, (item) => {
+            // only hide the popups from the current layer
+            const elementID = item.getId();
+            const layerID = elementID.toString().split(':')[0];
+            if (layerID) {
+              if (layerID === layer.id) {
+                return layerID === layer.id;
+              }
+            } else {
+              return true;
+            }
+          });
+
         }
         if (ollayer.getOpacity() !== layer.opacity) {
           ollayer.setOpacity(layer.opacity);

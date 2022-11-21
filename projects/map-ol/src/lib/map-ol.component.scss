@@ -74,6 +74,10 @@
     left: 48px;
     margin-left: -11px;
   }
+
+  &.hidden{
+    visibility: hidden;
+  }
 }
 
 .crosshair {
