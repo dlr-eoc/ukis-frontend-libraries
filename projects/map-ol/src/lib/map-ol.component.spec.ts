@@ -4,10 +4,10 @@ import { MapOlComponent } from './map-ol.component';
 import { LayersService, VectorLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { RasterLayer } from '@dlr-eoc/services-layers';
 import { LayerGroup, CustomLayer } from '@dlr-eoc/services-layers';
-import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
+import { EocBasemapTile, OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { of } from 'rxjs';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { ApplicationRef, Component, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
 import testFeatureData from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import olVectorLayer from 'ol/layer/Vector';
 import olTileLayer from 'ol/layer/Tile';
@@ -16,6 +16,7 @@ import olVectorSource from 'ol/source/Vector';
 import olTileSource from 'ol/source/Tile';
 import olGeometry from 'ol/geom/Geometry';
 import olGeoJSON from 'ol/format/GeoJSON';
+import olMap from 'ol/Map';
 import { MapOlService } from './map-ol.service';
 
 /**
@@ -70,10 +71,228 @@ class InstrumentedMockPopupComponent implements OnInit, OnDestroy {
   }
 }
 
+function addSomeLayers(component: MapOlComponent, mapSvc: MapOlService) {
+  const osmLayer = new OsmTileLayer();
+  const EocBasemap = new EocBasemapTile();
+  const baseLayers = [osmLayer, EocBasemap];
+  baseLayers.forEach(l => {
+    component.layersSvc.addLayer(l, 'Baselayers');
+  });
+
+  //-----------------------------------------------
+
+  const testVector = new VectorLayer({
+    id: 'vectorLayer',
+    name: 'vectorLayer',
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Point',
+          coordinates: [11.71142578125, 46.5739667965278]
+        }
+      }]
+    }
+  });
+
+
+  const layer1 = new olVectorLayer({
+    source: new olVectorSource({
+      features: new olGeoJSON({
+        dataProjection: 'EPSG:4326',
+        featureProjection: mapSvc.EPSG
+      }).readFeatures({
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                10.37109375,
+                50.064191736659104
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                11.997070312499998,
+                50.064191736659104
+              ]
+            }
+          }
+        ]
+      })
+    })
+  });
+  const layer2 = new olVectorLayer({
+    source: new olVectorSource({
+      features: new olGeoJSON({
+        dataProjection: 'EPSG:4326',
+        featureProjection: mapSvc.EPSG
+      }).readFeatures({
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "LineString",
+              "coordinates": [
+                [
+                  8.67919921875,
+                  49.167338606291075
+                ],
+                [
+                  10.458984375,
+                  48.4146186174932
+                ],
+                [
+                  11.997070312499998,
+                  48.4146186174932
+                ],
+                [
+                  13.24951171875,
+                  48.821332549646634
+                ],
+                [
+                  13.7109375,
+                  49.396675075193976
+                ]
+              ]
+            }
+          }
+        ]
+      })
+    })
+  });
+
+  const layerGroup = new olLayerGroup({
+    layers: [layer1, layer2]
+  });
+
+  const ukisOlLayerGroup = new CustomLayer({
+    custom_layer: layerGroup,
+    id: 'olGroupLayer',
+    name: 'Ol-Group Layer',
+    filtertype: 'Layers',
+    visible: true
+  });
+
+
+  const layer1_2 = new olVectorLayer({
+    source: new olVectorSource({
+      features: new olGeoJSON({
+        dataProjection: 'EPSG:4326',
+        featureProjection: mapSvc.EPSG
+      }).readFeatures({
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                10.37109375,
+                50.064191736659104
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                11.997070312499998,
+                50.064191736659104
+              ]
+            }
+          }
+        ]
+      })
+    })
+  });
+  const layer2_2 = new olVectorLayer({
+    source: new olVectorSource({
+      features: new olGeoJSON({
+        dataProjection: 'EPSG:4326',
+        featureProjection: mapSvc.EPSG
+      }).readFeatures({
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "LineString",
+              "coordinates": [
+                [
+                  8.67919921875,
+                  49.167338606291075
+                ],
+                [
+                  10.458984375,
+                  48.4146186174932
+                ],
+                [
+                  11.997070312499998,
+                  48.4146186174932
+                ],
+                [
+                  13.24951171875,
+                  48.821332549646634
+                ],
+                [
+                  13.7109375,
+                  49.396675075193976
+                ]
+              ]
+            }
+          }
+        ]
+      })
+    })
+  });
+  const layerGroup2 = new olLayerGroup({
+    layers: [layer1_2, layer2_2]
+  });
+  const ukisOlLayerGroup2 = new CustomLayer({
+    custom_layer: layerGroup2,
+    id: 'olGroupLayer2',
+    name: 'Ol-Group Layer 2',
+    filtertype: 'Layers',
+    visible: true
+  });
+  let layers = [testVector, ukisOlLayerGroup, ukisOlLayerGroup2];
+  layers.forEach(l => {
+    component.layersSvc.addLayer(l, 'Layers');
+  });
+
+  return {
+    osmLayer,
+    EocBasemap,
+    testVector,
+    ukisOlLayerGroup,
+    ukisOlLayerGroup2
+  };
+}
+
 
 describe('MapOlComponent', () => {
   let component: MapOlComponent;
   let fixture: ComponentFixture<MapOlComponent>;
+  let mapSvc: MapOlService;
+  const mapSize = [600, 600];
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -92,11 +311,46 @@ describe('MapOlComponent', () => {
     component = fixture.componentInstance;
     component.layersSvc = new MockLayersService();
     component.mapStateSvc = new MapStateService();
+    mapSvc = TestBed.inject(MapOlService);
     fixture.detectChanges();
+    component.map.setSize(mapSize);
+    component.map.renderSync();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have a map and the map should be the same as from the mapSvc', () => {
+    expect(component.map instanceof olMap).toBeTruthy();
+    expect(component.map === mapSvc.map).toBeTruthy();
+  });
+
+  it('should have a map Size', () => {
+    expect(component.map.getSize()).toEqual(mapSize);
+  });
+
+  it('should have a three olLayerGroups', () => {
+    expect(component.map.getLayers().getLength()).toEqual(3);
+    expect(mapSvc.getLayerGroups().length).toEqual(3);
+  });
+
+  it('should add layers', () => {
+    let { osmLayer, EocBasemap, testVector, ukisOlLayerGroup, ukisOlLayerGroup2 } = addSomeLayers(component, mapSvc);
+    const baseLayers = [osmLayer, EocBasemap];
+    const layers = [testVector, ukisOlLayerGroup, ukisOlLayerGroup2]
+
+    expect(component.map.getAllLayers().length).toEqual(7);
+    expect(mapSvc.getLayers('Baselayers').length).toEqual(baseLayers.length);
+
+
+    expect(mapSvc.getLayers('Layers').length).toEqual(layers.length);
+
+    // group with two layers
+    const groupFromMap1 = mapSvc.getLayers('Layers')[1] as olLayerGroup;
+    expect(groupFromMap1.getLayers().getLength()).toEqual(2);
+    const groupFromMap2 = mapSvc.getLayers('Layers')[2] as olLayerGroup;
+    expect(groupFromMap2.getLayers().getLength()).toEqual(2);
   });
 
   it('should update a vector-layer', () => {
@@ -119,21 +373,22 @@ describe('MapOlComponent', () => {
     component.layersSvc.addLayer(vectorLayer, 'Layers');
 
     // layer has been added successfully
-    expect(component.layersSvc.getLayerById(vectorLayer.id)).toBeTruthy();
+    const layerFromService = component.layersSvc.getLayerById(vectorLayer.id) as VectorLayer;
+    expect(layerFromService).toBeTruthy();
     // layer has but one feature
-    expect((component.layersSvc.getLayerById(vectorLayer.id) as VectorLayer).data.features.length).toEqual(1);
+    expect(layerFromService.data.features.length).toEqual(1);
 
     // layer is present on map
-    const layer = component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer<olVectorSource<olGeometry>>;
-    expect(layer).toBeTruthy();
-    expect(layer.getProperties()['id']).toEqual(vectorLayer.id);
-    expect(layer.getSource().getFeatures().length).toEqual(1);
+    const layerFromMap = mapSvc.getLayerByKey({ key: 'id', value: vectorLayer.id }) as olVectorLayer<olVectorSource<olGeometry>>;
+    expect(layerFromMap).toBeTruthy();
+    expect(layerFromMap.getProperties()['id']).toEqual(vectorLayer.id);
+    expect(layerFromMap.getSource().getFeatures().length).toEqual(1);
 
     // updating data
     vectorLayer.data = testFeatureData;
     // the layers new data has *not yet* been passed through to the ol-layer.
     // this ensures that there is no spooky-action-at-a-distance.
-    expect(layer.getSource().getFeatures().length).toEqual(1);
+    expect(layerFromMap.getSource().getFeatures().length).toEqual(1);
 
     component.layersSvc.updateLayer(vectorLayer);
     // now, after calling `updateLayer`, the data is present on the ol-layer
@@ -141,130 +396,68 @@ describe('MapOlComponent', () => {
   });
 
   it('should use the correct z-index for Ukis-custom-layers even if they contain an olLayerGroup', () => {
-    const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap();
+    let { osmLayer, EocBasemap, testVector, ukisOlLayerGroup, ukisOlLayerGroup2 } = addSomeLayers(component, mapSvc);
 
+    const osmFromMap = mapSvc.getLayerByKey({ key: 'id', value: osmLayer.id });
+    const eocFromMap = mapSvc.getLayerByKey({ key: 'id', value: EocBasemap.id });
+    const testVectorFromMap = mapSvc.getLayerByKey({ key: 'id', value: testVector.id });
+    const group1FromMap = mapSvc.getLayerByKey({ key: 'id', value: ukisOlLayerGroup.id }) as olLayerGroup;
+    const group2FromMap = mapSvc.getLayerByKey({ key: 'id', value: ukisOlLayerGroup2.id }) as olLayerGroup;
 
-    const osmLayer = new OsmTileLayer();
-    component.layersSvc.addLayer(osmLayer, 'Baselayers');
-    const baseLayer = new VectorLayer({
-      id: 'vectorLayer',
-      name: 'vectorLayer',
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: [{
-          type: 'Feature',
-          properties: {},
-          geometry: {
-            type: 'Point',
-            coordinates: [11.71142578125, 46.5739667965278]
-          }
-        }]
-      }
-    });
-    component.layersSvc.addLayer(baseLayer, 'Layers');
+    expect(osmFromMap.getZIndex()).toBe(0);
+    expect(eocFromMap.getZIndex()).toBe(1);
+    expect(testVectorFromMap.getZIndex()).toBe(2);
+    expect(group1FromMap.getZIndex()).toBe(3);
 
-    const layer1 = new olVectorLayer({
-      source: new olVectorSource({
-        features: new olGeoJSON({
-          dataProjection: 'EPSG:4326',
-          featureProjection: service.EPSG
-        }).readFeatures({
-          "type": "FeatureCollection",
-          "features": [
-            {
-              "type": "Feature",
-              "properties": {},
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  10.37109375,
-                  50.064191736659104
-                ]
-              }
-            },
-            {
-              "type": "Feature",
-              "properties": {},
-              "geometry": {
-                "type": "Point",
-                "coordinates": [
-                  11.997070312499998,
-                  50.064191736659104
-                ]
-              }
-            }
-          ]
-        })
-      })
-    });
-    const layer2 = new olVectorLayer({
-      source: new olVectorSource({
-        features: new olGeoJSON({
-          dataProjection: 'EPSG:4326',
-          featureProjection: service.EPSG
-        }).readFeatures({
-          "type": "FeatureCollection",
-          "features": [
-            {
-              "type": "Feature",
-              "properties": {},
-              "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                  [
-                    8.67919921875,
-                    49.167338606291075
-                  ],
-                  [
-                    10.458984375,
-                    48.4146186174932
-                  ],
-                  [
-                    11.997070312499998,
-                    48.4146186174932
-                  ],
-                  [
-                    13.24951171875,
-                    48.821332549646634
-                  ],
-                  [
-                    13.7109375,
-                    49.396675075193976
-                  ]
-                ]
-              }
-            }
-          ]
-        })
-      })
+    // the ZIndex of olLayerGroup layers is set to the same as the group
+    // This is also done in olLayerGroup [getLayerStatesArray](https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/layer/Group.js#L288-L289) if not set
+    group1FromMap.getLayers().forEach(l => {
+      expect(l.getZIndex()).toBe(3);
     });
 
-    const layerGroup = new olLayerGroup({
-      layers: [layer1, layer2]
-    });
+    expect(group2FromMap.getZIndex()).toBe(4);
+    group2FromMap.getLayers().forEach(l => {
+      expect(l.getZIndex()).toBe(4);
+    })
+  });
 
-    const ukisLayer = new CustomLayer({
-      custom_layer: layerGroup,
-      id: 'olGroupLayer',
-      name: 'Ol-Group Layer',
-      filtertype: 'Layers',
-      visible: true
-    });
+  it('should resort layers - set z-index and layer position', () => {
+    let { osmLayer, EocBasemap, testVector, ukisOlLayerGroup, ukisOlLayerGroup2 } = addSomeLayers(component, mapSvc);
 
-    component.layersSvc.addLayer(ukisLayer, 'Layers');
+    const layers = [ukisOlLayerGroup, testVector, ukisOlLayerGroup2];
 
-    const lowLayer = service.getLayerByKey({ key: 'id', value: baseLayer.id });
-    const higherLayer = service.getLayerByKey({ key: 'id', value: 'olGroupLayer' });
-    const higherLayersChild = higherLayer.getLayersArray()[0];
+    // trigger update of layers 
+    component['addUpdateLayers'](layers, 'layers', ['baselayers']);
 
-    expect(lowLayer.getZIndex()).toBeDefined();
-    expect(higherLayer.getZIndex()).toBeDefined();
-    expect(higherLayersChild.getZIndex()).toBeDefined();
-    expect(lowLayer.getZIndex() <= higherLayer.getZIndex()).toBeTrue();
-    expect(lowLayer.getZIndex() <= higherLayersChild.getZIndex()).toBeTrue();
-    expect(higherLayer.getZIndex() <= higherLayersChild.getZIndex()).toBeTrue();
+    const osmFromMap = mapSvc.getLayerByKey({ key: 'id', value: osmLayer.id });
+    const eocFromMap = mapSvc.getLayerByKey({ key: 'id', value: EocBasemap.id });
+    const testVectorFromMap = mapSvc.getLayerByKey({ key: 'id', value: testVector.id });
+    const group1FromMap = mapSvc.getLayerByKey({ key: 'id', value: ukisOlLayerGroup.id }) as olLayerGroup;
+    const group2FromMap = mapSvc.getLayerByKey({ key: 'id', value: ukisOlLayerGroup2.id }) as olLayerGroup;
+
+    const updatedLaersFromMap = mapSvc.map.getAllLayers();
+
+
+    expect(osmFromMap.getZIndex()).toBe(0);
+    expect(updatedLaersFromMap[0].get('id')).toBe(osmLayer.id);
+
+
+    expect(eocFromMap.getZIndex()).toBe(1);
+    expect(updatedLaersFromMap[1].get('id')).toBe(EocBasemap.id);
+
+
+    expect(group1FromMap.getZIndex()).toBe(2);
+    expect(updatedLaersFromMap[2].get('id')).toBe(group1FromMap.getLayers().getArray()[0].get('id'));
+    expect(updatedLaersFromMap[3].get('id')).toBe(group1FromMap.getLayers().getArray()[1].get('id'));
+
+
+    expect(testVectorFromMap.getZIndex()).toBe(3);
+    expect(updatedLaersFromMap[4].get('id')).toBe(testVector.id);
+
+
+    expect(group2FromMap.getZIndex()).toBe(4);
+    expect(updatedLaersFromMap[5].get('id')).toBe(group2FromMap.getLayers().getArray()[0].get('id'));
+    expect(updatedLaersFromMap[6].get('id')).toBe(group2FromMap.getLayers().getArray()[1].get('id'));
   });
 
   /**

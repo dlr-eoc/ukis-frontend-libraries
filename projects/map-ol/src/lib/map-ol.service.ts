@@ -736,6 +736,8 @@ export class MapOlService {
           collection.insertAt(index, l);
         });
       }
+      // Set the index of the group layers to the same as the group.
+      // This is also done in olLayerGroup [getLayerStatesArray](https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/layer/Group.js#L288-L289) if not set
       collection.forEach(l => {
         if (appendToZIndex > 0) {
           l.setZIndex(index + appendToZIndex);
