@@ -75,7 +75,7 @@
     margin-left: -11px;
   }
 
-  &.hidden{
+  &.hidden {
     visibility: hidden;
   }
 }
@@ -92,7 +92,12 @@
 
 //restyle Controlls
 .ol-control {
+  padding: 1px;
+  --ol-subtle-background-color: #fff6;
+
   button {
+    --ol-subtle-foreground-color: #fff;
+    --ol-foreground-color: #fff;
     cursor: pointer;
     background-color: var(--ukis-ol-control-bg-color);
 
@@ -109,14 +114,20 @@
 .ol-scale-line {
   background: rgba(255, 255, 255, 0.4);
   line-height: 1.375em;
+  padding: 1px;
 
   .ol-scale-line-inner {
     background: var(--ukis-ol-control-bg-color);
     border-color: var(--ukis-ol-control-bg-color);
+    --ol-foreground-color: #fff;
   }
 }
 
 .ol-attribution {
+  &:not(.ol-collapsed) {
+    padding: 0 2px;
+  }
+
   ul {
     font-size: 0.5rem;
   }

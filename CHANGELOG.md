@@ -29,6 +29,7 @@
   - Remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.
   - Set bbox for olLayerGroup layers in `create_custom_layer`.
   - Show popups on transparent features [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
+  - Adjust to style changes of `ol-control` from OpenLayers 7.
 
 # [10.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v10.1.0) (2022-11-07) (Features and Bug Fixes)
 ### Features
