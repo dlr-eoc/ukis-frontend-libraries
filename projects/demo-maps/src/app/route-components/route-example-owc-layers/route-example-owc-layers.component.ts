@@ -44,12 +44,16 @@ export class RouteExampleOwcLayersComponent implements OnInit {
   }
 
   addLayersFromContext(context: IEocOwsContext) {
-    this.layersSvc.removeLayers(l => {
-      return l.id !== 'osm' && l.id !== 'ContextSelectionLayer';
-    });
     this.owcSvc.getLayers(context, this.mapSvc.EPSG).pipe(first()).subscribe((layers) => {
       for (const layer of layers) {
         if (layer instanceof LayerGroup) {
+
+          // A owc context does not allow to configure popups right now!! 
+          // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/104
+          // You have to set popups manually after creating the layers
+          if (layer.id === 'VectorLayers_baseWFSLayer_eocGeojsonLayer_baseKMLLayer') {
+            layer.layers.forEach(l => l.popup = true);
+          }
           this.layersSvc.addLayerGroup(layer, layer.filtertype);
         } else {
           this.layersSvc.addLayer(layer, layer.filtertype);
