@@ -41,6 +41,7 @@ import olGeometry from 'ol/geom/Geometry';
 import olSourceCluster from 'ol/source/Cluster';
 import olVectorLayer from 'ol/layer/Vector';
 import { applyStyle } from 'ol-mapbox-style';
+import { collectionItemSetIndex, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 
 
 export interface IMapControls {
@@ -215,20 +216,10 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         }
         this.updateLayerSource(layer, ollayer);
         const indexOfLayer = layers.indexOf(layer);
-        if (otherlayerslength > 0) {
-          if (ollayer.getZIndex() !== indexOfLayer + otherlayerslength) {
-            layerGroupCollection.remove(ollayer);
-            layerGroupCollection.insertAt(indexOfLayer, ollayer);
-
-            this.mapSvc.setZIndexForLayerAndGroup(ollayer, indexOfLayer, true, otherlayerslength);
-          }
-        } else {
-          if (ollayer.getZIndex() !== indexOfLayer) {
-            layerGroupCollection.remove(ollayer);
-            layerGroupCollection.insertAt(indexOfLayer, ollayer);
-
-            this.mapSvc.setZIndexForLayerAndGroup(ollayer, indexOfLayer);
-          }
+        const newZIndex = (otherlayerslength > 0) ? indexOfLayer + otherlayerslength : indexOfLayer;
+        if (ollayer.getZIndex() !== newZIndex) {
+          collectionItemSetIndex(ollayer, indexOfLayer, layerGroupCollection);
+          layerOrGroupSetZIndex(ollayer, indexOfLayer, otherlayerslength);
         }
         this.updateLayerParamsWith(ollayer as olLayer<any>, layer);
       }
@@ -402,7 +393,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     return true;
   }
 
-  private addUpdateBaseLayers(layers) {
+  private addUpdateBaseLayers(layers: Layer[]) {
     const layerGroupCollection = this.mapSvc.getLayerGroups('baselayers')[0].getLayers();
     /** if length of layers has changed add new layers */
     if (layers.length !== this.mapSvc.getLayers('baselayers').length) {
@@ -428,7 +419,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
             layerGroupCollection.remove(bllayer);
             layerGroupCollection.insertAt(indexOfLayer, bllayer);
 
-            this.mapSvc.setZIndexForLayerAndGroup(bllayer, indexOfLayer)
+            layerOrGroupSetZIndex(bllayer, indexOfLayer)
           }
           if (bllayer.getOpacity() !== layer.opacity) {
             bllayer.setOpacity(layer.opacity);
