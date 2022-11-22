@@ -14,6 +14,7 @@
   - The function `layerOnEvent` (for popups) now accepts an optional `feature` as the last parameter.
   - The function `getLayerGroups` is now public to retrieve the LayerGroups and Collections from the map.
   - Use `hideAllPopups` on `layer.visible` change and add css styles [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
+  - Add `groupID` from `CustomLayer` or `StackedLayer` to the layers from there `ol/layer/Group`. So you can get the LayerGroup later e.g. in map.getAllLayers().
 
 * **@dlr-eoc/utils-maps:**
   - Add function `getCollectionItem` from `ol/Collection`. This returns the item and the index of the item if found otherwise `null`.

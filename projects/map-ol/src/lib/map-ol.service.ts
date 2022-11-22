@@ -92,6 +92,7 @@ export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'B
 const OVERLAY_TYPE_KEY = 'type';
 const FILTER_TYPE_KEY = 'filtertype';
 const ID_KEY = 'id';
+const OL_GROUP_KEY = 'groupID';
 const TITLE_KEY = 'title';
 const WebMercator = 'EPSG:3857';
 const WGS84 = 'EPSG:4326';
@@ -1328,8 +1329,10 @@ export class MapOlService {
         }
       } else if (layer instanceof olLayerGroup) {
         layer.getLayers().forEach(gl => {
-          /** fix add olUID to check if a group layer */
-          const layerId = `${l.id}_olUID:Layer_${olGetUid(gl)}`;
+          /** add groupID to check if a layer was in an olLayerGroup */
+          gl.set(OL_GROUP_KEY, l.id);
+
+          const layerId = `${l.id}_${olGetUid(gl)}`;
           if (!gl.get('id')) {
             gl.set('id', layerId);
           }
@@ -1416,16 +1419,26 @@ export class MapOlService {
   private create_stacked_layer(l: StackedLayer) {
     if (l instanceof StackedLayer) {
       const layers = l.layers.map(ml => {
-        /** Set all to visible because the visibility of merge layers cannot be controlled later */
-        ml.visible = true;
+        // Set visibility and opacity from the StackedLayer as start for all the layers
+        // they will be updated later by layerOrGroupSetVisible and layerOrGroupSetOpacity in map-ol component 
+        ml.visible = l.visible;
+        ml.opacity = l.opacity;
         /** popups are get from the olLayer later so add them */
-        ml.popup = l.popup;
+        if (l.popup) {
+          ml.popup = l.popup;
+        }
         /** events are get from the olLayer later so add them */
-        ml.events = l.events;
+        if (l.events) {
+          ml.events = l.events;
+        }
         return this.create_layers(ml);
       });
 
       const baseLayerOptions = this.createOlLayerOptions(l, 'custom');
+
+      /** add groupID to check if a layer was in an olLayerGroup */
+      layers.forEach(oll => oll.set(OL_GROUP_KEY, l.id));
+
       const groupOptions: olLayerGroupOptions = {
         layers
       };
@@ -1577,9 +1590,15 @@ export class MapOlService {
     let item: { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView, feature?: olFeature | olRenderFeature } = null;
     while (layersLength--) {
       const layer = allMapLayers[layersLength];
-      const layerVisible = layer.getVisible();
-      const layerOpacity = layer.getOpacity();
-      // check for layers with no popup above others
+      let layerVisible = layer.getVisible();
+      let layerOpacity = layer.getOpacity();
+      const hasGroup = layer.get(OL_GROUP_KEY);
+      if (hasGroup) {
+        const group = this.getLayerByKey({ key: ID_KEY, value: hasGroup });
+        layerVisible = group.getVisible();
+        layerOpacity = group.getOpacity();
+      }
+      // check for visible layers with no popup above others
       if (layerVisible && layerOpacity !== 0 && this.filterLayerExtent(layer, evt.pixel) && !layer.get('popup')) {
         break;
       } else if (this.filterLayerNoPopup(layer) && layer.getData && layer.getData(evt.pixel) && this.checkIsRaster(layer)) {
