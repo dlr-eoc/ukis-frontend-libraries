@@ -18,6 +18,11 @@
 
 * **@dlr-eoc/utils-maps:**
   - Add function `getCollectionItem` from `ol/Collection`. This returns the item and the index of the item if found otherwise `null`.
+  - Add function `layerOrGroupSetZIndex`. Can set the zIndex for `ol/layer/Group` and all layers in the group.
+  - Add function `layerOrGroupSetOpacity`. Can set the opacity for `ol/layer/Group` and all layers in the group.
+  - Add function `layerOrGroupSetVisible`. Can set the visibility for `ol/layer/Group` and all layers in the group.
+  - Add function `collectionItemSetIndex`. Moves an item in the `ol/Collection` to the index.
+  
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**

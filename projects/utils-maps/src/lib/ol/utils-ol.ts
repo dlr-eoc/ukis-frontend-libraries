@@ -210,8 +210,8 @@ export function simpleMapToCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
  * Get a item from ol/Collection by ID
  * @returns ol/Collection item and the index in the collection array
  */
-export function getCollectionItem(id: string, collection: Collection<BaseLayer>, idKey = 'id') {
-    let item: null | { index: number, layer: BaseLayer } = null;
+export function getCollectionItem(id: string, collection: Collection<BaseLayer | LayerGroup>, idKey = 'id') {
+    let item: null | { index: number, layer: BaseLayer | LayerGroup } = null;
     collection.getArray().find((l, index) => {
         const lID = l.get(idKey);
         if (lID === id) {
@@ -223,4 +223,73 @@ export function getCollectionItem(id: string, collection: Collection<BaseLayer>,
         }
     });
     return item;
+}
+
+/**
+ * setVisible for all layers in ol/layer/Group
+ * 
+ * OpenLayers does not handle handle child layers
+ * https://github.com/openlayers/openlayers/issues/3837
+ * 
+ * so if anyone uses map.getAllLayers the visibility for the group and their child is not the same
+ */
+export function layerOrGroupSetVisible(lg: LayerGroup | BaseLayer, visible: boolean, skipGroup = false) {
+    lg.setVisible(visible);
+    if (!skipGroup && lg instanceof LayerGroup) {
+        const collection = lg.getLayers();
+        // Sublayers of groups are not updated directly from ol/layer/Group
+        collection.forEach(l => {
+            layerOrGroupSetVisible(l, visible);
+        });
+    }
+}
+
+/**
+ * setOpacity for all layers in ol/layer/Group
+ * 
+ * OpenLayers does not handle handle child layers
+ * https://github.com/openlayers/openlayers/issues/3837
+ * 
+ * @param opacity number from 0 - 1
+ */
+export function layerOrGroupSetOpacity(lg: LayerGroup | BaseLayer, opacity: number, skipGroup = false) {
+    lg.setOpacity(opacity);
+    if (!skipGroup && lg instanceof LayerGroup) {
+        const collection = lg.getLayers();
+        // Sublayers of groups are not updated directly from ol/layer/Group
+        collection.forEach(l => {
+            layerOrGroupSetOpacity(l, opacity);
+        });
+    }
+}
+
+
+/**
+ * setZIndex for all layers in ol/layer/Group
+ * 
+ * appendToZIndex - appends this number to the index so you can change the zIndex
+ */
+export function layerOrGroupSetZIndex(lg: BaseLayer | LayerGroup, index: number, appendToZIndex?: number) {
+    const newZIndex = (appendToZIndex > 0) ? index + appendToZIndex : index;
+    lg.setZIndex(newZIndex);
+
+    // addresses an issue in openlayers: https://github.com/openlayers/openlayers/issues/6654
+    if (lg instanceof LayerGroup) {
+        const collection = lg.getLayers();
+        // Set the index of the group layers to the same as the group.
+        // This is also done in olLayerGroup [getLayerStatesArray](https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/layer/Group.js#L288-L289) if not set
+        // but not if you get layers from the map e.g. map.getAllLayers()
+        collection.forEach(l => {
+            layerOrGroupSetZIndex(l, index, appendToZIndex);
+        });
+    }
+}
+
+
+/**
+ * moves the item in the collection to the index
+ */
+export function collectionItemSetIndex(lg: BaseLayer | LayerGroup, index: number, collection: Collection<BaseLayer>) {
+    collection.remove(lg);
+    collection.insertAt(index, lg);
 }
