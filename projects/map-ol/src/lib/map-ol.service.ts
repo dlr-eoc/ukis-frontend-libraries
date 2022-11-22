@@ -85,7 +85,7 @@ import olEvent from 'ol/events/Event';
 import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
-import { flattenLayers } from '@dlr-eoc/utils-maps';
+import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -653,7 +653,7 @@ export class MapOlService {
               oldLayer.setVisible(newVisible);
             }
             if (newZIndex) {
-              this.setZIndexForLayerAndGroup(oldLayer, newZIndex, true);
+              layerOrGroupSetZIndex(oldLayer, newZIndex);
             }
             oldLayer.changed();
             groupLayers.setAt(index, oldLayer);
@@ -691,13 +691,9 @@ export class MapOlService {
     } else {
       layers.forEach((newLayer, index) => {
         const layer = this.create_layers(newLayer);
-        // check if layer not undefined
+        // check if layer is undefined
         if (layer) {
-          if (appendToZIndex > 0) {
-            this.setZIndexForLayerAndGroup(layer, index, false, appendToZIndex);
-          } else {
-            this.setZIndexForLayerAndGroup(layer, index);
-          }
+          layerOrGroupSetZIndex(layer, index, appendToZIndex);
           tempLayers.push(layer);
         }
       });
@@ -710,41 +706,6 @@ export class MapOlService {
         type: lowerType, layers: tempLayers
       };
       return newTempLayers;
-    }
-  }
-
-  /**
-   * this function is more for internal use in MapOlComponent
-   * 
-   * set zIndex for olLayer and olLayerGroup layers
-   * if updateCollection = true - moves items in the collection to the index
-   * this should only be use in map ol
-   */
-  public setZIndexForLayerAndGroup(ollayer: olBaseLayer | olLayerGroup, index: number, updateCollection = false, appendToZIndex?: number) {
-    if (appendToZIndex > 0) {
-      ollayer.setZIndex(index + appendToZIndex);
-    } else {
-      ollayer.setZIndex(index);
-    }
-
-    // addresses an issue in openlayers: https://github.com/openlayers/openlayers/issues/6654
-    if (ollayer instanceof olLayerGroup) {
-      const collection = (ollayer as olLayerGroup).getLayers();
-      if (updateCollection) {
-        collection.getArray().forEach(l => {
-          collection.remove(l);
-          collection.insertAt(index, l);
-        });
-      }
-      // Set the index of the group layers to the same as the group.
-      // This is also done in olLayerGroup [getLayerStatesArray](https://github.com/openlayers/openlayers/blob/v7.1.0/src/ol/layer/Group.js#L288-L289) if not set
-      collection.forEach(l => {
-        if (appendToZIndex > 0) {
-          l.setZIndex(index + appendToZIndex);
-        } else {
-          l.setZIndex(index);
-        }
-      });
     }
   }
 
