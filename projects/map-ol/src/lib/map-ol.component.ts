@@ -41,7 +41,7 @@ import olGeometry from 'ol/geom/Geometry';
 import olSourceCluster from 'ol/source/Cluster';
 import olVectorLayer from 'ol/layer/Vector';
 import { applyStyle } from 'ol-mapbox-style';
-import { collectionItemSetIndex, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
+import { collectionItemSetIndex, layerOrGroupSetOpacity, layerOrGroupSetVisible, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 
 
 export interface IMapControls {
@@ -193,8 +193,9 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       const ollayer = this.mapSvc.getLayerByKey({ key: ID_KEY, value: layer.id }, filtertype) as olBaseLayer | olLayer<any> | olLayerGroup;
       if (ollayer) {
         if (ollayer.getVisible() !== layer.visible) {
-          ollayer.setVisible(layer.visible);
-          
+          // On custom layers, only the group is set, not the layers, so they can be controlled by the user
+          layerOrGroupSetVisible(ollayer, layer.visible, layer instanceof CustomLayer);
+
           // fixes https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120
           // When a layer is set hidden, it's associated popups get a hidden class.
           this.mapSvc.hideAllPopups(!layer.visible, (item) => {
@@ -212,7 +213,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
         }
         if (ollayer.getOpacity() !== layer.opacity) {
-          ollayer.setOpacity(layer.opacity);
+          // On custom layers, only the group is set, not the layers, so they can be controlled by the user
+          layerOrGroupSetOpacity(ollayer, layer.opacity, layer instanceof CustomLayer);
         }
         this.updateLayerSource(layer, ollayer);
         const indexOfLayer = layers.indexOf(layer);
@@ -413,7 +415,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         if (bllayer) {
           const indexOfLayer = layers.indexOf(layer);
           if (bllayer.getVisible() !== layer.visible) {
-            bllayer.setVisible(layer.visible);
+            // On custom layers, only the group is set, not the layers, so they can be controlled by the user
+            layerOrGroupSetVisible(bllayer, layer.visible, layer instanceof CustomLayer);
           }
           if (bllayer.getZIndex() !== indexOfLayer) {
             layerGroupCollection.remove(bllayer);
@@ -422,7 +425,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
             layerOrGroupSetZIndex(bllayer, indexOfLayer)
           }
           if (bllayer.getOpacity() !== layer.opacity) {
-            bllayer.setOpacity(layer.opacity);
+            // On custom layers, only the group is set, not the layers, so they can be controlled by the user
+            layerOrGroupSetOpacity(bllayer, layer.opacity, layer instanceof CustomLayer);
           }
           this.updateLayerSource(layer, bllayer);
           this.updateLayerParamsWith(bllayer as olLayer<any>, layer);
