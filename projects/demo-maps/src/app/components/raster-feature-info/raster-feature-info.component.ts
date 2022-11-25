@@ -3,8 +3,7 @@ import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MapBrowserEvent } from 'ol';
 import { Layer } from 'ol/layer';
-import BaseLayer from 'ol/src/layer/Base';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({

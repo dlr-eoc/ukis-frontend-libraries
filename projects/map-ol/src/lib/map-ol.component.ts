@@ -16,6 +16,7 @@ import { getUid as olGetUid } from 'ol/util';
 import olBaseLayer from 'ol/layer/Base';
 import olLayer from 'ol/layer/Layer';
 import olLayerGroup from 'ol/layer/Group';
+import olCollection from 'ol/Collection';
 
 import Attribution from 'ol/control/Attribution';
 import ScaleLine from 'ol/control/ScaleLine';
@@ -40,6 +41,7 @@ import olGeometry from 'ol/geom/Geometry';
 import olSourceCluster from 'ol/source/Cluster';
 import olVectorLayer from 'ol/layer/Vector';
 import { applyStyle } from 'ol-mapbox-style';
+import { collectionItemSetIndex, layerOrGroupSetOpacity, layerOrGroupSetVisible, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 
 
 export interface IMapControls {
@@ -169,67 +171,60 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   }
 
   private addUpdateLayers(layers: Layer[], filtertype: Tgroupfiltertype, layersunderneath: Array<Tgroupfiltertype>) {
-    /** get all underneath layers for zIndex */
-    let otherlayerslength = 0;
-    layersunderneath.forEach(itemType => {
-      otherlayerslength += this.mapSvc.getLayers(itemType).length;
-    });
+    const layerGroupCollection = this.mapSvc.getLayerGroups(filtertype)[0].getLayers();
+    /** get all underneath layers (e.g. "baselayers" | "layers" ) to calculate the correct zIndex */
+    const otherlayerslength = layersunderneath.reduce((previousValue, currentType) => {
+      return previousValue + this.mapSvc.getLayers(currentType).length;
+    }, 0);
 
     /** if length of layers has changed add new layers */
     if (layers.length !== this.mapSvc.getLayers(filtertype).length) {
-      this.mapSvc.setUkisLayers(layers, filtertype);
-      // if layers underneath add thhen to the zIndex of layer
-      if (otherlayerslength > 0) {
-        for (const layer of layers) {
-          const ollayer = this.mapSvc.getLayerByKey({ key: ID_KEY, value: layer.id }, filtertype);
-          if (ollayer) {
-            if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
-              ollayer.setZIndex(layers.indexOf(layer) + otherlayerslength);
-              this.setZIndexForGroup(ollayer, layers, layer, otherlayerslength);
-            }
-          }
-        }
-      }
+      // if layers underneath add them to the zIndex of layer
+      this.mapSvc.setUkisLayers(layers, filtertype, otherlayerslength);
     } else {
       /** if layers already on the map -length not changed- update them */
-      for (const layer of layers) {
-        const ollayer = this.mapSvc.getLayerByKey({ key: ID_KEY, value: layer.id }, filtertype) as olBaseLayer | olLayer<any> | olLayerGroup;
-        if (ollayer) {
-          if (ollayer.getVisible() !== layer.visible) {
-            ollayer.setVisible(layer.visible);
-          }
-          if (ollayer.getOpacity() !== layer.opacity) {
-            ollayer.setOpacity(layer.opacity);
-          }
-          this.updateLayerSource(layer, ollayer);
-          if (otherlayerslength > 0) {
-            if (ollayer.getZIndex() !== layers.indexOf(layer) + otherlayerslength) {
-              ollayer.setZIndex(layers.indexOf(layer) + otherlayerslength);
-              this.setZIndexForGroup(ollayer, layers, layer, otherlayerslength);
-            }
-
-          } else {
-            if (ollayer.getZIndex() !== layers.indexOf(layer)) {
-              ollayer.setZIndex(layers.indexOf(layer));
-              this.setZIndexForGroup(ollayer, layers, layer);
-            }
-          }
-          this.updateLayerParamsWith(ollayer as olLayer<any>, layer);
-        }
-      }
+      this.updateLayers(layers, filtertype, otherlayerslength, layerGroupCollection);
     }
   }
 
-  /** addresses an issue in openlayers: https://github.com/openlayers/openlayers/issues/6654 */
-  private setZIndexForGroup(ollayer, layers: Layer[], layer: Layer, otherlayerslength?: number) {
-    if (ollayer instanceof olLayerGroup) {
-      (ollayer as olLayerGroup).getLayers().forEach(l => {
-        if (otherlayerslength) {
-          l.setZIndex(layers.indexOf(layer) + otherlayerslength);
-        } else {
-          l.setZIndex(layers.indexOf(layer));
+
+  private updateLayers(layers: Layer[], filtertype: Tgroupfiltertype, otherlayerslength: number, layerGroupCollection: olCollection<olBaseLayer>) {
+    for (const layer of layers) {
+      const ollayer = this.mapSvc.getLayerByKey({ key: ID_KEY, value: layer.id }, filtertype) as olBaseLayer | olLayer<any> | olLayerGroup;
+      if (ollayer) {
+        if (ollayer.getVisible() !== layer.visible) {
+          // On custom layers, only the group is set, not the layers, so they can be controlled by the user
+          layerOrGroupSetVisible(ollayer, layer.visible, layer instanceof CustomLayer);
+
+          // fixes https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120
+          // When a layer is set hidden, it's associated popups get a hidden class.
+          this.mapSvc.hideAllPopups(!layer.visible, (item) => {
+            // only hide the popups from the current layer
+            const elementID = item.getId();
+            const layerID = elementID.toString().split(':')[0];
+            if (layerID) {
+              if (layerID === layer.id) {
+                return layerID === layer.id;
+              }
+            } else {
+              return true;
+            }
+          });
+
         }
-      });
+        if (ollayer.getOpacity() !== layer.opacity) {
+          // On custom layers, only the group is set, not the layers, so they can be controlled by the user
+          layerOrGroupSetOpacity(ollayer, layer.opacity, layer instanceof CustomLayer);
+        }
+        this.updateLayerSource(layer, ollayer);
+        const indexOfLayer = layers.indexOf(layer);
+        const newZIndex = (otherlayerslength > 0) ? indexOfLayer + otherlayerslength : indexOfLayer;
+        if (ollayer.getZIndex() !== newZIndex) {
+          collectionItemSetIndex(ollayer, indexOfLayer, layerGroupCollection);
+          layerOrGroupSetZIndex(ollayer, indexOfLayer, otherlayerslength);
+        }
+        this.updateLayerParamsWith(ollayer as olLayer<any>, layer);
+      }
     }
   }
 
@@ -400,7 +395,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     return true;
   }
 
-  private addUpdateBaseLayers(layers) {
+  private addUpdateBaseLayers(layers: Layer[]) {
+    const layerGroupCollection = this.mapSvc.getLayerGroups('baselayers')[0].getLayers();
     /** if length of layers has changed add new layers */
     if (layers.length !== this.mapSvc.getLayers('baselayers').length) {
       // set only one visible at start
@@ -417,14 +413,20 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       for (const layer of layers) {
         const bllayer = this.mapSvc.getLayerByKey({ key: ID_KEY, value: layer.id }, 'baselayers');
         if (bllayer) {
+          const indexOfLayer = layers.indexOf(layer);
           if (bllayer.getVisible() !== layer.visible) {
-            bllayer.setVisible(layer.visible);
+            // On custom layers, only the group is set, not the layers, so they can be controlled by the user
+            layerOrGroupSetVisible(bllayer, layer.visible, layer instanceof CustomLayer);
           }
-          if (bllayer.getZIndex() !== layers.indexOf(layer)) {
-            bllayer.setZIndex(layers.indexOf(layer));
+          if (bllayer.getZIndex() !== indexOfLayer) {
+            layerGroupCollection.remove(bllayer);
+            layerGroupCollection.insertAt(indexOfLayer, bllayer);
+
+            layerOrGroupSetZIndex(bllayer, indexOfLayer)
           }
           if (bllayer.getOpacity() !== layer.opacity) {
-            bllayer.setOpacity(layer.opacity);
+            // On custom layers, only the group is set, not the layers, so they can be controlled by the user
+            layerOrGroupSetOpacity(bllayer, layer.opacity, layer instanceof CustomLayer);
           }
           this.updateLayerSource(layer, bllayer);
           this.updateLayerParamsWith(bllayer as olLayer<any>, layer);

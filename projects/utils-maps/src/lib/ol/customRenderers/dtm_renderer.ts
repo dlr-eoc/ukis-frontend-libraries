@@ -1,7 +1,7 @@
 import LayerRenderer from 'ol/renderer/Layer';
 import ImageLayer from 'ol/layer/Image';
 import ImageSource from 'ol/source/Image';
-import { FrameState } from 'ol/PluggableMap';
+import { FrameState } from 'ol/Map';
 import { transformExtent } from 'ol/proj';
 import Static from 'ol/source/ImageStatic';
 import { Shader, Program, Uniform, Texture, Attribute } from '../../webgl/engine.core';

@@ -34,12 +34,16 @@ import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCol
 import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
 import { get as getProjection, transform, transformExtent } from 'ol/proj';
+import { fromExtent as polygonFromExtent } from 'ol/geom/Polygon';
+import olFeature from 'ol/Feature';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
 import { Subject } from 'rxjs';
 import { ApplicationRef, Component, Input } from '@angular/core';
 import { getCenter as olGetCenter } from 'ol/extent';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
+
+import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 
 
 const WebMercator = 'EPSG:3857';
@@ -99,7 +103,6 @@ let groupLayer3: olLayerGroup;
 const createMapTarget = (size: number[]) => {
   const container = document.createElement('div');
   container.style.border = 'solid 1px #000';
-  container.id = 'map';
   container.style.width = `${size[0]}px`;
   container.style.height = `${size[1]}px`;
   document.body.appendChild(container);
@@ -393,6 +396,8 @@ describe('MapOlService Core', () => {
 
   it('should create a map', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+    /** creating the map should not add multiple baselayer groups */
     service.createMap(mapTarget.container);
     expect(service.map.getLayers().getArray().length).toEqual(3);
     expect(service.map.getTargetElement()).toEqual(mapTarget.container);
@@ -905,21 +910,28 @@ describe('MapOlService TileGrid', () => {
   });
 });
 
-describe('MapOlService popup', () => {
+describe('MapOlService popup and events', () => {
   beforeEach(beforeEachFn);
 
-  it('should add a basic popup to the map for vector Layers', () => {
+  it('should add a popup to the map from a event coordinate and some properties', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
 
+    // add vector layer above the raster layer
+    service.addLayer(vectorLayer, 'layers');
+
+    // render map so map.frameState exists
+    service.map.renderSync();
+
     const feature = vectorLayer.getSource().getFeatures()[0];
+    const coordinate = olGetCenter(service.getFeaturesExtent([feature]));
     const popupProperties = feature.getProperties();
     const args: IPopupArgs = {
       modelName: vectorLayer.get('id'),
       properties: popupProperties,
       layer: vectorLayer,
       feature,
-      event: { type: 'click', coordinate: [1312192.0073726526, 5444712.8273727745] } as any
+      event: { type: 'click', coordinate } as any
     };
 
     service.addPopup(args, popupProperties, null);
@@ -931,6 +943,285 @@ describe('MapOlService popup', () => {
     expect(popupOnMap.getId()).toBe(`ID-vector:${olGetUid(feature)}`);
     expect(popupOnMap.get('addEvent')).toBe(args.event.type);
   });
+
+  it('should distinguish between on click or move ', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+    const popupObj: Layer['popup'] = [
+      {
+        event: 'click',
+        popupFunction: () => `<p>test</p>`,
+        options: { autoPan: false }
+      },
+      {
+        event: 'move',
+        options: { autoPan: false }
+      }
+    ];
+
+    vectorLayer.set('popup', popupObj);
+    service.addLayer(vectorLayer, 'layers');
+
+    // render map so map.frameState exists
+    service.map.renderSync();
+
+    const testFeature = vectorLayer.getSource().getFeatures()[0];
+    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
+      type: 'click', // 'pointermove'
+      map: service.map,
+      originalEvent: null,
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
+    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+    const isEvent = service['checkTopLayerEvent'](browserEvent, popupObj);
+    expect(isEvent).toBe(popupObj[0].event);
+  });
+
+  it('should handle vector on click', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+    // add popup prop to olLayer for hasPopup in layers_on_click_move
+    const popupObj: popup = {
+      event: 'click',
+      options: { autoPan: false }
+    };
+    vectorLayer.set('popup', popupObj);
+    service.addLayer(vectorLayer, 'layers');
+
+
+    // render map so map.frameState exists
+    service.map.renderSync();
+
+    const testFeature = vectorLayer.getSource().getFeatures()[0];
+    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
+      type: 'click',
+      map: service.map,
+      originalEvent: null,
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
+    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+    service.vectorOnEvent(browserEvent, vectorLayer, testFeature);
+
+    const popups = service.getPopups();
+    expect(popups.length).toBe(1);
+
+    const popupOnMap = popups[0];
+    expect(popupOnMap instanceof olOverlay).toBeTrue();
+    // OVERLAY_TYPE_KEY, OVERLAY_TYPE_VALUE
+    expect(popupOnMap.get('type')).toBe('popup');
+    expect(popupOnMap.getId()).toBe(`${vectorLayer.get('id')}:${olGetUid(testFeature)}`);
+    expect(popupOnMap.get('addEvent')).toBe(popupObj.event);
+  });
+
+  // This test is complicated because async loading of the image is only working with a timeout
+  it('should handle raster on click', async () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+
+    // add popup prop to olLayer for hasPopup in layersOnMapEvent
+    const popupObj: popup = {
+      event: 'click',
+      filterkeys: ['id', 'name', 'color']
+    };
+
+    imageLayer.set('popup', popupObj);
+
+    service.addLayer(imageLayer, 'layers');
+
+    // render map so map.frameState exists for MapBrowserEvent
+    service.map.renderSync();
+    const imageExtent = imageLayer.getExtent();
+    const coordinate = olGetCenter(imageExtent);
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
+      type: 'click',
+      map: service.map,
+      originalEvent: null,
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
+    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+
+    // wait for map is rendered and layer is fully loaded
+    const imageSource = imageLayer.getSource();
+    await new Promise((resolve, reject) => {
+      imageSource.on('imageloadend', (evt) => {
+        resolve(evt.image);
+      });
+    });
+    service.map.renderSync();
+
+
+    service.layersOnMapEvent(browserEvent);
+
+    const popups = service.getPopups();
+    expect(popups.length).toBe(1);
+    const popupOnMap = popups[0];
+    expect(popupOnMap instanceof olOverlay).toBeTrue();
+
+    // see service.addPopup how the id is created
+    expect(popupOnMap.getId()).toBe(`${imageLayer.get('id')}:${olGetUid(imageLayer)}`);
+  });
+
+  it('should only show a popup for the top visible layer with a popup property - layersOnMapEvent()', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+    // add popup prop to olLayer for hasPopup in layersOnMapEvent
+    const popupObj: popup = {
+      event: 'click',
+      options: { autoPan: false }
+    };
+
+    const vectorExtent = imageLayer.getExtent();
+    const poly = polygonFromExtent(vectorExtent);
+
+    const feature1 = new olFeature({
+      geometry: poly,
+      name: 'Polygon for imageLayer extent'
+    });
+    const polyFrorRaster = new olVectorLayer({
+      source: new olVectorSource({
+        features: [feature1]
+      }),
+      style: () => {
+        return new olStyle({
+          stroke: new olStroke({
+            color: 'gray',
+            width: 1
+          }),
+          fill: new olFill({
+            color: 'rgba(0, 153, 255, 1)',
+          })
+        });
+      }
+    });
+
+    polyFrorRaster.set('id', 'ID-vector-test');
+    polyFrorRaster.set('popup', popupObj);
+
+
+    const feature2 = new olFeature({
+      geometry: poly,
+      name: 'Polygon 2 - for imageLayer extent'
+    });
+    const polyFrorRaster2 = new olVectorLayer({
+      source: new olVectorSource({
+        features: [feature2]
+      }),
+      style: () => {
+        return new olStyle({
+          stroke: new olStroke({
+            color: 'gray',
+            width: 1
+          }),
+          fill: new olFill({
+            color: 'rgba(0, 255, 255, 1)',
+          })
+        });
+      }
+    });
+
+    polyFrorRaster2.set('id', 'ID-vector-test-2');
+    polyFrorRaster2.set('popup', popupObj);
+
+
+    // add vector layer 1 first
+    service.addLayer(polyFrorRaster, 'layers');
+
+
+    // add vector layer 2 above the vector layer 1
+    service.addLayer(polyFrorRaster2, 'layers');
+
+
+    // render map so map.frameState exists
+    service.map.renderSync();
+
+    const coordinate = olGetCenter(vectorExtent);
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
+      type: popupObj.event,
+      map: service.map,
+      originalEvent: null,
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
+    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+
+    service.layersOnMapEvent(browserEvent);
+
+    const popups = service.getPopups();
+    expect(popups.length).toBe(1);
+    const popupOnMap = popups[0];
+    expect(popupOnMap instanceof olOverlay).toBeTrue();
+
+    // see service.addPopup how the id is created
+    expect(popupOnMap.getId()).toBe(`${polyFrorRaster2.get('id')}:${olGetUid(feature2)}`);
+  });
+
+  it('should filter out layers for popup', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+
+    const filterPopup: popup = {
+      filterLayer: true
+    };
+    vectorLayer.set('popup', filterPopup);
+    service.addLayer(vectorLayer, 'layers');
+
+    // render map so map.frameState exists
+    service.map.renderSync();
+
+    const testFeature = vectorLayer.getSource().getFeatures()[0];
+    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
+    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+
+    const eo = {
+      type: 'click',
+      map: service.map,
+      originalEvent: null,
+      opt_dragging: false,
+      opt_frameState: service.map['frameState_']
+    }
+    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
+    browserEvent.target = eo.map;
+    browserEvent.coordinate = coordinate;
+    browserEvent.pixel = mapPixel;
+
+    service.layersOnMapEvent(browserEvent);
+
+    const popups = service.getPopups();
+    expect(popups.length).toBe(0);
+  })
 
   it('should add multiple popups to the map for vector Layers', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
@@ -1035,184 +1326,74 @@ describe('MapOlService popup', () => {
     expect(service.getPopups().length).toBe(0);
     expect(appRef.viewCount).toEqual(0);
   });
-});
 
-describe('MapOlService Events', () => {
-  beforeEach(beforeEachFn);
-
-  it('should only show a popup for the top visible layer with a popup property - layersOnMapEvent()', () => {
+  it('should show/hide popups', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
 
+    const features = vectorLayer.getSource().getFeatures();
 
-    /** add popup prop to olLayer for hasPopup in layersOnMapEvent */
-    const popupObj: popup = {
-      event: 'click',
-      options: { autoPan: false }
+    const addPopups = (feature) => {
+      const popupProperties = feature.getProperties();
+      const args: IPopupArgs = {
+        modelName: vectorLayer.get('id'),
+        properties: popupProperties,
+        layer: vectorLayer,
+        feature,
+        event: { type: 'click' } as any
+      };
+
+      service.addPopup(args, popupProperties, null);
     };
-    rasterLayer.set('popup', popupObj);
-    vectorLayer.set('popup', popupObj);
 
-    service.addLayer(rasterLayer, 'layers');
-    /** add vector layer above the raster layer */
-    service.addLayer(vectorLayer, 'layers');
+    features.forEach(f => {
+      addPopups(f);
+    });
 
-    /** render map so map.frameState exists */
-    service.map.renderSync();
 
-    const testFeature = vectorLayer.getSource().getFeatures()[0];
-    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
-    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
+    const popupsOnMap = service.getPopups();
+    expect(popupsOnMap.length).toBe(features.length);
 
-    const eo = {
-      type: 'click',
-      map: service.map,
-      originalEvent: null,
-      opt_dragging: false,
-      opt_frameState: service.map['frameState_']
-    }
-    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
-    browserEvent.target = eo.map;
-    browserEvent.coordinate = coordinate;
-    browserEvent.pixel = mapPixel;
-
-    service.layersOnMapEvent(browserEvent);
-
-    const popups = service.getPopups();
-    expect(popups.length).toBe(1);
-    const popupOnMap = popups[0];
-    expect(popupOnMap instanceof olOverlay).toBeTrue();
-    expect(popupOnMap.getId()).toBe(`${vectorLayer.get('id')}:${olGetUid(testFeature)}`);
-  });
-
-  it('should distinguish between on click or move ', () => {
-    const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap(mapTarget.container);
-
-    const popupObj: Layer['popup'] = [
-      {
-        event: 'click',
-        popupFunction: () => `<p>test</p>`,
-        options: { autoPan: false }
-      },
-      {
-        event: 'move',
-        options: { autoPan: false }
+    // hide all popups
+    service.hideAllPopups(true, (item) => {
+      const elementID = item.getId();
+      const layerID = elementID.toString().split(':')[0];
+      if (layerID) {
+        if (layerID === vectorLayer.get('id')) {
+          return layerID === vectorLayer.get('id');
+        }
+      } else {
+        return true;
       }
-    ];
+    });
+    expect(service.getPopups().length).toBe(features.length);
 
-    vectorLayer.set('popup', popupObj);
-    service.addLayer(vectorLayer, 'layers');
+    popupsOnMap.forEach(p => {
+      const element = p.getElement();
+      const hasHiddenClass = element.classList.contains('hidden')
+      expect(hasHiddenClass).toBe(true);
+    });
 
-    /** render map so map.frameState exists */
-    service.map.renderSync();
+    // show all popups
+    service.hideAllPopups(false, (item) => {
+      const elementID = item.getId();
+      const layerID = elementID.toString().split(':')[0];
+      if (layerID) {
+        if (layerID === vectorLayer.get('id')) {
+          return layerID === vectorLayer.get('id');
+        }
+      } else {
+        return true;
+      }
+    });
 
-    const testFeature = vectorLayer.getSource().getFeatures()[0];
-    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
-    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
-
-    const eo = {
-      type: 'click',
-      map: service.map,
-      originalEvent: null,
-      opt_dragging: false,
-      opt_frameState: service.map['frameState_']
-    }
-    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
-    browserEvent.target = eo.map;
-    browserEvent.coordinate = coordinate;
-    browserEvent.pixel = mapPixel;
-
-    const isEvent = service['topLayerCheckEvent'](browserEvent, popupObj);
-    expect(isEvent).toBe(browserEvent.type);
+    popupsOnMap.forEach(p => {
+      const element = p.getElement();
+      const hasHiddenClass = element.classList.contains('hidden')
+      expect(hasHiddenClass).toBe(false);
+    });
   });
 
-
-  it('should handle vector on click', () => {
-    const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap(mapTarget.container);
-
-    /** add popup prop to olLayer for hasPopup in layers_on_click_move */
-    const popupObj: popup = {
-      event: 'click',
-      options: { autoPan: false }
-    };
-    vectorLayer.set('popup', popupObj);
-    service.addLayer(vectorLayer, 'layers');
-
-
-    /** render map so map.frameState exists */
-    service.map.renderSync();
-
-    const testFeature = vectorLayer.getSource().getFeatures()[0];
-    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
-    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
-
-    const eo = {
-      type: 'click',
-      map: service.map,
-      originalEvent: null,
-      opt_dragging: false,
-      opt_frameState: service.map['frameState_']
-    }
-    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
-    browserEvent.target = eo.map;
-    browserEvent.coordinate = coordinate;
-    browserEvent.pixel = mapPixel;
-
-    service.vectorOnEvent(browserEvent);
-
-    const popups = service.getPopups();
-    expect(popups.length).toBe(1);
-
-    const popupOnMap = popups[0];
-    expect(popupOnMap instanceof olOverlay).toBeTrue();
-    /** OVERLAY_TYPE_KEY, OVERLAY_TYPE_VALUE */
-    expect(popupOnMap.get('type')).toBe('popup');
-    expect(popupOnMap.getId()).toBe(`${vectorLayer.get('id')}:${olGetUid(testFeature)}`);
-    expect(popupOnMap.get('addEvent')).toBe(popupObj.event);
-  });
-
-  /*
-   * This test is complicated because async loading of the image is not working properly
-  it('should handle raster on click', () => {
-  });
-  */
-
-  it('should filter out layers for popup', () => {
-    const service: MapOlService = TestBed.inject(MapOlService);
-    service.createMap(mapTarget.container);
-
-    const filterPopup: popup = {
-      filterLayer: true
-    };
-    vectorLayer.set('popup', filterPopup);
-    service.addLayer(vectorLayer, 'layers');
-
-
-    service.map.renderSync();
-
-    const testFeature = vectorLayer.getSource().getFeatures()[0];
-    const coordinate = olGetCenter(service.getFeaturesExtent([testFeature]));
-    const mapPixel = service.map.getPixelFromCoordinate(coordinate);
-
-    const eo = {
-      type: 'click',
-      map: service.map,
-      originalEvent: null,
-      opt_dragging: false,
-      opt_frameState: service.map['frameState_']
-    }
-    const browserEvent = new olMapBrowserEvent<PointerEvent>(eo.type, eo.map, eo.originalEvent, eo.opt_dragging, eo.opt_frameState);
-    browserEvent.target = eo.map;
-    browserEvent.coordinate = coordinate;
-    browserEvent.pixel = mapPixel;
-
-    service.vectorOnEvent(browserEvent);
-
-    const popups = service.getPopups();
-    expect(popups.length).toBe(0);
-  })
 });
 
 describe('MapOlService State', () => {
@@ -1230,41 +1411,51 @@ describe('MapOlService State', () => {
     expect(service.getCenter(true)[1]).toBeCloseTo(center[1], 1);
   });
 
-  it('should have a default zoom of 0', (done) => {
+  it('should have a default zoom of 0', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
     // a zoom of 0 is not working because of the mapsize check https://openlayers.org/en/latest/examples/min-zoom.html
     service.map.getView().setZoom(5);
+    service.map.renderSync();
 
     const oldZoom = service.getZoom();
     expect(oldZoom).toBeCloseTo(5, 0);
-    done();
   });
 
 
-  it('should zoom in or out for one step', (done) => {
+  it('should zoom in or out for one step', async () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
     // a zoom of 0 is not working because of the mapsize check https://openlayers.org/en/latest/examples/min-zoom.html
-    service.map.getView().setZoom(5);
-
+    service.map.getView().setZoom(8);
     const oldZoom = service.getZoom();
-    const duration = 250;
-    service.zoomInOut('+');
 
-    setTimeout(() => {
-      const newZoom = service.getZoom();
-      expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
-      done();
-    }, duration);
+    await new Promise((resolve, reject) => {
+      service.zoomInOut('+', {
+        callback: (complete) => {
+          resolve(complete);
+        }
+      });
+    });
+
+    const newZoom = service.getZoom();
+    expect(newZoom).toBeCloseTo((oldZoom + 1), 0);
   });
 
-  it('should set/get extent', () => {
+  it('should set/get extent', async () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
     const oldExtent = service.getCurrentExtent(true);
     const extent = [-14, 33, 40, 57] as any;
-    service.setExtent(extent, true);
+
+    await new Promise((resolve, reject) => {
+      service.setExtent(extent, true, {
+        callback: (complete) => {
+          resolve(complete);
+        }
+      });
+    });
+
     // map.getView().fit() tries to fit the specified extent on the map -> [-14.000000000000002, 24.562357322635023, 40, 61.890976149402576]
     // therefore only check if the extent has changed!!!
     expect(service.getCurrentExtent(true) !== oldExtent).toBeTrue();

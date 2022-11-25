@@ -78,6 +78,7 @@ If your project depends on a package that is already listed in [frontend-librari
 
 ### 5. Test your library
 - create specs and run `ng test < name >`
+- to only run a few test use [fdescribe](https://jasmine.github.io/api/edge/global.html#fdescribe) and [fit](https://jasmine.github.io/api/edge/global.html#fit) temporarily.
 
 ### 6. Build your library locally
 - build lib `ng build < name >`

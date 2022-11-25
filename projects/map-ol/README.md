@@ -9,6 +9,31 @@ For examples [see demo maps](../demo-maps/README.md)
 - "@dlr-eoc/layer-control" (optional)
 - "@dlr-eoc/base-layers-raster" (optional)
 
+
+### add styles from OpenLayers to your application
+
+e.g. in your apps style file
+```
+// styles.scss/styles.css
+@import 'ol/ol.css';
+...
+
+```
+
+or in the angular config file
+```
+// angular.json
+...
+  "styles": [
+    ...
+    "node_modules/ol/ol.css",
+    "src/styles.scss"
+  ],
+...
+
+```
+
+
 #### add the following to the app.module.ts
 ```
 import { MapOlModule } from '@dlr-eoc/map-ol';

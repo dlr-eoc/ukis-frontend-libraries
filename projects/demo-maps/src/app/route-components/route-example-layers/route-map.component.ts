@@ -381,7 +381,6 @@ export class RouteMapComponent implements OnInit {
         ]
       },
       visible: false,
-      cssClass: 'hide',
       popup: ['type', 'name'],
       actions: [{ title: 'download', icon: 'download-cloud', action: (layer) => { console.log(layer); } }]
     });
@@ -528,20 +527,20 @@ export class RouteMapComponent implements OnInit {
   }
 
   addOverlays() {
-    const layerOnTopOfAll = new BlueMarbleTile({ crossOrigin: 'anonymous' });
-    const openSeaMapOnTop = new OpenSeaMap({ crossOrigin: 'anonymous' });
-    this.layersSvc.addLayer(layerOnTopOfAll, 'Overlays');
-    this.layersSvc.addLayer(openSeaMapOnTop, 'Overlays');
+    const blueMarble = new BlueMarbleTile({ crossOrigin: 'anonymous' });
+    const openSeaMap = new OpenSeaMap({ crossOrigin: 'anonymous' });
+    this.layersSvc.addLayer(blueMarble, 'Overlays');
+    this.layersSvc.addLayer(openSeaMap, 'Overlays');
 
-    const blueMarble = new BlueMarbleTile({ id: 'merge_BlueMarble' });
-    const eocLiteoverlay2 = new EocLiteoverlayTile({ id: 'merge_Liteoverlay' });
+    const blueMarbleMerge = new BlueMarbleTile({ id: 'merge_BlueMarble' });
+    const eocLiteoverlayMerge = new EocLiteoverlayTile({ id: 'merge_Liteoverlay' });
     const mergeLayer = new StackedLayer({
       id: 'BlueMarbleTile_Overlay',
       name: 'BlueMarble with Overlay',
       visible: false,
-      legendImg: blueMarble.legendImg,
+      legendImg: blueMarbleMerge.legendImg,
       description: 'merged/stacked Layers BlueMarble with Overlay',
-      layers: [blueMarble, eocLiteoverlay2]
+      layers: [blueMarbleMerge, eocLiteoverlayMerge]
     });
     this.layersSvc.addLayer(mergeLayer, 'Overlays');
   }
