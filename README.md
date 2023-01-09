@@ -78,7 +78,7 @@ Then run:
 
 6. [See clarity get-started to use there components](https://clarity.design/documentation/get-started)
 
-
+More detailed information about setting up a local UKIS application can be found in the [tutorial document](TUTORIALS.md).
 
 
 ## Team
@@ -95,6 +95,7 @@ The UKIS team creates and adapts libraries which simplify the creation of web-ba
  - Volkmann, Rouven 
  - Riedlinger, Torsten 
  - Voinov, Sergey 
+ - Angermann, Lucas
 
 
 
