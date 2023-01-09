@@ -53,7 +53,7 @@
     "@schematics/angular": "^14.1.1",
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "delaunator": "^5.0.0",
-    "luxon": "^2.5.0",
+    "luxon": "^2.5.2",
     "md5": "^2.2.1",
     "ogc-schemas": "^2.6.1",
     "ol": "^v7.1.0",
