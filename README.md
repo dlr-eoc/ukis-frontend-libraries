@@ -86,17 +86,17 @@ More detailed information about setting up a local UKIS application can be found
 
 The UKIS team creates and adapts libraries which simplify the creation of web-based applications. Our team includes (in alphabetical order):
 
- - Böck, Mathias 
+ - Angermann, Lucas
+ - Böck, Mathias
  - Friedemann, Monika
  - Jaspersen, Verena
- - Keim, Stefan 
- - Langbein, Michael 
- - Mandery, Nico 
- - Mühlbauer Martin 
- - Volkmann, Rouven 
- - Riedlinger, Torsten 
- - Voinov, Sergey 
- - Angermann, Lucas
+ - Keim, Stefan
+ - Langbein, Michael
+ - Mandery, Nico
+ - Mühlbauer Martin
+ - Riedlinger, Torsten
+ - Voinov, Sergey
+ - Volkmann, Rouven
 
 
 
