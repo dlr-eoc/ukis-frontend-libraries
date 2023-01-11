@@ -68,7 +68,7 @@ Then run:
 
 3. Add Clarity Angular
 - See [Adding Clarity to an Angular project](https://clarity.design/documentation/get-started#seedProjectAngular)
-- Also add the icons manually
+- If you use Clarity Core also [add the icons manually](https://core.clarity.design/foundation/icons/)
 
 4. Run the ng add command for the UKIS core-ui
 - `ng add @dlr-eoc/core-ui --project=<appName> [options]` 
