@@ -1,14 +1,14 @@
-# Creating a simple web map application
+# Creating a basic web map application
 ## Introduction
-In this guide you will follow the necessary steps for creating a basic web map application with the UKIS frontend libraries. At the end you should be able to set up an UKIS application yourself and start customising it. The application contains the core, map-ol, ... libraries. The finished application integrates some layers from the [EOC GeoService](https://geoservice.dlr.de/web/).
+In this guide you will follow the necessary steps for creating a basic web map application with the UKIS frontend libraries. At the end you should be able to set up an UKIS application yourself and start customizing it. The application contains the core-ui, map-ol, base-layers-raster and layer-control libraries. The finished application integrates some layers from the [EOC GeoService](https://geoservice.dlr.de/web/).
 
 ## Requirements
 For this tutorial to work you need a code editor of your choice (e.g. Visual Studio Code) and npm installed. 
 
-## Setting up UKIS core
+## Setting up UKIS core-ui
 ### 1. Generate a new [Angular application](https://angular.io/cli/new) in the same Version like specified in our package.json [@angular/core](package.json).
 For this you have to install `@angular/cli` in this specific Version first. 
-- For this tutorial use 
+- For this tutorial use version `14.1.1`
 ```
 npm install -g @angular/cli@14.1.1
 ```
@@ -25,7 +25,7 @@ cd project-tutorial-map
 ```
 ### 3. Add Clarity Angular
 - At the moment Clarity does not support angular schematics ([github ng add issue](https://github.com/vmware-clarity/ng-clarity/issues/120)). Therefore Clarity has to be installed manually. 
-- run 
+- Run 
 ```
 npm install @cds/core @clr/angular @clr/ui
 ```
@@ -76,28 +76,27 @@ npm install rxjs@6.6.7
 ng add @dlr-eoc/core-ui@10.1.0 --project=project-tutorial-map 
 ``` 
 - Answer the promt with `Y`
-- In this tutorial more additional options of the core-ui ng-add like routing are not required.
+- In this tutorial more additional options of the core-ui ng add like routing are not required.
 - [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
 
 ### 5. Start and view the application
-- run `npm start`
-- open `http://localhost:4200/` on a browser
+- Run `npm start`
+- Open [http://localhost:4200/](http://localhost:4200/) on a browser
 - You should now be able to see the basic application layout in the browser.
 
 ## Installing map libraries
 In the following the components neccessary for the display of a web map are installed. More information can be found [in the map-ol library folder](projects/map-ol/README.md).
-### 1. Add the following dependencies to the package.json
-- `npm install @dlr-eoc/map-ol`
-- "@dlr-eoc/map-ol"
-- "@dlr-eoc/base-layers-raster"
+### 1. Add the following libraries:
+```
+npm install @dlr-eoc/map-ol @dlr-eoc/base-layers-raster
+```
 
-The base layers raster library is optional, but it makes it easier to add a basemap. Without it the map canvas would be empty. 
+The base layers raster library is optional, but it makes it easier to add a basemap. Without a given basemap the map canvas would be empty. 
 
 ### 2. Add styles from OpenLayers to your application
 
-e.g. in your apps style file
+e.g. in your apps style file (src/styles.css)
 ```
-// src/styles.css
 @import 'ol/ol.css';
 ...
 
@@ -106,26 +105,25 @@ e.g. in your apps style file
 ### 3. Add the following to the app.module.ts:
 ```
 import { MapOlModule } from '@dlr-eoc/map-ol';
-import { LayerControlModule } from '@dlr-eoc/layer-control';
 
 ...
 
  imports: [
     ...
-    MapOlModule,
-    LayerControlModule
+    MapOlModule
   ]
 ```
 
-### 4. Also add to a route-view.component.html:
+### 4. Also replace the example-view.component.html with:
 ```
 <section class="content-area map-view">
   <ukis-map-ol [layersSvc]="layerSvc" [mapState]="mapStateSvc" [controls]="controls"></ukis-map-ol>
 </section>
 ```
 ### 5. Remove the contents of example-view.component.scss
+This is necessary, as we do not have a footer or a side nav at the moment.
 
-### 6. Add the following to a route-view.component.ts:
+### 6. Add the following to example-view.component.ts:
 ```
 import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
@@ -141,11 +139,6 @@ controls!: IMapControls;
     public layerSvc: LayersService,
     public mapStateSvc: MapStateService
 ) { }
-```
-
-```
-// add a OnInit Function
-export class <MyComponent> implements OnInit...
 ```
 
 ```
@@ -175,9 +168,19 @@ addBaselayers() {
 
 ## Adding layer controll and layers
 To enable more interaction with the application we are now adding the layer control, overlays and layers. 
-### 1. First, install the layer control library:
+### 1. First, install the layer control library and add the module to app.module.ts:
 ```
 npm install @dlr-eoc/layer-control
+```
+```
+import { LayerControlModule } from '@dlr-eoc/layer-control';
+
+...
+
+ imports: [
+    ...
+    LayerControlModule
+  ]
 ```
 More information about this library can be found [in the layer-control library folder](projects/layer-control/README.md).
 ### 2. Next, include the following code in the example-view.component.html:
@@ -212,11 +215,11 @@ More information about this library can be found [in the layer-control library f
 
 </clr-vertical-nav>
 ```
-### 3. Extend the following imports in the example-view.component.ts:
+### 3. Extend the following import in the example-view.component.ts:
 ```
 
 import { LayersService, Layer, WmtsLayer, RasterLayer } from '@dlr-eoc/services-layers';
-import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@dlr-eoc/base-layers-raster';
+
 
 ```
 ### 4. Add the overlays and layers next to the already existing baselayers in the example-view.component.ts:
@@ -225,7 +228,7 @@ import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@d
 ngOnInit() {
     this.addBaselayers();
     this.addLayers();
-    this.addOverlays()
+    this.addOverlays();
 }
 
 addBaselayers() {
@@ -238,7 +241,6 @@ addBaselayers() {
 
 addLayers() {
     const layers: Layer[] = [
-       const layers: Layer[] = [
     new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
@@ -297,7 +299,6 @@ addLayers() {
 
 addOverlays(){
     const layers: Layer[] = [
-        const layers: Layer[] = [
     new EocLiteoverlayTile({
       visible: false,
       displayName: 'Litelables'
@@ -308,7 +309,7 @@ addOverlays(){
 }
 ```
 - For this tutorial we are using some example layers from the [EOC GeoService](https://geoservice.dlr.de/web/).
-- Save and refresh your changes. You can now switch between the layers, change the layer order and adjust the opacity of individual layers in the layer control. Notice, that there is always the hierachical order overlays > layers > base layers. Also there is only one active base layer possible at a time. If you do not need one layer category, you could delete the corresponding code in example-view.component.html. 
+- Save and refresh your changes. You can now switch between the layers, change the layer order and adjust the opacity of individual layers in the layer control. Notice, that there is always the hierachical order overlays > layers > base layers. Also, there is only one active base layer possible at a time. If you do not need a layer category, you could delete the corresponding code in example-view.component.html. 
 
 ## Optional adaptions
 We are nearly finished with our basic example application in this tutorial. In the last steps we can adjust some details in the application.
@@ -356,4 +357,4 @@ constructor(
 - You can adjust the application title, short title and description inside the corresponding meta tags in the index.html.
 
 ## Conclusion
-Congratulations! You have set up a working web map application with the UKIS frontend libraries. Now you can start to adjust and customise the code to your needs. Make shure to check out our [demo-maps](projects/demo-maps) project, where you can find some inspiratoins. 
+Congratulations! You have set up a working web map application with the UKIS frontend libraries. Now you can start to adjust and customize the code to your needs. Make sure to check out our [demo-maps](projects/demo-maps) project, where you can find some inspirations. 
