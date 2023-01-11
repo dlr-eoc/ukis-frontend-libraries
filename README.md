@@ -68,33 +68,35 @@ Then run:
 
 3. Add Clarity Angular
 - See [Adding Clarity to an Angular project](https://clarity.design/documentation/get-started#seedProjectAngular)
+- If you use Clarity Core also [add the icons manually](https://core.clarity.design/foundation/icons/)
 
 4. Run the ng add command for the UKIS core-ui
-- `ng add @dlr-eoc/core-ui [options]` 
+- `ng add @dlr-eoc/core-ui --project=<appName> [options]` 
   - --routing=boolean // set up your project with [routing](https://angular.io/guide/router)
   - [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
 
 5. [See layout structure of the core-ui](projects/core-ui/README.md#layout-structure-of-the-core-ui)
 
-6. [See clarity get-started to use there components](https://clarity.design/documentation/get-started)
+6. [See clarity get-started to use their components](https://clarity.design/documentation/get-started)
 
-
+More detailed information about setting up a local UKIS application can be found in the [tutorial document](TUTORIALS.md).
 
 
 ## Team
 
 The UKIS team creates and adapts libraries which simplify the creation of web-based applications. Our team includes (in alphabetical order):
 
- - Böck, Mathias 
+ - Angermann, Lucas
+ - Böck, Mathias
  - Friedemann, Monika
  - Jaspersen, Verena
- - Keim, Stefan 
- - Langbein, Michael 
- - Mandery, Nico 
- - Mühlbauer Martin 
- - Volkmann, Rouven 
- - Riedlinger, Torsten 
- - Voinov, Sergey 
+ - Keim, Stefan
+ - Langbein, Michael
+ - Mandery, Nico
+ - Mühlbauer Martin
+ - Riedlinger, Torsten
+ - Voinov, Sergey
+ - Volkmann, Rouven
 
 
 
