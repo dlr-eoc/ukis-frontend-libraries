@@ -1,6 +1,6 @@
 # Creating a basic web map application
 ## Introduction
-In this guide you will follow the necessary steps for creating a basic web map application with the UKIS frontend libraries. At the end you should be able to set up an UKIS application yourself and start customizing it. The application contains the core-ui, map-ol, base-layers-raster and layer-control libraries. The finished application integrates some layers from the [EOC GeoService](https://geoservice.dlr.de/web/).
+In this guide you will follow the necessary steps for creating a basic web map application with the UKIS frontend libraries. At the end you should be able to set up an UKIS application yourself and start customizing it. The application contains the [core-ui](projects/core-ui/README.md), [map-ol](projects/map-ol/README.md), [base-layers-raster](projects/base-layers-raster/README.md) and [layer-control](projects/layer-control/README.md) libraries. The finished application integrates some layers from the [EOC GeoService](https://geoservice.dlr.de/web/).
 
 ## Requirements
 For this tutorial to work you need a code editor of your choice (e.g. Visual Studio Code) and npm installed. 
@@ -24,7 +24,7 @@ ng new project-tutorial-map --style=scss
 cd project-tutorial-map
 ```
 ### 3. Add Clarity Angular
-- At the moment Clarity does not support angular schematics ([github ng add issue](https://github.com/vmware-clarity/ng-clarity/issues/120)). Therefore Clarity has to be installed manually. 
+- At the moment Clarity does not support angular schematics ([github ng add issue](https://github.com/vmware-clarity/ng-clarity/issues/120)). Therefore Clarity has to be installed manually.
 - Run 
 ```
 npm install @cds/core @clr/angular @clr/ui
@@ -67,7 +67,7 @@ npm install @cds/core @clr/angular @clr/ui
 
 
 ### 4. Run the ng add command for the UKIS core-ui
-- First you have to match the dependency of rxjs, to do this you need to run
+- First you have to match the dependency of rxjs ([for ukis-frontend-libraries@10.1.0](package.json)), to do this you need to run
 ``` 
 npm install rxjs@6.6.7 
 ```
