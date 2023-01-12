@@ -26,6 +26,7 @@
 
 ### Bug Fixes
 * **@dlr-eoc/map-ol:**
+  - Use `applyBackground()` from 'ol-mapbox-style' when creating vector tile layers.
   - Remove LayerGroups from map before add `baselayerGroup`, `layersGroup` and `overlayGroup`.
   - Set bbox for olLayerGroup layers in `create_custom_layer`.
   - Show popups on transparent features [Issue #120](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120).
