@@ -36,7 +36,7 @@ import olVectorTile from 'ol/source/VectorTile';
 import olVectorTileLayer from 'ol/layer/VectorTile';
 import { Options as olVectorTileLayerOptions } from 'ol/layer/VectorTile';
 import olVectorTileSource from 'ol/source/VectorTile';
-import { applyStyle } from 'ol-mapbox-style';
+import { applyBackground, applyStyle } from 'ol-mapbox-style';
 import { createXYZ } from 'ol/tilegrid';
 import olMVT from 'ol/format/MVT';
 
@@ -945,6 +945,7 @@ export class MapOlService {
       const style = l?.options?.style;
       const mapboxSourceKey = l?.options?.styleSource;
       if (style && mapboxSourceKey) {
+        applyBackground(newlayer, style);
         /**
          * The urls from olsource are not used if sources.<source>.url are set in the open map style
          * if tms service is used or no correct TileJSON is available we have to override the urls
