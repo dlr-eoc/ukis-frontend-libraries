@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.13.0
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.13.0
       - uses: ./.github/actions/test
       - name: build
         run: |
@@ -65,12 +65,12 @@ jobs:
           path: dist
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.13.0
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
       ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
-      - run: npm i -g npm@8.19.2
+      - run: npm i -g npm@8.19.3
       - run: rm -f .npmrc
       ### for each module in dist set version from repository package.json
       - run: node scripts/library/index.js --set
@@ -98,12 +98,12 @@ jobs:
           path: dist
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.13.0
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci
       ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
-      - run: npm i -g npm@8.19.2
+      - run: npm i -g npm@8.19.3
       - run: rm -f .npmrc
       ### for each module in dist set version from repository package.json
       - run: node scripts/library/index.js --set
