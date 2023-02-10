@@ -3,8 +3,15 @@
   "main": "src/public-api",
   "version": "0.0.0-PLACEHOLDER",
   "license": "Apache-2.0",
-  "peerDependencies": {
-  },
+  "author": "Team UKIS",
+  "description": "This library bundles our clients for OGC standards. The long-term-strategy is to make all services in `@dlr-eoc/services-ogc` independent of angular and move them here.",
+  "keywords": [
+    "mapping",
+    "OGC",
+    "WMS",
+    "WPS"
+  ],
+  "peerDependencies": {},
   "dependencies": {
     "w3c-schemas": "0.0.0-PLACEHOLDER-VENDOR",
     "ogc-schemas": "0.0.0-PLACEHOLDER-VENDOR",

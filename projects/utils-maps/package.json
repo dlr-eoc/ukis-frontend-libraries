@@ -3,8 +3,15 @@
   "main": "src/public-api",
   "version": "0.0.0-PLACEHOLDER",
   "license": "Apache-2.0",
-  "peerDependencies": {
-  },
+  "author": "Team UKIS",
+  "description": "This library contains a collection of utilities for OpenLayers and WebGL.",
+  "keywords": [
+    "OpenLayers",
+    "custom",
+    "renderers",
+    "WebGL"
+  ],
+  "peerDependencies": {},
   "dependencies": {
     "ol": "0.0.0-PLACEHOLDER-VENDOR",
     "delaunator": "0.0.0-PLACEHOLDER-VENDOR"

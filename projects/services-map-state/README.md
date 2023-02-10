@@ -1,5 +1,7 @@
 # @dlr-eoc/services-map-state
 
+The `MapStateService` should be an interface to handle `zoom`, `center`, `extent` and `time` of maps.
+The idea is similar to `@dlr-eoc/services-layers`.
 ### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
 
 ```

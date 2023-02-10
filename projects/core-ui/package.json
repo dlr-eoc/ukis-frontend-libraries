@@ -3,16 +3,18 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public-api",
   "license": "Apache-2.0",
-  "schematics": "./schematics/collection.json",
-  "scripts": {
-    "preschematics:test": "cd ../../ && ng build core-ui",
-    "schematics:test": "npx ../../node_modules/.bin/jasmine ../../dist/core-ui/schematics/**/*_spec.js"
-  },
+  "author": "Team UKIS",
+  "description": "This project includes schematics to add the base UKIS-Layout to an angular application. The Layout is based on Clarity so [add this first](https://clarity.design/get-started/developing/angular)!",
   "keywords": [
     "schematics",
     "@dlr-eoc",
     "core-ui"
   ],
+  "schematics": "./schematics/collection.json",
+  "scripts": {
+    "preschematics:test": "cd ../../ && ng build core-ui",
+    "schematics:test": "npx ../../node_modules/.bin/jasmine ../../dist/core-ui/schematics/**/*_spec.js"
+  },
   "ng-add": {
     "save": "dependencies"
   },

@@ -3,6 +3,15 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public-api",
   "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "This is an example application showing how to implement authentication with the UKIS frontend-libraries.",
+  "keywords": [
+    "angular",
+    "Clarity Design",
+    "authentication",
+    "login",
+    "registration"
+  ],
   "peerDependencies": {
     "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",

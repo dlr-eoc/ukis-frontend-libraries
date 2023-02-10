@@ -3,6 +3,17 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public-api",
   "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "This is a angular module that exports a threejs component uses a canvas of a OpenLayers map as a texture.",
+  "keywords": [
+    "angular",
+    "mapping",
+    "threejs",
+    "threejs scene",
+    "canvas",
+    "texture",
+    "3D"
+  ],
   "peerDependencies": {
     "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR"

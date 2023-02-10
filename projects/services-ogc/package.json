@@ -3,6 +3,17 @@
   "main": "src/public-api",
   "version": "0.0.0-PLACEHOLDER",
   "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "This module bundles our clients for OGC standards. E.g. parse OWS Context JSON, WMS, WMTS or WPS.",
+  "keywords": [
+    "angular",
+    "mapping",
+    "OGC",
+    "OWS Context JSON",
+    "WMS",
+    "WMTS",
+    "WPS"
+  ],
   "peerDependencies": {
     "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
