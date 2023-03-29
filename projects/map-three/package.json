@@ -4,7 +4,7 @@
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
-  "description": "This is a angular module that exports a threejs component uses a canvas of a OpenLayers map as a texture.",
+  "description": "This is a angular module that exports a threejs component which uses a canvas of a OpenLayers map as a texture.",
   "keywords": [
     "angular",
     "mapping",

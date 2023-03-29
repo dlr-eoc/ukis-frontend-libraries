@@ -4,7 +4,7 @@
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
-  "description": "This is a angular module that exports a OpenLayers component that can handle layers UKIS layers. See @dlr-eoc/services-layers for supported types.",
+  "description": "This is a angular module that exports a OpenLayers component that can handle UKIS layers. See @dlr-eoc/services-layers for supported types.",
   "keywords": [
     "angular",
     "mapping",
