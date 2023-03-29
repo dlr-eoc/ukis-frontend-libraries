@@ -1,7 +1,7 @@
 # @dlr-eoc/core-ui (Schematics for UKIS core-ui)
 
 This project includes some schematics to add the base UKIS-Layout to an angular application.
-It is based on Clarity so [add this first](https://clarity.design/get-started/developing/angular)!
+The Layout is based on Clarity so [add this first](https://clarity.design/get-started/developing/angular)!
 
 ## What the ng-add command is doing?
 

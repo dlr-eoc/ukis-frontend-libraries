@@ -2,6 +2,9 @@
   "name": "@dlr-eoc/shared-assets",
   "version": "0.0.0-PLACEHOLDER",
   "main": "index",
-  "description": "Shared assets which can be used for tests in the projects",
-  "private": true
+  "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "Shared assets which can be used for tests in the projects. This package will not be published.",
+  "private": true,
+  "devDependencies": {}
 }

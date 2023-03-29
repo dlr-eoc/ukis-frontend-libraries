@@ -29,9 +29,13 @@ const placeholders: Iplaceholders = {
   vendorVersion: '0.0.0-PLACEHOLDER-VENDOR'
 };
 
-function showDependencyGraph() {
+interface IgraphOptions {
+  projects?: string;
+}
+function showDependencyGraph(options: IgraphOptions) {
+  const filterProjects = options?.projects?.split(',') || false;
   const projects = getProjects(ANGULARJSON);
-  const graph = dependencyGraph(projects, packageScope);
+  const graph = dependencyGraph(projects, packageScope, filterProjects);
   console.log(graph.nodesmapGraph);
 }
 
@@ -67,10 +71,21 @@ function runTests(offset = 0, projects, headless = false) {
   }
 }
 
-function testAll(headless = false) {
+interface ItestOptions {
+  headless: boolean;
+  projects?: string;
+}
+function testAll(options: ItestOptions) {
+  if (options.headless) {
+    options.headless = true;
+  } else {
+    options.headless = false
+  }
+
+  const filterProjects = options?.projects?.split(',') || false;
   const testableProjects = getProjects(ANGULARJSON).filter(item => item.test && item.type === 'library');
-  const flattdepsAndProjects = getSortedProjects(testableProjects, packageScope);
-  runTests(0, flattdepsAndProjects, headless);
+  const flattdepsAndProjects = getSortedProjects(testableProjects, packageScope, filterProjects);
+  runTests(0, flattdepsAndProjects, options.headless);
 }
 
 function runBuilds(offset = 0, projects) {
@@ -94,10 +109,14 @@ function runBuilds(offset = 0, projects) {
   }
 }
 
+
+interface IbuildOptions {
+  projects?: string;
+}
 /**
  * Builds all projects from projectType = "library" and architect.build
  */
-async function buildAll() {
+async function buildAll(options: IbuildOptions) {
   runCheckDeps()
   const result = await checkDeps(ANGULARJSON, packageScope);
   /** build ony if there are no missing deps */
@@ -106,8 +125,10 @@ async function buildAll() {
     console.error(`check for missing dependencies`)
     process.exit(1);
   } else {
+
+    const filterProjects = options?.projects?.split(',') || false;
     const buildableProjects = getProjects(ANGULARJSON).filter(item => item.build && item.type === 'library');
-    const flattdepsAndProjects = getSortedProjects(buildableProjects, packageScope);
+    const flattdepsAndProjects = getSortedProjects(buildableProjects, packageScope, filterProjects);
     runBuilds(0, flattdepsAndProjects);
   }
 }
@@ -276,6 +297,7 @@ export function run() {
     .option('-g, --graph', 'Set versions of all projects in dist folder')
     .option('-c, --check', 'Check if all dependencies are listed in the package.json of the project')
     .option('-t, --test', 'Run ng test for all projects')
+    .option('-p, --projects [type]', 'Comma separated list of projects. Run only for specified projects. This is working for test and build and graph')
     .option('--headless', '-t --headless: Run ng test for all projects with ChromeHeadless')
     .option('-b, --build', 'Run ng build for all projects with toposort dependencies')
     .parse(process.argv);
@@ -287,24 +309,32 @@ export function run() {
 
   if (options.list) {
     listAllProjects();
-  } else if (options.deps && options.peer) {
-    showProjectsAndDependencies(false, true);
   } else if (options.deps) {
-    showProjectsAndDependencies();
+    if (options.peer) {
+      showProjectsAndDependencies(false, true);
+    } else {
+      showProjectsAndDependencies();
+    }
   } else if (options.set) {
     setVersionsOfProjects(true);
   } else if (options.updatePackage) {
     updateBuildPackages(options.updatePackage)
   } else if (options.graph) {
-    showDependencyGraph();
+    showDependencyGraph({
+      projects: options.projects
+    });
   } else if (options.check) {
     runCheckDeps();
-  } else if (options.test && options.headless) {
-    testAll(true);
   } else if (options.test) {
-    testAll();
+    console.log(options)
+    testAll({
+      headless: options.headless,
+      projects: options.projects
+    });
   } else if (options.build) {
-    buildAll().catch(err => {
+    buildAll({
+      projects: options.projects
+    }).catch(err => {
       console.log(err);
     });
   }

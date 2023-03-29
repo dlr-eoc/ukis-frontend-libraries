@@ -3,6 +3,14 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public-api",
   "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "This is a angular module that exports a OpenLayers component that can handle UKIS layers. See @dlr-eoc/services-layers for supported types.",
+  "keywords": [
+    "angular",
+    "mapping",
+    "OpenLayers",
+    "layers"
+  ],
   "peerDependencies": {
     "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",

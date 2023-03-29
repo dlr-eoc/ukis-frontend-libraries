@@ -3,7 +3,7 @@
 
 ## The idea of the LayersService
 
-It should be a interface to use our components with different mapping libraries.  
+It should be an interface to use our components with different mapping libraries e.g. OpenLayers, Cesium, Leaflet, MapLibre
 For example one layer control which is working with all the different maps and layertypes. 
 The conversion from our generalized layers to the map specific should be implemented in the corresponding component like in @dlr-eoc/map-ol 
 

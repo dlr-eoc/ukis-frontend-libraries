@@ -3,6 +3,15 @@
   "version": "0.0.0-PLACEHOLDER",
   "main": "src/public-api",
   "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "This module is an interface to use our defined layer types in different mapping libraries. E.g. OpenLayers, Cesium, Leaflet, MapLibre. The conversion of the generalized layers to the map specific should be implemented in the corresponding component like in @dlr-eoc/map-ol",
+  "keywords": [
+    "angular",
+    "mapping",
+    "layers",
+    "types",
+    "interface"
+  ],
   "peerDependencies": {
     "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
     "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
