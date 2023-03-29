@@ -213,7 +213,8 @@ export function getProjects(angularJson: WorkspaceSchema) {
  *
  * Use all Projects to get child dependencies as well
  */
-export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScope: string, withPeerDeps = false) {
+export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScope: string, filter?: string[] | false) {
+  const buildableProjects = projects.map(p => p.name);
   const nodesmapGraph: Map<string, RecursiveMap> = new Map();
   const edges: [string, string][] = [];
   /**
@@ -222,27 +223,30 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
   const nodes: string[] = [];
   projects.forEach((project) => {
     if (FS.existsSync(project.packagePath)) { // check not working ???
-      const projectPackage = require(project.packagePath);
+      const projectPackage: IPackageJSON = require(project.packagePath);
       const packageProjectName = projectPackage.name.replace(packageScope, '');
       nodes.push(packageProjectName);
+      // also get projectPackage.devDependencies and projectPackage.peerDependencies
+
+      let projectDeps: string[] = null;
+      let projectDevDeps: string[] = null;
+      let projectPeerDeps: string[] = null;
       if (projectPackage.dependencies) {
-        const projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
-        if (projectDeps.length) {
-          const depsObj: Map<string, any> = new Map();
-          projectDeps.forEach((dep) => {
-            if (nodesmapGraph.has(dep)) {
-              depsObj.set(dep, nodesmapGraph.get(dep));
-            } else {
-              depsObj.set(dep, null);
-            }
-            edges.push([dep, packageProjectName]);
-          });
-          nodesmapGraph.set(packageProjectName, depsObj);
-        } else {
-          // if project has no dependencies with packageScope
-          nodesmapGraph.set(packageProjectName, null);
-        }
-      } else {
+        projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
+        addDepsOfProject(projectDeps, buildableProjects, packageProjectName, nodesmapGraph, edges)
+      }
+
+      if (projectPackage.devDependencies) {
+        projectDevDeps = Object.keys(projectPackage.devDependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
+        addDepsOfProject(projectDevDeps, buildableProjects, packageProjectName, nodesmapGraph, edges)
+      }
+
+      if (projectPackage.devDependencies) {
+        projectPeerDeps = Object.keys(projectPackage.devDependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
+        addDepsOfProject(projectPeerDeps, buildableProjects, packageProjectName, nodesmapGraph, edges)
+      }
+
+      if (!projectDeps?.length || !projectDevDeps?.length || !projectPeerDeps?.length) {
         // if project has no dependencies at all
         nodesmapGraph.set(packageProjectName, null);
       }
@@ -250,7 +254,49 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
   });
   // fill all null childs not get in the first iteration
   traverseUpdate(nodesmapGraph, nodesmapGraph);
-  return { edges, nodes, nodesmapGraph };
+
+  if (filter) {
+    const filteredGraph: Map<string, RecursiveMap> = new Map();
+    filter.forEach(projectName => {
+      if (nodesmapGraph.has(projectName)) {
+        filteredGraph.set(projectName, nodesmapGraph.get(projectName));
+      }
+    });
+
+
+    const projectsDeps: string[] = edges.filter(e => filter.includes(e[0])).map(e => e[1]).filter((item, index, array) => array.indexOf(item) === index);
+    projectsDeps.forEach(item => {
+      if (filter.indexOf(item) === -1) {
+        filter.push(item);
+      }
+    });
+    const filteredEdges: [string, string][] = edges.filter(e => filter.includes(e[0]));
+
+    return { edges: filteredEdges, nodes, nodesmapGraph: filteredGraph };
+  } else {
+    return { edges, nodes, nodesmapGraph };
+  }
+
+}
+
+function addDepsOfProject(dependencies: string[], buildableProjects: string[], packageProjectName: string, nodesmapGraph: Map<string, RecursiveMap>, edges: [string, string][]) {
+  if (dependencies.length) {
+    const depsObj: Map<string, any> = new Map();
+    dependencies.forEach((dep) => {
+      if (buildableProjects.includes(dep)) {
+        if (nodesmapGraph.has(dep)) {
+          depsObj.set(dep, nodesmapGraph.get(dep));
+        } else {
+          depsObj.set(dep, null);
+        }
+        edges.push([packageProjectName, dep]);
+      }
+    });
+    nodesmapGraph.set(packageProjectName, depsObj);
+  } else {
+    // if project has no dependencies with packageScope
+    nodesmapGraph.set(packageProjectName, null);
+  }
 }
 
 
@@ -274,11 +320,11 @@ function traverseUpdate(map: RecursiveMap, lookupTree: Map<string, RecursiveMap>
 }
 
 
-export function getSortedProjects(projects: ICustomWorkspaceProject[], packageScope: string) {
-  const graph = dependencyGraph(projects, packageScope);
-  const edges = graph.edges;
-  const nodes = graph.nodes;
-  const flattdeps = toposort.array(nodes, edges);
+export function getSortedProjects(projects: ICustomWorkspaceProject[], packageScope: string, filter?: string[] | false) {
+  const gne = dependencyGraph(projects, packageScope, filter);
+  /** An array of directed edges describing a graph e.g. edge1   */
+  const edges = gne.edges;
+  const flattdeps = toposort(edges).reverse();
   return flattdeps;
 }
 
