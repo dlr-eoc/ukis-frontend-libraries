@@ -1,5 +1,5 @@
 {
-  "$schema": "../../../../../../projects/services-ogc/src/lib/owc/types/ukis-owc.schema.json",
+  "$schema": "../../services-ogc/src/lib/owc/types/ukis-owc.schema.json",
   "type": "FeatureCollection",
   "bbox": [
     -180,
