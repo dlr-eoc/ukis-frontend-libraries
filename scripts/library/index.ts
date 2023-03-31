@@ -212,13 +212,20 @@ function updateBuildPackages(registry?: string) {
   }
 }
 
-function listAllProjects() {
+
+function listAllProjects(sorted = false, projects?: string) {
   const projectsPaths = getProjects(ANGULARJSON);
-  const list = projectsPaths.reduce((p, n) => {
-    const relPath = n.path.split(PATH.join(CWD, '/'))[1].replace(/\\/g, '/');
-    return p + '- ' + `[${n.name}](${relPath}/README.md)` + '\n';
-  }, '');
-  console.log(list);
+  let projectNames = projectsPaths.map(p => p.name);
+  if (sorted) {
+    projectNames = getSortedDeps({ type: 'all', target: 'all', projects: projects });
+    console.log(projectNames);
+  } else {
+    const list = projectsPaths.sort((a, b) => projectNames.indexOf(a.name) - projectNames.indexOf(b.name)).reduce((p, n) => {
+      const relPath = n.path.split(join(CWD, '/'))[1].replace(/\\/g, '/');
+      return p + '- ' + `[${n.name}](${relPath}/README.md)` + '\n';
+    }, '');
+    console.log(list);
+  }
 }
 
 function showProjectsAndDependencies(silent = false, showPeer = false, projectType?: WorkspaceProject['projectType']) {
@@ -283,6 +290,7 @@ export function run() {
     .description('Run this script inside of an angular workspace')
     .option('-h, --help ', 'display help for command')
     .option('-l, --list', 'List all projects')
+    .option('--list-sort', 'List projects sorted')
     .option('-d, --deps', 'List all projects in a table with dependencies')
     .option('--peer', '-d --peer: List all projects with dependencies and peerDependencies')
     .option('-s, --set', 'Set versions of all projects in dist folder')
@@ -302,6 +310,8 @@ export function run() {
 
   if (options.list) {
     listAllProjects();
+  } else if (options.listSort) {
+    listAllProjects(true, options.projects);
   } else if (options.deps) {
     if (options.peer) {
       showProjectsAndDependencies(false, true);
