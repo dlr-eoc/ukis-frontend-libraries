@@ -12,10 +12,6 @@ It uses the package scope `@dlr-eoc`, `main package.json` and the angular config
 - To get the build order it uses `depcheck` and `toposort`.
 - To run build and test it uses `await NG.default(options)` in a child process for each project.
 
-**Replace versions after build:**
-0.0.0-PLACEHOLDER: Is replaced with the versions (ukis-frontend-libraries) from the main package.json
-0.0.0-PLACEHOLDER-VENDOR: Is replaced with the versions set in `dependencies` from the main package.json
-
 
 **Functionality:**
 - List all projects
