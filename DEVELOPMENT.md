@@ -1,16 +1,16 @@
 # Getting started 
 
 - Check if [Git](https://git-scm.com/) is installed.
-- Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` . 
 - Check if [Node.js](https://nodejs.org/) and npm are installed.
+- Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` . 
 - Move into project: `cd frontend-libraries`
 - Create a new branch for your feature specific changes based on the main branch: e.g. `git checkout -b feature-XXX`
-- Install dependencies: `npm install`
+- Install dependencies: [`npm install`](https://docs.npmjs.com/cli/commands/npm-install) or [`npm ci`](https://docs.npmjs.com/cli/commands/npm-ci)
 
 ## Update dependencies
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies.
-- check for new versions `npm outdated -l` and `ng update`
-- update versions `npm update <pkg>` and `ng update <pkg>`
+- check for new versions [`npm outdated -l`](https://docs.npmjs.com/cli/commands/npm-outdated) and [`ng update`](https://angular.io/cli/update)
+- update versions [`npm update <pkg>`](https://docs.npmjs.com/cli/commands/npm-update) and `ng update <pkg>`
 - make angular migrations manually `ng update @angular/cli --from <version> --to <version> --migrate-only` and `ng update @angular/core --from <version> --to <version> --migrate-only`
 - an update of a `major` version in the dependencies should introduce a **BREAKING CHANGE!**
 

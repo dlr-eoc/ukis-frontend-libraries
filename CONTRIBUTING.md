@@ -53,9 +53,10 @@ Before you submit your Pull Request (PR) consider the following guidelines:
   We cannot accept code without this. Make sure you sign with the primary email address of the Git identity that has been granted access to the UKIS repository.
 
 #### Getting started
-1. [Fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) the UKIS repo [and check that your name and e-mail](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/remembering-your-github-username-or-email) is set in the Git configuration.
+1. Check our [developer documentation](DEVELOPMENT.md)
+2. [Fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) the UKIS repo [and check that your name and e-mail](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/remembering-your-github-username-or-email) is set in the Git configuration.
 
-2. Clone your forked repository and add a upstream remote
+3. Clone your forked repository and add a upstream remote
   ```shell
      git clone https://github.com/<username>/ukis-frontend-libraries.git
 
@@ -63,7 +64,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
   ```
 
 
-2. Make a new local topic branch for your chnages:
+4. Make a new local topic branch for your chnages:
   ```shell
     git checkout main
 
@@ -85,13 +86,13 @@ Before you submit your Pull Request (PR) consider the following guidelines:
   to ensure that all tests pass.
 
 
-3. Push your branch to your fork on GitHub:
+5. Push your branch to your fork on GitHub:
     ```shell
     git push origin my-fix-branch
     ```
 
 
-4. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis-frontend-libraries:main`.
+6. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis-frontend-libraries:main`.
   * If we suggest changes then:
     * Make the required updates and push it back to the same branch you opened the Pull Request on.
     * This will automatically re-run the UKIS test suites ([configured in the GitHub Actions](.github/workflows/testAndBuild.yml)) to ensure tests are still passing.
