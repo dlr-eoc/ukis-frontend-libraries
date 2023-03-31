@@ -5,9 +5,9 @@
  */
 
 import { fork } from 'child_process';
-import * as PATH from 'path';
-import * as FS from 'fs';
-import { IPackageJSON } from './npm-package.interface';
+import { join } from 'path';
+import { existsSync } from 'fs';
+import { Command } from 'commander';
 import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 
 
@@ -15,6 +15,7 @@ import {
   setVersionsforDependencies, Iplaceholders, getProjects, dependencyGraph, Iproject,
   checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput, updatePackageJson, createNpmrc
 } from './utils';
+import { IPackageJSON } from './npm-package.interface';
 
 import { Command } from 'commander';
 
@@ -141,7 +142,7 @@ function setVersionsOfProjects(useDistPath = false) {
   if (useDistPath) {
     projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
   }
-  projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
+  projectsPaths = projectsPaths.filter(p => existsSync(p));
   const errors = showProjectsAndDependencies(true, false);
   if (!projectsPaths.length) {
     console.log(`there are no build projects, run npm run build first!`);
@@ -163,7 +164,7 @@ function updateBuildPackages(registry?: string) {
   let projects = getProjects(ANGULARJSON).filter(item => item.type === 'library')
   let projectsPaths = projects.map(p => p.path.replace('projects', 'dist'));
 
-  projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
+  projectsPaths = projectsPaths.filter(p => existsSync(p));
   if (!projectsPaths.length) {
     console.log(`there are no build projects, run npm run build first!`);
   }
@@ -174,7 +175,7 @@ function updateBuildPackages(registry?: string) {
     const repositoryUrl = `git+https://github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
     projectsPaths.map(p => {
-      const packagePath = PATH.join(p, 'package.json');
+      const packagePath = join(p, 'package.json');
       updatePackageJson(packagePath, (json) => {
         if (!json.repository) {
           json.repository = {} as any;
@@ -188,9 +189,9 @@ function updateBuildPackages(registry?: string) {
       });
 
       if (typeof registry === 'string') {
-        createNpmrc(PATH.join(p, '.npmrc'), packageScope, registry);
+        createNpmrc(join(p, '.npmrc'), packageScope, registry);
       } else {
-        createNpmrc(PATH.join(p, '.npmrc'), packageScope);
+        createNpmrc(join(p, '.npmrc'), packageScope);
       }
     });
 
@@ -284,7 +285,7 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
 }
 
 export function run() {
-  const privPackage = require(PATH.join(__dirname, 'package.json'));
+  const privPackage = require(join(__dirname, 'package.json'));
   const program = new Command(`node ${privPackage.main}`);
   program.version(privPackage.version, '-v, --vers', 'output the current version')
     .description('Run this script inside of an angular workspace')
