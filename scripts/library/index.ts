@@ -49,6 +49,24 @@ async function runCheckDeps() {
   return allErrors.length;
 }
 
+
+interface ISortedDepsOptions {
+  projects?: string;
+  type?: 'library' | 'application' | 'all';
+  target: 'test' | 'build' | 'all';
+}
+/**
+ * get all projects filtered and topo sorted
+ */
+function getSortedDeps(options: ISortedDepsOptions) {
+  if (!options.type) {
+    options.type = 'library';
+  }
+  const filterProjects = options?.projects?.split(',') || false;
+  const targetFilter = (item: ICustomWorkspaceProject) => (options.target === 'all') ? true : item[options.target];
+  const typeFilter = (item: ICustomWorkspaceProject) => (options.type === 'all') ? true : item.type === options.type;
+  const filteredProjects = getProjects(ANGULARJSON).filter(item => targetFilter(item) && typeFilter(item));
+  return getSortedProjects(filteredProjects, PACKAGE_SCOPE, filterProjects);
 }
 
 function runTests(offset = 0, projects, headless = false) {
@@ -86,9 +104,7 @@ function testAll(options: ItestOptions) {
     options.headless = false
   }
 
-  const filterProjects = options?.projects?.split(',') || false;
-  const testableProjects = getProjects(ANGULARJSON).filter(item => item.test && item.type === 'library');
-  const flattdepsAndProjects = getSortedProjects(testableProjects, packageScope, filterProjects);
+  const flattdepsAndProjects = getSortedDeps({ target: 'test', type: 'library', projects: options?.projects });
   runTests(0, flattdepsAndProjects, options.headless);
 }
 
@@ -126,10 +142,7 @@ async function buildAll(options: IbuildOptions) {
   if (errors) {
     process.exit(1);
   } else {
-
-    const filterProjects = options?.projects?.split(',') || false;
-    const buildableProjects = getProjects(ANGULARJSON).filter(item => item.build && item.type === 'library');
-    const flattdepsAndProjects = getSortedProjects(buildableProjects, packageScope, filterProjects);
+    const flattdepsAndProjects = getSortedDeps({ target: 'build', type: 'library', projects: options?.projects });
     runBuilds(0, flattdepsAndProjects);
   }
 }
