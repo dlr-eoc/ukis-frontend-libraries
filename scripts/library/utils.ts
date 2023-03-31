@@ -99,42 +99,58 @@ export interface IcheckDepsOutput {
 
 type RecursiveMap = Map<string, RecursiveMap>;
 
-export function setVersionsforDependencies(paths: string[], MAINPACKAGE: IPackageJSON, placeholders: Iplaceholders, version = MAINPACKAGE.version) {
-  const packageAllDeps = Object.assign(MAINPACKAGE.dependencies, MAINPACKAGE.devDependencies);
-  paths.map(p => {
-    updatePackageJson(p, (json) => {
-      /** set main version */
-      if (json.version && json.version === placeholders.libVersion) {
-        json.version = version;
-      }
+export function setDependencyVersionsInWorkspaces(MAINPACKAGE: IPackageJSON, packageScope: string, workspacesPaths?: string[], depsKey = 'dependencies', mainPath?: string) {
+  const workspaces = workspacesPaths || MAINPACKAGE?.workspaces.map(p => p.replace(/\\/g, '/'));
+  if (workspaces) {
+    const mainDependencies = MAINPACKAGE[depsKey];
 
-      const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
-      /** set versions for all dependencies */
-      depsList.forEach(dep => {
-        if (json.hasOwnProperty(dep)) {
-          const deps = json[dep];
-          json[dep] = replaceDependencies(deps, packageAllDeps, placeholders, version);
-        }
+    if (mainDependencies) {
+      workspaces.forEach(async path => {
+        await updateWorkspace(path, { dependencies: mainDependencies }, MAINPACKAGE.version, packageScope);
       });
-      return json;
+
+    } else {
+      console.log(`key ${depsKey} is not in package: ${MAINPACKAGE.name}`)
+    }
+
+  } else {
+    console.log('Run this script in a npm monorepo with workspaces or specify paths to workspaces/projects');
+  }
+}
+
+async function updateWorkspace(path: string, obj: IPackageJSON['dependencies'], mainVersion: string, packageScope: string) {
+  updatePackageJson(path, (json) => {
+    json.version = mainVersion;
+    const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
+    depsList.forEach(async d => {
+      updateDependencies(json, obj, d, mainVersion, packageScope);
     });
+
+    return json;
   });
 }
 
+function updateDependencies(pkgJson: IPackageJSON, obj: IPackageJSON['dependencies'], depKey: string, mainVersion: string, packageScope: string) {
+  const mainPackageDependencies = obj.dependencies;
+  if (pkgJson[depKey]) {
+    Object.keys(mainPackageDependencies).forEach(dep => {
+      const hasDep = pkgJson[depKey]?.[dep];
+      if (hasDep) {
+        const main = mainPackageDependencies[dep];
+        pkgJson[depKey][dep] = main;
+      }
+    });
 
-function replaceDependencies(dependencies: IDependencyMap, packageAllDeps, placeholders: Iplaceholders, version: string) {
-  const deps = dependencies;
-  Object.keys(deps).forEach(key => {
-    const dep = deps[key];
-    if (key.includes('@dlr-eoc') && dep === '0.0.0-PLACEHOLDER') {
-      deps[key] = version;
-    }
-    if (key in packageAllDeps && dep === placeholders.vendorVersion) {
-      deps[key] = packageAllDeps[key];
-    }
-  });
-  return deps;
+    // replace workspace versions
+    Object.keys(pkgJson[depKey]).forEach(dep => {
+      const workspaceDep = dep.includes(packageScope);
+      if (workspaceDep) {
+        pkgJson[depKey][dep] = mainVersion;
+      }
+    });
+  }
 }
+
 
 export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPackageJSON) {
   readFile(path, 'utf8', (error, jsonString) => {

@@ -10,25 +10,25 @@ import { existsSync } from 'fs';
 import { Command } from 'commander';
 import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 
-
 import {
-  setVersionsforDependencies, Iplaceholders, getProjects, dependencyGraph, Iproject,
-  checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput, updatePackageJson, createNpmrc
+  getProjects, dependencyGraph, Iproject,
+  checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput, updatePackageJson, createNpmrc, setDependencyVersionsInWorkspaces, ICustomWorkspaceProject,
 } from './utils';
 import { IPackageJSON } from './npm-package.interface';
 
-import { Command } from 'commander';
 
-
-const packageScope = '@dlr-eoc/';
 const CWD = process.cwd();
 const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
 const ANGULARJSON: WorkspaceSchema = require(PATH.join(CWD, 'angular.json'));
 const LIBRARIES_VERSION = MAINPACKAGE.version;
-const placeholders: Iplaceholders = {
-  libVersion: '0.0.0-PLACEHOLDER',
-  vendorVersion: '0.0.0-PLACEHOLDER-VENDOR'
-};
+if (!LIBRARIES_VERSION) {
+  console.error(`property version is not set in the root package.json`);
+}
+const PACKAGE_SCOPE = MAINPACKAGE.projectsScope;
+if (!PACKAGE_SCOPE) {
+  console.error(`property 'projectsScope' for projects is not set in the root package.json`);
+}
+
 
 interface IgraphOptions {
   projects?: string;
@@ -135,10 +135,10 @@ async function buildAll(options: IbuildOptions) {
 }
 
 /**
- * replace versions of all dependencies in projects which have placeholders
+ * replace versions of all dependencies in projects with the versions of the main package.dependencies
  */
 function setVersionsOfProjects(useDistPath = false) {
-  let projectsPaths = getProjects(ANGULARJSON).filter(item => item.type === 'library').map(item => item.packagePath);
+  let projectsPaths = getProjects(ANGULARJSON).map(item => item.packagePath);
   if (useDistPath) {
     projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
   }
@@ -152,8 +152,8 @@ function setVersionsOfProjects(useDistPath = false) {
     console.table(errors);
   }
   if (!errors.length && projectsPaths.length) {
-    setVersionsforDependencies(projectsPaths, MAINPACKAGE, placeholders);
-    console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json ${MAINPACKAGE.version}`);
+    setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE, projectsPaths);
+    console.log(`replaced all versions in project workspaces with the versions of the main package.json`);
   }
 }
 
