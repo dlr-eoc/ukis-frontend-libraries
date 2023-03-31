@@ -1,7 +1,7 @@
-import { IPackageJSON, IDependencyMap } from './npm-package.interface';
-import * as FS from 'fs';
+import { IPackageJSON } from './npm-package.interface';
+import { readFile, writeFile, existsSync, readFileSync } from 'fs';
 import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
-import * as PATH from 'path';
+import { join } from 'path';
 
 import * as depcheck from 'depcheck';
 import * as toposort from 'toposort';
@@ -137,7 +137,7 @@ function replaceDependencies(dependencies: IDependencyMap, packageAllDeps, place
 }
 
 export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPackageJSON) {
-  FS.readFile(path, 'utf8', (error, jsonString) => {
+  readFile(path, 'utf8', (error, jsonString) => {
     if (error) {
       console.log(`Error read file ${path}:`, error);
       return;
@@ -146,7 +146,7 @@ export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPac
       if (jsonString) {
         const jsonObj: IPackageJSON = JSON.parse(jsonString);
         const content = cb(jsonObj);
-        FS.writeFile(path, JSON.stringify(content), err => {
+        writeFile(path, JSON.stringify(content), err => {
           if (err) {
             console.log('Error writing file', err);
           } else {
@@ -168,7 +168,7 @@ export function createNpmrc(path: string, scope: string, registry = 'https://npm
 
   try {
     if (path) {
-      FS.writeFile(path, npmrc, err => {
+      writeFile(path, npmrc, err => {
         if (err) {
           console.log('Error writing file', err);
         } else {
@@ -189,8 +189,8 @@ export function getProjects(angularJson: WorkspaceSchema) {
     const project = angularJson.projects[p];
     const customWorkspaceProject: ICustomWorkspaceProject = {
       name: p,
-      path: PATH.join(CWD, project.root),
-      packagePath: PATH.join(CWD, project.root, 'package.json'),
+      path: join(CWD, project.root),
+      packagePath: join(CWD, project.root, 'package.json'),
       test: (project.architect && project.architect.test) ? true : false,
       build: (project.architect && project.architect.build) ? true : false,
       server: (project.architect && project.architect.server) ? true : false,
@@ -222,7 +222,7 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
    */
   const nodes: string[] = [];
   projects.forEach((project) => {
-    if (FS.existsSync(project.packagePath)) { // check not working ???
+    if (existsSync(project.packagePath)) {
       const projectPackage: IPackageJSON = require(project.packagePath);
       const packageProjectName = projectPackage.name.replace(packageScope, '');
       nodes.push(packageProjectName);
@@ -380,7 +380,7 @@ export async function checkDeps(angularJson: WorkspaceSchema, packageScope: stri
 
   // function to check if dep is transitive dependency from using...
   const aysncdepcheck = async (item: ICustomWorkspaceProject) => {
-    if (FS.existsSync(item.packagePath)) {
+    if (existsSync(item.packagePath)) {
       const results = await depcheck(item.path, options);
       if (results) {
         const hasMissing = Object.keys(results.missing).length;
@@ -461,13 +461,13 @@ function checkTransitiveDependencies(depcheckResults: depcheck.Results, packageS
   allDependencies.map(key => {
     let packagePath = `${key}/package.json`;
     if (key.includes(packageScope)) {
-      packagePath = PATH.join(CWD, packagePath.replace(packageScope, 'projects/'));
+      packagePath = join(CWD, packagePath.replace(packageScope, 'projects/'));
     }
     const allPackageDeps = [];
     // Resolve package path and then read package.json with FS because some packages do not list ./package.json on there exports so if we require the package.json an error occurres.
     // Package subpath './package.json' is not defined by "exports"
     const resPackagePath = browserifyResolve(packagePath);
-    const depPackage: IPackageJSON = JSON.parse(FS.readFileSync(resPackagePath, 'utf-8'));
+    const depPackage: IPackageJSON = JSON.parse(readFileSync(resPackagePath, 'utf-8'));
 
     if (depPackage.dependencies) {
       Object.keys(depPackage.dependencies).map(i => allPackageDeps.push(i));
