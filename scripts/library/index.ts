@@ -18,8 +18,8 @@ import { IPackageJSON } from './npm-package.interface';
 
 
 const CWD = process.cwd();
-const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
-const ANGULARJSON: WorkspaceSchema = require(PATH.join(CWD, 'angular.json'));
+const MAINPACKAGE: IPackageJSON = require(join(CWD, 'package.json'));
+const ANGULARJSON: WorkspaceSchema = require(join(CWD, 'angular.json'));
 const LIBRARIES_VERSION = MAINPACKAGE.version;
 if (!LIBRARIES_VERSION) {
   console.error(`property version is not set in the root package.json`);
@@ -36,16 +36,19 @@ interface IgraphOptions {
 function showDependencyGraph(options: IgraphOptions) {
   const filterProjects = options?.projects?.split(',') || false;
   const projects = getProjects(ANGULARJSON);
-  const graph = dependencyGraph(projects, packageScope, filterProjects);
+  const graph = dependencyGraph(projects, PACKAGE_SCOPE, filterProjects);
   console.log(graph.nodesmapGraph);
 }
 
 async function runCheckDeps() {
-  const allErrors = await checkDeps(ANGULARJSON, packageScope);
+  const allErrors = await checkDeps(ANGULARJSON, PACKAGE_SCOPE);
   if (allErrors.length) {
     allErrors.map(e => formatCheckDepsOutput(e, false));
-    process.exit(1);
+    console.error(`check for missing dependencies`)
   }
+  return allErrors.length;
+}
+
 }
 
 function runTests(offset = 0, projects, headless = false) {
@@ -118,12 +121,9 @@ interface IbuildOptions {
  * Builds all projects from projectType = "library" and architect.build
  */
 async function buildAll(options: IbuildOptions) {
-  runCheckDeps()
-  const result = await checkDeps(ANGULARJSON, packageScope);
+  const errors = await runCheckDeps();
   /** build ony if there are no missing deps */
-  if (result.length) {
-    result.map(e => formatCheckDepsOutput(e, false));
-    console.error(`check for missing dependencies`)
+  if (errors) {
     process.exit(1);
   } else {
 
@@ -171,7 +171,7 @@ function updateBuildPackages(registry?: string) {
 
   if (projectsPaths.length) {
 
-    const packageScope = '@dlr-eoc';
+    const packageScope = PACKAGE_SCOPE;
     const repositoryUrl = `git+https://github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
     projectsPaths.map(p => {
@@ -222,22 +222,13 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
     const projectPackage = require(p.packagePath);
     const project: Iproject = {
       name: projectPackage.name,
-      version: projectPackage.version.replace('0.0.0', LIBRARIES_VERSION),
+      version: projectPackage.version,
       error: false,
       dependencies: null
     };
 
-    if (projectPackage.version !== placeholders.libVersion) {
-      const error = `version of project: ${projectPackage.name} must be ${placeholders.vendorVersion} for build!`;
-      if (!silent) {
-        console.error(error);
-      }
-      project.error = true;
-      errors.push({ project: projectPackage.name, error });
-    }
-
-    if (p.type === 'library' && projectPackage.name.indexOf(packageScope) === -1) {
-      const error = `name of project: ${projectPackage.name} must be prefixed with the ${packageScope} namespace!`;
+    if (p.type === 'library' && projectPackage.name.indexOf(PACKAGE_SCOPE) === -1) {
+      const error = `name of project: ${projectPackage.name} must be prefixed with the ${PACKAGE_SCOPE} namespace!`;
       if (!silent) {
         console.error(error);
       }
@@ -248,20 +239,8 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
     if (projectPackage.dependencies) {
       const dependencies = Object.keys(projectPackage.dependencies);
       project.dependencies = dependencies.join(',') || null;
-
-      Object.keys(projectPackage.dependencies).forEach((key) => {
-        const dep = projectPackage.dependencies[key];
-        if (key.indexOf(packageScope) !== -1 && dep !== placeholders.libVersion) {
-          const error = `version of dependency: ${key} in project: ${projectPackage.name}
-                    must be ${placeholders.libVersion} for build!`;
-          if (!silent) {
-            errors.push({ project: projectPackage.name, error });
-          }
-          project.error = true;
-          errors.push({ project: projectPackage.name, error });
-        }
-      });
     }
+
     // without peerDeps
     projects.push(project);
     // --------------------------------------
@@ -287,7 +266,7 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
 export function run() {
   const privPackage = require(join(__dirname, 'package.json'));
   const program = new Command(`node ${privPackage.main}`);
-  program.version(privPackage.version, '-v, --vers', 'output the current version')
+  program.version(privPackage.version, '-v, --vers', 'output the current version of this script')
     .description('Run this script inside of an angular workspace')
     .option('-h, --help ', 'display help for command')
     .option('-l, --list', 'List all projects')
@@ -295,8 +274,8 @@ export function run() {
     .option('--peer', '-d --peer: List all projects with dependencies and peerDependencies')
     .option('-s, --set', 'Set versions of all projects in dist folder')
     .option('-u, --update-package <registry>', 'Update package of all projects in dist folder with repo and npm config')
-    .option('-g, --graph', 'Set versions of all projects in dist folder')
-    .option('-c, --check', 'Check if all dependencies are listed in the package.json of the project')
+    .option('-g, --graph', 'Show a dependency graph')
+    .option('-c, --check', 'Check if all dependencies are listed in the package.json of the projects')
     .option('-t, --test', 'Run ng test for all projects')
     .option('-p, --projects [type]', 'Comma separated list of projects. Run only for specified projects. This is working for test and build and graph')
     .option('--headless', '-t --headless: Run ng test for all projects with ChromeHeadless')
@@ -325,9 +304,12 @@ export function run() {
       projects: options.projects
     });
   } else if (options.check) {
-    runCheckDeps();
+    runCheckDeps().then(errors => {
+      if (errors) {
+        process.exit(1);
+      }
+    });
   } else if (options.test) {
-    console.log(options)
     testAll({
       headless: options.headless,
       projects: options.projects
