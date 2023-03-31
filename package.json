@@ -3,6 +3,7 @@
   "version": "11.0.0-alpha.1",
   "license": "Apache-2.0",
   "author": "Team UKIS",
+  "projectsScope": "@dlr-eoc/",
   "bugs": {
     "url": "https://github.com/dlr-eoc/ukis-frontend-libraries/issues"
   },
