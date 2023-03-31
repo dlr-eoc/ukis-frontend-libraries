@@ -144,9 +144,9 @@ export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPac
     }
     try {
       if (jsonString) {
-        const jsonObj: IPackageJSON = JSON.parse(jsonString);
+        const jsonObj = jsonParse<IPackageJSON>(jsonString);
         const content = cb(jsonObj);
-        writeFile(path, JSON.stringify(content), err => {
+        writeFile(path, json2String(content), err => {
           if (err) {
             console.log('Error writing file', err);
           } else {
@@ -364,11 +364,11 @@ export async function checkDeps(angularJson: WorkspaceSchema, packageScope: stri
     const o: IcheckDepsOutput = {
       project: projectName,
       projectPath,
-      missingDependencies: JSON.stringify(depcheckResults.missing, null, '\t').replace(/\\\\/g, '/'),
-      invalidFiles: JSON.stringify(depcheckResults.invalidFiles, null, '\t').replace(/\\\\/g, '/'), // @babel errors not same as typescript
+      missingDependencies: json2String(depcheckResults.missing),
+      invalidFiles: json2String(depcheckResults.invalidFiles), // @babel errors not same as typescript
       unusedDependencies: depcheckResults.dependencies,
       unusedDevDependencies: depcheckResults.devDependencies,
-      usedDependencies: JSON.stringify(depcheckResults.using, null, '\t').replace(/\\\\/g, '/')
+      usedDependencies: json2String(depcheckResults.using)
     };
     const missingDeps = Object.keys(depcheckResults.missing).length;
     if (!missingDeps && !showAll) {
@@ -467,7 +467,7 @@ function checkTransitiveDependencies(depcheckResults: depcheck.Results, packageS
     // Resolve package path and then read package.json with FS because some packages do not list ./package.json on there exports so if we require the package.json an error occurres.
     // Package subpath './package.json' is not defined by "exports"
     const resPackagePath = browserifyResolve(packagePath);
-    const depPackage: IPackageJSON = JSON.parse(readFileSync(resPackagePath, 'utf-8'));
+    const depPackage = jsonParse<IPackageJSON>(readFileSync(resPackagePath, 'utf-8'));
 
     if (depPackage.dependencies) {
       Object.keys(depPackage.dependencies).map(i => allPackageDeps.push(i));
@@ -493,4 +493,40 @@ function checkTransitiveDependencies(depcheckResults: depcheck.Results, packageS
     });
   });
   return depcheckResults;
+}
+
+
+/**
+ * inspired by https://github.com/npm/json-parse-even-better-errors/blob/latest/lib/index.js#L77
+ */
+type TjsonObj = { [k: string | symbol]: any; };
+function jsonParse<T>(text: string) {
+  text = String(text).replace(/^\uFEFF/, '');
+
+  const formatRE = /^\s*[{[]((?:\r?\n)+)([\s\t]*)/;
+  const emptyRE = /^(?:\{\}|\[\])((?:\r?\n)+)?$/;
+  const [, newline = '\n', indent = '  '] = text.match(emptyRE) || text.match(formatRE) || [null, '', ''];
+
+  let json: TjsonObj = JSON.parse(text);
+  // catch duplicate stringified objects
+  if (typeof json === 'string') {
+    json = JSON.parse(json);
+  }
+
+  if (json && typeof json === 'object') {
+    json[Symbol.for('newline')] = newline;
+    json[Symbol.for('indent')] = indent;
+  }
+
+  return json as T & TjsonObj;
+}
+
+function json2String(json: TjsonObj) {
+  const indent = json[Symbol.for('indent')];
+  const newline = json[Symbol.for('newline')];
+
+  const format = indent === undefined ? '  ' : indent
+  const eol = newline === undefined ? '\n' : newline
+  return `${JSON.stringify(json, null, format)
+    }\n`.replace(/\n/g, eol)
 }
