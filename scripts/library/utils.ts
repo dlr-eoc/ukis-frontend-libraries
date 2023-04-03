@@ -1,4 +1,4 @@
-import { IPackageJSON } from './npm-package.interface';
+import { IDependencyMap, IPackageJSON } from './npm-package.interface';
 import { readFile, writeFile, existsSync, readFileSync } from 'fs';
 import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 import { join } from 'path';
@@ -80,14 +80,24 @@ export interface IcheckDepsOutput {
 
 type RecursiveMap = Map<string, RecursiveMap>;
 
-export function setDependencyVersionsInWorkspaces(MAINPACKAGE: IPackageJSON, packageScope: string, workspacesPaths?: string[], depsKey = 'dependencies', mainPath?: string) {
-  const workspaces = workspacesPaths || MAINPACKAGE?.workspaces.map(p => p.replace(/\\/g, '/'));
+/**
+ * replaces all dependency versions in your workspaces with the versions set in main package.json dependencies and devDependencies.
+ * Workspace paths are a replacement for the default paths from your package workspaces, and another dependency object in the main package can be used using depsKey
+ */
+export function setDependencyVersionsInWorkspaces(MAINPACKAGE: IPackageJSON, packageScope: string, workspacesPaths?: string[], depsKey?: string) {
+  const workspaces = workspacesPaths || MAINPACKAGE?.workspaces.map(p => join(CWD, p.replace(/\\/g, '/'), 'package.json'));
   if (workspaces) {
-    const mainDependencies = MAINPACKAGE[depsKey];
+    let mainDependencies = Object.assign(MAINPACKAGE.devDependencies, MAINPACKAGE.dependencies);
+
+    if (depsKey) {
+      mainDependencies = MAINPACKAGE[depsKey];
+    }
 
     if (mainDependencies) {
       workspaces.forEach(async path => {
-        await updateWorkspace(path, { dependencies: mainDependencies }, MAINPACKAGE.version, packageScope);
+        // todo use all deps in man also dev or add a shared deps
+        // and replace also in @dlr-eoc/shared-assets wich not in workspacesPaths
+        await updateWorkspace(path, mainDependencies, MAINPACKAGE.version, packageScope);
       });
 
     } else {
@@ -99,20 +109,19 @@ export function setDependencyVersionsInWorkspaces(MAINPACKAGE: IPackageJSON, pac
   }
 }
 
-async function updateWorkspace(path: string, obj: IPackageJSON['dependencies'], mainVersion: string, packageScope: string) {
+async function updateWorkspace(path: string, obj: IDependencyMap, mainVersion: string, packageScope: string) {
   updatePackageJson(path, (json) => {
     json.version = mainVersion;
     const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
     depsList.forEach(async d => {
-      updateDependencies(json, obj, d, mainVersion, packageScope);
+      updateDependencies(json, d, obj, mainVersion, packageScope);
     });
 
     return json;
   });
 }
 
-function updateDependencies(pkgJson: IPackageJSON, obj: IPackageJSON['dependencies'], depKey: string, mainVersion: string, packageScope: string) {
-  const mainPackageDependencies = obj.dependencies;
+function updateDependencies(pkgJson: IPackageJSON, depKey: string, mainPackageDependencies: IDependencyMap, mainVersion: string, packageScope: string) {
   if (pkgJson[depKey]) {
     Object.keys(mainPackageDependencies).forEach(dep => {
       const hasDep = pkgJson[depKey]?.[dep];
