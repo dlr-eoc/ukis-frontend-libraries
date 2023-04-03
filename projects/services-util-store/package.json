@@ -17,7 +17,7 @@
     "@angular/core": "^14.1.1"
   },
   "dependencies": {
-    "md5": "^2.2.1",
+    "md5": "^2.3.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
