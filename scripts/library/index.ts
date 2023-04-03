@@ -150,7 +150,7 @@ async function buildAll(options: IbuildOptions) {
 /**
  * replace versions of all dependencies in projects with the versions of the main package.dependencies
  */
-function setVersionsOfProjects(useDistPath = false) {
+function setVersionsOfProjects(useDistPath = false, workspacePaths = false) {
   let projectsPaths = getProjects(ANGULARJSON).map(item => item.packagePath);
   if (useDistPath) {
     projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
@@ -165,7 +165,12 @@ function setVersionsOfProjects(useDistPath = false) {
     console.table(errors);
   }
   if (!errors.length && projectsPaths.length) {
-    setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE, projectsPaths);
+    if (workspacePaths && !useDistPath) {
+      setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE);
+    } else {
+      setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE, projectsPaths);
+    }
+
     console.log(`replaced all versions in project workspaces with the versions of the main package.json`);
   }
 }
@@ -294,6 +299,7 @@ export function run() {
     .option('-d, --deps', 'List all projects in a table with dependencies')
     .option('--peer', '-d --peer: List all projects with dependencies and peerDependencies')
     .option('-s, --set', 'Set versions of all projects in dist folder')
+    .option('--set-source', 'Set versions of all projects in source folder')
     .option('-u, --update-package <registry>', 'Update package of all projects in dist folder with repo and npm config')
     .option('-g, --graph', 'Show a dependency graph')
     .option('-c, --check', 'Check if all dependencies are listed in the package.json of the projects')
@@ -320,6 +326,9 @@ export function run() {
     }
   } else if (options.set) {
     setVersionsOfProjects(true);
+  }
+  else if (options.setSource) {
+    setVersionsOfProjects(false, true);
   } else if (options.updatePackage) {
     updateBuildPackages(options.updatePackage)
   } else if (options.graph) {
