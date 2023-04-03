@@ -1,4 +1,15 @@
-export interface IPackageJSON extends Object {
+/**
+* https://github.com/npm/package-json
+*/
+
+
+interface ICustomPackageJSON extends Object {
+  workspaces?: string[];
+
+  projectsScope?: string
+}
+
+export interface IPackageJSON extends ICustomPackageJSON {
 
   name: string;
 
@@ -55,7 +66,6 @@ export interface IPackageJSON extends Object {
   private?: boolean;
 
   publishConfig?: IPublishConfig;
-
 }
 
 /**

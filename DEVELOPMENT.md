@@ -1,18 +1,21 @@
 # Getting started 
 
 - Check if [Git](https://git-scm.com/) is installed.
-- Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` . 
 - Check if [Node.js](https://nodejs.org/) and npm are installed.
+- Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` . 
 - Move into project: `cd frontend-libraries`
 - Create a new branch for your feature specific changes based on the main branch: e.g. `git checkout -b feature-XXX`
-- Install dependencies: `npm install`
+- Install dependencies: [`npm install`](https://docs.npmjs.com/cli/commands/npm-install) or [`npm ci`](https://docs.npmjs.com/cli/commands/npm-ci)
 
 ## Update dependencies
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies.
-- check for new versions `npm outdated -l` and `ng update`
-- update versions `npm update <pkg>` and `ng update <pkg>`
+- check for new versions [`npm outdated -l`](https://docs.npmjs.com/cli/commands/npm-outdated) and [`ng update`](https://angular.io/cli/update)
+- update versions [`npm update <pkg>`](https://docs.npmjs.com/cli/commands/npm-update) and `ng update <pkg>`
 - make angular migrations manually `ng update @angular/cli --from <version> --to <version> --migrate-only` and `ng update @angular/core --from <version> --to <version> --migrate-only`
 - an update of a `major` version in the dependencies should introduce a **BREAKING CHANGE!**
+
+The versions of the dependencies which are listed in root package.json will be shared with all projects
+After you update something in root package.json run the script `node scripts/library/index.js --set` to update all projects.
 
 ## General Development Workflow
 
@@ -36,7 +39,7 @@ The angular workspace was created by ``ng new < name > --create-application=fals
 run ``ng generate library < name > --prefix ukis``
 
 - rename lib package: "name": "@dlr-eoc/< name >"
-- set version to: "version": "0.0.0-PLACEHOLDER"
+- set version to the same as in the root package.json
 - set lib package: "main": "src/public-api",
 - add "license": "Apache-2.0" or a compatible licenses
 - remove the newly created path mapping in the main tsconfig.json because it is already done by `@dlr-eoc/*`
@@ -51,22 +54,25 @@ run ``ng generate library < name > --prefix ukis``
 
 ---
 
-If your project depends on a package that is already listed in [frontend-libraries/package.json](https://github.com/dlr-eoc/frontend-libraries/package.json)
- - add that package as a peer dependency to your project-specific package.json. Use the version-placeholder (`0.0.0-PLACEHOLDER-VENDOR`) for those peer dependencies. If you use a library then use the version-placeholder (`0.0.0-PLACEHOLDER`)  Example: 
+If your project depends on a package that is already listed in [frontend-libraries/package.json](https://github.com/dlr-eoc/frontend-libraries/package.json) add that package as a peer dependency to your project-specific package.json and use the same version as in the root package. 
+ 
+If you use a library (@dlr-eoc/...) then use the current version of frontend-libraries.
+
+Example: 
     ```
         // package.json
         // ...
         "peerDependencies": {
-            "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
-            "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
-            "@angular/cdk": "0.0.0-PLACEHOLDER-VENDOR",
-            "@clr/angular": "0.0.0-PLACEHOLDER-VENDOR",
-            "@clr/icons": "0.0.0-PLACEHOLDER-VENDOR",
-            "rxjs": "0.0.0-PLACEHOLDER-VENDOR",
-            "md5": "0.0.0-PLACEHOLDER-VENDOR"
+            "@angular/common": "<main version>",
+            "@angular/core": "<main version>",
+            "@angular/cdk": "<main version>",
+            "@clr/angular": "<main version>",
+            "@clr/icons": "<main version>",
+            "rxjs": "<main version>",
+            "md5": "<main version>"
         },
         "dependencies":{
-          "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER"
+          "@dlr-eoc/services-layers": "*"
         }
         // ...
     ```

@@ -1,7 +1,7 @@
-import { IPackageJSON, IDependencyMap } from './npm-package.interface';
-import * as FS from 'fs';
+import { IDependencyMap, IPackageJSON } from './npm-package.interface';
+import { readFile, writeFile, existsSync, readFileSync } from 'fs';
 import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
-import * as PATH from 'path';
+import { join } from 'path';
 
 import * as depcheck from 'depcheck';
 import * as toposort from 'toposort';
@@ -38,25 +38,6 @@ export const consoleLogColors = {
   BgCyan: '\x1b[46m',
   BgWhite: '\x1b[47m'
 };
-
-export interface Iplaceholders {
-  libVersion: string;
-  vendorVersion: string;
-}
-
-/* export interface ICustomWorkspaceProject {
-  name: string;
-  path: string;
-  packagePath: string;
-  testable: boolean;
-  buildable: boolean;
-  type: WorkspaceProject['projectType'];
-} */
-
-/* type TprojectTargets = {
-  [K in keyof WorkspaceTargets]: string | boolean
-}; */
-
 
 interface IprojectTargets {
   build: boolean;
@@ -99,54 +80,79 @@ export interface IcheckDepsOutput {
 
 type RecursiveMap = Map<string, RecursiveMap>;
 
-export function setVersionsforDependencies(paths: string[], MAINPACKAGE: IPackageJSON, placeholders: Iplaceholders, version = MAINPACKAGE.version) {
-  const packageAllDeps = Object.assign(MAINPACKAGE.dependencies, MAINPACKAGE.devDependencies);
-  paths.map(p => {
-    updatePackageJson(p, (json) => {
-      /** set main version */
-      if (json.version && json.version === placeholders.libVersion) {
-        json.version = version;
-      }
+/**
+ * replaces all dependency versions in your workspaces with the versions set in main package.json dependencies and devDependencies.
+ * Workspace paths are a replacement for the default paths from your package workspaces, and another dependency object in the main package can be used using depsKey
+ */
+export function setDependencyVersionsInWorkspaces(MAINPACKAGE: IPackageJSON, packageScope: string, workspacesPaths?: string[], depsKey?: string) {
+  const workspaces = workspacesPaths || MAINPACKAGE?.workspaces.map(p => join(CWD, p.replace(/\\/g, '/'), 'package.json'));
+  if (workspaces) {
+    let mainDependencies = Object.assign(MAINPACKAGE.devDependencies, MAINPACKAGE.dependencies);
 
-      const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
-      /** set versions for all dependencies */
-      depsList.forEach(dep => {
-        if (json.hasOwnProperty(dep)) {
-          const deps = json[dep];
-          json[dep] = replaceDependencies(deps, packageAllDeps, placeholders, version);
-        }
+    if (depsKey) {
+      mainDependencies = MAINPACKAGE[depsKey];
+    }
+
+    if (mainDependencies) {
+      workspaces.forEach(async path => {
+        // todo use all deps in man also dev or add a shared deps
+        // and replace also in @dlr-eoc/shared-assets wich not in workspacesPaths
+        await updateWorkspace(path, mainDependencies, MAINPACKAGE.version, packageScope);
       });
-      return json;
+
+    } else {
+      console.log(`key ${depsKey} is not in package: ${MAINPACKAGE.name}`)
+    }
+
+  } else {
+    console.log('Run this script in a npm monorepo with workspaces or specify paths to workspaces/projects');
+  }
+}
+
+async function updateWorkspace(path: string, obj: IDependencyMap, mainVersion: string, packageScope: string) {
+  updatePackageJson(path, (json) => {
+    json.version = mainVersion;
+    const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
+    depsList.forEach(async d => {
+      updateDependencies(json, d, obj, mainVersion, packageScope);
     });
+
+    return json;
   });
 }
 
+function updateDependencies(pkgJson: IPackageJSON, depKey: string, mainPackageDependencies: IDependencyMap, mainVersion: string, packageScope: string) {
+  if (pkgJson[depKey]) {
+    Object.keys(mainPackageDependencies).forEach(dep => {
+      const hasDep = pkgJson[depKey]?.[dep];
+      if (hasDep) {
+        const main = mainPackageDependencies[dep];
+        pkgJson[depKey][dep] = main;
+      }
+    });
 
-function replaceDependencies(dependencies: IDependencyMap, packageAllDeps, placeholders: Iplaceholders, version: string) {
-  const deps = dependencies;
-  Object.keys(deps).forEach(key => {
-    const dep = deps[key];
-    if (key.includes('@dlr-eoc') && dep === '0.0.0-PLACEHOLDER') {
-      deps[key] = version;
-    }
-    if (key in packageAllDeps && dep === placeholders.vendorVersion) {
-      deps[key] = packageAllDeps[key];
-    }
-  });
-  return deps;
+    // replace workspace versions
+    Object.keys(pkgJson[depKey]).forEach(dep => {
+      const workspaceDep = dep.includes(packageScope);
+      if (workspaceDep) {
+        pkgJson[depKey][dep] = mainVersion;
+      }
+    });
+  }
 }
+
 
 export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPackageJSON) {
-  FS.readFile(path, 'utf8', (error, jsonString) => {
+  readFile(path, 'utf8', (error, jsonString) => {
     if (error) {
       console.log(`Error read file ${path}:`, error);
       return;
     }
     try {
       if (jsonString) {
-        const jsonObj: IPackageJSON = JSON.parse(jsonString);
+        const jsonObj = jsonParse<IPackageJSON>(jsonString);
         const content = cb(jsonObj);
-        FS.writeFile(path, JSON.stringify(content), err => {
+        writeFile(path, json2String(content), err => {
           if (err) {
             console.log('Error writing file', err);
           } else {
@@ -168,7 +174,7 @@ export function createNpmrc(path: string, scope: string, registry = 'https://npm
 
   try {
     if (path) {
-      FS.writeFile(path, npmrc, err => {
+      writeFile(path, npmrc, err => {
         if (err) {
           console.log('Error writing file', err);
         } else {
@@ -189,8 +195,8 @@ export function getProjects(angularJson: WorkspaceSchema) {
     const project = angularJson.projects[p];
     const customWorkspaceProject: ICustomWorkspaceProject = {
       name: p,
-      path: PATH.join(CWD, project.root),
-      packagePath: PATH.join(CWD, project.root, 'package.json'),
+      path: join(CWD, project.root),
+      packagePath: join(CWD, project.root, 'package.json'),
       test: (project.architect && project.architect.test) ? true : false,
       build: (project.architect && project.architect.build) ? true : false,
       server: (project.architect && project.architect.server) ? true : false,
@@ -213,8 +219,8 @@ export function getProjects(angularJson: WorkspaceSchema) {
  *
  * Use all Projects to get child dependencies as well
  */
-export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScope: string, filter?: string[] | false) {
-  const buildableProjects = projects.map(p => p.name);
+export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScope: string, filterPN?: string[] | false) {
+  const projectNames = projects.map(p => p.name);
   const nodesmapGraph: Map<string, RecursiveMap> = new Map();
   const edges: [string, string][] = [];
   /**
@@ -222,7 +228,7 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
    */
   const nodes: string[] = [];
   projects.forEach((project) => {
-    if (FS.existsSync(project.packagePath)) { // check not working ???
+    if (existsSync(project.packagePath)) {
       const projectPackage: IPackageJSON = require(project.packagePath);
       const packageProjectName = projectPackage.name.replace(packageScope, '');
       nodes.push(packageProjectName);
@@ -233,21 +239,21 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
       let projectPeerDeps: string[] = null;
       if (projectPackage.dependencies) {
         projectDeps = Object.keys(projectPackage.dependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
-        addDepsOfProject(projectDeps, buildableProjects, packageProjectName, nodesmapGraph, edges)
+        addDepsOfProject('dependencies', projectDeps, projectNames, packageProjectName, nodesmapGraph, edges);
       }
 
       if (projectPackage.devDependencies) {
         projectDevDeps = Object.keys(projectPackage.devDependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
-        addDepsOfProject(projectDevDeps, buildableProjects, packageProjectName, nodesmapGraph, edges)
+        addDepsOfProject('devDependencies', projectDevDeps, projectNames, packageProjectName, nodesmapGraph, edges);
       }
 
-      if (projectPackage.devDependencies) {
-        projectPeerDeps = Object.keys(projectPackage.devDependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
-        addDepsOfProject(projectPeerDeps, buildableProjects, packageProjectName, nodesmapGraph, edges)
+      if (projectPackage.peerDependencies) {
+        projectPeerDeps = Object.keys(projectPackage.peerDependencies).filter((key) => key.indexOf(packageScope) !== -1).map(key => key.replace(packageScope, ''));
+        addDepsOfProject('peerDependencies', projectPeerDeps, projectNames, packageProjectName, nodesmapGraph, edges);
       }
 
-      if (!projectDeps?.length || !projectDevDeps?.length || !projectPeerDeps?.length) {
-        // if project has no dependencies at all
+      // if project has no dependencies at all
+      if (!projectDeps?.length && !projectDevDeps?.length && !projectPeerDeps?.length) {
         nodesmapGraph.set(packageProjectName, null);
       }
     }
@@ -255,47 +261,53 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
   // fill all null childs not get in the first iteration
   traverseUpdate(nodesmapGraph, nodesmapGraph);
 
-  if (filter) {
+  if (filterPN) {
     const filteredGraph: Map<string, RecursiveMap> = new Map();
-    filter.forEach(projectName => {
+    filterPN.forEach(projectName => {
       if (nodesmapGraph.has(projectName)) {
         filteredGraph.set(projectName, nodesmapGraph.get(projectName));
       }
     });
 
+    // edge = [projectName, dep->projectName]
+    // check if project name from filter array is edge[0] -> map to edge[1] and remove duplicates
+    const projectsDeps: string[] = edges.filter(e => filterPN.includes(e[0])).map(e => e[1]).filter((item, index, array) => array.indexOf(item) === index);
 
-    const projectsDeps: string[] = edges.filter(e => filter.includes(e[0])).map(e => e[1]).filter((item, index, array) => array.indexOf(item) === index);
+    // add the dependencies of the project to the filter array so we can then filter all edges edge[0] based on this list
     projectsDeps.forEach(item => {
-      if (filter.indexOf(item) === -1) {
-        filter.push(item);
+      if (filterPN.indexOf(item) === -1) {
+        filterPN.push(item);
       }
     });
-    const filteredEdges: [string, string][] = edges.filter(e => filter.includes(e[0]));
-
-    return { edges: filteredEdges, nodes, nodesmapGraph: filteredGraph };
+    const filteredEdges: [string, string][] = edges.filter(e => filterPN.includes(e[0]));
+    const filteredNodes = nodes.filter(n => filterPN.includes(n));
+    return { edges: filteredEdges, nodes: filteredNodes, nodesmapGraph: filteredGraph };
   } else {
     return { edges, nodes, nodesmapGraph };
   }
 
 }
 
-function addDepsOfProject(dependencies: string[], buildableProjects: string[], packageProjectName: string, nodesmapGraph: Map<string, RecursiveMap>, edges: [string, string][]) {
+function addDepsOfProject(depsType: string, dependencies: string[], projectNames: string[], packageProjectName: string, nodesmapGraph: Map<string, RecursiveMap>, edges: [string, string][]) {
   if (dependencies.length) {
     const depsObj: Map<string, any> = new Map();
     dependencies.forEach((dep) => {
-      if (buildableProjects.includes(dep)) {
-        if (nodesmapGraph.has(dep)) {
-          depsObj.set(dep, nodesmapGraph.get(dep));
-        } else {
-          depsObj.set(dep, null);
+      if (projectNames.includes(dep)) {
+        // graph only for dependencies not like edges for all;
+        if (depsType === 'dependencies') {
+          if (nodesmapGraph.has(dep)) {
+            depsObj.set(dep, nodesmapGraph.get(dep));
+          } else {
+            depsObj.set(dep, null);
+          }
         }
+
         edges.push([packageProjectName, dep]);
       }
     });
-    nodesmapGraph.set(packageProjectName, depsObj);
-  } else {
-    // if project has no dependencies with packageScope
-    nodesmapGraph.set(packageProjectName, null);
+    if (depsObj.size) {
+      nodesmapGraph.set(packageProjectName, depsObj);
+    }
   }
 }
 
@@ -320,12 +332,18 @@ function traverseUpdate(map: RecursiveMap, lookupTree: Map<string, RecursiveMap>
 }
 
 
-export function getSortedProjects(projects: ICustomWorkspaceProject[], packageScope: string, filter?: string[] | false) {
-  const gne = dependencyGraph(projects, packageScope, filter);
+export function getSortedProjects(projects: ICustomWorkspaceProject[], packageScope: string, filterPN?: string[] | false) {
+  const gne = dependencyGraph(projects, packageScope, filterPN);
   /** An array of directed edges describing a graph e.g. edge1   */
-  const edges = gne.edges;
-  const flattdeps = toposort(edges).reverse();
-  return flattdeps;
+  //const flattdeps = toposort.array(gne.nodes, gne.edges).reverse();
+  const flattdeps = toposort(gne.edges).reverse();
+  let difference = gne.nodes.filter(x => !flattdeps.includes(x));
+  let sortedProjects = flattdeps;
+  if (difference.length) {
+    // if projects do not have dependencies the ara not in flattdeps so we have to collect them from the nodes array
+    sortedProjects = [...difference, ...flattdeps];
+  }
+  return sortedProjects
 }
 
 /**
@@ -364,11 +382,11 @@ export async function checkDeps(angularJson: WorkspaceSchema, packageScope: stri
     const o: IcheckDepsOutput = {
       project: projectName,
       projectPath,
-      missingDependencies: JSON.stringify(depcheckResults.missing, null, '\t').replace(/\\\\/g, '/'),
-      invalidFiles: JSON.stringify(depcheckResults.invalidFiles, null, '\t').replace(/\\\\/g, '/'), // @babel errors not same as typescript
+      missingDependencies: json2String(depcheckResults.missing),
+      invalidFiles: json2String(depcheckResults.invalidFiles), // @babel errors not same as typescript
       unusedDependencies: depcheckResults.dependencies,
       unusedDevDependencies: depcheckResults.devDependencies,
-      usedDependencies: JSON.stringify(depcheckResults.using, null, '\t').replace(/\\\\/g, '/')
+      usedDependencies: json2String(depcheckResults.using)
     };
     const missingDeps = Object.keys(depcheckResults.missing).length;
     if (!missingDeps && !showAll) {
@@ -380,7 +398,7 @@ export async function checkDeps(angularJson: WorkspaceSchema, packageScope: stri
 
   // function to check if dep is transitive dependency from using...
   const aysncdepcheck = async (item: ICustomWorkspaceProject) => {
-    if (FS.existsSync(item.packagePath)) {
+    if (existsSync(item.packagePath)) {
       const results = await depcheck(item.path, options);
       if (results) {
         const hasMissing = Object.keys(results.missing).length;
@@ -461,13 +479,13 @@ function checkTransitiveDependencies(depcheckResults: depcheck.Results, packageS
   allDependencies.map(key => {
     let packagePath = `${key}/package.json`;
     if (key.includes(packageScope)) {
-      packagePath = PATH.join(CWD, packagePath.replace(packageScope, 'projects/'));
+      packagePath = join(CWD, packagePath.replace(packageScope, 'projects/'));
     }
     const allPackageDeps = [];
     // Resolve package path and then read package.json with FS because some packages do not list ./package.json on there exports so if we require the package.json an error occurres.
     // Package subpath './package.json' is not defined by "exports"
     const resPackagePath = browserifyResolve(packagePath);
-    const depPackage: IPackageJSON = JSON.parse(FS.readFileSync(resPackagePath, 'utf-8'));
+    const depPackage = jsonParse<IPackageJSON>(readFileSync(resPackagePath, 'utf-8'));
 
     if (depPackage.dependencies) {
       Object.keys(depPackage.dependencies).map(i => allPackageDeps.push(i));
@@ -493,4 +511,40 @@ function checkTransitiveDependencies(depcheckResults: depcheck.Results, packageS
     });
   });
   return depcheckResults;
+}
+
+
+/**
+ * inspired by https://github.com/npm/json-parse-even-better-errors/blob/latest/lib/index.js#L77
+ */
+type TjsonObj = { [k: string | symbol]: any; };
+function jsonParse<T>(text: string) {
+  text = String(text).replace(/^\uFEFF/, '');
+
+  const formatRE = /^\s*[{[]((?:\r?\n)+)([\s\t]*)/;
+  const emptyRE = /^(?:\{\}|\[\])((?:\r?\n)+)?$/;
+  const [, newline = '\n', indent = '  '] = text.match(emptyRE) || text.match(formatRE) || [null, '', ''];
+
+  let json: TjsonObj = JSON.parse(text);
+  // catch duplicate stringified objects
+  if (typeof json === 'string') {
+    json = JSON.parse(json);
+  }
+
+  if (json && typeof json === 'object') {
+    json[Symbol.for('newline')] = newline;
+    json[Symbol.for('indent')] = indent;
+  }
+
+  return json as T & TjsonObj;
+}
+
+function json2String(json: TjsonObj) {
+  const indent = json[Symbol.for('indent')];
+  const newline = json[Symbol.for('newline')];
+
+  const format = indent === undefined ? '  ' : indent
+  const eol = newline === undefined ? '\n' : newline
+  return `${JSON.stringify(json, null, format)
+    }\n`.replace(/\n/g, eol)
 }

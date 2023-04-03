@@ -22,7 +22,7 @@ interface IUi {
 export class AppComponent implements OnInit, OnDestroy {
   title = '';
   shortTitle = '';
-  version = (appVersion === '0.0.0-PLACEHOLDER') ? null : appVersion;
+  version = (appVersion) ? appVersion : null;
 
   ui: IUi = {
     alert: null,

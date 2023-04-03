@@ -5,29 +5,30 @@
  */
 
 import { fork } from 'child_process';
-import * as PATH from 'path';
-import * as FS from 'fs';
-import { IPackageJSON } from './npm-package.interface';
+import { join } from 'path';
+import { existsSync } from 'fs';
+import { Command } from 'commander';
 import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 
-
 import {
-  setVersionsforDependencies, Iplaceholders, getProjects, dependencyGraph, Iproject,
-  checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput, updatePackageJson, createNpmrc
+  getProjects, dependencyGraph, Iproject,
+  checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput, updatePackageJson, createNpmrc, setDependencyVersionsInWorkspaces, ICustomWorkspaceProject,
 } from './utils';
+import { IPackageJSON } from './npm-package.interface';
 
-import { Command } from 'commander';
 
-
-const packageScope = '@dlr-eoc/';
 const CWD = process.cwd();
-const MAINPACKAGE: IPackageJSON = require(PATH.join(CWD, 'package.json'));
-const ANGULARJSON: WorkspaceSchema = require(PATH.join(CWD, 'angular.json'));
+const MAINPACKAGE: IPackageJSON = require(join(CWD, 'package.json'));
+const ANGULARJSON: WorkspaceSchema = require(join(CWD, 'angular.json'));
 const LIBRARIES_VERSION = MAINPACKAGE.version;
-const placeholders: Iplaceholders = {
-  libVersion: '0.0.0-PLACEHOLDER',
-  vendorVersion: '0.0.0-PLACEHOLDER-VENDOR'
-};
+if (!LIBRARIES_VERSION) {
+  console.error(`property version is not set in the root package.json`);
+}
+const PACKAGE_SCOPE = MAINPACKAGE.projectsScope;
+if (!PACKAGE_SCOPE) {
+  console.error(`property 'projectsScope' for projects is not set in the root package.json`);
+}
+
 
 interface IgraphOptions {
   projects?: string;
@@ -35,16 +36,37 @@ interface IgraphOptions {
 function showDependencyGraph(options: IgraphOptions) {
   const filterProjects = options?.projects?.split(',') || false;
   const projects = getProjects(ANGULARJSON);
-  const graph = dependencyGraph(projects, packageScope, filterProjects);
+  const graph = dependencyGraph(projects, PACKAGE_SCOPE, filterProjects);
   console.log(graph.nodesmapGraph);
 }
 
 async function runCheckDeps() {
-  const allErrors = await checkDeps(ANGULARJSON, packageScope);
+  const allErrors = await checkDeps(ANGULARJSON, PACKAGE_SCOPE);
   if (allErrors.length) {
     allErrors.map(e => formatCheckDepsOutput(e, false));
-    process.exit(1);
+    console.error(`check for missing dependencies`)
   }
+  return allErrors.length;
+}
+
+
+interface ISortedDepsOptions {
+  projects?: string;
+  type?: 'library' | 'application' | 'all';
+  target: 'test' | 'build' | 'all';
+}
+/**
+ * get all projects filtered and topo sorted
+ */
+function getSortedDeps(options: ISortedDepsOptions) {
+  if (!options.type) {
+    options.type = 'library';
+  }
+  const filterProjects = options?.projects?.split(',') || false;
+  const targetFilter = (item: ICustomWorkspaceProject) => (options.target === 'all') ? true : item[options.target];
+  const typeFilter = (item: ICustomWorkspaceProject) => (options.type === 'all') ? true : item.type === options.type;
+  const filteredProjects = getProjects(ANGULARJSON).filter(item => targetFilter(item) && typeFilter(item));
+  return getSortedProjects(filteredProjects, PACKAGE_SCOPE, filterProjects);
 }
 
 function runTests(offset = 0, projects, headless = false) {
@@ -82,9 +104,7 @@ function testAll(options: ItestOptions) {
     options.headless = false
   }
 
-  const filterProjects = options?.projects?.split(',') || false;
-  const testableProjects = getProjects(ANGULARJSON).filter(item => item.test && item.type === 'library');
-  const flattdepsAndProjects = getSortedProjects(testableProjects, packageScope, filterProjects);
+  const flattdepsAndProjects = getSortedDeps({ target: 'test', type: 'library', projects: options?.projects });
   runTests(0, flattdepsAndProjects, options.headless);
 }
 
@@ -117,31 +137,25 @@ interface IbuildOptions {
  * Builds all projects from projectType = "library" and architect.build
  */
 async function buildAll(options: IbuildOptions) {
-  runCheckDeps()
-  const result = await checkDeps(ANGULARJSON, packageScope);
+  const errors = await runCheckDeps();
   /** build ony if there are no missing deps */
-  if (result.length) {
-    result.map(e => formatCheckDepsOutput(e, false));
-    console.error(`check for missing dependencies`)
+  if (errors) {
     process.exit(1);
   } else {
-
-    const filterProjects = options?.projects?.split(',') || false;
-    const buildableProjects = getProjects(ANGULARJSON).filter(item => item.build && item.type === 'library');
-    const flattdepsAndProjects = getSortedProjects(buildableProjects, packageScope, filterProjects);
+    const flattdepsAndProjects = getSortedDeps({ target: 'build', type: 'library', projects: options?.projects });
     runBuilds(0, flattdepsAndProjects);
   }
 }
 
 /**
- * replace versions of all dependencies in projects which have placeholders
+ * replace versions of all dependencies in projects with the versions of the main package.dependencies
  */
-function setVersionsOfProjects(useDistPath = false) {
-  let projectsPaths = getProjects(ANGULARJSON).filter(item => item.type === 'library').map(item => item.packagePath);
+function setVersionsOfProjects(useDistPath = false, workspacePaths = false) {
+  let projectsPaths = getProjects(ANGULARJSON).map(item => item.packagePath);
   if (useDistPath) {
     projectsPaths = projectsPaths.map(p => p.replace('projects', 'dist'));
   }
-  projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
+  projectsPaths = projectsPaths.filter(p => existsSync(p));
   const errors = showProjectsAndDependencies(true, false);
   if (!projectsPaths.length) {
     console.log(`there are no build projects, run npm run build first!`);
@@ -151,8 +165,13 @@ function setVersionsOfProjects(useDistPath = false) {
     console.table(errors);
   }
   if (!errors.length && projectsPaths.length) {
-    setVersionsforDependencies(projectsPaths, MAINPACKAGE, placeholders);
-    console.log(`replaced all versions in projects with '${placeholders.libVersion}' and '${placeholders.vendorVersion}' with the versions of the main package.json ${MAINPACKAGE.version}`);
+    if (workspacePaths && !useDistPath) {
+      setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE);
+    } else {
+      setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE, projectsPaths);
+    }
+
+    console.log(`replaced all versions in project workspaces with the versions of the main package.json`);
   }
 }
 
@@ -163,18 +182,18 @@ function updateBuildPackages(registry?: string) {
   let projects = getProjects(ANGULARJSON).filter(item => item.type === 'library')
   let projectsPaths = projects.map(p => p.path.replace('projects', 'dist'));
 
-  projectsPaths = projectsPaths.filter(p => FS.existsSync(p));
+  projectsPaths = projectsPaths.filter(p => existsSync(p));
   if (!projectsPaths.length) {
     console.log(`there are no build projects, run npm run build first!`);
   }
 
   if (projectsPaths.length) {
 
-    const packageScope = '@dlr-eoc';
+    const packageScope = PACKAGE_SCOPE;
     const repositoryUrl = `git+https://github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
     projectsPaths.map(p => {
-      const packagePath = PATH.join(p, 'package.json');
+      const packagePath = join(p, 'package.json');
       updatePackageJson(packagePath, (json) => {
         if (!json.repository) {
           json.repository = {} as any;
@@ -188,9 +207,9 @@ function updateBuildPackages(registry?: string) {
       });
 
       if (typeof registry === 'string') {
-        createNpmrc(PATH.join(p, '.npmrc'), packageScope, registry);
+        createNpmrc(join(p, '.npmrc'), packageScope, registry);
       } else {
-        createNpmrc(PATH.join(p, '.npmrc'), packageScope);
+        createNpmrc(join(p, '.npmrc'), packageScope);
       }
     });
 
@@ -198,13 +217,20 @@ function updateBuildPackages(registry?: string) {
   }
 }
 
-function listAllProjects() {
+
+function listAllProjects(sorted = false, projects?: string) {
   const projectsPaths = getProjects(ANGULARJSON);
-  const list = projectsPaths.reduce((p, n) => {
-    const relPath = n.path.split(PATH.join(CWD, '/'))[1].replace(/\\/g, '/');
-    return p + '- ' + `[${n.name}](${relPath}/README.md)` + '\n';
-  }, '');
-  console.log(list);
+  let projectNames = projectsPaths.map(p => p.name);
+  if (sorted) {
+    projectNames = getSortedDeps({ type: 'all', target: 'all', projects: projects });
+    console.log(projectNames);
+  } else {
+    const list = projectsPaths.sort((a, b) => projectNames.indexOf(a.name) - projectNames.indexOf(b.name)).reduce((p, n) => {
+      const relPath = n.path.split(join(CWD, '/'))[1].replace(/\\/g, '/');
+      return p + '- ' + `[${n.name}](${relPath}/README.md)` + '\n';
+    }, '');
+    console.log(list);
+  }
 }
 
 function showProjectsAndDependencies(silent = false, showPeer = false, projectType?: WorkspaceProject['projectType']) {
@@ -221,22 +247,13 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
     const projectPackage = require(p.packagePath);
     const project: Iproject = {
       name: projectPackage.name,
-      version: projectPackage.version.replace('0.0.0', LIBRARIES_VERSION),
+      version: projectPackage.version,
       error: false,
       dependencies: null
     };
 
-    if (projectPackage.version !== placeholders.libVersion) {
-      const error = `version of project: ${projectPackage.name} must be ${placeholders.vendorVersion} for build!`;
-      if (!silent) {
-        console.error(error);
-      }
-      project.error = true;
-      errors.push({ project: projectPackage.name, error });
-    }
-
-    if (p.type === 'library' && projectPackage.name.indexOf(packageScope) === -1) {
-      const error = `name of project: ${projectPackage.name} must be prefixed with the ${packageScope} namespace!`;
+    if (p.type === 'library' && projectPackage.name.indexOf(PACKAGE_SCOPE) === -1) {
+      const error = `name of project: ${projectPackage.name} must be prefixed with the ${PACKAGE_SCOPE} namespace!`;
       if (!silent) {
         console.error(error);
       }
@@ -247,20 +264,8 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
     if (projectPackage.dependencies) {
       const dependencies = Object.keys(projectPackage.dependencies);
       project.dependencies = dependencies.join(',') || null;
-
-      Object.keys(projectPackage.dependencies).forEach((key) => {
-        const dep = projectPackage.dependencies[key];
-        if (key.indexOf(packageScope) !== -1 && dep !== placeholders.libVersion) {
-          const error = `version of dependency: ${key} in project: ${projectPackage.name}
-                    must be ${placeholders.libVersion} for build!`;
-          if (!silent) {
-            errors.push({ project: projectPackage.name, error });
-          }
-          project.error = true;
-          errors.push({ project: projectPackage.name, error });
-        }
-      });
     }
+
     // without peerDeps
     projects.push(project);
     // --------------------------------------
@@ -284,20 +289,22 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
 }
 
 export function run() {
-  const privPackage = require(PATH.join(__dirname, 'package.json'));
+  const privPackage = require(join(__dirname, 'package.json'));
   const program = new Command(`node ${privPackage.main}`);
-  program.version(privPackage.version, '-v, --vers', 'output the current version')
+  program.version(privPackage.version, '-v, --vers', 'output the current version of this script')
     .description('Run this script inside of an angular workspace')
     .option('-h, --help ', 'display help for command')
     .option('-l, --list', 'List all projects')
+    .option('--list-sort', 'List projects sorted')
     .option('-d, --deps', 'List all projects in a table with dependencies')
     .option('--peer', '-d --peer: List all projects with dependencies and peerDependencies')
     .option('-s, --set', 'Set versions of all projects in dist folder')
+    .option('--set-source', 'Set versions of all projects in source folder')
     .option('-u, --update-package <registry>', 'Update package of all projects in dist folder with repo and npm config')
-    .option('-g, --graph', 'Set versions of all projects in dist folder')
-    .option('-c, --check', 'Check if all dependencies are listed in the package.json of the project')
+    .option('-g, --graph', 'Show a dependency graph')
+    .option('-c, --check', 'Check if all dependencies are listed in the package.json of the projects')
     .option('-t, --test', 'Run ng test for all projects')
-    .option('-p, --projects [type]', 'Comma separated list of projects. Run only for specified projects. This is working for test and build and graph')
+    .option('-p, --projects [type]', 'Comma separated list of projects. Run only for specified projects. This is working for --test, --build, --graph and --list-sort')
     .option('--headless', '-t --headless: Run ng test for all projects with ChromeHeadless')
     .option('-b, --build', 'Run ng build for all projects with toposort dependencies')
     .parse(process.argv);
@@ -309,6 +316,8 @@ export function run() {
 
   if (options.list) {
     listAllProjects();
+  } else if (options.listSort) {
+    listAllProjects(true, options.projects);
   } else if (options.deps) {
     if (options.peer) {
       showProjectsAndDependencies(false, true);
@@ -317,6 +326,9 @@ export function run() {
     }
   } else if (options.set) {
     setVersionsOfProjects(true);
+  }
+  else if (options.setSource) {
+    setVersionsOfProjects(false, true);
   } else if (options.updatePackage) {
     updateBuildPackages(options.updatePackage)
   } else if (options.graph) {
@@ -324,9 +336,12 @@ export function run() {
       projects: options.projects
     });
   } else if (options.check) {
-    runCheckDeps();
+    runCheckDeps().then(errors => {
+      if (errors) {
+        process.exit(1);
+      }
+    });
   } else if (options.test) {
-    console.log(options)
     testAll({
       headless: options.headless,
       projects: options.projects
