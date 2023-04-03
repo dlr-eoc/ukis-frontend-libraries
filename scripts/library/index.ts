@@ -304,7 +304,7 @@ export function run() {
     .option('-g, --graph', 'Show a dependency graph')
     .option('-c, --check', 'Check if all dependencies are listed in the package.json of the projects')
     .option('-t, --test', 'Run ng test for all projects')
-    .option('-p, --projects [type]', 'Comma separated list of projects. Run only for specified projects. This is working for test and build and graph')
+    .option('-p, --projects [type]', 'Comma separated list of projects. Run only for specified projects. This is working for --test, --build, --graph and --list-sort')
     .option('--headless', '-t --headless: Run ng test for all projects with ChromeHeadless')
     .option('-b, --build', 'Run ng build for all projects with toposort dependencies')
     .parse(process.argv);

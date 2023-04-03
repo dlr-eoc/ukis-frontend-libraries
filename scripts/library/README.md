@@ -19,8 +19,11 @@ It uses the package scope `@dlr-eoc`, `main package.json` and the angular config
 - List all projects with dependencies and peerDependencies
 
 - Set versions of all projects in dist folder
+- Set versions of all projects in source (projects) folder
 - Show a dependency graph
 - Check if all dependencies are listed in the package.json of the project
 
 - Run ng test for all projects
 - Run ng build for all projects (with toposort dependencies)
+
+Check help `node index.js -h` for more information.
