@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/services-util-store",
-  "version": "0.0.0-PLACEHOLDER",
+  "version": "11.0.0-alpha.1",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -13,15 +13,15 @@
     "object"
   ],
   "peerDependencies": {
-    "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR"
+    "@angular/common": "^14.1.1",
+    "@angular/core": "^14.1.1"
   },
   "dependencies": {
-    "md5": "0.0.0-PLACEHOLDER-VENDOR",
-    "tslib": "0.0.0-PLACEHOLDER-VENDOR"
+    "md5": "^2.2.1",
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"
+    "zone.js": "^0.11.7",
+    "@angular/platform-browser-dynamic": "^14.1.1"
   }
 }

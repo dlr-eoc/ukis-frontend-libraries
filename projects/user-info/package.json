@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/user-info",
-  "version": "0.0.0-PLACEHOLDER",
+  "version": "11.0.0-alpha.1",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -13,19 +13,19 @@
     "user details"
   ],
   "peerDependencies": {
-    "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/forms": "0.0.0-PLACEHOLDER-VENDOR",
-    "@clr/angular": "0.0.0-PLACEHOLDER-VENDOR",
-    "@clr/icons": "0.0.0-PLACEHOLDER-VENDOR",
-    "@clr/ui": "0.0.0-PLACEHOLDER-VENDOR",
-    "rxjs": "0.0.0-PLACEHOLDER-VENDOR"
+    "@angular/common": "^14.1.1",
+    "@angular/core": "^14.1.1",
+    "@angular/forms": "^14.1.1",
+    "@clr/angular": "^13.7.0",
+    "@clr/icons": "^13.0.2",
+    "@clr/ui": "^13.7.0",
+    "rxjs": "^6.6.7"
   },
   "devDependencies": {
-    "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"
+    "zone.js": "^0.11.7",
+    "@angular/platform-browser-dynamic": "^14.1.1"
   },
   "dependencies": {
-    "tslib": "0.0.0-PLACEHOLDER-VENDOR"
+    "tslib": "^2.4.0"
   }
 }

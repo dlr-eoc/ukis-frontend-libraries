@@ -1,7 +1,7 @@
 {
   "name": "@dlr-eoc/services-ogc",
   "main": "src/public-api",
-  "version": "0.0.0-PLACEHOLDER",
+  "version": "11.0.0-alpha.1",
   "license": "Apache-2.0",
   "author": "Team UKIS",
   "description": "This module bundles our clients for OGC standards. E.g. parse OWS Context JSON, WMS, WMTS or WPS.",
@@ -15,30 +15,30 @@
     "WPS"
   ],
   "peerDependencies": {
-    "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
-    "rxjs": "0.0.0-PLACEHOLDER-VENDOR"
+    "@angular/common": "^14.1.1",
+    "@angular/core": "^14.1.1",
+    "rxjs": "^6.6.7"
   },
   "dependencies": {
-    "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/services-util-store": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/base-layers-raster": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/services-map-state": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/utils-ogc": "0.0.0-PLACEHOLDER",
-    "md5": "0.0.0-PLACEHOLDER-VENDOR",
-    "w3c-schemas": "0.0.0-PLACEHOLDER-VENDOR",
-    "ogc-schemas": "0.0.0-PLACEHOLDER-VENDOR",
-    "ol": "0.0.0-PLACEHOLDER-VENDOR",
-    "@michaellangbein/jsonix": "0.0.0-PLACEHOLDER-VENDOR",
-    "tslib": "0.0.0-PLACEHOLDER-VENDOR",
-    "opensearch-browser": "0.0.0-PLACEHOLDER-VENDOR",
-    "luxon": "0.0.0-PLACEHOLDER-VENDOR",
-    "ol-mapbox-style": "0.0.0-PLACEHOLDER-VENDOR"
+    "@dlr-eoc/services-layers": "11.0.0-alpha.1",
+    "@dlr-eoc/services-util-store": "11.0.0-alpha.1",
+    "@dlr-eoc/base-layers-raster": "11.0.0-alpha.1",
+    "@dlr-eoc/services-map-state": "11.0.0-alpha.1",
+    "@dlr-eoc/utils-ogc": "11.0.0-alpha.1",
+    "md5": "^2.2.1",
+    "w3c-schemas": "^1.4.0",
+    "ogc-schemas": "^2.6.1",
+    "ol": "^v7.1.0",
+    "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
+    "tslib": "^2.4.0",
+    "opensearch-browser": "^2.0.0-alpha.5",
+    "luxon": "^2.5.0",
+    "ol-mapbox-style": "^9.2.1"
   },
   "devDependencies": {
-    "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR",
-    "proj4": "0.0.0-PLACEHOLDER-VENDOR",
-    "@dlr-eoc/shared-assets": "0.0.0-PLACEHOLDER"
+    "zone.js": "^0.11.7",
+    "@angular/platform-browser-dynamic": "^14.1.1",
+    "proj4": "^2.8.0",
+    "@dlr-eoc/shared-assets": "11.0.0-alpha.1"
   }
 }

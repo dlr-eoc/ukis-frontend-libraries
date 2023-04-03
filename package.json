@@ -137,6 +137,26 @@
     "karma-junit-reporter -tests",
     "@fontsource/noto-sans - for open-map-styles"
   ],
+  "workspaces": [
+    "projects\\cookie-alert",
+    "projects\\base-layers-raster",
+    "projects\\core-ui",
+    "projects\\map-tools",
+    "projects\\layer-control",
+    "projects\\map-ol",
+    "projects\\services-layers",
+    "projects\\services-util-store",
+    "projects\\services-ogc",
+    "projects\\services-map-state",
+    "projects\\demo-auth",
+    "projects\\demo-maps",
+    "projects\\user-info",
+    "projects\\utils-browser",
+    "projects\\utils-maps",
+    "projects\\utils-ogc",
+    "projects\\map-three",
+    "projects\\shared-assets"
+  ],
   "engines": {
     "node": ">= 18.13.0",
     "npm": ">= 8.19.3"
