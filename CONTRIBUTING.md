@@ -50,7 +50,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 - Be sure that an issue describes the problem you're fixing, or documents the design for the feature you'd like to add.
   Discussing the design up front helps to ensure that we're ready to accept your work.
 - **Please sign our [Contributor License Agreement (CLA)](#cla) before sending PRs.**
-  We cannot accept code without this. Make sure you sign with the primary email address of the Git identity that has been granted access to the UKIS repository.
+  We unfortunately cannot accept code without this. Make sure you sign with the primary email address of the Git identity that has been granted access to the UKIS repository.
 
 #### Getting started
 1. Check our [developer documentation](DEVELOPMENT.md)
@@ -95,7 +95,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 6. [Send a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) to `ukis-frontend-libraries:main`.
   * If we suggest changes then:
     * Make the required updates and push it back to the same branch you opened the Pull Request on.
-    * This will automatically re-run the UKIS test suites ([configured in the GitHub Actions](.github/workflows/testAndBuild.yml)) to ensure tests are still passing.
+    * This will automatically re-run the UKIS test suites ([configured in the GitHub Actions](.github/workflows/test-build.yml)) to ensure tests are still passing.
 
 **Do not, rebase your local branch on newer versions of main before your work is complete and all requested changes are made!!!** [The Perils of Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing#_rebase_peril)
 
@@ -112,8 +112,6 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 That's it :) Thank you for your contribution!
 
-
-#### After your pull request is merged
 
 After your pull request is merged, you can safely delete your branch and pull the changes
 from the main (upstream) repository:
@@ -205,18 +203,18 @@ changes to be accepted, the CLA must be signed. It's a quick process, we promise
 
   If you have more than one Git identity, you must make sure that you sign the CLA using the primary email address associated with the ID that has been granted access to the UKIS repository. Git identities can be associated with more than one email address, and only one is primary. Here are some links to help you sort out multiple Git identities and email addresses:
 
-  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#setting-your-commit-email-address-in-git
+  * [Setting your commit email address in Git](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#setting-your-commit-email-address-in-git)
   * https://stackoverflow.com/questions/37245303/what-does-usera-committed-with-userb-13-days-ago-on-github-mean
-  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#about-commit-email-addresses
-  * https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/blocking-command-line-pushes-that-expose-your-personal-email-address
+  * [About commit email addresses](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address#about-commit-email-addresses)
+  * [Blocking command line pushes that expose your personal email address](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/blocking-command-line-pushes-that-expose-your-personal-email-address)
 
   Note that if you have more than one Git identity, it is important to verify that you are logged in with the same ID with which you signed the CLA, before you commit changes. If not, your PR will fail the CLA check.
 
 <hr>
 
 
-[github]: https://github.com/dlr-eoc/
-[cla]: https://github.com/dlr-eoc/frontend-libraries/DLR_Individual_Contributor_License_Agreement_UKIS.pdf
-[coc]: https://github.com/dlr-eoc/frontend-libraries/CODE_OF_CONDUCT.md
-[changelog]: https://github.com/dlr-eoc/frontend-libraries/CHANGELOG.md
-[development]: https://github.com/dlr-eoc/frontend-libraries/DEVELOPMENT.md
+[github]: https://github.com/dlr-eoc/frontend-libraries/
+[cla]: https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/DLR_Individual_Contributor_License_Agreement_UKIS.pdf
+[coc]: https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/CODE_OF_CONDUCT.md
+[changelog]: https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/CHANGELOG.md
+[development]: https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/DEVELOPMENT.md
