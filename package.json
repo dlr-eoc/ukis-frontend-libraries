@@ -24,7 +24,7 @@
     "test": "node scripts/library/index.js --test",
     "schematics:test": "jasmine dist/core-ui/schematics/**/*_spec.js",
     "preschematics:test": "ng build --configuration=production --watch=false core-ui",
-    "setVersionsInBuild": "node scripts/library/index.js --set",
+    "syncVersionsInWorkspaces": "node scripts/library/index.js --set-source",
     "build:scripts": "npx tsc -p scripts/library/tsconfig.json",
     "lint": "ng lint",
     "compodoc": "compodoc -p tsconfig.doc.json -a projects/core-ui/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
