@@ -1,31 +1,34 @@
 # Getting started 
 
-- Check if [Git](https://git-scm.com/) is installed.
-- Check if [Node.js](https://nodejs.org/) and npm are installed.
-- Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` . 
+- Check if [Git](https://git-scm.com/) is installed
+- Check if [Node.js](https://nodejs.org/) and npm are installed
+- Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` 
 - Move into project: `cd frontend-libraries`
-- Create a new branch for your feature specific changes based on the main branch: e.g. `git checkout -b feature-XXX`
 - Install dependencies: [`npm install`](https://docs.npmjs.com/cli/commands/npm-install) or [`npm ci`](https://docs.npmjs.com/cli/commands/npm-ci)
+- Dependencies are managed in [npm workspaces](https://docs.npmjs.com/cli/v9/using-npm/workspaces) check how to use them
+- Create a new branch for your feature specific changes based on the main branch: e.g. `git checkout -b feature-XXX`
 
 ## Update dependencies
 - reserve time in sprint or before a sprint to upgrade versions and then to test and fix broken dependencies.
 - check for new versions [`npm outdated -l`](https://docs.npmjs.com/cli/commands/npm-outdated) and [`ng update`](https://angular.io/cli/update)
 - update versions [`npm update <pkg>`](https://docs.npmjs.com/cli/commands/npm-update) and `ng update <pkg>`
-- make angular migrations manually `ng update @angular/cli --from <version> --to <version> --migrate-only` and `ng update @angular/core --from <version> --to <version> --migrate-only`
+- make angular migrations manually if needed `ng update @angular/cli --from <version> --to <version> --migrate-only` and `ng update @angular/core --from <version> --to <version> --migrate-only`
 - an update of a `major` version in the dependencies should introduce a **BREAKING CHANGE!**
 
-The versions of the dependencies which are listed in root package.json will be shared with all projects
-After you update something in root package.json run the script `node scripts/library/index.js --set` to update all projects.
+**The versions of the dependencies which are listed in root package.json will be shared with all projects**
+**After you update something in root package.json (package version or dependencies) run the script `node scripts/library/index.js --set-source` to sync all versions with the projects**
+
+This is used to sync "peerDependencies" across all workspaces but also to set the versions of other dependencies and the package version itself.
 
 ## General Development Workflow
 
 ### Issues and Milestones
-- Collect Ideas, then Sum them up to Issues which we can then sort into different [Milestones](https://github.com/dlr-eoc/ukis-frontend-libraries/milestones)
+- Collect Ideas, then sum them up to Issues which we can then sort into different [Milestones](https://github.com/dlr-eoc/ukis-frontend-libraries/milestones)
 - Label Issues and use the [Commit Message Guidelines](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/CONTRIBUTING.md#-commit-message-guidelines)
 
 ### Branch and Fork
 - Internally we use branches in the repository to create new features and bug fixes
-- If you are not member of our organization fork our repository and use branches ([see our guide on contributing](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/CONTRIBUTING.md))
+- If you are not member of our organization fork our repository and ([see the guide on contributing](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/CONTRIBUTING.md))
 
 **gh-pages branch:**
 This branch is used to host some demo applications as GitHub Pages.
@@ -33,28 +36,33 @@ Do not push to it or adjust it manually, because it gets updated by a [GitHub Ac
 
 
 # Ho to create a new Project library (UKIS-Module)
-The angular workspace was created by ``ng new < name > --create-application=false --prefix=ukis --style=scss`` with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.14.
+The angular workspace was created by ``ng new <name> --create-application=false --prefix=ukis --style=scss`` with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.14.
 
 ### 1. Generate a new library with the cli
-run ``ng generate library < name > --prefix ukis``
+run ``ng generate library <name> --prefix ukis``
 
-- rename lib package: "name": "@dlr-eoc/< name >"
+- rename lib package: "name": "`@dlr-eoc/<name>`"
 - set version to the same as in the root package.json
 - set lib package: "main": "src/public-api",
 - add "license": "Apache-2.0" or a compatible licenses
 - remove the newly created path mapping in the main tsconfig.json because it is already done by `@dlr-eoc/*`
 
-### 2. Add and create Files
+### 2. Add it to npm workspaces
+run ``npm init -w ./projects/<angular-project-name>``
+
+Same name used in ``ng generate library <name>``.
+
+### 3. Add and create Files
 - create components and or services in the lib with the cli
 - add missing exports to public-api.ts
 
-### 3. Add Dependencies
+### 4. Add Dependencies
 
 [When my package depends on another package, should I put it in dependencies or peerDependencies?](https://medium.com/angular-in-depth/npm-peer-dependencies-f843f3ac4e7f)
 
 ---
 
-If your project depends on a package that is already listed in [frontend-libraries/package.json](https://github.com/dlr-eoc/frontend-libraries/package.json) add that package as a peer dependency to your project-specific package.json and use the same version as in the root package. 
+1. If your project depends on a package that is already listed in [frontend-libraries/package.json](https://github.com/dlr-eoc/frontend-libraries/package.json) add that package as a peer dependency to your project-specific package.json and use the same version as in the root package. 
  
 If you use a library (@dlr-eoc/...) then use the current version of frontend-libraries.
 
@@ -79,28 +87,33 @@ Example:
    This placeholder gets replaced with the versions of the main package.json on publish! [see scripts/library (setVersionsOfProjects)](scripts\library\index.ts)
  - list them in your project-specific ng-package.json as allowedNonPeerDependencies
 
-### 4. Check if dependencies are correct in the package.json
-- run `node scripts/library/index.js -c`
+2. If your project depends on a package not listed in `frontend-libraries/package.json` add it to the project-specific package.json.
 
-### 5. Test your library
-- create specs and run `ng test < name >`
+
+### 5. Check if dependencies are correct in the package.json
+- run `node scripts/library/index.js -c` 
+
+This is running [depcheck](https://github.com/depcheck/depcheck#depcheck) with some configuration. For more information see `checkDeps()` in [ukis-libraries-scripts](scripts/library/README.md)
+
+### 6. Test your library
+- create specs and run `ng test <name>`
 - to only run a few test use [fdescribe](https://jasmine.github.io/api/edge/global.html#fdescribe) and [fit](https://jasmine.github.io/api/edge/global.html#fit) temporarily.
 
-### 6. Build your library locally
-- build lib `ng build < name >`
+### 7. Build your library locally
+If the library does not depend on other libraries from the projects run
+- build lib `ng build <name>`
 
-### 7. update README and CHANGELOG
+If it depends on one
+- `node scripts/library/index.js -b --projects <name>`
+
+### 8. update README and CHANGELOG
 - add your library to the README
 - add important/breaking changes to the CHANGELOG
 
 
 
-
-
-
-
 ### Generate a new application with the cli
-run ``ng g application < name > --prefix=app --style=scss``
+run ``ng g application <name> --prefix=app --style=scss``
 
 # How to publish a new version for all projects
 The general workflow to create a new version:
@@ -119,7 +132,7 @@ The general workflow to create a new version:
 - based on the new main branch create a release branch e.g `git checkout -b release-v7.1.0`
 - set version, date and description in the CHANGELOG.md e.g. `# [<version>](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v<version>) (<date>) (<description>)`
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
-  by running `npm version <newversion> -m "Version after Milestone XY"` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
+  by running `npm version <newversion> -m "Version after Milestone XY" --workspaces --include-workspace-root` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
 - merge the release branch in the main branch by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/main...release-v8.0.1?template=release_pull_request.md` the PR body is populated with the template)
 - push the tag (created from `npm version`) by running `git push origin --tags`
 
@@ -136,7 +149,7 @@ E.g. if the current npm version is `7.2.0` then you can create a `7.3.0-next.0`
 You can check this with `[semver](https://github.com/npm/node-semver#readme) 7.2.0 -i prerelease --preid next`
 Whereby after semantic versioning the following order exists: 7.2.0 < 7.3.0-alpha.0 < 7.3.0-beta.0 < 7.3.0-next.0
 
-To create a new prerelease, you only have to create a new version from your current branch `npm version <prerelease> --preid=next -m "prerelease message"` (premajor | preminor | prepatch).
+To create a new prerelease, you only have to create a new version from your current branch `npm version <prerelease> --preid=next -m "prerelease message" --workspaces --include-workspace-root` (premajor | preminor | prepatch).
 And then `git push origin --tags` which will trigger the [Pre Release](.github/workflows/pre-release-package.yml) workflow.
 **Before doing this you should [locally test and build](#further-you-can-test-and-build-locally)!!!** to prevent failed workflows but created tags.
 
