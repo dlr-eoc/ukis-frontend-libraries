@@ -111,13 +111,9 @@ export function setDependencyVersionsInWorkspaces(MAINPACKAGE: IPackageJSON, pac
 
 async function updateWorkspace(path: string, obj: IDependencyMap, mainVersion: string, packageScope: string) {
   updatePackageJson(path, (json) => {
-<<<<<<< HEAD
     if (json.name !== 'ukis-libraries-scripts') {
       json.version = mainVersion;
     }
-=======
-    json.version = mainVersion;
->>>>>>> main
     const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
     depsList.forEach(async d => {
       updateDependencies(json, d, obj, mainVersion, packageScope);
