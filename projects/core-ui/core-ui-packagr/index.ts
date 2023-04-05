@@ -16,8 +16,8 @@ import { Observable, from, of } from 'rxjs';
 import { mapTo, switchMap, catchError, map } from 'rxjs/operators';
 
 import { spawn } from 'child_process';
-import * as os from 'os';
-import * as cpx from 'cpx';
+import { platform } from 'os';
+import { copy } from 'cpx';
 
 
 async function initialize(
@@ -41,7 +41,7 @@ async function transpile(context: BuilderContext) {
     command: 'npx',
     args: ['tsc', '-p', join(__dirname, '../tsconfig.schematics.json')]
   }
-  if (os.platform() === "win32") {
+  if (platform() === "win32") {
     options.command = 'npx.cmd'
   }
   context.reportStatus(`Executing "${options.command}"...`);
@@ -83,7 +83,7 @@ async function copyFiles(context: BuilderContext) {
 
   const copyFiles = afilePaths.map(item => {
     return new Promise<{ from: string, to: string }>((resolve, reject) => {
-      cpx.copy(item.source, item.dest, cpxOptions, (error) => {
+      copy(item.source, item.dest, cpxOptions, (error) => {
         if (error) {
           reject(error);
         } else {
@@ -101,8 +101,7 @@ async function copyFiles(context: BuilderContext) {
   return Promise.all(copyFiles);
 }
 
-/** @deprecated Since 10.1 use `executeNgPackagrBuilder` from `@angular-devkit/build-angular` instead. */
-export function execute(
+export function customBuildNgPackagr(
   options: NgPackagrBuilderOptions,
   context: BuilderContext,
 ): Observable<BuilderOutput> {
@@ -123,4 +122,4 @@ export function execute(
 }
 
 
-export default createBuilder<Record<string, string> & NgPackagrBuilderOptions>(execute);
+export default createBuilder<Record<string, string> & NgPackagrBuilderOptions>(customBuildNgPackagr);

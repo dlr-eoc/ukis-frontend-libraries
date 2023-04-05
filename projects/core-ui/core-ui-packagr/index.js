@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.execute = void 0;
+exports.customBuildNgPackagr = void 0;
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -26,8 +26,8 @@ const path_1 = require("path");
 const rxjs_1 = require("rxjs");
 const operators_1 = require("rxjs/operators");
 const child_process_1 = require("child_process");
-const os = require("os");
-const cpx = require("cpx");
+const os_1 = require("os");
+const cpx_1 = require("cpx");
 function initialize(options, root) {
     return __awaiter(this, void 0, void 0, function* () {
         const packager = (yield Promise.resolve().then(() => require('ng-packagr'))).ngPackagr();
@@ -44,7 +44,7 @@ function transpile(context) {
             command: 'npx',
             args: ['tsc', '-p', (0, path_1.join)(__dirname, '../tsconfig.schematics.json')]
         };
-        if (os.platform() === "win32") {
+        if ((0, os_1.platform)() === "win32") {
             options.command = 'npx.cmd';
         }
         context.reportStatus(`Executing "${options.command}"...`);
@@ -83,7 +83,7 @@ function copyFiles(context) {
         const afilePaths = filePaths.map(item => ({ source: (0, path_1.join)(__dirname, item.source), dest: (0, path_1.join)(__dirname, item.dest) }));
         const copyFiles = afilePaths.map(item => {
             return new Promise((resolve, reject) => {
-                cpx.copy(item.source, item.dest, cpxOptions, (error) => {
+                (0, cpx_1.copy)(item.source, item.dest, cpxOptions, (error) => {
                     if (error) {
                         reject(error);
                     }
@@ -101,8 +101,7 @@ function copyFiles(context) {
         return Promise.all(copyFiles);
     });
 }
-/** @deprecated Since 10.1 use `executeNgPackagrBuilder` from `@angular-devkit/build-angular` instead. */
-function execute(options, context) {
+function customBuildNgPackagr(options, context) {
     return (0, rxjs_1.from)(initialize(options, context.workspaceRoot)).pipe((0, operators_1.switchMap)(packager => {
         const tc = transpile(context).then(() => copyFiles(context));
         if (options.watch) {
@@ -114,5 +113,5 @@ function execute(options, context) {
         }
     }), (0, operators_1.mapTo)({ success: true }), (0, operators_1.catchError)((err) => (0, rxjs_1.of)({ success: false, error: err.message })));
 }
-exports.execute = execute;
-exports.default = (0, architect_1.createBuilder)(execute);
+exports.customBuildNgPackagr = customBuildNgPackagr;
+exports.default = (0, architect_1.createBuilder)(customBuildNgPackagr);
