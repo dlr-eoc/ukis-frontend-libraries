@@ -42,7 +42,7 @@ function transpile(context) {
     return __awaiter(this, void 0, void 0, function* () {
         const options = {
             command: 'npx',
-            args: ['tsc', '-p', 'projects/core-ui/tsconfig.schematics.json']
+            args: ['tsc', '-p', (0, path_1.join)(__dirname, '../tsconfig.schematics.json')]
         };
         if (os.platform() === "win32") {
             options.command = 'npx.cmd';
@@ -72,15 +72,16 @@ function copyFiles(context) {
             includeEmptyDirs: true
         };
         const filePaths = [
-            { source: 'projects/core-ui/schematics/collection.json', dest: 'dist/core-ui/schematics/' },
-            { source: 'projects/core-ui/schematics/**/schema.json', dest: 'dist/core-ui/schematics/' },
-            { source: 'projects/core-ui/schematics/*/files/**', dest: 'dist/core-ui/schematics/' },
-            { source: 'projects/core-ui/src/lib/global-alert/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/' },
-            { source: 'projects/core-ui/src/lib/global-progress/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/' },
-            { source: 'projects/core-ui/src/lib/header/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/header/' },
-            { source: 'projects/core-ui/schematics/migrations/**', dest: 'dist/core-ui/schematics/migrations/' },
+            { source: '../schematics/collection.json', dest: '../../../dist/core-ui/schematics/' },
+            { source: '../schematics/**/schema.json', dest: '../../../dist/core-ui/schematics/' },
+            { source: '../schematics/*/files/**', dest: '../../../dist/core-ui/schematics/' },
+            { source: '../src/lib/global-alert/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/' },
+            { source: '../src/lib/global-progress/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/' },
+            { source: '../src/lib/header/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/header/' },
+            { source: '../schematics/migrations/**', dest: '../../../dist/core-ui/schematics/migrations/' }
         ];
-        const copyFiles = filePaths.map(item => {
+        const afilePaths = filePaths.map(item => ({ source: (0, path_1.join)(__dirname, item.source), dest: (0, path_1.join)(__dirname, item.dest) }));
+        const copyFiles = afilePaths.map(item => {
             return new Promise((resolve, reject) => {
                 cpx.copy(item.source, item.dest, cpxOptions, (error) => {
                     if (error) {

@@ -11,7 +11,7 @@
  */
 import { BuilderContext, BuilderOutput, createBuilder } from '@angular-devkit/architect';
 import { NgPackagrBuilderOptions } from '@angular-devkit/build-angular';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import { Observable, from, of } from 'rxjs';
 import { mapTo, switchMap, catchError, map } from 'rxjs/operators';
 
@@ -39,7 +39,7 @@ async function initialize(
 async function transpile(context: BuilderContext) {
   const options = {
     command: 'npx',
-    args: ['tsc', '-p', 'projects/core-ui/tsconfig.schematics.json']
+    args: ['tsc', '-p', join(__dirname, '../tsconfig.schematics.json')]
   }
   if (os.platform() === "win32") {
     options.command = 'npx.cmd'
@@ -71,16 +71,17 @@ async function copyFiles(context: BuilderContext) {
     includeEmptyDirs: true
   };
   const filePaths = [
-    { source: 'projects/core-ui/schematics/collection.json', dest: 'dist/core-ui/schematics/' },
-    { source: 'projects/core-ui/schematics/**/schema.json', dest: 'dist/core-ui/schematics/' },
-    { source: 'projects/core-ui/schematics/*/files/**', dest: 'dist/core-ui/schematics/' },
-    { source: 'projects/core-ui/src/lib/global-alert/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/' },
-    { source: 'projects/core-ui/src/lib/global-progress/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/' },
-    { source: 'projects/core-ui/src/lib/header/**', dest: 'dist/core-ui/schematics/ng-add/files/src/app/components/header/' },
-    { source: 'projects/core-ui/schematics/migrations/**', dest: 'dist/core-ui/schematics/migrations/' },
-  ]
+    { source: '../schematics/collection.json', dest: '../../../dist/core-ui/schematics/' },
+    { source: '../schematics/**/schema.json', dest: '../../../dist/core-ui/schematics/' },
+    { source: '../schematics/*/files/**', dest: '../../../dist/core-ui/schematics/' },
+    { source: '../src/lib/global-alert/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/' },
+    { source: '../src/lib/global-progress/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/' },
+    { source: '../src/lib/header/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/header/' },
+    { source: '../schematics/migrations/**', dest: '../../../dist/core-ui/schematics/migrations/' }
+  ];
+  const afilePaths = filePaths.map(item => ({ source: join(__dirname, item.source), dest: join(__dirname, item.dest) }))
 
-  const copyFiles = filePaths.map(item => {
+  const copyFiles = afilePaths.map(item => {
     return new Promise<{ from: string, to: string }>((resolve, reject) => {
       cpx.copy(item.source, item.dest, cpxOptions, (error) => {
         if (error) {
