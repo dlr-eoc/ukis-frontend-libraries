@@ -28,8 +28,7 @@
     "build:scripts": "npx tsc -p scripts/library/tsconfig.json",
     "lint": "ng lint",
     "compodoc": "compodoc -p tsconfig.doc.json -a projects/core-ui/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
-    "compodoc-serve": "compodoc -r 8081 -s",
-    "postinstall": "cd scripts/library && npm ci && cd ../../ && npm run build:scripts"
+    "compodoc-serve": "compodoc -r 8081 -s"
   },
   "private": true,
   "dependencies": {
@@ -116,6 +115,7 @@
     "@fontsource/noto-sans - for open-map-styles"
   ],
   "workspaces": [
+    "scripts\\library",
     "projects\\cookie-alert",
     "projects\\base-layers-raster",
     "projects\\core-ui",
