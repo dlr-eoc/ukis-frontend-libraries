@@ -1,7 +1,7 @@
 {
   "name": "@dlr-eoc/utils-maps",
   "main": "src/public-api",
-  "version": "0.0.0-PLACEHOLDER",
+  "version": "11.0.0-alpha.1",
   "license": "Apache-2.0",
   "author": "Team UKIS",
   "description": "This library contains a collection of utilities for OpenLayers and WebGL.",
@@ -13,13 +13,13 @@
   ],
   "peerDependencies": {},
   "dependencies": {
-    "ol": "0.0.0-PLACEHOLDER-VENDOR",
-    "delaunator": "0.0.0-PLACEHOLDER-VENDOR"
+    "ol": "^v7.1.0",
+    "delaunator": "^5.0.0"
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
-    "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
-    "@types/offscreencanvas": "0.0.0-PLACEHOLDER-VENDOR"
+    "@angular/platform-browser-dynamic": "^14.1.1",
+    "@angular/core": "^14.1.1",
+    "zone.js": "^0.11.7",
+    "@types/offscreencanvas": "^2019.7.0"
   }
 }

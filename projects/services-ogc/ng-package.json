@@ -11,14 +11,12 @@
     "@dlr-eoc/base-layers-raster",
     "@dlr-eoc/services-map-state",
     "@dlr-eoc/utils-ogc",
-    "md5",
     "ol",
     "w3c-schemas",
     "ogc-schemas",
     "@michaellangbein/jsonix",
     "opensearch-browser",
     "luxon",
-    "proj4",
-    "ol-mapbox-style"
+    "proj4"
   ]
 }

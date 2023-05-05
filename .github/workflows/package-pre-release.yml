@@ -72,8 +72,6 @@ jobs:
       ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
       - run: npm i -g npm@8.19.3
       - run: rm -f .npmrc
-      ### for each module in dist set version from repository package.json
-      - run: node scripts/library/index.js --set
       ### for each module in dist update package.json and create .npmrc
       - run: node scripts/library/index.js --update-package=https://npm.pkg.github.com/
       ### for each module in dist publish frontend-libraries to registry
@@ -105,8 +103,6 @@ jobs:
       ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
       - run: npm i -g npm@8.19.3
       - run: rm -f .npmrc
-      ### for each module in dist set version from repository package.json
-      - run: node scripts/library/index.js --set
       ### for each module in dist update package.json and create .npmrc
       - run: node scripts/library/index.js --update-package=https://registry.npmjs.org/
       ### for each module in dist publish frontend-libraries to registry

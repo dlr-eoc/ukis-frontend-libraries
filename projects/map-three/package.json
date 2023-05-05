@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-three",
-  "version": "0.0.0-PLACEHOLDER",
+  "version": "11.0.0-alpha.1",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -15,20 +15,20 @@
     "3D"
   ],
   "peerDependencies": {
-    "@angular/common": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR"
+    "@angular/common": "^14.1.1",
+    "@angular/core": "^14.1.1"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/services-layers": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/map-ol": "0.0.0-PLACEHOLDER",
-    "@dlr-eoc/utils-maps": "0.0.0-PLACEHOLDER",
-    "proj4": "0.0.0-PLACEHOLDER-VENDOR",
-    "tslib": "0.0.0-PLACEHOLDER-VENDOR",
-    "three": "0.0.0-PLACEHOLDER-VENDOR"
+    "@dlr-eoc/services-map-state": "11.0.0-alpha.1",
+    "@dlr-eoc/services-layers": "11.0.0-alpha.1",
+    "@dlr-eoc/map-ol": "11.0.0-alpha.1",
+    "@dlr-eoc/utils-maps": "11.0.0-alpha.1",
+    "proj4": "^2.8.0",
+    "tslib": "^2.4.0",
+    "three": "^0.137.5"
   },
   "devDependencies": {
-    "zone.js": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR"
+    "zone.js": "^0.11.7",
+    "@angular/platform-browser-dynamic": "^14.1.1"
   }
 }

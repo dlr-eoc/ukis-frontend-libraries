@@ -1,7 +1,7 @@
 {
   "name": "@dlr-eoc/utils-ogc",
   "main": "src/public-api",
-  "version": "0.0.0-PLACEHOLDER",
+  "version": "11.0.0-alpha.1",
   "license": "Apache-2.0",
   "author": "Team UKIS",
   "description": "This library bundles our clients for OGC standards. The long-term-strategy is to make all services in `@dlr-eoc/services-ogc` independent of angular and move them here.",
@@ -13,15 +13,15 @@
   ],
   "peerDependencies": {},
   "dependencies": {
-    "w3c-schemas": "0.0.0-PLACEHOLDER-VENDOR",
-    "ogc-schemas": "0.0.0-PLACEHOLDER-VENDOR",
-    "@michaellangbein/jsonix": "0.0.0-PLACEHOLDER-VENDOR",
-    "xmlserializer": "0.0.0-PLACEHOLDER-VENDOR",
-    "ol": "0.0.0-PLACEHOLDER-VENDOR"
+    "w3c-schemas": "^1.4.0",
+    "ogc-schemas": "^2.6.1",
+    "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
+    "xmlserializer": "^0.6.1",
+    "ol": "^v7.1.0"
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "0.0.0-PLACEHOLDER-VENDOR",
-    "@angular/core": "0.0.0-PLACEHOLDER-VENDOR",
-    "@types/node": "0.0.0-PLACEHOLDER-VENDOR"
+    "@angular/platform-browser-dynamic": "^14.1.1",
+    "@angular/core": "^14.1.1",
+    "@types/node": "^14.18.23"
   }
 }
