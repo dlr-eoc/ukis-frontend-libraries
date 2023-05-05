@@ -20,7 +20,7 @@
     "rxjs": "^6.6.7"
   },
   "dependencies": {
-    "@dlr-eoc/services-layers": "11.0.0-alpha.1",
+    "@dlr-eoc/services-layers": "11.0.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {

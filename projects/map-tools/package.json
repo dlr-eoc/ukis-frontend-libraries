@@ -23,8 +23,8 @@
     "rxjs": "^6.6.7"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "11.0.0-alpha.1",
-    "@dlr-eoc/map-ol": "11.0.0-alpha.1",
+    "@dlr-eoc/services-map-state": "11.0.0",
+    "@dlr-eoc/map-ol": "11.0.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
