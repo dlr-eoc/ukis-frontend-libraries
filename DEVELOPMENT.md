@@ -132,7 +132,7 @@ The general workflow to create a new version:
 - based on the new main branch create a release branch e.g `git checkout -b release-v7.1.0`
 - set version, date and description in the CHANGELOG.md e.g. `# [<version>](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v<version>) (<date>) (<description>)`
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
-  by running `npm version <newversion> -m "Version after Milestone XY" --workspaces --include-workspace-root` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version)
+  by running `npm version <newversion> -m "Version after Milestone XY" --workspace=projects --include-workspace-root` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version). Optionally test this by appending `--no-git-tag-version`.
 - merge the release branch in the main branch by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/main...release-v8.0.1?template=release_pull_request.md` the PR body is populated with the template)
 - push the tag (created from `npm version`) by running `git push origin --tags`
 
@@ -149,7 +149,7 @@ E.g. if the current npm version is `7.2.0` then you can create a `7.3.0-next.0`
 You can check this with `[semver](https://github.com/npm/node-semver#readme) 7.2.0 -i prerelease --preid next`
 Whereby after semantic versioning the following order exists: 7.2.0 < 7.3.0-alpha.0 < 7.3.0-beta.0 < 7.3.0-next.0
 
-To create a new prerelease, you only have to create a new version from your current branch `npm version <prerelease> --preid=next -m "prerelease message" --workspaces --include-workspace-root` (premajor | preminor | prepatch).
+To create a new prerelease, you only have to create a new version from your current branch `npm version <prerelease> --preid=next -m "prerelease message" --workspace=projects --include-workspace-root` (premajor | preminor | prepatch).
 And then `git push origin --tags` which will trigger the [Pre Release](.github/workflows/pre-release-package.yml) workflow.
 **Before doing this you should [locally test and build](#further-you-can-test-and-build-locally)!!!** to prevent failed workflows but created tags.
 
