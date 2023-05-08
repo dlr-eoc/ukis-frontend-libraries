@@ -1,3 +1,5 @@
+
+# [11.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v11.0.0) (2023-05-05) (Openlayers Update and map-ol)
 ### Breaking Changes
 * Update Openlayers to `^v7.1.0` and ol-mapbox-style to `^9.2.1`. [Issue #157](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/157).
 

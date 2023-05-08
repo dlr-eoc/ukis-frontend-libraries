@@ -1,7 +1,7 @@
 {
   "name": "@dlr-eoc/utils-ogc",
   "main": "src/public-api",
-  "version": "11.0.0-alpha.1",
+  "version": "11.0.0",
   "license": "Apache-2.0",
   "author": "Team UKIS",
   "description": "This library bundles our clients for OGC standards. The long-term-strategy is to make all services in `@dlr-eoc/services-ogc` independent of angular and move them here.",
