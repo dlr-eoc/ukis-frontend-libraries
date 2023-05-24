@@ -42,6 +42,7 @@ import olSourceCluster from 'ol/source/Cluster';
 import olVectorLayer from 'ol/layer/Vector';
 import { applyStyle } from 'ol-mapbox-style';
 import { collectionItemSetIndex, layerOrGroupSetOpacity, layerOrGroupSetVisible, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
+import { defaults as defaultInteractions } from 'ol/interaction/defaults';
 
 
 export interface IMapControls {
@@ -118,6 +119,14 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   ngOnDestroy() {
     this.subs.forEach(sub => sub.unsubscribe());
+
+    /**
+     * Set the last MapState to Destroy. When the component is reinitialized, this MapState is used
+     */
+    const lastMapState = this.mapStateSvc.getMapState().value;
+    lastMapState.options.notifier = 'user';
+    this.mapStateSvc.setMapState(lastMapState);
+
     if (this.map) {
       this.map.un('moveend', this.mapOnMoveend);
       this.map.un('click', this.mapOnClickMove);
@@ -501,6 +510,17 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   private initMap() {
     const olMapView = this.mapSvc.createMap();
     this.map = olMapView.map; //
+    const oldInteractions = this.map.getInteractions();
+    const interactions = defaultInteractions();
+    interactions.forEach((item) => {
+      const hasInteraction = oldInteractions.getArray().find((i) => {
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor?retiredLocale=en
+        return (i as Object).constructor.name === (item as Object).constructor.name;
+      });
+      if (!hasInteraction) {
+        this.map.addInteraction(item)
+      }
+    });
 
     this.setControls();
     if (!this.layersSvc) {

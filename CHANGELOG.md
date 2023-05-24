@@ -2,6 +2,10 @@
 * **@dlr-eoc/layer-control:**
   - Add input to disable and enable sorting for layers or layers of groups. E.g. `<ukis-layer-control ... [layersSort]="true" [groupLayersSort]="false">` [Issue #179](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/179).
 
+### Bug Fixes
+* **@dlr-eoc/map-ol:**
+  - Restore ol map interactions and MapState after component toggle [Issue #178](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/178).
+
 # [11.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v11.0.0) (2023-05-05) (Openlayers Update and map-ol)
 ### Breaking Changes
 * Update Openlayers to `^v7.1.0` and ol-mapbox-style to `^9.2.1`. [Issue #157](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/157).
