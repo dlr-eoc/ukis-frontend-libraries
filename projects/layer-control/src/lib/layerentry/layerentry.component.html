@@ -13,7 +13,7 @@
     </span>
 
     <!-- setLayerIndex // for reversed layergroups on ngFor up is down -->
-    <span *ngIf="!checkBaselayer(layer,group)">
+    <span *ngIf="!checkBaselayer(layer,group) && sorting">
       <clr-icon [hidden]="layerGroups && layerGroups.length == 1" class="iconButton" shape="arrow"
         [ngClass]="{'disabled': isLast(layer)}" (click)="setLayerIndex(layer, 'down', group)" title="up"></clr-icon>
       <clr-icon [hidden]="layerGroups && layerGroups.length == 1" class="iconButton" shape="arrow"

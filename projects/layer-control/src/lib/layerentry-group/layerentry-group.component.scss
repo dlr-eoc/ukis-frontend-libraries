@@ -6,6 +6,17 @@
   display: none;
 }
 
+/** style for drag and drop */
+.move-item {
+  cursor: move;
+}
+
+.cdk-drop-list-disabled {
+  .move-item {
+    cursor: pointer;
+  }
+}
+
 .cdk-drag-preview {
   display: flex;
   align-items: center;

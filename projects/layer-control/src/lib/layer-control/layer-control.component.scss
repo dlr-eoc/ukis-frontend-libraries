@@ -8,6 +8,12 @@
   cursor: move;
 }
 
+.cdk-drop-list-disabled {
+  .move-item {
+    cursor: pointer;
+  }
+}
+
 .cdk-drag-preview {
   display: flex;
   align-items: center;

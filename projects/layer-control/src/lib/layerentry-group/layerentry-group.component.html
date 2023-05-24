@@ -14,7 +14,7 @@
     </span>
 
     <!-- setLayerGroupIndex // for reversed layergroups on ngFor up is down -->
-    <span *ngIf="layerGroups.length>1">
+    <span *ngIf="layerGroups.length>1 && groupSort">
       <clr-icon class="iconButton move-item" [ngClass]="{'disabled':isLast(group)}" shape="arrow"
         (click)="setLayerGroupIndex(group, 'down')" title="up"></clr-icon>
       <clr-icon class="iconButton move-item" [ngClass]="{'disabled':isFirst(group)}" shape="arrow"
@@ -90,12 +90,12 @@
     </div>
 
     <!-- (cdkDropListSorted)="sort($event)"  -->
-    <div cdkDropList (cdkDropListDropped)="drop($event)"
+    <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!groupLayersSort"
       [cdkDropListData]="group.layers | itemsfilter: checkClassHide | reverse">
       <ng-container *ngFor="let layer of group.layers | itemsfilter: checkClassHide | reverse">
         <div class="sublayers" cdkDragLockAxis="y" cdkDrag [cdkDragData]="{id:layer.id}">
           <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
-            [layer]="layer" [group]="group" (update)="layerUpdate($event, group)">
+            [layer]="layer" [group]="group" (update)="layerUpdate($event, group)" [sorting]="groupLayersSort">
             <span class="move-item" cdkDragHandle>
               {{layer.displayName || layer.name}}
             </span>
