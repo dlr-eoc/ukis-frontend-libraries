@@ -1,5 +1,5 @@
 <main class="content-area">
-  <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
+  <ukis-map-ol *ngIf="showMap" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
 </main>
 
 
@@ -43,6 +43,8 @@
       <button class="btn btn-primary" (click)="setExtent()">set Extent</button>
 
       <button class="btn btn-primary" (click)="parseCapabilities()">Parse WMS capabilities</button>
+
+      <button class="btn btn-primary" (click)="toggleMap()">toggle Map</button>
 
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>

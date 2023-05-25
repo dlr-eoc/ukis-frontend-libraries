@@ -28,6 +28,8 @@ export class LayerentryGroupComponent implements OnInit {
   @Input('mapState') mapState?: MapStateService;
   @Input('group') group: LayerGroup;
   @Input('layerGroups') layerGroups: Array<Layer | LayerGroup>;
+  @Input('groupSort') groupSort?: boolean = true;
+  @Input('groupLayersSort') groupLayersSort?: boolean = true;
 
   public set openAllLayersProperties(value: boolean) {
     if (this.group && this.group.layers.length) {

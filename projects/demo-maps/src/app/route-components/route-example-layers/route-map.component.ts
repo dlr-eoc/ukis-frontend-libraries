@@ -27,6 +27,7 @@ import { VtileLayerActionComponent } from '../../components/vtile-layer-action/v
 export class RouteMapComponent implements OnInit {
   @HostBinding('class') class = 'content-container';
   controls: IMapControls;
+  showMap = true;
 
   constructor(
     public layersSvc: LayersService,
@@ -564,6 +565,10 @@ export class RouteMapComponent implements OnInit {
 
   removeAllLayers() {
     this.layersSvc.removeLayers();
+  }
+
+  toggleMap() {
+    this.showMap = !this.showMap;
   }
 
 }

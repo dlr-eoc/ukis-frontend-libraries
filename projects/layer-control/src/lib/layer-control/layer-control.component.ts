@@ -16,6 +16,8 @@ export class LayerControlComponent implements OnInit, OnDestroy {
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapStateSvc') mapStateSvc?: MapStateService;
   @Input('layerfilter') layerfilter: Layer['filtertype'] = 'Layers';
+  @Input('layersSort') layersSort?: boolean = true;
+  @Input('groupLayersSort') groupLayersSort?: boolean = true;
 
   layerGroupsSubscription: Subscription;
   layersSubscription: Subscription;

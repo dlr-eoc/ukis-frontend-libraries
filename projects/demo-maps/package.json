@@ -12,14 +12,14 @@
     "layers"
   ],
   "peerDependencies": {
-    "@angular/common": "^14.1.1",
-    "@angular/core": "^14.1.1",
-    "@angular/router": "^14.1.1",
-    "@angular/platform-browser": "^14.1.1",
-    "@clr/angular": "^13.7.0",
+    "@angular/common": "^14.2.11",
+    "@angular/core": "^14.2.11",
+    "@angular/router": "^14.2.11",
+    "@angular/platform-browser": "^14.2.11",
+    "@clr/angular": "^13.17.0",
     "rxjs": "^6.6.7",
-    "ol": "^v7.1.0",
-    "proj4": "^2.8.0"
+    "ol": "^7.3.0",
+    "proj4": "^2.9.0"
   },
   "dependencies": {
     "@dlr-eoc/map-ol": "11.0.0",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "zone.js": "^0.11.7",
-    "@angular/platform-browser-dynamic": "^14.1.1",
+    "@angular/platform-browser-dynamic": "^14.2.11",
     "protractor": "^7.0.0"
   }
 }

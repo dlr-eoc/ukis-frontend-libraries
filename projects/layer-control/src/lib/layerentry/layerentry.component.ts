@@ -43,6 +43,7 @@ export class LayerentryComponent implements OnInit {
     }
   }
   @Input('expandable') expandable = true;
+  @Input('sorting') sorting?: boolean = true;
 
 
   @Output() update = new EventEmitter<{ layer: Layer }>();
