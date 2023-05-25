@@ -15,8 +15,8 @@
     "WPS"
   ],
   "peerDependencies": {
-    "@angular/common": "^14.1.1",
-    "@angular/core": "^14.1.1",
+    "@angular/common": "^14.2.11",
+    "@angular/core": "^14.2.11",
     "rxjs": "^6.6.7"
   },
   "dependencies": {
@@ -27,7 +27,7 @@
     "@dlr-eoc/utils-ogc": "11.0.0",
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
-    "ol": "^v7.1.0",
+    "ol": "^7.3.0",
     "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
     "tslib": "^2.4.0",
     "opensearch-browser": "^2.0.0-alpha.5",
@@ -35,9 +35,9 @@
   },
   "devDependencies": {
     "zone.js": "^0.11.7",
-    "@angular/platform-browser-dynamic": "^14.1.1",
-    "proj4": "^2.8.0",
+    "@angular/platform-browser-dynamic": "^14.2.11",
+    "proj4": "^2.9.0",
     "@dlr-eoc/shared-assets": "11.0.0",
-    "terser": "^5.14.2"
+    "terser": "^5.17.6"
   }
 }

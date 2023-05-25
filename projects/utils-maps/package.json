@@ -13,12 +13,12 @@
   ],
   "peerDependencies": {},
   "dependencies": {
-    "ol": "^v7.1.0",
+    "ol": "^7.3.0",
     "delaunator": "^5.0.0"
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "^14.1.1",
-    "@angular/core": "^14.1.1",
+    "@angular/platform-browser-dynamic": "^14.2.11",
+    "@angular/core": "^14.2.11",
     "zone.js": "^0.11.7",
     "@types/offscreencanvas": "^2019.7.0"
   }
