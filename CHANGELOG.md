@@ -1,3 +1,4 @@
+# [11.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v11.1.0) (2023-05-30) (map-ol and layer-control)
 ### Features
 * **@dlr-eoc/layer-control:**
   - Add input to disable and enable sorting for layers or layers of groups. E.g. `<ukis-layer-control ... [layersSort]="true" [groupLayersSort]="false">` [Issue #179](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/179).
