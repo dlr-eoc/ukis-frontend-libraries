@@ -1,3 +1,7 @@
+### Features
+* **@dlr-eoc/map-ol:**
+  - Add groupID to olLayers (layer.groupID) to check if a layer was in an olLayerGroup.
+
 # [11.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v11.1.0) (2023-05-30) (map-ol and layer-control)
 ### Features
 * **@dlr-eoc/layer-control:**

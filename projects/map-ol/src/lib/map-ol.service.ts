@@ -93,6 +93,7 @@ const OVERLAY_TYPE_KEY = 'type';
 const FILTER_TYPE_KEY = 'filtertype';
 const ID_KEY = 'id';
 const OL_GROUP_KEY = 'groupID';
+const OL_GROUP_NAME = 'groupName';
 const TITLE_KEY = 'title';
 const WebMercator = 'EPSG:3857';
 const WGS84 = 'EPSG:4326';
@@ -1332,6 +1333,7 @@ export class MapOlService {
         layer.getLayers().forEach(gl => {
           /** add groupID to check if a layer was in an olLayerGroup */
           gl.set(OL_GROUP_KEY, l.id);
+          gl.set(OL_GROUP_NAME, l.name);
 
           const layerId = `${l.id}_${olGetUid(gl)}`;
           if (!gl.get('id')) {
@@ -1438,7 +1440,10 @@ export class MapOlService {
       const baseLayerOptions = this.createOlLayerOptions(l, 'custom');
 
       /** add groupID to check if a layer was in an olLayerGroup */
-      layers.forEach(oll => oll.set(OL_GROUP_KEY, l.id));
+      layers.forEach(oll => {
+        oll.set(OL_GROUP_KEY, l.id);
+        oll.set(OL_GROUP_NAME, l.name);
+      });
 
       const groupOptions: olLayerGroupOptions = {
         layers
