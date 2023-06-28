@@ -1786,8 +1786,9 @@ export class MapOlService {
       const popup: Layer['popup'] = layer.get('popup');
       /** add layername and layerid to feature properties */
       let properties: any = {};
+      const featureProperties = feature.getProperties();
 
-      const childFeatures = feature.getProperties().features;
+      const childFeatures = featureProperties.features;
       if (childFeatures && childFeatures.length === 1) {
         const childFeature = childFeatures[0];
         properties = childFeature.getProperties();
@@ -1797,7 +1798,7 @@ export class MapOlService {
          * or check for layerpopup.event !== move
          */
         if (evt.type === 'click') {
-          const extent = this.getFeaturesExtent(feature.getProperties().features);
+          const extent = this.getFeaturesExtent(childFeatures);
           this.setExtent(extent);
           return false;
         } else {
