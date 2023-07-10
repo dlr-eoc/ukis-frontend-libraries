@@ -97,6 +97,7 @@ const OL_GROUP_NAME = 'groupName';
 const TITLE_KEY = 'title';
 const WebMercator = 'EPSG:3857';
 const WGS84 = 'EPSG:4326';
+const POPUP_KEY = 'popup';
 
 /**
  * While @dlr-eoc/services-layers.popup already contains instructions about how to build a popup,
@@ -421,7 +422,7 @@ export class MapOlService {
 
   private isLayerInGroup(layer: olBaseLayer, layerGroup: olLayerGroup) {
     const layers = layerGroup.getLayers().getArray();
-    const haseLayer = layers.filter(l => l.get('id') === layer.get('id'));
+    const haseLayer = layers.filter(l => l.get(ID_KEY) === layer.get(ID_KEY));
     if (haseLayer.length) {
       return true;
     } else {
@@ -508,7 +509,7 @@ export class MapOlService {
    */
   private cleanUpEventListeners(layerGroup: olLayerGroup, newLayers: olBaseLayer[]) {
     /** get Difference of old layers and new layers */
-    const layersToRemove = layerGroup.getLayers().getArray().filter(x => !newLayers.map(l => l.get('id')).includes(x.get('id')));
+    const layersToRemove = layerGroup.getLayers().getArray().filter(x => !newLayers.map(l => l.get(ID_KEY)).includes(x.get(ID_KEY)));
     this.removeListenersFromOldLayers(layersToRemove);
 
     // TODO: is this done by setLayers??
@@ -718,7 +719,7 @@ export class MapOlService {
     }
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const oldLayers = this.getLayers(lowerType);
-    const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
+    const oldLayer = oldLayers.find(l => l.get(ID_KEY) === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
     if (oldLayer) {
       this.removeLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, filtertype);
@@ -734,7 +735,7 @@ export class MapOlService {
     }
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     const oldLayers = this.getLayers(lowerType);
-    const oldLayer = oldLayers.find(l => l.get('id') === newLayer.id);
+    const oldLayer = oldLayers.find(l => l.get(ID_KEY) === newLayer.id);
     const newOlLayer = this.create_layers(newLayer);
     if (newOlLayer) {
       this.updateLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, newOlLayer, filtertype);
@@ -1336,8 +1337,8 @@ export class MapOlService {
           gl.set(OL_GROUP_NAME, l.name);
 
           const layerId = `${l.id}_${olGetUid(gl)}`;
-          if (!gl.get('id')) {
-            gl.set('id', layerId);
+          if (!gl.get(ID_KEY)) {
+            gl.set(ID_KEY, layerId);
           }
           if (gl instanceof olLayer) {
             this.setCrossOrigin(l, gl);
@@ -1347,8 +1348,8 @@ export class MapOlService {
            * groups are flattened in map.getAllLayers so add popup to each layer
            * will show the popup for top layer in the Group if there is a pixel color or feature
            */
-          if (l.popup && !gl.get('popup')) {
-            gl.set('popup', l.popup);
+          if (l.popup && !gl.get(POPUP_KEY)) {
+            gl.set(POPUP_KEY, l.popup);
             /** set className if not default ol-layer */
             if (gl.getClassName() === 'ol-layer') {
               gl['className_'] = layerId;
@@ -1627,7 +1628,7 @@ export class MapOlService {
         // fixes: https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120
         const features = this.map.getFeaturesAtPixel(evt.pixel, {
           layerFilter: (l) => {
-            return layer.get('id') === l.get('id')
+            return layer.get(ID_KEY) === l.get(ID_KEY)
           }
         });
         if (features.length) {
@@ -1641,10 +1642,10 @@ export class MapOlService {
     }
 
     if (item) {
-      const popup: Layer['popup'] = (item.layer.get('popup'));
+      const popup: Layer['popup'] = (item.layer.get(POPUP_KEY));
 
       /** check if cursor was set (we need this only on move?) */
-      this.hitLayerCurr = item.layer.get('id');
+      this.hitLayerCurr = item.layer.get(ID_KEY);
       if (!this.hitLayerPrev) {
         this.hitLayerPrev = this.hitLayerCurr;
       }
@@ -1681,7 +1682,7 @@ export class MapOlService {
    * in map.forEachLayerAtPixel for raster and map.forEachFeatureAtPixel for vector
    */
   private filterLayerNoPopup = (l: olLayer<olSource>) => {
-    const popup: Layer['popup'] = (l.get('popup'));
+    const popup: Layer['popup'] = (l.get(POPUP_KEY));
     let shouldNotFilterLayer = true;
     if (!popup) {
       shouldNotFilterLayer = false;
@@ -1783,8 +1784,7 @@ export class MapOlService {
 
   public vectorOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, feature: olFeature | olRenderFeature) {
     if (layer && feature) {
-      const popup: Layer['popup'] = layer.get('popup');
-      /** add layername and layerid to feature properties */
+      const popup: Layer['popup'] = layer.get(POPUP_KEY);
       let properties: any = {};
       const featureProperties = feature.getProperties();
 
@@ -1813,7 +1813,7 @@ export class MapOlService {
   }
 
   public rasterOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView) {
-    const popup: Layer['popup'] = layer.get('popup');
+    const popup: Layer['popup'] = layer.get(POPUP_KEY);
     let properties: any = {};
 
     if (popup) {
@@ -1945,11 +1945,9 @@ export class MapOlService {
     }
   }
 
-  // TODO: overlapping layers - move popup is added on click ???
-  public addPopup(args: IPopupArgs, popupObj: any, html?: string, event?: 'click' | 'move', removePopups?: boolean) {
-    const layerpopup: Layer['popup'] = args.layer.get('popup');
+    const layerpopup: Layer['popup'] = args.layer.get(POPUP_KEY);
     // check if popup is already there and event is move
-    const layerID = args.layer.get('id');
+    const layerID = args.layer.get(ID_KEY);
     const moveID = `popup_move_ID`;
     const moveKeyLayerFeature = 'move_ID_L_F';
     const movePopup = this.getPopups().find(item => item.getId() === moveID);
@@ -2080,7 +2078,7 @@ export class MapOlService {
       } else {
         overlay.set('addEvent', browserEvent.type);
       }
-      overlay.set(OVERLAY_TYPE_KEY, 'popup');
+      overlay.set(OVERLAY_TYPE_KEY, POPUP_KEY);
       overlay.setElement(container);
 
       let coordinate;
@@ -2161,7 +2159,7 @@ export class MapOlService {
       popups = this.getPopups().filter(filter);
     }
     popups.forEach((overlay) => {
-      if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
+      if (overlay.get(OVERLAY_TYPE_KEY) === POPUP_KEY) {
         // removes ol-part of popup
         this.map.removeOverlay(overlay);
         // removes angular-part of popup
@@ -2176,7 +2174,7 @@ export class MapOlService {
       popups = this.getPopups().filter(filter);
     }
     popups.forEach((overlay) => {
-      if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
+      if (overlay.get(OVERLAY_TYPE_KEY) === POPUP_KEY) {
         const element = overlay.getElement();
         if (hide) {
           element.classList.add('hidden');
@@ -2202,7 +2200,7 @@ export class MapOlService {
   public getPopups(): olOverlay[] {
     const popups = [];
     this.map.getOverlays().getArray().slice(0).forEach((overlay) => {
-      if (overlay.get(OVERLAY_TYPE_KEY) === 'popup') {
+      if (overlay.get(OVERLAY_TYPE_KEY) === POPUP_KEY) {
         popups.push(overlay);
       }
     });
