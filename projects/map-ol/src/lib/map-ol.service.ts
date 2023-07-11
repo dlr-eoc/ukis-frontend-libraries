@@ -114,14 +114,10 @@ export interface IPopupArgs {
 }
 
 
-export interface IDynamicPopupArgs {
-  properties: popup['properties']; // will be filtered by popup['filterkeys'] (if given)
-  layer: IPopupArgs['layer'];
-  feature?: IPopupArgs['feature'];
-  event: olMapBrowserEvent<PointerEvent>;
-  dynamicPopup: popup['dynamicPopup'];
+export interface IPopupEvent {
+  popupObj: popup;
+  popupParams: IPopupParams;
 }
-
 
 type tmsReturnType<T> = T extends RasterLayer ? olTileLayer<olTileSource> :
   T extends VectorLayer ? olVectorTileLayer : never;

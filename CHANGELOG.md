@@ -1,5 +1,9 @@
 ### Features
+* **@dlr-eoc/services-layers:**
+  - The `layer.popup` gets more types and uses `IPopupParams` which will be applied to all popups.
+
 * **@dlr-eoc/map-ol:**
+  - A new Interface `IPopupEvent` is exposed.
   - Add groupID to olLayers (layer.groupID) to check if a layer was in an olLayerGroup.
 
 # [11.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v11.1.0) (2023-05-30) (map-ol and layer-control)

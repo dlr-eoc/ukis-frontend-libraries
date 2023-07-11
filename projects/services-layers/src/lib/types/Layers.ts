@@ -32,6 +32,17 @@ export interface ILayerStyleSet extends IAnyObject {
   content?: ILayerContent;
 }
 
+export interface IPopupParams {
+  layerId: string;
+  layerName: string;
+  mapEvent: any;
+  layer: any;
+  feature?: any;
+  color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView | string;
+  /** properties of the feature/layer or asyncData */
+  properties?: IAnyObject
+}
+
 export interface popup {
   /** limit layer or feature properties: only those properties of a layer/feature, that are listed in this array, are being passed through to a popup-render-function */
   filterkeys?: Array<string>;
