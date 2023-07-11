@@ -1,8 +1,8 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, StackedLayer } from '@dlr-eoc/services-layers';
+import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, StackedLayer, IPopupParams } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
-import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { ZommNumberControl } from './ol-custom-control';
 import { getFeatureInfoPopup } from './map-helpers';
 import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
@@ -293,7 +293,7 @@ export class RouteMapComponent implements OnInit {
         event: 'move',
         dynamicPopup: {
           component: TablePopupComponent,
-          getAttributes: (args: IDynamicPopupArgs) => {
+          getAttributes: (args: IPopupParams) => {
             return { data: args.properties };
           }
         }
@@ -425,8 +425,8 @@ export class RouteMapComponent implements OnInit {
         }
       ],
       popup: {
-        popupFunction: options => {
-          return `<div>${JSON.stringify(options)} </div>`;
+        popupFunction: params => {
+          return `<div>${JSON.stringify(params.properties)} </div>`;
         }
       },
       expanded: {
@@ -497,21 +497,21 @@ export class RouteMapComponent implements OnInit {
 
     const hillshade = new HillshadeTile({
       popup: {
-        popupFunction: (obj) => {
+        popupFunction: (params) => {
           return `
             <table>
               <tbody>
                 <tr>
-                  <td style="vertical-align: top; padding-right: 7px;"><b>Name: ${obj.name}</b></td>
+                  <td style="vertical-align: top; padding-right: 7px;"><b>Name: ${params.properties.name}</b></td>
                   <td></td>
                 </tr>
                 <tr>
-                  <td style="vertical-align: top; padding-right: 7px;"><b>type: ${obj.type}</b></td>
+                  <td style="vertical-align: top; padding-right: 7px;"><b>type: ${params.properties.type}</b></td>
                   <td></td>
                 </tr>
               </tbody>
             </table>
-            <img src="${obj.legendImg}">
+            <img src="${params.properties.legendImg}">
             `;
         }
       }

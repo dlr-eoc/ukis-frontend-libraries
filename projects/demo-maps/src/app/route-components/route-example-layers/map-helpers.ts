@@ -1,9 +1,10 @@
+import { IPopupParams } from '@dlr-eoc/services-layers';
 import { FeatureCollection } from 'geojson';
 import olTileWMS from 'ol/source/TileWMS';
 
-export function getFeatureInfoPopup(obj, mapSvc, cb) {
-  const source: olTileWMS = obj.source;
-  const evt = obj.evt;
+export function getFeatureInfoPopup(popupObj: IPopupParams, mapSvc, cb) {
+  const source: olTileWMS = popupObj.layer.getSource();
+  const evt = popupObj.mapEvent;
   const viewResolution = mapSvc.map.getView().getResolution();
   /* const url = `https://geoservice.dlr.de/eoc/land/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo` +
     `&QUERY_LAYERS=GUF28_DLR_v1_Mosaic&LAYERS=GUF28_DLR_v1_Mosaic&INFO_FORMAT=application%2Fjson&X=50&Y=50&SRS=EPSG%3A4326&WIDTH=101&HEIGHT=101&BBOX=1.207031249999995%2C47.63671875%2C3.5742187499999947%2C50.00390625`; */

@@ -121,7 +121,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
           component: RasterFeatureInfoComponent,
           getAttributes: (args) => ({
             layer: args.layer,
-            event: args.event
+            event: args.mapEvent
           })
         }
       }
@@ -178,7 +178,7 @@ export class RouteMap6Component implements OnInit, OnDestroy {
           component: RasterFeatureInfoComponent,
           getAttributes: (args) => ({
             layer: args.layer,
-            event: args.event
+            event: args.mapEvent
           })
         }
       }
