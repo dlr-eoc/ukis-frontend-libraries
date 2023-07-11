@@ -4,6 +4,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { EocLitemap, EocLiteoverlayTile, WorldReliefBwTile } from '@dlr-eoc/base-layers-raster';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
+import { GeoJSONFeature, GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
 
 @Component({
   selector: 'app-route-map5',
@@ -17,12 +18,21 @@ export class RouteMap5Component implements OnInit, OnDestroy {
   controls: IMapControls;
 
 
-  public geojsonData: any;
+  public geojsonData: GeoJSONFeatureCollection;
+  public popupData: {
+    headers: string[],
+    features: GeoJSONFeature[]
+  } = {
+      headers: [],
+      features: []
+    };
+
   showTable = false;
   subs: Subscription[] = [];
   constructor(
     public layersSvc: LayersService,
-    public mapStateSvc: MapStateService) {
+    public mapStateSvc: MapStateService,
+    public mapSvc: MapOlService) {
 
     this.controls = {
       attribution: true,
@@ -38,6 +48,18 @@ export class RouteMap5Component implements OnInit, OnDestroy {
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
     this.mapStateSvc.setExtent([-14, 33, 40, 57]);
     this.checkVisibleLayers();
+
+    this.mapSvc.popupEvents.subscribe(evt => {
+      if (evt.popupParams.properties) {
+        this.popupData.headers = Object.keys(evt.popupParams.properties);
+        const f: any = {
+          properties: evt.popupParams.properties
+        }
+        this.popupData.features = [f];
+      } else {
+        this.popupData.features = [];
+      }
+    });
   }
 
   addBaseLayers() {
@@ -169,7 +191,15 @@ export class RouteMap5Component implements OnInit, OnDestroy {
       type: 'geojson',
       data: this.geojsonData,
       visible: false,
-      popup: true
+      popup: [
+        {
+          event: 'click',
+          asObservable:true
+        },
+        {
+          event: 'move'
+        }
+      ]
     });
 
     this.layersSvc.addLayer(vectorLayer, 'Layers');
