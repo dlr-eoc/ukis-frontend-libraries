@@ -71,6 +71,8 @@ export interface popup {
   options?: IAnyObject;
   /** If the layer should be filtered out and the popup beneath should be shown e.g. text overlays use filterLayer: true */
   filterLayer?: boolean;
+  /** Use this to not add a popup to the map and instead publish events to view data in an external UI. */
+  asObservable?: boolean;
 }
 
 
@@ -144,7 +146,7 @@ export type TGeoExtent = [number, number, number, number] | [number, number, num
 export type CrossOriginType = 'anonymous' | 'use-credentials';
 
 
-export interface ILayerExpanded{
+export interface ILayerExpanded {
   /** tab: settings | legend | description */
   tab: string;
   /** optional to not expand the tab - for overriding defaults */
@@ -321,7 +323,7 @@ export class Layer implements ILayerOptions {
 
   styles?: ILayerStyleSet[];
   crossOrigin?: CrossOriginType;
-  expanded: boolean | ILayerExpanded  = false;
+  expanded: boolean | ILayerExpanded = false;
   cssClass?: string;
 
   constructor(options: ILayerOptions) {

@@ -87,6 +87,7 @@ import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
 import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
+import LayerRenderer from 'ol/renderer/Layer';
 
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
@@ -130,6 +131,7 @@ export class MapOlService {
    * We keep a reference to them here so that we can remove them again after they are no longer displayed.
    */
   private dynamicPopupComponents: Map<string, ComponentRef<any>> = new Map();
+  public popupEvents = new Subject<IPopupEvent>();
 
   constructor(
     private app: ApplicationRef,
@@ -1539,6 +1541,7 @@ export class MapOlService {
    *  1. on a Map event iterate through map.getAllLayers if:
    *  - layer visible
    *  - opacity > 0
+   *  - check for popup.asObservable and create map
    *  - pixel coordinate in layer extent
    *  - layer has popup
    * 
@@ -1555,11 +1558,12 @@ export class MapOlService {
    * returns top visible layer - so no popups are shown for layers beneath if layer.opacity > 0 https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-916759628
    *  2. check top layer event (click or move)
    *  3. set cursor for Layers with a color value or feature
+   *     if no layer has been hit and the map popup.asObservable has items, then publish a null event for them
    *  4. differentiate between raster and vector
    * 
    *  5. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
    *  6. overwrite properties if popup property is: popup | popup[]
-   *  7. check for popupFunction, asyncPopup and dynamicPopup
+   *  7. check for popupFunction, asyncPopup, dynamicPopup and asObservable
    *  8. use addPopup() or addPopupObj()
    *
    *  9. check popup event and if move popup exists => reuse old popup
@@ -1576,6 +1580,7 @@ export class MapOlService {
     let layerHit = false;
     const allMapLayers = this.map.getAllLayers();
     let layersLength = allMapLayers.length;
+    const layerPopupsAsObservable = new Map<string, olLayer<olSource, LayerRenderer<any>>>();
 
     /** iterate in reverse order (from top to bottom) if a layer has data/feature at the pixel, if a layer is found break out to only use top layer  */
     let item: { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView, feature?: olFeature | olRenderFeature } = null;
@@ -1589,13 +1594,16 @@ export class MapOlService {
         layerVisible = group.getVisible();
         layerOpacity = group.getOpacity();
       }
+
+      const layerPopup: Layer['popup'] = layer.get(POPUP_KEY);
+      this.checkForPopupAsObservable(layer, layerVisible, layerOpacity, layerPopup, layerPopupsAsObservable);
       // check for visible layers with no popup above others
-      if (layerVisible && layerOpacity !== 0 && this.filterLayerExtent(layer, evt.pixel) && !layer.get('popup')) {
+      if (layerVisible && layerOpacity !== 0 && this.filterLayerExtent(layer, evt.pixel) && !layerPopup) {
         break;
       } else if (this.filterLayerNoPopup(layer) && layer.getData && layer.getData(evt.pixel) && this.checkIsRaster(layer)) {
         // rgba Data
         const pixelData = layer.getData(evt.pixel);
-        let a
+        let a;
         if (pixelData instanceof Uint8ClampedArray || pixelData instanceof Uint8Array || pixelData instanceof Float32Array) {
           a = pixelData[3];
         }
@@ -1654,10 +1662,66 @@ export class MapOlService {
     if (layerHit) {
       this.map.getTargetElement().style.cursor = 'pointer';
     } else {
+      this.publishNullPropertiesAsObservable(layerPopupsAsObservable, evt);
       this.removeAllPopups((item) => {
         return item.get('addEvent') === 'pointermove';
       });
       this.map.getTargetElement().style.cursor = '';
+    }
+  }
+
+  /** 
+   * Check for popup.asObservable to publish null properties if layer is not hit. 
+   */
+  private checkForPopupAsObservable(layer: olLayer<olSource, LayerRenderer<any>>, layerVisible: boolean, layerOpacity: number, layerPopup: Layer['popup'], layerPopupsAsObservable: Map<string, olLayer<olSource, LayerRenderer<any>>>) {
+    if (layerVisible && layerOpacity !== 0 && layerPopup) {
+      if (this.isPopupObj(layerPopup) && layerPopup.asObservable) {
+        layerPopupsAsObservable.set(layer.get(ID_KEY), layer);
+      } else if (this.isPopupObjArray(layerPopup)) {
+        layerPopup.forEach(p => {
+          if (p.asObservable) {
+            layerPopupsAsObservable.set(layer.get(ID_KEY), layer);
+          }
+        });
+      }
+    }
+  }
+
+  /** 
+   * Publish null properties for popup.asObservable if layer is not hit. 
+   */
+  private publishNullPropertiesAsObservable(layerPopupsAsObservable: Map<string, olLayer<olSource, LayerRenderer<any>>>, event: olMapBrowserEvent<PointerEvent>) {
+    if (layerPopupsAsObservable.size) {
+
+      layerPopupsAsObservable.forEach(item => {
+        const popup: Layer['popup'] = item.get(POPUP_KEY);
+        const popups: popup[] = []
+        if (this.isPopupObj(popup) && popup.asObservable) {
+          popups.push(popup);
+        } else if (this.isPopupObjArray(popup)) {
+          popup.forEach(p => {
+            if (p.asObservable) {
+              popups.push(p);
+            }
+          });
+        }
+
+        popups.forEach(p => {
+          const sameEvent = this.eventIsBrowserEvent(p.event || 'click', event);
+          if (sameEvent) {
+            this.popupEvents.next({
+              popupObj: p,
+              popupParams: {
+                layerId: item.get(ID_KEY),
+                layerName: item.get('name'),
+                mapEvent: event,
+                layer: item,
+                properties: null,
+              }
+            });
+          }
+        });
+      });
     }
   }
 
@@ -1898,20 +1962,22 @@ export class MapOlService {
     }
 
     const addPopupObj = (popupObj: popup) => {
-      /** async function where you can paste a html string to the callback */
+      /** async function where you can paste a an Object or html string to the callback */
       if ('asyncPopup' in popupObj) {
+        popupObj.asyncPopup(popupParams, (asyncData) => {
+          if (popupObj.asObservable) {
+            this.publishPopupEvent(popupObj, popupParams, asyncData);
+          } else {
             this.addPopup(popupParams, popupObj, asyncData, popupObj.event, popupObj.single);
+          }
         });
         /** add event if popup object */
       } else {
-
-        /** adjust args if popupFunction or dynamicPopup*/
-        if (popupObj.popupFunction) {
-          args.popupFn = popupObj.popupFunction; //This could be done in createPopupContainer()
-        } else if (popupObj.dynamicPopup) {
-          args.dynamicPopup = popupObj.dynamicPopup; // This could be done in createPopupContainer()
+        if (popupObj.asObservable) {
+          this.publishPopupEvent(popupObj, popupParams);
+        } else {
+          this.addPopup(popupParams, popupObj, null, popupObj.event, popupObj.single);
         }
-        this.addPopup(popupParams, popupObj, null, popupObj.event, popupObj.single);
       }
     }
 
@@ -1932,6 +1998,18 @@ export class MapOlService {
     else if (layerpopup) {
       addPopupObj(layerpopup);
     }
+  }
+
+  private publishPopupEvent(popupObj: popup, popupParams: IPopupParams, asyncData?: any) {
+    if (asyncData) {
+      popupParams.properties = Object.assign(popupParams.properties, asyncData);
+    }
+
+    const pEvent: IPopupEvent = {
+      popupObj,
+      popupParams
+    }
+    this.popupEvents.next(pEvent);
   }
 
 
