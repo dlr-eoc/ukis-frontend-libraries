@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { IPopupArgs, MapOlService } from './map-ol.service';
-import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer, StackedLayer, ILayerOptions } from '@dlr-eoc/services-layers';
+import { MapOlService } from './map-ol.service';
+import { RasterLayer, VectorLayer, CustomLayer, WmtsLayer, LayerGroup, WmsLayer, popup, Layer, StackedLayer, ILayerOptions, IPopupParams } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView from 'ol/View';
@@ -926,22 +926,23 @@ describe('MapOlService popup and events', () => {
     const feature = vectorLayer.getSource().getFeatures()[0];
     const coordinate = olGetCenter(service.getFeaturesExtent([feature]));
     const popupProperties = feature.getProperties();
-    const args: IPopupArgs = {
-      modelName: vectorLayer.get('id'),
+    const popupParams: IPopupParams = {
+      layerId: vectorLayer.get('id'),
+      layerName: vectorLayer.get('name'),
       properties: popupProperties,
       layer: vectorLayer,
       feature,
-      event: { type: 'click', coordinate } as any
+      mapEvent: { type: 'click', coordinate } as any
     };
 
-    service.addPopup(args, popupProperties, null);
+    service.addPopup(popupParams, null, null);
     expect(service.getPopups().length).toBe(1);
     const popupOnMap = service.getPopups()[0];
     expect(popupOnMap instanceof olOverlay).toBeTrue();
     /** OVERLAY_TYPE_KEY, OVERLAY_TYPE_VALUE */
     expect(popupOnMap.get('type')).toBe('popup');
     expect(popupOnMap.getId()).toBe(`ID-vector:${olGetUid(feature)}`);
-    expect(popupOnMap.get('addEvent')).toBe(args.event.type);
+    expect(popupOnMap.get('addEvent')).toBe(popupParams.mapEvent.type);
   });
 
   it('should distinguish between on click or move ', () => {
@@ -1040,7 +1041,13 @@ describe('MapOlService popup and events', () => {
     // add popup prop to olLayer for hasPopup in layersOnMapEvent
     const popupObj: popup = {
       event: 'click',
-      filterkeys: ['id', 'name', 'color']
+      popupFunction: (params) => {
+        if (params.color) {
+          return `has color - ${params.color.toString()}`;
+        } else {
+          return '';
+        }
+      }
     };
 
     imageLayer.set('popup', popupObj);
@@ -1085,6 +1092,9 @@ describe('MapOlService popup and events', () => {
 
     // see service.addPopup how the id is created
     expect(popupOnMap.getId()).toBe(`${imageLayer.get('id')}:${olGetUid(imageLayer)}`);
+    // see createPopupContainer
+    // check if color was add to IPopupParams for raster layers
+    expect(popupOnMap.getElement().innerHTML).toContain('has color');
   });
 
   it('should only show a popup for the top visible layer with a popup property - layersOnMapEvent()', () => {
@@ -1231,15 +1241,16 @@ describe('MapOlService popup and events', () => {
 
     const addPopups = (feature) => {
       const popupProperties = feature.getProperties();
-      const args: IPopupArgs = {
-        modelName: vectorLayer.get('id'),
+      const popupParams: IPopupParams = {
+        layerId: vectorLayer.get('id'),
+        layerName: vectorLayer.get('name'),
         properties: popupProperties,
         layer: vectorLayer,
         feature,
-        event: { type: 'click' } as any
+        mapEvent: { type: 'click' } as any
       };
 
-      service.addPopup(args, popupProperties, null);
+      service.addPopup(popupParams, null, null);
     };
 
     features.forEach(f => {
@@ -1257,15 +1268,17 @@ describe('MapOlService popup and events', () => {
 
     const addPopups = (feature) => {
       const popupProperties = feature.getProperties();
-      const args: IPopupArgs = {
-        modelName: vectorLayer.get('id'),
+
+      const popupParams: IPopupParams = {
+        layerId: vectorLayer.get('id'),
+        layerName: vectorLayer.get('name'),
         properties: popupProperties,
         layer: vectorLayer,
         feature,
-        event: { type: 'click' } as any
+        mapEvent: { type: 'click' } as any
       };
 
-      service.addPopup(args, popupProperties, null);
+      service.addPopup(popupParams, null, null);
     };
 
     features.forEach(f => {
@@ -1303,20 +1316,26 @@ describe('MapOlService popup and events', () => {
 
     const feature = vectorLayer.getSource().getFeatures()[0];
     const popupProperties = feature.getProperties();
-    const popupArgs: IPopupArgs = {
-      modelName: vectorLayer.get('id'),
+    const popupParams: IPopupParams = {
+      layerId: vectorLayer.get('id'),
+      layerName: vectorLayer.get('name'),
       properties: popupProperties,
       layer: vectorLayer,
       feature,
-      event: { type: 'click', coordinate: [1312192.0073726526, 5444712.8273727745] } as any,
+      mapEvent: { type: 'click', coordinate: [1312192.0073726526, 5444712.8273727745] } as any,
+    };
+
+    const popupObj: popup = {
+      event: 'click',
       dynamicPopup: {
         component: MockPopupComponent,
-        getAttributes: (args: any) => {
+        getAttributes: (args: IPopupParams) => {
           return { data: [1, 2, 3] };
         }
       }
     };
-    service.addPopup(popupArgs, popupProperties, null);
+    vectorLayer.set('popup', popupObj);
+    service.addPopup(popupParams, popupObj, null);
 
     expect(service.getPopups().length).toBe(1);
     expect(appRef.viewCount).toEqual(1);
@@ -1335,15 +1354,17 @@ describe('MapOlService popup and events', () => {
 
     const addPopups = (feature) => {
       const popupProperties = feature.getProperties();
-      const args: IPopupArgs = {
-        modelName: vectorLayer.get('id'),
+
+      const popupParams: IPopupParams = {
+        layerId: vectorLayer.get('id'),
+        layerName: vectorLayer.get('name'),
         properties: popupProperties,
         layer: vectorLayer,
         feature,
-        event: { type: 'click' } as any
+        mapEvent: { type: 'click' } as any
       };
 
-      service.addPopup(args, popupProperties, null);
+      service.addPopup(popupParams, null, null);
     };
 
     features.forEach(f => {
