@@ -4,6 +4,8 @@
   - The parameters of the `MapOlService.addPopup` function are changed as follows `addPopup(popupParams: IPopupParams, popupObj?: popup, html?: string, event?: 'click' | 'move', removePopups?: boolean)`.
   - The interfaces `IPopupArgs` and `IDynamicPopupArgs` have been removed. Use `IPopupParams` now
   - The dynamic popup now gets `IPopupParams` instead of `IDynamicPopupArgs` - `popup.dynamicPopup.getAttributes(params:IPopupParams)`
+  - Not used `notifier` is removed from `MapOlService.setZoom(zoom: number)`
+
 ### Features
 * **@dlr-eoc/services-layers:**
   - The `layer.popup` gets more types and uses `IPopupParams` which will be applied to all popups.

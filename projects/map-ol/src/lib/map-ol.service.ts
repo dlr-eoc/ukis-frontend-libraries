@@ -2318,7 +2318,7 @@ export class MapOlService {
   }
 
   /** USED in map-ol.component */
-  public setZoom(zoom: number, notifier?: 'map' | 'user') {
+  public setZoom(zoom: number) {
     const view = this.map.getView();
     view.setZoom(zoom);
   }
