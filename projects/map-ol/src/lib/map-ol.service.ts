@@ -10,6 +10,7 @@ import { ViewOptions as olViewOptions } from 'ol/View';
 import olBaseLayer from 'ol/layer/Base';
 import olSource from 'ol/source/Source';
 import olGeometry from 'ol/geom/Geometry';
+import olPoint from 'ol/geom/Point';
 import olLayer from 'ol/layer/Layer';
 import { Options as olLayerOptions } from 'ol/layer/Layer';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
@@ -1937,24 +1938,26 @@ export class MapOlService {
     }
   }
 
-    const layerpopup: Layer['popup'] = args.layer.get(POPUP_KEY);
+
+  public addPopup(popupParams: IPopupParams, popupObj?: popup, popupContent?: string | IAnyObject, event?: 'click' | 'move', removePopups?: boolean) {
+    const layerpopup: Layer['popup'] = popupParams.layer.get(POPUP_KEY);
     // check if popup is already there and event is move
-    const layerID = args.layer.get(ID_KEY);
+    const layerID = popupParams.layer.get(ID_KEY);
     const moveID = `popup_move_ID`;
     const moveKeyLayerFeature = 'move_ID_L_F';
     const movePopup = this.getPopups().find(item => item.getId() === moveID);
-    const browserEvent = args.event;
+    const browserEvent = popupParams.mapEvent;
 
     let moveIDlf = null;
     if (event === 'move') {
       /** only on raster color is added - see rasterOnEvent()*/
-      if (args.properties?.color) {
-        moveIDlf = `${layerID}:${args.properties?.color.toString()}`;
+      if (popupParams.color) {
+        moveIDlf = `${layerID}:${popupParams.color.toString()}`;
       } else {
-        if (args.feature) {
-          moveIDlf = `${layerID}:${olGetUid(args.feature)}`;
-        } else if (args.layer) {
-          moveIDlf = `${layerID}:${olGetUid(args.layer)}`;
+        if (popupParams.feature) {
+          moveIDlf = `${layerID}:${olGetUid(popupParams.feature)}`;
+        } else if (popupParams.layer) {
+          moveIDlf = `${layerID}:${olGetUid(popupParams.layer)}`;
         }
       }
     }
@@ -1965,15 +1968,17 @@ export class MapOlService {
      */
     if (event === 'move' && browserEvent.type === 'pointermove' && movePopup) {
       let coordinate;
-      if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
-        coordinate = args.properties.geometry.getCoordinates();
+      // When a point is clicked, its coordinate is used for the popup position.
+      const feature: olFeature<olPoint> = popupParams.feature;
+      if (feature && feature.getGeometry()?.getType() === 'Point') {
+        coordinate = feature.getGeometry().getCoordinates();
       } else {
         coordinate = browserEvent.coordinate;
       }
 
       /** check if layer or feature changes, then only create new container */
       if (moveIDlf !== movePopup.get(moveKeyLayerFeature)) {
-        const container = this.createPopupContainer(movePopup, args, popupObj, html, event);
+        const container = this.createPopupContainer(movePopup, popupParams, popupObj, popupContent, event);
         movePopup.setElement(container);
       }
 
@@ -1998,10 +2003,10 @@ export class MapOlService {
       if (event === 'move') {
         popupID = moveID;
       } else {
-        if (args.feature) {
-          popupID = `${layerID}:${olGetUid(args.feature)}`;
-        } else if (args.layer) {
-          popupID = `${layerID}:${olGetUid(args.layer)}`;
+        if (popupParams.feature) {
+          popupID = `${layerID}:${olGetUid(popupParams.feature)}`;
+        } else if (popupParams.layer) {
+          popupID = `${layerID}:${olGetUid(popupParams.layer)}`;
         } else {
           popupID = `${layerID}:popup_${new Date().getTime()}`;
         }
@@ -2063,7 +2068,7 @@ export class MapOlService {
         this.destroyDynamicPopupComponent(hasPopup.getId().toString());
       }
 
-      const container = this.createPopupContainer(overlay, args, popupObj, html, event);
+      const container = this.createPopupContainer(overlay, popupParams, popupObj, popupContent, event);
       /** edge case when moving and clicking sometimes the browser event is not like the popup event */
       if (overlay.getId() === moveID) {
         overlay.set('addEvent', 'pointermove');
@@ -2074,8 +2079,10 @@ export class MapOlService {
       overlay.setElement(container);
 
       let coordinate;
-      if (args.properties && args.properties.geometry && args.properties.geometry.getType() === 'Point') {
-        coordinate = args.properties.geometry.getCoordinates();
+      // When a point is clicked, its coordinate is used for the popup position.
+      const feature: olFeature<olPoint> = popupParams.feature;
+      if (feature && feature.getGeometry()?.getType() === 'Point') {
+        coordinate = feature.getGeometry().getCoordinates();
       } else {
         coordinate = browserEvent.coordinate;
       }
