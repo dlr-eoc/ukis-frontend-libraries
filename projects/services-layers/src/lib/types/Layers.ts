@@ -48,14 +48,20 @@ export interface popup {
   filterkeys?: Array<string>;
   /** To overwrite the keys (and only the keys) of the layer/feature properties. Object has the form {"oldKey": "newKey"} */
   properties?: IAnyObject;
-  /** function to create html string - popupobj: nativeLayer */
-  popupFunction?: (popupobj: IAnyObject) => string;
-  /** async function where you can paste a html string to the callback - popupobj: nativeLayer */
-  asyncPopup?: (popupobj: any, cb: (html: any) => void) => void;
+  /** 
+   * function to create the popup content.
+   * Return an HTML string or an object from which an HTML string is generated.
+   */
+  popupFunction?: (popupParams: IPopupParams) => string | IAnyObject;
+  /** 
+   * async function to create the popup content.
+   * Pass an HTML string, or an object from which an HTML string is generated, to the callback..
+   */
+  asyncPopup?: (popupParams: IPopupParams, cb: (content: string | IAnyObject) => void) => void;
   /** create popup using angular component */
   dynamicPopup?: {
     component: Type<any>;
-    getAttributes?: (args: any) => object;
+    getAttributes?: (args: IPopupParams) => object;
   };
   /** default event is click - use move for a popup on hover */
   event?: 'move' | 'click';

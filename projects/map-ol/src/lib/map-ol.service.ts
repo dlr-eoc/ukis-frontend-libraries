@@ -100,19 +100,6 @@ const WebMercator = 'EPSG:3857';
 const WGS84 = 'EPSG:4326';
 const POPUP_KEY = 'popup';
 
-/**
- * While @dlr-eoc/services-layers.popup already contains instructions about how to build a popup,
- * IPopupArgs adds additional, map-ol-specific context like the olLayer, the feature, and the olMapBrowserEvent.
- */
-export interface IPopupArgs {
-  modelName: string;
-  properties: popup['properties']; // will be filtered by popup['filterkeys'] (if given)
-  layer: olLayer<any>;
-  feature?: olFeature<any> | olRenderFeature;
-  event: olMapBrowserEvent<PointerEvent>;
-  popupFn?: popup['popupFunction'];
-  dynamicPopup?: popup['dynamicPopup'];
-}
 
 
 export interface IPopupEvent {
@@ -1782,6 +1769,9 @@ export class MapOlService {
   public vectorOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, feature: olFeature | olRenderFeature) {
     if (layer && feature) {
       const popup: Layer['popup'] = layer.get(POPUP_KEY);
+      /** 
+       * properties of olFeature.
+       */
       let properties: any = {};
       const featureProperties = feature.getProperties();
 
@@ -1805,7 +1795,7 @@ export class MapOlService {
         // type no cluster
         properties = feature.getProperties();
       }
-      this.prepareAddPopup(properties, layer, feature, evt, popup);
+      this.prepareAddPopup(layer, evt, popup, feature, properties);
     }
   }
 
@@ -1816,30 +1806,38 @@ export class MapOlService {
     }
   }
 
-      this.prepareAddPopup(properties, layer, null, evt, popup);
+  /**
+   * @param featurProperties: properties of olFeature
+   */
+  private prepareAddPopup(layer: olLayer<any>, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup'], feature?: olFeature<any> | olRenderFeature, featurProperties?: any, color?: IPopupParams['color']) {
+    const layerProperties = layer.getProperties();
+
+    const popupParams: IPopupParams = {
+      layerId: layerProperties.id,
+      layerName: layerProperties.name || layerProperties[OL_GROUP_NAME] || null,
+      mapEvent: evt,
+      layer: layer,
+      properties: (featurProperties) ? Object.assign({}, featurProperties) : {}
     }
-  }
 
-  private prepareAddPopup(layerProperties: any, layer: olLayer<any>, feature: olFeature<any> | olRenderFeature, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup']) {
-    const args: IPopupArgs = {
-      modelName: layerProperties.id,
-      properties: layerProperties,
-      layer,
-      feature,
-      event: evt
-    };
+    if (popupParams.properties?.geometry) {
+      delete popupParams.properties.geometry;
+    }
 
-    let popupProperties = Object.assign({}, layerProperties);
-    if (popupProperties.geometry) {
-      delete popupProperties.geometry;
+    if (feature) {
+      popupParams.feature = feature;
+    }
+
+    if (color) {
+      popupParams.color = color;
     }
 
     const limitPopupObjProperties = (popupObj: popup) => {
       if (popupObj && popupObj.filterkeys) {
-        popupProperties = Object.keys(popupProperties)
+        popupParams.properties = Object.keys(popupParams.properties)
           .filter(key => popupObj.filterkeys.includes(key))
           .reduce((obj, key) => {
-            obj[key] = popupProperties[key];
+            obj[key] = popupParams.properties[key];
             return obj;
           }, {});
       }
@@ -1847,10 +1845,10 @@ export class MapOlService {
 
     /** Popup is array - limit properties */
     if (this.isPopupStringArray(layerpopup)) {
-      popupProperties = Object.keys(popupProperties)
+      popupParams.properties = Object.keys(popupParams.properties)
         .filter(key => layerpopup.includes(key))
         .reduce((obj, key) => {
-          obj[key] = popupProperties[key];
+          obj[key] = popupParams.properties[key];
           return obj;
         }, {});
     }
@@ -1871,14 +1869,14 @@ export class MapOlService {
       if (popupObj.properties) {
         const usedProperties = Object.keys(popupObj.properties);
         if (Array.isArray(usedProperties)) {
-          popupProperties = Object.keys(popupProperties)
+          popupParams.properties = Object.keys(popupParams.properties)
             /* .filter(key => usedProperties.includes(key)) */
             .reduce((obj, key) => {
               const newKey = popupObj.properties[key];
               if (newKey) {
-                obj[newKey] = popupProperties[key];
+                obj[newKey] = popupParams.properties[key];
               } else {
-                obj[key] = popupProperties[key];
+                obj[key] = popupParams.properties[key];
               }
               return obj;
             }, {});
@@ -1902,8 +1900,7 @@ export class MapOlService {
     const addPopupObj = (popupObj: popup) => {
       /** async function where you can paste a html string to the callback */
       if ('asyncPopup' in popupObj) {
-        popupObj.asyncPopup(popupProperties, (html) => {
-          this.addPopup(args, null, html, popupObj.event, popupObj.single);
+            this.addPopup(popupParams, popupObj, asyncData, popupObj.event, popupObj.single);
         });
         /** add event if popup object */
       } else {
@@ -1914,14 +1911,13 @@ export class MapOlService {
         } else if (popupObj.dynamicPopup) {
           args.dynamicPopup = popupObj.dynamicPopup; // This could be done in createPopupContainer()
         }
-
-        this.addPopup(args, popupProperties, null, popupObj.event, popupObj.single);
+        this.addPopup(popupParams, popupObj, null, popupObj.event, popupObj.single);
       }
     }
 
     /** popup is boolean or string array */
     if (typeof layerpopup === 'boolean' || this.isPopupStringArray(layerpopup)) {
-      this.addPopup(args, popupProperties, null);
+      this.addPopup(popupParams);
     }
     /** popup array of popupObj */
     else if (this.isPopupObjArray(layerpopup)) {
@@ -2099,33 +2095,35 @@ export class MapOlService {
     }
   }
 
-  private createPopupContainer(overlay: olOverlay, args: IPopupArgs, popupObj: any, html?: string, event?: 'click' | 'move') {
+  private createPopupContainer(overlay: olOverlay, popupParams: IPopupParams, popupObj?: popup, popupContent?: string | IAnyObject, event?: 'click' | 'move') {
     const content = document.createElement('div');
     content.className = 'ol-popup-content';
     let popupHtml = '';
-    if (args.popupFn) {
-      popupHtml = args.popupFn(popupObj);
-    } else if (html && (!popupObj || Object.keys(popupObj).length === 0)) {
-      popupHtml = html;
-    } else {
-      popupHtml = this.createPopupHtml(popupObj);
+    if (popupObj?.popupFunction) {
+      const content = popupObj.popupFunction(popupParams);
+      if (typeof content === 'string') {
+        popupHtml = content;
+      } else {
+        popupHtml = this.createPopupHtml(content);
+      }
+    } else if (popupContent) {
+      if (typeof popupContent === 'string') {
+        popupHtml = popupContent;
+      } else {
+        popupHtml = this.createPopupHtml(popupContent);
+      }
+    } else if (Object.keys(popupParams.properties).length) {
+      popupHtml = this.createPopupHtml(popupParams.properties);
     }
     content.innerHTML = popupHtml;
-    if (args.dynamicPopup) {
+    if (popupObj?.dynamicPopup) {
       // To prevent memory leak:
       // if this very popup already has been created (for example `popup_move_ID`),
       // then destroy it before creating a new one.
       const id = overlay.getId().toString();
       this.destroyDynamicPopupComponent(id);
       // Only now create a new one.
-      const dArgs: IDynamicPopupArgs = {
-        event: args.event,
-        layer: args.layer,
-        feature: args.feature || null,
-        dynamicPopup: args.dynamicPopup,
-        properties: popupObj,
-      };
-      this.createDynamicPopupComponent(id, content, dArgs);
+      this.createDynamicPopupComponent(id, content, popupParams, popupObj);
     }
 
     const container = document.createElement('div');
@@ -2230,14 +2228,14 @@ export class MapOlService {
    * @param anchorElement : The html-element to which the popup-component shall be attached
    * @param args : Must contain `dynamicPopup`
    */
-  private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, args: IDynamicPopupArgs): void {
-    const popupBody = createComponent(args.dynamicPopup.component, {
+  private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, popupParams: IPopupParams, popupObj: popup): void {
+    const popupBody = createComponent(popupObj.dynamicPopup.component, {
       environmentInjector: this.envInjector,
       hostElement: anchorElement
     });
 
-    if (args.dynamicPopup.getAttributes) {
-      const attributes = args.dynamicPopup.getAttributes(args);
+    if (popupObj.dynamicPopup.getAttributes) {
+      const attributes = popupObj.dynamicPopup.getAttributes(popupParams);
       for (const key in attributes) {
         if (attributes[key] !== 'undefined') {
           popupBody.instance[key] = attributes[key];
