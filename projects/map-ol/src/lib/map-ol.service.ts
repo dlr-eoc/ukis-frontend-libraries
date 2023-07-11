@@ -1,7 +1,7 @@
 import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype } from '@dlr-eoc/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IPopupParams, IAnyObject } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView, { FitOptions as olFitOptions } from 'ol/View';
@@ -1810,14 +1810,10 @@ export class MapOlService {
 
   public rasterOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView) {
     const popup: Layer['popup'] = layer.get(POPUP_KEY);
-    let properties: any = {};
-
     if (popup) {
-      properties = layer.getProperties();
-      properties.evt = evt;
-      if (color) {
-        properties.color = color;
-      }
+      this.prepareAddPopup(layer, evt, popup, null, null, color);
+    }
+  }
 
       this.prepareAddPopup(properties, layer, null, evt, popup);
     }

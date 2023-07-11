@@ -1,3 +1,6 @@
+### Breaking Changes
+* **@dlr-eoc/map-ol:**
+  - Remove color and event from properties passed to raster layer popup. Now `IPopupParams` is passed so you can use `IPopupParams.color` and `IPopupParams.mapEvent`. For the remaining properties, use `IPopupParams.properties`, which contains feature properties and async data.
 ### Features
 * **@dlr-eoc/services-layers:**
   - The `layer.popup` gets more types and uses `IPopupParams` which will be applied to all popups.
