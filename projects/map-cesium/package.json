@@ -1,0 +1,28 @@
+{
+  "name": "@dlr-eoc/map-cesium",
+  "version": "12.0.0-alpha.0",
+  "main": "src/public-api",
+  "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "This is a angular module that exports a cesium component that can handle UKIS layers. See @dlr-eoc/services-layers for supported types.",
+  "keywords": [
+    "angular",
+    "mapping",
+    "cesium",
+    "3D",
+    "Globe",
+    "layers"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^14.2.11",
+    "@angular/core": "^14.2.11",
+    "rxjs": "^6.6.7"
+  },
+  "dependencies": {
+    "@dlr-eoc/services-map-state": "12.0.0-alpha.0",
+    "@dlr-eoc/services-layers": "12.0.0-alpha.0",
+    "@cesium/engine": "^2.2.0",
+    "@cesium/widgets": "^2.1.1",
+    "tslib": "^2.4.0"
+  }
+}
