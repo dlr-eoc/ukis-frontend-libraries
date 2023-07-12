@@ -133,7 +133,8 @@
     "projects/utils-maps",
     "projects/utils-ogc",
     "projects/map-three",
-    "projects/shared-assets"
+    "projects/shared-assets",
+    "projects/map-cesium"
   ],
   "engines": {
     "node": ">= 18.13.0",
