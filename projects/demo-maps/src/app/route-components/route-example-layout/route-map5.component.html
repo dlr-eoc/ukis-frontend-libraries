@@ -56,6 +56,23 @@
           </tr>
         </tbody>
       </table>
+
+      <table class="table" *ngIf="popupData.features.length">
+        <thead>
+          <tr>
+            <th [ngClass]="{'left': i === 0}" *ngFor="let item of popupData.headers;let i=index;">{{item}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of popupData.features;let i=index;">
+            <td class="left">{{item.properties[popupData.headers[0]]}}</td>
+            <td>{{item.properties[popupData.headers[1]]}}</td>
+            <td>{{item.properties[popupData.headers[2]]}}</td>
+            <td>{{item.properties[popupData.headers[3]]}}</td>
+          </tr>
+        </tbody>
+      </table>
+      
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 </clr-vertical-nav>

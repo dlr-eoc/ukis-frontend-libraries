@@ -463,7 +463,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       if (lastAction === 'setExtent') {
         this.mapSvc.setExtent(mapState.extent, true);
       } else if (lastAction === 'setState') {
-        this.mapSvc.setZoom(mapState.zoom, mapState.options.notifier);
+        this.mapSvc.setZoom(mapState.zoom);
         this.mapSvc.setCenter([mapState.center.lon, mapState.center.lat], true);
       }
     }

@@ -1,3 +1,20 @@
+### Breaking Changes
+* **@dlr-eoc/map-ol:**
+  - Remove color and event from properties passed to raster layer popup. Now `IPopupParams` is passed so you can use `IPopupParams.color` and `IPopupParams.mapEvent`. For the remaining properties, use `IPopupParams.properties`, which contains feature properties and async data.
+  - The parameters of the `MapOlService.addPopup` function are changed as follows `addPopup(popupParams: IPopupParams, popupObj?: popup, html?: string, event?: 'click' | 'move', removePopups?: boolean)`.
+  - The interfaces `IPopupArgs` and `IDynamicPopupArgs` have been removed. Use `IPopupParams` now
+  - The dynamic popup now gets `IPopupParams` instead of `IDynamicPopupArgs` - `popup.dynamicPopup.getAttributes(params:IPopupParams)`
+  - Not used `notifier` is removed from `MapOlService.setZoom(zoom: number)`
+
+### Features
+* **@dlr-eoc/services-layers:**
+  - The `layer.popup` gets more types and uses `IPopupParams` which will be applied to all popups.
+
+* **@dlr-eoc/map-ol:**
+  - Popup events can be observed by `MapOlService.popupEvents: Subject<IPopupEvent>`. For this add `asObservable: true` to a popup object, you will then be able to subscribe to the event instead of having a popup container being added to the map.
+  - A new Interface `IPopupEvent` is exposed.
+  - Add groupID to olLayers (layer.groupID) to check if a layer was in an olLayerGroup.
+
 # [11.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v11.1.0) (2023-05-30) (map-ol and layer-control)
 ### Features
 * **@dlr-eoc/layer-control:**

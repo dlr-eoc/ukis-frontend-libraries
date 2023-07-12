@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer, WmtsLayer, RasterLayer } from '@dlr-eoc/services-layers';
+import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer, IPopupParams } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapOlService, IMapControls, IDynamicPopupArgs } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
 import { Feature as olFeature } from 'ol';
@@ -80,7 +80,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       name: 'Heatmap Layer',
       actions: [{ title: 'test', icon: '', action: (layer) => { } }],
       popup: {
-        filterkeys: ['id', 'color', 'name']
+        event: 'click',
       },
       action: {
         component: ExampleLayerActionComponent, inputs: this.inputValue, outputs: {
@@ -196,7 +196,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           options: { autoPan: false },
           dynamicPopup: {
             component: TablePopupComponent,
-            getAttributes: (args: IDynamicPopupArgs) => {
+            getAttributes: (args: IPopupParams) => {
               return { data: args.properties };
             }
           }
@@ -206,7 +206,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
           options: { autoPan: false },
           dynamicPopup: {
             component: Popup2Component,
-            getAttributes: (args: IDynamicPopupArgs) => {
+            getAttributes: (args: IPopupParams) => {
               return { data: args.properties };
             }
           }
