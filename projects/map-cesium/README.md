@@ -32,12 +32,11 @@ or in the angular config file
 
 ```
 
-#### Add assets for angular-cli build
+#### Add assets for angular-cli build and serve
 ```
 // angular.json
  "assets": [
-              "src/favicon.ico",
-              "src/assets",
+              ...
               {
                 "glob": "**/*",
                 "input": "node_modules/@cesium/engine/Source/Assets",
@@ -164,7 +163,7 @@ Change the following inside example-view.component.ts:
     }, {
       provide: 'threeDlayerSvc', useClass: LayersService
     }
-
+    ...
   ]
 })
 ```
