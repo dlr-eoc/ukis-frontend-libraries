@@ -7,6 +7,8 @@
   - Not used `notifier` is removed from `MapOlService.setZoom(zoom: number)`
 
 ### Features
+* **@dlr-eoc/map-cesium:**
+  - New UKIS library for working with [CesiumJS](https://github.com/CesiumGS/cesium) was added.
 
   - A new example has been added to the demo-maps to show how to work with the new cesium library.
 
