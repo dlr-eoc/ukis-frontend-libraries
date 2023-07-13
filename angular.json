@@ -342,6 +342,26 @@
                 "glob": "**/*",
                 "input": "./projects/core-ui/schematics/ng-add/files/src/assets",
                 "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Source/Assets",
+                "output": "./assets/cesium/Assets"
+              },
+              {
+                "glob": "**/*.css",
+                "input": "node_modules/@cesium/widgets/Source/",
+                "output": "./assets/cesium/Widgets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Build/Workers",
+                "output": "./assets/cesium/Workers"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Source/ThirdParty",
+                "output": "./assets/cesium/ThirdParty"
               }
             ],
             "styles": [

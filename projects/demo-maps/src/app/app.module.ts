@@ -19,6 +19,7 @@ import { MapOlModule } from '@dlr-eoc/map-ol';
 import { LayerControlModule } from '@dlr-eoc/layer-control';
 import { MapToolsModule } from '@dlr-eoc/map-tools';
 import { MapThreeModule } from '@dlr-eoc/map-three';
+import { MapCesiumModule } from '@dlr-eoc/map-cesium';
 
 import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
 import { RouteMap2Component } from './route-components/route-example-projection/route-map2.component';
@@ -44,6 +45,7 @@ import { BookmarksComponent } from './route-components/bookmarks/bookmarks.compo
 import { ExampleLayerDescriptionComponent } from './components/example-layer-description/example-layer-description.component';
 import { ExampleGroupLegendComponent } from './components/example-group-legend/example-group-legend.component';
 import { VtileLayerActionComponent } from './components/vtile-layer-action/vtile-layer-action.component';
+import { RouteExampleCesiumComponent } from './route-components/route-example-cesium/route-example-cesium.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,8 @@ import { VtileLayerActionComponent } from './components/vtile-layer-action/vtile
     BookmarksComponent,
     ExampleLayerDescriptionComponent,
     ExampleGroupLegendComponent,
-    VtileLayerActionComponent
+    VtileLayerActionComponent,
+    RouteExampleCesiumComponent
   ],
   imports: [
     BrowserModule,
@@ -86,6 +89,7 @@ import { VtileLayerActionComponent } from './components/vtile-layer-action/vtile
     BrowserAnimationsModule,
     MapOlModule,
     MapThreeModule,
+    MapCesiumModule,
     LayerControlModule,
     MapToolsModule,
     HttpClientModule,

@@ -11,6 +11,7 @@ import { RouteMap7Component } from './route-components/route-example-olperforman
 import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
 import { RouteExampleOwcLayersComponent } from './route-components/route-example-owc-layers/route-example-owc-layers.component';
 import { BookmarksComponent } from './route-components/bookmarks/bookmarks.component';
+import { RouteExampleCesiumComponent } from './route-components/route-example-cesium/route-example-cesium.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'examples', pathMatch: 'full' },
@@ -89,6 +90,15 @@ const routes: Routes = [
     data: {
       title: 'Threejs',
       description: 'This example shows a Threejs map connected to a OpenLayers map e.g. to display a globe and a flat map side by side.',
+      img: 'assets/route-threejs.jpg'
+    }
+  },
+  {
+    path: 'cesium',
+    component: RouteExampleCesiumComponent,
+    data: {
+      title: 'Cesium',
+      description: 'This example shows a cesium map and switch to OpenLayers map',
       img: 'assets/route-threejs.jpg'
     }
   },

@@ -7,6 +7,9 @@
   - Not used `notifier` is removed from `MapOlService.setZoom(zoom: number)`
 
 ### Features
+
+  - A new example has been added to the demo-maps to show how to work with the new cesium library.
+
 * **@dlr-eoc/services-layers:**
   - The `layer.popup` gets more types and uses `IPopupParams` which will be applied to all popups.
 
