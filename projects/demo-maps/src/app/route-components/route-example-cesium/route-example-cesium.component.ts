@@ -228,25 +228,8 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
       attribution: '© zki'
     });
 
-    const salzburg_tileset = Cesium3DTileset.fromUrl('https://services.zki.dlr.de/3d-tiles/salzburg_3d/Production_2.json', {
-      show: true,
-      maximumScreenSpaceError: 1
-    });
-    const salzburg = new CustomLayer({
-      name: 'Salzburg 3D',
-      displayName: 'Salzburg 3D',
-      id: 'salzburg_3d',
-      custom_layer: await salzburg_tileset,
-      visible: true,
-      description: '3D Model of Salzburg',
-      type: 'custom',
-      opacity: 1,
-      attribution: '© DLR ZKI',
-      minZoom: -46,
-      maxZoom: 1
-    });
 
-    const layers = [hamburg, salzburg, i3s_tileset];
+    const layers = [hamburg, i3s_tileset];
     layers.map(l => this.threeDlayerSvc.addLayer(l, 'Layers'));
   }
 
