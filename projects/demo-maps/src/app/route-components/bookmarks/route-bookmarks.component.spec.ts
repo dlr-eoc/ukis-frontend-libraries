@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BookmarksComponent } from './bookmarks.component';
+import { BookmarksComponent } from './route-bookmarks.component';
 
 describe('BookmarksComponent', () => {
   let component: BookmarksComponent;

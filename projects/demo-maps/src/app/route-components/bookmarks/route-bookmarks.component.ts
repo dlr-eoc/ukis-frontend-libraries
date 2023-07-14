@@ -10,8 +10,8 @@ interface BookmarkEntry {
 
 @Component({
   selector: 'app-bookmarks',
-  templateUrl: './bookmarks.component.html',
-  styleUrls: ['./bookmarks.component.scss']
+  templateUrl: './route-bookmarks.component.html',
+  styleUrls: ['./route-bookmarks.component.scss']
 })
 export class BookmarksComponent implements OnInit {
   @HostBinding('class') class = 'content-container';
