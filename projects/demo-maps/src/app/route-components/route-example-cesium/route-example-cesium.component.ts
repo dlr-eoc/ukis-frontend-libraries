@@ -3,7 +3,7 @@ import { LayersService, Layer, WmtsLayer, RasterLayer, CustomLayer, WmsLayer, Ve
 import { MapStateService, IMapState } from '@dlr-eoc/services-map-state';
 
 import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@dlr-eoc/base-layers-raster';
-import { ICesiumControls, MapCesiumService } from 'projects/map-cesium';
+import { ICesiumControls, MapCesiumService } from '@dlr-eoc/map-cesium';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import olMap from 'ol/Map';
 import { Cesium3DTileset, CesiumTerrainProvider, Credit, EllipsoidTerrainProvider, I3SDataProvider, createGooglePhotorealistic3DTileset } from '@cesium/engine';
