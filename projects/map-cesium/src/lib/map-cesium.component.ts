@@ -90,9 +90,10 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     /** clean up all events on destroy */
     this.subs.forEach(s => s.unsubscribe());
-    this.viewer.scene.primitives.destroy();
+    if (this.viewer?.scene?.primitives) {
+      this.viewer.scene.primitives.destroy();
+    }
     this.mapSvc.destroyLayerGrpoups();
-
   }
 
   private initMap() {
