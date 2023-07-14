@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
-import { Subscription, Subject, combineLatest } from 'rxjs';
-import { delay, filter, skip } from 'rxjs/operators';
+import { Subscription, Subject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { MapCesiumService, Tgroupfiltertype } from './map-cesium.service';
-import { LayersService, Layer, LayerGroup, CustomLayer } from '@dlr-eoc/services-layers';
+import { LayersService, Layer } from '@dlr-eoc/services-layers';
 import { Viewer } from '@cesium/widgets';
 
 
@@ -54,7 +53,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
   mapCreated = new Subject<boolean>();
   initState = true;
 
-  constructor(private mapSvc: MapCesiumService, private cdRef: ChangeDetectorRef) { }
+  constructor(private mapSvc: MapCesiumService) { }
 
   ngOnInit(): void {
     if (!this.twoDlayersSvc) {
