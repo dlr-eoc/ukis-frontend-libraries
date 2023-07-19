@@ -205,7 +205,7 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     // https://cesium.com/learn/cesiumjs/ref-doc/Cesium3DTileset.html
     const hamburg = new CustomLayer({
       name: 'Hamburg 3D',
-      displayName: 'Hamburg 3D',
+      displayName: 'Hamburg 3D (LoD2 Tileset)',
       id: 'hamburg_3d',
       custom_layer: await Cesium3DTileset.fromUrl('https://daten-hamburg.de/gdi3d/datasource-data/LoD2/tileset.json', { show: false }),
       visible: false,
@@ -217,15 +217,15 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
 
     // https://cesium.com/learn/cesiumjs/ref-doc/I3SDataProvider.html
     const i3s_tileset = new CustomLayer({
-      name: 'Esri Portal 3D',
-      displayName: 'Esri Portal 3D',
+      name: 'Frankfurt 3D',
+      displayName: 'Frankfurt 3D (Esri i3s)',
       id: 'i3s_3d',
       custom_layer: await I3SDataProvider.fromUrl('https://tiles.arcgis.com/tiles/z2tnIkrLQ2BRzr6P/arcgis/rest/services/Frankfurt2017_vi3s_18/SceneServer/layers/0', { show: false }),
       visible: false,
       description: 'Esri Portal 3D Model',
       type: 'custom',
       opacity: 1,
-      attribution: '© zki'
+      attribution: '© Esri'
     });
 
 
@@ -248,9 +248,9 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
 
     // Dataservices from the masterportal: https://bitbucket.org/geowerkstatt-hamburg/masterportalapi/src/master/
     const hamburg_dgm = new CustomLayer({
-      name: 'Hamburg Gelaende',
-      displayName: 'Hamburg Gelaende',
-      id: 'hamburg_gelaende',
+      name: 'Hamburg Terrain',
+      displayName: 'Hamburg Terrain',
+      id: 'hamburg_terrain',
       custom_layer: await CesiumTerrainProvider.fromUrl('https://daten-hamburg.de/gdi3d/datasource-data/Gelaende/',
         {
           credit: new Credit(`© MasterPortal Hamburg`)

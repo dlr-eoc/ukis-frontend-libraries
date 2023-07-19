@@ -94,7 +94,7 @@ const routes: Routes = [
     data: {
       title: 'Cesium',
       description: 'This example shows a cesium map and switch to OpenLayers map',
-      img: 'assets/route-threejs.jpg'
+      img: 'assets/route-cesium.jpg'
     }
   },
   {
