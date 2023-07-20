@@ -142,15 +142,14 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setMapState(mapState: MapState) {
     this.mapSvc.setZoom(mapState.zoom, mapState.options.notifier);
-    this.mapSvc.setCenter([mapState.center.lon, mapState.center.lat], true);
+    this.mapSvc.setCenter(mapState.center);
   }
 
   private subscribeToMapEvents() {
 
     this.viewer.camera.moveEnd.addEventListener(() => {
       const zoom = this.mapSvc.getZoom();
-      const center = this.mapSvc.getCenter(true);
-      const newCenter = { lat: center[0], lon: center[1] };
+      const newCenter = this.mapSvc.getCenter();
       const extent = this.mapSvc.getCurrentExtent();
       const ms = new MapState(zoom, newCenter, { notifier: 'user' }, extent);
       //console.log('New Cesium Map State: ');

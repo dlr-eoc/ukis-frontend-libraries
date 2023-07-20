@@ -4,6 +4,7 @@ import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeo
 import { ICesiumControls } from './map-cesium.component';
 import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, OpenStreetMapImageryProvider, PrimitiveCollection, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, } from '@cesium/engine';
 import { Viewer } from '@cesium/widgets';
+import { IMapCenter } from '@dlr-eoc/services-map-state';
 
 export declare type Tgroupfiltertype = 'baselayers' | 'layers' | 'overlays' | 'Baselayers' | 'Overlays' | 'Layers';
 const WebMercator = 'EPSG:3857';
@@ -181,23 +182,23 @@ export class MapCesiumService {
     return zoom;
   }
 
-  public setCenter(center: number[], geographic?: boolean) {
-
+  public setCenter(center: IMapCenter) {
+    // to avoid confusion about the lat, lon ordering, the IMapCenter interfaced is used here
     // get current height from viewer
     const height = this.viewer.camera.positionCartographic.height;
     // set camera to new position
     this.viewer.camera.setView({
-      destination: Cartesian3.fromDegrees(center[0], center[1], height)
+      destination: Cartesian3.fromDegrees(center.lon, center.lat, height)
     });
-    //console.log('SetCenter: ' + center[1] + ', ' + center[0] + ', ' + height);
+    //console.log('SetCenter: ' + center.lat + ', ' + center.lon + ', ' + height);
   }
 
-  public getCenter(geographic?: boolean): number[] {
+  public getCenter(): IMapCenter {
     const currentPosition = this.viewer.camera.positionCartographic;
-    const lon = currentPosition.longitude * (180 / Math.PI);
     const lat = currentPosition.latitude * (180 / Math.PI);
+    const lon = currentPosition.longitude * (180 / Math.PI);
     //console.log('GetCenter: ' + lat + ', ' + lon);
-    return [lat, lon];
+    return {lat: lat,lon: lon};
   }
 
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: any) {
@@ -1095,5 +1096,5 @@ export class MapCesiumService {
     this.terrainLayerGroup.clear();
     this.tilesetLayerGroup.clear();
   }
-  
+
 }
