@@ -835,21 +835,23 @@ export class MapCesiumService {
   public update2DLayerVisibility(layers: Layer[], filtertype: Tgroupfiltertype) {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
     for (const layer of layers) {
-      if (layer.type === 'geojson') {
+      if (layer.type === 'geojson' || layer.type === 'kml') {
+        console.log('Changing DataSourceLayer Visibility');
+        console.log(layer);
         if (lowerType === 'baselayers') {
-          const geoJsonLayer = this.baseLayerDataSourceGroup.get(layer.id);
-          if (geoJsonLayer && geoJsonLayer.show !== layer.visible) {
-            geoJsonLayer.show = layer.visible;
+          const dataSourceLayer = this.baseLayerDataSourceGroup.get(layer.id);
+          if (dataSourceLayer && dataSourceLayer.show !== layer.visible) {
+            dataSourceLayer.show = layer.visible;
           }
         } else if (lowerType === 'layers') {
-          const geoJsonLayer = this.standardLayerDataSourceGroup.get(layer.id);
-          if (geoJsonLayer && geoJsonLayer.show !== layer.visible) {
-            geoJsonLayer.show = layer.visible;
+          const dataSourceLayer = this.standardLayerDataSourceGroup.get(layer.id);
+          if (dataSourceLayer && dataSourceLayer.show !== layer.visible) {
+            dataSourceLayer.show = layer.visible;
           }
         } else if (lowerType === 'overlays') {
-          const geoJsonLayer = this.overlayLayerDataSourceGroup.get(layer.id);
-          if (geoJsonLayer && geoJsonLayer.show !== layer.visible) {
-            geoJsonLayer.show = layer.visible;
+          const dataSourceLayer = this.overlayLayerDataSourceGroup.get(layer.id);
+          if (dataSourceLayer && dataSourceLayer.show !== layer.visible) {
+            dataSourceLayer.show = layer.visible;
           }
         }
       } else {
