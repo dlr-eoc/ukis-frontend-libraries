@@ -184,6 +184,14 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
         description: 'World Settlement Footprint Evolution',
         attribution: 'DLR/EOC: <a href="https://www.dlr.de/eoc/</a>',
         legendImg: 'https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=WSF_Evolution',
+      })/* ,
+      new VectorLayer({
+        id: 'kml_test',
+        name: 'KML Vector Layer',
+        attribution: `© DLR KML`,
+        type: 'kml',
+        data: 'assets/kml/TimeZones.kml',
+        visible: false
       }),
       new VectorLayer({
         id: 'geojson_test',
@@ -193,7 +201,7 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
         data: testData,
         visible: false,
         popup: true
-      })
+      }) */
     ];
 
     layers.map(l => this.twoDlayerSvc.addLayer(l, 'Overlays'));
