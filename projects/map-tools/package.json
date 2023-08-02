@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-tools",
-  "version": "11.1.0",
+  "version": "12.0.0-alpha.1",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -23,8 +23,8 @@
     "rxjs": "^6.6.7"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "11.1.0",
-    "@dlr-eoc/map-ol": "11.1.0",
+    "@dlr-eoc/services-map-state": "12.0.0-alpha.1",
+    "@dlr-eoc/map-ol": "12.0.0-alpha.1",
     "tslib": "^2.4.0"
   },
   "devDependencies": {

@@ -479,6 +479,9 @@ function checkTransitiveDependencies(depcheckResults: depcheck.Results, packageS
    * get package.json for each dependency and check if it includes one of the dependencies;
    */
   allDependencies.map(key => {
+    if(key === "projects"){
+      console.info(`Check imports - maybe it should be ${packageScope} instead of "projects/"`, depcheckResults.using[key]);
+    }
     let packagePath = `${key}/package.json`;
     if (key.includes(packageScope)) {
       packagePath = join(CWD, packagePath.replace(packageScope, 'projects/'));

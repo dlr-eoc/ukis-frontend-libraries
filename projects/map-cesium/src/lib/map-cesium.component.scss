@@ -1,0 +1,73 @@
+:root {
+    --ukis-crosshair-color: #ff0004;
+    --ukis-popup-bg-color: rgb(238, 238, 238);
+    --ukis-drop-shadow: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+}
+
+.cesium-viewer .cesium-viewer-cesiumWidgetContainer {
+    height: 100%;
+}
+
+.cesiumMap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.cesium-viewer-bottom .cesium-credit-logoContainer {
+    display: none !important;
+}
+
+.cesium-credit-lightbox ul {
+    padding-left: 20px;
+}
+
+.cesium-infoBox {
+    top: 0px;
+    left: 0px;
+    margin: 0.5rem;
+    background-color: var(--ukis-popup-bg-color);
+    filter: var(--ukis-drop-shadow);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 1000000;
+
+
+    .cesium-infoBox-title {
+        background-color: var(--ukis-popup-bg-color);
+        border-bottom-left-radius: 0px;
+        color: var(--clr-global-font-color);
+        height: 30px;
+        font-weight: 600;
+        padding-top: 0.5rem;
+    }
+
+    button.cesium-infoBox-camera {
+        display: none;
+    }
+
+    button.cesium-infoBox-close {
+        color: var(--clr-global-font-color);
+    }
+}
+
+.cesium-infoBox-content {
+    padding: 0.75rem;
+    color: var(--clr-global-font-color);
+}
+
+.cesium-infoBox-defaultTable {
+    background-color: var(--ukis-popup-bg-color);
+    color: var(--clr-global-font-color);
+
+    tr td:first-child {
+        font-weight: 600;
+    }
+}
+
+.cesium-selection-wrapper svg {
+    fill: var(--ukis-popup-bg-color);
+    stroke: #0072a3;
+    stroke-width: 1.1px;
+}

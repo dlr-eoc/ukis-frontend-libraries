@@ -342,6 +342,26 @@
                 "glob": "**/*",
                 "input": "./projects/core-ui/schematics/ng-add/files/src/assets",
                 "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Source/Assets",
+                "output": "./assets/cesium/Assets"
+              },
+              {
+                "glob": "**/*.css",
+                "input": "node_modules/@cesium/widgets/Source/",
+                "output": "./assets/cesium/Widgets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Build/Workers",
+                "output": "./assets/cesium/Workers"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Source/ThirdParty",
+                "output": "./assets/cesium/ThirdParty"
               }
             ],
             "styles": [
@@ -687,6 +707,37 @@
             "main": "projects/utils-ogc/src/test.ts",
             "tsConfig": "projects/utils-ogc/tsconfig.spec.json",
             "karmaConfig": "projects/utils-ogc/karma.conf.js"
+          }
+        }
+      }
+    },
+    "map-cesium": {
+      "projectType": "library",
+      "root": "projects/map-cesium",
+      "sourceRoot": "projects/map-cesium/src",
+      "prefix": "ukis1",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/map-cesium/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/map-cesium/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/map-cesium/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/map-cesium/src/test.ts",
+            "tsConfig": "projects/map-cesium/tsconfig.spec.json",
+            "karmaConfig": "projects/map-cesium/karma.conf.js"
           }
         }
       }

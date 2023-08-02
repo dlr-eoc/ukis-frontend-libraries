@@ -1,0 +1,14 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/map-cesium",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "tslib",
+    "@dlr-eoc/services-layers",
+    "@dlr-eoc/services-map-state",
+    "@cesium/engine",
+    "@cesium/widgets"
+  ]
+}

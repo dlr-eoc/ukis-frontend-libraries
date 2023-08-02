@@ -3,93 +3,36 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { ClarityModule } from '@clr/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HeaderComponent } from './components/header/header.component';
-import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
 import { AlertService } from './components/global-alert/alert.service';
-import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { ProgressService } from './components/global-progress/progress.service';
-import { BlinkerComponent } from './components/performance/blinker/blinker.component';
-import { FpserComponent } from './components/performance/fpser/fpser.component';
-import { PerformanceComponent } from './components/performance/performance.component';
-
-import { MapOlModule } from '@dlr-eoc/map-ol';
-import { LayerControlModule } from '@dlr-eoc/layer-control';
-import { MapToolsModule } from '@dlr-eoc/map-tools';
-import { MapThreeModule } from '@dlr-eoc/map-three';
-
-import { RouteMapComponent } from './route-components/route-example-layers/route-map.component';
-import { RouteMap2Component } from './route-components/route-example-projection/route-map2.component';
-import { RouteMap3Component } from './route-components/route-example-events/route-map3.component';
-import { RouteMap4Component } from './route-components/route-example-custom-layers/route-map4.component';
-import { RouteMap5Component } from './route-components/route-example-layout/route-map5.component';
-import { RouteMap6Component } from './route-components/route-example-layer-style/route-map6.component';
-import { RouteLicensesComponent } from './route-components/route-licenses/route-licenses.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { RouteMap7Component } from './route-components/route-example-olperformance/route-map7.component';
-import { ExampleLayerActionComponent } from './components/example-layer-action/example-layer-action.component';
-import { SunlightComponent } from './components/sunlight/sunlight.component';
-import { InterpolationSettingsComponent } from './components/interpolation-settings/interpolation-settings.component';
-import { RouteMap8Component } from './route-components/route-example-threejs/route-example-threejs.component';
-import { TablePopupComponent } from './components/table-popup/table-popup.component';
-import { ServicesOgcModule } from '@dlr-eoc/services-ogc';
-import { ExampleGroupActionComponent } from './components/example-group-action/example-group-action.component';
-import { RasterFeatureInfoComponent } from './components/raster-feature-info/raster-feature-info.component';
-import { Popup2Component } from './components/popup2/popup2.component';
-import { RouteExampleOwcLayersComponent } from './route-components/route-example-owc-layers/route-example-owc-layers.component';
-import { BookmarksComponent } from './route-components/bookmarks/bookmarks.component';
-import { ExampleLayerDescriptionComponent } from './components/example-layer-description/example-layer-description.component';
-import { ExampleGroupLegendComponent } from './components/example-group-legend/example-group-legend.component';
-import { VtileLayerActionComponent } from './components/vtile-layer-action/vtile-layer-action.component';
+import { SharedComponentsModule } from './app-shared-components.module';
+
+import { HeaderComponent } from './components/header/header.component';
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
     HeaderComponent,
     GlobalAlertComponent,
     GlobalProgressComponent,
-    RouteMapComponent,
-    RouteMap2Component,
-    RouteMap3Component,
-    RouteMap4Component,
-    RouteMap5Component,
-    RouteMap6Component,
-    RouteMap7Component,
-    RouteLicensesComponent,
-    PerformanceComponent,
-    BlinkerComponent,
-    FpserComponent,
-    RouteLicensesComponent,
-    ExampleLayerActionComponent,
-    SunlightComponent,
-    RouteMap8Component,
-    InterpolationSettingsComponent,
-    TablePopupComponent,
-    ExampleGroupActionComponent,
-    RasterFeatureInfoComponent,
-    Popup2Component,
-    RouteExampleOwcLayersComponent,
-    BookmarksComponent,
-    ExampleLayerDescriptionComponent,
-    ExampleGroupLegendComponent,
-    VtileLayerActionComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     ClarityModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MapOlModule,
-    MapThreeModule,
-    LayerControlModule,
-    MapToolsModule,
-    HttpClientModule,
-    ServicesOgcModule
+    SharedComponentsModule
   ],
   providers: [AlertService, ProgressService],
   bootstrap: [AppComponent]

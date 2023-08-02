@@ -273,7 +273,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       name: 'Static Image',
       visible: false,
       popup: {
-        filterkeys: ['id', 'color', 'name']
+        popupFunction: (params) => {
+          return params.color.toString();
+        }
       },
       // crossOrigin: null, // set this to get data for pixel for cross-origin data or not if null
       custom_layer: new olImageLayer({
@@ -291,8 +293,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       name: 'OSM Clip',
       visible: true,
       popup: {
-        filterkeys: ['id', 'color', 'name']
-        // filterLayer: true
+        popupFunction: (params) => {
+          return params.color.toString();
+        }
       },
       custom_layer: new olTileLayer({
         source: new olOSM()
@@ -312,7 +315,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       opacity: 0.6,
       popup: {
         event: 'move',
-        filterkeys: ['id', 'color', 'name'],
+        popupFunction: (params) => {
+          return `${params.color.toString()}`;
+        },
         options: { autoPan: false }
       },
       custom_layer: new olLayerGroup({
@@ -446,7 +451,9 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
       }),
       visible: false,
       popup: {
-        filterkeys: ['id', 'color', 'name']
+        popupFunction: (params) => {
+          return params.color.toString();
+        }
       },
       bbox: [-133.9453125, 18.979025953255267, -60.46875, 52.908902047770255] /** for zoom to the layer */
     });
