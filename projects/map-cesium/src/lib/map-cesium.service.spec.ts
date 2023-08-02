@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { MapCesiumService } from './map-cesium.service';
 import { Viewer } from '@cesium/widgets';
 import { ICesiumControls } from './map-cesium.component';
-import { Scene } from '@cesium/engine';
+import { ImageryLayer, Scene } from '@cesium/engine';
 import { CustomLayer, ILayerOptions, IRasterLayerOptions, Layer, RasterLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
@@ -434,7 +434,7 @@ describe('MapCesiumService ukisLayers', () => {
     const mapLayersLength = service.get2DImageryLayersSize('Layers');
     expect(mapLayersLength).toBe(layers.length);
 
-    const imageryLayer = service.getLayerById(ukisBaseLayer.id, 'Layers');
+    const imageryLayer = service.getLayerById(ukisBaseLayer.id, 'Layers') as ImageryLayer;
     expect(imageryLayer.show).toBe(ukisBaseLayer.visible);
     expect(imageryLayer.alpha).toBe(ukisBaseLayer.opacity);
   });
@@ -482,19 +482,19 @@ describe('MapCesiumService DataSources', () => {
     expect(service.getLayerById(ukisWmtsLayer.id, 'layers')).toBeTruthy();
   });
 
-  xit('should add geoJSON DataSource', () => {
+  it('should add geoJSON DataSource', () => {
     service.createMap(mapTarget.container);
     service.set2DUkisLayers([ukisGeoJsonLayer], 'Layers');
 
-    expect(service.get2DImageryLayersSize('Layers')).toBe(1);
+    expect(service.getAll2DLayersSize('Layers')).toBe(1);
     expect(service.getLayerById(ukisGeoJsonLayer.id, 'layers')).toBeTruthy();
   });
 
-  xit('should add KML DataSource', () => {
+  it('should add KML DataSource', () => {
     service.createMap(mapTarget.container);
     service.set2DUkisLayers([ukisKmlLayer], 'Layers');
 
-    expect(service.get2DImageryLayersSize('Layers')).toBe(1);
+    expect(service.getAll2DLayersSize('Layers')).toBe(1);
     expect(service.getLayerById(ukisKmlLayer.id, 'layers')).toBeTruthy();
   });
 
