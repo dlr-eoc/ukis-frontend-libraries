@@ -259,6 +259,7 @@ At the moment there are not many services out there, which serve 3D data. If you
 - Terrain has to be attributed with a new Cesium Credit object, see the example above. 
 - GeoJSON layer are supported, but they are always shown above imagery layers, regardless of their ordering index in the layer control. Therefore they should be added as overlays.
 - As of 01/2023, WFS is not supported by Cesium yet. 
+- KmlDataSource does not support opacity change at the moment
 
 
 ===

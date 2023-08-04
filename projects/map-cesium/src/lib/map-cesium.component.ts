@@ -260,6 +260,8 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mapSvc.update2DLayerVisibility(layers, filtertype);
     this.mapSvc.update2DLayerOpacity(layers, filtertype);
     this.mapSvc.update2DLayerZIndex(layers, filtertype);
+    this.mapSvc.updateDataSourceZIndex(layers, filtertype);
+
   }
 
   private addUpdate3DLayers(layers: Layer[], filtertype: Tgroupfiltertype) {

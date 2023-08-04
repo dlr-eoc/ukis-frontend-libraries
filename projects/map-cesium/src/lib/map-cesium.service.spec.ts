@@ -486,7 +486,7 @@ describe('MapCesiumService DataSources', () => {
     service.createMap(mapTarget.container);
     service.set2DUkisLayers([ukisGeoJsonLayer], 'Layers');
 
-    expect(service.getAll2DLayersSize('Layers')).toBe(1);
+    expect(service.getDataSourceLayersSize('Layers')).toBe(1);
     expect(service.getLayerById(ukisGeoJsonLayer.id, 'layers')).toBeTruthy();
   });
 
@@ -494,7 +494,7 @@ describe('MapCesiumService DataSources', () => {
     service.createMap(mapTarget.container);
     service.set2DUkisLayers([ukisKmlLayer], 'Layers');
 
-    expect(service.getAll2DLayersSize('Layers')).toBe(1);
+    expect(service.getDataSourceLayersSize('Layers')).toBe(1);
     expect(service.getLayerById(ukisKmlLayer.id, 'layers')).toBeTruthy();
   });
 
