@@ -34,7 +34,7 @@ export class RouteMap2Component implements OnInit {
       title: 'Arctic Polar Stereographic',
       extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
       worldExtent: [-180.0, 60.0, 180.0, 90.0],
-      global: false,
+      global: true,
       units: 'm'
     };
 
@@ -44,7 +44,7 @@ export class RouteMap2Component implements OnInit {
       title: 'Antarctic Polar Stereographic',
       extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
       worldExtent: [-180.0, -90.0, 180.0, -60.0],
-      global: false,
+      global: true,
       units: 'm'
     };
 

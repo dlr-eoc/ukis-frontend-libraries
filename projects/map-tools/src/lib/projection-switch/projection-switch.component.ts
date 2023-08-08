@@ -2,15 +2,20 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MapOlService } from '@dlr-eoc/map-ol';
 
+import { MapStateService } from '@dlr-eoc/services-map-state';
+
+
 
 @Component({
   selector: 'ukis-projection-switch',
   templateUrl: './projection-switch.component.html',
-  styles: []
+  styles: [],
 })
 export class ProjectionSwitchComponent implements OnInit {
   @Input('mapSvc') mapSvc?: MapOlService;
+  @Input('mapStateSvc') mapStateSvc: MapStateService;
   @Input('projectionList') projList: IProjDef[];
+  @Input('fitViewToNewExtent') fitViewToNewExtent? = false;
   subscription: Subscription;
   selectedProj: IProjDef;
   constructor() { }
@@ -23,10 +28,11 @@ export class ProjectionSwitchComponent implements OnInit {
 
   setNewProjection(projection: IProjDef) {
     this.mapSvc.registerProjection(projection);
-
     const newProj = this.mapSvc.getOlProjection(projection);
-
     this.mapSvc.setProjection(newProj);
+    if (this.fitViewToNewExtent) {
+      this.mapStateSvc.setExtent(projection.worldExtent);
+    }
     this.selectedProj = projection;
   }
 }
