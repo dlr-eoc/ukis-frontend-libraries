@@ -12,7 +12,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
   styles: [],
 })
 export class ProjectionSwitchComponent implements OnInit {
-  @Input('mapSvc') mapSvc?: MapOlService;
+  @Input('mapSvc') mapSvc: MapOlService;
   @Input('mapStateSvc') mapStateSvc: MapStateService;
   @Input('projectionList') projList: IProjDef[];
   @Input('fitViewToNewExtent') fitViewToNewExtent? = false;
