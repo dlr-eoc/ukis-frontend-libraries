@@ -90,6 +90,9 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     /** clean up all events on destroy */
     this.subs.forEach(s => s.unsubscribe());
     if (this.viewer?.scene?.primitives) {
+      this.viewer.imageryLayers.removeAll();
+      this.viewer.dataSources.removeAll();
+      this.viewer.scene.primitives.removeAll();
       this.viewer.scene.primitives.destroy();
     }
     this.mapSvc.destroyLayerGrpoups();
@@ -257,6 +260,8 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mapSvc.update2DLayerVisibility(layers, filtertype);
     this.mapSvc.update2DLayerOpacity(layers, filtertype);
     this.mapSvc.update2DLayerZIndex(layers, filtertype);
+    this.mapSvc.updateDataSourceZIndex(layers, filtertype);
+
   }
 
   private addUpdate3DLayers(layers: Layer[], filtertype: Tgroupfiltertype) {
