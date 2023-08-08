@@ -1,4 +1,4 @@
-define(['./Transforms-e2d4a55a', './Matrix2-e1298525', './Matrix3-41c58dde', './Check-6ede7e26', './defaultValue-fe22d8c0', './Math-0a2ac845', './ArcType-2d9abbbc', './arrayRemoveDuplicates-d2061e85', './ComponentDatatype-cf1fa08e', './EllipsoidGeodesic-5b3623dc', './EllipsoidRhumbLine-ef872433', './EncodedCartesian3-57415c8a', './GeometryAttribute-13da9466', './IntersectionTests-85350792', './Plane-4c3d403b', './WebMercatorProjection-13ed1a6e', './combine-d9581036', './RuntimeError-ef395448', './WebGLConstants-0b1ce7ba'], (function (Transforms, Matrix2, Matrix3, Check, defaultValue, Math$1, ArcType, arrayRemoveDuplicates, ComponentDatatype, EllipsoidGeodesic, EllipsoidRhumbLine, EncodedCartesian3, GeometryAttribute, IntersectionTests, Plane, WebMercatorProjection, combine, RuntimeError, WebGLConstants) { 'use strict';
+define(['./Transforms-b527bb09', './Matrix2-e1298525', './Matrix3-41c58dde', './Check-6ede7e26', './defaultValue-fe22d8c0', './Math-0a2ac845', './ArcType-2d9abbbc', './arrayRemoveDuplicates-d2061e85', './ComponentDatatype-cf1fa08e', './EllipsoidGeodesic-5b3623dc', './EllipsoidRhumbLine-ef872433', './EncodedCartesian3-57415c8a', './GeometryAttribute-a5b6275b', './IntersectionTests-feace3da', './Plane-4c3d403b', './WebMercatorProjection-13ed1a6e', './combine-d9581036', './RuntimeError-ef395448', './WebGLConstants-0b1ce7ba'], (function (Transforms, Matrix2, Matrix3, Check, defaultValue, Math$1, ArcType, arrayRemoveDuplicates, ComponentDatatype, EllipsoidGeodesic, EllipsoidRhumbLine, EncodedCartesian3, GeometryAttribute, IntersectionTests, Plane, WebMercatorProjection, combine, RuntimeError, WebGLConstants) { 'use strict';
 
   /**
    * A tiling scheme for geometry referenced to a simple {@link GeographicProjection} where
@@ -1938,8 +1938,9 @@ define(['./Transforms-e2d4a55a', './Matrix2-e1298525', './Matrix3-41c58dde', './
       const minHeight = minMaxHeights.minimumTerrainHeight;
       const maxHeight = minMaxHeights.maximumTerrainHeight;
 
-      sumHeights += minHeight;
-      sumHeights += maxHeight;
+      // Sum using abs() to properly account for negative eleavtions in calculating bounding sphere radius
+      sumHeights += Math.abs(minHeight);
+      sumHeights += Math.abs(maxHeight);
 
       adjustHeights(
         startBottom,

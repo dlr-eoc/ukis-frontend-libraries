@@ -1001,6 +1001,12 @@ define(['./defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConstants-0b1ce7b
       return value;
     }
 
+    _nextUint8Array(len) {
+      const value = new Uint8Array(this._dataView.buffer, this._dataView.byteOffset + this._offset, len);
+      this._offset += len;
+      return value;
+    }
+
     _skip(bytes) {
       this._offset += bytes;
       return this;
@@ -1165,12 +1171,17 @@ define(['./defaultValue-fe22d8c0', './Check-6ede7e26', './WebGLConstants-0b1ce7b
       const keyData = kvdReader._scan(keyValueByteLength);
 
       const key = decodeText(keyData);
+      container.keyValue[key] = kvdReader._nextUint8Array(keyValueByteLength - keyData.byteLength - 1);
 
-      const valueData = kvdReader._scan(keyValueByteLength - keyData.byteLength);
+      if (key.match(/^ktx/i)) {
+        const text = decodeText(container.keyValue[key]);
+        container.keyValue[key] = text.substring(0, text.lastIndexOf('\x00'));
+      }
 
-      container.keyValue[key] = key.match(/^ktx/i) ? decodeText(valueData) : valueData; // 4-byte alignment.
+      const kvPadding = keyValueByteLength % 4 ? 4 - keyValueByteLength % 4 : 0; // align(4)
+      // 4-byte alignment.
 
-      if (kvdReader._offset % 4) kvdReader._skip(4 - kvdReader._offset % 4);
+      kvdReader._skip(kvPadding);
     } ///////////////////////////////////////////////////
     // Supercompression Global Data (SGD).
     ///////////////////////////////////////////////////
