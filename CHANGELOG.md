@@ -6,6 +6,10 @@
   - The dynamic popup now gets `IPopupParams` instead of `IDynamicPopupArgs` - `popup.dynamicPopup.getAttributes(params:IPopupParams)`
   - Not used `notifier` is removed from `MapOlService.setZoom(zoom: number)`
 
+* **@dlr-eoc/map-tools:**
+  - Input 'mapSvc' of ProjectionSwitchComponent become mandatory and not optional
+  - Additional mandatory input in ProjectionSwitchComponent "mapStateSvc" and optional "fitViewToNewExtent"
+
 ### Features
 * **@dlr-eoc/map-cesium:**
   - New UKIS library for working with [CesiumJS](https://github.com/CesiumGS/cesium) was added.
@@ -19,6 +23,9 @@
   - Popup events can be observed by `MapOlService.popupEvents: Subject<IPopupEvent>`. For this add `asObservable: true` to a popup object, you will then be able to subscribe to the event instead of having a popup container being added to the map.
   - A new Interface `IPopupEvent` is exposed.
   - Add groupID to olLayers (layer.groupID) to check if a layer was in an olLayerGroup.
+
+* **@dlr-eoc/map-tools:**
+  - Optional parameter "fitViewToNewExtent" in the ProjectionSwitchComponent to adjust map view extent
 
 # [11.1.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v11.1.0) (2023-05-30) (map-ol and layer-control)
 ### Features

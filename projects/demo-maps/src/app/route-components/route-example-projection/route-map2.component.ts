@@ -30,29 +30,29 @@ export class RouteMap2Component implements OnInit {
 
     const arcticPolarStereographic: IProjDef = {
       code: 'EPSG:3995',
-      proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
+      proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs',
       title: 'Arctic Polar Stereographic',
-      extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
+      extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
       worldExtent: [-180.0, 60.0, 180.0, 90.0],
-      global: false,
+      global: true,
       units: 'm'
     };
 
     const antarcticPolarStereographic: IProjDef = {
       code: `EPSG:3031`,
-      proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
+      proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs',
       title: 'Antarctic Polar Stereographic',
-      extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
+      extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
       worldExtent: [-180.0, -90.0, 180.0, -60.0],
-      global: false,
+      global: true,
       units: 'm'
     };
 
     const webMercator: IProjDef = {
       code: `EPSG:3857`,
-      proj4js: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs',
+      proj4js: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs',
       title: 'Spherical Mercator',
-      extent: [-20026376.39, -20048966.10, 20026376.39, 20048966.10],
+      extent: [-20037508.34, -20048966.1, 20037508.34, 20048966.1],
       worldExtent: [-180.0, -85.06, 180.0, 85.06],
       global: true,
       units: 'm'
