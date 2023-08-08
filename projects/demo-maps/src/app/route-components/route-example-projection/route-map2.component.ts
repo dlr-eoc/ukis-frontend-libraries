@@ -30,9 +30,9 @@ export class RouteMap2Component implements OnInit {
 
     const arcticPolarStereographic: IProjDef = {
       code: 'EPSG:3995',
-      proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
+      proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs',
       title: 'Arctic Polar Stereographic',
-      extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
+      extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
       worldExtent: [-180.0, 60.0, 180.0, 90.0],
       global: false,
       units: 'm'
@@ -40,9 +40,9 @@ export class RouteMap2Component implements OnInit {
 
     const antarcticPolarStereographic: IProjDef = {
       code: `EPSG:3031`,
-      proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs',
+      proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs',
       title: 'Antarctic Polar Stereographic',
-      extent: [-20048966.10, -20048966.10, 20048966.10, 20048966.10],
+      extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
       worldExtent: [-180.0, -90.0, 180.0, -60.0],
       global: false,
       units: 'm'
