@@ -101,7 +101,7 @@ addBaselayers() {
     <clr-icon shape="map" clrVerticalNavIcon></clr-icon>
     Projection
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections"></ukis-projection-switch>
+      <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections" [fitViewToNewExtent]="true" [mapStateSvc]="mapStateSvc"></ukis-projection-switch>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 ```
