@@ -18,6 +18,7 @@
 
 * **@dlr-eoc/services-layers:**
   - The `layer.popup` gets more types and uses `IPopupParams` which will be applied to all popups.
+  - Export new type `TFiltertypesUncap` to use with `TFiltertypes`. So `Tgroupfiltertype = TFiltertypesUncap | TFiltertypes` is usable in maps.
 
 * **@dlr-eoc/map-ol:**
   - Popup events can be observed by `MapOlService.popupEvents: Subject<IPopupEvent>`. For this add `asObservable: true` to a popup object, you will then be able to subscribe to the event instead of having a popup container being added to the map.
