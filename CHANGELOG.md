@@ -1,5 +1,9 @@
 ### Breaking Changes
+* **@dlr-eoc/map-cesium:**
+  - Remove exported type `Tgroupfiltertype`. Use `Tgroupfiltertype = TFiltertypesUncap | TFiltertypes` and import them from `@dlr-eoc/services-layers`.
+
 * **@dlr-eoc/map-ol:**
+  - Remove exported type `Tgroupfiltertype`. Use `Tgroupfiltertype = TFiltertypesUncap | TFiltertypes` and import them from  `@dlr-eoc/services-layers`.
   - Remove color and event from properties passed to raster layer popup. Now `IPopupParams` is passed so you can use `IPopupParams.color` and `IPopupParams.mapEvent`. For the remaining properties, use `IPopupParams.properties`, which contains feature properties and async data.
   - The parameters of the `MapOlService.addPopup` function are changed as follows `addPopup(popupParams: IPopupParams, popupObj?: popup, html?: string, event?: 'click' | 'move', removePopups?: boolean)`.
   - The interfaces `IPopupArgs` and `IDynamicPopupArgs` have been removed. Use `IPopupParams` now
