@@ -45,6 +45,9 @@ run ``ng generate library <name> --prefix ukis``
 - set version to the same as in the root package.json
 - set lib package: "main": "src/public-api",
 - add "license": "Apache-2.0" or a compatible licenses
+- add "author": "Team UKIS"
+- add "description" for the package
+- add "keywords"
 - remove the newly created path mapping in the main tsconfig.json because it is already done by `@dlr-eoc/*`
 
 ### 2. Add it to npm workspaces
@@ -106,10 +109,18 @@ If the library does not depend on other libraries from the projects run
 If it depends on one
 - `node scripts/library/index.js -b --projects <name>`
 
-### 8. update README and CHANGELOG
+### 8. Update README and CHANGELOG
 - add your library to the README
 - add important/breaking changes to the CHANGELOG
 
+
+### 9. Add examples for library to demo maps
+- create new route module `ng generate module route-components/<route-example-modulename> --project=demo-maps`
+- create new route component `ng generate component route-components/<route-example-componentname> --inline-style=false --inline-template=false --project=demo-maps --module=<route-example-modulename>`
+- add dependencies to `demo-maps/package.json`
+- see the library readme for how to update the component.
+- see [angular Lazy-loading](https://angular.io/guide/lazy-loading-ngmodules) how to add imports and split code into modules. See also other route examples modules like `route-example-cesium` or `route-example-layers`.
+- add new route to `app-routing.module.ts`
 
 
 ### Generate a new application with the cli
