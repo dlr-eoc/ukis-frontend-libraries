@@ -3,14 +3,29 @@
   "version": "12.0.0-alpha.2",
   "main": "src/public-api",
   "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "This is a angular module that exports a maplibre-gl component that can handle UKIS layers. See @dlr-eoc/services-layers for supported types.",
+  "keywords": [
+    "angular",
+    "mapping",
+    "maplibre-gl",
+    "maplibre",
+    "layers"
+  ],
   "peerDependencies": {
     "@angular/common": "^14.2.0",
-    "@angular/core": "^14.2.0"
+    "@angular/core": "^14.2.0",
+    "rxjs": "^6.6.7"
   },
   "dependencies": {
     "tslib": "^2.3.0",
-    "maplibre-gl": "^3.0.0-pre.3",
+    "maplibre-gl": "^3.3.0",
+    "@mapbox/togeojson":"0.16.0",
     "@dlr-eoc/services-map-state": "12.0.0-alpha.2",
     "@dlr-eoc/services-layers": "12.0.0-alpha.2"
+  },
+  "devDependencies": {
+    "@dlr-eoc/base-layers-raster": "12.0.0-alpha.2",
+    "@dlr-eoc/shared-assets": "12.0.0-alpha.2"
   }
 }

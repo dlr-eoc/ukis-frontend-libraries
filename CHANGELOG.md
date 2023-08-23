@@ -18,6 +18,9 @@
 * **@dlr-eoc/utilities:**
   - New UKIS library export utilities for other libraries.
 
+* **@dlr-eoc/map-maplibre:**
+  - New UKIS library for working with [maplibre](https://maplibre.org/) was added.
+
 * **@dlr-eoc/map-cesium:**
   - New UKIS library for working with [CesiumJS](https://github.com/CesiumGS/cesium) was added.
 

@@ -1,0 +1,547 @@
+import { CircleLayerSpecification, FillLayerSpecification, GeoJSONFeature, GeoJSONSourceSpecification, LayerSpecification, LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification } from "maplibre-gl";
+import {
+    RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
+    WmtsLayer as ukisWmtsLayer, VectorLayer as ukisVectorLayer, CustomLayer as ukisCustomLayer, Layer as ukisLayer, StackedLayer, XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype
+} from '@dlr-eoc/services-layers';
+
+/** Layers can consist of multiple layers and sources, e.g. if they are a VectorTileLayer - StyleSpecification   */
+export type SourceIdSpecification = { [id: string]: SourceSpecification };
+export type LayerSourceSpecification = { sources: SourceIdSpecification, layers: LayerSpecification[] };
+
+
+export function addUkisLayerMetadata(l: ukisLayer) {
+    return {
+        'ukis:filtertype': l.filtertype,
+        'ukis:layergroup': l.id
+    }
+}
+
+export function hasUkisLayerMetadata(ml: TypedStyleLayer) {
+    if ((ml?.metadata as any)['ukis:filtertype'] || (ml?.metadata as any)['ukis:layergroup']) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export function getUkisLayerMetadata(ml: TypedStyleLayer) {
+    return {
+        'ukis:filtertype': (ml?.metadata as any)['ukis:filtertype'],
+        'ukis:layergroup': (ml?.metadata as any)['ukis:layergroup']
+    }
+}
+
+export function createGetMapUrl(l: ukisWmsLayer) {
+    const baseurl = l.url;
+    const properties = l.params
+    let url = `${baseurl}?bbox={bbox-epsg-3857}&format=${properties?.FORMAT || 'image/png'}&service=WMS&version=${properties?.VERSION || '1.1.1'}&request=GetMap&srs=EPSG:3857&transparent=${properties?.TRANSPARENT || 'true'}&width=${l.tileSize || 256}&height=${l.tileSize || 256}&layers=${properties?.LAYERS}`;
+    if (properties.STYLES) {
+        url += `&styles=${properties.STYLES}`
+    }
+    return url;
+}
+
+export function createGetTileUrl(l: ukisWtmsLayer) {
+    const baseurl = l.url;
+    const properties = l.params;
+    const matrix = 'EPSG:3857:{z}';
+
+    // https://github1s.com/openlayers/openlayers/blob/HEAD/src/ol/source/WMTS.js#L70-L71
+
+    // https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Abasemap&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11
+    // bbox={bbox-epsg-3857}&ratio={ratio}&quadkey={quadkey}&z={z}&x={x}&y={y}
+    const url = `${baseurl}?layer=${properties?.layer}&style=${properties.style}&tilematrixset=${properties.matrixSetOptions?.matrixSet}&service=WTMS&version=${properties?.version || '1.0.0'}&request=GetTile&TileMatrix=${matrix}&TileCol={x}&TileRow={y}&format=${properties?.format || 'image/png'}`;
+    return url;
+}
+
+function returnSourcesAndLayers(l: ukisLayer, source: SourceSpecification | KmlSourceSpecification, layers: LayerSpecification[]) {
+    const sources: SourceIdSpecification = {};
+    sources[l.id] = source as SourceSpecification;
+
+    return {
+        sources,
+        layers
+    } as LayerSourceSpecification;
+}
+
+/**
+ * This function is used as the basis for all layers.
+ * Wms | Xyz | Wmts | Geojson | Wfs | Kml
+ */
+export function createBaseLayer<T>(l: ukisRasterLayer | ukisVectorLayer) {
+    const source: VectorSourceSpecification | RasterSourceSpecification | GeoJSONSourceSpecification | KmlSourceSpecification = {} as any;
+    const layer: FillLayerSpecification | LineLayerSpecification | SymbolLayerSpecification | CircleLayerSpecification | RasterLayerSpecification = {} as any;
+
+    if (l instanceof ukisVectorLayer) {
+        source.type = 'vector';
+
+        if (l.type === 'geojson' || l.type === 'wfs') {
+            source.type = 'geojson';
+            (source as GeoJSONSourceSpecification).data = l.data || { type: 'FeatureCollection', features: [] };
+        } else if (l.type === 'kml') {
+            source.type = 'kml';
+            (source as KmlSourceSpecification).data = l.data || { type: 'FeatureCollection', features: [] };
+        }
+
+        if (source.type === 'kml' || source.type === 'geojson') {
+            if (l.data) {
+                source.data = l.data;
+            } else if (l.url) {
+                source.data = l.url;
+            }
+
+            if (l.cluster) {
+                source.cluster = true; //TODO: add more options from ukis l.cluster
+            }
+        }
+
+    } else if (l instanceof ukisRasterLayer) {
+        source.type = 'raster';
+    }
+
+    if (l.attribution) {
+        source.attribution = l.attribution;
+    }
+
+    if (source.type === 'raster' && l instanceof ukisRasterLayer) {
+        if (l.tileSize) { source.tileSize = l.tileSize; }
+        else { source.tileSize = 256; }
+    }
+
+    layer.id = l.id;
+    layer.type = 'raster';
+    layer.source = l.id;
+    layer.paint = {
+        'raster-opacity': l.opacity
+    };
+    layer.layout = {
+        visibility: (l.visible) ? 'visible' : 'none'
+    };
+    layer.metadata = addUkisLayerMetadata(l);
+
+    if (l.maxZoom) { layer.maxzoom = l.maxZoom; }
+    if (l.maxZoom) { layer.minzoom = l.minZoom; }
+
+    return {
+        source: source as T,
+        layer
+    }
+}
+
+export function createWmsLayer(l: ukisWmsLayer) {
+    const { source, layer } = createBaseLayer<RasterSourceSpecification>(l);
+    source.tiles = [createGetMapUrl(l)]
+    return returnSourcesAndLayers(l, source, [layer]);
+}
+
+export function createXyzLayer(l: ukisRasterLayer) {
+    const { source, layer } = createBaseLayer<RasterSourceSpecification>(l);
+    source.tiles = (l.subdomains) ? l.subdomains.map(s => l.url.replace('{s}', s)) : [l.url];
+    source.scheme = 'xyz';
+    return returnSourcesAndLayers(l, source, [layer]);
+}
+
+export function createWmtsLayer(l: ukisWtmsLayer) {
+    const { source, layer } = createBaseLayer<RasterSourceSpecification>(l);
+    source.tiles = [createGetTileUrl(l)];
+    return returnSourcesAndLayers(l, source, [layer]);
+}
+
+
+type tmsReturnType<T> = T extends ukisRasterLayer ? LayerSourceSpecification :
+    T extends ukisVectorLayer ? StyleSpecification : never;
+
+export function createTmsLayer<T extends ukisRasterLayer | ukisVectorLayer>(l: T): tmsReturnType<T> {
+    let layerSourceOrStyleSpecification: any;
+    if (l instanceof ukisRasterLayer) {
+        const sl = createXyzLayer(l);
+
+        layerSourceOrStyleSpecification = sl as LayerSourceSpecification;
+
+    } else if (l instanceof ukisVectorLayer) {
+        const style = l?.options?.style as StyleSpecification;
+        style.layers.forEach(ls => {
+            (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
+
+            // Set not visible on start
+            // TODO: ??? 
+            if (!ls.layout) {
+                ls.layout = {
+                    visibility: 'none'
+                }
+            } else {
+                ls.layout.visibility = 'none';
+            }
+        });
+        layerSourceOrStyleSpecification = style as StyleSpecification;
+        // TODO: merge styles??? 
+    }
+    return layerSourceOrStyleSpecification;
+}
+
+
+export function createGeojsonLayer(l: ukisVectorLayer) {
+    const { source } = createBaseLayer<GeoJSONSourceSpecification>(l)
+    let layers: LayerSpecification[] = [];
+    if (typeof l.data === 'object') {
+        if (l.data.type === 'Feature') {
+            layers = [createLayersFromGeojsonTypes(l.data, l)];
+        } else if (l.data.type === 'FeatureCollection') {
+            if (!l.data || !l.data.features.length) {
+                layers = creteDefaultGeojsonLayers(l);
+            } else {
+                layers = l.data.features.map((f: GeoJSONFeature, index: number) => createLayersFromGeojsonTypes(f, l, index));
+            }
+        }
+    } else {
+        // url data
+        const defaultGeom = [
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'Polygon'
+                }
+            },
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString'
+                }
+            },
+            {
+                type: 'Feature',
+                geometry: {
+                    type: 'Point'
+                }
+            }
+        ]
+        layers = defaultGeom.map((f: any) => createLayersFromGeojsonTypes(f, l));
+    }
+
+    return returnSourcesAndLayers(l, source, layers);
+}
+
+export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLayer, index?: number) {
+    let layer: LayerSpecification = {} as never;
+    const style = {
+        fill: {
+            color: feature?.properties?.fill || 'rgba(255,255,255,0.4)',
+        },
+        stroke: {
+            color: feature?.properties?.stroke || '#3399CC',
+            width: 1.25,
+        },
+        circle: {
+            radius: 5
+        }
+    };
+
+    switch (feature.geometry.type) {
+        case 'Polygon':
+            layer = {
+                id: `${l.id}:fill`,
+                type: 'fill',
+                source: l.id,
+                paint: {
+                    'fill-opacity': l.opacity,
+                    'fill-color': style.fill.color,
+                },
+                layout: {
+                    visibility: (l.visible) ? 'visible' : 'none'
+                },
+                metadata: {
+                    'ukis:filtertype': l.filtertype,
+                    'ukis:layergroup': l.id
+                },
+                filter: ['==', '$type', 'Polygon']
+            };
+            break;
+        case 'LineString':
+            layer = {
+                id: `${l.id}:line`,
+                type: 'line',
+                source: l.id,
+                paint: {
+                    'line-opacity': l.opacity,
+                    'line-color': style.stroke.color,
+                    'line-width': style.stroke.width
+                },
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round',
+                    visibility: (l.visible) ? 'visible' : 'none'
+                },
+                metadata: {
+                    'ukis:filtertype': l.filtertype,
+                    'ukis:layergroup': l.id
+                },
+                filter: ['in', '$type', 'LineString', 'Polygon']
+            };
+            break;
+        case 'Point':
+            layer = {
+                id: `${l.id}:circle`,
+                type: 'circle',
+                source: l.id,
+                paint: {
+                    'circle-opacity': l.opacity,
+                    'circle-stroke-opacity': l.opacity,
+                    'circle-stroke-color': style.stroke.color,
+                    'circle-color': style.fill.color,
+                    'circle-radius': style.circle.radius,
+                    'circle-stroke-width': style.stroke.width,
+                },
+                layout: {
+                    visibility: (l.visible) ? 'visible' : 'none'
+                },
+                metadata: {
+                    'ukis:filtertype': l.filtertype,
+                    'ukis:layergroup': l.id
+                },
+                filter: ['==', '$type', 'Point']
+            };
+            break;
+    }
+
+    if (typeof index === 'number') {
+        layer.id += `:${index}`;
+    }
+
+    if (l.maxZoom) layer.maxzoom = l.maxZoom;
+    if (l.maxZoom) layer.minzoom = l.minZoom;
+
+    return layer;
+}
+
+export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
+    const fill = 'rgba(255,255,255,0.4)';
+    const stroke = '#3399CC';
+    const defaultGeom: Omit<GeoJSONFeature, '_geometry' | 'id' | '_vectorTileFeature' | 'toJSON'>[] = [
+        {
+            type: 'Feature',
+            geometry: {
+                type: 'Polygon',
+                coordinates: [] as any
+            },
+            properties: {
+                fill,
+                stroke
+            }
+        },
+        {
+            type: 'Feature',
+            geometry: {
+                type: 'LineString',
+                coordinates: [] as any
+            },
+            properties: {
+                fill,
+                stroke
+            }
+        },
+        {
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: [] as any
+            },
+            properties: {
+                fill,
+                stroke
+            }
+        }
+    ]
+    return defaultGeom.map((f: GeoJSONFeature, index: number) => createLayersFromGeojsonTypes(f, l, index));
+}
+
+/**
+ * This could be improved by something like
+ * - https://github.com/maplibre/maplibre-gl-js/discussions/1078 ->  addProtocol
+ * - https://openlayers.org/en/latest/apidoc/module-ol_source_Vector.html#~LoadingStrategy
+ * - https://openlayers.org/en/latest/apidoc/module-ol_source_TileWMS-TileWMS.html
+ *  Or force the server to provide vector tiles :D -> e.g. https://docs.geoserver.org/main/en/user/extensions/vectortiles/tutorial.html
+ */
+export function createWfsLayer(l: ukisVectorLayer) {
+    let url = null;
+    if (l.url) {
+        if (l.url.indexOf('http://') === 0 || l.url.indexOf('https://') === 0) {
+            url = new URL(l.url);
+        } else {
+            url = new URL(l.url, window.location.origin);
+        }
+
+        // making sure that srsname is set to projection for GeoJson
+        url.searchParams.set('srsname', 'EPSG:4326');
+        // url.searchParams.set('bbox', `{bbox-epsg-3857},EPSG:3857`);
+
+        l.url = url.toString();
+    }
+
+    return createGeojsonLayer(l);
+}
+
+
+export type KmlSourceSpecification = Omit<GeoJSONSourceSpecification, 'type'> & { type: "kml" };
+export function createKmlLayer(l: ukisVectorLayer) {
+    /**
+     * use map.addSourceType('kml', KMLSource,...)
+     * and extend the geojson source to convert kml to geojson and then use it.
+     * see -> map-maplibre.component.ts
+     */
+    const { sources, layers } = createGeojsonLayer(l);
+    const source: KmlSourceSpecification = sources[l.id] as never;
+    source.type = 'kml';
+    return returnSourcesAndLayers(l, source, layers);
+}
+
+
+export function getOpacityPaintProperty(ls: LayerSpecification) {
+    if (ls.paint) {
+        if (ls.type !== 'hillshade') {
+            let type: any = ls.type;
+            if (ls.type === 'symbol') {
+                type = 'icon';
+            }
+
+            return `${type}-opacity`;
+        }
+    }
+}
+
+export function createCustomLayer(l: ukisCustomLayer) {
+
+    const isStyleSpec = l.custom_layer?.version && l.custom_layer?.sources && l.custom_layer?.layers;
+    if (!isStyleSpec) {
+        console.error('custom_layer is not a StyleSpecification');
+    }
+
+    const style = l.custom_layer as StyleSpecification;
+
+    const sources: SourceIdSpecification = style.sources;
+    Object.keys(sources).forEach(key => {
+        const s = sources[key];
+        if (!(s as any).attribution && l.attribution) {
+            (s as any).attribution = l.attribution;
+        }
+    });
+
+
+    const layers: LayerSpecification[] = style.layers;
+    layers.forEach(ls => {
+        ls.id = `${ls.id}:${l.id}`;
+        ls.metadata = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
+
+        // Set visibility only if it is not ignored in a custom layer.
+        // Allow hidden or always visible layers in a custom layer.
+        const ignoreVisibility = ls.metadata?.['ukis:ignore-visibility']
+        if (!ignoreVisibility) {
+            if (!ls.layout) {
+                ls.layout = {};
+            }
+            ls.layout.visibility = (l.visible) ? 'visible' : 'none';
+        }
+
+        const opacityPaintProperty = getOpacityPaintProperty(ls);
+        // Set the opacity only if it is not ignored in a custom layer.
+        const ignoreOpacity = ls.metadata?.['ukis:ignore-opacity']
+        if (opacityPaintProperty && !ignoreOpacity) {
+            if (!ls.paint) {
+                ls.paint = {};
+            }
+            (ls.paint as any)[opacityPaintProperty] = l.opacity;
+        }
+    });
+
+
+    return style;
+}
+
+
+export function createStackedLayer(l: StackedLayer) {
+    if (l instanceof StackedLayer) {
+        const layersStyles = l.layers.map(ml => {
+            // Set visibility and opacity from the StackedLayer as start for all the layers
+            // they will be updated later in map-component 
+            ml.visible = l.visible;
+            ml.opacity = l.opacity;
+
+            /** popups are get from the olLayer later so add them */
+            /* if (l.popup) {
+                ml.popup = l.popup;
+            } */
+
+            /** events are get from the olLayer later so add them */
+            /* if (l.events) {
+                ml.events = l.events;
+            } */
+
+            /** Only crete layers that are not stacked. */
+            if (ml instanceof StackedLayer !== true) {
+                return createLayer(ml);
+            }
+        });
+
+        const sources: SourceIdSpecification | StyleSpecification['sources'] = {};
+        const layers: LayerSpecification[] = [];
+        // This has to be done like for a custom layer, so only one mlLayer exists for the stack.
+        layersStyles.forEach(lsGroup => {
+            lsGroup.layers.forEach(ls => {
+                ls.id = `${ls.id}:${l.id}`;
+                ls.metadata = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
+                layers.push(ls);
+            });
+
+            Object.keys(lsGroup.sources).forEach(s => {
+                sources[s] = lsGroup.sources[s];
+            });
+        });
+
+        return {
+            sources,
+            layers
+        } as LayerSourceSpecification;
+    } else {
+        console.log('layer is not of type StackedLayer!', l);
+    }
+}
+
+/**
+ * all layers 
+ */
+
+export function createLayer(newLayer: ukisLayer) {
+    let newLlayer: (LayerSourceSpecification | StyleSpecification | undefined);
+    switch (newLayer.type) {
+        case XyzLayertype:
+            newLlayer = createXyzLayer(newLayer as ukisRasterLayer);
+            break;
+        case WmsLayertype:
+            newLlayer = createWmsLayer(newLayer as ukisWmsLayer);
+            break;
+        case WmtsLayertype:
+            newLlayer = createWmtsLayer(newLayer as ukisWmtsLayer);
+            break;
+        case TmsLayertype:
+            newLlayer = createTmsLayer(newLayer as ukisVectorLayer | ukisRasterLayer);
+            break;
+        case GeojsonLayertype:
+            newLlayer = createGeojsonLayer(newLayer as ukisVectorLayer);
+            break;
+        case KmlLayertype:
+            newLlayer = createKmlLayer(newLayer as ukisVectorLayer);
+            break;
+        case WfsLayertype:
+            newLlayer = createWfsLayer(newLayer as ukisVectorLayer);
+            break;
+        case CustomLayertype:
+            newLlayer = createCustomLayer(newLayer as ukisCustomLayer);
+            break;
+        case StackedLayertype:
+            newLlayer = createStackedLayer(newLayer as StackedLayer);
+            break;
+    }
+    return newLlayer;
+}
+
+
+
