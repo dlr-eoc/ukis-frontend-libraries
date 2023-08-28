@@ -98,6 +98,15 @@ const routes: Routes = [
     }
   },
   {
+    path: 'maplibre',
+    loadChildren: () => import('./route-components/route-example-maplibre/route-example-maplibre.module').then(m => m.RouteExampleMaplibreModule),
+    data: {
+      title: 'Maplibre',
+      description: 'This example shows a maplibre map and how to work with UKIS layers',
+      img: 'assets/route-maplibre.jpg'
+    }
+  },
+  {
     path: 'licenses',
     loadChildren: () => import('./route-components/route-licenses/route-licenses.module').then(m => m.RouteLicensesModule),
     data: {
