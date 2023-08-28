@@ -6,7 +6,7 @@ import {
 import { Map as glMap, StyleSpecification, TypedStyleLayer } from 'maplibre-gl';
 import { BehaviorSubject } from 'rxjs';
 import { LayerSourceSpecification, UKIS_METADATA, setOpacity, setVisibility } from './maplibre.helpers';
-import { setOpacity, setVisibility } from './maplibre.helpers';
+import { createLayer } from './maplibre-layers.helpers';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
