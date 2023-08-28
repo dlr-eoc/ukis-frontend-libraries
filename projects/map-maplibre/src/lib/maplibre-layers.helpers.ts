@@ -119,8 +119,8 @@ export function createBaseLayer<T>(l: ukisRasterLayer | ukisVectorLayer) {
     };
     layer.metadata = addUkisLayerMetadata(l);
 
-    if (l.maxZoom) { layer.maxzoom = l.maxZoom; }
-    if (l.maxZoom) { layer.minzoom = l.minZoom; }
+    if (l.maxZoom || l.maxZoom === 0) { layer.maxzoom = l.maxZoom; }
+    if (l.minZoom || l.minZoom === 0) { layer.minzoom = l.minZoom; }
 
     return {
         source: source as T,
@@ -307,8 +307,8 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
         layer.id += `:${index}`;
     }
 
-    if (l.maxZoom) layer.maxzoom = l.maxZoom;
-    if (l.maxZoom) layer.minzoom = l.minZoom;
+    if (l.maxZoom || l.maxZoom === 0) layer.maxzoom = l.maxZoom;
+    if (l.minZoom || l.minZoom === 0) layer.minzoom = l.minZoom;
 
     return layer;
 }
