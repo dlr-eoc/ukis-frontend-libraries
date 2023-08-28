@@ -138,13 +138,13 @@ export function getIndexOfLayer(map: Map, layerID: string) {
     return layers.findIndex(l => l.id === layerID);
 }
 
-export function getLayerGroupIDs(map: Map, filtertype?: Tgroupfiltertype) {
+export function getUkisLayerIDs(map: Map, filtertype?: Tgroupfiltertype) {
     let filteredlayers = getAllLayers(map, filtertype)
     const ids: string[] = filteredlayers.filter(l => (l.metadata as any)?.[UKIS_METADATA.layerID]).map(l => (l.metadata as any)?.[UKIS_METADATA.layerID]);
     return [...new Set(ids)];
 }
 
-export function getLayersAndSourcesOfGroup(map: Map, groupID: string) {
+export function getLayersAndSources(map: Map, ukisLayerID: string) {
     const style = map.getStyle();
     const filtered = style.layers.filter(l => {
         if ((l.metadata as any)?.[UKIS_METADATA.layerID] === ukisLayerID) {
@@ -174,21 +174,21 @@ export function getLayersAndSourcesOfGroup(map: Map, groupID: string) {
     }
 }
 
-export function removeLayerAndSource(map: Map, groupID: string | string[]) {
+export function removeLayerAndSource(map: Map, ukisLayerID: string | string[]) {
     const toRemove: {
         layers: LayerSpecification[],
         sources: SourceIdSpecification
     } = { layers: [], sources: {} };
 
     let groupIds = [];
-    if (Array.isArray(groupID)) {
-        groupIds = groupID;
+    if (Array.isArray(ukisLayerID)) {
+        groupIds = ukisLayerID;
     } else {
-        groupIds.push(groupID);
+        groupIds.push(ukisLayerID);
     }
 
     groupIds.forEach(item => {
-        const ls = getLayersAndSourcesOfGroup(map, item);
+        const ls = getLayersAndSources(map, item);
         toRemove.layers.push(...ls.layers);
         toRemove.sources = ls.sources;
     });
@@ -206,7 +206,8 @@ export function removeLayerAndSource(map: Map, groupID: string | string[]) {
     });
 }
 
-export function getFirstAndLastGroupLayer(map: Map, groupID: string) {
+
+export function getFirstAndLastLayer(map: Map, ukisLayerID: string) {
     const filtered = map.getStyle().layers.filter(l => {
         if ((l.metadata as any)?.[UKIS_METADATA.layerID] === ukisLayerID) {
             return true;

@@ -1,6 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { LayerSpecification, Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Dispatcher, Evented } from 'maplibre-gl';
-import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getLayerGroupIDs, getLayerChangeOrder, getFirstAndLastGroupLayer, removeLayerAndSource } from './maplibre.helpers';
+import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, getLayerChangeOrder, getFirstAndLastLayer, removeLayerAndSource, UKIS_METADATA, getLayersAndSources } from './maplibre.helpers';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } from '@dlr-eoc/services-layers';
@@ -338,7 +338,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
 
 
     /** if length of layers has changed add new layers */
-    const mapLayers = getLayerGroupIDs(this.map, filtertype);
+    const mapLayers = getUkisLayerIDs(this.map, filtertype);
 
     if (layers.length !== mapLayers.length) {
       // set only one visible at start
@@ -363,7 +363,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
 
 
     /** if length of layers has changed add new layers */
-    const mapLayers = getLayerGroupIDs(this.map, filtertype)
+    const mapLayers = getUkisLayerIDs(this.map, filtertype)
 
     if (layers.length !== mapLayers.length) {
       const layerIDs = layers.map(l => l.id);
@@ -388,7 +388,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
       for (let index = 0; index < length; index++) {
         const lc = layerChange[index];
         if (index >= 1) {
-          const newMapLayerIds = getLayerGroupIDs(this.map, filtertype)
+          const newMapLayerIds = getUkisLayerIDs(this.map, filtertype)
           const newlayerChange = getLayerChangeOrder(layers, newMapLayerIds);
           // Stop moving layers because the order is already the same as in the new layer array.
           if (newlayerChange.length === 0) {
@@ -403,7 +403,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     for (const layer of layers) {
       const mllayers = getAllLayers(this.map).filter(l => {
         const ukismetadata = getUkisLayerMetadata(l as TypedStyleLayer)
-        return ukismetadata['ukis:layergroup'] === layer.id;
+        return ukismetadata[UKIS_METADATA.layerID] === layer.id;
       }).map(l => this.map.getLayer(l.id)).filter(l => l);
 
       mllayers.forEach(l => {
