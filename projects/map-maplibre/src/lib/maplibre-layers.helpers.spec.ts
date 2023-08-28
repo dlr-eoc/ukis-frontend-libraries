@@ -2,7 +2,7 @@ import { CustomLayer, Layer, RasterLayer, VectorLayer, WmsLayer, WmtsLayer } fro
 import {
     addUkisLayerMetadata, hasUkisLayerMetadata, getUkisLayerMetadata, createWmsLayer, createXyzLayer,
     createWmtsLayer, createTmsLayer, createGeojsonLayer, createLayersFromGeojsonTypes, creteDefaultGeojsonLayers, createWfsLayer, createKmlLayer, createCustomLayer,
-    createStackedLayer, createGetMapUrl, createGetTileUrl, createBaseLayer, getOpacityPaintProperty
+    createStackedLayer, createGetMapUrl, createGetTileUrl, createBaseLayer
 } from './maplibre-layers.helpers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import { RasterSourceSpecification, StyleSpecification } from 'maplibre-gl';
@@ -281,7 +281,7 @@ describe('MaplibreLayerHelpers', () => {
             expect(ls.id.split(':')[1]).toBe(ukisCustom.id);
             expect(ls.layout.visibility).toBe((ukisCustom.visible) ? 'visible' : 'none');
 
-            const opacityPaintProperty = getOpacityPaintProperty(ls);
+            const opacityPaintProperty = getOpacityPaintProperty(ls.type);
             if (opacityPaintProperty) {
                 expect((ls.paint as any)[opacityPaintProperty]).toBe(ukisCustom.opacity);
             }
@@ -302,7 +302,7 @@ describe('MaplibreLayerHelpers', () => {
         expect(layer_1.metadata['ukis:ignore-visibility']).toBe(true);
         expect(layer_1.layout.visibility).toBe(customLayer_1.layout.visibility);
 
-        const opacityPaintProperty = getOpacityPaintProperty(layer_1);
+        const opacityPaintProperty = getOpacityPaintProperty(layer_1.type);
         if (opacityPaintProperty) {
             expect(layer_1.paint[opacityPaintProperty]).toBe(customLayer_1.paint[opacityPaintProperty]);
         }

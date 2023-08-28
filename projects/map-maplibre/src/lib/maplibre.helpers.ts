@@ -122,6 +122,44 @@ export function setOpacity(map: Map, layerOrId: string | TypedStyleLayer, opacit
     }
 }
 
+export function getOpacity(map: Map, layerOrId: string | TypedStyleLayer) {
+    let mllayer;
+    if (typeof layerOrId === 'string') {
+        mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
+    } else {
+        mllayer = layerOrId;
+    }
+    if (mllayer) {
+        return styleLayerGetOpacity(mllayer);
+    }
+}
+
+export function styleLayerGetOpacity(mllayer: TypedStyleLayer) {
+    let opacityPaintProperty = getOpacityPaintProperty(mllayer.type);
+    return mllayer.getPaintProperty(opacityPaintProperty);
+}
+
+export function getOpacityPaintProperty(type: string) {
+    let _type = type;
+    if (type === 'symbol') {
+        _type = 'icon';
+    }
+
+    let opacityPaintProperty = `${_type}-opacity`;
+
+    if (type === 'circle') {
+        opacityPaintProperty = 'circle-stroke-opacity';
+    }
+
+    // hillshade only has visibility
+    // https://github.com/maplibre/maplibre-gl-js/issues/1439
+    if (type === 'hillshade') {
+        opacityPaintProperty = 'hillshade-exaggeration';
+    }
+
+    return opacityPaintProperty;
+}
+
 export function getAllLayers(map: Map, filtertype?: Tgroupfiltertype) {
     const layers = map.getStyle().layers;
     let filteredlayers = layers;

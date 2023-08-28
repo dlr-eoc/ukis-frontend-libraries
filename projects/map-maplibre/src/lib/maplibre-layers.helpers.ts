@@ -388,19 +388,6 @@ export function createKmlLayer(l: ukisVectorLayer) {
 }
 
 
-export function getOpacityPaintProperty(ls: LayerSpecification) {
-    if (ls.paint) {
-        if (ls.type !== 'hillshade') {
-            let type: any = ls.type;
-            if (ls.type === 'symbol') {
-                type = 'icon';
-            }
-
-            return `${type}-opacity`;
-        }
-    }
-}
-
 export function createCustomLayer(l: ukisCustomLayer) {
 
     const isStyleSpec = l.custom_layer?.version && l.custom_layer?.sources && l.custom_layer?.layers;
@@ -434,7 +421,7 @@ export function createCustomLayer(l: ukisCustomLayer) {
             ls.layout.visibility = (l.visible) ? 'visible' : 'none';
         }
 
-        const opacityPaintProperty = getOpacityPaintProperty(ls);
+        const opacityPaintProperty = (ls.paint) ? getOpacityPaintProperty(ls.type) : null;
         // Set the opacity only if it is not ignored in a custom layer.
         const ignoreOpacity = ls.metadata?.['ukis:ignore-opacity']
         if (opacityPaintProperty && !ignoreOpacity) {
