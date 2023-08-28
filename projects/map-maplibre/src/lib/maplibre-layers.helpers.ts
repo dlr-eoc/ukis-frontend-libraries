@@ -3,21 +3,17 @@ import {
     RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
     WmtsLayer as ukisWmtsLayer, VectorLayer as ukisVectorLayer, CustomLayer as ukisCustomLayer, Layer as ukisLayer, StackedLayer, XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype
 } from '@dlr-eoc/services-layers';
-
-/** Layers can consist of multiple layers and sources, e.g. if they are a VectorTileLayer - StyleSpecification   */
-export type SourceIdSpecification = { [id: string]: SourceSpecification };
-export type LayerSourceSpecification = { sources: SourceIdSpecification, layers: LayerSpecification[] };
-
+import { LayerSourceSpecification, SourceIdSpecification, UKIS_METADATA, getOpacityPaintProperty } from "./maplibre.helpers";
 
 export function addUkisLayerMetadata(l: ukisLayer) {
-    return {
-        'ukis:filtertype': l.filtertype,
-        'ukis:layergroup': l.id
-    }
+    const metadata = {};
+    metadata[UKIS_METADATA.filtertype] = l.filtertype;
+    metadata[UKIS_METADATA.layerID] = l.id;
+    return metadata;
 }
 
 export function hasUkisLayerMetadata(ml: TypedStyleLayer) {
-    if ((ml?.metadata as any)['ukis:filtertype'] || (ml?.metadata as any)['ukis:layergroup']) {
+    if ((ml?.metadata as any)[UKIS_METADATA.filtertype] || (ml?.metadata as any)[UKIS_METADATA.layerID]) {
         return true;
     } else {
         return false;
@@ -25,10 +21,10 @@ export function hasUkisLayerMetadata(ml: TypedStyleLayer) {
 }
 
 export function getUkisLayerMetadata(ml: TypedStyleLayer) {
-    return {
-        'ukis:filtertype': (ml?.metadata as any)['ukis:filtertype'],
-        'ukis:layergroup': (ml?.metadata as any)['ukis:layergroup']
-    }
+    const metadata = {};
+    metadata[UKIS_METADATA.filtertype] = (ml?.metadata as any)[UKIS_METADATA.filtertype];
+    metadata[UKIS_METADATA.layerID] = (ml?.metadata as any)[UKIS_METADATA.layerID];
+    return metadata;
 }
 
 export function createGetMapUrl(l: ukisWmsLayer) {
@@ -249,12 +245,11 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
                 layout: {
                     visibility: (l.visible) ? 'visible' : 'none'
                 },
-                metadata: {
-                    'ukis:filtertype': l.filtertype,
-                    'ukis:layergroup': l.id
-                },
+                metadata: {},
                 filter: ['==', '$type', 'Polygon']
             };
+            layer.metadata[UKIS_METADATA.filtertype] = l.filtertype;
+            layer.metadata[UKIS_METADATA.layerID] = l.id;
             break;
         case 'LineString':
             layer = {
@@ -271,12 +266,11 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
                     'line-cap': 'round',
                     visibility: (l.visible) ? 'visible' : 'none'
                 },
-                metadata: {
-                    'ukis:filtertype': l.filtertype,
-                    'ukis:layergroup': l.id
-                },
+                metadata: {},
                 filter: ['in', '$type', 'LineString', 'Polygon']
             };
+            layer.metadata[UKIS_METADATA.filtertype] = l.filtertype;
+            layer.metadata[UKIS_METADATA.layerID] = l.id;
             break;
         case 'Point':
             layer = {
@@ -294,12 +288,11 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
                 layout: {
                     visibility: (l.visible) ? 'visible' : 'none'
                 },
-                metadata: {
-                    'ukis:filtertype': l.filtertype,
-                    'ukis:layergroup': l.id
-                },
+                metadata: {},
                 filter: ['==', '$type', 'Point']
             };
+            layer.metadata[UKIS_METADATA.filtertype] = l.filtertype;
+            layer.metadata[UKIS_METADATA.layerID] = l.id;
             break;
     }
 

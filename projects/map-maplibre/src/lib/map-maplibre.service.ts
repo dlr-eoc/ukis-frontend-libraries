@@ -5,7 +5,7 @@ import {
 } from '@dlr-eoc/services-layers';
 import { Map as glMap, StyleSpecification, TypedStyleLayer } from 'maplibre-gl';
 import { BehaviorSubject } from 'rxjs';
-import { LayerSourceSpecification, createLayer } from './maplibre-layers.helpers';
+import { LayerSourceSpecification, UKIS_METADATA, setOpacity, setVisibility } from './maplibre.helpers';
 import { setOpacity, setVisibility } from './maplibre.helpers';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -112,7 +112,7 @@ export class MapMaplibreService {
    */
   public getLayers(filtertype: Tgroupfiltertype, map: glMap) {
     const style = map.getStyle();
-    const layerSpecifications = style.layers.filter(l => l.metadata['ukis:filtertype'] === filtertype);
+    const layerSpecifications = style.layers.filter(l => l.metadata[UKIS_METADATA.filtertype] === filtertype);
     const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id));
 
     return {
@@ -131,7 +131,7 @@ export class MapMaplibreService {
    */
   public getLayersForId(id: string, filtertype: Tgroupfiltertype, map: glMap) {
     const alllayers = this.getLayers(filtertype, map);
-    const layerSpecifications = alllayers.layerSpecifications.filter(l => l.metadata['ukis:layergroup'] === id);
+    const layerSpecifications = alllayers.layerSpecifications.filter(l => l.metadata[UKIS_METADATA.layerID] === id);
     if (layerSpecifications.length) {
       const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id));
       return {

@@ -6,6 +6,7 @@ import {
 } from './maplibre-layers.helpers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import { RasterSourceSpecification, StyleSpecification } from 'maplibre-gl';
+import { UKIS_METADATA, getOpacityPaintProperty } from './maplibre.helpers';
 
 
 let ukisOsm: RasterLayer;
@@ -196,8 +197,8 @@ describe('MaplibreLayerHelpers', () => {
         });
 
         const metadata = addUkisLayerMetadata(layer);
-        expect(metadata['ukis:filtertype']).toBe(layer.filtertype);
-        expect(metadata['ukis:layergroup']).toBe(layer.id);
+        expect(metadata[UKIS_METADATA.filtertype]).toBe(layer.filtertype);
+        expect(metadata[UKIS_METADATA.layerID]).toBe(layer.id);
     });
 
     it('should create a base LayerSourceSpecification from ukis Rasterlayer', () => {
@@ -275,8 +276,8 @@ describe('MaplibreLayerHelpers', () => {
         const layers = styleSpec.layers;
         layers.forEach(ls => {
             const metadata = addUkisLayerMetadata(ukisCustom);
-            expect(ls.metadata['ukis:filtertype']).toBe(metadata['ukis:filtertype']);
-            expect(ls.metadata['ukis:layergroup']).toBe(metadata['ukis:layergroup']);
+            expect(ls.metadata[UKIS_METADATA.filtertype]).toBe(metadata[UKIS_METADATA.filtertype]);
+            expect(ls.metadata[UKIS_METADATA.layerID]).toBe(metadata[UKIS_METADATA.layerID]);
             expect(ls.id.split(':')[1]).toBe(ukisCustom.id);
             expect(ls.layout.visibility).toBe((ukisCustom.visible) ? 'visible' : 'none');
 

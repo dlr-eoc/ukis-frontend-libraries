@@ -5,6 +5,12 @@ import { SourceIdSpecification } from './maplibre-layers.helpers';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
+export const UKIS_METADATA = {
+    layerID: 'ukis:layerID',
+    filtertype: 'ukis:filtertype'
+};
+
+
 export function setExtent(map: Map, extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const bounds = new LngLatBounds([extent[0], extent[1]], [extent[2], extent[3]]);
     map.fitBounds(bounds);
@@ -118,7 +124,7 @@ export function getAllLayers(map: Map, filtertype?: Tgroupfiltertype) {
     let filteredlayers = layers;
     if (filtertype) {
         const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
-        filteredlayers = layers.filter(l => (l.metadata as any)?.['ukis:filtertype']?.toLowerCase() === lowerType);
+        filteredlayers = layers.filter(l => (l.metadata as any)?.[UKIS_METADATA.filtertype]?.toLowerCase() === lowerType);
     }
 
     return filteredlayers;
@@ -131,14 +137,14 @@ export function getIndexOfLayer(map: Map, layerID: string) {
 
 export function getLayerGroupIDs(map: Map, filtertype?: Tgroupfiltertype) {
     let filteredlayers = getAllLayers(map, filtertype)
-    const ids: string[] = filteredlayers.filter(l => (l.metadata as any)?.['ukis:layergroup']).map(l => (l.metadata as any)?.['ukis:layergroup']);
+    const ids: string[] = filteredlayers.filter(l => (l.metadata as any)?.[UKIS_METADATA.layerID]).map(l => (l.metadata as any)?.[UKIS_METADATA.layerID]);
     return [...new Set(ids)];
 }
 
 export function getLayersAndSourcesOfGroup(map: Map, groupID: string) {
     const style = map.getStyle();
     const filtered = style.layers.filter(l => {
-        if ((l.metadata as any)?.['ukis:layergroup'] === groupID) {
+        if ((l.metadata as any)?.[UKIS_METADATA.layerID] === ukisLayerID) {
             return true;
         } else {
             return;
@@ -199,7 +205,7 @@ export function removeLayerAndSource(map: Map, groupID: string | string[]) {
 
 export function getFirstAndLastGroupLayer(map: Map, groupID: string) {
     const filtered = map.getStyle().layers.filter(l => {
-        if ((l.metadata as any)?.['ukis:layergroup'] === groupID) {
+        if ((l.metadata as any)?.[UKIS_METADATA.layerID] === ukisLayerID) {
             return true;
         } else {
             return false;
