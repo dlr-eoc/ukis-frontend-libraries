@@ -225,12 +225,14 @@ export function getFirstAndLastGroupLayer(map: Map, groupID: string) {
     }
 }
 
-
+/**
+ * Detect changes in layer order
+ */
 export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) {
     let layerChange: null | {
         layerId: string,
         beforeId: string
-    } = null;
+    }[] = [];
     const orderChanges = [];
     const layerIndexDiff = [];
 
@@ -268,17 +270,14 @@ export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) 
     const down = layerIndexDiff.filter(i => !i).length < layerIndexDiff.filter(i => i).length;
 
     if (down && !up) {
-        // if more true in layerIndexDiff direction is down take the last change
-        layerChange = orderChanges[orderChanges.length - 1]
+        // if more true in layerIndexDiff direction is down. Reverse changes so that the last change is used first.
+        layerChange = orderChanges.reverse();
     } else if (up && !down) {
-        // if more false in layerIndexDiff direction is up take the first change
-        layerChange = orderChanges[0];
+        // if more false in layerIndexDiff direction is up
+        layerChange = orderChanges;
     } else if (!down && !up) {
         // if only two values, only two layers are swapped so it doesn't matter which change to take
-        const oc = orderChanges[0];
-        if (oc) {
-            layerChange = oc;
-        }
+        layerChange = orderChanges;
     }
 
     return layerChange;

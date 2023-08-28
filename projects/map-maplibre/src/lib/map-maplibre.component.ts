@@ -352,7 +352,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
       this.mapSvc.setUkisLayers(layers, filtertype, this.map);
     } else {
       /** if layers already on the map -length not changed- update them */
-      this.updateLayers(layers, mapLayers);
+      this.updateLayers(layers, mapLayers, filtertype);
     }
     // console.log(layers, 'visible', visiblelayers, 'map -', mapLayers, 'map visible -', visibleMapLayers)
   }
@@ -371,19 +371,48 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
 
       //TODO: if layer was StyleSpecification how to remove all things from it
       removeLayerAndSource(this.map, removedLayers);
-      // console.log('reset layers', layers, mapLayers);
+      // console.log(`reset ${filtertype}`, layers, mapLayers);
       this.mapSvc.setUkisLayers(layers, filtertype, this.map);
     } else {
       /** if layers already on the map - length not changed - update them */
-      this.updateLayers(layers, mapLayers);
-      // console.log('update layers', layers, mapLayers);
+      this.updateLayers(layers, mapLayers, filtertype);
+      // console.log(`update ${filtertype}`, layers, mapLayers);
     }
 
   }
 
-  private updateLayers(layers: ukisLayer[], mapLayerIds: string[]) {
+  private updateLayers(layers: ukisLayer[], mapLayerIds: string[], filtertype: Tgroupfiltertype) {
     const layerChange = getLayerChangeOrder(layers, mapLayerIds);
+    const length = layerChange.length;
+    if (length) {
+      for (let index = 0; index < length; index++) {
+        const lc = layerChange[index];
+        if (index >= 1) {
+          const newMapLayerIds = getLayerGroupIDs(this.map, filtertype)
+          const newlayerChange = getLayerChangeOrder(layers, newMapLayerIds);
+          // Stop moving layers because the order is already the same as in the new layer array.
+          if (newlayerChange.length === 0) {
+            break;
+          }
+        }
+        this.changeLayerOrder(lc);
+      }
+    }
 
+
+    for (const layer of layers) {
+      const mllayers = getAllLayers(this.map).filter(l => {
+        const ukismetadata = getUkisLayerMetadata(l as TypedStyleLayer)
+        return ukismetadata['ukis:layergroup'] === layer.id;
+      }).map(l => this.map.getLayer(l.id)).filter(l => l);
+
+      mllayers.forEach(l => {
+        this.mapSvc.updateMlLayer(l as any, layer, this.map);
+      })
+    }
+  }
+
+  private changeLayerOrder(layerChange: { layerId: string, beforeId: string }) {
     if (layerChange) {
       const layerMapLayers = getFirstAndLastGroupLayer(this.map, layerChange.layerId);
       const beforeMapLayers = getFirstAndLastGroupLayer(this.map, layerChange.beforeId);
@@ -429,17 +458,6 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
         // layerMapLayers.length === 0 
         // there is nothing to move
       }
-    }
-
-    for (const layer of layers) {
-      const mllayers = getAllLayers(this.map).filter(l => {
-        const ukismetadata = getUkisLayerMetadata(l as TypedStyleLayer)
-        return ukismetadata['ukis:layergroup'] === layer.id;
-      }).map(l => this.map.getLayer(l.id)).filter(l => l);
-
-      mllayers.forEach(l => {
-        this.mapSvc.updateMlLayer(l as any, layer, this.map);
-      })
     }
   }
 }
