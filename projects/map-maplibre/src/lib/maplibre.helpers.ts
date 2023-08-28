@@ -1,7 +1,10 @@
 
-import { Map, LngLatBounds, LngLat, LayerSpecification, TypedStyleLayer } from 'maplibre-gl';
+import { Map, LngLatBounds, LngLat, LayerSpecification, TypedStyleLayer, SourceSpecification } from 'maplibre-gl';
 import { TGeoExtent, Layer as ukisLayer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
-import { SourceIdSpecification } from './maplibre-layers.helpers';
+
+/** Layers can consist of multiple layers and sources, e.g. if they are a VectorTileLayer - StyleSpecification   */
+export type SourceIdSpecification = { [id: string]: SourceSpecification };
+export type LayerSourceSpecification = { sources: SourceIdSpecification, layers: LayerSpecification[] };
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
