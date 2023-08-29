@@ -171,10 +171,6 @@ export function getAllLayers(map: Map, filtertype?: Tgroupfiltertype) {
     return filteredlayers;
 }
 
-export function getIndexOfLayer(map: Map, layerID: string) {
-    const layers = map.getStyle().layers;
-    return layers.findIndex(l => l.id === layerID);
-}
 
 export function getUkisLayerIDs(map: Map, filtertype?: Tgroupfiltertype) {
     let filteredlayers = getAllLayers(map, filtertype)
