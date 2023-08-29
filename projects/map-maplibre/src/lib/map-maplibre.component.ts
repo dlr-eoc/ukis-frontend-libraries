@@ -1,6 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { LayerSpecification, Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Dispatcher, Evented } from 'maplibre-gl';
-import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, getLayerChangeOrder, getFirstAndLastLayer, removeLayerAndSource, UKIS_METADATA, getLayersAndSources } from './maplibre.helpers';
+import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Dispatcher, Evented } from 'maplibre-gl';
+import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, UKIS_METADATA, changeOrderOfLayers } from './maplibre.helpers';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } from '@dlr-eoc/services-layers';
@@ -363,7 +363,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
 
 
     /** if length of layers has changed add new layers */
-    const mapLayers = getUkisLayerIDs(this.map, filtertype)
+    const mapLayers = getUkisLayerIDs(this.map, filtertype);
 
     if (layers.length !== mapLayers.length) {
       const layerIDs = layers.map(l => l.id);
@@ -382,23 +382,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   private updateLayers(layers: ukisLayer[], mapLayerIds: string[], filtertype: Tgroupfiltertype) {
-    const layerChange = getLayerChangeOrder(layers, mapLayerIds);
-    const length = layerChange.length;
-    if (length) {
-      for (let index = 0; index < length; index++) {
-        const lc = layerChange[index];
-        if (index >= 1) {
-          const newMapLayerIds = getUkisLayerIDs(this.map, filtertype)
-          const newlayerChange = getLayerChangeOrder(layers, newMapLayerIds);
-          // Stop moving layers because the order is already the same as in the new layer array.
-          if (newlayerChange.length === 0) {
-            break;
-          }
-        }
-        this.changeLayerOrder(lc);
-      }
-    }
-
+    changeOrderOfLayers(this.map, layers, mapLayerIds, filtertype);
 
     for (const layer of layers) {
       const mllayers = getAllLayers(this.map).filter(l => {
@@ -409,55 +393,6 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
       mllayers.forEach(l => {
         this.mapSvc.updateMlLayer(l as any, layer, this.map);
       })
-    }
-  }
-
-  private changeLayerOrder(layerChange: { layerId: string, beforeId: string }) {
-    if (layerChange) {
-      const layerMapLayers = getFirstAndLastGroupLayer(this.map, layerChange.layerId);
-      const beforeMapLayers = getFirstAndLastGroupLayer(this.map, layerChange.beforeId);
-      /** 
-       * if the layer before the one to be moved has several layers, move the layer on beforeMapLayers[0]
-       * If there is no layer before, move it to the top.
-       * 
-       * https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#movelayer
-       * -  If beforeId is omitted, the layer will be appended to the end of the layers array... -
-       */
-      if (beforeMapLayers.length >= 1) {
-        layerChange.beforeId = beforeMapLayers[0].id;
-      } else {
-        layerChange.beforeId = null;
-      }
-
-
-      /** If the layer which should be moved has several layers, move all of them. */
-      if (layerMapLayers.length > 1) {
-        // reverse to move
-        layerMapLayers.reverse();
-        layerMapLayers.forEach((value: LayerSpecification, index: number) => {
-          // Move the first layer to the Before ID and the Move All layer after the moved layer.
-          if (index === 0) {
-            if (layerChange.beforeId) {
-              this.map.moveLayer(value.id, layerChange.beforeId);
-            } else {
-              this.map.moveLayer(value.id);
-            }
-          } else {
-            const beforeLayer = layerMapLayers[index - 1];
-            this.map.moveLayer(value.id, beforeLayer.id);
-          }
-        });
-      } else if (layerMapLayers.length === 1) {
-        const layer = layerMapLayers[0];
-        if (layerChange.beforeId) {
-          this.map.moveLayer(layer.id, layerChange.beforeId);
-        } else {
-          this.map.moveLayer(layer.id)
-        }
-      } else {
-        // layerMapLayers.length === 0 
-        // there is nothing to move
-      }
     }
   }
 }
