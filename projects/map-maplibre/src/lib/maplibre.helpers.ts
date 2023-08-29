@@ -183,14 +183,15 @@ export function getUkisLayerIDs(map: Map, filtertype?: Tgroupfiltertype) {
 }
 
 export function getLayersAndSources(map: Map, ukisLayerID: string) {
-    const style = map.getStyle();
-    const filtered = style.layers.filter(l => {
+    const allLayers = getAllLayers(map);
+    const filtered = allLayers.filter(l => {
         if ((l.metadata as any)?.[UKIS_METADATA.layerID] === ukisLayerID) {
             return true;
         } else {
             return;
         }
     });
+    const styleSources = map.getStyle().sources;
     const filteredSources = filtered.reduce((results, l) => {
         let sid: string;
         if ('source' in l && typeof l['source'] === 'string') {
@@ -199,7 +200,7 @@ export function getLayersAndSources(map: Map, ukisLayerID: string) {
             sid = l.id;
         }
 
-        const s = style.sources[sid];
+        const s = styleSources[sid];
         if (s) {
             results[sid] = s;
         }
