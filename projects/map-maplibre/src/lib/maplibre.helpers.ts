@@ -216,6 +216,7 @@ export function removeLayerAndSource(map: Map, ukisLayerID: string | string[]) {
     } = { layers: [], sources: {} };
 
     let groupIds = [];
+    const allLayers = getAllLayers(map);
     if (Array.isArray(ukisLayerID)) {
         groupIds = ukisLayerID;
     } else {
@@ -234,8 +235,13 @@ export function removeLayerAndSource(map: Map, ukisLayerID: string | string[]) {
         }
     });
 
+    const sourcesInOtherLayers = allLayers
+        .filter(l => !toRemove.layers.map(r => r.id).includes(l.id)) // Difference
+        .map(l => (l as any)?.source) // get sources
+        .filter((value, index, array) => array.indexOf(value) === index && value); // unique and not undefined
+    // only remove source if not used by other layer !!!
     Object.keys(toRemove.sources).forEach(k => {
-        if (map.getSource(k)) {
+        if (map.getSource(k) && !sourcesInOtherLayers.includes(k)) {
             map.removeSource(k);
         }
     });
