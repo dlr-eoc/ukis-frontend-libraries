@@ -280,30 +280,30 @@ export function getFirstAndLastLayer(map: Map, ukisLayerID: string) {
  * Detect changes in layer order
  */
 export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) {
-    let layerChange: null | {
+    let orderChanges: {
         layerId: string,
         beforeId: string
     }[] = [];
-    const orderChanges = [];
-    const layerIndexDiff = [];
 
     let layersLength = mapLayerIds.length;
-
     let index = layersLength;
     while (index--) {
         const mapLayer = mapLayerIds[index];
         const layer = layers[index];
-
 
         if (mapLayer !== layer.id) {
             const orderChange = {
                 layerId: layer.id,
                 beforeId: null as any
             };
-            const indexMapLayer = mapLayerIds.indexOf(layer.id);
-            layerIndexDiff.push(index > indexMapLayer);
 
 
+            /**
+             * https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#movelayer
+             * The ID of an existing layer to insert the new layer before. 
+             * When viewing the map, layer.id will appear beneath the beforeId layer. 
+             * If beforeId is omitted, the layer will be appended to the end of the layers array and appear above all other layers on the map.
+             */
             const beforeIndex = index + 1;
             if (beforeIndex < layersLength) {
                 const beforeId = layers[beforeIndex].id;
@@ -315,21 +315,81 @@ export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) 
 
             orderChanges.push(orderChange);
         }
+
     }
+    return orderChanges;
+}
 
-    const up = layerIndexDiff.filter(i => i).length < layerIndexDiff.filter(i => !i).length;
-    const down = layerIndexDiff.filter(i => !i).length < layerIndexDiff.filter(i => i).length;
 
-    if (down && !up) {
-        // if more true in layerIndexDiff direction is down. Reverse changes so that the last change is used first.
-        layerChange = orderChanges.reverse();
-    } else if (up && !down) {
-        // if more false in layerIndexDiff direction is up
-        layerChange = orderChanges;
-    } else if (!down && !up) {
-        // if only two values, only two layers are swapped so it doesn't matter which change to take
-        layerChange = orderChanges;
+/**
+ * Change the order of map layers based on the new ukisLayers
+ */
+export function changeOrderOfLayers(map: Map, layers: ukisLayer[], mapLayerIds: string[], filtertype: Tgroupfiltertype) {
+    const layerChange = getLayerChangeOrder(layers, mapLayerIds);
+    const length = layerChange.length;
+    if (length) {
+        for (let index = 0; index < length; index++) {
+            const lc = layerChange[index];
+            if (index >= 1) {
+                const newMapLayerIds = getUkisLayerIDs(map, filtertype)
+                const newlayerChange = getLayerChangeOrder(layers, newMapLayerIds);
+                // Stop moving layers because the order is already the same as in the new layer array.
+                if (newlayerChange.length === 0) {
+                    break;
+                }
+            }
+            changeOrderOfLayer(map, lc);
+        }
     }
+}
 
-    return layerChange;
+export function changeOrderOfLayer(map: Map, layerChange: { layerId: string, beforeId: string }) {
+    if (layerChange) {
+        const layerMapLayers = getLayersAndSources(map, layerChange.layerId).layers;
+        const beforeMapLayers = getLayersAndSources(map, layerChange.beforeId).layers;
+        /* const layerMapLayers = getFirstAndLastLayer(map, layerChange.layerId);
+        const beforeMapLayers = getFirstAndLastLayer(map, layerChange.beforeId); */
+        /** 
+         * if the layer before the one to be moved has several layers, move the layer on beforeMapLayers[0]
+         * If there is no layer before, move it to the top.
+         * 
+         * https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#movelayer
+         * -  If beforeId is omitted, the layer will be appended to the end of the layers array... -
+         */
+        if (beforeMapLayers.length >= 1) {
+            layerChange.beforeId = beforeMapLayers[0].id;
+        } else {
+            layerChange.beforeId = null;
+        }
+
+
+        /** If the layer which should be moved has several layers, move all of them. */
+        if (layerMapLayers.length > 1) {
+            // reverse to move
+            layerMapLayers.reverse();
+            layerMapLayers.forEach((value: LayerSpecification, index: number) => {
+                // Move the first layer to the Before ID and then move all layer after the moved layer.
+                if (index === 0) {
+                    if (layerChange.beforeId) {
+                        map.moveLayer(value.id, layerChange.beforeId);
+                    } else {
+                        map.moveLayer(value.id);
+                    }
+                } else {
+                    const beforeLayer = layerMapLayers[index - 1];
+                    map.moveLayer(value.id, beforeLayer.id);
+                }
+            });
+        } else if (layerMapLayers.length === 1) {
+            const layer = layerMapLayers[0];
+            if (layerChange.beforeId) {
+                map.moveLayer(layer.id, layerChange.beforeId);
+            } else {
+                map.moveLayer(layer.id)
+            }
+        } else {
+            // layerMapLayers.length === 0 
+            // there is nothing to move
+        }
+    }
 }
