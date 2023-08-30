@@ -1,5 +1,4 @@
-import { Layer } from 'ol/layer';
-import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, getLayerChangeOrder, UKIS_METADATA, changeOrderOfLayers, LayerSourceSpecification } from './maplibre.helpers';
+import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification } from './maplibre.helpers';
 import { StyleSpecification, LayerSpecification, SourceSpecification, Map as glMap } from 'maplibre-gl';
 import { CustomLayer } from '@dlr-eoc/services-layers/src/public-api';
 import { addUkisLayerMetadata } from './maplibre-layers.helpers';
