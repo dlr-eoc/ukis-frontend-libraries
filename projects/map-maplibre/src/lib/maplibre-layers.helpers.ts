@@ -126,7 +126,10 @@ export function createBaseLayer<T>(l: ukisRasterLayer | ukisVectorLayer) {
 
 export function createWmsLayer(l: ukisWmsLayer) {
     const { source, layer } = createBaseLayer<RasterSourceSpecification>(l);
-    source.tiles = [createGetMapUrl(l)]
+    source.tiles = (l.subdomains) ? l.subdomains.map(s => {
+        l.url = l.url.replace('{s}', s);
+        return createGetMapUrl(l);
+    }) : [createGetMapUrl(l)];
     return returnSourcesAndLayers(l, source, [layer]);
 }
 
