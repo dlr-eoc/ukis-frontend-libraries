@@ -87,12 +87,25 @@ export function createBaseLayer<T>(l: ukisRasterLayer | ukisVectorLayer) {
             }
 
             if (l.cluster) {
-                source.cluster = true; //TODO: add more options from ukis l.cluster
+                source.cluster = true;
+                if (typeof l.cluster !== 'boolean') {
+                    if (l.cluster?.clusterRadius || l.cluster.distance) source.clusterRadius = l.cluster.clusterRadius | l.cluster.distance;
+                    if (l.cluster?.clusterMaxZoom) source.clusterMaxZoom = l.cluster.clusterMaxZoom;
+                    if (l.cluster?.clusterMinPoints) source.clusterMinPoints = l.cluster.clusterMinPoints;
+                    if (l.cluster?.clusterProperties) source.clusterProperties = l.cluster.clusterProperties;
+                }
             }
+        }
+
+        if (l.bbox && source.type === 'vector') {
+            source.bounds = l.bbox as any;
         }
 
     } else if (l instanceof ukisRasterLayer) {
         source.type = 'raster';
+        if (l.bbox && source.type === 'raster') {
+            source.bounds = l.bbox as any;
+        }
     }
 
     if (l.attribution) {
