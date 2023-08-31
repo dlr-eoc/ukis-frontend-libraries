@@ -1,5 +1,5 @@
 
-import { Map, LngLatBounds, LngLat, LayerSpecification, TypedStyleLayer, SourceSpecification } from 'maplibre-gl';
+import { Map as glMap, LngLatBounds, LngLat, LayerSpecification, TypedStyleLayer, SourceSpecification } from 'maplibre-gl';
 import { TGeoExtent, Layer as ukisLayer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 
 /** Layers can consist of multiple layers and sources, e.g. if they are a VectorTileLayer - StyleSpecification   */
@@ -14,7 +14,7 @@ export const UKIS_METADATA = {
 };
 
 
-export function setExtent(map: Map, extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
+export function setExtent(map: glMap, extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const bounds = new LngLatBounds([extent[0], extent[1]], [extent[2], extent[3]]);
     map.fitBounds(bounds);
 
@@ -22,14 +22,14 @@ export function setExtent(map: Map, extent: TGeoExtent, geographic?: boolean, fi
     return getExtent(map, geographic);
 }
 
-export function getExtent(map: Map, geographic?: boolean): TGeoExtent {
+export function getExtent(map: glMap, geographic?: boolean): TGeoExtent {
     const newbounds = map.getBounds();
     const newExtent = [newbounds.getSouth(), newbounds.getWest(), newbounds.getNorth(), newbounds.getEast()] as TGeoExtent;
     return newExtent;
 }
 
 
-export function setCenter(map: Map, center: number[], geographic?: boolean): number[] {
+export function setCenter(map: glMap, center: number[], geographic?: boolean): number[] {
     const lngLat = new LngLat(center[0], center[1]);
     map.setCenter(lngLat);
 
@@ -38,22 +38,22 @@ export function setCenter(map: Map, center: number[], geographic?: boolean): num
     return getCenter(map, geographic);
 }
 
-export function getCenter(map: Map, geographic?: boolean): number[] {
+export function getCenter(map: glMap, geographic?: boolean): number[] {
     const newLngLat = map.getCenter();
     return [newLngLat.lng, newLngLat.lat];
 }
 
 
-export function setZoom(map: Map, zoom: number, notifier?: 'map' | 'user') {
+export function setZoom(map: glMap, zoom: number, notifier?: 'map' | 'user') {
     map.setZoom(zoom);
 }
 
-export function getZoom(map: Map, notifier?: 'map' | 'user') {
+export function getZoom(map: glMap, notifier?: 'map' | 'user') {
     return map.getZoom();
 }
 
 
-export function setVisibility(map: Map, layerOrId: string | TypedStyleLayer, visibility: boolean, cb?: () => void) {
+export function setVisibility(map: glMap, layerOrId: string | TypedStyleLayer, visibility: boolean, cb?: () => void) {
     let mllayer;
     if (typeof layerOrId === 'string') {
         mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
@@ -82,7 +82,7 @@ export function setVisibility(map: Map, layerOrId: string | TypedStyleLayer, vis
     }
 }
 
-export function setOpacity(map: Map, layerOrId: string | TypedStyleLayer, opacity: number, cb?: () => void) {
+export function setOpacity(map: glMap, layerOrId: string | TypedStyleLayer, opacity: number, cb?: () => void) {
     let mllayer;
     if (typeof layerOrId === 'string') {
         mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
@@ -122,7 +122,7 @@ export function setOpacity(map: Map, layerOrId: string | TypedStyleLayer, opacit
     }
 }
 
-export function getOpacity(map: Map, layerOrId: string | TypedStyleLayer) {
+export function getOpacity(map: glMap, layerOrId: string | TypedStyleLayer) {
     let mllayer;
     if (typeof layerOrId === 'string') {
         mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
@@ -160,7 +160,7 @@ export function getOpacityPaintProperty(type: string) {
     return opacityPaintProperty;
 }
 
-export function getAllLayers(map: Map, filtertype?: Tgroupfiltertype) {
+export function getAllLayers(map: glMap, filtertype?: Tgroupfiltertype) {
     const layers = map.getStyle().layers;
     let filteredlayers = layers;
     if (filtertype) {
@@ -172,13 +172,13 @@ export function getAllLayers(map: Map, filtertype?: Tgroupfiltertype) {
 }
 
 
-export function getUkisLayerIDs(map: Map, filtertype?: Tgroupfiltertype) {
+export function getUkisLayerIDs(map: glMap, filtertype?: Tgroupfiltertype) {
     let filteredlayers = getAllLayers(map, filtertype)
     const ids: string[] = filteredlayers.filter(l => (l.metadata as any)?.[UKIS_METADATA.layerID]).map(l => (l.metadata as any)?.[UKIS_METADATA.layerID]);
     return [...new Set(ids)];
 }
 
-export function getLayersAndSources(map: Map, ukisLayerID: string) {
+export function getLayersAndSources(map: glMap, ukisLayerID: string) {
     const allLayers = getAllLayers(map);
     const filtered = allLayers.filter(l => {
         if ((l.metadata as any)?.[UKIS_METADATA.layerID] === ukisLayerID) {
@@ -209,7 +209,7 @@ export function getLayersAndSources(map: Map, ukisLayerID: string) {
     }
 }
 
-export function removeLayerAndSource(map: Map, ukisLayerID: string | string[]) {
+export function removeLayerAndSource(map: glMap, ukisLayerID: string | string[]) {
     const toRemove: {
         layers: LayerSpecification[],
         sources: SourceIdSpecification
@@ -324,7 +324,7 @@ export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) 
 /**
  * Change the order of map layers based on the new ukisLayers
  */
-export function changeOrderOfLayers(map: Map, layers: ukisLayer[], mapLayerIds: string[], filtertype: Tgroupfiltertype) {
+export function changeOrderOfLayers(map: glMap, layers: ukisLayer[], mapLayerIds: string[], filtertype: Tgroupfiltertype) {
     const layerChange = getLayerChangeOrder(layers, mapLayerIds);
     const length = layerChange.length;
     if (length) {
@@ -343,7 +343,7 @@ export function changeOrderOfLayers(map: Map, layers: ukisLayer[], mapLayerIds: 
     }
 }
 
-export function changeOrderOfLayer(map: Map, layerChange: { layerId: string, beforeId: string }) {
+export function changeOrderOfLayer(map: glMap, layerChange: { layerId: string, beforeId: string }) {
     if (layerChange) {
         const layerMapLayers = getLayersAndSources(map, layerChange.layerId).layers;
         const beforeMapLayers = getLayersAndSources(map, layerChange.beforeId).layers;
