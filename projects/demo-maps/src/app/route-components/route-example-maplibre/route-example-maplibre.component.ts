@@ -249,7 +249,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     const mosaic_hillshade = new WmsLayer({
       name: 'mosaic_hillshade',
       id: 'gmted2010_dsc075_mosaic_hillshade',
-      visible: false, //TODO
+      visible: true,
       type: 'wms',
       removable: false,
       params: {
@@ -476,6 +476,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       attribution: `© DLR GeoJSON`,
       type: 'geojson',
       data: testData,
+      bbox: [5.461, 8.631, 53.931, 42.193],
       visible: false
     });
 
@@ -497,6 +498,46 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       visible: false
     });
 
+    const agrodeLayer = new WmsLayer({
+      type: 'wms',
+      id: 'S2_L3A_WASP_FRC_P1M',
+      url: 'https://{s}.geoservice.dlr.de/eoc/imagery/wms',
+      name: 'Sentinel-2 L3A FRC (WASP)',
+      visible: false,
+      subdomains: ['a', 'b', 'c', 'd'],
+      filtertype: 'Layers',
+      attribution: '&copy; <a href="http://www.dlr.de" target="_blank">DLR</a> Contains modified Copernicus Sentinel Data [2020]',
+      params: {
+        LAYERS: 'S2_L3A_WASP_FRC_P1M',
+        VERSION: '1.1.0',
+        FORMAT: 'image/png',
+      },
+      expanded: {
+        tab: 'settings'
+      },
+      bbox: [2.183, 47.076, 8.206, 49.287],
+      styles: [
+        {
+          default: true,
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:S2_L3A_WASP_FRC_P1M',
+          name: 's2-ndvi',
+          title: 'NDVI'
+        },
+        {
+          default: false,
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:S2_L3A_WASP_FRC_P1M',
+          name: 's2-infrared',
+          title: 'Infrared (8,4,3)'
+        },
+        {
+          default: false,
+          legendURL: 'https://geoservice.dlr.de/eoc/imagery/wms?service=WMS&request=GetLegendGraphic&format=image/png&width=20&height=20&layer=land:S2_L3A_WASP_FRC_P1M',
+          name: 's2-l3a-wasp-frc',
+          title: 'Style for L3A MAJA/WASP Ground Reflectances'
+        }
+      ]
+    });
+
 
     const stackedLayer = new StackedLayer({
       id: 'stackedLayer_id',
@@ -509,6 +550,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     const groupLayer = new LayerGroup({
       id: 'group_1',
       name: 'Raster Group',
+      visible: false,
       layers: [eocBasemap, osm, MODIS_EU_DAILY, sentinel2Europe],
       description: 'This is a group with multiple raster layers',
       expanded: {
@@ -518,7 +560,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     });
 
 
-    const layers = [groupLayer, waterway, hillshade, mosaic_hillshade, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer];
+    const layers = [groupLayer, hillshade, mosaic_hillshade, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
     layers.map(l => {
       if (l instanceof Layer) {
         this.layerSvc.addLayer(l, 'Layers');
