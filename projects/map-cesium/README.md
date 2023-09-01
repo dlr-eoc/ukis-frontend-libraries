@@ -9,7 +9,7 @@ First, install and setupt UKIS core, like described in the [Tutorial](../../TUTO
 - "@dlr-eoc/layer-control" (optional)
 - "@dlr-eoc/base-layers-raster" (optional)
 
-#### Add styles from OpenLayers to your application
+#### Add styles from cesium to your application
 
 e.g. in your apps style file
 ```
