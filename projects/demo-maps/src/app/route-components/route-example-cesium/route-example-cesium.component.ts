@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, HostBinding, OnDestroy, Inject, ViewEncapsulation } from '@angular/core';
 import { LayersService, Layer, WmtsLayer, RasterLayer, CustomLayer, WmsLayer, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService, IMapState } from '@dlr-eoc/services-map-state';
 
@@ -13,6 +13,8 @@ import testData from '@dlr-eoc/shared-assets/geojson/test.json';
   selector: 'app-route-example-cesium',
   templateUrl: './route-example-cesium.component.html',
   styleUrls: ['./route-example-cesium.component.scss'],
+  // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
+  encapsulation: ViewEncapsulation.None,
   providers: [
     MapStateService,
     MapOlService,
