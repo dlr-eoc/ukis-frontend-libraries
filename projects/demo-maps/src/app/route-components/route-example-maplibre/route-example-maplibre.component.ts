@@ -631,4 +631,45 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     this.subs.push(mapStatSub);
   }
 
+  updateLayer() {
+    const layer = this.layerSvc.getLayerOrGroupById('geojson_test') as unknown as VectorLayer;
+    layer.data = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              [
+                [
+                  11.771870735772268,
+                  47.49013323424285
+                ],
+                [
+                  11.771870735772268,
+                  47.44101685032831
+                ],
+                [
+                  11.85227430395085,
+                  47.44101685032831
+                ],
+                [
+                  11.85227430395085,
+                  47.49013323424285
+                ],
+                [
+                  11.771870735772268,
+                  47.49013323424285
+                ]
+              ]
+            ],
+            "type": "Polygon"
+          }
+        }
+      ]
+    };
+    this.layerSvc.updateLayer(layer);
+  }
+
 }
