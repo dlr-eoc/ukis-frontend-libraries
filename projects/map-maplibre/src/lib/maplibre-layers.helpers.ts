@@ -1,9 +1,13 @@
-import { CircleLayerSpecification, FillLayerSpecification, GeoJSONFeature, GeoJSONSourceSpecification, LayerSpecification, LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification } from "maplibre-gl";
+import {
+    CircleLayerSpecification, FillLayerSpecification, GeoJSONFeature, GeoJSONSourceSpecification, LayerSpecification, Map as glMap,
+    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, GeoJSONSource
+} from "maplibre-gl";
 import {
     RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
     WmtsLayer as ukisWmtsLayer, VectorLayer as ukisVectorLayer, CustomLayer as ukisCustomLayer, Layer as ukisLayer, StackedLayer, XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype
 } from '@dlr-eoc/services-layers';
-import { LayerSourceSpecification, SourceIdSpecification, UKIS_METADATA, getOpacityPaintProperty } from "./maplibre.helpers";
+import { LayerSourceSpecification, SourceIdSpecification, UKIS_METADATA, getAllLayers, getOpacityPaintProperty } from "./maplibre.helpers";
+import { propsEqual } from '@dlr-eoc/utilities';
 
 export function addUkisLayerMetadata(l: ukisLayer) {
     const metadata = {};
@@ -58,6 +62,16 @@ function returnSourcesAndLayers(l: ukisLayer, source: SourceSpecification | KmlS
         sources,
         layers
     } as LayerSourceSpecification;
+}
+
+
+export function layerIsSupported(layer: ukisLayer) {
+    const supportedLayers = [XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, CustomLayertype, WfsLayertype, KmlLayertype, StackedLayertype];
+    const supported = supportedLayers.includes(layer.type);
+    if (!supported) {
+        console.warn(`layer of type ${layer.type} is not supported!`)
+    }
+    return supported;
 }
 
 /**
@@ -537,6 +551,51 @@ export function createLayer(newLayer: ukisLayer) {
             break;
     }
     return newLlayer;
+}
+
+
+export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
+    /* if (oldSource.type === 'geojson' && oldSource instanceof GeoJSONSource) {
+        if (layer.type === 'geojson' && layer instanceof ukisVectorLayer) {
+            if (typeof layer.cluster === 'object') {
+                oldSource.setClusterOptions(layer.cluster)
+            }
+            
+            oldSource.setData(layer.data);
+            return;
+        }
+    } */
+
+
+    /* if(oldSource.type === 'image'){
+        oldSource.updateImage()
+      } */
+
+    const allLayers = getAllLayers(map);
+    const layersWhitSource = allLayers.filter(l => {
+        if (l.type !== 'background') {
+            return l.source === layer.id;
+        }
+    });
+
+    const newLS = createLayer(layer);
+    const newSourceSpec = newLS.sources[layer.id];
+    const oldSourceSpec = map.getStyle().sources[layer.id];
+
+    const diff = !propsEqual(newSourceSpec, oldSourceSpec);
+    if (diff) {
+        layersWhitSource.forEach(l => {
+            map.removeLayer(l.id);
+        });
+        map.removeSource(layer.id);
+
+        console.log('update source', newSourceSpec);
+        map.addSource(layer.id, newSourceSpec);
+        layersWhitSource.forEach(l => {
+            map.addLayer(l);
+            console.log('update layer for source', l.id);
+        });
+    }
 }
 
 

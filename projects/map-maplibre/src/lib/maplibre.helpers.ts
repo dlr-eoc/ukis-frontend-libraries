@@ -134,6 +134,7 @@ export function getOpacity(map: glMap, layerOrId: string | TypedStyleLayer) {
     }
 }
 
+// https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.StyleLayer/
 export function styleLayerGetOpacity(mllayer: TypedStyleLayer) {
     let opacityPaintProperty = getOpacityPaintProperty(mllayer.type);
     return mllayer.getPaintProperty(opacityPaintProperty);

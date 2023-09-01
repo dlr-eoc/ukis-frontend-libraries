@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
-  Layer as ukisLayer,
-  XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype, TFiltertypesUncap, TFiltertypes,
+  Layer as ukisLayer, TFiltertypesUncap, TFiltertypes,
 } from '@dlr-eoc/services-layers';
 import { Map as glMap, StyleSpecification, TypedStyleLayer } from 'maplibre-gl';
 import { BehaviorSubject } from 'rxjs';
 import { LayerSourceSpecification, UKIS_METADATA, setOpacity, setVisibility } from './maplibre.helpers';
-import { createLayer } from './maplibre-layers.helpers';
+import { createLayer, layerIsSupported, updateSource } from './maplibre-layers.helpers';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
@@ -216,31 +215,19 @@ export class MapMaplibreService {
     if (!ignoreOpacity) {
       setOpacity(map, mllayer, layer.opacity);
     }
+    
+    this.updateLayerParamsAndSource(map, mllayer, layer)
+  }
 
-
-    // TODO: update sources if changed
-    // https://maplibre.org/maplibre-gl-js-docs/api/sources/
-    // e.g. map.getSource(id).setData()
-    // this.updateLayerSource(layer, mllayer);
-
-    // console.log(map.getStyle().layers);
-    // console.log(map.getStyle());
-    // console.log(mllayer, mllayer.id, index);
-
-    // TODO: update parmas e.g. wms...
-    // this.updateLayerParamsWith(mllayer as olLayer<any>, layer); -> see @dlr-eoc/map-ol
+  private updateLayerParamsAndSource(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer) {
+    if (layer.type === 'wms' || layer.type === 'wmts' || layer.type === 'tms' || layer.type === 'wfs' || layer.type === 'geojson') {
+      const oldSource = map.getSource(mllayer.source);
+      updateSource(map, layer, oldSource);
+    }
   }
 
   public createLayer = createLayer;
-
-  public layerIsSupported(layer: ukisLayer) {
-    const supportedLayers = [XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, CustomLayertype, WfsLayertype, KmlLayertype, StackedLayertype];
-    const supported = supportedLayers.includes(layer.type);
-    if (!supported) {
-      console.warn(`layer of type ${layer.type} is not supported!`)
-    }
-    return supported;
-  }
+  public layerIsSupported = layerIsSupported;
 }
 
 
