@@ -144,6 +144,9 @@ export class MapMaplibreService {
   }
 
 
+  /**
+   * Add layers and sources from LayerSourceSpecification | StyleSpecification if they are not already on the map.
+   */
   public setLayers(layers: (LayerSourceSpecification | StyleSpecification)[], map: glMap) {
     layers.forEach(layersAndSources => {
       /* Check if StyleSpecification or LayerSourceSpecification
