@@ -249,34 +249,6 @@ export function removeLayerAndSource(map: glMap, ukisLayerID: string | string[])
 }
 
 
-export function getFirstAndLastLayer(map: Map, ukisLayerID: string) {
-    const filtered = map.getStyle().layers.filter(l => {
-        if ((l.metadata as any)?.[UKIS_METADATA.layerID] === ukisLayerID) {
-            return true;
-        } else {
-            return false;
-        }
-    });
-
-    const filteredLength = filtered.length;
-
-    if (filteredLength <= 1) {
-        return [filtered[0]].filter(i => i);
-    } else {
-        const layers: LayerSpecification[] = [];
-        filtered.forEach((item, index) => {
-            if (index === 0) {
-                layers.push(filtered[0]);
-            } else if (index === filteredLength - 1) {
-                layers.push(filtered[index]);
-            } else {
-                layers.push(filtered[index]);
-            }
-        })
-        return layers.filter(i => i);
-    }
-}
-
 /**
  * Detect changes in layer order
  */
