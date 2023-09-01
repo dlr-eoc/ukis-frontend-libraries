@@ -65,18 +65,23 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       if (map) {
         map.addSource('terrainSource', {
           type: 'raster-dem',
+          encoding: "terrarium", // "mapbox",
           tiles: [
-            "https://geoservice.dlr.de/eoc/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test%3ATDM90_DEM_Plus&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&styles=&format=image/png"
+            // "https://geoservice.dlr.de/eoc/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test%3ATDM90_DEM_Plus&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&styles=&format=image/png"
             // "https://geoservice.dlr.de/eoc/basemap/gmted/wms?service=WMS&version=1.1.0&request=GetMap&layers=gmted%3Agmted&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&styles=&format=image/png"
             // "https://sgx.geodatenzentrum.de/wms_dgm200?service=wms&version=1.3.0&request=GetMap&Layers=relief&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&styles=&format=image/png"
             // "https://vtc-cdn.maptoolkit.net/terrainrgb/{z}/{x}/{y}.png"
             // "https://wms.wheregroup.com/dem_tileserver/raster_dem/{z}/{x}/{y}.webp"
-            // "https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{z}/{x}/{y}.webp"
+            // "https://api.mapbox.com/raster/v1/mapbox.mapbox-terrain-dem-v1/{z}/{x}/{y}.webp",
+
+            // https://registry.opendata.aws/terrain-tiles/
+            "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
           ],
           tileSize: 256,
+          attribution: `© <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank">AWS Terrain Tiles</a>`,
           minzoom: 3
         });
-        const exaggeration = -0.001; // 0.001 // 1 //??? https://blog.mapbox.com/global-elevation-data-6689f1d0ba65 - height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
+        const exaggeration = 1; // -0.001; // 0.001 // 1 //??? https://blog.mapbox.com/global-elevation-data-6689f1d0ba65 - height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
         map.setTerrain({
           source: 'terrainSource',
           exaggeration: exaggeration
@@ -367,16 +372,19 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       name: 'hillshade raster dem',
       visible: false,
       removable: true,
+      attribution: `© <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank">AWS Terrain Tiles</a>`,
       custom_layer: {
         version: 8,
         sources: {
           hillshadeSource: {
             "type": "raster-dem",
+            "encoding": "terrarium", //"mapbox",
             "tileSize": 512, // 256
             "tiles": [
-              "https://geoservice.dlr.de/eoc/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test%3ATDM90_DEM_Plus&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&styles=&format=image/png"
+              // "https://geoservice.dlr.de/eoc/test/wms?service=WMS&version=1.1.0&request=GetMap&layers=test%3ATDM90_DEM_Plus&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&styles=&format=image/png"
               // "https://geoservice.dlr.de/eoc/basemap/gmted/wms?service=WMS&version=1.1.0&request=GetMap&layers=gmted%3Agmted&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&styles=&format=image/png"
               // "https://vtc-cdn.maptoolkit.net/terrainrgb/{z}/{x}/{y}.png"
+              "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
             ],
             minzoom: 3
           }
