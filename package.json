@@ -134,13 +134,8 @@
     "projects/utils-ogc",
     "projects/map-three",
     "projects/shared-assets",
-<<<<<<< HEAD
-    "projects/map-cesium"
-=======
     "projects/map-cesium",
-    "projects/map-maplibre",
     "projects/utilities"
->>>>>>> 82897969 (feat: New UKIS library export utilities for other libraries)
   ],
   "engines": {
     "node": ">= 18.13.0",
