@@ -570,31 +570,31 @@ export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
     /* if(oldSource.type === 'image'){
         oldSource.updateImage()
       } */
-
-    const allLayers = getAllLayers(map);
-    const layersWhitSource = allLayers.filter(l => {
-        if (l.type !== 'background') {
-            return l.source === layer.id;
-        }
-    });
-
-    const newLS = createLayer(layer);
-    const newSourceSpec = newLS.sources[layer.id];
     const oldSourceSpec = map.getStyle().sources[layer.id];
-
-    const diff = !propsEqual(newSourceSpec, oldSourceSpec);
-    if (diff) {
-        layersWhitSource.forEach(l => {
-            map.removeLayer(l.id);
+    if (oldSourceSpec) {
+        const allLayers = getAllLayers(map);
+        const layersWhitSource = allLayers.filter(l => {
+            if (l.type !== 'background') {
+                return l.source === layer.id;
+            }
         });
-        map.removeSource(layer.id);
+        const newLS = createLayer(layer);
+        const newSourceSpec = newLS.sources[layer.id];
 
-        console.log('update source', newSourceSpec);
-        map.addSource(layer.id, newSourceSpec);
-        layersWhitSource.forEach(l => {
-            map.addLayer(l);
-            console.log('update layer for source', l.id);
-        });
+        const diff = !propsEqual(newSourceSpec, oldSourceSpec);
+        if (diff) {
+            layersWhitSource.forEach(l => {
+                map.removeLayer(l.id);
+            });
+            map.removeSource(layer.id);
+
+            console.log('update source', newSourceSpec);
+            map.addSource(layer.id, newSourceSpec);
+            layersWhitSource.forEach(l => {
+                map.addLayer(l);
+                console.log('update layer for source', l.id);
+            });
+        }
     }
 }
 
