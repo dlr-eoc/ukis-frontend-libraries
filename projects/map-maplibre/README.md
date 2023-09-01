@@ -101,6 +101,17 @@ addBaselayers() {
 ```
 
 
+## TODO
+- There are currently no popups implemented for layers
+
+- Some properties of Layers or Layergroups are currently not used. E.g. 
+- `Layer.continuousWorld`: this is not available in maplibre
+- `Layer.minResolution`: this is not available in maplibre use minZoom
+- `Layer.maxResolution`: this is not available in maplibre use maxZoom
+- `Layer.bbox`: Works only with some sources see https://maplibre.org/maplibre-style-spec/sources/#sources - bounds
+- `Layer.events`: TODO: https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.StyleLayer/ on/of
+- `Layer.crossOrigin`: this is not available in maplibre
+
 ===
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.0.

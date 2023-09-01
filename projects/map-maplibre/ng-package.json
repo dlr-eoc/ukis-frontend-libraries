@@ -9,6 +9,7 @@
     "maplibre-gl",
     "@mapbox/togeojson",
     "@dlr-eoc/services-layers",
-    "@dlr-eoc/services-map-state"
+    "@dlr-eoc/services-map-state",
+    "@dlr-eoc/utilities"
   ]
 }
