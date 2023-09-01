@@ -1,0 +1,22 @@
+{
+  "name": "@dlr-eoc/utilities",
+  "main": "src/public-api",
+  "version": "12.0.0-alpha.2",
+  "license": "Apache-2.0",
+  "author": "Team UKIS",
+  "description": "This library contains a collection of utilities.",
+  "keywords": [
+    "utilities",
+    "utils",
+    "object",
+    "array"
+  ],
+  "peerDependencies": {},
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/platform-browser-dynamic": "^14.2.11",
+    "@angular/core": "^14.2.11"
+  }
+}

@@ -15,6 +15,9 @@
   - Additional mandatory input in ProjectionSwitchComponent "mapStateSvc" and optional "fitViewToNewExtent"
 
 ### Features
+* **@dlr-eoc/utilities:**
+  - New UKIS library export utilities for other libraries.
+
 * **@dlr-eoc/map-cesium:**
   - New UKIS library for working with [CesiumJS](https://github.com/CesiumGS/cesium) was added.
 
