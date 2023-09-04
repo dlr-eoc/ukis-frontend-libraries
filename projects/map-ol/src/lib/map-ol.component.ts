@@ -7,8 +7,8 @@ import { MapState } from '@dlr-eoc/services-map-state';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
-import { MapOlService, Tgroupfiltertype } from './map-ol.service';
-import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype, WfsLayertype, TmsLayertype } from '@dlr-eoc/services-layers';
+import { MapOlService } from './map-ol.service';
+import { LayersService, WmtsLayertype, Layer, WmsLayertype, WmtsLayer, WmsLayer, CustomLayer, VectorLayer, GeojsonLayertype, WfsLayertype, TmsLayertype, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 
 import Map from 'ol/Map';
 import { getUid as olGetUid } from 'ol/util';
@@ -62,6 +62,8 @@ export interface IMapControls {
   /** @see (Rotate options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/Rotate.js#L11 */
   rotate?: boolean | object;
 }
+
+declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes
 
 const ID_KEY = 'id';
 

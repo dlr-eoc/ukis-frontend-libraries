@@ -1,5 +1,9 @@
 ### Breaking Changes
+* **@dlr-eoc/map-cesium:**
+  - Remove exported type `Tgroupfiltertype`. Use `Tgroupfiltertype = TFiltertypesUncap | TFiltertypes` and import them from `@dlr-eoc/services-layers`.
+
 * **@dlr-eoc/map-ol:**
+  - Remove exported type `Tgroupfiltertype`. Use `Tgroupfiltertype = TFiltertypesUncap | TFiltertypes` and import them from  `@dlr-eoc/services-layers`.
   - Remove color and event from properties passed to raster layer popup. Now `IPopupParams` is passed so you can use `IPopupParams.color` and `IPopupParams.mapEvent`. For the remaining properties, use `IPopupParams.properties`, which contains feature properties and async data.
   - The parameters of the `MapOlService.addPopup` function are changed as follows `addPopup(popupParams: IPopupParams, popupObj?: popup, html?: string, event?: 'click' | 'move', removePopups?: boolean)`.
   - The interfaces `IPopupArgs` and `IDynamicPopupArgs` have been removed. Use `IPopupParams` now
@@ -11,6 +15,9 @@
   - Additional mandatory input in ProjectionSwitchComponent "mapStateSvc" and optional "fitViewToNewExtent"
 
 ### Features
+* **@dlr-eoc/utilities:**
+  - New UKIS library export utilities for other libraries.
+
 * **@dlr-eoc/map-cesium:**
   - New UKIS library for working with [CesiumJS](https://github.com/CesiumGS/cesium) was added.
 
@@ -18,6 +25,7 @@
 
 * **@dlr-eoc/services-layers:**
   - The `layer.popup` gets more types and uses `IPopupParams` which will be applied to all popups.
+  - Export new type `TFiltertypesUncap` to use with `TFiltertypes`. So `Tgroupfiltertype = TFiltertypesUncap | TFiltertypes` is usable in maps.
 
 * **@dlr-eoc/map-ol:**
   - Popup events can be observed by `MapOlService.popupEvents: Subject<IPopupEvent>`. For this add `asObservable: true` to a popup object, you will then be able to subscribe to the event instead of having a popup container being added to the map.

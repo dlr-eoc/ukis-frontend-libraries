@@ -3,8 +3,8 @@ import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { MapCesiumService, Tgroupfiltertype } from './map-cesium.service';
-import { LayersService, Layer } from '@dlr-eoc/services-layers';
+import { MapCesiumService } from './map-cesium.service';
+import { LayersService, Layer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 import { Viewer } from '@cesium/widgets';
 
 
@@ -29,6 +29,8 @@ export interface ICesiumControls {
   viewAngle?: number;
   selectionIndicator?: boolean;
 }
+
+declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
 
 @Component({

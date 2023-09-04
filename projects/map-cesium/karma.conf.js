@@ -20,13 +20,17 @@ module.exports = function (config) {
       { pattern: "../../node_modules/@cesium/engine/Source/Assets/**", included: false, served: true },
       { pattern: "../../node_modules/@cesium/engine/Source/ThirdParty/**", included: false, served: true },
       { pattern: "../../node_modules/@cesium/engine/Source/Widget/*.css", included: false, served: true },
+      { pattern: "../../node_modules/@cesium/widgets/Source/**/*.css", included: false, served: true },
+      { pattern: '../shared-assets/**', watched: false, included: false, served: true }
     ],
     // https://github.com/karma-runner/karma/issues/2703#issuecomment-421987843
     proxies: {
+      '/assets/': `/absolute${PATH.normalize(PATH.resolve('projects/shared-assets/'))}`,
       // see angular.json assets for cesium!
       '/assets/cesium/': `/absolute${PATH.normalize(PATH.resolve('node_modules/@cesium/engine/Source/'))}`,
       '/assets/cesium/Widgets/': `/absolute${PATH.normalize(PATH.resolve('node_modules/@cesium/widgets/Source/'))}`,
       '/assets/cesium/Workers/': `/absolute${PATH.normalize(PATH.resolve('node_modules/@cesium/engine/Build/Workers/'))}`,
+      '/assets/engine/Source/Widget/CesiumWidget.css': `/absolute${PATH.normalize(PATH.resolve('node_modules/@cesium/engine/Source/Widget/CesiumWidget.css'))}`
     },
     client: {
       jasmine: {

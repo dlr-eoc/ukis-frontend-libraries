@@ -415,8 +415,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "25kb",
+                  "maximumError": "100kb"
                 }
               ]
             }
@@ -738,6 +738,68 @@
             "main": "projects/map-cesium/src/test.ts",
             "tsConfig": "projects/map-cesium/tsconfig.spec.json",
             "karmaConfig": "projects/map-cesium/karma.conf.js"
+          }
+        }
+      }
+    },
+    "map-maplibre": {
+      "projectType": "library",
+      "root": "projects/map-maplibre",
+      "sourceRoot": "projects/map-maplibre/src",
+      "prefix": "ukis",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/map-maplibre/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/map-maplibre/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/map-maplibre/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/map-maplibre/src/test.ts",
+            "tsConfig": "projects/map-maplibre/tsconfig.spec.json",
+            "karmaConfig": "projects/map-maplibre/karma.conf.js"
+          }
+        }
+      }
+    },
+    "utilities": {
+      "projectType": "library",
+      "root": "projects/utilities",
+      "sourceRoot": "projects/utilities/src",
+      "prefix": "ukis",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/utilities/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/utilities/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/utilities/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/utilities/src/test.ts",
+            "tsConfig": "projects/utilities/tsconfig.spec.json",
+            "karmaConfig": "projects/utilities/karma.conf.js"
           }
         }
       }

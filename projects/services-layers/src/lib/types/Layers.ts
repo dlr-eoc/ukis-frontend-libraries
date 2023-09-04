@@ -106,6 +106,7 @@ export const Filtertypes = {
   Layers: 'Layers'
 } as const;
 export type TFiltertypes = keyof typeof Filtertypes;
+export type TFiltertypesUncap = Uncapitalize<TFiltertypes>;
 
 
 /**
