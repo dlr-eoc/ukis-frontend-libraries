@@ -12,7 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "module": "es2020",
     "skipLibCheck": true,
     "lib": [
@@ -49,7 +49,8 @@
         "./node_modules/util"
       ]
     },
-    "allowJs": true
+    "allowJs": true,
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
