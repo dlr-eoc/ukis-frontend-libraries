@@ -16,7 +16,7 @@
 - an update of a `major` version in the dependencies should introduce a **BREAKING CHANGE!**
 
 **The versions of the dependencies which are listed in root package.json will be shared with all projects**
-**After you update something in root package.json (package version or dependencies) run the script `node scripts/library/index.js --set-source` to sync all versions with the projects**
+**After you update something in root package.json (package version or dependencies) run the script `node scripts/library/index.js --set-source` to sync all versions with the projects and also run `npm install` to regenerate `package-lock.json`.**
 
 This is used to sync "peerDependencies" across all workspaces but also to set the versions of other dependencies and the package version itself.
 
