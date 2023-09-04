@@ -15,8 +15,8 @@
     "3D"
   ],
   "peerDependencies": {
-    "@angular/common": "^14.2.11",
-    "@angular/core": "^14.2.11"
+    "@angular/common": "^15.2.9",
+    "@angular/core": "^15.2.9"
   },
   "dependencies": {
     "@dlr-eoc/services-map-state": "12.0.0-alpha.2",
@@ -29,6 +29,6 @@
   },
   "devDependencies": {
     "zone.js": "^0.11.7",
-    "@angular/platform-browser-dynamic": "^14.2.11"
+    "@angular/platform-browser-dynamic": "^15.2.9"
   }
 }

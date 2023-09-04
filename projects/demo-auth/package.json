@@ -13,10 +13,10 @@
     "registration"
   ],
   "peerDependencies": {
-    "@angular/common": "^14.2.11",
-    "@angular/core": "^14.2.11",
-    "@angular/router": "^14.2.11",
-    "@angular/platform-browser": "^14.2.11",
+    "@angular/common": "^15.2.9",
+    "@angular/core": "^15.2.9",
+    "@angular/router": "^15.2.9",
+    "@angular/platform-browser": "^15.2.9",
     "@clr/angular": "^13.17.0",
     "rxjs": "^6.6.7"
   },
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "zone.js": "^0.11.7",
-    "@angular/platform-browser-dynamic": "^14.2.11",
+    "@angular/platform-browser-dynamic": "^15.2.9",
     "protractor": "^7.0.0"
   }
 }

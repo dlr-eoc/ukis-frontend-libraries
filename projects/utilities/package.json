@@ -13,10 +13,10 @@
   ],
   "peerDependencies": {},
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "^14.2.11",
-    "@angular/core": "^14.2.11"
+    "@angular/platform-browser-dynamic": "^15.2.9",
+    "@angular/core": "^15.2.9"
   }
 }

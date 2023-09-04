@@ -15,8 +15,8 @@
     "time"
   ],
   "peerDependencies": {
-    "@angular/common": "^14.2.11",
-    "@angular/core": "^14.2.11",
+    "@angular/common": "^15.2.9",
+    "@angular/core": "^15.2.9",
     "rxjs": "^6.6.7"
   },
   "dependencies": {
@@ -25,6 +25,6 @@
   },
   "devDependencies": {
     "zone.js": "^0.11.7",
-    "@angular/platform-browser-dynamic": "^14.2.11"
+    "@angular/platform-browser-dynamic": "^15.2.9"
   }
 }

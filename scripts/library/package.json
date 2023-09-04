@@ -11,7 +11,7 @@
   "main": "index.js",
   "private": true,
   "peerDependencies": {
-    "@angular/cli": "^14.2.11",
+    "@angular/cli": "^15.2.9",
     "@schematics/angular": "^14.2.11",
     "typescript": "^4.8.2"
   },
