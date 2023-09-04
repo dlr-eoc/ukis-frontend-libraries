@@ -24,7 +24,7 @@
   "dependencies": {
     "@angular-devkit/core": "^15.2.9",
     "@angular-devkit/schematics": "^15.2.9",
-    "@schematics/angular": "^14.2.11",
+    "@schematics/angular": "^15.2.9",
     "parse5-html-rewriting-stream": "^6.0.1",
     "tslib": "^2.4.0"
   },
@@ -32,9 +32,9 @@
     "@angular/common": "^15.2.9",
     "@angular/core": "^15.2.9",
     "@angular/router": "^15.2.9",
-    "@clr/angular": "^13.17.0",
+    "@clr/angular": "^15.12.0",
     "@clr/icons": "^13.0.2",
-    "rxjs": "^6.6.7",
+    "rxjs": "~7.8.0",
     "jsonc-parser": "^3.1.0"
   },
   "devDependencies": {
@@ -42,7 +42,7 @@
     "@types/cpx": "^1.5.2",
     "typescript": "^4.8.2",
     "jasmine": "^3.99.0",
-    "zone.js": "^0.11.7",
+    "zone.js": "~0.13.0",
     "@angular/platform-browser-dynamic": "^15.2.9",
     "@angular-devkit/architect": "^0.1502.9"
   }

@@ -15,10 +15,10 @@
   "peerDependencies": {
     "@angular/common": "^15.2.9",
     "@angular/core": "^15.2.9",
-    "rxjs": "^6.6.7"
+    "rxjs": "~7.8.0"
   },
   "devDependencies": {
-    "zone.js": "^0.11.7",
+    "zone.js": "~0.13.0",
     "@angular/platform-browser-dynamic": "^15.2.9",
     "@dlr-eoc/core-ui": "12.0.0-alpha.2",
     "@dlr-eoc/shared-assets": "12.0.0-alpha.2"
