@@ -1,4 +1,6 @@
 ### Breaking Changes
+  - Update rxjs from `^6.6.7` to `~7.8.0`. Fixes of deprecations `forkJoin(obs,obs)` to `forkJoin([obs,obs])` and `retryWhen()` to `retry({count: number deley: ()=> })` and `combineLatest()` to `combineLatestWith()` and `of<T>()` to `of()`.
+
 * **@dlr-eoc/map-cesium:**
   - Remove exported type `Tgroupfiltertype`. Use `Tgroupfiltertype = TFiltertypesUncap | TFiltertypes` and import them from `@dlr-eoc/services-layers`.
 
