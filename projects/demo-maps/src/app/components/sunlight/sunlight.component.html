@@ -1,13 +1,17 @@
 <form clrForm [formGroup]="sunlightForm" clrLayout="horizontal">
-    <label>Sun position</label>
-    <clr-input-container>
+    <hr>
+    <label class="sun-range-label">Sun position</label>
+
+    <clr-range-container class="sun-range">
         <label>x</label>
-        <input type="range" class="ukis-range-input" min="-100" max="100" value="0" clrInput formControlName="x">
+        <input type="range" class="ukis-range-input" min="-100" max="100" value="0" clrRange formControlName="x">
         <clr-control-helper>east -> west</clr-control-helper>
-    </clr-input-container>
-    <clr-input-container>
+    </clr-range-container>
+
+
+    <clr-range-container class="sun-range">
         <label>y</label>
-        <input type="range" class="ukis-range-input" min="-100" max="100" value="0" clrInput formControlName="y">
+        <input type="range" class="ukis-range-input" min="-100" max="100" value="0" clrRange formControlName="y">
         <clr-control-helper>south -> north</clr-control-helper>
-    </clr-input-container>
+    </clr-range-container>
 </form>
