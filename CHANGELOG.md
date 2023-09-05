@@ -1,4 +1,5 @@
 ### Breaking Changes
+  - Update angular from `^14.2.11` to `^16.2.1` automatic migrations are made by ng update. See update angular from [14.0-15.0](https://update.angular.io/?l=3&v=14.0-15.0) and [14.0-15.0](https://update.angular.io/?l=3&v=15.0-16.0).
   - Update @clr/angular and @clr/ui from [`^13.17.0`](https://github.com/vmware-clarity/ng-clarity/releases?q=v13.17.0) to [`^15.12.0`](https://github.com/vmware-clarity/ng-clarity/releases?q=v15.12.0). See releases [Breaking Changes](https://github.com/vmware-clarity/ng-clarity/releases?q=Breaking+Changes). Fixes in styles have been made so update the styles folder from `projects/core-ui/schematics/ng-add/files/src/styles` and also add `class="content-area map-view"` for content areas that include a map.
   - Update rxjs from `^6.6.7` to `~7.8.0`. Fixes of deprecations `forkJoin(obs,obs)` to `forkJoin([obs,obs])` and `retryWhen()` to `retry({count: number deley: ()=> })` and `combineLatest()` to `combineLatestWith()` and `of<T>()` to `of()`.
 
