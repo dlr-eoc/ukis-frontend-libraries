@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/map-maplibre",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "tslib",
+    "maplibre-gl",
+    "@mapbox/togeojson",
+    "@dlr-eoc/services-layers",
+    "@dlr-eoc/services-map-state",
+    "@dlr-eoc/utilities"
+  ]
+}

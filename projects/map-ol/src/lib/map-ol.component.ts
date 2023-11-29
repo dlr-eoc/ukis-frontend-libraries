@@ -382,6 +382,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
+  // TODO: replace with @dlr-eoc/utilities propsEqual()
   private shallowEqual(a: object, b: object): boolean {
     // Create arrays of property names
     const aProps = Object.getOwnPropertyNames(a);

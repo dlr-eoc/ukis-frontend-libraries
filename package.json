@@ -135,7 +135,8 @@
     "projects/map-three",
     "projects/shared-assets",
     "projects/map-cesium",
-    "projects/utilities"
+    "projects/utilities",
+    "projects/map-maplibre"
   ],
   "engines": {
     "node": ">= 18.13.0",
