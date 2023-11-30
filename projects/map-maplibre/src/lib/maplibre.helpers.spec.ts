@@ -1,6 +1,6 @@
 import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification } from './maplibre.helpers';
 import { StyleSpecification, LayerSpecification, SourceSpecification, Map as glMap } from 'maplibre-gl';
-import { CustomLayer } from '@dlr-eoc/services-layers/src/public-api';
+import { CustomLayer } from '@dlr-eoc/services-layers';
 import { addUkisLayerMetadata } from './maplibre-layers.helpers';
 
 const createMapTarget = (size: number[]) => {
@@ -513,7 +513,7 @@ describe('MaplibreHelpers', () => {
 
         const changeLayers = [ukisLandLayer, ukisWaterLayer];
         const allChangeLayers = changeLayers.map(l => l.custom_layer.layers).flat(1).map(l => l.id);
-        
+
         changeOrderOfLayers(map, changeLayers, ukisMapLayers, 'Layers');
         const newMapLayers = getAllLayers(map, 'Layers').map(l => l.id);
         expect(newMapLayers).toEqual(allChangeLayers);
