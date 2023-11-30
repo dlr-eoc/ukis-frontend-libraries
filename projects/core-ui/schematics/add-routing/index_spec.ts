@@ -36,17 +36,17 @@ describe('add-routing', () => {
   };
 
   beforeEach(async () => {
-    appTree = await schematicRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
-    appTree = await schematicRunner.runExternalSchematicAsync(
+    appTree = await schematicRunner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = await schematicRunner.runExternalSchematic(
       '@schematics/angular',
       'application',
       appOptions,
       appTree,
-    ).toPromise();
+    );
   });
 
   it('should include the angular project file', async () => {
-    const tree = await schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise();
+    const tree = await schematicRunner.runSchematic('add-routing', ngAddOptions, appTree);
     expect(tree.files.includes('/angular.json')).toBe(true);
   });
 
@@ -60,7 +60,7 @@ describe('add-routing', () => {
       '/src/app/route-components/example-route/example-route.component.ts',
       '/src/app/route-components/example-route/example-route.component.scss'
     ];
-    const tree = await schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise();
+    const tree = await schematicRunner.runSchematic('add-routing', ngAddOptions, appTree);
     testFiles.every(f => {
       expect(tree.files).toContain(f);
     });
@@ -71,7 +71,7 @@ describe('add-routing', () => {
       'AppRoutingModule',
       'ExampleRouteComponent'
     ];
-    const tree = await schematicRunner.runSchematicAsync('add-routing', ngAddOptions, appTree).toPromise();
+    const tree = await schematicRunner.runSchematic('add-routing', ngAddOptions, appTree);
     const appModule = tree.readContent('/src/app/app.module.ts');
     testImports.every(i => {
       expect(appModule).toContain(i);
