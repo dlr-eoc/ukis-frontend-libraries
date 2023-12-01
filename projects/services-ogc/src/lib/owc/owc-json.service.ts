@@ -530,7 +530,7 @@ export class OwcJsonService {
         const layerGroup$ = this.createLayerGroup(groupName, includedResources, context, targetProjection);
         return layerGroup$;
       } else {
-        return of<null>(null);
+        return of(null);
       }
     } else {
       /** Single Layers */
@@ -607,7 +607,7 @@ export class OwcJsonService {
         || offerings[0];
       return this.createLayerFromOffering(offering, resource, owc, targetProjection);
     } else {
-      return of<null>(null);
+      return of(null);
     }
   }
 
@@ -625,13 +625,13 @@ export class OwcJsonService {
       return this.createVectorLayerFromOffering(offering, resource, context, targetProjection);
     } else {
       console.warn(`This type of service (${layerType}) has not been implemented yet.`, offering);
-      return of<null>(null);
+      return of(null);
     }
   }
 
   createVectorLayerFromOffering(offering: IOwsOffering, resource: IOwsResource, context?: IOwsContext, targetProjection?: string): Observable<VectorLayer> {
     const layerType = this.getLayertypeFromOfferingCode(offering);
-    let vectorLayer$: Observable<VectorLayer> = of<null>(null);
+    let vectorLayer$: Observable<VectorLayer> = of(null);
 
     switch (layerType) {
       case WfsLayertype:
@@ -718,7 +718,7 @@ export class OwcJsonService {
     offering: IOwsOffering, resource: IOwsResource, context: IOwsContext, targetProjection: string): Observable<RasterLayer> {
     const layerType = this.getLayertypeFromOfferingCode(offering);
 
-    let rasterLayer$: Observable<RasterLayer> = of<null>(null);
+    let rasterLayer$: Observable<RasterLayer> = of(null);
     switch (layerType) {
       case WmsLayertype:
         rasterLayer$ = this.createWmsLayerFromOffering(offering, resource, context, targetProjection);
@@ -800,11 +800,11 @@ export class OwcJsonService {
           return of(newLayer);
         }
       } else {
-        return of<null>(null);
+        return of(null);
       }
 
     } else {
-      return of<null>(null);
+      return of(null);
     }
   }
 
@@ -829,7 +829,7 @@ export class OwcJsonService {
     }
 
     if (layerUrl === null) {
-      return of<null>(null);
+      return of(null);
     }
   }
 
@@ -872,7 +872,7 @@ export class OwcJsonService {
       const layer = new VectorLayer(layerOptions);
       return of(layer);
     } else {
-      return of<null>(null);
+      return of(null);
     }
   }
 
@@ -889,10 +889,10 @@ export class OwcJsonService {
         return of(layer);
       } else {
         // no Raster TMS, maybe VectorTile
-        return of<null>(null);
+        return of(null);
       }
     } else {
-      return of<null>(null);
+      return of(null);
     }
   }
 
@@ -904,7 +904,7 @@ export class OwcJsonService {
         return layer;
       }));
     } else {
-      return of<null>(null);
+      return of(null);
     }
   }
 
@@ -914,7 +914,7 @@ export class OwcJsonService {
       const layer = new WmsLayer(options);
       return of(layer);
     } else {
-      return of<null>(null);
+      return of(null);
     }
   }
 
@@ -927,7 +927,7 @@ export class OwcJsonService {
       const layer = new RasterLayer(rasterOptions);
       return of(layer);
     } else {
-      return of<null>(null);
+      return of(null);
     }
 
   }
@@ -1063,7 +1063,7 @@ export class OwcJsonService {
        * If offering.matrixSets === null use a default set for EPSG:3857 and 256 tiles
        * Create this in the mapping library when the WMTS is created.
        */
-      return of<null>(null)
+      return of(null)
     } else {
       const url = this.parseOperationUrl(offering, 'GetCapabilities').url;
       return this.wmtsClient.getCapabilities(url).pipe(

@@ -1,7 +1,10 @@
-const RewritingStream = require('parse5-html-rewriting-stream');
-import { Rule, SchematicContext, SchematicsException } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, SchematicsException, } from '@angular-devkit/schematics';
 import { Tree } from '@angular-devkit/schematics/src/tree/interface';
 import { Readable, Writable } from 'stream';
+
+export function loadEsmModule<T>(modulePath: string | URL): Promise<T> {
+  return new Function('modulePath', `return import(modulePath);`)(modulePath) as Promise<T>;
+}
 
 interface Iparse5Tag {
   tagName: string;
@@ -22,12 +25,16 @@ interface Iparse5Tag {
  * https://github.com/angular/angular-cli/blob/aedfcc1862afc599ea18c578248d0aa373a947bb/packages/angular_devkit/build_angular/src/utils/index-file/html-rewriting-stream.ts#L11
  */
 export function updateHtmlFile(path: string, startTagStr: string, endTagStr: string, items: string | string[]): Rule {
-  return (tree: Tree, context: SchematicContext) => {
+  return async (tree: Tree, context: SchematicContext) => {
 
     const buffer = tree.read(path);
     if (buffer === null) {
       throw new SchematicsException(`Could not read index file: ${path}`);
     }
+
+    const { RewritingStream } = await loadEsmModule<typeof import('parse5-html-rewriting-stream')>(
+      'parse5-html-rewriting-stream',
+    );
 
     const rewriter = new RewritingStream();
     const startTags: Iparse5Tag[] = [];

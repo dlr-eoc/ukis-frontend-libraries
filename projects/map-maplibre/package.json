@@ -13,12 +13,12 @@
     "layers"
   ],
   "peerDependencies": {
-    "@angular/common": "^14.2.0",
-    "@angular/core": "^14.2.0",
-    "rxjs": "^6.6.7"
+    "@angular/common": "^16.2.3",
+    "@angular/core": "^16.2.3",
+    "rxjs": "~7.8.0"
   },
   "dependencies": {
-    "tslib": "^2.3.0",
+    "tslib": "^2.4.0",
     "maplibre-gl": "^3.3.0",
     "@mapbox/togeojson": "0.16.0",
     "@dlr-eoc/services-map-state": "12.0.0-alpha.2",

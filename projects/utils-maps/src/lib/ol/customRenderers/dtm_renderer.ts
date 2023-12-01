@@ -1,4 +1,3 @@
-import LayerRenderer from 'ol/renderer/Layer';
 import ImageLayer from 'ol/layer/Image';
 import ImageSource from 'ol/source/Image';
 import { FrameState } from 'ol/Map';
@@ -9,6 +8,7 @@ import { createTextCanvas } from '../../webgl/engine.helpers';
 import { bindProgram } from '../../webgl/webgl';
 import { ShapeA, rectangleA } from '../../webgl/engine.shapes';
 import { flattenRecursive } from '../../webgl/utils';
+import CanvasImageLayerRenderer from 'ol/renderer/canvas/ImageLayer';
 
 
 
@@ -25,7 +25,9 @@ export class DtmLayer extends ImageLayer<ImageSource> {
     }
 
     updateSunAngle(angle: number[]): void {
-        this.renderer.updateSunAngle(angle);
+        if (this.renderer) {
+            this.renderer.updateSunAngle(angle);
+        }
     }
 }
 
@@ -41,7 +43,7 @@ export class DtmLayer extends ImageLayer<ImageSource> {
  *  - occlusion maps,
  *  - ...
  */
-export class DtmImageRenderer extends LayerRenderer<ImageLayer<ImageSource>> {
+export class DtmImageRenderer extends CanvasImageLayerRenderer {
 
     readonly canvas: HTMLCanvasElement;
     readonly gl: WebGLRenderingContext;
