@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { MapCesiumService } from './map-cesium.service';
 import { LayersService, Layer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 import { Viewer } from '@cesium/widgets';
+import { GeoJsonDataSource } from '@cesium/engine';
 
 
 export interface ICesiumControls {
@@ -157,10 +158,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
       const newCenter = this.mapSvc.getCenter();
       const extent = this.mapSvc.getCurrentExtent();
       const ms = new MapState(zoom, newCenter, { notifier: 'user' }, extent);
-      //console.log('New Cesium Map State: ');
-      //console.log(ms);
       this.mapStateSvc.setMapState(ms);
-      //console.log(this.mapStateSvc.getMapState().getValue());
     });
 
     //Changing entitiy parameters for the display in he infoBox window
@@ -170,6 +168,12 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
       const titleDiv = this.viewer.infoBox.container.getElementsByClassName('cesium-infoBox-title')[0];
       titleDiv.innerHTML = 'Layer Attributes';
       if (entity) {
+        if(entity.entityCollection.owner instanceof GeoJsonDataSource){
+          titleDiv.innerHTML = entity.entityCollection.owner.name;
+          entity.name = entity.entityCollection.owner.name;
+        }else{
+          entity.name = 'Layer Attributes';
+        }
         if (entity.description) {
           const description = entity.description.getValue(this.mapSvc.cesiumCurrentTime);
           const contentDiv = this.viewer.infoBox.container.getElementsByClassName('cesium-infoBox-content')[0];
