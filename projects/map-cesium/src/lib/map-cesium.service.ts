@@ -620,9 +620,10 @@ export class MapCesiumService {
 
   private create_geojson_layer(l: VectorLayer): GeoJsonDataSource {
     const newGeoJsonDataSource = new GeoJsonDataSource();
-    const YELLOW = Object.freeze(Color.fromCssColorString("#FFFF00"));
-    let fillColor = YELLOW;
-    let strokeColor = YELLOW;
+    // default GeoJsonDataSource values
+    let fillColor = GeoJsonDataSource.fill;
+    let strokeColor = GeoJsonDataSource.stroke;
+    let strokeWidth = GeoJsonDataSource.strokeWidth;
     let clamp = false;
     if(l.options){
       if(l.options['fillColor']){
@@ -631,6 +632,9 @@ export class MapCesiumService {
       if(l.options['strokeColor']){
         strokeColor = Object.freeze(Color.fromCssColorString(l.options['strokeColor']));
       }
+      if(l.options['strokeWidth']){
+        strokeWidth = l.options['strokeWidth'];
+      }
       if(l.options['clampToGround']){
         clamp = l.options['clampToGround'];
       }
@@ -638,6 +642,7 @@ export class MapCesiumService {
     const dataSourceOptions = {
       fill: fillColor.withAlpha(l.opacity/1.5),
       stroke: strokeColor.withAlpha(l.opacity),
+      strokeWidth: strokeWidth,
       clampToGround: clamp
     } as GeoJsonDataSource.LoadOptions;
 
