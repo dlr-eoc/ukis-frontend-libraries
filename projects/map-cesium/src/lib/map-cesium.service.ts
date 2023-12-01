@@ -1017,7 +1017,7 @@ export class MapCesiumService {
           if (viewerLayer) {
             const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
             const layerIndex = layers.indexOf(layer);
-            if (cesiumIndex !== layerIndex) {
+            if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
               const diffIndex = cesiumIndex - layerIndex;
               if (diffIndex < 0) {
                 // Move layer up in collection
@@ -1041,7 +1041,7 @@ export class MapCesiumService {
           if (viewerLayer) {
             const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
             const layerIndex = layers.indexOf(layer) + this.getDataSourceLayersSize('baselayers');
-            if (cesiumIndex !== layerIndex) {
+            if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
               const diffIndex = cesiumIndex - layerIndex;
               if (diffIndex < 0) {
                 // Move layer up in collection
@@ -1065,9 +1065,6 @@ export class MapCesiumService {
           if (viewerLayer) {
             const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
             const layerIndex = layers.indexOf(layer) + this.getDataSourceLayersSize('baselayers') + this.getDataSourceLayersSize('layers');
-/*             console.log(layer.name);
-            console.log('CesiumIndex: '+ cesiumIndex);
-            console.log('LayerIndex: '+ layerIndex); */
             if (cesiumIndex !== layerIndex && cesiumIndex >= 0){
               const diffIndex = cesiumIndex - layerIndex;
               if (diffIndex < 0) {
@@ -1081,7 +1078,6 @@ export class MapCesiumService {
                   dataSourceCollection.lower(viewerLayer);
                 }
               }
-              //console.log('New CesiumIndex: '+ dataSourceCollection.indexOf(viewerLayer));
             }
           }
         }
