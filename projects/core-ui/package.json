@@ -22,28 +22,28 @@
     "migrations": "./schematics/migrations/migration.json"
   },
   "dependencies": {
-    "@angular-devkit/core": "^14.2.11",
-    "@angular-devkit/schematics": "^14.2.11",
-    "@schematics/angular": "^14.2.11",
+    "@angular-devkit/core": "^16.2.1",
+    "@angular-devkit/schematics": "^16.2.1",
+    "@schematics/angular": "^16.2.1",
     "parse5-html-rewriting-stream": "^6.0.1",
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
-    "@angular/common": "^14.2.11",
-    "@angular/core": "^14.2.11",
-    "@angular/router": "^14.2.11",
-    "@clr/angular": "^13.17.0",
+    "@angular/common": "^16.2.3",
+    "@angular/core": "^16.2.3",
+    "@angular/router": "^16.2.3",
+    "@clr/angular": "^15.12.0",
     "@clr/icons": "^13.0.2",
-    "rxjs": "^6.6.7",
+    "rxjs": "~7.8.0",
     "jsonc-parser": "^3.1.0"
   },
   "devDependencies": {
     "cpx": "^1.5.0",
     "@types/cpx": "^1.5.2",
-    "typescript": "^4.8.2",
-    "jasmine": "^3.99.0",
-    "zone.js": "^0.11.7",
-    "@angular/platform-browser-dynamic": "^14.2.11",
-    "@angular-devkit/architect": "^0.1402.11"
+    "typescript": "^5.1.3",
+    "jasmine": "^4.6.0",
+    "zone.js": "~0.13.0",
+    "@angular/platform-browser-dynamic": "^16.2.3",
+    "@angular-devkit/architect": "^0.1602.1"
   }
 }

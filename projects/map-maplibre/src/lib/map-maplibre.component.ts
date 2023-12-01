@@ -7,7 +7,7 @@ import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } fr
 
 
 import { Subject, Subscription } from 'rxjs';
-import { combineLatest, delay } from 'rxjs/operators';
+import { combineLatestWith, delay } from 'rxjs/operators';
 import { MapMaplibreService } from './map-maplibre.service';
 import { getUkisLayerMetadata } from './maplibre-layers.helpers';
 import toGeoJson from '@mapbox/togeojson';
@@ -310,18 +310,16 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
        * Expression has changed after it was checked
        * -> addBaseLayers changes visible in layers array
        * -> better try to create layers before the map is created, but add them when the map is created.
-       * 
-       * combineLatest is replaced with combineLatestWith in rxjs v7.x. Wait until Angular supports this.
        */
-      const onBaselayers = this.mapCreated.asObservable().pipe(delay(0), (combineLatest(this.layersSvc.getBaseLayers())))
+      const onBaselayers = this.mapCreated.asObservable().pipe(delay(0), (combineLatestWith(this.layersSvc.getBaseLayers())))
         .subscribe(obs => this.addUpdateBaseLayers(obs[1].filter(l => this.mapSvc.layerIsSupported(l))));
       this.subs.push(onBaselayers);
 
-      const onLayers = this.mapCreated.asObservable().pipe(delay(0), (combineLatest(this.layersSvc.getLayers())))
+      const onLayers = this.mapCreated.asObservable().pipe(delay(0), (combineLatestWith(this.layersSvc.getLayers())))
         .subscribe(obs => this.addUpdateLayers(obs[1].filter(l => this.mapSvc.layerIsSupported(l)), 'layers'));
       this.subs.push(onLayers);
 
-      const onOverlays = this.mapCreated.asObservable().pipe(delay(0), (combineLatest(this.layersSvc.getOverlays())))
+      const onOverlays = this.mapCreated.asObservable().pipe(delay(0), (combineLatestWith(this.layersSvc.getOverlays())))
         .subscribe(obs => this.addUpdateLayers(obs[1].filter(l => this.mapSvc.layerIsSupported(l)), 'overlays'));
       this.subs.push(onOverlays);
     }

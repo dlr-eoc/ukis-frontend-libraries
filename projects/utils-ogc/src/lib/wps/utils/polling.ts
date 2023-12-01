@@ -1,5 +1,5 @@
 import { Observable, timer, of, forkJoin } from 'rxjs';
-import { tap, map, mergeMap, retryWhen, delay } from 'rxjs/operators';
+import { tap, map, mergeMap, retry } from 'rxjs/operators';
 
 
 
@@ -19,7 +19,7 @@ export function pollUntil<T>(
     })
   );
 
-  const requestTakesAtLeast$: Observable<T> = forkJoin(tappedTask$, timer(minWaitTime)).pipe(
+  const requestTakesAtLeast$: Observable<T> = forkJoin([tappedTask$, timer(minWaitTime)]).pipe(
     map(r => r[0])
   );
 
@@ -40,30 +40,23 @@ export function pollUntil<T>(
 
 
 export function delayedRetry(delayMs: number, maxRetries = 3) {
-  let attempts = 1;
-
   return (src$: Observable<any>) => {
     return src$.pipe(
       // If an error occurs ...
-      retryWhen((error$: Observable<any>) => {
-        return error$.pipe(
-          delay(delayMs), // <- in any case, first wait a little while ...
-          mergeMap((error: any) => {
-            if (error.status && error.status === 400) {
-              // In case of a server error, repeating won't help.
-              throw error;
-            } else if (attempts <= maxRetries) {
-              console.log('http-error. Retrying ...');
-              attempts += 1;
-              return of(error); // <- an observable causes request to be retried
-            } else {
-              console.log(`Persistent http-errors after ${attempts} attempts. Giving up.`);
-              throw error; // an error causes request to be given up on.
-            }
-          })
-        );
+      retry({
+        count: maxRetries, delay: (error: any, retryCount: number) => {
+          if (error.status && error.status === 400) {
+            // In case of a server error, repeating won't help.
+            throw error;
+          } else if (retryCount <= maxRetries) {
+            console.log('http-error. Retrying ...');
+            return timer(delayMs); // Adding a timer from RxJS to return observable to delay param.
+          } else {
+            console.log(`Persistent http-errors after ${retryCount} attempts. Giving up.`);
+            throw error; // an error causes request to be given up on.
+          }
+        }
       })
     );
   };
-
 }

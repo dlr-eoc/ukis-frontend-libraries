@@ -10,6 +10,7 @@
 
 /** nav orientation default left side ------------------------------ */
 .clr-vertical-nav {
+  width: var(--clr-vertical-nav-width, 12rem);
   &.is-collapsed {
     .nav-icon {
       margin-left: var(--nav-items-distance-side) !important; //$clr_baselineRem_0_667;

@@ -85,12 +85,20 @@
               min-width: 1.5rem;
               text-align: center;
             }
+
+            &.opacity-input {
+              .clr-form-control {
+                padding-left: 0.4rem;
+                margin-top: 0;
+              }
+
+              label {
+                display: flex;
+              }
+            }
+
           }
         }
-      }
-
-      .ukis-range-input.opacity-input {
-        margin-top: 0.5rem;
       }
     }
 
