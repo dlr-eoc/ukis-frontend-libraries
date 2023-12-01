@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeoExtent, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IListMatrixSet, TFiltertypesUncap, TFiltertypes } from '@dlr-eoc/services-layers';
 
 import { ICesiumControls } from './map-cesium.component';
-import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, OpenStreetMapImageryProvider, PrimitiveCollection, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, } from '@cesium/engine';
+import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, } from '@cesium/engine';
 import { Viewer } from '@cesium/widgets';
 import { IMapCenter } from '@dlr-eoc/services-map-state';
 
@@ -416,16 +416,14 @@ export class MapCesiumService {
 
   public set3DUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
-    const tempLayers: ImageryLayer[] = [];
     this.remove3DLayers(lowerType);
 
     layers.forEach((newLayer) => {
-      const layer = this.create_3D_layer(newLayer as CustomLayer);
+      this.create_3D_layer(newLayer as CustomLayer);
     })
   }
 
   private create_2D_layer(newLayer: Layer) {
-    //console.log('Creating new '+newLayer.type+' layer: '+ newLayer.name);
     let newImageryLayer!: ImageryLayer;
     switch (newLayer.type) {
       case XyzLayertype:
@@ -501,8 +499,6 @@ export class MapCesiumService {
   }
 
   private create_wms_layer(l: WmsLayer): ImageryLayer {
-    //console.log(l.name);
-    //console.log(l);
     let defaultFormat = 'image/png';
     let maxLevel = 20;
     if (l.maxZoom) {
@@ -624,11 +620,25 @@ export class MapCesiumService {
 
   private create_geojson_layer(l: VectorLayer): GeoJsonDataSource {
     const newGeoJsonDataSource = new GeoJsonDataSource();
-    // https://github.com/CesiumGS/cesium/blob/690b4e8850493c9c208b7bd137e9692cbeeca698/packages/engine/Source/Core/Color.js#L2244
     const YELLOW = Object.freeze(Color.fromCssColorString("#FFFF00"));
+    let fillColor = YELLOW;
+    let strokeColor = YELLOW;
+    let clamp = false;
+    if(l.options){
+      if(l.options['fillColor']){
+        fillColor = Object.freeze(Color.fromCssColorString(l.options['fillColor']));
+      }
+      if(l.options['strokeColor']){
+        strokeColor = Object.freeze(Color.fromCssColorString(l.options['strokeColor']));
+      }
+      if(l.options['clampToGround']){
+        clamp = l.options['clampToGround'];
+      }
+      }
     const dataSourceOptions = {
-      fill: YELLOW.withAlpha(l.opacity),
-      stroke: YELLOW.withAlpha(l.opacity)
+      fill: fillColor.withAlpha(l.opacity/1.5),
+      stroke: strokeColor.withAlpha(l.opacity),
+      clampToGround: clamp
     } as GeoJsonDataSource.LoadOptions;
 
     if (l.attribution) {
