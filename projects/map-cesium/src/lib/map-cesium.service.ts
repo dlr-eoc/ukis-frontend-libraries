@@ -624,8 +624,6 @@ export class MapCesiumService {
     let fillColor = Color.fromCssColorString('#FFFFFF99');
     let strokeColor = Color.fromCssColorString('#3399CC');
     let strokeWidth = 1;
-    let strokeOpacity = 1;
-    let fillOpacity = 1;
     let clamp = false;
 
     if(l.options && l.options.style){
@@ -639,21 +637,11 @@ export class MapCesiumService {
         clamp = l.options['clampToGround'];
       }
     }
-    // as Cesium cannot handle an opacity for the whole datasource, we need to modify the color opacity,
-    // in case the cesium color already has an opacity value
-    if(fillColor.alpha != l.opacity){
-      fillOpacity = l.opacity*fillColor.alpha;
-    }else{
-      fillOpacity = l.opacity;
-    }
-    if(strokeColor.alpha != l.opacity){
-      strokeOpacity = l.opacity*strokeColor.alpha;
-    }else{
-      strokeOpacity = l.opacity;
-    }
     const dataSourceOptions = {
-      fill: fillColor.withAlpha(fillOpacity),
-      stroke: strokeColor.withAlpha(strokeOpacity),
+      // as Cesium cannot handle an opacity for the whole datasource, we need to modify the layer opacity,
+      // in case the cesium color already has an opacity value
+      fill: fillColor.withAlpha(l.opacity*fillColor.alpha),
+      stroke: strokeColor.withAlpha(l.opacity*strokeColor.alpha),
       strokeWidth: strokeWidth,
       clampToGround: clamp
     } as GeoJsonDataSource.LoadOptions;
