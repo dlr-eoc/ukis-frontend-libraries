@@ -255,11 +255,45 @@ Instead of a new 3D layer service, the existing [@dlr-eoc/services-layers](https
 #### Serving 3D content
 At the moment there are not many services out there, which serve 3D data. If you have data in the right format ([Cesium 3D Tiles](https://github.com/CesiumGS/3d-tiles), [Cesium quantized-mesh](https://github.com/CesiumGS/quantized-mesh)) available, everything you need is a web server for making the data accessible to the app. To quickly test the 3D capabilities you could use [http-server](https://github.com/http-party/http-server) to host 3D tiles and terrain meshes locally. A useful tool for generating terrain in the quantized-mesh format is the  [Cesium Terrain Builder Docker](https://github.com/tum-gis/cesium-terrain-builder-docker).
 
+#### Styling geoJSON vector layer
+GeoJSON layer in Cesium access the layer.options style property. To clamp a vector layer to the ground use `clampToGround: true` as an optional property of layer.options. Here is an example:
+```
+new VectorLayer({
+        id: 'geojson_test',
+        name: 'GeoJSON Vector Layer',
+        attribution: `© Attribution`,
+        type: 'geojson',
+        data: testData,
+        visible: true,
+        options: {
+          style: (feature: Feature) => {
+            let styles = [];
+
+            let polygonStyle = new Style({
+              stroke: new Stroke({
+                color: '#FF7400',
+                width: 1
+              }),
+              fill: new Fill({
+                color: '#FF7400' + '99',
+
+              }),
+            });
+            styles.push(polygonStyle);
+            return styles;
+          },
+          clampToGround: false
+        }
+      })
+```
+
 #### Notes
 - Terrain has to be attributed with a new Cesium Credit object, see the example above. 
 - GeoJSON layer are supported, but they are always shown above imagery layers, regardless of their ordering index in the layer control. Therefore they should be added as overlays.
 - As of 01/2023, WFS is not supported by Cesium yet. 
-- KmlDataSource does not support opacity change at the moment
+- KmlDataSource does not support opacity change at the moment.
+- The stroke-width of vector polygons in Cesium does not change on non Apple browsers. There seems to be an issue with the browser support for this feature.
+- When a vector layer is clamped to the ground, Cesium does not display the stroke anymore. Cesium's proposed workaround at the moment is to include the stroke as additional polyline vector layer. 
 
 
 ===
