@@ -220,20 +220,17 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
 
             let polygonStyle = new Style({
               stroke: new Stroke({
-                color: '#0072a3',
+                color: '#FF7400',
                 width: 1
               }),
               fill: new Fill({
-                color: '#FFFFFF' + '99',
+                color: '#FF7400' + '99',
 
               }),
             });
             styles.push(polygonStyle);
             return styles;
           },
-          fillColor: '#FFFFFF',
-          strokeColor: '#0072a3',
-          strokeWidth: 2,
           clampToGround: false
         }
       })
