@@ -620,28 +620,40 @@ export class MapCesiumService {
 
   private create_geojson_layer(l: VectorLayer): GeoJsonDataSource {
     const newGeoJsonDataSource = new GeoJsonDataSource();
-    // default GeoJsonDataSource values
-    let fillColor = GeoJsonDataSource.fill;
-    let strokeColor = GeoJsonDataSource.stroke;
-    let strokeWidth = GeoJsonDataSource.strokeWidth;
+    // default UKIS values
+    let fillColor = Color.fromCssColorString('#FFFFFF99');
+    let strokeColor = Color.fromCssColorString('#3399CC');
+    let strokeWidth = 1;
+    let strokeOpacity = 1;
+    let fillOpacity = 1;
     let clamp = false;
-    if(l.options){
-      if(l.options['fillColor']){
-        fillColor = Object.freeze(Color.fromCssColorString(l.options['fillColor']));
-      }
-      if(l.options['strokeColor']){
-        strokeColor = Object.freeze(Color.fromCssColorString(l.options['strokeColor']));
-      }
-      if(l.options['strokeWidth']){
-        strokeWidth = l.options['strokeWidth'];
+
+    if(l.options && l.options.style){
+      const styleProperties = l.options.style(l.data)[0];
+      if(styleProperties){
+      fillColor = Color.fromCssColorString(styleProperties.fill_.color_) || fillColor;
+      strokeColor = Color.fromCssColorString(styleProperties.stroke_.color_) || strokeColor;
+      strokeWidth = styleProperties.stroke_.width_ || strokeWidth;
       }
       if(l.options['clampToGround']){
         clamp = l.options['clampToGround'];
       }
-      }
+    }
+    // as Cesium cannot handle an opacity for the whole datasource, we need to modify the color opacity,
+    // in case the cesium color already has an opacity value
+    if(fillColor.alpha != l.opacity){
+      fillOpacity = l.opacity*fillColor.alpha;
+    }else{
+      fillOpacity = l.opacity;
+    }
+    if(strokeColor.alpha != l.opacity){
+      strokeOpacity = l.opacity*strokeColor.alpha;
+    }else{
+      strokeOpacity = l.opacity;
+    }
     const dataSourceOptions = {
-      fill: fillColor.withAlpha(l.opacity/1.5),
-      stroke: strokeColor.withAlpha(l.opacity),
+      fill: fillColor.withAlpha(fillOpacity),
+      stroke: strokeColor.withAlpha(strokeOpacity),
       strokeWidth: strokeWidth,
       clampToGround: clamp
     } as GeoJsonDataSource.LoadOptions;
@@ -652,7 +664,7 @@ export class MapCesiumService {
 
     newGeoJsonDataSource.load(l.data, dataSourceOptions);
     newGeoJsonDataSource.show = l.visible;
-    newGeoJsonDataSource.name = l.id;
+    newGeoJsonDataSource.name = l.name;
 
     this.dataSourceOpacity.set(l.id, l.opacity);
     return newGeoJsonDataSource;
