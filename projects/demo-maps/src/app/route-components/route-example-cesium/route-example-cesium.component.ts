@@ -8,6 +8,8 @@ import { MapOlService } from '@dlr-eoc/map-ol';
 import olMap from 'ol/Map';
 import { Cesium3DTileset, CesiumTerrainProvider, Credit, EllipsoidTerrainProvider, I3SDataProvider, createGooglePhotorealistic3DTileset } from '@cesium/engine';
 import testData from '@dlr-eoc/shared-assets/geojson/test.json';
+import { Feature } from 'ol';
+import { Fill, Stroke, Style } from 'ol/style';
 
 @Component({
   selector: 'app-route-example-cesium',
@@ -197,12 +199,40 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
       }),
       new VectorLayer({
         id: 'geojson_test',
-        name: 'GeoJSON Vector Layer',
+        name: 'GeoJSON Vector Layer (default)',
         attribution: `© DLR GeoJSON`,
         type: 'geojson',
         data: testData,
         visible: false,
         popup: true
+      }),
+      new VectorLayer({
+        id: 'geojson_test2',
+        name: 'GeoJSON Vector Layer (styled)',
+        attribution: `© DLR GeoJSON`,
+        type: 'geojson',
+        data: testData,
+        visible: false,
+        popup: true,
+        options: {
+          style: (feature: Feature) => {
+            let styles = [];
+
+            let polygonStyle = new Style({
+              stroke: new Stroke({
+                color: '#FF7400',
+                width: 1
+              }),
+              fill: new Fill({
+                color: '#FF7400' + '99',
+
+              }),
+            });
+            styles.push(polygonStyle);
+            return styles;
+          },
+          clampToGround: false
+        }
       })
     ];
 

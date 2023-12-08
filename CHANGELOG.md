@@ -28,8 +28,8 @@
 
 * **@dlr-eoc/map-cesium:**
   - New UKIS library for working with [CesiumJS](https://github.com/CesiumGS/cesium) was added.
-
   - A new example has been added to the demo-maps to show how to work with the new cesium library.
+  - The GeoJsonDatasource in map-cesium was updated and styling of vector layers is now possible.
 
 * **@dlr-eoc/services-layers:**
   - The `layer.popup` gets more types and uses `IPopupParams` which will be applied to all popups.

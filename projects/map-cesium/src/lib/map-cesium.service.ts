@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeoExtent, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IListMatrixSet, TFiltertypesUncap, TFiltertypes } from '@dlr-eoc/services-layers';
 
 import { ICesiumControls } from './map-cesium.component';
-import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, OpenStreetMapImageryProvider, PrimitiveCollection, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, } from '@cesium/engine';
+import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, } from '@cesium/engine';
 import { Viewer } from '@cesium/widgets';
 import { IMapCenter } from '@dlr-eoc/services-map-state';
 
@@ -416,16 +416,14 @@ export class MapCesiumService {
 
   public set3DUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype) {
     const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
-    const tempLayers: ImageryLayer[] = [];
     this.remove3DLayers(lowerType);
 
     layers.forEach((newLayer) => {
-      const layer = this.create_3D_layer(newLayer as CustomLayer);
+      this.create_3D_layer(newLayer as CustomLayer);
     })
   }
 
   private create_2D_layer(newLayer: Layer) {
-    //console.log('Creating new '+newLayer.type+' layer: '+ newLayer.name);
     let newImageryLayer!: ImageryLayer;
     switch (newLayer.type) {
       case XyzLayertype:
@@ -501,8 +499,6 @@ export class MapCesiumService {
   }
 
   private create_wms_layer(l: WmsLayer): ImageryLayer {
-    //console.log(l.name);
-    //console.log(l);
     let defaultFormat = 'image/png';
     let maxLevel = 20;
     if (l.maxZoom) {
@@ -624,11 +620,30 @@ export class MapCesiumService {
 
   private create_geojson_layer(l: VectorLayer): GeoJsonDataSource {
     const newGeoJsonDataSource = new GeoJsonDataSource();
-    // https://github.com/CesiumGS/cesium/blob/690b4e8850493c9c208b7bd137e9692cbeeca698/packages/engine/Source/Core/Color.js#L2244
-    const YELLOW = Object.freeze(Color.fromCssColorString("#FFFF00"));
+    // default UKIS values
+    let fillColor = Color.fromCssColorString('#FFFFFF99');
+    let strokeColor = Color.fromCssColorString('#3399CC');
+    let strokeWidth = 1;
+    let clamp = false;
+
+    if(l.options && l.options.style){
+      const styleProperties = l.options.style(l.data)[0];
+      if(styleProperties){
+      fillColor = Color.fromCssColorString(styleProperties.fill_.color_) || fillColor;
+      strokeColor = Color.fromCssColorString(styleProperties.stroke_.color_) || strokeColor;
+      strokeWidth = styleProperties.stroke_.width_ || strokeWidth;
+      }
+      if(l.options['clampToGround']){
+        clamp = l.options['clampToGround'];
+      }
+    }
     const dataSourceOptions = {
-      fill: YELLOW.withAlpha(l.opacity),
-      stroke: YELLOW.withAlpha(l.opacity)
+      // as Cesium cannot handle an opacity for the whole datasource, we need to modify the layer opacity,
+      // in case the cesium color already has an opacity value
+      fill: fillColor.withAlpha(l.opacity*fillColor.alpha),
+      stroke: strokeColor.withAlpha(l.opacity*strokeColor.alpha),
+      strokeWidth: strokeWidth,
+      clampToGround: clamp
     } as GeoJsonDataSource.LoadOptions;
 
     if (l.attribution) {
@@ -637,7 +652,7 @@ export class MapCesiumService {
 
     newGeoJsonDataSource.load(l.data, dataSourceOptions);
     newGeoJsonDataSource.show = l.visible;
-    newGeoJsonDataSource.name = l.id;
+    newGeoJsonDataSource.name = l.name;
 
     this.dataSourceOpacity.set(l.id, l.opacity);
     return newGeoJsonDataSource;
@@ -1007,7 +1022,7 @@ export class MapCesiumService {
           if (viewerLayer) {
             const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
             const layerIndex = layers.indexOf(layer);
-            if (cesiumIndex !== layerIndex) {
+            if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
               const diffIndex = cesiumIndex - layerIndex;
               if (diffIndex < 0) {
                 // Move layer up in collection
@@ -1031,7 +1046,7 @@ export class MapCesiumService {
           if (viewerLayer) {
             const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
             const layerIndex = layers.indexOf(layer) + this.getDataSourceLayersSize('baselayers');
-            if (cesiumIndex !== layerIndex) {
+            if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
               const diffIndex = cesiumIndex - layerIndex;
               if (diffIndex < 0) {
                 // Move layer up in collection
@@ -1055,9 +1070,6 @@ export class MapCesiumService {
           if (viewerLayer) {
             const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
             const layerIndex = layers.indexOf(layer) + this.getDataSourceLayersSize('baselayers') + this.getDataSourceLayersSize('layers');
-/*             console.log(layer.name);
-            console.log('CesiumIndex: '+ cesiumIndex);
-            console.log('LayerIndex: '+ layerIndex); */
             if (cesiumIndex !== layerIndex && cesiumIndex >= 0){
               const diffIndex = cesiumIndex - layerIndex;
               if (diffIndex < 0) {
@@ -1071,7 +1083,6 @@ export class MapCesiumService {
                   dataSourceCollection.lower(viewerLayer);
                 }
               }
-              //console.log('New CesiumIndex: '+ dataSourceCollection.indexOf(viewerLayer));
             }
           }
         }
