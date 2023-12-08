@@ -1,14 +1,70 @@
-define(['./Matrix3-41c58dde', './defaultValue-fe22d8c0', './EllipseGeometry-89533a10', './Check-6ede7e26', './Math-0a2ac845', './Transforms-b527bb09', './Matrix2-e1298525', './RuntimeError-ef395448', './combine-d9581036', './ComponentDatatype-cf1fa08e', './WebGLConstants-0b1ce7ba', './EllipseGeometryLibrary-b0d7df17', './GeometryAttribute-a5b6275b', './GeometryAttributes-ad136444', './GeometryInstance-34d9e21e', './GeometryOffsetAttribute-9ad0019c', './GeometryPipeline-fa9e6ffc', './AttributeCompression-f9f6c717', './EncodedCartesian3-57415c8a', './IndexDatatype-2643aa47', './IntersectionTests-feace3da', './Plane-4c3d403b', './VertexFormat-030f11ff'], (function (Matrix3, defaultValue, EllipseGeometry, Check, Math, Transforms, Matrix2, RuntimeError, combine, ComponentDatatype, WebGLConstants, EllipseGeometryLibrary, GeometryAttribute, GeometryAttributes, GeometryInstance, GeometryOffsetAttribute, GeometryPipeline, AttributeCompression, EncodedCartesian3, IndexDatatype, IntersectionTests, Plane, VertexFormat) { 'use strict';
+/**
+ * @license
+ * Cesium - https://github.com/CesiumGS/cesium
+ * Version 1.111
+ *
+ * Copyright 2011-2022 Cesium Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Columbus View (Pat. Pend.)
+ *
+ * Portions licensed separately.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
+ */
 
-  function createEllipseGeometry(ellipseGeometry, offset) {
-    if (defaultValue.defined(offset)) {
-      ellipseGeometry = EllipseGeometry.EllipseGeometry.unpack(ellipseGeometry, offset);
-    }
-    ellipseGeometry._center = Matrix3.Cartesian3.clone(ellipseGeometry._center);
-    ellipseGeometry._ellipsoid = Matrix3.Ellipsoid.clone(ellipseGeometry._ellipsoid);
-    return EllipseGeometry.EllipseGeometry.createGeometry(ellipseGeometry);
+import {
+  EllipseGeometry_default
+} from "./chunk-6JRDO2JP.js";
+import "./chunk-AEADHPUM.js";
+import "./chunk-DD2PDL6D.js";
+import "./chunk-TIEL2RYB.js";
+import "./chunk-4EXWKTY2.js";
+import "./chunk-EEL3YC6V.js";
+import "./chunk-ZERWARDV.js";
+import "./chunk-N7FIYNQV.js";
+import "./chunk-R5NOUYKW.js";
+import "./chunk-PNAD2XAN.js";
+import "./chunk-CKOGHQ6J.js";
+import "./chunk-EH2PEDWL.js";
+import "./chunk-3R5RPSYS.js";
+import "./chunk-XKGSTUQO.js";
+import "./chunk-DNCKFFNR.js";
+import "./chunk-IQCBK4CE.js";
+import "./chunk-UJ76JVUZ.js";
+import {
+  Cartesian3_default,
+  Ellipsoid_default
+} from "./chunk-54GSYZWT.js";
+import "./chunk-A3TYRSRJ.js";
+import "./chunk-XNRYWRVT.js";
+import "./chunk-YK5RU5AO.js";
+import "./chunk-N73NY3KY.js";
+import "./chunk-WYMW5NZB.js";
+import {
+  defined_default
+} from "./chunk-FMN2NHBU.js";
+
+// packages/engine/Source/Workers/createEllipseGeometry.js
+function createEllipseGeometry(ellipseGeometry, offset) {
+  if (defined_default(offset)) {
+    ellipseGeometry = EllipseGeometry_default.unpack(ellipseGeometry, offset);
   }
-
-  return createEllipseGeometry;
-
-}));
+  ellipseGeometry._center = Cartesian3_default.clone(ellipseGeometry._center);
+  ellipseGeometry._ellipsoid = Ellipsoid_default.clone(ellipseGeometry._ellipsoid);
+  return EllipseGeometry_default.createGeometry(ellipseGeometry);
+}
+var createEllipseGeometry_default = createEllipseGeometry;
+export {
+  createEllipseGeometry_default as default
+};

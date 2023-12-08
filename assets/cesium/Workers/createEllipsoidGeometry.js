@@ -1,12 +1,58 @@
-define(['./defaultValue-fe22d8c0', './EllipsoidGeometry-07e99d2d', './Transforms-b527bb09', './Matrix3-41c58dde', './Check-6ede7e26', './Math-0a2ac845', './Matrix2-e1298525', './RuntimeError-ef395448', './combine-d9581036', './ComponentDatatype-cf1fa08e', './WebGLConstants-0b1ce7ba', './GeometryAttribute-a5b6275b', './GeometryAttributes-ad136444', './GeometryOffsetAttribute-9ad0019c', './IndexDatatype-2643aa47', './VertexFormat-030f11ff'], (function (defaultValue, EllipsoidGeometry, Transforms, Matrix3, Check, Math, Matrix2, RuntimeError, combine, ComponentDatatype, WebGLConstants, GeometryAttribute, GeometryAttributes, GeometryOffsetAttribute, IndexDatatype, VertexFormat) { 'use strict';
+/**
+ * @license
+ * Cesium - https://github.com/CesiumGS/cesium
+ * Version 1.111
+ *
+ * Copyright 2011-2022 Cesium Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Columbus View (Pat. Pend.)
+ *
+ * Portions licensed separately.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
+ */
 
-  function createEllipsoidGeometry(ellipsoidGeometry, offset) {
-    if (defaultValue.defined(offset)) {
-      ellipsoidGeometry = EllipsoidGeometry.EllipsoidGeometry.unpack(ellipsoidGeometry, offset);
-    }
-    return EllipsoidGeometry.EllipsoidGeometry.createGeometry(ellipsoidGeometry);
+import {
+  EllipsoidGeometry_default
+} from "./chunk-QX5ASOZZ.js";
+import "./chunk-ZERWARDV.js";
+import "./chunk-N7FIYNQV.js";
+import "./chunk-CKOGHQ6J.js";
+import "./chunk-EH2PEDWL.js";
+import "./chunk-3R5RPSYS.js";
+import "./chunk-XKGSTUQO.js";
+import "./chunk-DNCKFFNR.js";
+import "./chunk-IQCBK4CE.js";
+import "./chunk-UJ76JVUZ.js";
+import "./chunk-54GSYZWT.js";
+import "./chunk-A3TYRSRJ.js";
+import "./chunk-XNRYWRVT.js";
+import "./chunk-YK5RU5AO.js";
+import "./chunk-N73NY3KY.js";
+import "./chunk-WYMW5NZB.js";
+import {
+  defined_default
+} from "./chunk-FMN2NHBU.js";
+
+// packages/engine/Source/Workers/createEllipsoidGeometry.js
+function createEllipsoidGeometry(ellipsoidGeometry, offset) {
+  if (defined_default(offset)) {
+    ellipsoidGeometry = EllipsoidGeometry_default.unpack(ellipsoidGeometry, offset);
   }
-
-  return createEllipsoidGeometry;
-
-}));
+  return EllipsoidGeometry_default.createGeometry(ellipsoidGeometry);
+}
+var createEllipsoidGeometry_default = createEllipsoidGeometry;
+export {
+  createEllipsoidGeometry_default as default
+};
