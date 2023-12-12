@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-cesium",
-  "version": "12.0.0-alpha.2",
+  "version": "12.0.0",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -19,15 +19,15 @@
     "rxjs": "~7.8.0"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "12.0.0-alpha.2",
-    "@dlr-eoc/services-layers": "12.0.0-alpha.2",
+    "@dlr-eoc/services-map-state": "12.0.0",
+    "@dlr-eoc/services-layers": "12.0.0",
     "@cesium/engine": "^6.1.0",
     "@cesium/widgets": "^4.3.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "@dlr-eoc/base-layers-raster": "12.0.0-alpha.2",
-    "@dlr-eoc/shared-assets": "12.0.0-alpha.2",
+    "@dlr-eoc/base-layers-raster": "12.0.0",
+    "@dlr-eoc/shared-assets": "12.0.0",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
     "path-browserify": "^1.0.1",
