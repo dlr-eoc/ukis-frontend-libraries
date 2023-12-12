@@ -145,10 +145,18 @@ The general workflow to create a new version:
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Milestone XY" --workspace=projects --include-workspace-root` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version). Optionally test this by appending `--no-git-tag-version`.
 - run `node scripts/library/index.js --set-source` to sync all versions.
+- run `npm install` to update the main package-lock.json
 - merge the release branch in the main branch by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/main...release-v8.0.1?template=release_pull_request.md` the PR body is populated with the template)
 - push the tag (created from `npm version`) by running `git push origin --tags`
+- set the label of the release PR to 'RELEASE'
 
-Changes on the PR trigger the workflow [Package Main Release](.github/workflows/main-release-package.yml). If all jobs succeed the angular projects are published as github/npm packages.
+Changes on the PR trigger the workflow [Package Main Release](.github/workflows/package-main-release.yml). The workflow comtains these jobs in this order: 
+1. [checkHeadBranch](.github/workflows/package-main-release.yml#L14)
+2. [checkTitelTag](.github/workflows/package-main-release.yml#L23)
+3. [checkTagOnNpm](.github/workflows/package-main-release.yml#L59)
+4. [checkLabel](.github/workflows/package-main-release.yml#L103)
+
+Therefore it is important to meet the requirements of the jobs, as described in the [release_pull_request.md](.github/PULL_REQUEST_TEMPLATE/release_pull_request.md). If all jobs succeed the angular projects are published as github/npm packages.
 
 
 ## Alternative prereleases can be created
