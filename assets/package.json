@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/shared-assets",
-  "version": "12.0.0-alpha.2",
+  "version": "12.0.0",
   "main": "index",
   "license": "Apache-2.0",
   "author": "Team UKIS",
