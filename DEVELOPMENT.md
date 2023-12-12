@@ -148,7 +148,7 @@ The general workflow to create a new version:
 - run `npm install` to update the main package-lock.json
 - merge the release branch in the main branch by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/main...release-v8.0.1?template=release_pull_request.md` the PR body is populated with the template)
 - push the tag (created from `npm version`) by running `git push origin --tags`
-- set the label of the release PR to 'VERSION'
+- set the label of the release PR to 'RELEASE'
 
 Changes on the PR trigger the workflow [Package Main Release](.github/workflows/package-main-release.yml). The workflow comtains these jobs in this order: 
 1. [checkHeadBranch](.github/workflows/package-main-release.yml#L14)

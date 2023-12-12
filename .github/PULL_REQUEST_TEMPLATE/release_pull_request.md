@@ -12,7 +12,7 @@ Please check if your PR fulfills the following requirements in this order:
 4. [ ] The correct version and tag was set with `npm version <major | minor | patch> -m "Version for release XYZ"`.
 5. [ ] All versions are synced with `node scripts/library/index.js --set-source`.
 6. [ ] The main package-lock.json was updated with `npm intsall`.
-7. [ ] The Tag v[0-9]+.[0-9]+.[0-9] was pushed with the brach. 
+7. [ ] The Tag v[0-9]+.[0-9]+.[0-9] was pushed with the branch. 
 8. [ ] The Project is building without errors [see](https://github.com/dlr-eoc/ukis-frontend-libraries/actions/workflows/package-main-release.yml) and check if the build job was successful.
 9. [ ] Add the Label `RELEASE` to the PR.
 
