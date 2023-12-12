@@ -155,6 +155,7 @@ Changes on the PR trigger the workflow [Package Main Release](.github/workflows/
 2. [checkTitelTag](.github/workflows/package-main-release.yml#L23)
 3. [checkTagOnNpm](.github/workflows/package-main-release.yml#L59)
 4. [checkLabel](.github/workflows/package-main-release.yml#L103)
+
 Therefore it is important to meet the requirements of the jobs, as described in the [release_pull_request.md](.github/PULL_REQUEST_TEMPLATE/release_pull_request.md). If all jobs succeed the angular projects are published as github/npm packages.
 
 
