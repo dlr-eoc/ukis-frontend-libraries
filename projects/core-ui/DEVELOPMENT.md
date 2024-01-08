@@ -13,17 +13,15 @@ https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2
 }
 ```
 
-2. build the schematics `ng build core-ui`
+2. build the schematics `ng build --configuration=production core-ui `
 
-3. set Versions in build `node scripts/library/index.js --set`
+3. create a new project `ng new my-project`
 
-4. create a new project `ng new my-project`
+4. link to the Schematics in the new project `npm link $PATH_TO_SCHEMATIC_PROJECT` e.g. (`npm link ../frontend-libraries/dist/core-ui`)
 
-5. link to the Schematics in the new project `npm link $PATH_TO_SCHEMATIC_PROJECT` e.g. (`npm link ../frontend-libraries/dist/core-ui`)
+5. run the schematics in the new project `schematics @dlr-eoc/core-ui:ng-add` or `ng generate @dlr-eoc/core-ui:ng-add --project=<my-project>` or `ng generate @dlr-eoc/core-ui:ng-add --project=<my-project> --routing=true`
 
-6. run the schematics in the new project `schematics @dlr-eoc/core-ui:ng-add` or `ng generate @dlr-eoc/core-ui:ng-add` or `ng generate @dlr-eoc/core-ui:ng-add --routing=true`
-
-7. Update -> run step 1. and 2 again (You don't have to unlink and relink)
+6. Update -> run step 2. again (You don't have to unlink and relink)
 
 
 to unlink use 
@@ -32,8 +30,7 @@ to unlink use
 
 
 remove files in test app:
-- `git clean -fd`
-- `git checkout .`
+- `git clean -fd && git checkout .`
 
 ### Unit Testing
 
