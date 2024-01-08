@@ -8,9 +8,9 @@ For this tutorial to work you need a code editor of your choice (e.g. Visual Stu
 ## Setting up UKIS core-ui
 ### 1. Generate a new [Angular application](https://angular.io/cli/new) in the same Version like specified in our package.json [@angular/core](package.json).
 For this you have to install `@angular/cli` in this specific Version first. 
-- For this tutorial use version `14.1.1`
+- See ukis-frontend-libraries package.json [version of @angular/core](package.json) 
 ```
-npm install -g @angular/cli@14.1.1
+npm install -g @angular/cli@<version>
 ```
 
 - Then run:
@@ -24,10 +24,10 @@ ng new project-tutorial-map --style=scss
 cd project-tutorial-map
 ```
 ### 3. Add Clarity Angular
-- At the moment Clarity does not support angular schematics ([github ng add issue](https://github.com/vmware-clarity/ng-clarity/issues/120)). Therefore Clarity has to be installed manually.
+- At the moment Clarity does not support angular schematics ([github ng add issue](https://github.com/vmware-clarity/ng-clarity/issues/120)). Therefore Clarity has to be installed manually. For the versions also see ukis-frontend-libraries [package.json](package.json)
 - Run 
 ```
-npm install @cds/core @clr/angular @clr/ui
+npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version> @clr/icons@<version>
 ```
 - Add Clarity styles and scripts in the angular.json:
 ```
@@ -67,14 +67,16 @@ npm install @cds/core @clr/angular @clr/ui
 
 
 ### 4. Run the ng add command for the UKIS core-ui
-- First you have to match the dependency of rxjs ([for ukis-frontend-libraries@10.1.0](package.json)), to do this you need to run
+- First you have to match the dependency of rxjs ([for ukis-frontend-libraries](package.json)), to do this you need to run
 ``` 
-npm install rxjs@6.6.7 
+npm install rxjs@<version>
 ```
 - Then run 
 ``` 
-ng add @dlr-eoc/core-ui@10.1.0 --project=project-tutorial-map 
+ng add @dlr-eoc/core-ui@<version> --project=project-tutorial-map 
 ``` 
+to add files and styles from ukis-frontend-libraries in the desired version.
+
 - Answer the promt with `Y`
 - In this tutorial more additional options of the core-ui ng add like routing are not required.
 - [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
