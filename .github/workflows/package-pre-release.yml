@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # check out before using actions reference from the same repository!
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.13.0
+          node-version: 20.10.0
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -38,10 +38,10 @@ jobs:
     needs: checkTagOnNpm
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.13.0
+          node-version: 20.10.0
       - uses: ./.github/actions/test
       - name: build
         run: |
@@ -57,15 +57,15 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download dist result from job build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.13.0
+          node-version: 20.10.0
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -88,15 +88,15 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download dist result from job build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.13.0
+          node-version: 20.10.0
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci
