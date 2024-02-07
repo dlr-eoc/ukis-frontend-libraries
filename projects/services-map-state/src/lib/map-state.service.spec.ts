@@ -26,6 +26,7 @@ describe('MapStateService', () => {
     const stateTime = new Date().toISOString(); // this is passed on new MapState()
     const state = new MapState(4, { lat: 48, lon: 11 });
     state.time = stateTime;
+    state.rotation = 20;
 
 
     service.setMapState(state);
@@ -34,6 +35,8 @@ describe('MapStateService', () => {
       expect(sta.center.lon).toEqual(11);
       expect(sta.zoom).toEqual(4);
       expect(sta.time).toEqual(stateTime);
+      expect(sta.rotation).toEqual(20);
+      expect(sta.viewAngle).toEqual(0);
     });
   }));
 
