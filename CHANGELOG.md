@@ -1,3 +1,8 @@
+# [12.x.x](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2024-02-07) (services-map-state)
+### Features
+* **@dlr-eoc/services-map-state:**
+  - Added viewAngle and rotation to mapState [Issue #216](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/216).
+  
 # [12.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2023-12-12) (map-ol, map-cesium and map-maplibre)
 ### Breaking Changes
   - Update angular from `^14.2.11` to `^16.2.1` automatic migrations are made by ng update. See update angular from [14.0-15.0](https://update.angular.io/?l=3&v=14.0-15.0) and [14.0-15.0](https://update.angular.io/?l=3&v=15.0-16.0).
