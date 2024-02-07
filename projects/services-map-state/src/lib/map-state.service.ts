@@ -59,6 +59,18 @@ export class MapStateService {
     this.setMapState(state);
   }
 
+  public setViewAngle(angel: number) {
+    const state = this.getMapState().getValue();
+    state.viewAngle = angel;
+    this.setMapState(state);
+  }
+
+  public setRotation(rotation: number) {
+    const state = this.getMapState().getValue();
+    state.rotation = rotation;
+    this.setMapState(state);
+  }
+
 
   public getLastAction() {
     return this.lastAction;
