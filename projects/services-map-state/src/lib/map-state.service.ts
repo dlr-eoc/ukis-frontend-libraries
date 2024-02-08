@@ -10,7 +10,7 @@ const initialState = new MapState(0, { lat: 0, lon: 0 });
 })
 export class MapStateService {
   private mapState = new BehaviorSubject(initialState)
-  private lastAction = new BehaviorSubject<'setExtent' | 'setState'>(null);
+  private lastAction = new BehaviorSubject<'setExtent' | 'setState' | 'setRotation' | 'setAngle'>(null);
   constructor() {
   }
 
@@ -59,16 +59,26 @@ export class MapStateService {
     this.setMapState(state);
   }
 
-  public setViewAngle(angel: number) {
+  public setViewAngle(angle: number, notifier: IMapState['options']['notifier'] = 'user') {
+    if (!angle) {
+      return;
+    }
+    this.lastAction.next('setAngle');
     const state = this.getMapState().getValue();
-    state.viewAngle = angel;
-    this.setMapState(state);
+    state.options.notifier = notifier;
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.time, angle, state.rotation);
+    this.mapState.next(newState);
   }
 
-  public setRotation(rotation: number) {
+  public setRotation(rotation: number, notifier: IMapState['options']['notifier'] = 'user') {
+    if (!rotation) {
+      return;
+    }
+    this.lastAction.next('setRotation');
     const state = this.getMapState().getValue();
-    state.rotation = rotation;
-    this.setMapState(state);
+    state.options.notifier = notifier;
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.time, state.viewAngle, rotation);
+    this.mapState.next(newState);
   }
 
 
