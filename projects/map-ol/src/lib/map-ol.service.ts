@@ -1410,7 +1410,7 @@ export class MapOlService {
     if (l instanceof StackedLayer) {
       const layers = l.layers.map(ml => {
         // Set visibility and opacity from the StackedLayer as start for all the layers
-        // they will be updated later by layerOrGroupSetVisible and layerOrGroupSetOpacity in map-ol component 
+        // they will be updated later by layerOrGroupSetVisible and layerOrGroupSetOpacity in map-ol component
         ml.visible = l.visible;
         ml.opacity = l.opacity;
         /** popups are get from the olLayer later so add them */
@@ -1544,23 +1544,23 @@ export class MapOlService {
    *  - check for popup.asObservable and create map
    *  - pixel coordinate in layer extent
    *  - layer has popup
-   * 
+   *
    *  - filterLayerNoPopup
    *  - layer has pixel data
    *  - pixel data alpha value > 0
    *  - layer is raster
-   * 
+   *
    *  - filterLayerNoPopup
    *  - pixel coordinate in layer extent
    *  - layer is vector
    *  - layer has features at pixel
-   * 
+   *
    * returns top visible layer - so no popups are shown for layers beneath if layer.opacity > 0 https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-916759628
    *  2. check top layer event (click or move)
    *  3. set cursor for Layers with a color value or feature
    *     if no layer has been hit and the map popup.asObservable has items, then publish a null event for them
    *  4. differentiate between raster and vector
-   * 
+   *
    *  5. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
    *  6. overwrite properties if popup property is: popup | popup[]
    *  7. check for popupFunction, asyncPopup, dynamicPopup and asObservable
@@ -1670,8 +1670,8 @@ export class MapOlService {
     }
   }
 
-  /** 
-   * Check for popup.asObservable to publish null properties if layer is not hit. 
+  /**
+   * Check for popup.asObservable to publish null properties if layer is not hit.
    */
   private checkForPopupAsObservable(layer: olLayer<olSource, LayerRenderer<any>>, layerVisible: boolean, layerOpacity: number, layerPopup: Layer['popup'], layerPopupsAsObservable: Map<string, olLayer<olSource, LayerRenderer<any>>>) {
     if (layerVisible && layerOpacity !== 0 && layerPopup) {
@@ -1687,8 +1687,8 @@ export class MapOlService {
     }
   }
 
-  /** 
-   * Publish null properties for popup.asObservable if layer is not hit. 
+  /**
+   * Publish null properties for popup.asObservable if layer is not hit.
    */
   private publishNullPropertiesAsObservable(layerPopupsAsObservable: Map<string, olLayer<olSource, LayerRenderer<any>>>, event: olMapBrowserEvent<PointerEvent>) {
     if (layerPopupsAsObservable.size) {
@@ -1833,7 +1833,7 @@ export class MapOlService {
   public vectorOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, feature: olFeature | olRenderFeature) {
     if (layer && feature) {
       const popup: Layer['popup'] = layer.get(POPUP_KEY);
-      /** 
+      /**
        * properties of olFeature.
        */
       let properties: any = {};
@@ -2393,6 +2393,20 @@ export class MapOlService {
     const extent = this.map.getView().calculateExtent();
     const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
     return (transfomExtent as TGeoExtent);
+  }
+
+   /** USED in map-ol.component */
+   public setRotation(rotation: number) {
+    const view = this.map.getView();
+    // convert rotation vom deg to rad
+    rotation = rotation * (Math.PI/180);
+    view.setRotation(rotation);
+  }
+
+  /** USED in map-ol.component */
+  public getRotation(): number {
+    // convert rotation vom rad to deg
+    return this.map.getView().getRotation() * (180/Math.PI);
   }
 
   /** USED in map-ol.component */
