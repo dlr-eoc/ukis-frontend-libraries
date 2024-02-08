@@ -1,6 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Dispatcher, Evented } from 'maplibre-gl';
-import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, UKIS_METADATA, changeOrderOfLayers } from './maplibre.helpers';
+import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, UKIS_METADATA, changeOrderOfLayers, setBearing, setPitch } from './maplibre.helpers';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } from '@dlr-eoc/services-layers';
@@ -14,7 +14,7 @@ import toGeoJson from '@mapbox/togeojson';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
-/** 
+/**
  * This has to be global, because maplibre does this the same way
  * https://github1s.com/maplibre/maplibre-gl-js/blob/main/src/source/source.ts#L18-L19
  */
@@ -79,11 +79,11 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     }
   }
 
-  /** 
-   * https://maplibre.org/maplibre-gl-js-docs/api/ 
-   * 
+  /**
+   * https://maplibre.org/maplibre-gl-js-docs/api/
+   *
    * https://github.com/maplibre/ngx-maplibre-gl
-   * 
+   *
    * */
   private initMap() {
     // https://github.com/maptiler/angular-template-maplibre-gl-js/blob/master/src/app/map/map.component.ts
@@ -137,7 +137,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
 
   private addKmlSourceType() {
     /**
-      * add custom source 
+      * add custom source
       * https://github.com/maplibre/maplibre-gl-js/blob/4619234968089ee67f761bde6ce24e1f861fb8c6/src/source/geojson_source.ts#L266
       * https://github.com/jimmyrocks/mapbox-gl-custom-protocol/blob/main/src/index.ts#L44
       * https://github.com/indus/mapsrc/blob/main/packages/TOPO/src/mapsrcTOPO.ts
@@ -220,24 +220,27 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
   private subscribeToMapEvents() {
     this.map.on('moveend', this.mapOnMoveend);
 
-    /** 
+    /**
      * TODO: Popups
-     * handle click and pointermove/mousemove 
+     * handle click and pointermove/mousemove
      */
 
-    /** 
+    /**
      * TODO:
      * handle double click
      */
   }
 
   private mapOnMoveend = (evt: MapLibreEvent<MouseEvent | TouchEvent | WheelEvent | undefined>) => {
+    const oldMapState = this.mapStateSvc.getMapState().getValue();
     const zoom = this.map.getZoom();
     const latLng = this.map.getCenter();
     const extent = getExtent(this.map, true);
+    const viewAngle = this.map.getPitch();
+    const rotation = this.map.getBearing();
 
     const newCenter = { lat: latLng.lat, lon: latLng.lng };
-    const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent);
+    const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time, viewAngle, rotation);
     this.mapStateSvc.setMapState(ms);
   };
 
@@ -248,7 +251,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
         if (!this.initialMapStateSet && this.initialMapState) {
           /**
            * If container size and map size are equal (map size 'stable')
-           * Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit 
+           * Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit
            * Update map size before so view.fit can calculate correct center
            */
           this.setMapState(this.initialMapState);
@@ -278,6 +281,12 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
       } else if (lastAction === 'setState') {
         setZoom(this.map, mapState.zoom, mapState.options.notifier);
         setCenter(this.map, [mapState.center.lon, mapState.center.lat], true);
+        setBearing(this.map, mapState.rotation);
+        setPitch(this.map, mapState.viewAngle);
+      } else if (lastAction === 'setRotation') {
+        setBearing(this.map, mapState.rotation);
+      } else if (lastAction === 'setAngle') {
+        setPitch(this.map, mapState.viewAngle);
       }
     }
   }
@@ -329,7 +338,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
 
   private addUpdateBaseLayers(layers: ukisLayer[]) {
     const filtertype = 'baselayers';
-    // this is like map change style but we only like to update nor recreat alle style 
+    // this is like map change style but we only like to update nor recreat alle style
     // map.setStyle(): https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#setstyle
     // Changes in sprites and glyphs cannot be diffed.
     const visiblelayers = layers.filter(i => i.visible);
@@ -356,8 +365,8 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   private addUpdateLayers(layers: ukisLayer[], filtertype: Tgroupfiltertype) {
-    // this.map.addSource or update (this.map.removeLayer and this.map.addLayer) 
-    // and this.map.addLayer or update (this.map.removeLayer and this.map.addLayer) 
+    // this.map.addSource or update (this.map.removeLayer and this.map.addLayer)
+    // and this.map.addLayer or update (this.map.removeLayer and this.map.addLayer)
 
 
     /** if length of layers has changed add new layers */

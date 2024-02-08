@@ -52,6 +52,13 @@ export function getZoom(map: glMap, notifier?: 'map' | 'user') {
     return map.getZoom();
 }
 
+export function setPitch(map: glMap, pitch: number) {
+  map.setPitch(pitch);
+}
+export function setBearing(map: glMap, bearing: number) {
+  // subtract bearing degree from 360° to get the same behavior as in openlayers
+  map.setBearing(360-bearing);
+}
 
 export function setVisibility(map: glMap, layerOrId: string | TypedStyleLayer, visibility: boolean, cb?: () => void) {
     let mllayer;
@@ -273,8 +280,8 @@ export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) 
 
             /**
              * https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#movelayer
-             * The ID of an existing layer to insert the new layer before. 
-             * When viewing the map, layer.id will appear beneath the beforeId layer. 
+             * The ID of an existing layer to insert the new layer before.
+             * When viewing the map, layer.id will appear beneath the beforeId layer.
              * If beforeId is omitted, the layer will be appended to the end of the layers array and appear above all other layers on the map.
              */
             const beforeIndex = index + 1;
@@ -322,10 +329,10 @@ export function changeOrderOfLayer(map: glMap, layerChange: { layerId: string, b
         const beforeMapLayers = getLayersAndSources(map, layerChange.beforeId).layers;
         /* const layerMapLayers = getFirstAndLastLayer(map, layerChange.layerId);
         const beforeMapLayers = getFirstAndLastLayer(map, layerChange.beforeId); */
-        /** 
+        /**
          * if the layer before the one to be moved has several layers, move the layer on beforeMapLayers[0]
          * If there is no layer before, move it to the top.
-         * 
+         *
          * https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#movelayer
          * -  If beforeId is omitted, the layer will be appended to the end of the layers array... -
          */
@@ -361,7 +368,7 @@ export function changeOrderOfLayer(map: glMap, layerChange: { layerId: string, b
                 map.moveLayer(layer.id)
             }
         } else {
-            // layerMapLayers.length === 0 
+            // layerMapLayers.length === 0
             // there is nothing to move
         }
     }
