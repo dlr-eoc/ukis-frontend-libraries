@@ -3,7 +3,7 @@ import { LayersService, Layer, WmtsLayer, RasterLayer, CustomLayer, WmsLayer, Ve
 import { MapStateService, IMapState } from '@dlr-eoc/services-map-state';
 
 import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@dlr-eoc/base-layers-raster';
-import { ICesiumControls, MapCesiumService } from '@dlr-eoc/map-cesium';
+import { ICesiumControls } from '@dlr-eoc/map-cesium';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import olMap from 'ol/Map';
 import { Cesium3DTileset, CesiumTerrainProvider, Credit, EllipsoidTerrainProvider, I3SDataProvider, createGooglePhotorealistic3DTileset } from '@cesium/engine';
@@ -20,7 +20,6 @@ import { Fill, Stroke, Style } from 'ol/style';
   providers: [
     MapStateService,
     MapOlService,
-    MapCesiumService,
     {
       provide: 'twoDlayerSvc', useClass: LayersService
     }, {
@@ -37,7 +36,9 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     center: {
       lat: 40,
       lon: 13
-    }
+    },
+    rotation: 0,
+    viewAngle: 0
   };
 
   //Set inititial 2D/3D state
@@ -47,7 +48,6 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     @Inject('twoDlayerSvc') public twoDlayerSvc: LayersService,
     @Inject('threeDlayerSvc') public threeDlayerSvc: LayersService,
     public mapOlSvc: MapOlService,
-    public mapCesiumSvc: MapCesiumService,
     public mapStateSvc: MapStateService
   ) {
     this.controls = {
@@ -274,17 +274,6 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
   }
 
   async addTerrainlayer() {
-    // Terrain Datasource as Custom Layer
-    const bkgDGM5 = new CustomLayer({
-      name: 'BKG DGM5',
-      displayName: 'BKG DGM5',
-      id: 'bkg_dgm5',
-      custom_layer: await CesiumTerrainProvider.fromUrl('https://geoportal.de/3d/dgm5'),
-      visible: false,
-      attribution: `© <a href="https://www.bkg.de">Bundesamt für Kartographie und Geodäsie (BKG)</a>`,
-      description: 'BKG digital elevation modell with 5m grid resulution',
-      type: 'custom',
-    });
 
     // Dataservices from the masterportal: https://bitbucket.org/geowerkstatt-hamburg/masterportalapi/src/master/
     const hamburg_dgm = new CustomLayer({
@@ -313,7 +302,7 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     });
 
 
-    const layers = [bkgDGM5, hamburg_dgm, default_ellipsoid];
+    const layers = [hamburg_dgm, default_ellipsoid];
     layers.map(l => this.threeDlayerSvc.addLayer(l, 'Baselayers'));
   }
 
@@ -321,9 +310,9 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     if (this.is2dMap) {
       this.is2dMap = false;
     } else {
-      // If there is no camera roll, the flyTo is not necessary
-      if (this.mapCesiumSvc.viewer.camera.roll != 0) {
-        this.mapCesiumSvc.setNadirViewAngle();
+      // If there is no set view angle, the flyTo is not necessary
+      if (this.mapStateSvc.getMapState().getValue().viewAngle != 0) {
+        this.mapStateSvc.setViewAngle(0.01);
         // Wait for the cesim flyTo function to finish
         setTimeout(() => {
           //the openlayers map needs to be fully resetted, to avoid an error with the map controls
@@ -337,6 +326,22 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
 
 
     }
+  }
+  setViewAngle() {
+    /** set map rotation with the MapStateService */
+    this.mapStateSvc.setViewAngle(45);
+  }
+  resetViewAngle() {
+    /** set map rotation with the MapStateService */
+    this.mapStateSvc.setViewAngle(0.01);
+  }
+  setRotation() {
+    /** set map rotation with the MapStateService */
+    this.mapStateSvc.setRotation(90);
+  }
+  resetRotation() {
+    /** set map rotation with the MapStateService, due to the rotation constraint small numbers are snapped to 0 */
+    this.mapStateSvc.setRotation(0.01);
   }
 }
 

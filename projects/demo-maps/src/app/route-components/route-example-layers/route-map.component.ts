@@ -53,6 +53,14 @@ export class RouteMapComponent implements OnInit {
     /** set map extent or IMapState (zoom, center...) with the MapStateService */
     this.mapStateSvc.setExtent([-14, 33, 40, 57]);
   }
+  setRotation() {
+    /** set map rotation with the MapStateService */
+    this.mapStateSvc.setRotation(90);
+  }
+  resetRotation() {
+    /** set map rotation with the MapStateService, due to the rotation constraint small numbers are snapped to 0 */
+    this.mapStateSvc.setRotation(0.01);
+  }
 
   parseCapabilities() {
     this.wmsSvc.getCapabilities('https://geoservice.dlr.de/eoc/land/wms').subscribe(caps => {
