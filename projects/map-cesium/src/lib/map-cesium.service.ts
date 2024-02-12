@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeoExtent, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IListMatrixSet, TFiltertypesUncap, TFiltertypes } from '@dlr-eoc/services-layers';
 
 import { ICesiumControls } from './map-cesium.component';
-import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, } from '@cesium/engine';
+import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath} from '@cesium/engine';
 import { Viewer } from '@cesium/widgets';
 import { IMapCenter } from '@dlr-eoc/services-map-state';
 
@@ -224,38 +224,41 @@ export class MapCesiumService {
   }
 
   // Set initial oblique view, see https://cesium.com/learn/cesiumjs/ref-doc/Camera.html
+  //subtract 90°, to get the same behavior as in openlayers
   public setViewAngle(viewAngle: number) {
-    //const view_angle = 0.2;
-    /*  const height = position.height;
-     const sin_view_angle = Math.sin(view_angle);
-     const dist_square = height*height*((1/(sin_view_angle*sin_view_angle))-1);
-     const dist = Math.sqrt(dist_square);
-     const height_diff = sin_view_angle*dist;
-     //move the camera back in order to view the same scene as in 2D
-     console.log(dist);
-     console.log(height_diff);
-     //this.viewer.camera. moveBackward(dist);
-     //this.viewer.camera. moveDown(height_diff);
-     this.viewer.camera. moveDown(dist);*/
-    this.viewer.camera.lookUp(viewAngle);
-    //this.viewer.camera. moveUp(10000);
-
-
+    this.viewer.camera.flyTo({
+      destination: this.viewer.camera.position,
+      orientation: {
+        heading: this.viewer.camera.heading,
+        pitch: CesiumMath.toRadians(viewAngle-90),
+        roll: this.viewer.camera.roll,
+      },
+  });
   }
 
   public setNadirViewAngle() {
-    const position = this.viewer.camera.position;
-    /*  const heading = MathCesium.toRadians(0);
-     const pitch = MathCesium.toRadians(0);
-     const range = this.viewer.camera.positionCartographic.height;
-     this.viewer.camera.lookAt(center, new HeadingPitchRange(heading, pitch, range)); */
-    this.viewer.camera.flyTo({
-      destination: position,
-      duration: 1
-    });
+    this.setViewAngle(0.01);
   }
 
-
+  //add 90°, to get the same behavior as in openlayers
+  public getViewAngle():number{
+    return CesiumMath.toDegrees(this.viewer.camera.pitch) + 90;
+  }
+// subtract rotation degree from 360° to get the same behavior as in openlayers
+  public setRotation(rotation: number) {
+    this.viewer.camera.flyTo({
+      destination: this.viewer.camera.position,
+      orientation: {
+        heading: CesiumMath.toRadians(360-rotation),
+        pitch: this.viewer.camera.pitch,
+        roll: this.viewer.camera.roll,
+      },
+  });
+  }
+// subtract rotation degree from 360° to get the same behavior as in openlayers
+  public getRotation():number{
+    return 360 - CesiumMath.toDegrees(this.viewer.camera.heading);
+  }
 
   // https://sandcastle.cesium.com/index.html?src=Imagery%2520Layers.html
   // https://sandcastle.cesium.com/index.html?src=Imagery%2520Layers%2520Manipulation.html

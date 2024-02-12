@@ -2,11 +2,11 @@ import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, 
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription, Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, skip } from 'rxjs/operators';
 import { MapCesiumService } from './map-cesium.service';
 import { LayersService, Layer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 import { Viewer } from '@cesium/widgets';
-import { GeoJsonDataSource } from '@cesium/engine';
+import { GeoJsonDataSource, ScreenSpaceEventHandler, ScreenSpaceEventType } from '@cesium/engine';
 
 
 export interface ICesiumControls {
@@ -26,8 +26,6 @@ export interface ICesiumControls {
   ionAccessToken?: string;
   //In the same way you can provide a personal key for Google Maps, https://cesium.com/learn/cesiumjs-learn/cesiumjs-photorealistic-3d-tiles/
   GoogleMapsApiKey?: string;
-  //Optional initial view angle in radians from the nadir view
-  viewAngle?: number;
   selectionIndicator?: boolean;
 }
 
@@ -79,17 +77,22 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component */
     const oldMapState = this.mapStateSvc.getMapState().getValue();
     this.setMapState(oldMapState);
-    if (this.controls.viewAngle) {
-      this.mapSvc.setViewAngle(this.controls.viewAngle);
-    }
-
+    // set viewAngle and rotation seperatly again, as their values are not set by the viewer the first time
+    this.mapSvc.setViewAngle(oldMapState.viewAngle);
+    this.mapSvc.setRotation(oldMapState.rotation);
     /** Subscribe to map events when the map is completely created  */
     this.subscribeToMapEvents();
     /** Subscribe to mapStateSvc */
     this.subscribeToMapState();
+
   }
 
   ngOnDestroy(): void {
+
+    const lastMapState = this.mapStateSvc.getMapState().value;
+    lastMapState.options.notifier = 'user';
+    this.mapStateSvc.setMapState(lastMapState);
+
     /** clean up all events on destroy */
     this.subs.forEach(s => s.unsubscribe());
     if (this.viewer?.scene?.primitives) {
@@ -100,6 +103,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.mapSvc.destroyLayerGrpoups();
   }
+
 
   private initMap() {
     if (this.timeInterval) {
@@ -139,25 +143,42 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private subscribeToMapState() {
     if (this.mapStateSvc) {
-      const mapStateOn = this.mapStateSvc.getMapState().pipe(filter(s => s.options.notifier === 'map')).subscribe(state => {
-        this.mapSvc.updateTime(state.time);
-      });
+      const mapStateOn = this.mapStateSvc.getMapState().pipe(skip(1)).subscribe(state => this.setMapState(state));
       this.subs.push(mapStateOn);
     }
   }
 
   private setMapState(mapState: MapState) {
-    this.mapSvc.setZoom(mapState.zoom, mapState.options.notifier);
-    this.mapSvc.setCenter(mapState.center);
+    const lastAction = this.mapStateSvc.getLastAction().getValue();
+    if (mapState.options.notifier === 'user') {
+      if (lastAction === 'setExtent') {
+        this.mapSvc.setExtent(mapState.extent, true);
+      } else if (lastAction === 'setState') {
+        this.mapSvc.setZoom(mapState.zoom);
+        this.mapSvc.setCenter(mapState.center);
+        this.mapSvc.setRotation(mapState.rotation);
+        this.mapSvc.setViewAngle(mapState.viewAngle);
+      } else if (lastAction === 'setRotation') {
+        this.mapSvc.setRotation(mapState.rotation);
+      } else if (lastAction === 'setAngle') {
+        this.mapSvc.setViewAngle(mapState.viewAngle);
+      }
+    }
+    else if (mapState.options.notifier === 'map') {
+      this.mapSvc.updateTime(mapState.time);
+    }
   }
 
   private subscribeToMapEvents() {
 
-    this.viewer.camera.moveEnd.addEventListener(() => {
+    this.viewer.camera.changed.addEventListener((evt) => {
+      const time = this.mapStateSvc.getMapState().getValue().time;
       const zoom = this.mapSvc.getZoom();
       const newCenter = this.mapSvc.getCenter();
       const extent = this.mapSvc.getCurrentExtent();
-      const ms = new MapState(zoom, newCenter, { notifier: 'user' }, extent);
+      const viewAngle = this.mapSvc.getViewAngle();
+      const rotation = this.mapSvc.getRotation();
+      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, time, viewAngle, rotation);
       this.mapStateSvc.setMapState(ms);
     });
 
