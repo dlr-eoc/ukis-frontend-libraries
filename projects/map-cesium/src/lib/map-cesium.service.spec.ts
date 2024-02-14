@@ -235,21 +235,24 @@ describe('MapCesiumService State', () => {
     expect(service.getCurrentExtent(true) !== oldExtent).toBeTrue();
   });
 
-
-  it('should set the view angle', () => {
+  it('should set/get rotation', async () => {
     service.createMap(mapTarget.container);
-    const oldAngle = service.viewer.camera.roll;
-    const newAngle = 20;
-
-    service.setViewAngle(newAngle);
-    expect(service.viewer.camera.roll !== oldAngle).toBeTrue();
+    const newRotation = 45;
+    service.setRotation(newRotation);
+    // we have to wait for the flyTo to finish
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    // some radians to degree conversions are made, so there are some rounding errors to be expected
+    expect(service.getRotation()).toBeCloseTo(45);
   });
 
-  it('should set the nadir view angle', () => {
+  it('should set/get view angle', async () => {
     service.createMap(mapTarget.container);
-
-    service.setNadirViewAngle();
-    expect(service.viewer.camera.roll === 0).toBeTrue();
+    const newAngle = 45;
+    service.setViewAngle(newAngle);
+    // we have to wait for the flyTo to finish
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    // some radians to degree conversions are made, so there are some rounding errors to be expected
+    expect(service.getViewAngle()).toBeCloseTo(45);
   });
 
 });

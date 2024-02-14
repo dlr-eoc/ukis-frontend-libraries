@@ -6,7 +6,7 @@ import { MapCesiumService } from './map-cesium.service';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Viewer } from '@cesium/widgets';
 import { Component, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
-import { of } from 'rxjs';
+import { of, timeout } from 'rxjs';
 import { OsmTileLayer, EocBasemapTile } from '@dlr-eoc/base-layers-raster';
 
 /**
@@ -181,6 +181,24 @@ describe('MapCesiumComponent', () => {
   it('should have a viewer and the viewer should be the same as from the mapSvc', () => {
     expect(component.viewer instanceof Viewer).toBeTruthy();
     expect(component.viewer === mapSvc.viewer).toBeTruthy();
+  });
+
+  it('should set mapstate rotation', async () => {
+    //set rotation to 90°
+    component.mapStateSvc.setRotation(90);
+    // we have to wait for the flyTo to finish
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    // some radians to degree conversions are made, so there are some rounding errors to be expected
+    expect(mapSvc.getRotation()).toBeCloseTo(90);
+  });
+
+  it('should set mapstate view angle', async () => {
+    //set view angle to 55°
+    component.mapStateSvc.setViewAngle(55);
+    // we have to wait for the flyTo to finish
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    // some radians to degree conversions are made, so there are some rounding errors to be expected
+    expect(mapSvc.getViewAngle()).toBeCloseTo(55);
   });
 
   it('should add Imagery layers', () => {

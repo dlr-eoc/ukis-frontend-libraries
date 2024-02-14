@@ -53,6 +53,7 @@ export function getZoom(map: glMap, notifier?: 'map' | 'user') {
 }
 
 export function setPitch(map: glMap, pitch: number) {
+  //default maxPitch is 60°
   map.setPitch(pitch);
 }
 export function setBearing(map: glMap, rotation: number) {
