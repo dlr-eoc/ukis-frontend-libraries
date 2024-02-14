@@ -1,7 +1,13 @@
-# [12.x.x](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2024-02-07) (services-map-state)
+# [12.x.x](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2024-02-07) (services-map-state, map-ol, map-cesium and map-maplibre)
 ### Features
 * **@dlr-eoc/services-map-state:**
   - Added viewAngle and rotation to mapState [Issue #216](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/216).
+* **@dlr-eoc/map-ol:**
+  - Adding support for mapState rotation  
+* **@dlr-eoc/map-cesium:**
+  - Adding support for mapState viewAngle and rotation
+ * **@dlr-eoc/map-maplibre:**
+  - Adding support for mapState viewAngle and rotation 
   
 # [12.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2023-12-12) (map-ol, map-cesium and map-maplibre)
 ### Breaking Changes
