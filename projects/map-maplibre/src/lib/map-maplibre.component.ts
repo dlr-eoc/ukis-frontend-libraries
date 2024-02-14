@@ -1,6 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Dispatcher, Evented } from 'maplibre-gl';
-import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, UKIS_METADATA, changeOrderOfLayers, setBearing, setPitch } from './maplibre.helpers';
+import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, UKIS_METADATA, changeOrderOfLayers, setBearing, setPitch, getBearing } from './maplibre.helpers';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } from '@dlr-eoc/services-layers';
@@ -73,6 +73,11 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   ngOnDestroy(): void {
+    const lastMapState = this.mapStateSvc.getMapState().value;
+    lastMapState.options.notifier = 'user';
+    this.mapStateSvc.setMapState(lastMapState);
+     /** clean up all events on destroy */
+     this.subs.forEach(s => s.unsubscribe());
     if (this.map) {
       this.map.off('moveend', this.mapOnMoveend);
       // this.mapDivView.nativeElement.removeEventListener('mouseleave', this.removePopupsOnMouseLeave);
@@ -237,7 +242,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     const latLng = this.map.getCenter();
     const extent = getExtent(this.map, true);
     const viewAngle = this.map.getPitch();
-    const rotation = this.map.getBearing();
+    const rotation = getBearing(this.map);
 
     const newCenter = { lat: latLng.lat, lon: latLng.lng };
     const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time, viewAngle, rotation);

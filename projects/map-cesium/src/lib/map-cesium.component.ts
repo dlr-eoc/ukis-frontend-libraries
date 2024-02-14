@@ -76,6 +76,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component */
     const oldMapState = this.mapStateSvc.getMapState().getValue();
+    oldMapState.options.notifier = 'user';
     this.setMapState(oldMapState);
     // set viewAngle and rotation seperatly again, as their values are not set by the viewer the first time
     this.mapSvc.setViewAngle(oldMapState.viewAngle);

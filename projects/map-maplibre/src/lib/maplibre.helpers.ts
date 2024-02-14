@@ -24,7 +24,7 @@ export function setExtent(map: glMap, extent: TGeoExtent, geographic?: boolean, 
 
 export function getExtent(map: glMap, geographic?: boolean): TGeoExtent {
     const newbounds = map.getBounds();
-    const newExtent = [newbounds.getSouth(), newbounds.getWest(), newbounds.getNorth(), newbounds.getEast()] as TGeoExtent;
+    const newExtent = [newbounds.getWest(), newbounds.getSouth(), newbounds.getEast(), newbounds.getNorth()] as TGeoExtent;
     return newExtent;
 }
 
@@ -55,9 +55,29 @@ export function getZoom(map: glMap, notifier?: 'map' | 'user') {
 export function setPitch(map: glMap, pitch: number) {
   map.setPitch(pitch);
 }
-export function setBearing(map: glMap, bearing: number) {
-  // subtract bearing degree from 360° to get the same behavior as in openlayers
-  map.setBearing(360-bearing);
+export function setBearing(map: glMap, rotation: number) {
+  // bearing is defined from -180° to 180°, rotation from 0° to 360°
+  // subtract rotation degree from 360° or change sign to get the same behavior as in openlayers
+  let bearing = 0;
+  if(rotation > 180){
+    bearing = 360 - rotation;
+  }else{
+    bearing = -rotation;
+  }
+  map.setBearing(bearing);
+}
+
+export function getBearing(map: glMap):number {
+  // bearing is defined from -180° to 180°, rotation from 0° to 360°
+  // subtract bearing degree from 360° or change sign to get the same behavior as in openlayers
+  let rotation = 0;
+  const bearing = map.getBearing();
+  if (bearing > 0){
+    rotation = 360 - bearing;
+  } else if(bearing < 0){
+    rotation = -bearing;
+  }
+  return rotation;
 }
 
 export function setVisibility(map: glMap, layerOrId: string | TypedStyleLayer, visibility: boolean, cb?: () => void) {
