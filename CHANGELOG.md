@@ -2,6 +2,9 @@
 ### Features
 * **@dlr-eoc/services-map-state:**
   - Added viewAngle and rotation to mapState [Issue #216](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/216).
+  - Added optional `notifier`  to `setTime` like in the setters  `setExtent`, `setViewAngle` or `setRotation`.
+  - Test for incorrect values in setters
+
 * **@dlr-eoc/map-ol:**
   - Adding support for mapState rotation  
 * **@dlr-eoc/map-cesium:**

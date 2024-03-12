@@ -10,7 +10,7 @@ const initialState = new MapState(0, { lat: 0, lon: 0 });
 })
 export class MapStateService {
   private mapState = new BehaviorSubject(initialState)
-  private lastAction = new BehaviorSubject<'setExtent' | 'setState' | 'setRotation' | 'setAngle'>(null);
+  private lastAction = new BehaviorSubject<'setExtent' | 'setState' | 'setRotation' | 'setAngle' | 'setTime'>(null);
   constructor() {
   }
 
@@ -38,7 +38,7 @@ export class MapStateService {
   }
 
   public setExtent(extent: TGeoExtent, notifier: IMapState['options']['notifier'] = 'user') {
-    if (!extent) {
+    if (!Array.isArray(extent)) {
       return;
     }
     this.lastAction.next('setExtent');
@@ -48,8 +48,10 @@ export class MapStateService {
     this.mapState.next(newState);
   }
 
-  public setTime(time: Date | string) {
+  public setTime(time: Date | string, notifier: IMapState['options']['notifier'] = 'user') {
+    this.lastAction.next('setTime');
     const state = this.getMapState().getValue();
+    state.options.notifier = notifier;
 
     if (time instanceof Date) {
       state.time = time.toISOString();
@@ -59,8 +61,16 @@ export class MapStateService {
     this.setMapState(state);
   }
 
+  /**
+   * @param angle
+   * This is not available for OpenLayers (only rotation)
+   * 
+   * For Maplibre the default is from 0 to 60. Can be increasd with setMaxPitch (0-85). Values greater than 60 degrees are experimental and may result in rendering issues.
+   * 
+   * For Cesium values greater than 90, is like looking from the ground up to the sky. Values greater than 180 also rotate the globe.
+   */
   public setViewAngle(angle: number, notifier: IMapState['options']['notifier'] = 'user') {
-    if (!angle) {
+    if (isNaN(angle)) {
       return;
     }
     this.lastAction.next('setAngle');
@@ -71,7 +81,7 @@ export class MapStateService {
   }
 
   public setRotation(rotation: number, notifier: IMapState['options']['notifier'] = 'user') {
-    if (!rotation) {
+    if (isNaN(rotation)) {
       return;
     }
     this.lastAction.next('setRotation');
