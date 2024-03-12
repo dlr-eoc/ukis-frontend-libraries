@@ -192,7 +192,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
       const titleDiv = this.viewer.infoBox.container.getElementsByClassName('cesium-infoBox-title')[0];
       titleDiv.innerHTML = 'Layer Attributes';
       if (entity) {
-        if(entity.entityCollection.owner instanceof GeoJsonDataSource){
+        if(entity.entityCollection?.owner instanceof GeoJsonDataSource){
           titleDiv.innerHTML = entity.entityCollection.owner.name;
           entity.name = entity.entityCollection.owner.name;
         }else{

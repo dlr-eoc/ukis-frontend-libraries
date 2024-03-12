@@ -18,6 +18,9 @@
  * **@dlr-eoc/map-maplibre:**
   - Fix wrong coordinate order from `getExtent` [#216](7ff01801fd3af594aaa34b2479e921be88894dbe)
   - Rename `set/getBearing` to `set/getRotation` because we want to have the same behavior as in openlayers and `set/getBearing` is expected differently in mapliebre
+
+* **@dlr-eoc/map-cesium:**
+  - Fix get entity.name for infoBox in none GeoJson layers
   
 # [12.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2023-12-12) (map-ol, map-cesium and map-maplibre)
 ### Breaking Changes
