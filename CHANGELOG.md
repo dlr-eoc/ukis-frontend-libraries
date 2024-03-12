@@ -1,4 +1,6 @@
-# [12.x.x](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2024-02-07) (services-map-state, map-ol, map-cesium and map-maplibre)
+# [12.x.x]() () (services-map-state, map-ol, map-cesium and map-maplibre)
+
+
 ### Features
 * **@dlr-eoc/services-map-state:**
   - Added viewAngle and rotation to mapState [Issue #216](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/216).
@@ -11,6 +13,7 @@
 * **@dlr-eoc/map-cesium:**
   - Adding support for mapState viewAngle and rotation
   - Added flyTo options for `setViewAngle` and `setRotation`
+  - Added flyTo options for `setNadirViewAngle` - This can be useful if you switch the map to a 2D view and want to reset the `ViewAngle` before.
 
  * **@dlr-eoc/map-maplibre:**
   - Adding support for mapState viewAngle and rotation 

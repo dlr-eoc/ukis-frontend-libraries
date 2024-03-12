@@ -3,9 +3,8 @@ import { LayersService, Layer, WmtsLayer, RasterLayer, CustomLayer, WmsLayer, Ve
 import { MapStateService, IMapState } from '@dlr-eoc/services-map-state';
 
 import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@dlr-eoc/base-layers-raster';
-import { ICesiumControls } from '@dlr-eoc/map-cesium';
+import { ICesiumControls, MapCesiumService } from '@dlr-eoc/map-cesium';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import olMap from 'ol/Map';
 import { Cesium3DTileset, CesiumTerrainProvider, Credit, EllipsoidTerrainProvider, I3SDataProvider, createGooglePhotorealistic3DTileset } from '@cesium/engine';
 import testData from '@dlr-eoc/shared-assets/geojson/test.json';
 import { Feature } from 'ol';
@@ -20,6 +19,7 @@ import { Fill, Stroke, Style } from 'ol/style';
   providers: [
     MapStateService,
     MapOlService,
+    MapCesiumService,
     {
       provide: 'twoDlayerSvc', useClass: LayersService
     }, {
@@ -48,7 +48,8 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     @Inject('twoDlayerSvc') public twoDlayerSvc: LayersService,
     @Inject('threeDlayerSvc') public threeDlayerSvc: LayersService,
     public mapOlSvc: MapOlService,
-    public mapStateSvc: MapStateService
+    public mapStateSvc: MapStateService,
+    public mapCesiumSvc: MapCesiumService
   ) {
     this.controls = {
       infoBox: true,
@@ -310,21 +311,11 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     if (this.is2dMap) {
       this.is2dMap = false;
     } else {
-      // If there is no set view angle, the flyTo is not necessary
-      if (this.mapStateSvc.getMapState().getValue().viewAngle != 0) {
-        this.mapStateSvc.setViewAngle(0.01);
-        // Wait for the cesim flyTo function to finish
-        setTimeout(() => {
-          //the openlayers map needs to be fully resetted, to avoid an error with the map controls
-          this.mapOlSvc.map = new olMap({});
+      this.mapCesiumSvc.setNadirViewAngle({
+        complete: () => {
           this.is2dMap = true;
-        }, 1500);
-      } else {
-        this.mapOlSvc.map = new olMap({});
-        this.is2dMap = true;
-      }
-
-
+        }
+      });
     }
   }
 

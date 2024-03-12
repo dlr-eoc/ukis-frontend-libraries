@@ -244,8 +244,22 @@ export class MapCesiumService {
     this.viewer.camera.flyTo(flyToOptions)
   }
 
-  public setNadirViewAngle() {
-    this.setViewAngle(0);
+  /**
+   * @param options of viewer.camera.flyTo
+   */
+  public setNadirViewAngle(options?: any) {
+    if (this.getViewAngle() !== 0) {
+      if (options) {
+        this.setViewAngle(0, options);
+      } else {
+        this.setViewAngle(0);
+      }
+    }else{
+      // If view angle is 0, setViewAngle(0) (flyTo) is not necessary
+      if(options.complete && typeof options.complete === 'function'){
+        options.complete();
+      }
+    }
   }
 
   //add 90°, to get the same behavior as in openlayers
@@ -272,7 +286,7 @@ export class MapCesiumService {
 
     this.viewer.camera.flyTo(flyToOptions)
   }
-// subtract rotation degree from 360° to get the same behavior as in openlayers
+  // subtract rotation degree from 360° to get the same behavior as in openlayers
   public getRotation():number{
     return 360 - CesiumMath.toDegrees(this.viewer.camera.heading);
   }
