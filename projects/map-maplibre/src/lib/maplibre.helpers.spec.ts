@@ -1,4 +1,4 @@
-import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification, setBearing, setPitch, getBearing } from './maplibre.helpers';
+import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification, setRotation, setPitch, getRotation } from './maplibre.helpers';
 import { StyleSpecification, LayerSpecification, SourceSpecification, Map as glMap } from 'maplibre-gl';
 import { CustomLayer } from '@dlr-eoc/services-layers';
 import { addUkisLayerMetadata } from './maplibre-layers.helpers';
@@ -522,9 +522,9 @@ describe('MaplibreHelpers', () => {
     it('should set/get rotation and view angle', () => {
       const rotation = 45;
       const viewAngle = 45;
-      setBearing(map,rotation);
+      setRotation(map,rotation);
       setPitch(map, viewAngle);
-      expect(getBearing(map)).toBe(rotation);
+      expect(getRotation(map)).toBe(rotation);
       expect(map.getPitch()).toBe(viewAngle);
     });
 

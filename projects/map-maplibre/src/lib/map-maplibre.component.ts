@@ -1,6 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Dispatcher, Evented } from 'maplibre-gl';
-import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, UKIS_METADATA, changeOrderOfLayers, setBearing, setPitch, getBearing } from './maplibre.helpers';
+import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, UKIS_METADATA, changeOrderOfLayers, setRotation, setPitch, getRotation } from './maplibre.helpers';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } from '@dlr-eoc/services-layers';
@@ -242,7 +242,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     const latLng = this.map.getCenter();
     const extent = getExtent(this.map, true);
     const viewAngle = this.map.getPitch();
-    const rotation = getBearing(this.map);
+    const rotation = getRotation(this.map);
 
     const newCenter = { lat: latLng.lat, lon: latLng.lng };
     const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time, viewAngle, rotation);
@@ -286,10 +286,10 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
       } else if (lastAction === 'setState') {
         setZoom(this.map, mapState.zoom, mapState.options.notifier);
         setCenter(this.map, [mapState.center.lon, mapState.center.lat], true);
-        setBearing(this.map, mapState.rotation);
+        setRotation(this.map, mapState.rotation);
         setPitch(this.map, mapState.viewAngle);
       } else if (lastAction === 'setRotation') {
-        setBearing(this.map, mapState.rotation);
+        setRotation(this.map, mapState.rotation);
       } else if (lastAction === 'setAngle') {
         setPitch(this.map, mapState.viewAngle);
       }

@@ -60,9 +60,14 @@ export function setPitch(map: glMap, pitch: number) {
   //default maxPitch is 60°
   map.setPitch(pitch);
 }
-export function setBearing(map: glMap, rotation: number) {
-  // bearing is defined from -180° to 180°, rotation from 0° to 360°
-  // subtract rotation degree from 360° or change sign to get the same behavior as in openlayers
+/**
+ * @param rotation - Sets the map's rotation (bearing)
+ * bearing is defined from -180° to 180°, rotation from 0° to 360°
+ * This subtracts rotation degrees from 360° or changes the sign to get the same behavior as in OpenLayers.
+ * 
+ * https://github.com/maplibre/maplibre-gl-js/blob/adc7f17061f1aca261c307fcfa2e3e4f2390ef45/src/ui/camera.ts#L505
+ */
+export function setRotation(map: glMap, rotation: number) {
   let bearing = 0;
   if(rotation > 180){
     bearing = 360 - rotation;
@@ -72,9 +77,11 @@ export function setBearing(map: glMap, rotation: number) {
   map.setBearing(bearing);
 }
 
-export function getBearing(map: glMap):number {
-  // bearing is defined from -180° to 180°, rotation from 0° to 360°
-  // subtract bearing degree from 360° or change sign to get the same behavior as in openlayers
+/**
+ * @returns rotation from 0° to 360° (bearing is defined from -180° to 180°) 
+ * subtract bearing degree from 360° or change sign to get the same behavior as in openlayers
+ */
+export function getRotation(map: glMap):number {
   let rotation = 0;
   const bearing = map.getBearing();
   if (bearing > 0){

@@ -6,7 +6,7 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { Map } from 'maplibre-gl';
 import { EocBasemapTile, OsmTileLayer, EocBaseoverlayTile } from '@dlr-eoc/base-layers-raster';
-import { getBearing } from './maplibre.helpers';
+import { getRotation } from './maplibre.helpers';
 
 
 function addSomeLayers(component: MapMaplibreComponent, mapSvc: MapMaplibreService) {
@@ -82,7 +82,7 @@ describe('MapMaplibreComponent', () => {
   it('should set mapstate rotation', () => {
     //set rotation to 90°
     component.mapStateSvc.setRotation(90);
-    expect(getBearing(component.map)).toEqual(90);
+    expect(getRotation(component.map)).toEqual(90);
   });
 
   it('should set mapstate view angle', () => {
