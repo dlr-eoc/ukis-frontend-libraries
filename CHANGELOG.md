@@ -6,6 +6,7 @@
   - Test for incorrect values in setters
 
 * **@dlr-eoc/map-ol:**
+  - Adding support for mapState rotation [#216](e04b42fd62c4b66fc21920a514da1375bb297a11)
 
 * **@dlr-eoc/map-cesium:**
   - Adding support for mapState viewAngle and rotation
