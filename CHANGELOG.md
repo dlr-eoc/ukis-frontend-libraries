@@ -21,6 +21,7 @@
 
 * **@dlr-eoc/map-cesium:**
   - Fix get entity.name for infoBox in none GeoJson layers
+  - Get camera view and set `Mapstate` before destroy to preserve the last state for switching maps.
   
 # [12.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2023-12-12) (map-ol, map-cesium and map-maplibre)
 ### Breaking Changes

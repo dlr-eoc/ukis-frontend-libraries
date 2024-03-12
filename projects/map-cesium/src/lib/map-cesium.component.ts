@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 
-import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
+import { IMapStateOptions, MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription, Subject } from 'rxjs';
 import { filter, skip } from 'rxjs/operators';
 import { MapCesiumService } from './map-cesium.service';
 import { LayersService, Layer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 import { Viewer } from '@cesium/widgets';
-import { GeoJsonDataSource, ScreenSpaceEventHandler, ScreenSpaceEventType } from '@cesium/engine';
+import { GeoJsonDataSource } from '@cesium/engine';
 
 
 export interface ICesiumControls {
@@ -76,7 +76,6 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /** Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component */
     const oldMapState = this.mapStateSvc.getMapState().getValue();
-    oldMapState.options.notifier = 'user';
     this.setMapState(oldMapState);
     // set viewAngle and rotation seperatly again, as their values are not set by the viewer the first time
     this.mapSvc.setViewAngle(oldMapState.viewAngle);
@@ -92,8 +91,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Set the last MapState on Destroy. When the component is reinitialized, this MapState is used
      */
-    const lastMapState = this.mapStateSvc.getMapState().value;
-    lastMapState.options.notifier = 'user';
+    const lastMapState = this.calcMapStateFromCamera('user');
     this.mapStateSvc.setMapState(lastMapState);
 
     /** clean up all events on destroy */
@@ -172,16 +170,22 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private subscribeToMapEvents() {
+  private calcMapStateFromCamera(notifier: IMapStateOptions['notifier']){
+    const time = this.mapStateSvc.getMapState().getValue().time;
+    const zoom = this.mapSvc.getZoom();
+    const newCenter = this.mapSvc.getCenter();
+    const extent = this.mapSvc.getCurrentExtent();
+    const viewAngle = this.mapSvc.getViewAngle();
+    const rotation = this.mapSvc.getRotation();
+    return new MapState(zoom, newCenter, { notifier }, extent, time, viewAngle, rotation);
+  }
 
+  private subscribeToMapEvents() {
+    // https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L223-L224
+    // The amount the camera has to change before the event is raised is 0.5
+    // this.viewer.camera.percentageChanged = 0.1;
     this.viewer.camera.changed.addEventListener((evt) => {
-      const time = this.mapStateSvc.getMapState().getValue().time;
-      const zoom = this.mapSvc.getZoom();
-      const newCenter = this.mapSvc.getCenter();
-      const extent = this.mapSvc.getCurrentExtent();
-      const viewAngle = this.mapSvc.getViewAngle();
-      const rotation = this.mapSvc.getRotation();
-      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, time, viewAngle, rotation);
+      const ms = this.calcMapStateFromCamera('map');
       this.mapStateSvc.setMapState(ms);
     });
 
