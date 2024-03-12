@@ -89,7 +89,9 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    /**
+     * Set the last MapState on Destroy. When the component is reinitialized, this MapState is used
+     */
     const lastMapState = this.mapStateSvc.getMapState().value;
     lastMapState.options.notifier = 'user';
     this.mapStateSvc.setMapState(lastMapState);

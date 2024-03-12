@@ -52,6 +52,10 @@ export function getZoom(map: glMap, notifier?: 'map' | 'user') {
     return map.getZoom();
 }
 
+/**
+ * @param pitch - The pitch to set, measured in degrees away from the plane of the screen (0-60).
+ * https://github.com/maplibre/maplibre-gl-js/blob/adc7f17061f1aca261c307fcfa2e3e4f2390ef45/src/ui/camera.ts#L616C15-L616C102
+ */
 export function setPitch(map: glMap, pitch: number) {
   //default maxPitch is 60°
   map.setPitch(pitch);

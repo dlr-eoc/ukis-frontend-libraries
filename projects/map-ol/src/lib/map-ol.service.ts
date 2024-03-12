@@ -2345,8 +2345,12 @@ export class MapOlService {
     return (transfomExtent as TGeoExtent);
   }
 
-  /** USED in map-ol.component */
-  /** ol.Coordinate xy */
+  /** 
+   * USED in map-ol.component
+   * ol.Coordinate xy
+   * 
+   * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L1707 
+   */
   public setCenter(center: number[], geographic?: boolean): number[] {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const transfomCenter = transform(center, projection, this.getProjection().getCode());
@@ -2395,7 +2399,12 @@ export class MapOlService {
     return (transfomExtent as TGeoExtent);
   }
 
-   /** USED in map-ol.component */
+   /** 
+    * USED in map-ol.component
+    * 
+    * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L291
+    * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L1707
+    */
    public setRotation(rotation: number) {
     const view = this.map.getView();
     // convert rotation vom deg to rad
