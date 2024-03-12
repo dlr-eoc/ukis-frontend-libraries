@@ -59,7 +59,7 @@ export class RouteMapComponent implements OnInit {
   }
   resetRotation() {
     /** set map rotation with the MapStateService, due to the rotation constraint small numbers are snapped to 0 */
-    this.mapStateSvc.setRotation(0.01);
+    this.mapStateSvc.setRotation(0);
   }
 
   parseCapabilities() {

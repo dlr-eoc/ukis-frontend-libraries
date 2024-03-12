@@ -327,21 +327,22 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
 
     }
   }
+
   setViewAngle() {
     /** set map rotation with the MapStateService */
     this.mapStateSvc.setViewAngle(45);
   }
   resetViewAngle() {
     /** set map rotation with the MapStateService */
-    this.mapStateSvc.setViewAngle(0.01);
+    this.mapStateSvc.setViewAngle(0);
   }
   setRotation() {
     /** set map rotation with the MapStateService */
-    this.mapStateSvc.setRotation(90);
+    this.mapStateSvc.setRotation(10);
   }
   resetRotation() {
     /** set map rotation with the MapStateService, due to the rotation constraint small numbers are snapped to 0 */
-    this.mapStateSvc.setRotation(0.01);
+    this.mapStateSvc.setRotation(0);
   }
 }
 

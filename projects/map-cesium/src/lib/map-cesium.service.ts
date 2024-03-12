@@ -245,7 +245,7 @@ export class MapCesiumService {
   }
 
   public setNadirViewAngle() {
-    this.setViewAngle(0.01);
+    this.setViewAngle(0);
   }
 
   //add 90°, to get the same behavior as in openlayers
