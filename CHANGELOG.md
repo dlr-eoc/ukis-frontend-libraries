@@ -11,6 +11,10 @@
   - Adding support for mapState viewAngle and rotation
  * **@dlr-eoc/map-maplibre:**
   - Adding support for mapState viewAngle and rotation 
+
+### Bug Fixes
+ * **@dlr-eoc/map-maplibre:**
+  - Fix wrong coordinate order from `getExtent` [#216](7ff01801fd3af594aaa34b2479e921be88894dbe)
   
 # [12.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2023-12-12) (map-ol, map-cesium and map-maplibre)
 ### Breaking Changes
