@@ -6,9 +6,11 @@
   - Test for incorrect values in setters
 
 * **@dlr-eoc/map-ol:**
-  - Adding support for mapState rotation  
+
 * **@dlr-eoc/map-cesium:**
   - Adding support for mapState viewAngle and rotation
+  - Added flyTo options for `setViewAngle` and `setRotation`
+
  * **@dlr-eoc/map-maplibre:**
   - Adding support for mapState viewAngle and rotation 
 

@@ -223,17 +223,25 @@ export class MapCesiumService {
     return extent;
   }
 
-  // Set initial oblique view, see https://cesium.com/learn/cesiumjs/ref-doc/Camera.html
-  //subtract 90°, to get the same behavior as in openlayers
-  public setViewAngle(viewAngle: number) {
-    this.viewer.camera.flyTo({
+  /**
+    *  Set initial oblique view, see https://cesium.com/learn/cesiumjs/ref-doc/Camera.html
+    *  subtract 90°, to get the same behavior as in openlayers
+    *  options of viewer.camera.flyTo`
+    * 
+    * https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L1457
+    * https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L3540-L3541
+    */
+  public setViewAngle(viewAngle: number, options?: any) {
+    const flyToOptions = Object.assign({
       destination: this.viewer.camera.position,
       orientation: {
         heading: this.viewer.camera.heading,
-        pitch: CesiumMath.toRadians(viewAngle-90),
+        pitch: CesiumMath.toRadians(viewAngle - 90),
         roll: this.viewer.camera.roll,
       },
-  });
+    }, options || {});
+
+    this.viewer.camera.flyTo(flyToOptions)
   }
 
   public setNadirViewAngle() {
@@ -244,16 +252,25 @@ export class MapCesiumService {
   public getViewAngle():number{
     return CesiumMath.toDegrees(this.viewer.camera.pitch) + 90;
   }
-// subtract rotation degree from 360° to get the same behavior as in openlayers
-  public setRotation(rotation: number) {
-    this.viewer.camera.flyTo({
+
+  /**
+    *  subtract rotation degree from 360° to get the same behavior as in openlayers
+    *  options of viewer.camera.flyTo`
+    * 
+    * https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L3424
+    * https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L1456
+    */
+  public setRotation(rotation: number, options?: any) {
+    const flyToOptions = Object.assign({
       destination: this.viewer.camera.position,
       orientation: {
-        heading: CesiumMath.toRadians(360-rotation),
+        heading: CesiumMath.toRadians(360 - rotation),
         pitch: this.viewer.camera.pitch,
         roll: this.viewer.camera.roll,
       },
-  });
+    }, options || {});
+
+    this.viewer.camera.flyTo(flyToOptions)
   }
 // subtract rotation degree from 360° to get the same behavior as in openlayers
   public getRotation():number{
