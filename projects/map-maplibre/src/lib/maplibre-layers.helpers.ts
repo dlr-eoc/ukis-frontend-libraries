@@ -1,6 +1,6 @@
 import {
     CircleLayerSpecification, FillLayerSpecification, GeoJSONFeature, GeoJSONSourceSpecification, LayerSpecification, Map as glMap,
-    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, GeoJSONSource
+    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, FilterSpecification
 } from "maplibre-gl";
 import {
     RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
@@ -572,10 +572,10 @@ export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
         }
     } */
 
-
     /* if(oldSource.type === 'image'){
         oldSource.updateImage()
-      } */
+    } */
+
     const oldSourceSpec = map.getStyle().sources[layer.id];
     if (oldSourceSpec) {
         const allLayers = getAllLayers(map);
@@ -594,13 +594,109 @@ export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
             });
             map.removeSource(layer.id);
 
-            console.log('update source', newSourceSpec);
+            console.log('update source', layer.id, newSourceSpec);
             map.addSource(layer.id, newSourceSpec);
             layersWhitSource.forEach(l => {
                 map.addLayer(l);
-                console.log('update layer for source', l.id);
+                // console.log('update layer for source', l.id);
             });
         }
+    }
+}
+
+export function updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer) {
+    // https://maplibre.org/maplibre-style-spec/layers/#layer-properties
+    // paint -> map.setPaintProperty(l.id...)
+    // layout -> map.setLayoutProperty(l.id...)
+    // maxzoom/minzoom -> map.setLayerZoomRange(l.id...)
+    // filter -> map.setFilter(l.id...)
+    // source -> mllayer.source =
+    // source-layer -> mllayer.sourceLayer =
+    // metadata -> TODO
+
+    const newLS = createLayer(layer);
+    const newStyleLayer = newLS.layers.find(l => l.id === mllayer.id);
+
+    if (newStyleLayer) {
+
+        type TlayerProp = keyof LayerSpecification;
+        Object.entries(newStyleLayer).map((p: [TlayerProp | 'filter' | 'source' | 'source-layer', any]) => {
+            const propKey = p[0];
+            const value = p[1];
+            switch (propKey) {
+                case 'paint':
+                    const diff = Object.entries(value as LayerSpecification['paint']).map(item => {
+                        const key = item[0];
+                        // Set opacity only if it is not ignored in a custom layer. Here we do not need to check for UKIS_METADATA.ignoreOpacity like on setOpacity because it is set in -> createLayer(layer) -> createCustomLayer
+                        const oldProp = mllayer.getPaintProperty(key);
+                        const newProp = item[1];
+                        if (oldProp !== newProp) {
+                            // https://github.com/maplibre/maplibre-gl-js/issues/3001
+                            // map.setPaintProperty(mllayer.id, key, newProp);
+                            // map.style.setPaintProperty(mllayer.id, key, newProp);
+
+                            return true;
+                        } else {
+                            false;
+                        }
+                    }).filter(i => i === true);
+
+                    if (diff.length) {
+                        map.removeLayer(mllayer.id);
+                        map.addLayer(newStyleLayer);
+                    }
+
+                    break;
+                case 'layout':
+                    type TlayoutProps = keyof LayerSpecification['layout'];
+                    // Set visibility only if it is not ignored in a custom layer. Here we do not need to check for UKIS_METADATA.ignoreVisibility] like on setVisibility because it is set in -> createLayer(layer) -> createCustomLayer
+                    Object.entries(value).forEach((item: [TlayoutProps, any]) => {
+                        const key = item[0];
+                        const oldProp = mllayer.getLayoutProperty(key);
+                        const newProp = item[1];
+                        if (oldProp !== newProp) {
+                            map.setLayoutProperty(mllayer.id, key, newProp);
+                        }
+                    })
+                    break;
+                case 'maxzoom':
+                    if (mllayer.maxzoom !== value) {
+                        map.setLayerZoomRange(mllayer.id, mllayer.minzoom, value as number);
+                    }
+                    break;
+                case 'minzoom':
+                    if (mllayer.minzoom !== value) {
+                        map.setLayerZoomRange(mllayer.id, value as number, mllayer.maxzoom);
+                    }
+                    break;
+                case 'filter':
+                    const newFilter = value as FilterSpecification;
+                    let filterChnanged = false;
+                    if (newFilter) {
+                        const oldFilter = mllayer.filter;
+                        if (oldFilter) {
+                            filterChnanged = !propsEqual(oldFilter as never, newFilter as never);
+                        } else {
+                            filterChnanged = true
+                        }
+
+                        if (newStyleLayer.type !== 'background' && filterChnanged) {
+                            map.setFilter(mllayer.id, value as FilterSpecification);
+                        }
+                    }
+                    break;
+                case 'source':
+                    if (mllayer.source !== value) {
+                        mllayer.source = value;
+                    }
+                    break;
+                case 'source-layer':
+                    if (mllayer.sourceLayer !== value) {
+                        mllayer.sourceLayer = value;
+                    }
+                    break;
+            }
+        });
     }
 }
 
