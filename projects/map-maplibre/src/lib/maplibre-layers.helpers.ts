@@ -438,7 +438,10 @@ export function createCustomLayer(l: ukisCustomLayer) {
 
     const layers: LayerSpecification[] = style.layers;
     layers.forEach(ls => {
-        ls.id = `${ls.id}:${l.id}`;
+        // add l.id only if not already added
+        if (ls.id.indexOf(l.id) === -1) {
+            ls.id = `${ls.id}:${l.id}`;
+        }
         ls.metadata = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
 
         // Set visibility only if it is not ignored in a custom layer.
@@ -496,7 +499,10 @@ export function createStackedLayer(l: StackedLayer) {
         // This has to be done like for a custom layer, so only one mlLayer exists for the stack.
         layersStyles.forEach(lsGroup => {
             lsGroup.layers.forEach(ls => {
-                ls.id = `${ls.id}:${l.id}`;
+                // add l.id only if not already added
+                if (ls.id.indexOf(l.id) === -1) {
+                    ls.id = `${ls.id}:${l.id}`;
+                }
                 ls.metadata = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
                 layers.push(ls);
             });
