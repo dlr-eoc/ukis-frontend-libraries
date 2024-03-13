@@ -10,7 +10,9 @@ type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
 export const UKIS_METADATA = {
     layerID: 'ukis:layerID',
-    filtertype: 'ukis:filtertype'
+    filtertype: 'ukis:filtertype',
+    ignoreOpacity: 'ukis:ignore-opacity',
+    ignoreVisibility: 'ukis:ignore-visibility',
 };
 
 

@@ -443,7 +443,7 @@ export function createCustomLayer(l: ukisCustomLayer) {
 
         // Set visibility only if it is not ignored in a custom layer.
         // Allow hidden or always visible layers in a custom layer.
-        const ignoreVisibility = ls.metadata?.['ukis:ignore-visibility']
+        const ignoreVisibility = ls.metadata?.[UKIS_METADATA.ignoreVisibility]
         if (!ignoreVisibility) {
             if (!ls.layout) {
                 ls.layout = {};
@@ -453,7 +453,7 @@ export function createCustomLayer(l: ukisCustomLayer) {
 
         const opacityPaintProperty = (ls.paint) ? getOpacityPaintProperty(ls.type) : null;
         // Set the opacity only if it is not ignored in a custom layer.
-        const ignoreOpacity = ls.metadata?.['ukis:ignore-opacity']
+        const ignoreOpacity = ls.metadata?.[UKIS_METADATA.ignoreOpacity]
         if (opacityPaintProperty && !ignoreOpacity) {
             if (!ls.paint) {
                 ls.paint = {};

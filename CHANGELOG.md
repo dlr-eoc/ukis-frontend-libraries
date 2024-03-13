@@ -17,6 +17,7 @@
 
  * **@dlr-eoc/map-maplibre:**
   - Adding support for mapState viewAngle and rotation 
+  - Added new `UKIS_METADATA.ignoreOpacity` and `UKIS_METADATA.ignoreVisibility` which can be used in `CustomLayer` to prevent changing the opacity or visibility for some layers.
 
 ### Bug Fixes
  * **@dlr-eoc/map-maplibre:**

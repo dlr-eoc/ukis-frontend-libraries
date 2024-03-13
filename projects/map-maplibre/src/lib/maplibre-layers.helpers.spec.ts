@@ -293,13 +293,13 @@ describe('MaplibreLayerHelpers', () => {
         // set ignore-visibility
         const customLayer_1 = ukisCustom.custom_layer.layers[1];
         customLayer_1.metadata = {
-            ['ukis:ignore-visibility']: true,
-            ['ukis:ignore-opacity']: true
+            [UKIS_METADATA.ignoreVisibility]: true,
+            [UKIS_METADATA.ignoreOpacity]: true
         };
         const styleSpec = createCustomLayer(ukisCustom);
 
         const layer_1 = styleSpec.layers[1];
-        expect(layer_1.metadata['ukis:ignore-visibility']).toBe(true);
+        expect(layer_1.metadata[UKIS_METADATA.ignoreVisibility]).toBe(true);
         expect(layer_1.layout.visibility).toBe(customLayer_1.layout.visibility);
 
         const opacityPaintProperty = getOpacityPaintProperty(layer_1.type);
@@ -308,8 +308,8 @@ describe('MaplibreLayerHelpers', () => {
         }
 
         // remove ignore-visibility
-        delete customLayer_1.metadata['ukis:ignore-visibility'];
-        delete customLayer_1.metadata['ukis:ignore-opacity'];
+        delete customLayer_1.metadata[UKIS_METADATA.ignoreVisibility];
+        delete customLayer_1.metadata[UKIS_METADATA.ignoreOpacity];
     });
 
 

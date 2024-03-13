@@ -333,7 +333,8 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
             },
             // ignore set visibility on ukisLayer change
             "metadata": {
-              "ukis:ignore-visibility": true
+              "ukis:ignore-visibility": true,
+              "ukis:ignore-opacity": true
             }
           },
           {
