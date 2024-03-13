@@ -331,6 +331,12 @@ describe('MapOlComponent', () => {
     expect(component.map.getSize()).toEqual(mapSize);
   });
 
+  it('should set mapstate rotation', () => {
+    //set rotation to 90°
+    component.mapStateSvc.setRotation(90);
+    expect(mapSvc.getRotation()).toEqual(90);
+  });
+
   it('should have a three olLayerGroups', () => {
     expect(component.map.getLayers().getLength()).toEqual(3);
     expect(mapSvc.getLayerGroups().length).toEqual(3);
@@ -427,7 +433,7 @@ describe('MapOlComponent', () => {
 
     const layers = [ukisOlLayerGroup, testVector, ukisOlLayerGroup2];
 
-    // trigger update of layers 
+    // trigger update of layers
     component['addUpdateLayers'](layers, 'layers', ['baselayers']);
 
     const osmFromMap = mapSvc.getLayerByKey({ key: 'id', value: osmLayer.id });

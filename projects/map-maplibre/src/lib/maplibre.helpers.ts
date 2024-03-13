@@ -24,7 +24,7 @@ export function setExtent(map: glMap, extent: TGeoExtent, geographic?: boolean, 
 
 export function getExtent(map: glMap, geographic?: boolean): TGeoExtent {
     const newbounds = map.getBounds();
-    const newExtent = [newbounds.getSouth(), newbounds.getWest(), newbounds.getNorth(), newbounds.getEast()] as TGeoExtent;
+    const newExtent = [newbounds.getWest(), newbounds.getSouth(), newbounds.getEast(), newbounds.getNorth()] as TGeoExtent;
     return newExtent;
 }
 
@@ -52,6 +52,45 @@ export function getZoom(map: glMap, notifier?: 'map' | 'user') {
     return map.getZoom();
 }
 
+/**
+ * @param pitch - The pitch to set, measured in degrees away from the plane of the screen (0-60).
+ * https://github.com/maplibre/maplibre-gl-js/blob/adc7f17061f1aca261c307fcfa2e3e4f2390ef45/src/ui/camera.ts#L616C15-L616C102
+ */
+export function setPitch(map: glMap, pitch: number) {
+  //default maxPitch is 60°
+  map.setPitch(pitch);
+}
+/**
+ * @param rotation - Sets the map's rotation (bearing)
+ * bearing is defined from -180° to 180°, rotation from 0° to 360°
+ * This subtracts rotation degrees from 360° or changes the sign to get the same behavior as in OpenLayers.
+ * 
+ * https://github.com/maplibre/maplibre-gl-js/blob/adc7f17061f1aca261c307fcfa2e3e4f2390ef45/src/ui/camera.ts#L505
+ */
+export function setRotation(map: glMap, rotation: number) {
+  let bearing = 0;
+  if(rotation > 180){
+    bearing = 360 - rotation;
+  }else{
+    bearing = -rotation;
+  }
+  map.setBearing(bearing);
+}
+
+/**
+ * @returns rotation from 0° to 360° (bearing is defined from -180° to 180°) 
+ * subtract bearing degree from 360° or change sign to get the same behavior as in openlayers
+ */
+export function getRotation(map: glMap):number {
+  let rotation = 0;
+  const bearing = map.getBearing();
+  if (bearing > 0){
+    rotation = 360 - bearing;
+  } else if(bearing < 0){
+    rotation = -bearing;
+  }
+  return rotation;
+}
 
 export function setVisibility(map: glMap, layerOrId: string | TypedStyleLayer, visibility: boolean, cb?: () => void) {
     let mllayer;
@@ -273,8 +312,8 @@ export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) 
 
             /**
              * https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#movelayer
-             * The ID of an existing layer to insert the new layer before. 
-             * When viewing the map, layer.id will appear beneath the beforeId layer. 
+             * The ID of an existing layer to insert the new layer before.
+             * When viewing the map, layer.id will appear beneath the beforeId layer.
              * If beforeId is omitted, the layer will be appended to the end of the layers array and appear above all other layers on the map.
              */
             const beforeIndex = index + 1;
@@ -322,10 +361,10 @@ export function changeOrderOfLayer(map: glMap, layerChange: { layerId: string, b
         const beforeMapLayers = getLayersAndSources(map, layerChange.beforeId).layers;
         /* const layerMapLayers = getFirstAndLastLayer(map, layerChange.layerId);
         const beforeMapLayers = getFirstAndLastLayer(map, layerChange.beforeId); */
-        /** 
+        /**
          * if the layer before the one to be moved has several layers, move the layer on beforeMapLayers[0]
          * If there is no layer before, move it to the top.
-         * 
+         *
          * https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#movelayer
          * -  If beforeId is omitted, the layer will be appended to the end of the layers array... -
          */
@@ -361,7 +400,7 @@ export function changeOrderOfLayer(map: glMap, layerChange: { layerId: string, b
                 map.moveLayer(layer.id)
             }
         } else {
-            // layerMapLayers.length === 0 
+            // layerMapLayers.length === 0
             // there is nothing to move
         }
     }

@@ -158,7 +158,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         if (!this.initialMapStateSet) {
           /**
            * If container size and map size are equal (map size 'stable')
-           * Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit 
+           * Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit
            * Update map size before so view.fit can calculate correct center
            */
           const oldMapState = this.mapStateSvc.getMapState().getValue();
@@ -468,6 +468,9 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       } else if (lastAction === 'setState') {
         this.mapSvc.setZoom(mapState.zoom);
         this.mapSvc.setCenter([mapState.center.lon, mapState.center.lat], true);
+        this.mapSvc.setRotation(mapState.rotation);
+      } else if (lastAction === 'setRotation') {
+        this.mapSvc.setRotation(mapState.rotation);
       }
     }
     /* else if (mapState.options.notifier === 'map') {
@@ -489,9 +492,10 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       const zoom = this.mapSvc.getZoom();
       const center = this.mapSvc.getCenter(true);
       const extent = this.mapSvc.getCurrentExtent(true);
+      const rotation = this.mapSvc.getRotation();
 
       const newCenter = { lat: parseFloat(center[1]), lon: parseFloat(center[0]) };
-      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time);
+      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time, oldMapState.viewAngle, rotation);
       this.mapStateSvc.setMapState(ms);
     };
     this.map.on('moveend', this.mapOnMoveend);

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 
-import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
+import { IMapStateOptions, MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription, Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, skip } from 'rxjs/operators';
 import { MapCesiumService } from './map-cesium.service';
 import { LayersService, Layer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 import { Viewer } from '@cesium/widgets';
@@ -26,8 +26,6 @@ export interface ICesiumControls {
   ionAccessToken?: string;
   //In the same way you can provide a personal key for Google Maps, https://cesium.com/learn/cesiumjs-learn/cesiumjs-photorealistic-3d-tiles/
   GoogleMapsApiKey?: string;
-  //Optional initial view angle in radians from the nadir view
-  viewAngle?: number;
   selectionIndicator?: boolean;
 }
 
@@ -79,17 +77,23 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component */
     const oldMapState = this.mapStateSvc.getMapState().getValue();
     this.setMapState(oldMapState);
-    if (this.controls.viewAngle) {
-      this.mapSvc.setViewAngle(this.controls.viewAngle);
-    }
-
+    // set viewAngle and rotation seperatly again, as their values are not set by the viewer the first time
+    this.mapSvc.setViewAngle(oldMapState.viewAngle);
+    this.mapSvc.setRotation(oldMapState.rotation);
     /** Subscribe to map events when the map is completely created  */
     this.subscribeToMapEvents();
     /** Subscribe to mapStateSvc */
     this.subscribeToMapState();
+
   }
 
   ngOnDestroy(): void {
+    /**
+     * Set the last MapState on Destroy. When the component is reinitialized, this MapState is used
+     */
+    const lastMapState = this.calcMapStateFromCamera('user');
+    this.mapStateSvc.setMapState(lastMapState);
+
     /** clean up all events on destroy */
     this.subs.forEach(s => s.unsubscribe());
     if (this.viewer?.scene?.primitives) {
@@ -100,6 +104,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.mapSvc.destroyLayerGrpoups();
   }
+
 
   private initMap() {
     if (this.timeInterval) {
@@ -139,25 +144,48 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private subscribeToMapState() {
     if (this.mapStateSvc) {
-      const mapStateOn = this.mapStateSvc.getMapState().pipe(filter(s => s.options.notifier === 'map')).subscribe(state => {
-        this.mapSvc.updateTime(state.time);
-      });
+      const mapStateOn = this.mapStateSvc.getMapState().pipe(skip(1)).subscribe(state => this.setMapState(state));
       this.subs.push(mapStateOn);
     }
   }
 
   private setMapState(mapState: MapState) {
-    this.mapSvc.setZoom(mapState.zoom, mapState.options.notifier);
-    this.mapSvc.setCenter(mapState.center);
+    const lastAction = this.mapStateSvc.getLastAction().getValue();
+    if (mapState.options.notifier === 'user') {
+      if (lastAction === 'setExtent') {
+        this.mapSvc.setExtent(mapState.extent, true);
+      } else if (lastAction === 'setState') {
+        this.mapSvc.setZoom(mapState.zoom);
+        this.mapSvc.setCenter(mapState.center);
+        this.mapSvc.setRotation(mapState.rotation);
+        this.mapSvc.setViewAngle(mapState.viewAngle);
+      } else if (lastAction === 'setRotation') {
+        this.mapSvc.setRotation(mapState.rotation);
+      } else if (lastAction === 'setAngle') {
+        this.mapSvc.setViewAngle(mapState.viewAngle);
+      }
+    }
+    else if (mapState.options.notifier === 'map') {
+      this.mapSvc.updateTime(mapState.time);
+    }
+  }
+
+  private calcMapStateFromCamera(notifier: IMapStateOptions['notifier']){
+    const time = this.mapStateSvc.getMapState().getValue().time;
+    const zoom = this.mapSvc.getZoom();
+    const newCenter = this.mapSvc.getCenter();
+    const extent = this.mapSvc.getCurrentExtent();
+    const viewAngle = this.mapSvc.getViewAngle();
+    const rotation = this.mapSvc.getRotation();
+    return new MapState(zoom, newCenter, { notifier }, extent, time, viewAngle, rotation);
   }
 
   private subscribeToMapEvents() {
-
-    this.viewer.camera.moveEnd.addEventListener(() => {
-      const zoom = this.mapSvc.getZoom();
-      const newCenter = this.mapSvc.getCenter();
-      const extent = this.mapSvc.getCurrentExtent();
-      const ms = new MapState(zoom, newCenter, { notifier: 'user' }, extent);
+    // https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L223-L224
+    // The amount the camera has to change before the event is raised is 0.5
+    // this.viewer.camera.percentageChanged = 0.1;
+    this.viewer.camera.changed.addEventListener((evt) => {
+      const ms = this.calcMapStateFromCamera('map');
       this.mapStateSvc.setMapState(ms);
     });
 
@@ -168,7 +196,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
       const titleDiv = this.viewer.infoBox.container.getElementsByClassName('cesium-infoBox-title')[0];
       titleDiv.innerHTML = 'Layer Attributes';
       if (entity) {
-        if(entity.entityCollection.owner instanceof GeoJsonDataSource){
+        if(entity.entityCollection?.owner instanceof GeoJsonDataSource){
           titleDiv.innerHTML = entity.entityCollection.owner.name;
           entity.name = entity.entityCollection.owner.name;
         }else{

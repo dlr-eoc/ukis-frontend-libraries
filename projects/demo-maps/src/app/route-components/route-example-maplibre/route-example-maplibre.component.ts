@@ -48,9 +48,13 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       lat: 47.41449812198263,
       lon: 11.7455863952639
     };
+    const rotation = 45;
+    const viewAngle = 60;
     this.mapStateSvc.setMapState({
       zoom,
-      center
+      center,
+      rotation,
+      viewAngle
     });
   }
 
@@ -87,8 +91,6 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
           exaggeration: exaggeration
         });
 
-        map.setBearing(-20);
-        map.setPitch(60);
         map.setMaxPitch(80);
 
         map.addControl(
@@ -103,7 +105,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
   }
 
   addBaselayers() {
-    // some of the fonts are not working 
+    // some of the fonts are not working
     greyscale.layers.forEach(l => {
       if (l?.layout?.['text-font']) {
         l.layout['text-font'] = l.layout['text-font'].filter(i => i !== 'Noto Sans Regular' && i !== 'Noto Sans Italic');
@@ -231,7 +233,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     const sentinel2Europe = new WmsLayer({
       name: 'Sentinel-2 Europe',
       id: 'sentinel2Europe',
-      visible: false,
+      visible: true,
       type: 'wms',
       removable: false,
       params: {
@@ -249,7 +251,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     const mosaic_hillshade = new WmsLayer({
       name: 'mosaic_hillshade',
       id: 'gmted2010_dsc075_mosaic_hillshade',
-      visible: true,
+      visible: false,
       type: 'wms',
       removable: false,
       params: {
@@ -551,7 +553,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       id: 'group_1',
       name: 'Raster Group',
       visible: false,
-      layers: [eocBasemap, osm, MODIS_EU_DAILY, sentinel2Europe],
+      layers: [eocBasemap, osm, MODIS_EU_DAILY, hillshade, mosaic_hillshade],
       description: 'This is a group with multiple raster layers',
       expanded: {
         tab: 'description'
@@ -560,7 +562,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     });
 
 
-    const layers = [groupLayer, hillshade, mosaic_hillshade, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
+    const layers = [groupLayer, ,sentinel2Europe, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
     layers.map(l => {
       if (l instanceof Layer) {
         this.layerSvc.addLayer(l, 'Layers');
@@ -629,7 +631,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       opacity: 1
     });
 
-    // some of the fonts are not working 
+    // some of the fonts are not working
     placeLabels.layers.forEach(l => {
       l.source = 'place-labels-planet_eoc';
       if (l?.layout?.['text-font']) {
@@ -712,6 +714,22 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       ]
     };
     this.layerSvc.updateLayer(layer);
+  }
+  setViewAngle() {
+    /** set map rotation with the MapStateService */
+    this.mapStateSvc.setViewAngle(45);
+  }
+  resetViewAngle() {
+    /** set map rotation with the MapStateService */
+    this.mapStateSvc.setViewAngle(0);
+  }
+  setRotation() {
+    /** set map rotation with the MapStateService */
+    this.mapStateSvc.setRotation(90);
+  }
+  resetRotation() {
+    /** set map rotation with the MapStateService, due to the rotation constraint small numbers are snapped to 0 */
+    this.mapStateSvc.setRotation(0);
   }
 
 }

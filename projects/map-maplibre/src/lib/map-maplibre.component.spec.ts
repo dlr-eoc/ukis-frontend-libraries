@@ -6,10 +6,11 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { Map } from 'maplibre-gl';
 import { EocBasemapTile, OsmTileLayer, EocBaseoverlayTile } from '@dlr-eoc/base-layers-raster';
+import { getRotation } from './maplibre.helpers';
 
 
 function addSomeLayers(component: MapMaplibreComponent, mapSvc: MapMaplibreService) {
-  /* 
+  /*
    * Unfortunately, component.subscribeToLayers() does not work in the test, so we have to add the layers manually instead of using layersSvc.
    */
   /**
@@ -29,8 +30,8 @@ function addSomeLayers(component: MapMaplibreComponent, mapSvc: MapMaplibreServi
 }
 
 /**
- *  Unfortunately running tests in watch with edit does not work 
- *  
+ *  Unfortunately running tests in watch with edit does not work
+ *
  * -> Async function did not complete within 5000ms
  */
 describe('MapMaplibreComponent', () => {
@@ -76,6 +77,18 @@ describe('MapMaplibreComponent', () => {
   it('should have a map and the map should be the same as from the mapSvc', () => {
     expect(component.map instanceof Map).toBeTruthy();
     expect(mapSvc.map.getValue()._mapId).toBe(component.map._mapId);
+  });
+
+  it('should set mapstate rotation', () => {
+    //set rotation to 90°
+    component.mapStateSvc.setRotation(90);
+    expect(getRotation(component.map)).toEqual(90);
+  });
+
+  it('should set mapstate view angle', () => {
+    //set view angle to 45°
+    component.mapStateSvc.setViewAngle(45);
+    expect(component.map.getPitch()).toEqual(45);
   });
 
   it('should add/update Layers to the style', () => {

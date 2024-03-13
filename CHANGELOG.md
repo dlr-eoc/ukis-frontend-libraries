@@ -1,3 +1,32 @@
+# [12.x.x]() () (services-map-state, map-ol, map-cesium and map-maplibre)
+
+
+### Features
+* **@dlr-eoc/services-map-state:**
+  - Added viewAngle and rotation to mapState [Issue #216](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/216).
+  - Added optional `notifier`  to `setTime` like in the setters  `setExtent`, `setViewAngle` or `setRotation`.
+  - Test for incorrect values in setters
+
+* **@dlr-eoc/map-ol:**
+  - Adding support for mapState rotation [#216](e04b42fd62c4b66fc21920a514da1375bb297a11)
+
+* **@dlr-eoc/map-cesium:**
+  - Adding support for mapState viewAngle and rotation
+  - Added flyTo options for `setViewAngle` and `setRotation`
+  - Added flyTo options for `setNadirViewAngle` - This can be useful if you switch the map to a 2D view and want to reset the `ViewAngle` before.
+
+ * **@dlr-eoc/map-maplibre:**
+  - Adding support for mapState viewAngle and rotation 
+
+### Bug Fixes
+ * **@dlr-eoc/map-maplibre:**
+  - Fix wrong coordinate order from `getExtent` [#216](7ff01801fd3af594aaa34b2479e921be88894dbe)
+  - Rename `set/getBearing` to `set/getRotation` because we want to have the same behavior as in openlayers and `set/getBearing` is expected differently in mapliebre
+
+* **@dlr-eoc/map-cesium:**
+  - Fix get entity.name for infoBox in none GeoJson layers
+  - Get camera view and set `Mapstate` before destroy to preserve the last state for switching maps.
+  
 # [12.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v12.0.0) (2023-12-12) (map-ol, map-cesium and map-maplibre)
 ### Breaking Changes
   - Update angular from `^14.2.11` to `^16.2.1` automatic migrations are made by ng update. See update angular from [14.0-15.0](https://update.angular.io/?l=3&v=14.0-15.0) and [14.0-15.0](https://update.angular.io/?l=3&v=15.0-16.0).

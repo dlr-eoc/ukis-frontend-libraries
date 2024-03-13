@@ -16,6 +16,10 @@ export interface IMapState {
   extent?: TGeoExtent;
   /** iso 8601 Datestring */
   time?: string;
+  /** from nadir in degrees */
+  viewAngle?: number;
+  /** from north in degrees */
+  rotation?: number;
 }
 
 /**
@@ -33,8 +37,12 @@ export class MapState implements IMapState {
   extent: TGeoExtent;
   /** iso 8601 Datestring */
   time: string;
+  /** from nadir in degrees */
+  viewAngle: number;
+  /** from north in degrees */
+  rotation: number;
 
-  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], time: string = new Date().toISOString()) {
+  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0) {
     const defaultOptions = {
       maxzoom: 0,
       minzoom: 0,
@@ -44,6 +52,8 @@ export class MapState implements IMapState {
     this.center = center;
     this.extent = extent;
     this.time = time;
+    this.viewAngle = viewAngle;
+    this.rotation = rotation;
     this.options = Object.assign(defaultOptions, options);
   }
 

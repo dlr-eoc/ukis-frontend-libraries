@@ -1570,6 +1570,15 @@ describe('MapOlService State', () => {
     expect(service.getCenter(true)[1]).toBeCloseTo(center[1], 1);
   });
 
+  it('should set/get rotation', () => {
+    const service: MapOlService = TestBed.inject(MapOlService);
+    service.createMap(mapTarget.container);
+    const rotation = 45;
+    service.setRotation(rotation);
+    expect(service.getRotation()).toBe(45);
+    // Rounding errors 47.99999999999997 to equal 48
+  });
+
   it('should have a default zoom of 0', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
