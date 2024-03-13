@@ -266,7 +266,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       opacity: 0.5
     });
 
-    const waterway = new CustomLayer({
+    const waterway = new CustomLayer<StyleSpecification>({
       id: 'waterway-planet_eoc',
       name: 'waterway',
       visible: true,
@@ -275,6 +275,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
         version: 8,
         // Use a different source for layers, to improve render quality
         sources: {
+           // The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109
           'waterway-planet_eoc': // 'planet_eoc':
           {
             "type": "vector",
@@ -563,7 +564,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     });
 
 
-    const layers = [groupLayer, ,sentinel2Europe, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
+    const layers = [groupLayer, sentinel2Europe, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
     layers.map(l => {
       if (l instanceof Layer) {
         this.layerSvc.addLayer(l, 'Layers');
@@ -639,7 +640,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
         l.layout['text-font'] = l.layout['text-font'].filter(i => i !== 'Noto Sans Regular' && i !== 'Noto Sans Italic');
       }
     });
-    const labels = new CustomLayer({
+    const labels = new CustomLayer<StyleSpecification>({
       id: 'place-labels-planet_eoc',
       name: 'Place Labels',
       visible: true,
@@ -648,6 +649,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
         version: 8,
         // Use a different source for layers, to improve render quality
         sources: {
+          // The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109
           'place-labels-planet_eoc':
           {
             "type": "vector",
@@ -661,7 +663,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
             ]
           }
         },
-        layers: placeLabels.layers
+        layers: placeLabels.layers as StyleSpecification['layers']
       }
     })
 
