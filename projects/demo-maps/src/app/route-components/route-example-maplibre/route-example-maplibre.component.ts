@@ -279,7 +279,6 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
           'waterway-planet_eoc': // 'planet_eoc':
           {
             "type": "vector",
-            "__Comment": "The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109",
             "url": "",
             "tiles": [
               "https://a.tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true",
@@ -653,7 +652,6 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
           'place-labels-planet_eoc':
           {
             "type": "vector",
-            "__Comment": "The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109",
             "url": "",
             "tiles": [
               "https://a.tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true",
@@ -718,6 +716,28 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     };
     this.layerSvc.updateLayer(layer);
   }
+
+  updateStyleLayer() {
+    const water = this.layerSvc.getLayerOrGroupById('waterway-planet_eoc') as CustomLayer<StyleSpecification>;
+    const layer0 = water.custom_layer.layers[0];
+    layer0.paint['fill-color'] = 'hsl(30, 14%, 53%)';
+    // layer0.maxzoom = 12;
+    
+    if (layer0.type !== 'background') {
+      layer0['source-layer'] = 'landuse'
+      /* layer0.filter = [
+        "all",
+        [
+          "==",
+          "$type",
+          "Polygon"
+        ]
+      ]; */
+    }
+
+    this.layerSvc.updateLayer(water);
+  }
+  
   setViewAngle() {
     /** set map rotation with the MapStateService */
     this.mapStateSvc.setViewAngle(45);
