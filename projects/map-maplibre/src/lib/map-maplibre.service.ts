@@ -4,8 +4,8 @@ import {
 } from '@dlr-eoc/services-layers';
 import { Map as glMap, StyleSpecification, TypedStyleLayer } from 'maplibre-gl';
 import { BehaviorSubject } from 'rxjs';
-import { LayerSourceSpecification, UKIS_METADATA, setOpacity, setVisibility } from './maplibre.helpers';
-import { createLayer, layerIsSupported, updateSource } from './maplibre-layers.helpers';
+import { LayerSourceSpecification, UKIS_METADATA } from './maplibre.helpers';
+import { createLayer, layerIsSupported, updateSource, updateStyleLayerProperties } from './maplibre-layers.helpers';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
@@ -201,22 +201,10 @@ export class MapMaplibreService {
      * - map.setFilter()
      * - map.setLayerZoomRange()
      */
-    // update visibility
-    // Set visibility only if it is not ignored in a custom layer.
-    const ignoreVisibility = mllayer.metadata['ukis:ignore-visibility'];
-    if (!ignoreVisibility) {
-      setVisibility(map, mllayer, layer.visible);
-    }
+    this.updateLayerParamsAndSource(map, mllayer, layer);
 
-
-    // update opacity
-    // Set opacity only if it is not ignored in a custom layer.
-    const ignoreOpacity = mllayer.metadata['ukis:ignore-opacity'];
-    if (!ignoreOpacity) {
-      setOpacity(map, mllayer, layer.opacity);
-    }
-    
-    this.updateLayerParamsAndSource(map, mllayer, layer)
+    // update visibility, opacity and other Properties (https://maplibre.org/maplibre-style-spec/layers/#layer-properties)
+    updateStyleLayerProperties(map, mllayer, layer);
   }
 
   private updateLayerParamsAndSource(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer) {
