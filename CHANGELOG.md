@@ -23,8 +23,9 @@
 ### Bug Fixes
  * **@dlr-eoc/map-maplibre:**
   - Fix wrong coordinate order from `getExtent` [#216](7ff01801fd3af594aaa34b2479e921be88894dbe)
-  - Rename `set/getBearing` to `set/getRotation` because we want to have the same behavior as in openlayers and `set/getBearing` is expected differently in maplibre
-  - Fix create `StyleLayer` id in `createCustomLayer` and `createStackedLayer`
+  - Rename `set/getBearing` to `set/getRotation` because we want to have the same behavior as in openlayers and `set/getBearing` is expected differently in maplibre.
+  - Fix create `StyleLayer` id in `createCustomLayer` and `createStackedLayer`.
+  - Fix create default `StyleLayers` for `GeoJson` Data (test for `MultiPolygon` and `MultiLineString`).
 
 * **@dlr-eoc/map-cesium:**
   - Fix get entity.name for infoBox in none GeoJson layers

@@ -1,6 +1,6 @@
 import {
     CircleLayerSpecification, FillLayerSpecification, GeoJSONFeature, GeoJSONSourceSpecification, LayerSpecification, Map as glMap,
-    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, FilterSpecification
+    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, FilterSpecification, DataDrivenPropertyValueSpecification
 } from "maplibre-gl";
 import {
     RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
@@ -216,31 +216,40 @@ export function createGeojsonLayer(l: ukisVectorLayer) {
             if (!l.data || !l.data.features.length) {
                 layers = creteDefaultGeojsonLayers(l);
             } else {
-                layers = l.data.features.map((f: GeoJSONFeature, index: number) => createLayersFromGeojsonTypes(f, l, index));
+                const features: GeoJSONFeature[] = l.data.features;
+                const geomTypes = features.map(i => i.geometry.type);
+                const uniqueGeomTypes = geomTypes.filter((t, i) => geomTypes.findIndex(t2 => t2 === t) === i);
+                const uniqueFeatures = [];
+                const hasPoly = uniqueGeomTypes.filter(i => i === 'Polygon' || i === 'MultiPolygon').length;
+                const hasLine = uniqueGeomTypes.filter(i => i === 'LineString' || i === 'MultiLineString').length;
+                const hasPoint = uniqueGeomTypes.filter(i => i === 'Point').length;
+
+                if(hasPoly){
+                    const defaultPoly = getDefaultGeoms().find(f => f.geometry.type === 'Polygon') as GeoJSONFeature;
+                    uniqueFeatures.push(defaultPoly);
+                }
+
+                if(hasLine){
+                    const defaultLine = getDefaultGeoms().find(f => f.geometry.type === 'LineString') as GeoJSONFeature;
+                    uniqueFeatures.push(defaultLine);
+                }
+
+                if(hasPoint){
+                    const defaultPoint = getDefaultGeoms().find(f => f.geometry.type === 'Point') as GeoJSONFeature;
+                    uniqueFeatures.push(defaultPoint);
+                }
+
+                if (hasPoly && !hasLine) {
+                    const defaultLine = getDefaultGeoms().find(f => f.geometry.type === 'LineString') as GeoJSONFeature;
+                    uniqueFeatures.push(defaultLine);
+                }
+                
+                layers = uniqueFeatures.map((f: GeoJSONFeature) => createLayersFromGeojsonTypes(f, l));
             }
         }
     } else {
         // url data
-        const defaultGeom = [
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'Polygon'
-                }
-            },
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString'
-                }
-            },
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'Point'
-                }
-            }
-        ]
+        const defaultGeom = getDefaultGeoms();
         layers = defaultGeom.map((f: any) => createLayersFromGeojsonTypes(f, l));
     }
 
@@ -249,28 +258,32 @@ export function createGeojsonLayer(l: ukisVectorLayer) {
 
 export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLayer, index?: number) {
     let layer: LayerSpecification = {} as never;
-    const style = {
-        fill: {
-            color: feature?.properties?.fill || 'rgba(255,255,255,0.4)',
-        },
-        stroke: {
-            color: feature?.properties?.stroke || '#3399CC',
-            width: 1.25,
-        },
-        circle: {
-            radius: 5
-        }
-    };
 
-    switch (feature.geometry.type) {
+    // https://wiki.openstreetmap.org/wiki/Geojson_CSS
+    // https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0
+    const defaultStyle = {
+        fill: 'rgba(255,255,255,0.4)',
+        stroke: '#3399CC',
+        'stroke-width': 1.25,
+        'circle-radius': 5
+    } as const;
+
+    const getFeaturePropStyle = <T>(prop: keyof typeof defaultStyle) => {
+        const style: DataDrivenPropertyValueSpecification<T> = ['coalesce', ['get', prop], defaultStyle[prop]];
+        return style;
+    }
+
+    const type = feature.geometry.type;
+    switch (type) {
         case 'Polygon':
+        case 'MultiPolygon':
             layer = {
                 id: `${l.id}:fill`,
                 type: 'fill',
                 source: l.id,
                 paint: {
                     'fill-opacity': l.opacity,
-                    'fill-color': style.fill.color,
+                    'fill-color': getFeaturePropStyle('fill')
                 },
                 layout: {
                     visibility: (l.visible) ? 'visible' : 'none'
@@ -282,14 +295,15 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
             layer.metadata[UKIS_METADATA.layerID] = l.id;
             break;
         case 'LineString':
+        case 'MultiLineString':
             layer = {
                 id: `${l.id}:line`,
                 type: 'line',
                 source: l.id,
                 paint: {
                     'line-opacity': l.opacity,
-                    'line-color': style.stroke.color,
-                    'line-width': style.stroke.width
+                    'line-color': getFeaturePropStyle('stroke'),
+                    'line-width': getFeaturePropStyle('stroke-width')
                 },
                 layout: {
                     'line-join': 'round',
@@ -310,10 +324,10 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
                 paint: {
                     'circle-opacity': l.opacity,
                     'circle-stroke-opacity': l.opacity,
-                    'circle-stroke-color': style.stroke.color,
-                    'circle-color': style.fill.color,
-                    'circle-radius': style.circle.radius,
-                    'circle-stroke-width': style.stroke.width,
+                    'circle-stroke-color': getFeaturePropStyle('stroke'),
+                    'circle-color': getFeaturePropStyle('fill'),
+                    'circle-radius': getFeaturePropStyle('circle-radius'),
+                    'circle-stroke-width': getFeaturePropStyle('stroke-width'),
                 },
                 layout: {
                     visibility: (l.visible) ? 'visible' : 'none'
@@ -337,8 +351,11 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
 }
 
 export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
-    const fill = 'rgba(255,255,255,0.4)';
-    const stroke = '#3399CC';
+    const defaultGeom = getDefaultGeoms();
+    return defaultGeom.map((f: GeoJSONFeature) => createLayersFromGeojsonTypes(f, l));
+}
+
+function getDefaultGeoms() {
     const defaultGeom: Omit<GeoJSONFeature, '_geometry' | 'id' | '_vectorTileFeature' | 'toJSON'>[] = [
         {
             type: 'Feature',
@@ -347,8 +364,6 @@ export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
                 coordinates: [] as any
             },
             properties: {
-                fill,
-                stroke
             }
         },
         {
@@ -358,8 +373,6 @@ export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
                 coordinates: [] as any
             },
             properties: {
-                fill,
-                stroke
             }
         },
         {
@@ -369,12 +382,11 @@ export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
                 coordinates: [] as any
             },
             properties: {
-                fill,
-                stroke
+ 
             }
         }
-    ]
-    return defaultGeom.map((f: GeoJSONFeature, index: number) => createLayersFromGeojsonTypes(f, l, index));
+    ];
+    return defaultGeom;
 }
 
 /**
