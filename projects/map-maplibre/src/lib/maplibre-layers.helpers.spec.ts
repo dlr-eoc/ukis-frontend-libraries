@@ -5,9 +5,22 @@ import {
     createStackedLayer, createGetMapUrl, createGetTileUrl, createBaseLayer
 } from './maplibre-layers.helpers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
-import { RasterSourceSpecification, StyleSpecification } from 'maplibre-gl';
+import { RasterSourceSpecification, StyleSpecification, TypedStyleLayer, Map as glMap } from 'maplibre-gl';
 import { UKIS_METADATA, getOpacityPaintProperty } from './maplibre.helpers';
+import { TestBed } from '@angular/core/testing';
+import { MapMaplibreService } from './map-maplibre.service';
 
+const createMapTarget = (size: number[]) => {
+    const container = document.createElement('div');
+    container.style.border = 'solid 1px #000';
+    container.style.width = `${size[0]}px`;
+    container.style.height = `${size[1]}px`;
+    document.body.appendChild(container);
+    return {
+        size,
+        container
+    };
+};
 
 let ukisOsm: RasterLayer;
 let ukisCustom: CustomLayer<StyleSpecification>;
@@ -184,8 +197,37 @@ const createLayers = () => {
 }
 
 describe('MaplibreLayerHelpers', () => {
+    let service: MapMaplibreService;
+    let map: glMap;
+
     beforeEach(async () => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(MapMaplibreService);
         createLayers();
+
+        const baseStyle: StyleSpecification = {
+            "version": 8,
+            "name": "Merged Style Specifications",
+            "metadata": {
+            },
+            "sources": {},
+            "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
+            "glyphs": "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+            "layers": []
+        };
+
+        const mapTarget = createMapTarget([1024, 768]);
+        map = new glMap({
+            container: mapTarget.container,
+            style: baseStyle as StyleSpecification
+        });
+
+        // https://github.com/maplibre/maplibre-gl-js/discussions/2193
+        await new Promise((resolve, reject) => {
+            map.once('idle', (evt) => {
+                resolve(evt);
+            });
+        });
     });
 
     it('should create ukis Metadata for LayerSourceSpecification', () => {
