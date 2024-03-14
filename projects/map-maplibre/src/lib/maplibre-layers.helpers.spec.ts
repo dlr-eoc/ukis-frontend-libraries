@@ -1,8 +1,7 @@
 import { CustomLayer, Layer, RasterLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import {
-    addUkisLayerMetadata, hasUkisLayerMetadata, getUkisLayerMetadata, createWmsLayer, createXyzLayer,
-    createWmtsLayer, createTmsLayer, createGeojsonLayer, createLayersFromGeojsonTypes, creteDefaultGeojsonLayers, createWfsLayer, createKmlLayer, createCustomLayer,
-    createStackedLayer, createGetMapUrl, createGetTileUrl, createBaseLayer
+    addUkisLayerMetadata, createWmsLayer, createWmtsLayer, createGeojsonLayer, createCustomLayer,
+    createGetMapUrl, createGetTileUrl, createBaseLayer, updateStyleLayerProperties
 } from './maplibre-layers.helpers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import { RasterSourceSpecification, StyleSpecification, TypedStyleLayer, Map as glMap } from 'maplibre-gl';
@@ -292,6 +291,18 @@ describe('MaplibreLayerHelpers', () => {
         if (source.type === 'geojson') {
             expect(source.data).toBe(ukisGeoJson.data);
         }
+    });
+
+    it('should create LayerSpecification from ukis ukisGeoJson', () => {
+        // There is only one layer for each geometry type of the geo features. If Polygon are in the feature also a layer for lins is created
+        const ls = createGeojsonLayer(ukisGeoJson);
+
+        const geomTypes = ukisGeoJson.data.features.map(i => i.geometry.type);
+        const uniqueGeomTypes = geomTypes.filter((t, i) => geomTypes.findIndex(t2 => t2 === t) === i);
+ 
+        const geoJsonLayers = ls.layers.map(l => l.id);
+        // This is not true if there is only one polygon in the features, then there is one more layer.
+        expect(uniqueGeomTypes.length).toEqual(geoJsonLayers.length);
     });
     //  TODO:createLayersFromGeojsonTypes
 
