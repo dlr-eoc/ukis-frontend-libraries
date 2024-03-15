@@ -196,37 +196,8 @@ const createLayers = () => {
 }
 
 describe('MaplibreLayerHelpers', () => {
-    let service: MapMaplibreService;
-    let map: glMap;
-
     beforeEach(async () => {
-        TestBed.configureTestingModule({});
-        service = TestBed.inject(MapMaplibreService);
         createLayers();
-
-        const baseStyle: StyleSpecification = {
-            "version": 8,
-            "name": "Merged Style Specifications",
-            "metadata": {
-            },
-            "sources": {},
-            "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
-            "glyphs": "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
-            "layers": []
-        };
-
-        const mapTarget = createMapTarget([1024, 768]);
-        map = new glMap({
-            container: mapTarget.container,
-            style: baseStyle as StyleSpecification
-        });
-
-        // https://github.com/maplibre/maplibre-gl-js/discussions/2193
-        await new Promise((resolve, reject) => {
-            map.once('idle', (evt) => {
-                resolve(evt);
-            });
-        });
     });
 
     it('should create ukis Metadata for LayerSourceSpecification', () => {
@@ -299,7 +270,7 @@ describe('MaplibreLayerHelpers', () => {
 
         const geomTypes = ukisGeoJson.data.features.map(i => i.geometry.type);
         const uniqueGeomTypes = geomTypes.filter((t, i) => geomTypes.findIndex(t2 => t2 === t) === i);
- 
+
         const geoJsonLayers = ls.layers.map(l => l.id);
         // This is not true if there is only one polygon in the features, then there is one more layer.
         expect(uniqueGeomTypes.length).toEqual(geoJsonLayers.length);
@@ -367,4 +338,41 @@ describe('MaplibreLayerHelpers', () => {
 
 
     //  TODO:createStackedLayer
+});
+
+describe('MaplibreLayerHelpers - use mapservice', () => {
+    let service: MapMaplibreService;
+    let map: glMap;
+
+    beforeEach(async () => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(MapMaplibreService);
+        createLayers();
+
+        const baseStyle: StyleSpecification = {
+            "version": 8,
+            "name": "Merged Style Specifications",
+            "metadata": {
+            },
+            "sources": {},
+            "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
+            "glyphs": "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+            "layers": []
+        };
+
+        const mapTarget = createMapTarget([1024, 768]);
+        map = new glMap({
+            container: mapTarget.container,
+            style: baseStyle as StyleSpecification
+        });
+
+        // https://github.com/maplibre/maplibre-gl-js/discussions/2193
+        await new Promise((resolve, reject) => {
+            map.once('idle', (evt) => {
+                resolve(evt);
+            });
+        });
+    });
+
+
 });
