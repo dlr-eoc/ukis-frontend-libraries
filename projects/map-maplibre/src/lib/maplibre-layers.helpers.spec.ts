@@ -384,5 +384,27 @@ describe('MaplibreLayerHelpers - use mapservice', () => {
         });
     });
 
+    it('should update as StyleLayer', () => {
+        const filtertype = 'Layers';
+        const waterId = 'water';
+        const waterIdStyledObj = `${waterId}:${ukisCustom.id}`;
+        service.setUkisLayers([ukisCustom], filtertype, map);
+        const layerBeforUpdate = service.getLayersForId(ukisCustom.id, filtertype, map).styleLayers
+        const waterLayerBefor = layerBeforUpdate.find(l => l.id === waterIdStyledObj);
+
+        ukisCustom.visible = true;
+        const paintProp = 'fill-color'
+        const newColor = 'hsl(200, 100%, 30%)';
+        // TODO: service.setUkisLayers changes the id on the original object????
+        const waterLayer = ukisCustom.custom_layer.layers.find(l => l.id === waterId);
+        waterLayer.paint[paintProp] = newColor;
+        updateStyleLayerProperties(map, waterLayerBefor as TypedStyleLayer, ukisCustom)
+
+        const layerAfterUpdate = service.getLayersForId(ukisCustom.id, filtertype, map).styleLayers;
+        const waterLayerAfter = layerAfterUpdate.find(l => l.id === waterIdStyledObj);
+
+        expect(waterLayerAfter.visibility).toBe("visible");
+        expect(waterLayerAfter.getPaintProperty(paintProp)).toBe(newColor);
+    });
 
 });
