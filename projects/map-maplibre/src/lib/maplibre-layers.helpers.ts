@@ -7,7 +7,7 @@ import {
     WmtsLayer as ukisWmtsLayer, VectorLayer as ukisVectorLayer, CustomLayer as ukisCustomLayer, Layer as ukisLayer, StackedLayer, XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype
 } from '@dlr-eoc/services-layers';
 import { LayerSourceSpecification, SourceIdSpecification, UKIS_METADATA, getAllLayers, getOpacityPaintProperty } from "./maplibre.helpers";
-import { propsEqual } from '@dlr-eoc/utilities';
+import { propsEqual, clone } from '@dlr-eoc/utilities';
 
 export function addUkisLayerMetadata(l: ukisLayer) {
     const metadata = {};
@@ -186,7 +186,7 @@ export function createTmsLayer<T extends ukisRasterLayer | ukisVectorLayer>(l: T
 
     } else if (l instanceof ukisVectorLayer) {
         if(l?.options?.style){
-            const style = cloneStyle(l?.options?.style) as StyleSpecification;
+            const style = clone(l?.options?.style) as StyleSpecification;
             style.layers.forEach(ls => {
                 (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
     
@@ -432,25 +432,6 @@ export function createKmlLayer(l: ukisVectorLayer) {
     return returnSourcesAndLayers(l, source, layers);
 }
 
-/**
- * simple clone function to clone styles of CustomLayer
- */
-function cloneStyle<T>(obj:any){
-    const newObj = {} as T;
-    Object.entries<StyleSpecification>(obj).forEach(s => {
-        const key = s[0];
-        const value = s[1];
-        if(Array.isArray(value)){
-            newObj[key] = value.map(i => { return {...i}});
-        }else if(typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' ){
-            newObj[key] = value;
-        }else if(typeof value === 'object'){
-            newObj[key] = {...value};
-        }
-    });
-
-    return newObj;
-}
 
 
 export function createCustomLayer(l: ukisCustomLayer) {
@@ -460,7 +441,7 @@ export function createCustomLayer(l: ukisCustomLayer) {
         console.error('custom_layer is not a StyleSpecification');
     }
 
-    const style = cloneStyle(l.custom_layer) as StyleSpecification;
+    const style = clone(l.custom_layer) as StyleSpecification;
 
     const sources: SourceIdSpecification = style.sources;
     Object.keys(sources).forEach(key => {
