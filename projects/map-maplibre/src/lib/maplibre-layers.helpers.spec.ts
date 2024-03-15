@@ -302,8 +302,18 @@ describe('MaplibreLayerHelpers', () => {
             const metadata = addUkisLayerMetadata(ukisCustom);
             expect(ls.metadata[UKIS_METADATA.filtertype]).toBe(metadata[UKIS_METADATA.filtertype]);
             expect(ls.metadata[UKIS_METADATA.layerID]).toBe(metadata[UKIS_METADATA.layerID]);
-            expect(ls.id.split(':')[1]).toBe(ukisCustom.id);
+            // id is created by `styleLayer.id:ukisLayer.id`
+            const partID = ls.id.split(':');
+            const partIDUkisLayer = partID[1];
+            const partIDStyleLayer = partID[0]
+            expect(partIDUkisLayer).toBe(ukisCustom.id);
+            // object should not modify the old object whil creating layer.
+            const layerIndexOriginalObjet = ukisCustom.custom_layer.layers.findIndex(item => item.id === partIDStyleLayer);
+            const layerFromOriginalObjet = ukisCustom.custom_layer.layers[layerIndexOriginalObjet];
+            expect(ls.id).not.toBe(layerFromOriginalObjet.id);
+
             expect(ls.layout.visibility).toBe((ukisCustom.visible) ? 'visible' : 'none');
+
 
             const opacityPaintProperty = getOpacityPaintProperty(ls.type);
             if (opacityPaintProperty) {
