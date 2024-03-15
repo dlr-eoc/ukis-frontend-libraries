@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
 import { MapMaplibreService } from './map-maplibre.service';
-import { GeoJSONFeature, StyleSpecification, Map as glMap } from 'maplibre-gl';
+import { StyleSpecification, Map as glMap } from 'maplibre-gl';
 import { CustomLayer, RasterLayer, VectorLayer, WmsLayer, Layer as ukisLayer } from '@dlr-eoc/services-layers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
-import { GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
-import { createLayersFromGeojsonTypes } from './maplibre-layers.helpers';
+import { createGeojsonLayer, createCustomLayer } from './maplibre-layers.helpers';
 
 const createMapTarget = (size: number[]) => {
   const container = document.createElement('div');
@@ -217,8 +216,9 @@ describe('MapMaplibreService', () => {
 
     const addedLayers = service.getLayers(filtertype, map);
     // ukisCustom layers.length and geojson layers for each type
-    const customLayers = ukisCustom.custom_layer.layers.map(l => l.id);
-    const geoJsonLayers = (ukisGeoJson.data as GeoJSONFeatureCollection).features.map((f: GeoJSONFeature, index: number) => createLayersFromGeojsonTypes(f, ukisGeoJson, index)).map(l => l.id);
+    const customLayers = createCustomLayer(ukisCustom).layers.map(l => l.id);
+    // There is only one layer for each geometry type of the geo features. If Polygon are in the feature also a layer for lins is created
+    const geoJsonLayers = createGeojsonLayer(ukisGeoJson).layers.map(l => l.id);
     expect(addedLayers.styleLayers.map(l => l.id)).toEqual([...customLayers, ukisOsm.id, ...geoJsonLayers, ukisWms.id]);
     expect(addedLayers.styleLayers.length).toEqual((layers.length - 2) + customLayers.length + geoJsonLayers.length);
   });
