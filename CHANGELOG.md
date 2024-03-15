@@ -26,6 +26,7 @@
   - Rename `set/getBearing` to `set/getRotation` because we want to have the same behavior as in openlayers and `set/getBearing` is expected differently in maplibre.
   - Fix create `StyleLayer` id in `createCustomLayer` and `createStackedLayer`.
   - Fix create default `StyleLayers` for `GeoJson` Data (test for `MultiPolygon` and `MultiLineString`).
+  - Do not modify referenced objects when creating `StyleLayers` from `CustomLayer` or `VectorLayer.options.style` see also (cddf2fc6a83444851914ed6619bc8d5ada8ce485)
 
 * **@dlr-eoc/map-cesium:**
   - Fix get entity.name for infoBox in none GeoJson layers

@@ -185,22 +185,25 @@ export function createTmsLayer<T extends ukisRasterLayer | ukisVectorLayer>(l: T
         layerSourceOrStyleSpecification = sl as LayerSourceSpecification;
 
     } else if (l instanceof ukisVectorLayer) {
-        const style = l?.options?.style as StyleSpecification;
-        style.layers.forEach(ls => {
-            (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
-
-            // Set not visible on start
-            // TODO: ??? 
-            if (!ls.layout) {
-                ls.layout = {
-                    visibility: 'none'
+        if(l?.options?.style){
+            const style = cloneStyle(l?.options?.style) as StyleSpecification;
+            style.layers.forEach(ls => {
+                (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
+    
+                // Set not visible on start
+                // TODO: ??? 
+                if (!ls.layout) {
+                    ls.layout = {
+                        visibility: 'none'
+                    }
+                } else {
+                    ls.layout.visibility = 'none';
                 }
-            } else {
-                ls.layout.visibility = 'none';
-            }
-        });
-        layerSourceOrStyleSpecification = style as StyleSpecification;
-        // TODO: merge styles??? 
+            });
+            layerSourceOrStyleSpecification = style as StyleSpecification;
+            // TODO: merge styles??? 
+        }
+        
     }
     return layerSourceOrStyleSpecification;
 }
@@ -429,6 +432,26 @@ export function createKmlLayer(l: ukisVectorLayer) {
     return returnSourcesAndLayers(l, source, layers);
 }
 
+/**
+ * simple clone function to clone styles of CustomLayer
+ */
+function cloneStyle<T>(obj:any){
+    const newObj = {} as T;
+    Object.entries<StyleSpecification>(obj).forEach(s => {
+        const key = s[0];
+        const value = s[1];
+        if(Array.isArray(value)){
+            newObj[key] = value.map(i => { return {...i}});
+        }else if(typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' ){
+            newObj[key] = value;
+        }else if(typeof value === 'object'){
+            newObj[key] = {...value};
+        }
+    });
+
+    return newObj;
+}
+
 
 export function createCustomLayer(l: ukisCustomLayer) {
 
@@ -437,7 +460,7 @@ export function createCustomLayer(l: ukisCustomLayer) {
         console.error('custom_layer is not a StyleSpecification');
     }
 
-    const style = l.custom_layer as StyleSpecification;
+    const style = cloneStyle(l.custom_layer) as StyleSpecification;
 
     const sources: SourceIdSpecification = style.sources;
     Object.keys(sources).forEach(key => {
