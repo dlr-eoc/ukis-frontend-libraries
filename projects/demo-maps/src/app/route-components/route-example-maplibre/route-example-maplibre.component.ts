@@ -266,7 +266,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       opacity: 0.5
     });
 
-    const waterway = new CustomLayer({
+    const waterway = new CustomLayer<StyleSpecification>({
       id: 'waterway-planet_eoc',
       name: 'waterway',
       visible: true,
@@ -275,10 +275,10 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
         version: 8,
         // Use a different source for layers, to improve render quality
         sources: {
+           // The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109
           'waterway-planet_eoc': // 'planet_eoc':
           {
             "type": "vector",
-            "__Comment": "The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109",
             "url": "",
             "tiles": [
               "https://a.tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true",
@@ -333,7 +333,8 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
             },
             // ignore set visibility on ukisLayer change
             "metadata": {
-              "ukis:ignore-visibility": true
+              "ukis:ignore-visibility": true,
+              "ukis:ignore-opacity": true
             }
           },
           {
@@ -562,7 +563,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     });
 
 
-    const layers = [groupLayer, ,sentinel2Europe, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
+    const layers = [groupLayer, sentinel2Europe, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
     layers.map(l => {
       if (l instanceof Layer) {
         this.layerSvc.addLayer(l, 'Layers');
@@ -638,7 +639,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
         l.layout['text-font'] = l.layout['text-font'].filter(i => i !== 'Noto Sans Regular' && i !== 'Noto Sans Italic');
       }
     });
-    const labels = new CustomLayer({
+    const labels = new CustomLayer<StyleSpecification>({
       id: 'place-labels-planet_eoc',
       name: 'Place Labels',
       visible: true,
@@ -647,10 +648,10 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
         version: 8,
         // Use a different source for layers, to improve render quality
         sources: {
+          // The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109
           'place-labels-planet_eoc':
           {
             "type": "vector",
-            "__Comment": "The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109",
             "url": "",
             "tiles": [
               "https://a.tiles.geoservice.dlr.de/service/tms/1.0.0/planet_eoc@EPSG%3A900913@pbf/{z}/{x}/{y}.pbf?flipy=true",
@@ -660,7 +661,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
             ]
           }
         },
-        layers: placeLabels.layers
+        layers: placeLabels.layers as StyleSpecification['layers']
       }
     })
 
@@ -715,6 +716,28 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     };
     this.layerSvc.updateLayer(layer);
   }
+
+  updateStyleLayer() {
+    const water = this.layerSvc.getLayerOrGroupById('waterway-planet_eoc') as CustomLayer<StyleSpecification>;
+    const layer0 = water.custom_layer.layers[0];
+    layer0.paint['fill-color'] = 'hsl(30, 14%, 53%)';
+    // layer0.maxzoom = 12;
+    
+    if (layer0.type !== 'background') {
+      layer0['source-layer'] = 'landuse'
+      /* layer0.filter = [
+        "all",
+        [
+          "==",
+          "$type",
+          "Polygon"
+        ]
+      ]; */
+    }
+
+    this.layerSvc.updateLayer(water);
+  }
+  
   setViewAngle() {
     /** set map rotation with the MapStateService */
     this.mapStateSvc.setViewAngle(45);

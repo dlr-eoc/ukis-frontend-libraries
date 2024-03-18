@@ -1,13 +1,25 @@
 import { CustomLayer, Layer, RasterLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import {
-    addUkisLayerMetadata, hasUkisLayerMetadata, getUkisLayerMetadata, createWmsLayer, createXyzLayer,
-    createWmtsLayer, createTmsLayer, createGeojsonLayer, createLayersFromGeojsonTypes, creteDefaultGeojsonLayers, createWfsLayer, createKmlLayer, createCustomLayer,
-    createStackedLayer, createGetMapUrl, createGetTileUrl, createBaseLayer
+    addUkisLayerMetadata, createWmsLayer, createWmtsLayer, createGeojsonLayer, createCustomLayer,
+    createGetMapUrl, createGetTileUrl, createBaseLayer, updateStyleLayerProperties
 } from './maplibre-layers.helpers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
-import { RasterSourceSpecification, StyleSpecification } from 'maplibre-gl';
+import { RasterSourceSpecification, StyleSpecification, TypedStyleLayer, Map as glMap } from 'maplibre-gl';
 import { UKIS_METADATA, getOpacityPaintProperty } from './maplibre.helpers';
+import { TestBed } from '@angular/core/testing';
+import { MapMaplibreService } from './map-maplibre.service';
 
+const createMapTarget = (size: number[]) => {
+    const container = document.createElement('div');
+    container.style.border = 'solid 1px #000';
+    container.style.width = `${size[0]}px`;
+    container.style.height = `${size[1]}px`;
+    document.body.appendChild(container);
+    return {
+        size,
+        container
+    };
+};
 
 let ukisOsm: RasterLayer;
 let ukisCustom: CustomLayer<StyleSpecification>;
@@ -251,6 +263,18 @@ describe('MaplibreLayerHelpers', () => {
             expect(source.data).toBe(ukisGeoJson.data);
         }
     });
+
+    it('should create LayerSpecification from ukis ukisGeoJson', () => {
+        // There is only one layer for each geometry type of the geo features. If Polygon are in the feature also a layer for lins is created
+        const ls = createGeojsonLayer(ukisGeoJson);
+
+        const geomTypes = ukisGeoJson.data.features.map(i => i.geometry.type);
+        const uniqueGeomTypes = geomTypes.filter((t, i) => geomTypes.findIndex(t2 => t2 === t) === i);
+
+        const geoJsonLayers = ls.layers.map(l => l.id);
+        // This is not true if there is only one polygon in the features, then there is one more layer.
+        expect(uniqueGeomTypes.length).toEqual(geoJsonLayers.length);
+    });
     //  TODO:createLayersFromGeojsonTypes
 
     //  TODO:creteDefaultGeojsonLayers
@@ -278,8 +302,18 @@ describe('MaplibreLayerHelpers', () => {
             const metadata = addUkisLayerMetadata(ukisCustom);
             expect(ls.metadata[UKIS_METADATA.filtertype]).toBe(metadata[UKIS_METADATA.filtertype]);
             expect(ls.metadata[UKIS_METADATA.layerID]).toBe(metadata[UKIS_METADATA.layerID]);
-            expect(ls.id.split(':')[1]).toBe(ukisCustom.id);
+            // id is created by `styleLayer.id:ukisLayer.id`
+            const partID = ls.id.split(':');
+            const partIDUkisLayer = partID[1];
+            const partIDStyleLayer = partID[0]
+            expect(partIDUkisLayer).toBe(ukisCustom.id);
+            // object should not modify the old object whil creating layer.
+            const layerIndexOriginalObjet = ukisCustom.custom_layer.layers.findIndex(item => item.id === partIDStyleLayer);
+            const layerFromOriginalObjet = ukisCustom.custom_layer.layers[layerIndexOriginalObjet];
+            expect(ls.id).not.toBe(layerFromOriginalObjet.id);
+
             expect(ls.layout.visibility).toBe((ukisCustom.visible) ? 'visible' : 'none');
+
 
             const opacityPaintProperty = getOpacityPaintProperty(ls.type);
             if (opacityPaintProperty) {
@@ -293,13 +327,13 @@ describe('MaplibreLayerHelpers', () => {
         // set ignore-visibility
         const customLayer_1 = ukisCustom.custom_layer.layers[1];
         customLayer_1.metadata = {
-            ['ukis:ignore-visibility']: true,
-            ['ukis:ignore-opacity']: true
+            [UKIS_METADATA.ignoreVisibility]: true,
+            [UKIS_METADATA.ignoreOpacity]: true
         };
         const styleSpec = createCustomLayer(ukisCustom);
 
         const layer_1 = styleSpec.layers[1];
-        expect(layer_1.metadata['ukis:ignore-visibility']).toBe(true);
+        expect(layer_1.metadata[UKIS_METADATA.ignoreVisibility]).toBe(true);
         expect(layer_1.layout.visibility).toBe(customLayer_1.layout.visibility);
 
         const opacityPaintProperty = getOpacityPaintProperty(layer_1.type);
@@ -308,10 +342,69 @@ describe('MaplibreLayerHelpers', () => {
         }
 
         // remove ignore-visibility
-        delete customLayer_1.metadata['ukis:ignore-visibility'];
-        delete customLayer_1.metadata['ukis:ignore-opacity'];
+        delete customLayer_1.metadata[UKIS_METADATA.ignoreVisibility];
+        delete customLayer_1.metadata[UKIS_METADATA.ignoreOpacity];
     });
 
 
     //  TODO:createStackedLayer
+});
+
+describe('MaplibreLayerHelpers - use mapservice', () => {
+    let service: MapMaplibreService;
+    let map: glMap;
+
+    beforeEach(async () => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(MapMaplibreService);
+        createLayers();
+
+        const baseStyle: StyleSpecification = {
+            "version": 8,
+            "name": "Merged Style Specifications",
+            "metadata": {
+            },
+            "sources": {},
+            "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
+            "glyphs": "http://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
+            "layers": []
+        };
+
+        const mapTarget = createMapTarget([1024, 768]);
+        map = new glMap({
+            container: mapTarget.container,
+            style: baseStyle as StyleSpecification
+        });
+
+        // https://github.com/maplibre/maplibre-gl-js/discussions/2193
+        await new Promise((resolve, reject) => {
+            map.once('idle', (evt) => {
+                resolve(evt);
+            });
+        });
+    });
+
+    it('should update as StyleLayer', () => {
+        const filtertype = 'Layers';
+        const waterId = 'water';
+        const waterIdStyledObj = `${waterId}:${ukisCustom.id}`;
+        service.setUkisLayers([ukisCustom], filtertype, map);
+        const layerBeforUpdate = service.getLayersForId(ukisCustom.id, filtertype, map).styleLayers
+        const waterLayerBefor = layerBeforUpdate.find(l => l.id === waterIdStyledObj);
+
+        ukisCustom.visible = true;
+        const paintProp = 'fill-color'
+        const newColor = 'hsl(200, 100%, 30%)';
+        // TODO: service.setUkisLayers changes the id on the original object????
+        const waterLayer = ukisCustom.custom_layer.layers.find(l => l.id === waterId);
+        waterLayer.paint[paintProp] = newColor;
+        updateStyleLayerProperties(map, waterLayerBefor as TypedStyleLayer, ukisCustom)
+
+        const layerAfterUpdate = service.getLayersForId(ukisCustom.id, filtertype, map).styleLayers;
+        const waterLayerAfter = layerAfterUpdate.find(l => l.id === waterIdStyledObj);
+
+        expect(waterLayerAfter.visibility).toBe("visible");
+        expect(waterLayerAfter.getPaintProperty(paintProp)).toBe(newColor);
+    });
+
 });

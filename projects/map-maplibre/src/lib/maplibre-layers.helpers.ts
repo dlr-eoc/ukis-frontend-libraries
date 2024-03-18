@@ -1,13 +1,13 @@
 import {
     CircleLayerSpecification, FillLayerSpecification, GeoJSONFeature, GeoJSONSourceSpecification, LayerSpecification, Map as glMap,
-    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, GeoJSONSource
+    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, FilterSpecification, DataDrivenPropertyValueSpecification
 } from "maplibre-gl";
 import {
     RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
     WmtsLayer as ukisWmtsLayer, VectorLayer as ukisVectorLayer, CustomLayer as ukisCustomLayer, Layer as ukisLayer, StackedLayer, XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype
 } from '@dlr-eoc/services-layers';
 import { LayerSourceSpecification, SourceIdSpecification, UKIS_METADATA, getAllLayers, getOpacityPaintProperty } from "./maplibre.helpers";
-import { propsEqual } from '@dlr-eoc/utilities';
+import { propsEqual, clone } from '@dlr-eoc/utilities';
 
 export function addUkisLayerMetadata(l: ukisLayer) {
     const metadata = {};
@@ -185,22 +185,25 @@ export function createTmsLayer<T extends ukisRasterLayer | ukisVectorLayer>(l: T
         layerSourceOrStyleSpecification = sl as LayerSourceSpecification;
 
     } else if (l instanceof ukisVectorLayer) {
-        const style = l?.options?.style as StyleSpecification;
-        style.layers.forEach(ls => {
-            (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
-
-            // Set not visible on start
-            // TODO: ??? 
-            if (!ls.layout) {
-                ls.layout = {
-                    visibility: 'none'
+        if(l?.options?.style){
+            const style = clone(l?.options?.style) as StyleSpecification;
+            style.layers.forEach(ls => {
+                (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
+    
+                // Set not visible on start
+                // TODO: ??? 
+                if (!ls.layout) {
+                    ls.layout = {
+                        visibility: 'none'
+                    }
+                } else {
+                    ls.layout.visibility = 'none';
                 }
-            } else {
-                ls.layout.visibility = 'none';
-            }
-        });
-        layerSourceOrStyleSpecification = style as StyleSpecification;
-        // TODO: merge styles??? 
+            });
+            layerSourceOrStyleSpecification = style as StyleSpecification;
+            // TODO: merge styles??? 
+        }
+        
     }
     return layerSourceOrStyleSpecification;
 }
@@ -216,31 +219,40 @@ export function createGeojsonLayer(l: ukisVectorLayer) {
             if (!l.data || !l.data.features.length) {
                 layers = creteDefaultGeojsonLayers(l);
             } else {
-                layers = l.data.features.map((f: GeoJSONFeature, index: number) => createLayersFromGeojsonTypes(f, l, index));
+                const features: GeoJSONFeature[] = l.data.features;
+                const geomTypes = features.map(i => i.geometry.type);
+                const uniqueGeomTypes = geomTypes.filter((t, i) => geomTypes.findIndex(t2 => t2 === t) === i);
+                const uniqueFeatures = [];
+                const hasPoly = uniqueGeomTypes.filter(i => i === 'Polygon' || i === 'MultiPolygon').length;
+                const hasLine = uniqueGeomTypes.filter(i => i === 'LineString' || i === 'MultiLineString').length;
+                const hasPoint = uniqueGeomTypes.filter(i => i === 'Point').length;
+
+                if(hasPoly){
+                    const defaultPoly = getDefaultGeoms().find(f => f.geometry.type === 'Polygon') as GeoJSONFeature;
+                    uniqueFeatures.push(defaultPoly);
+                }
+
+                if(hasLine){
+                    const defaultLine = getDefaultGeoms().find(f => f.geometry.type === 'LineString') as GeoJSONFeature;
+                    uniqueFeatures.push(defaultLine);
+                }
+
+                if(hasPoint){
+                    const defaultPoint = getDefaultGeoms().find(f => f.geometry.type === 'Point') as GeoJSONFeature;
+                    uniqueFeatures.push(defaultPoint);
+                }
+
+                if (hasPoly && !hasLine) {
+                    const defaultLine = getDefaultGeoms().find(f => f.geometry.type === 'LineString') as GeoJSONFeature;
+                    uniqueFeatures.push(defaultLine);
+                }
+                
+                layers = uniqueFeatures.map((f: GeoJSONFeature) => createLayersFromGeojsonTypes(f, l));
             }
         }
     } else {
         // url data
-        const defaultGeom = [
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'Polygon'
-                }
-            },
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString'
-                }
-            },
-            {
-                type: 'Feature',
-                geometry: {
-                    type: 'Point'
-                }
-            }
-        ]
+        const defaultGeom = getDefaultGeoms();
         layers = defaultGeom.map((f: any) => createLayersFromGeojsonTypes(f, l));
     }
 
@@ -249,28 +261,32 @@ export function createGeojsonLayer(l: ukisVectorLayer) {
 
 export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLayer, index?: number) {
     let layer: LayerSpecification = {} as never;
-    const style = {
-        fill: {
-            color: feature?.properties?.fill || 'rgba(255,255,255,0.4)',
-        },
-        stroke: {
-            color: feature?.properties?.stroke || '#3399CC',
-            width: 1.25,
-        },
-        circle: {
-            radius: 5
-        }
-    };
 
-    switch (feature.geometry.type) {
+    // https://wiki.openstreetmap.org/wiki/Geojson_CSS
+    // https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0
+    const defaultStyle = {
+        fill: 'rgba(255,255,255,0.4)',
+        stroke: '#3399CC',
+        'stroke-width': 1.25,
+        'circle-radius': 5
+    } as const;
+
+    const coalesce = <T>(key: keyof typeof defaultStyle) => {
+        const style: DataDrivenPropertyValueSpecification<T> = ['coalesce', ['get', key], defaultStyle[key]];
+        return style;
+    }
+
+    const type = feature.geometry.type;
+    switch (type) {
         case 'Polygon':
+        case 'MultiPolygon':
             layer = {
                 id: `${l.id}:fill`,
                 type: 'fill',
                 source: l.id,
                 paint: {
                     'fill-opacity': l.opacity,
-                    'fill-color': style.fill.color,
+                    'fill-color': coalesce('fill')
                 },
                 layout: {
                     visibility: (l.visible) ? 'visible' : 'none'
@@ -282,14 +298,15 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
             layer.metadata[UKIS_METADATA.layerID] = l.id;
             break;
         case 'LineString':
+        case 'MultiLineString':
             layer = {
                 id: `${l.id}:line`,
                 type: 'line',
                 source: l.id,
                 paint: {
                     'line-opacity': l.opacity,
-                    'line-color': style.stroke.color,
-                    'line-width': style.stroke.width
+                    'line-color': coalesce('stroke'),
+                    'line-width': coalesce('stroke-width')
                 },
                 layout: {
                     'line-join': 'round',
@@ -310,10 +327,10 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
                 paint: {
                     'circle-opacity': l.opacity,
                     'circle-stroke-opacity': l.opacity,
-                    'circle-stroke-color': style.stroke.color,
-                    'circle-color': style.fill.color,
-                    'circle-radius': style.circle.radius,
-                    'circle-stroke-width': style.stroke.width,
+                    'circle-stroke-color': coalesce('stroke'),
+                    'circle-color': coalesce('fill'),
+                    'circle-radius': coalesce('circle-radius'),
+                    'circle-stroke-width': coalesce('stroke-width'),
                 },
                 layout: {
                     visibility: (l.visible) ? 'visible' : 'none'
@@ -337,8 +354,11 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
 }
 
 export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
-    const fill = 'rgba(255,255,255,0.4)';
-    const stroke = '#3399CC';
+    const defaultGeom = getDefaultGeoms();
+    return defaultGeom.map((f: GeoJSONFeature) => createLayersFromGeojsonTypes(f, l));
+}
+
+function getDefaultGeoms() {
     const defaultGeom: Omit<GeoJSONFeature, '_geometry' | 'id' | '_vectorTileFeature' | 'toJSON'>[] = [
         {
             type: 'Feature',
@@ -347,8 +367,6 @@ export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
                 coordinates: [] as any
             },
             properties: {
-                fill,
-                stroke
             }
         },
         {
@@ -358,8 +376,6 @@ export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
                 coordinates: [] as any
             },
             properties: {
-                fill,
-                stroke
             }
         },
         {
@@ -369,12 +385,11 @@ export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
                 coordinates: [] as any
             },
             properties: {
-                fill,
-                stroke
+ 
             }
         }
-    ]
-    return defaultGeom.map((f: GeoJSONFeature, index: number) => createLayersFromGeojsonTypes(f, l, index));
+    ];
+    return defaultGeom;
 }
 
 /**
@@ -418,6 +433,7 @@ export function createKmlLayer(l: ukisVectorLayer) {
 }
 
 
+
 export function createCustomLayer(l: ukisCustomLayer) {
 
     const isStyleSpec = l.custom_layer?.version && l.custom_layer?.sources && l.custom_layer?.layers;
@@ -425,7 +441,7 @@ export function createCustomLayer(l: ukisCustomLayer) {
         console.error('custom_layer is not a StyleSpecification');
     }
 
-    const style = l.custom_layer as StyleSpecification;
+    const style = clone(l.custom_layer) as StyleSpecification;
 
     const sources: SourceIdSpecification = style.sources;
     Object.keys(sources).forEach(key => {
@@ -438,12 +454,15 @@ export function createCustomLayer(l: ukisCustomLayer) {
 
     const layers: LayerSpecification[] = style.layers;
     layers.forEach(ls => {
-        ls.id = `${ls.id}:${l.id}`;
+        // add l.id only if not already added
+        if (ls.id.indexOf(l.id) === -1) {
+            ls.id = `${ls.id}:${l.id}`;
+        }
         ls.metadata = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
 
         // Set visibility only if it is not ignored in a custom layer.
         // Allow hidden or always visible layers in a custom layer.
-        const ignoreVisibility = ls.metadata?.['ukis:ignore-visibility']
+        const ignoreVisibility = ls.metadata?.[UKIS_METADATA.ignoreVisibility]
         if (!ignoreVisibility) {
             if (!ls.layout) {
                 ls.layout = {};
@@ -453,7 +472,7 @@ export function createCustomLayer(l: ukisCustomLayer) {
 
         const opacityPaintProperty = (ls.paint) ? getOpacityPaintProperty(ls.type) : null;
         // Set the opacity only if it is not ignored in a custom layer.
-        const ignoreOpacity = ls.metadata?.['ukis:ignore-opacity']
+        const ignoreOpacity = ls.metadata?.[UKIS_METADATA.ignoreOpacity]
         if (opacityPaintProperty && !ignoreOpacity) {
             if (!ls.paint) {
                 ls.paint = {};
@@ -496,7 +515,10 @@ export function createStackedLayer(l: StackedLayer) {
         // This has to be done like for a custom layer, so only one mlLayer exists for the stack.
         layersStyles.forEach(lsGroup => {
             lsGroup.layers.forEach(ls => {
-                ls.id = `${ls.id}:${l.id}`;
+                // add l.id only if not already added
+                if (ls.id.indexOf(l.id) === -1) {
+                    ls.id = `${ls.id}:${l.id}`;
+                }
                 ls.metadata = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
                 layers.push(ls);
             });
@@ -566,10 +588,10 @@ export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
         }
     } */
 
-
     /* if(oldSource.type === 'image'){
         oldSource.updateImage()
-      } */
+    } */
+
     const oldSourceSpec = map.getStyle().sources[layer.id];
     if (oldSourceSpec) {
         const allLayers = getAllLayers(map);
@@ -588,13 +610,109 @@ export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
             });
             map.removeSource(layer.id);
 
-            console.log('update source', newSourceSpec);
+            console.log('update source', layer.id, newSourceSpec);
             map.addSource(layer.id, newSourceSpec);
             layersWhitSource.forEach(l => {
                 map.addLayer(l);
-                console.log('update layer for source', l.id);
+                // console.log('update layer for source', l.id);
             });
         }
+    }
+}
+
+export function updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer) {
+    // https://maplibre.org/maplibre-style-spec/layers/#layer-properties
+    // paint -> map.setPaintProperty(l.id...)
+    // layout -> map.setLayoutProperty(l.id...)
+    // maxzoom/minzoom -> map.setLayerZoomRange(l.id...)
+    // filter -> map.setFilter(l.id...)
+    // source -> mllayer.source =
+    // source-layer -> mllayer.sourceLayer =
+    // metadata -> TODO
+
+    const newLS = createLayer(layer);
+    const newStyleLayer = newLS.layers.find(l => l.id === mllayer.id);
+
+    if (newStyleLayer) {
+
+        type TlayerProp = keyof LayerSpecification;
+        Object.entries(newStyleLayer).map((p: [TlayerProp | 'filter' | 'source' | 'source-layer', any]) => {
+            const propKey = p[0];
+            const value = p[1];
+            switch (propKey) {
+                case 'paint':
+                    const diff = Object.entries(value as LayerSpecification['paint']).map(item => {
+                        const key = item[0];
+                        // Set opacity only if it is not ignored in a custom layer. Here we do not need to check for UKIS_METADATA.ignoreOpacity like on setOpacity because it is set in -> createLayer(layer) -> createCustomLayer
+                        const oldProp = mllayer.getPaintProperty(key);
+                        const newProp = item[1];
+                        if (oldProp !== newProp) {
+                            // https://github.com/maplibre/maplibre-gl-js/issues/3001
+                            // map.setPaintProperty(mllayer.id, key, newProp);
+                            // map.style.setPaintProperty(mllayer.id, key, newProp);
+
+                            return true;
+                        } else {
+                            false;
+                        }
+                    }).filter(i => i === true);
+
+                    if (diff.length) {
+                        map.removeLayer(mllayer.id);
+                        map.addLayer(newStyleLayer);
+                    }
+
+                    break;
+                case 'layout':
+                    type TlayoutProps = keyof LayerSpecification['layout'];
+                    // Set visibility only if it is not ignored in a custom layer. Here we do not need to check for UKIS_METADATA.ignoreVisibility] like on setVisibility because it is set in -> createLayer(layer) -> createCustomLayer
+                    Object.entries(value).forEach((item: [TlayoutProps, any]) => {
+                        const key = item[0];
+                        const oldProp = mllayer.getLayoutProperty(key);
+                        const newProp = item[1];
+                        if (oldProp !== newProp) {
+                            map.setLayoutProperty(mllayer.id, key, newProp);
+                        }
+                    })
+                    break;
+                case 'maxzoom':
+                    if (mllayer.maxzoom !== value) {
+                        map.setLayerZoomRange(mllayer.id, mllayer.minzoom, value as number);
+                    }
+                    break;
+                case 'minzoom':
+                    if (mllayer.minzoom !== value) {
+                        map.setLayerZoomRange(mllayer.id, value as number, mllayer.maxzoom);
+                    }
+                    break;
+                case 'filter':
+                    const newFilter = value as FilterSpecification;
+                    let filterChnanged = false;
+                    if (newFilter) {
+                        const oldFilter = mllayer.filter;
+                        if (oldFilter) {
+                            filterChnanged = !propsEqual(oldFilter as never, newFilter as never);
+                        } else {
+                            filterChnanged = true
+                        }
+
+                        if (newStyleLayer.type !== 'background' && filterChnanged) {
+                            map.setFilter(mllayer.id, value as FilterSpecification);
+                        }
+                    }
+                    break;
+                case 'source':
+                    if (mllayer.source !== value) {
+                        mllayer.source = value;
+                    }
+                    break;
+                case 'source-layer':
+                    if (mllayer.sourceLayer !== value) {
+                        mllayer.sourceLayer = value;
+                    }
+                    break;
+            }
+        });
     }
 }
 

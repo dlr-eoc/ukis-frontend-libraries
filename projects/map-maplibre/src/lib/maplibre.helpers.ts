@@ -10,7 +10,9 @@ type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
 export const UKIS_METADATA = {
     layerID: 'ukis:layerID',
-    filtertype: 'ukis:filtertype'
+    filtertype: 'ukis:filtertype',
+    ignoreOpacity: 'ukis:ignore-opacity',
+    ignoreVisibility: 'ukis:ignore-visibility',
 };
 
 
@@ -129,23 +131,8 @@ export function setOpacity(map: glMap, layerOrId: string | TypedStyleLayer, opac
         mllayer = layerOrId;
     }
     if (mllayer) {
-        let type: any = mllayer.type;
-        if (mllayer.type === 'symbol') {
-            type = 'icon';
-        }
-
-        let opacityPaintProperty = `${type}-opacity`;
-
-        if (mllayer.type === 'circle') {
-            opacityPaintProperty = 'circle-stroke-opacity';
-        }
-
-        // hillshade only has visibility
-        // https://github.com/maplibre/maplibre-gl-js/issues/1439
-        if (mllayer.type === 'hillshade') {
-            opacityPaintProperty = 'hillshade-exaggeration';
-        }
-
+        let opacityPaintProperty = getOpacityPaintProperty(mllayer.type);
+ 
         if (mllayer.getPaintProperty(opacityPaintProperty) !== opacity) {
             // TODO: custom layers -- On custom layers, only the group is set, not the layers, so they can be controlled by the user
             // TODO: layerOrGroupSetOpacity(mllayer, layer.opacity, layer instanceof CustomLayer);
