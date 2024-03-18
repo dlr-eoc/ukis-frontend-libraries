@@ -271,8 +271,8 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
         'circle-radius': 5
     } as const;
 
-    const getFeaturePropStyle = <T>(prop: keyof typeof defaultStyle) => {
-        const style: DataDrivenPropertyValueSpecification<T> = ['coalesce', ['get', prop], defaultStyle[prop]];
+    const coalesce = <T>(key: keyof typeof defaultStyle) => {
+        const style: DataDrivenPropertyValueSpecification<T> = ['coalesce', ['get', key], defaultStyle[key]];
         return style;
     }
 
@@ -286,7 +286,7 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
                 source: l.id,
                 paint: {
                     'fill-opacity': l.opacity,
-                    'fill-color': getFeaturePropStyle('fill')
+                    'fill-color': coalesce('fill')
                 },
                 layout: {
                     visibility: (l.visible) ? 'visible' : 'none'
@@ -305,8 +305,8 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
                 source: l.id,
                 paint: {
                     'line-opacity': l.opacity,
-                    'line-color': getFeaturePropStyle('stroke'),
-                    'line-width': getFeaturePropStyle('stroke-width')
+                    'line-color': coalesce('stroke'),
+                    'line-width': coalesce('stroke-width')
                 },
                 layout: {
                     'line-join': 'round',
@@ -327,10 +327,10 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
                 paint: {
                     'circle-opacity': l.opacity,
                     'circle-stroke-opacity': l.opacity,
-                    'circle-stroke-color': getFeaturePropStyle('stroke'),
-                    'circle-color': getFeaturePropStyle('fill'),
-                    'circle-radius': getFeaturePropStyle('circle-radius'),
-                    'circle-stroke-width': getFeaturePropStyle('stroke-width'),
+                    'circle-stroke-color': coalesce('stroke'),
+                    'circle-color': coalesce('fill'),
+                    'circle-radius': coalesce('circle-radius'),
+                    'circle-stroke-width': coalesce('stroke-width'),
                 },
                 layout: {
                     visibility: (l.visible) ? 'visible' : 'none'
