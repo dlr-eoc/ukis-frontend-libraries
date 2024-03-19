@@ -160,6 +160,25 @@ export function getOpacity(map: glMap, layerOrId: string | TypedStyleLayer) {
     }
 }
 
+export function getLayerbeforeId(map: glMap, layerOrId: string | TypedStyleLayer) {
+    let mllayer;
+    if (typeof layerOrId === 'string') {
+        mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
+    } else {
+        mllayer = layerOrId;
+    }
+
+    const filtertype = getUkisLayerMetadata(mllayer).filtertype as TFiltertypes;
+    const layers = getAllLayers(map, filtertype);
+    const index = layers.findIndex((item) => item.id === mllayer.id);
+
+    if (index < layers.length - 1) {
+        return layers[index + 1].id;
+    } else {
+        return undefined;
+    }
+}
+
 // https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.StyleLayer/
 export function styleLayerGetOpacity(mllayer: TypedStyleLayer) {
     let opacityPaintProperty = getOpacityPaintProperty(mllayer.type);

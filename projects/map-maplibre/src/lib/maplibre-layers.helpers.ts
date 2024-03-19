@@ -659,7 +659,8 @@ export function updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer,
 
                     if (diff.length) {
                         map.removeLayer(mllayer.id);
-                        map.addLayer(newStyleLayer);
+                        const beforeId = getLayerbeforeId(map, mllayer);
+                        map.addLayer(newStyleLayer, beforeId);
                     }
 
                     break;
