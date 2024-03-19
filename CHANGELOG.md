@@ -1,5 +1,8 @@
 # [12.x.x]() () (services-map-state, map-ol, map-cesium and map-maplibre)
 
+### Breaking Changes
+ * **@dlr-eoc/map-maplibre:**
+  - Move functions `addUkisLayerMetadata` and `getUkisLayerMetadata` from maplibre-layers.helpers to maplibre.helpers and remove `hasUkisLayerMetadata`.
 
 ### Features
 * **@dlr-eoc/services-map-state:**

@@ -4,32 +4,10 @@ import {
 } from "maplibre-gl";
 import {
     RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
-    WmtsLayer as ukisWmtsLayer, VectorLayer as ukisVectorLayer, CustomLayer as ukisCustomLayer, Layer as ukisLayer, StackedLayer, XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype
+    WmtsLayer as ukisWmtsLayer, VectorLayer as ukisVectorLayer, CustomLayer as ukisCustomLayer, Layer as ukisLayer, StackedLayer, XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype, TFiltertypes
 } from '@dlr-eoc/services-layers';
-import { LayerSourceSpecification, SourceIdSpecification, UKIS_METADATA, getAllLayers, getOpacityPaintProperty } from "./maplibre.helpers";
+import { LayerSourceSpecification, SourceIdSpecification, UKIS_METADATA, getAllLayers, getOpacityPaintProperty, getLayerbeforeId, addUkisLayerMetadata } from "./maplibre.helpers";
 import { propsEqual, clone } from '@dlr-eoc/utilities';
-
-export function addUkisLayerMetadata(l: ukisLayer) {
-    const metadata = {};
-    metadata[UKIS_METADATA.filtertype] = l.filtertype;
-    metadata[UKIS_METADATA.layerID] = l.id;
-    return metadata;
-}
-
-export function hasUkisLayerMetadata(ml: TypedStyleLayer) {
-    if ((ml?.metadata as any)[UKIS_METADATA.filtertype] || (ml?.metadata as any)[UKIS_METADATA.layerID]) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-export function getUkisLayerMetadata(ml: TypedStyleLayer) {
-    const metadata = {};
-    metadata[UKIS_METADATA.filtertype] = (ml?.metadata as any)[UKIS_METADATA.filtertype];
-    metadata[UKIS_METADATA.layerID] = (ml?.metadata as any)[UKIS_METADATA.layerID];
-    return metadata;
-}
 
 export function createGetMapUrl(l: ukisWmsLayer) {
     const baseurl = l.url;

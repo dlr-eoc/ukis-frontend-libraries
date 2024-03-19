@@ -1,7 +1,6 @@
-import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification, setRotation, setPitch, getRotation } from './maplibre.helpers';
+import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification, setRotation, setPitch, getRotation, UKIS_METADATA, addUkisLayerMetadata } from './maplibre.helpers';
 import { StyleSpecification, LayerSpecification, SourceSpecification, Map as glMap } from 'maplibre-gl';
-import { CustomLayer } from '@dlr-eoc/services-layers';
-import { addUkisLayerMetadata } from './maplibre-layers.helpers';
+import { CustomLayer, Layer } from '@dlr-eoc/services-layers';
 
 const createMapTarget = (size: number[]) => {
     const container = document.createElement('div');
@@ -398,6 +397,19 @@ describe('MaplibreHelpers', () => {
                 resolve(evt);
             });
         });
+    });
+
+    it('should create ukis Metadata for LayerSourceSpecification', () => {
+        const layer = new Layer({
+            id: 'testlayer',
+            name: 'Test Layer',
+            type: 'custom',
+            filtertype: 'Layers',
+        });
+
+        const metadata = addUkisLayerMetadata(layer);
+        expect(metadata[UKIS_METADATA.filtertype]).toBe(layer.filtertype);
+        expect(metadata[UKIS_METADATA.layerID]).toBe(layer.id);
     });
 
     it('should set Layout Property visibility of a layer', () => {

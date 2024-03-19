@@ -15,6 +15,22 @@ export const UKIS_METADATA = {
     ignoreVisibility: 'ukis:ignore-visibility',
 };
 
+export function addUkisLayerMetadata(l: ukisLayer) {
+    const metadata = {};
+    metadata[UKIS_METADATA.filtertype] = l.filtertype;
+    metadata[UKIS_METADATA.layerID] = l.id;
+    return metadata;
+}
+
+export function getUkisLayerMetadata(ml: TypedStyleLayer) {
+    const metadata: { filtertype?: TFiltertypes, layerID?: ukisLayer['id'], ignoreOpacity?: boolean, ignoreVisibility?: boolean } = {};
+    metadata[UKIS_METADATA.filtertype] = (ml?.metadata as any)[UKIS_METADATA.filtertype];
+    metadata[UKIS_METADATA.layerID] = (ml?.metadata as any)[UKIS_METADATA.layerID];
+    metadata[UKIS_METADATA.ignoreOpacity] = (ml?.metadata as any)[UKIS_METADATA.ignoreOpacity];
+    metadata[UKIS_METADATA.ignoreVisibility] = (ml?.metadata as any)[UKIS_METADATA.ignoreVisibility];
+    return metadata;
+}
+
 
 export function setExtent(map: glMap, extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const bounds = new LngLatBounds([extent[0], extent[1]], [extent[2], extent[3]]);
