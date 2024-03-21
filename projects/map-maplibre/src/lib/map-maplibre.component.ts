@@ -1,6 +1,6 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Dispatcher, Evented } from 'maplibre-gl';
-import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, UKIS_METADATA, changeOrderOfLayers, setRotation, setPitch, getRotation } from './maplibre.helpers';
+import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, changeOrderOfLayers, setRotation, setPitch, getRotation, getUkisLayerMetadata, UKIS_METADATA } from './maplibre.helpers';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } from '@dlr-eoc/services-layers';
@@ -9,7 +9,6 @@ import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } fr
 import { Subject, Subscription } from 'rxjs';
 import { combineLatestWith, delay } from 'rxjs/operators';
 import { MapMaplibreService } from './map-maplibre.service';
-import { getUkisLayerMetadata } from './maplibre-layers.helpers';
 import toGeoJson from '@mapbox/togeojson';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
