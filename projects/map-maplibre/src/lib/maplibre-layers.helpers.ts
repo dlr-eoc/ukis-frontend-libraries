@@ -166,22 +166,19 @@ export function createTmsLayer<T extends ukisRasterLayer | ukisVectorLayer>(l: T
         if(l?.options?.style){
             const style = clone(l?.options?.style) as StyleSpecification;
             style.layers.forEach(ls => {
-                (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l));
-    
-                // Set not visible on start
-                // TODO: ??? 
+                (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l))
+                // Set not visible on start... This is not working with the new updateStyleLayerProperties
                 if (!ls.layout) {
                     ls.layout = {
-                        visibility: 'none'
+                        visibility: (l.visible) ? 'visible' : 'none'
                     }
                 } else {
-                    ls.layout.visibility = 'none';
+                    ls.layout.visibility = (l.visible) ? 'visible' : 'none'
                 }
             });
             layerSourceOrStyleSpecification = style as StyleSpecification;
             // TODO: merge styles??? 
         }
-        
     }
     return layerSourceOrStyleSpecification;
 }
