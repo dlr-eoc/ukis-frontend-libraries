@@ -625,19 +625,26 @@ export function updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer,
                         const oldProp = mllayer.getPaintProperty(key);
                         const newProp = item[1];
                         if (oldProp !== newProp) {
-                            // https://github.com/maplibre/maplibre-gl-js/issues/3001
-                            // map.setPaintProperty(mllayer.id, key, newProp);
-                            // map.style.setPaintProperty(mllayer.id, key, newProp);
-
-                            return true;
+                            if (map.getTerrain()) {
+                                // if has terrain use workaround remove and add layer
+                                return true;
+                            } else {
+                                // https://github.com/maplibre/maplibre-gl-js/issues/3001
+                                map.setPaintProperty(mllayer.id, key, newProp);
+                                // map.style.setPaintProperty(mllayer.id, key, newProp);
+                                return false
+                            }
                         } else {
                             false;
                         }
                     }).filter(i => i === true);
 
+                    // workaround remove and add layer
+                    // https://github.com/maplibre/maplibre-gl-js/issues/3001
                     if (diff.length) {
-                        map.removeLayer(mllayer.id);
+                        // get beforeId before layer is removed, then the layer can be removed and added again
                         const beforeId = getLayerbeforeId(map, mllayer);
+                        map.removeLayer(mllayer.id);
                         map.addLayer(newStyleLayer, beforeId);
                     }
 

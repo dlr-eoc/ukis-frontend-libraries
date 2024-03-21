@@ -30,7 +30,8 @@
   - Fix create `StyleLayer` id in `createCustomLayer` and `createStackedLayer`.
   - Fix create default `StyleLayers` for `GeoJson` Data (test for `MultiPolygon` and `MultiLineString`).
   - Do not modify referenced objects when creating `StyleLayers` from `CustomLayer` or `VectorLayer.options.style` see also (cddf2fc6a83444851914ed6619bc8d5ada8ce485)
-  - Fix add layer with the correct beforeId on update `PaintProperty` workaround.
+  - Fix add layer with the correct beforeId on update `PaintProperty` workaround for [maplibre issue 3001](https://github.com/maplibre/maplibre-gl-js/issues/3001).
+  - Fix workaround that tried to get beforeId after layer was removed. Now use workaround only if `map.getTerrain()` is not not null.
 
 * **@dlr-eoc/map-cesium:**
   - Fix get entity.name for infoBox in none GeoJson layers
