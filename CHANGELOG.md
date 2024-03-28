@@ -23,6 +23,9 @@
   - Added new `UKIS_METADATA.ignoreOpacity` and `UKIS_METADATA.ignoreVisibility` which can be used in `CustomLayer` to prevent changing the opacity or visibility for some layers.
   - Added new function `updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer)` to update `paint`, `layout`, `maxzoom`, `minzoom`, `filter`, `source` and `source-layer` from ukisLayers.
 
+* **shared-assets:**
+  - Add tilejson for open-map-style
+
 ### Bug Fixes
  * **@dlr-eoc/map-maplibre:**
   - Fix wrong coordinate order from `getExtent` [#216](7ff01801fd3af594aaa34b2479e921be88894dbe)
