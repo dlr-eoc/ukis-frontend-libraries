@@ -4,6 +4,9 @@
  * **@dlr-eoc/map-maplibre:**
   - Move functions `addUkisLayerMetadata` and `getUkisLayerMetadata` from maplibre-layers.helpers to maplibre.helpers and remove `hasUkisLayerMetadata`.
 
+ * **@dlr-eoc/map-ol:**
+  - Move type `IPopupEvent` to `@dlr-eoc/services-layers`
+
 ### Features
 * **@dlr-eoc/services-map-state:**
   - Added viewAngle and rotation to mapState [Issue #216](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/216).

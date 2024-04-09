@@ -75,6 +75,10 @@ export interface popup {
   asObservable?: boolean;
 }
 
+export interface IPopupEvent {
+  popupObj: popup;
+  popupParams: IPopupParams;
+}
 
 /**
  * Layer events like rendering or Source events like data load, change, error...
