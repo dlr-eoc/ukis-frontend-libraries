@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/core-ui",
-  "version": "12.0.1-next.3",
+  "version": "12.0.1-next.4",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",

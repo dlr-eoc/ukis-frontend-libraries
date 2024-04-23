@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-three",
-  "version": "12.0.1-next.3",
+  "version": "12.0.1-next.4",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -19,10 +19,10 @@
     "@angular/core": "^16.2.3"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "12.0.1-next.3",
-    "@dlr-eoc/services-layers": "12.0.1-next.3",
-    "@dlr-eoc/map-ol": "12.0.1-next.3",
-    "@dlr-eoc/utils-maps": "12.0.1-next.3",
+    "@dlr-eoc/services-map-state": "12.0.1-next.4",
+    "@dlr-eoc/services-layers": "12.0.1-next.4",
+    "@dlr-eoc/map-ol": "12.0.1-next.4",
+    "@dlr-eoc/utils-maps": "12.0.1-next.4",
     "proj4": "^2.9.0",
     "tslib": "^2.4.0",
     "three": "^0.137.5"
