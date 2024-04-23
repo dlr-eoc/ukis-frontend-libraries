@@ -149,7 +149,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
       */
     const FeatureCollection = { 'type': 'FeatureCollection', 'features': [] };
     class KMLSource extends GeoJSONSource {
-      constructor(id: string, { data, ...options }: any, dispatcher: Dispatcher, eventedParent: Evented) {
+      constructor(id: string, { data, ...options }: any, dispatcher: any, eventedParent: Evented) {
         super(id, Object.assign(options, { data: FeatureCollection }), dispatcher, eventedParent);
         this.id = id;
         this.type = "geojson";

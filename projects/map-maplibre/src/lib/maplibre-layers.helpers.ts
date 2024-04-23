@@ -1,6 +1,7 @@
 import {
-    CircleLayerSpecification, FillLayerSpecification, GeoJSONFeature, GeoJSONSourceSpecification, LayerSpecification, Map as glMap,
-    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, FilterSpecification, DataDrivenPropertyValueSpecification
+    CircleLayerSpecification, FillLayerSpecification, GeoJSONSourceSpecification, LayerSpecification, Map as glMap,
+    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, FilterSpecification, DataDrivenPropertyValueSpecification,
+    MapGeoJSONFeature
 } from "maplibre-gl";
 import {
     RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
@@ -218,7 +219,7 @@ export function createGeojsonLayer(l: ukisVectorLayer) {
             if (!l.data || !l.data.features.length) {
                 layers = creteDefaultGeojsonLayers(l);
             } else {
-                const features: GeoJSONFeature[] = l.data.features;
+                const features: MapGeoJSONFeature[] = l.data.features;
                 const geomTypes = features.map(i => i.geometry.type);
                 const uniqueGeomTypes = geomTypes.filter((t, i) => geomTypes.findIndex(t2 => t2 === t) === i);
                 const uniqueFeatures = [];
@@ -227,26 +228,26 @@ export function createGeojsonLayer(l: ukisVectorLayer) {
                 const hasPoint = uniqueGeomTypes.filter(i => i === 'Point').length;
 
                 if(hasPoly){
-                    const defaultPoly = getDefaultGeoms().find(f => f.geometry.type === 'Polygon') as GeoJSONFeature;
+                    const defaultPoly = getDefaultGeoms().find(f => f.geometry.type === 'Polygon') as MapGeoJSONFeature;
                     uniqueFeatures.push(defaultPoly);
                 }
 
                 if(hasLine){
-                    const defaultLine = getDefaultGeoms().find(f => f.geometry.type === 'LineString') as GeoJSONFeature;
+                    const defaultLine = getDefaultGeoms().find(f => f.geometry.type === 'LineString') as MapGeoJSONFeature;
                     uniqueFeatures.push(defaultLine);
                 }
 
                 if(hasPoint){
-                    const defaultPoint = getDefaultGeoms().find(f => f.geometry.type === 'Point') as GeoJSONFeature;
+                    const defaultPoint = getDefaultGeoms().find(f => f.geometry.type === 'Point') as MapGeoJSONFeature;
                     uniqueFeatures.push(defaultPoint);
                 }
 
                 if (hasPoly && !hasLine) {
-                    const defaultLine = getDefaultGeoms().find(f => f.geometry.type === 'LineString') as GeoJSONFeature;
+                    const defaultLine = getDefaultGeoms().find(f => f.geometry.type === 'LineString') as MapGeoJSONFeature;
                     uniqueFeatures.push(defaultLine);
                 }
                 
-                layers = uniqueFeatures.map((f: GeoJSONFeature) => createLayersFromGeojsonTypes(f, l));
+                layers = uniqueFeatures.map((f: MapGeoJSONFeature) => createLayersFromGeojsonTypes(f, l));
             }
         }
     } else {
@@ -258,7 +259,7 @@ export function createGeojsonLayer(l: ukisVectorLayer) {
     return returnSourcesAndLayers(l, source, layers);
 }
 
-export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLayer, index?: number) {
+export function createLayersFromGeojsonTypes(feature: MapGeoJSONFeature, l: ukisLayer, index?: number) {
     let layer: LayerSpecification = {} as never;
 
     // https://wiki.openstreetmap.org/wiki/Geojson_CSS
@@ -354,11 +355,11 @@ export function createLayersFromGeojsonTypes(feature: GeoJSONFeature, l: ukisLay
 
 export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
     const defaultGeom = getDefaultGeoms();
-    return defaultGeom.map((f: GeoJSONFeature) => createLayersFromGeojsonTypes(f, l));
+    return defaultGeom.map((f: MapGeoJSONFeature) => createLayersFromGeojsonTypes(f, l));
 }
 
 function getDefaultGeoms() {
-    const defaultGeom: Omit<GeoJSONFeature, '_geometry' | 'id' | '_vectorTileFeature' | 'toJSON'>[] = [
+    const defaultGeom: Omit<MapGeoJSONFeature, '_geometry' | 'id' | '_vectorTileFeature' | 'source' | 'layer' | 'state' | 'toJSON'>[] = [
         {
             type: 'Feature',
             geometry: {
