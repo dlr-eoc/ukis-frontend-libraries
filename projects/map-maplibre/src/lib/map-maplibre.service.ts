@@ -112,7 +112,7 @@ export class MapMaplibreService {
   public getLayers(filtertype: Tgroupfiltertype, map: glMap) {
     const style = map.getStyle();
     const layerSpecifications = style.layers.filter(l => l.metadata[UKIS_METADATA.filtertype] === filtertype);
-    const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id));
+    const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id)) as TypedStyleLayer[]; //Temp fix of : Property ... of exported class expression may not be private or protected
 
     return {
       layerSpecifications,
@@ -132,7 +132,7 @@ export class MapMaplibreService {
     const alllayers = this.getLayers(filtertype, map);
     const layerSpecifications = alllayers.layerSpecifications.filter(l => l.metadata[UKIS_METADATA.layerID] === id);
     if (layerSpecifications.length) {
-      const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id));
+      const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id)) as TypedStyleLayer[]; //Temp fix of : Property ... of exported class expression may not be private or protected
       return {
         layerSpecifications,
         styleLayers
