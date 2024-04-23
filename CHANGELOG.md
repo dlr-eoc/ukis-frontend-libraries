@@ -3,6 +3,7 @@
 ### Breaking Changes
  * **@dlr-eoc/map-maplibre:**
   - Move functions `addUkisLayerMetadata` and `getUkisLayerMetadata` from maplibre-layers.helpers to maplibre.helpers and remove `hasUkisLayerMetadata`.
+  - Update `maplibre-gl` from `v^3.3.0` to `v^4.1.3` [see maplibre-gl Breaking Changes](https://github.com/maplibre/maplibre-gl-js/releases/tag/v4.0.0).
 
  * **@dlr-eoc/map-ol:**
   - Move type `IPopupEvent` to `@dlr-eoc/services-layers`
