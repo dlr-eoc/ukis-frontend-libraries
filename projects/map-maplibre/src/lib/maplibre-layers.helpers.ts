@@ -165,6 +165,14 @@ export function createTmsLayer<T extends ukisRasterLayer | ukisVectorLayer>(l: T
     } else if (l instanceof ukisVectorLayer) {
         if(l?.options?.style){
             const style = clone(l?.options?.style) as StyleSpecification;
+            const sourceKey = l?.options?.styleSource;
+            Object.entries(style.sources).forEach(item => {
+                const key = item[0];
+                const source = item[1];
+                if (!(source as any).attribution && l.attribution) {
+                    (source as any).attribution = l.attribution;
+                }
+            });
             style.layers.forEach(ls => {
                 (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l))
                 // Set not visible on start... This is not working with the new updateStyleLayerProperties
