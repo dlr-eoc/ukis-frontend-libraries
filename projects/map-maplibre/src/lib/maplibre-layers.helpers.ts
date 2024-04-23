@@ -172,6 +172,9 @@ export function createTmsLayer<T extends ukisRasterLayer | ukisVectorLayer>(l: T
                 if (!(source as any).attribution && l.attribution) {
                     (source as any).attribution = l.attribution;
                 }
+                if (key === sourceKey) {
+                    setSubdomains(l,source);
+                }
             });
             style.layers.forEach(ls => {
                 (ls.metadata as any) = Object.assign(ls.metadata as any || {}, addUkisLayerMetadata(l))
@@ -191,6 +194,19 @@ export function createTmsLayer<T extends ukisRasterLayer | ukisVectorLayer>(l: T
     return layerSourceOrStyleSpecification;
 }
 
+/** use subdomains to setUrl/s on source */
+function setSubdomains(l: ukisLayer, source: SourceSpecification): void {
+    if (l instanceof ukisVectorLayer || l instanceof ukisRasterLayer) {
+        if (l.subdomains && source.type === 'vector' || source.type === 'raster' || source.type === 'raster-dem') {
+            if (l.type === 'wfs' && l instanceof ukisVectorLayer) {
+                source.tiles = [l.url.replace('{s}', `${l.subdomains[0]}-${l.subdomains[l.subdomains.length - 1]}`)];
+            } else {
+                const urls = l.subdomains.map((item) => l.url.replace('{s}', `${item}`));
+                source.tiles = urls;
+            }
+        }
+    }
+}
 
 export function createGeojsonLayer(l: ukisVectorLayer) {
     const { source } = createBaseLayer<GeoJSONSourceSpecification>(l)

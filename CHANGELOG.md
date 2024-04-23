@@ -40,6 +40,7 @@
   - Fix workaround that tried to get beforeId after layer was removed. Now use workaround only if `map.getTerrain()` is not not null.
   - Fix set `layout.visibility` in style of `VectorLayer` based on `VectorLayer.visible`.
   - Fix set `VectorLayer.attribution` from `VectorLayer.options.style` for TMS.
+  - Fix set subdomains from `VectorLayer` in `VectorLayer.options.style` for TMS.
 
 * **@dlr-eoc/map-cesium:**
   - Fix get entity.name for infoBox in none GeoJson layers
