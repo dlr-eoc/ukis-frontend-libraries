@@ -4,7 +4,7 @@
 - Check if [Node.js](https://nodejs.org/) and npm are installed
 - Clone the repo: `git clone https://github.com/dlr-eoc/frontend-libraries.git` 
 - Move into project: `cd frontend-libraries`
-- Install dependencies: [`npm install`](https://docs.npmjs.com/cli/commands/npm-install) or [`npm ci`](https://docs.npmjs.com/cli/commands/npm-ci)
+- Install dependencies: [`npm install`](https://docs.npmjs.com/cli/commands/npm-install) or [`npm ci`](https://docs.npmjs.com/cli/commands/npm-ci). For all workspaces use `npm i --workspaces --include-workspace-root`.
 - Dependencies are managed in [npm workspaces](https://docs.npmjs.com/cli/v9/using-npm/workspaces) check how to use them
 - Create a new branch for your feature specific changes based on the main branch: e.g. `git checkout -b feature-XXX`
 
@@ -170,7 +170,7 @@ You can check this with `[semver](https://github.com/npm/node-semver#readme) 7.2
 Whereby after semantic versioning the following order exists: 7.2.0 < 7.3.0-alpha.0 < 7.3.0-beta.0 < 7.3.0-next.0
 
 To create a new prerelease, you only have to create a new version from your current branch 
-- `npm version <prerelease> --preid=next -m "prerelease message" --workspace=projects --include-workspace-root` (premajor | preminor | prepatch).
+- `npm version <prerelease> --preid=next -m "prerelease message" --workspace=projects --include-workspace-root` (premajor | preminor | prepatch). Append `--no-git-tag-version` to `npm version ...` if you want to skip creating a tag.
 - run `node scripts/library/index.js --set-source` to sync all versions and run npm install to regenerate `package-lock.json` (If something failed during the npm version, remove the local tag and create a new one. `git tag -d <version> && git tag -a <version> -m "<description>`).
 And then `git push origin --tags` which will trigger the [Pre Release](.github/workflows/pre-release-package.yml) workflow.
 **Before doing this you should [locally test and build](#further-you-can-test-and-build-locally)!!!** to prevent failed workflows but created tags.
