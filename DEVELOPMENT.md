@@ -171,7 +171,7 @@ Whereby after semantic versioning the following order exists: 7.2.0 < 7.3.0-alph
 
 To create a new prerelease, you only have to create a new version from your current branch 
 - `npm version prerelease --preid=next -m "prerelease message" --workspace=projects --include-workspace-root` (premajor | preminor | prepatch). Append `--no-git-tag-version` to `npm version ...` if you want to skip creating a tag.
-- run `node scripts/library/index.js --set-source` to sync all versions and run npm install to regenerate `package-lock.json` (If something failed during the npm version, remove the local tag and create a new one. `git tag -d <version> && git tag -a <version> -m "<description>`).
+- run `node scripts/library/index.js --set-source` to sync all versions and run npm install to regenerate `package-lock.json` (If something failed during the npm version, remove the local tag and create a new one. `git tag -d <version> && git tag -a <(v)version> -m "<description>`).
 And then `git push origin --tags` which will trigger the [Pre Release](.github/workflows/pre-release-package.yml) workflow.
 **Before doing this you should [locally test and build](#further-you-can-test-and-build-locally)!!!** to prevent failed workflows but created tags.
 
