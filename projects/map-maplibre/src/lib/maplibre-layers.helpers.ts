@@ -421,7 +421,7 @@ export function createWfsLayer(l: ukisVectorLayer) {
 export type KmlSourceSpecification = Omit<GeoJSONSourceSpecification, 'type'> & { type: "kml" };
 export function createKmlLayer(l: ukisVectorLayer) {
     /**
-     * use map.addSourceType('kml', KMLSource,...)
+     * use addSourceType('kml', KMLSource,...)
      * and extend the geojson source to convert kml to geojson and then use it.
      * see -> map-maplibre.component.ts
      */

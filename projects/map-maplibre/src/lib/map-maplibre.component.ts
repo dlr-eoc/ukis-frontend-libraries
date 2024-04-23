@@ -1,5 +1,5 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Dispatcher, Evented } from 'maplibre-gl';
+import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Evented, addSourceType } from 'maplibre-gl';
 import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, changeOrderOfLayers, setRotation, setPitch, getRotation, getUkisLayerMetadata, UKIS_METADATA } from './maplibre.helpers';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
@@ -191,11 +191,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     // return registeredSources[name];
     // addSourceType -> registeredSources[name] = SourceType
     // getSourceType -> return registeredSources[name]
-    this.map.addSourceType('kml', KMLSource, (err, result) => {
-      if (err) {
-        console.log(err, result);
-      }
-    });
+    addSourceType('kml', KMLSource);
   }
 
   private setControls() {
