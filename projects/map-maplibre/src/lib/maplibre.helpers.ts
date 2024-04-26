@@ -8,6 +8,13 @@ export type LayerSourceSpecification = { sources: SourceIdSpecification, layers:
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
+export interface IukisMetadata {
+    'ukis:layerID': ukisLayer['id'];
+    'ukis:filtertype': ukisLayer['filtertype'];
+    'ukis:ignore-opacity'?: boolean;
+    'ukis:ignore-visibility'?: boolean;
+}
+
 export const UKIS_METADATA = {
     layerID: 'ukis:layerID',
     filtertype: 'ukis:filtertype',
@@ -16,9 +23,10 @@ export const UKIS_METADATA = {
 };
 
 export function addUkisLayerMetadata(l: ukisLayer) {
-    const metadata = {};
-    metadata[UKIS_METADATA.filtertype] = l.filtertype;
-    metadata[UKIS_METADATA.layerID] = l.id;
+    const metadata: IukisMetadata = {
+        'ukis:filtertype': l.filtertype,
+        'ukis:layerID': l.id
+    };
     return metadata;
 }
 
@@ -31,6 +39,11 @@ export function getUkisLayerMetadata(ml: TypedStyleLayer) {
     return metadata;
 }
 
+export function setUkisLayerMetadata(ml: TypedStyleLayer, meta: Partial<IukisMetadata>) {
+    Object.keys(meta).forEach(k => {
+        (ml?.metadata as any)[k] = meta[k];
+    });
+}
 
 export function setExtent(map: glMap, extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const bounds = new LngLatBounds([extent[0], extent[1]], [extent[2], extent[3]]);

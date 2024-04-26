@@ -26,6 +26,7 @@
   - Adding support for mapState viewAngle and rotation 
   - Added new `UKIS_METADATA.ignoreOpacity` and `UKIS_METADATA.ignoreVisibility` which can be used in `CustomLayer` to prevent changing the opacity or visibility for some layers.
   - Added new function `updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer)` to update `paint`, `layout`, `maxzoom`, `minzoom`, `filter`, `source` and `source-layer` from ukisLayers.
+  - Added new function `setUkisLayerMetadata(ml: TypedStyleLayer, meta: Partial<IukisMetadata>)` and interface `IukisMetadata`.
 
 * **shared-assets:**
   - Add tilejson for open-map-style
