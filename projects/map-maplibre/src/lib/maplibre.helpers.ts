@@ -31,7 +31,7 @@ export function addUkisLayerMetadata(l: ukisLayer) {
 }
 
 export function getUkisLayerMetadata(ml: TypedStyleLayer) {
-    const metadata: { filtertype?: TFiltertypes, layerID?: ukisLayer['id'], ignoreOpacity?: boolean, ignoreVisibility?: boolean } = {};
+    const metadata: Partial<IukisMetadata> = {};
     metadata[UKIS_METADATA.filtertype] = (ml?.metadata as any)[UKIS_METADATA.filtertype];
     metadata[UKIS_METADATA.layerID] = (ml?.metadata as any)[UKIS_METADATA.layerID];
     metadata[UKIS_METADATA.ignoreOpacity] = (ml?.metadata as any)[UKIS_METADATA.ignoreOpacity];
@@ -197,7 +197,7 @@ export function getLayerbeforeId(map: glMap, layerOrId: string | TypedStyleLayer
         mllayer = layerOrId;
     }
 
-    const filtertype = getUkisLayerMetadata(mllayer).filtertype as TFiltertypes;
+    const filtertype = getUkisLayerMetadata(mllayer)['ukis:filtertype'];
     const layers = getAllLayers(map, filtertype);
     const index = layers.findIndex((item) => item.id === mllayer.id);
 

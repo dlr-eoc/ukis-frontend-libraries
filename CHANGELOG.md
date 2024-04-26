@@ -43,6 +43,7 @@
   - Fix set `layout.visibility` in style of `VectorLayer` based on `VectorLayer.visible`.
   - Fix set `VectorLayer.attribution` from `VectorLayer.options.style` for TMS.
   - Fix set subdomains from `VectorLayer` in `VectorLayer.options.style` for TMS.
+  - Fix return type of `getUkisLayerMetadata`.
 
 * **@dlr-eoc/map-cesium:**
   - Fix get entity.name for infoBox in none GeoJson layers
