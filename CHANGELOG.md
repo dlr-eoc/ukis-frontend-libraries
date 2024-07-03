@@ -23,6 +23,7 @@
   - Added flyTo options for `setNadirViewAngle` - This can be useful if you switch the map to a 2D view and want to reset the `ViewAngle` before.
 
  * **@dlr-eoc/map-maplibre:**
+  - Update "maplibre-gl-js" from `4.1.3` to `4.5.0` also see [maplibre-gl](https://github.com/maplibre/maplibre-gl-js/releases/tag/v4.5.0).
   - Adding support for mapState viewAngle and rotation 
   - Added new `UKIS_METADATA.ignoreOpacity` and `UKIS_METADATA.ignoreVisibility` which can be used in `CustomLayer` to prevent changing the opacity or visibility for some layers.
   - Added new function `updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer)` to update `paint`, `layout`, `maxzoom`, `minzoom`, `filter`, `source` and `source-layer` from ukisLayers.
