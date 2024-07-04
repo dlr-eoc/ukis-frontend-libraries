@@ -12,7 +12,7 @@ import { buffer } from 'ol/extent';
  */
 export const regularGrid = (bbox: TGeoExtent, cellSizeDeg: number, zoom: number, mapEPSG: string, mapExtent: TGeoExtent) => {
   /** olFeature */
-  const features = [];
+  const features: olFeature<olPolygon>[] = [];
 
   let multiplyFactor = 80;
   if (zoom > 1) {
@@ -91,7 +91,6 @@ export const regularGrid = (bbox: TGeoExtent, cellSizeDeg: number, zoom: number,
         cords4,
         cords1_5,
       ]];
-      console.log();
       // const inExtent = containsCoordinate(mapExtent, cords2) && containsCoordinate(mapExtent, cords4);
       const inExtent = containsXY(mapExtent, currentX, currentY) && containsXY(mapExtent, nextX, nextY);
       if (inExtent) {

@@ -188,9 +188,9 @@ export interface ILayerOptions {
   // https://stackoverflow.com/questions/57016728/is-there-a-way-to-define-type-for-array-with-unique-items-in-typescript
   popup?: boolean | Array<string> | popup | popup[];
   events?: {
-    /** e.g. https://openlayers.org/en/v6.5.0/apidoc/module-ol_layer_Layer-Layer.html Fires */
+    /** e.g. https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html Fires */
     layer?: ILayerEvent[];
-    /** e.g. https://openlayers.org/en/v6.5.0/apidoc/module-ol_source_Source.html Tile | Image | Raster | Vector */
+    /** e.g. https://openlayers.org/en/latest/apidoc/module-ol_source_Source.html Tile | Image | Raster | Vector */
     source?: ILayerEvent[];
   };
   actions?: [{ title: string, icon: string, action: (Layer) => void }];
