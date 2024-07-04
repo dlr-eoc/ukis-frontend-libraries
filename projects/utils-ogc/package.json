@@ -17,7 +17,7 @@
     "ogc-schemas": "^2.6.1",
     "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
     "xmlserializer": "^0.6.1",
-    "ol": "^7.3.0"
+    "ol": "^v9.2.4"
   },
   "devDependencies": {
     "@angular/platform-browser-dynamic": "^16.2.3",
