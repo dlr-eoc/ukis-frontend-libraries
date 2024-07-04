@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { IMapControls, MapOlService } from '@dlr-eoc/map-ol';
 import { LayerGroup, LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
