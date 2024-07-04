@@ -1,7 +1,6 @@
 import { Feature } from 'ol';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import VectorLayer from 'ol/layer/Vector';
-import Geometry from 'ol/geom/Geometry';
 import Point from 'ol/geom/Point';
 import { Vector as VectorSource, Cluster as olCluster } from 'ol/source';
 import { replaceChildren } from 'ol/dom';
@@ -11,6 +10,7 @@ import { FramebufferObject, getCurrentFramebuffersPixels } from '../../webgl/web
 import { rectangleA, rectangleE } from '../../webgl/engine.shapes';
 import { nextPowerOf, flattenRecursive, createNDimArray } from '../../webgl/utils';
 import { FrameState } from 'ol/Map';
+import { FeatureLike } from 'ol/Feature';
 
 
 
@@ -20,7 +20,7 @@ export type ColorRamp = {val: number, rgb: [number, number, number]}[];
 
 
 export interface InterpolationLayerOptions {
-    source: VectorSource<Point>;
+    source: VectorSource<FeatureLike>;
     renderSettings: InterpolationRendererSettings;
     [key: string]: any;
 }
@@ -41,7 +41,7 @@ export interface InterpolationRendererSettings {
 }
 
 
-export class InterpolationLayer extends VectorLayer<VectorSource<Geometry>> {
+export class InterpolationLayer extends VectorLayer<FeatureLike> {
 
     readonly options: InterpolationLayerOptions;
 
@@ -101,7 +101,7 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
     private projection: Projection;
     private bbox: number[];
 
-    constructor(layer: VectorLayer<VectorSource<Geometry>>, private settings: InterpolationRendererSettings) {
+    constructor(layer: VectorLayer<FeatureLike>, private settings: InterpolationRendererSettings) {
         super(layer);
 
         // setting up HTML element

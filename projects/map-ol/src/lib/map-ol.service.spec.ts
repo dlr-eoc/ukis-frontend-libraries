@@ -35,7 +35,7 @@ import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
 import { get as getProjection, transform, transformExtent } from 'ol/proj';
 import { fromExtent as polygonFromExtent } from 'ol/geom/Polygon';
-import olFeature from 'ol/Feature';
+import olFeature, { FeatureLike } from 'ol/Feature';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
 import { Subject } from 'rxjs';
@@ -44,6 +44,7 @@ import { getCenter as olGetCenter } from 'ol/extent';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
+import Feature from 'ol/Feature';
 
 
 const WebMercator = 'EPSG:3857';
@@ -55,16 +56,16 @@ let mapTarget: { size: number[], container: HTMLDivElement };
 let rasterLayer: olTileLayer<olTileSource>;
 
 /** ol/layer/Vector -ID-vector */
-let vectorLayer: olVectorLayer<olVectorSource<olGeometry>>;
+let vectorLayer: olVectorLayer<FeatureLike>;
 
 /** ol/layer/Image - ID-image */
 let imageLayer: olImageLayer<olImageSource>;
 
 /** ol/layer/VectorImage - ID-vector-image */
-let vectorImageLayer: olVectorImageLayer<olVectorSource<olGeometry>>, vectorImageData;
+let vectorImageLayer: olVectorImageLayer<Feature>, vectorImageData;
 
 /** ol/layer/VectorImage - ID-vector-tile */
-let vectorTileLayer: olVectorTileLayer;
+let vectorTileLayer: olVectorTileLayer<FeatureLike>;
 
 /** ID-ukis-raster */
 let ukisRasterLayer: RasterLayer;
@@ -748,12 +749,12 @@ describe('MapOlService ukisLayers', () => {
     const olSourceWmts = olLayerWmts.getSource();
     expect(olSourceWmts['crossOrigin'] && olSourceWmts['crossOrigin_']).toBe('anonymous');
 
-    const olLayerJson = mapLayers[4] as olVectorLayer<olVectorSource<olGeometry>>;
+    const olLayerJson = mapLayers[4] as olVectorLayer<FeatureLike>;
     expect(olLayerJson.getClassName()).toBe(ukisVectorLayerJson.id);
     const olSourceJson = olLayerJson.getSource();
     expect(olSourceJson['crossOrigin'] && olSourceJson['crossOrigin_']).toBe(undefined); // this is only set if Layer.url -> olTileJSON()
 
-    const olLayerWfs = mapLayers[5] as olVectorLayer<olVectorSource<olGeometry>>;
+    const olLayerWfs = mapLayers[5] as olVectorLayer<FeatureLike>;
     expect(olLayerWfs.getClassName()).toBe(ukisVectorLayerWfs.id);
     const olSourceWfs = olLayerWfs.getSource();
     expect(olSourceWfs['crossOrigin'] && olSourceWfs['crossOrigin_']).toBe(undefined); // WFS does not need crossOrigin??
@@ -1659,7 +1660,7 @@ describe('MapOlService State', () => {
     expect(service.getProjection().getCode()).toEqual(WebMercator);
     const layerBefore = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
 
-    const testFeatureBefore = (layerBefore as olVectorLayer<olVectorSource<olGeometry>>).getSource().getFeatures()[3];
+    const testFeatureBefore = (layerBefore as olVectorLayer<FeatureLike>).getSource().getFeatures()[3];
     // coordinates after Read.Features of vectorLayer [1281696.090285835, 5848349.908155403];
     const pointCoordinates = transform(testFeatureCollection.features[3].geometry.coordinates as number[], WGS84, WebMercator);
     // Test for Point Feature
@@ -1669,7 +1670,7 @@ describe('MapOlService State', () => {
     service.setProjection(projection);
 
     const reprojectedLayer = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
-    const testFeature = (reprojectedLayer as olVectorLayer<olVectorSource<olGeometry>>).getSource().getFeatures()[3];
+    const testFeature = (reprojectedLayer as olVectorLayer<FeatureLike>).getSource().getFeatures()[3];
     // Test for Point Feature
     expect(testFeature.getGeometry().getType()).toBe('Point');
     expect((testFeature.getGeometry() as olPoint).getCoordinates()).toEqual(testFeatureCollection.features[3].geometry.coordinates as number[]);

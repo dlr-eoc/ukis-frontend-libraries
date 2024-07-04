@@ -1,7 +1,5 @@
 import { Feature } from 'ol';
 import VectorLayer from 'ol/layer/Vector';
-import Geometry from 'ol/geom/Geometry';
-import { Vector as VectorSource } from 'ol/source';
 import { Polygon as olPolygonGeometry } from 'ol/geom';
 import {
   WebGLRenderer, PerspectiveCamera, Scene, Mesh, Renderer,
@@ -10,9 +8,10 @@ import {
 import { heightAboveWidth } from '@dlr-eoc/map-three';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import { FrameState } from 'ol/Map';
+import { FeatureLike } from 'ol/Feature';
 
 
-export class BarsLayer extends VectorLayer<VectorSource<Geometry>> {
+export class BarsLayer extends VectorLayer<FeatureLike> {
   constructor(options) {
     super(options);
   }
@@ -41,7 +40,7 @@ export class ThreeJsRenderer extends CanvasVectorLayerRenderer {
   readonly renderer: Renderer;
   readonly camera: PerspectiveCamera;
 
-  constructor(layer: VectorLayer<VectorSource<Geometry>>) {
+  constructor(layer: VectorLayer<FeatureLike>) {
     super(layer);
 
     // setting up canvas
