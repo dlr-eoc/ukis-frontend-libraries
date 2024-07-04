@@ -227,7 +227,7 @@ export class MapCesiumService {
     *  Set initial oblique view, see https://cesium.com/learn/cesiumjs/ref-doc/Camera.html
     *  subtract 90°, to get the same behavior as in openlayers
     *  options of viewer.camera.flyTo`
-    * 
+    *
     * https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L1457
     * https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L3540-L3541
     */
@@ -270,7 +270,7 @@ export class MapCesiumService {
   /**
     *  subtract rotation degree from 360° to get the same behavior as in openlayers
     *  options of viewer.camera.flyTo`
-    * 
+    *
     * https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L3424
     * https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L1456
     */
@@ -284,7 +284,7 @@ export class MapCesiumService {
       },
     }, options || {});
 
-    this.viewer.camera.flyTo(flyToOptions)
+    this.viewer.camera.flyTo(flyToOptions);
   }
   // subtract rotation degree from 360° to get the same behavior as in openlayers
   public getRotation():number{
