@@ -134,8 +134,9 @@ The general workflow to create a new version:
 
 #### Further you can test and build locally
 - run `node scripts/library/index.js -c` to check if all dependencies are present. (node_modules must be installed for this)
-- run `node scripts/library/index.js -t` to test all projects. (node_modules must be installed for this)
 - run `node scripts/library/index.js -b` to test all projects are building locally. (node_modules must be installed for this)
+- run `node scripts/library/index.js -t` to test all projects. (node_modules must be installed for this and the local build must be updated)
+
 
 4. create a [release pull request](https://github.com/dlr-eoc/ukis-frontend-libraries/pulls) on the main branch.
 
