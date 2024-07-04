@@ -63,8 +63,8 @@ export class RouteMapComponent implements OnInit {
   }
 
   parseCapabilities() {
-    this.wmsSvc.getCapabilities('https://geoservice.dlr.de/eoc/land/wms').subscribe(caps => {
-      const layer = this.wmsSvc.getLayerFromCapabilities('AGRODE_S2_EVI_P1M', caps);
+    this.wmsSvc.getCapabilities('https://geoservice.dlr.de/eoc/basemap/wms').subscribe(caps => {
+      const layer = this.wmsSvc.getLayerFromCapabilities('basemap', caps);
       console.log(layer);
     });
   }
