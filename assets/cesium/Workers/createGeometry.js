@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.111
+ * Version 1.119
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,34 +25,37 @@
 
 import {
   PrimitivePipeline_default
-} from "./chunk-CZFGXAMG.js";
+} from "./chunk-BDFNKFOE.js";
 import {
   createTaskProcessorWorker_default
-} from "./chunk-MMNPUV23.js";
-import "./chunk-BLXANKPB.js";
-import "./chunk-TIEL2RYB.js";
-import "./chunk-4EXWKTY2.js";
-import "./chunk-EEL3YC6V.js";
-import "./chunk-R5NOUYKW.js";
-import "./chunk-PNAD2XAN.js";
-import "./chunk-CKOGHQ6J.js";
-import "./chunk-EH2PEDWL.js";
-import "./chunk-3R5RPSYS.js";
-import "./chunk-XKGSTUQO.js";
-import "./chunk-DNCKFFNR.js";
-import "./chunk-IQCBK4CE.js";
-import "./chunk-UJ76JVUZ.js";
-import "./chunk-54GSYZWT.js";
-import "./chunk-A3TYRSRJ.js";
-import "./chunk-XNRYWRVT.js";
-import "./chunk-YK5RU5AO.js";
-import "./chunk-N73NY3KY.js";
-import "./chunk-WYMW5NZB.js";
+} from "./chunk-QX5XS4LC.js";
+import "./chunk-X23FRWHJ.js";
+import "./chunk-JYAHOGGL.js";
+import "./chunk-OORVMGDU.js";
+import "./chunk-I2RC4XVN.js";
+import "./chunk-XD445VDH.js";
+import "./chunk-4BAE4PWO.js";
+import "./chunk-QD4KM3GO.js";
+import "./chunk-R6B7UCQB.js";
+import "./chunk-GR3CDLCP.js";
+import "./chunk-DOXCPOG4.js";
+import "./chunk-O3JCMSS3.js";
+import "./chunk-2J3JKXCP.js";
+import "./chunk-PYHLO636.js";
+import "./chunk-MSKXMXJI.js";
+import "./chunk-OOK53QUQ.js";
+import "./chunk-T77JILCU.js";
+import {
+  defaultValue_default
+} from "./chunk-VE7BFUIX.js";
+import {
+  DeveloperError_default
+} from "./chunk-S3PI2KFM.js";
 import {
   __glob,
   __require,
   defined_default
-} from "./chunk-FMN2NHBU.js";
+} from "./chunk-AA4GZKOT.js";
 
 // import("./**/*.js") in packages/engine/Source/Workers/createGeometry.js
 var globImport_js = __glob({
@@ -108,17 +111,28 @@ var globImport_js = __glob({
 
 // packages/engine/Source/Workers/createGeometry.js
 var moduleCache = {};
-async function getModule(moduleName) {
-  let module = moduleCache[moduleName];
-  if (!defined_default(module)) {
-    if (typeof exports === "object") {
-      moduleCache[module] = module = __require(`Workers/${moduleName}`);
-    } else {
-      const result = await globImport_js(`./${moduleName}.js`);
-      module = result.default;
-      moduleCache[module] = module;
-    }
+async function getModule(moduleName, modulePath) {
+  let module = defaultValue_default(moduleCache[modulePath], moduleCache[moduleName]);
+  if (defined_default(module)) {
+    return module;
   }
+  if (defined_default(modulePath)) {
+    if (typeof exports === "object") {
+      module = __require(modulePath);
+    } else {
+      const result = await import(modulePath);
+      module = result.default;
+    }
+    moduleCache[modulePath] = module;
+    return module;
+  }
+  if (typeof exports === "object") {
+    module = __require(`Workers/${moduleName}`);
+  } else {
+    const result = defined_default(modulePath) ? await import(modulePath) : await globImport_js(`./${moduleName}.js`);
+    module = result.default;
+  }
+  moduleCache[moduleName] = module;
   return module;
 }
 async function createGeometry(parameters, transferableObjects) {
@@ -129,10 +143,15 @@ async function createGeometry(parameters, transferableObjects) {
     const task = subTasks[i];
     const geometry = task.geometry;
     const moduleName = task.moduleName;
-    if (defined_default(moduleName)) {
-      resultsOrPromises[i] = getModule(moduleName).then(
-        (createFunction) => createFunction(geometry, task.offset)
-      );
+    const modulePath = task.modulePath;
+    if (defined_default(moduleName) && defined_default(modulePath)) {
+      throw new DeveloperError_default("Must only set moduleName or modulePath");
+    }
+    if (defined_default(moduleName) || defined_default(modulePath)) {
+      resultsOrPromises[i] = getModule(
+        moduleName,
+        modulePath
+      ).then((createFunction) => createFunction(geometry, task.offset));
     } else {
       resultsOrPromises[i] = geometry;
     }

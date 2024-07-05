@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.111
+ * Version 1.119
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -26,56 +26,55 @@
 import {
   EllipsoidalOccluder_default,
   TerrainEncoding_default
-} from "./chunk-KFCTEEBD.js";
+} from "./chunk-BCL4PHHT.js";
 import {
   createTaskProcessorWorker_default
-} from "./chunk-MMNPUV23.js";
+} from "./chunk-QX5XS4LC.js";
 import {
   WebMercatorProjection_default
-} from "./chunk-BLXANKPB.js";
+} from "./chunk-X23FRWHJ.js";
 import {
   OrientedBoundingBox_default
-} from "./chunk-P2BTKBVY.js";
-import "./chunk-4EXWKTY2.js";
-import "./chunk-AI2FOC47.js";
+} from "./chunk-AVI4IUWC.js";
+import "./chunk-OORVMGDU.js";
+import "./chunk-SYCPRK3D.js";
 import {
   AxisAlignedBoundingBox_default
-} from "./chunk-5HUDPV54.js";
-import "./chunk-R5NOUYKW.js";
-import "./chunk-PNAD2XAN.js";
+} from "./chunk-STBBMQGG.js";
+import "./chunk-XD445VDH.js";
+import "./chunk-4BAE4PWO.js";
 import {
-  BoundingSphere_default,
+  BoundingSphere_default
+} from "./chunk-DOXCPOG4.js";
+import {
+  Matrix4_default,
+  Rectangle_default,
   Transforms_default
-} from "./chunk-XKGSTUQO.js";
-import "./chunk-DNCKFFNR.js";
+} from "./chunk-O3JCMSS3.js";
+import "./chunk-2J3JKXCP.js";
 import {
   Cartesian2_default,
-  Matrix4_default,
-  Rectangle_default
-} from "./chunk-IQCBK4CE.js";
-import "./chunk-UJ76JVUZ.js";
-import {
   Cartesian3_default,
   Ellipsoid_default
-} from "./chunk-54GSYZWT.js";
+} from "./chunk-PYHLO636.js";
 import {
   Math_default
-} from "./chunk-A3TYRSRJ.js";
-import "./chunk-XNRYWRVT.js";
+} from "./chunk-MSKXMXJI.js";
+import "./chunk-OOK53QUQ.js";
 import {
   RuntimeError_default
-} from "./chunk-YK5RU5AO.js";
+} from "./chunk-T77JILCU.js";
 import {
   defaultValue_default
-} from "./chunk-N73NY3KY.js";
+} from "./chunk-VE7BFUIX.js";
 import {
   DeveloperError_default
-} from "./chunk-WYMW5NZB.js";
+} from "./chunk-S3PI2KFM.js";
 import {
   __commonJS,
   __toESM,
   defined_default
-} from "./chunk-FMN2NHBU.js";
+} from "./chunk-AA4GZKOT.js";
 
 // node_modules/lerc/LercDecode.js
 var require_LercDecode = __commonJS({
@@ -1932,7 +1931,7 @@ HeightmapTessellator.computeVertices = function(options) {
   const skirtHeight = options.skirtHeight;
   const hasSkirts = skirtHeight > 0;
   const isGeographic = defaultValue_default(options.isGeographic, true);
-  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.WGS84);
+  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.default);
   const oneOverGlobeSemimajorAxis = 1 / ellipsoid.maximumRadius;
   const nativeRectangle = Rectangle_default.clone(options.nativeRectangle);
   const rectangle = Rectangle_default.clone(options.rectangle);

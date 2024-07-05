@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.111
+ * Version 1.119
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,98 +25,82 @@
 
 import {
   BoundingRectangle_default
-} from "./chunk-FNHGOHCI.js";
+} from "./chunk-MDHQR3ZS.js";
 import {
   PolygonGeometryLibrary_default
-} from "./chunk-ULABUYF6.js";
+} from "./chunk-LCLJJ2MZ.js";
 import {
   ArcType_default
-} from "./chunk-DHO4HQHW.js";
+} from "./chunk-QMLTCCYG.js";
 import {
   GeometryInstance_default
-} from "./chunk-DD2PDL6D.js";
+} from "./chunk-GRAT5GE7.js";
 import {
   GeometryPipeline_default
-} from "./chunk-TIEL2RYB.js";
-import "./chunk-4EXWKTY2.js";
-import "./chunk-EEL3YC6V.js";
-import {
-  oneTimeWarning_default
-} from "./chunk-2GWOHAWL.js";
-import {
-  EllipsoidGeodesic_default
-} from "./chunk-LID3UUML.js";
+} from "./chunk-JYAHOGGL.js";
+import "./chunk-OORVMGDU.js";
+import "./chunk-I2RC4XVN.js";
 import {
   GeometryOffsetAttribute_default
-} from "./chunk-ZERWARDV.js";
+} from "./chunk-Q55ECN3Y.js";
 import {
   VertexFormat_default
-} from "./chunk-N7FIYNQV.js";
+} from "./chunk-KUN2ZA5X.js";
 import {
   EllipsoidTangentPlane_default
-} from "./chunk-AI2FOC47.js";
-import "./chunk-5HUDPV54.js";
+} from "./chunk-SYCPRK3D.js";
+import "./chunk-STBBMQGG.js";
 import {
   PolygonPipeline_default,
   WindingOrder_default
-} from "./chunk-I5XKU3UZ.js";
-import "./chunk-E5HIGWSZ.js";
-import "./chunk-IDAL54EF.js";
+} from "./chunk-RJYML24O.js";
+import "./chunk-DKVHRNFY.js";
+import "./chunk-4MSUJ4I7.js";
 import {
   IntersectionTests_default,
   Ray_default
-} from "./chunk-R5NOUYKW.js";
-import "./chunk-PNAD2XAN.js";
+} from "./chunk-XD445VDH.js";
+import "./chunk-4BAE4PWO.js";
 import {
   IndexDatatype_default
-} from "./chunk-CKOGHQ6J.js";
-import "./chunk-EH2PEDWL.js";
+} from "./chunk-QD4KM3GO.js";
+import "./chunk-R6B7UCQB.js";
 import {
   GeometryAttribute_default,
   Geometry_default
-} from "./chunk-3R5RPSYS.js";
+} from "./chunk-GR3CDLCP.js";
 import {
-  BoundingSphere_default,
-  Quaternion_default
-} from "./chunk-XKGSTUQO.js";
-import "./chunk-DNCKFFNR.js";
+  BoundingSphere_default
+} from "./chunk-DOXCPOG4.js";
 import {
-  Cartesian2_default,
+  Quaternion_default,
   Rectangle_default
-} from "./chunk-IQCBK4CE.js";
+} from "./chunk-O3JCMSS3.js";
 import {
   ComponentDatatype_default
-} from "./chunk-UJ76JVUZ.js";
+} from "./chunk-2J3JKXCP.js";
 import {
+  Cartesian2_default,
   Cartesian3_default,
   Cartographic_default,
   Ellipsoid_default,
   Matrix3_default
-} from "./chunk-54GSYZWT.js";
+} from "./chunk-PYHLO636.js";
 import {
   Math_default
-} from "./chunk-A3TYRSRJ.js";
-import "./chunk-XNRYWRVT.js";
-import "./chunk-YK5RU5AO.js";
+} from "./chunk-MSKXMXJI.js";
+import "./chunk-OOK53QUQ.js";
+import "./chunk-T77JILCU.js";
 import {
   defaultValue_default
-} from "./chunk-N73NY3KY.js";
+} from "./chunk-VE7BFUIX.js";
 import {
   Check_default,
   DeveloperError_default
-} from "./chunk-WYMW5NZB.js";
+} from "./chunk-S3PI2KFM.js";
 import {
   defined_default
-} from "./chunk-FMN2NHBU.js";
-
-// packages/engine/Source/Core/deprecationWarning.js
-function deprecationWarning(identifier, message) {
-  if (!defined_default(identifier) || !defined_default(message)) {
-    throw new DeveloperError_default("identifier and message are required.");
-  }
-  oneTimeWarning_default(identifier, message);
-}
-var deprecationWarning_default = deprecationWarning;
+} from "./chunk-AA4GZKOT.js";
 
 // packages/engine/Source/Core/Stereographic.js
 function Stereographic(position, tangentPlane) {
@@ -192,7 +176,7 @@ var scratchCartographic = new Cartographic_default();
 var scratchCartesian = new Cartesian3_default();
 Stereographic.prototype.getLatitude = function(ellipsoid) {
   if (!defined_default(ellipsoid)) {
-    ellipsoid = Ellipsoid_default.WGS84;
+    ellipsoid = Ellipsoid_default.default;
   }
   scratchCartographic.latitude = this.conformalLatitude;
   scratchCartographic.longitude = this.longitude;
@@ -399,7 +383,7 @@ function computeAttributes(options) {
             scratchPosition
           );
           p = ellipsoid.scaleToGeodeticSurface(p, p);
-          const st = projectTo2d(p, appendTextureCoordinatesCartesian2);
+          const st = projectTo2d([p], appendTextureCoordinatesCartesian2)[0];
           Cartesian2_default.subtract(st, origin, st);
           const stx = Math_default.clamp(st.x / boundingRectangle.width, 0, 1);
           const sty = Math_default.clamp(st.y / boundingRectangle.height, 0, 1);
@@ -620,99 +604,6 @@ function computeAttributes(options) {
   }
   return geometry;
 }
-var startCartographicScratch = new Cartographic_default();
-var endCartographicScratch = new Cartographic_default();
-var idlCross = {
-  westOverIDL: 0,
-  eastOverIDL: 0
-};
-var ellipsoidGeodesic = new EllipsoidGeodesic_default();
-function computeRectangle(positions, ellipsoid, arcType, granularity, result) {
-  result = defaultValue_default(result, new Rectangle_default());
-  if (!defined_default(positions) || positions.length < 3) {
-    result.west = 0;
-    result.north = 0;
-    result.south = 0;
-    result.east = 0;
-    return result;
-  }
-  if (arcType === ArcType_default.RHUMB) {
-    return Rectangle_default.fromCartesianArray(positions, ellipsoid, result);
-  }
-  if (!ellipsoidGeodesic.ellipsoid.equals(ellipsoid)) {
-    ellipsoidGeodesic = new EllipsoidGeodesic_default(void 0, void 0, ellipsoid);
-  }
-  result.west = Number.POSITIVE_INFINITY;
-  result.east = Number.NEGATIVE_INFINITY;
-  result.south = Number.POSITIVE_INFINITY;
-  result.north = Number.NEGATIVE_INFINITY;
-  idlCross.westOverIDL = Number.POSITIVE_INFINITY;
-  idlCross.eastOverIDL = Number.NEGATIVE_INFINITY;
-  const inverseChordLength = 1 / Math_default.chordLength(granularity, ellipsoid.maximumRadius);
-  const positionsLength = positions.length;
-  let endCartographic = ellipsoid.cartesianToCartographic(
-    positions[0],
-    endCartographicScratch
-  );
-  let startCartographic = startCartographicScratch;
-  let swap;
-  for (let i = 1; i < positionsLength; i++) {
-    swap = startCartographic;
-    startCartographic = endCartographic;
-    endCartographic = ellipsoid.cartesianToCartographic(positions[i], swap);
-    ellipsoidGeodesic.setEndPoints(startCartographic, endCartographic);
-    interpolateAndGrowRectangle(
-      ellipsoidGeodesic,
-      inverseChordLength,
-      result,
-      idlCross
-    );
-  }
-  swap = startCartographic;
-  startCartographic = endCartographic;
-  endCartographic = ellipsoid.cartesianToCartographic(positions[0], swap);
-  ellipsoidGeodesic.setEndPoints(startCartographic, endCartographic);
-  interpolateAndGrowRectangle(
-    ellipsoidGeodesic,
-    inverseChordLength,
-    result,
-    idlCross
-  );
-  if (result.east - result.west > idlCross.eastOverIDL - idlCross.westOverIDL) {
-    result.west = idlCross.westOverIDL;
-    result.east = idlCross.eastOverIDL;
-    if (result.east > Math_default.PI) {
-      result.east = result.east - Math_default.TWO_PI;
-    }
-    if (result.west > Math_default.PI) {
-      result.west = result.west - Math_default.TWO_PI;
-    }
-  }
-  return result;
-}
-var interpolatedCartographicScratch = new Cartographic_default();
-function interpolateAndGrowRectangle(ellipsoidGeodesic2, inverseChordLength, result, idlCross2) {
-  const segmentLength = ellipsoidGeodesic2.surfaceDistance;
-  const numPoints = Math.ceil(segmentLength * inverseChordLength);
-  const subsegmentDistance = numPoints > 0 ? segmentLength / (numPoints - 1) : Number.POSITIVE_INFINITY;
-  let interpolationDistance = 0;
-  for (let i = 0; i < numPoints; i++) {
-    const interpolatedCartographic = ellipsoidGeodesic2.interpolateUsingSurfaceDistance(
-      interpolationDistance,
-      interpolatedCartographicScratch
-    );
-    interpolationDistance += subsegmentDistance;
-    const longitude = interpolatedCartographic.longitude;
-    const latitude = interpolatedCartographic.latitude;
-    result.west = Math.min(result.west, longitude);
-    result.east = Math.max(result.east, longitude);
-    result.south = Math.min(result.south, latitude);
-    result.north = Math.max(result.north, latitude);
-    const lonAdjusted = longitude >= 0 ? longitude : longitude + Math_default.TWO_PI;
-    idlCross2.westOverIDL = Math.min(idlCross2.westOverIDL, lonAdjusted);
-    idlCross2.eastOverIDL = Math.max(idlCross2.eastOverIDL, lonAdjusted);
-  }
-}
 var createGeometryFromPositionsExtrudedPositions = [];
 function createGeometryFromPositionsExtruded(ellipsoid, polygon2, textureCoordinates, granularity, hierarchy, perPositionHeight, closeTop, closeBottom, vertexFormat, arcType) {
   const geos = {
@@ -844,7 +735,7 @@ function PolygonGeometry(options) {
   }
   const polygonHierarchy = options.polygonHierarchy;
   const vertexFormat = defaultValue_default(options.vertexFormat, VertexFormat_default.DEFAULT);
-  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.WGS84);
+  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.default);
   const granularity = defaultValue_default(
     options.granularity,
     Math_default.RADIANS_PER_DEGREE
@@ -1143,33 +1034,6 @@ PolygonGeometry.computeRectangleFromPositions = function(positions, ellipsoid, a
     result.west = -Math_default.PI;
   }
   return result;
-};
-PolygonGeometry.computeRectangle = function(options, result) {
-  Check_default.typeOf.object("options", options);
-  Check_default.typeOf.object("options.polygonHierarchy", options.polygonHierarchy);
-  deprecationWarning_default(
-    "PolygonGeometry.computeRectangle",
-    "PolygonGeometry.computeRectangle was deprecated in CesiumJS 1.110.  It will be removed in CesiumJS 1.112. Use PolygonGeometry.computeRectangleFromPositions instead."
-  );
-  const granularity = defaultValue_default(
-    options.granularity,
-    Math_default.RADIANS_PER_DEGREE
-  );
-  const arcType = defaultValue_default(options.arcType, ArcType_default.GEODESIC);
-  if (arcType !== ArcType_default.GEODESIC && arcType !== ArcType_default.RHUMB) {
-    throw new DeveloperError_default(
-      "Invalid arcType. Valid options are ArcType.GEODESIC and ArcType.RHUMB."
-    );
-  }
-  const polygonHierarchy = options.polygonHierarchy;
-  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.WGS84);
-  return computeRectangle(
-    polygonHierarchy.positions,
-    ellipsoid,
-    arcType,
-    granularity,
-    result
-  );
 };
 var scratchPolarForPlane = new Stereographic_default();
 function getTangentPlane(rectangle, positions, ellipsoid) {

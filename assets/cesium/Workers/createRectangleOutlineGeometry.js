@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.111
+ * Version 1.119
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,54 +25,53 @@
 
 import {
   RectangleGeometryLibrary_default
-} from "./chunk-CHGQXPF3.js";
+} from "./chunk-AD5HBJ2F.js";
 import {
   GeometryOffsetAttribute_default
-} from "./chunk-ZERWARDV.js";
+} from "./chunk-Q55ECN3Y.js";
 import {
   PolygonPipeline_default
-} from "./chunk-I5XKU3UZ.js";
-import "./chunk-IDAL54EF.js";
+} from "./chunk-RJYML24O.js";
+import "./chunk-4MSUJ4I7.js";
 import {
   IndexDatatype_default
-} from "./chunk-CKOGHQ6J.js";
+} from "./chunk-QD4KM3GO.js";
 import {
   GeometryAttributes_default
-} from "./chunk-EH2PEDWL.js";
+} from "./chunk-R6B7UCQB.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-3R5RPSYS.js";
+} from "./chunk-GR3CDLCP.js";
 import {
   BoundingSphere_default
-} from "./chunk-XKGSTUQO.js";
-import "./chunk-DNCKFFNR.js";
+} from "./chunk-DOXCPOG4.js";
 import {
   Rectangle_default
-} from "./chunk-IQCBK4CE.js";
+} from "./chunk-O3JCMSS3.js";
 import {
   ComponentDatatype_default
-} from "./chunk-UJ76JVUZ.js";
+} from "./chunk-2J3JKXCP.js";
 import {
   Cartesian3_default,
   Cartographic_default,
   Ellipsoid_default
-} from "./chunk-54GSYZWT.js";
+} from "./chunk-PYHLO636.js";
 import {
   Math_default
-} from "./chunk-A3TYRSRJ.js";
-import "./chunk-XNRYWRVT.js";
-import "./chunk-YK5RU5AO.js";
+} from "./chunk-MSKXMXJI.js";
+import "./chunk-OOK53QUQ.js";
+import "./chunk-T77JILCU.js";
 import {
   defaultValue_default
-} from "./chunk-N73NY3KY.js";
+} from "./chunk-VE7BFUIX.js";
 import {
   DeveloperError_default
-} from "./chunk-WYMW5NZB.js";
+} from "./chunk-S3PI2KFM.js";
 import {
   defined_default
-} from "./chunk-FMN2NHBU.js";
+} from "./chunk-AA4GZKOT.js";
 
 // packages/engine/Source/Core/RectangleOutlineGeometry.js
 var bottomBoundingSphere = new BoundingSphere_default();
@@ -203,11 +202,9 @@ function constructRectangle(geometry, computedOptions) {
   return geo;
 }
 function constructExtrudedRectangle(rectangleGeometry, computedOptions) {
-  const surfaceHeight = rectangleGeometry._surfaceHeight;
-  const extrudedHeight = rectangleGeometry._extrudedHeight;
+  const maxHeight = rectangleGeometry._surfaceHeight;
+  const minHeight = rectangleGeometry._extrudedHeight;
   const ellipsoid = rectangleGeometry._ellipsoid;
-  const minHeight = extrudedHeight;
-  const maxHeight = surfaceHeight;
   const geo = constructRectangle(rectangleGeometry, computedOptions);
   const height = computedOptions.height;
   const width = computedOptions.width;
@@ -281,7 +278,7 @@ function RectangleOutlineGeometry(options) {
     options.granularity,
     Math_default.RADIANS_PER_DEGREE
   );
-  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.WGS84);
+  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.default);
   const rotation = defaultValue_default(options.rotation, 0);
   if (!defined_default(rectangle)) {
     throw new DeveloperError_default("rectangle is required.");
