@@ -9,6 +9,10 @@
  * **@dlr-eoc/map-ol:**
   - Move type `IPopupEvent` to `@dlr-eoc/services-layers`
 
+  * **@dlr-eoc/map-cesium:**
+  - Update `cesium/engine` from `v^6.1.0` to `v^10.0.0` and `cesium/widgets` from `v^4.3.0` to `v^7.0.0` [see cesiumJS Breaking Changes](https://github.com/CesiumGS/cesium/releases).
+  - Removed some external dependencies for cesium, as they are no longer required.
+
 ### Features
 * **@dlr-eoc/services-map-state:**
   - Added viewAngle and rotation to mapState [Issue #216](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/216).
