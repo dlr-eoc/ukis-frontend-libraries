@@ -26,27 +26,6 @@
       ],
       "path": [
         "./node_modules/path-browserify"
-      ],
-      "url": [
-        "./node_modules/url"
-      ],
-      "zlib": [
-        "./node_modules/browserify-zlib"
-      ],
-      "https": [
-        "./node_modules/https-browserify"
-      ],
-      "http": [
-        "./node_modules/stream-http"
-      ],
-      "assert": [
-        "./node_modules/assert"
-      ],
-      "stream": [
-        "./node_modules/stream-browserify"
-      ],
-      "util": [
-        "./node_modules/util"
       ]
     },
     "allowJs": true,
