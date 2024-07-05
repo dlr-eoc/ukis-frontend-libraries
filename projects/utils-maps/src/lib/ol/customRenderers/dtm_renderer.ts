@@ -142,14 +142,21 @@ export class DtmImageRenderer extends CanvasImageLayerRenderer {
 
         // step 5: loading actual image
         const imageWrapper = source.getImage(bbox, 0.02197265625, 2.440000295639038, currentProjection);
+        imageWrapper.load();
+
         imageWrapper.addEventListener('change', (evt: Event) => {
-            const newImage = imageWrapper.getImage() as HTMLImageElement | HTMLCanvasElement;
+            const newImage = imageWrapper.getImage() as ImageBitmap;
             this.shader.updateTextureData(this.gl, 'u_srtm', newImage);
             this.shader.bind(this.gl);
             this.state = 'ready';
-            super.getLayer().changed();
+            layer.changed();
+            const map = layer.get('map');
+            // @TODO: Maybe there is another way to trigger the rendering of the layer so that it appears on the map, otherwise it needs some interaction to appear.
+            requestAnimationFrame(() => {
+                map.render();
+            });
+
         });
-        imageWrapper.load();
     }
 
 

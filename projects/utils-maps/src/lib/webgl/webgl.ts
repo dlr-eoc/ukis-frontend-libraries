@@ -504,11 +504,11 @@ export const bindTextureToUniform = (gl: WebGLRenderingContext, texture: WebGLTe
 
 
 
-export const updateTexture = (gl: WebGLRenderingContext, to: TextureObject, newData: HTMLImageElement | HTMLCanvasElement | number[][][]): TextureObject => {
+export const updateTexture = (gl: WebGLRenderingContext, to: TextureObject, newData: HTMLImageElement | HTMLCanvasElement | ImageBitmap | number[][][]): TextureObject => {
 
     gl.activeTexture(gl.TEXTURE0 + textureConstructionBindPoint); // so that we don't overwrite another texture in the next line.
     gl.bindTexture(gl.TEXTURE_2D, to.texture);  // analog to bindBuffer. Binds texture to currently active texture-bindpoint (aka. texture unit).
-    if (newData instanceof HTMLImageElement || newData instanceof HTMLCanvasElement) {
+    if (newData instanceof HTMLImageElement || newData instanceof HTMLCanvasElement || newData instanceof ImageBitmap ) {
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, newData);  // analog to bufferData
     } else {
         const width = newData[0].length;
@@ -528,7 +528,11 @@ export const updateTexture = (gl: WebGLRenderingContext, to: TextureObject, newD
     } else if (newData instanceof HTMLCanvasElement) {
         to.width = newData.width;
         to.height = newData.height;
-    } else {
+    } 
+    else if (newData instanceof ImageBitmap ) {
+        to.width = newData.width;
+        to.height = newData.height;
+    }else {
         to.width = newData[0].length;
         to.height = newData.length;
     }

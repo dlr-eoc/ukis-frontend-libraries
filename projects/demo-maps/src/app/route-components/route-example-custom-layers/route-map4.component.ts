@@ -459,15 +459,16 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
 
 
-
+    const dtmLayerBbox = [10.00, 45.00, 15.00, 50.00];
     const dtmLayer = new CustomLayer({
       id: 'dtmLayer',
       name: 'SRTM DTM',
       filtertype: 'Layers',
+      bbox: dtmLayerBbox as TGeoExtent,
       custom_layer: new DtmLayer({
         source: new olStatic({
           url: 'assets/image/srtm_small.png',
-          imageExtent: [10.00, 45.00, 15.00, 50.00],
+          imageExtent: dtmLayerBbox,
           projection: 'EPSG:4326',
         })
       }),
