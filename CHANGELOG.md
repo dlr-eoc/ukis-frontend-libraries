@@ -1,5 +1,12 @@
 # [12.x.x]() () (services-map-state, map-ol, map-cesium and map-maplibre)
 
+### Breaking Changes
+ * **@dlr-eoc/map-maplibre:**
+  - Move functions `addUkisLayerMetadata` and `getUkisLayerMetadata` from maplibre-layers.helpers to maplibre.helpers and remove `hasUkisLayerMetadata`.
+  - Update `maplibre-gl` from `v^3.3.0` to `v^4.1.3` [see maplibre-gl Breaking Changes](https://github.com/maplibre/maplibre-gl-js/releases/tag/v4.0.0).
+
+ * **@dlr-eoc/map-ol:**
+  - Move type `IPopupEvent` to `@dlr-eoc/services-layers`
 
 ### Features
 * **@dlr-eoc/services-map-state:**
@@ -16,9 +23,14 @@
   - Added flyTo options for `setNadirViewAngle` - This can be useful if you switch the map to a 2D view and want to reset the `ViewAngle` before.
 
  * **@dlr-eoc/map-maplibre:**
+  - Update "maplibre-gl-js" from `4.1.3` to `4.5.0` also see [maplibre-gl](https://github.com/maplibre/maplibre-gl-js/releases/tag/v4.5.0).
   - Adding support for mapState viewAngle and rotation 
   - Added new `UKIS_METADATA.ignoreOpacity` and `UKIS_METADATA.ignoreVisibility` which can be used in `CustomLayer` to prevent changing the opacity or visibility for some layers.
   - Added new function `updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer)` to update `paint`, `layout`, `maxzoom`, `minzoom`, `filter`, `source` and `source-layer` from ukisLayers.
+  - Added new function `setUkisLayerMetadata(ml: TypedStyleLayer, meta: Partial<IukisMetadata>)` and interface `IukisMetadata`.
+
+* **shared-assets:**
+  - Add tilejson for open-map-style
 
 ### Bug Fixes
  * **@dlr-eoc/map-maplibre:**
@@ -27,6 +39,12 @@
   - Fix create `StyleLayer` id in `createCustomLayer` and `createStackedLayer`.
   - Fix create default `StyleLayers` for `GeoJson` Data (test for `MultiPolygon` and `MultiLineString`).
   - Do not modify referenced objects when creating `StyleLayers` from `CustomLayer` or `VectorLayer.options.style` see also (cddf2fc6a83444851914ed6619bc8d5ada8ce485)
+  - Fix add layer with the correct beforeId on update `PaintProperty` workaround for [maplibre issue 3001](https://github.com/maplibre/maplibre-gl-js/issues/3001).
+  - Fix workaround that tried to get beforeId after layer was removed. Now use workaround only if `map.getTerrain()` is not not null.
+  - Fix set `layout.visibility` in style of `VectorLayer` based on `VectorLayer.visible`.
+  - Fix set `VectorLayer.attribution` from `VectorLayer.options.style` for TMS.
+  - Fix set subdomains from `VectorLayer` in `VectorLayer.options.style` for TMS.
+  - Fix return type of `getUkisLayerMetadata`.
 
 * **@dlr-eoc/map-cesium:**
   - Fix get entity.name for infoBox in none GeoJson layers

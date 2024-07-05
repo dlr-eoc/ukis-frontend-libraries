@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/services-layers",
-  "version": "12.0.1-next.0",
+  "version": "12.0.1-next.4",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -20,8 +20,8 @@
   "devDependencies": {
     "zone.js": "~0.13.0",
     "@angular/platform-browser-dynamic": "^16.2.3",
-    "@dlr-eoc/core-ui": "12.0.1-next.0",
-    "@dlr-eoc/shared-assets": "12.0.1-next.0"
+    "@dlr-eoc/core-ui": "12.0.1-next.4",
+    "@dlr-eoc/shared-assets": "12.0.1-next.4"
   },
   "dependencies": {
     "tslib": "^2.4.0"

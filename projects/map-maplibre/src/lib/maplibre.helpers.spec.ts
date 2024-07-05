@@ -1,7 +1,6 @@
-import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification, setRotation, setPitch, getRotation } from './maplibre.helpers';
-import { StyleSpecification, LayerSpecification, SourceSpecification, Map as glMap } from 'maplibre-gl';
-import { CustomLayer } from '@dlr-eoc/services-layers';
-import { addUkisLayerMetadata } from './maplibre-layers.helpers';
+import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification, setRotation, setPitch, getRotation, UKIS_METADATA, addUkisLayerMetadata, getUkisLayerMetadata, IukisMetadata, setUkisLayerMetadata } from './maplibre.helpers';
+import { StyleSpecification, LayerSpecification, SourceSpecification, Map as glMap, TypedStyleLayer } from 'maplibre-gl';
+import { CustomLayer, Layer } from '@dlr-eoc/services-layers';
 
 const createMapTarget = (size: number[]) => {
     const container = document.createElement('div');
@@ -398,6 +397,57 @@ describe('MaplibreHelpers', () => {
                 resolve(evt);
             });
         });
+    });
+
+    it('should create ukis Metadata for LayerSourceSpecification', () => {
+        const layer = new Layer({
+            id: 'testlayer',
+            name: 'Test Layer',
+            type: 'custom',
+            filtertype: 'Layers',
+        });
+
+        const metadata = addUkisLayerMetadata(layer);
+        expect(metadata[UKIS_METADATA.filtertype]).toBe(layer.filtertype);
+        expect(metadata[UKIS_METADATA.layerID]).toBe(layer.id);
+    });
+
+    it('should set/get ukis Metadata of a layer', () => {
+        const metadata: IukisMetadata = {
+            'ukis:layerID': 'testLayer',
+            'ukis:filtertype': 'Layers',
+            'ukis:ignore-opacity': true,
+            'ukis:ignore-visibility': false
+        };
+
+        const waterLayer_test: LayerSpecification = {
+            "id": "water1",
+            "type": "fill",
+            "source": "planet_eoc",
+            "source-layer": "water",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "fill-antialias": true,
+                "fill-color": "hsl(198, 100%, 28%)",
+                "fill-opacity": 1
+            },
+            "metadata": metadata
+        };
+
+        map.addSource('planet_eoc', planet_eoc);
+        map.addLayer(waterLayer_test);
+
+        const mapLayer = map.getLayer(waterLayer_test.id) as TypedStyleLayer;
+
+        const meta = getUkisLayerMetadata(mapLayer);
+        expect(meta[UKIS_METADATA.ignoreOpacity]).toBe(true);
+        expect(meta[UKIS_METADATA.ignoreVisibility]).toBe(false);
+
+        setUkisLayerMetadata(mapLayer, { 'ukis:ignore-opacity': false });
+        const meta2 = getUkisLayerMetadata(mapLayer);
+        expect(meta2[UKIS_METADATA.ignoreOpacity]).toBe(false);
     });
 
     it('should set Layout Property visibility of a layer', () => {

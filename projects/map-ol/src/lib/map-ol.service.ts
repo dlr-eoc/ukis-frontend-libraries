@@ -1,7 +1,7 @@
 import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IPopupParams, IAnyObject, TFiltertypesUncap, TFiltertypes } from '@dlr-eoc/services-layers';
+import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IPopupParams, IAnyObject, TFiltertypesUncap, TFiltertypes, IPopupEvent } from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView, { FitOptions as olFitOptions } from 'ol/View';
@@ -101,12 +101,6 @@ const WebMercator = 'EPSG:3857';
 const WGS84 = 'EPSG:4326';
 const POPUP_KEY = 'popup';
 
-
-
-export interface IPopupEvent {
-  popupObj: popup;
-  popupParams: IPopupParams;
-}
 
 type tmsReturnType<T> = T extends RasterLayer ? olTileLayer<olTileSource> :
   T extends VectorLayer ? olVectorTileLayer : never;

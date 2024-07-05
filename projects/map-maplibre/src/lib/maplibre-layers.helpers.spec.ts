@@ -1,11 +1,11 @@
 import { CustomLayer, Layer, RasterLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import {
-    addUkisLayerMetadata, createWmsLayer, createWmtsLayer, createGeojsonLayer, createCustomLayer,
+    createWmsLayer, createWmtsLayer, createGeojsonLayer, createCustomLayer,
     createGetMapUrl, createGetTileUrl, createBaseLayer, updateStyleLayerProperties
 } from './maplibre-layers.helpers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import { RasterSourceSpecification, StyleSpecification, TypedStyleLayer, Map as glMap } from 'maplibre-gl';
-import { UKIS_METADATA, getOpacityPaintProperty } from './maplibre.helpers';
+import { UKIS_METADATA, getOpacityPaintProperty, addUkisLayerMetadata } from './maplibre.helpers';
 import { TestBed } from '@angular/core/testing';
 import { MapMaplibreService } from './map-maplibre.service';
 
@@ -198,19 +198,6 @@ const createLayers = () => {
 describe('MaplibreLayerHelpers', () => {
     beforeEach(async () => {
         createLayers();
-    });
-
-    it('should create ukis Metadata for LayerSourceSpecification', () => {
-        const layer = new Layer({
-            id: 'testlayer',
-            name: 'Test Layer',
-            type: 'custom',
-            filtertype: 'Layers',
-        });
-
-        const metadata = addUkisLayerMetadata(layer);
-        expect(metadata[UKIS_METADATA.filtertype]).toBe(layer.filtertype);
-        expect(metadata[UKIS_METADATA.layerID]).toBe(layer.id);
     });
 
     it('should create a base LayerSourceSpecification from ukis Rasterlayer', () => {

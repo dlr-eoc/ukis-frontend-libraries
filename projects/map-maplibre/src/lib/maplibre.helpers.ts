@@ -8,6 +8,13 @@ export type LayerSourceSpecification = { sources: SourceIdSpecification, layers:
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
+export interface IukisMetadata {
+    'ukis:layerID': ukisLayer['id'];
+    'ukis:filtertype': ukisLayer['filtertype'];
+    'ukis:ignore-opacity'?: boolean;
+    'ukis:ignore-visibility'?: boolean;
+}
+
 export const UKIS_METADATA = {
     layerID: 'ukis:layerID',
     filtertype: 'ukis:filtertype',
@@ -15,6 +22,28 @@ export const UKIS_METADATA = {
     ignoreVisibility: 'ukis:ignore-visibility',
 };
 
+export function addUkisLayerMetadata(l: ukisLayer) {
+    const metadata: IukisMetadata = {
+        'ukis:filtertype': l.filtertype,
+        'ukis:layerID': l.id
+    };
+    return metadata;
+}
+
+export function getUkisLayerMetadata(ml: TypedStyleLayer) {
+    const metadata: Partial<IukisMetadata> = {};
+    metadata[UKIS_METADATA.filtertype] = (ml?.metadata as any)[UKIS_METADATA.filtertype];
+    metadata[UKIS_METADATA.layerID] = (ml?.metadata as any)[UKIS_METADATA.layerID];
+    metadata[UKIS_METADATA.ignoreOpacity] = (ml?.metadata as any)[UKIS_METADATA.ignoreOpacity];
+    metadata[UKIS_METADATA.ignoreVisibility] = (ml?.metadata as any)[UKIS_METADATA.ignoreVisibility];
+    return metadata;
+}
+
+export function setUkisLayerMetadata(ml: TypedStyleLayer, meta: Partial<IukisMetadata>) {
+    Object.keys(meta).forEach(k => {
+        (ml?.metadata as any)[k] = meta[k];
+    });
+}
 
 export function setExtent(map: glMap, extent: TGeoExtent, geographic?: boolean, fitOptions?: any): TGeoExtent {
     const bounds = new LngLatBounds([extent[0], extent[1]], [extent[2], extent[3]]);
@@ -157,6 +186,25 @@ export function getOpacity(map: glMap, layerOrId: string | TypedStyleLayer) {
     }
     if (mllayer) {
         return styleLayerGetOpacity(mllayer);
+    }
+}
+
+export function getLayerbeforeId(map: glMap, layerOrId: string | TypedStyleLayer) {
+    let mllayer;
+    if (typeof layerOrId === 'string') {
+        mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
+    } else {
+        mllayer = layerOrId;
+    }
+
+    const filtertype = getUkisLayerMetadata(mllayer)['ukis:filtertype'];
+    const layers = getAllLayers(map, filtertype);
+    const index = layers.findIndex((item) => item.id === mllayer.id);
+
+    if (index < layers.length - 1) {
+        return layers[index + 1].id;
+    } else {
+        return undefined;
     }
 }
 
