@@ -1,6 +1,7 @@
 # [12.x.x]() () (services-map-state, map-ol, map-cesium and map-maplibre)
 
 ### Breaking Changes
+ - Update ol from `^7.3.0` to `^v9.2.4` [Issue #225](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/225) `@dlr-eoc/map-ol`, `@dlr-eoc/map-tools`, `@dlr-eoc/services-ogc`, `@dlr-eoc/utils-maps`, `@dlr-eoc/utils-ogc` and `demo-maps`
  * **@dlr-eoc/map-maplibre:**
   - Move functions `addUkisLayerMetadata` and `getUkisLayerMetadata` from maplibre-layers.helpers to maplibre.helpers and remove `hasUkisLayerMetadata`.
   - Update `maplibre-gl` from `v^3.3.0` to `v^4.1.3` [see maplibre-gl Breaking Changes](https://github.com/maplibre/maplibre-gl-js/releases/tag/v4.0.0).

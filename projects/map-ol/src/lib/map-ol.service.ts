@@ -9,7 +9,6 @@ import { ViewOptions as olViewOptions } from 'ol/View';
 
 import olBaseLayer from 'ol/layer/Base';
 import olSource from 'ol/source/Source';
-import olGeometry from 'ol/geom/Geometry';
 import olPoint from 'ol/geom/Point';
 import olLayer from 'ol/layer/Layer';
 import { Options as olLayerOptions } from 'ol/layer/Layer';
@@ -59,7 +58,7 @@ import olVectorSource from 'ol/source/Vector';
 import olRasterSource from 'ol/source/Raster';
 import olCluster from 'ol/source/Cluster';
 import { Options as olClusterOptions } from 'ol/source/Cluster';
-import olFeature from 'ol/Feature';
+import olFeature, { FeatureLike } from 'ol/Feature';
 
 import olCollection from 'ol/Collection';
 import olGeoJSON from 'ol/format/GeoJSON';
@@ -103,7 +102,7 @@ const POPUP_KEY = 'popup';
 
 
 type tmsReturnType<T> = T extends RasterLayer ? olTileLayer<olTileSource> :
-  T extends VectorLayer ? olVectorTileLayer : never;
+  T extends VectorLayer ? olVectorTileLayer<FeatureLike> : never;
 
 type LayerOptionsSources = olTileSource | olVectorTileSource | olImageSource | olSource;
 
@@ -724,7 +723,7 @@ export class MapOlService {
 
 
   private create_layers(newLayer: Layer) {
-    let newOlLayer: olTileLayer<olTileSource> | olVectorLayer<olVectorSource<olGeometry>> | olBaseLayer;
+    let newOlLayer: olTileLayer<olTileSource> | olVectorLayer<FeatureLike> | olBaseLayer;
     switch (newLayer.type) {
       case XyzLayertype:
         newOlLayer = this.create_xyz_layer(newLayer as RasterLayer);
@@ -915,7 +914,7 @@ export class MapOlService {
 
       const layeroptions = this.createOlLayerOptions(l, 'tms', olsource);
 
-      const vectorTileLayerOptions: olVectorTileLayerOptions = {
+      const vectorTileLayerOptions: olVectorTileLayerOptions<FeatureLike> = {
         declutter: true,
         renderMode: 'hybrid'
       };
@@ -1068,7 +1067,7 @@ export class MapOlService {
    * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html
    * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
    */
-  private create_wfs_layer(l: VectorLayer): olVectorLayer<olVectorSource<olGeometry>> {
+  private create_wfs_layer(l: VectorLayer): olVectorLayer<FeatureLike> {
     let url = null;
     if (l.url.indexOf('http://') === 0 || l.url.indexOf('https://') === 0) {
       url = new URL(l.url);
@@ -1087,7 +1086,7 @@ export class MapOlService {
     });
 
     const layeroptions = this.createOlLayerOptions(l, 'wfs', olsource);
-    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<olGeometry>> = {};
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<FeatureLike>> = {};
 
     if (l.options) {
       // here Object.assign modifies the target object - style... is included
@@ -1130,7 +1129,7 @@ export class MapOlService {
 
     const layeroptions = this.createOlLayerOptions(l, 'geojson', olsource);
 
-    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<olGeometry>> = {};
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<FeatureLike>> = {};
     if (l.options) {
       // here Object.assign modifies the target object - style... is included
       Object.assign(baseVectorLayerOptions, l.options);
@@ -1174,7 +1173,7 @@ export class MapOlService {
 
     const layeroptions = this.createOlLayerOptions(l, 'kml', olsource);
 
-    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<olGeometry>> = {};
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<FeatureLike>> = {};
     if (l.options) {
       // here Object.assign modifies the target object - style... is included
       Object.assign(baseVectorLayerOptions, l.options);
@@ -1207,9 +1206,9 @@ export class MapOlService {
   /**
    * set cluster source and style for point layers
    */
-  private setCluster(l: VectorLayer, layer: olVectorLayer<olVectorSource>, source: olVectorSource, styleCache: { [key: string]: any }): void {
+  private setCluster(l: VectorLayer, layer: olVectorLayer<FeatureLike>, source: olVectorSource, styleCache: { [key: string]: any }): void {
     if (l.cluster) {
-      const clusteroptions: olClusterOptions = {};
+      const clusteroptions: olClusterOptions<FeatureLike> = {};
       if (typeof l.cluster === 'object') {
         // here Object.assign modifies the target object
         Object.assign(clusteroptions, l.cluster);
@@ -1249,7 +1248,7 @@ export class MapOlService {
   /** use subdomains to setUrl/s on source */
   private setSubdomains(l: Layer, layer: olLayer<olSource>): void {
     if (l instanceof VectorLayer || l instanceof RasterLayer) {
-      const source = layer.getSource() as olXYZ | olVectorTile | olTileWMS | olWMTS | olVectorSource<olGeometry>;
+      const source = layer.getSource() as olXYZ | olVectorTile | olTileWMS | olWMTS | olVectorSource<FeatureLike>;
       if (l.subdomains) {
         if (l.type === 'wfs' && (source instanceof olVectorSource)) {
           l.url = l.url.replace('{s}', `${l.subdomains[0]}-${l.subdomains[l.subdomains.length - 1]}`);
@@ -2367,7 +2366,7 @@ export class MapOlService {
    * @param geographic: boolean
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
-  public getFeaturesExtent(features: olFeature<any>[], geographic?: boolean): TGeoExtent {
+  public getFeaturesExtent(features: FeatureLike[], geographic?: boolean): TGeoExtent {
     const extent: any = features[0].getGeometry().getExtent().slice(0);
     features.forEach((feature) => {
       olExtend(extent, feature.getGeometry().getExtent());

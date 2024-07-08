@@ -1,12 +1,11 @@
 import { FrameState } from 'ol/Map';
 import VectorLayer from 'ol/layer/Vector';
-import Geometry from 'ol/geom/Geometry';
-import { Vector as VectorSource } from 'ol/source';
 import { createShaderProgram, bindProgram, clearBackground } from '../../webgl/webgl';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
+import { FeatureLike } from 'ol/Feature';
 
 
-export class CustomWebGlVectorLayer extends VectorLayer<VectorSource<Geometry>> {
+export class CustomWebGlVectorLayer extends VectorLayer<FeatureLike> {
     createRenderer(): MinimalWebGlRenderer {
         return new MinimalWebGlRenderer(this, {});
     }
@@ -23,7 +22,7 @@ export class MinimalWebGlRenderer extends CanvasVectorLayerRenderer  {
     private canvas: HTMLCanvasElement;
     private gl: WebGLRenderingContext;
 
-    constructor(layer: VectorLayer<VectorSource<Geometry>>, options: Object) {
+    constructor(layer: VectorLayer<FeatureLike>, options: Object) {
         super(layer);
 
         this.canvas = document.createElement('canvas');

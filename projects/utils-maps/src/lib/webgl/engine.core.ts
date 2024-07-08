@@ -308,7 +308,7 @@ export class Shader implements IShader {
         uniform.value = newData;
     }
 
-    public updateTextureData(gl: WebGLRenderingContext, variableName: string, newImage: HTMLImageElement | HTMLCanvasElement | number[][][]): void {
+    public updateTextureData(gl: WebGLRenderingContext, variableName: string, newImage: HTMLImageElement | HTMLCanvasElement | ImageBitmap  | number[][][]): void {
         const original = first<ITexture>(this.textures, t => t.variableName === variableName);
         if (!original) {
             throw new Error(`No such texture ${variableName} to be updated.`);

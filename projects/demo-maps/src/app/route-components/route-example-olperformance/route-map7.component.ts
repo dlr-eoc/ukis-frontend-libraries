@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
-import { LayersService, VectorLayer } from '@dlr-eoc/services-layers';
+import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';

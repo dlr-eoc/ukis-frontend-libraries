@@ -10,12 +10,12 @@ import { MinimalWebGlRenderer } from './customRenderers/minimal_renderer';
 import { InterpolationRenderer } from './customRenderers/interpolation_renderer';
 import { ParticleRenderer } from './customRenderers/particle_renderer';
 import { DtmImageRenderer } from './customRenderers/dtm_renderer';
-import Geometry from 'ol/geom/Geometry';
+import { FeatureLike } from 'ol/Feature';
 
 
-let vector1: VectorLayer<VectorSource<Geometry>>;
-let vector2: VectorLayer<VectorSource<Geometry>>;
-let vector3: VectorLayer<VectorSource<Geometry>>;
+let vector1: VectorLayer<FeatureLike>;
+let vector2: VectorLayer<FeatureLike>;
+let vector3: VectorLayer<FeatureLike>;
 let tileLayerOSM: TileLayer<OSM>;
 
 let group1: LayerGroup;

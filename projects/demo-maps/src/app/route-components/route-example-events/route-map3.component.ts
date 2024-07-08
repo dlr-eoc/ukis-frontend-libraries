@@ -139,7 +139,16 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
       }]
     });
 
-    const layers = [eocLitemapLayer, osmLayer, eventLayer, updatableFeatureLayer];
+    const olGridLayer = this.getGridLayer();
+    const gridLayer = new CustomLayer({
+      id: olGridLayer.id,
+      name: `gridLayer`,
+      type: 'custom',
+      opacity: 0.3,
+      custom_layer: olGridLayer.layer
+    });
+
+    const layers = [eocLitemapLayer, osmLayer, eventLayer, updatableFeatureLayer, gridLayer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 
@@ -316,7 +325,16 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  updateLayerOnZoom = (evt) => {
+  updateLayerOnZoom = () => {
+    const olGridLayer = this.getGridLayer();
+    const oldGridLayer = this.layersSvc.getLayerById(olGridLayer.id) as CustomLayer;
+    if (oldGridLayer) {
+      oldGridLayer.custom_layer = olGridLayer.layer;
+      this.layersSvc.updateLayer(oldGridLayer, oldGridLayer.filtertype);
+    }
+  }
+
+  getGridLayer = () => {
     const mapState = this.mapStateSvc.getMapState().getValue();
     const mapextent = mapState.extent;
     const zoom = mapState.zoom;
@@ -335,21 +353,10 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     });
     olGridLayer.set('id', layerID);
 
-    const oldGridLayer = this.layersSvc.getLayerById(layerID) as CustomLayer;
-    if (!oldGridLayer) {
-      const gridLayer = new CustomLayer({
-        id: layerID,
-        name: `gridLayer`,
-        type: 'custom',
-        opacity: 0.3,
-        custom_layer: olGridLayer
-      });
-
-      this.layersSvc.addLayer(gridLayer, 'Layers');
-    } else {
-      oldGridLayer.custom_layer = olGridLayer;
-      this.layersSvc.updateLayer(oldGridLayer, oldGridLayer.filtertype);
-    }
+    return {
+      layer: olGridLayer,
+      id: layerID
+    };
   }
 
 }

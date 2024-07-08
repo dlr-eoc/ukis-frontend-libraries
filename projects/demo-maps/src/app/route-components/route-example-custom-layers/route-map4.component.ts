@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
-import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer, IPopupParams } from '@dlr-eoc/services-layers';
+import { LayersService, CustomLayer, LayerGroup, VectorLayer, Layer, IPopupParams, TGeoExtent } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
@@ -459,15 +459,16 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     });
 
 
-
+    const dtmLayerBbox = [10.00, 45.00, 15.00, 50.00];
     const dtmLayer = new CustomLayer({
       id: 'dtmLayer',
       name: 'SRTM DTM',
       filtertype: 'Layers',
+      bbox: dtmLayerBbox as TGeoExtent,
       custom_layer: new DtmLayer({
         source: new olStatic({
           url: 'assets/image/srtm_small.png',
-          imageExtent: [10.00, 45.00, 15.00, 50.00],
+          imageExtent: dtmLayerBbox,
           projection: 'EPSG:4326',
         })
       }),
@@ -489,9 +490,12 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const metersPerUnitWSG84 = new Projection({ code: 'EPSG:4326', units: 'degrees' }).getMetersPerUnit();
     munichPolys.features.map(f => f.properties.height = f.properties.height * metersPerUnitWSG84 / metersPerUnit);
 
+    const barFeatures = this.mapSvc.geoJsonToFeatures(munichPolys);
+    const barBbox = this.mapSvc.getFeaturesExtent(barFeatures, true);
     const barLayer = new CustomLayer({
       id: 'three',
       name: 'Bars layer',
+      bbox: barBbox,
       custom_layer: new BarsLayer({
         source: new olVectorSource({
           features: this.mapSvc.geoJsonToFeatures(munichPolys)
@@ -505,6 +509,8 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
 
 
 
+    const crescentFeatures = this.mapSvc.geoJsonToFeatures(crescentPoints);
+    const crescentBbox = this.mapSvc.getFeaturesExtent(crescentFeatures, true);
     const crescentSource = new olVectorSource({
       features: this.mapSvc.geoJsonToFeatures(crescentPoints)
     });
@@ -523,6 +529,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const interpolationLayer = new CustomLayer({
       id: 'interpolation',
       name: 'Interpolation',
+      bbox: crescentBbox,
       custom_layer: new InterpolationLayer({
         source: clusteredCrescentSource as any,
         style: (feature: olFeature<any>, resolution: number): olStyle => {
