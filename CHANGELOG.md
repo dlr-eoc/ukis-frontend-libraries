@@ -1,4 +1,4 @@
-# [12.x.x]() () (services-map-state, map-ol, map-cesium and map-maplibre)
+# [13.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v13.0.0) (2024-07-08) (services-map-state, map-ol, map-cesium and map-maplibre)
 
 ### Breaking Changes
  - Update ol from `^7.3.0` to `^v9.2.4` [Issue #225](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/225) `@dlr-eoc/map-ol`, `@dlr-eoc/map-tools`, `@dlr-eoc/services-ogc`, `@dlr-eoc/utils-maps`, `@dlr-eoc/utils-ogc` and `demo-maps`
