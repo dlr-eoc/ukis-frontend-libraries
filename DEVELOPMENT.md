@@ -145,9 +145,10 @@ The general workflow to create a new version:
 - set version, date and description in the CHANGELOG.md e.g. `# [<version>](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v<version>) (<date>) (<description>)`
 - update the `version` parameter in the main package.json for *ukis-frontend-libraries* according to [Semantic Versioning](https://semver.org/)
   by running `npm version <newversion> -m "Version after Milestone XY" --workspace=projects --include-workspace-root` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version). Optionally test this by appending `--no-git-tag-version`.
+  e.g. `npm version major -m "Update mapping libraries" --workspace=projects --include-workspace-root --no-git-tag-version` // An NPM installation error may occur because versions are not synchronized with dependencies.
 - run `node scripts/library/index.js --set-source` to sync all versions.
 - run `npm install` to update the main package-lock.json
-- merge the release branch in the main branch by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/main...release-v8.0.1?template=release_pull_request.md` the PR body is populated with the template)
+- merge the release branch in the main branch by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/main...release-v13.0.0?template=release_pull_request.md` the PR body is populated with the template)
 - push the tag (created from `npm version`) by running `git push origin --tags`
 - set the label of the release PR to 'RELEASE'
 
