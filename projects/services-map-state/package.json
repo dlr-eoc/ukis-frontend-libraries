@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/services-map-state",
-  "version": "12.0.1-next.4",
+  "version": "13.0.0",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -20,7 +20,7 @@
     "rxjs": "~7.8.0"
   },
   "dependencies": {
-    "@dlr-eoc/services-layers": "12.0.1-next.4",
+    "@dlr-eoc/services-layers": "13.0.0",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
