@@ -2,11 +2,11 @@ import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, 
 
 import { IMapStateOptions, MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription, Subject } from 'rxjs';
-import { filter, skip } from 'rxjs/operators';
+import { skip } from 'rxjs/operators';
 import { MapCesiumService } from './map-cesium.service';
 import { LayersService, Layer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 import { Viewer } from '@cesium/widgets';
-import { GeoJsonDataSource } from '@cesium/engine';
+import { ScreenSpaceEventHandler, ScreenSpaceEventType, GeoJsonDataSource } from '@cesium/engine';
 
 
 export interface ICesiumControls {
@@ -22,11 +22,14 @@ export interface ICesiumControls {
   fullscreenButton?: boolean;
   scene3DOnly?: boolean;
   infoBox?: boolean;
+  selectionIndicator?: boolean;
+  enablePopups?: boolean;
   //Also you can define an Cesium ion Access Token, https://cesium.com/learn/ion/cesium-ion-access-tokens/
   ionAccessToken?: string;
   //In the same way you can provide a personal key for Google Maps, https://cesium.com/learn/cesiumjs-learn/cesiumjs-photorealistic-3d-tiles/
   GoogleMapsApiKey?: string;
-  selectionIndicator?: boolean;
+  //default globe color as hex string
+  globeColor?: string;
 }
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -64,6 +67,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
       console.error(`provide a MapStateService as Input to ukis-map-cesium`);
     }
     this.mapSvc.removeAll2DLayers();
+
     //Set start time, if available
     if (this.startTime) {
       this.mapSvc.initTime(this.startTime);
@@ -181,15 +185,13 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private subscribeToMapEvents() {
-    // https://github.com/CesiumGS/cesium/blob/99d6fffe20d9cf19f2d70de97777dc00a435bc5e/packages/engine/Source/Scene/Camera.js#L223-L224
-    // The amount the camera has to change before the event is raised is 0.5
-    // this.viewer.camera.percentageChanged = 0.1;
     this.viewer.camera.changed.addEventListener((evt) => {
       const ms = this.calcMapStateFromCamera('map');
       this.mapStateSvc.setMapState(ms);
     });
 
-    //Changing entitiy parameters for the display in he infoBox window
+    if(this.controls.infoBox){
+      //Changing entitiy parameters for the display in he infoBox window
     this.viewer.selectedEntityChanged.addEventListener(() => {
       const entity = this.viewer.selectedEntity;
       //change infoBox title
@@ -212,6 +214,41 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
+    }
+
+    //Show the popup on click
+    if(this.controls.enablePopups){
+      const cesiumEventHandler = new ScreenSpaceEventHandler(this.viewer.scene.canvas);
+      cesiumEventHandler.setInputAction((e:any) => {
+        //get camera ray at picked position and get layer features at picked location
+        const ray = this.viewer.camera.getPickRay(e.position)!;
+        const entity = this.viewer.scene.imageryLayers.pickImageryLayerFeatures(ray, this.viewer.scene);
+        if(entity){
+        const popupContent = document.getElementById("map_cesium_popup_content")!;
+        const popupDiv = popupContent.parentElement;
+        const entity_x = e.position.x;
+        const entity_y = e.position.y
+
+        //hide popup while waiting for the content to load
+        popupDiv.style.display = 'none';
+
+        entity?.then(e =>{
+          //write description text to popup
+          popupContent.innerHTML = e[0].description!;
+          popupDiv.style.left = (entity_x-58) + 'px';
+          popupDiv.style.top = (entity_y-78) + 'px';
+          popupDiv.style.display = 'block';
+        }
+        );
+        }
+      }, ScreenSpaceEventType.LEFT_CLICK);
+
+      //Hide the popup
+      cesiumEventHandler.setInputAction((e:any) => {
+        const popup = document.getElementById("cesium_popup_div")!;
+        popup.style.display = 'none';
+      }, ScreenSpaceEventType.RIGHT_DOWN);
+    }
   }
 
 
@@ -243,9 +280,6 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private update2DBaseLayers(layers: Layer[]) {
     this.mapSvc.update2DLayerVisibility(layers, 'baselayers');
-    //In current application the folllowing map control functions are not enabled for baselayers
-    //this.mapSvc.updateLayerOpacity(layers, 'baselayers');
-    //this.mapSvc.updateLayerZIndex(layers, 'baselayers');
   }
 
   private addUpdateTerrainLayers(layers: Layer[]) {
@@ -317,6 +351,11 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     // handle layer Visible change
     this.mapSvc.update3DLayerVisibility(layers, filtertype);
     this.mapSvc.update3DLayerOpacity(layers, filtertype);
+  }
+
+  closeCesiumPopup(){
+    const popup = document.getElementById("cesium_popup_div")!;
+    popup.style.display = 'none';
   }
 
 }

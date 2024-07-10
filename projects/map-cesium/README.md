@@ -99,12 +99,15 @@ You can add widgets to the cesium viewer by specifying them in an `ICesiumContro
     sceneModePicker: false,
     homeButton: false,
     baseLayerPicker: false,
-    geocoder: false, //the geocoder requires an cesium ion access token to work
+    geocoder: false,
     navigationHelpButton: false,
     navigationInstructionsInitiallyVisible: false,
     fullscreenButton: false,
     scene3DOnly: true,
-    infoBox: false
+    skyAtmosphere: false,
+    infoBox: false,
+    selectionIndicator: false,
+    baseLayer: false
   };
 ```
 The widgets can be switched on and off inside the constructor of example-view.component.ts:
@@ -125,7 +128,7 @@ Popups for layers inside Cesium are handled with the [InfoBox widget](https://ce
 controls!: ICesiumControls;
 constructor() {
     this.controls = {
-      infoBox: true
+      enablePopups: true
     }
   }
 ```

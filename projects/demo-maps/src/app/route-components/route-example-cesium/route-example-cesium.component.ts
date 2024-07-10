@@ -51,10 +51,14 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     public mapStateSvc: MapStateService,
     public mapCesiumSvc: MapCesiumService
   ) {
-    this.controls = {
+  /*   this.controls = {
       infoBox: true,
       selectionIndicator: true
-    }
+    } */
+      this.controls = {
+        enablePopups: true,
+        globeColor: '#00FF00'
+      }
   }
 
   ngOnInit() {
@@ -77,6 +81,18 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
 
   addBaselayers() {
     const layers = [
+      new VectorLayer({
+        name: 'Transparent background',
+        id: 'blank',
+        type: 'geojson',
+        data: {
+          "type": "Feature",
+          "geometry": null,
+        },
+        description: 'This is a transparent background. Use this to save bandwidth when no background map is needed.',
+        visible: false,
+        opacity: 0
+      }),
       new OsmTileLayer({
         visible: true
       }),
@@ -234,7 +250,95 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
           },
           clampToGround: false
         }
-      })
+      }),
+      new VectorLayer({
+        id: 'geojson_test3',
+        name: 'GeoJSON Vector Layer (icons)',
+        attribution: `© DLR GeoJSON`,
+        type: 'geojson',
+        data: {
+          "type": "FeatureCollection",
+          "features": [
+            {
+            type: "Feature",
+            properties: {
+              id: 1,
+              title: "Point 1",
+              iconUrl: './assets/icons/icon-72x72.png'
+            },
+            geometry: {
+              coordinates: [
+                11.617674411393523,
+                48.12108785075742
+              ],
+              type: "Point"
+            }
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 1,
+            title: "Point 1",
+            iconUrl: './assets/icons/icon-72x72.png'
+          },
+          geometry: {
+            coordinates: [
+              -73.98871110194915,
+              40.704468034225556
+            ],
+            type: "Point"
+          }
+      },
+      {
+        type: "Feature",
+        properties: {
+          id: 1,
+          title: "Point 1",
+          iconUrl: './assets/icons/icon-72x72.png'
+        },
+        geometry: {
+          coordinates: [
+            -46.62002667427379,
+            -23.556899526881907
+          ],
+          type: "Point"
+        }
+    },
+    {
+      type: "Feature",
+      properties: {
+        id: 1,
+        title: "Point 1",
+        iconUrl: './assets/icons/icon-72x72.png'
+      },
+      geometry: {
+        coordinates: [
+          28.079737800003755,
+          -26.165098479883348
+        ],
+        type: "Point"
+      }
+  },
+  {
+    type: "Feature",
+    properties: {
+      id: 1,
+      title: "Point 1",
+      iconUrl: './assets/icons/icon-72x72.png'
+    },
+    geometry: {
+      coordinates: [
+        106.82649176443738,
+        -6.124589176175903
+      ],
+      type: "Point"
+    }
+}
+      ]
+    },
+        visible: false,
+        popup: true
+      }),
     ];
 
     layers.map(l => this.twoDlayerSvc.addLayer(l, 'Overlays'));

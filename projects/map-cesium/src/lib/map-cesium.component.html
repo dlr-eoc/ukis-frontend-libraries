@@ -1,2 +1,8 @@
-<div #cesiumMapDiv class="map cesiumMap"></div>
+<div #cesiumMapDiv class="map cesiumMap">
+  <div class="cesium-popup" id="cesium_popup_div">
+    <a class="cesium-popup-closer" (click)="closeCesiumPopup()"></a>
+    <div class="cesium-popup-content" id="map_cesium_popup_content">
+    </div>
+  </div>
+</div>
 <div #cesiumCreditDiv class="cesiumCredits"></div>

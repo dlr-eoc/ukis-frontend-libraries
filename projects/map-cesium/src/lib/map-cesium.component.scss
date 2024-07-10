@@ -12,6 +12,7 @@
     width: 100%;
     height: 100%;
     position: relative;
+    overflow: hidden;
 }
 
 .cesium-viewer-bottom .cesium-credit-logoContainer {
@@ -70,4 +71,59 @@
     fill: var(--ukis-popup-bg-color);
     stroke: #0072a3;
     stroke-width: 1.1px;
+}
+
+.cesium-popup {
+  position: absolute;
+  background-color: var(--ukis-popup-bg-color);
+  -webkit-filter: var(--ukis-drop-shadow);
+  filter: var(--ukis-drop-shadow);
+  padding: 15px;
+  border-radius: 2px;
+  top: 0px;
+  left: 0px;
+  margin: 0.5rem;
+  min-width: 280px;
+  display:none;
+  z-index: 1000000;
+
+  .cesium-popup-closer {
+    text-decoration: none;
+    position: absolute;
+    top: 0px;
+    right: 8px;
+    cursor: pointer;
+  }
+
+  .cesium-popup-closer:after {
+    content: "✖";
+  }
+
+  &:after,
+  &:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    border-top-color: var(--ukis-popup-bg-color);
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+  }
+
+  &:before {
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+  }
+
+  &.hidden {
+    visibility: hidden;
+  }
 }

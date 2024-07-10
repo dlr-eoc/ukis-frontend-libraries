@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeoExtent, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IListMatrixSet, TFiltertypesUncap, TFiltertypes } from '@dlr-eoc/services-layers';
 
 import { ICesiumControls } from './map-cesium.component';
-import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath} from '@cesium/engine';
+import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath, BillboardGraphics} from '@cesium/engine';
 import { Viewer } from '@cesium/widgets';
 import { IMapCenter } from '@dlr-eoc/services-map-state';
 
@@ -55,8 +55,9 @@ export class MapCesiumService {
     infoBox: false,
     selectionIndicator: false,
     baseLayer: false
-
   };
+
+  public defaultGlobeColor: Color = Color.WHITE;
 
   constructor() {
     this.EPSG = WebMercator;
@@ -104,6 +105,9 @@ export class MapCesiumService {
     if (typeof newControls.selectionIndicator !== 'undefined') {
       this.viewerOptions.selectionIndicator = newControls.selectionIndicator;
     }
+    if (typeof newControls.globeColor !== 'undefined') {
+      this.defaultGlobeColor = Color.fromCssColorString(newControls.globeColor);
+    }
   }
 
   //Create Cesium Viewer
@@ -117,16 +121,27 @@ export class MapCesiumService {
     const scene = this.viewer.scene;
     scene.fog.enabled = false;
     scene.globe.showGroundAtmosphere = false;
+    scene.sun.show = false;
+    scene.moon.show = false;
+
+    //reduce light effect on tilesets
+    scene.globe.enableLighting = false;
+    scene.highDynamicRange = false;
+
+    //set default color to white for transparent backgrounds
+    scene.globe.baseColor = this.defaultGlobeColor;
 
     //set start time
     this.viewer.clock.currentTime = this.cesiumCurrentTime;
 
     //change default infoBox
+    if(this.viewerOptions.infoBox){
     this.viewer.infoBox.container.getElementsByTagName('iframe')[0].remove();
     const newDiv = document.createElement("div");
     newDiv.className = 'cesium-infoBox-content';
     newDiv.id = 'cesiumInfoBoxContent'
     this.viewer.infoBox.container.children[0].append(newDiv);
+    }
 
     //Change primitive collection settings
     this.viewer.scene.primitives.destroyPrimitives = false;
@@ -256,6 +271,7 @@ export class MapCesiumService {
       }
     }else{
       // If view angle is 0, setViewAngle(0) (flyTo) is not necessary
+      console.log(typeof options.complete);
       if(options.complete && typeof options.complete === 'function'){
         options.complete();
       }
@@ -609,7 +625,7 @@ export class MapCesiumService {
       wmtsOptions.rectangle = Rectangle.fromDegrees(l.bbox[0], l.bbox[1], l.bbox[2], l.bbox[3]);
     }
     if (l.popup) {
-      //Not supported by cesium as 02/2023
+      //Not supported by cesium as 07/2024, https://cesium.com/learn/cesiumjs/ref-doc/WebMapTileServiceImageryProvider.html#pickFeatures
     }
     const newImageryLayer = new ImageryLayer(
       new WebMapTileServiceImageryProvider(wmtsOptions),
@@ -684,7 +700,22 @@ export class MapCesiumService {
       dataSourceOptions.credit = new Credit(l.attribution);
     }
 
-    newGeoJsonDataSource.load(l.data, dataSourceOptions);
+    newGeoJsonDataSource.load(l.data, dataSourceOptions).then(function(){
+      let i = 0;
+      const entityArray = newGeoJsonDataSource.entities.values;
+      //check if vector data has icon features and set the icon graphic accordingly
+      entityArray.forEach(entity => {
+        if(l.data['features'] && l.data['features'][i]['properties'] && l.data['features'][i]['properties']['iconUrl']){
+          entity.billboard =  new BillboardGraphics({
+            image: l.data['features'][i]['properties']['iconUrl'],
+            width: 20,
+            height: 20
+          });
+          entity.description = l.data['features'][i]['properties']['id'];
+        }
+        i++;
+      });
+    });
     newGeoJsonDataSource.show = l.visible;
     newGeoJsonDataSource.name = l.name;
 
@@ -1148,10 +1179,15 @@ export class MapCesiumService {
       if (new_tileset_layer.style == undefined) {
         new_tileset_layer.style = new Cesium3DTileStyle({
           "show": "true",
-          "color": "color('lightgrey'," + tilesetLayer.opacity + ")"
+          "color": "color('white'," + tilesetLayer.opacity + ")"
         });
       }
       new_tileset_layer.credit = new Credit(tilesetLayer.attribution!);
+
+      //set the luminance of the tileset. A high value reduces the day/night sun based lighting effect. Default value is 0.2
+    if(tilesetLayer.custom_layer.imageBasedLighting){
+      new_tileset_layer.imageBasedLighting.luminanceAtZenith = tilesetLayer.custom_layer.imageBasedLighting.luminanceAtZenith;
+      }
 
       this.tilesetLayerGroup.set(tilesetLayer.id, new_tileset_layer);
     } catch (error) {
@@ -1243,10 +1279,14 @@ export class MapCesiumService {
   }
 
   addIonAccessToken(token: string) {
-    Ion.defaultAccessToken = token;
+    if(token){
+      Ion.defaultAccessToken = token;
+    }
   }
   addGoogleMapsApiKey(key: string) {
+    if(key){
     //GoogleMaps.defaultApiKey = key;
+    }
   }
 
   destroyLayerGrpoups() {
