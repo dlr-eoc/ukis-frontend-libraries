@@ -56,7 +56,8 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
       selectionIndicator: true
     } */
       this.controls = {
-        enablePopups: true
+        enablePopups: true,
+        globeColor: '#00FF00'
       }
   }
 
@@ -80,6 +81,18 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
 
   addBaselayers() {
     const layers = [
+      new VectorLayer({
+        name: 'Transparent background',
+        id: 'blank',
+        type: 'geojson',
+        data: {
+          "type": "Feature",
+          "geometry": null,
+        },
+        description: 'This is a transparent background. Use this to save bandwidth when no background map is needed.',
+        visible: false,
+        opacity: 0
+      }),
       new OsmTileLayer({
         visible: true
       }),

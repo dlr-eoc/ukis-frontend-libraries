@@ -28,6 +28,8 @@ export interface ICesiumControls {
   ionAccessToken?: string;
   //In the same way you can provide a personal key for Google Maps, https://cesium.com/learn/cesiumjs-learn/cesiumjs-photorealistic-3d-tiles/
   GoogleMapsApiKey?: string;
+  //default globe color as hex string
+  globeColor?: string;
 }
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;

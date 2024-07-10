@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeoExtent, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IListMatrixSet, TFiltertypesUncap, TFiltertypes } from '@dlr-eoc/services-layers';
 
 import { ICesiumControls } from './map-cesium.component';
-import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath} from '@cesium/engine';
+import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath, BillboardGraphics} from '@cesium/engine';
 import { Viewer } from '@cesium/widgets';
 import { IMapCenter } from '@dlr-eoc/services-map-state';
 
@@ -57,6 +57,8 @@ export class MapCesiumService {
     baseLayer: false
   };
 
+  public defaultGlobeColor: Color = Color.WHITE;
+
   constructor() {
     this.EPSG = WebMercator;
   }
@@ -103,6 +105,9 @@ export class MapCesiumService {
     if (typeof newControls.selectionIndicator !== 'undefined') {
       this.viewerOptions.selectionIndicator = newControls.selectionIndicator;
     }
+    if (typeof newControls.globeColor !== 'undefined') {
+      this.defaultGlobeColor = Color.fromCssColorString(newControls.globeColor);
+    }
   }
 
   //Create Cesium Viewer
@@ -124,7 +129,7 @@ export class MapCesiumService {
     scene.highDynamicRange = false;
 
     //set default color to white for transparent backgrounds
-    scene.globe.baseColor = Color.WHITE;
+    scene.globe.baseColor = this.defaultGlobeColor;
 
     //set start time
     this.viewer.clock.currentTime = this.cesiumCurrentTime;
