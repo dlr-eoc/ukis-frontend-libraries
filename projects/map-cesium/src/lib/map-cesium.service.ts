@@ -700,7 +700,22 @@ export class MapCesiumService {
       dataSourceOptions.credit = new Credit(l.attribution);
     }
 
-    newGeoJsonDataSource.load(l.data, dataSourceOptions);
+    newGeoJsonDataSource.load(l.data, dataSourceOptions).then(function(){
+      let i = 0;
+      const entityArray = newGeoJsonDataSource.entities.values;
+      //check if vector data has icon features and set the icon graphic accordingly
+      entityArray.forEach(entity => {
+        if(l.data['features'] && l.data['features'][i]['properties'] && l.data['features'][i]['properties']['iconUrl']){
+          entity.billboard =  new BillboardGraphics({
+            image: l.data['features'][i]['properties']['iconUrl'],
+            width: 20,
+            height: 20
+          });
+          entity.description = l.data['features'][i]['properties']['id'];
+        }
+        i++;
+      });
+    });
     newGeoJsonDataSource.show = l.visible;
     newGeoJsonDataSource.name = l.name;
 

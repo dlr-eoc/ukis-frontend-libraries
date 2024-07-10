@@ -250,7 +250,95 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
           },
           clampToGround: false
         }
-      })
+      }),
+      new VectorLayer({
+        id: 'geojson_test3',
+        name: 'GeoJSON Vector Layer (icons)',
+        attribution: `© DLR GeoJSON`,
+        type: 'geojson',
+        data: {
+          "type": "FeatureCollection",
+          "features": [
+            {
+            type: "Feature",
+            properties: {
+              id: 1,
+              title: "Point 1",
+              iconUrl: './assets/icons/icon-72x72.png'
+            },
+            geometry: {
+              coordinates: [
+                11.617674411393523,
+                48.12108785075742
+              ],
+              type: "Point"
+            }
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 1,
+            title: "Point 1",
+            iconUrl: './assets/icons/icon-72x72.png'
+          },
+          geometry: {
+            coordinates: [
+              -73.98871110194915,
+              40.704468034225556
+            ],
+            type: "Point"
+          }
+      },
+      {
+        type: "Feature",
+        properties: {
+          id: 1,
+          title: "Point 1",
+          iconUrl: './assets/icons/icon-72x72.png'
+        },
+        geometry: {
+          coordinates: [
+            -46.62002667427379,
+            -23.556899526881907
+          ],
+          type: "Point"
+        }
+    },
+    {
+      type: "Feature",
+      properties: {
+        id: 1,
+        title: "Point 1",
+        iconUrl: './assets/icons/icon-72x72.png'
+      },
+      geometry: {
+        coordinates: [
+          28.079737800003755,
+          -26.165098479883348
+        ],
+        type: "Point"
+      }
+  },
+  {
+    type: "Feature",
+    properties: {
+      id: 1,
+      title: "Point 1",
+      iconUrl: './assets/icons/icon-72x72.png'
+    },
+    geometry: {
+      coordinates: [
+        106.82649176443738,
+        -6.124589176175903
+      ],
+      type: "Point"
+    }
+}
+      ]
+    },
+        visible: false,
+        popup: true
+      }),
     ];
 
     layers.map(l => this.twoDlayerSvc.addLayer(l, 'Overlays'));
