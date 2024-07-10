@@ -163,8 +163,7 @@ describe('MapCesiumService Core Functions', () => {
     service = TestBed.inject(MapCesiumService);
 
     const controls: ICesiumControls = {
-      infoBox: true,
-      selectionIndicator: true
+      enablePopups: true
     }
     service.setControls(controls);
   });
@@ -195,8 +194,7 @@ describe('MapCesiumService State', () => {
     service = TestBed.inject(MapCesiumService);
 
     const controls: ICesiumControls = {
-      infoBox: true,
-      selectionIndicator: true
+      enablePopups: true
     }
     service.setControls(controls);
   });
@@ -267,8 +265,7 @@ describe('MapCesiumService Layer Functions', () => {
     service = TestBed.inject(MapCesiumService);
 
     const controls: ICesiumControls = {
-      infoBox: true,
-      selectionIndicator: true
+      enablePopups: true
     }
     service.setControls(controls);
   });
@@ -354,8 +351,7 @@ describe('MapCesiumService ukisLayers', () => {
     service = TestBed.inject(MapCesiumService);
 
     const controls: ICesiumControls = {
-      infoBox: true,
-      selectionIndicator: true
+      enablePopups: true
     }
     service.setControls(controls);
     createTestLayer();
@@ -477,8 +473,7 @@ describe('MapCesiumService DataSources', () => {
     service = TestBed.inject(MapCesiumService);
 
     const controls: ICesiumControls = {
-      infoBox: true,
-      selectionIndicator: true
+      enablePopups: true
     }
     service.setControls(controls);
     createTestLayer();

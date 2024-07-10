@@ -51,10 +51,13 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     public mapStateSvc: MapStateService,
     public mapCesiumSvc: MapCesiumService
   ) {
-    this.controls = {
+  /*   this.controls = {
       infoBox: true,
       selectionIndicator: true
-    }
+    } */
+      this.controls = {
+        enablePopups: true
+      }
   }
 
   ngOnInit() {
