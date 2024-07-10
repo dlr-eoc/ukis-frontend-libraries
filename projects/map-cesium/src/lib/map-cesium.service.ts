@@ -55,7 +55,6 @@ export class MapCesiumService {
     infoBox: false,
     selectionIndicator: false,
     baseLayer: false
-
   };
 
   constructor() {
@@ -117,16 +116,27 @@ export class MapCesiumService {
     const scene = this.viewer.scene;
     scene.fog.enabled = false;
     scene.globe.showGroundAtmosphere = false;
+    scene.sun.show = false;
+    scene.moon.show = false;
+
+    //reduce light effect on tilesets
+    scene.globe.enableLighting = false;
+    scene.highDynamicRange = false;
+
+    //set default color to white for transparent backgrounds
+    scene.globe.baseColor = Color.WHITE;
 
     //set start time
     this.viewer.clock.currentTime = this.cesiumCurrentTime;
 
     //change default infoBox
+    if(this.viewerOptions.infoBox){
     this.viewer.infoBox.container.getElementsByTagName('iframe')[0].remove();
     const newDiv = document.createElement("div");
     newDiv.className = 'cesium-infoBox-content';
     newDiv.id = 'cesiumInfoBoxContent'
     this.viewer.infoBox.container.children[0].append(newDiv);
+    }
 
     //Change primitive collection settings
     this.viewer.scene.primitives.destroyPrimitives = false;
@@ -256,6 +266,7 @@ export class MapCesiumService {
       }
     }else{
       // If view angle is 0, setViewAngle(0) (flyTo) is not necessary
+      console.log(typeof options.complete);
       if(options.complete && typeof options.complete === 'function'){
         options.complete();
       }
@@ -609,7 +620,7 @@ export class MapCesiumService {
       wmtsOptions.rectangle = Rectangle.fromDegrees(l.bbox[0], l.bbox[1], l.bbox[2], l.bbox[3]);
     }
     if (l.popup) {
-      //Not supported by cesium as 02/2023
+      //Not supported by cesium as 07/2024, https://cesium.com/learn/cesiumjs/ref-doc/WebMapTileServiceImageryProvider.html#pickFeatures
     }
     const newImageryLayer = new ImageryLayer(
       new WebMapTileServiceImageryProvider(wmtsOptions),
@@ -1148,10 +1159,15 @@ export class MapCesiumService {
       if (new_tileset_layer.style == undefined) {
         new_tileset_layer.style = new Cesium3DTileStyle({
           "show": "true",
-          "color": "color('lightgrey'," + tilesetLayer.opacity + ")"
+          "color": "color('white'," + tilesetLayer.opacity + ")"
         });
       }
       new_tileset_layer.credit = new Credit(tilesetLayer.attribution!);
+
+      //set the luminance of the tileset. A high value reduces the day/night sun based lighting effect. Default value is 0.2
+    if(tilesetLayer.custom_layer.imageBasedLighting){
+      new_tileset_layer.imageBasedLighting.luminanceAtZenith = tilesetLayer.custom_layer.imageBasedLighting.luminanceAtZenith;
+      }
 
       this.tilesetLayerGroup.set(tilesetLayer.id, new_tileset_layer);
     } catch (error) {
@@ -1243,10 +1259,14 @@ export class MapCesiumService {
   }
 
   addIonAccessToken(token: string) {
-    Ion.defaultAccessToken = token;
+    if(token){
+      Ion.defaultAccessToken = token;
+    }
   }
   addGoogleMapsApiKey(key: string) {
+    if(key){
     //GoogleMaps.defaultApiKey = key;
+    }
   }
 
   destroyLayerGrpoups() {
