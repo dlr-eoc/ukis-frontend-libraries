@@ -17,6 +17,7 @@
  */
 
 @import "./ukis-variables";
+@import '@cds/core/global.css';
 // --- overwrite Clarity variables - remove if
 @import "./overwrites-clr-variables";
 @import "@clr/ui/src/main";

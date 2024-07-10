@@ -1,5 +1,11 @@
 # [13.X.X](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v13.X.X) (2024-07-10) (map-cesium)
 
+### Breaking Changes
+ - Update angular from `^16.2.3` to `^17.3.11` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
+ - Upadte @clr/angular from `^15.12.0` to `^17.2.1` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
+ - Upadte @clr/ui from `^15.12.0` to `^17.2.1` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
+   Clients now have to set the clarity theme as described in their documentation ([Step 3: Set the Theme](https://clarity.design/pages/developing))
+
 ### Features
 * **@dlr-eoc/map-cesium:**
 - Added popup interface as an alternative to the infoBox. (In the long run the popup will replace the infoBox)

@@ -16,15 +16,17 @@
  *       It's not a performance issue. It's just saner to maintain.
  */
 
-@import "./ukis-variables";
-// --- overwrite Clarity variables - remove if
-@import "./overwrites-clr-variables";
-@import "@clr/ui/src/main";
-// ----------------------------------
-@import "./clr-vertival-nav-layout";
-
-@import "./ukis-inputs";
-@import "./ukis-layer-nav";
-
-
-@import "./ukis-core-ui-layout";
+ @import "./ukis-variables";
+ @import '@cds/core/global.css';
+ // --- overwrite Clarity variables - remove if
+ @import "./overwrites-clr-variables";
+ @import "@clr/ui/src/main";
+ // ----------------------------------
+ @import "./clr-vertival-nav-layout";
+ 
+ @import "./ukis-inputs";
+ @import "./ukis-layer-nav";
+ 
+ 
+ @import "./ukis-core-ui-layout";
+ 
