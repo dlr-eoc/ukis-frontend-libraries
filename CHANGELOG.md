@@ -1,3 +1,12 @@
+# [13.X.X](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v13.X.X) (2024-07-10) (map-cesium)
+
+### Features
+* **@dlr-eoc/map-cesium:**
+- Added popup interface as an alternative to the infoBox. (In the long run the popup will replace the infoBox)
+- Adjustments for 3D scene lighting and support for imageBasedLighting luminanceAtZenith.
+- Added control option for the default globe color.
+- Added support for icon markers for point geojson features.
+
 # [13.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v13.0.0) (2024-07-08) (services-map-state, map-ol, map-cesium and map-maplibre)
 
 ### Breaking Changes
