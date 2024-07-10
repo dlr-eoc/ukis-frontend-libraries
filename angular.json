@@ -426,18 +426,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo-maps:build"
+            "buildTarget": "demo-maps:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "demo-maps:build:production"
+              "buildTarget": "demo-maps:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "demo-maps:build"
+            "buildTarget": "demo-maps:build"
           }
         },
         "test": {
@@ -554,18 +554,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo-auth:build"
+            "buildTarget": "demo-auth:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "demo-auth:build:production"
+              "buildTarget": "demo-auth:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "demo-auth:build"
+            "buildTarget": "demo-auth:build"
           }
         },
         "test": {

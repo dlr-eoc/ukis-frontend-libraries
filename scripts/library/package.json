@@ -11,9 +11,9 @@
   "main": "index.js",
   "private": true,
   "peerDependencies": {
-    "@angular/cli": "^16.2.1",
+    "@angular/cli": "^17.3.8",
     "@schematics/angular": "^16.2.1",
-    "typescript": "^5.1.3"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "commander": "^9.0.0",

@@ -13,13 +13,13 @@
     "interface"
   ],
   "peerDependencies": {
-    "@angular/common": "^16.2.3",
-    "@angular/core": "^16.2.3",
+    "@angular/common": "^17.3.11",
+    "@angular/core": "^17.3.11",
     "rxjs": "~7.8.0"
   },
   "devDependencies": {
-    "zone.js": "~0.13.0",
-    "@angular/platform-browser-dynamic": "^16.2.3",
+    "zone.js": "~0.14.7",
+    "@angular/platform-browser-dynamic": "^17.3.11",
     "@dlr-eoc/core-ui": "13.0.1-next.0",
     "@dlr-eoc/shared-assets": "13.0.1-next.0"
   },

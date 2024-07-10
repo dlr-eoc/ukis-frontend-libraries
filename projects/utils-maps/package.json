@@ -17,9 +17,9 @@
     "delaunator": "^5.0.0"
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "^16.2.3",
-    "@angular/core": "^16.2.3",
-    "zone.js": "~0.13.0",
+    "@angular/platform-browser-dynamic": "^17.3.11",
+    "@angular/core": "^17.3.11",
+    "zone.js": "~0.14.7",
     "@types/offscreencanvas": "^2019.7.0"
   }
 }
