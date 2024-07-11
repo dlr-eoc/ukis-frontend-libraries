@@ -49,7 +49,7 @@
     "@fontsource/metropolis": "^4.5.3",
     "@fontsource/noto-sans": "^4.5.11",
     "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
-    "@schematics/angular": "^16.2.1",
+    "@schematics/angular": "^17.3.8",
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "delaunator": "^5.0.0",
     "luxon": "^2.5.0",

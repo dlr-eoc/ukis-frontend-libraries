@@ -8,6 +8,6 @@
     "build": "tsc -p tsconfig.json"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "^1.0.0"
+    "@angular-devkit/architect": "^0.1703.8"
   }
 }
