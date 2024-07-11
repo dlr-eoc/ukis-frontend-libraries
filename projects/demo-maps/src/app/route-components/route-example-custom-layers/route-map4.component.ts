@@ -81,7 +81,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const customHeatmapLayer = new CustomLayer({
       id: 'heatmap_layer',
       name: 'Heatmap Layer',
-      actions: [{ title: 'test', icon: '', action: (layer) => { } }],
+      actions: [{ title: 'test', icon: 'paperclip', action: (layer) => { } }],
       popup: {
         event: 'click',
       },
