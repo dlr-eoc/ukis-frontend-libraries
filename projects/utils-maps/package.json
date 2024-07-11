@@ -14,7 +14,7 @@
   "peerDependencies": {},
   "dependencies": {
     "ol": "^v9.2.4",
-    "delaunator": "^5.0.0"
+    "delaunator": "^5.0.1"
   },
   "devDependencies": {
     "@angular/platform-browser-dynamic": "^17.3.11",

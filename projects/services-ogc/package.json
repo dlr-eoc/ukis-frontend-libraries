@@ -29,15 +29,15 @@
     "ogc-schemas": "^2.6.1",
     "ol": "^v9.2.4",
     "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
-    "tslib": "^2.4.0",
+    "tslib": "^2.6.3",
     "opensearch-browser": "^2.0.0-alpha.5",
     "luxon": "^2.5.0"
   },
   "devDependencies": {
     "zone.js": "~0.14.7",
     "@angular/platform-browser-dynamic": "^17.3.11",
-    "proj4": "^2.9.0",
     "@dlr-eoc/shared-assets": "13.0.1-next.0",
-    "terser": "^5.17.6"
+    "proj4": "^2.11.0",
+    "terser": "^5.31.2"
   }
 }

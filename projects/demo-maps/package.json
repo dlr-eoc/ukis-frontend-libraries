@@ -19,7 +19,7 @@
     "@clr/angular": "^17.2.1",
     "rxjs": "~7.8.0",
     "ol": "^v9.2.4",
-    "proj4": "^2.9.0"
+    "proj4": "^2.11.0"
   },
   "dependencies": {
     "@dlr-eoc/map-ol": "13.0.1-next.0",

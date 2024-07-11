@@ -27,8 +27,8 @@
     "@dlr-eoc/services-layers": "13.0.1-next.0",
     "@dlr-eoc/services-map-state": "13.0.1-next.0",
     "@dlr-eoc/core-ui": "13.0.1-next.0",
-    "@angular/cdk": "^15.2.9",
-    "tslib": "^2.4.0"
+    "@angular/cdk": "^17.3.10",
+    "tslib": "^2.6.3"
   },
   "devDependencies": {
     "zone.js": "~0.14.7",

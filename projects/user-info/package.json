@@ -26,6 +26,6 @@
     "@angular/platform-browser-dynamic": "^17.3.11"
   },
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.3"
   }
 }

@@ -22,6 +22,6 @@
   "devDependencies": {
     "@angular/platform-browser-dynamic": "^17.3.11",
     "@angular/core": "^17.3.11",
-    "@types/node": "^20.10.1"
+    "@types/node": "^20.14.10"
   }
 }

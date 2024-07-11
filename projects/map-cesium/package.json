@@ -23,7 +23,7 @@
     "@dlr-eoc/services-layers": "13.0.1-next.0",
     "@cesium/engine": "^10.0.0",
     "@cesium/widgets": "^7.0.0",
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.3"
   },
   "devDependencies": {
     "@dlr-eoc/base-layers-raster": "13.0.1-next.0",

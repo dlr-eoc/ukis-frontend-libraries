@@ -23,8 +23,8 @@
     "@dlr-eoc/services-layers": "13.0.1-next.0",
     "@dlr-eoc/map-ol": "13.0.1-next.0",
     "@dlr-eoc/utils-maps": "13.0.1-next.0",
-    "proj4": "^2.9.0",
-    "tslib": "^2.4.0",
+    "proj4": "^2.11.0",
+    "tslib": "^2.6.3",
     "three": "^0.137.5"
   },
   "devDependencies": {

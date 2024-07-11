@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@dlr-eoc/services-util-store": "13.0.1-next.0",
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.3"
   },
   "devDependencies": {
     "zone.js": "~0.14.7",
