@@ -1130,13 +1130,6 @@
     "path": "<path to ukis-frontend-libraries>\\node_modules\\@clr\\angular",
     "licenseFile": "<path to ukis-frontend-libraries>\\node_modules\\@clr\\angular\\README.md"
   },
-  "@clr/icons@13.0.2": {
-    "licenses": "MIT",
-    "repository": "https://github.com/vmware/clarity",
-    "publisher": "clarity",
-    "path": "<path to ukis-frontend-libraries>\\node_modules\\@clr\\icons",
-    "licenseFile": "<path to ukis-frontend-libraries>\\node_modules\\@clr\\icons\\README.md"
-  },
   "@clr/ui@15.13.0": {
     "licenses": "MIT",
     "repository": "https://github.com/vmware-clarity/ng-clarity",

@@ -10,6 +10,9 @@ import testData from '@dlr-eoc/shared-assets/geojson/test.json';
 import { Feature } from 'ol';
 import { Fill, Stroke, Style } from 'ol/style';
 
+import { ClarityIcons, layersIcon, worldIcon, blockIcon, cogIcon, mapIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
+
 @Component({
   selector: 'app-route-example-cesium',
   templateUrl: './route-example-cesium.component.html',

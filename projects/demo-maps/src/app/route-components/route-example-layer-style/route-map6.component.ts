@@ -6,6 +6,9 @@ import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
 import { RasterFeatureInfoComponent } from '../../components/raster-feature-info/raster-feature-info.component';
 
+import { ClarityIcons, layersIcon, worldIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, worldIcon]);
+
 @Component({
   selector: 'app-route-map6',
   templateUrl: './route-map6.component.html',

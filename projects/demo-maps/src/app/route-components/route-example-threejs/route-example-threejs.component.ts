@@ -10,9 +10,8 @@ import { TileWMS } from 'ol/source';
 import { Tile as TileLayer } from 'ol/layer';
 import { get as getProjection } from 'ol/proj';
 
-
-
-
+import { ClarityIcons, layersIcon, infoStandardIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, infoStandardIcon]);
 
 @Component({
   selector: 'app-route-example-threejs',

@@ -5,6 +5,8 @@ import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { IProjDef } from '@dlr-eoc/map-tools';
 
+import { ClarityIcons, layersIcon, mapIcon, compassIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, mapIcon, compassIcon]);
 
 @Component({
   selector: 'app-route-map2',

@@ -4,7 +4,8 @@ import { MapOlService } from '@dlr-eoc/map-ol';
 
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
-
+import { ClarityIcons, eyeIcon, eyeHideIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
 
 @Component({
   selector: 'ukis-projection-switch',

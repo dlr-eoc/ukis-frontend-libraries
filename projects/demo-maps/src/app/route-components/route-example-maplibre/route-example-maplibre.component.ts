@@ -10,6 +10,9 @@ import placeLabels from '@dlr-eoc/shared-assets/open-map-styles/open-map-style-p
 import testData from '@dlr-eoc/shared-assets/geojson/test.collection.json';
 import { Subscription } from 'rxjs';
 
+import { ClarityIcons, layersIcon, worldIcon, cogIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
+
 @Component({
   selector: 'app-route-example-maplibre',
   templateUrl: './route-example-maplibre.component.html',

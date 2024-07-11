@@ -5,6 +5,8 @@
  - Upadte @clr/angular from `^15.12.0` to `^17.2.1` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
  - Upadte @clr/ui from `^15.12.0` to `^17.2.1` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
    Clients now have to set the clarity theme as described in their documentation ([Step 3: Set the Theme](https://clarity.design/pages/developing))
+ - Remove `@clr/icons` and replace it with the icons from `@cds/core`.
+   Now each icon that is used must be imported into the component where it is in the template. See [clarity documentation icons](https://clarity.design/documentation/icons). Use `import '@cds/core/icon/register.js';` in a main file of the application so that it is used only once.
 
 ### Features
 * **@dlr-eoc/map-cesium:**

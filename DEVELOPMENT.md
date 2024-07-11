@@ -78,7 +78,8 @@ Example:
             "@angular/core": "<main version>",
             "@angular/cdk": "<main version>",
             "@clr/angular": "<main version>",
-            "@clr/icons": "<main version>",
+            "@cds/core": "<main version>",
+            "@clr/ui": "<main version>",
             "rxjs": "<main version>",
             "md5": "<main version>"
         },

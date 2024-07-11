@@ -19,7 +19,7 @@
     "@angular/core": "^17.3.11",
     "@angular/forms": "^17.3.11",
     "@clr/angular": "^17.2.1",
-    "@clr/icons": "^13.0.2",
+    "@cds/core": "^6.12.0",
     "@clr/ui": "^17.2.1",
     "rxjs": "~7.8.0"
   },

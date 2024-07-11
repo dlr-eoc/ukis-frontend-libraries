@@ -7,6 +7,9 @@ import { IEocOwsContext, OwcJsonService } from '@dlr-eoc/services-ogc';
 import { first } from 'rxjs/operators';
 import { ZommNumberControl } from '../route-example-layers/ol-custom-control';
 
+import { ClarityIcons, layersIcon, worldIcon, exportIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, worldIcon, exportIcon ]);
+
 @Component({
   selector: 'app-route-example-owc-layers',
   templateUrl: './route-example-owc-layers.component.html',

@@ -77,6 +77,7 @@ async function copyFiles(context: BuilderContext) {
     { source: '../src/lib/global-alert/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/' },
     { source: '../src/lib/global-progress/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/' },
     { source: '../src/lib/header/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/header/' },
+    { source: '../src/lib/icons/**', dest: '../../../dist/core-ui/schematics/ng-add/files/src/app/components/icons/' },
     { source: '../schematics/migrations/**', dest: '../../../dist/core-ui/schematics/migrations/' }
   ];
   const afilePaths = filePaths.map(item => ({ source: join(__dirname, item.source), dest: join(__dirname, item.dest) }))

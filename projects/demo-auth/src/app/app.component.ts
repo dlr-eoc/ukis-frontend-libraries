@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import './components/icons/ukis';
+import '@cds/core/icon/register.js';
 
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';

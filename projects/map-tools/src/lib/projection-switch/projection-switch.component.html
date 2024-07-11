@@ -5,8 +5,8 @@
         <span class="title" [title]="proj.title" (click)="setNewProjection(proj)">
           {{proj.title || proj.code}}
         </span>
-        <clr-icon class="iconButton" [ngClass]="{'is-solid':proj===selectedProj}"
-          [attr.shape]="proj===selectedProj?'eye':'eye-hide'" title="{{proj.code}}"></clr-icon>
+        <cds-icon class="iconButton" [attr.solid]="proj===selectedProj"
+          [attr.shape]="proj===selectedProj?'eye':'eye-hide'" title="{{proj.code}}"></cds-icon>
       </div>
     </div>
   </div>

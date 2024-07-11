@@ -85,7 +85,7 @@ addBaselayers() {
 ```
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2">
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="false" class="layers" title="Coordinates">
-    <clr-icon shape="compass" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
     Coordinates
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-mouse-position></ukis-mouse-position>
@@ -98,7 +98,7 @@ addBaselayers() {
 #### add the following to a route-view.component.html
 ```
 <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="false" class="layers" title="Projection">
-    <clr-icon shape="map" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="map" clrVerticalNavIcon></cds-icon>
     Projection
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections" [fitViewToNewExtent]="true" [mapStateSvc]="mapStateSvc"></ukis-projection-switch>
@@ -155,7 +155,7 @@ constructor(
 #### add the following to a route-view.component.html
 ```
 <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Navigator">
-    <clr-icon shape="compass" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
     Navigator
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-map-navigator [mapState]="mapStateSvc"></ukis-map-navigator>

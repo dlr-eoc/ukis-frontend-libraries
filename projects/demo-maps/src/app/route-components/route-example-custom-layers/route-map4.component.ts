@@ -31,6 +31,9 @@ import { ExampleGroupActionComponent } from '../../components/example-group-acti
 import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
 import { Popup2Component } from '../../components/popup2/popup2.component';
 
+import { ClarityIcons, layersIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon]);
+
 
 @Component({
   selector: 'app-route-map4',

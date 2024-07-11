@@ -5,7 +5,7 @@
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" class="right" [clr-nav-level]="2">
 
     <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <clr-icon shape="clock" title="Performance" clrVerticalNavIcon></clr-icon>
+        <cds-icon shape="clock" title="Performance" clrVerticalNavIcon></cds-icon>
         Performance
         <clr-vertical-nav-group-children class="padding title-ellipsis">
             <ukis-performance></ukis-performance>
@@ -14,7 +14,7 @@
     </clr-vertical-nav-group>
 
     <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <clr-icon shape="layers" clrVerticalNavIcon title="layers"></clr-icon>
+        <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
         Layers
         <clr-vertical-nav-group-children class="padding title-ellipsis">
             <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>

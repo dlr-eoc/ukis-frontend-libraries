@@ -24,6 +24,9 @@ import { getRenderPixel } from 'ol/render';
 import olLayerGroup from 'ol/layer/Group';
 import { AlertService } from '../../components/global-alert/alert.service';
 
+import { ClarityIcons, layersIcon, cogIcon, compassIcon} from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, cogIcon, compassIcon]);
+
 @Component({
   selector: 'app-route-map3',
   templateUrl: './route-map3.component.html',

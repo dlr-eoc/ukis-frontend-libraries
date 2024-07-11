@@ -237,7 +237,7 @@ addTerrainlayer(){
 To be able to interact with the layers in the viewer, additional layer controls have to be added to the vertical nav in `example-view.component.html`. Note, that the 3D serve-layers instanced is used here.
 ```
       <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers three-d-layer-control">
-        <clr-icon shape="block" clrVerticalNavIcon title="tilelayers"></clr-icon>
+        <cds-icon shape="block" clrVerticalNavIcon title="tilelayers"></cds-icon>
         3D Tilelayers
         <clr-vertical-nav-group-children class="padding title-ellipsis">
           <ukis-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
@@ -245,7 +245,7 @@ To be able to interact with the layers in the viewer, additional layer controls 
       </clr-vertical-nav-group>
 
       <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <clr-icon shape="world" title="terain" clrVerticalNavIcon></clr-icon>
+        <cds-icon shape="world" title="terain" clrVerticalNavIcon></cds-icon>
         3D Terrain
         <clr-vertical-nav-group-children class="padding title-ellipsis">
           <ukis-base-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>

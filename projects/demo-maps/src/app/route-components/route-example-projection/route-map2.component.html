@@ -4,28 +4,28 @@
 
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" class="right" [clr-nav-level]="2">
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="layers" clrVerticalNavIcon title="layers"></clr-icon>
+    <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
     Layers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Projection">
-    <clr-icon shape="map" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="map" clrVerticalNavIcon></cds-icon>
     Projection
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections" [fitViewToNewExtent]="true" [mapStateSvc]="mapStateSvc"></ukis-projection-switch>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Coordinates">
-    <clr-icon shape="compass" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
     Coordinates
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-mouse-position></ukis-mouse-position>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Navigator">
-    <clr-icon shape="compass" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
     Navigator
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-map-navigator [mapState]="mapStateSvc"></ukis-map-navigator>
