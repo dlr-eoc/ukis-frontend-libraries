@@ -7,6 +7,7 @@
    Clients now have to set the clarity theme as described in their documentation ([Step 3: Set the Theme](https://clarity.design/pages/developing))
  - Remove `@clr/icons` and replace it with the icons from `@cds/core`.
    Now each icon that is used must be imported into the component where it is in the template. See [clarity documentation icons](https://clarity.design/documentation/icons). Use `import '@cds/core/icon/register.js';` in a main file of the application so that it is used only once.
+ - Set node and npm compatibility for angular 17 (node: 20.15.1 and npm: 10.7.0)
 
 ### Features
 * **@dlr-eoc/map-cesium:**
