@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/cookie-alert",
-  "version": "13.0.1-next.0",
+  "version": "13.0.1-next.1",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -16,7 +16,7 @@
     "@angular/core": "^17.3.11"
   },
   "dependencies": {
-    "@dlr-eoc/services-util-store": "13.0.1-next.0",
+    "@dlr-eoc/services-util-store": "13.0.1-next.1",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
