@@ -42,14 +42,14 @@ function transpile(context) {
     return __awaiter(this, void 0, void 0, function* () {
         const options = {
             command: 'npx',
-            args: ['tsc', '-p', (0, path_1.join)(__dirname, '../tsconfig.schematics.json')]
+            args: ['tsc', '-p','shell', (0, path_1.join)(__dirname, '../tsconfig.schematics.json')]
         };
         if ((0, os_1.platform)() === "win32") {
             options.command = 'npx.cmd';
         }
         context.reportStatus(`Executing "${options.command}"...`);
         context.logger.info(`Executing Transpile: ${options.args.join(' ')}`);
-        const child = (0, child_process_1.spawn)(options.command, options.args, { stdio: 'pipe', cwd: process.cwd() });
+        const child = (0, child_process_1.spawn(options.command, options.args, { stdio: 'pipe', cwd: process.cwd(), shell: true }));
         child.stdout.on('data', (data) => {
             context.logger.info(data.toString());
         });
