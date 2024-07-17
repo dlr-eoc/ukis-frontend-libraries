@@ -66,7 +66,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "./projects/core-ui/core-ui-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/core-ui/tsconfig.lib.json",
             "project": "projects/core-ui/ng-package.json"

@@ -10,5 +10,14 @@
     "@angular-devkit/schematics",
     "@schematics/angular",
     "parse5-html-rewriting-stream"
+  ],
+  "assets": [
+    { "input": "schematics", "glob": "**/*.json", "output": "schematics/" },
+    { "input": "schematics/ng-add/files", "glob": "**/*.*", "output": "schematics/ng-add/files/" },
+    { "input": "schematics/add-routing/files", "glob": "**/*.*", "output": "schematics/add-routing/files/" },
+    { "input": "src/lib/global-alert", "glob": "**.*", "output": "schematics/ng-add/files/src/app/components/global-alert/" },
+    { "input": "src/lib/global-progress", "glob": "**.*", "output": "schematics/ng-add/files/src/app/components/global-progress/" },
+    { "input": "src/lib/header", "glob": "**.*", "output": "schematics/ng-add/files/src/app/components/header/" },
+    { "input": "src/lib/icons", "glob": "**.*", "output": "schematics/ng-add/files/src/app/components/icons/" }
   ]
 }

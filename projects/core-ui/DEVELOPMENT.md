@@ -13,7 +13,7 @@ https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2
 }
 ```
 
-2. build the schematics `ng build --configuration=production core-ui `
+2. build the schematics `npm run build --workspace=projects/core-ui && npm run schematics:build --workspace=projects/core-ui` 
 
 3. create a new project `ng new my-project`
 
@@ -34,25 +34,23 @@ remove files in test app:
 
 ### Unit Testing
 
-`npm run schematics:test` will run the unit tests, using Jasmine as a runner and test framework.
+`npm run schematics:test --workspace=projects/core-ui` will run the unit tests, using Jasmine as a runner and test framework.
 `ng test core-ui` will run the unit tests of the lib via [Karma](https://karma-runner.github.io).
 
 ### Build Schematics
 
-- `ng build core-ui`
+- `npm run build --workspace=projects/core-ui && npm run schematics:build --workspace=projects/core-ui` 
 
 The above command compiles the schematics
 `tsc -p projects/core-ui/tsconfig.schematics.json`
 
-and copies the files
-- `cpx projects/core-ui/schematics/collection.json dist/core-ui/schematics/`
-- `cpx projects/core-ui/schematics/**/schema.json dist/core-ui/schematics/`
-- `cpx projects/core-ui/schematics/*/files/** dist/core-ui/schematics/`
-- `cpx projects/core-ui/src/lib/global-alert/** dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/`
-- `cpx projects/core-ui/src/lib/global-progress/** dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/`
+and copies the files (ng build core-ui ng-package.json assets)
+- `projects/core-ui/schematics/collection.json dist/core-ui/schematics/`
+- `projects/core-ui/schematics/**/schema.json dist/core-ui/schematics/`
+- `projects/core-ui/schematics/*/files/** dist/core-ui/schematics/`
+- `projects/core-ui/src/lib/global-alert/** dist/core-ui/schematics/ng-add/files/src/app/components/global-alert/`
+- `projects/core-ui/src/lib/global-progress/** dist/core-ui/schematics/ng-add/files/src/app/components/global-progress/`
 - ...
-
-This is done by a [custom builder](core-ui-packagr/index.js)
 
 ### Publishing
 
