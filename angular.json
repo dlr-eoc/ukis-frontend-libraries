@@ -66,7 +66,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "./projects/core-ui/core-ui-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/core-ui/tsconfig.lib.json",
             "project": "projects/core-ui/ng-package.json"
@@ -367,13 +367,7 @@
             "styles": [
               "node_modules/@fontsource/metropolis/all.css",
               "node_modules/@fontsource/noto-sans/index.css",
-              "node_modules/@clr/icons/clr-icons.min.css",
-              "node_modules/@clr/ui/clr-ui.min.css",
               "projects/demo-maps/src/styles.scss"
-            ],
-            "scripts": [
-              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-              "node_modules/@clr/icons/clr-icons.min.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -426,18 +420,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo-maps:build"
+            "buildTarget": "demo-maps:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "demo-maps:build:production"
+              "buildTarget": "demo-maps:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "demo-maps:build"
+            "buildTarget": "demo-maps:build"
           }
         },
         "test": {
@@ -505,13 +499,7 @@
               }
             ],
             "styles": [
-              "node_modules/@clr/icons/clr-icons.min.css",
-              "node_modules/@clr/ui/clr-ui.min.css",
               "projects/demo-auth/src/styles.scss"
-            ],
-            "scripts": [
-              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-              "node_modules/@clr/icons/clr-icons.min.js"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -554,18 +542,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "demo-auth:build"
+            "buildTarget": "demo-auth:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "demo-auth:build:production"
+              "buildTarget": "demo-auth:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "demo-auth:build"
+            "buildTarget": "demo-auth:build"
           }
         },
         "test": {

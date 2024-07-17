@@ -10,7 +10,9 @@
 
 /** nav orientation default left side ------------------------------ */
 .clr-vertical-nav {
+  --clr-vertical-nav-bg-color: hsl(198, 0%, 91%);
   width: var(--clr-vertical-nav-width, 12rem);
+  line-height: 24px;
   &.is-collapsed {
     .nav-icon {
       margin-left: var(--nav-items-distance-side) !important; //$clr_baselineRem_0_667;
@@ -68,7 +70,7 @@
     margin-right: auto;
 
     .nav-trigger-icon {
-      margin-left: 0.5rem;
+      margin-left: 0rem;
       margin-right: auto;
 
       &[direction="right"] {

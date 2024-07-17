@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-three",
-  "version": "13.0.0",
+  "version": "14.0.0-next.0",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -15,20 +15,20 @@
     "3D"
   ],
   "peerDependencies": {
-    "@angular/common": "^16.2.3",
-    "@angular/core": "^16.2.3"
+    "@angular/common": "^17.3.11",
+    "@angular/core": "^17.3.11"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "13.0.0",
-    "@dlr-eoc/services-layers": "13.0.0",
-    "@dlr-eoc/map-ol": "13.0.0",
-    "@dlr-eoc/utils-maps": "13.0.0",
-    "proj4": "^2.9.0",
-    "tslib": "^2.4.0",
+    "@dlr-eoc/services-map-state": "14.0.0-next.0",
+    "@dlr-eoc/services-layers": "14.0.0-next.0",
+    "@dlr-eoc/map-ol": "14.0.0-next.0",
+    "@dlr-eoc/utils-maps": "14.0.0-next.0",
+    "proj4": "^2.11.0",
+    "tslib": "^2.6.3",
     "three": "^0.137.5"
   },
   "devDependencies": {
-    "zone.js": "~0.13.0",
-    "@angular/platform-browser-dynamic": "^16.2.3"
+    "zone.js": "~0.14.7",
+    "@angular/platform-browser-dynamic": "^17.3.11"
   }
 }

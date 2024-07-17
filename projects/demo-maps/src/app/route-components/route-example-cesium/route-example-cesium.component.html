@@ -13,7 +13,7 @@
 <!-- for layer-control -->
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2" class="right">
     <clr-vertical-nav-group *ngIf="!is2dMap" [clrVerticalNavGroupExpanded]="true" class="layers three-d-layer-control">
-        <clr-icon shape="block" clrVerticalNavIcon title="tilelayers"></clr-icon>
+        <cds-icon shape="block" clrVerticalNavIcon title="tilelayers"></cds-icon>
         3D Tilelayers
         <clr-vertical-nav-group-children class="padding title-ellipsis">
             <ukis-layer-control [layersSvc]="threeDlayerSvc" [layersSort]="false" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
@@ -21,7 +21,7 @@
     </clr-vertical-nav-group>
 
     <clr-vertical-nav-group *ngIf="!is2dMap" [clrVerticalNavGroupExpanded]="true" class="layers">
-        <clr-icon shape="world" title="terain" clrVerticalNavIcon></clr-icon>
+        <cds-icon shape="world" title="terain" clrVerticalNavIcon></cds-icon>
         3D Terrain
         <clr-vertical-nav-group-children class="padding title-ellipsis">
             <ukis-base-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
@@ -29,7 +29,7 @@
     </clr-vertical-nav-group>
 
     <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <clr-icon shape="world" title="Overlays" clrVerticalNavIcon></clr-icon>
+        <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
         Overlays
         <clr-vertical-nav-group-children class="padding title-ellipsis">
             <ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc" [layersSort]="false" [layerfilter]="'Overlays'">
@@ -38,7 +38,7 @@
     </clr-vertical-nav-group>
 
     <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <clr-icon shape="layers" clrVerticalNavIcon title="layers"></clr-icon>
+        <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
         Layers
         <clr-vertical-nav-group-children class="padding title-ellipsis">
             <ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
@@ -46,7 +46,7 @@
     </clr-vertical-nav-group>
 
     <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <clr-icon shape="world" title="Baselayers" clrVerticalNavIcon></clr-icon>
+        <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
         Baselayers
         <clr-vertical-nav-group-children class="padding title-ellipsis">
             <ukis-base-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
@@ -54,7 +54,7 @@
     </clr-vertical-nav-group>
 
     <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-      <clr-icon shape="cog" title="Actions" clrVerticalNavIcon></clr-icon>
+      <cds-icon shape="cog" title="Actions" clrVerticalNavIcon></cds-icon>
       Actions
       <clr-vertical-nav-group-children class="padding title-ellipsis">
 
@@ -67,11 +67,11 @@
     </clr-vertical-nav-group>
 
     <a clrVerticalNavLink *ngIf="is2dMap" class="iconButton" (click)="changeMapDimension()">
-        <clr-icon shape="block" title="3D View" clrVerticalNavIcon></clr-icon>
+        <cds-icon shape="block" title="3D View" clrVerticalNavIcon></cds-icon>
         3D View
     </a>
     <a clrVerticalNavLink *ngIf="!is2dMap" class="iconButton" (click)="changeMapDimension()">
-        <clr-icon shape="map" title="2D View" clrVerticalNavIcon></clr-icon>
+        <cds-icon shape="map" title="2D View" clrVerticalNavIcon></cds-icon>
         2D View
     </a>
 

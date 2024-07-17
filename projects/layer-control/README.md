@@ -33,7 +33,7 @@ import { LayerControlModule } from '@dlr-eoc/layer-control';
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2">
 
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="world" title="Overlays" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
     Overlays
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'">
@@ -42,7 +42,7 @@ import { LayerControlModule } from '@dlr-eoc/layer-control';
   </clr-vertical-nav-group>
 
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="layers" clrVerticalNavIcon title="layers"></clr-icon>
+    <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
     Layers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
@@ -50,7 +50,7 @@ import { LayerControlModule } from '@dlr-eoc/layer-control';
   </clr-vertical-nav-group>
 
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="world" title="Baselayers" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
     Baselayers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-base-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>

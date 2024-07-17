@@ -1,5 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { ClarityIcons} from '@cds/core/icon';
+import { ukisIcon, dlrIcon } from '../icons/ukis';
+ClarityIcons.addIcons(ukisIcon, dlrIcon);
+
 @Component({
   selector: 'ukis-header',
   templateUrl: './header.component.html',

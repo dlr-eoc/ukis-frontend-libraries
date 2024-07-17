@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-maplibre",
-  "version": "13.0.0",
+  "version": "14.0.0-next.0",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -13,20 +13,20 @@
     "layers"
   ],
   "peerDependencies": {
-    "@angular/common": "^16.2.3",
-    "@angular/core": "^16.2.3",
+    "@angular/common": "^17.3.11",
+    "@angular/core": "^17.3.11",
     "rxjs": "~7.8.0"
   },
   "dependencies": {
-    "tslib": "^2.4.0",
+    "tslib": "^2.6.3",
     "maplibre-gl": "^4.5.0",
     "@mapbox/togeojson": "0.16.2",
-    "@dlr-eoc/services-map-state": "13.0.0",
-    "@dlr-eoc/services-layers": "13.0.0",
-    "@dlr-eoc/utilities": "13.0.0"
+    "@dlr-eoc/services-map-state": "14.0.0-next.0",
+    "@dlr-eoc/services-layers": "14.0.0-next.0",
+    "@dlr-eoc/utilities": "14.0.0-next.0"
   },
   "devDependencies": {
-    "@dlr-eoc/base-layers-raster": "13.0.0",
-    "@dlr-eoc/shared-assets": "13.0.0"
+    "@dlr-eoc/base-layers-raster": "14.0.0-next.0",
+    "@dlr-eoc/shared-assets": "14.0.0-next.0"
   }
 }

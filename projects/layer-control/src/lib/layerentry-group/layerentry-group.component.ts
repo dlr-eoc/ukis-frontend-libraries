@@ -8,6 +8,10 @@ import { LayersService } from '@dlr-eoc/services-layers';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { IDynamicComponent } from '@dlr-eoc/core-ui';
 
+import { ClarityIcons, folderIcon, folderOpenIcon, arrowIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, detailsIcon, zoomInIcon, trashIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[folderIcon, folderOpenIcon, arrowIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, detailsIcon, zoomInIcon, trashIcon]);
+
+
 enum EactiveTabs {
   settings = 'settings',
   legend = 'legend',

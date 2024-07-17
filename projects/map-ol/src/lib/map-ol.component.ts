@@ -43,6 +43,10 @@ import { collectionItemSetIndex, layerOrGroupSetOpacity, layerOrGroupSetVisible,
 import { defaults as defaultInteractions } from 'ol/interaction/defaults';
 import { FeatureLike } from 'ol/Feature';
 
+import { ClarityIcons, worldIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[worldIcon]);
+
+
 
 export interface IMapControls {
   /** @see (Attribution options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/Attribution.js#L13 */
@@ -600,7 +604,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       }
       if (this.controls.overviewMap) {
         const icon = document.createElement('spawn');
-        icon.innerHTML = '<clr-icon shape="world"></clr-icon>';
+        icon.innerHTML = '<cds-icon shape="world"></cds-icon>';
         let overviewMapOptions = {
           layers: [new olTileLayer({
             source: new olOSM()

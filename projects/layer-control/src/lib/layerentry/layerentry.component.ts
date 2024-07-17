@@ -7,6 +7,8 @@ import {
 } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
+import { ClarityIcons, angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon]);
 
 enum EactiveTabs {
   settings = 'settings',

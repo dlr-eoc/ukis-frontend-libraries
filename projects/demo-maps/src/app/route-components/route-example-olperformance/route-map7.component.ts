@@ -7,6 +7,9 @@ import { LargeLayersService } from './services/largelayers.service';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { Feature } from 'ol';
 
+import { ClarityIcons, layersIcon, clockIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
+
 @Component({
   selector: 'app-route-map7',
   templateUrl: './route-map7.component.html',
@@ -28,7 +31,7 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
       attribution: true,
       scaleLine: true
     };
-   }
+  }
 
   ngOnInit(): void {
     this.mapSvc.setProjection('EPSG:4326');
@@ -81,8 +84,8 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
     // this.mapStateSvc.setExtent(extent);
     this.mapSvc.map.getView().fit(
       extent, {
-        size: this.mapSvc.map.getSize(),
-      });
+      size: this.mapSvc.map.getSize(),
+    });
   }
 
 }

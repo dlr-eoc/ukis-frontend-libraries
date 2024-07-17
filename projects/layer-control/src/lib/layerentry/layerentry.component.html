@@ -1,8 +1,8 @@
 <div class="layer" [ngClass]="{'expanded': expanded}">
   <div class="head">
     <!-- layer expand icon -->
-    <clr-icon *ngIf="hasTabsbody" shape="angle" [ngStyle]="getExpandShape()" class="iconButton" [ngClass]="{'disabled': is_expandable()}"
-      (click)="showProperties()" title="Details"></clr-icon>
+    <cds-icon *ngIf="hasTabsbody" shape="angle" [ngStyle]="getExpandShape()" class="iconButton" [ngClass]="{'disabled': is_expandable()}"
+      (click)="showProperties()" title="Details"></cds-icon>
 
     <!-- layer title -->
     <div #ref class="item-title-replacement title" (click)="showProperties()" [title]="getLayerName(layer)">
@@ -14,23 +14,23 @@
 
     <!-- setLayerIndex // for reversed layergroups on ngFor up is down -->
     <span *ngIf="!checkBaselayer(layer,group) && sorting">
-      <clr-icon [hidden]="layerGroups && layerGroups.length == 1" class="iconButton" shape="arrow"
-        [ngClass]="{'disabled': isLast(layer)}" (click)="setLayerIndex(layer, 'down', group)" title="up"></clr-icon>
-      <clr-icon [hidden]="layerGroups && layerGroups.length == 1" class="iconButton" shape="arrow"
+      <cds-icon [hidden]="layerGroups && layerGroups.length == 1" class="iconButton" shape="arrow"
+        [ngClass]="{'disabled': isLast(layer)}" (click)="setLayerIndex(layer, 'down', group)" title="up"></cds-icon>
+      <cds-icon [hidden]="layerGroups && layerGroups.length == 1" class="iconButton" shape="arrow"
         [ngClass]="{'disabled': isFirst(layer)}" (click)="setLayerIndex(layer, 'up', group)" title="down" dir="down">
-      </clr-icon>
+      </cds-icon>
     </span>
 
     <!-- setLayerVisibility -->
     <label>
-      <clr-icon *ngIf="checkBaselayer(layer,group); else notBaselayer" class="iconButton"
-        [ngClass]="{'is-solid':layer.visible}" [attr.shape]="(layer.visible)?'dot-circle':'circle'"
+      <cds-icon *ngIf="checkBaselayer(layer,group); else notBaselayer" class="iconButton"
+        [attr.solid]="layer.visible" [attr.shape]="(layer.visible)?'dot-circle':'circle'"
         title="{{layer.visible?'Choose another layer':'Show layer'}}">
-      </clr-icon>
+      </cds-icon>
       <ng-template #notBaselayer>
-        <clr-icon class="iconButton" [ngClass]="{'is-solid':layer.visible}"
+        <cds-icon class="iconButton" [attr.solid]="layer.visible"
           [attr.shape]="(layer.visible)?'eye':'eye-hide'" title="{{layer.visible?'Hide layer':'Show layer'}}">
-        </clr-icon>
+        </cds-icon>
       </ng-template>
       <input class="hide" [type]="(checkBaselayer(layer,group))?'radio':'checkbox'" [name]="'layer'"
         [checked]="layer.visible" (change)="setLayerVisibility(layer, group)">
@@ -40,23 +40,24 @@
   <div *ngIf="expandable && expanded" class="body">
     <!-- tools: zoomTo, remove, switch Tab -->
     <div class="tools">
-      <clr-icon *ngIf="!checkBaselayer(layer, group) || layer.action" title="Layer settings" shape="cog"
-        class="iconButton" [ngClass]="{'active': activeTabs['settings']}" (click)="switchTab('settings')"></clr-icon>
-      <clr-icon *ngIf="layer.legendImg" title="Layer Legend" shape="image" class="iconButton"
-        [ngClass]="{'active': activeTabs['legend']}" (click)="switchTab('legend')"></clr-icon>
-      <clr-icon *ngIf="layer.description" title="Layer info" shape="info-standard" class="iconButton"
-        [ngClass]="{'active': activeTabs['description']}" (click)="switchTab('description')"></clr-icon>
+      <cds-icon *ngIf="!checkBaselayer(layer, group) || layer.action" title="Layer settings" shape="cog"
+        class="iconButton" [ngClass]="{'active': activeTabs['settings']}" (click)="switchTab('settings')"></cds-icon>
+      <cds-icon *ngIf="layer.legendImg" title="Layer Legend" shape="image" class="iconButton"
+        [ngClass]="{'active': activeTabs['legend']}" (click)="switchTab('legend')"></cds-icon>
+      <cds-icon *ngIf="layer.description" title="Layer info" shape="info-standard" class="iconButton"
+        [ngClass]="{'active': activeTabs['description']}" (click)="switchTab('description')"></cds-icon>
 
-      <clr-icon *ngFor="let item of layer.actions" [attr.shape]="item.icon" class="iconButton"
+      <!-- The icons for actions have tobe passd with the layer e.g. in the file the layer is added -->
+      <cds-icon *ngFor="let item of layer.actions" [attr.shape]="item.icon" class="iconButton"
         (click)="item.action(layer)" [title]="item.title">
-      </clr-icon>
+      </cds-icon>
 
 
       <span></span>
-      <clr-icon *ngIf="canZoomToLayer" shape="zoom-in" class="iconButton" title="Zoom to layer" (click)="zoomTo(layer)">
-      </clr-icon>
-      <clr-icon *ngIf="layer.removable" shape="trash" class="iconButton" (click)="removeLayer(group, layer)"
-        title="Remove layer"></clr-icon>
+      <cds-icon *ngIf="canZoomToLayer" shape="zoom-in" class="iconButton" title="Zoom to layer" (click)="zoomTo(layer)">
+      </cds-icon>
+      <cds-icon *ngIf="layer.removable" shape="trash" class="iconButton" (click)="removeLayer(group, layer)"
+        title="Remove layer"></cds-icon>
     </div>
     <div class="tabsbody" *ngIf="hasTabsbody && hasActiveTabs()">
       <div *ngIf="activeTabs.settings" class="layersettings">

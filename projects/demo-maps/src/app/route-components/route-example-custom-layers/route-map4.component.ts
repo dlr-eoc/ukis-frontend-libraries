@@ -31,6 +31,9 @@ import { ExampleGroupActionComponent } from '../../components/example-group-acti
 import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
 import { Popup2Component } from '../../components/popup2/popup2.component';
 
+import { ClarityIcons, layersIcon, paperclipIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, paperclipIcon]);
+
 
 @Component({
   selector: 'app-route-map4',
@@ -78,7 +81,7 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     const customHeatmapLayer = new CustomLayer({
       id: 'heatmap_layer',
       name: 'Heatmap Layer',
-      actions: [{ title: 'test', icon: '', action: (layer) => { } }],
+      actions: [{ title: 'test', icon: 'paperclip', action: (layer) => { } }],
       popup: {
         event: 'click',
       },

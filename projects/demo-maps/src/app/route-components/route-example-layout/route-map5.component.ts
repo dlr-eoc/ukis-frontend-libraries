@@ -6,6 +6,9 @@ import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
 import { GeoJSONFeature, GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
 
+import { ClarityIcons, layersIcon, worldIcon, tableIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, worldIcon, tableIcon]);
+
 @Component({
   selector: 'app-route-map5',
   templateUrl: './route-map5.component.html',

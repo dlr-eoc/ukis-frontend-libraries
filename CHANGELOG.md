@@ -1,4 +1,13 @@
-# [13.X.X](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v13.X.X) (2024-07-10) (map-cesium)
+# [x.y.z]() (YYYY-mm-dd) (map-cesium, angular update)
+
+### Breaking Changes
+ - Update angular from `^16.2.3` to `^17.3.11` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
+ - Upadte @clr/angular from `^15.12.0` to `^17.2.1` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
+ - Upadte @clr/ui from `^15.12.0` to `^17.2.1` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
+   Clients now have to set the clarity theme as described in their documentation ([Step 3: Set the Theme](https://clarity.design/pages/developing))
+ - Remove `@clr/icons` and replace it with the icons from `@cds/core`.
+   Now each icon that is used must be imported into the component where it is in the template. See [clarity documentation icons](https://clarity.design/documentation/icons). Use `import '@cds/core/icon/register.js';` in a main file of the application so that it is used only once.
+ - Set node and npm compatibility for angular 17 (node: 20.15.1 and npm: 10.7.0)
 
 ### Features
 * **@dlr-eoc/map-cesium:**

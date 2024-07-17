@@ -33,6 +33,7 @@ describe('ng-add', () => {
   const appOptions: ApplicationOptions = {
     name: 'ukisapp',
     projectRoot: '',
+    standalone: false, // We have not yet migrated to the standalone API.
     inlineStyle: false,
     inlineTemplate: false,
     routing: true,

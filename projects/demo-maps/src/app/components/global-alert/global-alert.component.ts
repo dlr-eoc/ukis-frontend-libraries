@@ -1,6 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IAlert } from './alert.service';
 
+import { ClarityIcons, infoCircleIcon, windowCloseIcon} from '@cds/core/icon';
+ClarityIcons.addIcons(...[infoCircleIcon, windowCloseIcon]);
+
 @Component({
   selector: 'ukis-global-alert',
   templateUrl: './global-alert.component.html',

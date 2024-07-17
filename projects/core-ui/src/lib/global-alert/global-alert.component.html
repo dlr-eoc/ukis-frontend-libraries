@@ -2,7 +2,7 @@
   <div class="alert-items">
     <div class="alert-item static">
       <div class="alert-icon-wrapper">
-        <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
+        <cds-icon class="alert-icon" shape="info-circle"></cds-icon>
       </div>
       <div class="alert-text" [innerHTML]=alert.text></div>
       <div *ngIf="alert.actions" class="alert-actions">
@@ -12,6 +12,6 @@
     </div>
   </div>
   <button *ngIf="alert.closeable" type="button" class="close" aria-label="alert close" (click)="close()">
-    <clr-icon aria-hidden="true" shape="close"></clr-icon>
+    <cds-icon aria-hidden="true" shape="window-close"></cds-icon>
   </button>
 </div>

@@ -27,19 +27,9 @@ cd project-tutorial-map
 - At the moment Clarity does not support angular schematics ([github ng add issue](https://github.com/vmware-clarity/ng-clarity/issues/120)). Therefore Clarity has to be installed manually. For the versions also see ukis-frontend-libraries [package.json](package.json)
 - Run 
 ```
-npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version> @clr/icons@<version>
+npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version>
 ```
-- Add Clarity styles and scripts in the angular.json:
-```
-  "styles": [
-      "node_modules/@clr/ui/clr-ui.min.css",
-      "node_modules/@clr/icons/clr-icons.min.css"
-      ... any other styles
-            ],
-  "scripts": [
-      "node_modules/@clr/icons/clr-icons.min.js"
-            ]
-```
+
 - Add the Clarity module and icons inside the app.module.ts: 
 ``` import { NgModule } from "@angular/core";
       import { BrowserModule } from "@angular/platform-browser";
@@ -62,6 +52,11 @@ npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version> @clr/ic
         bootstrap: [ AppComponent ]
       })
       export class AppModule { }
+```
+
+- Set Clarity Theme (index.html)
+```
+<body cds-theme="light" />
 ```
 - For more information see [Adding Clarity to an Angular project](https://clarity.design/documentation/get-started#seedProjectAngular)
 
@@ -191,7 +186,7 @@ More information about this library can be found [in the layer-control library f
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2" class="right">
 
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="world" title="Overlays" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
     Overlays
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-layer-control [layersSvc]="layerSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'">
@@ -200,7 +195,7 @@ More information about this library can be found [in the layer-control library f
   </clr-vertical-nav-group>
 
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="layers" clrVerticalNavIcon title="layers"></clr-icon>
+    <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
     Layers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-layer-control [layersSvc]="layerSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
@@ -208,7 +203,7 @@ More information about this library can be found [in the layer-control library f
   </clr-vertical-nav-group>
 
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-    <clr-icon shape="world" title="Baselayers" clrVerticalNavIcon></clr-icon>
+    <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
     Baselayers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-base-layer-control [layersSvc]="layerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>

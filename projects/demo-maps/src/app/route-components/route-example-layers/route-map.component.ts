@@ -17,6 +17,10 @@ import { ExampleGroupLegendComponent } from '../../components/example-group-lege
 import greyscale from '@dlr-eoc/shared-assets/open-map-styles/open-map-style.json';
 import { VtileLayerActionComponent } from '../../components/vtile-layer-action/vtile-layer-action.component';
 
+// import icons for use in html and layer actions
+import { ClarityIcons, layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon]);
+
 @Component({
   selector: 'app-route-map',
   templateUrl: './route-map.component.html',

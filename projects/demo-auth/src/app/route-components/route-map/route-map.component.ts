@@ -7,6 +7,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MapOlService } from '@dlr-eoc/map-ol';
 
+import { ClarityIcons, layersIcon, worldIcon} from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, worldIcon]);
+
 
 @Component({
   selector: 'app-route-map',
