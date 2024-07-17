@@ -53,6 +53,11 @@ npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version>
       })
       export class AppModule { }
 ```
+
+- Set Clarity Theme (index.html)
+```
+<body cds-theme="light" />
+```
 - For more information see [Adding Clarity to an Angular project](https://clarity.design/documentation/get-started#seedProjectAngular)
 
 
