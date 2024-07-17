@@ -40,8 +40,6 @@
     "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
-    "cpx": "^1.5.0",
-    "@types/cpx": "^1.5.2",
     "typescript": "^5.4.5",
     "jasmine": "^4.6.0",
     "zone.js": "~0.14.7",

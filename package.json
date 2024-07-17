@@ -27,7 +27,8 @@
     "build:scripts": "npx tsc -p scripts/library/tsconfig.json",
     "lint": "ng lint",
     "compodoc": "compodoc -p tsconfig.doc.json -a projects/core-ui/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
-    "compodoc-serve": "compodoc -r 8081 -s"
+    "compodoc-serve": "compodoc -r 8081 -s",
+    "build:license":"npx license-checker --json --out ./projects/demo-maps/src/assets/licenses.json"
   },
   "private": true,
   "dependencies": {
