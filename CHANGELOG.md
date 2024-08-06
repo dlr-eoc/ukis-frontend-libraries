@@ -1,4 +1,4 @@
-# [x.y.z]() (YYYY-mm-dd) (map-cesium, angular update)
+# [14.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v14.0.0) (2024-08-05) (map-cesium, angular update, @clr and @cds update)
 
 ### Breaking Changes
  - Update angular from `^16.2.3` to `^17.3.11` [Issue #232](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/232)
