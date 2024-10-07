@@ -1,8 +1,9 @@
 import { CswClient } from './cswclient';
 import { CswCapabilitiesElement, CswDescribeRecordResponseElement, CswGetRecordByIdResponseElement, CswGetDomainResponseElement } from './cswdatatypes';
-import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { FakeDataGovCswServer, FakeGeotestCswServer } from './fakeCswServer';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 
@@ -17,9 +18,9 @@ describe('Testing CSW client', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [CswClient],
-            imports: [HttpClientTestingModule]
-        });
+    imports: [],
+    providers: [CswClient, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
         // We inject our service (which imports the HttpClient) and the Test Controller
         httpTestingController = TestBed.inject(HttpTestingController);
