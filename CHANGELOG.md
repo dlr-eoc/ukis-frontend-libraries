@@ -3,6 +3,7 @@
 ### Bug Fixes
 * **@dlr-eoc/core-ui:**
   - Update styles for `@clr 17`
+  - Schemantic add path in tsconfig no baseUrl
 
 
 # [14.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v14.0.0) (2024-08-05) (map-cesium, angular update, @clr and @cds update)

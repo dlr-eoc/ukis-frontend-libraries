@@ -362,7 +362,7 @@ function ruleUpdateTsConfigFile(): Rule {
 
     return updateJsonFile<TsconfigJSON>(path, (json) => {
       const tsconfigPaths = [
-        { name: '@dlr-eoc/*', paths: ['frontend-libraries/projects/*'] }
+        { name: '@dlr-eoc/*', paths: ['./frontend-libraries/projects/*'] }
       ];
 
       if (!json.compilerOptions) {
