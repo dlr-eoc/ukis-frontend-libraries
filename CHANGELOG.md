@@ -1,5 +1,8 @@
 ### Breaking Changes
  - Update angular from `^17.3.11` to `^18.2.7`
+### Bug Fixes
+* **@dlr-eoc/core-ui:**
+  - Update styles for `@clr 17`
 
 
 # [14.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v14.0.0) (2024-08-05) (map-cesium, angular update, @clr and @cds update)
