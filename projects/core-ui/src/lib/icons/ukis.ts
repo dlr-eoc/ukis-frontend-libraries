@@ -1,4 +1,6 @@
-import { IconShapeTuple } from "@cds/core/icon/interfaces/icon.interfaces";
+type IconSvgString = string;
+type IconNameString = string;
+type IconShapeTuple = [IconNameString,IconSvgString];
 
 export const ukisIcon: IconShapeTuple = ['ukis-icon', `<svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" class="has-solid"
 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false" role="img">
