@@ -24,7 +24,7 @@ ng add @dlr-eoc/core-ui
 
 --routing=boolean // sets up angular routing (default false)
 
---addClr=boolean // run's @clr/angular:ng-add (default false)
+--addClr=boolean // run's @clr/angular:ng-add (default false) // does not work anymore, we need to remove this
 
 
 > The following are not implemented right now!
