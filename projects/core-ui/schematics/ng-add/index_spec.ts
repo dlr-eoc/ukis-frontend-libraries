@@ -9,7 +9,7 @@ import { TsconfigJSON } from '../schema.tsconfig';
 const collectionPath = require.resolve(path.join(__dirname, '../collection.json'));
 
 
-describe('ng-add', () => {
+describe('ng-add Module or standalone', () => {
   const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
 
   let appTree: UnitTestTree;
@@ -33,7 +33,7 @@ describe('ng-add', () => {
   const appOptions: ApplicationOptions = {
     name: 'ukisapp',
     projectRoot: '',
-    standalone: false, // We have not yet migrated to the standalone API.
+    standalone: false, // no standalone API.
     inlineStyle: false,
     inlineTemplate: false,
     routing: true,
@@ -154,29 +154,6 @@ describe('ng-add', () => {
     });
   });
 
-  it('should add Imports', async () => {
-    const testImports = [
-      'HeaderComponent',
-      'GlobalAlertComponent',
-      'AlertService',
-      'GlobalProgressComponent',
-      'ProgressService',
-      'ExampleViewComponent'
-    ];
-    const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
-    const appModule = tree.readContent('/src/app/app.module.ts');
-    testImports.map(i => {
-      expect(appModule).toContain(i);
-    });
-  });
-
-  /* it('should add workspace schematics', async () => {
-    const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
-    const projectFile = JSON.parse(tree.readContent('/angular.json'));
-    console.log(projectFile);
-    expect(projectFile?.schematics['@schematics/angular:component']?.style).toBe('scss');
-  }); */
-
   it('should add project schematics', async () => {
     const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
     const projectFile = JSON.parse(tree.readContent('/angular.json'));
@@ -242,32 +219,175 @@ describe('ng-add', () => {
       // expect(tree.files).toContain(f);
     });
   });
+});
 
-  it('should remove imports from views if routing is true', async () => {
+// ---------------------------------------------------------------------------------------------------
+describe('ng-add Module App', () => {
+  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
+
+  let appTree: UnitTestTree;
+
+  const ngAddOptions: UkisNgAddSchema = {
+    project: 'ukisapp',
+    routing: false,
+    addClr: false,
+    addFiles: true,
+    updateFiles: true, // TODO: this has to be implemented first
+    addMap: false, // TODO: this has to be implemented first
+    auth: false, // TODO: this has to be implemented first
+  };
+
+  const workspaceOptions: WorkspaceOptions = {
+    name: 'workspace',
+    newProjectRoot: 'projects',
+    version: '9.0.0'
+  };
+
+  const appOptions: ApplicationOptions = {
+    name: 'ukisapp',
+    projectRoot: '',
+    standalone: false, // no standalone API.
+    inlineStyle: false,
+    inlineTemplate: false,
+    routing: true,
+    style: Style.Css,
+    skipTests: false
+  };
+
+  beforeEach(async () => {
+    appTree = await schematicRunner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = await schematicRunner.runExternalSchematic(
+      '@schematics/angular',
+      'application',
+      appOptions,
+      appTree);
+  });
+
+  it('should add Imports', async () => {
     const testImports = [
+      'HeaderComponent',
+      'GlobalAlertComponent',
+      'AlertService',
+      'GlobalProgressComponent',
+      'ProgressService',
       'ExampleViewComponent'
     ];
-    const routingOptions = Object.assign({}, ngAddOptions, { routing: true });
-    const tree = await schematicRunner.runSchematic('ng-add', routingOptions, appTree);
-    const appModuleSource = tree.readContent('/src/app/app.module.ts').split('@NgModule');
-    const appModule = appModuleSource[0];
-
+    const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
+    const appModule = tree.readContent('/src/app/app.module.ts');
     testImports.map(i => {
-      expect(appModule).not.toContain(i);
+      expect(appModule).toContain(i);
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------
+
+describe('ng-add standalone App', () => {
+  const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
+
+  let appTree: UnitTestTree;
+
+  const ngAddOptions: UkisNgAddSchema = {
+    project: 'ukisapp',
+    routing: false,
+    addClr: false,
+    addFiles: true,
+    updateFiles: true, // TODO: this has to be implemented first
+    addMap: false, // TODO: this has to be implemented first
+    auth: false, // TODO: this has to be implemented first
+  };
+
+  const workspaceOptions: WorkspaceOptions = {
+    name: 'workspace',
+    newProjectRoot: 'projects',
+    version: '9.0.0'
+  };
+
+  const appOptions: ApplicationOptions = {
+    name: 'ukisapp',
+    projectRoot: '',
+    standalone: true, // We have not yet migrated to the standalone API.
+    inlineStyle: false,
+    inlineTemplate: false,
+    routing: true,
+    style: Style.Css,
+    skipTests: false
+  };
+
+  beforeEach(async () => {
+    appTree = await schematicRunner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
+    appTree = await schematicRunner.runExternalSchematic(
+      '@schematics/angular',
+      'application',
+      appOptions,
+      appTree);
+  });
+
+  it('should be standalone App', async () => {
+    const testFiles = [
+      '/src/main.ts',
+      '/src/app/app.config.ts'
+    ];
+    const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
+    testFiles.every(f => {
+      expect(tree.files).toContain(f);
     });
   });
 
-  it('should remove Declarations from views if routing is true', async () => {
-    const testDeclarations = [
-      'ExampleViewComponent'
-    ];
-    const routingOptions = Object.assign({}, ngAddOptions, { routing: true });
-    const tree = await schematicRunner.runSchematic('ng-add', routingOptions, appTree);
-    const appModuleSource = tree.readContent('/src/app/app.module.ts').split('@NgModule');
-    const appNgModule = `@NgModule${appModuleSource[1]}`;
+  it('should add config to main', async () => {
+    const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
+    const mainFile = tree.readContent('/src/main.ts');
+    expect(mainFile).toContain('app.config');
+  });
 
-    testDeclarations.map(i => {
-      expect(appNgModule).not.toContain(i);
+  // this should not be the case if ngAddOptions.routing = false ???
+  it('should have standalone routes', async () => {
+    const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
+    expect(tree.files).toContain('/src/app/app.routes.ts');
+  });
+
+  it('should add app files', async () => {
+    const testFiles = [
+      '/src/app/app.component.html',
+      '/src/app/app.component.scss',
+      '/src/app/app.component.ts',
+
+      'src/app/components/global-alert/alert.service.spec.ts',
+      'src/app/components/global-alert/alert.service.ts',
+      'src/app/components/global-alert/global-alert.component.html',
+      'src/app/components/global-alert/global-alert.component.scss',
+      'src/app/components/global-alert/global-alert.component.spec.ts',
+      'src/app/components/global-alert/global-alert.component.ts',
+
+      'src/app/components/global-progress/global-progress.component.html',
+      'src/app/components/global-progress/global-progress.component.scss',
+      'src/app/components/global-progress/global-progress.component.spec.ts',
+      'src/app/components/global-progress/global-progress.component.ts',
+      'src/app/components/global-progress/progress.service.spec.ts',
+      'src/app/components/global-progress/progress.service.ts',
+
+      'src/app/views/example-view/example-view.component.html',
+      'src/app/views/example-view/example-view.component.scss',
+      'src/app/views/example-view/example-view.component.spec.ts',
+      'src/app/views/example-view/example-view.component.ts'
+    ];
+    const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
+    testFiles.every(f => {
+      expect(tree.files).toContain(f);
+      // expect(tree.exists(f)).toBeTruthy();
+    });
+  });
+
+  it('should add Providers', async () => {
+    const testProviders = [
+      'AlertService',
+      'ProgressService',
+    ];
+    const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
+    const appConfig = tree.readContent('/src/app/app.config.ts');
+    testProviders.map(i => {
+      expect(appConfig).toContain(i);
+      expect(appConfig).toContain(`import { ${i} }`);
     });
   });
 });

@@ -1,11 +1,17 @@
 import { Component } from '@angular/core';
 
-import './components/icons/ukis';
+import { HeaderComponent } from './components/header/header.component';
 
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
 import { AlertService, IAlert } from './components/global-alert/alert.service';
+
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
-import { Router } from '@angular/router';
+
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
+import { NgFor, NgIf } from '@angular/common';
 
 interface IUi {
   alert: null | IAlert;
@@ -15,6 +21,8 @@ interface IUi {
 
 @Component({
   selector: '<%= appPrefix %>-root',
+  standalone: true,
+  imports: [ClrMainContainerModule, ClrNavigationModule, NgIf, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, NgFor, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
@@ -34,8 +42,8 @@ export class AppComponent {
     public router: Router
   ) {
     const meta = this.getHtmlMeta(['title', 'version', 'description', 'short-title']);
-    if (meta.title) {
-      this.title = meta.title;
+    if (meta['title']) {
+      this.title = meta['title'];
     }
     if (meta['short-title']) {
       this.shortTitle = meta['short-title'];

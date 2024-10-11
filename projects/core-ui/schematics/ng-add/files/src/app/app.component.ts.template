@@ -1,10 +1,20 @@
 import { Component, OnDestroy } from '@angular/core';
+import { NgIf } from '@angular/common';
+
+import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
 
 import '@cds/core/icon/register.js';
 
+import { HeaderComponent } from './components/header/header.component';
+
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
 import { AlertService, IAlert } from './components/global-alert/alert.service';
+
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
+
 import { Subscription } from 'rxjs';
+import { ExampleViewComponent } from './views/example-view/example-view.component';
 
 interface IUi {
   alert: null | IAlert;
@@ -14,6 +24,8 @@ interface IUi {
 
 @Component({
   selector: '<%= appPrefix %>-root',
+  standalone: true,
+  imports: [ClrMainContainerModule, ClrNavigationModule, NgIf, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, ExampleViewComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

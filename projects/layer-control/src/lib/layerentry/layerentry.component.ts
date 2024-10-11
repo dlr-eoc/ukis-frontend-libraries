@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
-import { IDynamicComponent } from '@dlr-eoc/core-ui';
+import { IDynamicComponent, DynamicComponentComponent } from '@dlr-eoc/core-ui';
 
 // imports only for typings...
 import {
@@ -8,6 +8,9 @@ import {
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
 import { ClarityIcons, angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon } from '@cds/core/icon';
+import { NgClass, NgIf, NgStyle, NgFor } from '@angular/common';
+import { ClrIconModule, ClrCommonFormsModule, ClrRangeModule, ClrSelectModule } from '@clr/angular';
+import { FormsModule } from '@angular/forms';
 ClarityIcons.addIcons(...[angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon]);
 
 enum EactiveTabs {
@@ -18,9 +21,11 @@ enum EactiveTabs {
 type TactiveTabs = keyof typeof EactiveTabs;
 
 @Component({
-  selector: 'ukis-layerentry',
-  templateUrl: './layerentry.component.html',
-  styleUrls: ['./layerentry.component.scss']
+    selector: 'ukis-layerentry',
+    templateUrl: './layerentry.component.html',
+    styleUrls: ['./layerentry.component.scss'],
+    standalone: true,
+    imports: [NgClass, NgIf, ClrIconModule, NgStyle, ClrCommonFormsModule, NgFor, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponentComponent]
 })
 export class LayerentryComponent implements OnInit {
   @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }
