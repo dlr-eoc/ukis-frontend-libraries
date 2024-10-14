@@ -9,6 +9,9 @@
   - Schemantic add path in tsconfig no baseUrl
   - Replace not found import `IconShapeTuple` from `@cds/core`
 
+* **@dlr-eoc/layer-control:**
+  - Fix direction of `@cds` icon
+
 
 # [14.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v14.0.0) (2024-08-05) (map-cesium, angular update, @clr and @cds update)
 
