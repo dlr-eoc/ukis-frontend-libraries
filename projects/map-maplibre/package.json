@@ -28,5 +28,6 @@
   "devDependencies": {
     "@dlr-eoc/base-layers-raster": "14.0.0",
     "@dlr-eoc/shared-assets": "14.0.0"
-  }
+  },
+  "sideEffects": false
 }
