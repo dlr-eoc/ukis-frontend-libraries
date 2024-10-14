@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-tools",
-  "version": "14.0.0",
+  "version": "15.0.0-next.0",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -23,8 +23,8 @@
     "rxjs": "~7.8.0"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "14.0.0",
-    "@dlr-eoc/map-ol": "14.0.0",
+    "@dlr-eoc/services-map-state": "15.0.0-next.0",
+    "@dlr-eoc/map-ol": "15.0.0-next.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
