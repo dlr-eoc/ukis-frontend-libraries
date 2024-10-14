@@ -45,6 +45,7 @@ import olMapBrowserEvent from 'ol/MapBrowserEvent';
 
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import Feature from 'ol/Feature';
+import { CommonModule } from '@angular/common';
 
 
 const WebMercator = 'EPSG:3857';
@@ -114,8 +115,10 @@ const createMapTarget = (size: number[]) => {
 };
 
 @Component({
-  selector: 'app-mock-popup',
-  template: `<div>{{ data | json }}</div>`
+    selector: 'app-mock-popup',
+    template: `<div>{{ data | json }}</div>`,
+    imports: [ CommonModule ],
+    standalone: true
 })
 class MockPopupComponent {
   @Input() data: any;
@@ -128,8 +131,8 @@ const beforeEachCreateMapFn = () => {
 
 const beforeEachFn = () => {
   TestBed.configureTestingModule({
-    declarations: [MockPopupComponent]
-  });
+    imports: [MockPopupComponent]
+});
 
   beforeEachCreateMapFn();
 
