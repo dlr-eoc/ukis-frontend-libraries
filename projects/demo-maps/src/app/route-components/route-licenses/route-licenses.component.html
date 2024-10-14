@@ -23,6 +23,7 @@
     <clr-dg-column>License</clr-dg-column>
     <clr-dg-column>Repository</clr-dg-column>
 
+ 
     @if (licenses$ | async; as licenses) {
       @for (l of licenses; track l) {
         <clr-dg-row>
@@ -32,6 +33,8 @@
           <clr-dg-cell><a href="{{l.repository}}">{{l.repository}}</a></clr-dg-cell>
         </clr-dg-row>
       }
+    }
+    @if (licenses$ | async; as licenses) {
       <clr-dg-footer>{{licenses.length}} third party dependencies</clr-dg-footer>
     }
 
