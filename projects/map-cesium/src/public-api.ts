@@ -4,4 +4,3 @@
 
 export * from './lib/map-cesium.service';
 export * from './lib/map-cesium.component';
-export * from './lib/map-cesium.module';
