@@ -13,8 +13,8 @@
     "layers"
   ],
   "peerDependencies": {
-    "@angular/common": "^18.2.7",
-    "@angular/core": "^18.2.7",
+    "@angular/common": "^18.2.8",
+    "@angular/core": "^18.2.8",
     "rxjs": "~7.8.0"
   },
   "dependencies": {

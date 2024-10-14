@@ -15,8 +15,8 @@
     "WPS"
   ],
   "peerDependencies": {
-    "@angular/common": "^18.2.7",
-    "@angular/core": "^18.2.7",
+    "@angular/common": "^18.2.8",
+    "@angular/core": "^18.2.8",
     "rxjs": "~7.8.0"
   },
   "dependencies": {
@@ -35,9 +35,9 @@
   },
   "devDependencies": {
     "zone.js": "~0.14.10",
-    "@angular/platform-browser-dynamic": "^18.2.7",
+    "@angular/platform-browser-dynamic": "^18.2.8",
     "@dlr-eoc/shared-assets": "14.0.0",
-    "proj4": "^2.11.0",
-    "terser": "^5.31.2"
+    "proj4": "^2.12.1",
+    "terser": "^5.34.1"
   }
 }
