@@ -5,12 +5,20 @@ import { MapOlService } from '@dlr-eoc/map-ol';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
 import { ClarityIcons, eyeIcon, eyeHideIcon } from '@cds/core/icon';
+import { NgIf, NgFor } from '@angular/common';
+import { ClrIconModule } from '@clr/angular';
 ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
 
 @Component({
-  selector: 'ukis-projection-switch',
-  templateUrl: './projection-switch.component.html',
-  styles: [],
+    selector: 'ukis-projection-switch',
+    templateUrl: './projection-switch.component.html',
+    styles: [],
+    standalone: true,
+    imports: [
+        NgIf,
+        NgFor,
+        ClrIconModule,
+    ],
 })
 export class ProjectionSwitchComponent implements OnInit {
   @Input('mapSvc') mapSvc: MapOlService;

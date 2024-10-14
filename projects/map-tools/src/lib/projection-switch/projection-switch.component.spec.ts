@@ -14,9 +14,8 @@ describe('ProjectionSwitchComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ClarityModule, FormsModule],
-      declarations: [ProjectionSwitchComponent]
-    })
+    imports: [ClarityModule, FormsModule, ProjectionSwitchComponent]
+})
       .compileComponents();
   }));
 

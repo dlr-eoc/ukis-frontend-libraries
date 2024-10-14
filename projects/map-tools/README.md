@@ -17,17 +17,18 @@ For examples [see demo maps route-example-events](../demo-maps/README.md)
 - "@dlr-eoc/map-ol"
 - "@dlr-eoc/map-tools"
 
-#### add the following to the app.module.ts
+#### add the following to route-view.component.ts
 ```
-import { MapOlModule } from '@dlr-eoc/map-ol';
-import { MapToolsModule } from '@dlr-eoc/map-tools';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
+import { ProjectionSwitchComponent, MapNavigatorComponent, MousePositionComponent } from '@dlr-eoc/map-tools';
 
 ...
 
+ standalone: true,
  imports: [
     ...
-    MapOlModule,
-    MapToolsModule
+    MapOlComponent,
+    ProjectionSwitchComponent, MapNavigatorComponent, MousePositionComponent
   ]
 ```
 ##Create simple map:
