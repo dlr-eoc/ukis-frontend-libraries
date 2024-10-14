@@ -12,7 +12,7 @@ import { UserService, IUser } from '@dlr-eoc/user-info';
 import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
 import { BasicAuthService } from './auth/basic-auth.service';
 import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
-import { NgFor, NgIf } from '@angular/common';
+
 import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
 import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -24,8 +24,7 @@ interface IUi {
 
 @Component({
   selector: 'app-root',
-  imports: [ClrMainContainerModule, ClrNavigationModule, NgIf, GlobalAlertComponent, GlobalProgressComponent,
-            HeaderComponent, RouterLink, RouterLinkActive, NgFor, RouterOutlet, CookieAlertComponent],
+  imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, RouterOutlet, CookieAlertComponent],
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

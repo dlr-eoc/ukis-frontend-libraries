@@ -1,6 +1,7 @@
 ### Breaking Changes
  - Update angular from `^17.3.11` to `^18.2.7`
  - Refactor all libraries and apps to [angular standalone API](https://angular.dev/reference/migrations/standalone).
+ - Refactor all libraries and apps to [angular Control Flow syntax](https://angular.dev/reference/migrations/control-flow).
 
 ### Bug Fixes
 * **@dlr-eoc/core-ui:**

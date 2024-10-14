@@ -11,7 +11,7 @@ import { Feature } from 'ol';
 import { Fill, Stroke, Style } from 'ol/style';
 
 import { ClarityIcons, layersIcon, worldIcon, blockIcon, cogIcon, mapIcon } from '@cds/core/icon';
-import { NgIf } from '@angular/common';
+
 import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
 import { MapCesiumComponent } from '../../../../../map-cesium/src/lib/map-cesium.component';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
@@ -36,7 +36,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
         }
     ],
     standalone: true,
-    imports: [NgIf, MapOlComponent, MapCesiumComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
+    imports: [MapOlComponent, MapCesiumComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';

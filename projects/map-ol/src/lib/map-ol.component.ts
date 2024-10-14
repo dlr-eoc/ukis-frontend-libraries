@@ -44,7 +44,7 @@ import { defaults as defaultInteractions } from 'ol/interaction/defaults';
 import { FeatureLike } from 'ol/Feature';
 
 import { ClarityIcons, worldIcon } from '@cds/core/icon';
-import { NgIf } from '@angular/common';
+
 ClarityIcons.addIcons(...[worldIcon]);
 
 
@@ -77,7 +77,7 @@ const ID_KEY = 'id';
     styleUrls: ['./map-ol.component.scss'],
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [NgIf]
+    imports: []
 })
 export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   @ViewChild('mapDiv') mapDivView: ElementRef;

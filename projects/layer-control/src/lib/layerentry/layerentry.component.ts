@@ -8,7 +8,7 @@ import {
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
 import { ClarityIcons, angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon } from '@cds/core/icon';
-import { NgClass, NgIf, NgStyle, NgFor } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { ClrIconModule, ClrCommonFormsModule, ClrRangeModule, ClrSelectModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 ClarityIcons.addIcons(...[angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon]);
@@ -25,7 +25,7 @@ type TactiveTabs = keyof typeof EactiveTabs;
     templateUrl: './layerentry.component.html',
     styleUrls: ['./layerentry.component.scss'],
     standalone: true,
-    imports: [NgClass, NgIf, ClrIconModule, NgStyle, ClrCommonFormsModule, NgFor, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponentComponent]
+    imports: [NgClass, ClrIconModule, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponentComponent]
 })
 export class LayerentryComponent implements OnInit {
   @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }

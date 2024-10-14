@@ -5,7 +5,7 @@ import { MapBrowserEvent } from 'ol';
 import { Layer } from 'ol/layer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { NgIf, NgFor, AsyncPipe, KeyValuePipe } from '@angular/common';
+import { AsyncPipe, KeyValuePipe } from '@angular/common';
 import { ClrSpinnerModule } from '@clr/angular';
 
 @Component({
@@ -13,7 +13,7 @@ import { ClrSpinnerModule } from '@clr/angular';
     templateUrl: './raster-feature-info.component.html',
     styleUrls: ['./raster-feature-info.component.scss'],
     standalone: true,
-    imports: [NgIf, NgFor, ClrSpinnerModule, AsyncPipe, KeyValuePipe]
+    imports: [ClrSpinnerModule, AsyncPipe, KeyValuePipe]
 })
 export class RasterFeatureInfoComponent implements OnInit {
 

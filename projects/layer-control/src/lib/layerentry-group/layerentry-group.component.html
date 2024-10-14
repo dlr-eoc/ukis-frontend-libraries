@@ -2,107 +2,121 @@
   <div class="head">
     <!-- layer expand icon -->
     <cds-icon [attr.shape]="group.expanded?'folder-open':'folder'" class="iconButton" (click)="showProperties()"
-      title="{{group.expanded?'Close':'Open'}}"></cds-icon>
+    title="{{group.expanded?'Close':'Open'}}"></cds-icon>
 
 
     <!-- layer title -->
     <div #ref class="item-title-replacement title" (click)="showProperties()" [title]="getLayerName(group)">
       <ng-content></ng-content>
     </div>
-    <span *ngIf="ref.children.length == 0" class="title" [title]="getLayerName(group)" (click)="showProperties()">
-      {{getLayerName(group)}}
-    </span>
+    @if (ref.children.length == 0) {
+      <span class="title" [title]="getLayerName(group)" (click)="showProperties()">
+        {{getLayerName(group)}}
+      </span>
+    }
 
-    <!-- setLayerGroupIndex // for reversed layergroups on ngFor up is down -->
-    <span *ngIf="layerGroups.length>1 && groupSort">
-      <cds-icon class="iconButton move-item" [ngClass]="{'disabled':isLast(group)}" shape="arrow"
+    <!-- setLayerGroupIndex // for reversed layergroups on @for up is down -->
+    @if (layerGroups.length>1 && groupSort) {
+      <span>
+        <cds-icon class="iconButton move-item" [ngClass]="{'disabled':isLast(group)}" shape="arrow"
         (click)="setLayerGroupIndex(group, 'down')" title="up"></cds-icon>
-      <cds-icon class="iconButton move-item" [ngClass]="{'disabled':isFirst(group)}" shape="arrow"
+        <cds-icon class="iconButton move-item" [ngClass]="{'disabled':isFirst(group)}" shape="arrow"
         (click)="setLayerGroupIndex(group, 'up')" title="down" dir="down"></cds-icon>
-    </span>
+      </span>
+    }
 
     <!-- setGroupLayersVisibility -->
-    <span *ngIf="!checkBaselayer(group)">
-      <label>
-        <cds-icon class="iconButton" [attr.solid]="group.visible"
+    @if (!checkBaselayer(group)) {
+      <span>
+        <label>
+          <cds-icon class="iconButton" [attr.solid]="group.visible"
           [attr.shape]="group.visible?'eye':'eye-hide'" title="{{group.visible?'Hide Group':'Show Group'}}"></cds-icon>
-        <input class="hide" [type]="'checkbox'" [checked]="group.visible" [name]="'group'"
-          (change)="setGroupLayersVisibility()">
-      </label>
-    </span>
-  </div>
-
-  <div *ngIf="group.expanded" class="body">
-    <!-- tools: zoomTo, remove, open all Tabs -->
-    <div class="tools">
-      <cds-icon *ngIf="group.action" shape="cog" class="iconButton" [attr.solid]="activeTabs.settings"
-        (click)="switchTab('settings')" title="{{!activeTabs.settings?'Show settings': 'Hide settings'}}"></cds-icon>
-      <cds-icon *ngIf="group.legendImg" title="{{!activeTabs.legend?'Show Legend': 'Hide Legend'}}" shape="image"
-        class="iconButton" [attr.solid]="activeTabs.legend" (click)="switchTab('legend')"></cds-icon>
-      <cds-icon *ngIf="group.description" shape="info-standard" class="iconButton"
-        [attr.solid]="activeTabs.description"  (click)="switchTab('description')"
-        title="{{!activeTabs.description?'Show Info': 'Hide Info'}}"></cds-icon>
-
-      <cds-icon shape="details" class="iconButton" [attr.solid]="openAllLayersProperties"
-        (click)="showHideAllDetails()"
-        title="{{!openAllLayersProperties?'Show all layers details': 'Hide all layers details'}}"></cds-icon>
-
-      <!-- The icons for actions have tobe passd with the layer e.g. in the file the layer is added -->
-      <cds-icon *ngFor="let item of group.actions" [attr.shape]="item.icon" class="iconButton"
-        (click)="item.action(group)" [title]="item.title">
-      </cds-icon>
-
-      <span></span>
-      <cds-icon *ngIf="canZoomToGroup" shape="zoom-in" class="iconButton" (click)="zoomTo(group)" title="Zoom to group">
-      </cds-icon>
-      <cds-icon *ngIf="group.removable" shape="trash" class="iconButton" (click)="removeLayerGroup(group)"
-        title="Remove group"></cds-icon>
+          <input class="hide" [type]="'checkbox'" [checked]="group.visible" [name]="'group'"
+            (change)="setGroupLayersVisibility()">
+          </label>
+        </span>
+      }
     </div>
 
-    <!-- show Description -->
-    <div *ngIf="group.description && activeTabs.description" class="tabsbody description">
-
-      <ng-container *ngIf="checkIsComponentItem(group,'description'); else descriptionText">
-        <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>
-      </ng-container>
-
-      <ng-template #descriptionText>
-        <span [innerHTML]="group.description"></span>
-      </ng-template>
-    </div>
-
-    <!-- show group action -->
-    <div *ngIf="group.action && activeTabs.settings" class="tabsbody layersettings">
-      <ng-container *ngIf="checkIsComponentItem(group, 'action');">
-        <ukis-dynamic-component [(dynamicComponent)]="group.action">
-        </ukis-dynamic-component>
-      </ng-container>
-    </div>
-
-    <!-- show Legend -->
-    <div *ngIf="group.legendImg && activeTabs.legend" class="tabsbody legend">
-      <ng-container *ngIf="checkIsComponentItem(group,'legendImg'); else imageUrl">
-        <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
-      </ng-container>
-
-      <ng-template #imageUrl>
-        <a [href]="group.legendImg" target="_blank" title="Show full Image"><img [src]="group.legendImg" /></a>
-      </ng-template>
-    </div>
-
-    <!-- (cdkDropListSorted)="sort($event)"  -->
-    <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!groupLayersSort"
-      [cdkDropListData]="group.layers | itemsfilter: checkClassHide | reverse">
-      <ng-container *ngFor="let layer of group.layers | itemsfilter: checkClassHide | reverse">
-        <div class="sublayers" cdkDragLockAxis="y" cdkDrag [cdkDragData]="{id:layer.id}">
-          <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
-            [layer]="layer" [group]="group" (update)="layerUpdate($event, group)" [sorting]="groupLayersSort">
-            <span class="move-item" cdkDragHandle>
-              {{layer.displayName || layer.name}}
-            </span>
-          </ukis-layerentry>
+    @if (group.expanded) {
+      <div class="body">
+        <!-- tools: zoomTo, remove, open all Tabs -->
+        <div class="tools">
+          @if (group.action) {
+            <cds-icon shape="cog" class="iconButton" [attr.solid]="activeTabs.settings"
+            (click)="switchTab('settings')" title="{{!activeTabs.settings?'Show settings': 'Hide settings'}}"></cds-icon>
+          }
+          @if (group.legendImg) {
+            <cds-icon title="{{!activeTabs.legend?'Show Legend': 'Hide Legend'}}" shape="image"
+            class="iconButton" [attr.solid]="activeTabs.legend" (click)="switchTab('legend')"></cds-icon>
+          }
+          @if (group.description) {
+            <cds-icon shape="info-standard" class="iconButton"
+              [attr.solid]="activeTabs.description"  (click)="switchTab('description')"
+            title="{{!activeTabs.description?'Show Info': 'Hide Info'}}"></cds-icon>
+          }
+          <cds-icon shape="details" class="iconButton" [attr.solid]="openAllLayersProperties"
+            (click)="showHideAllDetails()"
+          title="{{!openAllLayersProperties?'Show all layers details': 'Hide all layers details'}}"></cds-icon>
+          <!-- The icons for actions have tobe passd with the layer e.g. in the file the layer is added -->
+          @for (item of group.actions; track item) {
+            <cds-icon [attr.shape]="item.icon" class="iconButton"
+              (click)="item.action(group)" [title]="item.title">
+            </cds-icon>
+          }
+          <span></span>
+          @if (canZoomToGroup) {
+            <cds-icon shape="zoom-in" class="iconButton" (click)="zoomTo(group)" title="Zoom to group">
+            </cds-icon>
+          }
+          @if (group.removable) {
+            <cds-icon shape="trash" class="iconButton" (click)="removeLayerGroup(group)"
+            title="Remove group"></cds-icon>
+          }
         </div>
-      </ng-container>
-    </div>
+        <!-- show Description -->
+        @if (group.description && activeTabs.description) {
+          <div class="tabsbody description">
+            @if (checkIsComponentItem(group,'description')) {
+              <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>
+            } @else {
+              <span [innerHTML]="group.description"></span>
+            }
+          </div>
+        }
+        <!-- show group action -->
+        @if (group.action && activeTabs.settings) {
+          <div class="tabsbody layersettings">
+            @if (checkIsComponentItem(group, 'action');) {
+              <ukis-dynamic-component [(dynamicComponent)]="group.action">
+              </ukis-dynamic-component>
+            }
+          </div>
+        }
+        <!-- show Legend -->
+        @if (group.legendImg && activeTabs.legend) {
+          <div class="tabsbody legend">
+            @if (checkIsComponentItem(group,'legendImg')) {
+              <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
+            } @else {
+              <a [href]="group.legendImg" target="_blank" title="Show full Image"><img [src]="group.legendImg" /></a>
+            }
+          </div>
+        }
+        <!-- (cdkDropListSorted)="sort($event)"  -->
+        <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!groupLayersSort"
+          [cdkDropListData]="group.layers | itemsfilter: checkClassHide | reverse">
+          @for (layer of group.layers | itemsfilter: checkClassHide | reverse; track layer) {
+            <div class="sublayers" cdkDragLockAxis="y" cdkDrag [cdkDragData]="{id:layer.id}">
+              <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
+                [layer]="layer" [group]="group" (update)="layerUpdate($event, group)" [sorting]="groupLayersSort">
+                <span class="move-item" cdkDragHandle>
+                  {{layer.displayName || layer.name}}
+                </span>
+              </ukis-layerentry>
+            </div>
+          }
+        </div>
+      </div>
+    }
   </div>
-</div>

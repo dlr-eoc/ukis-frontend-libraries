@@ -44,8 +44,12 @@ It uses the angular components from Clarity to get a responsive navigation.
 Use a basic layout like the following, containing the router-outlet which then shows route components as the Clarity `content-container`.
 ```
 <clr-main-container>
-  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
-  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+  @if(ui.alert){
+    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+  }
+  @if(ui.progress){
+    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+  }
   <ukis-header [ukis-title]="title">
     ...
   </ukis-header>
@@ -57,8 +61,12 @@ Use a basic layout like the following, containing the router-outlet which then s
 Replace the router-outlet with a view component which also adds the Clarity `content-container` class as HostBinding.
 ```
 <clr-main-container>
-  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
-  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+  @if(ui.alert){
+    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+  }
+  @if(ui.progress){
+    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+  }
   <ukis-header [ukis-title]="title">
   ...
   </ukis-header>

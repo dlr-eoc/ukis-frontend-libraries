@@ -4,7 +4,7 @@ import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { LayerGroup, Layer } from '@dlr-eoc/services-layers';
 import { Subscription } from 'rxjs';
-import { NgFor, NgIf } from '@angular/common';
+
 import { LayerentryGroupComponent } from '../layerentry-group/layerentry-group.component';
 import { LayerentryComponent } from '../layerentry/layerentry.component';
 import { ReversePipe } from '../utils/array-reverse.pipe';
@@ -14,7 +14,7 @@ import { ReversePipe } from '../utils/array-reverse.pipe';
     templateUrl: './base-layer-control.component.html',
     styleUrls: ['./base-layer-control.component.scss'],
     standalone: true,
-    imports: [NgFor, NgIf, LayerentryGroupComponent, LayerentryComponent, ReversePipe]
+    imports: [LayerentryGroupComponent, LayerentryComponent, ReversePipe]
 })
 export class BaseLayerControlComponent implements OnInit, OnDestroy {
   @Input('layersSvc') layersSvc: LayersService;

@@ -1,6 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router, Routes, RouterLink } from '@angular/router';
-import { NgFor, NgIf } from '@angular/common';
+
 
 interface BookmarkEntry {
   title: string;
@@ -14,7 +14,7 @@ interface BookmarkEntry {
     templateUrl: './route-bookmarks.component.html',
     styleUrls: ['./route-bookmarks.component.scss'],
     standalone: true,
-    imports: [NgFor, RouterLink, NgIf]
+    imports: [RouterLink]
 })
 export class BookmarksComponent implements OnInit {
   @HostBinding('class') class = 'content-container';

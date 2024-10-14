@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { NgIf } from '@angular/common';
 
 import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
 
@@ -25,7 +24,7 @@ interface IUi {
 @Component({
   selector: '<%= appPrefix %>-root',
   standalone: true,
-  imports: [ClrMainContainerModule, ClrNavigationModule, NgIf, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, ExampleViewComponent],
+  imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, ExampleViewComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

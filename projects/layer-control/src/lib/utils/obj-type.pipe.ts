@@ -12,7 +12,7 @@ export class ObjTypePipe implements PipeTransform {
 }
 
 /**
- * e.g. usage *ngFor="let item of items | itemsfilter: callbackfn"
+ * e.g. usage @for(item of items | itemsfilter: callbackfn)
  */
 @Pipe({
     name: 'itemsfilter', pure: false,

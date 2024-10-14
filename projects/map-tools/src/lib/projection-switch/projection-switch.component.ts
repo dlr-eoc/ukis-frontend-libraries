@@ -5,7 +5,7 @@ import { MapOlService } from '@dlr-eoc/map-ol';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
 import { ClarityIcons, eyeIcon, eyeHideIcon } from '@cds/core/icon';
-import { NgIf, NgFor } from '@angular/common';
+
 import { ClrIconModule } from '@clr/angular';
 ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
 
@@ -15,10 +15,8 @@ ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
     styles: [],
     standalone: true,
     imports: [
-        NgIf,
-        NgFor,
-        ClrIconModule,
-    ],
+    ClrIconModule
+],
 })
 export class ProjectionSwitchComponent implements OnInit {
   @Input('mapSvc') mapSvc: MapOlService;

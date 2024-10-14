@@ -10,7 +10,7 @@ import { IDynamicComponent, DynamicComponentComponent } from '@dlr-eoc/core-ui';
 
 import { ClarityIcons, folderIcon, folderOpenIcon, arrowIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, detailsIcon, zoomInIcon, trashIcon } from '@cds/core/icon';
 import { ClrIconModule, ClrCommonFormsModule } from '@clr/angular';
-import { NgIf, NgClass, NgFor } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { LayerentryComponent } from '../layerentry/layerentry.component';
 import { ItemsFilterPipe } from '../utils/obj-type.pipe';
 import { ReversePipe } from '../utils/array-reverse.pipe';
@@ -29,7 +29,7 @@ type TactiveTabs = keyof typeof EactiveTabs;
     templateUrl: './layerentry-group.component.html',
     styleUrls: ['./layerentry-group.component.scss'],
     standalone: true,
-    imports: [ClrIconModule, NgIf, NgClass, ClrCommonFormsModule, NgFor, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponentComponent]
+    imports: [ClrIconModule, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponentComponent]
 })
 export class LayerentryGroupComponent implements OnInit {
   @HostBinding('class.group-visible') get visible() { return this.group.visible; }
