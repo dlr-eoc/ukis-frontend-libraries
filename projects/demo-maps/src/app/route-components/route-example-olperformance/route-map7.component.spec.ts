@@ -8,8 +8,8 @@ describe('RouteMap7', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RouteMap7Component ]
-    })
+    imports: [RouteMap7Component]
+})
     .compileComponents();
   }));
 

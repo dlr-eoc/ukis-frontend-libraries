@@ -11,23 +11,32 @@ import { Feature } from 'ol';
 import { Fill, Stroke, Style } from 'ol/style';
 
 import { ClarityIcons, layersIcon, worldIcon, blockIcon, cogIcon, mapIcon } from '@cds/core/icon';
+import { NgIf } from '@angular/common';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { MapCesiumComponent } from '../../../../../map-cesium/src/lib/map-cesium.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
 
 @Component({
-  selector: 'app-route-example-cesium',
-  templateUrl: './route-example-cesium.component.html',
-  styleUrls: ['./route-example-cesium.component.scss'],
-  // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
-  encapsulation: ViewEncapsulation.None,
-  providers: [
-    MapStateService,
-    MapOlService,
-    MapCesiumService,
-    {
-      provide: 'twoDlayerSvc', useClass: LayersService
-    }, {
-      provide: 'threeDlayerSvc', useClass: LayersService
-    }]
+    selector: 'app-route-example-cesium',
+    templateUrl: './route-example-cesium.component.html',
+    styleUrls: ['./route-example-cesium.component.scss'],
+    // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
+    encapsulation: ViewEncapsulation.None,
+    providers: [
+        MapStateService,
+        MapOlService,
+        MapCesiumService,
+        {
+            provide: 'twoDlayerSvc', useClass: LayersService
+        }, {
+            provide: 'threeDlayerSvc', useClass: LayersService
+        }
+    ],
+    standalone: true,
+    imports: [NgIf, MapOlComponent, MapCesiumComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';

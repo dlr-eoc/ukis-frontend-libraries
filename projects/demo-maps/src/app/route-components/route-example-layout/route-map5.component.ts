@@ -7,14 +7,21 @@ import { Subscription } from 'rxjs';
 import { GeoJSONFeature, GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
 
 import { ClarityIcons, layersIcon, worldIcon, tableIcon } from '@cds/core/icon';
+import { NgStyle, NgIf, NgFor, NgClass } from '@angular/common';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, tableIcon]);
 
 @Component({
-  selector: 'app-route-map5',
-  templateUrl: './route-map5.component.html',
-  styleUrls: ['./route-map5.component.scss'],
-  /** use differnt instances of the services only for testing with diffenr routs  */
-  providers: [LayersService, MapStateService, MapOlService]
+    selector: 'app-route-map5',
+    templateUrl: './route-map5.component.html',
+    styleUrls: ['./route-map5.component.scss'],
+    /** use differnt instances of the services only for testing with diffenr routs  */
+    providers: [LayersService, MapStateService, MapOlService],
+    standalone: true,
+    imports: [NgStyle, MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent, NgIf, NgFor, NgClass]
 })
 export class RouteMap5Component implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';

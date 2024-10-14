@@ -8,8 +8,8 @@ describe('PerformanceComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PerformanceComponent ]
-    })
+    imports: [PerformanceComponent]
+})
     .compileComponents();
   }));
 

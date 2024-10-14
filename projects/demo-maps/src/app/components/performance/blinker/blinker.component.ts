@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule } from '@clr/angular';
 
 
 /**
@@ -10,9 +11,11 @@ import { Component, OnInit, AfterContentChecked } from '@angular/core';
  */
 
 @Component({
-  selector: 'ukis-blinker',
-  templateUrl: './blinker.component.html',
-  styleUrls: ['./blinker.component.scss']
+    selector: 'ukis-blinker',
+    templateUrl: './blinker.component.html',
+    styleUrls: ['./blinker.component.scss'],
+    standalone: true,
+    imports: [ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule]
 })
 export class BlinkerComponent implements AfterContentChecked {
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorRamp } from '@dlr-eoc/utils-maps';
+import { ClrCommonFormsModule, ClrInputModule, ClrCheckboxModule } from '@clr/angular';
 
 interface IinterpolationForm {
   power: FormControl<number>;
@@ -8,9 +9,11 @@ interface IinterpolationForm {
   labels: FormControl<boolean>;
 }
 @Component({
-  selector: 'app-interpolation-settings',
-  templateUrl: './interpolation-settings.component.html',
-  styleUrls: ['./interpolation-settings.component.scss']
+    selector: 'app-interpolation-settings',
+    templateUrl: './interpolation-settings.component.html',
+    styleUrls: ['./interpolation-settings.component.scss'],
+    standalone: true,
+    imports: [FormsModule, ClrCommonFormsModule, ReactiveFormsModule, ClrInputModule, ClrCheckboxModule]
 })
 export class InterpolationSettingsComponent implements OnInit {
 

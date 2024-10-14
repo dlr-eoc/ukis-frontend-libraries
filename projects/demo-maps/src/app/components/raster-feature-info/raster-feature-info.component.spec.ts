@@ -8,8 +8,8 @@ describe('RasterFeatureInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RasterFeatureInfoComponent ]
-    })
+    imports: [RasterFeatureInfoComponent]
+})
     .compileComponents();
   });
 

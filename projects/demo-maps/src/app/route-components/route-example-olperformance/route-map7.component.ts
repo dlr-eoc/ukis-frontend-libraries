@@ -8,13 +8,19 @@ import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { Feature } from 'ol';
 
 import { ClarityIcons, layersIcon, clockIcon } from '@cds/core/icon';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { PerformanceComponent } from '../../components/performance/performance.component';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
 
 @Component({
-  selector: 'app-route-map7',
-  templateUrl: './route-map7.component.html',
-  styleUrls: ['./route-map7.component.scss'],
-  providers: [LayersService, MapStateService, MapOlService]
+    selector: 'app-route-map7',
+    templateUrl: './route-map7.component.html',
+    styleUrls: ['./route-map7.component.scss'],
+    providers: [LayersService, MapStateService, MapOlService],
+    standalone: true,
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, PerformanceComponent, LayerControlComponent]
 })
 export class RouteMap7Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';

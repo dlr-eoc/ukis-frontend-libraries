@@ -11,13 +11,20 @@ import { Tile as TileLayer } from 'ol/layer';
 import { get as getProjection } from 'ol/proj';
 
 import { ClarityIcons, layersIcon, infoStandardIcon } from '@cds/core/icon';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { MapThreeComponent } from '../../../../../map-three/src/lib/map-three.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, ClrAlertModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, infoStandardIcon]);
 
 @Component({
-  selector: 'app-route-example-threejs',
-  templateUrl: './route-example-threejs.component.html',
-  styleUrls: ['./route-example-threejs.component.scss'],
-  providers: [LayersService, MapOlService]  // <-- Don't provide MapStateSvc here! If we do, state is no longer synced between the two maps.
+    selector: 'app-route-example-threejs',
+    templateUrl: './route-example-threejs.component.html',
+    styleUrls: ['./route-example-threejs.component.scss'],
+    providers: [LayersService, MapOlService] // <-- Don't provide MapStateSvc here! If we do, state is no longer synced between the two maps.
+    ,
+    standalone: true,
+    imports: [MapOlComponent, MapThreeComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, ClrAlertModule, LayerControlComponent]
 })
 export class RouteMap8Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';

@@ -7,7 +7,7 @@
       <div class="alert-text" [innerHTML]=alert.text></div>
       <div *ngIf="alert.actions" class="alert-actions">
         <button *ngFor="let action of alert.actions" class="btn alert-action" aria-label="alert action"
-          (click)="action.callback && action.callback()">{{action.title}}</button>
+          (click)="action.callback()">{{action.title}}</button>
       </div>
     </div>
   </div>

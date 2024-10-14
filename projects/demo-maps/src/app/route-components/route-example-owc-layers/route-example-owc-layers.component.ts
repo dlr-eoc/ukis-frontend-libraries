@@ -8,14 +8,20 @@ import { first } from 'rxjs/operators';
 import { ZommNumberControl } from '../route-example-layers/ol-custom-control';
 
 import { ClarityIcons, layersIcon, worldIcon, exportIcon } from '@cds/core/icon';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, exportIcon ]);
 
 @Component({
-  selector: 'app-route-example-owc-layers',
-  templateUrl: './route-example-owc-layers.component.html',
-  styleUrls: ['./route-example-owc-layers.component.scss'],
-  /** use different instances of the services only for testing with different routes  */
-  providers: [LayersService, MapStateService, MapOlService]
+    selector: 'app-route-example-owc-layers',
+    templateUrl: './route-example-owc-layers.component.html',
+    styleUrls: ['./route-example-owc-layers.component.scss'],
+    /** use different instances of the services only for testing with different routes  */
+    providers: [LayersService, MapStateService, MapOlService],
+    standalone: true,
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleOwcLayersComponent implements OnInit {
   @HostBinding('class') class = 'content-container';

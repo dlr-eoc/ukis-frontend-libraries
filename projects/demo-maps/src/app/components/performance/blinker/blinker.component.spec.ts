@@ -8,8 +8,8 @@ describe('BlinkerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BlinkerComponent ]
-    })
+    imports: [BlinkerComponent]
+})
     .compileComponents();
   }));
 

@@ -8,14 +8,20 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MapOlService } from '@dlr-eoc/map-ol';
 
 import { ClarityIcons, layersIcon, worldIcon} from '@cds/core/icon';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, worldIcon]);
 
 
 @Component({
-  selector: 'app-route-map',
-  templateUrl: './route-map.component.html',
-  styleUrls: ['./route-map.component.scss'],
-  providers: [MapOlService]
+    selector: 'app-route-map',
+    templateUrl: './route-map.component.html',
+    styleUrls: ['./route-map.component.scss'],
+    providers: [MapOlService],
+    standalone: true,
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMapComponent implements OnInit {
   @HostBinding('class') class = 'content-container';

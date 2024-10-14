@@ -19,6 +19,11 @@ import { VtileLayerActionComponent } from '../../components/vtile-layer-action/v
 
 // import icons for use in html and layer actions
 import { ClarityIcons, layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon } from '@cds/core/icon';
+import { NgIf } from '@angular/common';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon]);
 
 @Component({
@@ -26,7 +31,9 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syn
   templateUrl: './route-map.component.html',
   styleUrls: ['./route-map.component.scss'],
   /** use different instances of the services only for testing with different routes  */
-  providers: [LayersService, MapStateService, MapOlService]
+    providers: [LayersService, MapStateService, MapOlService, WmsService],
+    standalone: true,
+    imports: [NgIf, MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMapComponent implements OnInit {
   @HostBinding('class') class = 'content-container';

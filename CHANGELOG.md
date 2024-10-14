@@ -1,5 +1,7 @@
 ### Breaking Changes
  - Update angular from `^17.3.11` to `^18.2.7`
+ - Refactor all libraries and apps to [angular standalone API](https://angular.dev/reference/migrations/standalone).
+
 ### Bug Fixes
 * **@dlr-eoc/core-ui:**
   - Update styles for `@clr 17`

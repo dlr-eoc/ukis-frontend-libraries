@@ -8,8 +8,8 @@ describe('ExampleGroupActionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExampleGroupActionComponent ]
-    })
+    imports: [ExampleGroupActionComponent]
+})
     .compileComponents();
   });
 

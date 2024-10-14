@@ -4,10 +4,15 @@ import '@cds/core/icon/register.js';
 
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
-import { NavigationEnd, NavigationStart, Router, Routes } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, Routes, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { appVersion } from '../environments/version';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
+import { NgIf, NgFor } from '@angular/common';
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
+import { HeaderComponent } from './components/header/header.component';
 
 interface IUi {
   alert: null | IAlert;
@@ -15,9 +20,11 @@ interface IUi {
 }
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: true,
+    imports: [ClrMainContainerModule, ClrNavigationModule, NgIf, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, NgFor, RouterOutlet]
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = '';

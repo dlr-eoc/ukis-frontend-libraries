@@ -1,5 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { Router, Routes } from '@angular/router';
+import { Router, Routes, RouterLink } from '@angular/router';
+import { NgFor, NgIf } from '@angular/common';
 
 interface BookmarkEntry {
   title: string;
@@ -9,9 +10,11 @@ interface BookmarkEntry {
 }
 
 @Component({
-  selector: 'app-bookmarks',
-  templateUrl: './route-bookmarks.component.html',
-  styleUrls: ['./route-bookmarks.component.scss']
+    selector: 'app-bookmarks',
+    templateUrl: './route-bookmarks.component.html',
+    styleUrls: ['./route-bookmarks.component.scss'],
+    standalone: true,
+    imports: [NgFor, RouterLink, NgIf]
 })
 export class BookmarksComponent implements OnInit {
   @HostBinding('class') class = 'content-container';
