@@ -1,7 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import { FormGroup, Validators, FormControl, ValidationErrors } from '@angular/forms';
+import { FormGroup, Validators, FormControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UserService, IRegisterUser, IUser } from '../user.service';
+import { ClrInputModule, ClrCommonFormsModule, ClrPasswordModule } from '@clr/angular';
 
 interface IusrInfoForm {
   usrName: FormControl<string>;
@@ -11,9 +12,11 @@ interface IusrInfoForm {
   email: FormControl<string>;
 }
 @Component({
-  selector: 'ukis-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+    selector: 'ukis-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule]
 })
 export class RegisterComponent implements OnDestroy {
   usrInfoFormOptions: IusrInfoForm;

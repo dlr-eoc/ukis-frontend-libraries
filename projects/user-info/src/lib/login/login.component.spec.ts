@@ -19,10 +19,9 @@ describe('LoginComponent', () => {
     usrSvc.setAuthService(authService);
 
     TestBed.configureTestingModule({
-      imports: [ClarityModule, FormsModule, ReactiveFormsModule],
-      declarations: [LoginComponent],
-      providers: [{ provide: UserService, useValue: usrSvc }]
-    }).compileComponents();
+    imports: [ClarityModule, FormsModule, ReactiveFormsModule, LoginComponent],
+    providers: [{ provide: UserService, useValue: usrSvc }]
+}).compileComponents();
   }));
 
   beforeEach(() => {

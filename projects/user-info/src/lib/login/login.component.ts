@@ -1,7 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService, IUserinfo, IUser } from '../user.service';
 import { Subscription } from 'rxjs';
+import { ClrInputModule, ClrCommonFormsModule, ClrPasswordModule, ClrCheckboxModule } from '@clr/angular';
 
 interface IusrInfoForm {
   usrName: FormControl<string>;
@@ -9,9 +10,11 @@ interface IusrInfoForm {
   remember: FormControl<boolean>;
 }
 @Component({
-  selector: 'ukis-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'ukis-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule, ClrCheckboxModule]
 })
 export class LoginComponent implements OnDestroy {
   public usrInfoFormOptions: IusrInfoForm;
