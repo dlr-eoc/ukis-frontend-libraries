@@ -9,9 +9,9 @@ describe('CookieAlertComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CookieAlertComponent],
-      providers: [UtilStoreService]
-    })
+    imports: [CookieAlertComponent],
+    providers: [UtilStoreService]
+})
       .compileComponents();
   }));
 

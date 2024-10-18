@@ -6,8 +6,10 @@ import { Component } from '@angular/core';
 
 
 @Component({
-  selector: 'ukis-nested-component',
-  template: `<clr-main-container><ukis-header></ukis-header></clr-main-container>`
+    selector: 'ukis-nested-component',
+    template: `<clr-main-container><ukis-header></ukis-header></clr-main-container>`,
+    standalone: true,
+    imports: [ClarityModule]
 })
 class NestedTestComponent { }
 
@@ -17,9 +19,9 @@ describe('HeaderComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ClarityModule],
-      declarations: [HeaderComponent, NestedTestComponent, ClrMainContainer]
-    })
+    imports: [ClarityModule, HeaderComponent, NestedTestComponent],
+    declarations: [ClrMainContainer]
+})
       .compileComponents();
   }));
 

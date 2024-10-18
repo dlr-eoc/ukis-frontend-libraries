@@ -6,14 +6,22 @@ import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { IProjDef } from '@dlr-eoc/map-tools';
 
 import { ClarityIcons, layersIcon, mapIcon, compassIcon } from '@cds/core/icon';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { ProjectionSwitchComponent } from '../../../../../map-tools/src/lib/projection-switch/projection-switch.component';
+import { MousePositionComponent } from '../../../../../map-tools/src/lib/mouse-position/mouse-position.component';
+import { MapNavigatorComponent } from '../../../../../map-tools/src/lib/navigator/map-navigator.component';
 ClarityIcons.addIcons(...[layersIcon, mapIcon, compassIcon]);
 
 @Component({
-  selector: 'app-route-map2',
-  templateUrl: './route-map2.component.html',
-  styleUrls: ['./route-map2.component.scss'],
-  /** use differnt instances of the services only for testing with diffenr routs  */
-  providers: [LayersService, MapStateService, MapOlService]
+    selector: 'app-route-map2',
+    templateUrl: './route-map2.component.html',
+    styleUrls: ['./route-map2.component.scss'],
+    /** use differnt instances of the services only for testing with diffenr routs  */
+    providers: [LayersService, MapStateService, MapOlService],
+    standalone: true,
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent]
 })
 export class RouteMap2Component implements OnInit {
   @HostBinding('class') class = 'content-container';

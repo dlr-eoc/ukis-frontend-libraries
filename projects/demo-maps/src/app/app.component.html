@@ -1,16 +1,24 @@
 <clr-main-container>
-  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
-  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
+  @if (ui.alert) {
+    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+  }
+  @if (ui.progress) {
+    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+  }
 
   <ukis-header [ukis-title]="title" [ukis-short-title]="shortTitle" [ukis-version]="version">
 
     <a routerLink="/examples" routerLinkActive="active"
-      class="nav-link nav-text header-nav-el">Examples</a>
+    class="nav-link nav-text header-nav-el">Examples</a>
 
-    <ng-container *ngFor="let route of routes" class="nav-link nav-text header-nav-el">
-      <a *ngIf="currentRoute === route.path" routerLink="/{{route.path}}" routerLinkActive="active"
-        class="nav-link nav-text header-nav-el">{{route.data.title}}</a>
-    </ng-container>
+    @for (route of routes; track route) {
+      <ng-container class="nav-link nav-text header-nav-el">
+        @if (currentRoute === route.path) {
+          <a routerLink="/{{route.path}}" routerLinkActive="active"
+          class="nav-link nav-text header-nav-el">{{route.data.title}}</a>
+        }
+      </ng-container>
+    }
 
 
   </ukis-header>

@@ -19,6 +19,7 @@ import olMap from 'ol/Map';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import { MapOlService } from './map-ol.service';
 import { FeatureLike } from 'ol/Feature';
+import { CommonModule } from '@angular/common';
 
 /**
  * this service extends the LayersService to mimic its behavior. The getLayerGroups function is overwritten to
@@ -50,8 +51,10 @@ class MockLayersService extends LayersService {
 
 let instrumentedMockupCompId = 0;
 @Component({
-  selector: 'app-mock-popup',
-  template: `<div>{{ data | json }}</div>`
+    selector: 'app-mock-popup',
+    template: `<div>{{ data | json }}</div>`,
+    imports: [CommonModule],
+    standalone: true
 })
 class InstrumentedMockPopupComponent implements OnInit, OnDestroy {
   @Input() initCallback: (id: number) => void;
@@ -297,13 +300,13 @@ describe('MapOlComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MapOlComponent, InstrumentedMockPopupComponent],
-      providers: [
+    imports: [MapOlComponent, InstrumentedMockPopupComponent],
+    providers: [
         MapOlService,
         { provide: LayersService, useClass: MockLayersService },
         { provide: MapStateService, useClass: MapStateService }
-      ]
-    })
+    ]
+})
       .compileComponents();
   }));
 

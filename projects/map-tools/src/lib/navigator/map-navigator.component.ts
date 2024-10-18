@@ -2,11 +2,15 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 
 import { MapStateService, MapState } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { ClrCommonFormsModule, ClrInputModule } from '@clr/angular';
 
 @Component({
-  selector: 'ukis-map-navigator',
-  templateUrl: './map-navigator.component.html',
-  styleUrls: ['./map-navigator.component.scss']
+    selector: 'ukis-map-navigator',
+    templateUrl: './map-navigator.component.html',
+    styleUrls: ['./map-navigator.component.scss'],
+    standalone: true,
+    imports: [FormsModule, ClrCommonFormsModule, ClrInputModule]
 })
 export class MapNavigatorComponent implements OnInit, OnDestroy {
   @Input('mapState') mapState?: MapStateService;

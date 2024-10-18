@@ -2,14 +2,17 @@
   <caption>
     Feature properties
   </caption>
-  <tbody *ngIf="(data$ | async) as data; else loading">
-    <tr *ngFor="let item of data | keyvalue">
-      <th>{{ item.key }}</th>
-      <td>{{ item.value }}</td>
-    </tr>
-  </tbody>
+  @if ((data$ | async); as data) {
+    <tbody>
+      @for (item of data | keyvalue; track item) {
+        <tr>
+          <th>{{ item.key }}</th>
+          <td>{{ item.value }}</td>
+        </tr>
+      }
+    </tbody>
+  } @else {
+    <clr-spinner [clrInline]="true">Loading ...</clr-spinner>
+  }
 </table>
 
-<ng-template #loading>
-  <clr-spinner [clrInline]="true">Loading ...</clr-spinner>
-</ng-template>

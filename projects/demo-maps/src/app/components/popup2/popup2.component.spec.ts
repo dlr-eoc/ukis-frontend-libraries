@@ -8,8 +8,8 @@ describe('Popup2Component', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ Popup2Component ]
-    })
+    imports: [Popup2Component]
+})
     .compileComponents();
   });
 

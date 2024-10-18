@@ -8,8 +8,8 @@ describe('RouteExampleOwcLayersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RouteExampleOwcLayersComponent ]
-    })
+    imports: [RouteExampleOwcLayersComponent]
+})
     .compileComponents();
   });
 

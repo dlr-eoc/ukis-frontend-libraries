@@ -19,10 +19,9 @@ describe('UserDetailsComponent', () => {
     usrSvc.setAuthService(authService);
 
     TestBed.configureTestingModule({
-      imports: [ClarityModule, FormsModule, ReactiveFormsModule],
-      declarations: [UserDetailsComponent],
-      providers: [{ provide: UserService, useValue: usrSvc }]
-    })
+    imports: [ClarityModule, FormsModule, ReactiveFormsModule, UserDetailsComponent],
+    providers: [{ provide: UserService, useValue: usrSvc }]
+})
       .compileComponents();
   }));
 

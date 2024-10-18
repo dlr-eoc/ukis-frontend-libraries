@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BookmarksComponent } from './route-bookmarks.component';
 import { CommonModule } from '@angular/common';
-import { SharedComponentsModule } from '../../app-shared-components.module';
+
 import { RouterModule, Routes } from '@angular/router';
 import { ClarityModule } from '@clr/angular';
 
@@ -15,14 +15,11 @@ export class RouteBookmarksRoutingModule { }
 
 
 @NgModule({
-    declarations: [
-        BookmarksComponent
-    ],
     imports: [
-        CommonModule,
-        SharedComponentsModule,
-        ClarityModule,
-        RouteBookmarksRoutingModule
-    ]
+    CommonModule,
+    ClarityModule,
+    RouteBookmarksRoutingModule,
+    BookmarksComponent
+]
 })
 export class RouteBookmarksModule { }

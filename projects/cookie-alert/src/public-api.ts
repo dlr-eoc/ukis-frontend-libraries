@@ -4,4 +4,4 @@
 
 export * from './lib/cookie-alert.service';
 export * from './lib/cookie-alert.component';
-export * from './lib/cookie-alert.module';
+

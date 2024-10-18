@@ -1,8 +1,10 @@
 <div>
   <span>some properties of the group:</span>
   <ul>
-    <li *ngFor="let prop of groupkeys">
-      {{prop}}: {{group[prop] || 'undefined'}}
-    </li>
+    @for (prop of groupkeys; track prop) {
+      <li>
+        {{prop}}: {{group[prop] || 'undefined'}}
+      </li>
+    }
   </ul>
 </div>

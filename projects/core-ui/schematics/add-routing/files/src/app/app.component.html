@@ -1,7 +1,10 @@
 <clr-main-container>
-  <ukis-global-alert *ngIf="ui.alert" [(alert)]="ui.alert"></ukis-global-alert>
-  <ukis-global-progress *ngIf="ui.progress" [(progress)]="ui.progress"></ukis-global-progress>
-
+  @if(ui.alert){
+    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+  }
+  @if(ui.progress){
+    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+  }
   <ukis-header [ukis-title]="title">
     <a routerLink="/example" routerLinkActive="active" class="nav-link nav-text header-nav-el">example route</a>
   </ukis-header>

@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { SharedComponentsModule } from '../../app-shared-components.module';
+
 import { RouterModule, Routes } from '@angular/router';
 import { RouteMap3Component } from './route-map3.component';
 import { ClarityModule } from '@clr/angular';
-import { LayerControlModule } from '@dlr-eoc/layer-control';
-import { MapOlModule } from '@dlr-eoc/map-ol';
-import { MapToolsModule } from '@dlr-eoc/map-tools';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
 
 
 
@@ -20,18 +18,12 @@ export class RouteMap3RoutingModule { }
 
 
 @NgModule({
-    declarations: [
-        RouteMap3Component
-    ],
     imports: [
-        CommonModule,
-        SharedComponentsModule,
-        RouteMap3RoutingModule,
-        ClarityModule,
-
-        LayerControlModule,
-        MapOlModule,
-        MapToolsModule,
-    ]
+    CommonModule,
+    RouteMap3RoutingModule,
+    ClarityModule,
+    MapOlComponent,
+    RouteMap3Component,
+]
 })
 export class RouteMap3Module { }

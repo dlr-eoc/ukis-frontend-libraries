@@ -2,10 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClarityModule } from '@clr/angular';
 import { RouteExampleCesiumComponent } from './route-example-cesium.component';
-import { MapCesiumModule } from '@dlr-eoc/map-cesium';
-import { LayerControlModule } from '@dlr-eoc/layer-control';
-import { MapOlModule } from '@dlr-eoc/map-ol';
-import { SharedComponentsModule } from '../../app-shared-components.module';
+import { MapCesiumComponent } from '@dlr-eoc/map-cesium';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
+
 import { RouterModule, Routes } from '@angular/router';
 
 
@@ -18,18 +17,13 @@ export class RouteCesiumModuleRoutingModule { }
 
 
 @NgModule({
-    declarations: [
-        RouteExampleCesiumComponent
-    ],
     imports: [
-        CommonModule,
-        RouteCesiumModuleRoutingModule,
-        SharedComponentsModule,
-        ClarityModule,
-
-        MapCesiumModule,
-        LayerControlModule,
-        MapOlModule
-    ]
+    CommonModule,
+    RouteCesiumModuleRoutingModule,
+    ClarityModule,
+    MapCesiumComponent,
+    MapOlComponent,
+    RouteExampleCesiumComponent
+]
 })
 export class RouteCesiumModule { }

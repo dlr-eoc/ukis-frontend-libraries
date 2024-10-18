@@ -11,10 +11,9 @@ describe('MousePositionComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MousePositionComponent],
-      imports: [FormsModule, ClarityModule],
-      providers: [MapOlService]
-    })
+    imports: [FormsModule, ClarityModule, MousePositionComponent],
+    providers: [MapOlService]
+})
       .compileComponents();
   }));
 

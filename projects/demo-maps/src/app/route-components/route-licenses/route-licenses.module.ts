@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { SharedComponentsModule } from '../../app-shared-components.module';
+
 import { RouterModule, Routes } from '@angular/router';
 import { RouteLicensesComponent } from './route-licenses.component';
 import { ClarityModule } from '@clr/angular';
@@ -17,15 +17,11 @@ export class RouteLicensesRoutingModule { }
 
 
 @NgModule({
-    declarations: [
-        RouteLicensesComponent
-    ],
     imports: [
-        CommonModule,
-        SharedComponentsModule,
-        RouteLicensesRoutingModule,
-
-        ClarityModule
-    ]
+    CommonModule,
+    RouteLicensesRoutingModule,
+    ClarityModule,
+    RouteLicensesComponent
+]
 })
 export class RouteLicensesModule { }

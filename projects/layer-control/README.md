@@ -8,17 +8,18 @@ For examples [see demo maps](../demo-maps/README.md)
 - "@dlr-eoc/map-ol"
 - "@dlr-eoc/layer-control"
 
-#### add the following to the app.module.ts
+#### add the following to route-view.component.ts
 ```
-import { MapOlModule } from '@dlr-eoc/map-ol';
-import { LayerControlModule } from '@dlr-eoc/layer-control';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
 
 ...
 
+ standalone: true,
  imports: [
     ...
-    MapOlModule,
-    LayerControlModule
+    MapOlComponent,
+    LayerControlComponent
   ]
 ```
 

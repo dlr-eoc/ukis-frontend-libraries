@@ -1,8 +1,8 @@
 .content {
-  position: absolute;
+  position: relative;
   width: 100%;
   //height: 100%;
-  height: calc(100vh - (24px * 2.5));
+  height: calc(100vh - var(--clr-header-height,60px) - (24px * 2));
   //background: #565656;
 
   .login {

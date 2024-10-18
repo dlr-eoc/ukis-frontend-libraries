@@ -8,8 +8,8 @@ describe('RouteExampleMaplibreComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RouteExampleMaplibreComponent ]
-    })
+    imports: [RouteExampleMaplibreComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(RouteExampleMaplibreComponent);

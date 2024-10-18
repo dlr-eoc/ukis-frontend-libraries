@@ -4,12 +4,18 @@ import '@cds/core/icon/register.js';
 
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 /** for User */
 import { Subscription } from 'rxjs';
 import { UserService, IUser } from '@dlr-eoc/user-info';
+import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
 import { BasicAuthService } from './auth/basic-auth.service';
+import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
+
+import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
+import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
+import { HeaderComponent } from './components/header/header.component';
 
 interface IUi {
   alert: null | IAlert;
@@ -18,6 +24,8 @@ interface IUi {
 
 @Component({
   selector: 'app-root',
+  imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, RouterOutlet, CookieAlertComponent],
+  standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

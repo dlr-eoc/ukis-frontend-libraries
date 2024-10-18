@@ -19,10 +19,9 @@ describe('RegisterComponent', () => {
     usrSvc.setAuthService(authService);
 
     TestBed.configureTestingModule({
-      imports: [ClarityModule, FormsModule, ReactiveFormsModule],
-      declarations: [RegisterComponent],
-      providers: [{ provide: UserService, useValue: usrSvc }]
-    })
+    imports: [ClarityModule, FormsModule, ReactiveFormsModule, RegisterComponent],
+    providers: [{ provide: UserService, useValue: usrSvc }]
+})
       .compileComponents();
   }));
 

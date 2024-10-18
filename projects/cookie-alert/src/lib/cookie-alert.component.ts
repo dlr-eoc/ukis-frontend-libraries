@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UtilStoreService } from '@dlr-eoc/services-util-store';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'ukis-cookie-alert',
-  templateUrl: './cookie-alert.component.html',
-  styleUrls: ['./cookie-alert.component.scss']
+    selector: 'ukis-cookie-alert',
+    templateUrl: './cookie-alert.component.html',
+    styleUrls: ['./cookie-alert.component.scss'],
+    standalone: true,
+    imports: [NgClass]
 })
 export class CookieAlertComponent implements OnInit {
   alert: any;

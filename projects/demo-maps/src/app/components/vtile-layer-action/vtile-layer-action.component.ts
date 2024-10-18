@@ -1,10 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { LayersService } from '@dlr-eoc/services-layers';
+import { ClrCheckboxModule, ClrCommonFormsModule } from '@clr/angular';
 
 @Component({
-  selector: 'app-vtile-layer-action',
-  templateUrl: './vtile-layer-action.component.html',
-  styleUrls: ['./vtile-layer-action.component.scss']
+    selector: 'app-vtile-layer-action',
+    templateUrl: './vtile-layer-action.component.html',
+    styleUrls: ['./vtile-layer-action.component.scss'],
+    standalone: true,
+    imports: [ClrCheckboxModule, ClrCommonFormsModule]
 })
 export class VtileLayerActionComponent implements OnInit {
   @Input() layer;

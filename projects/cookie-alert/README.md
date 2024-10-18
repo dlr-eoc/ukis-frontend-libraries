@@ -10,24 +10,13 @@ For a example [see demo auth](../demo-auth/README.md)
 #### add the following dependencies to the package.json
 - "@dlr-eoc/cookie-alert"
 
-#### add the following to the app.module.ts
-```
-  import { CookieAlertModule } from '@dlr-eoc/cookie-alert';
-  ...
-  imports: [
-    ...
-    CookieAlertModule
-  ]
-```
-
-or 
-
+#### add the following to app.component.ts
 ```
   import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
   ...
-  declarations: [
+  imports: [
     ...
-    CookieAlertModule
+    CookieAlertComponent
   ]
 ```
 

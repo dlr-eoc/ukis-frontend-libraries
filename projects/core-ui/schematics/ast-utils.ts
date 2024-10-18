@@ -1,11 +1,13 @@
-import { Tree, SchematicsException, SchematicContext, Rule, UpdateRecorder } from '@angular-devkit/schematics';
+import { Tree, SchematicsException, SchematicContext, Rule, UpdateRecorder, noop } from '@angular-devkit/schematics';
 import { UkisNgAddSchema } from './ng-add/schema';
 import { getWorkspace } from '@schematics/angular/utility/workspace';
 import { addProviderToModule, insertImport, addImportToModule, addDeclarationToModule, findNodes, getDecoratorMetadata, getMetadataField } from '@schematics/angular/utility/ast-utils';
 
 import { Change, RemoveChange, NoopChange, InsertChange, ReplaceChange } from '@schematics/angular/utility/change';
 import { normalize, join } from '@angular-devkit/core';
-import { getAppModulePath } from '@schematics/angular/utility/ng-ast-utils';
+import { getAppModulePath, isStandaloneApp } from '@schematics/angular/utility/ng-ast-utils';
+import { addRootProvider } from '@schematics/angular/utility';
+
 
 /**
  * https://github.com/angular/angular-cli/blob/fb14945c02a3f150d6965e77324416b1ec7cc575/packages/schematics/angular/utility/ast-utils.ts#L9
@@ -14,6 +16,7 @@ import { getAppModulePath } from '@schematics/angular/utility/ng-ast-utils';
 import * as ts from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 import { tags } from '@angular-devkit/core';
 import { checkProjectSourceRoot, getProjectName, hasArchitectBuildOptionsMain } from './workspace-utils';
+import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
 
 export interface ImoduleImport {
   classifiedName: string;
@@ -21,6 +24,7 @@ export interface ImoduleImport {
   module?: boolean;
   provide?: boolean;
   declare?: boolean;
+  standalone?: boolean;
 }
 
 type TmetadataFields = 'providers' | 'imports' | 'declarations' | 'exports' | 'bootstrap' | 'entryComponents';
@@ -58,6 +62,17 @@ export interface AddInjectionContext {
   // e. g. SideMenuService
 }
 
+export function getMainPath(project: ProjectDefinition) {
+  let mainPath: string = join(normalize(project.root), project.sourceRoot || join(normalize(project.root), 'src'), 'main.ts');
+
+  // https://github.com/angular/angular-cli/blob/HEAD/packages/angular/pwa/pwa/index.ts#L100
+  if (hasArchitectBuildOptionsMain(project.extensions)) {
+    mainPath = join(normalize(project.root), project.extensions.architect.build.options.main);
+  }
+
+  return mainPath;
+}
+
 
 export function addServiceComponentModule(optionsProject: UkisNgAddSchema['project'], item: ImoduleImport, modulePathStr?: string): Rule {
   return async (tree: Tree, context: SchematicContext) => {
@@ -66,33 +81,44 @@ export function addServiceComponentModule(optionsProject: UkisNgAddSchema['proje
     if (projectName) {
       const project = workspace.projects.get(projectName);
       if (project && checkProjectSourceRoot(project, context)) {
-        let mainPath: string = join(normalize(project.root), project.sourceRoot, 'main.ts');
+        let mainPath = getMainPath(project);
 
-        // https://github.com/angular/angular-cli/blob/HEAD/packages/angular/pwa/pwa/index.ts#L100
-        if (hasArchitectBuildOptionsMain(project.extensions)) {
-          mainPath = join(normalize(project.root), project.extensions.architect.build.options.main);
-        }
+        const isStandalone = isStandaloneApp(tree, mainPath);
+        if (isStandalone) {
 
-        let modulePath = getAppModulePath(tree, mainPath);
-        if (modulePathStr && tree.exists(modulePathStr)) {
-          modulePath = modulePathStr;
-        }
-        context.logger.debug(`module path: ${modulePath}`);
-
-        const moduleSource = getTsSourceFile(tree, modulePath);
-
-        if (item.provide) {
-          const changes = addProviderToModule(moduleSource, modulePath, item.classifiedName, item.path);
-          applyChanges(changes, tree, modulePath);
-        } else if (item.module) {
-          const change = addImportToModule(moduleSource, modulePath, item.classifiedName, item.path);
-          applyChanges(change, tree, modulePath);
-        } else if (item.declare) {
-          const changes = addDeclarationToModule(moduleSource, modulePath, item.classifiedName, item.path);
-          applyChanges(changes, tree, modulePath);
+          if (item.provide) {
+            return addRootProvider(projectName, ({ code, external }) =>
+              code`${external(item.classifiedName, item.path)}`,
+            );
+          } else {
+            return noop();
+          }
         } else {
-          const change = [insertImport(moduleSource, modulePath, item.classifiedName, item.path)];
-          applyChanges(change, tree, modulePath);
+          let modulePath = getAppModulePath(tree, mainPath);
+
+          if (modulePathStr && tree.exists(modulePathStr)) {
+            modulePath = modulePathStr;
+          }
+
+          context.logger.debug(`module path: ${modulePath}`);
+
+          const moduleSource = getTsSourceFile(tree, modulePath);
+
+          if (!item.standalone) {
+            if (item.provide) {
+              const changes = addProviderToModule(moduleSource, modulePath, item.classifiedName, item.path);
+              applyChanges(changes, tree, modulePath);
+            } else if (item.module) {
+              const change = addImportToModule(moduleSource, modulePath, item.classifiedName, item.path);
+              applyChanges(change, tree, modulePath);
+            } else if (item.declare) {
+              const changes = addDeclarationToModule(moduleSource, modulePath, item.classifiedName, item.path);
+              applyChanges(changes, tree, modulePath);
+            } else {
+              const change = [insertImport(moduleSource, modulePath, item.classifiedName, item.path)];
+              applyChanges(change, tree, modulePath);
+            }
+          }
         }
       }
     }
@@ -107,34 +133,37 @@ export function removeServiceComponentModule(optionsProject: UkisNgAddSchema['pr
     if (projectName) {
       const project = workspace.projects.get(projectName);
       if (project && checkProjectSourceRoot(project, context)) {
-        let mainPath: string = join(normalize(project.root), project.sourceRoot, 'main.ts');
+        let mainPath = getMainPath(project);
 
-        // https://github.com/angular/angular-cli/blob/HEAD/packages/angular/pwa/pwa/index.ts#L100
-        if (hasArchitectBuildOptionsMain(project.extensions)) {
-          mainPath = join(normalize(project.root), project.extensions.architect.build.options.main);
-        }
-
-        let modulePath = getAppModulePath(tree, mainPath);
-        if (modulePathStr && tree.exists(modulePathStr)) {
-          modulePath = modulePathStr;
-        }
-        context.logger.debug(`module path: ${modulePath}`);
-
-        const moduleSource = getTsSourceFile(tree, modulePath);
-
-        if (item.provide) {
-          const changes = removeProviderFromModule(moduleSource, modulePath, item.classifiedName, item.path);
-          applyChanges(changes, tree, modulePath);
-        } else if (item.module) {
-          const change = removeImportFromModule(moduleSource, modulePath, item.classifiedName, item.path);
-          applyChanges(change, tree, modulePath);
-        } else if (item.declare) {
-          const changes = removeDeclarationFromModule(moduleSource, modulePath, item.classifiedName, item.path);
-          applyChanges(changes, tree, modulePath);
+        const isStandalone = isStandaloneApp(tree, mainPath);
+        if (isStandalone) {
+          // TODO remove things
+          return noop();
         } else {
-          const symbolName = item.classifiedName.replace(/\..*$/, '');
-          const change = [...removeImport(moduleSource, modulePath, symbolName, item.path)];
-          applyChanges(change, tree, modulePath);
+          let modulePath = getAppModulePath(tree, mainPath);
+          if (modulePathStr && tree.exists(modulePathStr)) {
+            modulePath = modulePathStr;
+          }
+          context.logger.debug(`module path: ${modulePath}`);
+
+          const moduleSource = getTsSourceFile(tree, modulePath);
+
+          if (!item.standalone) {
+            if (item.provide) {
+              const changes = removeProviderFromModule(moduleSource, modulePath, item.classifiedName, item.path);
+              applyChanges(changes, tree, modulePath);
+            } else if (item.module) {
+              const change = removeImportFromModule(moduleSource, modulePath, item.classifiedName, item.path);
+              applyChanges(change, tree, modulePath);
+            } else if (item.declare) {
+              const changes = removeDeclarationFromModule(moduleSource, modulePath, item.classifiedName, item.path);
+              applyChanges(changes, tree, modulePath);
+            } else {
+              const symbolName = item.classifiedName.replace(/\..*$/, '');
+              const change = [...removeImport(moduleSource, modulePath, symbolName, item.path)];
+              applyChanges(change, tree, modulePath);
+            }
+          }
         }
       }
     }

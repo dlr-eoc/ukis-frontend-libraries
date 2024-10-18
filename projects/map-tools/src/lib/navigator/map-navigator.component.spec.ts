@@ -13,10 +13,9 @@ describe('MapNavigatorComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MapNavigatorComponent],
-      imports: [FormsModule, ClarityModule],
-      providers: [MapStateService]
-    })
+    imports: [FormsModule, ClarityModule, MapNavigatorComponent],
+    providers: [MapStateService]
+})
       .compileComponents();
   }));
 

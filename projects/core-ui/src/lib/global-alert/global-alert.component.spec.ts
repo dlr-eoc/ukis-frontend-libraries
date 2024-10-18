@@ -10,8 +10,7 @@ describe('GlobalAlertComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ClarityModule],
-      declarations: [GlobalAlertComponent],
+      imports: [ClarityModule, GlobalAlertComponent],
       providers: [AlertService]
     })
       .compileComponents();

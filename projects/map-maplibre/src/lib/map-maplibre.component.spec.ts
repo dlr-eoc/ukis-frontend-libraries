@@ -42,13 +42,13 @@ describe('MapMaplibreComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MapMaplibreComponent],
-      providers: [
+    imports: [MapMaplibreComponent],
+    providers: [
         MapMaplibreService,
         { provide: LayersService, useClass: LayersService },
         { provide: MapStateService, useClass: MapStateService }
-      ]
-    }).compileComponents();
+    ]
+}).compileComponents();
 
     fixture = TestBed.createComponent(MapMaplibreComponent);
     component = fixture.componentInstance;

@@ -12,12 +12,13 @@ import { LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayerty
 import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
 import { IOwsOffering, IOwsResource, kmlOffering, wfsOffering, wmsOffering, wmtsOffering } from './types/owc-json';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
 import { GetFeatureOperationCode, GetMapOperationCode, GetTileOperationCode, RESTOperationCode } from './types/owc-json.utils';
 import { GeoJsonOffering, IEocOwsOffering, IEocOwsResource, tmsOffering, xyzOffering } from './types/eoc-owc-json';
 
 import { DateTime } from 'luxon';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OwcJsonService utils', () => {
   beforeEach(() => { });
@@ -35,8 +36,9 @@ describe('OwcJsonService: reading basic data from owc', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
   }));
 
 
@@ -96,8 +98,9 @@ describe('OwcJsonService: reading basic data from owc Resource', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources = service.getResources(basicOgcOwsContext);
@@ -210,8 +213,9 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources = service.getResources(eocOwsContext);
@@ -353,8 +357,9 @@ describe('OwcJsonService: reading basic data from owc Offering', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources = service.getResources(basicOgcOwsContext);
@@ -401,8 +406,9 @@ describe('OwcJsonService: reading data from IEocOwsOffering', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources = service.getResources(basicOgcOwsContext);
@@ -434,8 +440,9 @@ describe('OwcJsonService: reading layer data from owc', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
   }));
 
@@ -708,8 +715,9 @@ describe('OwcJsonService: writing data into owc', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
-    });
+    imports: [],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     // baseWMSLayer - assets/exampleContext.ts
     ukisWmsLayer = new WmsLayer({

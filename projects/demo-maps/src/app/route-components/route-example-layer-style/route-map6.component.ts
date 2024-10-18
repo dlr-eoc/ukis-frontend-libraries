@@ -7,14 +7,20 @@ import { Subscription } from 'rxjs';
 import { RasterFeatureInfoComponent } from '../../components/raster-feature-info/raster-feature-info.component';
 
 import { ClarityIcons, layersIcon, worldIcon } from '@cds/core/icon';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, worldIcon]);
 
 @Component({
-  selector: 'app-route-map6',
-  templateUrl: './route-map6.component.html',
-  styleUrls: ['./route-map6.component.scss'],
-  /** use differnt instances of the services only for testing with diffenr routs  */
-  providers: [LayersService, MapStateService, MapOlService]
+    selector: 'app-route-map6',
+    templateUrl: './route-map6.component.html',
+    styleUrls: ['./route-map6.component.scss'],
+    /** use differnt instances of the services only for testing with diffenr routs  */
+    providers: [LayersService, MapStateService, MapOlService],
+    standalone: true,
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMap6Component implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';

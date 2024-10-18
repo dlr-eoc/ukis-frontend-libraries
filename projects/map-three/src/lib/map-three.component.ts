@@ -14,9 +14,10 @@ import { HostListener } from '@angular/core';
  */
 
 @Component({
-  selector: 'ukis-map-three',
-  templateUrl: './map-three.component.html',
-  styleUrls: ['./map-three.component.scss']
+    selector: 'ukis-map-three',
+    templateUrl: './map-three.component.html',
+    styleUrls: ['./map-three.component.scss'],
+    standalone: true
 })
 export class MapThreeComponent implements OnInit, AfterViewInit {
 

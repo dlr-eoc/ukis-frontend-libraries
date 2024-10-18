@@ -13,19 +13,20 @@ For a example [see demo auth](../demo-auth/README.md)
 This service (e.g. basic-auth.service) includes your business logic for authentication and authorization
 
 #### create an AuthGuardService
-This service protects your routes and is registered in the AppRoutingModule
+This service protects your routes and is registered in the AppConfig or App Component
 
-#### add the following to the app.module.ts
+#### add the following to the app.component.ts
 ```
-import { UserInfoModule } from '@dlr-eoc/user-info';
+import { LoginComponent, RegisterComponent, UserDetailsComponent } from '@dlr-eoc/user-info';
 import { BasicAuthService } from './auth/basic-auth.service';
 import { HttpAuthInterceptor } from './auth/http-auth.interceptor';
 
 ...
 
+ standalone: true,
  imports: [
     ...
-    UserInfoModule
+    LoginComponent, RegisterComponent, UserDetailsComponent
   ]
 
   providers: [

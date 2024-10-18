@@ -4,15 +4,15 @@
   <p>Click here to learn how to generate it:
     <clr-signpost >
       <clr-signpost-content [clrPosition]="'right-bottom'" *clrIfOpen>
-          <h3>Licenses setup</h3>
-          <p>This component expects a <code>assets/licenses.json</code> file to be present in the project bundle.</p>
-          <p>That file was created with the following command:</p>
-          <code>
-            cd ./frontend-libraries
-            npm install -g license-checker
-            npx license-checker --json --out ./dist/demo-maps/assets
-          </code>
-          You might want to add this command to the build-process by adding a <code>"postbuild"</code> task to your package.json.
+        <h3>Licenses setup</h3>
+        <p>This component expects a <code>assets/licenses.json</code> file to be present in the project bundle.</p>
+        <p>That file was created with the following command:</p>
+        <code>
+          cd ./frontend-libraries
+          npm install -g license-checker
+          npx license-checker --json --out ./dist/demo-maps/assets
+        </code>
+        You might want to add this command to the build-process by adding a <code>"postbuild"</code> task to your package.json.
       </clr-signpost-content>
     </clr-signpost>
   </p>
@@ -23,16 +23,20 @@
     <clr-dg-column>License</clr-dg-column>
     <clr-dg-column>Repository</clr-dg-column>
 
-    <ng-container *ngIf="licenses$ | async as licenses">
-      <clr-dg-row *ngFor="let l of licenses">
-        <clr-dg-cell>{{l.name}}</clr-dg-cell>
-        <clr-dg-cell>{{l.publisher}}</clr-dg-cell>
-        <clr-dg-cell>{{l.license}}</clr-dg-cell>
-        <clr-dg-cell><a href="{{l.repository}}">{{l.repository}}</a></clr-dg-cell>
-      </clr-dg-row>
-
+ 
+    @if (licenses$ | async; as licenses) {
+      @for (l of licenses; track l) {
+        <clr-dg-row>
+          <clr-dg-cell>{{l.name}}</clr-dg-cell>
+          <clr-dg-cell>{{l.publisher}}</clr-dg-cell>
+          <clr-dg-cell>{{l.license}}</clr-dg-cell>
+          <clr-dg-cell><a href="{{l.repository}}">{{l.repository}}</a></clr-dg-cell>
+        </clr-dg-row>
+      }
+    }
+    @if (licenses$ | async; as licenses) {
       <clr-dg-footer>{{licenses.length}} third party dependencies</clr-dg-footer>
-    </ng-container>
+    }
 
 
   </clr-datagrid>

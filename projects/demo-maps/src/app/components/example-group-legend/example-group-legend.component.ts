@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { LayerGroup } from '@dlr-eoc/services-layers';
 
 @Component({
-  selector: 'app-example-group-legend',
-  templateUrl: './example-group-legend.component.html',
-  styleUrls: ['./example-group-legend.component.scss']
+    selector: 'app-example-group-legend',
+    templateUrl: './example-group-legend.component.html',
+    styleUrls: ['./example-group-legend.component.scss'],
+    standalone: true
 })
 export class ExampleGroupLegendComponent implements OnInit {
   @Input() group: LayerGroup;

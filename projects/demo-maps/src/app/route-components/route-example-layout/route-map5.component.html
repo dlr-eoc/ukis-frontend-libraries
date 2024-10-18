@@ -38,41 +38,51 @@
     <cds-icon shape="table" title="Overlays" clrVerticalNavIcon></cds-icon>
     Table
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <table class="table" *ngIf="showTable">
-        <thead>
-          <tr>
-            <th class="left">Title</th>
-            <th>Foo</th>
-            <th>Bar</th>
-            <th>Baz</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of geojsonData.features">
-            <td class="left">{{item.properties.title}}</td>
-            <td>{{item.properties.foo}}</td>
-            <td>{{item.properties.bar}}</td>
-            <td>{{item.properties.baz}}</td>
-          </tr>
-        </tbody>
-      </table>
+      @if (showTable) {
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="left">Title</th>
+              <th>Foo</th>
+              <th>Bar</th>
+              <th>Baz</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of geojsonData.features; track item) {
+              <tr>
+                <td class="left">{{item.properties.title}}</td>
+                <td>{{item.properties.foo}}</td>
+                <td>{{item.properties.bar}}</td>
+                <td>{{item.properties.baz}}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
 
-      <table class="table" *ngIf="popupData.features.length">
-        <thead>
-          <tr>
-            <th [ngClass]="{'left': i === 0}" *ngFor="let item of popupData.headers;let i=index;">{{item}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of popupData.features;let i=index;">
-            <td class="left">{{item.properties[popupData.headers[0]]}}</td>
-            <td>{{item.properties[popupData.headers[1]]}}</td>
-            <td>{{item.properties[popupData.headers[2]]}}</td>
-            <td>{{item.properties[popupData.headers[3]]}}</td>
-          </tr>
-        </tbody>
-      </table>
-      
+      @if (popupData.features.length) {
+        <table class="table">
+          <thead>
+            <tr>
+              @for (item of popupData.headers; track item; let i = $index) {
+                <th [ngClass]="{'left': i === 0}">{{item}}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of popupData.features; track item; let i = $index) {
+              <tr>
+                <td class="left">{{item.properties[popupData.headers[0]]}}</td>
+                <td>{{item.properties[popupData.headers[1]]}}</td>
+                <td>{{item.properties[popupData.headers[2]]}}</td>
+                <td>{{item.properties[popupData.headers[3]]}}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 </clr-vertical-nav>

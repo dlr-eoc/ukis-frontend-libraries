@@ -1,6 +1,10 @@
 <clr-datagrid>
-    <clr-dg-column *ngFor="let kv of data | keyvalue">{{ kv.key }}</clr-dg-column>
-    <clr-dg-row>
-        <clr-dg-cell *ngFor="let kv of data | keyvalue">{{ kv.value }}</clr-dg-cell>
-    </clr-dg-row>
+  @for (kv of data | keyvalue; track kv) {
+    <clr-dg-column>{{ kv.key }}</clr-dg-column>
+  }
+  <clr-dg-row>
+    @for (kv of data | keyvalue; track kv) {
+      <clr-dg-cell>{{ kv.value }}</clr-dg-cell>
+    }
+  </clr-dg-row>
 </clr-datagrid>

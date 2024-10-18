@@ -4,12 +4,16 @@
   </caption>
   <thead>
     <tr>
-      <th *ngFor="let kv of data | keyvalue">{{ kv.key }}</th>
+      @for (kv of data | keyvalue; track kv) {
+        <th>{{ kv.key }}</th>
+      }
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td *ngFor="let kv of data | keyvalue">{{ kv.value }}</td>
+      @for (kv of data | keyvalue; track kv) {
+        <td>{{ kv.value }}</td>
+      }
     </tr>
   </tbody>
 </table>

@@ -2,10 +2,13 @@ import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
 
+
 @Component({
-  selector: 'ukis-user-details',
-  templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.scss']
+    selector: 'ukis-user-details',
+    templateUrl: './user-details.component.html',
+    styleUrls: ['./user-details.component.scss'],
+    standalone: true,
+    imports: []
 })
 export class UserDetailsComponent implements OnDestroy {
 

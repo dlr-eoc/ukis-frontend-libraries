@@ -25,14 +25,20 @@ import olLayerGroup from 'ol/layer/Group';
 import { AlertService } from '../../components/global-alert/alert.service';
 
 import { ClarityIcons, layersIcon, cogIcon, compassIcon, downloadIcon } from '@cds/core/icon';
+import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { MousePositionComponent } from '../../../../../map-tools/src/lib/mouse-position/mouse-position.component';
 ClarityIcons.addIcons(...[layersIcon, cogIcon, compassIcon, downloadIcon]);
 
 @Component({
-  selector: 'app-route-map3',
-  templateUrl: './route-map3.component.html',
-  styleUrls: ['./route-map3.component.scss'],
-  /** use different instances of the services only for testing with different routes  */
-  providers: [LayersService, MapStateService, MapOlService]
+    selector: 'app-route-map3',
+    templateUrl: './route-map3.component.html',
+    styleUrls: ['./route-map3.component.scss'],
+    /** use different instances of the services only for testing with different routes  */
+    providers: [LayersService, MapStateService, MapOlService],
+    standalone: true,
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, MousePositionComponent]
 })
 export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
   @HostBinding('class') class = 'content-container floating';

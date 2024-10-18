@@ -3,4 +3,3 @@
  */
 
 export * from './lib/util-store.service';
-export * from './lib/util-store.module';

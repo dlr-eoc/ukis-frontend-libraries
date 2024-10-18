@@ -11,15 +11,21 @@ import testData from '@dlr-eoc/shared-assets/geojson/test.collection.json';
 import { Subscription } from 'rxjs';
 
 import { ClarityIcons, layersIcon, worldIcon, cogIcon } from '@cds/core/icon';
+import { MapMaplibreComponent } from '../../../../../map-maplibre/src/lib/map-maplibre.component';
+import { ClrVerticalNavModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
 
 @Component({
-  selector: 'app-route-example-maplibre',
-  templateUrl: './route-example-maplibre.component.html',
-  styleUrls: ['./route-example-maplibre.component.scss'],
-  // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
-  encapsulation: ViewEncapsulation.None,
-  providers: [LayersService, MapStateService, MapMaplibreService]
+    selector: 'app-route-example-maplibre',
+    templateUrl: './route-example-maplibre.component.html',
+    styleUrls: ['./route-example-maplibre.component.scss'],
+    // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
+    encapsulation: ViewEncapsulation.None,
+    providers: [LayersService, MapStateService, MapMaplibreService],
+    standalone: true,
+    imports: [MapMaplibreComponent, ClrVerticalNavModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';

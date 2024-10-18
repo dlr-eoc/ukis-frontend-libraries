@@ -34,17 +34,17 @@ or in the angular config file
 ```
 
 
-#### add the following to the app.module.ts
+#### add the following to route-view.component.ts
 ```
-import { MapMaplibreModule } from '@dlr-eoc/map-maplibre';
-import { LayerControlModule } from '@dlr-eoc/layer-control';
+import { MapMaplibreComponent } from '@dlr-eoc/map-maplibre';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
 
 ...
-
+ standalone: true,
  imports: [
     ...
-    MapMaplibreModule,
-    LayerControlModule
+    MapMaplibreComponent,
+    LayerControlComponent
   ]
 ```
 

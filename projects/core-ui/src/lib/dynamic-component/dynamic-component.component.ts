@@ -13,6 +13,7 @@ export interface IDynamicComponent {
 
 @Directive({
   selector: '[ukisAddHost]',
+  standalone: true,
 })
 export class ViewRefDirective {
   constructor(public viewContainerRef: ViewContainerRef) { }
@@ -20,7 +21,9 @@ export class ViewRefDirective {
 
 @Component({
   selector: 'ukis-dynamic-component',
-  template: `<ng-template ukisAddHost></ng-template>`
+  template: `<ng-template ukisAddHost></ng-template>`,
+  standalone: true,
+  imports: [ViewRefDirective]
 })
 export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
   @Input() dynamicComponent!: IDynamicComponent;

@@ -8,8 +8,8 @@ describe('ExampleLayerDescriptionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExampleLayerDescriptionComponent ]
-    })
+    imports: [ExampleLayerDescriptionComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ExampleLayerDescriptionComponent);
