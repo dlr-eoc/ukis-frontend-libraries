@@ -423,15 +423,25 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     layers.map(l => this.threeDlayerSvc.addLayer(l, 'Baselayers'));
   }
 
-  changeMapDimension() {
+  async changeMapDimension() {
     if (this.is2dMap) {
       this.is2dMap = false;
     } else {
-      this.mapCesiumSvc.setNadirViewAngle({
-        complete: () => {
-          this.is2dMap = true;
-        }
-      });
+      //If there is no camera roll, the flyTo is not necessary
+      if (this.mapCesiumSvc.viewer && this.mapCesiumSvc.viewer.camera.roll != 0) {
+        this.mapCesiumSvc.setNadirViewAngle();
+          //Wait for the cesim flyTo function to finish
+          this.is2dMap = await new Promise(resolve => {
+            this.mapCesiumSvc.setNadirViewAngle({
+                complete: () => {
+                    resolve(true);
+                }
+            });
+          });
+        this.is2dMap = true;
+      } else {
+        this.is2dMap = true;
+      }
     }
   }
 
