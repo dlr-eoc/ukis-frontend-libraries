@@ -1,17 +1,14 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
+import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { IProjDef } from '@dlr-eoc/map-tools';
 
 import { ClarityIcons, layersIcon, mapIcon, compassIcon } from '@cds/core/icon';
-import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
-import { ProjectionSwitchComponent } from '../../../../../map-tools/src/lib/projection-switch/projection-switch.component';
-import { MousePositionComponent } from '../../../../../map-tools/src/lib/mouse-position/mouse-position.component';
-import { MapNavigatorComponent } from '../../../../../map-tools/src/lib/navigator/map-navigator.component';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
+import { ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent } from '@dlr-eoc/map-tools';
 ClarityIcons.addIcons(...[layersIcon, mapIcon, compassIcon]);
 
 @Component({
