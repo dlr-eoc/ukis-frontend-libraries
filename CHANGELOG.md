@@ -6,8 +6,9 @@
 ### Bug Fixes
 * **@dlr-eoc/core-ui:**
   - Update styles for `@clr 17`
-  - Schemantic add path in tsconfig no baseUrl
+  - Schematics add path in tsconfig no baseUrl
   - Replace not found import `IconShapeTuple` from `@cds/core`
+  - Schematics transpile after build because custom buiulder was removed in [v14.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v14.0.0/projects/core-ui/schematics).
 
 * **@dlr-eoc/layer-control:**
   - Fix direction of `@cds` icon

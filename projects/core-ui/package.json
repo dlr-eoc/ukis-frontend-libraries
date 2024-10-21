@@ -14,7 +14,8 @@
   "scripts": {
     "build": "ng build core-ui --configuration=production --watch=false",
     "schematics:build": "tsc -p tsconfig.schematics.json",
-    "preschematics:test": "npm run build && npm run schematics:build",
+    "postbuild": "npm run schematics:build",
+    "preschematics:test": "npm run build",
     "schematics:test": "npx jasmine ../../dist/core-ui/schematics/**/*_spec.js"
   },
   "ng-add": {

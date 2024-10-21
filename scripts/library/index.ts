@@ -4,7 +4,7 @@
  * node scripts/projectsVersion.js -l
  */
 
-import { fork } from 'child_process';
+import { fork, spawn } from 'child_process';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { Command } from 'commander';
@@ -112,8 +112,21 @@ function runBuilds(offset = 0, projects) {
   const project = projects[offset];
   const cliArgs = ['build', '--configuration=production', '--watch=false', project];
   if (project) {
-    console.log(consoleLogColors.Bright, `---------------------->>> ${offset + 1}: run ng ${cliArgs.join(' ')}`);
-    const child = fork(`${__dirname}/run-ng.js`, cliArgs);
+   
+    const packageJson: IPackageJSON = require(join(CWD, ANGULARJSON.projects[project].root, 'package.json'));
+    let child = null;
+    if(packageJson && packageJson.scripts && packageJson.scripts['build']){
+      const  spawnCliArgs = ['run', 'build', `--workspace=projects/${project}`];
+      console.log(consoleLogColors.Bright, `---------------------->>> ${offset + 1}: npm ${spawnCliArgs.join(' ')}`);
+      let command = 'npm';
+      if (process.platform !== 'win32') {
+        command = 'npm.cmd'
+      }
+      child = spawn(command, spawnCliArgs, { stdio: "inherit", shell: true });
+    }else{
+      console.log(consoleLogColors.Bright, `---------------------->>> ${offset + 1}: run ng ${cliArgs.join(' ')}`);
+      child = fork(`${__dirname}/run-ng.js`, cliArgs);
+    }
     child.on('close', (code, signal) => {
       offset++;
       if (offset >= projects.length) {
