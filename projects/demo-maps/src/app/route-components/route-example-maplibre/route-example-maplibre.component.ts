@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CustomLayer, Layer, LayerGroup, LayersService, RasterLayer, StackedLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapMaplibreService } from '@dlr-eoc/map-maplibre';
+import { MapMaplibreService, MapMaplibreComponent } from '@dlr-eoc/map-maplibre';
 import { StyleSpecification, TerrainControl } from 'maplibre-gl';
 
 import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocBaseoverlayTile } from '@dlr-eoc/base-layers-raster';
@@ -11,10 +11,8 @@ import testData from '@dlr-eoc/shared-assets/geojson/test.collection.json';
 import { Subscription } from 'rxjs';
 
 import { ClarityIcons, layersIcon, worldIcon, cogIcon } from '@cds/core/icon';
-import { MapMaplibreComponent } from '../../../../../map-maplibre/src/lib/map-maplibre.component';
 import { ClrVerticalNavModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
-import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
 
 @Component({
@@ -731,7 +729,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     const layer0 = water.custom_layer.layers[0];
     layer0.paint['fill-color'] = 'hsl(30, 14%, 53%)';
     // layer0.maxzoom = 12;
-    
+
     if (layer0.type !== 'background') {
       layer0['source-layer'] = 'landuse'
       /* layer0.filter = [
@@ -746,7 +744,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
 
     this.layerSvc.updateLayer(water);
   }
-  
+
   setViewAngle() {
     /** set map rotation with the MapStateService */
     this.mapStateSvc.setViewAngle(45);
