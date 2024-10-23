@@ -20,10 +20,9 @@ import { VtileLayerActionComponent } from '../../components/vtile-layer-action/v
 // import icons for use in html and layer actions
 import { ClarityIcons, layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon } from '@cds/core/icon';
 
-import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
-import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon]);
 
 @Component({

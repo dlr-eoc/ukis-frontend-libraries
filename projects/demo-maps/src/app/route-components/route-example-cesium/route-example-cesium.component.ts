@@ -12,11 +12,10 @@ import { Fill, Stroke, Style } from 'ol/style';
 
 import { ClarityIcons, layersIcon, worldIcon, blockIcon, cogIcon, mapIcon } from '@cds/core/icon';
 
-import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
-import { MapCesiumComponent } from '../../../../../map-cesium/src/lib/map-cesium.component';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
+import { MapCesiumComponent } from '@dlr-eoc/map-cesium';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
-import { BaseLayerControlComponent } from '../../../../../layer-control/src/lib/base-layer-control/base-layer-control.component';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
 
 @Component({

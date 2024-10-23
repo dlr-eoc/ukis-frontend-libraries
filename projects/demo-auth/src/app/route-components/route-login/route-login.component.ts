@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoginComponent } from '../../../../../user-info/src/lib/login/login.component';
+import { LoginComponent } from '@dlr-eoc/user-info';
 
 @Component({
     selector: 'app-route-login',

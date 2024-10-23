@@ -25,10 +25,10 @@ import olLayerGroup from 'ol/layer/Group';
 import { AlertService } from '../../components/global-alert/alert.service';
 
 import { ClarityIcons, layersIcon, cogIcon, compassIcon, downloadIcon } from '@cds/core/icon';
-import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
-import { MousePositionComponent } from '../../../../../map-tools/src/lib/mouse-position/mouse-position.component';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
+import { MousePositionComponent } from '@dlr-eoc/map-tools';
 ClarityIcons.addIcons(...[layersIcon, cogIcon, compassIcon, downloadIcon]);
 
 @Component({

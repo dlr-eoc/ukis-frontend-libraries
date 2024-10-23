@@ -8,10 +8,10 @@ import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { Feature } from 'ol';
 
 import { ClarityIcons, layersIcon, clockIcon } from '@cds/core/icon';
-import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
 import { PerformanceComponent } from '../../components/performance/performance.component';
-import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
 
 @Component({

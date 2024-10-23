@@ -11,10 +11,10 @@ import { Tile as TileLayer } from 'ol/layer';
 import { get as getProjection } from 'ol/proj';
 
 import { ClarityIcons, layersIcon, infoStandardIcon } from '@cds/core/icon';
-import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
-import { MapThreeComponent } from '../../../../../map-three/src/lib/map-three.component';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
+import { MapThreeComponent } from '@dlr-eoc/map-three';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, ClrAlertModule } from '@clr/angular';
-import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, infoStandardIcon]);
 
 @Component({

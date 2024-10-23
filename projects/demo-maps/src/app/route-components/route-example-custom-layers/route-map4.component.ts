@@ -32,9 +32,9 @@ import { TablePopupComponent } from '../../components/table-popup/table-popup.co
 import { Popup2Component } from '../../components/popup2/popup2.component';
 
 import { ClarityIcons, layersIcon, paperclipIcon } from '@cds/core/icon';
-import { MapOlComponent } from '../../../../../map-ol/src/lib/map-ol.component';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '../../../../../layer-control/src/lib/layer-control/layer-control.component';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, paperclipIcon]);
 
 
