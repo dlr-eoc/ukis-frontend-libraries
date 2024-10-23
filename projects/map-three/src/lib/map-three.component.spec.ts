@@ -8,8 +8,8 @@ describe('MapThreeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapThreeComponent ]
-    })
+    imports: [MapThreeComponent]
+})
     .compileComponents();
   }));
 

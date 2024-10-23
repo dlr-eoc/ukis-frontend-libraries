@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ExampleViewComponent } from './example-view.component';
+import { ClrNavigationModule, ClrVerticalNavModule } from '@clr/angular';
 
 describe('ExampleViewComponent', () => {
   let component: ExampleViewComponent;
@@ -7,6 +8,7 @@ describe('ExampleViewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [ClrNavigationModule, ClrVerticalNavModule],
       declarations: [ ExampleViewComponent ]
     })
     .compileComponents();

@@ -50,12 +50,12 @@ describe('BaseLayerControlComponent', () => {
 
 
     TestBed.configureTestingModule({
-      declarations: [BaseLayerControlComponent, ReversePipe, MockLayerentryGroupComponent, MockLayerentryComponent],
-      providers: [
+    imports: [BaseLayerControlComponent, ReversePipe, MockLayerentryGroupComponent, MockLayerentryComponent],
+    providers: [
         { provide: LayersService, useClass: MockLayersService },
         MapStateService
-      ]
-    }).compileComponents();
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {
@@ -103,8 +103,9 @@ describe('BaseLayerControlComponent', () => {
  * and give its selector
  */
 @Component({
-  selector: 'ukis-layerentry',
-  template: ''
+    selector: 'ukis-layerentry',
+    template: '',
+    standalone: true
 })
 class MockLayerentryComponent {
   @Input('layersSvc') layersSvc: LayersService;
@@ -123,8 +124,9 @@ class MockLayerentryComponent {
  * and give its selector
  */
 @Component({
-  selector: 'ukis-layerentry-group',
-  template: ''
+    selector: 'ukis-layerentry-group',
+    template: '',
+    standalone: true
 })
 class MockLayerentryGroupComponent {
 

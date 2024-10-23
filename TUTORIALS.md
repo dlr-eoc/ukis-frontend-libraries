@@ -15,7 +15,7 @@ npm install -g @angular/cli@<version>
 
 - Then run:
 ```
-ng new project-tutorial-map --style=scss
+ng new project-tutorial-map --style=scss --standalone=true
 ```
 - We do not need angular routing, so decline the prompt with `N`
 
@@ -30,35 +30,46 @@ cd project-tutorial-map
 npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version>
 ```
 
-- Add the Clarity module and icons inside the app.module.ts: 
-``` import { NgModule } from "@angular/core";
-      import { BrowserModule } from "@angular/platform-browser";
-      import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-      import { ClarityModule } from "@clr/angular";
-      import { coreCollectionIcons, essentialCollectionIcons, ClarityIcons } from '@cds/core/icon';
-      import { AppComponent } from "./app.component";
+- Add Clarity Styles: This is done later by adding the UKIS Theme
 
-      ClarityIcons.addIcons(...coreCollectionIcons);
-      ClarityIcons.addIcons(...essentialCollectionIcons);
-
-      @NgModule({
-        imports: [
-          BrowserModule,
-          BrowserAnimationsModule,
-          ClarityModule,
-         ...
-        ],
-        declarations: [ AppComponent ],
-        bootstrap: [ AppComponent ]
-      })
-      export class AppModule { }
+- Add the Clarity module to app.config.ts:
 ```
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ClarityModule } from '@clr/angular'; 
+import { provideAnimations } from '@angular/platform-browser/animations'; 
+import { BrowserModule } from '@angular/platform-browser';
+
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    ...
+    importProvidersFrom(BrowserModule, ClarityModule, ...),
+    provideAnimations() //Replacement for BrowserAnimationsModule
+  ]
+};
+```
+
+- Add Clarity icons to any component that uses them.
+
+e.g. in AppComponent
+```
+import { coreCollectionIcons, essentialCollectionIcons, ClarityIcons } from '@cds/core/icon';
+
+ClarityIcons.addIcons(...coreCollectionIcons);
+ClarityIcons.addIcons(...essentialCollectionIcons);
+
+```
+
+
 
 - Set Clarity Theme (index.html)
 ```
 <body cds-theme="light" />
 ```
-- For more information see [Adding Clarity to an Angular project](https://clarity.design/documentation/get-started#seedProjectAngular)
+- For more information see 
+- [Adding Clarity to an Angular project](https://clarity.design/documentation/get-started#seedProjectAngular)
+- [Step 2: Include the Clarity and Core Styles](https://clarity.design/pages/developing)
+- [Step 5: Add Clarity to Angular Application](https://clarity.design/pages/developing)
 
 
 ### 4. Run the ng add command for the UKIS core-ui
@@ -99,16 +110,21 @@ e.g. in your apps style file (src/styles.css)
 
 ```
 
-### 3. Add the following to the app.module.ts:
+### 3. Add the following to example-view.component.ts:
 ```
-import { MapOlModule } from '@dlr-eoc/map-ol';
+import { MapOlComponent, MapOlService } from '@dlr-eoc/map-ol';
+import { LayerControlComponent, LayersService } from '@dlr-eoc/layer-control';
+import { MapStateService } from '@dlr-eoc/services-map-state';
 
 ...
 
- imports: [
-    ...
-    MapOlModule
-  ]
+providers: [LayersService, MapStateService, MapOlService],
+standalone: true,
+imports: [
+  ...
+  MapOlComponent,
+  LayerControlComponent
+]
 ```
 
 ### 4. Also replace the example-view.component.html with:
@@ -122,41 +138,35 @@ This is necessary, as we do not have a footer or a side nav at the moment.
 
 ### 6. Add the following to example-view.component.ts:
 ```
-import { LayersService } from '@dlr-eoc/services-layers';
-import { MapStateService } from '@dlr-eoc/services-map-state';
+...
 import { IMapControls } from '@dlr-eoc/map-ol';
+import { OsmTileLayer, EocLitemap, BlueMarbleTile } from '@dlr-eoc/base-layers-raster';
 
-import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@dlr-eoc/base-layers-raster';
-```
-
-
-```
-controls!: IMapControls;
+...
+controls: IMapControls;
   constructor(
     public layerSvc: LayersService,
     public mapStateSvc: MapStateService
 ) { }
-```
 
-```
 ngOnInit() {
-    this.addBaselayers();
+  this.addBaselayers();
 }
 
 addBaselayers() {
-    const layers = [
-        new OsmTileLayer({
-        visible: false
-        }),
-        new EocLitemap({
-        visible: true
-        }),
-        new BlueMarbleTile({
-        visible: false
-        })
-    ];
+  const layers = [
+    new OsmTileLayer({
+    visible: false
+    }),
+    new EocLitemap({
+    visible: true
+    }),
+    new BlueMarbleTile({
+    visible: false
+    })
+  ];
 
-    layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
+  layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
 }
 ```
 
@@ -170,13 +180,13 @@ To enable more interaction with the application we are now adding the layer cont
 npm install @dlr-eoc/layer-control
 ```
 ```
-import { LayerControlModule } from '@dlr-eoc/layer-control';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
 
 ...
 
  imports: [
     ...
-    LayerControlModule
+    LayerControlComponent
   ]
 ```
 More information about this library can be found [in the layer-control library folder](projects/layer-control/README.md).
@@ -223,21 +233,21 @@ import { LayersService, Layer, WmtsLayer, RasterLayer } from '@dlr-eoc/services-
 
 ```
 ngOnInit() {
-    this.addBaselayers();
-    this.addLayers();
-    this.addOverlays();
+  this.addBaselayers();
+  this.addLayers();
+  this.addOverlays();
 }
 
 addBaselayers() {
-    const layers: Layer[] = [
-        ...
-    ];
+  const layers: Layer[] = [
+      ...
+  ];
 
-    layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
+  layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
 }
 
 addLayers() {
-    const layers: Layer[] = [
+  const layers: Layer[] = [
     new WmtsLayer({
       type: 'wmts',
       url: 'https://tiles.geoservice.dlr.de/service/wmts',
@@ -259,6 +269,7 @@ addLayers() {
       legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=TDM90_DEM&style=default&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A4&TileCol=8&TileRow=5',
       cssClass: 'custom-layer'
     }),
+
     new RasterLayer({
       type: 'wms',
       url: 'https://geoservice.dlr.de/eoc/land/wms',
@@ -274,6 +285,7 @@ addLayers() {
       attribution: ' | GUF®: <a href="https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-9628/16557_read-40454/">DLR License</a>',
       legendImg: '',
     }),
+
     new RasterLayer({
       type: 'wms',
       url: 'https://geoservice.dlr.de/eoc/land/wms',
@@ -289,18 +301,18 @@ addLayers() {
       attribution: 'DLR/EOC: <a href="https://www.dlr.de/eoc/</a>',
       legendImg: 'https://geoservice.dlr.de/eoc/land/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=WSF_Evolution',
     })
-    ];
+  ];
 
-    layers.map(l => this.layerSvc.addLayer(l, 'Layers'));
+  layers.map(l => this.layerSvc.addLayer(l, 'Layers'));
 }
 
 addOverlays(){
-    const layers: Layer[] = [
+  const layers: Layer[] = [
     new EocLiteoverlayTile({
       visible: false,
       displayName: 'Litelables'
     })
-    ];
+  ];
 
     layers.map(l => this.layerSvc.addLayer(l, 'Overlays'));
 }
@@ -317,7 +329,7 @@ import { MapStateService, IMapState } from '@dlr-eoc/services-map-state';
 ...
 
 controls!: IMapControls;
-/** Europe */
+  /** Europe */
   public startState: IMapState = {
     zoom: 4.8,
     center: {
@@ -348,7 +360,7 @@ constructor(
       scaleLine: true,
       zoom: true
     };
-    } 
+  }
 ```
 - As we have made some changes to the application, you should increase the version in the package.json to "1.0.0".
 - You can adjust the application title, short title and description inside the corresponding meta tags in the index.html.

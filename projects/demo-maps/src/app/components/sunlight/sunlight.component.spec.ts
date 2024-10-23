@@ -8,8 +8,8 @@ describe('SunlightComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SunlightComponent ]
-    })
+    imports: [SunlightComponent]
+})
     .compileComponents();
   }));
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClrCommonFormsModule, ClrRangeModule } from '@clr/angular';
 
 
 interface IsunlightForm {
@@ -7,9 +8,11 @@ interface IsunlightForm {
   y: FormControl<number>;
 }
 @Component({
-  selector: 'app-sunlight',
-  templateUrl: './sunlight.component.html',
-  styleUrls: ['./sunlight.component.scss']
+    selector: 'app-sunlight',
+    templateUrl: './sunlight.component.html',
+    styleUrls: ['./sunlight.component.scss'],
+    standalone: true,
+    imports: [FormsModule, ClrCommonFormsModule, ReactiveFormsModule, ClrRangeModule]
 })
 export class SunlightComponent implements OnInit {
 

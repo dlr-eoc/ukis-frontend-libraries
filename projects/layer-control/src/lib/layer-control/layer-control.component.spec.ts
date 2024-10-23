@@ -22,10 +22,9 @@ describe('LayerControlComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ClarityModule, FormsModule, DragDropModule],
-      declarations: [LayerControlComponent, LayerentryGroupComponent, LayerentryComponent, ObjTypePipe, ReversePipe, ItemsFilterPipe],
-      providers: [LayersService, MapStateService]
-    }).compileComponents();
+    imports: [ClarityModule, FormsModule, DragDropModule, LayerControlComponent, LayerentryGroupComponent, LayerentryComponent, ObjTypePipe, ReversePipe, ItemsFilterPipe],
+    providers: [LayersService, MapStateService]
+}).compileComponents();
   }));
 
   beforeEach(() => {

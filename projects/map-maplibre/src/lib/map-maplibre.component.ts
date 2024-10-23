@@ -20,10 +20,11 @@ type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 const hasSourceType = {};
 
 @Component({
-  selector: 'ukis-map-maplibre',
-  templateUrl: './map-maplibre.component.html',
-  styleUrls: ['./map-maplibre.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'ukis-map-maplibre',
+    templateUrl: './map-maplibre.component.html',
+    styleUrls: ['./map-maplibre.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: true
 })
 export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   @Input('layersSvc') layersSvc!: LayersService;

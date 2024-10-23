@@ -1,22 +1,26 @@
 <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!layersSort"
   [cdkDropListData]="layergroups | itemsfilter: checkClassHide | reverse">
-  <ng-container *ngFor="let group of layergroups | itemsfilter: checkClassHide | reverse">
+  @for (group of layergroups | itemsfilter: checkClassHide | reverse; track group) {
     <div class="list-item" cdkDragLockAxis="y" cdkDrag [cdkDragData]="{id:group.id}">
-      <ukis-layerentry-group *ngIf=" isLayerGroup(group) && group.filtertype===layerfilter" [layersSvc]="layersSvc"
-        [mapState]="mapStateSvc" [group]="group" [layerGroups]="layergroups" [groupSort]="layersSort"
-        [groupLayersSort]="groupLayersSort">
-        <span class="move-item" cdkDragHandle>
-          {{group.displayName || group.name}}
-        </span>
-      </ukis-layerentry-group>
-      <ukis-layerentry *ngIf="!isLayerGroup(group) && group.filtertype === layerfilter" [layerGroups]="layergroups"
-        [expanded]="false" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [layer]="group" [group]="null"
-        [sorting]="layersSort">
-        <span class="move-item" cdkDragHandle>
-          {{group.displayName || group.name}}
-        </span>
-      </ukis-layerentry>
+      @if ( isLayerGroup(group) && group.filtertype===layerfilter) {
+        <ukis-layerentry-group [layersSvc]="layersSvc"
+          [mapState]="mapStateSvc" [group]="group" [layerGroups]="layergroups" [groupSort]="layersSort"
+          [groupLayersSort]="groupLayersSort">
+          <span class="move-item" cdkDragHandle>
+            {{group.displayName || group.name}}
+          </span>
+        </ukis-layerentry-group>
+      }
+      @if (!isLayerGroup(group) && group.filtertype === layerfilter) {
+        <ukis-layerentry [layerGroups]="layergroups"
+          [expanded]="false" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [layer]="group" [group]="null"
+          [sorting]="layersSort">
+          <span class="move-item" cdkDragHandle>
+            {{group.displayName || group.name}}
+          </span>
+        </ukis-layerentry>
+      }
     </div>
-  </ng-container>
+  }
 
 </div>

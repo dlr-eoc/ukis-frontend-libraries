@@ -8,8 +8,8 @@ describe('RouteExampleCesiumComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RouteExampleCesiumComponent ]
-    })
+    imports: [RouteExampleCesiumComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(RouteExampleCesiumComponent);

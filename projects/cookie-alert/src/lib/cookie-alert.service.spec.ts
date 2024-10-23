@@ -9,8 +9,8 @@ describe('CookieAlertService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CookieAlertComponent]
-    });
+    imports: [CookieAlertComponent]
+});
 
     // create component and test fixture
     fixture = TestBed.createComponent(CookieAlertComponent);

@@ -44,6 +44,7 @@ import { defaults as defaultInteractions } from 'ol/interaction/defaults';
 import { FeatureLike } from 'ol/Feature';
 
 import { ClarityIcons, worldIcon } from '@cds/core/icon';
+
 ClarityIcons.addIcons(...[worldIcon]);
 
 
@@ -71,10 +72,12 @@ declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes
 const ID_KEY = 'id';
 
 @Component({
-  selector: 'ukis-map-ol',
-  templateUrl: './map-ol.component.html',
-  styleUrls: ['./map-ol.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'ukis-map-ol',
+    templateUrl: './map-ol.component.html',
+    styleUrls: ['./map-ol.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: true,
+    imports: []
 })
 export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   @ViewChild('mapDiv') mapDivView: ElementRef;

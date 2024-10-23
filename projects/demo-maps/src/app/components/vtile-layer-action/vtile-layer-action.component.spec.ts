@@ -8,8 +8,8 @@ describe('VtileLayerActionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VtileLayerActionComponent ]
-    })
+    imports: [VtileLayerActionComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(VtileLayerActionComponent);

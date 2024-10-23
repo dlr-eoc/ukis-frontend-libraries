@@ -1,78 +1,86 @@
 <!-- for map  -->
 <main class="content-area map-view">
-    <ng-container *ngIf="is2dMap">
-        <ukis-map-ol [layersSvc]="twoDlayerSvc" [mapState]="mapStateSvc"></ukis-map-ol>
-    </ng-container>
-    <ng-container *ngIf="!is2dMap">
-        <ukis-map-cesium [twoDlayersSvc]="twoDlayerSvc" [threeDlayersSvc]="threeDlayerSvc" [mapState]="mapStateSvc"
-            [controls]="controls"></ukis-map-cesium>
-    </ng-container>
+  @if (is2dMap) {
+    <ukis-map-ol [layersSvc]="twoDlayerSvc" [mapState]="mapStateSvc"></ukis-map-ol>
+  }
+  @if (!is2dMap) {
+    <ukis-map-cesium [twoDlayersSvc]="twoDlayerSvc" [threeDlayersSvc]="threeDlayerSvc" [mapState]="mapStateSvc"
+    [controls]="controls"></ukis-map-cesium>
+  }
 </main>
 
 
 <!-- for layer-control -->
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2" class="right">
-    <clr-vertical-nav-group *ngIf="!is2dMap" [clrVerticalNavGroupExpanded]="true" class="layers three-d-layer-control">
-        <cds-icon shape="block" clrVerticalNavIcon title="tilelayers"></cds-icon>
-        3D Tilelayers
-        <clr-vertical-nav-group-children class="padding title-ellipsis">
-            <ukis-layer-control [layersSvc]="threeDlayerSvc" [layersSort]="false" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
-        </clr-vertical-nav-group-children>
-    </clr-vertical-nav-group>
-
-    <clr-vertical-nav-group *ngIf="!is2dMap" [clrVerticalNavGroupExpanded]="true" class="layers">
-        <cds-icon shape="world" title="terain" clrVerticalNavIcon></cds-icon>
-        3D Terrain
-        <clr-vertical-nav-group-children class="padding title-ellipsis">
-            <ukis-base-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
-        </clr-vertical-nav-group-children>
-    </clr-vertical-nav-group>
-
-    <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
-        Overlays
-        <clr-vertical-nav-group-children class="padding title-ellipsis">
-            <ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc" [layersSort]="false" [layerfilter]="'Overlays'">
-            </ukis-layer-control>
-        </clr-vertical-nav-group-children>
-    </clr-vertical-nav-group>
-
-    <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
-        Layers
-        <clr-vertical-nav-group-children class="padding title-ellipsis">
-            <ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
-        </clr-vertical-nav-group-children>
-    </clr-vertical-nav-group>
-
-    <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-        <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
-        Baselayers
-        <clr-vertical-nav-group-children class="padding title-ellipsis">
-            <ukis-base-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
-        </clr-vertical-nav-group-children>
-    </clr-vertical-nav-group>
-
-    <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
-      <cds-icon shape="cog" title="Actions" clrVerticalNavIcon></cds-icon>
-      Actions
+  @if (!is2dMap) {
+    <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers three-d-layer-control">
+      <cds-icon shape="block" clrVerticalNavIcon title="tilelayers"></cds-icon>
+      3D Tilelayers
       <clr-vertical-nav-group-children class="padding title-ellipsis">
-
-        <button class="btn btn-primary" (click)="setViewAngle()">set ViewAngle</button>
-        <button class="btn btn-primary" (click)="resetViewAngle()">reset ViewAngle</button>
-        <button class="btn btn-primary" (click)="setRotation()">set Rotation</button>
-        <button class="btn btn-primary" (click)="resetRotation()">reset Rotation</button>
-
+        <ukis-layer-control [layersSvc]="threeDlayerSvc" [layersSort]="false" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
       </clr-vertical-nav-group-children>
     </clr-vertical-nav-group>
+  }
 
-    <a clrVerticalNavLink *ngIf="is2dMap" class="iconButton" (click)="changeMapDimension()">
-        <cds-icon shape="block" title="3D View" clrVerticalNavIcon></cds-icon>
-        3D View
+  @if (!is2dMap) {
+    <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+      <cds-icon shape="world" title="terain" clrVerticalNavIcon></cds-icon>
+      3D Terrain
+      <clr-vertical-nav-group-children class="padding title-ellipsis">
+        <ukis-base-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
+      </clr-vertical-nav-group-children>
+    </clr-vertical-nav-group>
+  }
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
+    Overlays
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc" [layersSort]="false" [layerfilter]="'Overlays'">
+      </ukis-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
+    Layers
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
+    Baselayers
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ukis-base-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="cog" title="Actions" clrVerticalNavIcon></cds-icon>
+    Actions
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+
+      <button class="btn btn-primary" (click)="setViewAngle()">set ViewAngle</button>
+      <button class="btn btn-primary" (click)="resetViewAngle()">reset ViewAngle</button>
+      <button class="btn btn-primary" (click)="setRotation()">set Rotation</button>
+      <button class="btn btn-primary" (click)="resetRotation()">reset Rotation</button>
+
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  @if (is2dMap) {
+    <a clrVerticalNavLink class="iconButton" (click)="changeMapDimension()">
+      <cds-icon shape="block" title="3D View" clrVerticalNavIcon></cds-icon>
+      3D View
     </a>
-    <a clrVerticalNavLink *ngIf="!is2dMap" class="iconButton" (click)="changeMapDimension()">
-        <cds-icon shape="map" title="2D View" clrVerticalNavIcon></cds-icon>
-        2D View
+  }
+  @if (!is2dMap) {
+    <a clrVerticalNavLink class="iconButton" (click)="changeMapDimension()">
+      <cds-icon shape="map" title="2D View" clrVerticalNavIcon></cds-icon>
+      2D View
     </a>
+  }
 
 </clr-vertical-nav>

@@ -11,23 +11,31 @@ import { Feature } from 'ol';
 import { Fill, Stroke, Style } from 'ol/style';
 
 import { ClarityIcons, layersIcon, worldIcon, blockIcon, cogIcon, mapIcon } from '@cds/core/icon';
+
+import { MapOlComponent } from '@dlr-eoc/map-ol';
+import { MapCesiumComponent } from '@dlr-eoc/map-cesium';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
 
 @Component({
-  selector: 'app-route-example-cesium',
-  templateUrl: './route-example-cesium.component.html',
-  styleUrls: ['./route-example-cesium.component.scss'],
-  // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
-  encapsulation: ViewEncapsulation.None,
-  providers: [
-    MapStateService,
-    MapOlService,
-    MapCesiumService,
-    {
-      provide: 'twoDlayerSvc', useClass: LayersService
-    }, {
-      provide: 'threeDlayerSvc', useClass: LayersService
-    }]
+    selector: 'app-route-example-cesium',
+    templateUrl: './route-example-cesium.component.html',
+    styleUrls: ['./route-example-cesium.component.scss'],
+    // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
+    encapsulation: ViewEncapsulation.None,
+    providers: [
+        MapStateService,
+        MapOlService,
+        MapCesiumService,
+        {
+            provide: 'twoDlayerSvc', useClass: LayersService
+        }, {
+            provide: 'threeDlayerSvc', useClass: LayersService
+        }
+    ],
+    standalone: true,
+    imports: [MapOlComponent, MapCesiumComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
@@ -414,15 +422,25 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
     layers.map(l => this.threeDlayerSvc.addLayer(l, 'Baselayers'));
   }
 
-  changeMapDimension() {
+  async changeMapDimension() {
     if (this.is2dMap) {
       this.is2dMap = false;
     } else {
-      this.mapCesiumSvc.setNadirViewAngle({
-        complete: () => {
-          this.is2dMap = true;
-        }
-      });
+      //If there is no camera roll, the flyTo is not necessary
+      if (this.mapCesiumSvc.viewer && this.mapCesiumSvc.viewer.camera.roll != 0) {
+        this.mapCesiumSvc.setNadirViewAngle();
+          //Wait for the cesim flyTo function to finish
+          this.is2dMap = await new Promise(resolve => {
+            this.mapCesiumSvc.setNadirViewAngle({
+                complete: () => {
+                    resolve(true);
+                }
+            });
+          });
+        this.is2dMap = true;
+      } else {
+        this.is2dMap = true;
+      }
     }
   }
 

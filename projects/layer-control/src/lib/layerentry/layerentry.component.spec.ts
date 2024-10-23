@@ -15,10 +15,9 @@ describe('LayerentryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ClarityModule, FormsModule],
-      declarations: [LayerentryComponent],
-      providers: [LayersService, MapStateService]
-    }).compileComponents();
+    imports: [ClarityModule, FormsModule, LayerentryComponent],
+    providers: [LayersService, MapStateService]
+}).compileComponents();
   }));
 
   beforeEach(() => {

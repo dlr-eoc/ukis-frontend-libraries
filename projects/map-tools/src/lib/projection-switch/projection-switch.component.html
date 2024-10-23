@@ -1,13 +1,17 @@
-<div *ngIf="projList">
-  <div *ngFor="let proj of projList" (click)="setNewProjection(proj)">
-    <div class="layergroup">
-      <div class="head">
-        <span class="title" [title]="proj.title" (click)="setNewProjection(proj)">
-          {{proj.title || proj.code}}
-        </span>
-        <cds-icon class="iconButton" [attr.solid]="proj===selectedProj"
-          [attr.shape]="proj===selectedProj?'eye':'eye-hide'" title="{{proj.code}}"></cds-icon>
+@if (projList) {
+  <div>
+    @for (proj of projList; track proj) {
+      <div (click)="setNewProjection(proj)">
+        <div class="layergroup">
+          <div class="head">
+            <span class="title" [title]="proj.title" (click)="setNewProjection(proj)">
+              {{proj.title || proj.code}}
+            </span>
+            <cds-icon class="iconButton" [attr.solid]="proj===selectedProj"
+            [attr.shape]="proj===selectedProj?'eye':'eye-hide'" title="{{proj.code}}"></cds-icon>
+          </div>
+        </div>
       </div>
-    </div>
+    }
   </div>
-</div>
+}

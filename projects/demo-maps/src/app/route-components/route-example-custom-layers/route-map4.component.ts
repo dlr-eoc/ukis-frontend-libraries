@@ -32,15 +32,20 @@ import { TablePopupComponent } from '../../components/table-popup/table-popup.co
 import { Popup2Component } from '../../components/popup2/popup2.component';
 
 import { ClarityIcons, layersIcon, paperclipIcon } from '@cds/core/icon';
+import { MapOlComponent } from '@dlr-eoc/map-ol';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, paperclipIcon]);
 
 
 @Component({
-  selector: 'app-route-map4',
-  templateUrl: './route-map4.component.html',
-  styleUrls: ['./route-map4.component.scss'],
-  /** use different instances of the services only for testing with different routes  */
-  providers: [LayersService, MapStateService, MapOlService]
+    selector: 'app-route-map4',
+    templateUrl: './route-map4.component.html',
+    styleUrls: ['./route-map4.component.scss'],
+    /** use different instances of the services only for testing with different routes  */
+    providers: [LayersService, MapStateService, MapOlService],
+    standalone: true,
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent]
 })
 export class RouteMap4Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';

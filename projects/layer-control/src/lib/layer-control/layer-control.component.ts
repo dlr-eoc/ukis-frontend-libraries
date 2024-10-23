@@ -5,12 +5,19 @@ import { MapStateService } from '@dlr-eoc/services-map-state';
 import { LayerGroup, Layer } from '@dlr-eoc/services-layers';
 import { Subscription } from 'rxjs';
 
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+
+import { LayerentryGroupComponent } from '../layerentry-group/layerentry-group.component';
+import { LayerentryComponent } from '../layerentry/layerentry.component';
+import { ItemsFilterPipe } from '../utils/obj-type.pipe';
+import { ReversePipe } from '../utils/array-reverse.pipe';
 
 @Component({
-  selector: 'ukis-layer-control',
-  templateUrl: './layer-control.component.html',
-  styleUrls: ['./layer-control.component.scss']
+    selector: 'ukis-layer-control',
+    templateUrl: './layer-control.component.html',
+    styleUrls: ['./layer-control.component.scss'],
+    standalone: true,
+    imports: [CdkDropList, CdkDrag, LayerentryGroupComponent, CdkDragHandle, LayerentryComponent, ItemsFilterPipe, ReversePipe]
 })
 export class LayerControlComponent implements OnInit, OnDestroy {
   @Input('layersSvc') layersSvc: LayersService;

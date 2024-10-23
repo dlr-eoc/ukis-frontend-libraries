@@ -1,7 +1,7 @@
 {
   "name": "@dlr-eoc/utils-ogc",
   "main": "src/public-api",
-  "version": "14.0.0",
+  "version": "15.0.0-next.1",
   "license": "Apache-2.0",
   "author": "Team UKIS",
   "description": "This library bundles our clients for OGC standards. The long-term-strategy is to make all services in `@dlr-eoc/services-ogc` independent of angular and move them here.",
@@ -20,8 +20,8 @@
     "ol": "^v9.2.4"
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "^17.3.11",
-    "@angular/core": "^17.3.11",
+    "@angular/platform-browser-dynamic": "^18.2.8",
+    "@angular/core": "^18.2.8",
     "@types/node": "^20.14.10"
   }
 }

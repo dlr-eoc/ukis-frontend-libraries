@@ -1,3 +1,19 @@
+### Breaking Changes
+ - Update angular from `^17.3.11` to `^18.2.7`
+ - Refactor all libraries and apps to [angular standalone API](https://angular.dev/reference/migrations/standalone).
+ - Refactor all libraries and apps to [angular Control Flow syntax](https://angular.dev/reference/migrations/control-flow).
+
+### Bug Fixes
+* **@dlr-eoc/core-ui:**
+  - Update styles for `@clr 17`
+  - Schematics add path in tsconfig no baseUrl
+  - Replace not found import `IconShapeTuple` from `@cds/core`
+  - Schematics transpile after build because custom buiulder was removed in [v14.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v14.0.0/projects/core-ui/schematics).
+
+* **@dlr-eoc/layer-control:**
+  - Fix direction of `@cds` icon
+
+
 # [14.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v14.0.0) (2024-08-05) (map-cesium, angular update, @clr and @cds update)
 
 ### Breaking Changes

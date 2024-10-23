@@ -5,11 +5,15 @@ import { MapBrowserEvent } from 'ol';
 import { Layer } from 'ol/layer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AsyncPipe, KeyValuePipe } from '@angular/common';
+import { ClrSpinnerModule } from '@clr/angular';
 
 @Component({
-  selector: 'app-raster-feature-info',
-  templateUrl: './raster-feature-info.component.html',
-  styleUrls: ['./raster-feature-info.component.scss']
+    selector: 'app-raster-feature-info',
+    templateUrl: './raster-feature-info.component.html',
+    styleUrls: ['./raster-feature-info.component.scss'],
+    standalone: true,
+    imports: [ClrSpinnerModule, AsyncPipe, KeyValuePipe]
 })
 export class RasterFeatureInfoComponent implements OnInit {
 

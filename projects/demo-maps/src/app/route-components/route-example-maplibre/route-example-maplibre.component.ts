@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CustomLayer, Layer, LayerGroup, LayersService, RasterLayer, StackedLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { MapMaplibreService } from '@dlr-eoc/map-maplibre';
+import { MapMaplibreService, MapMaplibreComponent } from '@dlr-eoc/map-maplibre';
 import { StyleSpecification, TerrainControl } from 'maplibre-gl';
 
 import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocBaseoverlayTile } from '@dlr-eoc/base-layers-raster';
@@ -11,15 +11,19 @@ import testData from '@dlr-eoc/shared-assets/geojson/test.collection.json';
 import { Subscription } from 'rxjs';
 
 import { ClarityIcons, layersIcon, worldIcon, cogIcon } from '@cds/core/icon';
+import { ClrVerticalNavModule, ClrIconModule } from '@clr/angular';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
 
 @Component({
-  selector: 'app-route-example-maplibre',
-  templateUrl: './route-example-maplibre.component.html',
-  styleUrls: ['./route-example-maplibre.component.scss'],
-  // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
-  encapsulation: ViewEncapsulation.None,
-  providers: [LayersService, MapStateService, MapMaplibreService]
+    selector: 'app-route-example-maplibre',
+    templateUrl: './route-example-maplibre.component.html',
+    styleUrls: ['./route-example-maplibre.component.scss'],
+    // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
+    encapsulation: ViewEncapsulation.None,
+    providers: [LayersService, MapStateService, MapMaplibreService],
+    standalone: true,
+    imports: [MapMaplibreComponent, ClrVerticalNavModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
@@ -725,7 +729,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     const layer0 = water.custom_layer.layers[0];
     layer0.paint['fill-color'] = 'hsl(30, 14%, 53%)';
     // layer0.maxzoom = 12;
-    
+
     if (layer0.type !== 'background') {
       layer0['source-layer'] = 'landuse'
       /* layer0.filter = [
@@ -740,7 +744,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
 
     this.layerSvc.updateLayer(water);
   }
-  
+
   setViewAngle() {
     /** set map rotation with the MapStateService */
     this.mapStateSvc.setViewAngle(45);

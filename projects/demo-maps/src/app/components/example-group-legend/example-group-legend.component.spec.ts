@@ -8,8 +8,8 @@ describe('ExampleGroupLegendComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExampleGroupLegendComponent ]
-    })
+    imports: [ExampleGroupLegendComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(ExampleGroupLegendComponent);

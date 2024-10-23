@@ -8,8 +8,8 @@ describe('RouteLicensesComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RouteLicensesComponent ]
-    })
+    imports: [RouteLicensesComponent]
+})
     .compileComponents();
   }));
 

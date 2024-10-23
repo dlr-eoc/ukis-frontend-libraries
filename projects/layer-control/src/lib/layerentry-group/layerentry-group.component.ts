@@ -5,10 +5,15 @@ import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { LayerGroup, Layer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { LayersService } from '@dlr-eoc/services-layers';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { IDynamicComponent } from '@dlr-eoc/core-ui';
+import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { IDynamicComponent, DynamicComponentComponent } from '@dlr-eoc/core-ui';
 
 import { ClarityIcons, folderIcon, folderOpenIcon, arrowIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, detailsIcon, zoomInIcon, trashIcon } from '@cds/core/icon';
+import { ClrIconModule, ClrCommonFormsModule } from '@clr/angular';
+import { NgClass } from '@angular/common';
+import { LayerentryComponent } from '../layerentry/layerentry.component';
+import { ItemsFilterPipe } from '../utils/obj-type.pipe';
+import { ReversePipe } from '../utils/array-reverse.pipe';
 ClarityIcons.addIcons(...[folderIcon, folderOpenIcon, arrowIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, detailsIcon, zoomInIcon, trashIcon]);
 
 
@@ -20,9 +25,11 @@ enum EactiveTabs {
 type TactiveTabs = keyof typeof EactiveTabs;
 
 @Component({
-  selector: 'ukis-layerentry-group',
-  templateUrl: './layerentry-group.component.html',
-  styleUrls: ['./layerentry-group.component.scss']
+    selector: 'ukis-layerentry-group',
+    templateUrl: './layerentry-group.component.html',
+    styleUrls: ['./layerentry-group.component.scss'],
+    standalone: true,
+    imports: [ClrIconModule, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponentComponent]
 })
 export class LayerentryGroupComponent implements OnInit {
   @HostBinding('class.group-visible') get visible() { return this.group.visible; }

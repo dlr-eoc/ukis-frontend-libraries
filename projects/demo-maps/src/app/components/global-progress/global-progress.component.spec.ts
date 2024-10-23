@@ -11,10 +11,9 @@ describe('GlobalProgressComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ClarityModule],
-      declarations: [GlobalProgressComponent],
-      providers: [ProgressService]
-    })
+    imports: [ClarityModule, GlobalProgressComponent],
+    providers: [ProgressService]
+})
       .compileComponents();
   }));
 

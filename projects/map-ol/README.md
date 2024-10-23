@@ -33,22 +33,6 @@ or in the angular config file
 
 ```
 
-
-#### add the following to the app.module.ts
-```
-import { MapOlModule } from '@dlr-eoc/map-ol';
-import { LayerControlModule } from '@dlr-eoc/layer-control';
-
-...
-
- imports: [
-    ...
-    MapOlModule,
-    LayerControlModule
-  ]
-```
-
-
 #### add the following to a route-view.component.html
 ```
 <section class="content-area map-view">
@@ -58,15 +42,24 @@ import { LayerControlModule } from '@dlr-eoc/layer-control';
 
 #### add the following to a route-view.component.ts
 ```
-import { LayersService } from '@dlr-eoc/services-layers';
+import { MapOlComponent, MapOlService, IMapControls } from '@dlr-eoc/map-ol';
+import { LayerControlComponent, LayersService } from '@dlr-eoc/layer-control';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { IMapControls } from '@dlr-eoc/map-ol';
 
 import { OsmTileLayer, EocLitemap, BlueMarbleTile } from '@dlr-eoc/base-layers-raster';
 ```
 
 
 ```
+providers: [LayersService, MapStateService, MapOlService],
+standalone: true,
+imports: [
+    ...
+    MapOlComponent,
+    LayerControlComponent
+]
+
+...
 controls: IMapControls;
   constructor(
     public layerSvc: LayersService,

@@ -8,8 +8,8 @@ describe('RouteLoginComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [RouteLoginComponent]
-    })
+    imports: [RouteLoginComponent]
+})
       .compileComponents();
   }));
 

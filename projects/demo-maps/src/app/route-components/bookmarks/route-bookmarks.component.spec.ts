@@ -8,8 +8,8 @@ describe('BookmarksComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BookmarksComponent ]
-    })
+    imports: [BookmarksComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(BookmarksComponent);

@@ -1,5 +1,7 @@
 <main class="content-area map-view">
-  <ukis-map-ol *ngIf="showMap" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
+  @if (showMap) {
+    <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
+  }
 </main>
 
 

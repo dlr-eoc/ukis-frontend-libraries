@@ -1,17 +1,25 @@
-<div *ngIf="alert" class="alert alert-app-level" [ngClass]="'alert-'+alert.type" role="alert">
-  <div class="alert-items">
-    <div class="alert-item static">
-      <div class="alert-icon-wrapper">
-        <cds-icon class="alert-icon" shape="info-circle"></cds-icon>
-      </div>
-      <div class="alert-text" [innerHTML]=alert.text></div>
-      <div *ngIf="alert.actions" class="alert-actions">
-        <button *ngFor="let action of alert.actions" class="btn alert-action" aria-label="alert action"
-          (click)="action.callback && action.callback()">{{action.title}}</button>
+@if (alert) {
+  <div class="alert alert-app-level" [ngClass]="'alert-'+alert.type" role="alert">
+    <div class="alert-items">
+      <div class="alert-item static">
+        <div class="alert-icon-wrapper">
+          <cds-icon class="alert-icon" shape="info-circle"></cds-icon>
+        </div>
+        <div class="alert-text" [innerHTML]=alert.text></div>
+        @if (alert.actions) {
+          <div class="alert-actions">
+            @for (action of alert.actions; track action) {
+              <button class="btn alert-action" aria-label="alert action"
+              (click)="action.callback()">{{action.title}}</button>
+            }
+          </div>
+        }
       </div>
     </div>
+    @if (alert.closeable) {
+      <button type="button" class="close" aria-label="alert close" (click)="close()">
+        <cds-icon aria-hidden="true" shape="window-close"></cds-icon>
+      </button>
+    }
   </div>
-  <button *ngIf="alert.closeable" type="button" class="close" aria-label="alert close" (click)="close()">
-    <cds-icon aria-hidden="true" shape="window-close"></cds-icon>
-  </button>
-</div>
+}

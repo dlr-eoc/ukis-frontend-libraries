@@ -1,7 +1,7 @@
 {
   "name": "@dlr-eoc/services-ogc",
   "main": "src/public-api",
-  "version": "14.0.0",
+  "version": "15.0.0-next.1",
   "license": "Apache-2.0",
   "author": "Team UKIS",
   "description": "This module bundles our clients for OGC standards. E.g. parse OWS Context JSON, WMS, WMTS or WPS.",
@@ -15,16 +15,16 @@
     "WPS"
   ],
   "peerDependencies": {
-    "@angular/common": "^17.3.11",
-    "@angular/core": "^17.3.11",
+    "@angular/common": "^18.2.8",
+    "@angular/core": "^18.2.8",
     "rxjs": "~7.8.0"
   },
   "dependencies": {
-    "@dlr-eoc/services-layers": "14.0.0",
-    "@dlr-eoc/services-util-store": "14.0.0",
-    "@dlr-eoc/base-layers-raster": "14.0.0",
-    "@dlr-eoc/services-map-state": "14.0.0",
-    "@dlr-eoc/utils-ogc": "14.0.0",
+    "@dlr-eoc/services-layers": "15.0.0-next.1",
+    "@dlr-eoc/services-util-store": "15.0.0-next.1",
+    "@dlr-eoc/base-layers-raster": "15.0.0-next.1",
+    "@dlr-eoc/services-map-state": "15.0.0-next.1",
+    "@dlr-eoc/utils-ogc": "15.0.0-next.1",
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
     "ol": "^v9.2.4",
@@ -34,10 +34,10 @@
     "luxon": "^2.5.0"
   },
   "devDependencies": {
-    "zone.js": "~0.14.7",
-    "@angular/platform-browser-dynamic": "^17.3.11",
-    "@dlr-eoc/shared-assets": "14.0.0",
-    "proj4": "^2.11.0",
-    "terser": "^5.31.2"
+    "zone.js": "~0.14.10",
+    "@angular/platform-browser-dynamic": "^18.2.8",
+    "@dlr-eoc/shared-assets": "15.0.0-next.1",
+    "proj4": "^2.12.1",
+    "terser": "^5.34.1"
   }
 }

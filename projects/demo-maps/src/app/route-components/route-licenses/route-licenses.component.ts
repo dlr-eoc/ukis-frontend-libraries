@@ -2,6 +2,8 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule, ClrDatagridModule } from '@clr/angular';
+import { AsyncPipe } from '@angular/common';
 
 /**
  * This component expects a assets/licenses.json file to be present in the project bundle.
@@ -48,9 +50,11 @@ interface License {
 
 
 @Component({
-  selector: 'app-route-licenses',
-  templateUrl: './route-licenses.component.html',
-  styleUrls: ['./route-licenses.component.scss']
+    selector: 'app-route-licenses',
+    templateUrl: './route-licenses.component.html',
+    styleUrls: ['./route-licenses.component.scss'],
+    standalone: true,
+    imports: [ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule, ClrDatagridModule, AsyncPipe]
 })
 export class RouteLicensesComponent implements OnInit {
   @HostBinding('class') class = 'content-container';
