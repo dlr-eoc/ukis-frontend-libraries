@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.119
+ * Version 1.120
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,52 +25,52 @@
 
 import {
   WallGeometryLibrary_default
-} from "./chunk-COYFZ5VA.js";
-import "./chunk-DGS5QNIO.js";
-import "./chunk-VFBNELXB.js";
+} from "./chunk-LXQ5QAEJ.js";
+import "./chunk-OE4MCOC7.js";
+import "./chunk-6D66DPRV.js";
 import {
   VertexFormat_default
-} from "./chunk-KUN2ZA5X.js";
-import "./chunk-DKVHRNFY.js";
-import "./chunk-4MSUJ4I7.js";
-import "./chunk-XD445VDH.js";
-import "./chunk-4BAE4PWO.js";
+} from "./chunk-LSSWVB2X.js";
+import "./chunk-NVOABL76.js";
+import "./chunk-BY3E4ONI.js";
+import "./chunk-TF776XCO.js";
+import "./chunk-A5CODJ4M.js";
 import {
   IndexDatatype_default
-} from "./chunk-QD4KM3GO.js";
+} from "./chunk-EB7PNZTK.js";
 import {
   GeometryAttributes_default
-} from "./chunk-R6B7UCQB.js";
+} from "./chunk-JYQNWIQQ.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-GR3CDLCP.js";
+} from "./chunk-IUROUBPA.js";
 import {
   BoundingSphere_default
-} from "./chunk-DOXCPOG4.js";
-import "./chunk-O3JCMSS3.js";
+} from "./chunk-ELI4BUOT.js";
+import "./chunk-OXALEQPI.js";
 import {
   ComponentDatatype_default
-} from "./chunk-2J3JKXCP.js";
+} from "./chunk-FQPSOOPH.js";
 import {
   Cartesian3_default,
   Ellipsoid_default
-} from "./chunk-PYHLO636.js";
+} from "./chunk-T6LPN7RI.js";
 import {
   Math_default
-} from "./chunk-MSKXMXJI.js";
-import "./chunk-OOK53QUQ.js";
-import "./chunk-T77JILCU.js";
+} from "./chunk-R4OIEIPE.js";
+import "./chunk-RHBWXX7C.js";
+import "./chunk-ZIKGV7EL.js";
 import {
   defaultValue_default
-} from "./chunk-VE7BFUIX.js";
+} from "./chunk-BAVI3ZS2.js";
 import {
   DeveloperError_default
-} from "./chunk-S3PI2KFM.js";
+} from "./chunk-TGY6H6N6.js";
 import {
   defined_default
-} from "./chunk-AA4GZKOT.js";
+} from "./chunk-N4QEHO3U.js";
 
 // packages/engine/Source/Core/WallGeometry.js
 var scratchCartesian3Position1 = new Cartesian3_default();

@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.119
+ * Version 1.120
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,25 +25,25 @@
 
 import {
   createTaskProcessorWorker_default
-} from "./chunk-QX5XS4LC.js";
+} from "./chunk-MMV6TO3P.js";
 import {
   WebGLConstants_default
-} from "./chunk-OOK53QUQ.js";
+} from "./chunk-RHBWXX7C.js";
 import {
   RuntimeError_default
-} from "./chunk-T77JILCU.js";
+} from "./chunk-ZIKGV7EL.js";
 import {
   defaultValue_default
-} from "./chunk-VE7BFUIX.js";
+} from "./chunk-BAVI3ZS2.js";
 import {
   Check_default
-} from "./chunk-S3PI2KFM.js";
+} from "./chunk-TGY6H6N6.js";
 import {
   __commonJS,
   __require,
   __toESM,
   defined_default
-} from "./chunk-AA4GZKOT.js";
+} from "./chunk-N4QEHO3U.js";
 
 // packages/engine/Source/ThirdParty/Workers/basis_transcoder.js
 var require_basis_transcoder = __commonJS({
@@ -3018,10 +3018,7 @@ var KTX2_ID = [
   10
 ];
 function decodeText(buffer) {
-  if (typeof TextDecoder !== "undefined") {
-    return new TextDecoder().decode(buffer);
-  }
-  return Buffer.from(buffer).toString("utf8");
+  return new TextDecoder().decode(buffer);
 }
 function read2(data) {
   const id = new Uint8Array(data.buffer, data.byteOffset, KTX2_ID.length);
