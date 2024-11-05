@@ -6,7 +6,7 @@ In this guide you will follow the necessary steps for creating a basic web map a
 For this tutorial to work you need a code editor of your choice (e.g. Visual Studio Code) and npm installed. 
 
 ## Setting up UKIS core-ui
-### 1. Generate a new [Angular application](https://angular.io/cli/new) in the same Version like specified in our package.json [@angular/core](package.json).
+### 1. Generate a new [Angular application](https://angular.dev/cli/new) in the same Version like specified in our package.json [@angular/core](package.json).
 For this you have to install `@angular/cli` in this specific Version first. 
 - See ukis-frontend-libraries package.json [version of @angular/core](package.json) 
 ```
@@ -32,20 +32,23 @@ npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version>
 
 - Add Clarity Styles: This is done later by adding the UKIS Theme
 
-- Add the Clarity module to app.config.ts:
+- Add the Clarity module and others to app.config.ts:
 ```
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { ClarityModule } from '@clr/angular'; 
-import { provideAnimations } from '@angular/platform-browser/animations'; 
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ClarityModule } from '@clr/angular';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    ...
-    importProvidersFrom(BrowserModule, ClarityModule, ...),
-    provideAnimations() //Replacement for BrowserAnimationsModule
-  ]
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    importProvidersFrom(BrowserModule, ClarityModule),
+    provideAnimations()
+    ]
 };
 ```
 
@@ -64,12 +67,11 @@ ClarityIcons.addIcons(...essentialCollectionIcons);
 
 - Set Clarity Theme (index.html)
 ```
-<body cds-theme="light" />
+<body cds-theme="light">
 ```
-- For more information see 
-- [Adding Clarity to an Angular project](https://clarity.design/documentation/get-started#seedProjectAngular)
-- [Step 2: Include the Clarity and Core Styles](https://clarity.design/pages/developing)
-- [Step 5: Add Clarity to Angular Application](https://clarity.design/pages/developing)
+For more information see 
+- [Getting Started with Clarity Design System](https://clarity.design/documentation/get-started#seedProjectAngular)
+- [Adding Clarity to an Existing Angular Application](https://clarity.design/pages/developing#adding-clarity-to-an-existing-angular-application)
 
 
 ### 4. Run the ng add command for the UKIS core-ui
@@ -90,20 +92,20 @@ to add files and styles from ukis-frontend-libraries in the desired version.
 ### 5. Start and view the application
 - Run `npm start`
 - Open [http://localhost:4200/](http://localhost:4200/) on a browser
-- You should now be able to see the basic application layout in the browser.
+- You should now be able to see the basic application layout (still without a map) in the browser.
 
 ## Installing map libraries
 In the following the components neccessary for the display of a web map are installed. More information can be found [in the map-ol library folder](projects/map-ol/README.md).
 ### 1. Add the following libraries:
 ```
-npm install @dlr-eoc/map-ol @dlr-eoc/base-layers-raster
+npm install @dlr-eoc/map-ol @dlr-eoc/layer-control @dlr-eoc/base-layers-raster
 ```
 
 The base layers raster library is optional, but it makes it easier to add a basemap. Without a given basemap the map canvas would be empty. 
 
 ### 2. Add styles from OpenLayers to your application
 
-e.g. in your apps style file (src/styles.css)
+e.g. in your apps style file (src/styles.scss)
 ```
 @import 'ol/ol.css';
 ...
@@ -113,8 +115,11 @@ e.g. in your apps style file (src/styles.css)
 ### 3. Add the following to example-view.component.ts:
 ```
 import { MapOlComponent, MapOlService } from '@dlr-eoc/map-ol';
-import { LayerControlComponent, LayersService } from '@dlr-eoc/layer-control';
+import { LayerControlComponent, BaseLayerControlComponent} from '@dlr-eoc/layer-control';
+import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
+import { IMapControls } from '@dlr-eoc/map-ol';
+import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@dlr-eoc/base-layers-raster';
 
 ...
 
@@ -123,8 +128,39 @@ standalone: true,
 imports: [
   ...
   MapOlComponent,
-  LayerControlComponent
+  LayerControlComponent,
+  BaseLayerControlComponent
 ]
+
+...
+
+controls!: IMapControls;
+constructor(
+  public layerSvc: LayersService,
+  public mapStateSvc: MapStateService
+) { }
+
+ngOnInit(): void {
+  this.addBaselayers();
+}
+
+...
+
+addBaselayers() {
+  const layers = [
+    new OsmTileLayer({
+      visible: false
+    }),
+    new EocLitemap({
+      visible: true
+    }),
+    new BlueMarbleTile({
+      visible: false
+    })
+  ];
+
+  layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
+}
 ```
 
 ### 4. Also replace the example-view.component.html with:
@@ -134,63 +170,13 @@ imports: [
 </section>
 ```
 ### 5. Remove the contents of example-view.component.scss
-This is necessary, as we do not have a footer or a side nav at the moment.
+- This is necessary, as we do not have a footer or a side nav at the moment.
 
-### 6. Add the following to example-view.component.ts:
-```
-...
-import { IMapControls } from '@dlr-eoc/map-ol';
-import { OsmTileLayer, EocLitemap, BlueMarbleTile } from '@dlr-eoc/base-layers-raster';
+After these steps save your changes and visit your browser again. You should now see a working web map. As we have not included the layer control html yet, you are only able to see the baselayer with visibility set to 'true'.
 
-...
-controls: IMapControls;
-  constructor(
-    public layerSvc: LayersService,
-    public mapStateSvc: MapStateService
-) { }
-
-ngOnInit() {
-  this.addBaselayers();
-}
-
-addBaselayers() {
-  const layers = [
-    new OsmTileLayer({
-    visible: false
-    }),
-    new EocLitemap({
-    visible: true
-    }),
-    new BlueMarbleTile({
-    visible: false
-    })
-  ];
-
-  layers.map(l => this.layerSvc.addLayer(l, 'Baselayers'));
-}
-```
-
-
-- After these steps save your changes and visit your browser again. You should now see a working web map. As we have not included the layer control yet, you are only able to see the layers with visibility set to 'true'.
-
-## Adding layer controll and layers
+## Adding layer controll and layers to the app
 To enable more interaction with the application we are now adding the layer control, overlays and layers. 
-### 1. First, install the layer control library and add the module to app.module.ts:
-```
-npm install @dlr-eoc/layer-control
-```
-```
-import { LayerControlComponent } from '@dlr-eoc/layer-control';
-
-...
-
- imports: [
-    ...
-    LayerControlComponent
-  ]
-```
-More information about this library can be found [in the layer-control library folder](projects/layer-control/README.md).
-### 2. Next, include the following code in the example-view.component.html:
+### 1. First, add the layer control html code in the example-view.component.html:
 
 ```
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" [clr-nav-level]="2" class="right">
@@ -222,14 +208,17 @@ More information about this library can be found [in the layer-control library f
 
 </clr-vertical-nav>
 ```
-### 3. Extend the following import in the example-view.component.ts:
-```
 
+More information about this library can be found [in the layer-control library folder](projects/layer-control/README.md).
+
+### 2. Extend the import in the example-view.component.ts:
+```
 import { LayersService, Layer, WmtsLayer, RasterLayer } from '@dlr-eoc/services-layers';
-
-
+import { ClarityIcons, layersIcon} from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon]);
 ```
-### 4. Add the overlays and layers next to the already existing baselayers in the example-view.component.ts:
+
+### 3. Add the overlays and layers next to the already existing baselayers in the example-view.component.ts:
 
 ```
 ngOnInit() {
@@ -309,7 +298,7 @@ addLayers() {
 addOverlays(){
   const layers: Layer[] = [
     new EocLiteoverlayTile({
-      visible: false,
+      visible: true,
       displayName: 'Litelables'
     })
   ];
@@ -318,11 +307,11 @@ addOverlays(){
 }
 ```
 - For this tutorial we are using some example layers from the [EOC GeoService](https://geoservice.dlr.de/web/).
-- Save and refresh your changes. You can now switch between the layers, change the layer order and adjust the opacity of individual layers in the layer control. Notice, that there is always the hierachical order overlays > layers > base layers. Also, there is only one active base layer possible at a time. If you do not need a layer category, you could delete the corresponding code in example-view.component.html. 
+- Save and refresh your changes. You can now switch between the layers, change the layer order and adjust the opacity of individual layers in the layer control. Notice, that there is always the hierachical order overlays > layers > baselayers. Also, there is only one active baselayer possible at a time. If you do not need a layer category, you could hide or delete the corresponding code in example-view.component.html. 
 
 ## Optional adaptions
 We are nearly finished with our basic example application in this tutorial. In the last steps we can adjust some details in the application.
-- To change the starting view of the map, paste the following changes in example-view.component.ts:
+- To change the starting view of the map, add the following changes in example-view.component.ts:
 ```
 import { MapStateService, IMapState } from '@dlr-eoc/services-map-state';
 
@@ -349,7 +338,7 @@ controls!: IMapControls;
     this.mapStateSvc.setMapState(this.startState);
   }
 ```
-- Add some controls to the map in the example-view.component.ts:
+- To add some controls to the map, adjust the controls object in the example-view.component.ts:
 ```
 constructor(
     public layerSvc: LayersService,
