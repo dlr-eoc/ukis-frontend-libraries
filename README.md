@@ -82,9 +82,9 @@ Then run:
 More detailed information about setting up a local UKIS application can be found in the [tutorial document](TUTORIALS.md).
 
 
-## Team
+## UKIS contributors
 
-The UKIS team creates and adapts libraries which simplify the creation of web-based applications. Our team includes (in alphabetical order):
+The UKIS core team creates and adapts libraries which simplify the creation of web-based applications. The main contributors over the years were (in alphabetical order):
 
  - Angermann, Lucas
  - Böck, Mathias
