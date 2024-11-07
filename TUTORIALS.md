@@ -267,6 +267,7 @@ addLayers() {
       params: {
         LAYERS: 'GUF28_DLR_v1_Mosaic',
         STYLES: 'guf_8bit',
+        TRANSPARENT: true
       },
       tileSize: 512,
       visible: true,
@@ -283,6 +284,7 @@ addLayers() {
       params: {
         LAYERS: 'WSF_Evolution',
         STYLES: 'wsfevolution',
+        TRANSPARENT: true
       },
       tileSize: 512,
       visible: false,
