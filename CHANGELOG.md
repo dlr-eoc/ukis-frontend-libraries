@@ -13,6 +13,10 @@
 * **@dlr-eoc/layer-control:**
   - Fix direction of `@cds` icon
 
+### Documentation
+- Update `TUTORIALS.md`
+- Minor changes in some libraries's `README.md`
+
 
 # [14.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v14.0.0) (2024-08-05) (map-cesium, angular update, @clr and @cds update)
 
