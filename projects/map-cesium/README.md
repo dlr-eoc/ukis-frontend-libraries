@@ -1,5 +1,5 @@
 # @dlr-eoc/map-cesium
-This library enables the UKIS frontend to display content on a 3D virtual globe using [CesiumJS](https://cesium.com/platform/cesiumjs/). It uses the same toolsets as the 2D mapping libraries and adds additional 3D capabilities. In the most basic version, map-cesium is displaying 2D maps on a 3D globe without explicit 3D content.
+This library enables the UKIS frontend to display content on a 3D virtual globe using [CesiumJS](https://github.com/CesiumGS/cesium). It uses the same toolsets as the 2D mapping libraries and adds additional 3D capabilities. In the most basic version, map-cesium is displaying 2D maps on a 3D globe without explicit 3D content.
 
 ### How to use this in a ukis-angular (@dlr-eoc/core-ui) project
 First, install and setupt UKIS core, like described in the [Tutorial](../../TUTORIALS.md#setting-up-ukis-core-ui).
@@ -66,15 +66,38 @@ or in the angular config file
 (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
 ```
 
-Now, you can display the same layers as used in the [Tutorial](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/TUTORIALS.md#adding-layer-controll-and-layers) on the cesium 3D globe.
+### Adjust some imports and objects in example-view.component.ts:
+```
+...
+
+import { MapCesiumComponent, ICesiumControls } from '@dlr-eoc/map-cesium';
+
+...
+imports: [..., MapCesiumComponent],
+...
+controls!: ICesiumControls;
+...
+//for now, remove the contents of the controls object in the constructor, it is not compatible with cesium
+ this.controls = { };
+```
+
+#### Switch the map component in example-view.component.html to map-cesium:
+```
+<ukis-map-cesium [twoDlayersSvc]="layerSvc" [mapState]="mapStateSvc" [controls]="controls"></ukis-map-cesium>
+```
+Note: The controls object is not the same as in map-ol! The map state and layers service can be used in both map components.
+
+Now, you can display the same layers as used in the [Tutorial](https://github.com/dlr-eoc/ukis-frontend-libraries/blob/main/TUTORIALS.md#adding-layer-controll-and-layers) on the cesium 3D globe. 
+
+Note: WMS layers need the parameter ```TRANSPARENT: true```, otherwise they will overlay other layers with a white background color.
 
 To make the application more interesting, let's add some global layers from the [EOC GeoService](https://geoservice.dlr.de/web/) to the layers array in example-view.component.ts:
 ```
-  new WmsLayer({
+  new RasterLayer({
         type: 'wms',
         id: 'metopGome2Ozone',
         name: 'MetOp GOME-2 L2C Daily O3 Combined',
-        visible: false,
+        visible: true,
         opacity: 0.8,
         description: 'MetOp GOME-2 Total Column Ozone (O3) Composite Layer',
         legendImg: 'https://geoservice.dlr.de/eoc/atmosphere/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=METOP_GOME-2_L2C_P1D_COMB_O3',
@@ -152,10 +175,16 @@ new VectorLayer({
 ```
 
 #### Adding 3D content
-Layer with 3D content like terrain and tilesets can be added with a second instance of the layers service. 3D tilesets have to be added as 'Layers', terrain datasets as 'Baselayers'.
-Change the following inside example-view.component.ts:
+Layer with 3D content like terrain and tilesets can be added with a second instance of the layers service. 3D tilesets have to be added as 'Layers', terrain datasets as 'Baselayers'. 
+Change the following inside example-view.component.ts, adjust the new layers service name and add the missing imports:
 
 ```
+import { Cesium3DTileset, CesiumTerrainProvider, Credit, EllipsoidTerrainProvider } from '@cesium/engine';
+import { ClarityIcons, layersIcon, blockIcon} from '@cds/core/icon';
+ClarityIcons.addIcons(...[layersIcon, blockIcon]);
+
+...
+
 @Component({
   selector: 'app-example-view',
   templateUrl: './example-view.component.html',
@@ -169,10 +198,10 @@ Change the following inside example-view.component.ts:
     ...
   ]
 })
-```
 
-```
-onstructor(
+...
+
+constructor(
     @Inject('twoDlayerSvc') public twoDlayerSvc: LayersService,
     @Inject('threeDlayerSvc') public threeDlayerSvc: LayersService,
     public mapStateSvc: MapStateService
@@ -183,58 +212,64 @@ onstructor(
 
 Then you can add 3D services, e.g.
 ```
-addTilelayer(){
-  // Cesium 3D Tileset Datasource as Custom Layer
-  const tileset_layer = new CustomLayer({
-    name: '3D Tileset',
-    displayName: '3D Tileset',
-    id: 'tileset_3d',
-    custom_layer: new Cesium3DTileset({
-      url:'https://link_to_dataset/tileset.json',
-      show: false
-    }),
-    visible: false,
-    description: '3D Tileset',
-    type: 'custom',
-    opacity: 1
-  });
+ ngOnInit(): void {
+    ...
 
-  const layers = [tileset_layer];
-  layers.map(l => this.threeDlayerSvc.addLayer(l, 'Layers'));
-}
+    this.addTilelayer();
+    this.addTerrainlayer();
 
-addTerrainlayer(){
-  // Terrain Datasource as Custom Layer
-  const terrain_layer = new CustomLayer({
-    name: 'Terain',
-    displayName: 'Terrain',
-    id: 'terrain',
-    custom_layer: new CesiumTerrainProvider({
-      url:'https://link_to_terrain_dataset',
-      credit: new Credit('© <a href="https://link_to_dataprovider">Attribution</a>')
-    }),
-    visible: false,
-    description: 'digital elevation modell with 5m grid resulution',
-    type: 'custom',
-  });
+    ...
+  }
 
-  const default_ellipsoid = new CustomLayer({
-    name: 'Ellipsoid',
-    displayName: 'Ellipsoid',
-    id: 'ellipsoid',
-    custom_layer: new EllipsoidTerrainProvider({}),
-    visible: true,
-    attribution: ``,
-    description: '',
-    type: 'custom',
-  });
-
-
-  const layers = [terrain_layer, default_ellipsoid];
-  layers.map(l => this.threeDlayerSvc.addLayer(l, 'Baselayers'));
-}
+ async addTilelayer(){
+    // Cesium 3D Tileset Datasource as Custom Layer
+    const tileset_layer = new CustomLayer({
+      name: '3D Tileset',
+      displayName: '3D Tileset',
+      id: 'tileset_3d',
+      custom_layer: await Cesium3DTileset.fromUrl('https://link_to_dataset/tileset.json', { show: false }),
+      visible: false,
+      description: '3D Tileset',
+      type: 'custom',
+      opacity: 1
+    });
+  
+    const layers = [tileset_layer];
+    layers.map(l => this.threeDlayerSvc.addLayer(l, 'Layers'));
+  }
+  
+  async addTerrainlayer(){
+    // Terrain Datasource as Custom Layer
+    const terrain_layer = new CustomLayer({
+      name: 'Terain',
+      displayName: 'Terrain',
+      id: 'terrain',
+      custom_layer: await CesiumTerrainProvider.fromUrl('https://link_to_terrain_dataset',
+        {
+          credit: new Credit(`© <a href="https://link_to_dataprovider">Attribution</a>`)
+        }),
+      visible: false,
+      description: 'digital elevation modell with 5m grid resulution',
+      type: 'custom',
+    });
+  
+    const default_ellipsoid = new CustomLayer({
+      name: 'Ellipsoid',
+      displayName: 'Ellipsoid',
+      id: 'ellipsoid',
+      custom_layer: new EllipsoidTerrainProvider({}),
+      visible: true,
+      attribution: ``,
+      description: '',
+      type: 'custom',
+    });
+  
+  
+    const layers = [terrain_layer, default_ellipsoid];
+    layers.map(l => this.threeDlayerSvc.addLayer(l, 'Baselayers'));
+  }
 ```
-To be able to interact with the layers in the viewer, additional layer controls have to be added to the vertical nav in `example-view.component.html`. Note, that the 3D serve-layers instanced is used here.
+To be able to interact with the layers in the viewer, additional layer controls have to be added to the vertical nav in `example-view.component.html`. Note, that the 3D service-layers instanced is used here.
 ```
       <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers three-d-layer-control">
         <cds-icon shape="block" clrVerticalNavIcon title="tilelayers"></cds-icon>
@@ -293,7 +328,7 @@ new VectorLayer({
 #### Notes
 - Terrain has to be attributed with a new Cesium Credit object, see the example above. 
 - GeoJSON layer are supported, but they are always shown above imagery layers, regardless of their ordering index in the layer control. Therefore they should be added as overlays.
-- As of 01/2023, WFS is not supported by Cesium yet. 
+- So far, WFS is not supported by Cesium yet. 
 - KmlDataSource does not support opacity change at the moment.
 - The stroke-width of vector polygons in Cesium does not change on non Apple browsers. There seems to be an issue with the browser support for this feature.
 - When a vector layer is clamped to the ground, Cesium does not display the stroke anymore. Cesium's proposed workaround at the moment is to include the stroke as additional polyline vector layer. 
