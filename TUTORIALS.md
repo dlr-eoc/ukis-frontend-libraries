@@ -34,7 +34,7 @@ npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version>
 
 - Add the Clarity module and others to app.config.ts:
 ```
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { ClarityModule } from '@clr/angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
