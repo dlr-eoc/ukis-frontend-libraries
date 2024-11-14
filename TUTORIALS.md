@@ -15,7 +15,7 @@ npm install -g @angular/cli@<version>
 
 - Then run:
 ```
-ng new project-tutorial-map --style=scss --standalone=true
+ng new project-tutorial-map --style=scss --standalone=true --routing=false
 ```
 - We do not need angular routing, so decline the prompt with `N`
 
@@ -35,12 +35,14 @@ npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version>
 - Add the Clarity module and others to app.config.ts:
 ```
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+...
 import { ClarityModule } from '@clr/angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    ...
     importProvidersFrom(BrowserModule, ClarityModule),
     provideAnimations()
     ]
@@ -118,6 +120,8 @@ import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@d
 
 ...
 
+@Component({
+...
 providers: [LayersService, MapStateService, MapOlService],
 standalone: true,
 imports: [
@@ -126,7 +130,8 @@ imports: [
   LayerControlComponent,
   BaseLayerControlComponent
 ]
-
+...
+})
 ...
 
 controls!: IMapControls;
