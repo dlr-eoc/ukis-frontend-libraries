@@ -38,14 +38,9 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { ClarityModule } from '@clr/angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
     importProvidersFrom(BrowserModule, ClarityModule),
     provideAnimations()
     ]
