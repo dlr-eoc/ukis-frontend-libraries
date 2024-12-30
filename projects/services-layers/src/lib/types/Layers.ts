@@ -51,13 +51,15 @@ export interface popup {
   /** 
    * function to create the popup content.
    * Return an HTML string or an object from which an HTML string is generated.
+   * If false is returned, only the function is executed, but no popup is added.
    */
-  popupFunction?: (popupParams: IPopupParams) => string | IAnyObject;
+  popupFunction?: (popupParams: IPopupParams) => string | IAnyObject | false;
   /** 
    * async function to create the popup content.
    * Pass an HTML string, or an object from which an HTML string is generated, to the callback..
+   * If no callback is used, only the function is executed, but no popup is added.
    */
-  asyncPopup?: (popupParams: IPopupParams, cb: (content: string | IAnyObject) => void) => void;
+  asyncPopup?: (popupParams: IPopupParams, cb: (content: string | IAnyObject | false) => void) => void;
   /** create popup using angular component */
   dynamicPopup?: {
     component: Type<any>;

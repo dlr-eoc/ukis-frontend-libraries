@@ -2006,7 +2006,7 @@ export class MapOlService {
   }
 
 
-  public addPopup(popupParams: IPopupParams, popupObj?: popup, popupContent?: string | IAnyObject, event?: 'click' | 'move', removePopups?: boolean) {
+  public addPopup(popupParams: IPopupParams, popupObj?: popup, popupContent?: string | IAnyObject | false, event?: 'click' | 'move', removePopups?: boolean) {
     const layerpopup: Layer['popup'] = popupParams.layer.get(POPUP_KEY);
     // check if popup is already there and event is move
     const layerID = popupParams.layer.get(ID_KEY);
@@ -2137,13 +2137,16 @@ export class MapOlService {
 
       const container = this.createPopupContainer(overlay, popupParams, popupObj, popupContent, event);
       /** edge case when moving and clicking sometimes the browser event is not like the popup event */
-      if (overlay.getId() === moveID) {
-        overlay.set('addEvent', 'pointermove');
-      } else {
-        overlay.set('addEvent', browserEvent.type);
+      if(container){
+        if (overlay.getId() === moveID) {
+          overlay.set('addEvent', 'pointermove');
+        } else {
+          overlay.set('addEvent', browserEvent.type);
+        }
+        overlay.set(OVERLAY_TYPE_KEY, POPUP_KEY);
+        overlay.setElement(container);
       }
-      overlay.set(OVERLAY_TYPE_KEY, POPUP_KEY);
-      overlay.setElement(container);
+      
 
       let coordinate;
       // When a point is clicked, its coordinate is used for the popup position.
@@ -2154,7 +2157,11 @@ export class MapOlService {
         coordinate = browserEvent.coordinate;
       }
 
-      overlay.setPosition(coordinate);
+      if(container){
+        overlay.setPosition(coordinate);
+      }else{
+        this.map.removeOverlay(overlay);
+      }
 
       /**
        * edge case prevent add multiple movePopup's
@@ -2166,14 +2173,17 @@ export class MapOlService {
     }
   }
 
-  private createPopupContainer(overlay: olOverlay, popupParams: IPopupParams, popupObj?: popup, popupContent?: string | IAnyObject, event?: 'click' | 'move') {
+  private createPopupContainer(overlay: olOverlay, popupParams: IPopupParams, popupObj?: popup, popupContent?: string | IAnyObject | false, event?: 'click' | 'move') {
     const content = document.createElement('div');
     content.className = 'ol-popup-content';
     let popupHtml = '';
+    let hasContent = true;
     if (popupObj?.popupFunction) {
       const content = popupObj.popupFunction(popupParams);
       if (typeof content === 'string') {
         popupHtml = content;
+      } else if (content === false) {
+        hasContent = false;
       } else {
         popupHtml = this.createPopupHtml(content);
       }
@@ -2183,9 +2193,14 @@ export class MapOlService {
       } else {
         popupHtml = this.createPopupHtml(popupContent);
       }
+    } else if(popupContent === false){
+      hasContent = false;
     } else if (Object.keys(popupParams.properties).length) {
       popupHtml = this.createPopupHtml(popupParams.properties);
+    }else{
+      hasContent = false;
     }
+
     content.innerHTML = popupHtml;
     if (popupObj?.dynamicPopup) {
       // To prevent memory leak:
@@ -2197,27 +2212,32 @@ export class MapOlService {
       this.createDynamicPopupComponent(id, content, popupParams, popupObj);
     }
 
-    const container = document.createElement('div');
-    container.className = 'ol-popup';
-    container.id = overlay.getId().toString();
-    container.style.display = 'block';
+    if (!hasContent) {
+      // this sets the Overlay.setElement(undefined);
+      return undefined;
+    } else {
+      const container = document.createElement('div');
+      container.className = 'ol-popup';
+      container.id = overlay.getId().toString();
+      container.style.display = 'block';
 
-    if (!event || event !== 'move') {
-      const closer = document.createElement('a');
-      closer.className = 'ol-popup-closer';
-      container.appendChild(closer);
+      if (!event || event !== 'move') {
+        const closer = document.createElement('a');
+        closer.className = 'ol-popup-closer';
+        container.appendChild(closer);
 
-      const closeFunction = () => {
-        closer.removeEventListener('click', closeFunction, false);
-        // removes ol-part of popup
-        this.map.removeOverlay(overlay);
-        // removes angular-part of popup
-        this.destroyDynamicPopupComponent(overlay.getId().toString());
-      };
-      closer.addEventListener('click', closeFunction, false);
+        const closeFunction = () => {
+          closer.removeEventListener('click', closeFunction, false);
+          // removes ol-part of popup
+          this.map.removeOverlay(overlay);
+          // removes angular-part of popup
+          this.destroyDynamicPopupComponent(overlay.getId().toString());
+        };
+        closer.addEventListener('click', closeFunction, false);
+      }
+      container.appendChild(content);
+      return container;
     }
-    container.appendChild(content);
-    return container;
   }
 
   /** USED in map-ol.component */

@@ -13,6 +13,12 @@
 * **@dlr-eoc/layer-control:**
   - Fix direction of `@cds` icon
 
+### Features
+* **@dlr-eoc/services-layers:**
+  - Allow return `false` for `popup.popupFunction` and `popup.asyncPopup`;
+* **@dlr-eoc/map-ol:**
+  - Do not add a popup if `popup.popupFunction` or `popup.asyncPopup` return `false`;
+
 ### Documentation
 - Update `TUTORIALS.md`
 - Minor changes in some libraries's `README.md`
