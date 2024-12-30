@@ -1,3 +1,5 @@
+# [15.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v15.0.0) (2024-12-31) (angular update, @clr and @cds update, layer-control, map-ol)
+
 ### Breaking Changes
  - Update angular from `^17.3.11` to `^18.2.7`
  - Refactor all libraries and apps to [angular standalone API](https://angular.dev/reference/migrations/standalone).

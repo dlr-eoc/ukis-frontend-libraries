@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/base-layers-raster",
-  "version": "15.0.0-next.1",
+  "version": "15.0.0",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -17,7 +17,7 @@
     "@angular/core": "^18.2.8"
   },
   "dependencies": {
-    "@dlr-eoc/services-layers": "15.0.0-next.1",
+    "@dlr-eoc/services-layers": "15.0.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {

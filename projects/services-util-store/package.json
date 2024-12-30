@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/services-util-store",
-  "version": "15.0.0-next.1",
+  "version": "15.0.0",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
