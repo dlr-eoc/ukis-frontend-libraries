@@ -86,6 +86,12 @@ to add files and styles from ukis-frontend-libraries in the desired version.
 - In this tutorial more additional options of the core-ui ng add like routing are not required.
 - [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
 
+If this does not work due to incorrect versions of peer dependencies, you can fix it as described below if you are sure that the current dependencies work together!
+``` 
+npm install @dlr-eoc/core-ui@<version> --force
+ng generate @dlr-eoc/core-ui:ng-add --project=project-tutorial-map
+``` 
+
 ### 5. Start and view the application
 - Run `npm start`
 - Open [http://localhost:4200/](http://localhost:4200/) on a browser
