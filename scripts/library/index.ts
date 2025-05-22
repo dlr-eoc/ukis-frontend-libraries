@@ -73,7 +73,7 @@ function runTests(offset = 0, projects, headless = false) {
   const project = projects[offset];
   const cliArgs = ['test', project, '--watch=false'];
   if (headless) {
-    cliArgs.push('--browsers=ChromeHeadless');
+    cliArgs.push('--browsers=ChromeHeadless --progress=false');
   }
   if (project) {
     console.log(consoleLogColors.Bright, `>>> run ng ${cliArgs.join(' ')}`);
