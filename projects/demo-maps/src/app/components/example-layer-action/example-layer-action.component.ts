@@ -5,7 +5,6 @@ import { ClrRangeModule, ClrCommonFormsModule } from '@clr/angular';
     selector: 'app-example-layer-action',
     templateUrl: './example-layer-action.component.html',
     styleUrls: ['./example-layer-action.component.scss'],
-    standalone: true,
     imports: [ClrRangeModule, ClrCommonFormsModule]
 })
 export class ExampleLayerActionComponent implements OnInit {

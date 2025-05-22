@@ -6,7 +6,6 @@ import { NgClass } from '@angular/common';
     selector: 'ukis-global-progress',
     templateUrl: './global-progress.component.html',
     styleUrls: ['./global-progress.component.scss'],
-    standalone: true,
     imports: [NgClass]
 })
 export class GlobalProgressComponent implements OnInit {

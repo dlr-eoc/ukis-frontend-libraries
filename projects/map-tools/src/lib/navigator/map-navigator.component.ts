@@ -9,7 +9,6 @@ import { ClrCommonFormsModule, ClrInputModule } from '@clr/angular';
     selector: 'ukis-map-navigator',
     templateUrl: './map-navigator.component.html',
     styleUrls: ['./map-navigator.component.scss'],
-    standalone: true,
     imports: [FormsModule, ClrCommonFormsModule, ClrInputModule]
 })
 export class MapNavigatorComponent implements OnInit, OnDestroy {

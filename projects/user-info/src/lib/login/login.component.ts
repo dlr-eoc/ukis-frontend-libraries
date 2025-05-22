@@ -13,7 +13,6 @@ interface IusrInfoForm {
     selector: 'ukis-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
-    standalone: true,
     imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule, ClrCheckboxModule]
 })
 export class LoginComponent implements OnDestroy {

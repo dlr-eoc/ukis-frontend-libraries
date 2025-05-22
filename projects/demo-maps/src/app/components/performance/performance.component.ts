@@ -6,8 +6,7 @@ import { FpserComponent } from './fpser/fpser.component';
     selector: 'ukis-performance',
     templateUrl: './performance.component.html',
     styleUrls: ['./performance.component.scss'],
-    standalone: true,
-    imports: [BlinkerComponent, FpserComponent],
+    imports: [BlinkerComponent, FpserComponent]
 })
 export class PerformanceComponent {
 

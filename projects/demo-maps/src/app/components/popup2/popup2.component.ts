@@ -5,7 +5,6 @@ import { KeyValuePipe } from '@angular/common';
     selector: 'app-popup2',
     templateUrl: './popup2.component.html',
     styleUrls: ['./popup2.component.scss'],
-    standalone: true,
     imports: [KeyValuePipe]
 })
 export class Popup2Component implements OnInit {

@@ -37,7 +37,6 @@ ClarityIcons.addIcons(...[layersIcon, cogIcon, compassIcon, downloadIcon]);
     styleUrls: ['./route-map3.component.scss'],
     /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService],
-    standalone: true,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, MousePositionComponent]
 })
 export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {

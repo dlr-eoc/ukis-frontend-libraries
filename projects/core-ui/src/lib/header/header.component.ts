@@ -7,11 +7,10 @@ import { NgClass } from '@angular/common';
 ClarityIcons.addIcons(ukisIcon, dlrIcon, timesIcon);
 
 @Component({
-  selector: 'ukis-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  standalone: true,
-  imports: [ClrNavigationModule, NgClass, ClrIconModule, ClrStandaloneCdkTrapFocus]
+    selector: 'ukis-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    imports: [ClrNavigationModule, NgClass, ClrIconModule, ClrStandaloneCdkTrapFocus]
 })
 export class HeaderComponent implements OnInit {
   @Input('ukis-title') title: string = '';

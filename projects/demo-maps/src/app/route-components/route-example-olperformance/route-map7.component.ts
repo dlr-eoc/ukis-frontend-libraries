@@ -19,7 +19,6 @@ ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
     templateUrl: './route-map7.component.html',
     styleUrls: ['./route-map7.component.scss'],
     providers: [LayersService, MapStateService, MapOlService],
-    standalone: true,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, PerformanceComponent, LayerControlComponent]
 })
 export class RouteMap7Component implements OnInit, AfterViewInit {

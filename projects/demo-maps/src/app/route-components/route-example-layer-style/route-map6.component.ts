@@ -18,7 +18,6 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon]);
     styleUrls: ['./route-map6.component.scss'],
     /** use differnt instances of the services only for testing with diffenr routs  */
     providers: [LayersService, MapStateService, MapOlService],
-    standalone: true,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMap6Component implements OnInit, OnDestroy {

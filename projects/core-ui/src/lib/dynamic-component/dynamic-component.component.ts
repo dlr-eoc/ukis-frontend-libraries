@@ -20,10 +20,9 @@ export class ViewRefDirective {
 }
 
 @Component({
-  selector: 'ukis-dynamic-component',
-  template: `<ng-template ukisAddHost></ng-template>`,
-  standalone: true,
-  imports: [ViewRefDirective]
+    selector: 'ukis-dynamic-component',
+    template: `<ng-template ukisAddHost></ng-template>`,
+    imports: [ViewRefDirective]
 })
 export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
   @Input() dynamicComponent!: IDynamicComponent;

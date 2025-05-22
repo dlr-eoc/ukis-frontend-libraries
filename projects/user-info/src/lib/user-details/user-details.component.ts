@@ -7,7 +7,6 @@ import { UserService } from '../user.service';
     selector: 'ukis-user-details',
     templateUrl: './user-details.component.html',
     styleUrls: ['./user-details.component.scss'],
-    standalone: true,
     imports: []
 })
 export class UserDetailsComponent implements OnDestroy {

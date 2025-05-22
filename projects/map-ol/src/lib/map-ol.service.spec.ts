@@ -117,8 +117,7 @@ const createMapTarget = (size: number[]) => {
 @Component({
     selector: 'app-mock-popup',
     template: `<div>{{ data | json }}</div>`,
-    imports: [ CommonModule ],
-    standalone: true
+    imports: [CommonModule]
 })
 class MockPopupComponent {
   @Input() data: any;

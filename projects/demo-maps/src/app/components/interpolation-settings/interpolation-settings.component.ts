@@ -12,7 +12,6 @@ interface IinterpolationForm {
     selector: 'app-interpolation-settings',
     templateUrl: './interpolation-settings.component.html',
     styleUrls: ['./interpolation-settings.component.scss'],
-    standalone: true,
     imports: [FormsModule, ClrCommonFormsModule, ReactiveFormsModule, ClrInputModule, ClrCheckboxModule]
 })
 export class InterpolationSettingsComponent implements OnInit {

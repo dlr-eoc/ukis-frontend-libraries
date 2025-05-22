@@ -22,7 +22,6 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
     // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
     encapsulation: ViewEncapsulation.None,
     providers: [LayersService, MapStateService, MapMaplibreService],
-    standalone: true,
     imports: [MapMaplibreComponent, ClrVerticalNavModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {

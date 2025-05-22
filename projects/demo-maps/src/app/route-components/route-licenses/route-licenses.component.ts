@@ -53,7 +53,6 @@ interface License {
     selector: 'app-route-licenses',
     templateUrl: './route-licenses.component.html',
     styleUrls: ['./route-licenses.component.scss'],
-    standalone: true,
     imports: [ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule, ClrDatagridModule, AsyncPipe]
 })
 export class RouteLicensesComponent implements OnInit {

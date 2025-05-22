@@ -7,11 +7,10 @@ import { ClrIconModule, ClrAlertModule } from '@clr/angular';
 ClarityIcons.addIcons(...[infoCircleIcon, windowCloseIcon]);
 
 @Component({
-  selector: 'ukis-global-alert',
-  templateUrl: './global-alert.component.html',
-  styleUrls: ['./global-alert.component.scss'],
-  standalone: true,
-  imports: [NgClass, ClrIconModule, ClrAlertModule]
+    selector: 'ukis-global-alert',
+    templateUrl: './global-alert.component.html',
+    styleUrls: ['./global-alert.component.scss'],
+    imports: [NgClass, ClrIconModule, ClrAlertModule]
 })
 export class GlobalAlertComponent {
   @Input() alert!: null | IAlert;

@@ -6,7 +6,6 @@ import { LayerGroup, LayersService, ILayerGroupOptions } from '@dlr-eoc/services
     selector: 'app-example-group-action',
     templateUrl: './example-group-action.component.html',
     styleUrls: ['./example-group-action.component.scss'],
-    standalone: true,
     imports: []
 })
 export class ExampleGroupActionComponent implements OnInit {

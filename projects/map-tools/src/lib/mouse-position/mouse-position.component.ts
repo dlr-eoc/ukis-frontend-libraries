@@ -15,7 +15,6 @@ interface ISelectProjection {
     selector: 'ukis-mouse-position',
     templateUrl: './mouse-position.component.html',
     styleUrls: ['./mouse-position.component.scss'],
-    standalone: true,
     imports: [ClrSelectModule, ClrCommonFormsModule, FormsModule, ClrInputModule]
 })
 export class MousePositionComponent implements OnInit, OnDestroy {

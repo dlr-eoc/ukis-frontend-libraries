@@ -13,7 +13,6 @@ interface BookmarkEntry {
     selector: 'app-bookmarks',
     templateUrl: './route-bookmarks.component.html',
     styleUrls: ['./route-bookmarks.component.scss'],
-    standalone: true,
     imports: [RouterLink]
 })
 export class BookmarksComponent implements OnInit {

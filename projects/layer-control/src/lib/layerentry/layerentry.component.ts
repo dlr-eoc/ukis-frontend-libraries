@@ -24,7 +24,6 @@ type TactiveTabs = keyof typeof EactiveTabs;
     selector: 'ukis-layerentry',
     templateUrl: './layerentry.component.html',
     styleUrls: ['./layerentry.component.scss'],
-    standalone: true,
     imports: [NgClass, ClrIconModule, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponentComponent]
 })
 export class LayerentryComponent implements OnInit {

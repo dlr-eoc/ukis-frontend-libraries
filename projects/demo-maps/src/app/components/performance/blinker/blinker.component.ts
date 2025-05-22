@@ -14,7 +14,6 @@ import { ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpost
     selector: 'ukis-blinker',
     templateUrl: './blinker.component.html',
     styleUrls: ['./blinker.component.scss'],
-    standalone: true,
     imports: [ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule]
 })
 export class BlinkerComponent implements AfterContentChecked {

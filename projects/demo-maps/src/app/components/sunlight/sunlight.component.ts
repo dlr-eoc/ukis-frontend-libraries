@@ -11,7 +11,6 @@ interface IsunlightForm {
     selector: 'app-sunlight',
     templateUrl: './sunlight.component.html',
     styleUrls: ['./sunlight.component.scss'],
-    standalone: true,
     imports: [FormsModule, ClrCommonFormsModule, ReactiveFormsModule, ClrRangeModule]
 })
 export class SunlightComponent implements OnInit {

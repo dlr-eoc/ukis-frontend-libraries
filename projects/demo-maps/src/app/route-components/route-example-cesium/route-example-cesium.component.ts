@@ -34,7 +34,6 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
             provide: 'threeDlayerSvc', useClass: LayersService
         }
     ],
-    standalone: true,
     imports: [MapOlComponent, MapCesiumComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleCesiumComponent implements OnInit, OnDestroy {

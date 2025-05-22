@@ -76,7 +76,6 @@ const ID_KEY = 'id';
     templateUrl: './map-ol.component.html',
     styleUrls: ['./map-ol.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    standalone: true,
     imports: []
 })
 export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
