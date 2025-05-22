@@ -1,11 +1,14 @@
 ### Breaking Changes
  - Update angular from `^18.2.8` to `^19.2.13`
 
- ### Bug Fixes
+### Bug Fixes
 * **@dlr-eoc/core-ui:**
 * **@dlr-eoc/demo-maps:**
 * **@dlr-eoc/demo-auth:**
   - fix: [sass breaking change](https://sass-lang.com/documentation/breaking-changes/import) switch from @import to @use.
+
+* **@dlr-eoc/map-tools:**
+  - use `clr-number-input-container` instead of `clr-input-container` for input of `type="number"`.
 
 
 # [15.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v15.0.0) (2024-12-31) (angular update, @clr and @cds update, layer-control, map-ol)

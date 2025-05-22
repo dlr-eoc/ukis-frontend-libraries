@@ -2,32 +2,31 @@
   <div class="clr-col-9">
     <div class="output-container">
       <form clrForm>
-        <!-- class="input-container" -->
-        <clr-input-container>
+        <clr-number-input-container>
           <label>Lon</label>
-          <input clrInput type="number" [(ngModel)]="mapstate.center.lon" name="lon" [step]="inputStep"
+          <input clrNumberInput type="number" [(ngModel)]="mapstate.center.lon" name="lon" [step]="inputStep"
             (ngModelChange)="stateChange($event)" />
-        </clr-input-container>
-        <clr-input-container>
+        </clr-number-input-container>
+        <clr-number-input-container>
           <label>Lat</label>
-          <input clrInput type="number" [(ngModel)]="mapstate.center.lat" name="lat" [step]="inputStep"
+          <input clrNumberInput type="number" [(ngModel)]="mapstate.center.lat" name="lat" [step]="inputStep"
             (ngModelChange)="stateChange($event)" />
-        </clr-input-container>
-        <clr-input-container>
+        </clr-number-input-container>
+        <clr-number-input-container>
           <label>Zoom</label>
-          <input clrInput type="number" [(ngModel)]="mapstate.zoom" name="zoom" [step]="inputStep"
+          <input clrNumberInput type="number" [(ngModel)]="mapstate.zoom" name="zoom" [step]="inputStep"
             (ngModelChange)="stateChange($event)" />
-        </clr-input-container>
+        </clr-number-input-container>
       </form>
     </div>
   </div>
   <div class="clr-col-3">
     <div class="input-container">
-      <clr-input-container>
+      <clr-number-input-container>
         <label>Precision </label>
         <input type="number" min="0" max="8" step="1" [(ngModel)]="precision" (ngModelChange)="setInputStep($event)"
-          name="precision" clrInput />
-      </clr-input-container>
+          name="precision" clrNumberInput />
+      </clr-number-input-container>
     </div>
   </div>
 </div>
