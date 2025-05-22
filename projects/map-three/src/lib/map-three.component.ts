@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { MapThreeService } from './map-three.service';
 import { Mesh, BufferGeometry } from 'three';
-import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { HostListener } from '@angular/core';
 
 
