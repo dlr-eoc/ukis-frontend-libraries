@@ -13,7 +13,7 @@
   "peerDependencies": {
     "@angular/cli": "^19.2.13",
     "@schematics/angular": "^19.2.12",
-    "typescript": "^5.4.5"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "commander": "^9.0.0",
@@ -26,8 +26,8 @@
     "npm": ">= 8.19.3"
   },
   "devDependencies": {
-    "@types/jasmine": "^5.1.0",
-    "@types/node": "^20.14.10",
+    "@types/jasmine": "^5.1.8",
+    "@types/node": "^22.15.21",
     "@types/toposort": "^2.0.3"
   }
 }

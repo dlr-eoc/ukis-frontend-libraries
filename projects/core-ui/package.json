@@ -28,7 +28,7 @@
     "@angular-devkit/core": "^19.2.13",
     "@angular-devkit/schematics": "^19.2.13",
     "@schematics/angular": "^19.2.12",
-    "parse5-html-rewriting-stream": "^7.0.0",
+    "parse5-html-rewriting-stream": "^7.1.0",
     "tslib": "^2.6.3"
   },
   "peerDependencies": {
@@ -37,12 +37,12 @@
     "@angular/router": "^19.2.12",
     "@clr/angular": "^17.10.0",
     "@cds/core": "^6.15.1",
-    "rxjs": "~7.8.0",
+    "rxjs": "~7.8.2",
     "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
-    "jasmine": "^5.1.0",
+    "typescript": "^5.8.3",
+    "jasmine": "^5.7.1",
     "zone.js": "~0.15.0",
     "@angular/platform-browser-dynamic": "^19.2.12",
     "@angular-devkit/architect": "^0.1902.13"

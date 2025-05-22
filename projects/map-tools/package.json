@@ -19,8 +19,8 @@
     "@cds/core": "^6.15.1",
     "@clr/ui": "^17.10.0",
     "ol": "^v9.2.4",
-    "proj4": "^2.12.1",
-    "rxjs": "~7.8.0"
+    "proj4": "^2.17.0",
+    "rxjs": "~7.8.2"
   },
   "dependencies": {
     "@dlr-eoc/services-map-state": "15.0.0",

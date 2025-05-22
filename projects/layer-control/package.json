@@ -21,7 +21,7 @@
     "@clr/angular": "^17.10.0",
     "@cds/core": "^6.15.1",
     "@clr/ui": "^17.10.0",
-    "rxjs": "~7.8.0"
+    "rxjs": "~7.8.2"
   },
   "dependencies": {
     "@dlr-eoc/services-layers": "15.0.0",

@@ -23,7 +23,7 @@
     "@dlr-eoc/services-layers": "15.0.0",
     "@dlr-eoc/map-ol": "15.0.0",
     "@dlr-eoc/utils-maps": "15.0.0",
-    "proj4": "^2.12.1",
+    "proj4": "^2.17.0",
     "tslib": "^2.6.3",
     "three": "^0.137.5"
   },

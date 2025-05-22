@@ -19,7 +19,7 @@
     "@clr/angular": "^17.10.0",
     "@cds/core": "^6.15.1",
     "@clr/ui": "^17.10.0",
-    "rxjs": "~7.8.0"
+    "rxjs": "~7.8.2"
   },
   "devDependencies": {
     "zone.js": "~0.15.0",
