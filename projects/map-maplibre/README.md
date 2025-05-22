@@ -40,7 +40,6 @@ import { MapMaplibreComponent } from '@dlr-eoc/map-maplibre';
 import { LayerControlComponent } from '@dlr-eoc/layer-control';
 
 ...
- standalone: true,
  imports: [
     ...
     MapMaplibreComponent,

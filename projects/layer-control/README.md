@@ -14,8 +14,6 @@ import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { LayerControlComponent } from '@dlr-eoc/layer-control';
 
 ...
-
- standalone: true,
  imports: [
     ...
     MapOlComponent,

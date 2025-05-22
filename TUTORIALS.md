@@ -123,7 +123,6 @@ import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@d
 @Component({
 ...
 providers: [LayersService, MapStateService, MapOlService],
-standalone: true,
 imports: [
   ...
   MapOlComponent,

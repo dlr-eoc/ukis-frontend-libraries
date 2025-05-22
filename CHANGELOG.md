@@ -10,6 +10,8 @@
 * **@dlr-eoc/map-tools:**
   - use `clr-number-input-container` instead of `clr-input-container` for input of `type="number"`.
 
+### Features
+- Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
 
 # [15.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v15.0.0) (2024-12-31) (angular update, @clr and @cds update, layer-control, map-ol)
 

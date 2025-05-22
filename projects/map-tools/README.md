@@ -23,8 +23,6 @@ import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ProjectionSwitchComponent, MapNavigatorComponent, MousePositionComponent } from '@dlr-eoc/map-tools';
 
 ...
-
- standalone: true,
  imports: [
     ...
     MapOlComponent,

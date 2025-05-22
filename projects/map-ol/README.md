@@ -52,7 +52,6 @@ import { OsmTileLayer, EocLitemap, BlueMarbleTile } from '@dlr-eoc/base-layers-r
 
 ```
 providers: [LayersService, MapStateService, MapOlService],
-standalone: true,
 imports: [
     ...
     MapOlComponent,

@@ -12,8 +12,7 @@ export interface IDynamicComponent {
 }
 
 @Directive({
-  selector: '[ukisAddHost]',
-  standalone: true,
+  selector: '[ukisAddHost]'
 })
 export class ViewRefDirective {
   constructor(public viewContainerRef: ViewContainerRef) { }
