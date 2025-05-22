@@ -368,7 +368,7 @@
               }
             ],
             "styles": [
-              "node_modules/@fontsource/metropolis/all.css",
+              "node_modules/@fontsource/metropolis/index.css",
               "node_modules/@fontsource/noto-sans/index.css",
               "projects/demo-maps/src/styles.scss"
             ],
