@@ -22,9 +22,6 @@
       "@dlr-eoc/*": [
         "dist/*",
         "projects/*"
-      ],
-      "path": [
-        "./node_modules/path-browserify"
       ]
     },
     "allowJs": true,
