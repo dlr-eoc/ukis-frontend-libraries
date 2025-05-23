@@ -28,7 +28,7 @@
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
     "ol": "^v9.2.4",
-    "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
+    "jsonix": "^3.0.0",
     "tslib": "^2.6.3",
     "opensearch-browser": "^2.0.0-alpha.5",
     "luxon": "^3.6.1"

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Jsonix } from '@michaellangbein/jsonix';
+import { Jsonix } from 'jsonix';
 import { map } from 'rxjs/operators';
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0';
 const XLink_1_0 = XLink_1_0_Factory.XLink_1_0;

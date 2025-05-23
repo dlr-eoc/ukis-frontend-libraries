@@ -9,7 +9,7 @@ import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 
 import * as OWS_2_0_Factory from 'ogc-schemas/lib/OWS_2_0'; const OWS_2_0 = OWS_2_0_Factory.OWS_2_0;
 import * as WPS_1_0_0_Factory from 'ogc-schemas/lib/WPS_1_0_0'; const WPS_1_0_0 = WPS_1_0_0_Factory.WPS_1_0_0;
 import * as WPS_2_0_Factory from 'ogc-schemas/lib/WPS_2_0'; const WPS_2_0 = WPS_2_0_Factory.WPS_2_0;
-import * as JsonixFactory from '@michaellangbein/jsonix'; const Jsonix = JsonixFactory.Jsonix;
+import * as JsonixFactory from 'jsonix'; const Jsonix = JsonixFactory.Jsonix;
 import { pollUntil, delayedRetry } from './utils/polling';
 import { Cache, FakeCache } from './cache';
 import { HttpClient } from '../httpClient/httpclient';

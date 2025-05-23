@@ -7,7 +7,7 @@
   "allowedNonPeerDependencies": [
     "w3c-schemas",
     "ogc-schemas",
-    "@michaellangbein/jsonix",
+    "jsonix",
     "xmlserializer",
     "ol"
   ]

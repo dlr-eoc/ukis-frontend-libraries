@@ -2,8 +2,10 @@
  - Update angular from `^18.2.8` to `^19.2.13`
 
 ### Bug Fixes
+* **@dlr-eoc/services-ogc:**
+* **@dlr-eoc/utils-ogc:**
 * **@dlr-eoc/demo-maps:**
-  - We marked `amdefine` which is required by `jsonix` (@dlr-eoc/utils-ogc | @dlr-eoc/services-ogc) as `externalDependencies`, to exclude it from the Angular build because it throws an error `Could not resolve "path"`, which is not needed in the browser anyway.
+- Patch `jsonix` because is not compatible with modern angular build.
 
 * **@dlr-eoc/core-ui:**
 * **@dlr-eoc/demo-maps:**

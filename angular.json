@@ -376,8 +376,7 @@
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true,
-            "browser": "projects/demo-maps/src/main.ts",
-            "externalDependencies": ["amdefine"]
+            "browser": "projects/demo-maps/src/main.ts"
           },
           "configurations": {
             "production": {

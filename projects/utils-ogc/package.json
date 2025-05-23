@@ -15,7 +15,7 @@
   "dependencies": {
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
-    "@michaellangbein/jsonix": "3.0.1-SNAPSHOT-3",
+    "jsonix": "^3.0.0",
     "xmlserializer": "^0.6.1",
     "ol": "^v9.2.4"
   },
