@@ -53,8 +53,7 @@ let instrumentedMockupCompId = 0;
 @Component({
     selector: 'app-mock-popup',
     template: `<div>{{ data | json }}</div>`,
-    imports: [CommonModule],
-    standalone: true
+    imports: [CommonModule]
 })
 class InstrumentedMockPopupComponent implements OnInit, OnDestroy {
   @Input() initCallback: (id: number) => void;

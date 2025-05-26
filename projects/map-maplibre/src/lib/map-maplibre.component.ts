@@ -23,8 +23,7 @@ const hasSourceType = {};
     selector: 'ukis-map-maplibre',
     templateUrl: './map-maplibre.component.html',
     styleUrls: ['./map-maplibre.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: true
+    encapsulation: ViewEncapsulation.None
 })
 export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   @Input('layersSvc') layersSvc!: LayersService;

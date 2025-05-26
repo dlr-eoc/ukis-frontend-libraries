@@ -6,7 +6,6 @@ import { NgClass } from '@angular/common';
     selector: 'ukis-cookie-alert',
     templateUrl: './cookie-alert.component.html',
     styleUrls: ['./cookie-alert.component.scss'],
-    standalone: true,
     imports: [NgClass]
 })
 export class CookieAlertComponent implements OnInit {

@@ -40,10 +40,9 @@ class MockLayersService extends LayersService {
 
 let instrumentedMockupCompId = 0;
 @Component({
-  selector: 'app-mock-popup',
-  template: `<div>{{ data | json }}</div>`,
-  imports: [CommonModule],
-  standalone: true
+    selector: 'app-mock-popup',
+    template: `<div>{{ data | json }}</div>`,
+    imports: [CommonModule]
 })
 class InstrumentedMockPopupComponent implements OnInit, OnDestroy {
   @Input() initCallback: (id: number) => void;

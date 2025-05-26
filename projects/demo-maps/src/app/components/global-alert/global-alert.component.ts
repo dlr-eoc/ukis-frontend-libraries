@@ -10,7 +10,6 @@ ClarityIcons.addIcons(...[infoCircleIcon, windowCloseIcon]);
     selector: 'ukis-global-alert',
     templateUrl: './global-alert.component.html',
     styleUrls: ['./global-alert.component.scss'],
-    standalone: true,
     imports: [NgClass, ClrIconModule, ClrAlertModule]
 })
 export class GlobalAlertComponent {

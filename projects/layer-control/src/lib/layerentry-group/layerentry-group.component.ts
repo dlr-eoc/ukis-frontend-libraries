@@ -28,7 +28,6 @@ type TactiveTabs = keyof typeof EactiveTabs;
     selector: 'ukis-layerentry-group',
     templateUrl: './layerentry-group.component.html',
     styleUrls: ['./layerentry-group.component.scss'],
-    standalone: true,
     imports: [ClrIconModule, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponentComponent]
 })
 export class LayerentryGroupComponent implements OnInit {

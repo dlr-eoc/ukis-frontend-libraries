@@ -17,3 +17,7 @@ In the src folder you can find a few route-components which show the usage of ma
 - run `npm install` (for ukis-frontend-libraries) 
 - run `ng serve demo-maps`
 - open a browser on *http://localhost:4200*
+
+## Usage!!!
+This application musst be patched to use `jsonix` because it is not compatible with modern angular build.
+To do this, run `patch-package`, which uses the patch from [patches](patches\jsonix+3.0.0.patch).

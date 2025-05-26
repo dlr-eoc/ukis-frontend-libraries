@@ -11,7 +11,6 @@ ClarityIcons.addIcons(ukisIcon, dlrIcon);
     selector: 'ukis-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    standalone: true,
     imports: [ClrNavigationModule, NgClass, ClrIconModule, RouterLink, RouterLinkActive, ClrStandaloneCdkTrapFocus]
 })
 export class HeaderComponent implements OnInit {

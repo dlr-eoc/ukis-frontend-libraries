@@ -12,15 +12,15 @@
     "map-ol"
   ],
   "peerDependencies": {
-    "@angular/common": "^18.2.8",
-    "@angular/core": "^18.2.8",
-    "@angular/forms": "^18.2.8",
-    "@clr/angular": "^17.3.1",
-    "@cds/core": "^6.13.0",
-    "@clr/ui": "^17.3.1",
+    "@angular/common": "^19.2.12",
+    "@angular/core": "^19.2.12",
+    "@angular/forms": "^19.2.12",
+    "@clr/angular": "^17.10.0",
+    "@cds/core": "^6.15.1",
+    "@clr/ui": "^17.10.0",
     "ol": "^v9.2.4",
-    "proj4": "^2.12.1",
-    "rxjs": "~7.8.0"
+    "proj4": "^2.17.0",
+    "rxjs": "~7.8.2"
   },
   "dependencies": {
     "@dlr-eoc/services-map-state": "15.0.0",
@@ -28,7 +28,7 @@
     "tslib": "^2.6.3"
   },
   "devDependencies": {
-    "zone.js": "~0.14.10",
-    "@angular/platform-browser-dynamic": "^18.2.8"
+    "zone.js": "~0.15.0",
+    "@angular/platform-browser-dynamic": "^19.2.12"
   }
 }

@@ -14,9 +14,9 @@
     "layers"
   ],
   "peerDependencies": {
-    "@angular/common": "^18.2.8",
-    "@angular/core": "^18.2.8",
-    "rxjs": "~7.8.0"
+    "@angular/common": "^19.2.12",
+    "@angular/core": "^19.2.12",
+    "rxjs": "~7.8.2"
   },
   "dependencies": {
     "@dlr-eoc/services-map-state": "15.0.0",

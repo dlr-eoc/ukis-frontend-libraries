@@ -3,7 +3,6 @@ import { ClrNavigationModule, ClrVerticalNavModule, } from '@clr/angular';
 
 @Component({
   selector: '<%= appPrefix %>-example-route',
-  standalone: true,
   imports: [ClrNavigationModule, ClrVerticalNavModule],
   templateUrl: './example-route.component.html',
   styleUrls: ['./example-route.component.scss']

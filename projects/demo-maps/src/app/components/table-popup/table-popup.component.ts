@@ -6,7 +6,6 @@ import { KeyValuePipe } from '@angular/common';
     selector: 'app-table-popup',
     templateUrl: './table-popup.component.html',
     styleUrls: ['./table-popup.component.scss'],
-    standalone: true,
     imports: [ClrDatagridModule, ClrStopEscapePropagationDirective, ClrPopoverHostDirective, KeyValuePipe]
 })
 export class TablePopupComponent implements OnInit {

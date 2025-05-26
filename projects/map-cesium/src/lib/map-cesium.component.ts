@@ -39,8 +39,7 @@ declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
     selector: 'ukis-map-cesium',
     templateUrl: './map-cesium.component.html',
     styleUrls: ['./map-cesium.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: true
+    encapsulation: ViewEncapsulation.None
 })
 export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 

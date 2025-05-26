@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'ol/ol.css';
-@import "styles/ukis-theme";
+@use 'ol/ol.css';
+@use "styles/ukis-theme";
 
 /**
  * When there are many items in the header, they may disappear behind the browser window's right edge on smaller screens

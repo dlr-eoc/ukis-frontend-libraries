@@ -16,7 +16,6 @@ import { ReversePipe } from '../utils/array-reverse.pipe';
     selector: 'ukis-layer-control',
     templateUrl: './layer-control.component.html',
     styleUrls: ['./layer-control.component.scss'],
-    standalone: true,
     imports: [CdkDropList, CdkDrag, LayerentryGroupComponent, CdkDragHandle, LayerentryComponent, ItemsFilterPipe, ReversePipe]
 })
 export class LayerControlComponent implements OnInit, OnDestroy {

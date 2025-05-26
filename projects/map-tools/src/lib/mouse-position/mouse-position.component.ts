@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { transform as olTransform, get as olGetProjection, Projection as olProjection } from 'ol/proj';
 import { Subscription } from 'rxjs';
-import { ClrSelectModule, ClrCommonFormsModule, ClrInputModule } from '@clr/angular';
+import { ClrSelectModule, ClrCommonFormsModule, ClrNumberInputModule } from '@clr/angular';
 
 import { FormsModule } from '@angular/forms';
 
@@ -15,8 +15,7 @@ interface ISelectProjection {
     selector: 'ukis-mouse-position',
     templateUrl: './mouse-position.component.html',
     styleUrls: ['./mouse-position.component.scss'],
-    standalone: true,
-    imports: [ClrSelectModule, ClrCommonFormsModule, FormsModule, ClrInputModule]
+    imports: [ClrSelectModule, ClrCommonFormsModule, FormsModule, ClrNumberInputModule]
 })
 export class MousePositionComponent implements OnInit, OnDestroy {
 

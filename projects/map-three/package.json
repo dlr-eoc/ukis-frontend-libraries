@@ -15,20 +15,20 @@
     "3D"
   ],
   "peerDependencies": {
-    "@angular/common": "^18.2.8",
-    "@angular/core": "^18.2.8"
+    "@angular/common": "^19.2.12",
+    "@angular/core": "^19.2.12"
   },
   "dependencies": {
     "@dlr-eoc/services-map-state": "15.0.0",
     "@dlr-eoc/services-layers": "15.0.0",
     "@dlr-eoc/map-ol": "15.0.0",
     "@dlr-eoc/utils-maps": "15.0.0",
-    "proj4": "^2.12.1",
+    "proj4": "^2.17.0",
     "tslib": "^2.6.3",
     "three": "^0.137.5"
   },
   "devDependencies": {
-    "zone.js": "~0.14.10",
-    "@angular/platform-browser-dynamic": "^18.2.8"
+    "zone.js": "~0.15.0",
+    "@angular/platform-browser-dynamic": "^19.2.12"
   }
 }

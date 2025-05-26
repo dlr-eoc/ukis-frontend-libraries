@@ -15,7 +15,6 @@ import { ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpost
     selector: 'ukis-fpser',
     templateUrl: './fpser.component.html',
     styleUrls: ['./fpser.component.scss'],
-    standalone: true,
     imports: [ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule]
 })
 export class FpserComponent {

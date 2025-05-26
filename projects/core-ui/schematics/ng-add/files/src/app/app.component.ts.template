@@ -23,7 +23,6 @@ interface IUi {
 
 @Component({
   selector: '<%= appPrefix %>-root',
-  standalone: true,
   imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, ExampleViewComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

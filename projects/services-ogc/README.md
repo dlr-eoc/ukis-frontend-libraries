@@ -2,6 +2,10 @@
 
 This library bundles our clients for OGC standards. 
 
+## Usage!!!
+This package musst be patched to use `jsonix` because it is not compatible with modern angular build.
+To do this run `npm i -D patch-package` (v8.0.0) and use the patch from [patches](patches\jsonix+3.0.0.patch) run `patch-package`.
+
 ## WPS
 This is a client to communicate with WPS-servers. With it, remote procedures can be called, their status monitored and their results fetched.
 The service is intended to abstract away the differences between the versions of the WPS protocol. It currently supports both WPS 1.0.0 and WPS 2.0.0.

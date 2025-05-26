@@ -6,7 +6,6 @@ import { ClrCheckboxModule, ClrCommonFormsModule } from '@clr/angular';
     selector: 'app-vtile-layer-action',
     templateUrl: './vtile-layer-action.component.html',
     styleUrls: ['./vtile-layer-action.component.scss'],
-    standalone: true,
     imports: [ClrCheckboxModule, ClrCommonFormsModule]
 })
 export class VtileLayerActionComponent implements OnInit {

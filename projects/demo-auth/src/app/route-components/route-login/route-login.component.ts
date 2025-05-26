@@ -6,7 +6,6 @@ import { LoginComponent } from '@dlr-eoc/user-info';
     selector: 'app-route-login',
     templateUrl: './route-login.component.html',
     styleUrls: ['./route-login.component.scss'],
-    standalone: true,
     imports: [LoginComponent]
 })
 export class RouteLoginComponent implements OnInit {

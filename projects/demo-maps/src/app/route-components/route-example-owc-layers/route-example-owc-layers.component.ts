@@ -19,7 +19,6 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, exportIcon ]);
     styleUrls: ['./route-example-owc-layers.component.scss'],
     /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService],
-    standalone: true,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleOwcLayersComponent implements OnInit {

@@ -104,8 +104,7 @@ describe('BaseLayerControlComponent', () => {
  */
 @Component({
     selector: 'ukis-layerentry',
-    template: '',
-    standalone: true
+    template: ''
 })
 class MockLayerentryComponent {
   @Input('layersSvc') layersSvc: LayersService;
@@ -125,8 +124,7 @@ class MockLayerentryComponent {
  */
 @Component({
     selector: 'ukis-layerentry-group',
-    template: '',
-    standalone: true
+    template: ''
 })
 class MockLayerentryGroupComponent {
 

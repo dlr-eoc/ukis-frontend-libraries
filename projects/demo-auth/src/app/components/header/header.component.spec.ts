@@ -8,7 +8,6 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'ukis-nested-component',
     template: `<clr-main-container><ukis-header></ukis-header></clr-main-container>`,
-    standalone: true,
     imports: [ClarityModule, HeaderComponent]
 })
 class NestedTestComponent { }

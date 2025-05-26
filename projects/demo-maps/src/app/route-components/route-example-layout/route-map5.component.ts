@@ -19,7 +19,6 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, tableIcon]);
     styleUrls: ['./route-map5.component.scss'],
     /** use differnt instances of the services only for testing with diffenr routs  */
     providers: [LayersService, MapStateService, MapOlService],
-    standalone: true,
     imports: [NgStyle, MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent, NgClass]
 })
 export class RouteMap5Component implements OnInit, OnDestroy {

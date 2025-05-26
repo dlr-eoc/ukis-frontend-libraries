@@ -44,7 +44,6 @@ ClarityIcons.addIcons(...[layersIcon, paperclipIcon]);
     styleUrls: ['./route-map4.component.scss'],
     /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService],
-    standalone: true,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent]
 })
 export class RouteMap4Component implements OnInit, AfterViewInit {

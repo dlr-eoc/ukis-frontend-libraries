@@ -23,7 +23,6 @@ ClarityIcons.addIcons(...[layersIcon, infoStandardIcon]);
     styleUrls: ['./route-example-threejs.component.scss'],
     providers: [LayersService, MapOlService] // <-- Don't provide MapStateSvc here! If we do, state is no longer synced between the two maps.
     ,
-    standalone: true,
     imports: [MapOlComponent, MapThreeComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, ClrAlertModule, LayerControlComponent]
 })
 export class RouteMap8Component implements OnInit, AfterViewInit {

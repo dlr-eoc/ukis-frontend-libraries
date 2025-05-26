@@ -12,7 +12,6 @@ import { ClrSpinnerModule } from '@clr/angular';
     selector: 'app-raster-feature-info',
     templateUrl: './raster-feature-info.component.html',
     styleUrls: ['./raster-feature-info.component.scss'],
-    standalone: true,
     imports: [ClrSpinnerModule, AsyncPipe, KeyValuePipe]
 })
 export class RasterFeatureInfoComponent implements OnInit {

@@ -10,7 +10,6 @@ ClarityIcons.addIcons(ukisIcon, dlrIcon, timesIcon);
     selector: 'ukis-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    standalone: true,
     imports: [ClrNavigationModule, NgClass, ClrIconModule, ClrStandaloneCdkTrapFocus]
 })
 export class HeaderComponent implements OnInit {

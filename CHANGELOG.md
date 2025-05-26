@@ -1,3 +1,24 @@
+### Breaking Changes
+ - Update angular from `^18.2.8` to `^19.2.13`
+ - Patch `jsonix` when using `@dlr-eoc/utils-ogc` or `@dlr-eoc/services-ogc`, see [jsonix 3.0.0.patch](patches/jsonix+3.0.0.patch) and use `patch-package`.
+
+### Bug Fixes
+* **@dlr-eoc/services-ogc:**
+* **@dlr-eoc/utils-ogc:**
+* **@dlr-eoc/demo-maps:**
+- Patch `jsonix` because is not compatible with modern angular build.
+
+* **@dlr-eoc/core-ui:**
+* **@dlr-eoc/demo-maps:**
+* **@dlr-eoc/demo-auth:**
+  - fix: [sass breaking change](https://sass-lang.com/documentation/breaking-changes/import) switch from @import to @use.
+
+* **@dlr-eoc/map-tools:**
+  - use `clr-number-input-container` instead of `clr-input-container` for input of `type="number"`.
+
+### Features
+- Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
+
 # [15.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v15.0.0) (2024-12-31) (angular update, @clr and @cds update, layer-control, map-ol)
 
 ### Breaking Changes

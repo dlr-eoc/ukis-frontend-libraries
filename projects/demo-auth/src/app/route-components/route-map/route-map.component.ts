@@ -19,7 +19,6 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon]);
     templateUrl: './route-map.component.html',
     styleUrls: ['./route-map.component.scss'],
     providers: [MapOlService],
-    standalone: true,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMapComponent implements OnInit {

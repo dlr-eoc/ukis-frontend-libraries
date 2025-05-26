@@ -15,7 +15,6 @@ interface IusrInfoForm {
     selector: 'ukis-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
-    standalone: true,
     imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule]
 })
 export class RegisterComponent implements OnDestroy {

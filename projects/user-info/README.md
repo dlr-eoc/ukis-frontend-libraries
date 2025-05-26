@@ -22,8 +22,6 @@ import { BasicAuthService } from './auth/basic-auth.service';
 import { HttpAuthInterceptor } from './auth/http-auth.interceptor';
 
 ...
-
- standalone: true,
  imports: [
     ...
     LoginComponent, RegisterComponent, UserDetailsComponent

@@ -26,12 +26,11 @@ import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon]);
 
 @Component({
-  selector: 'app-route-map',
-  templateUrl: './route-map.component.html',
-  styleUrls: ['./route-map.component.scss'],
-  /** use different instances of the services only for testing with different routes  */
+    selector: 'app-route-map',
+    templateUrl: './route-map.component.html',
+    styleUrls: ['./route-map.component.scss'],
+    /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService, WmsService],
-    standalone: true,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMapComponent implements OnInit {

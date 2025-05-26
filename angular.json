@@ -323,12 +323,15 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/demo-maps",
+            "outputPath": {
+              "base": "dist/demo-maps"
+            },
             "index": "projects/demo-maps/src/index.html",
-            "main": "projects/demo-maps/src/main.ts",
-            "polyfills": "projects/demo-maps/src/polyfills.ts",
+            "polyfills": [
+              "projects/demo-maps/src/polyfills.ts"
+            ],
             "tsConfig": "projects/demo-maps/tsconfig.app.json",
             "assets": [
               "projects/demo-maps/src/favicon.ico",
@@ -365,16 +368,15 @@
               }
             ],
             "styles": [
-              "node_modules/@fontsource/metropolis/all.css",
+              "node_modules/@fontsource/metropolis/index.css",
               "node_modules/@fontsource/noto-sans/index.css",
               "projects/demo-maps/src/styles.scss"
             ],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "projects/demo-maps/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -396,10 +398,7 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
               "aot": true,
-              "commonChunk": true,
-              "buildOptimizer": true,
               "deleteOutputPath": true,
               "budgets": [
                 {
@@ -477,12 +476,15 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/demo-auth",
+            "outputPath": {
+              "base": "dist/demo-auth"
+            },
             "index": "projects/demo-auth/src/index.html",
-            "main": "projects/demo-auth/src/main.ts",
-            "polyfills": "projects/demo-auth/src/polyfills.ts",
+            "polyfills": [
+              "projects/demo-auth/src/polyfills.ts"
+            ],
             "tsConfig": "projects/demo-auth/tsconfig.app.json",
             "assets": [
               "projects/demo-auth/src/favicon.ico",
@@ -501,12 +503,11 @@
             "styles": [
               "projects/demo-auth/src/styles.scss"
             ],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "projects/demo-auth/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -521,8 +522,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",

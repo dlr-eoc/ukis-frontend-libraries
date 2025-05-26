@@ -3,11 +3,10 @@ import { IProgress } from './progress.service';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'ukis-global-progress',
-  templateUrl: './global-progress.component.html',
-  styleUrls: ['./global-progress.component.scss'],
-  standalone: true,
-  imports: [NgClass]
+    selector: 'ukis-global-progress',
+    templateUrl: './global-progress.component.html',
+    styleUrls: ['./global-progress.component.scss'],
+    imports: [NgClass]
 })
 export class GlobalProgressComponent implements OnInit {
   @Input() progress!: null | IProgress;

@@ -13,7 +13,6 @@ import { ReversePipe } from '../utils/array-reverse.pipe';
     selector: 'ukis-base-layer-control',
     templateUrl: './base-layer-control.component.html',
     styleUrls: ['./base-layer-control.component.scss'],
-    standalone: true,
     imports: [LayerentryGroupComponent, LayerentryComponent, ReversePipe]
 })
 export class BaseLayerControlComponent implements OnInit, OnDestroy {

@@ -17,7 +17,6 @@ ClarityIcons.addIcons(...[layersIcon, mapIcon, compassIcon]);
     styleUrls: ['./route-map2.component.scss'],
     /** use differnt instances of the services only for testing with diffenr routs  */
     providers: [LayersService, MapStateService, MapOlService],
-    standalone: true,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent]
 })
 export class RouteMap2Component implements OnInit {

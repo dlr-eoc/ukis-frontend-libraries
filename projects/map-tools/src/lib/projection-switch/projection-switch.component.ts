@@ -13,10 +13,9 @@ ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
     selector: 'ukis-projection-switch',
     templateUrl: './projection-switch.component.html',
     styles: [],
-    standalone: true,
     imports: [
-    ClrIconModule
-],
+        ClrIconModule
+    ]
 })
 export class ProjectionSwitchComponent implements OnInit {
   @Input('mapSvc') mapSvc: MapOlService;
