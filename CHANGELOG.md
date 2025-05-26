@@ -1,6 +1,7 @@
 ### Breaking Changes
  - Update angular from `^18.2.8` to `^19.2.13`
  - Patch `jsonix` when using `@dlr-eoc/utils-ogc` or `@dlr-eoc/services-ogc`, see [jsonix 3.0.0.patch](patches/jsonix+3.0.0.patch) and use `patch-package`.
+ - Update OpenLayers from `v9.2.4` to `v10.5.0` see [OpenLayers releases](https://github.com/openlayers/openlayers/releases) for all changes.
 
 ### Bug Fixes
 * **@dlr-eoc/services-ogc:**

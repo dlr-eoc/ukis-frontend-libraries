@@ -8,10 +8,10 @@ import {
 import { heightAboveWidth } from '@dlr-eoc/map-three';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import { FrameState } from 'ol/Map';
-import { FeatureLike } from 'ol/Feature';
+import VectorSource from 'ol/source/Vector';
 
 
-export class BarsLayer extends VectorLayer<FeatureLike> {
+export class BarsLayer extends VectorLayer<VectorSource> {
   constructor(options) {
     super(options);
   }
@@ -40,7 +40,7 @@ export class ThreeJsRenderer extends CanvasVectorLayerRenderer {
   readonly renderer: Renderer;
   readonly camera: PerspectiveCamera;
 
-  constructor(layer: VectorLayer<FeatureLike>) {
+  constructor(layer: VectorLayer<VectorSource>) {
     super(layer);
 
     // setting up canvas
