@@ -4,6 +4,7 @@
  - Update OpenLayers from `v9.2.4` to `v10.5.0` see [OpenLayers releases](https://github.com/openlayers/openlayers/releases) for all changes.
  - Update maplibre from `^4.5.0` to `v5.5.0` see [maplibre releases](https://github.com/maplibre/maplibre-gl-js/releases) for all changes.
  - Update three.js from `^0.137.5` to `^0.176.0` see [three releases](https://github.com/mrdoob/three.js/releases) for all changes.
+ - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^10.1.0` to `^17.0.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^7.1.0` to `^12.0.0` (cesium from `1.120` to `1.129`) see [cesium changelog](https://github.com/CesiumGS/cesium/blob/1.129/CHANGES.md) for all changes.
 
 ### Bug Fixes
 * **@dlr-eoc/services-ogc:**
