@@ -14,7 +14,6 @@ import olVectorImageLayer from 'ol/layer/VectorImage';
 import olVectorSource from 'ol/source/Vector';
 import olTileSource from 'ol/source/Tile';
 import olImageSource from 'ol/source/Image';
-import olGeometry from 'ol/geom/Geometry';
 import olVectorTileLayer from 'ol/layer/VectorTile';
 import olVectorTileSource from 'ol/source/VectorTile';
 import olMVT from 'ol/format/MVT';
@@ -35,7 +34,7 @@ import olOverlay from 'ol/Overlay';
 import { getUid as olGetUid } from 'ol/util';
 import { get as getProjection, transform, transformExtent } from 'ol/proj';
 import { fromExtent as polygonFromExtent } from 'ol/geom/Polygon';
-import olFeature, { FeatureLike } from 'ol/Feature';
+import olFeature from 'ol/Feature';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
 import { Subject } from 'rxjs';
@@ -44,7 +43,6 @@ import { getCenter as olGetCenter } from 'ol/extent';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
-import Feature from 'ol/Feature';
 import { CommonModule } from '@angular/common';
 
 
@@ -57,16 +55,16 @@ let mapTarget: { size: number[], container: HTMLDivElement };
 let rasterLayer: olTileLayer<olTileSource>;
 
 /** ol/layer/Vector -ID-vector */
-let vectorLayer: olVectorLayer<FeatureLike>;
+let vectorLayer: olVectorLayer<olVectorSource>;
 
 /** ol/layer/Image - ID-image */
 let imageLayer: olImageLayer<olImageSource>;
 
 /** ol/layer/VectorImage - ID-vector-image */
-let vectorImageLayer: olVectorImageLayer<Feature>, vectorImageData;
+let vectorImageLayer: olVectorImageLayer<olVectorSource>, vectorImageData;
 
 /** ol/layer/VectorImage - ID-vector-tile */
-let vectorTileLayer: olVectorTileLayer<FeatureLike>;
+let vectorTileLayer: olVectorTileLayer<olVectorTileSource>;
 
 /** ID-ukis-raster */
 let ukisRasterLayer: RasterLayer;
@@ -115,9 +113,9 @@ const createMapTarget = (size: number[]) => {
 };
 
 @Component({
-    selector: 'app-mock-popup',
-    template: `<div>{{ data | json }}</div>`,
-    imports: [CommonModule]
+  selector: 'app-mock-popup',
+  template: `<div>{{ data | json }}</div>`,
+  imports: [CommonModule]
 })
 class MockPopupComponent {
   @Input() data: any;
@@ -131,7 +129,7 @@ const beforeEachCreateMapFn = () => {
 const beforeEachFn = () => {
   TestBed.configureTestingModule({
     imports: [MockPopupComponent]
-});
+  });
 
   beforeEachCreateMapFn();
 
@@ -751,12 +749,12 @@ describe('MapOlService ukisLayers', () => {
     const olSourceWmts = olLayerWmts.getSource();
     expect(olSourceWmts['crossOrigin'] && olSourceWmts['crossOrigin_']).toBe('anonymous');
 
-    const olLayerJson = mapLayers[4] as olVectorLayer<FeatureLike>;
+    const olLayerJson = mapLayers[4] as olVectorLayer<olVectorSource>;
     expect(olLayerJson.getClassName()).toBe(ukisVectorLayerJson.id);
     const olSourceJson = olLayerJson.getSource();
     expect(olSourceJson['crossOrigin'] && olSourceJson['crossOrigin_']).toBe(undefined); // this is only set if Layer.url -> olTileJSON()
 
-    const olLayerWfs = mapLayers[5] as olVectorLayer<FeatureLike>;
+    const olLayerWfs = mapLayers[5] as olVectorLayer<olVectorSource>;
     expect(olLayerWfs.getClassName()).toBe(ukisVectorLayerWfs.id);
     const olSourceWfs = olLayerWfs.getSource();
     expect(olSourceWfs['crossOrigin'] && olSourceWfs['crossOrigin_']).toBe(undefined); // WFS does not need crossOrigin??
@@ -1662,7 +1660,7 @@ describe('MapOlService State', () => {
     expect(service.getProjection().getCode()).toEqual(WebMercator);
     const layerBefore = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
 
-    const testFeatureBefore = (layerBefore as olVectorLayer<FeatureLike>).getSource().getFeatures()[3];
+    const testFeatureBefore = (layerBefore as olVectorLayer<olVectorSource>).getSource().getFeatures()[3];
     // coordinates after Read.Features of vectorLayer [1281696.090285835, 5848349.908155403];
     const pointCoordinates = transform(testFeatureCollection.features[3].geometry.coordinates as number[], WGS84, WebMercator);
     // Test for Point Feature
@@ -1672,7 +1670,7 @@ describe('MapOlService State', () => {
     service.setProjection(projection);
 
     const reprojectedLayer = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
-    const testFeature = (reprojectedLayer as olVectorLayer<FeatureLike>).getSource().getFeatures()[3];
+    const testFeature = (reprojectedLayer as olVectorLayer<olVectorSource>).getSource().getFeatures()[3];
     // Test for Point Feature
     expect(testFeature.getGeometry().getType()).toBe('Point');
     expect((testFeature.getGeometry() as olPoint).getCoordinates()).toEqual(testFeatureCollection.features[3].geometry.coordinates as number[]);
@@ -1722,7 +1720,11 @@ describe('MapOlService Data', () => {
     service.createMap(mapTarget.container);
 
     const feature = service.geoJsonToFeature(testFeatureCollection.features[0]);
-    expect(feature.getGeometry().getType()).toBe('Polygon');
+    if (!Array.isArray(feature)) {
+      expect(feature.getGeometry().getType()).toBe('Polygon');
+    }else{
+      expect(feature[0].getGeometry().getType()).toBe('Polygon');
+    }
   });
 
   it('should create a Array of OpenLayers Features from a GeoJson FeatureCollection', () => {

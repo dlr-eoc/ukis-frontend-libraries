@@ -41,9 +41,9 @@ import olVectorLayer from 'ol/layer/Vector';
 import { applyStyle } from 'ol-mapbox-style';
 import { collectionItemSetIndex, layerOrGroupSetOpacity, layerOrGroupSetVisible, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import { defaults as defaultInteractions } from 'ol/interaction/defaults';
-import { FeatureLike } from 'ol/Feature';
 
 import { ClarityIcons, worldIcon } from '@cds/core/icon';
+import VectorSource from 'ol/source/Vector';
 
 ClarityIcons.addIcons(...[worldIcon]);
 
@@ -294,7 +294,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
-  private updateTmsLayerParamsWith(oldLayer: olVectorLayer<FeatureLike>, newLayer: Layer) {
+  private updateTmsLayerParamsWith(oldLayer: olVectorLayer<VectorSource>, newLayer: Layer) {
     if (newLayer instanceof VectorLayer) {
       const style = newLayer.options.style;
       const mapboxSourceKey = newLayer.options.styleSource;
@@ -302,7 +302,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
-  private updateWfsLayerParamsWith(oldLayer: olVectorLayer<FeatureLike>, newLayer: VectorLayer) {
+  private updateWfsLayerParamsWith(oldLayer: olVectorLayer<VectorSource>, newLayer: VectorLayer) {
 
     // step 1: update style
     if (newLayer.options && newLayer.options.style !== oldLayer.getStyle()) {
@@ -318,7 +318,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   /**
    * TODO: set all other props of GeoJsonLayer.options and GeoJsonLayer.cluster (see: IVectorLayerOptions)
    */
-  updateGeojsonLayerParamsWith(oldLayer: olVectorLayer<FeatureLike>, newGeojsonLayer: VectorLayer) {
+  updateGeojsonLayerParamsWith(oldLayer: olVectorLayer<VectorSource>, newGeojsonLayer: VectorLayer) {
     const oldSource = oldLayer.getSource();
     if (oldSource) {
       if (newGeojsonLayer.data) {

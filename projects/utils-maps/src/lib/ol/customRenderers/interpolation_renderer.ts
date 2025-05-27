@@ -41,7 +41,7 @@ export interface InterpolationRendererSettings {
 }
 
 
-export class InterpolationLayer extends VectorLayer<FeatureLike> {
+export class InterpolationLayer extends VectorLayer<VectorSource<FeatureLike>> {
 
     readonly options: InterpolationLayerOptions;
 
@@ -101,7 +101,7 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
     private projection: Projection;
     private bbox: number[];
 
-    constructor(layer: VectorLayer<FeatureLike>, private settings: InterpolationRendererSettings) {
+    constructor(layer: VectorLayer<VectorSource<FeatureLike>>, private settings: InterpolationRendererSettings) {
         super(layer);
 
         // setting up HTML element

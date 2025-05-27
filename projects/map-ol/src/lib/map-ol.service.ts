@@ -10,6 +10,7 @@ import { ViewOptions as olViewOptions } from 'ol/View';
 import olBaseLayer from 'ol/layer/Base';
 import olSource from 'ol/source/Source';
 import olPoint from 'ol/geom/Point';
+import olGeometry from 'ol/geom/Geometry';
 import olLayer from 'ol/layer/Layer';
 import { Options as olLayerOptions } from 'ol/layer/Layer';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
@@ -87,6 +88,7 @@ import { getUid as olGetUid } from 'ol/util';
 import { Subject } from 'rxjs';
 import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import LayerRenderer from 'ol/renderer/Layer';
+import VectorSource from 'ol/source/Vector';
 
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -102,7 +104,7 @@ const POPUP_KEY = 'popup';
 
 
 type tmsReturnType<T> = T extends RasterLayer ? olTileLayer<olTileSource> :
-  T extends VectorLayer ? olVectorTileLayer<FeatureLike> : never;
+  T extends VectorLayer ? olVectorTileLayer : never;
 
 type LayerOptionsSources = olTileSource | olVectorTileSource | olImageSource | olSource;
 
@@ -723,7 +725,7 @@ export class MapOlService {
 
 
   private create_layers(newLayer: Layer) {
-    let newOlLayer: olTileLayer<olTileSource> | olVectorLayer<FeatureLike> | olBaseLayer;
+    let newOlLayer: olTileLayer<olTileSource> | olVectorLayer<VectorSource> | olBaseLayer;
     switch (newLayer.type) {
       case XyzLayertype:
         newOlLayer = this.create_xyz_layer(newLayer as RasterLayer);
@@ -914,7 +916,7 @@ export class MapOlService {
 
       const layeroptions = this.createOlLayerOptions(l, 'tms', olsource);
 
-      const vectorTileLayerOptions: olVectorTileLayerOptions<FeatureLike> = {
+      const vectorTileLayerOptions: olVectorTileLayerOptions = {
         declutter: true,
         renderMode: 'hybrid'
       };
@@ -1067,7 +1069,7 @@ export class MapOlService {
    * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html
    * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
    */
-  private create_wfs_layer(l: VectorLayer): olVectorLayer<FeatureLike> {
+  private create_wfs_layer(l: VectorLayer): olVectorLayer<olVectorSource> {
     let url = null;
     if (l.url.indexOf('http://') === 0 || l.url.indexOf('https://') === 0) {
       url = new URL(l.url);
@@ -1086,14 +1088,14 @@ export class MapOlService {
     });
 
     const layeroptions = this.createOlLayerOptions(l, 'wfs', olsource);
-    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<FeatureLike>> = {};
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<FeatureLike, olVectorSource> = {};
 
     if (l.options) {
       // here Object.assign modifies the target object - style... is included
       Object.assign(baseVectorLayerOptions, l.options);
     }
 
-    const newlayer = new olVectorLayer(Object.assign(layeroptions, baseVectorLayerOptions));
+    const newlayer = new olVectorLayer<olVectorSource>(Object.assign(layeroptions, baseVectorLayerOptions));
     if (l.cluster) {
       this.setCluster(l, newlayer, olsource, {});
     }
@@ -1129,7 +1131,7 @@ export class MapOlService {
 
     const layeroptions = this.createOlLayerOptions(l, 'geojson', olsource);
 
-    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<FeatureLike>> = {};
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<FeatureLike, olVectorSource> = {};
     if (l.options) {
       // here Object.assign modifies the target object - style... is included
       Object.assign(baseVectorLayerOptions, l.options);
@@ -1173,7 +1175,7 @@ export class MapOlService {
 
     const layeroptions = this.createOlLayerOptions(l, 'kml', olsource);
 
-    const baseVectorLayerOptions: olBaseVectorLayerOptions<olVectorSource<FeatureLike>> = {};
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<FeatureLike, olVectorSource> = {};
     if (l.options) {
       // here Object.assign modifies the target object - style... is included
       Object.assign(baseVectorLayerOptions, l.options);
@@ -1206,7 +1208,7 @@ export class MapOlService {
   /**
    * set cluster source and style for point layers
    */
-  private setCluster(l: VectorLayer, layer: olVectorLayer<FeatureLike>, source: olVectorSource, styleCache: { [key: string]: any }): void {
+  private setCluster(l: VectorLayer, layer: olVectorLayer<olVectorSource>, source: olVectorSource, styleCache: { [key: string]: any }): void {
     if (l.cluster) {
       const clusteroptions: olClusterOptions<FeatureLike> = {};
       if (typeof l.cluster === 'object') {
@@ -1793,7 +1795,7 @@ export class MapOlService {
   /**
    * https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html#Subclasses
    */
-  private checkIsVector(layer: olLayer<any>): layer is olBaseVectorLayer<olVectorSource<any>, CanvasVectorLayerRenderer> {
+  private checkIsVector(layer: olLayer<any>): layer is olBaseVectorLayer<FeatureLike, olVectorSource, CanvasVectorLayerRenderer> {
     if (layer instanceof olBaseVectorLayer && !this.checkIsRaster(layer)) {
       return true;
     } else {
@@ -2137,7 +2139,7 @@ export class MapOlService {
 
       const container = this.createPopupContainer(overlay, popupParams, popupObj, popupContent, event);
       /** edge case when moving and clicking sometimes the browser event is not like the popup event */
-      if(container){
+      if (container) {
         if (overlay.getId() === moveID) {
           overlay.set('addEvent', 'pointermove');
         } else {
@@ -2146,7 +2148,7 @@ export class MapOlService {
         overlay.set(OVERLAY_TYPE_KEY, POPUP_KEY);
         overlay.setElement(container);
       }
-      
+
 
       let coordinate;
       // When a point is clicked, its coordinate is used for the popup position.
@@ -2157,9 +2159,9 @@ export class MapOlService {
         coordinate = browserEvent.coordinate;
       }
 
-      if(container){
+      if (container) {
         overlay.setPosition(coordinate);
-      }else{
+      } else {
         this.map.removeOverlay(overlay);
       }
 
@@ -2193,11 +2195,11 @@ export class MapOlService {
       } else {
         popupHtml = this.createPopupHtml(popupContent);
       }
-    } else if(popupContent === false){
+    } else if (popupContent === false) {
       hasContent = false;
     } else if (Object.keys(popupParams.properties).length) {
       popupHtml = this.createPopupHtml(popupParams.properties);
-    }else{
+    } else {
       hasContent = false;
     }
 
@@ -2412,23 +2414,23 @@ export class MapOlService {
     return (transfomExtent as TGeoExtent);
   }
 
-   /** 
-    * USED in map-ol.component
-    * 
-    * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L291
-    * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L1707
-    */
-   public setRotation(rotation: number) {
+  /** 
+   * USED in map-ol.component
+   * 
+   * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L291
+   * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L1707
+   */
+  public setRotation(rotation: number) {
     const view = this.map.getView();
     // convert rotation vom deg to rad
-    rotation = rotation * (Math.PI/180);
+    rotation = rotation * (Math.PI / 180);
     view.setRotation(rotation);
   }
 
   /** USED in map-ol.component */
   public getRotation(): number {
     // convert rotation vom rad to deg
-    return this.map.getView().getRotation() * (180/Math.PI);
+    return this.map.getView().getRotation() * (180 / Math.PI);
   }
 
   /** USED in map-ol.component */
@@ -2470,15 +2472,16 @@ export class MapOlService {
     }
   }
 
-  public geoJsonToFeature(geojson: any): olFeature<any> {
+  public geoJsonToFeature(geojson: any): olFeature<olGeometry> | olFeature<olGeometry>[] {
     const GEOJSON = new olGeoJSON({
       dataProjection: WGS84,
       featureProjection: this.EPSG
     });
+    GEOJSON.readFeature
     return GEOJSON.readFeature(geojson);
   }
 
-  public geoJsonToFeatures(geojson: any): Array<olFeature<any>> {
+  public geoJsonToFeatures(geojson: any): olFeature<olGeometry>[] {
     const GEOJSON = new olGeoJSON({
       dataProjection: WGS84,
       featureProjection: this.EPSG

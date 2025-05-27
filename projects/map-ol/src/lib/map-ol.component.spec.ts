@@ -18,8 +18,8 @@ import olGeoJSON from 'ol/format/GeoJSON';
 import olMap from 'ol/Map';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import { MapOlService } from './map-ol.service';
-import { FeatureLike } from 'ol/Feature';
 import { CommonModule } from '@angular/common';
+import VectorSource from 'ol/source/Vector';
 
 /**
  * this service extends the LayersService to mimic its behavior. The getLayerGroups function is overwritten to
@@ -388,7 +388,7 @@ describe('MapOlComponent', () => {
     expect(layerFromService.data.features.length).toEqual(1);
 
     // layer is present on map
-    const layerFromMap = mapSvc.getLayerByKey({ key: 'id', value: vectorLayer.id }) as olVectorLayer<FeatureLike>;
+    const layerFromMap = mapSvc.getLayerByKey({ key: 'id', value: vectorLayer.id }) as olVectorLayer<VectorSource>;
     expect(layerFromMap).toBeTruthy();
     expect(layerFromMap.getProperties()['id']).toEqual(vectorLayer.id);
     expect(layerFromMap.getSource().getFeatures().length).toEqual(1);
@@ -401,7 +401,7 @@ describe('MapOlComponent', () => {
 
     component.layersSvc.updateLayer(vectorLayer);
     // now, after calling `updateLayer`, the data is present on the ol-layer
-    expect((component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer<FeatureLike>).getSource().getFeatures().length).toEqual(4);
+    expect((component.map.getLayers().getArray()[1].getLayersArray()[0] as olVectorLayer<VectorSource>).getSource().getFeatures().length).toEqual(4);
   });
 
   it('should use the correct z-index for Ukis-custom-layers even if they contain an olLayerGroup', () => {

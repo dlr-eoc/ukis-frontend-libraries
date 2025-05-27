@@ -10,12 +10,11 @@ import { MinimalWebGlRenderer } from './customRenderers/minimal_renderer';
 import { InterpolationRenderer } from './customRenderers/interpolation_renderer';
 import { ParticleRenderer } from './customRenderers/particle_renderer';
 import { DtmImageRenderer } from './customRenderers/dtm_renderer';
-import { FeatureLike } from 'ol/Feature';
 
 
-let vector1: VectorLayer<FeatureLike>;
-let vector2: VectorLayer<FeatureLike>;
-let vector3: VectorLayer<FeatureLike>;
+let vector1: VectorLayer<VectorSource>;
+let vector2: VectorLayer<VectorSource>;
+let vector3: VectorLayer<VectorSource>;
 let tileLayerOSM: TileLayer<OSM>;
 
 let group1: LayerGroup;

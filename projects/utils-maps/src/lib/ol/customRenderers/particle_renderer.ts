@@ -1,5 +1,6 @@
 import { Feature } from 'ol';
 import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
 import Point from 'ol/geom/Point';
 import Delaunator from 'delaunator';
 import { Shader, Framebuffer, Program, Uniform, Texture, renderLoop, Attribute } from '../../webgl/engine.core';
@@ -7,10 +8,9 @@ import { rectangleA } from '../../webgl/engine.shapes';
 import { flattenRecursive } from '../../webgl/utils';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import { FrameState } from 'ol/Map';
-import { FeatureLike } from 'ol/Feature';
 
 
-export class WindFieldLayer extends VectorLayer<FeatureLike> {
+export class WindFieldLayer extends VectorLayer<VectorSource> {
     constructor(options) {
         super(options);
     }
@@ -52,7 +52,7 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
     readonly particleFb2: Framebuffer;
     private fps = 30;
 
-    constructor(layer: VectorLayer<FeatureLike>) {
+    constructor(layer: VectorLayer<VectorSource>) {
         super(layer);
 
         // setting up canvas

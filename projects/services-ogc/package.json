@@ -27,7 +27,7 @@
     "@dlr-eoc/utils-ogc": "15.0.0",
     "w3c-schemas": "^1.4.0",
     "ogc-schemas": "^2.6.1",
-    "ol": "^v9.2.4",
+    "ol": "^v10.5.0",
     "jsonix": "^3.0.0",
     "tslib": "^2.6.3",
     "opensearch-browser": "^2.0.0-alpha.5",
