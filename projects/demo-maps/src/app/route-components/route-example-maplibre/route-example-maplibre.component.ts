@@ -2,7 +2,7 @@ import { Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation } from '@a
 import { CustomLayer, Layer, LayerGroup, LayersService, RasterLayer, StackedLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapMaplibreService, MapMaplibreComponent } from '@dlr-eoc/map-maplibre';
-import { StyleSpecification, TerrainControl } from 'maplibre-gl';
+import { GlobeControl, StyleSpecification, TerrainControl } from 'maplibre-gl';
 
 import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocBaseoverlayTile } from '@dlr-eoc/base-layers-raster';
 import greyscale from '@dlr-eoc/shared-assets/open-map-styles/open-map-style.json';
@@ -105,6 +105,8 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
             exaggeration: exaggeration
           }), 'top-left'
         );
+
+        map.addControl(new GlobeControl());
       }
     });
     this.subs.push(mapSub);

@@ -20,9 +20,10 @@ jobs:
         run: |
           npm ci
           npx ng build demo-maps --configuration=production --base-href=/ukis-frontend-libraries/
+          find dist/demo-maps/ -maxdepth 1 -type f -exec mv {} dist/demo-maps/browser/ \;
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: dist/demo-maps # The folder the action should deploy.
+          folder: dist/demo-maps/browser # The folder the action should deploy.
