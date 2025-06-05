@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.120
+ * Version 1.129
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,43 +25,41 @@
 
 import {
   GeometryOffsetAttribute_default
-} from "./chunk-GNHZH7HP.js";
+} from "./chunk-4TIR5UPL.js";
 import {
   GeometryAttributes_default
-} from "./chunk-JYQNWIQQ.js";
+} from "./chunk-236N6BJN.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-IUROUBPA.js";
+} from "./chunk-CQMXZF4A.js";
 import {
   BoundingSphere_default
-} from "./chunk-ELI4BUOT.js";
-import "./chunk-OXALEQPI.js";
+} from "./chunk-QJTIOB2Z.js";
+import "./chunk-5RPUEFSA.js";
 import {
   ComponentDatatype_default
-} from "./chunk-FQPSOOPH.js";
+} from "./chunk-IKDQX7DY.js";
 import {
-  Cartesian3_default
-} from "./chunk-T6LPN7RI.js";
-import "./chunk-R4OIEIPE.js";
-import "./chunk-RHBWXX7C.js";
-import "./chunk-ZIKGV7EL.js";
-import {
-  defaultValue_default
-} from "./chunk-BAVI3ZS2.js";
+  Cartesian3_default,
+  Frozen_default
+} from "./chunk-2BJXFXD7.js";
+import "./chunk-QUFN3GEO.js";
+import "./chunk-XYGBWBD5.js";
+import "./chunk-IFIS4CVK.js";
 import {
   Check_default,
   DeveloperError_default
-} from "./chunk-TGY6H6N6.js";
+} from "./chunk-NZSBSY5K.js";
 import {
   defined_default
-} from "./chunk-N4QEHO3U.js";
+} from "./chunk-HBNWBMAM.js";
 
 // packages/engine/Source/Core/BoxOutlineGeometry.js
 var diffScratch = new Cartesian3_default();
 function BoxOutlineGeometry(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const min = options.minimum;
   const max = options.maximum;
   Check_default.typeOf.object("min", min);
@@ -77,7 +75,7 @@ function BoxOutlineGeometry(options) {
   this._workerName = "createBoxOutlineGeometry";
 }
 BoxOutlineGeometry.fromDimensions = function(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const dimensions = options.dimensions;
   Check_default.typeOf.object("dimensions", dimensions);
   Check_default.typeOf.number.greaterThanOrEquals("dimensions.x", dimensions.x, 0);
@@ -101,13 +99,10 @@ BoxOutlineGeometry.packedLength = 2 * Cartesian3_default.packedLength + 1;
 BoxOutlineGeometry.pack = function(value, array, startingIndex) {
   Check_default.typeOf.object("value", value);
   Check_default.defined("array", array);
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   Cartesian3_default.pack(value._min, array, startingIndex);
   Cartesian3_default.pack(value._max, array, startingIndex + Cartesian3_default.packedLength);
-  array[startingIndex + Cartesian3_default.packedLength * 2] = defaultValue_default(
-    value._offsetAttribute,
-    -1
-  );
+  array[startingIndex + Cartesian3_default.packedLength * 2] = value._offsetAttribute ?? -1;
   return array;
 };
 var scratchMin = new Cartesian3_default();
@@ -119,7 +114,7 @@ var scratchOptions = {
 };
 BoxOutlineGeometry.unpack = function(array, startingIndex, result) {
   Check_default.defined("array", array);
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   const min = Cartesian3_default.unpack(array, startingIndex, scratchMin);
   const max = Cartesian3_default.unpack(
     array,

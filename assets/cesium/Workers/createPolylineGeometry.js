@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.120
+ * Version 1.129
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,60 +25,58 @@
 
 import {
   Color_default
-} from "./chunk-OJF4RTJG.js";
+} from "./chunk-VXAKU6EV.js";
 import {
   ArcType_default
-} from "./chunk-4VFBBNQ3.js";
+} from "./chunk-4BGKMM7J.js";
 import {
   PolylinePipeline_default
-} from "./chunk-OE4MCOC7.js";
-import "./chunk-6D66DPRV.js";
+} from "./chunk-UX5JWAC7.js";
+import "./chunk-UFV3YUIN.js";
 import {
   VertexFormat_default
-} from "./chunk-LSSWVB2X.js";
+} from "./chunk-SSLK4U3V.js";
 import {
   arrayRemoveDuplicates_default
-} from "./chunk-NVOABL76.js";
-import "./chunk-BY3E4ONI.js";
-import "./chunk-TF776XCO.js";
-import "./chunk-A5CODJ4M.js";
+} from "./chunk-K5JTWJPE.js";
+import "./chunk-E7SMO47Q.js";
+import "./chunk-C5DCX2YQ.js";
+import "./chunk-HGEGZ67N.js";
 import {
   IndexDatatype_default
-} from "./chunk-EB7PNZTK.js";
+} from "./chunk-77MDEA47.js";
 import {
   GeometryAttributes_default
-} from "./chunk-JYQNWIQQ.js";
+} from "./chunk-236N6BJN.js";
 import {
   GeometryAttribute_default,
   GeometryType_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-IUROUBPA.js";
+} from "./chunk-CQMXZF4A.js";
 import {
   BoundingSphere_default
-} from "./chunk-ELI4BUOT.js";
-import "./chunk-OXALEQPI.js";
+} from "./chunk-QJTIOB2Z.js";
+import "./chunk-5RPUEFSA.js";
 import {
   ComponentDatatype_default
-} from "./chunk-FQPSOOPH.js";
+} from "./chunk-IKDQX7DY.js";
 import {
   Cartesian3_default,
-  Ellipsoid_default
-} from "./chunk-T6LPN7RI.js";
+  Ellipsoid_default,
+  Frozen_default
+} from "./chunk-2BJXFXD7.js";
 import {
   Math_default
-} from "./chunk-R4OIEIPE.js";
-import "./chunk-RHBWXX7C.js";
-import "./chunk-ZIKGV7EL.js";
-import {
-  defaultValue_default
-} from "./chunk-BAVI3ZS2.js";
+} from "./chunk-QUFN3GEO.js";
+import "./chunk-XYGBWBD5.js";
+import "./chunk-IFIS4CVK.js";
 import {
   DeveloperError_default
-} from "./chunk-TGY6H6N6.js";
+} from "./chunk-NZSBSY5K.js";
 import {
   defined_default
-} from "./chunk-N4QEHO3U.js";
+} from "./chunk-HBNWBMAM.js";
 
 // packages/engine/Source/Core/PolylineGeometry.js
 var scratchInterpolateColorsArray = [];
@@ -115,11 +113,11 @@ function interpolateColors(p0, p1, color0, color1, numPoints) {
   return colors;
 }
 function PolylineGeometry(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const positions = options.positions;
   const colors = options.colors;
-  const width = defaultValue_default(options.width, 1);
-  const colorsPerVertex = defaultValue_default(options.colorsPerVertex, false);
+  const width = options.width ?? 1;
+  const colorsPerVertex = options.colorsPerVertex ?? false;
   if (!defined_default(positions) || positions.length < 2) {
     throw new DeveloperError_default("At least two positions are required.");
   }
@@ -134,16 +132,11 @@ function PolylineGeometry(options) {
   this._width = width;
   this._colorsPerVertex = colorsPerVertex;
   this._vertexFormat = VertexFormat_default.clone(
-    defaultValue_default(options.vertexFormat, VertexFormat_default.DEFAULT)
+    options.vertexFormat ?? VertexFormat_default.DEFAULT
   );
-  this._arcType = defaultValue_default(options.arcType, ArcType_default.GEODESIC);
-  this._granularity = defaultValue_default(
-    options.granularity,
-    Math_default.RADIANS_PER_DEGREE
-  );
-  this._ellipsoid = Ellipsoid_default.clone(
-    defaultValue_default(options.ellipsoid, Ellipsoid_default.default)
-  );
+  this._arcType = options.arcType ?? ArcType_default.GEODESIC;
+  this._granularity = options.granularity ?? Math_default.RADIANS_PER_DEGREE;
+  this._ellipsoid = Ellipsoid_default.clone(options.ellipsoid ?? Ellipsoid_default.default);
   this._workerName = "createPolylineGeometry";
   let numComponents = 1 + positions.length * Cartesian3_default.packedLength;
   numComponents += defined_default(colors) ? 1 + colors.length * Color_default.packedLength : 1;
@@ -156,7 +149,7 @@ PolylineGeometry.pack = function(value, array, startingIndex) {
   if (!defined_default(array)) {
     throw new DeveloperError_default("array is required");
   }
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   let i;
   const positions = value._positions;
   let length = positions.length;
@@ -196,7 +189,7 @@ PolylineGeometry.unpack = function(array, startingIndex, result) {
   if (!defined_default(array)) {
     throw new DeveloperError_default("array is required");
   }
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   let i;
   let length = array[startingIndex++];
   const positions = new Array(length);

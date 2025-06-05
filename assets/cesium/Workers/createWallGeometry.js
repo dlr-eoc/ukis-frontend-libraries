@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.120
+ * Version 1.129
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,52 +25,50 @@
 
 import {
   WallGeometryLibrary_default
-} from "./chunk-LXQ5QAEJ.js";
-import "./chunk-OE4MCOC7.js";
-import "./chunk-6D66DPRV.js";
+} from "./chunk-MAIKDIBS.js";
+import "./chunk-UX5JWAC7.js";
+import "./chunk-UFV3YUIN.js";
 import {
   VertexFormat_default
-} from "./chunk-LSSWVB2X.js";
-import "./chunk-NVOABL76.js";
-import "./chunk-BY3E4ONI.js";
-import "./chunk-TF776XCO.js";
-import "./chunk-A5CODJ4M.js";
+} from "./chunk-SSLK4U3V.js";
+import "./chunk-K5JTWJPE.js";
+import "./chunk-E7SMO47Q.js";
+import "./chunk-C5DCX2YQ.js";
+import "./chunk-HGEGZ67N.js";
 import {
   IndexDatatype_default
-} from "./chunk-EB7PNZTK.js";
+} from "./chunk-77MDEA47.js";
 import {
   GeometryAttributes_default
-} from "./chunk-JYQNWIQQ.js";
+} from "./chunk-236N6BJN.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-IUROUBPA.js";
+} from "./chunk-CQMXZF4A.js";
 import {
   BoundingSphere_default
-} from "./chunk-ELI4BUOT.js";
-import "./chunk-OXALEQPI.js";
+} from "./chunk-QJTIOB2Z.js";
+import "./chunk-5RPUEFSA.js";
 import {
   ComponentDatatype_default
-} from "./chunk-FQPSOOPH.js";
+} from "./chunk-IKDQX7DY.js";
 import {
   Cartesian3_default,
-  Ellipsoid_default
-} from "./chunk-T6LPN7RI.js";
+  Ellipsoid_default,
+  Frozen_default
+} from "./chunk-2BJXFXD7.js";
 import {
   Math_default
-} from "./chunk-R4OIEIPE.js";
-import "./chunk-RHBWXX7C.js";
-import "./chunk-ZIKGV7EL.js";
-import {
-  defaultValue_default
-} from "./chunk-BAVI3ZS2.js";
+} from "./chunk-QUFN3GEO.js";
+import "./chunk-XYGBWBD5.js";
+import "./chunk-IFIS4CVK.js";
 import {
   DeveloperError_default
-} from "./chunk-TGY6H6N6.js";
+} from "./chunk-NZSBSY5K.js";
 import {
   defined_default
-} from "./chunk-N4QEHO3U.js";
+} from "./chunk-HBNWBMAM.js";
 
 // packages/engine/Source/Core/WallGeometry.js
 var scratchCartesian3Position1 = new Cartesian3_default();
@@ -81,7 +79,7 @@ var scratchBitangent = new Cartesian3_default();
 var scratchTangent = new Cartesian3_default();
 var scratchNormal = new Cartesian3_default();
 function WallGeometry(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const wallPositions = options.positions;
   const maximumHeights = options.maximumHeights;
   const minimumHeights = options.minimumHeights;
@@ -98,12 +96,9 @@ function WallGeometry(options) {
       "options.positions and options.minimumHeights must have the same length."
     );
   }
-  const vertexFormat = defaultValue_default(options.vertexFormat, VertexFormat_default.DEFAULT);
-  const granularity = defaultValue_default(
-    options.granularity,
-    Math_default.RADIANS_PER_DEGREE
-  );
-  const ellipsoid = defaultValue_default(options.ellipsoid, Ellipsoid_default.default);
+  const vertexFormat = options.vertexFormat ?? VertexFormat_default.DEFAULT;
+  const granularity = options.granularity ?? Math_default.RADIANS_PER_DEGREE;
+  const ellipsoid = options.ellipsoid ?? Ellipsoid_default.default;
   this._positions = wallPositions;
   this._minimumHeights = minimumHeights;
   this._maximumHeights = maximumHeights;
@@ -127,7 +122,7 @@ WallGeometry.pack = function(value, array, startingIndex) {
   if (!defined_default(array)) {
     throw new DeveloperError_default("array is required");
   }
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   let i;
   const positions = value._positions;
   let length = positions.length;
@@ -172,7 +167,7 @@ WallGeometry.unpack = function(array, startingIndex, result) {
   if (!defined_default(array)) {
     throw new DeveloperError_default("array is required");
   }
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   let i;
   let length = array[startingIndex++];
   const positions = new Array(length);
@@ -220,7 +215,7 @@ WallGeometry.unpack = function(array, startingIndex, result) {
   return result;
 };
 WallGeometry.fromConstantHeights = function(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const positions = options.positions;
   if (!defined_default(positions)) {
     throw new DeveloperError_default("options.positions is required.");

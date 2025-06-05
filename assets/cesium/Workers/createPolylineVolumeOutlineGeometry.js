@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.120
+ * Version 1.129
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,62 +25,60 @@
 
 import {
   BoundingRectangle_default
-} from "./chunk-XLTOBCDI.js";
+} from "./chunk-CC2WKHIW.js";
 import {
   CornerType_default,
   PolylineVolumeGeometryLibrary_default
-} from "./chunk-G5V4GPZE.js";
-import "./chunk-OE4MCOC7.js";
-import "./chunk-6D66DPRV.js";
-import "./chunk-X2ZQ7RJR.js";
-import "./chunk-XZZNKIEV.js";
+} from "./chunk-ZTBZMRQT.js";
+import "./chunk-UX5JWAC7.js";
+import "./chunk-UFV3YUIN.js";
+import "./chunk-CAKU6ZPR.js";
+import "./chunk-DRMXU674.js";
 import {
   PolygonPipeline_default,
   WindingOrder_default
-} from "./chunk-76BYYG7N.js";
+} from "./chunk-GO3RZX2R.js";
 import {
   arrayRemoveDuplicates_default
-} from "./chunk-NVOABL76.js";
-import "./chunk-BY3E4ONI.js";
-import "./chunk-TF776XCO.js";
-import "./chunk-A5CODJ4M.js";
+} from "./chunk-K5JTWJPE.js";
+import "./chunk-E7SMO47Q.js";
+import "./chunk-C5DCX2YQ.js";
+import "./chunk-HGEGZ67N.js";
 import {
   IndexDatatype_default
-} from "./chunk-EB7PNZTK.js";
+} from "./chunk-77MDEA47.js";
 import {
   GeometryAttributes_default
-} from "./chunk-JYQNWIQQ.js";
+} from "./chunk-236N6BJN.js";
 import {
   GeometryAttribute_default,
   Geometry_default,
   PrimitiveType_default
-} from "./chunk-IUROUBPA.js";
+} from "./chunk-CQMXZF4A.js";
 import {
   BoundingSphere_default
-} from "./chunk-ELI4BUOT.js";
-import "./chunk-OXALEQPI.js";
+} from "./chunk-QJTIOB2Z.js";
+import "./chunk-5RPUEFSA.js";
 import {
   ComponentDatatype_default
-} from "./chunk-FQPSOOPH.js";
+} from "./chunk-IKDQX7DY.js";
 import {
   Cartesian2_default,
   Cartesian3_default,
-  Ellipsoid_default
-} from "./chunk-T6LPN7RI.js";
+  Ellipsoid_default,
+  Frozen_default
+} from "./chunk-2BJXFXD7.js";
 import {
   Math_default
-} from "./chunk-R4OIEIPE.js";
-import "./chunk-RHBWXX7C.js";
-import "./chunk-ZIKGV7EL.js";
-import {
-  defaultValue_default
-} from "./chunk-BAVI3ZS2.js";
+} from "./chunk-QUFN3GEO.js";
+import "./chunk-XYGBWBD5.js";
+import "./chunk-IFIS4CVK.js";
 import {
   DeveloperError_default
-} from "./chunk-TGY6H6N6.js";
+} from "./chunk-NZSBSY5K.js";
 import {
   defined_default
-} from "./chunk-N4QEHO3U.js";
+} from "./chunk-HBNWBMAM.js";
 
 // packages/engine/Source/Core/PolylineVolumeOutlineGeometry.js
 function computeAttributes(positions, shape) {
@@ -133,7 +131,7 @@ function computeAttributes(positions, shape) {
   return geometry;
 }
 function PolylineVolumeOutlineGeometry(options) {
-  options = defaultValue_default(options, defaultValue_default.EMPTY_OBJECT);
+  options = options ?? Frozen_default.EMPTY_OBJECT;
   const positions = options.polylinePositions;
   const shape = options.shapePositions;
   if (!defined_default(positions)) {
@@ -144,14 +142,9 @@ function PolylineVolumeOutlineGeometry(options) {
   }
   this._positions = positions;
   this._shape = shape;
-  this._ellipsoid = Ellipsoid_default.clone(
-    defaultValue_default(options.ellipsoid, Ellipsoid_default.default)
-  );
-  this._cornerType = defaultValue_default(options.cornerType, CornerType_default.ROUNDED);
-  this._granularity = defaultValue_default(
-    options.granularity,
-    Math_default.RADIANS_PER_DEGREE
-  );
+  this._ellipsoid = Ellipsoid_default.clone(options.ellipsoid ?? Ellipsoid_default.default);
+  this._cornerType = options.cornerType ?? CornerType_default.ROUNDED;
+  this._granularity = options.granularity ?? Math_default.RADIANS_PER_DEGREE;
   this._workerName = "createPolylineVolumeOutlineGeometry";
   let numComponents = 1 + positions.length * Cartesian3_default.packedLength;
   numComponents += 1 + shape.length * Cartesian2_default.packedLength;
@@ -164,7 +157,7 @@ PolylineVolumeOutlineGeometry.pack = function(value, array, startingIndex) {
   if (!defined_default(array)) {
     throw new DeveloperError_default("array is required");
   }
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   let i;
   const positions = value._positions;
   let length = positions.length;
@@ -197,7 +190,7 @@ PolylineVolumeOutlineGeometry.unpack = function(array, startingIndex, result) {
   if (!defined_default(array)) {
     throw new DeveloperError_default("array is required");
   }
-  startingIndex = defaultValue_default(startingIndex, 0);
+  startingIndex = startingIndex ?? 0;
   let i;
   let length = array[startingIndex++];
   const positions = new Array(length);

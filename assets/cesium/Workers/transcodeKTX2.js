@@ -1,7 +1,7 @@
 /**
  * @license
  * Cesium - https://github.com/CesiumGS/cesium
- * Version 1.120
+ * Version 1.129
  *
  * Copyright 2011-2022 Cesium Contributors
  *
@@ -25,25 +25,22 @@
 
 import {
   createTaskProcessorWorker_default
-} from "./chunk-MMV6TO3P.js";
+} from "./chunk-J2HTPGC7.js";
 import {
   WebGLConstants_default
-} from "./chunk-RHBWXX7C.js";
+} from "./chunk-XYGBWBD5.js";
 import {
   RuntimeError_default
-} from "./chunk-ZIKGV7EL.js";
-import {
-  defaultValue_default
-} from "./chunk-BAVI3ZS2.js";
+} from "./chunk-IFIS4CVK.js";
 import {
   Check_default
-} from "./chunk-TGY6H6N6.js";
+} from "./chunk-NZSBSY5K.js";
 import {
   __commonJS,
   __require,
   __toESM,
   defined_default
-} from "./chunk-N4QEHO3U.js";
+} from "./chunk-HBNWBMAM.js";
 
 // packages/engine/Source/ThirdParty/Workers/basis_transcoder.js
 var require_basis_transcoder = __commonJS({
@@ -2305,6 +2302,17 @@ PixelDatatype.sizeInBytes = function(pixelDatatype) {
 PixelDatatype.validate = function(pixelDatatype) {
   return pixelDatatype === PixelDatatype.UNSIGNED_BYTE || pixelDatatype === PixelDatatype.UNSIGNED_SHORT || pixelDatatype === PixelDatatype.UNSIGNED_INT || pixelDatatype === PixelDatatype.FLOAT || pixelDatatype === PixelDatatype.HALF_FLOAT || pixelDatatype === PixelDatatype.UNSIGNED_INT_24_8 || pixelDatatype === PixelDatatype.UNSIGNED_SHORT_4_4_4_4 || pixelDatatype === PixelDatatype.UNSIGNED_SHORT_5_5_5_1 || pixelDatatype === PixelDatatype.UNSIGNED_SHORT_5_6_5;
 };
+PixelDatatype.getTypedArrayConstructor = function(pixelDatatype) {
+  const sizeInBytes = PixelDatatype.sizeInBytes(pixelDatatype);
+  if (sizeInBytes === Uint8Array.BYTES_PER_ELEMENT) {
+    return Uint8Array;
+  } else if (sizeInBytes === Uint16Array.BYTES_PER_ELEMENT) {
+    return Uint16Array;
+  } else if (sizeInBytes === Float32Array.BYTES_PER_ELEMENT && pixelDatatype === PixelDatatype.FLOAT) {
+    return Float32Array;
+  }
+  return Uint32Array;
+};
 var PixelDatatype_default = Object.freeze(PixelDatatype);
 
 // packages/engine/Source/Core/PixelFormat.js
@@ -2549,17 +2557,7 @@ PixelFormat.alignmentInBytes = function(pixelFormat, pixelDatatype, width) {
   return mod === 0 ? 4 : mod === 2 ? 2 : 1;
 };
 PixelFormat.createTypedArray = function(pixelFormat, pixelDatatype, width, height) {
-  let constructor;
-  const sizeInBytes = PixelDatatype_default.sizeInBytes(pixelDatatype);
-  if (sizeInBytes === Uint8Array.BYTES_PER_ELEMENT) {
-    constructor = Uint8Array;
-  } else if (sizeInBytes === Uint16Array.BYTES_PER_ELEMENT) {
-    constructor = Uint16Array;
-  } else if (sizeInBytes === Float32Array.BYTES_PER_ELEMENT && pixelDatatype === PixelDatatype_default.FLOAT) {
-    constructor = Float32Array;
-  } else {
-    constructor = Uint32Array;
-  }
+  const constructor = PixelDatatype_default.getTypedArrayConstructor(pixelDatatype);
   const size = PixelFormat.componentsLength(pixelFormat) * width * height;
   return new constructor(size);
 };
@@ -2917,21 +2915,20 @@ var KHR_DF_TRANSFER_SRGB = 2;
 var KHR_DF_PRIMARIES_BT709 = 1;
 var KHR_DF_SAMPLE_DATATYPE_SIGNED = 64;
 var VK_FORMAT_UNDEFINED = 0;
-var KTX2Container = class {
-  constructor() {
-    this.vkFormat = VK_FORMAT_UNDEFINED;
-    this.typeSize = 1;
-    this.pixelWidth = 0;
-    this.pixelHeight = 0;
-    this.pixelDepth = 0;
-    this.layerCount = 0;
-    this.faceCount = 1;
-    this.supercompressionScheme = KHR_SUPERCOMPRESSION_NONE;
-    this.levels = [];
-    this.dataFormatDescriptor = [{
+function createDefaultContainer() {
+  return {
+    vkFormat: VK_FORMAT_UNDEFINED,
+    typeSize: 1,
+    pixelWidth: 0,
+    pixelHeight: 0,
+    pixelDepth: 0,
+    layerCount: 0,
+    faceCount: 1,
+    supercompressionScheme: KHR_SUPERCOMPRESSION_NONE,
+    levels: [],
+    dataFormatDescriptor: [{
       vendorId: KHR_DF_VENDORID_KHRONOS,
       descriptorType: KHR_DF_KHR_DESCRIPTORTYPE_BASICFORMAT,
-      descriptorBlockSize: 0,
       versionNumber: KHR_DF_VERSION,
       colorModel: KHR_DF_MODEL_UNSPECIFIED,
       colorPrimaries: KHR_DF_PRIMARIES_BT709,
@@ -2940,11 +2937,11 @@ var KTX2Container = class {
       texelBlockDimension: [0, 0, 0, 0],
       bytesPlane: [0, 0, 0, 0, 0, 0, 0, 0],
       samples: []
-    }];
-    this.keyValue = {};
-    this.globalData = null;
-  }
-};
+    }],
+    keyValue: {},
+    globalData: null
+  };
+}
 var BufferReader = class {
   constructor(data, byteOffset, byteLength, littleEndian) {
     this._dataView = void 0;
@@ -3036,7 +3033,7 @@ function read2(data) {
   id[11] !== KTX2_ID[11]) {
     throw new Error("Missing KTX 2.0 identifier.");
   }
-  const container = new KTX2Container();
+  const container = createDefaultContainer();
   const headerByteLength = 17 * Uint32Array.BYTES_PER_ELEMENT;
   const headerReader = new BufferReader(data, KTX2_ID.length, headerByteLength, true);
   container.vkFormat = headerReader._nextUint32();
@@ -3063,33 +3060,41 @@ function read2(data) {
     });
   }
   const dfdReader = new BufferReader(data, dfdByteOffset, dfdByteLength, true);
+  dfdReader._skip(4);
+  const vendorId = dfdReader._nextUint16();
+  const descriptorType = dfdReader._nextUint16();
+  const versionNumber = dfdReader._nextUint16();
+  const descriptorBlockSize = dfdReader._nextUint16();
+  const colorModel = dfdReader._nextUint8();
+  const colorPrimaries = dfdReader._nextUint8();
+  const transferFunction = dfdReader._nextUint8();
+  const flags = dfdReader._nextUint8();
+  const texelBlockDimension = [dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8()];
+  const bytesPlane = [dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8()];
+  const samples = [];
   const dfd = {
-    vendorId: dfdReader._skip(
-      4
-      /* totalSize */
-    )._nextUint16(),
-    descriptorType: dfdReader._nextUint16(),
-    versionNumber: dfdReader._nextUint16(),
-    descriptorBlockSize: dfdReader._nextUint16(),
-    colorModel: dfdReader._nextUint8(),
-    colorPrimaries: dfdReader._nextUint8(),
-    transferFunction: dfdReader._nextUint8(),
-    flags: dfdReader._nextUint8(),
-    texelBlockDimension: [dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8()],
-    bytesPlane: [dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8()],
-    samples: []
+    vendorId,
+    descriptorType,
+    versionNumber,
+    colorModel,
+    colorPrimaries,
+    transferFunction,
+    flags,
+    texelBlockDimension,
+    bytesPlane,
+    samples
   };
   const sampleStart = 6;
   const sampleWords = 4;
-  const numSamples = (dfd.descriptorBlockSize / 4 - sampleStart) / sampleWords;
+  const numSamples = (descriptorBlockSize / 4 - sampleStart) / sampleWords;
   for (let i = 0; i < numSamples; i++) {
     const sample = {
       bitOffset: dfdReader._nextUint16(),
       bitLength: dfdReader._nextUint8(),
       channelType: dfdReader._nextUint8(),
       samplePosition: [dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8(), dfdReader._nextUint8()],
-      sampleLower: -Infinity,
-      sampleUpper: Infinity
+      sampleLower: Number.NEGATIVE_INFINITY,
+      sampleUpper: Number.POSITIVE_INFINITY
     };
     if (sample.channelType & KHR_DF_SAMPLE_DATATYPE_SIGNED) {
       sample.sampleLower = dfdReader._nextInt32();
@@ -3364,7 +3369,7 @@ function transcodeCompressed(data, header, supportedTargetFormats, transcoderMod
 }
 async function initWorker(parameters, transferableObjects) {
   const wasmConfig = parameters.webAssemblyConfig;
-  const basisTranscoder = defaultValue_default(import_basis_transcoder.default, self.BASIS);
+  const basisTranscoder = import_basis_transcoder.default ?? self.BASIS;
   if (defined_default(wasmConfig.wasmBinaryFile)) {
     transcoderModule = await basisTranscoder(wasmConfig);
   } else {
