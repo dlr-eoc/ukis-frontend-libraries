@@ -5,7 +5,7 @@ import { MapStateService, IMapState } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemap, BlueMarbleTile, EocLiteoverlayTile } from '@dlr-eoc/base-layers-raster';
 import { ICesiumControls, MapCesiumService } from '@dlr-eoc/map-cesium';
 import { MapOlService } from '@dlr-eoc/map-ol';
-import { Cesium3DTileset, CesiumTerrainProvider, Credit, EllipsoidTerrainProvider, I3SDataProvider, createGooglePhotorealistic3DTileset } from '@cesium/engine';
+import { Cesium3DTileset, CesiumTerrainProvider, Credit, EllipsoidTerrainProvider, I3SDataProvider} from '@cesium/engine';
 import testData from '@dlr-eoc/shared-assets/geojson/test.json';
 import { Feature } from 'ol';
 import { Fill, Stroke, Style } from 'ol/style';
