@@ -1,6 +1,6 @@
 {
   "name": "demo-maps",
-  "version": "15.0.0",
+  "version": "16.0.0-next.0",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -22,16 +22,16 @@
     "proj4": "^2.17.0"
   },
   "dependencies": {
-    "@dlr-eoc/map-ol": "15.0.0",
-    "@dlr-eoc/layer-control": "15.0.0",
-    "@dlr-eoc/map-tools": "15.0.0",
-    "@dlr-eoc/base-layers-raster": "15.0.0",
-    "@dlr-eoc/map-three": "15.0.0",
-    "@dlr-eoc/utils-maps": "15.0.0",
-    "@dlr-eoc/services-ogc": "15.0.0",
-    "@dlr-eoc/shared-assets": "15.0.0",
-    "@dlr-eoc/map-cesium": "15.0.0",
-    "@dlr-eoc/map-maplibre": "15.0.0"
+    "@dlr-eoc/map-ol": "16.0.0-next.0",
+    "@dlr-eoc/layer-control": "16.0.0-next.0",
+    "@dlr-eoc/map-tools": "16.0.0-next.0",
+    "@dlr-eoc/base-layers-raster": "16.0.0-next.0",
+    "@dlr-eoc/map-three": "16.0.0-next.0",
+    "@dlr-eoc/utils-maps": "16.0.0-next.0",
+    "@dlr-eoc/services-ogc": "16.0.0-next.0",
+    "@dlr-eoc/shared-assets": "16.0.0-next.0",
+    "@dlr-eoc/map-cesium": "16.0.0-next.0",
+    "@dlr-eoc/map-maplibre": "16.0.0-next.0"
   },
   "devDependencies": {
     "zone.js": "~0.15.0",
