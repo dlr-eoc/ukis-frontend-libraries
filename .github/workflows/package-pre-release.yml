@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -30,7 +30,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           prerelease: true
 
@@ -41,14 +41,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
       - uses: ./.github/actions/test
       - name: build
         run: |
            npm ci
            npm run build
       - name: Archive dist artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "dist"
           path: dist
@@ -59,13 +59,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download dist result from job build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -90,13 +90,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download dist result from job build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci

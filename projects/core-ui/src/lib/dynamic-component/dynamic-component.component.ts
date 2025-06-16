@@ -33,6 +33,7 @@ export class DynamicComponentComponent implements OnInit, OnDestroy, OnChanges {
   subs: Subscription[] = [];
   constructor() { }
 
+  // TODO: check if this can be enhanced https://angular.dev/api/core/createComponent#createComponent_0
   loadComponent() {
     if (this.dynamicComponent) {
       this.viewContainerRef = this.ukisAddHost.viewContainerRef;
