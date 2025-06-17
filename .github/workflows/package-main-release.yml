@@ -68,7 +68,7 @@ jobs:
           git checkout ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -88,13 +88,13 @@ jobs:
           git checkout ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
       - name: build
         run: |
            npm ci
            npm run build
       - name: Archive dist artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "dist"
           path: dist
@@ -129,7 +129,7 @@ jobs:
           git fetch --all --tags
           git checkout ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
 
@@ -140,13 +140,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download dist result from job build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -171,13 +171,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download dist result from job build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci

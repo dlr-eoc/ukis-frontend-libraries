@@ -5,14 +5,16 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.15.1
+          node-version: 22
 
       # This builds the project for projects/demo-maps and outputs the result to the 'dist' folder.
       # https://github.com/angular/angular-cli/issues/9016#issuecomment-526825531
@@ -22,8 +24,24 @@ jobs:
           npx ng build demo-maps --configuration=production --base-href=/ukis-frontend-libraries/
           find dist/demo-maps/ -maxdepth 1 -type f -exec mv {} dist/demo-maps/browser/ \;
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload artifact
+        # https://docs.github.com/de/actions/writing-workflows/choosing-what-your-workflow-does/storing-and-sharing-data-from-a-workflow
+        # use this and not upload-artifact@v4 because so all metadata is set correctly
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: dist/demo-maps/browser # The folder the action should deploy.
+          # Upload entire repository
+          path: 'dist/demo-maps/browser'
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
