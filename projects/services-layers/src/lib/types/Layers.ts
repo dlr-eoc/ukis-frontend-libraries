@@ -174,6 +174,7 @@ export interface ILayerOptions {
   attribution?: string;
   displayName?: string;
   description?: string | IDynamicComponent;
+  properties?: IAnyObject;
   time?: string;
   minResolution?: number;
   maxResolution?: number;
@@ -312,6 +313,7 @@ export class Layer implements ILayerOptions {
   attribution?: string;
   displayName?: string;
   description?: string | IDynamicComponent;
+  properties?: IAnyObject;
   protected protTime?: string;
   minResolution?: number;
   maxResolution?: number;
