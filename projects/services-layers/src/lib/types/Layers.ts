@@ -335,7 +335,7 @@ export class Layer<T = any> implements ILayerOptions<T>{
   expanded: boolean | ILayerExpanded = false;
   cssClass?: string;
 
-  constructor(options: ILayerOptions) {
+  constructor(options: ILayerOptions<T>) {
     Object.assign(this, options);
   }
 
