@@ -160,7 +160,7 @@ export interface ILayerExpanded {
   expanded?: boolean;
 }
 
-export interface ILayerOptions {
+export interface ILayerOptions<T = any > {
   name: string;
   id: string;
   // id: string
@@ -174,6 +174,7 @@ export interface ILayerOptions {
   attribution?: string;
   displayName?: string;
   description?: string | IDynamicComponent;
+  properties?: T;
   time?: string;
   minResolution?: number;
   maxResolution?: number;
@@ -299,7 +300,7 @@ export interface IStackedLayerOptions extends Omit<ILayerOptions, 'type'> {
 /**
  * Classes for layer construction
  */
-export class Layer implements ILayerOptions {
+export class Layer<T = any> implements ILayerOptions<T>{
   name = '';
   id = '';
   type: TLayertype;
@@ -312,6 +313,7 @@ export class Layer implements ILayerOptions {
   attribution?: string;
   displayName?: string;
   description?: string | IDynamicComponent;
+  properties?: T = {} as T;
   protected protTime?: string;
   minResolution?: number;
   maxResolution?: number;
@@ -333,7 +335,7 @@ export class Layer implements ILayerOptions {
   expanded: boolean | ILayerExpanded = false;
   cssClass?: string;
 
-  constructor(options: ILayerOptions) {
+  constructor(options: ILayerOptions<T>) {
     Object.assign(this, options);
   }
 

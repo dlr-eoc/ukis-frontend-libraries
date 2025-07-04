@@ -15,6 +15,7 @@ describe('Layer Types', () => {
       id: 'ID-raster',
       name: 'raster',
       type: 'wms',
+      properties: {unit: 'm'},
       url: '//geoservice.dlr.de/eoc/basemap/wms',
       removable: true,
       visible: true,
@@ -27,6 +28,7 @@ describe('Layer Types', () => {
       id: 'ID-vector',
       name: 'vector',
       type: 'geojson',
+      properties: {unit: 'm²'},
       data: {},
       visible: false
     });
@@ -35,6 +37,7 @@ describe('Layer Types', () => {
       id: 'ID-custom',
       type: 'custom',
       name: 'custom',
+      properties: {unit: 'm³'},
       custom_layer: {}
     });
   }));
@@ -46,6 +49,7 @@ describe('Layer Types', () => {
       minZoom = 3,
       maxZoom = 25,
       opacity = 0.5,
+      properties = {unit: 'm'},
       bbox: TGeoExtent = [-180, -90, 180, 90];
 
     const layer = new Layer({
@@ -53,6 +57,7 @@ describe('Layer Types', () => {
       type,
       name,
       opacity,
+      properties,
       bbox,
       minZoom,
       maxZoom
@@ -65,6 +70,7 @@ describe('Layer Types', () => {
 
     /** optional or defaults */
     expect(layer.opacity).toBe(opacity);
+    expect(layer.properties).toBe(properties);
     expect(layer.visible).toBe(true);
     expect(layer.expanded).toBe(false);
     expect(layer.removable).toBe(false);
@@ -128,6 +134,7 @@ describe('Layer Types', () => {
     expect(newRasterlayer.attribution).toBe(undefined);
     expect(newRasterlayer.displayName).toBe(undefined);
     expect(newRasterlayer.description).toBe(undefined);
+    expect(newRasterlayer.properties).toBe(undefined);
     expect(newRasterlayer.time).toBe(undefined);
     expect(newRasterlayer.minResolution).toBe(undefined);
     expect(newRasterlayer.maxResolution).toBe(undefined);
@@ -188,6 +195,7 @@ describe('Layer Types', () => {
     expect(newVectorLayer.attribution).toBe(undefined);
     expect(newVectorLayer.displayName).toBe(undefined);
     expect(newVectorLayer.description).toBe(undefined);
+    expect(newVectorLayer.properties).toBe(undefined);
     expect(newVectorLayer.time).toBe(undefined);
     expect(newVectorLayer.minResolution).toBe(undefined);
     expect(newVectorLayer.maxResolution).toBe(undefined);
