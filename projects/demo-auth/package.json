@@ -1,6 +1,6 @@
 {
   "name": "demo-auth",
-  "version": "16.0.0-next.1",
+  "version": "16.0.0-next.2",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -21,11 +21,11 @@
     "rxjs": "~7.8.2"
   },
   "dependencies": {
-    "@dlr-eoc/map-ol": "16.0.0-next.1",
-    "@dlr-eoc/layer-control": "16.0.0-next.1",
-    "@dlr-eoc/cookie-alert": "16.0.0-next.1",
-    "@dlr-eoc/user-info": "16.0.0-next.1",
-    "@dlr-eoc/base-layers-raster": "16.0.0-next.1"
+    "@dlr-eoc/map-ol": "16.0.0-next.2",
+    "@dlr-eoc/layer-control": "16.0.0-next.2",
+    "@dlr-eoc/cookie-alert": "16.0.0-next.2",
+    "@dlr-eoc/user-info": "16.0.0-next.2",
+    "@dlr-eoc/base-layers-raster": "16.0.0-next.2"
   },
   "devDependencies": {
     "zone.js": "~0.15.0",
