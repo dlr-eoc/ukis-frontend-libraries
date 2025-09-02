@@ -22,6 +22,11 @@
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
+
+* **@dlr-eoc/ngx-ukis-utilities:**
+- New UKIS library for angular utilities was added.
+- Export `DynamicComponent` which have been in `@dlr-eoc/core-ui`
+- Export some pipes which have been in `@dlr-eoc/layer-control`
 * **@dlr-eoc/services-layers:**
 - Add `properties` attribute to Layer type
 

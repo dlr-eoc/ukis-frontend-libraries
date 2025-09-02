@@ -136,7 +136,8 @@
     "projects/shared-assets",
     "projects/map-cesium",
     "projects/utilities",
-    "projects/map-maplibre"
+    "projects/map-maplibre",
+    "projects/ngx-ukis-utilities"
   ],
   "engines": {
     "node": ">= 20.15.1",
