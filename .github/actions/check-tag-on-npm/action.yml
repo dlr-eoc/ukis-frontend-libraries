@@ -4,7 +4,7 @@ inputs:
   npmPackageName: # id of input
     description: "The npm package to get the latest version from the npm registry."
     required: false
-    default: "@dlr-eoc/core-ui"
+    default: "@dlr-eoc/map-ol"
   npmPackageTags:
     description: "A List of tags. Use this instead of npmPackageName if you can't get the tags from the package."
     required: false

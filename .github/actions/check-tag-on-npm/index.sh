@@ -5,7 +5,7 @@
 # chmod +x index.sh or git update-index --chmod=+x index.sh
 
 
-#NPM_PACKAGE_NAME=@dlr-eoc/core-ui
+#NPM_PACKAGE_NAME=@dlr-eoc/map-ol
 #PACKAGE_PATH="./package.json"
 #TAG="v7.3.1"
 #NPM_PACKAGE_TAGS="v0.4.0-next.1 , v0.4.0-next.2 , v0.9.0, v1.0.0, v1.0.1, v1.0.2, v1.0.3"

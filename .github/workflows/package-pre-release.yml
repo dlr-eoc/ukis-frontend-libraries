@@ -20,7 +20,7 @@ jobs:
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
-          npmPackageName: "@dlr-eoc/core-ui"
+          npmPackageName: "@dlr-eoc/map-ol"
           tag: "${{ github.ref }}"
 
   # create Release on tag push https://github.com/softprops/action-gh-release
