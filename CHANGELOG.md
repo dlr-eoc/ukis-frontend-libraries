@@ -33,6 +33,10 @@
 - New UKIS library for angular utilities was added.
 - Export `DynamicComponent` which have been in `@dlr-eoc/core-ui`
 - Export some pipes which have been in `@dlr-eoc/layer-control`
+
+* **@dlr-eoc/map-ol:**
+- Remove dependency on @cds/core [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+
 * **@dlr-eoc/services-layers:**
 - Add `properties` attribute to Layer type
 
