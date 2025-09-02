@@ -17,6 +17,13 @@ npm install -g @angular/cli@<version>
 ```
 ng new project-tutorial-map --style=scss --standalone=true --routing=false
 ```
+
+or locally installed `@angular/cli` with `npx`
+
+```
+npx @angular/cli@<version> new project-tutorial-map --style=scss --standalone=true --routing=false
+```
+
 - We do not need angular routing, so decline the prompt with `N`
 
 ### 2. Move into the directory
