@@ -12,7 +12,7 @@
   "private": true,
   "peerDependencies": {
     "@angular/cli": "^19.2.13",
-    "@schematics/angular": "^19.2.12",
+    "@schematics/angular": "^19.2.13",
     "typescript": "^5.8.3"
   },
   "dependencies": {

@@ -14,7 +14,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.6.3"
   },
   "devDependencies": {},
   "peerDependencies": {
