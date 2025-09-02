@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
-import { IDynamicComponent, DynamicComponentComponent } from '@dlr-eoc/core-ui';
+import { IDynamicComponent, DynamicComponent } from '@dlr-eoc/ngx-ukis-utilities';
 
 // imports only for typings...
 import {
@@ -24,7 +24,7 @@ type TactiveTabs = keyof typeof EactiveTabs;
     selector: 'ukis-layerentry',
     templateUrl: './layerentry.component.html',
     styleUrls: ['./layerentry.component.scss'],
-    imports: [NgClass, ClrIconModule, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponentComponent]
+    imports: [NgClass, ClrIconModule, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponent]
 })
 export class LayerentryComponent implements OnInit {
   @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }

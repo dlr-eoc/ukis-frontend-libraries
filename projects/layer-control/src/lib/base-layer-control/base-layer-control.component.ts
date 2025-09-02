@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 
 import { LayerentryGroupComponent } from '../layerentry-group/layerentry-group.component';
 import { LayerentryComponent } from '../layerentry/layerentry.component';
-import { ReversePipe } from '../utils/array-reverse.pipe';
+import { ReversePipe } from '@dlr-eoc/ngx-ukis-utilities';
 
 @Component({
     selector: 'ukis-base-layer-control',

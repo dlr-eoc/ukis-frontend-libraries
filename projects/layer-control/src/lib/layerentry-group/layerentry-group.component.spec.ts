@@ -7,9 +7,8 @@ import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 import { Layer, LayerGroup, LayersService } from '@dlr-eoc/services-layers';
 
-import { ReversePipe } from '../utils/array-reverse.pipe';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { ItemsFilterPipe } from '../utils/obj-type.pipe';
+import { ReversePipe, ItemsFilterPipe } from '@dlr-eoc/ngx-ukis-utilities';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 describe('LayerentryGroupComponent', () => {

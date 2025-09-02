@@ -8,7 +8,7 @@
     "tslib",
     "@dlr-eoc/services-layers",
     "@dlr-eoc/services-map-state",
-    "@dlr-eoc/core-ui",
+    "@dlr-eoc/ngx-ukis-utilities",
     "@angular/cdk"
   ]
 }

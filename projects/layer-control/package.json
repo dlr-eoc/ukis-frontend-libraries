@@ -26,7 +26,7 @@
   "dependencies": {
     "@dlr-eoc/services-layers": "16.0.0-next.0",
     "@dlr-eoc/services-map-state": "16.0.0-next.0",
-    "@dlr-eoc/core-ui": "16.0.0-next.0",
+    "@dlr-eoc/ngx-ukis-utilities": "16.0.0-next.0",
     "@angular/cdk": "^19.2.12",
     "tslib": "^2.6.3"
   },

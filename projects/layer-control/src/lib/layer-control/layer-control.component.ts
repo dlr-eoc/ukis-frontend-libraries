@@ -9,8 +9,7 @@ import { CdkDragDrop, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/d
 
 import { LayerentryGroupComponent } from '../layerentry-group/layerentry-group.component';
 import { LayerentryComponent } from '../layerentry/layerentry.component';
-import { ItemsFilterPipe } from '../utils/obj-type.pipe';
-import { ReversePipe } from '../utils/array-reverse.pipe';
+import { ReversePipe, ItemsFilterPipe } from '@dlr-eoc/ngx-ukis-utilities';
 
 @Component({
     selector: 'ukis-layer-control',

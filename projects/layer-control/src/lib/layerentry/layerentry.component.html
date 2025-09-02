@@ -104,8 +104,8 @@
                   }
                   <!-- show layer action -->
                   @if (checkIsComponentItem(layer, 'action');) {
-                    <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.action">
-                    </ukis-dynamic-component>
+                    <ngx-ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.action">
+                    </ngx-ukis-dynamic-component>
                   }
                 </div>
               }
@@ -113,7 +113,7 @@
               @if (activeTabs.legend && layer.legendImg) {
                 <div class="legend">
                   @if (checkIsComponentItem(layer,'legendImg')) {
-                    <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
+                    <ngx-ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ngx-ukis-dynamic-component>
                   } @else {
                     <a [href]="layer.legendImg" target="_blank" title="Show full Image"><img [src]="layer.legendImg" /></a>
                   }
@@ -123,7 +123,7 @@
               @if (activeTabs.description && layer.description) {
                 <div class="description">
                   @if (checkIsComponentItem(layer,'description')) {
-                    <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>
+                    <ngx-ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ngx-ukis-dynamic-component>
                   } @else {
                     <span [innerHTML]="layer.description"></span>
                   }

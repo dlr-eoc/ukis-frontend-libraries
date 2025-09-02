@@ -78,7 +78,7 @@
         @if (group.description && activeTabs.description) {
           <div class="tabsbody description">
             @if (checkIsComponentItem(group,'description')) {
-              <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ukis-dynamic-component>
+              <ngx-ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.description"></ngx-ukis-dynamic-component>
             } @else {
               <span [innerHTML]="group.description"></span>
             }
@@ -88,8 +88,8 @@
         @if (group.action && activeTabs.settings) {
           <div class="tabsbody layersettings">
             @if (checkIsComponentItem(group, 'action');) {
-              <ukis-dynamic-component [(dynamicComponent)]="group.action">
-              </ukis-dynamic-component>
+              <ngx-ukis-dynamic-component [(dynamicComponent)]="group.action">
+              </ngx-ukis-dynamic-component>
             }
           </div>
         }
@@ -97,7 +97,7 @@
         @if (group.legendImg && activeTabs.legend) {
           <div class="tabsbody legend">
             @if (checkIsComponentItem(group,'legendImg')) {
-              <ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ukis-dynamic-component>
+              <ngx-ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ngx-ukis-dynamic-component>
             } @else {
               <a [href]="group.legendImg" target="_blank" title="Show full Image"><img [src]="group.legendImg" /></a>
             }
