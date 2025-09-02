@@ -9,6 +9,8 @@
  * **@dlr-eoc/core-ui:**
  - Removed `DynamicComponent` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 
+ * **@dlr-eoc/layer-control:**
+ - Removed `pipes` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 
 ### Bug Fixes
 * **@dlr-eoc/services-ogc:**
