@@ -8,4 +8,3 @@ export * from './lib/global-alert/global-alert.component';
 export * from './lib/global-alert/alert.service';
 export * from './lib/header/header.component';
 export * from './lib/icons/ukis';
-export * from './lib/dynamic-component/dynamic-component.component';
