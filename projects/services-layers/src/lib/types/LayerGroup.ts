@@ -1,5 +1,5 @@
 import { Layer, TGeoExtent, TFiltertypes, ILayerExpanded } from './Layers';
-import { IDynamicComponent } from '@dlr-eoc/core-ui';
+import { IDynamicComponent } from '@dlr-eoc/ngx-ukis-utilities';
 
 /**
  *  LayerGroups
