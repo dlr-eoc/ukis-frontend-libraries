@@ -42,28 +42,24 @@ import { applyStyle } from 'ol-mapbox-style';
 import { collectionItemSetIndex, layerOrGroupSetOpacity, layerOrGroupSetVisible, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import { defaults as defaultInteractions } from 'ol/interaction/defaults';
 
-import { ClarityIcons, worldIcon } from '@cds/core/icon';
 import VectorSource from 'ol/source/Vector';
 
-ClarityIcons.addIcons(...[worldIcon]);
 
 
-
+ /** @see (control options object) https://github.com/openlayers/openlayers/tree/main/src/ol/control */
 export interface IMapControls {
-  /** @see (Attribution options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/Attribution.js#L13 */
+  /** for icon replacement use - label | collapseLabel */
   attribution?: boolean | object;
-  /** @see (ScaleLine options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/ScaleLine.js#L39 */
   scaleLine?: boolean | object;
-  /** @see (Zoom options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/Zoom.js#L11 */
+  /** for icon replacement use - zoomInLabel | zoomOutLabel */
   zoom?: boolean | object;
   crosshair?: boolean;
-  /** @see (FullScreen options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/FullScreen.js#L13 */
+  /** for icon replacement use - label | labelActive */
   fullScreen?: boolean | object;
-  /** @see (MousePosition options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/MousePosition.js#L25 */
   mousePosition?: boolean | object;
-  /** @see (OverviewMap options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/OverviewMap.js#L46 */
+  /** for icon replacement use - label | collapseLabel */
   overviewMap?: boolean | object;
-  /** @see (Rotate options) https://github.com/openlayers/openlayers/blob/v6.2.1/src/ol/control/Rotate.js#L11 */
+  /** for icon replacement use - label */
   rotate?: boolean | object;
 }
 
@@ -605,13 +601,10 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         tempControls.push(fullScreen);
       }
       if (this.controls.overviewMap) {
-        const icon = document.createElement('spawn');
-        icon.innerHTML = '<cds-icon shape="world"></cds-icon>';
         let overviewMapOptions = {
           layers: [new olTileLayer({
             source: new olOSM()
-          })],
-          label: icon
+          })]
         };
         if (typeof this.controls.overviewMap === 'object') {
           overviewMapOptions = Object.assign(overviewMapOptions, this.controls.overviewMap);
