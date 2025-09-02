@@ -1,7 +1,7 @@
 # @dlr-eoc/user-info
 
 
-### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
+### how to use this in a ukis-angular project
 
 For a example [see demo auth](../demo-auth/README.md)
 

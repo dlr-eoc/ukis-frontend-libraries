@@ -9,7 +9,7 @@ The conversion from our generalized layers to the map specific should be impleme
 
 
 ![The idea of the layerService](assets/TheIdeaOfTheUkisLayerService.svg)
-### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
+### how to use this in a ukis-angular project
 ```
 import { LayersService } from '@dlr-eoc/services-layers';
 ```

@@ -1,6 +1,6 @@
 # @dlr-eoc/map-ol
 
-### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
+### how to use this in a ukis-angular project
 
 For examples [see demo maps](../demo-maps/README.md)
 

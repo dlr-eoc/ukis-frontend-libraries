@@ -1,6 +1,6 @@
 # @dlr-eoc/map-tools
 
-### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
+### how to use this in a ukis-angular project
 
 This repository contains 3 ui components:
 
