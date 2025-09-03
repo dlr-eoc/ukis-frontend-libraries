@@ -1,5 +1,5 @@
 
-import { Map as glMap, LngLatBounds, LngLat, LayerSpecification, TypedStyleLayer, SourceSpecification } from 'maplibre-gl';
+import { Map as glMap, LngLatBounds, LngLat, LayerSpecification, StyleLayer, SourceSpecification } from 'maplibre-gl';
 import { TGeoExtent, Layer as ukisLayer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 
 /** Layers can consist of multiple layers and sources, e.g. if they are a VectorTileLayer - StyleSpecification   */
@@ -30,7 +30,7 @@ export function addUkisLayerMetadata(l: ukisLayer) {
     return metadata;
 }
 
-export function getUkisLayerMetadata(ml: TypedStyleLayer) {
+export function getUkisLayerMetadata(ml: StyleLayer) {
     const metadata: Partial<IukisMetadata> = {};
     metadata[UKIS_METADATA.filtertype] = (ml?.metadata as any)[UKIS_METADATA.filtertype];
     metadata[UKIS_METADATA.layerID] = (ml?.metadata as any)[UKIS_METADATA.layerID];
@@ -39,7 +39,7 @@ export function getUkisLayerMetadata(ml: TypedStyleLayer) {
     return metadata;
 }
 
-export function setUkisLayerMetadata(ml: TypedStyleLayer, meta: Partial<IukisMetadata>) {
+export function setUkisLayerMetadata(ml: StyleLayer, meta: Partial<IukisMetadata>) {
     Object.keys(meta).forEach(k => {
         (ml?.metadata as any)[k] = meta[k];
     });
@@ -123,10 +123,10 @@ export function getRotation(map: glMap):number {
   return rotation;
 }
 
-export function setVisibility(map: glMap, layerOrId: string | TypedStyleLayer, visibility: boolean, cb?: () => void) {
+export function setVisibility(map: glMap, layerOrId: string | StyleLayer, visibility: boolean, cb?: () => void) {
     let mllayer;
     if (typeof layerOrId === 'string') {
-        mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
+        mllayer = map.getLayer(layerOrId) as StyleLayer | undefined;
     } else {
         mllayer = layerOrId;
     }
@@ -152,10 +152,10 @@ export function setVisibility(map: glMap, layerOrId: string | TypedStyleLayer, v
     }
 }
 
-export function setOpacity(map: glMap, layerOrId: string | TypedStyleLayer, opacity: number, cb?: () => void) {
+export function setOpacity(map: glMap, layerOrId: string | StyleLayer, opacity: number, cb?: () => void) {
     let mllayer;
     if (typeof layerOrId === 'string') {
-        mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
+        mllayer = map.getLayer(layerOrId) as StyleLayer | undefined;
     } else {
         mllayer = layerOrId;
     }
@@ -177,10 +177,10 @@ export function setOpacity(map: glMap, layerOrId: string | TypedStyleLayer, opac
     }
 }
 
-export function getOpacity(map: glMap, layerOrId: string | TypedStyleLayer) {
+export function getOpacity(map: glMap, layerOrId: string | StyleLayer) {
     let mllayer;
     if (typeof layerOrId === 'string') {
-        mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
+        mllayer = map.getLayer(layerOrId) as StyleLayer | undefined;
     } else {
         mllayer = layerOrId;
     }
@@ -189,10 +189,10 @@ export function getOpacity(map: glMap, layerOrId: string | TypedStyleLayer) {
     }
 }
 
-export function getLayerbeforeId(map: glMap, layerOrId: string | TypedStyleLayer) {
+export function getLayerbeforeId(map: glMap, layerOrId: string | StyleLayer) {
     let mllayer;
     if (typeof layerOrId === 'string') {
-        mllayer = map.getLayer(layerOrId) as TypedStyleLayer | undefined;
+        mllayer = map.getLayer(layerOrId) as StyleLayer | undefined;
     } else {
         mllayer = layerOrId;
     }
@@ -209,7 +209,7 @@ export function getLayerbeforeId(map: glMap, layerOrId: string | TypedStyleLayer
 }
 
 // https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.StyleLayer/
-export function styleLayerGetOpacity(mllayer: TypedStyleLayer) {
+export function styleLayerGetOpacity(mllayer: StyleLayer) {
     let opacityPaintProperty = getOpacityPaintProperty(mllayer.type);
     return mllayer.getPaintProperty(opacityPaintProperty);
 }

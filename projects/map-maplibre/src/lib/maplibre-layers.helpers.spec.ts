@@ -4,7 +4,7 @@ import {
     createGetMapUrl, createGetTileUrl, createBaseLayer, updateStyleLayerProperties
 } from './maplibre-layers.helpers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
-import { RasterSourceSpecification, StyleSpecification, TypedStyleLayer, Map as glMap } from 'maplibre-gl';
+import { RasterSourceSpecification, StyleSpecification, StyleLayer, Map as glMap } from 'maplibre-gl';
 import { UKIS_METADATA, getOpacityPaintProperty, addUkisLayerMetadata } from './maplibre.helpers';
 import { TestBed } from '@angular/core/testing';
 import { MapMaplibreService } from './map-maplibre.service';
@@ -385,7 +385,7 @@ describe('MaplibreLayerHelpers - use mapservice', () => {
         // TODO: service.setUkisLayers changes the id on the original object????
         const waterLayer = ukisCustom.custom_layer.layers.find(l => l.id === waterId);
         waterLayer.paint[paintProp] = newColor;
-        updateStyleLayerProperties(map, waterLayerBefor as TypedStyleLayer, ukisCustom)
+        updateStyleLayerProperties(map, waterLayerBefor as StyleLayer, ukisCustom)
 
         const layerAfterUpdate = service.getLayersForId(ukisCustom.id, filtertype, map).styleLayers;
         const waterLayerAfter = layerAfterUpdate.find(l => l.id === waterIdStyledObj);

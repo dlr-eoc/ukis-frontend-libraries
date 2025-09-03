@@ -1,5 +1,5 @@
 import { getOpacity, setOpacity, setVisibility, getAllLayers, getUkisLayerIDs, getLayersAndSources, removeLayerAndSource, changeOrderOfLayers, LayerSourceSpecification, setRotation, setPitch, getRotation, UKIS_METADATA, addUkisLayerMetadata, getUkisLayerMetadata, IukisMetadata, setUkisLayerMetadata } from './maplibre.helpers';
-import { StyleSpecification, LayerSpecification, SourceSpecification, Map as glMap, TypedStyleLayer } from 'maplibre-gl';
+import { StyleSpecification, LayerSpecification, SourceSpecification, Map as glMap, StyleLayer } from 'maplibre-gl';
 import { CustomLayer, Layer } from '@dlr-eoc/services-layers';
 
 const createMapTarget = (size: number[]) => {
@@ -439,7 +439,7 @@ describe('MaplibreHelpers', () => {
         map.addSource('planet_eoc', planet_eoc);
         map.addLayer(waterLayer_test);
 
-        const mapLayer = map.getLayer(waterLayer_test.id) as TypedStyleLayer;
+        const mapLayer = map.getLayer(waterLayer_test.id) as StyleLayer;
 
         const meta = getUkisLayerMetadata(mapLayer);
         expect(meta[UKIS_METADATA.ignoreOpacity]).toBe(true);

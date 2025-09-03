@@ -13,6 +13,9 @@
  - Removed `pipes` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 
 ### Bug Fixes
+* **@dlr-eoc/map-maplibre:**
+- Replaced `TypedStyleLayer` with `StyleLayer` because `TypedStyleLayer` is not exported anymore.
+
 * **@dlr-eoc/services-ogc:**
 * **@dlr-eoc/utils-ogc:**
 * **@dlr-eoc/demo-maps:**

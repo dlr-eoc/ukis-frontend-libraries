@@ -233,7 +233,7 @@ describe('MapMaplibreService', () => {
   });
 
 
-  it('should update a TypedStyleLayer with updateMlLayer', () => {
+  it('should update a StyleLayer with updateMlLayer', () => {
     const layers = [ukisGeoJson];
     const filtertype = 'Layers';
     service.setUkisLayers(layers, filtertype, map);
