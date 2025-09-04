@@ -22,7 +22,7 @@ import { ClarityIcons, layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIc
 
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon]);
 
 @Component({

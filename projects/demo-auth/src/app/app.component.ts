@@ -8,7 +8,7 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 
 /** for User */
 import { Subscription } from 'rxjs';
-import { UserService, IUser } from '@dlr-eoc/user-info';
+import { UserService, IUser } from '@dlr-eoc/ngx-ukis-ui-clarity';
 import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
 import { BasicAuthService } from './auth/basic-auth.service';
 import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';

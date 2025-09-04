@@ -6,7 +6,7 @@ For examples [see demo maps](../demo-maps/README.md)
 
 #### add the following dependencies to the package.json
 - "@dlr-eoc/map-maplibre"
-- "@dlr-eoc/layer-control" (optional)
+- "@dlr-eoc/ngx-ukis-ui-clarity" (optional)
 - "@dlr-eoc/base-layers-raster" (optional)
 
 
@@ -37,7 +37,7 @@ or in the angular config file
 #### add the following to route-view.component.ts
 ```
 import { MapMaplibreComponent } from '@dlr-eoc/map-maplibre';
-import { LayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 
 ...
  imports: [

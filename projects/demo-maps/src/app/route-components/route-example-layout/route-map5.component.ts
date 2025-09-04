@@ -10,7 +10,7 @@ import { ClarityIcons, layersIcon, worldIcon, tableIcon } from '@cds/core/icon';
 import { NgStyle, NgClass } from '@angular/common';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, tableIcon]);
 
 @Component({

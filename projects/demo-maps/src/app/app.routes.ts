@@ -20,7 +20,7 @@ export const routes: Routes = [
     loadChildren: () => import('./route-components/route-example-projection/route-map2.module').then(m => m.RouteMap2Module),
     data: {
       title: 'Projection',
-      description: 'Example shows how to work with projections using ukis-projection-switch from @dlr-eoc/map-tools.',
+      description: 'Example shows how to work with projections using ukis-projection-switch from @dlr-eoc/ngx-ukis-ui-clarity (map-tools).',
       img: 'assets/route-projection.jpg'
     }
   },

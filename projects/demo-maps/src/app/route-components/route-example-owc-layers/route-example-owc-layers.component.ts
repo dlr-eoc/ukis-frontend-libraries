@@ -10,7 +10,7 @@ import { ZommNumberControl } from '../route-example-layers/ol-custom-control';
 import { ClarityIcons, layersIcon, worldIcon, exportIcon } from '@cds/core/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, exportIcon ]);
 
 @Component({

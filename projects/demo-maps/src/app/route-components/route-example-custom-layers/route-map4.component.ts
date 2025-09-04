@@ -34,7 +34,7 @@ import { Popup2Component } from '../../components/popup2/popup2.component';
 import { ClarityIcons, layersIcon, paperclipIcon, worldIcon } from '@cds/core/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, paperclipIcon, worldIcon]);
 
 

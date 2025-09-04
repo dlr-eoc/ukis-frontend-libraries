@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LoginComponent } from '@dlr-eoc/user-info';
+import { LoginComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 
 @Component({
     selector: 'app-route-login',

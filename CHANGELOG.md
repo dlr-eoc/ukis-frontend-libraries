@@ -6,6 +6,11 @@
  - Update three.js from `^0.137.5` to `^0.176.0` see [three releases](https://github.com/mrdoob/three.js/releases) for all changes.
  - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^10.1.0` to `^17.0.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^7.1.0` to `^12.0.0` (cesium from `1.120` to `1.129`) see [cesium changelog](https://github.com/CesiumGS/cesium/blob/1.129/CHANGES.md) for all changes.
 
+ - Renamed `@dlr-eoc/core-ui` to `@dlr-eoc/ngx-ukis-ui-clarity`
+ - Moved `@dlr-eoc/layer-control` to `@dlr-eoc/ngx-ukis-ui-clarity`. Import the components from there now.
+ - Moved `@dlr-eoc/map-tools` to `@dlr-eoc/ngx-ukis-ui-clarity`. Import the components from there now.
+ - Moved `@dlr-eoc/user-info` to `@dlr-eoc/ngx-ukis-ui-clarity`. Import the components from there now.
+
  * **@dlr-eoc/core-ui:**
  - Removed `DynamicComponent` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 

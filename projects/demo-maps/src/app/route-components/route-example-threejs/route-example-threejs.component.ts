@@ -14,7 +14,7 @@ import { ClarityIcons, layersIcon, infoStandardIcon } from '@cds/core/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { MapThreeComponent } from '@dlr-eoc/map-three';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, ClrAlertModule } from '@clr/angular';
-import { LayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, infoStandardIcon]);
 
 @Component({

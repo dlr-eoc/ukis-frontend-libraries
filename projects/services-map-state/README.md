@@ -28,8 +28,7 @@ This module is used by components like:
 - @dlr-eoc/map-ol
 - @dlr-eoc/map-cesium
 - @dlr-eoc/map-maplibre
-- @dlr-eoc/map-tools
-- @dlr-eoc/layer-control
+- @dlr-eoc/ngx-ukis-ui-clarity (layer-control, map-tools)
 - ...
 
 It implements a basic 'state' for the map like:

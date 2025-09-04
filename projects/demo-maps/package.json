@@ -23,8 +23,7 @@
   },
   "dependencies": {
     "@dlr-eoc/map-ol": "16.0.0-next.0",
-    "@dlr-eoc/layer-control": "16.0.0-next.0",
-    "@dlr-eoc/map-tools": "16.0.0-next.0",
+    "@dlr-eoc/ngx-ukis-ui-clarity": "16.0.0-next.0",
     "@dlr-eoc/base-layers-raster": "16.0.0-next.0",
     "@dlr-eoc/map-three": "16.0.0-next.0",
     "@dlr-eoc/utils-maps": "16.0.0-next.0",

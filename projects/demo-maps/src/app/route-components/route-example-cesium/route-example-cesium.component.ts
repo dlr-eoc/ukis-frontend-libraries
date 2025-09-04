@@ -15,7 +15,7 @@ import { ClarityIcons, layersIcon, worldIcon, blockIcon, cogIcon, mapIcon } from
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { MapCesiumComponent } from '@dlr-eoc/map-cesium';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
 
 @Component({

@@ -6,7 +6,7 @@ For examples [see demo maps](../demo-maps/README.md)
 
 #### add the following dependencies to the package.json
 - "@dlr-eoc/map-ol"
-- "@dlr-eoc/layer-control" (optional)
+- "@dlr-eoc/ngx-ukis-ui-clarity" (optional)
 - "@dlr-eoc/base-layers-raster" (optional)
 
 
@@ -43,7 +43,8 @@ or in the angular config file
 #### add the following to a route-view.component.ts
 ```
 import { MapOlComponent, MapOlService, IMapControls } from '@dlr-eoc/map-ol';
-import { LayerControlComponent, LayersService } from '@dlr-eoc/layer-control';
+import { LayersService } from '@dlr-eoc/services-layers';
+import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
 import { OsmTileLayer, EocLitemap, BlueMarbleTile } from '@dlr-eoc/base-layers-raster';

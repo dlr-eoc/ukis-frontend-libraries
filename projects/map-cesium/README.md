@@ -6,7 +6,7 @@ First, install and setupt UKIS core, like described in the [Tutorial](../../TUTO
 
 #### Add the following dependencies to the package.json
 - "@dlr-eoc/map-cesium"
-- "@dlr-eoc/layer-control" (optional)
+- "@dlr-eoc/ngx-ukis-ui-clarity" (optional)
 - "@dlr-eoc/base-layers-raster" (optional)
 
 #### Add styles from cesium to your application

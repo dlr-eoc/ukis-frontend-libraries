@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { IUserinfo, IAuthService, IBasicUser } from '@dlr-eoc/user-info';
+import { IUserinfo, IAuthService, IBasicUser } from '@dlr-eoc/ngx-ukis-ui-clarity';
 
 export class Auth {
   userName: string;

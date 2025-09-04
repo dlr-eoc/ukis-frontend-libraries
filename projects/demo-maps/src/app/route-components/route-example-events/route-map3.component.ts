@@ -27,8 +27,7 @@ import { AlertService } from '../../components/global-alert/alert.service';
 import { ClarityIcons, layersIcon, cogIcon, compassIcon, downloadIcon } from '@cds/core/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '@dlr-eoc/layer-control';
-import { MousePositionComponent } from '@dlr-eoc/map-tools';
+import { LayerControlComponent, MousePositionComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, cogIcon, compassIcon, downloadIcon]);
 
 @Component({

@@ -47,7 +47,7 @@ For examples see:
 
 
 This module is used by components like:
-- @dlr-eoc/layer-control
+- @dlr-eoc/ngx-ukis-ui-clarity (layer-control)
 - @dlr-eoc/base-layers-raster
 - ...
 

@@ -3,12 +3,10 @@ import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layer
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
-import { IProjDef } from '@dlr-eoc/map-tools';
 
 import { ClarityIcons, layersIcon, mapIcon, compassIcon } from '@cds/core/icon';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '@dlr-eoc/layer-control';
-import { ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent } from '@dlr-eoc/map-tools';
+import { LayerControlComponent, IProjDef, ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, mapIcon, compassIcon]);
 
 @Component({
