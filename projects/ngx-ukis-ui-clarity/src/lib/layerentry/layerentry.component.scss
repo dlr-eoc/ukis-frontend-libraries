@@ -1,0 +1,20 @@
+.title {
+  cursor: pointer;
+}
+
+.item-title-replacement:empty {
+  display: none;
+}
+
+.body {
+  cursor: default;
+}
+
+.tabsbody {
+  overflow: hidden;
+
+  img {
+    height: auto;
+    max-width: 100%;
+  }
+}

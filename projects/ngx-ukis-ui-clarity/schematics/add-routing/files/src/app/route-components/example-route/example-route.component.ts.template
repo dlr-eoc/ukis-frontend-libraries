@@ -1,0 +1,17 @@
+import { Component, OnInit, HostBinding } from '@angular/core';
+import { ClrNavigationModule, ClrVerticalNavModule, } from '@clr/angular';
+
+@Component({
+  selector: '<%= appPrefix %>-example-route',
+  imports: [ClrNavigationModule, ClrVerticalNavModule],
+  templateUrl: './example-route.component.html',
+  styleUrls: ['./example-route.component.scss']
+})
+export class ExampleRouteComponent implements OnInit {
+  @HostBinding('class') class = 'content-container';
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}

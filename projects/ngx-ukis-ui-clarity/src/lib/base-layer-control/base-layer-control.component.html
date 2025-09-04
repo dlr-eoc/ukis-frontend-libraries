@@ -1,0 +1,12 @@
+@for (group of layergroups | reverse; track group) {
+  <div class="list-item">
+    @if (isLayerGroup(group)) {
+      <ukis-layerentry-group [layersSvc]="layersSvc" [mapState]="mapStateSvc" [group]="group"
+      [layerGroups]="layergroups"></ukis-layerentry-group>
+    }
+    @if (!isLayerGroup(group)) {
+      <ukis-layerentry [layerGroups]="layergroups" [expanded]="false" [layersSvc]="layersSvc"
+      [mapState]="mapStateSvc" [layer]="group" [group]="null"></ukis-layerentry>
+    }
+  </div>
+}

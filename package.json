@@ -137,7 +137,8 @@
     "projects/map-cesium",
     "projects/utilities",
     "projects/map-maplibre",
-    "projects/ngx-ukis-utilities"
+    "projects/ngx-ukis-utilities",
+    "projects/ngx-ukis-ui-clarity"
   ],
   "engines": {
     "node": ">= 20.15.1",

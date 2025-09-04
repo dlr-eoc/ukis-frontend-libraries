@@ -1,0 +1,12 @@
+<clr-main-container>
+  @if(ui.alert){
+    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+  }
+  @if(ui.progress){
+    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+  }
+  <ukis-header [ukis-title]="title">
+    <a routerLink="/example" routerLinkActive="active" class="nav-link nav-text header-nav-el">example route</a>
+  </ukis-header>
+  <router-outlet></router-outlet>
+</clr-main-container>

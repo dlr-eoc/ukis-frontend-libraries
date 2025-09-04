@@ -1,0 +1,17 @@
+@if (user) {
+  <div>
+    @if (user.firstName) {
+      <h6 class="hint">Hello {{user.firstName}} {{user.lastName}}!</h6>
+    }
+    @if (!user.firstName && user.userName) {
+      <h6 class="hint">Hello {{user.userName}}!</h6>
+    }
+    @if (user.email) {
+      <h6 class="hint">your email is: {{user.email}}</h6>
+    }
+    <br>
+      <button type="button" class="btn btn-primary" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  }

@@ -1,0 +1,33 @@
+/** BUTTONS */
+button:focus {
+  outline: none;
+  box-shadow: 0 0 1pt 1pt var(--clr-color-action-600, var(--fallback-color-no-clr));
+}
+
+.iconButton:hover {
+  cursor: pointer;
+  color: var(--clr-color-action-600, var(--fallback-color-no-clr));
+}
+
+.iconButton-drpDwn {
+  cursor: pointer;
+  transform: rotate(180deg);
+}
+
+.iconButton-drpDwn-active {
+  cursor: pointer;
+  color: var(--clr-color-action-600, var(--fallback-color-no-clr));
+}
+
+.headerButton:hover {
+  cursor: pointer;
+}
+
+.ukis-range-input {
+  --clr-forms-range-track-color: var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 1pt 1pt var(--clr-color-action-600, var(--fallback-color-no-clr));
+  }
+}
