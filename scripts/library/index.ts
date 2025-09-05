@@ -120,7 +120,7 @@ function runBuilds(offset = 0, projects) {
       const spawnCliArgs = ['run', 'build', `--workspace=projects/${project}`];
       console.log(consoleLogColors.Bright, `---------------------->>> ${offset + 1}: npm ${spawnCliArgs.join(' ')}`);
       let command = 'npm';
-      if (process.platform !== 'win32') {
+      if (process.platform === 'win32') {
         command = 'npm.cmd'
       }
       child = spawn(command, spawnCliArgs, { stdio: "inherit", shell: true });
