@@ -21,8 +21,11 @@
   "scripts": {
     "start": "ng serve demo-maps",
     "library": "node scripts/library/index.js",
+    "build": "npm run library -- --build",
+    "test": "npm run library -- --test",
     "schematics:test": "npm run schematics:test --workspace=projects/ngx-ukis-ui-clarity",
     "ui-clarity:build": "npm run library -- --build --projects=ngx-ukis-ui-clarity",
+    "syncVersionsInWorkspaces": "npm run library -- --set-source",
     "build:scripts": "npx tsc -p scripts/library/tsconfig.json",
     "lint": "ng lint",
     "compodoc": "compodoc -p tsconfig.doc.json -a projects/ngx-ukis-ui-clarity/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
