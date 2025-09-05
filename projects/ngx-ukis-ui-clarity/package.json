@@ -15,7 +15,7 @@
     "build": "ng build ngx-ukis-ui-clarity --configuration=production --watch=false",
     "schematics:build": "tsc -p tsconfig.schematics.json",
     "postbuild": "npm run schematics:build",
-    "preschematics:test": "npm run build",
+    "preschematics:test": "npm run --prefix ../../ ui-clarity:build",
     "schematics:test": "npx jasmine ../../dist/ngx-ukis-ui-clarity/schematics/**/*_spec.js"
   },
   "dependencies": {
