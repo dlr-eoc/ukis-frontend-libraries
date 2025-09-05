@@ -4,7 +4,7 @@
  * node scripts/projectsVersion.js -l
  */
 
-import { fork, spawn } from 'child_process';
+import { ChildProcess, fork, spawn } from 'child_process';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { Command } from 'commander';
@@ -36,12 +36,12 @@ interface IgraphOptions {
 function showDependencyGraph(options: IgraphOptions) {
   const filterProjects = options?.projects?.split(',') || false;
   const projects = getProjects(ANGULARJSON);
-  const graph = dependencyGraph(projects, PACKAGE_SCOPE, filterProjects);
+  const graph = dependencyGraph(projects, PACKAGE_SCOPE!, filterProjects);
   console.log(graph.nodesmapGraph);
 }
 
 async function runCheckDeps() {
-  const allErrors = await checkDeps(ANGULARJSON, PACKAGE_SCOPE);
+  const allErrors = await checkDeps(ANGULARJSON, PACKAGE_SCOPE!);
   if (allErrors.length) {
     allErrors.map(e => formatCheckDepsOutput(e, false));
     console.error(`check for missing dependencies`)
@@ -66,7 +66,7 @@ function getSortedDeps(options: ISortedDepsOptions) {
   const targetFilter = (item: ICustomWorkspaceProject) => (options.target === 'all') ? true : item[options.target];
   const typeFilter = (item: ICustomWorkspaceProject) => (options.type === 'all') ? true : item.type === options.type;
   const filteredProjects = getProjects(ANGULARJSON).filter(item => targetFilter(item) && typeFilter(item));
-  return getSortedProjects(filteredProjects, PACKAGE_SCOPE, filterProjects);
+  return getSortedProjects(filteredProjects, PACKAGE_SCOPE!, filterProjects);
 }
 
 function runTests(offset = 0, projects, headless = false) {
@@ -113,18 +113,18 @@ function runBuilds(offset = 0, projects) {
   const project = projects[offset];
   const cliArgs = ['build', '--configuration=production', '--watch=false', project];
   if (project) {
-   
+
     const packageJson: IPackageJSON = require(join(CWD, ANGULARJSON.projects[project].root, 'package.json'));
-    let child = null;
-    if(packageJson && packageJson.scripts && packageJson.scripts['build']){
-      const  spawnCliArgs = ['run', 'build', `--workspace=projects/${project}`];
+    let child: null | ChildProcess = null;
+    if (packageJson && packageJson.scripts && packageJson.scripts['build']) {
+      const spawnCliArgs = ['run', 'build', `--workspace=projects/${project}`];
       console.log(consoleLogColors.Bright, `---------------------->>> ${offset + 1}: npm ${spawnCliArgs.join(' ')}`);
       let command = 'npm';
       if (process.platform !== 'win32') {
         command = 'npm.cmd'
       }
       child = spawn(command, spawnCliArgs, { stdio: "inherit", shell: true });
-    }else{
+    } else {
       console.log(consoleLogColors.Bright, `---------------------->>> ${offset + 1}: run ng ${cliArgs.join(' ')}`);
       child = fork(`${__dirname}/run-ng.js`, cliArgs);
     }
@@ -180,9 +180,9 @@ function setVersionsOfProjects(useDistPath = false, workspacePaths = false) {
   }
   if (!errors.length && projectsPaths.length) {
     if (workspacePaths && !useDistPath) {
-      setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE);
+      setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE!);
     } else {
-      setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE, projectsPaths);
+      setDependencyVersionsInWorkspaces(MAINPACKAGE, PACKAGE_SCOPE!, projectsPaths);
     }
 
     console.log(`replaced all versions in project workspaces with the versions of the main package.json`);
@@ -203,7 +203,6 @@ function updateBuildPackages(registry?: string) {
 
   if (projectsPaths.length) {
 
-    const packageScope = PACKAGE_SCOPE;
     const repositoryUrl = `git+https://github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
     projectsPaths.map(p => {
@@ -221,9 +220,9 @@ function updateBuildPackages(registry?: string) {
       });
 
       if (typeof registry === 'string') {
-        createNpmrc(join(p, '.npmrc'), packageScope, registry);
+        createNpmrc(join(p, '.npmrc'), PACKAGE_SCOPE!, registry);
       } else {
-        createNpmrc(join(p, '.npmrc'), packageScope);
+        createNpmrc(join(p, '.npmrc'), PACKAGE_SCOPE!);
       }
     });
 
@@ -258,15 +257,15 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
   }
 
   projectsPaths.forEach((p) => {
-    const projectPackage = require(p.packagePath);
+    const projectPackage: IPackageJSON = require(p.packagePath);
     const project: Iproject = {
       name: projectPackage.name,
-      version: projectPackage.version,
+      version: projectPackage.version!,
       error: false,
-      dependencies: null
+      dependencies: ''
     };
 
-    if (p.type === 'library' && projectPackage.name.indexOf(PACKAGE_SCOPE) === -1) {
+    if (p.type === 'library' && projectPackage.name.indexOf(PACKAGE_SCOPE!) === -1) {
       const error = `name of project: ${projectPackage.name} must be prefixed with the ${PACKAGE_SCOPE} namespace!`;
       if (!silent) {
         console.error(error);
@@ -277,7 +276,7 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
 
     if (projectPackage.dependencies) {
       const dependencies = Object.keys(projectPackage.dependencies);
-      project.dependencies = dependencies.join(',') || null;
+      project.dependencies = dependencies.join(',');
     }
 
     // without peerDeps
@@ -286,7 +285,7 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
     const newProject = Object.assign({}, project);
     if (projectPackage.peerDependencies) {
       const peerDependencies = Object.keys(projectPackage.peerDependencies);
-      newProject.peerDependencies = peerDependencies.join(',') || null;
+      newProject.peerDependencies = peerDependencies.join(',');
     }
     projectsPeer.push(newProject);
   });
@@ -302,6 +301,7 @@ function showProjectsAndDependencies(silent = false, showPeer = false, projectTy
   return errors;
 }
 
+// TODO: maybe check https://github.com/lerna-lite/lerna-lite as replacement?
 export function run() {
   const privPackage = require(join(__dirname, 'package.json'));
   const program = new Command(`node ${privPackage.main}`);

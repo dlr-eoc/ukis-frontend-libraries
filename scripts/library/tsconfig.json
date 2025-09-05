@@ -9,6 +9,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "strictNullChecks": true,
     "types": [
       "jasmine",
       "node"
