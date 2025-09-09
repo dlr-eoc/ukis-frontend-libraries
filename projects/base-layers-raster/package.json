@@ -12,16 +12,13 @@
     "Geoservice",
     "OSM"
   ],
-  "peerDependencies": {
-    "@angular/common": "^19.2.12",
-    "@angular/core": "^19.2.12"
-  },
   "dependencies": {
     "@dlr-eoc/services-layers": "16.0.0-next.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
     "zone.js": "~0.15.0",
-    "@angular/platform-browser-dynamic": "^19.2.12"
+    "@angular/platform-browser-dynamic": "^19.2.12",
+    "@angular/core": "^19.2.12"
   }
 }
