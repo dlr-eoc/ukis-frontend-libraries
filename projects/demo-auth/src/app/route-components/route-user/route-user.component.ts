@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { UserDetailsComponent } from '@dlr-eoc/user-info';
+import { UserDetailsComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 
 @Component({
     selector: 'app-route-user',

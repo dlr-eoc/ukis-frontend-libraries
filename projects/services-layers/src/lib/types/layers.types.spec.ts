@@ -134,7 +134,7 @@ describe('Layer Types', () => {
     expect(newRasterlayer.attribution).toBe(undefined);
     expect(newRasterlayer.displayName).toBe(undefined);
     expect(newRasterlayer.description).toBe(undefined);
-    expect(newRasterlayer.properties).toBe(undefined);
+    expect(newRasterlayer.properties).toEqual({});
     expect(newRasterlayer.time).toBe(undefined);
     expect(newRasterlayer.minResolution).toBe(undefined);
     expect(newRasterlayer.maxResolution).toBe(undefined);
@@ -195,7 +195,7 @@ describe('Layer Types', () => {
     expect(newVectorLayer.attribution).toBe(undefined);
     expect(newVectorLayer.displayName).toBe(undefined);
     expect(newVectorLayer.description).toBe(undefined);
-    expect(newVectorLayer.properties).toBe(undefined);
+    expect(newVectorLayer.properties).toEqual({});
     expect(newVectorLayer.time).toBe(undefined);
     expect(newVectorLayer.minResolution).toBe(undefined);
     expect(newVectorLayer.maxResolution).toBe(undefined);

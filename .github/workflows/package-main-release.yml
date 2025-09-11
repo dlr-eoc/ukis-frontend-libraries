@@ -55,7 +55,7 @@ jobs:
     outputs:
       VERSION_TAG: ${{ steps.get-tag.outputs.result }}
 
-  # check if the tag is already published - uses @dlr-eoc/core-ui for test
+  # check if the tag is already published - uses @dlr-eoc/map-ol for test
   checkTagOnNpm:
     runs-on: ubuntu-latest
     needs: checkTitelTag
@@ -72,7 +72,7 @@ jobs:
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
-          npmPackageName: "@dlr-eoc/core-ui"
+          npmPackageName: "@dlr-eoc/map-ol"
           tag: ${{ needs.checkTitelTag.outputs.VERSION_TAG }}
 
   # check out the tag, build packages and store them as artifacts

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   Layer as ukisLayer, TFiltertypesUncap, TFiltertypes,
 } from '@dlr-eoc/services-layers';
-import { Map as glMap, StyleSpecification, TypedStyleLayer } from 'maplibre-gl';
+import { Map as glMap, StyleSpecification, StyleLayer } from 'maplibre-gl';
 import { BehaviorSubject } from 'rxjs';
 import { LayerSourceSpecification, UKIS_METADATA } from './maplibre.helpers';
 import { createLayer, layerIsSupported, updateSource, updateStyleLayerProperties } from './maplibre-layers.helpers';
@@ -112,7 +112,7 @@ export class MapMaplibreService {
   public getLayers(filtertype: Tgroupfiltertype, map: glMap) {
     const style = map.getStyle();
     const layerSpecifications = style.layers.filter(l => l.metadata[UKIS_METADATA.filtertype] === filtertype);
-    const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id)) as TypedStyleLayer[]; //Temp fix of : Property ... of exported class expression may not be private or protected
+    const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id)) as StyleLayer[]; //Temp fix of : Property ... of exported class expression may not be private or protected
 
     return {
       layerSpecifications,
@@ -132,7 +132,7 @@ export class MapMaplibreService {
     const alllayers = this.getLayers(filtertype, map);
     const layerSpecifications = alllayers.layerSpecifications.filter(l => l.metadata[UKIS_METADATA.layerID] === id);
     if (layerSpecifications.length) {
-      const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id)) as TypedStyleLayer[]; //Temp fix of : Property ... of exported class expression may not be private or protected
+      const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id)) as StyleLayer[]; //Temp fix of : Property ... of exported class expression may not be private or protected
       return {
         layerSpecifications,
         styleLayers
@@ -191,7 +191,7 @@ export class MapMaplibreService {
     return layers;
   }
 
-  public updateMlLayer(mllayer: TypedStyleLayer, layer: ukisLayer, map: glMap) {
+  public updateMlLayer(mllayer: StyleLayer, layer: ukisLayer, map: glMap) {
     /**
      * update ml layer
      * - map.setLayoutProperty() > Visibility
@@ -207,7 +207,7 @@ export class MapMaplibreService {
     updateStyleLayerProperties(map, mllayer, layer);
   }
 
-  private updateLayerParamsAndSource(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer) {
+  private updateLayerParamsAndSource(map: glMap, mllayer: StyleLayer, layer: ukisLayer) {
     if (layer.type === 'wms' || layer.type === 'wmts' || layer.type === 'tms' || layer.type === 'wfs' || layer.type === 'geojson') {
       const oldSource = map.getSource(mllayer.source);
       updateSource(map, layer, oldSource);

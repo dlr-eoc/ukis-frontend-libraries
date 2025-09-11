@@ -11,7 +11,7 @@ import { ClarityIcons, layersIcon, clockIcon } from '@cds/core/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
 import { PerformanceComponent } from '../../components/performance/performance.component';
-import { LayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
 
 @Component({

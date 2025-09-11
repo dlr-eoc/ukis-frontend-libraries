@@ -1,5 +1,5 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, TypedStyleLayer, GeoJSONSource, Evented, addSourceType } from 'maplibre-gl';
+import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, StyleLayer, GeoJSONSource, Evented, addSourceType } from 'maplibre-gl';
 import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, changeOrderOfLayers, setRotation, setPitch, getRotation, getUkisLayerMetadata, UKIS_METADATA } from './maplibre.helpers';
 
 import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
@@ -393,7 +393,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
 
     for (const layer of layers) {
       const mllayers = getAllLayers(this.map).filter(l => {
-        const ukismetadata = getUkisLayerMetadata(l as TypedStyleLayer)
+        const ukismetadata = getUkisLayerMetadata(l as StyleLayer)
         return ukismetadata[UKIS_METADATA.layerID] === layer.id;
       }).map(l => this.map.getLayer(l.id)).filter(l => l);
 

@@ -1,18 +1,19 @@
 {
   "name": "ukis-libraries-scripts",
-  "version": "3.0.1",
+  "version": "3.0.3",
   "license": "Apache-2.0",
   "author": "Team UKIS",
   "description": "This package contains a few scripts to build and test angular libraries.",
   "scripts": {
     "build": "npx tsc -p tsconfig.json",
+    "build:watch": "npx tsc -p tsconfig.json -w",
     "postinstall": "npm run build"
   },
   "main": "index.js",
   "private": true,
   "peerDependencies": {
     "@angular/cli": "^19.2.13",
-    "@schematics/angular": "^19.2.12",
+    "@schematics/angular": "^19.2.13",
     "typescript": "^5.8.3"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@types/jasmine": "^5.1.8",
     "@types/node": "^22.15.21",
-    "@types/toposort": "^2.0.3"
+    "@types/toposort": "^2.0.3",
+    "tslib": "^2.6.3"
   }
 }

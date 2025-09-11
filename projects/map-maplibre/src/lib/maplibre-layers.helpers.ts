@@ -1,6 +1,6 @@
 import {
     CircleLayerSpecification, FillLayerSpecification, GeoJSONSourceSpecification, LayerSpecification, Map as glMap,
-    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, TypedStyleLayer, VectorSourceSpecification, Source, FilterSpecification, DataDrivenPropertyValueSpecification,
+    LineLayerSpecification, RasterLayerSpecification, RasterSourceSpecification, SourceSpecification, StyleSpecification, SymbolLayerSpecification, StyleLayer, VectorSourceSpecification, Source, FilterSpecification, DataDrivenPropertyValueSpecification,
     MapGeoJSONFeature
 } from "maplibre-gl";
 import {
@@ -620,7 +620,7 @@ export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
     }
 }
 
-export function updateStyleLayerProperties(map: glMap, mllayer: TypedStyleLayer, layer: ukisLayer) {
+export function updateStyleLayerProperties(map: glMap, mllayer: StyleLayer, layer: ukisLayer) {
     // https://maplibre.org/maplibre-style-spec/layers/#layer-properties
     // paint -> map.setPaintProperty(l.id...)
     // layout -> map.setLayoutProperty(l.id...)

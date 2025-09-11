@@ -1,6 +1,6 @@
 # @dlr-eoc/services-util-store
 
-### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
+### how to use this in a ukis-angular project
 
 ```
 import { UtilStoreService } from '@dlr-eoc/services-util-store';

@@ -6,7 +6,21 @@
  - Update three.js from `^0.137.5` to `^0.176.0` see [three releases](https://github.com/mrdoob/three.js/releases) for all changes.
  - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^10.1.0` to `^17.0.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^7.1.0` to `^12.0.0` (cesium from `1.120` to `1.129`) see [cesium changelog](https://github.com/CesiumGS/cesium/blob/1.129/CHANGES.md) for all changes.
 
+ - Renamed `@dlr-eoc/core-ui` to `@dlr-eoc/ngx-ukis-ui-clarity`
+ - Moved `@dlr-eoc/layer-control` to `@dlr-eoc/ngx-ukis-ui-clarity`. Import the components from there now.
+ - Moved `@dlr-eoc/map-tools` to `@dlr-eoc/ngx-ukis-ui-clarity`. Import the components from there now.
+ - Moved `@dlr-eoc/user-info` to `@dlr-eoc/ngx-ukis-ui-clarity`. Import the components from there now.
+
+ * **@dlr-eoc/core-ui:**
+ - Removed `DynamicComponent` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+
+ * **@dlr-eoc/layer-control:**
+ - Removed `pipes` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+
 ### Bug Fixes
+* **@dlr-eoc/map-maplibre:**
+- Replaced `TypedStyleLayer` with `StyleLayer` because `TypedStyleLayer` is not exported anymore.
+
 * **@dlr-eoc/services-ogc:**
 * **@dlr-eoc/utils-ogc:**
 * **@dlr-eoc/demo-maps:**
@@ -22,6 +36,19 @@
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
+
+* **@dlr-eoc/ngx-ukis-ui-clarity:**
+- New UKIS library for ui-clarity related things was added.
+- It includes all components of `@dlr-eoc/layer-control`, `@dlr-eoc/map-tools`, `@dlr-eoc/user-info` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+
+* **@dlr-eoc/ngx-ukis-utilities:**
+- New UKIS library for angular utilities was added.
+- Export `DynamicComponent` which have been in `@dlr-eoc/core-ui`
+- Export some pipes which have been in `@dlr-eoc/layer-control`
+
+* **@dlr-eoc/map-ol:**
+- Remove dependency on @cds/core [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+
 * **@dlr-eoc/services-layers:**
 - Add `properties` attribute to Layer type
 

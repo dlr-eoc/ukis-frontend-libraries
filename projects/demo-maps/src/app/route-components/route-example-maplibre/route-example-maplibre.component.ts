@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 
 import { ClarityIcons, layersIcon, worldIcon, cogIcon } from '@cds/core/icon';
 import { ClrVerticalNavModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/layer-control';
+import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
 
 @Component({

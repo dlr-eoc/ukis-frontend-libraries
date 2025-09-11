@@ -1,11 +1,11 @@
 # Creating a basic web map application
 ## Introduction
-In this guide you will follow the necessary steps for creating a basic web map application with the UKIS frontend libraries. At the end you should be able to set up an UKIS application yourself and start customizing it. The application contains the [core-ui](projects/core-ui/README.md), [map-ol](projects/map-ol/README.md), [base-layers-raster](projects/base-layers-raster/README.md) and [layer-control](projects/layer-control/README.md) libraries. The finished application integrates some layers from the [EOC GeoService](https://geoservice.dlr.de/web/).
+In this guide you will follow the necessary steps for creating a basic web map application with the UKIS frontend libraries. At the end you should be able to set up an UKIS application yourself and start customizing it. The application contains the [ngx-ukis-ui-clarity](projects/ngx-ukis-ui-clarity/core-ui.md), [map-ol](projects/map-ol/README.md), [base-layers-raster](projects/base-layers-raster/README.md) and [layer-control](projects/ngx-ukis-ui-clarity/layer-control.md) libraries. The finished application integrates some layers from the [EOC GeoService](https://geoservice.dlr.de/web/).
 
 ## Requirements
 For this tutorial to work you need a code editor of your choice (e.g. Visual Studio Code) and npm installed. 
 
-## Setting up UKIS core-ui
+## Setting up ngx-ukis-ui-clarity
 ### 1. Generate a new [Angular application](https://angular.dev/cli/new) in the same Version like specified in our package.json [@angular/core](package.json).
 For this you have to install `@angular/cli` in this specific Version first. 
 - See ukis-frontend-libraries package.json [version of @angular/core](package.json) 
@@ -17,6 +17,13 @@ npm install -g @angular/cli@<version>
 ```
 ng new project-tutorial-map --style=scss --standalone=true --routing=false
 ```
+
+or locally installed `@angular/cli` with `npx`
+
+```
+npx @angular/cli@<version> new project-tutorial-map --style=scss --standalone=true --routing=false
+```
+
 - We do not need angular routing, so decline the prompt with `N`
 
 ### 2. Move into the directory
@@ -71,25 +78,25 @@ For more information see
 - [Adding Clarity to an Existing Angular Application](https://clarity.design/pages/developing#adding-clarity-to-an-existing-angular-application)
 
 
-### 4. Run the ng add command for the UKIS core-ui
+### 4. Run the ng add command for the ngx-ukis-ui-clarity
 - First you have to match the dependency of rxjs ([for ukis-frontend-libraries](package.json)), to do this you need to run
 ``` 
 npm install rxjs@<version>
 ```
 - Then run 
 ``` 
-ng add @dlr-eoc/core-ui@<version> --project=project-tutorial-map 
+ng add @dlr-eoc/ngx-ukis-ui-clarity@<version> --project=project-tutorial-map 
 ``` 
 to add files and styles from ukis-frontend-libraries in the desired version.
 
 - Answer the promt with `Y`
-- In this tutorial more additional options of the core-ui ng add like routing are not required.
-- [for more information see core-ui ng-add](projects/core-ui/schematics/ng-add/schema.json)
+- In this tutorial more additional options of the ngx-ukis-ui-clarity like routing are not required.
+- [for more information see ngx-ukis-ui-clarity ng-add](projects/ngx-ukis-ui-clarity/schematics/ng-add/schema.json)
 
 If this does not work due to incorrect versions of peer dependencies, you can fix it as described below if you are sure that the current dependencies work together!
 ``` 
-npm install @dlr-eoc/core-ui@<version> --force
-ng generate @dlr-eoc/core-ui:ng-add --project=project-tutorial-map
+npm install @dlr-eoc/ngx-ukis-ui-clarity@<version> --force
+ng generate @dlr-eoc/ngx-ukis-ui-clarity:ng-add --project=project-tutorial-map
 ``` 
 
 ### 5. Start and view the application
@@ -101,7 +108,7 @@ ng generate @dlr-eoc/core-ui:ng-add --project=project-tutorial-map
 In the following the components neccessary for the display of a web map are installed. More information can be found [in the map-ol library folder](projects/map-ol/README.md).
 ### 1. Add the following libraries:
 ```
-npm install @dlr-eoc/map-ol @dlr-eoc/layer-control @dlr-eoc/base-layers-raster
+npm install @dlr-eoc/map-ol @dlr-eoc/ngx-ukis-ui-clarity @dlr-eoc/base-layers-raster
 ```
 
 The base layers raster library is optional, but it makes it easier to add a basemap. Without a given basemap the map canvas would be empty. 
@@ -118,7 +125,7 @@ e.g. in your apps style file (src/styles.scss)
 ### 3. Add the following to example-view.component.ts:
 ```
 import { MapOlComponent, MapOlService } from '@dlr-eoc/map-ol';
-import { LayerControlComponent, BaseLayerControlComponent} from '@dlr-eoc/layer-control';
+import { LayerControlComponent, BaseLayerControlComponent} from '@dlr-eoc/ngx-ukis-ui-clarity';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { IMapControls } from '@dlr-eoc/map-ol';

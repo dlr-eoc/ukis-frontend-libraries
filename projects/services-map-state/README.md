@@ -2,7 +2,7 @@
 
 The `MapStateService` should be an interface to handle `zoom`, `center`, `extent`, `view angle`, `rotation` and `time` of maps.
 The idea is similar to `@dlr-eoc/services-layers`.
-### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
+### how to use this in a ukis-angular project
 
 ```
 import { MapStateService } from '@dlr-eoc/services-map-state';
@@ -28,8 +28,7 @@ This module is used by components like:
 - @dlr-eoc/map-ol
 - @dlr-eoc/map-cesium
 - @dlr-eoc/map-maplibre
-- @dlr-eoc/map-tools
-- @dlr-eoc/layer-control
+- @dlr-eoc/ngx-ukis-ui-clarity (layer-control, map-tools)
 - ...
 
 It implements a basic 'state' for the map like:

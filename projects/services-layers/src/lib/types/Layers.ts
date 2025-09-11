@@ -1,18 +1,10 @@
 import { Type } from '@angular/core';
+import { IDynamicComponent } from '@dlr-eoc/ngx-ukis-utilities';
 
 export interface IAnyObject {
   [k: string]: any;
 }
 
-/**
- * When using dynamic components for layers you should keep in mind to handle the state (with a service or object binding) if needed,
- * because `legendIng` or `action` are placed inside `@if` directives in the template and are destroyed when they are hidden.
- */
-interface IDynamicComponent {
-  component: Type<any>;
-  inputs?: { [input: string]: any };
-  outputs?: { [inputChange: string]: (value) => void };
-}
 
 export interface ILayerContent extends IAnyObject {
   /** MIME type of the Content */
@@ -160,6 +152,10 @@ export interface ILayerExpanded {
   expanded?: boolean;
 }
 
+/**
+ * When using dynamic components for layers you should keep in mind to handle the state (with a service or object binding) if needed,
+ * because `legendImg` or `action` are placed inside `@if` directives in the template and are destroyed when they are hidden.
+ */
 export interface ILayerOptions<T = any > {
   name: string;
   id: string;

@@ -4,7 +4,7 @@
   angular Content Projection and ng-content. For further information what items can be used see [Clarity Header](https://clarity.design/documentation/header)
 - you can also set the Header title with [ukis-title]="title"
 
-### how to use this in a ukis-angular (@dlr-eoc/core-ui) project
+### how to use this in a ukis-angular project
 
 For examples [see demo maps](../demo-maps/README.md)
 

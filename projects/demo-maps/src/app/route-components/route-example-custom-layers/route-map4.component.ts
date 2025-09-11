@@ -31,11 +31,11 @@ import { ExampleGroupActionComponent } from '../../components/example-group-acti
 import { TablePopupComponent } from '../../components/table-popup/table-popup.component';
 import { Popup2Component } from '../../components/popup2/popup2.component';
 
-import { ClarityIcons, layersIcon, paperclipIcon } from '@cds/core/icon';
+import { ClarityIcons, layersIcon, paperclipIcon, worldIcon } from '@cds/core/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent } from '@dlr-eoc/layer-control';
-ClarityIcons.addIcons(...[layersIcon, paperclipIcon]);
+import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
+ClarityIcons.addIcons(...[layersIcon, paperclipIcon, worldIcon]);
 
 
 @Component({
@@ -57,10 +57,15 @@ export class RouteMap4Component implements OnInit, AfterViewInit {
     public mapSvc: MapOlService
   ) {
 
+    const icon = document.createElement('spawn');
+    icon.innerHTML = '<cds-icon shape="world"></cds-icon>';
+        
     this.controls = {
       attribution: true,
       scaleLine: true,
-      overviewMap: true
+      overviewMap: {
+        label: icon
+      }
     };
   }
 

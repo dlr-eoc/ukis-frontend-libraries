@@ -1,12 +1,12 @@
 # @dlr-eoc/map-cesium
 This library enables the UKIS frontend to display content on a 3D virtual globe using [CesiumJS](https://github.com/CesiumGS/cesium). It uses the same toolsets as the 2D mapping libraries and adds additional 3D capabilities. In the most basic version, map-cesium is displaying 2D maps on a 3D globe without explicit 3D content.
 
-### How to use this in a ukis-angular (@dlr-eoc/core-ui) project
+### How to use this in a ukis-angular project
 First, install and setupt UKIS core, like described in the [Tutorial](../../TUTORIALS.md#setting-up-ukis-core-ui).
 
 #### Add the following dependencies to the package.json
 - "@dlr-eoc/map-cesium"
-- "@dlr-eoc/layer-control" (optional)
+- "@dlr-eoc/ngx-ukis-ui-clarity" (optional)
 - "@dlr-eoc/base-layers-raster" (optional)
 
 #### Add styles from cesium to your application
