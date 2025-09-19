@@ -36,6 +36,7 @@
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
+- Allow the use of nav layer styles also with the class `.ukis-aside`. This way, the `ukis-layer-control` component can be used not only in `.clr-vertical-nav`.
 
 * **@dlr-eoc/ngx-ukis-ui-clarity:**
 - New UKIS library for ui-clarity related things was added.
