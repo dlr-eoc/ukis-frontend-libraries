@@ -44,7 +44,7 @@
 
 * **@dlr-eoc/ngx-ukis-utilities:**
 - New UKIS library for angular utilities was added.
-- Export `DynamicComponent` which have been in `@dlr-eoc/core-ui`
+- Export `DynamicComponent` which have been in `@dlr-eoc/core-ui` renamed to `<ngx-ukis-dynamic-component>`
 - Export some pipes which have been in `@dlr-eoc/layer-control`
 
 * **@dlr-eoc/map-ol:**
