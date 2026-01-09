@@ -13,7 +13,7 @@
   "peerDependencies": {},
   "devDependencies": {
     "@angular/platform-browser-dynamic": "^19.2.12",
-    "@angular/core": "^19.2.12",
+    "@angular/core": "^19.2.18",
     "zone.js": "~0.15.0"
   }
 }

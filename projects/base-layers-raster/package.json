@@ -19,6 +19,6 @@
   "devDependencies": {
     "zone.js": "~0.15.0",
     "@angular/platform-browser-dynamic": "^19.2.12",
-    "@angular/core": "^19.2.12"
+    "@angular/core": "^19.2.18"
   }
 }
