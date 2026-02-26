@@ -13,7 +13,7 @@
   ],
   "peerDependencies": {},
   "dependencies": {
-    "ol": "^v10.5.0",
+    "ol": "^v10.8.0",
     "delaunator": "^5.0.1"
   },
   "devDependencies": {
