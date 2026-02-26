@@ -75,8 +75,8 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     const lastMapState = this.mapStateSvc.getMapState().value;
     lastMapState.options.notifier = 'user';
     this.mapStateSvc.setMapState(lastMapState);
-     /** clean up all events on destroy */
-     this.subs.forEach(s => s.unsubscribe());
+    /** clean up all events on destroy */
+    this.subs.forEach(s => s.unsubscribe());
     if (this.map) {
       this.map.off('moveend', this.mapOnMoveend);
       // this.mapDivView.nativeElement.removeEventListener('mouseleave', this.removePopupsOnMouseLeave);
@@ -157,24 +157,25 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
         this._preSetData(data);
       }
 
-      setData(data: string) {
+      setData(data: GeoJSON.GeoJSON | string, waitForCompletion: true): Promise<void>;
+      setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: false): this;
+      setData(data: GeoJSON.GeoJSON | string): this | Promise<void> {
         this._preSetData(data);
-        super.setData(this._data);
-        return this;
+        return super.setData(this._data.url || this._data.geojson);
       }
 
       /** kml string or url */
-      _preSetData(data: string) {
+      _preSetData(data: GeoJSON.GeoJSON | string) {
         if (typeof data === 'string' && data.includes('.kml')) {
           var req = new XMLHttpRequest();
           req.open("GET", <string>data);
           req.responseType = "text";
           req.addEventListener("load", () => this.setData(req.response));
           req.send();
-        } else if (data.includes('<?xml')) {
+        } else if (typeof data === 'string' && data.includes('<?xml')) {
           this._options.data = data;
           const geojson = this._dataToGeojson(data);
-          this._data = geojson;
+          this._data.geojson = geojson;
         } else {
           console.error("KMLSource expects a URL or a KML (XML) as string 'data'");
         }
