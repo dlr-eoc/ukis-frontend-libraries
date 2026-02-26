@@ -18,6 +18,9 @@
  - Removed `pipes` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 
 ### Bug Fixes
+* **@dlr-eoc/ngx-ukis-ui-clarity:**
+- Add missing code for `<ngx-ukis-global-alert>`, `<ngx-ukis-global-progress>` and `<ngx-ukis-header>`. This was lost by the conversion from `@dlr-eoc/core-ui` to `@dlr-eoc/ngx-ukis-ui-clarity`.
+
 * **@dlr-eoc/map-maplibre:**
 - Replaced `TypedStyleLayer` with `StyleLayer` because `TypedStyleLayer` is not exported anymore.
 

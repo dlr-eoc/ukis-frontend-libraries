@@ -1,1 +1,15 @@
-<p>global-progress works!</p>
+@if (progress && progress.indeterminate) {
+  <span>
+    @if (progress.class) {
+      <div class="progress loop" [ngClass]="progress.class"><progress></progress></div>
+    }
+  </span>
+}
+@if (progress && !progress.indeterminate) {
+  <span>
+    @if (progress.class) {
+      <div class="progress" [ngClass]="progress.class"><progress max="{{progress.max}}"
+      value="{{progress.value}}"></progress></div>
+    }
+  </span>
+}

@@ -1,18 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
+import { ClarityModule, ClrMainContainer } from '@clr/angular';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'ukis-nested-component',
+  template: `<clr-main-container><ukis-header></ukis-header></clr-main-container>`,
+  imports: [ClarityModule, HeaderComponent]
+})
+class NestedTestComponent { }
 
 describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+  let component: NestedTestComponent;
+  let fixture: ComponentFixture<NestedTestComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
+      imports: [ClarityModule, HeaderComponent, NestedTestComponent],
+      declarations: [ClrMainContainer]
     })
-    .compileComponents();
+      .compileComponents();
 
-    fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(NestedTestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
