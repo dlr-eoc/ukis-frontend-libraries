@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-maplibre",
-  "version": "16.0.0-next.3",
+  "version": "16.0.0-next.4",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -21,13 +21,13 @@
     "tslib": "^2.6.3",
     "maplibre-gl": "^5.5.0",
     "@mapbox/togeojson": "0.16.2",
-    "@dlr-eoc/services-map-state": "16.0.0-next.3",
-    "@dlr-eoc/services-layers": "16.0.0-next.3",
-    "@dlr-eoc/utilities": "16.0.0-next.3"
+    "@dlr-eoc/services-map-state": "16.0.0-next.4",
+    "@dlr-eoc/services-layers": "16.0.0-next.4",
+    "@dlr-eoc/utilities": "16.0.0-next.4"
   },
   "devDependencies": {
-    "@dlr-eoc/base-layers-raster": "16.0.0-next.3",
-    "@dlr-eoc/shared-assets": "16.0.0-next.3"
+    "@dlr-eoc/base-layers-raster": "16.0.0-next.4",
+    "@dlr-eoc/shared-assets": "16.0.0-next.4"
   },
   "sideEffects": false
 }
