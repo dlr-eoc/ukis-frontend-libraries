@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'pull_request' && needs.checkTitelTag.outputs.VERSION_TAG != '') ||
-      github.event_name == 'push'
+      github.event_name == 'push' || needs.checkHeadBranch.result != 'failure' || needs.checkTitelTag.result != 'failure'
     steps:
       # Your existing build job exactly as-is
       - uses: actions/checkout@v4
@@ -171,11 +171,11 @@ jobs:
             }
 
   gh-release:
-    needs: [checkHeadBranch, checkTitelTag, checkTagOnNpm, build, checkLabel]
+    needs: [build, checkLabel]
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'pull_request' && needs.checkTitelTag.outputs.VERSION_TAG != '') ||
-      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/'))
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) || needs.checkLabel.result != 'failure' 
     steps:
       # Your existing gh-release logic, but dynamic tag:
       - name: Release
@@ -186,7 +186,7 @@ jobs:
 
   # download artifacts and publish packages
   publish-gpr:
-    needs: [checkHeadBranch, checkTitelTag, checkTagOnNpm, build, checkLabel, gh-release]
+    needs: [build, gh-release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -217,7 +217,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   publish-npm:
-    needs: [checkHeadBranch, checkTitelTag, checkTagOnNpm, build, checkLabel, gh-release]
+    needs: [build, gh-release]
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'pull_request' && needs.checkTitelTag.outputs.VERSION_TAG != '') ||
