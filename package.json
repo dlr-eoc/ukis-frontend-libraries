@@ -120,7 +120,6 @@
     "scripts/library",
     "projects/cookie-alert",
     "projects/base-layers-raster",
-    "projects/layer-control",
     "projects/map-ol",
     "projects/services-layers",
     "projects/services-util-store",
