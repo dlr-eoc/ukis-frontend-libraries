@@ -378,6 +378,23 @@ export function getSortedProjects(projects: ICustomWorkspaceProject[], packageSc
   /** An array of directed edges describing a graph e.g. edge1   */
   // maybe check other toposort libs https://www.npmjs.com/search?page=0&q=toposort&sortBy=dependent_count
   const flattdeps = toposort(edges).reverse();
+  
+  // check for deps without edges and push them in the array
+  if (Array.isArray(filterPN) && filterPN.length) {
+    filterPN.forEach(p => {
+      if (!flattdeps.includes(p)) {
+        flattdeps.push(p);
+      }
+    })
+  }
+  if (!filterPN && flattdeps.length !== projects.length) {
+    projects.forEach(p => {
+      if (!flattdeps.includes(p.name)) {
+        flattdeps.push(p.name);
+      }
+    })
+  }
+  //------------------------------------------------------
   return flattdeps;
 }
 
