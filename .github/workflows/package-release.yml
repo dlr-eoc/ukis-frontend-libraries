@@ -171,7 +171,7 @@ jobs:
               npm publish "$dir" --access public --provenance
           done
         env:
-          OIDC_TOKEN: ${{secrets.NPM_TOKEN_FROM_OIDC}}
+          OIDC_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   publish-npm_pr:
     needs: [checkHeadBranch_pr, checkTitelTag_pr, checkTagOnNpm_pr, build_pr, checkLabel_pr, gh-release_pr]
@@ -284,7 +284,7 @@ jobs:
               npm publish "$dir" --access public --tag "next" --provenance
           done
         env:
-          OIDC_TOKEN: ${{secrets.NPM_TOKEN_FROM_OIDC}}
+          OIDC_TOKEN: ${{secrets.GITHUB_TOKEN}}
   
   publish-npm_push:
     needs: [gh-release_push, build_push]
