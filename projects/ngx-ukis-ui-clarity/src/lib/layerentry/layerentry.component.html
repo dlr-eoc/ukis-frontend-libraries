@@ -72,7 +72,7 @@
             </cds-icon>
           }
           @if (layer.removable) {
-            <cds-icon shape="trash" class="iconButton" (click)="removeLayer(group, layer)"
+            <cds-icon shape="trash" class="iconButton" (click)="removeLayer(layer, group)"
             title="Remove layer"></cds-icon>
           }
         </div>
@@ -94,7 +94,7 @@
                     </div>
                   }
                   <!-- show style-switcher -->
-                  @if (layer.styles && layer.styles?.length > 1) {
+                  @if (layer.styles && layer.styles.length > 1) {
                     <select clrSelect (change)="executeChangeStyle($event)">
                       @for (style of layer.styles; track style) {
                         <option [value]="style.name"

@@ -1,11 +1,11 @@
 <clr-main-container>
   @if(ui.alert){
-    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+    <ngx-ukis-global-alert [(alert)]="ui.alert"></ngx-ukis-global-alert>
   }
   @if(ui.progress){
-    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+    <ngx-ukis-global-progress [(progress)]="ui.progress"></ngx-ukis-global-progress>
   }
-  <ukis-header [ukis-title]="title">
+  <ngx-ukis-header [ukis-title]="title">
     <!-- <a class="nav-link nav-text header-nav-el"><span class="nav-text">Test link</span></a> -->
     <!-- <a href="..." class="nav-link nav-text header-nav-el"><span class="nav-text">Interactive Analytics</span></a>
     <div class="header-action-el">
@@ -13,6 +13,6 @@
         <cds-icon shape="cog"></cds-icon>
       </a>
     </div> -->
-  </ukis-header>
+  </ngx-ukis-header>
   <app-example-view></app-example-view>
 </clr-main-container>

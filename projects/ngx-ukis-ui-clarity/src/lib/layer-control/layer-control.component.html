@@ -13,7 +13,7 @@
       }
       @if (!isLayerGroup(group) && group.filtertype === layerfilter) {
         <ukis-layerentry [layerGroups]="layergroups"
-          [expanded]="false" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [layer]="group" [group]="null"
+          [expanded]="false" [layersSvc]="layersSvc" [mapState]="mapStateSvc" [layer]="group"
           [sorting]="layersSort">
           <span class="move-item" cdkDragHandle>
             {{group.displayName || group.name}}

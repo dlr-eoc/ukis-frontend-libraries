@@ -245,7 +245,7 @@ export class LayerentryComponent implements OnInit {
   /**
    * remove the Layer if possible
    */
-  removeLayer(group: LayerGroup, selectedLayer: Layer) {
+  removeLayer(selectedLayer: Layer, group?: LayerGroup) {
     // console.log("delete ", group, selectedLayer)
     if (group) {
       // console.log("delete layer from group")
