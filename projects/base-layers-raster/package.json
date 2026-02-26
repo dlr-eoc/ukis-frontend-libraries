@@ -17,8 +17,8 @@
     "tslib": "^2.6.3"
   },
   "devDependencies": {
-    "zone.js": "~0.15.0",
-    "@angular/platform-browser-dynamic": "^19.2.12",
-    "@angular/core": "^19.2.12"
+    "zone.js": "~0.15.1",
+    "@angular/platform-browser-dynamic": "^19.2.19",
+    "@angular/core": "^19.2.19"
   }
 }

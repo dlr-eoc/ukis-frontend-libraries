@@ -20,8 +20,8 @@
     "ol": "^v10.5.0"
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "^19.2.12",
-    "@angular/core": "^19.2.12",
+    "@angular/platform-browser-dynamic": "^19.2.19",
+    "@angular/core": "^19.2.19",
     "@types/node": "^22.15.21"
   }
 }

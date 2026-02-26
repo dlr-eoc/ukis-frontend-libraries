@@ -18,9 +18,9 @@
   },
   "devDependencies": {},
   "peerDependencies": {
-    "@angular/common": "^19.2.12",
-    "@angular/core": "^19.2.12",
-    "@angular/platform-browser-dynamic": "^19.2.12"
+    "@angular/common": "^19.2.19",
+    "@angular/core": "^19.2.19",
+    "@angular/platform-browser-dynamic": "^19.2.19"
   },
   "sideEffects": false
 }
