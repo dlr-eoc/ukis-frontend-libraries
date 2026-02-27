@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-ol",
-  "version": "16.0.0-next.4",
+  "version": "16.0.0-next.5",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -17,9 +17,9 @@
     "rxjs": "~7.8.2"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "16.0.0-next.4",
-    "@dlr-eoc/services-layers": "16.0.0-next.4",
-    "@dlr-eoc/utils-maps": "16.0.0-next.4",
+    "@dlr-eoc/services-map-state": "16.0.0-next.5",
+    "@dlr-eoc/services-layers": "16.0.0-next.5",
+    "@dlr-eoc/utils-maps": "16.0.0-next.5",
     "ol": "^v10.8.0",
     "ol-mapbox-style": "^13.2.1",
     "proj4": "^2.17.0",
@@ -28,7 +28,7 @@
   "devDependencies": {
     "zone.js": "~0.15.1",
     "@angular/platform-browser-dynamic": "^19.2.19",
-    "@dlr-eoc/base-layers-raster": "16.0.0-next.4",
-    "@dlr-eoc/shared-assets": "16.0.0-next.4"
+    "@dlr-eoc/base-layers-raster": "16.0.0-next.5",
+    "@dlr-eoc/shared-assets": "16.0.0-next.5"
   }
 }
