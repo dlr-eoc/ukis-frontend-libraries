@@ -18,6 +18,9 @@
  * **@dlr-eoc/layer-control:**
  - Removed `pipes` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 
+ * **@dlr-eoc/ngx-ukis-ui-clarity:**
+ - Input `mapStateSvc` was removed from `<ukis-projection-switch>`! Input `fitViewToNewExtent` is now triggered by `mapSvc.setProjection`.
+
 ### Bug Fixes
 * **@dlr-eoc/map-maplibre:**
 - Fix type errors on `setData` and test for string if kml.

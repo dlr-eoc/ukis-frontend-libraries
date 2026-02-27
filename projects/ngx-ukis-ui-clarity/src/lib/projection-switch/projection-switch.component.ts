@@ -19,7 +19,6 @@ ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
 })
 export class ProjectionSwitchComponent implements OnInit {
   @Input('mapSvc') mapSvc: MapOlService;
-  @Input('mapStateSvc') mapStateSvc: MapStateService;
   @Input('projectionList') projList: IProjDef[];
   @Input('fitViewToNewExtent') fitViewToNewExtent? = false;
   subscription: Subscription;
@@ -35,10 +34,7 @@ export class ProjectionSwitchComponent implements OnInit {
   setNewProjection(projection: IProjDef) {
     this.mapSvc.registerProjection(projection);
     const newProj = this.mapSvc.getOlProjection(projection);
-    this.mapSvc.setProjection(newProj);
-    if (this.fitViewToNewExtent) {
-      this.mapStateSvc.setExtent(projection.worldExtent);
-    }
+    this.mapSvc.setProjection(newProj, this.fitViewToNewExtent);
     this.selectedProj = projection;
   }
 }
