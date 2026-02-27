@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/ngx-ukis-utilities",
-  "version": "16.0.0-next.3",
+  "version": "16.0.0-next.5",
   "description": "Angular utilities for @dlr-eoc ukis frontends",
   "keywords": [
     "angular",
@@ -18,9 +18,9 @@
   },
   "devDependencies": {},
   "peerDependencies": {
-    "@angular/common": "^19.2.12",
-    "@angular/core": "^19.2.12",
-    "@angular/platform-browser-dynamic": "^19.2.12"
+    "@angular/common": "^19.2.19",
+    "@angular/core": "^19.2.19",
+    "@angular/platform-browser-dynamic": "^19.2.19"
   },
   "sideEffects": false
 }

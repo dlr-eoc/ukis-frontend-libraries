@@ -62,15 +62,35 @@ export class RouteMap2Component implements OnInit {
       units: 'm'
     };
 
-    this.projections = [webMercator, arcticPolarStereographic, antarcticPolarStereographic];
+    const SwissCH1903: IProjDef = {
+      code: `EPSG:21781`,
+      proj4js: '+proj=somerc +lat_0=46.9524055555556 +lon_0=7.43958333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs +type=crs',
+      title: 'Swiss CH1903 / LV03',
+      extent: [484273.3, 73150.16, 837939.88, 299970.97],
+      worldExtent: [5.95, 45.81, 10.5, 47.81],
+      global: false,
+      units: 'm'
+    };
+
+    this.projections = [webMercator, arcticPolarStereographic, antarcticPolarStereographic, SwissCH1903];
     this.addOverlays();
-    /** set map extent or IMapState (zoom, center...) with the MapStateService */
-    this.mapStateSvc.setExtent([-14, 33, 40, 57]);
+    /** 
+       * set map extent or IMapState (zoom, center...) with the MapStateService 
+       * Check if the Extent is valid for the set projection.
+       */
+      this.mapStateSvc.setExtent([-14, 33, 40, 57]);
 
   }
 
 
   ngOnInit(): void {
+    this.mapStateSvc.getMapState().subscribe(state => {
+      console.log('MapState change', state);
+    });
+
+    this.mapSvc.projectionChange.subscribe(proj => {
+      console.log('Map Proj change', proj);
+    });
   }
 
   addOverlays() {

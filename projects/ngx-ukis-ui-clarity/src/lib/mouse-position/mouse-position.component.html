@@ -13,8 +13,8 @@
         <clr-select-container>
           <label>Projection </label>
           <select (change)="onChangeProj($event)" clrSelect>
-            @for (projection of projections; track projection) {
-            <option [value]="projection.value">{{projection.title}}</option>
+            @for (projection of projections; track $index) {
+              <option [value]="projection.value">{{projection.title}}</option>
             }
           </select>
         </clr-select-container>

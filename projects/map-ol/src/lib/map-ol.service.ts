@@ -69,7 +69,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate, getCenter as olExtGetCenter, applyTransform, containsExtent } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -2513,9 +2513,10 @@ export class MapOlService {
    * wms layers will be updated with corresponding proj def in the requests.
    * for other raster layers and for those wms layers which backend does not support target projection, please
    * define initial(default) layer projection, so openlayers will reproject on the client side
+   * see: https://openlayers.org/en/latest/apidoc/module-ol_source_Source.html#projection
    * projection is proj~ProjectionLike
    */
-  public setProjection(projection: olProjection | string) {
+  public setProjection(projection: olProjection | string, fitToProjectionExtent: boolean = false) {
     if (projection) {
       let viewOptions: olViewOptions = {};
       if (this.viewOptions) {
@@ -2525,39 +2526,62 @@ export class MapOlService {
         viewOptions.resolution = undefined;
         viewOptions.resolutions = undefined;
       }
-      if (projection instanceof olProjection) {
-        viewOptions.projection = projection;
-        const newCenter = transform(this.map.getView().getCenter(), this.map.getView().getProjection(), projection); // get center coordinates in the new projection
-        viewOptions.center = newCenter; // this.map.getView().getCenter();
-        // _viewOptions.extent = projection.getExtent();// || undefined;
-        viewOptions.zoom = this.map.getView().getZoom();
-      } else if (typeof projection === 'string') {
-        viewOptions.projection = projection;
-        viewOptions.center = this.map.getView().getCenter();
-        viewOptions.zoom = this.map.getView().getZoom();
-      }
-      const view = new olView(viewOptions);
-      const oldProjection = this.EPSG;
-      this.EPSG = view.getProjection().getCode();
-      this.map.setView(view);
-      this.view = this.map.getView();
+      const oldView = this.map.getView();
+      const oldProj = oldView.getProjection();
+      const oldExtent = oldView.calculateExtent();
 
-      // reprojecting vector layers
-      this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-        layerGroup.getLayers().getArray().forEach(layer => {
-          if (layer instanceof olLayer) {
-            let source = layer.getSource();
-            // check for nested sources, e.g. cluster or cluster of clusters etc
-            while (source['source']) {
-              source = source['source'];
-            }
-            if (source instanceof olVectorSource) {
-              this.reprojectFeatures(source, oldProjection, this.EPSG);
-            }
+      let newProjection: olProjection;
+      if (projection instanceof olProjection) {
+        newProjection = projection;
+      } else if (typeof projection === 'string') {
+        newProjection = getProjection(projection);
+      }
+
+      if (newProjection) {
+        viewOptions.projection = newProjection;
+        viewOptions.extent = newProjection.getExtent();
+        viewOptions.center = olExtGetCenter(viewOptions.extent);
+
+        // https://openlayers.org/en/latest/examples/reprojection-by-code.html
+        const view = new olView(viewOptions);
+        const oldProjection = this.EPSG;
+        this.EPSG = view.getProjection().getCode();
+        this.map.setView(view);
+        this.view = this.map.getView();
+
+
+        if (fitToProjectionExtent) {
+          this.view.fit(viewOptions.extent);
+        } else {
+          // Try zooming to the old bbox if that works in the new projection.
+          const newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
+          if (containsExtent(viewOptions.extent, newExtent)) {
+            this.view.fit(newExtent);
+          } else {
+            this.view.fit(viewOptions.extent);
           }
+        }
+
+        // reprojecting vector layers
+        this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
+          layerGroup.getLayers().getArray().forEach(layer => {
+            if (layer instanceof olLayer) {
+              let source = layer.getSource();
+              // check for nested sources, e.g. cluster or cluster of clusters etc
+              while (source['source']) {
+                source = source['source'];
+              }
+              if (source instanceof olVectorSource) {
+                this.reprojectFeatures(source, oldProjection, this.EPSG);
+              }
+            }
+          });
         });
-      });
-      this.projectionChange.next(this.getProjection());
+
+        this.projectionChange.next(this.getProjection());
+      } else {
+        console.log(`projection ${projection} is invalid or not registered!`);
+      }
     } else {
       // console.log('projection code is undefined');
     }

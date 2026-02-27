@@ -4,6 +4,7 @@
  - Update OpenLayers from `v9.2.4` to `v10.5.0` see [OpenLayers releases](https://github.com/openlayers/openlayers/releases) for all changes.
  - Update maplibre from `^4.5.0` to `v5.5.0` see [maplibre releases](https://github.com/maplibre/maplibre-gl-js/releases) for all changes.
  - Update three.js from `^0.137.5` to `^0.176.0` see [three releases](https://github.com/mrdoob/three.js/releases) for all changes.
+ - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^17.0.0` to `^22.3.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^12.0.0` to `^14.3.0` (cesium from `1.129` to `1.138`) see [cesium changelog](https://github.com/CesiumGS/cesium/blob/1.138/CHANGES.md) for all changes.
  - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^10.1.0` to `^17.0.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^7.1.0` to `^12.0.0` (cesium from `1.120` to `1.129`) see [cesium changelog](https://github.com/CesiumGS/cesium/blob/1.129/CHANGES.md) for all changes.
 
  - Renamed `@dlr-eoc/core-ui` to `@dlr-eoc/ngx-ukis-ui-clarity`
@@ -17,9 +18,16 @@
  * **@dlr-eoc/layer-control:**
  - Removed `pipes` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 
+ * **@dlr-eoc/ngx-ukis-ui-clarity:**
+ - Input `mapStateSvc` was removed from `<ukis-projection-switch>`! Input `fitViewToNewExtent` is now triggered by `mapSvc.setProjection`.
+
 ### Bug Fixes
 * **@dlr-eoc/map-maplibre:**
+- Fix type errors on `setData` and test for string if kml.
 - Replaced `TypedStyleLayer` with `StyleLayer` because `TypedStyleLayer` is not exported anymore.
+
+* **@dlr-eoc/ngx-ukis-ui-clarity:**
+- Add missing code for `<ngx-ukis-global-alert>`, `<ngx-ukis-global-progress>` and `<ngx-ukis-header>`. This was lost by the conversion from `@dlr-eoc/core-ui` to `@dlr-eoc/ngx-ukis-ui-clarity`.
 
 * **@dlr-eoc/services-ogc:**
 * **@dlr-eoc/utils-ogc:**
@@ -33,6 +41,9 @@
 
 * **@dlr-eoc/map-tools:**
   - use `clr-number-input-container` instead of `clr-input-container` for input of `type="number"`.
+
+* **@dlr-eoc/map-ol:**
+  - Fix `setProjection` zoom to old bbox. Add new param `fitToProjectionExtent` on `setProjection` to zoom to new projection extent.
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.

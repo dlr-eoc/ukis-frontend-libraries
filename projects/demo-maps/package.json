@@ -1,6 +1,6 @@
 {
   "name": "demo-maps",
-  "version": "16.0.0-next.3",
+  "version": "16.0.0-next.5",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -12,29 +12,29 @@
     "layers"
   ],
   "peerDependencies": {
-    "@angular/common": "^19.2.12",
-    "@angular/core": "^19.2.12",
-    "@angular/router": "^19.2.12",
-    "@angular/platform-browser": "^19.2.12",
-    "@clr/angular": "^17.10.0",
+    "@angular/common": "^19.2.19",
+    "@angular/core": "^19.2.19",
+    "@angular/router": "^19.2.19",
+    "@angular/platform-browser": "^19.2.19",
+    "@clr/angular": "^17.12.2",
     "rxjs": "~7.8.2",
-    "ol": "^v10.5.0",
+    "ol": "^v10.8.0",
     "proj4": "^2.17.0"
   },
   "dependencies": {
-    "@dlr-eoc/map-ol": "16.0.0-next.3",
-    "@dlr-eoc/ngx-ukis-ui-clarity": "16.0.0-next.3",
-    "@dlr-eoc/base-layers-raster": "16.0.0-next.3",
-    "@dlr-eoc/map-three": "16.0.0-next.3",
-    "@dlr-eoc/utils-maps": "16.0.0-next.3",
-    "@dlr-eoc/services-ogc": "16.0.0-next.3",
-    "@dlr-eoc/shared-assets": "16.0.0-next.3",
-    "@dlr-eoc/map-cesium": "16.0.0-next.3",
-    "@dlr-eoc/map-maplibre": "16.0.0-next.3"
+    "@dlr-eoc/map-ol": "16.0.0-next.5",
+    "@dlr-eoc/ngx-ukis-ui-clarity": "16.0.0-next.5",
+    "@dlr-eoc/base-layers-raster": "16.0.0-next.5",
+    "@dlr-eoc/map-three": "16.0.0-next.5",
+    "@dlr-eoc/utils-maps": "16.0.0-next.5",
+    "@dlr-eoc/services-ogc": "16.0.0-next.5",
+    "@dlr-eoc/shared-assets": "16.0.0-next.5",
+    "@dlr-eoc/map-cesium": "16.0.0-next.5",
+    "@dlr-eoc/map-maplibre": "16.0.0-next.5"
   },
   "devDependencies": {
-    "zone.js": "~0.15.0",
-    "@angular/platform-browser-dynamic": "^19.2.12",
+    "zone.js": "~0.15.1",
+    "@angular/platform-browser-dynamic": "^19.2.19",
     "protractor": "^7.0.0"
   }
 }

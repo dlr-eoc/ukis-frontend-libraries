@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/ngx-ukis-ui-clarity",
-  "version": "16.0.0-next.3",
+  "version": "16.0.0-next.5",
   "description": "This project includes schematics to add a base UKIS-Layout to an angular application. The Layout is based on Clarity so [add this first](https://clarity.design/get-started/developing/angular)!",
   "keywords": [
     "schematics",
@@ -19,36 +19,36 @@
     "schematics:test": "npx jasmine ../../dist/ngx-ukis-ui-clarity/schematics/**/*_spec.js"
   },
   "dependencies": {
-    "@angular-devkit/core": "^19.2.13",
-    "@angular-devkit/schematics": "^19.2.13",
-    "@schematics/angular": "^19.2.13",
+    "@angular-devkit/core": "^19.2.19",
+    "@angular-devkit/schematics": "^19.2.19",
+    "@schematics/angular": "^19.2.19",
     "parse5-html-rewriting-stream": "^7.1.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
     "typescript": "^5.8.3",
     "jasmine": "^5.7.1",
-    "zone.js": "~0.15.0",
-    "@angular/platform-browser-dynamic": "^19.2.12",
-    "@angular-devkit/architect": "^0.1902.13"
+    "zone.js": "~0.15.1",
+    "@angular/platform-browser-dynamic": "^19.2.19",
+    "@angular-devkit/architect": "^0.1902.19"
   },
   "peerDependencies": {
-    "@angular/common": "^19.2.12",
-    "@angular/core": "^19.2.12",
-    "@angular/forms": "^19.2.12",
+    "@angular/common": "^19.2.19",
+    "@angular/core": "^19.2.19",
+    "@angular/forms": "^19.2.19",
     "@angular/cdk": "^19.2.12",
-    "@angular/router": "^19.2.12",
-    "@clr/angular": "^17.10.0",
-    "@cds/core": "^6.15.1",
-    "@clr/ui": "^17.10.0",
+    "@angular/router": "^19.2.19",
+    "@clr/angular": "^17.12.2",
+    "@cds/core": "^6.17.0",
+    "@clr/ui": "^17.12.2",
     "rxjs": "~7.8.2",
     "jsonc-parser": "^3.3.1",
-    "ol": "^v10.5.0",
+    "ol": "^v10.8.0",
     "proj4": "^2.17.0",
-    "@dlr-eoc/services-layers": "16.0.0-next.3",
-    "@dlr-eoc/services-map-state": "16.0.0-next.3",
-    "@dlr-eoc/ngx-ukis-utilities": "16.0.0-next.3",
-    "@dlr-eoc/map-ol": "16.0.0-next.3"
+    "@dlr-eoc/services-layers": "16.0.0-next.5",
+    "@dlr-eoc/services-map-state": "16.0.0-next.5",
+    "@dlr-eoc/ngx-ukis-utilities": "16.0.0-next.5",
+    "@dlr-eoc/map-ol": "16.0.0-next.5"
   },
   "schematics": "./schematics/collection.json",
   "ng-add": {

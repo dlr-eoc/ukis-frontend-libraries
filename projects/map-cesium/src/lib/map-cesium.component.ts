@@ -111,13 +111,15 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   private initMap() {
-    if (this.timeInterval) {
-      this.mapSvc.setTimeInterval(this.timeInterval);
+    if (this.mapDivView.nativeElement) {
+      if (this.timeInterval) {
+        this.mapSvc.setTimeInterval(this.timeInterval);
+      }
+      this.mapSvc.setControls(this.controls);
+      const cesiumView = this.mapSvc.createMap(this.mapDivView.nativeElement);
+      this.viewer = cesiumView.viewer;
+      this.mapCreated.next(true);
     }
-    this.mapSvc.setControls(this.controls);
-    const cesiumView = this.mapSvc.createMap(this.mapDivView.nativeElement);
-    this.viewer = cesiumView.viewer;
-    this.mapCreated.next(true);
   }
 
   private subscribeToLayers() {

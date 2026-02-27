@@ -45,14 +45,14 @@ Use a basic layout like the following, containing the router-outlet which then s
 ```
 <clr-main-container>
   @if(ui.alert){
-    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+    <ngx-ukis-global-alert [(alert)]="ui.alert"></ngx-ukis-global-alert>
   }
   @if(ui.progress){
-    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+    <ngx-ukis-global-progress [(progress)]="ui.progress"></ngx-ukis-global-progress>
   }
-  <ukis-header [ukis-title]="title">
+  <ngx-ukis-header [ukis-title]="title">
     ...
-  </ukis-header>
+  </ngx-ukis-header>
   <router-outlet></router-outlet>
 </clr-main-container>
 ```
@@ -62,14 +62,14 @@ Replace the router-outlet with a view component which also adds the Clarity `con
 ```
 <clr-main-container>
   @if(ui.alert){
-    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+    <ngx-ukis-global-alert [(alert)]="ui.alert"></ngx-ukis-global-alert>
   }
   @if(ui.progress){
-    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+    <ngx-ukis-global-progress [(progress)]="ui.progress"></ngx-ukis-global-progress>
   }
-  <ukis-header [ukis-title]="title">
+  <ngx-ukis-header [ukis-title]="title">
   ...
-  </ukis-header>
+  </ngx-ukis-header>
   <app-example-view></app-example-view>
 </clr-main-container>
 ```

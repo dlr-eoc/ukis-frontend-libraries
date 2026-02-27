@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/base-layers-raster",
-  "version": "16.0.0-next.3",
+  "version": "16.0.0-next.5",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -13,12 +13,12 @@
     "OSM"
   ],
   "dependencies": {
-    "@dlr-eoc/services-layers": "16.0.0-next.3",
+    "@dlr-eoc/services-layers": "16.0.0-next.5",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
-    "zone.js": "~0.15.0",
-    "@angular/platform-browser-dynamic": "^19.2.12",
-    "@angular/core": "^19.2.12"
+    "zone.js": "~0.15.1",
+    "@angular/platform-browser-dynamic": "^19.2.19",
+    "@angular/core": "^19.2.19"
   }
 }

@@ -359,7 +359,7 @@ export function creteDefaultGeojsonLayers(l: ukisVectorLayer) {
 }
 
 function getDefaultGeoms() {
-    const defaultGeom: Omit<MapGeoJSONFeature, '_geometry' | 'id' | '_vectorTileFeature' | 'source' | 'layer' | 'state' | 'toJSON'>[] = [
+    const defaultGeom: GeoJSON.Feature[] = [
         {
             type: 'Feature',
             geometry: {
@@ -385,7 +385,7 @@ function getDefaultGeoms() {
                 coordinates: [] as any
             },
             properties: {
- 
+
             }
         }
     ];
