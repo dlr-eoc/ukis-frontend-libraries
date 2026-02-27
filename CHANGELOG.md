@@ -41,6 +41,9 @@
 * **@dlr-eoc/map-tools:**
   - use `clr-number-input-container` instead of `clr-input-container` for input of `type="number"`.
 
+* **@dlr-eoc/map-ol:**
+  - Fix `setProjection` zoom to old bbox. Add new param `fitToProjectionExtent` on `setProjection` to zoom to new projection extent.
+
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
 - Allow the use of nav layer styles also with the class `.ukis-aside`. This way, the `ukis-layer-control` component can be used not only in `.clr-vertical-nav`.
