@@ -14,6 +14,8 @@
     <cds-icon shape="map" clrVerticalNavIcon></cds-icon>
     Projection
     <clr-vertical-nav-group-children class="padding title-ellipsis">
+      On change, the map will fit to the new Projection extent. See "fitViewToNewExtent" Input
+      <p></p>
       <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections" [fitViewToNewExtent]="true"></ukis-projection-switch>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>

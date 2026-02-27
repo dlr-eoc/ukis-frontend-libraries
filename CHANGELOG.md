@@ -24,12 +24,10 @@
 ### Bug Fixes
 * **@dlr-eoc/map-maplibre:**
 - Fix type errors on `setData` and test for string if kml.
+- Replaced `TypedStyleLayer` with `StyleLayer` because `TypedStyleLayer` is not exported anymore.
 
 * **@dlr-eoc/ngx-ukis-ui-clarity:**
 - Add missing code for `<ngx-ukis-global-alert>`, `<ngx-ukis-global-progress>` and `<ngx-ukis-header>`. This was lost by the conversion from `@dlr-eoc/core-ui` to `@dlr-eoc/ngx-ukis-ui-clarity`.
-
-* **@dlr-eoc/map-maplibre:**
-- Replaced `TypedStyleLayer` with `StyleLayer` because `TypedStyleLayer` is not exported anymore.
 
 * **@dlr-eoc/services-ogc:**
 * **@dlr-eoc/utils-ogc:**
