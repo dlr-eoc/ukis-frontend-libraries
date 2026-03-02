@@ -36,10 +36,10 @@ jobs:
     needs: checkHeadBranch_pr
     if: github.event_name == 'pull_request'  # Only for PRs
     steps:
-      # - uses: actions/checkout@v4
+      # - uses: actions/checkout@v6
       # needs uses: actions/checkout@ if script/module is required
       - name: checkTitelTag
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         id: get-tag
         with:
           result-encoding: string
@@ -74,14 +74,14 @@ jobs:
     needs: [checkHeadBranch_pr, checkTitelTag_pr]
     if: github.event_name == 'pull_request' && needs.checkTitelTag_pr.outputs.VERSION_TAG != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: checkout tag
         run: |
           git fetch --all --tags
           git checkout ${{ needs.checkTitelTag_pr.outputs.VERSION_TAG }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -93,14 +93,14 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.checkTitelTag_pr.outputs.VERSION_TAG != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: checkout tag
         run: |
           git fetch --all --tags
           git checkout ${{ needs.checkTitelTag_pr.outputs.VERSION_TAG }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - name: build
         run: |
            npm ci
@@ -117,7 +117,7 @@ jobs:
     needs: [build_pr]
     steps:
       - name: checkLabel
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             if(context.payload.pull_request.labels){
@@ -147,15 +147,15 @@ jobs:
     needs: [checkHeadBranch_pr, checkTitelTag_pr, checkTagOnNpm_pr, build_pr, checkLabel_pr, gh-release_pr]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download dist result from job build
         uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -178,15 +178,15 @@ jobs:
     needs: [checkHeadBranch_pr, checkTitelTag_pr, checkTagOnNpm_pr, build_pr, checkLabel_pr, gh-release_pr]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download dist result from job build
         uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -212,10 +212,10 @@ jobs:
     if: github.event_name == 'push'
     steps:
       # check out before using actions reference from the same repository!
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -226,10 +226,10 @@ jobs:
     needs: [checkTagOnNpm_push]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - uses: ./.github/actions/test
       - name: build
         run: |
@@ -259,15 +259,15 @@ jobs:
     needs: [gh-release_push, build_push]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download dist result from job build
         uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -291,15 +291,15 @@ jobs:
     needs: [gh-release_push, build_push]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download dist result from job build
         uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci
