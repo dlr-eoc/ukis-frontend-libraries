@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MapState, IMapStateOptions, IMapState } from './types/map-state';
 import { TGeoExtent } from '@dlr-eoc/services-layers';
 import { map } from 'rxjs/operators';
+import { IProjDef } from './types/projections';
 
 const initialState = new MapState(0, { lat: 0, lon: 0 });
 @Injectable({
