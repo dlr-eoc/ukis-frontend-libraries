@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 import { LayersService } from '@dlr-eoc/services-layers';
-import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapStateService, EPSG_4326_Def } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { LargeLayersService } from './services/largelayers.service';
@@ -39,7 +39,8 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.mapSvc.setProjection('EPSG:4326');
+    // this.mapSvc.setProjection(EPSG_4326_Def);
+    this.mapStateSvc.setProjection(EPSG_4326_Def.code);
 
     const styleFunc = (feature: Feature<any>, resolution: number) => {
       const fullId = feature.getId().toString();

@@ -98,8 +98,6 @@ const ID_KEY = 'id';
 const OL_GROUP_KEY = 'groupID';
 const OL_GROUP_NAME = 'groupName';
 const TITLE_KEY = 'title';
-const WebMercator = 'EPSG:3857';
-const WGS84 = 'EPSG:4326';
 const POPUP_KEY = 'popup';
 
 

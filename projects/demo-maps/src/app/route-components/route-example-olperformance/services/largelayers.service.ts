@@ -8,12 +8,11 @@ import { VectorTile as VectorTileLayer } from 'ol/layer';
 import { VectorTile as VectorTileSource } from 'ol/source';
 import { GeoJSON } from 'ol/format';
 import { get as getProjection, getTransform } from 'ol/proj';
-import { register } from 'ol/proj/proj4';
-import proj4 from 'proj4';
 import { HttpClient } from '@angular/common/http';
 import { CustomLayer } from '@dlr-eoc/services-layers';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { all, bbox } from 'ol/loadingstrategy';
+import { IProjDef } from '@dlr-eoc/services-map-state';
 
 
 export type DataStrategy = 'all' | 'bbox' | 'tile' | 'simplifyGeometry' | 'noProps';
@@ -31,8 +30,16 @@ export class LargeLayersService {
     private http: HttpClient,
     private olSvc: MapOlService
   ) {
-    proj4.defs('EPSG:2966', '+proj=tmerc +lat_0=37.5 +lon_0=-87.08333333333333 +k=0.999966667 +x_0=900000 +y_0=249999.9998983998 +datum=NAD83 +units=us-ft +no_defs');
-    register(proj4);
+    const IndianaWest: IProjDef = {
+      code: 'EPSG:2966',
+      proj4js: '+proj=tmerc +lat_0=37.5 +lon_0=-87.08333333333333 +k=0.999966667 +x_0=900000 +y_0=249999.9998983998 +datum=NAD83 +units=us-ft +no_defs',
+      title: 'NAD83 / Indiana West',
+      extent: [2658876.73, 918525.73, 3618576.69, 2383977.36],
+      worldExtent: [-88.1, 37.77, -84.78, 41.77],
+      global: false,
+      units: 'degrees'
+    }
+    this.olSvc.registerProjection(IndianaWest);
     const newProj = getProjection('EPSG:2966');
     const toWgs84 = getTransform(newProj, 'EPSG:4326');
 

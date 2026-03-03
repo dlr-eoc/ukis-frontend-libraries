@@ -6,6 +6,7 @@ import { Map as glMap, StyleSpecification, StyleLayer } from 'maplibre-gl';
 import { BehaviorSubject } from 'rxjs';
 import { LayerSourceSpecification, UKIS_METADATA } from './maplibre.helpers';
 import { createLayer, layerIsSupported, updateSource, updateStyleLayerProperties } from './maplibre-layers.helpers';
+import { WebMercator, WGS84 } from '@dlr-eoc/services-map-state';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
@@ -17,8 +18,8 @@ export class MapMaplibreService {
   readonly FILTER_TYPE_KEY = 'filtertype' as const;
   readonly ID_KEY = 'id' as const;
   readonly TITLE_KEY = 'title' as const;
-  WebMercator = 'EPSG:3857';
-  WGS84 = 'EPSG:4326';
+  WebMercator = WebMercator
+  WGS84 = WGS84
 
   public map = new BehaviorSubject<glMap | null>(null);
   constructor() { }

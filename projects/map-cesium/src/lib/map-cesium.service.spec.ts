@@ -7,9 +7,8 @@ import { ImageryLayer, Scene } from '@cesium/engine';
 import { CustomLayer, ILayerOptions, IRasterLayerOptions, Layer, RasterLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
+import { WebMercator } from '@dlr-eoc/services-map-state';
 
-const WebMercator = 'EPSG:3857';
-const WGS84 = 'EPSG:4326';
 
 let mapTarget: { size: number[], container: HTMLDivElement };
 

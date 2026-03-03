@@ -4,11 +4,9 @@ import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeo
 import { ICesiumControls } from './map-cesium.component';
 import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath, BillboardGraphics} from '@cesium/engine';
 import { Viewer } from '@cesium/widgets';
-import { IMapCenter } from '@dlr-eoc/services-map-state';
+import { IMapCenter, WebMercator } from '@dlr-eoc/services-map-state';
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes
-const WebMercator = 'EPSG:3857';
-const WGS84 = 'EPSG:4326';
 
 @Injectable({
   providedIn: 'root'
