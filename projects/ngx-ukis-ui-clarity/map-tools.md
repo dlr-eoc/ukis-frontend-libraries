@@ -5,9 +5,9 @@
 This repository contains 3 ui components:
 
 1. mouse-position: shows projected coordinates of mouse pointer <br />
- ```<ukis-mouse-position></ukis-mouse-position>```
+ ```<ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc"></ukis-mouse-position>```
 2. navigator: allows to insert coordinates in order to navigate the map to desired position <br />
- ```<ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections"></ukis-projection-switch>```
+ ```<ukis-projection-switch [mapSvc]="mapSvc" [mapState]="mapStateSvc" [projectionList]="projections"></ukis-projection-switch>```
 3. projection-switch: ui element for interactive projection switch <br />
  ```<ukis-map-navigator [mapState]="mapStateSvc"></ukis-map-navigator>```
 
@@ -87,7 +87,7 @@ addBaselayers() {
     <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
     Coordinates
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-mouse-position></ukis-mouse-position>
+      <ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc"></ukis-mouse-position>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 </clr-vertical-nav>

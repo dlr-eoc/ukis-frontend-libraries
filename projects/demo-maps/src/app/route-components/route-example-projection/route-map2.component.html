@@ -16,14 +16,14 @@
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       On change, the map will fit to the new Projection extent. See "fitViewToNewExtent" Input
       <p></p>
-      <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections" [fitViewToNewExtent]="true"></ukis-projection-switch>
+      <ukis-projection-switch [mapSvc]="mapSvc" [mapState]="mapStateSvc" [projectionList]="projections" [fitViewToNewExtent]="true"></ukis-projection-switch>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Coordinates">
     <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
     Coordinates
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-mouse-position></ukis-mouse-position>
+      <ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc"></ukis-mouse-position>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Navigator">

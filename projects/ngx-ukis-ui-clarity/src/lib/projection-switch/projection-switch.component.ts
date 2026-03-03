@@ -19,6 +19,7 @@ ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
 })
 export class ProjectionSwitchComponent implements OnInit {
   @Input('mapSvc') mapSvc: MapOlService;
+  @Input('mapState') mapState: MapStateService;
   @Input('projectionList') projList: IProjDef[];
   @Input('fitViewToNewExtent') fitViewToNewExtent? = false;
   subscription: Subscription;
