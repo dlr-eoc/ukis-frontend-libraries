@@ -69,7 +69,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate, getCenter as olExtGetCenter, applyTransform, containsExtent } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate, getCenter as olExtGetCenter, containsExtent, Extent as olExtent } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -89,6 +89,7 @@ import { Subject } from 'rxjs';
 import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorSource from 'ol/source/Vector';
+import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjOptions } from '@dlr-eoc/services-map-state';
 
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -119,6 +120,8 @@ export class MapOlService {
   private hitLayerPrev = null;
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
+  public registeredProjections: Map<IProjDef['code'], IProjDef> = new Map();
+
   /**
    * This object keeps track of currently bound angular-components that are being used as popups.
    * We keep a reference to them here so that we can remove them again after they are no longer displayed.
@@ -251,7 +254,11 @@ export class MapOlService {
     this.map.setView(tempview);
     // this.map.getControls().clear();
     this.view = this.map.getView();
-    this.setProjection(this.EPSG);
+    // Register projection at startup if it is not identical
+    if (this.view.getProjection().getCode() !== this.EPSG) {
+      this.registerProjection(EPSG_3857_Def);
+      this.setProjection(this.EPSG);
+    }
     if (target) {
       this.map.setTarget(target);
     }
@@ -2514,8 +2521,16 @@ export class MapOlService {
    * see: https://openlayers.org/en/latest/apidoc/module-ol_source_Source.html#projection
    * projection is proj~ProjectionLike
    */
-  public setProjection(projection: olProjection | string, fitToProjectionExtent: boolean = false) {
-    if (projection) {
+  public setProjection(projection: IProjDef | string, options?: IProjOptions) {
+    let projIsReg = this.registeredProjections.get((typeof projection === 'string') ? projection : projection.code);
+    
+    // IProjDef is used and it is not registered, register it and use it.
+    if(typeof projection !== 'string' && !projIsReg){
+      this.registerProjection(projection);
+      projIsReg = this.registeredProjections.get(projection.code);
+    }
+
+    if (projIsReg) {
       let viewOptions: olViewOptions = {};
       if (this.viewOptions) {
         viewOptions = this.viewOptions;
@@ -2528,17 +2543,11 @@ export class MapOlService {
       const oldProj = oldView.getProjection();
       const oldExtent = oldView.calculateExtent();
 
-      let newProjection: olProjection;
-      if (projection instanceof olProjection) {
-        newProjection = projection;
-      } else if (typeof projection === 'string') {
-        newProjection = getProjection(projection);
-      }
-
+      const newProjection = this.getOlProjection(projIsReg);
       if (newProjection) {
         viewOptions.projection = newProjection;
         viewOptions.extent = newProjection.getExtent();
-        viewOptions.center = olExtGetCenter(viewOptions.extent);
+        viewOptions.center = (viewOptions.extent) ? olExtGetCenter(viewOptions.extent) : viewOptions.center;
 
         // https://openlayers.org/en/latest/examples/reprojection-by-code.html
         const view = new olView(viewOptions);
@@ -2548,11 +2557,21 @@ export class MapOlService {
         this.view = this.map.getView();
 
 
-        if (fitToProjectionExtent) {
+        if (options?.fitToProjectionExtent) {
           this.view.fit(viewOptions.extent);
         } else {
-          // Try zooming to the old bbox if that works in the new projection.
-          const newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
+          let newExtent: olExtent;
+          if (options?.fitToBbox) {
+            // Try zooming to a bbox provided in set projection.
+            newExtent = transformExtent(options.fitToBbox, WGS84, newProjection, 8);
+          } else if (options?.fitToNativeBbox) {
+            // the bbox is in the newProjection;
+            newExtent = options.fitToNativeBbox;
+          } else {
+            // Try zooming to the old bbox if that works in the new projection.
+            newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
+          }
+
           if (containsExtent(viewOptions.extent, newExtent)) {
             this.view.fit(newExtent);
           } else {
@@ -2581,7 +2600,7 @@ export class MapOlService {
         console.log(`projection ${projection} is invalid or not registered!`);
       }
     } else {
-      // console.log('projection code is undefined');
+      console.log('projection code is undefined or not registered', projection, this.registeredProjections);
     }
   }
 
@@ -2589,15 +2608,19 @@ export class MapOlService {
    * @param projDef.code - e.g.: "EPSG:4326"
    * @param projDef.proj4js - e.g.: "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
    */
-  public registerProjection(projDef: { code: string, proj4js: string }) {
-    proj4.defs(projDef.code, projDef.proj4js);
-    olRegister(proj4);
+  public registerProjection(projDef: IProjDef) {
+    const hasProj = this.registeredProjections.has(projDef.code);
+    if (!hasProj) {
+      proj4.defs(projDef.code, projDef.proj4js);
+      olRegister(proj4);
+      this.registeredProjections.set(projDef.code, projDef);
+    }
   }
 
   /**
-   * Returns a OpenLayers Projection from Options
+   * Returns a OpenLayers Projection froma Definition
    */
-  public getOlProjection(projDef: olProjectionOptions): olProjection {
+  public getOlProjection(projDef: IProjDef | olProjectionOptions): olProjection {
     return new olProjection({
       code: projDef.code,
       extent: projDef.extent ? projDef.extent : undefined,

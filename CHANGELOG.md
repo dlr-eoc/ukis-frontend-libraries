@@ -22,6 +22,10 @@
  - Input `mapStateSvc` on `<ukis-projection-switch>` was renamed to `mapState`! Input `fitViewToNewExtent` is now triggered by `mapSvc.setProjection`.
  
  - MousePositionComponent need now Inputs `<ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc">`
+
+* **@dlr-eoc/map-ol:**
+ - Params of `setProjection(projection: olProjection | string)` changed to `setProjection(projection: IProjDef | string, options?: IProjOptions)` in `MapOlService`. This allows the registration of proj4 definitions for projections from `IProjDef`. The options `IProjOptions` allow to zomm to a bbox on setProjection or zomm to the ProjectionExtent.
+
 * **@dlr-eoc/map-cesium:**
  - `MapCesiumService.getCurrentExtent()` param `geographic?: boolean` is removed because it was not used.
 
@@ -46,8 +50,6 @@
 * **@dlr-eoc/map-tools:**
   - use `clr-number-input-container` instead of `clr-input-container` for input of `type="number"`.
 
-* **@dlr-eoc/map-ol:**
-  - Fix `setProjection` zoom to old bbox. Add new param `fitToProjectionExtent` on `setProjection` to zoom to new projection extent.
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
