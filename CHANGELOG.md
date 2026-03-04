@@ -22,6 +22,9 @@
  - Input `mapStateSvc` on `<ukis-projection-switch>` was renamed to `mapState`! Input `fitViewToNewExtent` is now triggered by `mapSvc.setProjection`.
  
  - MousePositionComponent need now Inputs `<ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc">`
+* **@dlr-eoc/map-cesium:**
+ - `MapCesiumService.getCurrentExtent()` param `geographic?: boolean` is removed because it was not used.
+
 ### Bug Fixes
 * **@dlr-eoc/map-maplibre:**
 - Fix type errors on `setData` and test for string if kml.

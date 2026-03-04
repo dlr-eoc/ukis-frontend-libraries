@@ -221,7 +221,7 @@ export class MapCesiumService {
   }
 
 
-  public getCurrentExtent(geographic?: boolean): TGeoExtent {
+  public getCurrentExtent(): TGeoExtent {
     let extent!: TGeoExtent;
     // https://cesium.com/learn/cesiumjs/ref-doc/Rectangle.html
     const currentRectangle = this.viewer.camera.computeViewRectangle();
