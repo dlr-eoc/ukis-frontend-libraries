@@ -466,12 +466,22 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     if (mapState.options.notifier === 'user') {
       if (lastAction === 'setExtent') {
         this.mapSvc.setExtent(mapState.extent, true);
+      } else if (lastAction === 'setNativeExtent') {
+        this.mapSvc.setExtent(mapState.nativeExtent, false);
       } else if (lastAction === 'setState') {
         this.mapSvc.setZoom(mapState.zoom);
         this.mapSvc.setCenter([mapState.center.lon, mapState.center.lat], true);
         this.mapSvc.setRotation(mapState.rotation);
       } else if (lastAction === 'setRotation') {
         this.mapSvc.setRotation(mapState.rotation);
+      } else if (lastAction === 'setProjection') {
+        const projIsReg = this.mapSvc.registeredProjections.has(mapState.epsg);
+        const proj = this.mapSvc.getProjection().getCode();
+        if (projIsReg && mapState.epsg !== proj) {
+          this.mapSvc.setProjection(mapState.epsg, mapState.projOptions);
+        } else {
+          console.info(`projection: ${mapState.epsg} is not registered. Register them first with this.mapSvc.registerProjection.`)
+        }
       }
     }
     /* else if (mapState.options.notifier === 'map') {
@@ -493,10 +503,12 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       const zoom = this.mapSvc.getZoom();
       const center = this.mapSvc.getCenter(true);
       const extent = this.mapSvc.getCurrentExtent(true);
+      const nativeExtent = this.mapSvc.getCurrentExtent(false);
       const rotation = this.mapSvc.getRotation();
+      const epsg = this.mapSvc.getProjection().getCode();
 
       const newCenter = { lat: parseFloat(center[1]), lon: parseFloat(center[0]) };
-      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time, oldMapState.viewAngle, rotation);
+      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, nativeExtent, oldMapState.time, oldMapState.viewAngle, rotation, epsg);
       this.mapStateSvc.setMapState(ms);
     };
     this.map.on('moveend', this.mapOnMoveend);

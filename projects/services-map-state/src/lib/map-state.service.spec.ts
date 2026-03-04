@@ -1,6 +1,7 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { MapStateService } from './map-state.service';
 import { MapState, TGeoExtent, IMapState } from './types/map-state';
+import { WebMercator, WGS84 } from './types/projections';
 
 describe('MapStateService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
@@ -65,6 +66,20 @@ describe('MapStateService', () => {
   }));
 
 
+  it('should set/get the current nativeExtent', waitForAsync(() => {
+    const service: MapStateService = TestBed.inject(MapStateService);
+    const extent: TGeoExtent = [-10, -10, 10, 10];
+
+    service.setNativeExtent(extent);
+    service.getNativeExtent().subscribe((nativeExtent) => {
+      expect(nativeExtent[0]).toEqual(-10);
+      expect(nativeExtent[1]).toEqual(-10);
+      expect(nativeExtent[2]).toEqual(10);
+      expect(nativeExtent[3]).toEqual(10);
+    });
+  }));
+
+
   it('should set/get the current time', waitForAsync(() => {
     const service: MapStateService = TestBed.inject(MapStateService);
 
@@ -95,6 +110,23 @@ describe('MapStateService', () => {
     expect(state.sameCenter(state2.center)).toBe(false);
     expect(state.sameZoom(state2.zoom)).toBe(false);
     expect(state.sameNotifier(state2.options.notifier)).toBe(false);
+  }));
+
+  it('should have a initial MapState epsg for WebMercator', waitForAsync(() => {
+    const service: MapStateService = TestBed.inject(MapStateService);
+    service.getMapState().subscribe((state) => {
+      expect(state.epsg).toEqual(WebMercator);
+    });
+  }));
+
+  it('should set/get the current Projection (epsg)', waitForAsync(() => {
+    const service: MapStateService = TestBed.inject(MapStateService);
+
+    const epsg = WGS84;
+    service.setProjection(epsg);
+    service.getProjection().subscribe((proj) => {
+      expect(proj).toEqual(epsg);
+    });
   }));
 
 

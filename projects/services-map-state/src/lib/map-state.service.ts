@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MapState, IMapStateOptions, IMapState } from './types/map-state';
+import { MapState, IMapStateOptions, IMapState, IProjOptions } from './types/map-state';
 import { TGeoExtent } from '@dlr-eoc/services-layers';
 import { map } from 'rxjs/operators';
 import { IProjDef } from './types/projections';
@@ -11,7 +11,7 @@ const initialState = new MapState(0, { lat: 0, lon: 0 });
 })
 export class MapStateService {
   private mapState = new BehaviorSubject(initialState)
-  private lastAction = new BehaviorSubject<'setExtent' | 'setState' | 'setRotation' | 'setAngle' | 'setTime'>(null);
+  private lastAction = new BehaviorSubject<'setExtent' | 'setNativeExtent' | 'setState' | 'setRotation' | 'setAngle' | 'setTime' | 'setProjection'>(null);
   constructor() {
   }
 
@@ -25,11 +25,11 @@ export class MapStateService {
     }
     this.lastAction.next('setState');
     if (state instanceof MapState) {
-      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.time, state.viewAngle, state.rotation);
+      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg);
       this.mapState.next(newState);
     } else {
       const stateOptions: IMapStateOptions = { ...{ notifier: 'user' }, ...state.options };
-      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.time, state.viewAngle, state.rotation);
+      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg);
       this.mapState.next(newState);
     }
   }
@@ -45,7 +45,22 @@ export class MapStateService {
     this.lastAction.next('setExtent');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, extent, state.time, state.viewAngle, state.rotation);
+    const newState = new MapState(state.zoom, state.center, state.options, extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg);
+    this.mapState.next(newState);
+  }
+
+  public getNativeExtent() {
+    return this.mapState.pipe(map((state) => state.nativeExtent));
+  }
+
+  public setNativeExtent(nativeExtent: TGeoExtent, notifier: IMapState['options']['notifier'] = 'user') {
+    if (!Array.isArray(nativeExtent)) {
+      return;
+    }
+    this.lastAction.next('setNativeExtent');
+    const state = this.getMapState().getValue();
+    state.options.notifier = notifier;
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg);
     this.mapState.next(newState);
   }
 
@@ -77,7 +92,7 @@ export class MapStateService {
     this.lastAction.next('setAngle');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.time, angle, state.rotation);
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, angle, state.rotation, state.epsg);
     this.mapState.next(newState);
   }
 
@@ -88,8 +103,35 @@ export class MapStateService {
     this.lastAction.next('setRotation');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.time, state.viewAngle, rotation);
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, rotation, state.epsg);
     this.mapState.next(newState);
+  }
+
+  /**
+   * set a projection epsg code
+   * This then needs to be processed by the associated map component.
+   * @param epsg - https://epsg.io/
+   */
+  public setProjection(epsg: IProjDef['code'], notifier: IMapState['options']['notifier'] = 'user', options?: IProjOptions) {
+    const state = this.getMapState().getValue();
+    const currentEPSG = state.epsg;
+    if (epsg !== currentEPSG) {
+      this.lastAction.next('setProjection');
+      state.epsg = epsg;
+      state.options.notifier = notifier;
+      if (options?.fitToBbox) {
+        state.extent = options.fitToBbox;
+      }
+      if (options?.fitToNativeBbox) {
+        state.nativeExtent = options.fitToNativeBbox;
+      }
+      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg, options);
+      this.mapState.next(newState);
+    }
+  }
+
+  public getProjection() {
+    return this.mapState.pipe(map((state) => state.epsg));
   }
 
 

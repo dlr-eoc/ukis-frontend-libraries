@@ -1,3 +1,5 @@
+import { EPSG_3857_Def, WebMercator } from "./projections";
+
 export interface IMapCenter {
   lat: number;
   lon: number;
@@ -9,17 +11,29 @@ export interface IMapStateOptions {
   notifier?: 'user' | 'map';
 }
 
+export interface IProjOptions {
+  fitToProjectionExtent?: boolean
+  fitToBbox?: TGeoExtent
+  fitToNativeBbox?: TGeoExtent
+}
+
 export interface IMapState {
   zoom: number;
   center: IMapCenter;
   options?: IMapStateOptions;
+  /** WGS84: Extent */
   extent?: TGeoExtent;
+  /** Extent in the current map projection */
+  nativeExtent?: TGeoExtent;
   /** iso 8601 Datestring */
   time?: string;
   /** from nadir in degrees */
   viewAngle?: number;
   /** from north in degrees */
   rotation?: number;
+  /** EPSG of current map projection */
+  epsg?: string;
+  projOptions?: IProjOptions;
 }
 
 /**
@@ -34,15 +48,21 @@ export class MapState implements IMapState {
     lon: number;
   };
   options: IMapStateOptions;
+  /** WGS84: Extent */
   extent: TGeoExtent;
+  /** Extent in the current map projection */
+  nativeExtent: TGeoExtent;
   /** iso 8601 Datestring */
   time: string;
   /** from nadir in degrees */
   viewAngle: number;
   /** from north in degrees */
   rotation: number;
+  /** EPSG of current map projection */
+  epsg: string;
+  projOptions?: IProjOptions;
 
-  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0) {
+  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], nativeExtent: TGeoExtent = EPSG_3857_Def.extent, time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0, epsg: string = WebMercator, projOptions?: IProjOptions) {
     const defaultOptions = {
       maxzoom: 0,
       minzoom: 0,
@@ -51,10 +71,13 @@ export class MapState implements IMapState {
     this.zoom = zoom;
     this.center = center;
     this.extent = extent;
+    this.nativeExtent = nativeExtent;
+    this.epsg = epsg;
     this.time = time;
     this.viewAngle = viewAngle;
     this.rotation = rotation;
     this.options = Object.assign(defaultOptions, options);
+    this.projOptions = Object.assign({}, projOptions);
   }
 
 
