@@ -17,7 +17,7 @@ export const EPSG_3995_Def: IProjDef = {
     title: 'Arctic Polar Stereographic',
     extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
     worldExtent: [-180.0, 60.0, 180.0, 90.0],
-    global: true,
+    global: false,
     units: 'm'
 };
 
@@ -27,7 +27,7 @@ export const EPSG_3031_Def: IProjDef = {
     title: 'Antarctic Polar Stereographic',
     extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
     worldExtent: [-180.0, -90.0, 180.0, -60.0],
-    global: true,
+    global: false,
     units: 'm'
 };
 
