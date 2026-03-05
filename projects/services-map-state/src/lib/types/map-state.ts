@@ -36,6 +36,13 @@ export interface IMapState {
   projOptions?: IProjOptions;
 }
 
+export interface IMapStateProjection {
+  /** EPSG of current map projection */
+  epsg?: string;
+  projOptions?: IProjOptions;
+  IProjDef?: IProjDef;
+}
+
 /**
  * like ol.extent: minX, minY, maxX, maxY
  */
