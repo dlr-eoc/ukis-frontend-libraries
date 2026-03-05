@@ -15,11 +15,11 @@ import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
 
 @Component({
-    selector: 'app-route-map7',
-    templateUrl: './route-map7.component.html',
-    styleUrls: ['./route-map7.component.scss'],
-    providers: [LayersService, MapStateService, MapOlService],
-    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, PerformanceComponent, LayerControlComponent]
+  selector: 'app-route-map7',
+  templateUrl: './route-map7.component.html',
+  styleUrls: ['./route-map7.component.scss'],
+  providers: [LayersService, MapStateService, MapOlService],
+  imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, PerformanceComponent, LayerControlComponent]
 })
 export class RouteMap7Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';
@@ -39,9 +39,7 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    // this.mapSvc.setProjection(EPSG_4326_Def);
-    this.mapStateSvc.setProjection(EPSG_4326_Def.code);
-
+    this.mapStateSvc.setProjection(EPSG_4326_Def);
     const styleFunc = (feature: Feature<any>, resolution: number) => {
       const fullId = feature.getId().toString();
       const idStr = fullId.match(/(\d+)/)[0];
@@ -81,17 +79,8 @@ export class RouteMap7Component implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const extent = [-107.14, 51.85, -106.14, 52.33] as [number, number, number, number];
-    /**
-     * Currently, there is a small bug in mapStateSvc.setExtent:
-     * this method does not work as long as the 'duration' parameter is given.
-     * As a short-term workaround, we work on the olMap directly.
-     */
-    // this.mapStateSvc.setExtent(extent);
-    this.mapSvc.map.getView().fit(
-      extent, {
-      size: this.mapSvc.map.getSize(),
-    });
+    const extent = [-107.14, 51.85, -106.14, 52.33] as [number, number, number, number]
+    this.mapStateSvc.setExtent(extent);
   }
 
 }
