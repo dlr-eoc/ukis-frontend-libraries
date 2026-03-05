@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecked, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecked, AfterViewInit, ViewChild, ElementRef, NgZone, effect, signal } from '@angular/core';
 
 
 
 
-import { MapState } from '@dlr-eoc/services-map-state';
+import { IMapStateProjection, MapState } from '@dlr-eoc/services-map-state';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
@@ -89,9 +89,10 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   /** [width, height] */
   private mapSize = [0, 0];
-  private initialMapStateSet = false;
+  private initialMapStateSet = signal(false);
 
   constructor(private mapSvc: MapOlService, private ngZone: NgZone) {
+    this.subscribeToMapStateRegisterProjection();
   }
   ngOnInit() {
     /** Subscribe to mapStateSvc before map is created */
@@ -99,6 +100,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     this.initMap();
     /** subscribe to layers oninit so they get pulled after view init */
     this.subscribeToLayers();
+    // TODO: refactor to signals
+    this.subscribeToMapStateSetProjection();
   }
 
   /**
@@ -156,7 +159,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     const mapDiv = this.getMapDiv();
     if (mapDiv) {
       if (mapDiv.width === this.mapSize[0] && mapDiv.height === this.mapSize[1]) {
-        if (!this.initialMapStateSet) {
+        if (!this.initialMapStateSet()) {
           /**
            * If container size and map size are equal (map size 'stable')
            * Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit
@@ -164,7 +167,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
            */
           const oldMapState = this.mapStateSvc.getMapState().getValue();
           this.setMapState(oldMapState);
-          this.initialMapStateSet = true;
+          this.initialMapStateSet.set(true);
         }
       } else {
         /** update map size till container size and map size are equal */
@@ -474,19 +477,35 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
         this.mapSvc.setRotation(mapState.rotation);
       } else if (lastAction === 'setRotation') {
         this.mapSvc.setRotation(mapState.rotation);
-      } else if (lastAction === 'setProjection') {
-        const projIsReg = this.mapSvc.registeredProjections.has(mapState.epsg);
-        const proj = this.mapSvc.getProjection().getCode();
-        if (projIsReg && mapState.epsg !== proj) {
-          this.mapSvc.setProjection(mapState.epsg, mapState.projOptions);
-        } else {
-          console.info(`projection: ${mapState.epsg} is not registered. Register them first with this.mapSvc.registerProjection.`)
-        }
       }
     }
     /* else if (mapState.options.notifier === 'map') {
       console.log("--------Map triggered mapState change", mapState);
     } */
+  }
+
+  private setMapStateProjection(item: IMapStateProjection) {
+    const lastAction = this.mapStateSvc.getLastAction().getValue();
+    if (lastAction === 'setProjection') {
+      let projIsReg = this.mapSvc.registeredProjections.has(item.epsg);
+      const mapStateProjection = this.mapStateSvc.registeredProjections();
+      const isInStateSvc = mapStateProjection.find(p => p.code === item.epsg);
+      if (!projIsReg && isInStateSvc) {
+        this.mapSvc.registerProjection(isInStateSvc);
+        projIsReg = this.mapSvc.registeredProjections.has(item.epsg);
+      }
+
+      if (!projIsReg) {
+        console.info(`Projection ${item} is not registered in mapSvc`, this.mapSvc.registeredProjections, 'MapState:',this.mapStateSvc.registeredProjections());
+      }
+
+      const proj = this.mapSvc.getProjection().getCode();
+      if (projIsReg && item.epsg !== proj) {
+        this.mapSvc.setProjection(item.epsg, item.projOptions);
+      } else {
+        console.info(`projection: ${item.epsg} is not registered. Register them first with this.mapSvc.registerProjection.`)
+      }
+    }
   }
 
   private subscribeToMapState() {
@@ -495,6 +514,25 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       const mapStateOn = this.mapStateSvc.getMapState().pipe(skip(1)).subscribe(state => this.setMapState(state));
       this.subs.push(mapStateOn);
     }
+  }
+
+  private subscribeToMapStateSetProjection() {
+    if (this.mapStateSvc) {
+      const mapStateOn = this.mapStateSvc.getProjection().subscribe(item => this.setMapStateProjection(item));
+      this.subs.push(mapStateOn);
+    }
+  }
+
+  private subscribeToMapStateRegisterProjection(){
+    effect(() => {
+      const registeredProjections = this.mapStateSvc.registeredProjections();
+      registeredProjections.forEach(p => {
+        const hasProj = this.mapSvc.registeredProjections.has(p.code);
+        if (!hasProj) {
+          this.mapSvc.registerProjection(p);
+        }
+      });
+    });
   }
 
   private subscribeToMapEvents() {

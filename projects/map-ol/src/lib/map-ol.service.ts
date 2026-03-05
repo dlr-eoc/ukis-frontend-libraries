@@ -2514,6 +2514,8 @@ export class MapOlService {
   }
 
   /**
+   * If possible use @dlr-eoc/services-map-state to setProjection - this should only be used internally!
+   * 
    * vector layers will be reprojected automatically
    * wms layers will be updated with corresponding proj def in the requests.
    * for other raster layers and for those wms layers which backend does not support target projection, please
@@ -2521,11 +2523,11 @@ export class MapOlService {
    * see: https://openlayers.org/en/latest/apidoc/module-ol_source_Source.html#projection
    * projection is proj~ProjectionLike
    */
-  public setProjection(projection: IProjDef | string, options?: IProjOptions) {
+  public setProjection(projection: IProjDef | IProjDef['code'], options?: IProjOptions) {
     let projIsReg = this.registeredProjections.get((typeof projection === 'string') ? projection : projection.code);
     
     // IProjDef is used and it is not registered, register it and use it.
-    if(typeof projection !== 'string' && !projIsReg){
+    if (typeof projection !== 'string' && !projIsReg) {
       this.registerProjection(projection);
       projIsReg = this.registeredProjections.get(projection.code);
     }
@@ -2543,61 +2545,63 @@ export class MapOlService {
       const oldProj = oldView.getProjection();
       const oldExtent = oldView.calculateExtent();
 
-      const newProjection = this.getOlProjection(projIsReg);
-      if (newProjection) {
-        viewOptions.projection = newProjection;
-        viewOptions.extent = newProjection.getExtent();
-        viewOptions.center = (viewOptions.extent) ? olExtGetCenter(viewOptions.extent) : viewOptions.center;
+      // Test is not same projection
+      if (projIsReg.code !== oldProj.getCode()) {
+        const newProjection = this.getOlProjection(projIsReg);
+        if (newProjection) {
+          viewOptions.projection = newProjection;
+          viewOptions.extent = newProjection.getExtent();
+          viewOptions.center = (viewOptions.extent) ? olExtGetCenter(viewOptions.extent) : viewOptions.center;
 
-        // https://openlayers.org/en/latest/examples/reprojection-by-code.html
-        const view = new olView(viewOptions);
-        const oldProjection = this.EPSG;
-        this.EPSG = view.getProjection().getCode();
-        this.map.setView(view);
-        this.view = this.map.getView();
+          // https://openlayers.org/en/latest/examples/reprojection-by-code.html
+          const view = new olView(viewOptions);
+          const oldProjection = this.EPSG;
+          this.EPSG = view.getProjection().getCode();
+          this.map.setView(view);
+          this.view = this.map.getView();
 
-
-        if (options?.fitToProjectionExtent) {
-          this.view.fit(viewOptions.extent);
-        } else {
-          let newExtent: olExtent;
-          if (options?.fitToBbox) {
-            // Try zooming to a bbox provided in set projection.
-            newExtent = transformExtent(options.fitToBbox, WGS84, newProjection, 8);
-          } else if (options?.fitToNativeBbox) {
-            // the bbox is in the newProjection;
-            newExtent = options.fitToNativeBbox;
-          } else {
-            // Try zooming to the old bbox if that works in the new projection.
-            newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
-          }
-
-          if (containsExtent(viewOptions.extent, newExtent)) {
-            this.view.fit(newExtent);
-          } else {
+          if (options?.fitToProjectionExtent) {
             this.view.fit(viewOptions.extent);
-          }
-        }
-
-        // reprojecting vector layers
-        this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-          layerGroup.getLayers().getArray().forEach(layer => {
-            if (layer instanceof olLayer) {
-              let source = layer.getSource();
-              // check for nested sources, e.g. cluster or cluster of clusters etc
-              while (source['source']) {
-                source = source['source'];
-              }
-              if (source instanceof olVectorSource) {
-                this.reprojectFeatures(source, oldProjection, this.EPSG);
-              }
+          } else {
+            let newExtent: olExtent;
+            if (options?.fitToBbox) {
+              // Try zooming to a bbox provided in set projection.
+              newExtent = transformExtent(options.fitToBbox, WGS84, newProjection, 8);
+            } else if (options?.fitToNativeBbox) {
+              // the bbox is in the newProjection;
+              newExtent = options.fitToNativeBbox;
+            } else {
+              // Try zooming to the old bbox if that works in the new projection.
+              newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
             }
-          });
-        });
 
-        this.projectionChange.next(this.getProjection());
-      } else {
-        console.log(`projection ${projection} is invalid or not registered!`);
+            if (containsExtent(viewOptions.extent, newExtent)) {
+              this.view.fit(newExtent);
+            } else {
+              this.view.fit(viewOptions.extent);
+            }
+          }
+
+          // reprojecting vector layers
+          this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
+            layerGroup.getLayers().getArray().forEach(layer => {
+              if (layer instanceof olLayer) {
+                let source = layer.getSource();
+                // check for nested sources, e.g. cluster or cluster of clusters etc
+                while (source['source']) {
+                  source = source['source'];
+                }
+                if (source instanceof olVectorSource) {
+                  this.reprojectFeatures(source, oldProjection, this.EPSG);
+                }
+              }
+            });
+          });
+
+          this.projectionChange.next(this.getProjection());
+        } else {
+          console.log(`projection ${projection} is invalid or not registered!`);
+        }
       }
     } else {
       console.log('projection code is undefined or not registered', projection, this.registeredProjections);
@@ -2605,6 +2609,8 @@ export class MapOlService {
   }
 
   /**
+   * If possible use @dlr-eoc/services-map-state to registerProjection - this should only be used internally!
+   * 
    * @param projDef.code - e.g.: "EPSG:4326"
    * @param projDef.proj4js - e.g.: "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
    */

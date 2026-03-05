@@ -1,4 +1,4 @@
-import { EPSG_3857_Def, WebMercator } from "./projections";
+import { EPSG_3857_Def, IProjDef, WebMercator } from "./projections";
 
 export interface IMapCenter {
   lat: number;

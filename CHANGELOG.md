@@ -72,7 +72,7 @@
 
 * **@dlr-eoc/services-map-state:**
 - Export constants for `WebMercator`, `WGS84` and interface `IProjDef` and some projections `EPSG_3031_Def`, `EPSG_3995_Def`, `EPSG_3857_Def` and `EPSG_4326_Def`.
-- Add functionality to `setProjection` and `nativeExtent` (not WGS84) in `MapStateService` [Issue #204](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/204).
+- Add functionality to `setProjection`, `registerProjection` and set `nativeExtent` (not WGS84) in `MapStateService`. Now this can be used instead of the functions in `MapOlService` [Issue #204](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/204).
 
 # [15.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v15.0.0) (2024-12-31) (angular update, @clr and @cds update, layer-control, map-ol)
 
