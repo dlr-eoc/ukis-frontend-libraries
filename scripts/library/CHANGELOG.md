@@ -1,3 +1,8 @@
+# [3.0.5]
+
+### Bug Fixes
+- fix prepare publish for GitHub Packages.
+
 # [3.0.4]
 
 ### Bug Fixes

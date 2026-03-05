@@ -216,6 +216,14 @@ function updateBuildPackages(registry?: string) {
           json.repository.url = repositoryUrl;
           json.repository.type = `git`;
         }
+
+        // GitHub Packages now requires publishConfig.registry in new npm cli
+        if (registry && registry.includes('npm.pkg.github.com')) {
+          const scopeReg = `${PACKAGE_SCOPE}:registry`;
+          const publishConfig = {};
+          publishConfig[scopeReg] = registry;
+          json.publishConfig = publishConfig;
+        }
         return json;
       });
 

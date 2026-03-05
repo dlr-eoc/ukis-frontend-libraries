@@ -169,10 +169,17 @@ export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPac
 }
 
 export function createNpmrc(path: string, scope: string, registry = 'https://npm.pkg.github.com') {
-  /** https://github.com/actions/setup-node/blob/v6.2.0/src/authutil.ts */
-  const npmrc = `
+  let npmrc = `
     ${scope}:registry=${registry}:_authToken=${process.env.AUTH_TOKEN}
-    loglevel = "verbose"`;
+loglevel = "verbose"`;
+
+  /** https://github.com/actions/setup-node/blob/v6.2.0/src/authutil.ts */
+  if(registry.includes('npm.pkg.github.com')){
+    npmrc = `
+    ${registry.replace(/(^\w+:|^)/, '')}:_authToken=${process.env.AUTH_TOKEN}
+${scope}:registry=${registry}
+loglevel = "verbose"`
+  }
 
   try {
     if (path) {
