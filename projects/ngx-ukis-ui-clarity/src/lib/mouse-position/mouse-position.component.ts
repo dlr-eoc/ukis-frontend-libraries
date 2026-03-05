@@ -34,9 +34,9 @@ export class MousePositionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.mapSub = this.mapState.getProjection().pipe(distinctUntilChanged()).subscribe(epsg => {
-      this.mapProjection = olGetProjection(epsg);
-      this.setProjection(epsg);
+    this.mapSub = this.mapState.getProjection().pipe(distinctUntilChanged()).subscribe(item => {
+      this.mapProjection = olGetProjection(item.epsg);
+      this.setProjection(item.epsg);
     });
 
     this.mapProjection = this.mapSvc.getProjection();
