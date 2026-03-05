@@ -24,7 +24,7 @@
  - MousePositionComponent need now Inputs `<ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc">`
 
 * **@dlr-eoc/map-ol:**
- - Params of `setProjection(projection: olProjection | string)` changed to `setProjection(projection: IProjDef | string, options?: IProjOptions)` in `MapOlService`. This allows the registration of proj4 definitions for projections from `IProjDef`. The options `IProjOptions` allow to zomm to a bbox on setProjection or zomm to the ProjectionExtent.
+ - Params of `setProjection(projection: olProjection | string)` changed to `setProjection(projection: IProjDef | string, options?: IProjFitOptions)` in `MapOlService`. This allows the registration of proj4 definitions for projections from `IProjDef`. The options `IProjFitOptions` allow to zomm to a bbox on setProjection or zomm to the ProjectionExtent.
 
 * **@dlr-eoc/map-cesium:**
  - `MapCesiumService.getCurrentExtent()` param `geographic?: boolean` is removed because it was not used.
