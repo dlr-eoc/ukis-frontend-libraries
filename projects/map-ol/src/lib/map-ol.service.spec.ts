@@ -1633,10 +1633,10 @@ describe('MapOlService State', () => {
     service.createMap(mapTarget.container);
     let newProj = null;
     const projectionChange = service.projectionChange.subscribe(projLike => {
-      newProj = projLike.getCode();
+      newProj = projLike?.getCode();
     });
-    const projectionCode = WGS84;
-    service.setProjection(projectionCode);
+    const projectionCode = EPSG_4326_Def.code;
+    service.setProjection(EPSG_4326_Def);
     expect(service.getProjection().getCode()).toBe(projectionCode);
     expect(newProj).toBe(projectionCode);
     projectionChange.unsubscribe();
@@ -1646,8 +1646,8 @@ describe('MapOlService State', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
     const projection = service.getOlProjection(EPSG_4326_Def);
-    service.setProjection(projection.getCode());
-    expect(service.getProjection()).toBe(projection);
+    service.setProjection(EPSG_4326_Def);
+    expect(service.getProjection().getCode()).toBe(projection.getCode());
   });
 
   it('should update vectors to the correct new projection', () => {
@@ -1664,8 +1664,7 @@ describe('MapOlService State', () => {
     // Test for Point Feature
     expect((testFeatureBefore.getGeometry() as olPoint).getCoordinates()).toEqual(pointCoordinates);
 
-    const projection = service.getOlProjection(EPSG_4326_Def);
-    service.setProjection(projection.getCode());
+    service.setProjection(EPSG_4326_Def);
 
     const reprojectedLayer = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
     const testFeature = (reprojectedLayer as olVectorLayer<olVectorSource>).getSource().getFeatures()[3];
@@ -1677,7 +1676,9 @@ describe('MapOlService State', () => {
   it('should register a proj4 projection on Openlayers', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
-    const proj = service.getOlProjection(EPSG_3031_Def)
+    const hasProj = service.registeredProjections.has(EPSG_3031_Def.code);
+    const proj = getProjection(EPSG_3031_Def.code)
+    expect(hasProj).toBeFalse();
     expect(proj).toBe(null);
 
     service.registerProjection(EPSG_3031_Def);

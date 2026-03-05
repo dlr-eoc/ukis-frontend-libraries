@@ -225,11 +225,11 @@ describe('MapCesiumService State', () => {
 
   it('should set/get extent', () => {
     service.createMap(mapTarget.container);
-    const oldExtent = service.getCurrentExtent(true);
+    const oldExtent = service.getCurrentExtent();
     const extent = [-14, 33, 40, 57] as any;
 
     service.setExtent(extent);
-    expect(service.getCurrentExtent(true) !== oldExtent).toBeTrue();
+    expect(service.getCurrentExtent() !== oldExtent).toBeTrue();
   });
 
   it('should set/get rotation', async () => {
