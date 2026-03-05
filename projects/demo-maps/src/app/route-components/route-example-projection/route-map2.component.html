@@ -33,4 +33,19 @@
       <ukis-map-navigator [mapState]="mapStateSvc"></ukis-map-navigator>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Extent">
+    <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
+    Extent
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <app-extent-helper [mapStateSvc]="mapStateSvc"></app-extent-helper>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="cog" title="Actions" clrVerticalNavIcon></cds-icon>
+    Actions
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <button class="btn btn-primary" (click)="setExtent()">set Extent (Antarctic)</button>
+      <button class="btn btn-primary" (click)="setNewProjection()">set Projection and bbox (Antarctic)</button>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
 </clr-vertical-nav>

@@ -1,21 +1,22 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
-import { MapStateService } from '@dlr-eoc/services-map-state';
+import { LayersService, RasterLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
+import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
 import { ClarityIcons, layersIcon, mapIcon, compassIcon } from '@cds/core/icon';
 import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
-import { LayerControlComponent, IProjDef, ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
+import { LayerControlComponent, ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
+import { ExtentHelperComponent } from "../../components/extent-helper/extent-helper.component";
 ClarityIcons.addIcons(...[layersIcon, mapIcon, compassIcon]);
 
 @Component({
-    selector: 'app-route-map2',
-    templateUrl: './route-map2.component.html',
-    styleUrls: ['./route-map2.component.scss'],
-    /** use differnt instances of the services only for testing with diffenr routs  */
-    providers: [LayersService, MapStateService, MapOlService],
-    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent]
+  selector: 'app-route-map2',
+  templateUrl: './route-map2.component.html',
+  styleUrls: ['./route-map2.component.scss'],
+  /** use differnt instances of the services only for testing with diffenr routs  */
+  providers: [LayersService, MapStateService, MapOlService],
+  imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent, ExtentHelperComponent]
 })
 export class RouteMap2Component implements OnInit {
   @HostBinding('class') class = 'content-container';
@@ -32,36 +33,6 @@ export class RouteMap2Component implements OnInit {
       scaleLine: true
     };
 
-    const arcticPolarStereographic: IProjDef = {
-      code: 'EPSG:3995',
-      proj4js: '+proj=stere +lat_0=90 +lat_ts=71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs',
-      title: 'Arctic Polar Stereographic',
-      extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
-      worldExtent: [-180.0, 60.0, 180.0, 90.0],
-      global: true,
-      units: 'm'
-    };
-
-    const antarcticPolarStereographic: IProjDef = {
-      code: `EPSG:3031`,
-      proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs',
-      title: 'Antarctic Polar Stereographic',
-      extent: [-3299207.53, -3333134.03, 3299207.53, 3333134.03],
-      worldExtent: [-180.0, -90.0, 180.0, -60.0],
-      global: true,
-      units: 'm'
-    };
-
-    const webMercator: IProjDef = {
-      code: `EPSG:3857`,
-      proj4js: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs',
-      title: 'Spherical Mercator',
-      extent: [-20037508.34, -20048966.1, 20037508.34, 20048966.1],
-      worldExtent: [-180.0, -85.06, 180.0, 85.06],
-      global: true,
-      units: 'm'
-    };
-
     const SwissCH1903: IProjDef = {
       code: `EPSG:21781`,
       proj4js: '+proj=somerc +lat_0=46.9524055555556 +lon_0=7.43958333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs +type=crs',
@@ -72,13 +43,23 @@ export class RouteMap2Component implements OnInit {
       units: 'm'
     };
 
-    this.projections = [webMercator, arcticPolarStereographic, antarcticPolarStereographic, SwissCH1903];
+    const ESRI_53034: IProjDef = {
+      code: 'ESRI:53034',
+      proj4js: '+proj=cea +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +R=6371000 +units=m +no_defs +type=crs',
+      title: 'Cylindrical Equal Area',
+      extent: [-20015086.8, -6371000.0, 20015086.8, 6371000.0],
+      worldExtent: [-180.0, -90.0, 180.0, 90.0],
+      global: true,
+      units: 'm'
+    }
+
+    this.projections = [EPSG_3857_Def, EPSG_3995_Def, EPSG_3031_Def, SwissCH1903, ESRI_53034];
     this.addOverlays();
     /** 
        * set map extent or IMapState (zoom, center...) with the MapStateService 
        * Check if the Extent is valid for the set projection.
        */
-      this.mapStateSvc.setExtent([-14, 33, 40, 57]);
+    this.mapStateSvc.setExtent([-14, 33, 40, 57]);
 
   }
 
@@ -161,6 +142,22 @@ export class RouteMap2Component implements OnInit {
 
     const overlays = [osm_layer, gufLayer, vectorLayer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
+  }
+
+  setExtent() {
+    const nativeBbox: TGeoExtent = [-2166686.6992718857, 532310.7393676594, -2089422.303209693, 594837.26196001];
+    const wgs84bbox: TGeoExtent = [-76.19697134976582, -70.34272872293334, -74.10888626456216, -69.53237850373523];
+
+    // this.mapStateSvc.setExtent(wgs84bbox);
+    this.mapStateSvc.setNativeExtent(nativeBbox);
+  }
+
+  setNewProjection() {
+    const nativeBbox: TGeoExtent = [-2166686.6992718857, 532310.7393676594, -2089422.303209693, 594837.26196001];
+    const wgs84bbox: TGeoExtent = [-76.19697134976582, -70.34272872293334, -74.10888626456216, -69.53237850373523];
+    const proJ = this.projections.find(p => p.title === 'Antarctic Polar Stereographic');
+    this.mapStateSvc.registerProjection(proJ);
+    this.mapStateSvc.setProjection(proJ.code, 'user', { fitToNativeBbox: nativeBbox });
   }
 
 }
