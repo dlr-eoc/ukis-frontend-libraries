@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MapStateService, MapState } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { JsonPipe } from '@angular/common';
-import { MapOlService } from '@dlr-eoc/map-ol';
 
 @Component({
   selector: 'app-extent-helper',

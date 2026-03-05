@@ -501,7 +501,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
       const proj = this.mapSvc.getProjection().getCode();
       if (projIsReg && item.epsg !== proj) {
-        this.mapSvc.setProjection(item.epsg, item.projOptions);
+        this.mapSvc.setProjection(item.epsg, item.fitOptions);
       } else {
         console.info(`projection: ${item.epsg} is not registered. Register them first with this.mapSvc.registerProjection.`)
       }

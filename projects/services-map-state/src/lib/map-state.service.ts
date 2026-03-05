@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MapState, IMapStateOptions, IMapState, IProjOptions, IMapStateProjection } from './types/map-state';
+import { MapState, IMapStateOptions, IMapState, IProjFitOptions, IMapStateProjection } from './types/map-state';
 import { TGeoExtent } from '@dlr-eoc/services-layers';
 import { map } from 'rxjs/operators';
 import { IProjDef } from './types/projections';
@@ -28,11 +28,11 @@ export class MapStateService {
     }
     this.lastAction.next('setState');
     if (state instanceof MapState) {
-      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg);
+      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj?.epsg);
       this.mapState.next(newState);
     } else {
       const stateOptions: IMapStateOptions = { ...{ notifier: 'user' }, ...state.options };
-      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg);
+      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj?.epsg);
       this.mapState.next(newState);
     }
   }
@@ -48,7 +48,7 @@ export class MapStateService {
     this.lastAction.next('setExtent');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg);
+    const newState = new MapState(state.zoom, state.center, state.options, extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj?.epsg);
     this.mapState.next(newState);
   }
 
@@ -63,7 +63,7 @@ export class MapStateService {
     this.lastAction.next('setNativeExtent');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, state.extent, nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg);
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, nativeExtent, state.time, state.viewAngle, state.rotation, state.proj?.epsg);
     this.mapState.next(newState);
   }
 
@@ -95,7 +95,7 @@ export class MapStateService {
     this.lastAction.next('setAngle');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, angle, state.rotation, state.epsg);
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, angle, state.rotation, state.proj?.epsg);
     this.mapState.next(newState);
   }
 
@@ -106,16 +106,17 @@ export class MapStateService {
     this.lastAction.next('setRotation');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, rotation, state.epsg);
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, rotation, state.proj?.epsg);
     this.mapState.next(newState);
   }
 
   /**
-   * set a projection epsg code
-   * This then needs to be processed by the associated map component.
-   * @param epsg - https://epsg.io/
+   * Set a projection in the MapState so that map components like map-ol can listen to it.
+   * 
+   * If you use setProjection only with epsg code sting - registerProjection have to be called first!
+   * See https://epsg.io/
    */
-  public setProjection(projection: IProjDef | IProjDef['code'], notifier: IMapState['options']['notifier'] = 'user', options?: IProjOptions) {
+  public setProjection(projection: IProjDef | IProjDef['code'], notifier: IMapState['options']['notifier'] = 'user', fitOptions?: IProjFitOptions) {
     let projIsReg = this._registeredProjections().find(p => (typeof projection === 'string') ? p.code === projection : p.code === projection.code);
 
     // IProjDef is used and it is not registered, register it and use it.
@@ -127,15 +128,21 @@ export class MapStateService {
     if (projIsReg) {
       const state = this.getMapState().getValue();
       this.lastAction.next('setProjection');
-      state.epsg = projIsReg.code;
+      if (!state.proj) {
+        state.proj = {};
+      }
+      state.proj.epsg = projIsReg.code;
+      if (fitOptions) {
+        state.proj.fitOptions = fitOptions;
+      }
       state.options.notifier = notifier;
-      if (options?.fitToBbox) {
-        state.extent = options.fitToBbox;
+      if (fitOptions?.fitToBbox) {
+        state.extent = fitOptions.fitToBbox;
       }
-      if (options?.fitToNativeBbox) {
-        state.nativeExtent = options.fitToNativeBbox;
+      if (fitOptions?.fitToNativeBbox) {
+        state.nativeExtent = fitOptions.fitToNativeBbox;
       }
-      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.epsg, options);
+      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj?.epsg, fitOptions);
       this.mapState.next(newState);
     } else {
       console.info(`projection ${projection} is not registered!`);
@@ -144,8 +151,8 @@ export class MapStateService {
 
   public getProjection() {
     return this.mapState.pipe(map((state) => {
-      const hasDef = this._registeredProjections().find(p => p.code === state.epsg);
-      const item: IMapStateProjection = { epsg: state.epsg, projOptions: state.projOptions };
+      const hasDef = this._registeredProjections().find(p => p.code === state.proj.epsg);
+      const item: IMapStateProjection = { epsg: state.proj.epsg, fitOptions: state.proj.fitOptions };
       if (hasDef) {
         item.IProjDef = hasDef;
       }

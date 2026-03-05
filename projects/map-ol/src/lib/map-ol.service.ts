@@ -89,7 +89,7 @@ import { Subject } from 'rxjs';
 import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorSource from 'ol/source/Vector';
-import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjOptions } from '@dlr-eoc/services-map-state';
+import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions } from '@dlr-eoc/services-map-state';
 
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -2523,7 +2523,7 @@ export class MapOlService {
    * see: https://openlayers.org/en/latest/apidoc/module-ol_source_Source.html#projection
    * projection is proj~ProjectionLike
    */
-  public setProjection(projection: IProjDef | IProjDef['code'], options?: IProjOptions) {
+  public setProjection(projection: IProjDef | IProjDef['code'], options?: IProjFitOptions) {
     let projIsReg = this.registeredProjections.get((typeof projection === 'string') ? projection : projection.code);
     
     // IProjDef is used and it is not registered, register it and use it.

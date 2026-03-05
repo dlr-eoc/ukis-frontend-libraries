@@ -84,8 +84,7 @@ export class RouteMap8Component implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // this.mapOlSvc.setProjection(EPSG_4326_Def);
-    this.mapStateSvc.setProjection(EPSG_4326_Def.code);
+    this.mapStateSvc.setProjection(EPSG_4326_Def);
     this.mapOlSvc.map.getView().setMaxZoom(4); // zooming in deeper causes too much noise on the image-edges.
   }
 
