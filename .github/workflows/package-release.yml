@@ -172,7 +172,7 @@ jobs:
           for dir in ./dist/*/;
           do
               dir=${dir%*/}
-              npm publish "$dir" --access public
+              npm publish "$dir" --access public --tag "latest"
           done
         env:
           AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -288,7 +288,7 @@ jobs:
           for dir in ./dist/*/
           do
               dir=${dir%*/}
-              npm publish "$dir" --access public
+              npm publish "$dir" --access public --tag "next"
           done
         env:
           AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
