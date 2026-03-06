@@ -134,7 +134,12 @@ export class MapOlService {
     private envInjector: EnvironmentInjector
   ) {
     this.map = new olMap({ controls: [] });
-    this.view = new olView();
+    this.view = new olView({
+      center: [0, 0],
+      zoom: 0,
+      projection: WebMercator
+    });
+    this.map.setView(this.view);
     this.EPSG = WebMercator;
   }
 
