@@ -133,7 +133,6 @@ export function isLayertype(type: string): type is TLayertype {
 }
 
 /**
- * geographic coordinates
  * like ol.extent: minX, minY, maxX, maxY
  */
 export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];

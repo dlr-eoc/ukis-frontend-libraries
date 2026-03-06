@@ -1,7 +1,8 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { MapStateService } from './map-state.service';
-import { MapState, TGeoExtent, IMapState } from './types/map-state';
-import { EPSG_4326_Def, WebMercator, WGS84 } from './types/projections';
+import { MapState, IMapState } from './types/map-state';
+import { EPSG_4326_Def, WebMercator } from './types/projections';
+import { TGeoExtent } from '@dlr-eoc/services-layers';
 
 describe('MapStateService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

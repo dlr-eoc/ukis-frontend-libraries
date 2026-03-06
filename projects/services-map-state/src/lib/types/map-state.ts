@@ -1,3 +1,4 @@
+import { TGeoExtent } from "@dlr-eoc/services-layers";
 import { EPSG_3857_Def, IProjDef, WebMercator } from "./projections";
 
 export interface IMapCenter {
@@ -41,11 +42,6 @@ export interface IMapStateProjection {
   fitOptions?: IProjFitOptions;
   IProjDef?: IProjDef;
 }
-
-/**
- * like ol.extent: minX, minY, maxX, maxY
- */
-export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
 
 export class MapState implements IMapState {
   zoom: number;
