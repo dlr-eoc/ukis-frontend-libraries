@@ -69,6 +69,7 @@
 
 * **@dlr-eoc/services-layers:**
 - Add `properties` attribute to Layer type
+- Add `nativeBbox?: {epsg: string, bbox: TGeoExtent}` to `Layer` and `LayerGroup`. This can be helpful when zooming to the extent of a projected layer.
 
 * **@dlr-eoc/services-map-state:**
 - Export constants for `WebMercator`, `WGS84` and interface `IProjDef` and some projections `EPSG_3031_Def`, `EPSG_3995_Def`, `EPSG_3857_Def` and `EPSG_4326_Def`.
