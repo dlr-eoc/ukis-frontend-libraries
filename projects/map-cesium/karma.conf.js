@@ -57,7 +57,16 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    // https://github.com/karma-runner/karma-chrome-launcher/issues/263
+    // https://github.com/geosolutions-it/MapStore2/issues/10042
+    // https://github.com/google/model-viewer/issues/4972
+    browsers: ['Chrome', 'HeadlessChrome'],
+    customLaunchers:{
+      HeadlessChrome:{
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--enable-gpu', '--use-gl=angle']
+      }
+    },
     singleRun: false,
     restartOnFileChange: true
   });
