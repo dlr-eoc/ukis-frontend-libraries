@@ -1,7 +1,12 @@
 import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IPopupParams, IAnyObject, TFiltertypesUncap, TFiltertypes, IPopupEvent } from '@dlr-eoc/services-layers';
+import {
+  Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent,
+  ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype,
+  GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IPopupParams,
+  IAnyObject, TFiltertypesUncap, TFiltertypes, IPopupEvent
+} from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView, { FitOptions as olFitOptions } from 'ol/View';
@@ -812,6 +817,7 @@ export class MapOlService {
     }
 
     // ------------------------------------------
+    const currentProjection = this.getProjection().getCode();
     const layeroptions: olLayerOptions<LayerOptionsSources> & ILayerOptions = {
       // className - if
       opacity: l.opacity || 1,
@@ -860,8 +866,12 @@ export class MapOlService {
       layeroptions.minZoom = l.minZoom;
     }
 
-    if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+    if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection);
+      layeroptions.bbox = l.bbox;
+    } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+      layeroptions.extent = [...l.nativeBbox.bbox];
+      layeroptions.nativeBbox = l.nativeBbox;
     }
 
     return layeroptions;
@@ -893,6 +903,7 @@ export class MapOlService {
       useInterimTilesOnError: true
     };
     const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+    this.setLayerBboxes(l, newlayer);
     this.setSubdomains(l, newlayer);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
@@ -932,6 +943,7 @@ export class MapOlService {
       };
 
       newlayer = new olVectorTileLayer(Object.assign(layeroptions, vectorTileLayerOptions));
+      this.setLayerBboxes(l, newlayer);
       this.setCrossOrigin(l, newlayer);
       this.addEventsToLayer(l, newlayer, olsource);
 
@@ -989,6 +1001,7 @@ export class MapOlService {
 
     const layeroptions = this.createOlLayerOptions(l, 'wms', olsource);
     const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+    this.setLayerBboxes(l, newlayer);
     this.setSubdomains(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
@@ -1013,6 +1026,7 @@ export class MapOlService {
 
     };
     const newlayer = new olImageLayer(Object.assign(layeroptions, baseImageLayerOptions));
+    this.setLayerBboxes(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
   }
@@ -1062,6 +1076,7 @@ export class MapOlService {
       const baseTileLayerOptions: olBaseTileLayerOptions<olTileSource> = {};
 
       const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+      this.setLayerBboxes(l, newlayer);
       this.setSubdomains(l, newlayer);
       this.setCrossOrigin(l, newlayer);
       this.addEventsToLayer(l, newlayer, olsource);
@@ -1109,6 +1124,7 @@ export class MapOlService {
     if (l.cluster) {
       this.setCluster(l, newlayer, olsource, {});
     }
+    this.setLayerBboxes(l, newlayer);
     this.setSubdomains(l, newlayer);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
@@ -1151,6 +1167,7 @@ export class MapOlService {
     if (l.cluster) {
       this.setCluster(l, newlayer, olsource, {});
     }
+    this.setLayerBboxes(l, newlayer);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
@@ -1195,6 +1212,7 @@ export class MapOlService {
     if (l.cluster) {
       this.setCluster(l, newlayer, olsource, {});
     }
+    this.setLayerBboxes(l, newlayer);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, layeroptions.source);
     return newlayer;
@@ -1257,6 +1275,18 @@ export class MapOlService {
     }
   }
 
+  /** 
+   * add bbox and nativeBbox to olLayer to use layer.setExtent later after reproject
+  */
+  private setLayerBboxes(l: Layer, layer: olLayer<olSource>): void {
+    if (l.nativeBbox) {
+      layer.set('nativeBbox', l.nativeBbox);
+    }
+    if (l.bbox) {
+      layer.set('bbox', l.bbox);
+    }
+  }
+
   /** use subdomains to setUrl/s on source */
   private setSubdomains(l: Layer, layer: olLayer<olSource>): void {
     if (l instanceof VectorLayer || l instanceof RasterLayer) {
@@ -1293,6 +1323,7 @@ export class MapOlService {
   private create_custom_layer(l: CustomLayer<olBaseLayer>) {
     if (l.custom_layer) {
       const layer = l.custom_layer;
+      const currentProjection = this.getProjection().getCode();
 
       if (layer instanceof olLayer) {
         const olsource = layer.getSource() as olSource;
@@ -1312,6 +1343,7 @@ export class MapOlService {
           // tslint:disable-next-line: no-string-literal
           olsource['wrapX_'] = false;
         }
+        this.setLayerBboxes(l, layer);
         this.setCrossOrigin(l, layer);
         this.addEventsToLayer(l, layer, olsource);
 
@@ -1332,6 +1364,7 @@ export class MapOlService {
             gl.set(ID_KEY, layerId);
           }
           if (gl instanceof olLayer) {
+            this.setLayerBboxes(l, gl);
             this.setCrossOrigin(l, gl);
             this.addEventsToLayer(l, gl, gl.getSource());
           }
@@ -1348,9 +1381,11 @@ export class MapOlService {
           }
 
           /** fix set bbox for layers in olLayerGroup not only for the group */
-          if (l.bbox) {
-            const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+          if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+            const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection);
             gl.setExtent(extent);
+          } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+            gl.setExtent([...l.nativeBbox.bbox]);
           }
         });
       } else {
@@ -1392,9 +1427,11 @@ export class MapOlService {
         layer['className_'] = l.id;
       }
 
-      if (l.bbox) {
-        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+      if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection);
         layer.setExtent(extent);
+      } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+        layer.setExtent([...l.nativeBbox.bbox]);
       }
 
       layer.setProperties(layeroptions);
@@ -2530,7 +2567,7 @@ export class MapOlService {
    */
   public setProjection(projection: IProjDef | IProjDef['code'], options?: IProjFitOptions) {
     let projIsReg = this.registeredProjections.get((typeof projection === 'string') ? projection : projection.code);
-    
+
     // IProjDef is used and it is not registered, register it and use it.
     if (typeof projection !== 'string' && !projIsReg) {
       this.registerProjection(projection);
@@ -2548,6 +2585,7 @@ export class MapOlService {
       }
       const oldView = this.map.getView();
       const oldProj = oldView.getProjection();
+      const oldEPSG = oldProj.getCode();
       const oldExtent = oldView.calculateExtent();
 
       // Test is not same projection
@@ -2560,7 +2598,6 @@ export class MapOlService {
 
           // https://openlayers.org/en/latest/examples/reprojection-by-code.html
           const view = new olView(viewOptions);
-          const oldProjection = this.EPSG;
           this.EPSG = view.getProjection().getCode();
           this.map.setView(view);
           this.view = this.map.getView();
@@ -2587,22 +2624,7 @@ export class MapOlService {
             }
           }
 
-          // reprojecting vector layers
-          this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-            layerGroup.getLayers().getArray().forEach(layer => {
-              if (layer instanceof olLayer) {
-                let source = layer.getSource();
-                // check for nested sources, e.g. cluster or cluster of clusters etc
-                while (source['source']) {
-                  source = source['source'];
-                }
-                if (source instanceof olVectorSource) {
-                  this.reprojectFeatures(source, oldProjection, this.EPSG);
-                }
-              }
-            });
-          });
-
+          this.adjustLayersAfterProjection(oldEPSG, projIsReg);
           this.projectionChange.next(this.getProjection());
         } else {
           console.log(`projection ${projection} is invalid or not registered!`);
@@ -2611,6 +2633,55 @@ export class MapOlService {
     } else {
       console.log('projection code is undefined or not registered', projection, this.registeredProjections);
     }
+  }
+
+  /**
+   * reproject vector layers and set extent for all
+   */
+  private reprojectVectorLayers(layer: olLayer, oldEpsg: string, newEpsg: string) {
+    let source = layer.getSource();
+    // check for nested sources, e.g. cluster or cluster of clusters etc
+    while (source['source']) {
+      source = source['source'];
+    }
+    if (source instanceof olVectorSource) {
+      this.reprojectFeatures(source, oldEpsg, newEpsg);
+    }
+  }
+
+  /**
+   * set or calculate the new layer extent after reprojectFeatures
+   */
+  private setLayerExtentAfterProjection(layer: olLayer, newEpsg: string) {
+    const bbox: TGeoExtent = layer.get('bbox');
+    const nativeBbox: Layer['nativeBbox'] = layer.get('nativeBbox');
+    const newLayerExt = layer.getExtent();
+    if (bbox && nativeBbox?.epsg !== newEpsg) {
+      const newLExt = transformExtent(bbox.slice(0, 4) as [number, number, number, number], WGS84, newEpsg);
+      layer.setExtent(newLExt);
+    } else if (nativeBbox?.epsg === newEpsg) {
+      layer.setExtent(nativeBbox.bbox);
+    } else if (newLayerExt?.length) {
+      // if the layer has an extent specified but no bbox or nativeBbox has been defined
+      layer.setExtent(undefined);
+    }
+  }
+
+  /**
+   * reprojecting vector layers and set extent
+   */
+  private adjustLayersAfterProjection(oldEpsg: string, projection: IProjDef) {
+    this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
+      layerGroup.getLayers().getArray().forEach(layer => {
+        if (layer instanceof olLayer) {
+          const newEpsg = projection?.code;
+          this.reprojectVectorLayers(layer, oldEpsg, newEpsg);
+          this.setLayerExtentAfterProjection(layer, newEpsg);
+        } else {
+          console.log(layer, 'no olLayer');
+        }
+      });
+    });
   }
 
   /**

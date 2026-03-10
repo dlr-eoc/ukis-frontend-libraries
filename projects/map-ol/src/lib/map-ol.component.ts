@@ -496,16 +496,35 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       }
 
       if (!projIsReg) {
-        console.info(`Projection ${item} is not registered in mapSvc`, this.mapSvc.registeredProjections, 'MapState:',this.mapStateSvc.registeredProjections());
+        console.info(`Projection ${item} is not registered in mapSvc`, this.mapSvc.registeredProjections, 'MapState:', this.mapStateSvc.registeredProjections());
       }
 
       const proj = this.mapSvc.getProjection().getCode();
       if (projIsReg && item.epsg !== proj) {
         this.mapSvc.setProjection(item.epsg, item.fitOptions);
+        // Update the layers to use the correct layer extent - otherwise layers may not be displayed
+        this.updateLayersAfterProjection();
       } else {
         console.info(`projection: ${item.epsg} is not registered. Register them first with this.mapSvc.registerProjection.`)
       }
     }
+  }
+
+  private updateLayersAfterProjection() {
+    const layerGroupCollection = this.mapSvc.getLayerGroups();
+    layerGroupCollection.forEach(lg => {
+      const layers = lg.getLayers();
+      layers.forEach(l => {
+        const id = l.get('id');
+        const ukisLayer = this.layersSvc.getLayerOrGroupById(id);
+
+        if (ukisLayer instanceof Layer) {
+          this.layersSvc.updateLayer(ukisLayer);
+        } else {
+          this.layersSvc.updateLayerGroup(ukisLayer);
+        }
+      });
+    });
   }
 
   private subscribeToMapState() {
@@ -523,7 +542,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
-  private subscribeToMapStateRegisterProjection(){
+  private subscribeToMapStateRegisterProjection() {
     effect(() => {
       const registeredProjections = this.mapStateSvc.registeredProjections();
       registeredProjections.forEach(p => {
