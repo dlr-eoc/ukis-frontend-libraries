@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MapState, IMapStateOptions, IMapState, IProjFitOptions, IMapStateProjection } from './types/map-state';
 import { TGeoExtent } from '@dlr-eoc/services-layers';
-import { map } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { IProjDef } from './types/projections';
 
 const initialState = new MapState(0, { lat: 0, lon: 0 });
@@ -37,6 +37,7 @@ export class MapStateService {
     }
   }
 
+  // TODO: maybe we should also check for changes her before emit? like getProjection
   public getExtent() {
     return this.mapState.pipe(map((state) => state.extent));
   }
@@ -150,7 +151,7 @@ export class MapStateService {
   }
 
   public getProjection() {
-    return this.mapState.pipe(map((state) => {
+    return this.mapState.pipe(distinctUntilChanged((prev, curr) => prev?.proj?.epsg === curr?.proj?.epsg),map((state) => {
       const hasDef = this._registeredProjections().find(p => p.code === state.proj.epsg);
       const item: IMapStateProjection = { epsg: state.proj.epsg, fitOptions: state.proj.fitOptions };
       if (hasDef) {
