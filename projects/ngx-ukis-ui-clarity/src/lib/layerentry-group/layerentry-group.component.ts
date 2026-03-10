@@ -23,10 +23,10 @@ enum EactiveTabs {
 type TactiveTabs = keyof typeof EactiveTabs;
 
 @Component({
-    selector: 'ukis-layerentry-group',
-    templateUrl: './layerentry-group.component.html',
-    styleUrls: ['./layerentry-group.component.scss'],
-    imports: [ClrIconModule, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponent]
+  selector: 'ukis-layerentry-group',
+  templateUrl: './layerentry-group.component.html',
+  styleUrls: ['./layerentry-group.component.scss'],
+  imports: [ClrIconModule, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponent]
 })
 export class LayerentryGroupComponent implements OnInit {
   @HostBinding('class.group-visible') get visible() { return this.group.visible; }
@@ -77,7 +77,7 @@ export class LayerentryGroupComponent implements OnInit {
       if (Object.keys(EactiveTabs).includes(this.group.expanded.tab)) {
         this.switchTab(this.group.expanded.tab as TactiveTabs);
         /** let the user reset the default open tab */
-        if(this.group.expanded.expanded === false){
+        if (this.group.expanded.expanded === false) {
           this.activeTabs[this.group.expanded.tab] = false;
         }
       } else {
@@ -187,8 +187,13 @@ export class LayerentryGroupComponent implements OnInit {
 
 
   zoomTo(group: LayerGroup) {
-    if (this.mapState && group.bbox && group.bbox.length >= 4) {
-      this.mapState.setExtent(group.bbox);
+    if (this.mapState) {
+      const state = this.mapState.getMapState().value;
+      if (group.bbox && group?.nativeBbox?.epsg !== state?.proj?.epsg) {
+        this.mapState.setExtent(group.bbox);
+      } else if (group.nativeBbox && group.nativeBbox.epsg === state?.proj?.epsg) {
+        this.mapState.setNativeExtent(group.nativeBbox.bbox)
+      }
     }
   }
 
