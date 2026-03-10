@@ -58,6 +58,7 @@
 * **@dlr-eoc/ngx-ukis-ui-clarity:**
 - New UKIS library for ui-clarity related things was added.
 - It includes all components of `@dlr-eoc/layer-control`, `@dlr-eoc/map-tools`, `@dlr-eoc/user-info` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+- Adjust `LayerentryComponent` and `LayerentryGroupComponent` to use `nativeBbox` of types `services-layers`.
 
 * **@dlr-eoc/ngx-ukis-utilities:**
 - New UKIS library for angular utilities was added.
@@ -66,6 +67,7 @@
 
 * **@dlr-eoc/map-ol:**
 - Remove dependency on @cds/core [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+- Use `nativeBbox` of types `services-layers` to create `olLayerOptions.extent` for layers. Use it also in `CustomLayer` to create `olLayerOptions.extent` and for olLayerGroups. 
 
 * **@dlr-eoc/services-layers:**
 - Add `properties` attribute to Layer type
