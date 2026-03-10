@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/ngx-ukis-ui-clarity",
-  "version": "16.0.0-next.6",
+  "version": "16.0.0-next.7",
   "description": "This project includes schematics to add a base UKIS-Layout to an angular application. The Layout is based on Clarity so [add this first](https://clarity.design/get-started/developing/angular)!",
   "keywords": [
     "schematics",
@@ -45,10 +45,10 @@
     "jsonc-parser": "^3.3.1",
     "ol": "^v10.8.0",
     "proj4": "^2.17.0",
-    "@dlr-eoc/services-layers": "16.0.0-next.6",
-    "@dlr-eoc/services-map-state": "16.0.0-next.6",
-    "@dlr-eoc/ngx-ukis-utilities": "16.0.0-next.6",
-    "@dlr-eoc/map-ol": "16.0.0-next.6"
+    "@dlr-eoc/services-layers": "16.0.0-next.7",
+    "@dlr-eoc/services-map-state": "16.0.0-next.7",
+    "@dlr-eoc/ngx-ukis-utilities": "16.0.0-next.7",
+    "@dlr-eoc/map-ol": "16.0.0-next.7"
   },
   "schematics": "./schematics/collection.json",
   "ng-add": {
