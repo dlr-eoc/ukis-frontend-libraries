@@ -61,9 +61,9 @@ export class MapState implements IMapState {
   /** from north in degrees */
   rotation: number;
   /** current map projection */
-  proj?: Omit<IMapStateProjection, 'IProjDef'>;
+  proj: Required<Omit<IMapStateProjection, 'IProjDef'>>;
 
-  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], nativeExtent: TGeoExtent = EPSG_3857_Def.extent, time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0, epsg: string = WebMercator, projFitOptions?: IProjFitOptions) {
+  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], nativeExtent: TGeoExtent = EPSG_3857_Def.extent, time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0, epsg?: string, projFitOptions?: IProjFitOptions) {
     const defaultOptions = {
       maxzoom: 0,
       minzoom: 0,
@@ -74,7 +74,7 @@ export class MapState implements IMapState {
     this.extent = extent;
     this.nativeExtent = nativeExtent;
     this.proj = {
-      epsg,
+      epsg: epsg || WebMercator,
       fitOptions: Object.assign({}, projFitOptions)
     }
     this.time = time;
