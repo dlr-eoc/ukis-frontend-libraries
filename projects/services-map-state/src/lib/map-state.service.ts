@@ -148,14 +148,17 @@ export class MapStateService {
   }
 
   public getProjection() {
-    return this.mapState.pipe(distinctUntilChanged((prev, curr) => prev?.proj?.epsg === curr?.proj?.epsg),map((state) => {
-      const hasDef = this._registeredProjections().find(p => p.code === state.proj.epsg);
-      const item: IMapStateProjection = { epsg: state.proj.epsg, fitOptions: state.proj.fitOptions };
-      if (hasDef) {
-        item.IProjDef = hasDef;
-      }
-      return item;
-    }));
+    return this.mapState.pipe(map(state => ({
+      epsg: state.proj?.epsg,
+      fitOptions: state.proj?.fitOptions
+    })),
+      distinctUntilChanged((prev, curr) => prev.epsg === curr.epsg),
+      map(({ epsg, fitOptions }) => {
+        const item: any = { epsg, fitOptions };
+        const def = this._registeredProjections().find(p => p.code === epsg);
+        if (def) item.IProjDef = def;
+        return item;
+      }));
   }
 
   public registerProjection(proj: IProjDef) {
