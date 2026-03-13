@@ -50,6 +50,8 @@
 * **@dlr-eoc/map-tools:**
   - use `clr-number-input-container` instead of `clr-input-container` for input of `type="number"`.
 
+* **@dlr-eoc/map-ol:**
+  - Use 8 stops for all OpenLayers `transformExtent()` functions to sample more points along the edges for better results. Should have only minimal perf hit. This corrects some calculations of extents from WGS84 to other projections. For example, in `setProjection`, new extents for layers are more precise and layers are no longer clipped.
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.

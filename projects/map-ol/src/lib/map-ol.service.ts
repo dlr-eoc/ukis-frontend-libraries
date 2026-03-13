@@ -105,6 +105,8 @@ const OL_GROUP_KEY = 'groupID';
 const OL_GROUP_NAME = 'groupName';
 const TITLE_KEY = 'title';
 const POPUP_KEY = 'popup';
+// Perhaps a function could be created that sets the stops for the transformation based on the EPSG.
+const transformExtentStops = 8;
 
 
 type tmsReturnType<T> = T extends RasterLayer ? olTileLayer<olTileSource> :
@@ -867,7 +869,7 @@ export class MapOlService {
     }
 
     if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection);
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
       layeroptions.bbox = l.bbox;
     } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
       layeroptions.extent = [...l.nativeBbox.bbox];
@@ -1382,7 +1384,7 @@ export class MapOlService {
 
           /** fix set bbox for layers in olLayerGroup not only for the group */
           if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
-            const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection);
+            const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
             gl.setExtent(extent);
           } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
             gl.setExtent([...l.nativeBbox.bbox]);
@@ -1428,7 +1430,7 @@ export class MapOlService {
       }
 
       if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
-        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection);
+        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
         layer.setExtent(extent);
       } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
         layer.setExtent([...l.nativeBbox.bbox]);
@@ -2395,7 +2397,7 @@ export class MapOlService {
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: olFitOptions): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode());
+    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode(), transformExtentStops);
     const newFitOptions: olFitOptions = {
       size: this.map.getSize(),
       // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
@@ -2442,7 +2444,7 @@ export class MapOlService {
     });
     if (geographic) {
       const projection = getProjection(WGS84);
-      const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
+      const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection, transformExtentStops);
       return (transfomExtent as TGeoExtent);
     } else {
       return extent;
@@ -2457,7 +2459,7 @@ export class MapOlService {
   public getCurrentExtent(geographic?: boolean): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
-    const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
+    const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection, transformExtentStops);
     return (transfomExtent as TGeoExtent);
   }
 
@@ -2653,16 +2655,32 @@ export class MapOlService {
    * set or calculate the new layer extent after reprojectFeatures
    */
   private setLayerExtentAfterProjection(layer: olLayer, newEpsg: string) {
-    const bbox: TGeoExtent = layer.get('bbox');
-    const nativeBbox: Layer['nativeBbox'] = layer.get('nativeBbox');
-    const newLayerExt = layer.getExtent();
-    if (bbox && nativeBbox?.epsg !== newEpsg) {
-      const newLExt = transformExtent(bbox.slice(0, 4) as [number, number, number, number], WGS84, newEpsg);
-      layer.setExtent(newLExt);
-    } else if (nativeBbox?.epsg === newEpsg) {
+    const bbox = layer.get('bbox') as number[] | undefined;
+    const nativeBbox = layer.get('nativeBbox') as | { epsg: string; bbox: TGeoExtent } | undefined;
+    const currentExtent = layer.getExtent() as olExtent | undefined;
+
+    // nativeBbox exists and matches newEpsg -> use nativeBbox
+    if (nativeBbox && nativeBbox.epsg === newEpsg) {
       layer.setExtent(nativeBbox.bbox);
-    } else if (newLayerExt?.length) {
-      // if the layer has an extent specified but no bbox or nativeBbox has been defined
+      return;
+    }
+
+    // bbox exists and nativeBbox is missing OR has different epsg -> use bbox
+    if (bbox && (!nativeBbox || nativeBbox.epsg !== newEpsg)) {
+      if (bbox.length >= 4) {
+        const ext = transformExtent(bbox.slice(0, 4), WGS84, newEpsg, transformExtentStops);
+        if (ext.includes(NaN)) {
+          layer.setExtent(undefined);
+        } else {
+          layer.setExtent(ext);
+        }
+
+      }
+      return;
+    }
+
+    // no bbox and no nativeBbox -> clear any old defined extent
+    if (!bbox && !nativeBbox && currentExtent) {
       layer.setExtent(undefined);
     }
   }
