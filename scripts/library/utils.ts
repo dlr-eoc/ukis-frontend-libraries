@@ -170,15 +170,14 @@ export function updatePackageJson(path: string, cb: (json: IPackageJSON) => IPac
 
 export function createNpmrc(path: string, scope: string, registry = 'https://npm.pkg.github.com') {
   let npmrc = `
-    ${scope}:registry=${registry}:_authToken=${process.env.AUTH_TOKEN}
+${scope}:registry=${registry}:_authToken=${process.env.AUTH_TOKEN}
 loglevel = "verbose"`;
 
   /** https://github.com/actions/setup-node/blob/v6.2.0/src/authutil.ts */
-  if(registry.includes('npm.pkg.github.com')){
-    npmrc = `
-    ${registry.replace(/(^\w+:|^)/, '')}:_authToken=${process.env.AUTH_TOKEN}
-${scope}:registry=${registry}
-loglevel = "verbose"`
+  if (registry.includes('npm.pkg.github.com')) {
+    npmrc = `${scope}:registry=${registry}
+${registry.replace(/(^\w+:|^)/, '')}:_authToken=${process.env.NODE_AUTH_TOKEN}
+loglevel=verbose`;
   }
 
   try {
@@ -385,7 +384,7 @@ export function getSortedProjects(projects: ICustomWorkspaceProject[], packageSc
   /** An array of directed edges describing a graph e.g. edge1   */
   // maybe check other toposort libs https://www.npmjs.com/search?page=0&q=toposort&sortBy=dependent_count
   const flattdeps = toposort(edges).reverse();
-  
+
   // check for deps without edges and push them in the array
   if (Array.isArray(filterPN) && filterPN.length) {
     filterPN.forEach(p => {
