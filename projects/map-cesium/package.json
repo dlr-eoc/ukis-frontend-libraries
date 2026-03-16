@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/map-cesium",
-  "version": "16.0.0-next.7",
+  "version": "16.0.0-next.8",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -19,15 +19,15 @@
     "rxjs": "~7.8.2"
   },
   "dependencies": {
-    "@dlr-eoc/services-map-state": "16.0.0-next.7",
-    "@dlr-eoc/services-layers": "16.0.0-next.7",
+    "@dlr-eoc/services-map-state": "16.0.0-next.8",
+    "@dlr-eoc/services-layers": "16.0.0-next.8",
     "@cesium/engine": "^22.3.0",
     "@cesium/widgets": "^14.3.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
-    "@dlr-eoc/base-layers-raster": "16.0.0-next.7",
-    "@dlr-eoc/shared-assets": "16.0.0-next.7"
+    "@dlr-eoc/base-layers-raster": "16.0.0-next.8",
+    "@dlr-eoc/shared-assets": "16.0.0-next.8"
   },
   "sideEffects": false
 }

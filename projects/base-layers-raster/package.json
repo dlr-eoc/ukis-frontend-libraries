@@ -1,6 +1,6 @@
 {
   "name": "@dlr-eoc/base-layers-raster",
-  "version": "16.0.0-next.7",
+  "version": "16.0.0-next.8",
   "main": "src/public-api",
   "license": "Apache-2.0",
   "author": "Team UKIS",
@@ -13,7 +13,7 @@
     "OSM"
   ],
   "dependencies": {
-    "@dlr-eoc/services-layers": "16.0.0-next.7",
+    "@dlr-eoc/services-layers": "16.0.0-next.8",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
