@@ -28,11 +28,11 @@ export class MapStateService {
     }
     this.lastAction.next('setState');
     if (state instanceof MapState) {
-      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj.epsg);
+      const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj.epsg, state.proj.fitOptions);
       this.mapState.next(newState);
     } else {
       const stateOptions: IMapStateOptions = { ...{ notifier: 'user' }, ...state.options };
-      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj.epsg);
+      const newState = new MapState(state.zoom, state.center, stateOptions, state.extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj?.epsg, state.proj?.fitOptions);
       this.mapState.next(newState);
     }
   }
@@ -49,7 +49,7 @@ export class MapStateService {
     this.lastAction.next('setExtent');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj.epsg);
+    const newState = new MapState(state.zoom, state.center, state.options, extent, state.nativeExtent, state.time, state.viewAngle, state.rotation, state.proj.epsg, state.proj.fitOptions);
     this.mapState.next(newState);
   }
 
@@ -64,7 +64,7 @@ export class MapStateService {
     this.lastAction.next('setNativeExtent');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, state.extent, nativeExtent, state.time, state.viewAngle, state.rotation, state.proj.epsg);
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, nativeExtent, state.time, state.viewAngle, state.rotation, state.proj.epsg, state.proj.fitOptions);
     this.mapState.next(newState);
   }
 
@@ -96,7 +96,7 @@ export class MapStateService {
     this.lastAction.next('setAngle');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, angle, state.rotation, state.proj.epsg);
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, angle, state.rotation, state.proj.epsg, state.proj.fitOptions);
     this.mapState.next(newState);
   }
 
@@ -107,7 +107,7 @@ export class MapStateService {
     this.lastAction.next('setRotation');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
-    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, rotation, state.proj.epsg);
+    const newState = new MapState(state.zoom, state.center, state.options, state.extent, state.nativeExtent, state.time, state.viewAngle, rotation, state.proj.epsg, state.proj.fitOptions);
     this.mapState.next(newState);
   }
 
