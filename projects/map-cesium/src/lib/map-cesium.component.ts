@@ -104,7 +104,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
       this.viewer.imageryLayers.removeAll();
       this.viewer.dataSources.removeAll();
       this.viewer.scene.primitives.removeAll();
-      //this.viewer.scene.primitives.destroy(); -> will lead to developer errors due to missing elements
+      this.viewer.destroy();
     }
     this.mapSvc.destroyLayerGrpoups();
   }
