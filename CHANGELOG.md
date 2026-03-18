@@ -19,7 +19,15 @@
  - Removed `pipes` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 
  * **@dlr-eoc/ngx-ukis-ui-clarity:**
- - Input `mapStateSvc` was removed from `<ukis-projection-switch>`! Input `fitViewToNewExtent` is now triggered by `mapSvc.setProjection`.
+ - Input `mapStateSvc` on `<ukis-projection-switch>` was renamed to `mapState`! Input `fitViewToNewExtent` is now triggered by `mapSvc.setProjection`.
+ 
+ - MousePositionComponent need now Inputs `<ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc">`
+
+* **@dlr-eoc/map-ol:**
+ - Params of `setProjection(projection: olProjection | string)` changed to `setProjection(projection: IProjDef | string, options?: IProjFitOptions)` in `MapOlService`. This allows the registration of proj4 definitions for projections from `IProjDef`. The options `IProjFitOptions` allow to zomm to a bbox on setProjection or zomm to the ProjectionExtent.
+
+* **@dlr-eoc/map-cesium:**
+ - `MapCesiumService.getCurrentExtent()` param `geographic?: boolean` is removed because it was not used.
 
 ### Bug Fixes
 * **@dlr-eoc/map-maplibre:**
@@ -43,7 +51,7 @@
   - use `clr-number-input-container` instead of `clr-input-container` for input of `type="number"`.
 
 * **@dlr-eoc/map-ol:**
-  - Fix `setProjection` zoom to old bbox. Add new param `fitToProjectionExtent` on `setProjection` to zoom to new projection extent.
+  - Use 8 stops for all OpenLayers `transformExtent()` functions to sample more points along the edges for better results. Should have only minimal perf hit. This corrects some calculations of extents from WGS84 to other projections. For example, in `setProjection`, new extents for layers are more precise and layers are no longer clipped.
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
@@ -52,6 +60,7 @@
 * **@dlr-eoc/ngx-ukis-ui-clarity:**
 - New UKIS library for ui-clarity related things was added.
 - It includes all components of `@dlr-eoc/layer-control`, `@dlr-eoc/map-tools`, `@dlr-eoc/user-info` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+- Adjust `LayerentryComponent` and `LayerentryGroupComponent` to use `nativeBbox` of types `services-layers`.
 
 * **@dlr-eoc/ngx-ukis-utilities:**
 - New UKIS library for angular utilities was added.
@@ -60,9 +69,16 @@
 
 * **@dlr-eoc/map-ol:**
 - Remove dependency on @cds/core [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
+- Use `nativeBbox` of types `services-layers` to create `olLayerOptions.extent` for layers. Use it also in `CustomLayer` to create `olLayerOptions.extent` and for olLayerGroups. 
 
 * **@dlr-eoc/services-layers:**
 - Add `properties` attribute to Layer type
+- Add `nativeBbox?: {epsg: string, bbox: TGeoExtent}` to `Layer` and `LayerGroup`. This can be helpful when zooming to the extent of a projected layer.
+
+* **@dlr-eoc/services-map-state:**
+- Export constants for `WebMercator`, `WGS84` and interface `IProjDef` and some projections `EPSG_3031_Def`, `EPSG_3995_Def`, `EPSG_3857_Def` and `EPSG_4326_Def`.
+- Add projection object to `MapState` [Issue #204](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/204)
+- Add functionality to `setProjection`, `registerProjection` and set `nativeExtent` (not WGS84) in `MapStateService`. Now this can be used instead of the functions in `MapOlService` [Issue #204](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/204).
 
 # [15.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v15.0.0) (2024-12-31) (angular update, @clr and @cds update, layer-control, map-ol)
 

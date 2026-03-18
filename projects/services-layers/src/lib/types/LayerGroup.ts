@@ -16,6 +16,12 @@ export interface ILayerGroupOptions {
   removable?: boolean;
   layerRemovable?: boolean;
   bbox?: TGeoExtent;
+  nativeBbox?: {
+    /** the EPSG code for the bbox  */
+    epsg:string,
+    /** native coordinates for projected layers - this can be helpful when zooming to the extent of a projected layer */
+    bbox: TGeoExtent
+  };
   /** description for the group as string/html or a angular component */
   description?: string | IDynamicComponent;
   /** legend for the group as image or a angular component */
@@ -46,7 +52,11 @@ export class LayerGroup implements ILayerGroupOptions {
   filtertype?: TFiltertypes = 'Layers';
   removable = true;
   layerRemovable = true;
-  bbox?: [number, number, number, number];
+  bbox?: TGeoExtent;
+  nativeBbox?: {
+    epsg:string,
+    bbox: TGeoExtent
+  };
   description?: string | IDynamicComponent;
   legendImg?: string | IDynamicComponent;
   actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];

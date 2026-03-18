@@ -34,9 +34,9 @@ import {
   IWmtsParams,
   TVectorLayertype,
   StackedLayer,
-  IStackedLayerOptions
+  IStackedLayerOptions,
+  TGeoExtent
 } from '@dlr-eoc/services-layers';
-import { TGeoExtent } from '@dlr-eoc/services-map-state';
 import { WmtsClientService } from '../wmts/wmtsclient.service';
 import { of, Observable, forkJoin, concat } from 'rxjs';
 import { filter, map } from 'rxjs/operators';

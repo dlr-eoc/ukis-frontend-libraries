@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecked, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecked, AfterViewInit, ViewChild, ElementRef, NgZone, effect, signal } from '@angular/core';
 
 
 
 
-import { MapState } from '@dlr-eoc/services-map-state';
+import { IMapStateProjection, MapState } from '@dlr-eoc/services-map-state';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
@@ -89,9 +89,10 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   /** [width, height] */
   private mapSize = [0, 0];
-  private initialMapStateSet = false;
+  private initialMapStateSet = signal(false);
 
   constructor(private mapSvc: MapOlService, private ngZone: NgZone) {
+    this.subscribeToMapStateRegisterProjection();
   }
   ngOnInit() {
     /** Subscribe to mapStateSvc before map is created */
@@ -99,6 +100,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     this.initMap();
     /** subscribe to layers oninit so they get pulled after view init */
     this.subscribeToLayers();
+    // TODO: refactor to signals
+    this.subscribeToMapStateSetProjection();
   }
 
   /**
@@ -156,7 +159,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     const mapDiv = this.getMapDiv();
     if (mapDiv) {
       if (mapDiv.width === this.mapSize[0] && mapDiv.height === this.mapSize[1]) {
-        if (!this.initialMapStateSet) {
+        if (!this.initialMapStateSet()) {
           /**
            * If container size and map size are equal (map size 'stable')
            * Get last state from mapStateSvc and set it, so a User can set the initial MapState in a component on ngOnInit
@@ -164,7 +167,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
            */
           const oldMapState = this.mapStateSvc.getMapState().getValue();
           this.setMapState(oldMapState);
-          this.initialMapStateSet = true;
+          this.initialMapStateSet.set(true);
         }
       } else {
         /** update map size till container size and map size are equal */
@@ -466,6 +469,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     if (mapState.options.notifier === 'user') {
       if (lastAction === 'setExtent') {
         this.mapSvc.setExtent(mapState.extent, true);
+      } else if (lastAction === 'setNativeExtent') {
+        this.mapSvc.setExtent(mapState.nativeExtent, false);
       } else if (lastAction === 'setState') {
         this.mapSvc.setZoom(mapState.zoom);
         this.mapSvc.setCenter([mapState.center.lon, mapState.center.lat], true);
@@ -479,6 +484,49 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     } */
   }
 
+  private setMapStateProjection(item: IMapStateProjection) {
+    const lastAction = this.mapStateSvc.getLastAction().getValue();
+    if (lastAction === 'setProjection') {
+      let projIsReg = this.mapSvc.registeredProjections.has(item.epsg);
+      const mapStateProjection = this.mapStateSvc.registeredProjections();
+      const isInStateSvc = mapStateProjection.find(p => p.code === item.epsg);
+      if (!projIsReg && isInStateSvc) {
+        this.mapSvc.registerProjection(isInStateSvc);
+        projIsReg = this.mapSvc.registeredProjections.has(item.epsg);
+      }
+
+      if (!projIsReg) {
+        console.info(`Projection ${item} is not registered in mapSvc`, this.mapSvc.registeredProjections, 'MapState:', this.mapStateSvc.registeredProjections());
+      }
+
+      const proj = this.mapSvc.getProjection().getCode();
+      if (projIsReg && item.epsg !== proj) {
+        this.mapSvc.setProjection(item.epsg, item.fitOptions);
+        // Update the layers to use the correct layer extent - otherwise layers may not be displayed
+        this.updateLayersAfterProjection();
+      } else {
+        console.info(`projection: ${item.epsg} is not registered. Register them first with this.mapSvc.registerProjection.`)
+      }
+    }
+  }
+
+  private updateLayersAfterProjection() {
+    const layerGroupCollection = this.mapSvc.getLayerGroups();
+    layerGroupCollection.forEach(lg => {
+      const layers = lg.getLayers();
+      layers.forEach(l => {
+        const id = l.get('id');
+        const ukisLayer = this.layersSvc.getLayerOrGroupById(id);
+
+        if (ukisLayer instanceof Layer) {
+          this.layersSvc.updateLayer(ukisLayer);
+        } else {
+          this.layersSvc.updateLayerGroup(ukisLayer);
+        }
+      });
+    });
+  }
+
   private subscribeToMapState() {
     if (this.mapStateSvc) {
       /** .pipe(skip(1)) skips the first, e.g. initial value of the BehaviorSubject!! -- https://www.learnrxjs.io/learn-rxjs/operators/filtering/skip#why-use-skip  */
@@ -487,16 +535,37 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
     }
   }
 
+  private subscribeToMapStateSetProjection() {
+    if (this.mapStateSvc) {
+      const mapStateOn = this.mapStateSvc.getProjection().subscribe(item => this.setMapStateProjection(item));
+      this.subs.push(mapStateOn);
+    }
+  }
+
+  private subscribeToMapStateRegisterProjection() {
+    effect(() => {
+      const registeredProjections = this.mapStateSvc.registeredProjections();
+      registeredProjections.forEach(p => {
+        const hasProj = this.mapSvc.registeredProjections.has(p.code);
+        if (!hasProj) {
+          this.mapSvc.registerProjection(p);
+        }
+      });
+    });
+  }
+
   private subscribeToMapEvents() {
     this.mapOnMoveend = (evt: olMapEvent) => {
       const oldMapState = this.mapStateSvc.getMapState().getValue();
       const zoom = this.mapSvc.getZoom();
       const center = this.mapSvc.getCenter(true);
       const extent = this.mapSvc.getCurrentExtent(true);
+      const nativeExtent = this.mapSvc.getCurrentExtent(false);
       const rotation = this.mapSvc.getRotation();
+      const epsg = this.mapSvc.getProjection().getCode();
 
       const newCenter = { lat: parseFloat(center[1]), lon: parseFloat(center[0]) };
-      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time, oldMapState.viewAngle, rotation);
+      const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, nativeExtent, oldMapState.time, oldMapState.viewAngle, rotation, epsg);
       this.mapStateSvc.setMapState(ms);
     };
     this.map.on('moveend', this.mapOnMoveend);

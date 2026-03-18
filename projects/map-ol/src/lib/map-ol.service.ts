@@ -1,7 +1,12 @@
 import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector } from '@angular/core';
 
 
-import { Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent, ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IPopupParams, IAnyObject, TFiltertypesUncap, TFiltertypes, IPopupEvent } from '@dlr-eoc/services-layers';
+import {
+  Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent,
+  ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype,
+  GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IPopupParams,
+  IAnyObject, TFiltertypesUncap, TFiltertypes, IPopupEvent
+} from '@dlr-eoc/services-layers';
 
 import olMap from 'ol/Map';
 import olView, { FitOptions as olFitOptions } from 'ol/View';
@@ -69,7 +74,7 @@ import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import { transformExtent, get as getProjection, transform } from 'ol/proj';
 import { register as olRegister } from 'ol/proj/proj4';
 import proj4 from 'proj4';
-import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate, getCenter as olExtGetCenter, applyTransform, containsExtent } from 'ol/extent';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate, getCenter as olExtGetCenter, containsExtent, Extent as olExtent } from 'ol/extent';
 import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
 import { easeOut } from 'ol/easing.js';
 
@@ -89,6 +94,7 @@ import { Subject } from 'rxjs';
 import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorSource from 'ol/source/Vector';
+import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions } from '@dlr-eoc/services-map-state';
 
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -98,9 +104,9 @@ const ID_KEY = 'id';
 const OL_GROUP_KEY = 'groupID';
 const OL_GROUP_NAME = 'groupName';
 const TITLE_KEY = 'title';
-const WebMercator = 'EPSG:3857';
-const WGS84 = 'EPSG:4326';
 const POPUP_KEY = 'popup';
+// Perhaps a function could be created that sets the stops for the transformation based on the EPSG.
+const transformExtentStops = 8;
 
 
 type tmsReturnType<T> = T extends RasterLayer ? olTileLayer<olTileSource> :
@@ -121,6 +127,8 @@ export class MapOlService {
   private hitLayerPrev = null;
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
+  public registeredProjections: Map<IProjDef['code'], IProjDef> = new Map();
+
   /**
    * This object keeps track of currently bound angular-components that are being used as popups.
    * We keep a reference to them here so that we can remove them again after they are no longer displayed.
@@ -133,7 +141,12 @@ export class MapOlService {
     private envInjector: EnvironmentInjector
   ) {
     this.map = new olMap({ controls: [] });
-    this.view = new olView();
+    this.view = new olView({
+      center: [0, 0],
+      zoom: 0,
+      projection: WebMercator
+    });
+    this.map.setView(this.view);
     this.EPSG = WebMercator;
   }
 
@@ -253,7 +266,11 @@ export class MapOlService {
     this.map.setView(tempview);
     // this.map.getControls().clear();
     this.view = this.map.getView();
-    this.setProjection(this.EPSG);
+    // Register projection at startup if it is not identical
+    if (this.view.getProjection().getCode() !== this.EPSG) {
+      this.registerProjection(EPSG_3857_Def);
+      this.setProjection(this.EPSG);
+    }
     if (target) {
       this.map.setTarget(target);
     }
@@ -802,6 +819,7 @@ export class MapOlService {
     }
 
     // ------------------------------------------
+    const currentProjection = this.getProjection().getCode();
     const layeroptions: olLayerOptions<LayerOptionsSources> & ILayerOptions = {
       // className - if
       opacity: l.opacity || 1,
@@ -850,8 +868,12 @@ export class MapOlService {
       layeroptions.minZoom = l.minZoom;
     }
 
-    if (l.bbox) {
-      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+    if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
+      layeroptions.bbox = l.bbox;
+    } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+      layeroptions.extent = [...l.nativeBbox.bbox];
+      layeroptions.nativeBbox = l.nativeBbox;
     }
 
     return layeroptions;
@@ -883,6 +905,7 @@ export class MapOlService {
       useInterimTilesOnError: true
     };
     const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+    this.setLayerBboxes(l, newlayer);
     this.setSubdomains(l, newlayer);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
@@ -922,6 +945,7 @@ export class MapOlService {
       };
 
       newlayer = new olVectorTileLayer(Object.assign(layeroptions, vectorTileLayerOptions));
+      this.setLayerBboxes(l, newlayer);
       this.setCrossOrigin(l, newlayer);
       this.addEventsToLayer(l, newlayer, olsource);
 
@@ -979,6 +1003,7 @@ export class MapOlService {
 
     const layeroptions = this.createOlLayerOptions(l, 'wms', olsource);
     const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+    this.setLayerBboxes(l, newlayer);
     this.setSubdomains(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
@@ -1003,6 +1028,7 @@ export class MapOlService {
 
     };
     const newlayer = new olImageLayer(Object.assign(layeroptions, baseImageLayerOptions));
+    this.setLayerBboxes(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
   }
@@ -1052,6 +1078,7 @@ export class MapOlService {
       const baseTileLayerOptions: olBaseTileLayerOptions<olTileSource> = {};
 
       const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+      this.setLayerBboxes(l, newlayer);
       this.setSubdomains(l, newlayer);
       this.setCrossOrigin(l, newlayer);
       this.addEventsToLayer(l, newlayer, olsource);
@@ -1099,6 +1126,7 @@ export class MapOlService {
     if (l.cluster) {
       this.setCluster(l, newlayer, olsource, {});
     }
+    this.setLayerBboxes(l, newlayer);
     this.setSubdomains(l, newlayer);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
@@ -1141,6 +1169,7 @@ export class MapOlService {
     if (l.cluster) {
       this.setCluster(l, newlayer, olsource, {});
     }
+    this.setLayerBboxes(l, newlayer);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, olsource);
     return newlayer;
@@ -1185,6 +1214,7 @@ export class MapOlService {
     if (l.cluster) {
       this.setCluster(l, newlayer, olsource, {});
     }
+    this.setLayerBboxes(l, newlayer);
     this.setCrossOrigin(l, newlayer);
     this.addEventsToLayer(l, newlayer, layeroptions.source);
     return newlayer;
@@ -1247,6 +1277,18 @@ export class MapOlService {
     }
   }
 
+  /** 
+   * add bbox and nativeBbox to olLayer to use layer.setExtent later after reproject
+  */
+  private setLayerBboxes(l: Layer, layer: olLayer<olSource>): void {
+    if (l.nativeBbox) {
+      layer.set('nativeBbox', l.nativeBbox);
+    }
+    if (l.bbox) {
+      layer.set('bbox', l.bbox);
+    }
+  }
+
   /** use subdomains to setUrl/s on source */
   private setSubdomains(l: Layer, layer: olLayer<olSource>): void {
     if (l instanceof VectorLayer || l instanceof RasterLayer) {
@@ -1283,6 +1325,7 @@ export class MapOlService {
   private create_custom_layer(l: CustomLayer<olBaseLayer>) {
     if (l.custom_layer) {
       const layer = l.custom_layer;
+      const currentProjection = this.getProjection().getCode();
 
       if (layer instanceof olLayer) {
         const olsource = layer.getSource() as olSource;
@@ -1302,6 +1345,7 @@ export class MapOlService {
           // tslint:disable-next-line: no-string-literal
           olsource['wrapX_'] = false;
         }
+        this.setLayerBboxes(l, layer);
         this.setCrossOrigin(l, layer);
         this.addEventsToLayer(l, layer, olsource);
 
@@ -1322,6 +1366,7 @@ export class MapOlService {
             gl.set(ID_KEY, layerId);
           }
           if (gl instanceof olLayer) {
+            this.setLayerBboxes(l, gl);
             this.setCrossOrigin(l, gl);
             this.addEventsToLayer(l, gl, gl.getSource());
           }
@@ -1338,9 +1383,11 @@ export class MapOlService {
           }
 
           /** fix set bbox for layers in olLayerGroup not only for the group */
-          if (l.bbox) {
-            const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+          if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+            const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
             gl.setExtent(extent);
+          } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+            gl.setExtent([...l.nativeBbox.bbox]);
           }
         });
       } else {
@@ -1382,9 +1429,11 @@ export class MapOlService {
         layer['className_'] = l.id;
       }
 
-      if (l.bbox) {
-        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, this.getProjection().getCode());
+      if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
         layer.setExtent(extent);
+      } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+        layer.setExtent([...l.nativeBbox.bbox]);
       }
 
       layer.setProperties(layeroptions);
@@ -2348,7 +2397,7 @@ export class MapOlService {
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: olFitOptions): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode());
+    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode(), transformExtentStops);
     const newFitOptions: olFitOptions = {
       size: this.map.getSize(),
       // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
@@ -2395,7 +2444,7 @@ export class MapOlService {
     });
     if (geographic) {
       const projection = getProjection(WGS84);
-      const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
+      const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection, transformExtentStops);
       return (transfomExtent as TGeoExtent);
     } else {
       return extent;
@@ -2410,7 +2459,7 @@ export class MapOlService {
   public getCurrentExtent(geographic?: boolean): TGeoExtent {
     const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
     const extent = this.map.getView().calculateExtent();
-    const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection);
+    const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection, transformExtentStops);
     return (transfomExtent as TGeoExtent);
   }
 
@@ -2509,6 +2558,8 @@ export class MapOlService {
   }
 
   /**
+   * If possible use @dlr-eoc/services-map-state to setProjection - this should only be used internally!
+   * 
    * vector layers will be reprojected automatically
    * wms layers will be updated with corresponding proj def in the requests.
    * for other raster layers and for those wms layers which backend does not support target projection, please
@@ -2516,8 +2567,16 @@ export class MapOlService {
    * see: https://openlayers.org/en/latest/apidoc/module-ol_source_Source.html#projection
    * projection is proj~ProjectionLike
    */
-  public setProjection(projection: olProjection | string, fitToProjectionExtent: boolean = false) {
-    if (projection) {
+  public setProjection(projection: IProjDef | IProjDef['code'], options?: IProjFitOptions) {
+    let projIsReg = this.registeredProjections.get((typeof projection === 'string') ? projection : projection.code);
+
+    // IProjDef is used and it is not registered, register it and use it.
+    if (typeof projection !== 'string' && !projIsReg) {
+      this.registerProjection(projection);
+      projIsReg = this.registeredProjections.get(projection.code);
+    }
+
+    if (projIsReg) {
       let viewOptions: olViewOptions = {};
       if (this.viewOptions) {
         viewOptions = this.viewOptions;
@@ -2528,78 +2587,140 @@ export class MapOlService {
       }
       const oldView = this.map.getView();
       const oldProj = oldView.getProjection();
+      const oldEPSG = oldProj.getCode();
       const oldExtent = oldView.calculateExtent();
 
-      let newProjection: olProjection;
-      if (projection instanceof olProjection) {
-        newProjection = projection;
-      } else if (typeof projection === 'string') {
-        newProjection = getProjection(projection);
-      }
+      // Test is not same projection
+      if (projIsReg.code !== oldProj.getCode()) {
+        const newProjection = this.getOlProjection(projIsReg);
+        if (newProjection) {
+          viewOptions.projection = newProjection;
+          viewOptions.extent = newProjection.getExtent();
+          viewOptions.center = (viewOptions.extent) ? olExtGetCenter(viewOptions.extent) : viewOptions.center;
 
-      if (newProjection) {
-        viewOptions.projection = newProjection;
-        viewOptions.extent = newProjection.getExtent();
-        viewOptions.center = olExtGetCenter(viewOptions.extent);
+          // https://openlayers.org/en/latest/examples/reprojection-by-code.html
+          const view = new olView(viewOptions);
+          this.EPSG = view.getProjection().getCode();
+          this.map.setView(view);
+          this.view = this.map.getView();
 
-        // https://openlayers.org/en/latest/examples/reprojection-by-code.html
-        const view = new olView(viewOptions);
-        const oldProjection = this.EPSG;
-        this.EPSG = view.getProjection().getCode();
-        this.map.setView(view);
-        this.view = this.map.getView();
-
-
-        if (fitToProjectionExtent) {
-          this.view.fit(viewOptions.extent);
-        } else {
-          // Try zooming to the old bbox if that works in the new projection.
-          const newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
-          if (containsExtent(viewOptions.extent, newExtent)) {
-            this.view.fit(newExtent);
-          } else {
+          if (options?.fitToProjectionExtent) {
             this.view.fit(viewOptions.extent);
-          }
-        }
-
-        // reprojecting vector layers
-        this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
-          layerGroup.getLayers().getArray().forEach(layer => {
-            if (layer instanceof olLayer) {
-              let source = layer.getSource();
-              // check for nested sources, e.g. cluster or cluster of clusters etc
-              while (source['source']) {
-                source = source['source'];
-              }
-              if (source instanceof olVectorSource) {
-                this.reprojectFeatures(source, oldProjection, this.EPSG);
-              }
+          } else {
+            let newExtent: olExtent;
+            if (options?.fitToBbox) {
+              // Try zooming to a bbox provided in set projection.
+              newExtent = transformExtent(options.fitToBbox, WGS84, newProjection, 8);
+            } else if (options?.fitToNativeBbox) {
+              // the bbox is in the newProjection;
+              newExtent = options.fitToNativeBbox;
+            } else {
+              // Try zooming to the old bbox if that works in the new projection.
+              newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
             }
-          });
-        });
 
-        this.projectionChange.next(this.getProjection());
-      } else {
-        console.log(`projection ${projection} is invalid or not registered!`);
+            if (containsExtent(viewOptions.extent, newExtent)) {
+              this.view.fit(newExtent);
+            } else {
+              this.view.fit(viewOptions.extent);
+            }
+          }
+
+          this.adjustLayersAfterProjection(oldEPSG, projIsReg);
+          this.projectionChange.next(this.getProjection());
+        } else {
+          console.log(`projection ${projection} is invalid or not registered!`);
+        }
       }
     } else {
-      // console.log('projection code is undefined');
+      console.log('projection code is undefined or not registered', projection, this.registeredProjections);
     }
   }
 
   /**
-   * @param projDef.code - e.g.: "EPSG:4326"
-   * @param projDef.proj4js - e.g.: "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
+   * reproject vector layers and set extent for all
    */
-  public registerProjection(projDef: { code: string, proj4js: string }) {
-    proj4.defs(projDef.code, projDef.proj4js);
-    olRegister(proj4);
+  private reprojectVectorLayers(layer: olLayer, oldEpsg: string, newEpsg: string) {
+    let source = layer.getSource();
+    // check for nested sources, e.g. cluster or cluster of clusters etc
+    while (source['source']) {
+      source = source['source'];
+    }
+    if (source instanceof olVectorSource) {
+      this.reprojectFeatures(source, oldEpsg, newEpsg);
+    }
   }
 
   /**
-   * Returns a OpenLayers Projection from Options
+   * set or calculate the new layer extent after reprojectFeatures
    */
-  public getOlProjection(projDef: olProjectionOptions): olProjection {
+  private setLayerExtentAfterProjection(layer: olLayer, newEpsg: string) {
+    const bbox = layer.get('bbox') as number[] | undefined;
+    const nativeBbox = layer.get('nativeBbox') as | { epsg: string; bbox: TGeoExtent } | undefined;
+    const currentExtent = layer.getExtent() as olExtent | undefined;
+
+    // nativeBbox exists and matches newEpsg -> use nativeBbox
+    if (nativeBbox && nativeBbox.epsg === newEpsg) {
+      layer.setExtent(nativeBbox.bbox);
+      return;
+    }
+
+    // bbox exists and nativeBbox is missing OR has different epsg -> use bbox
+    if (bbox && (!nativeBbox || nativeBbox.epsg !== newEpsg)) {
+      if (bbox.length >= 4) {
+        const ext = transformExtent(bbox.slice(0, 4), WGS84, newEpsg, transformExtentStops);
+        if (ext.includes(NaN)) {
+          layer.setExtent(undefined);
+        } else {
+          layer.setExtent(ext);
+        }
+
+      }
+      return;
+    }
+
+    // no bbox and no nativeBbox -> clear any old defined extent
+    if (!bbox && !nativeBbox && currentExtent) {
+      layer.setExtent(undefined);
+    }
+  }
+
+  /**
+   * reprojecting vector layers and set extent
+   */
+  private adjustLayersAfterProjection(oldEpsg: string, projection: IProjDef) {
+    this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
+      layerGroup.getLayers().getArray().forEach(layer => {
+        if (layer instanceof olLayer) {
+          const newEpsg = projection?.code;
+          this.reprojectVectorLayers(layer, oldEpsg, newEpsg);
+          this.setLayerExtentAfterProjection(layer, newEpsg);
+        } else {
+          console.log(layer, 'no olLayer');
+        }
+      });
+    });
+  }
+
+  /**
+   * If possible use @dlr-eoc/services-map-state to registerProjection - this should only be used internally!
+   * 
+   * @param projDef.code - e.g.: "EPSG:4326"
+   * @param projDef.proj4js - e.g.: "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
+   */
+  public registerProjection(projDef: IProjDef) {
+    const hasProj = this.registeredProjections.has(projDef.code);
+    if (!hasProj) {
+      proj4.defs(projDef.code, projDef.proj4js);
+      olRegister(proj4);
+      this.registeredProjections.set(projDef.code, projDef);
+    }
+  }
+
+  /**
+   * Returns a OpenLayers Projection froma Definition
+   */
+  public getOlProjection(projDef: IProjDef | olProjectionOptions): olProjection {
     return new olProjection({
       code: projDef.code,
       extent: projDef.extent ? projDef.extent : undefined,

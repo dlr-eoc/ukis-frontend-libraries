@@ -1,3 +1,6 @@
+import { TGeoExtent } from "@dlr-eoc/services-layers";
+import { EPSG_3857_Def, IProjDef, WebMercator } from "./projections";
+
 export interface IMapCenter {
   lat: number;
   lon: number;
@@ -9,23 +12,36 @@ export interface IMapStateOptions {
   notifier?: 'user' | 'map';
 }
 
+export interface IProjFitOptions {
+  fitToProjectionExtent?: boolean
+  fitToBbox?: TGeoExtent
+  fitToNativeBbox?: TGeoExtent
+}
+
 export interface IMapState {
   zoom: number;
   center: IMapCenter;
   options?: IMapStateOptions;
+  /** WGS84: Extent */
   extent?: TGeoExtent;
+  /** Extent in the current map projection */
+  nativeExtent?: TGeoExtent;
   /** iso 8601 Datestring */
   time?: string;
   /** from nadir in degrees */
   viewAngle?: number;
   /** from north in degrees */
   rotation?: number;
+  /** current map projection */
+  proj?: Omit<IMapStateProjection, 'IProjDef'>;
 }
 
-/**
- * like ol.extent: minX, minY, maxX, maxY
- */
-export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
+export interface IMapStateProjection {
+  /** EPSG of current map projection */
+  epsg?: string;
+  fitOptions?: IProjFitOptions;
+  IProjDef?: IProjDef;
+}
 
 export class MapState implements IMapState {
   zoom: number;
@@ -34,15 +50,20 @@ export class MapState implements IMapState {
     lon: number;
   };
   options: IMapStateOptions;
+  /** WGS84: Extent */
   extent: TGeoExtent;
+  /** Extent in the current map projection */
+  nativeExtent: TGeoExtent;
   /** iso 8601 Datestring */
   time: string;
   /** from nadir in degrees */
   viewAngle: number;
   /** from north in degrees */
   rotation: number;
+  /** current map projection */
+  proj: Required<Omit<IMapStateProjection, 'IProjDef'>>;
 
-  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0) {
+  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], nativeExtent: TGeoExtent = EPSG_3857_Def.extent, time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0, epsg?: string, projFitOptions?: IProjFitOptions) {
     const defaultOptions = {
       maxzoom: 0,
       minzoom: 0,
@@ -51,6 +72,11 @@ export class MapState implements IMapState {
     this.zoom = zoom;
     this.center = center;
     this.extent = extent;
+    this.nativeExtent = nativeExtent;
+    this.proj = {
+      epsg: epsg || WebMercator,
+      fitOptions: Object.assign({}, projFitOptions)
+    }
     this.time = time;
     this.viewAngle = viewAngle;
     this.rotation = rotation;

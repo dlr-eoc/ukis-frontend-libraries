@@ -36,10 +36,10 @@ jobs:
     needs: checkHeadBranch_pr
     if: github.event_name == 'pull_request'  # Only for PRs
     steps:
-      # - uses: actions/checkout@v4
+      # - uses: actions/checkout@v6
       # needs uses: actions/checkout@ if script/module is required
       - name: checkTitelTag
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         id: get-tag
         with:
           result-encoding: string
@@ -74,14 +74,14 @@ jobs:
     needs: [checkHeadBranch_pr, checkTitelTag_pr]
     if: github.event_name == 'pull_request' && needs.checkTitelTag_pr.outputs.VERSION_TAG != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: checkout tag
         run: |
           git fetch --all --tags
           git checkout ${{ needs.checkTitelTag_pr.outputs.VERSION_TAG }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -93,14 +93,14 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.checkTitelTag_pr.outputs.VERSION_TAG != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: checkout tag
         run: |
           git fetch --all --tags
           git checkout ${{ needs.checkTitelTag_pr.outputs.VERSION_TAG }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - name: build
         run: |
            npm ci
@@ -117,7 +117,7 @@ jobs:
     needs: [build_pr]
     steps:
       - name: checkLabel
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             if(context.payload.pull_request.labels){
@@ -146,47 +146,62 @@ jobs:
   publish-gpr_pr:
     needs: [checkHeadBranch_pr, checkTitelTag_pr, checkTagOnNpm_pr, build_pr, checkLabel_pr, gh-release_pr]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download dist result from job build
         uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
       ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
       - run: npm i -g npm@latest  # Latest npm for trusted publishing
-      - run: rm -f .npmrc
+      - name: Check if .npmrc is there and delete file if it exists
+        id: check_and_delete_npmrc
+        run: |
+          FILE_PATH=".npmrc"
+          if [ -f "$FILE_PATH" ]; then
+            echo "File exists: $FILE_PATH"
+            rm -f "$FILE_PATH"
+            echo "File deleted."
+          else
+            echo "File does not exist: $FILE_PATH"
+          fi
       ### for each module in dist update package.json and create .npmrc
       - run: node scripts/library/index.js --update-package=https://npm.pkg.github.com/
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       ### for each module in dist publish frontend-libraries to registry
       - run: |
           for dir in ./dist/*/;
           do
               dir=${dir%*/}
-              npm publish "$dir" --access public --tag "latest" --provenance
+              npm publish "$dir" --access public --tag "latest"
           done
         env:
-          AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   publish-npm_pr:
     needs: [checkHeadBranch_pr, checkTitelTag_pr, checkTagOnNpm_pr, build_pr, checkLabel_pr, gh-release_pr]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download dist result from job build
         uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci
@@ -212,10 +227,10 @@ jobs:
     if: github.event_name == 'push'
     steps:
       # check out before using actions reference from the same repository!
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - run: rm -f .npmrc
       - uses: ./.github/actions/check-tag-on-npm
         with:
@@ -226,10 +241,10 @@ jobs:
     needs: [checkTagOnNpm_push]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - uses: ./.github/actions/test
       - name: build
         run: |
@@ -258,48 +273,63 @@ jobs:
   publish-gpr_push:
     needs: [gh-release_push, build_push]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download dist result from job build
         uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://npm.pkg.github.com/
           scope: "@dlr-eoc"
       - run: npm ci
       ### update npm to >8.19 for publish https://github.com/npm/cli/issues/2453 https://github.com/npm/cli/issues/3573
       - run: npm i -g npm@latest  # Latest npm for trusted publishing
-      - run: rm -f .npmrc
+      - name: Check if .npmrc is there and delete file if it exists
+        id: check_and_delete_npmrc
+        run: |
+          FILE_PATH=".npmrc"
+          if [ -f "$FILE_PATH" ]; then
+            echo "File exists: $FILE_PATH"
+            rm -f "$FILE_PATH"
+            echo "File deleted."
+          else
+            echo "File does not exist: $FILE_PATH"
+          fi
       ### for each module in dist update package.json and create .npmrc
       - run: node scripts/library/index.js --update-package=https://npm.pkg.github.com/
+        env:
+            NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       ### for each module in dist publish frontend-libraries to registry
       - run: |
           # Pre-release: use tag next
           for dir in ./dist/*/
           do
               dir=${dir%*/}
-              npm publish "$dir" --access public --tag "next" --provenance
+              npm publish "$dir" --access public --tag "next"
           done
         env:
-          AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
   
   publish-npm_push:
     needs: [gh-release_push, build_push]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Download dist result from job build
         uses: actions/download-artifact@v4
         with:
           name: "dist"
           path: dist
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org/
           scope: "@dlr-eoc"
       - run: npm ci

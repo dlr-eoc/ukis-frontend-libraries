@@ -104,7 +104,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
       this.viewer.imageryLayers.removeAll();
       this.viewer.dataSources.removeAll();
       this.viewer.scene.primitives.removeAll();
-      this.viewer.scene.primitives.destroy();
+      this.viewer.destroy();
     }
     this.mapSvc.destroyLayerGrpoups();
   }
@@ -181,9 +181,11 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     const zoom = this.mapSvc.getZoom();
     const newCenter = this.mapSvc.getCenter();
     const extent = this.mapSvc.getCurrentExtent();
+    const nativeExtent = extent; // there is no projection extent?
+    const epsg = this.mapSvc.EPSG;
     const viewAngle = this.mapSvc.getViewAngle();
     const rotation = this.mapSvc.getRotation();
-    return new MapState(zoom, newCenter, { notifier }, extent, time, viewAngle, rotation);
+    return new MapState(zoom, newCenter, { notifier }, extent, nativeExtent, time, viewAngle, rotation, epsg);
   }
 
   private subscribeToMapEvents() {

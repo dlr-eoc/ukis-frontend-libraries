@@ -2,7 +2,7 @@ import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, 
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, StyleLayer, GeoJSONSource, Evented, addSourceType } from 'maplibre-gl';
 import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, changeOrderOfLayers, setRotation, setPitch, getRotation, getUkisLayerMetadata, UKIS_METADATA } from './maplibre.helpers';
 
-import { MapState, MapStateService } from '@dlr-eoc/services-map-state';
+import { MapState, MapStateService, WebMercator, WGS84 } from '@dlr-eoc/services-map-state';
 import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } from '@dlr-eoc/services-layers';
 
 
@@ -237,11 +237,22 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     const zoom = this.map.getZoom();
     const latLng = this.map.getCenter();
     const extent = getExtent(this.map, true);
+    const nativeExtent = getExtent(this.map, false);
     const viewAngle = this.map.getPitch();
     const rotation = getRotation(this.map);
+    // https://maplibre.org/maplibre-style-spec/projection/
+    const projectionSpecType = this.map.getProjection()?.type;
+    const projMapping = { globe: WGS84, mercator: WebMercator };
+    let epsg = projMapping.mercator;
+    if(Array.isArray(projectionSpecType)){
+      // TODO: Perhaps this won't work in all cases.
+      epsg = projectionSpecType.pop() as string;
+    }else if(typeof projectionSpecType === 'string'){
+      epsg = projMapping[projectionSpecType];
+    }
 
     const newCenter = { lat: latLng.lat, lon: latLng.lng };
-    const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, oldMapState.time, viewAngle, rotation);
+    const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, nativeExtent, oldMapState.time, viewAngle, rotation, epsg);
     this.mapStateSvc.setMapState(ms);
   };
 

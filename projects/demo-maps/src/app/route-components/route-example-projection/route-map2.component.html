@@ -16,14 +16,14 @@
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       On change, the map will fit to the new Projection extent. See "fitViewToNewExtent" Input
       <p></p>
-      <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections" [fitViewToNewExtent]="true"></ukis-projection-switch>
+      <ukis-projection-switch [mapSvc]="mapSvc" [mapState]="mapStateSvc" [projectionList]="projections" [fitViewToNewExtent]="true"></ukis-projection-switch>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Coordinates">
     <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
     Coordinates
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-mouse-position></ukis-mouse-position>
+      <ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc"></ukis-mouse-position>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
   <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Navigator">
@@ -31,6 +31,22 @@
     Navigator
     <clr-vertical-nav-group-children class="padding title-ellipsis">
       <ukis-map-navigator [mapState]="mapStateSvc"></ukis-map-navigator>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers" title="Extent">
+    <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
+    Extent
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <app-extent-helper [mapStateSvc]="mapStateSvc"></app-extent-helper>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="cog" title="Actions" clrVerticalNavIcon></cds-icon>
+    Actions
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <button class="btn btn-primary" (click)="setExtent()">set Extent (Antarctic)</button>
+      <button class="btn btn-primary" (click)="setNewProjection()">set Projection and bbox (Antarctic)</button>
+      <button class="btn btn-primary" (click)="addLayer()">Add Swiss GeoJSON Layer</button>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 </clr-vertical-nav>

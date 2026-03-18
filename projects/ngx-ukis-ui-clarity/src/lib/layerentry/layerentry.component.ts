@@ -257,8 +257,13 @@ export class LayerentryComponent implements OnInit {
   }
 
   zoomTo(layer: Layer) {
-    if (this.mapState && layer.bbox && layer.bbox.length >= 4) {
-      this.mapState.setExtent(layer.bbox as [number, number, number, number]);
+    if (this.mapState) {
+      const state = this.mapState.getMapState().value;
+      if (layer.bbox && layer?.nativeBbox?.epsg !== state?.proj?.epsg) {
+        this.mapState.setExtent(layer.bbox);
+      } else if (layer.nativeBbox && layer.nativeBbox.epsg === state?.proj?.epsg) {
+        this.mapState.setNativeExtent(layer.nativeBbox.bbox);
+      }
     }
   }
 

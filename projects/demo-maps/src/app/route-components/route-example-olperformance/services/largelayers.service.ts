@@ -7,9 +7,6 @@ import { MVT } from 'ol/format';
 import { VectorTile as VectorTileLayer } from 'ol/layer';
 import { VectorTile as VectorTileSource } from 'ol/source';
 import { GeoJSON } from 'ol/format';
-import { get as getProjection, getTransform } from 'ol/proj';
-import { register } from 'ol/proj/proj4';
-import proj4 from 'proj4';
 import { HttpClient } from '@angular/common/http';
 import { CustomLayer } from '@dlr-eoc/services-layers';
 import { MapOlService } from '@dlr-eoc/map-ol';
@@ -29,12 +26,8 @@ export class LargeLayersService {
 
   constructor(
     private http: HttpClient,
-    private olSvc: MapOlService
+    private mapOlSvc: MapOlService
   ) {
-    proj4.defs('EPSG:2966', '+proj=tmerc +lat_0=37.5 +lon_0=-87.08333333333333 +k=0.999966667 +x_0=900000 +y_0=249999.9998983998 +datum=NAD83 +units=us-ft +no_defs');
-    register(proj4);
-    const newProj = getProjection('EPSG:2966');
-    const toWgs84 = getTransform(newProj, 'EPSG:4326');
 
     this.geojson2966To4326 = new GeoJSON({
       dataProjection: 'EPSG:2966',
@@ -51,7 +44,7 @@ export class LargeLayersService {
       case 'all':
         return new VectorSource({
           format: new GeoJSON(),
-          url: this.getRequestUrl(this.olSvc.EPSG),
+          url: this.getRequestUrl(this.mapOlSvc.EPSG),
           strategy: all
         });
 

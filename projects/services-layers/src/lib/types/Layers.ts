@@ -133,7 +133,6 @@ export function isLayertype(type: string): type is TLayertype {
 }
 
 /**
- * geographic coordinates
  * like ol.extent: minX, minY, maxX, maxY
  */
 export type TGeoExtent = [number, number, number, number] | [number, number, number, number, number, number];
@@ -180,6 +179,12 @@ export interface ILayerOptions<T = any > {
   legendImg?: string | IDynamicComponent;
   /** geographic coordinates */
   bbox?: TGeoExtent;
+  nativeBbox?: {
+    /** the EPSG code for the bbox  */
+    epsg:string,
+    /** native coordinates for projected layers - this can be helpful when zooming to the extent of a projected layer */
+    bbox: TGeoExtent
+  };
   dimensions?: ILayerDimensions;
   /** true: show popup on click | array: show popup on click and limit properties | or use a popup object to configure the popup
    * if a popup should be shown on multiple events use an array of popup object (only unique events)
@@ -318,6 +323,10 @@ export class Layer<T = any> implements ILayerOptions<T>{
   legendImg?: string | IDynamicComponent;
 
   bbox?: TGeoExtent;
+  nativeBbox?: {
+    epsg:string,
+    bbox: TGeoExtent
+  };
   dimensions?: ILayerDimensions;
 
   popup?: ILayerOptions['popup'];

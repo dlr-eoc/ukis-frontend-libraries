@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
 
 import { LayersService, CustomLayer } from '@dlr-eoc/services-layers';
-import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapStateService, EPSG_4326_Def } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { MapThreeService } from '@dlr-eoc/map-three';
 
@@ -84,8 +84,7 @@ export class RouteMap8Component implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const projection = getProjection('EPSG:4326');
-    this.mapOlSvc.setProjection(projection);
+    this.mapStateSvc.setProjection(EPSG_4326_Def);
     this.mapOlSvc.map.getView().setMaxZoom(4); // zooming in deeper causes too much noise on the image-edges.
   }
 

@@ -44,10 +44,8 @@ import olMapBrowserEvent from 'ol/MapBrowserEvent';
 
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { CommonModule } from '@angular/common';
+import { EPSG_3031_Def, EPSG_4326_Def, WebMercator, WGS84 } from '@dlr-eoc/services-map-state';
 
-
-const WebMercator = 'EPSG:3857';
-const WGS84 = 'EPSG:4326';
 
 let mapTarget: { size: number[], container: HTMLDivElement };
 
@@ -1635,10 +1633,10 @@ describe('MapOlService State', () => {
     service.createMap(mapTarget.container);
     let newProj = null;
     const projectionChange = service.projectionChange.subscribe(projLike => {
-      newProj = projLike.getCode();
+      newProj = projLike?.getCode();
     });
-    const projectionCode = WGS84;
-    service.setProjection(projectionCode);
+    const projectionCode = EPSG_4326_Def.code;
+    service.setProjection(EPSG_4326_Def);
     expect(service.getProjection().getCode()).toBe(projectionCode);
     expect(newProj).toBe(projectionCode);
     projectionChange.unsubscribe();
@@ -1647,9 +1645,9 @@ describe('MapOlService State', () => {
   it('should set/get projection obj', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
-    const projection = getProjection(WGS84);
-    service.setProjection(projection);
-    expect(service.getProjection()).toBe(projection);
+    const projection = service.getOlProjection(EPSG_4326_Def);
+    service.setProjection(EPSG_4326_Def);
+    expect(service.getProjection().getCode()).toBe(projection.getCode());
   });
 
   it('should update vectors to the correct new projection', () => {
@@ -1666,8 +1664,7 @@ describe('MapOlService State', () => {
     // Test for Point Feature
     expect((testFeatureBefore.getGeometry() as olPoint).getCoordinates()).toEqual(pointCoordinates);
 
-    const projection = getProjection(WGS84);
-    service.setProjection(projection);
+    service.setProjection(EPSG_4326_Def);
 
     const reprojectedLayer = service.getLayerByKey({ key: 'id', value: 'ID-vector' }, 'layers');
     const testFeature = (reprojectedLayer as olVectorLayer<olVectorSource>).getSource().getFeatures()[3];
@@ -1679,16 +1676,14 @@ describe('MapOlService State', () => {
   it('should register a proj4 projection on Openlayers', () => {
     const service: MapOlService = TestBed.inject(MapOlService);
     service.createMap(mapTarget.container);
-    const antarcticPolarStereographic = {
-      code: `EPSG:3031`,
-      proj4js: '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=0 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs'
-    };
-    const proj = getProjection(antarcticPolarStereographic.code);
+    const hasProj = service.registeredProjections.has(EPSG_3031_Def.code);
+    const proj = getProjection(EPSG_3031_Def.code)
+    expect(hasProj).toBeFalse();
     expect(proj).toBe(null);
 
-    service.registerProjection(antarcticPolarStereographic);
-    const projAfter = getProjection(antarcticPolarStereographic.code);
-    expect(projAfter.getCode()).toBe(antarcticPolarStereographic.code);
+    service.registerProjection(EPSG_3031_Def);
+    const projAfter = getProjection(EPSG_3031_Def.code);
+    expect(projAfter.getCode()).toBe(EPSG_3031_Def.code);
   });
 
   it('should create a Openlayers projection', () => {

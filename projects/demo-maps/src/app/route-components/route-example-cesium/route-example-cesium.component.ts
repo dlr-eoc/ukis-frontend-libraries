@@ -171,8 +171,7 @@ export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
           TRANSPARENT: true
         },
         expanded: false,
-        popup: true,
-        time: new Date().toISOString()
+        popup: true
       }),
       new WmsLayer({
         type: 'wms',
