@@ -295,9 +295,11 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
 
   private updateTmsLayerParamsWith(oldLayer: olVectorLayer<VectorSource>, newLayer: Layer) {
     if (newLayer instanceof VectorLayer) {
-      const style = newLayer.options.style;
-      const mapboxSourceKey = newLayer.options.styleSource;
-      applyStyle(oldLayer, style, mapboxSourceKey);
+      if (newLayer.options) {
+        const style = newLayer.options.style;
+        const mapboxSourceKey = newLayer.options.styleSource;
+        applyStyle(oldLayer, style, mapboxSourceKey);
+      }
     }
   }
 
