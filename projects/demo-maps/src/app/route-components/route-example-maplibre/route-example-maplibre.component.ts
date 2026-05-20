@@ -237,45 +237,6 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       opacity: 1
     });
 
-    const s3 = new WmsLayer({
-      name: 'NRT (S3)',
-      id: 'BURNTAREA_S3_EFR_P1D',
-      description: 'The research product is automatically derived from Sentinel-3 (OLCI) satellite imagery in near-real time. It is an incremental research product, meaning that the retrieved results are updated as soon as new input data becomes available over a timespan of ten days. Besides the fire perimeter, and detection time each feature contains information about the severity of the burning.',
-      visible: true,
-      type: 'wms',
-      removable: false,
-      expanded: false,
-      params: {
-        LAYERS: 'BURNTAREA_S3_EFR_P1D',
-        FORMAT: 'image/png',
-        TILED: 'true',
-        STYLES: 'burntarea-p1d',
-        VERSION: '1.1.0',
-        TRANSPARENT: true,
-        TIME:'2026-05-13T00:00:00.000Z/2026-05-20T00:00:00.000Z',
-        // to prevent tile loading errors from blocking requests se_inimage
-        EXCEPTIONS:'application/vnd.ogc.se_inimage',
-        bgcolor: '0x0072a3'
-      },
-      tileSize: 512,
-      // https://geoservice.dlr.de/eoc/burntarea/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities
-      dimensions: {
-        time: {
-          values: {
-            interval: `2026-05-13T00:00:00.000Z/2026-05-20T00:00:00.000Z`,
-            periodicity: 'P1D'
-          },
-          units: "ISO8601"
-        }
-      },
-      url: 'https://geoservice.dlr.de/eoc/burntarea/wms',
-      attribution: '| Burnt Area Daily NRT (S3) &copy <a href="https://geoservice.dlr.de/web/maps/eoc:burntarea:efr:daily" target="_blank">DLR/EOC</a> licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a> ',
-      continuousWorld: false,
-      legendImg: 'https://geoservice.dlr.de/eoc/burntarea/wms?service=WMS&version=1.3.0&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=BURNTAREA_S3_EFR_P1D&style=burntarea-p1d&SCALE=10000000',
-      opacity: 0.7,
-      crossOrigin: 'anonymous'
-    });
-
     // https://sgx.geodatenzentrum.de/wms_sen2europe?service=wms&version=1.3.0&request=GetMap&Layers=sentinel2-de:rgb&STYLES=&CRS=EPSG:25832&bbox=500000,5700000,550000,5750000&width=500&Height=500&Format=image/png&TIME=2018
     const sentinel2Europe = new WmsLayer({
       name: 'Sentinel-2 Europe',
@@ -610,7 +571,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     });
 
 
-    const layers = [groupLayer, s3, sentinel2Europe, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
+    const layers = [groupLayer, sentinel2Europe, waterway, wfsLayer, kmlLayer, geoJsonLayer, stackedLayer, agrodeLayer];
     layers.map(l => {
       if (l instanceof Layer) {
         this.layerSvc.addLayer(l, 'Layers');
