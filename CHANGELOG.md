@@ -52,6 +52,7 @@
 
 * **@dlr-eoc/map-ol:**
   - Use 8 stops for all OpenLayers `transformExtent()` functions to sample more points along the edges for better results. Should have only minimal perf hit. This corrects some calculations of extents from WGS84 to other projections. For example, in `setProjection`, new extents for layers are more precise and layers are no longer clipped.
+  - Allow to update `tms` vector layer with no style set.
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.
