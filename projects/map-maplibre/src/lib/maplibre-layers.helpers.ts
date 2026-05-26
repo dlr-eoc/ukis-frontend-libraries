@@ -12,11 +12,27 @@ import { propsEqual, clone } from '@dlr-eoc/utilities';
 
 export function createGetMapUrl(l: ukisWmsLayer) {
     const baseurl = l.url;
-    const properties = l.params
-    let url = `${baseurl}?bbox={bbox-epsg-3857}&format=${properties?.FORMAT || 'image/png'}&service=WMS&version=${properties?.VERSION || '1.1.1'}&request=GetMap&srs=EPSG:3857&transparent=${properties?.TRANSPARENT || 'true'}&width=${l.tileSize || 256}&height=${l.tileSize || 256}&layers=${properties?.LAYERS}`;
-    if (properties.STYLES) {
-        url += `&styles=${properties.STYLES}`
+    const properties = l.params;
+    //set defaults
+    if(!properties?.FORMAT){
+        properties.FORMAT = 'image/png';
     }
+    if(!properties?.VERSION){
+        properties.VERSION = '1.1.1';
+    }
+    if(!properties?.TRANSPARENT){
+        properties.TRANSPARENT = true;
+    }
+    if(!properties?.WIDTH){
+        properties.WIDTH = l.tileSize || 256;
+    }
+    if(!properties?.HEIGHT){
+        properties.HEIGHT = l.tileSize || 256;
+    }
+    let url = `${baseurl}?bbox={bbox-epsg-3857}&request=GetMap&service=WMS&srs=EPSG:3857`;
+    Object.entries(properties).forEach(([key, value]) => {
+        url += `&${key}=${value}`;
+    });
     return url;
 }
 
@@ -29,7 +45,10 @@ export function createGetTileUrl(l: ukisWtmsLayer) {
 
     // https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Abasemap&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11
     // bbox={bbox-epsg-3857}&ratio={ratio}&quadkey={quadkey}&z={z}&x={x}&y={y}
-    const url = `${baseurl}?layer=${properties?.layer}&style=${properties.style}&tilematrixset=${properties.matrixSetOptions?.matrixSet}&service=WTMS&version=${properties?.version || '1.0.0'}&request=GetTile&TileMatrix=${matrix}&TileCol={x}&TileRow={y}&format=${properties?.format || 'image/png'}`;
+    let url = `${baseurl}?layer=${properties?.layer}&style=${properties.style}&tilematrixset=${properties.matrixSetOptions?.matrixSet}&service=WTMS&version=${properties?.version || '1.0.0'}&request=GetTile&TileMatrix=${matrix}&TileCol={x}&TileRow={y}&format=${properties?.format || 'image/png'}`;
+    if(properties.time){
+        url += `&time=${properties.time}`
+    }
     return url;
 }
 

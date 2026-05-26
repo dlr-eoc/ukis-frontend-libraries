@@ -2,7 +2,7 @@
  - Update angular from `^18.2.8` to `^19.2.13`
  - Patch `jsonix` when using `@dlr-eoc/utils-ogc` or `@dlr-eoc/services-ogc`, see [jsonix 3.0.0.patch](patches/jsonix+3.0.0.patch) and use `patch-package`.
  - Update OpenLayers from `v9.2.4` to `v10.5.0` see [OpenLayers releases](https://github.com/openlayers/openlayers/releases) for all changes.
- - Update maplibre from `^4.5.0` to `v5.5.0` see [maplibre releases](https://github.com/maplibre/maplibre-gl-js/releases) for all changes.
+ - Update maplibre from `^4.5.0` to `^5.24.0` see [maplibre releases](https://github.com/maplibre/maplibre-gl-js/releases) for all changes.
  - Update three.js from `^0.137.5` to `^0.176.0` see [three releases](https://github.com/mrdoob/three.js/releases) for all changes.
  - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^17.0.0` to `^22.3.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^12.0.0` to `^14.3.0` (cesium from `1.129` to `1.138`) see [cesium changelog](https://github.com/CesiumGS/cesium/blob/1.138/CHANGES.md) for all changes.
  - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^10.1.0` to `^17.0.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^7.1.0` to `^12.0.0` (cesium from `1.120` to `1.129`) see [cesium changelog](https://github.com/CesiumGS/cesium/blob/1.129/CHANGES.md) for all changes.
@@ -18,6 +18,9 @@
  * **@dlr-eoc/layer-control:**
  - Removed `pipes` and moved it to new library `@dlr-eoc/ngx-ukis-utilities` [Issue #267](https://github.com/dlr-eoc/ukis-frontend-libraries/issues/267).
 
+* **@dlr-eoc/services-layers:**
+ - Adding optional time parameter in `IWmtsParams`.
+
  * **@dlr-eoc/ngx-ukis-ui-clarity:**
  - Input `mapStateSvc` on `<ukis-projection-switch>` was renamed to `mapState`! Input `fitViewToNewExtent` is now triggered by `mapSvc.setProjection`.
  
@@ -25,6 +28,9 @@
 
 * **@dlr-eoc/map-ol:**
  - Params of `setProjection(projection: olProjection | string)` changed to `setProjection(projection: IProjDef | string, options?: IProjFitOptions)` in `MapOlService`. This allows the registration of proj4 definitions for projections from `IProjDef`. The options `IProjFitOptions` allow to zomm to a bbox on setProjection or zomm to the ProjectionExtent.
+
+ * **@dlr-eoc/map-maplibre:**
+- Added support for time in WMS and WMTS layer sources.
 
 * **@dlr-eoc/map-cesium:**
  - `MapCesiumService.getCurrentExtent()` param `geographic?: boolean` is removed because it was not used.

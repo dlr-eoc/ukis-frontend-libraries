@@ -52,7 +52,11 @@ export interface IWmtsParams {
   projection?: string;
   format?: string;
   version?: string;
+  //time is not officially supportet in wmts request, but sometimes there are own implementations for the parameter
+  /** custom parameter: ISO time string */
+  time?: string
 }
+
 
 export const isWmtsLayer = (layer: Layer): layer is WmtsLayer => {
   return layer.type === 'wmts';
