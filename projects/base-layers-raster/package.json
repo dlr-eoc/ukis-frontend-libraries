@@ -13,7 +13,7 @@
     "OSM"
   ],
   "dependencies": {
-    "@dlr-eoc/services-layers": "16.0.0-next.9",
+    "@dlr-eoc/services-layers": "16.0.0-next.10",
     "tslib": "^2.6.3"
   },
   "devDependencies": {

@@ -21,10 +21,10 @@
     "rxjs": "~7.8.2"
   },
   "dependencies": {
-    "@dlr-eoc/map-ol": "16.0.0-next.9",
-    "@dlr-eoc/ngx-ukis-ui-clarity": "16.0.0-next.9",
-    "@dlr-eoc/cookie-alert": "16.0.0-next.9",
-    "@dlr-eoc/base-layers-raster": "16.0.0-next.9"
+    "@dlr-eoc/map-ol": "16.0.0-next.10",
+    "@dlr-eoc/ngx-ukis-ui-clarity": "16.0.0-next.10",
+    "@dlr-eoc/cookie-alert": "16.0.0-next.10",
+    "@dlr-eoc/base-layers-raster": "16.0.0-next.10"
   },
   "devDependencies": {
     "zone.js": "~0.15.1",
