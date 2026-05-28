@@ -48,6 +48,7 @@
     "@cds/core": "^6.17.0",
     "@clr/angular": "^17.12.2",
     "@clr/ui": "^17.12.2",
+    "@angular/cdk": "^19.2.19",
     "@fontsource/metropolis": "^5.2.5",
     "@fontsource/noto-sans": "^5.2.7",
     "@schematics/angular": "^19.2.19",
