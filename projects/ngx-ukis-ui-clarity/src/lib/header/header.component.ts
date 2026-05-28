@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 
-import { ClarityIcons, timesIcon } from '@cds/core/icon';
+import { ClarityIcons, timesIcon } from '@clr/angular/icon';
 import { ukisIcon, dlrIcon } from '../icons/ukis';
-import { ClrNavigationModule, ClrIconModule, ClrStandaloneCdkTrapFocus } from '@clr/angular';
+import { ClrNavigationModule, ClrIcon, ClrStandaloneCdkTrapFocus } from '@clr/angular';
 import { NgClass } from '@angular/common';
 ClarityIcons.addIcons(ukisIcon, dlrIcon, timesIcon);
 
 @Component({
   selector: 'ngx-ukis-header',
-  imports: [ClrNavigationModule, NgClass, ClrIconModule, ClrStandaloneCdkTrapFocus],
+  imports: [ClrNavigationModule, NgClass, ClrIcon, ClrStandaloneCdkTrapFocus],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

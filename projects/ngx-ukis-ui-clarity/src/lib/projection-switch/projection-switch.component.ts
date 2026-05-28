@@ -4,9 +4,9 @@ import { MapOlService } from '@dlr-eoc/map-ol';
 
 import { IProjDef, MapStateService } from '@dlr-eoc/services-map-state';
 
-import { ClarityIcons, eyeIcon, eyeHideIcon } from '@cds/core/icon';
+import { ClarityIcons, eyeIcon, eyeHideIcon } from '@clr/angular/icon';
 
-import { ClrIconModule } from '@clr/angular';
+import { ClrIcon } from '@clr/angular';
 ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
 
 @Component({
@@ -14,7 +14,7 @@ ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
   templateUrl: './projection-switch.component.html',
   styles: [],
   imports: [
-    ClrIconModule
+    ClrIcon
   ]
 })
 export class ProjectionSwitchComponent implements OnInit {

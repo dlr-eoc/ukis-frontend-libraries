@@ -6,10 +6,10 @@ import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { Subscription } from 'rxjs';
 import { GeoJSONFeature, GeoJSONFeatureCollection } from 'ol/format/GeoJSON';
 
-import { ClarityIcons, layersIcon, worldIcon, tableIcon } from '@cds/core/icon';
+import { ClarityIcons, layersIcon, worldIcon, tableIcon } from '@clr/angular/icon';
 import { NgStyle, NgClass } from '@angular/common';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
-import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon } from '@clr/angular';
 import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, tableIcon]);
 
@@ -19,7 +19,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, tableIcon]);
     styleUrls: ['./route-map5.component.scss'],
     /** use differnt instances of the services only for testing with diffenr routs  */
     providers: [LayersService, MapStateService, MapOlService],
-    imports: [NgStyle, MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent, NgClass]
+    imports: [NgStyle, MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent, NgClass]
 })
 export class RouteMap5Component implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';

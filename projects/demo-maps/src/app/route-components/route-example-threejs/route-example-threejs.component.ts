@@ -10,10 +10,10 @@ import { TileWMS } from 'ol/source';
 import { Tile as TileLayer } from 'ol/layer';
 import { get as getProjection } from 'ol/proj';
 
-import { ClarityIcons, layersIcon, infoStandardIcon } from '@cds/core/icon';
+import { ClarityIcons, layersIcon, infoStandardIcon } from '@clr/angular/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { MapThreeComponent } from '@dlr-eoc/map-three';
-import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, ClrAlertModule } from '@clr/angular';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, ClrAlertModule } from '@clr/angular';
 import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, infoStandardIcon]);
 
@@ -23,7 +23,7 @@ ClarityIcons.addIcons(...[layersIcon, infoStandardIcon]);
     styleUrls: ['./route-example-threejs.component.scss'],
     providers: [LayersService, MapOlService] // <-- Don't provide MapStateSvc here! If we do, state is no longer synced between the two maps.
     ,
-    imports: [MapOlComponent, MapThreeComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, ClrAlertModule, LayerControlComponent]
+    imports: [MapOlComponent, MapThreeComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, ClrAlertModule, LayerControlComponent]
 })
 export class RouteMap8Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';

@@ -1,12 +1,12 @@
 /** BUTTONS */
 button:focus {
   outline: none;
-  box-shadow: 0 0 1pt 1pt var(--clr-color-action-600, var(--fallback-color-no-clr));
+  box-shadow: 0 0 1pt 1pt var(--cds-alias-status-info, var(--fallback-color-no-clr));
 }
 
 .iconButton:hover {
   cursor: pointer;
-  color: var(--clr-color-action-600, var(--fallback-color-no-clr));
+  color: var(--cds-alias-status-info, var(--fallback-color-no-clr));
 }
 
 .iconButton-drpDwn {
@@ -16,7 +16,7 @@ button:focus {
 
 .iconButton-drpDwn-active {
   cursor: pointer;
-  color: var(--clr-color-action-600, var(--fallback-color-no-clr));
+  color: var(--cds-alias-status-info, var(--fallback-color-no-clr));
 }
 
 .headerButton:hover {
@@ -24,10 +24,10 @@ button:focus {
 }
 
 .ukis-range-input {
-  --clr-forms-range-track-color: var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+  --clr-forms-range-track-color: var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 1pt 1pt var(--clr-color-action-600, var(--fallback-color-no-clr));
+    box-shadow: 0 0 1pt 1pt var(--cds-alias-status-info, var(--fallback-color-no-clr));
   }
 }

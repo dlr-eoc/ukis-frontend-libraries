@@ -7,9 +7,9 @@ import { LargeLayersService } from './services/largelayers.service';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { Feature } from 'ol';
 
-import { ClarityIcons, layersIcon, clockIcon } from '@cds/core/icon';
+import { ClarityIcons, layersIcon, clockIcon } from '@clr/angular/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
-import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon } from '@clr/angular';
 import { PerformanceComponent } from '../../components/performance/performance.component';
 import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
@@ -19,7 +19,7 @@ ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
   templateUrl: './route-map7.component.html',
   styleUrls: ['./route-map7.component.scss'],
   providers: [LayersService, MapStateService, MapOlService],
-  imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, PerformanceComponent, LayerControlComponent]
+  imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, PerformanceComponent, LayerControlComponent]
 })
 export class RouteMap7Component implements OnInit, AfterViewInit {
   @HostBinding('class') class = 'content-container';

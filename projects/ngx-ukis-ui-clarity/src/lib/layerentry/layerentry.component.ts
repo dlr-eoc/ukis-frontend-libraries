@@ -7,9 +7,9 @@ import {
 } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 
-import { ClarityIcons, angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon } from '@cds/core/icon';
+import { ClarityIcons, angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon } from '@clr/angular/icon';
 import { NgClass, NgStyle } from '@angular/common';
-import { ClrIconModule, ClrCommonFormsModule, ClrRangeModule, ClrSelectModule } from '@clr/angular';
+import { ClrIcon, ClrCommonFormsModule, ClrRangeModule, ClrSelectModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 ClarityIcons.addIcons(...[angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon]);
 
@@ -24,7 +24,7 @@ type TactiveTabs = keyof typeof EactiveTabs;
     selector: 'ukis-layerentry',
     templateUrl: './layerentry.component.html',
     styleUrls: ['./layerentry.component.scss'],
-    imports: [NgClass, ClrIconModule, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponent]
+    imports: [NgClass, ClrIcon, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponent]
 })
 export class LayerentryComponent implements OnInit {
   @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }

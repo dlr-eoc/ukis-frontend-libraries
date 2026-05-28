@@ -8,8 +8,8 @@ import { LayersService } from '@dlr-eoc/services-layers';
 import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { IDynamicComponent, DynamicComponent, ReversePipe, ItemsFilterPipe } from '@dlr-eoc/ngx-ukis-utilities';
 
-import { ClarityIcons, folderIcon, folderOpenIcon, arrowIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, detailsIcon, zoomInIcon, trashIcon } from '@cds/core/icon';
-import { ClrIconModule, ClrCommonFormsModule } from '@clr/angular';
+import { ClarityIcons, folderIcon, folderOpenIcon, arrowIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, detailsIcon, zoomInIcon, trashIcon } from '@clr/angular/icon';
+import { ClrIcon, ClrCommonFormsModule } from '@clr/angular';
 import { NgClass } from '@angular/common';
 import { LayerentryComponent } from '../layerentry/layerentry.component';
 ClarityIcons.addIcons(...[folderIcon, folderOpenIcon, arrowIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, detailsIcon, zoomInIcon, trashIcon]);
@@ -26,7 +26,7 @@ type TactiveTabs = keyof typeof EactiveTabs;
   selector: 'ukis-layerentry-group',
   templateUrl: './layerentry-group.component.html',
   styleUrls: ['./layerentry-group.component.scss'],
-  imports: [ClrIconModule, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponent]
+  imports: [ClrIcon, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponent]
 })
 export class LayerentryGroupComponent implements OnInit {
   @HostBinding('class.group-visible') get visible() { return this.group.visible; }

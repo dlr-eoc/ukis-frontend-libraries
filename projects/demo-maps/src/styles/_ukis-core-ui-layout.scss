@@ -101,10 +101,10 @@
 
 .content-area {
   background: #fff;
-  color: var(--clr-color-neutral-700, var(--fallback-color-no-clr));
+  color: var(--cds-global-color-warm-gray-700, var(--fallback-color-no-clr));
 }
 
 
 .text-primary {
-  color: var(--clr-color-action-600, var(--fallback-color-no-clr));
+  color: var(--cds-alias-status-info, var(--fallback-color-no-clr));
 }

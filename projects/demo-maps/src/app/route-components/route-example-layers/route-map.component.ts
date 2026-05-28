@@ -18,10 +18,10 @@ import greyscale from '@dlr-eoc/shared-assets/open-map-styles/open-map-style.jso
 import { VtileLayerActionComponent } from '../../components/vtile-layer-action/vtile-layer-action.component';
 
 // import icons for use in html and layer actions
-import { ClarityIcons, layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon } from '@cds/core/icon';
+import { ClarityIcons, layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon } from '@clr/angular/icon';
 
 import { MapOlComponent } from '@dlr-eoc/map-ol';
-import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon } from '@clr/angular';
 import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syncIcon]);
 
@@ -31,7 +31,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syn
     styleUrls: ['./route-map.component.scss'],
     /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService, WmsService],
-    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMapComponent implements OnInit {
   @HostBinding('class') class = 'content-container';

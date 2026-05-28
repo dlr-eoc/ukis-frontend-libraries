@@ -45,7 +45,6 @@
     "@angular/platform-browser": "^21.2.14",
     "@angular/platform-browser-dynamic": "^21.2.14",
     "@angular/router": "^21.2.14",
-    "@cds/core": "^6.17.0",
     "@clr/angular": "^18.1.0",
     "@clr/ui": "^18.1.0",
     "@angular/cdk": "^21.2.13",

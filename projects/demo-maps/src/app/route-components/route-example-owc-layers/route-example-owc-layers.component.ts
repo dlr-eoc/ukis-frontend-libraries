@@ -7,9 +7,9 @@ import { IEocOwsContext, OwcJsonService } from '@dlr-eoc/services-ogc';
 import { first } from 'rxjs/operators';
 import { ZommNumberControl } from '../route-example-layers/ol-custom-control';
 
-import { ClarityIcons, layersIcon, worldIcon, exportIcon } from '@cds/core/icon';
+import { ClarityIcons, layersIcon, worldIcon, exportIcon } from '@clr/angular/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
-import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon } from '@clr/angular';
 import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, exportIcon ]);
 
@@ -19,7 +19,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, exportIcon ]);
     styleUrls: ['./route-example-owc-layers.component.scss'],
     /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService],
-    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
+    imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleOwcLayersComponent implements OnInit {
   @HostBinding('class') class = 'content-container';

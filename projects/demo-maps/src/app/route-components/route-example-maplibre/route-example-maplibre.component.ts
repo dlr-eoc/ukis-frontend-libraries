@@ -10,8 +10,8 @@ import placeLabels from '@dlr-eoc/shared-assets/open-map-styles/open-map-style-p
 import testData from '@dlr-eoc/shared-assets/geojson/test.collection.json';
 import { Subscription } from 'rxjs';
 
-import { ClarityIcons, layersIcon, worldIcon, cogIcon } from '@cds/core/icon';
-import { ClrVerticalNavModule, ClrIconModule } from '@clr/angular';
+import { ClarityIcons, layersIcon, worldIcon, cogIcon } from '@clr/angular/icon';
+import { ClrVerticalNavModule, ClrIcon } from '@clr/angular';
 import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
 
@@ -22,7 +22,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
     // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
     encapsulation: ViewEncapsulation.None,
     providers: [LayersService, MapStateService, MapMaplibreService],
-    imports: [MapMaplibreComponent, ClrVerticalNavModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
+    imports: [MapMaplibreComponent, ClrVerticalNavModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';
