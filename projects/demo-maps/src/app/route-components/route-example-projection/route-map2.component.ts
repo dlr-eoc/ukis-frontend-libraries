@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
-import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def } from '@dlr-eoc/services-map-state';
+import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
@@ -23,6 +23,8 @@ export class RouteMap2Component implements OnInit {
   @HostBinding('class') class = 'content-container';
   controls: IMapControls;
   projections: IProjDef[];
+
+  projectionSet = false;
 
   constructor(
     public layersSvc: LayersService,
@@ -64,8 +66,7 @@ export class RouteMap2Component implements OnInit {
       units: 'm'
     }
 
-    this.projections = [EPSG_3857_Def, EPSG_3995_Def, EPSG_3031_Def, SwissCH1903, ESRI_53034, ETRS89_UTM_37N];
-    this.addOverlays();
+    this.projections = [EPSG_3857_Def, EPSG_3995_Def, EPSG_3031_Def, SwissCH1903, ESRI_53034, ETRS89_UTM_37N, EPSG_4326_Def];
     /** 
        * set map extent or IMapState (zoom, center...) with the MapStateService 
        * Check if the Extent is valid for the set projection.
@@ -80,6 +81,11 @@ export class RouteMap2Component implements OnInit {
       console.log('Map Proj change', proj);
       if (proj.epsg === 'EPSG:21781') {
         this.addLayer();
+      }
+
+      if (!this.projectionSet) {
+        this.addOverlays();
+        this.projectionSet = true;
       }
     });
   }
@@ -102,7 +108,7 @@ export class RouteMap2Component implements OnInit {
         styles: 'guf_8bit'
       },
       visible: false,
-      description: 'GUF28_DLR_v1_Mosaic',
+      description: 'GUF28_DLR_v1_Mosaic. </br> Not working for Cylindrical Equal Area!',
       attribution: ' | GUF®: <a href="https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-9628/16557_read-40454/">DLR License</a>',
       legendImg: ''
     });
@@ -224,7 +230,7 @@ export class RouteMap2Component implements OnInit {
         layers: 'TDM_POLARDEM90_ANT_HSC'
       },
       visible: false,
-      description: 'A hillshade generated from the TanDEM-X PolarDEM 90m elevation layer. This shading represents a combination slope and oblique shading.',
+      description: 'A hillshade generated from the TanDEM-X PolarDEM 90m elevation layer. This shading represents a combination slope and oblique shading. </br> Not working for Cylindrical Equal Area!',
       attribution: 'PolarDEM Data &copy; DLR/EOC licensed for <a href="https://geoservice.dlr.de/resources/licenses/polardem90/License_for_the_Utilization_of_TanDEM-X-PolarDEM_90m_for_Scientific_Use.pdf">scientific use</a>',
       legendImg: '',
       bbox: [-180, -90, 180, -56.22686667234951],
@@ -250,8 +256,10 @@ export class RouteMap2Component implements OnInit {
     const nativeBbox: TGeoExtent = [-2166686.6992718857, 532310.7393676594, -2089422.303209693, 594837.26196001];
     const wgs84bbox: TGeoExtent = [-76.19697134976582, -70.34272872293334, -74.10888626456216, -69.53237850373523];
     const proJ = this.projections.find(p => p.title === 'Antarctic Polar Stereographic');
-    this.mapStateSvc.registerProjection(proJ);
-    this.mapStateSvc.setProjection(proJ.code, 'user', { fitToNativeBbox: nativeBbox });
+    if (proJ) {
+      this.mapStateSvc.registerProjection(proJ);
+      this.mapStateSvc.setProjection(proJ.code, 'user', { fitToNativeBbox: nativeBbox });
+    }
   }
 
   addLayer() {
