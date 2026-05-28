@@ -1,5 +1,6 @@
 ### Breaking Changes
- - Update angular from `^18.2.8` to `^20.3.26`
+ - Update angular from `^18.2.8` to `^21.2.13`
+ - Update @clr/angular from `^17.12.2` to `18.1.0` which uses angular v21 
  - Patch `jsonix` when using `@dlr-eoc/utils-ogc` or `@dlr-eoc/services-ogc`, see [jsonix 3.0.0.patch](patches/jsonix+3.0.0.patch) and use `patch-package`.
  - Update OpenLayers from `v9.2.4` to `v10.9.0` see [OpenLayers releases](https://github.com/openlayers/openlayers/releases) for all changes.
  - Update maplibre from `^4.5.0` to `^5.24.0` see [maplibre releases](https://github.com/maplibre/maplibre-gl-js/releases) for all changes.

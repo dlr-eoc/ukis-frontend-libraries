@@ -810,7 +810,7 @@ export const bindValueToUniform = (gl: WebGLRenderingContext, uniformLocation: W
  *
  * A (almost brutal) workaround to get the canvas to preserve the drawingBuffer can be found here: https://stackoverflow.com/questions/26783586/canvas-todataurl-returns-blank-image
  */
-export const getCurrentFramebuffersPixels = (canvas: HTMLCanvasElement): ArrayBuffer  => {
+export const getCurrentFramebuffersPixels = (canvas: HTMLCanvasElement)  => {
     const gl = canvas.getContext('webgl');
     if (!gl) {
         throw new Error('no context');

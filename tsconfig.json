@@ -14,10 +14,6 @@
     "target": "ES2022",
     "module": "es2020",
     "skipLibCheck": true,
-    "lib": [
-      "es2020",
-      "dom"
-    ],
     "paths": {
       "@dlr-eoc/*": [
         "dist/*",

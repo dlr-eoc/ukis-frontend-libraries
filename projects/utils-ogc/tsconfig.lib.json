@@ -8,10 +8,6 @@
     "inlineSources": true,
     "types": [
       "node"
-    ],
-    "lib": [
-      "dom",
-      "es2018"
     ]
   },
   "angularCompilerOptions": {

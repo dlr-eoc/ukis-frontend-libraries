@@ -6,10 +6,6 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "lib": [
-      "es2018",
-      "dom"
-    ],
     "types": ["offscreencanvas"]
   },
   "angularCompilerOptions": {

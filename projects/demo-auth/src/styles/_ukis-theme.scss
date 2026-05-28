@@ -20,7 +20,7 @@
 @use '@cds/core/global.css';
 // --- overwrite Clarity variables - remove if
 @use "./overwrites-clr-variables";
-@use "@clr/ui/src/main";
+@use "@clr/ui/main";
 // ----------------------------------
 @use "./clr-vertival-nav-layout";
 

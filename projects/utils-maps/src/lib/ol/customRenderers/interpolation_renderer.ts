@@ -96,7 +96,7 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
     private colorizationShader: Shader;
     private colorFb: Framebuffer;
     private arrangementShader: Shader;
-    private interpolatedValues: Uint8Array;
+    private interpolatedValues!: Float32Array<ArrayBuffer> | Uint16Array<ArrayBuffer> | Uint8Array<ArrayBuffer>;
 
     private projection: Projection;
     private bbox: number[];
@@ -243,7 +243,7 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
         this.interpolationShader.bind(this.gl);
         this.interpolationShader.render(this.gl, [0, 0, 0, 0], target);
         if (this.settings.storeInterpolatedPixelData) {
-            this.interpolatedValues = getCurrentFramebuffersPixels(this.webGlCanvas) as Uint8Array;
+            this.interpolatedValues = getCurrentFramebuffersPixels(this.webGlCanvas);
         }
     }
 
