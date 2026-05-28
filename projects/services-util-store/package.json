@@ -13,8 +13,8 @@
     "object"
   ],
   "peerDependencies": {
-    "@angular/common": "^19.2.19",
-    "@angular/core": "^19.2.19"
+    "@angular/common": "^20.3.22",
+    "@angular/core": "^20.3.22"
   },
   "dependencies": {
     "md5": "^2.3.0",
@@ -22,6 +22,6 @@
   },
   "devDependencies": {
     "zone.js": "~0.15.1",
-    "@angular/platform-browser-dynamic": "^19.2.19"
+    "@angular/platform-browser-dynamic": "^20.3.22"
   }
 }
