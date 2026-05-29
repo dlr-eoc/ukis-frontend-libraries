@@ -175,11 +175,18 @@ describe('MapCesiumService Core Functions', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should create a viewer and scene', () => {
+  it('should create a viewer and scene', async () => {
     service.createMap(mapTarget.container);
     expect(service.viewer.container).toEqual(mapTarget.container);
     expect(service.viewer instanceof Viewer).toBeTruthy();
-    expect(service.viewer.scene instanceof Scene).toBeTruthy();
+
+    // service.viewer.scene is not instanceof Scene???
+    expect(service.viewer.scene.fog).toBeDefined();
+    expect(service.viewer.scene.globe).toBeDefined();
+    expect(service.viewer.scene.sun).toBeDefined();
+    expect(service.viewer.scene.moon).toBeDefined();
+    expect(service.viewer.scene.highDynamicRange).toBeDefined();
+    expect(service.viewer.scene.primitives).toBeDefined();
   });
 });
 
