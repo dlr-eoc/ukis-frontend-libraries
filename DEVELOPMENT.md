@@ -16,7 +16,7 @@
 - an update of a `major` version in the dependencies should introduce a **BREAKING CHANGE!**
 
 **The versions of the dependencies which are listed in root package.json will be shared with all projects**
-**After you update something in root package.json (package version or dependencies) run the script `node scripts/library/index.js --set-source` to sync all versions with the projects and also run `npm install` to regenerate `package-lock.json`.**
+**After you update something in root package.json (package version or dependencies) run the script `node scripts/library/index.js --set-source` to sync all versions with the projects and also run `npm i --workspaces --include-workspace-root` to regenerate `package-lock.json`.**
 
 This is used to sync "peerDependencies" across all workspaces but also to set the versions of other dependencies and the package version itself.
 
@@ -147,7 +147,7 @@ The general workflow to create a new version:
   by running `npm version <newversion> -m "Version after Milestone XY" --workspace=projects --include-workspace-root` (major | minor | patch) [further see npm version](https://docs.npmjs.com/cli/version). Optionally test this by appending `--no-git-tag-version`.
   e.g. `npm version major -m "Update mapping libraries" --workspace=projects --include-workspace-root --no-git-tag-version` // An NPM installation error may occur because versions are not synchronized with dependencies.
 - run `node scripts/library/index.js --set-source` to sync all versions.
-- run `npm install` to update the main package-lock.json
+- run `npm i --workspaces --include-workspace-root` to update the main package-lock.json
 - merge the release branch in the main branch by making a pull request (by appending the query param `template` to the PR url e.g. `https://github.com/dlr-eoc/ukis-frontend-libraries/compare/main...release-v13.0.0?template=release_pull_request.md` the PR body is populated with the template)
 - push the tag (created from `npm version` or create on `git tag -a <(v)version> -m "<description>``) by running `git push origin --tags`
 - set the label of the release PR to 'RELEASE'

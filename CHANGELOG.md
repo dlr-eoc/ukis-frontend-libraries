@@ -1,3 +1,5 @@
+# [16.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v16.0.0) (2026-05-29) (update dependencies, new library ngx-ukis-ui-clarity and ngx-ukis-utilities, replace core-ui)
+
 ### Breaking Changes
  - Update angular from `^18.2.8` to `^21.2.13`
  - Update @clr/angular from `^17.12.2` to `18.1.0` which uses angular v21
