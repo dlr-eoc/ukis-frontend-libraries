@@ -43,7 +43,12 @@ export class LayerentryComponent implements OnInit {
   }
   get expanded() {
     if (this.layer) {
-      return (this.layer.expanded) ? true : false;
+      const layerExpanded = this.layer.expanded;
+      if (typeof layerExpanded === 'boolean') {
+        return layerExpanded;
+      } else {
+        return layerExpanded.expanded || false;
+      }
     } else {
       return false;
     }

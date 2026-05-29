@@ -44,6 +44,7 @@
 
 * **@dlr-eoc/ngx-ukis-ui-clarity:**
 - Add missing code for `<ngx-ukis-global-alert>`, `<ngx-ukis-global-progress>` and `<ngx-ukis-header>`. This was lost by the conversion from `@dlr-eoc/core-ui` to `@dlr-eoc/ngx-ukis-ui-clarity`.
+- Fix `ukis-layerentry` set expanded based on layer expanded object. E.g. `expanded: { tab: 'settings', expanded: false }`.
 
 * **@dlr-eoc/services-ogc:**
 * **@dlr-eoc/utils-ogc:**
