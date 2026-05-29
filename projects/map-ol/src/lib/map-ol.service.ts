@@ -2721,12 +2721,24 @@ export class MapOlService {
    * Returns a OpenLayers Projection froma Definition
    */
   public getOlProjection(projDef: IProjDef | olProjectionOptions): olProjection {
+    const proj = getProjection(projDef.code);
+    const extent = proj?.getExtent();
+    const worldExtent = proj?.getWorldExtent();
+    const global = proj?.isGlobal() || false;
+    const units = proj?.getUnits();
+    const axisOrientation = proj?.getAxisOrientation();
+    const metersPerUnit = proj?.getMetersPerUnit();
+    const getPointResolution = proj?.getPointResolutionFunc();
+
     return new olProjection({
       code: projDef.code,
-      extent: projDef.extent ? projDef.extent : undefined,
-      worldExtent: projDef.worldExtent ? projDef.worldExtent : undefined,
-      global: projDef.global ? projDef.global : false,
-      units: projDef.units ? projDef.units : undefined
+      extent: projDef.extent ? projDef.extent : extent,
+      worldExtent: projDef.worldExtent ? projDef.worldExtent : worldExtent,
+      global: projDef.global !== undefined ? projDef.global : global,
+      units: projDef.units ? projDef.units : units,
+      axisOrientation: ('axisOrientation' in projDef && projDef.axisOrientation) ? projDef.axisOrientation : axisOrientation,
+      metersPerUnit: ('metersPerUnit' in projDef && projDef.metersPerUnit) ? projDef.metersPerUnit : metersPerUnit,
+      getPointResolution: ('getPointResolution' in projDef && projDef.getPointResolution) ? projDef.getPointResolution : getPointResolution,
     });
   }
 

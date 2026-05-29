@@ -70,12 +70,15 @@ describe('ng-add Module or standalone', () => {
 
     const projectFile = JSON.parse(tree.readContent('/angular.json'));
     ['build', 'test'].forEach(target => {
-      const styles: string[] = projectFile.projects[appOptions.name].architect[target].options.styles;
-      styles.forEach(path => {
-        if(path.includes('styles.')){
-          expect(path.includes('.scss')).toBeTrue();
-        }
-      });
+      const targetObj = projectFile.projects[appOptions.name].architect[target];
+      const styles: string[] = targetObj?.options?.styles;
+      if (styles) {
+        styles.forEach(path => {
+          if (path.includes('styles.')) {
+            expect(path.includes('.scss')).toBeTrue();
+          }
+        });
+      }
     });
 
   });
@@ -273,7 +276,7 @@ describe('ng-add Module App', () => {
       'ExampleViewComponent'
     ];
     const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
-    const appModule = tree.readContent('/src/app/app.module.ts');
+    const appModule = tree.readContent('/src/app/app.component.ts');
     testImports.map(i => {
       expect(appModule).toContain(i);
     });

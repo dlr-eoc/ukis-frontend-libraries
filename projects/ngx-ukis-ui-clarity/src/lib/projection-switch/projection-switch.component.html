@@ -7,8 +7,10 @@
             <span class="title" [title]="proj.title" (click)="setNewProjection(proj)">
               {{proj.title || proj.code}}
             </span>
-            <cds-icon class="iconButton" [attr.solid]="proj===selectedProj"
-            [attr.shape]="proj===selectedProj?'eye':'eye-hide'" title="{{proj.code}}"></cds-icon>
+            <span class="iconButton">
+              <cds-icon [solid]="proj===selectedProj" [shape]="proj===selectedProj?'eye':'eye-hide'"
+                title="{{proj.code}}"></cds-icon>
+            </span>
           </div>
         </div>
       </div>

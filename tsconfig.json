@@ -9,15 +9,11 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "es2020",
     "skipLibCheck": true,
-    "lib": [
-      "es2020",
-      "dom"
-    ],
     "paths": {
       "@dlr-eoc/*": [
         "dist/*",

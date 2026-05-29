@@ -2,8 +2,6 @@ import { Component, OnDestroy } from '@angular/core';
 
 import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
 
-import '@cds/core/icon/register.js';
-
 import { HeaderComponent } from './components/header/header.component';
 
 import { GlobalAlertComponent } from './components/global-alert/global-alert.component';

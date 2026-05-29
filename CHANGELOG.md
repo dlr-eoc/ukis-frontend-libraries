@@ -1,7 +1,9 @@
 ### Breaking Changes
- - Update angular from `^18.2.8` to `^19.2.13`
+ - Update angular from `^18.2.8` to `^21.2.13`
+ - Update @clr/angular from `^17.12.2` to `18.1.0` which uses angular v21
+ - Remove @cds/core all features are now in @clr/angular e.g. cds-icon.
  - Patch `jsonix` when using `@dlr-eoc/utils-ogc` or `@dlr-eoc/services-ogc`, see [jsonix 3.0.0.patch](patches/jsonix+3.0.0.patch) and use `patch-package`.
- - Update OpenLayers from `v9.2.4` to `v10.5.0` see [OpenLayers releases](https://github.com/openlayers/openlayers/releases) for all changes.
+ - Update OpenLayers from `v9.2.4` to `v10.9.0` see [OpenLayers releases](https://github.com/openlayers/openlayers/releases) for all changes.
  - Update maplibre from `^4.5.0` to `^5.24.0` see [maplibre releases](https://github.com/maplibre/maplibre-gl-js/releases) for all changes.
  - Update three.js from `^0.137.5` to `^0.176.0` see [three releases](https://github.com/mrdoob/three.js/releases) for all changes.
  - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^17.0.0` to `^22.3.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^12.0.0` to `^14.3.0` (cesium from `1.129` to `1.138`) see [cesium changelog](https://github.com/CesiumGS/cesium/blob/1.138/CHANGES.md) for all changes.
@@ -42,6 +44,7 @@
 
 * **@dlr-eoc/ngx-ukis-ui-clarity:**
 - Add missing code for `<ngx-ukis-global-alert>`, `<ngx-ukis-global-progress>` and `<ngx-ukis-header>`. This was lost by the conversion from `@dlr-eoc/core-ui` to `@dlr-eoc/ngx-ukis-ui-clarity`.
+- Fix `ukis-layerentry` set expanded based on layer expanded object. E.g. `expanded: { tab: 'settings', expanded: false }`.
 
 * **@dlr-eoc/services-ogc:**
 * **@dlr-eoc/utils-ogc:**
@@ -59,6 +62,7 @@
 * **@dlr-eoc/map-ol:**
   - Use 8 stops for all OpenLayers `transformExtent()` functions to sample more points along the edges for better results. Should have only minimal perf hit. This corrects some calculations of extents from WGS84 to other projections. For example, in `setProjection`, new extents for layers are more precise and layers are no longer clipped.
   - Allow to update `tms` vector layer with no style set.
+  - Fix `getOlProjection` use the default values ​​from `olGetProjection` so `axisOrientation`, `metersPerUnit` and `getPointResolution` are correctly adjusted. This was not the case for `EPSG:4326`.
 
 ### Features
 - Remove `standalone: true` Angular directives, components and pipes are now standalone by default since version 19.

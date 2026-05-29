@@ -26,23 +26,24 @@ describe('LayerentryComponent', () => {
     layersSvc = TestBed.inject(LayersService);
     mapStateSvc = TestBed.inject(MapStateService);
 
-    component.layer = new Layer({
+    const layer = new Layer({
       type: 'wms',
       name: 'test layer',
       id: 'test_layer'
     });
+    fixture.componentRef.setInput('layer', layer);
 
-    component.group = new LayerGroup({
+    const group = new LayerGroup({
       filtertype: 'Overlays',
       id: 'Overlays_group',
       name: 'Overlays',
       layers: [component.layer]
-
     });
+    fixture.componentRef.setInput('group', group);
 
-    component.layerGroups = [component.group];
-    component.layersSvc = layersSvc;
-    component.mapState = mapStateSvc;
+    fixture.componentRef.setInput('layerGroups', [component.group]);
+    fixture.componentRef.setInput('layersSvc', layersSvc);
+    fixture.componentRef.setInput('mapState', mapStateSvc);
     fixture.detectChanges();
   });
 
@@ -69,24 +70,25 @@ describe('LayerentryComponent', () => {
   });
 
   it('should have input layerGroups', () => {
-    expect(component.layerGroups[0] instanceof LayerGroup).toBeTruthy();
+    expect(component.layerGroups).toBeDefined();
+    expect(component.layerGroups![0] instanceof LayerGroup).toBeTruthy();
   });
 
   it('should have input expanded', () => {
-    component.expanded = true;
+    fixture.componentRef.setInput('expanded', true)
     fixture.detectChanges();
     expect(component.expanded).toBe(true);
   });
 
   it('should set Layer.expanded from the input expanded', () => {
-    component.expanded = true;
+    fixture.componentRef.setInput('expanded', true)
     fixture.detectChanges();
     expect(component.expanded).toBe(true);
     expect(component.layer.expanded).toBe(true);
   });
 
   it('should have input expandable', () => {
-    component.expandable = true;
+    fixture.componentRef.setInput('expandable', true)
     fixture.detectChanges();
     expect(component.expandable).toBe(true);
   });

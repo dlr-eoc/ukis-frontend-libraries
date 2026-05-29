@@ -1086,13 +1086,6 @@
     "licenseFile": "<path to ukis-frontend-libraries>\\node_modules\\@cds\\city\\LICENSE",
     "noticeFile": "<path to ukis-frontend-libraries>\\node_modules\\@cds\\city\\NOTICE.md"
   },
-  "@cds/core@6.12.0": {
-    "licenses": "MIT",
-    "repository": "https://github.com/vmware-clarity/core",
-    "publisher": "clarity",
-    "path": "<path to ukis-frontend-libraries>\\node_modules\\@cds\\core",
-    "licenseFile": "<path to ukis-frontend-libraries>\\node_modules\\@cds\\core\\README.md"
-  },
   "@cesium/engine@10.0.0": {
     "licenses": "Apache-2.0",
     "repository": "https://github.com/CesiumGS/cesium",

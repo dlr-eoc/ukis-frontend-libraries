@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { ClarityIcons} from '@cds/core/icon';
+import { ClarityIcons} from '@clr/angular/icon';
 import { ukisIcon, dlrIcon } from '../icons/ukis';
-import { ClrNavigationModule, ClrIconModule, ClrStandaloneCdkTrapFocus } from '@clr/angular';
+import { ClrNavigationModule, ClrIcon, ClrStandaloneCdkTrapFocus } from '@clr/angular';
 import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 ClarityIcons.addIcons(ukisIcon, dlrIcon);
@@ -11,7 +11,7 @@ ClarityIcons.addIcons(ukisIcon, dlrIcon);
     selector: 'ukis-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    imports: [ClrNavigationModule, NgClass, ClrIconModule, RouterLink, RouterLinkActive, ClrStandaloneCdkTrapFocus]
+    imports: [ClrNavigationModule, NgClass, ClrIcon, RouterLink, RouterLinkActive, ClrStandaloneCdkTrapFocus]
 })
 export class HeaderComponent implements OnInit {
   @Input('ukis-title') title: string = '';

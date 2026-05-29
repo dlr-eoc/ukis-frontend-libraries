@@ -13,17 +13,21 @@
       margin-left: 0.2rem;
 
       .iconButton {
+        display: flex;
         height: 1rem;
+        width: 1rem;
         margin: 0 1px;
+        align-items: center;
+        justify-content: center;
 
         &.disabled {
           pointer-events: none;
-          color: var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+          color: var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
           cursor: default;
         }
 
         &.active {
-          color: var(--clr-color-action-600, var(--fallback-color-no-clr));
+          color: var(--cds-alias-status-info, var(--fallback-color-no-clr));
         }
       }
 
@@ -65,7 +69,7 @@
           padding-right: 0.2rem;
           padding-left: 0.1rem;
 
-          span {
+          .flex-1 {
             flex: 1 1 0;
           }
         }
@@ -106,12 +110,12 @@
 
     .layergroup {
       .body {
-        border-left: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+        border-left: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
         margin: 0 0 0 8px;
 
         .sublayers:last-child {
           .layer {
-            border-bottom: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+            border-bottom: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
           }
         }
 
@@ -123,15 +127,15 @@
 
           &.description,
           &.legend {
-            border-top: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
-            border-right: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+            border-top: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
+            border-right: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
           }
         }
 
         .layer {
           margin-left: 0;
-          border-top: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
-          border-right: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+          border-top: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
+          border-right: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
 
           padding: 0.2rem 0 0 0.2rem;
 
@@ -145,7 +149,7 @@
             .tabsbody {
               border-bottom: none;
               border-right: none;
-              border-top: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+              border-top: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
             }
 
             .tools {
@@ -164,16 +168,16 @@
 
     .layer {
       .body {
-        border-left: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+        border-left: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
 
 
         .tools {
-          border-bottom: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+          border-bottom: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
         }
 
         .tabsbody {
-          border-bottom: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
-          border-right: 1px solid var(--clr-color-neutral-400, var(--fallback-color-no-clr));
+          border-bottom: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
+          border-right: 1px solid var(--cds-global-color-warm-gray-200, var(--fallback-color-no-clr));
 
           .layersettings .form-group {
             padding: 0.2rem;
@@ -203,7 +207,7 @@
 
       &.active,
       &:hover {
-        color: var(--clr-color-action-600, var(--fallback-color-no-clr));
+        color: var(--cds-alias-status-info, var(--fallback-color-no-clr));
       }
     }
   }

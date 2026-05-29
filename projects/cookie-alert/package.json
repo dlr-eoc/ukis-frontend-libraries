@@ -12,8 +12,8 @@
     "cookies"
   ],
   "peerDependencies": {
-    "@angular/common": "^19.2.19",
-    "@angular/core": "^19.2.19"
+    "@angular/common": "^21.2.14",
+    "@angular/core": "^21.2.14"
   },
   "dependencies": {
     "@dlr-eoc/services-util-store": "16.0.0-next.10",
@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "zone.js": "~0.15.1",
-    "@angular/platform-browser-dynamic": "^19.2.19"
+    "@angular/platform-browser-dynamic": "^21.2.14"
   }
 }

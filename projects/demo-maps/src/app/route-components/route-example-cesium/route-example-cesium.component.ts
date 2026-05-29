@@ -10,11 +10,11 @@ import testData from '@dlr-eoc/shared-assets/geojson/test.json';
 import { Feature } from 'ol';
 import { Fill, Stroke, Style } from 'ol/style';
 
-import { ClarityIcons, layersIcon, worldIcon, blockIcon, cogIcon, mapIcon } from '@cds/core/icon';
+import { ClarityIcons, layersIcon, worldIcon, blockIcon, cogIcon, mapIcon } from '@clr/angular/icon';
 
 import { MapOlComponent } from '@dlr-eoc/map-ol';
 import { MapCesiumComponent } from '@dlr-eoc/map-cesium';
-import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule } from '@clr/angular';
+import { ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon } from '@clr/angular';
 import { LayerControlComponent, BaseLayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
 
@@ -34,7 +34,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
             provide: 'threeDlayerSvc', useClass: LayersService
         }
     ],
-    imports: [MapOlComponent, MapCesiumComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIconModule, LayerControlComponent, BaseLayerControlComponent]
+    imports: [MapOlComponent, MapCesiumComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleCesiumComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'content-container';

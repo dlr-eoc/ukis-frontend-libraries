@@ -180,7 +180,7 @@ Change the following inside example-view.component.ts, adjust the new layers ser
 
 ```
 import { Cesium3DTileset, CesiumTerrainProvider, Credit, EllipsoidTerrainProvider } from '@cesium/engine';
-import { ClarityIcons, layersIcon, blockIcon} from '@cds/core/icon';
+import { ClarityIcons, layersIcon, blockIcon} from '@clr/angular/icon';
 ClarityIcons.addIcons(...[layersIcon, blockIcon]);
 
 ...

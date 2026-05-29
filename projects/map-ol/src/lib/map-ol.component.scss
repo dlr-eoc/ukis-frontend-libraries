@@ -138,7 +138,7 @@
   border-color: var(--ukis-ol-bbox-border-color) !important;
 
   &.ol-drag-select {
-    border-color: var(--clr-color-action-600, var(--fallback-color-no-clr)) !important;
+    border-color: var(--cds-alias-status-info, var(--fallback-color-no-clr)) !important;
   }
 }
 

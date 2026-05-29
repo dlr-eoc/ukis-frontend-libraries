@@ -34,7 +34,7 @@ cd project-tutorial-map
 - At the moment Clarity does not support angular schematics ([github ng add issue](https://github.com/vmware-clarity/ng-clarity/issues/120)). Therefore Clarity has to be installed manually. For the versions also see ukis-frontend-libraries [package.json](package.json)
 - Run 
 ```
-npm install @cds/core@<version> @clr/angular@<version> @clr/ui@<version>
+npm install @clr/angular@<version> @clr/ui@<version>
 ```
 
 - Add Clarity Styles: This is done later by adding the UKIS Theme
@@ -60,7 +60,12 @@ export const appConfig: ApplicationConfig = {
 
 e.g. in AppComponent
 ```
-import { coreCollectionIcons, essentialCollectionIcons, ClarityIcons } from '@cds/core/icon';
+import { coreCollectionIcons, essentialCollectionIcons, ClarityIcons } from '@clr/angular/icon';
+import { ClrIcon } from '@clr/angular';
+
+@Component({
+    imports: [ClrIcon,...]
+})
 
 ClarityIcons.addIcons(...coreCollectionIcons);
 ClarityIcons.addIcons(...essentialCollectionIcons);
@@ -226,7 +231,13 @@ More information about this library can be found [in the layer-control library f
 ### 2. Extend the import in the example-view.component.ts:
 ```
 import { LayersService, Layer, WmtsLayer, RasterLayer } from '@dlr-eoc/services-layers';
-import { ClarityIcons, layersIcon} from '@cds/core/icon';
+import { ClarityIcons, layersIcon} from '@clr/angular/icon';
+import { ClrIcon } from '@clr/angular';
+
+@Component({
+    imports: [ClrIcon,...]
+})
+
 ClarityIcons.addIcons(...[layersIcon]);
 ```
 
