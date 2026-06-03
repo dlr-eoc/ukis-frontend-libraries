@@ -1,6 +1,7 @@
 ### Features
 * **@dlr-eoc/services-map-state**
  - Allow to use `projjson` in `IProjDef`.
+ - Export `EPSG_3035_Def`
 
 * **@dlr-eoc/map-ol:**
  - Use `projjson` or `proj4js` to create projection if defined on `IProjDef`.
