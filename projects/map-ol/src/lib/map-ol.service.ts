@@ -2711,7 +2711,7 @@ export class MapOlService {
   public registerProjection(projDef: IProjDef) {
     const hasProj = this.registeredProjections.has(projDef.code);
     if (!hasProj) {
-      proj4.defs(projDef.code, projDef.proj4js);
+      proj4.defs(projDef.code, ('projjson' in projDef) ? projDef.projjson : projDef.proj4js);
       olRegister(proj4);
       this.registeredProjections.set(projDef.code, projDef);
     }

@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
-import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def } from '@dlr-eoc/services-map-state';
+import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def, EPSG_3035_Def } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
@@ -66,7 +66,7 @@ export class RouteMap2Component implements OnInit {
       units: 'm'
     }
 
-    this.projections = [EPSG_3857_Def, EPSG_3995_Def, EPSG_3031_Def, SwissCH1903, ESRI_53034, ETRS89_UTM_37N, EPSG_4326_Def];
+    this.projections = [EPSG_3857_Def, EPSG_3995_Def, EPSG_3031_Def, SwissCH1903, ESRI_53034, ETRS89_UTM_37N, EPSG_4326_Def, EPSG_3035_Def];
     /** 
        * set map extent or IMapState (zoom, center...) with the MapStateService 
        * Check if the Extent is valid for the set projection.
@@ -93,7 +93,7 @@ export class RouteMap2Component implements OnInit {
   addOverlays() {
     const osm_layer = new OsmTileLayer({
       removable: true,
-      legendImg: null,
+      legendImg: undefined,
       visible: true,
       id: 'osm'
     });
