@@ -2,7 +2,7 @@
 * **@dlr-eoc/services-map-state**
  - Allow to use `projjson` in `IProjDef`.
  - Export `EPSG_3035_Def`
- - Export function `adjustBBoxAxis` and `adjustBBoxAxisToEnu` for convert to `enu`.
+ - Export function `getProj4Defs(projDef: IProjDef)`, `adjustBBoxAxis(bbox: [number, number, number, number], axis: AxisType)` and `adjustBBoxAxisToEnu(bbox: [number, number, number, number], proj?: TepsgCode | IProjDef, axis?: AxisType)` for convert to `enu`. Use this for `nativeBbox` get from wms 1.3.0. This tries to fixes native bbox axis from wms 1.3.0.
 
 * **@dlr-eoc/map-ol:**
  - Use `projjson` or `proj4js` to create projection if defined on `IProjDef`.

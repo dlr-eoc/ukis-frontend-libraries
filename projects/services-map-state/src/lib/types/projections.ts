@@ -1,4 +1,4 @@
-import { ProjectionDefinition } from "proj4";
+import proj4, { ProjectionDefinition } from "proj4";
 
 export type TepsgCode = `EPSG:${number}` | `ESRI:${number}`;
 /**
@@ -152,7 +152,14 @@ export function adjustBBoxAxis(bbox: [number, number, number, number], axis: Axi
 
 }
 
-export function adjustBBoxAxisToEnu(bbox: [number, number, number, number], axis?: AxisType, proj?: TepsgCode) {
+export function adjustBBoxAxisToEnu(bbox: [number, number, number, number], proj?: TepsgCode | IProjDef, axis?: AxisType) {
+    if (typeof proj === 'object') {
+        const proj4Axis = getProj4Defs(proj).axis;
+        if (proj4Axis) {
+            axis = proj4Axis as AxisType;
+        }
+    }
+
     if (!axis ||
         !proj ||
         proj &&
@@ -163,4 +170,13 @@ export function adjustBBoxAxisToEnu(bbox: [number, number, number, number], axis
         // console.log('adjustBBoxAxis', bbox, 'to axis', axis, adjustBBox);
         return adjustBBox;
     }
+}
+
+export function getProj4Defs(projDef: IProjDef) {
+    let projDefs = proj4.defs(projDef.code);
+    if (!projDefs) {
+        proj4.defs(projDef.code, ('projjson' in projDef) ? projDef.projjson : projDef.proj4js);
+        projDefs = proj4.defs(projDef.code);
+    }
+    return projDefs;
 }
