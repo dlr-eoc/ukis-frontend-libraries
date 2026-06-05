@@ -94,7 +94,7 @@ import { Subject } from 'rxjs';
 import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorSource from 'ol/source/Vector';
-import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions } from '@dlr-eoc/services-map-state';
+import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions, TepsgCode, adjustBBoxAxisToEnu } from '@dlr-eoc/services-map-state';
 
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -121,7 +121,7 @@ export class MapOlService {
   public map: olMap; // ol.Map;
   public view: olView;
   private viewOptions: olViewOptions;
-  public EPSG: string;
+  public EPSG: TepsgCode;
   private hitTolerance = 0;
   private hitLayerCurr = null;
   private hitLayerPrev = null;
@@ -1041,7 +1041,7 @@ export class MapOlService {
     if (l instanceof WmtsLayer) {
 
       let tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts');
-      let matrixSet = this.EPSG;
+      let matrixSet = this.EPSG as string;
       if (l.params.matrixSetOptions) {
         matrixSet = l.params.matrixSetOptions.matrixSet;
         if ('resolutions' in l.params.matrixSetOptions) {
@@ -2390,14 +2390,16 @@ export class MapOlService {
 
   /**
    *
-   * @param extent: [minX, minY, maxX, maxY]
+   * @param extent: [minX, minY, maxX, maxY] - can also be a nativeExtent where the axis order differs
    * @param geographic: boolean
    * @param fitOptions: olFitOptions
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: olFitOptions): TGeoExtent {
-    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode(), transformExtentStops);
+    const extentProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
+    const destinationProjectionCode = this.getProjection().getCode();
+    const destinationProjection = getProjection(destinationProjectionCode);
+    const transfomExtent = transformExtent(extent.slice(0, 4), extentProjection || this.EPSG, destinationProjection || destinationProjectionCode, transformExtentStops);
     const newFitOptions: olFitOptions = {
       size: this.map.getSize(),
       // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
@@ -2587,7 +2589,7 @@ export class MapOlService {
       }
       const oldView = this.map.getView();
       const oldProj = oldView.getProjection();
-      const oldEPSG = oldProj.getCode();
+      const oldEPSG = oldProj.getCode() as TepsgCode;
       const oldExtent = oldView.calculateExtent();
 
       // Test is not same projection
@@ -2600,7 +2602,7 @@ export class MapOlService {
 
           // https://openlayers.org/en/latest/examples/reprojection-by-code.html
           const view = new olView(viewOptions);
-          this.EPSG = view.getProjection().getCode();
+          this.EPSG = view.getProjection().getCode() as TepsgCode;
           this.map.setView(view);
           this.view = this.map.getView();
 
@@ -2640,7 +2642,7 @@ export class MapOlService {
   /**
    * reproject vector layers and set extent for all
    */
-  private reprojectVectorLayers(layer: olLayer, oldEpsg: string, newEpsg: string) {
+  private reprojectVectorLayers(layer: olLayer, oldEpsg: TepsgCode, newEpsg: TepsgCode) {
     let source = layer.getSource();
     // check for nested sources, e.g. cluster or cluster of clusters etc
     while (source['source']) {
@@ -2654,14 +2656,29 @@ export class MapOlService {
   /**
    * set or calculate the new layer extent after reprojectFeatures
    */
-  private setLayerExtentAfterProjection(layer: olLayer, newEpsg: string) {
+  private setLayerExtentAfterProjection(layer: olLayer, oldEpsg: TepsgCode, newEpsg: TepsgCode) {
     const bbox = layer.get('bbox') as number[] | undefined;
-    const nativeBbox = layer.get('nativeBbox') as | { epsg: string; bbox: TGeoExtent } | undefined;
+    const nativeBbox = layer.get('nativeBbox') as | { epsg: TepsgCode; bbox: TGeoExtent } | undefined;
     const currentExtent = layer.getExtent() as olExtent | undefined;
-
     // nativeBbox exists and matches newEpsg -> use nativeBbox
     if (nativeBbox && nativeBbox.epsg === newEpsg) {
       layer.setExtent(nativeBbox.bbox);
+      return;
+    } else if (nativeBbox && nativeBbox.epsg !== newEpsg && !bbox) {
+      const hasbboxProReg = this.registeredProjections.has(nativeBbox.epsg);
+      // if nativeBbox exists but newEpsg is different then nativeBbox -> use transformExtent
+      if (hasbboxProReg) {
+        const ext = transformExtent(nativeBbox.bbox, nativeBbox.epsg, newEpsg, transformExtentStops);
+        layer.setExtent(ext);
+      } else {
+        // if nativeBbox epsg not registered -> try to transform old extent or clear extent
+        if (currentExtent) {
+          const ext = transformExtent(currentExtent, oldEpsg, newEpsg, transformExtentStops);
+          layer.setExtent(ext);
+        } else {
+          layer.setExtent(undefined);
+        }
+      }
       return;
     }
 
@@ -2688,13 +2705,13 @@ export class MapOlService {
   /**
    * reprojecting vector layers and set extent
    */
-  private adjustLayersAfterProjection(oldEpsg: string, projection: IProjDef) {
+  private adjustLayersAfterProjection(oldEpsg: TepsgCode, projection: IProjDef) {
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       layerGroup.getLayers().getArray().forEach(layer => {
         if (layer instanceof olLayer) {
           const newEpsg = projection?.code;
           this.reprojectVectorLayers(layer, oldEpsg, newEpsg);
-          this.setLayerExtentAfterProjection(layer, newEpsg);
+          this.setLayerExtentAfterProjection(layer, oldEpsg, newEpsg);
         } else {
           console.log(layer, 'no olLayer');
         }
@@ -2711,7 +2728,7 @@ export class MapOlService {
   public registerProjection(projDef: IProjDef) {
     const hasProj = this.registeredProjections.has(projDef.code);
     if (!hasProj) {
-      proj4.defs(projDef.code, projDef.proj4js);
+      proj4.defs(projDef.code, ('projjson' in projDef) ? projDef.projjson : projDef.proj4js);
       olRegister(proj4);
       this.registeredProjections.set(projDef.code, projDef);
     }

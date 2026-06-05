@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeoExtent, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IListMatrixSet, TFiltertypesUncap, TFiltertypes } from '@dlr-eoc/services-layers';
 
 import { ICesiumControls } from './map-cesium.component';
-import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath, BillboardGraphics} from '@cesium/engine';
+import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath, BillboardGraphics } from '@cesium/engine';
 import { Viewer } from '@cesium/widgets';
-import { IMapCenter, WebMercator } from '@dlr-eoc/services-map-state';
+import { IMapCenter, WebMercator, TepsgCode } from '@dlr-eoc/services-map-state';
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes
 
@@ -31,7 +31,7 @@ export class MapCesiumService {
   private terrainLayerGroup = new Map<string, boolean>(); //Map for terrain containing layerID and visibility
   private tilesetLayerGroup = new Map<string, Cesium3DTileset>(); //Map for 3D tilesets containing layerID and viewer handler
 
-  public EPSG: string;
+  public EPSG: TepsgCode;
 
   //Time objects
   public cesiumCurrentTime = JulianDate.now();
@@ -1069,81 +1069,82 @@ export class MapCesiumService {
             }
           }
         }
-        }
+      }
     }
 
   }
 
   public updateDataSourceZIndex(layers: Layer[], filtertype: Tgroupfiltertype) {
     const dataSourceCollection = this.viewer.dataSources;
-    if(dataSourceCollection.length>1){
-    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
+    if (dataSourceCollection.length > 1) {
+      const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
       if (lowerType === 'baselayers') {
         for (const layer of layers) {
-        if (this.baseLayerDataSourceGroup.has(layer.id)) {
-          const viewerLayer = this.baseLayerDataSourceGroup.get(layer.id);
-          if (viewerLayer) {
-            const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
-            const layerIndex = layers.indexOf(layer);
-            if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
-              const diffIndex = cesiumIndex - layerIndex;
-              if (diffIndex < 0) {
-                // Move layer up in collection
-                for (let i = 0; i < Math.abs(diffIndex); i++) {
-                  dataSourceCollection.raise(viewerLayer);
-                }
-              } else if (diffIndex > 0) {
-                // Move layer down in collection
-                for (let i = 0; i < Math.abs(diffIndex); i++) {
-                  dataSourceCollection.lower(viewerLayer);
+          if (this.baseLayerDataSourceGroup.has(layer.id)) {
+            const viewerLayer = this.baseLayerDataSourceGroup.get(layer.id);
+            if (viewerLayer) {
+              const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
+              const layerIndex = layers.indexOf(layer);
+              if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
+                const diffIndex = cesiumIndex - layerIndex;
+                if (diffIndex < 0) {
+                  // Move layer up in collection
+                  for (let i = 0; i < Math.abs(diffIndex); i++) {
+                    dataSourceCollection.raise(viewerLayer);
+                  }
+                } else if (diffIndex > 0) {
+                  // Move layer down in collection
+                  for (let i = 0; i < Math.abs(diffIndex); i++) {
+                    dataSourceCollection.lower(viewerLayer);
+                  }
                 }
               }
             }
-          }
           }
         }
       } else if (lowerType === 'layers') {
         for (const layer of layers) {
-        if (this.standardLayerDataSourceGroup.has(layer.id)) {
-          const viewerLayer = this.standardLayerDataSourceGroup.get(layer.id);
-          if (viewerLayer) {
-            const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
-            const layerIndex = layers.indexOf(layer) + this.getDataSourceLayersSize('baselayers');
-            if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
-              const diffIndex = cesiumIndex - layerIndex;
-              if (diffIndex < 0) {
-                // Move layer up in collection
-                for (let i = 0; i < Math.abs(diffIndex); i++) {
-                  dataSourceCollection.raise(viewerLayer);
-                }
-              } else if (diffIndex > 0) {
-                // Move layer down in collection
-                for (let i = 0; i < Math.abs(diffIndex); i++) {
-                  dataSourceCollection.lower(viewerLayer);
+          if (this.standardLayerDataSourceGroup.has(layer.id)) {
+            const viewerLayer = this.standardLayerDataSourceGroup.get(layer.id);
+            if (viewerLayer) {
+              const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
+              const layerIndex = layers.indexOf(layer) + this.getDataSourceLayersSize('baselayers');
+              if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
+                const diffIndex = cesiumIndex - layerIndex;
+                if (diffIndex < 0) {
+                  // Move layer up in collection
+                  for (let i = 0; i < Math.abs(diffIndex); i++) {
+                    dataSourceCollection.raise(viewerLayer);
+                  }
+                } else if (diffIndex > 0) {
+                  // Move layer down in collection
+                  for (let i = 0; i < Math.abs(diffIndex); i++) {
+                    dataSourceCollection.lower(viewerLayer);
+                  }
                 }
               }
             }
           }
-          }
         }
       } else if (lowerType === 'overlays') {
         for (const layer of layers) {
-        if (this.overlayLayerDataSourceGroup.has(layer.id)) {
-          const viewerLayer = this.overlayLayerDataSourceGroup.get(layer.id);
-          if (viewerLayer) {
-            const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
-            const layerIndex = layers.indexOf(layer) + this.getDataSourceLayersSize('baselayers') + this.getDataSourceLayersSize('layers');
-            if (cesiumIndex !== layerIndex && cesiumIndex >= 0){
-              const diffIndex = cesiumIndex - layerIndex;
-              if (diffIndex < 0) {
-                // Move layer up in collection
-                for (let i = 0; i < Math.abs(diffIndex); i++) {
-                  dataSourceCollection.raise(viewerLayer);
-                }
-              } else if (diffIndex > 0) {
-                // Move layer down in collection
-                for (let i = 0; i < Math.abs(diffIndex); i++) {
-                  dataSourceCollection.lower(viewerLayer);
+          if (this.overlayLayerDataSourceGroup.has(layer.id)) {
+            const viewerLayer = this.overlayLayerDataSourceGroup.get(layer.id);
+            if (viewerLayer) {
+              const cesiumIndex = dataSourceCollection.indexOf(viewerLayer);
+              const layerIndex = layers.indexOf(layer) + this.getDataSourceLayersSize('baselayers') + this.getDataSourceLayersSize('layers');
+              if (cesiumIndex !== layerIndex && cesiumIndex >= 0) {
+                const diffIndex = cesiumIndex - layerIndex;
+                if (diffIndex < 0) {
+                  // Move layer up in collection
+                  for (let i = 0; i < Math.abs(diffIndex); i++) {
+                    dataSourceCollection.raise(viewerLayer);
+                  }
+                } else if (diffIndex > 0) {
+                  // Move layer down in collection
+                  for (let i = 0; i < Math.abs(diffIndex); i++) {
+                    dataSourceCollection.lower(viewerLayer);
+                  }
                 }
               }
             }
@@ -1151,7 +1152,6 @@ export class MapCesiumService {
         }
       }
     }
-  }
   }
 
 

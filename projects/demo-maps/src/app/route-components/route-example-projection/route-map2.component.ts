@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
-import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def } from '@dlr-eoc/services-map-state';
+import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def, EPSG_3035_Def, adjustBBoxAxisToEnu } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
@@ -66,7 +66,7 @@ export class RouteMap2Component implements OnInit {
       units: 'm'
     }
 
-    this.projections = [EPSG_3857_Def, EPSG_3995_Def, EPSG_3031_Def, SwissCH1903, ESRI_53034, ETRS89_UTM_37N, EPSG_4326_Def];
+    this.projections = [EPSG_3857_Def, EPSG_3995_Def, EPSG_3031_Def, SwissCH1903, ESRI_53034, ETRS89_UTM_37N, EPSG_4326_Def, EPSG_3035_Def];
     /** 
        * set map extent or IMapState (zoom, center...) with the MapStateService 
        * Check if the Extent is valid for the set projection.
@@ -93,7 +93,7 @@ export class RouteMap2Component implements OnInit {
   addOverlays() {
     const osm_layer = new OsmTileLayer({
       removable: true,
-      legendImg: null,
+      legendImg: undefined,
       visible: true,
       id: 'osm'
     });
@@ -111,6 +111,33 @@ export class RouteMap2Component implements OnInit {
       description: 'GUF28_DLR_v1_Mosaic. </br> Not working for Cylindrical Equal Area!',
       attribution: ' | GUF®: <a href="https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-9628/16557_read-40454/">DLR License</a>',
       legendImg: ''
+    });
+
+    const fcclLayer = new RasterLayer({
+      type: 'wms',
+      url: 'https://geoservice.dlr.de/eoc/land/wms',
+      name: 'FCCL DE P1M',
+      id: 'FCCL_DE_P1M',
+      attribution: ', <a href="https://geoservice.dlr.de/web/datasets/fccl" target="_blank">FCCL</a>',
+      description: 'This raster dataset shows forest canopy cover loss (FCCL) in Germany at a monthly resolution from September 2017 to October 2025',
+      params: {
+        layers: 'FCCL_DE_P1M'
+      },
+      visible: false,
+      legendImg: undefined,
+      bbox: [
+        5.230971659340296,
+        47.06431450392907,
+        15.694865911359667,
+        55.169891337305664
+      ],
+      nativeBbox: {
+        epsg: EPSG_3035_Def.code, // the axis must be defined in the IProjDef
+        // wms 1.3.0 <BoundingBox CRS="EPSG:3035" minx="2672950.0" miny="4016550.0" maxx="3562840.0" maxy="4684770.0"/>
+        bbox: adjustBBoxAxisToEnu([2672950, 4016550, 3562840, 4684770], EPSG_3035_Def)
+        // wms: 1.1.1 <BoundingBox SRS="EPSG:3035" minx="4016550.0" miny="2672950.0" maxx="4684770.0" maxy="3562840.0"/>
+        /* bbox: [4016550, 2672950, 4684770, 3562840] */
+      }
     });
 
     const vectorLayer = new VectorLayer({
@@ -240,7 +267,7 @@ export class RouteMap2Component implements OnInit {
       }
     })
 
-    const overlays = [osm_layer, gufLayer, vectorLayer, TanDEMPolarDEM, vectorLayerPolar];
+    const overlays = [osm_layer, gufLayer, vectorLayer, TanDEMPolarDEM, vectorLayerPolar, fcclLayer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 

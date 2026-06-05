@@ -5,7 +5,7 @@ import { distinctUntilChanged, Subscription } from 'rxjs';
 import { ClrSelectModule, ClrCommonFormsModule, ClrNumberInputModule } from '@clr/angular';
 
 import { FormsModule } from '@angular/forms';
-import { MapStateService } from '@dlr-eoc/services-map-state';
+import { MapStateService, TepsgCode } from '@dlr-eoc/services-map-state';
 
 interface ISelectProjection {
   title: string;
@@ -42,7 +42,7 @@ export class MousePositionComponent implements OnInit, OnDestroy {
     });
 
     this.mapProjection = this.mapSvc.getProjection();
-    this.setProjection(this.mapProjection.getCode());
+    this.setProjection(this.mapProjection.getCode() as TepsgCode);
 
     // TODO: remove listeneres on destry
     const onMove = this.mapSvc.map.on('pointermove', this.mapMoveSubscription);
@@ -52,7 +52,7 @@ export class MousePositionComponent implements OnInit, OnDestroy {
   /**
    * projLike: 'olProjection'
    */
-  setProjection(epsg: string) {
+  setProjection(epsg: TepsgCode) {
     if (epsg === 'EPSG:4326') {
       this.projections = [
         { title: epsg, value: epsg }

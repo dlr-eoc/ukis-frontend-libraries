@@ -2,7 +2,7 @@ import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, 
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, StyleLayer, GeoJSONSource, Evented, addSourceType } from 'maplibre-gl';
 import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, changeOrderOfLayers, setRotation, setPitch, getRotation, getUkisLayerMetadata, UKIS_METADATA } from './maplibre.helpers';
 
-import { MapState, MapStateService, WebMercator, WGS84 } from '@dlr-eoc/services-map-state';
+import { MapState, MapStateService, WebMercator, WGS84, TepsgCode } from '@dlr-eoc/services-map-state';
 import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } from '@dlr-eoc/services-layers';
 
 
@@ -243,12 +243,12 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     // https://maplibre.org/maplibre-style-spec/projection/
     const projectionSpecType = this.map.getProjection()?.type;
     const projMapping = { globe: WGS84, mercator: WebMercator };
-    let epsg = projMapping.mercator;
-    if(Array.isArray(projectionSpecType)){
+    let epsg = projMapping.mercator as TepsgCode;
+    if (Array.isArray(projectionSpecType)) {
       // TODO: Perhaps this won't work in all cases.
-      epsg = projectionSpecType.pop() as string;
-    }else if(typeof projectionSpecType === 'string'){
-      epsg = projMapping[projectionSpecType];
+      epsg = projectionSpecType.pop() as TepsgCode;
+    } else if (typeof projectionSpecType === 'string') {
+      epsg = projMapping[projectionSpecType] as TepsgCode;
     }
 
     const newCenter = { lat: latLng.lat, lon: latLng.lng };

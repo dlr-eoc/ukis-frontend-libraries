@@ -69,9 +69,7 @@ export class LayerentryGroupComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.group.bbox && this.group.bbox.length >= 4) {
-      this.canZoomToGroup = true;
-    }
+    this.checkCanZoomToGroup();
 
     if (typeof this.group?.expanded === 'object') {
       if (Object.keys(EactiveTabs).includes(this.group.expanded.tab)) {
@@ -93,6 +91,14 @@ export class LayerentryGroupComponent implements OnInit {
   private setDefaultActiveTabs() {
     if (!this.group?.action) {
       this.activeTabs.settings = false;
+    }
+  }
+
+  checkCanZoomToGroup() {
+    if ((this.group.bbox && this.group.bbox.length >= 4) || (this.group.nativeBbox && this.mapState?.getMapState().value.proj.epsg === this.group.nativeBbox.epsg && this.group.nativeBbox.bbox.length >= 4)) {
+      this.canZoomToGroup = true;
+    } else {
+      this.canZoomToGroup = false;
     }
   }
 
@@ -209,6 +215,7 @@ export class LayerentryGroupComponent implements OnInit {
 
 
   showProperties() {
+    this.checkCanZoomToGroup();
     this.group.expanded = !this.group.expanded;
   }
 
