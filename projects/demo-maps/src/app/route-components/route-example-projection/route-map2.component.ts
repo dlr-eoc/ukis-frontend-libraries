@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
-import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def, EPSG_3035_Def } from '@dlr-eoc/services-map-state';
+import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def, EPSG_3035_Def, adjustBBoxAxisToEnu } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
@@ -132,11 +132,11 @@ export class RouteMap2Component implements OnInit {
         55.169891337305664
       ],
       nativeBbox: {
-        epsg: 'EPSG:3035',
-        bbox: [2672950,
-          4016550,
-          3562840,
-          4684770]
+        epsg: EPSG_3035_Def.code, // the axis must be defined in the IProjDef
+        // wms 1.3.0 <BoundingBox CRS="EPSG:3035" minx="2672950.0" miny="4016550.0" maxx="3562840.0" maxy="4684770.0"/>
+        bbox: adjustBBoxAxisToEnu([2672950, 4016550, 3562840, 4684770], EPSG_3035_Def)
+        // wms: 1.1.1 <BoundingBox SRS="EPSG:3035" minx="4016550.0" miny="2672950.0" maxx="4684770.0" maxy="3562840.0"/>
+        /* bbox: [4016550, 2672950, 4684770, 3562840] */
       }
     });
 

@@ -1289,19 +1289,6 @@ export class MapOlService {
     }
   }
 
-  /**
-   * nativeBbox: - nativeBbox.bbox
-   * bboxEpsg: - nativeBbox.epsg
-   */
-  private adjustBBoxEnuBeforeSetExtent(nativeBbox: TGeoExtent, bboxEpsg: TepsgCode) {
-    const proj = getProjection(bboxEpsg);
-    const code = proj?.getCode() as TepsgCode;
-    const axis = proj?.getAxisOrientation();
-    // https://github.com/openlayers/openlayers/issues/12406
-    // https://github.com/proj4js/proj4js/blob/main/lib/adjust_axis.js
-    return adjustBBoxAxisToEnu(nativeBbox as never, axis as never, code);
-  }
-
   /** use subdomains to setUrl/s on source */
   private setSubdomains(l: Layer, layer: olLayer<olSource>): void {
     if (l instanceof VectorLayer || l instanceof RasterLayer) {
@@ -1400,8 +1387,7 @@ export class MapOlService {
             const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
             gl.setExtent(extent);
           } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
-            const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(l.nativeBbox.bbox, l.nativeBbox.epsg as TepsgCode);
-            gl.setExtent([...adjustBBox]);
+            gl.setExtent([...l.nativeBbox.bbox]);
           }
         });
       } else {
@@ -1447,8 +1433,7 @@ export class MapOlService {
         const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
         layer.setExtent(extent);
       } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
-        const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(l.nativeBbox.bbox, l.nativeBbox.epsg as TepsgCode);
-        layer.setExtent([...adjustBBox]);
+        layer.setExtent([...l.nativeBbox.bbox]);
       }
 
       layer.setProperties(layeroptions);
@@ -2412,13 +2397,9 @@ export class MapOlService {
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: olFitOptions): TGeoExtent {
     const extentProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const extentProjectionCode = extentProjection?.getCode() as TepsgCode || this.EPSG;
-
-    const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(extent.slice(0, 4) as TGeoExtent, extentProjectionCode);
-
     const destinationProjectionCode = this.getProjection().getCode();
     const destinationProjection = getProjection(destinationProjectionCode);
-    const transfomExtent = transformExtent(adjustBBox, extentProjection || this.EPSG, destinationProjection || destinationProjectionCode, transformExtentStops);
+    const transfomExtent = transformExtent(extent.slice(0, 4), extentProjection || this.EPSG, destinationProjection || destinationProjectionCode, transformExtentStops);
     const newFitOptions: olFitOptions = {
       size: this.map.getSize(),
       // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
@@ -2681,15 +2662,13 @@ export class MapOlService {
     const currentExtent = layer.getExtent() as olExtent | undefined;
     // nativeBbox exists and matches newEpsg -> use nativeBbox
     if (nativeBbox && nativeBbox.epsg === newEpsg) {
-      const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(nativeBbox.bbox, nativeBbox.epsg)
-      layer.setExtent(adjustBBox);
+      layer.setExtent(nativeBbox.bbox);
       return;
     } else if (nativeBbox && nativeBbox.epsg !== newEpsg && !bbox) {
       const hasbboxProReg = this.registeredProjections.has(nativeBbox.epsg);
       // if nativeBbox exists but newEpsg is different then nativeBbox -> use transformExtent
       if (hasbboxProReg) {
-        const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(nativeBbox.bbox, nativeBbox.epsg)
-        const ext = transformExtent(adjustBBox, nativeBbox.epsg, newEpsg, transformExtentStops);
+        const ext = transformExtent(nativeBbox.bbox, nativeBbox.epsg, newEpsg, transformExtentStops);
         layer.setExtent(ext);
       } else {
         // if nativeBbox epsg not registered -> try to transform old extent or clear extent
