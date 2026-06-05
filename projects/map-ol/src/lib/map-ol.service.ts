@@ -94,7 +94,7 @@ import { Subject } from 'rxjs';
 import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorSource from 'ol/source/Vector';
-import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions, TepsgCode } from '@dlr-eoc/services-map-state';
+import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions, TepsgCode, adjustBBoxAxisToEnu } from '@dlr-eoc/services-map-state';
 
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -1289,6 +1289,19 @@ export class MapOlService {
     }
   }
 
+  /**
+   * nativeBbox: - nativeBbox.bbox
+   * bboxEpsg: - nativeBbox.epsg
+   */
+  private adjustBBoxEnuBeforeSetExtent(nativeBbox: TGeoExtent, bboxEpsg: TepsgCode) {
+    const proj = getProjection(bboxEpsg);
+    const code = proj?.getCode() as TepsgCode;
+    const axis = proj?.getAxisOrientation();
+    // https://github.com/openlayers/openlayers/issues/12406
+    // https://github.com/proj4js/proj4js/blob/main/lib/adjust_axis.js
+    return adjustBBoxAxisToEnu(nativeBbox as never, axis as never, code);
+  }
+
   /** use subdomains to setUrl/s on source */
   private setSubdomains(l: Layer, layer: olLayer<olSource>): void {
     if (l instanceof VectorLayer || l instanceof RasterLayer) {
@@ -1387,7 +1400,8 @@ export class MapOlService {
             const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
             gl.setExtent(extent);
           } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
-            gl.setExtent([...l.nativeBbox.bbox]);
+            const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(l.nativeBbox.bbox, l.nativeBbox.epsg as TepsgCode);
+            gl.setExtent([...adjustBBox]);
           }
         });
       } else {
@@ -1433,7 +1447,8 @@ export class MapOlService {
         const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
         layer.setExtent(extent);
       } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
-        layer.setExtent([...l.nativeBbox.bbox]);
+        const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(l.nativeBbox.bbox, l.nativeBbox.epsg as TepsgCode);
+        layer.setExtent([...adjustBBox]);
       }
 
       layer.setProperties(layeroptions);
@@ -2390,14 +2405,20 @@ export class MapOlService {
 
   /**
    *
-   * @param extent: [minX, minY, maxX, maxY]
+   * @param extent: [minX, minY, maxX, maxY] - can also be a nativeExtent where the axis order differs
    * @param geographic: boolean
    * @param fitOptions: olFitOptions
    * @returns olExtend: [minX, minY, maxX, maxY]
    */
   public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: olFitOptions): TGeoExtent {
-    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
-    const transfomExtent = transformExtent(extent.slice(0, 4) as [number, number, number, number], projection, this.getProjection().getCode(), transformExtentStops);
+    const extentProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
+    const extentProjectionCode = extentProjection?.getCode() as TepsgCode || this.EPSG;
+
+    const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(extent.slice(0, 4) as TGeoExtent, extentProjectionCode);
+
+    const destinationProjectionCode = this.getProjection().getCode();
+    const destinationProjection = getProjection(destinationProjectionCode);
+    const transfomExtent = transformExtent(adjustBBox, extentProjection || this.EPSG, destinationProjection || destinationProjectionCode, transformExtentStops);
     const newFitOptions: olFitOptions = {
       size: this.map.getSize(),
       // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
@@ -2660,7 +2681,25 @@ export class MapOlService {
     const currentExtent = layer.getExtent() as olExtent | undefined;
     // nativeBbox exists and matches newEpsg -> use nativeBbox
     if (nativeBbox && nativeBbox.epsg === newEpsg) {
-      layer.setExtent(nativeBbox.bbox);
+      const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(nativeBbox.bbox, nativeBbox.epsg)
+      layer.setExtent(adjustBBox);
+      return;
+    } else if (nativeBbox && nativeBbox.epsg !== newEpsg && !bbox) {
+      const hasbboxProReg = this.registeredProjections.has(nativeBbox.epsg);
+      // if nativeBbox exists but newEpsg is different then nativeBbox -> use transformExtent
+      if (hasbboxProReg) {
+        const adjustBBox = this.adjustBBoxEnuBeforeSetExtent(nativeBbox.bbox, nativeBbox.epsg)
+        const ext = transformExtent(adjustBBox, nativeBbox.epsg, newEpsg, transformExtentStops);
+        layer.setExtent(ext);
+      } else {
+        // if nativeBbox epsg not registered -> try to transform old extent or clear extent
+        if (currentExtent) {
+          const ext = transformExtent(currentExtent, oldEpsg, newEpsg, transformExtentStops);
+          layer.setExtent(ext);
+        } else {
+          layer.setExtent(undefined);
+        }
+      }
       return;
     }
 
@@ -2693,7 +2732,7 @@ export class MapOlService {
         if (layer instanceof olLayer) {
           const newEpsg = projection?.code;
           this.reprojectVectorLayers(layer, oldEpsg, newEpsg);
-          this.setLayerExtentAfterProjection(layer, newEpsg);
+          this.setLayerExtentAfterProjection(layer, oldEpsg, newEpsg);
         } else {
           console.log(layer, 'no olLayer');
         }

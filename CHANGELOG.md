@@ -12,6 +12,9 @@
 * **@dlr-eoc/ngx-ukis-ui-clarity:**
  - Can zoom to `nativeBbox` for `LayerentryComponent` and `LayerentryGroupComponent`.
 
+* **@dlr-eoc/map-ol:**
+ - Try to udjust (native) bbox to enu before ol `setExtent`. This tries to fixes native bbox axis from wms 1.3.0. See `adjustBBoxAxisToEnu`.
+
 
 # [16.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v16.0.0) (2026-05-29) (update dependencies, new library ngx-ukis-ui-clarity and ngx-ukis-utilities, replace core-ui)
 

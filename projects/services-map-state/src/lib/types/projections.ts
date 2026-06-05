@@ -160,7 +160,7 @@ export function adjustBBoxAxisToEnu(bbox: [number, number, number, number], axis
         return bbox;
     } else {
         const adjustBBox = adjustBBoxAxis(bbox, axis);
-        console.log('adjustBBoxAxis', bbox, axis, 'to', adjustBBox);
+        // console.log('adjustBBoxAxis', bbox, 'to axis', axis, adjustBBox);
         return adjustBBox;
     }
 }
