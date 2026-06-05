@@ -77,3 +77,90 @@ export const EPSG_3035_Def: IProjDef = {
     global: false,
     units: 'm'
 }
+
+
+interface AxisTransform {
+    eastIdx: number;    // Which index is East? (0 or 1)
+    northIdx: number;   // Which index is North? (0 or 1)
+    eastSign: number;   // 1 for East, -1 for West
+    northSign: number;  // 1 for North, -1 for South
+}
+type AxisType = 'enu' | 'ned' | 'neu' | 'uen' | 'esu' | 'wnu';
+/**
+ * Adjusts a Bounding Box [minX, minY, maxX, maxY] 
+ * based on the axis string (e.g., 'enu', 'ned').
+ * Target is always ENU (East, North).
+ * 
+ * **Definition | X-Axis | Y-Axis | Z-Axis**
+ * **`+axis=enu`** | **East** | **North** | **Up** | **The Standard.
+ * **`+axis=ned`** | **North** | **East** | **Down** 
+ * **`+axis=neu`** | **North** | **East** | **Up**
+ * **`+axis=uen`** | **Up** | **East** | **North**
+ * **`+axis=esu`** | **East** | **South** | **Up**
+ * **`+axis=wnu`** | **West** | **North** | **Up**
+ * 
+ * https://github.com/openlayers/openlayers/issues/12406
+ * https://github.com/proj4js/proj4js/blob/main/lib/adjust_axis.js
+ */
+export function adjustBBoxAxis(bbox: [number, number, number, number], axis: AxisType) {
+    const AXIS_MAP: Record<AxisType, AxisTransform> = {
+        // X=East, Y=North
+        'enu': { eastIdx: 0, northIdx: 1, eastSign: 1, northSign: 1 },
+        // X=North, Y=East
+        'ned': { eastIdx: 1, northIdx: 0, eastSign: 1, northSign: 1 },
+        'neu': { eastIdx: 1, northIdx: 0, eastSign: 1, northSign: 1 },
+        // X=Up, Y=East (Warning: North is the Z-axis here, not in the BBOX)
+        'uen': { eastIdx: 1, northIdx: 0, eastSign: 1, northSign: 1 },
+        // X=East, Y=South
+        'esu': { eastIdx: 0, northIdx: 1, eastSign: 1, northSign: -1 },
+        // X=West, Y=North
+        'wnu': { eastIdx: 0, northIdx: 1, eastSign: -1, northSign: 1 },
+    };
+
+    const config = (axis) ? AXIS_MAP[axis] : undefined;
+
+    if (!config) {
+        throw new Error(`Unsupported axis definition: ${axis}`);
+    }
+
+    const [minX, minY, maxX, maxY] = bbox;
+
+    // Helper to get the value and apply sign from the correct index
+    const getVal = (idx: number, sign: number, isMax: boolean) => {
+        const val = isMax ? (idx === 0 ? maxX : maxY) : (idx === 0 ? minX : minY);
+        return val * sign;
+    };
+
+    // Calculate the new East (X) and North (Y) values
+    const eastMin = getVal(config.eastIdx, config.eastSign, false);
+    const eastMax = getVal(config.eastIdx, config.eastSign, true);
+
+    const northMin = getVal(config.northIdx, config.northSign, false);
+    const northMax = getVal(config.northIdx, config.northSign, true);
+
+    /**
+     * CRITICAL: When multiplying by -1 (West or South), 
+     * the minimum value becomes the maximum value.
+     * We must use Math.min/max to ensure the BBOX remains valid.
+     */
+    return [
+        Math.min(eastMin, eastMax),
+        Math.min(northMin, northMax),
+        Math.max(eastMin, eastMax),
+        Math.max(northMin, northMax)
+    ] as [number, number, number, number];
+
+}
+
+export function adjustBBoxAxisToEnu(bbox: [number, number, number, number], axis?: AxisType, proj?: TepsgCode) {
+    if (!axis ||
+        !proj ||
+        proj &&
+        proj === WGS84 && axis === 'neu') {
+        return bbox;
+    } else {
+        const adjustBBox = adjustBBoxAxis(bbox, axis);
+        console.log('adjustBBoxAxis', bbox, axis, 'to', adjustBBox);
+        return adjustBBox;
+    }
+}

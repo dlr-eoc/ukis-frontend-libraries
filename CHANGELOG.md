@@ -2,6 +2,7 @@
 * **@dlr-eoc/services-map-state**
  - Allow to use `projjson` in `IProjDef`.
  - Export `EPSG_3035_Def`
+ - Export function `adjustBBoxAxis` and `adjustBBoxAxisToEnu` for convert to `enu`.
 
 * **@dlr-eoc/map-ol:**
  - Use `projjson` or `proj4js` to create projection if defined on `IProjDef`.
