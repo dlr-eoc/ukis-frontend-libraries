@@ -113,6 +113,33 @@ export class RouteMap2Component implements OnInit {
       legendImg: ''
     });
 
+    const fcclLayer = new RasterLayer({
+      type: 'wms',
+      url: 'https://geoservice.dlr.de/eoc/land/wms',
+      name: 'FCCL DE P1M',
+      id: 'FCCL_DE_P1M',
+      attribution: ', <a href="https://geoservice.dlr.de/web/datasets/fccl" target="_blank">FCCL</a>',
+      description: 'This raster dataset shows forest canopy cover loss (FCCL) in Germany at a monthly resolution from September 2017 to October 2025',
+      params: {
+        layers: 'FCCL_DE_P1M'
+      },
+      visible: false,
+      legendImg: undefined,
+      bbox: [
+        5.230971659340296,
+        47.06431450392907,
+        15.694865911359667,
+        55.169891337305664
+      ],
+      nativeBbox: {
+        epsg: 'EPSG:3035',
+        bbox: [2672950,
+          4016550,
+          3562840,
+          4684770]
+      }
+    });
+
     const vectorLayer = new VectorLayer({
       id: 'geojson_test',
       name: 'GeoJSON Vector Layer',
@@ -240,7 +267,7 @@ export class RouteMap2Component implements OnInit {
       }
     })
 
-    const overlays = [osm_layer, gufLayer, vectorLayer, TanDEMPolarDEM, vectorLayerPolar];
+    const overlays = [osm_layer, gufLayer, vectorLayer, TanDEMPolarDEM, vectorLayerPolar, fcclLayer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 
