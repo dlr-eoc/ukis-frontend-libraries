@@ -94,7 +94,7 @@ import { Subject } from 'rxjs';
 import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import LayerRenderer from 'ol/renderer/Layer';
 import VectorSource from 'ol/source/Vector';
-import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions } from '@dlr-eoc/services-map-state';
+import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions, TepsgCode } from '@dlr-eoc/services-map-state';
 
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
@@ -121,7 +121,7 @@ export class MapOlService {
   public map: olMap; // ol.Map;
   public view: olView;
   private viewOptions: olViewOptions;
-  public EPSG: string;
+  public EPSG: TepsgCode;
   private hitTolerance = 0;
   private hitLayerCurr = null;
   private hitLayerPrev = null;
@@ -1041,7 +1041,7 @@ export class MapOlService {
     if (l instanceof WmtsLayer) {
 
       let tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts');
-      let matrixSet = this.EPSG;
+      let matrixSet = this.EPSG as string;
       if (l.params.matrixSetOptions) {
         matrixSet = l.params.matrixSetOptions.matrixSet;
         if ('resolutions' in l.params.matrixSetOptions) {
@@ -2587,7 +2587,7 @@ export class MapOlService {
       }
       const oldView = this.map.getView();
       const oldProj = oldView.getProjection();
-      const oldEPSG = oldProj.getCode();
+      const oldEPSG = oldProj.getCode() as TepsgCode;
       const oldExtent = oldView.calculateExtent();
 
       // Test is not same projection
@@ -2600,7 +2600,7 @@ export class MapOlService {
 
           // https://openlayers.org/en/latest/examples/reprojection-by-code.html
           const view = new olView(viewOptions);
-          this.EPSG = view.getProjection().getCode();
+          this.EPSG = view.getProjection().getCode() as TepsgCode;
           this.map.setView(view);
           this.view = this.map.getView();
 
@@ -2640,7 +2640,7 @@ export class MapOlService {
   /**
    * reproject vector layers and set extent for all
    */
-  private reprojectVectorLayers(layer: olLayer, oldEpsg: string, newEpsg: string) {
+  private reprojectVectorLayers(layer: olLayer, oldEpsg: TepsgCode, newEpsg: TepsgCode) {
     let source = layer.getSource();
     // check for nested sources, e.g. cluster or cluster of clusters etc
     while (source['source']) {
@@ -2654,11 +2654,10 @@ export class MapOlService {
   /**
    * set or calculate the new layer extent after reprojectFeatures
    */
-  private setLayerExtentAfterProjection(layer: olLayer, newEpsg: string) {
+  private setLayerExtentAfterProjection(layer: olLayer, oldEpsg: TepsgCode, newEpsg: TepsgCode) {
     const bbox = layer.get('bbox') as number[] | undefined;
-    const nativeBbox = layer.get('nativeBbox') as | { epsg: string; bbox: TGeoExtent } | undefined;
+    const nativeBbox = layer.get('nativeBbox') as | { epsg: TepsgCode; bbox: TGeoExtent } | undefined;
     const currentExtent = layer.getExtent() as olExtent | undefined;
-
     // nativeBbox exists and matches newEpsg -> use nativeBbox
     if (nativeBbox && nativeBbox.epsg === newEpsg) {
       layer.setExtent(nativeBbox.bbox);
@@ -2688,7 +2687,7 @@ export class MapOlService {
   /**
    * reprojecting vector layers and set extent
    */
-  private adjustLayersAfterProjection(oldEpsg: string, projection: IProjDef) {
+  private adjustLayersAfterProjection(oldEpsg: TepsgCode, projection: IProjDef) {
     this.map.getLayers().getArray().forEach((layerGroup: olLayerGroup) => {
       layerGroup.getLayers().getArray().forEach(layer => {
         if (layer instanceof olLayer) {

@@ -1,5 +1,6 @@
 import { ProjectionDefinition } from "proj4";
 
+export type TepsgCode = `EPSG:${number}` | `ESRI:${number}`;
 /**
  * https://spatialreference.org/
  * https://github.com/proj4js/proj4js
@@ -9,7 +10,7 @@ import { ProjectionDefinition } from "proj4";
  */
 export type IProjDef = IProj4jsDef | IProjjDef;
 interface IProjDefBase {
-    code: string; // e.g.: "EPSG:3857"
+    code: TepsgCode; // e.g.: "EPSG:3857"
     title: string; // projection title shown on switch, e.g.: "Spherical Mercator",
     extent: [number, number, number, number]; // projection extent in projected coordinates, e.g.: [-20026376.39, -20048966.10, 20026376.39, 20048966.10],
     worldExtent: [number, number, number, number]; // projection extent in geographical coordinates, e.g.:[-180.0, -85.06, 180.0, 85.06],

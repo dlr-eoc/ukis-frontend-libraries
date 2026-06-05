@@ -1,5 +1,5 @@
 import { TGeoExtent } from "@dlr-eoc/services-layers";
-import { EPSG_3857_Def, IProjDef, WebMercator } from "./projections";
+import { EPSG_3857_Def, IProjDef, WebMercator, TepsgCode } from "./projections";
 
 export interface IMapCenter {
   lat: number;
@@ -38,7 +38,7 @@ export interface IMapState {
 
 export interface IMapStateProjection {
   /** EPSG of current map projection */
-  epsg?: string;
+  epsg?: TepsgCode;
   fitOptions?: IProjFitOptions;
   IProjDef?: IProjDef;
 }
@@ -63,7 +63,7 @@ export class MapState implements IMapState {
   /** current map projection */
   proj: Required<Omit<IMapStateProjection, 'IProjDef'>>;
 
-  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], nativeExtent: TGeoExtent = EPSG_3857_Def.extent, time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0, epsg?: string, projFitOptions?: IProjFitOptions) {
+  constructor(zoom: number, center: IMapCenter, options?: IMapStateOptions, extent: TGeoExtent = [-180.0, -90.0, 180.0, 90.0], nativeExtent: TGeoExtent = EPSG_3857_Def.extent, time: string = new Date().toISOString(), viewAngle: number = 0, rotation: number = 0, epsg?: TepsgCode, projFitOptions?: IProjFitOptions) {
     const defaultOptions = {
       maxzoom: 0,
       minzoom: 0,

@@ -3,8 +3,7 @@ import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecke
 
 
 
-import { IMapStateProjection, MapState } from '@dlr-eoc/services-map-state';
-import { MapStateService } from '@dlr-eoc/services-map-state';
+import { IMapStateProjection, MapState, MapStateService, TepsgCode } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { skip } from 'rxjs/operators';
 import { MapOlService } from './map-ol.service';
@@ -46,7 +45,7 @@ import VectorSource from 'ol/source/Vector';
 
 
 
- /** @see (control options object) https://github.com/openlayers/openlayers/tree/main/src/ol/control */
+/** @see (control options object) https://github.com/openlayers/openlayers/tree/main/src/ol/control */
 export interface IMapControls {
   /** for icon replacement use - label | collapseLabel */
   attribution?: boolean | object;
@@ -564,7 +563,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
       const extent = this.mapSvc.getCurrentExtent(true);
       const nativeExtent = this.mapSvc.getCurrentExtent(false);
       const rotation = this.mapSvc.getRotation();
-      const epsg = this.mapSvc.getProjection().getCode();
+      const epsg = this.mapSvc.getProjection().getCode() as TepsgCode;
 
       const newCenter = { lat: parseFloat(center[1]), lon: parseFloat(center[0]) };
       const ms = new MapState(zoom, newCenter, { notifier: 'map' }, extent, nativeExtent, oldMapState.time, oldMapState.viewAngle, rotation, epsg);

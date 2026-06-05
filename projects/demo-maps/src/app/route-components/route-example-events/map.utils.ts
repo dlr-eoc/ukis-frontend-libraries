@@ -1,4 +1,5 @@
 import { TGeoExtent } from '@dlr-eoc/services-layers';
+import { TepsgCode } from '@dlr-eoc/services-map-state';
 import olFeature from 'ol/Feature';
 import olPolygon from 'ol/geom/Polygon';
 import { containsXY } from 'ol/extent';
@@ -10,7 +11,7 @@ import { buffer } from 'ol/extent';
  * https://github.com/Turfjs/turf/blob/master/packages/turf-rectangle-grid/index.ts
  * returns  olFeature<any>[]
  */
-export const regularGrid = (bbox: TGeoExtent, cellSizeDeg: number, zoom: number, mapEPSG: string, mapExtent: TGeoExtent) => {
+export const regularGrid = (bbox: TGeoExtent, cellSizeDeg: number, zoom: number, mapEPSG: TepsgCode, mapExtent: TGeoExtent) => {
   /** olFeature */
   const features: olFeature<olPolygon>[] = [];
 
