@@ -6,6 +6,11 @@
 * **@dlr-eoc/map-ol:**
  - Use `projjson` or `proj4js` to create projection if defined on `IProjDef`.
 
+ 
+### Bug Fixes
+* **@dlr-eoc/ngx-ukis-ui-clarity:**
+ - Can zoom to `nativeBbox` for `LayerentryComponent` and `LayerentryGroupComponent`.
+
 
 # [16.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v16.0.0) (2026-05-29) (update dependencies, new library ngx-ukis-ui-clarity and ngx-ukis-utilities, replace core-ui)
 

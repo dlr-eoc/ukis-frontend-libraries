@@ -21,10 +21,10 @@ enum EactiveTabs {
 type TactiveTabs = keyof typeof EactiveTabs;
 
 @Component({
-    selector: 'ukis-layerentry',
-    templateUrl: './layerentry.component.html',
-    styleUrls: ['./layerentry.component.scss'],
-    imports: [NgClass, ClrIcon, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponent]
+  selector: 'ukis-layerentry',
+  templateUrl: './layerentry.component.html',
+  styleUrls: ['./layerentry.component.scss'],
+  imports: [NgClass, ClrIcon, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponent]
 })
 export class LayerentryComponent implements OnInit {
   @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }
@@ -44,6 +44,8 @@ export class LayerentryComponent implements OnInit {
   get expanded() {
     if (this.layer) {
       const layerExpanded = this.layer.expanded;
+      // can change after projection was set for nativeBbox
+      this.checkCanZoomToLayer();
       if (typeof layerExpanded === 'boolean') {
         return layerExpanded;
       } else {
@@ -164,11 +166,7 @@ export class LayerentryComponent implements OnInit {
       this.setDefaultActiveTabs();
     }
 
-
-    if (this.layer.bbox && this.layer.bbox.length >= 4) {
-      this.canZoomToLayer = true;
-    }
-
+    this.checkCanZoomToLayer()
 
     if (this.layer.filtertype === 'Baselayers' && !this.layer.legendImg && !this.layer.description && !this.layer.action && !this.layer.actions && !this.layer.styles && !(this.layer.styles?.length > 1)) {
       this.hasTabsbody = false;
@@ -182,6 +180,14 @@ export class LayerentryComponent implements OnInit {
 
     if (!this.layer.legendImg && !this.layer.description) {
       this.switchTab('settings');
+    }
+  }
+
+  checkCanZoomToLayer() {
+    if ((this.layer.bbox && this.layer.bbox.length >= 4) || (this.layer.nativeBbox && this.mapState?.getMapState().value.proj.epsg === this.layer.nativeBbox.epsg && this.layer.nativeBbox.bbox.length >= 4)) {
+      this.canZoomToLayer = true;
+    } else {
+      this.canZoomToLayer = false;
     }
   }
 
@@ -272,7 +278,7 @@ export class LayerentryComponent implements OnInit {
     }
   }
 
-  setLayerOpacity(layer) {
+  setLayerOpacity(layer: Layer) {
     if (!this.group) {
       this.layersSvc.updateLayer(layer, layer.filtertype || 'Layers'); // TODO check for baselayers!!!!!!
     } else {
@@ -318,7 +324,7 @@ export class LayerentryComponent implements OnInit {
     }
   }
 
-  hasActiveTabs(){
+  hasActiveTabs() {
     return Object.values(this.activeTabs).filter(v => v).length > 0;
   }
 
