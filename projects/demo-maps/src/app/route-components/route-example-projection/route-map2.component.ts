@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
-import { LayersService, RasterLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
+import { LayersService, RasterLayer, TGeoExtent, VectorLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def, EPSG_3035_Def, adjustBBoxAxisToEnu } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
@@ -97,6 +97,37 @@ export class RouteMap2Component implements OnInit {
       visible: true,
       id: 'osm'
     });
+
+    const wmtsCustomTilegrid = new WmtsLayer({
+      name: 'EOC Basemap - ETRS89',
+      id: 'eoc_basemap_tile_EPSG_3035',
+      description: 'This basemap only works for EPSG:3035 - custom TileGrid',
+      visible: false,
+      type: 'wmts',
+      removable: false,
+      params: {
+        layer: 'eoc:basemap',
+        format: 'image/png', // 'image/vnd.jpeg-png',
+        style: '_empty',
+        matrixSetOptions: {
+          matrixSet: 'EPSG:3035:512',
+          matrixIds: ['EPSG:3035:512:0', 'EPSG:3035:512:1', 'EPSG:3035:512:2', 'EPSG:3035:512:3', 'EPSG:3035:512:4', 'EPSG:3035:512:5', 'EPSG:3035:512:6', 'EPSG:3035:512:7', 'EPSG:3035:512:8', 'EPSG:3035:512:9', 'EPSG:3035:512:10', 'EPSG:3035:512:11', 'EPSG:3035:512:12'],
+          resolutions: [11190.7684596639, 5595.38422983195, 2797.692114915975, 1398.8460574579874, 699.4230287289937, 349.71151436449685, 174.85575718224842, 87.42787859112421, 43.713939295562106, 21.856969647781053, 10.928484823890527, 5.464242411945263, 2.7321212059726316],
+          origin: [1896628.6179337814, 6827128]
+        }
+      },
+      tileSize: 512,
+      url: 'https://tiles.geoservice.dlr.de/service/wmts',
+      attribution: '&copy, <a href="//geoservice.dlr.de/eoc/basemap/">DLR</a>',
+      continuousWorld: false,
+      legendImg: 'https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Abasemap&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11',
+      opacity: 1,
+      nativeBbox: {
+        epsg: EPSG_3035_Def.code,
+        bbox: EPSG_3035_Def.extent
+      }
+    })
+
 
     const gufLayer = new RasterLayer({
       type: 'wms',
@@ -267,7 +298,7 @@ export class RouteMap2Component implements OnInit {
       }
     })
 
-    const overlays = [osm_layer, gufLayer, vectorLayer, TanDEMPolarDEM, vectorLayerPolar, fcclLayer];
+    const overlays = [wmtsCustomTilegrid, osm_layer, gufLayer, vectorLayer, TanDEMPolarDEM, vectorLayerPolar, fcclLayer];
     overlays.map(layer => this.layersSvc.addLayer(layer, 'Layers'));
   }
 
