@@ -1046,15 +1046,20 @@ export class MapOlService {
         matrixSet = l.params.matrixSetOptions.matrixSet;
         if ('resolutions' in l.params.matrixSetOptions) {
           const resolutions: Array<string | number> = l.params.matrixSetOptions.resolutions;
-          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', null, l.tileSize, null, resolutions);
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', undefined, l.tileSize, undefined, resolutions);
         } else if ('resolutionLevels' in l.params.matrixSetOptions || 'tileMatrixPrefix' in l.params.matrixSetOptions) { /** ISimpleMatrixSet */
           const resolutionLevels = l.params.matrixSetOptions.resolutionLevels;
           const tileMatrixPrefix = l.params.matrixSetOptions.tileMatrixPrefix;
-          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', resolutionLevels, l.tileSize, tileMatrixPrefix, null);
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', resolutionLevels, l.tileSize, tileMatrixPrefix, undefined);
         }
         if ('matrixIds' in l.params.matrixSetOptions) {
           const matrixIds = l.params.matrixSetOptions.matrixIds;
-          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', null, l.tileSize, null, null, matrixIds);
+          const resolutions = l.params.matrixSetOptions.resolutions;
+          const tileSize = l.params.matrixSetOptions.tileSizes || l.tileSize;
+          const origin = l.params.matrixSetOptions.origin;
+          const origins = l.params.matrixSetOptions.origins;
+          const extent = l.params.matrixSetOptions.extent;
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', undefined, tileSize, undefined, resolutions, matrixIds, origin, origins, extent);
         }
       }
 
@@ -1513,22 +1518,32 @@ export class MapOlService {
     });
   }
 
-  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number, matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>): T {
+  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number | number[], matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>, origin?: Array<string | number>, origins?: Array<Array<string | number>>, extent?: TGeoExtent): T {
     const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
-    const newTileSize = tileSize || DEFAULT_TILE_SIZE;
+    const newTileSize = (!Array.isArray(tileSize)) ? [tileSize || DEFAULT_TILE_SIZE] : tileSize;
     const newMatrixIdPrefix = matrixIdPrefix || '';
 
     const projectionExtent = this.getProjection().getExtent();
-    const defaultResolutions = this.resolutionsFromExtent(projectionExtent, newResolutionLevels, newTileSize);
+    const defaultResolutions = this.resolutionsFromExtent(projectionExtent, newResolutionLevels, newTileSize[0]);
     const defaultMatrixIds = this.matrixIdsFromResolutions(defaultResolutions.length, newMatrixIdPrefix);
     /** how to generate matrix ids is not in the wms GetCapabilities ?? */
 
     const tileGridOptions: any = {
-      extent: projectionExtent,
-      origin: olGetTopLeft(projectionExtent),
+      extent: extent || projectionExtent,
+      origin: origin || olGetTopLeft(projectionExtent),
       resolutions: resolutions || defaultResolutions,
-      tileSize: [newTileSize, newTileSize]
+      tileSize: newTileSize[0]
     };
+
+    if (origins) {
+      tileGridOptions.origins = origins;
+      delete tileGridOptions.origin;
+    }
+
+    if (Array.isArray(tileSize)) {
+      tileGridOptions.tileSizes = newTileSize
+      delete tileGridOptions.tileSize;
+    }
 
     if (type === 'wmts') {
       tileGridOptions.matrixIds = matrixIds || defaultMatrixIds;
