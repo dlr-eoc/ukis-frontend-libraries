@@ -1067,7 +1067,7 @@ export class MapOlService {
         url: l.url,
         tileGrid,
         matrixSet,
-        wrapX: false,
+        wrapX: l.continuousWorld || false,
         layer: l.params.layer,
         style: l.params.style
       };
