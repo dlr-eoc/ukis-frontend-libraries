@@ -1,4 +1,4 @@
-import { Layer, RasterLayer, IRasterLayerOptions, IRasterLayerParams } from './Layers';
+import { Layer, RasterLayer, IRasterLayerOptions, IRasterLayerParams, TGeoExtent } from './Layers';
 /**
  * The following classes try to incorporate any information that map-libraries (ol, mapbox, leaflet) might need to display raster-layers.
  * Like Layers.ts, these classes are intended as an abstraction over all map-libraries.
@@ -34,6 +34,13 @@ export interface IBaseMatrixSet {
 export interface IListMatrixSet extends IBaseMatrixSet {
   matrixIds: string[];
   resolutions: number[];
+  extent?: TGeoExtent;
+  /** https://openlayers.org/en/latest/apidoc/module-ol_tilegrid_WMTS-WMTSTileGrid.html */
+  origin?: number[],
+  /** or use origins if they are different for the Levels */
+  origins?: [number, number][];
+  /** array for all tileSizes for the resolutionLevels - if they are different from l.tileSize */
+  tileSizes?: number[];
 }
 
 export interface ISimpleMatrixSet extends IBaseMatrixSet {

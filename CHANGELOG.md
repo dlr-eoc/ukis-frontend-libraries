@@ -6,6 +6,8 @@
 
 * **@dlr-eoc/map-ol:**
  - Use `projjson` or `proj4js` to create projection if defined on `IProjDef`.
+* **@dlr-eoc/services-layers:**
+ - More options to create `WMTSTileGrid` on `IListMatrixSet`. The new optional options are `extent?: TGeoExtent`, `origin?: number[]`, `origins?: [number, number][]` and `tileSizes?: number[]`.
 
  
 ### Bug Fixes
