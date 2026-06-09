@@ -32,15 +32,20 @@ export interface IBaseMatrixSet {
   matrixSet: string;
 }
 export interface IListMatrixSet extends IBaseMatrixSet {
+  /** only used for type wmts */
   matrixIds: string[];
   resolutions: number[];
-  extent?: TGeoExtent;
+
   /** https://openlayers.org/en/latest/apidoc/module-ol_tilegrid_WMTS-WMTSTileGrid.html */
+  extent?: TGeoExtent;
+  /**  When no origin or origins are configured, the origin will be set to the top-left corner of the extent */
   origin?: number[],
   /** or use origins if they are different for the Levels */
   origins?: [number, number][];
   /** array for all tileSizes for the resolutionLevels - if they are different from l.tileSize */
   tileSizes?: number[];
+  /** Number of tile rows and columns of the grid for each zoom level - TileMatrixWidth and TileMatrixHeight from GetCapabilities  */
+  sizes?: [number, number][];
 }
 
 export interface ISimpleMatrixSet extends IBaseMatrixSet {

@@ -1059,7 +1059,8 @@ export class MapOlService {
           const origin = l.params.matrixSetOptions.origin;
           const origins = l.params.matrixSetOptions.origins;
           const extent = l.params.matrixSetOptions.extent;
-          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', undefined, tileSize, undefined, resolutions, matrixIds, origin, origins, extent);
+          const sizes = l.params.matrixSetOptions.sizes;
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', undefined, tileSize, undefined, resolutions, matrixIds, origin, origins, extent, sizes);
         }
       }
 
@@ -1518,7 +1519,7 @@ export class MapOlService {
     });
   }
 
-  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number | number[], matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>, origin?: Array<string | number>, origins?: Array<Array<string | number>>, extent?: TGeoExtent): T {
+  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number | number[], matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>, origin?: Array<string | number>, origins?: Array<Array<string | number>>, extent?: TGeoExtent, sizes?: Array<Array<string | number>>): T {
     const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
     const newTileSize = (!Array.isArray(tileSize)) ? [tileSize || DEFAULT_TILE_SIZE] : tileSize;
     const newMatrixIdPrefix = matrixIdPrefix || '';
@@ -1538,6 +1539,10 @@ export class MapOlService {
     if (origins) {
       tileGridOptions.origins = origins;
       delete tileGridOptions.origin;
+    }
+
+    if(sizes){
+      tileGridOptions.sizes = sizes;
     }
 
     if (Array.isArray(tileSize)) {
