@@ -40,6 +40,7 @@ import olVectorLayer from 'ol/layer/Vector';
 import { applyStyle } from 'ol-mapbox-style';
 import { collectionItemSetIndex, layerOrGroupSetOpacity, layerOrGroupSetVisible, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
 import { defaults as defaultInteractions } from 'ol/interaction/defaults';
+import { ViewOptions as olViewOptions } from 'ol/View';
 
 import VectorSource from 'ol/source/Vector';
 
@@ -79,6 +80,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   @Input('layersSvc') layersSvc: LayersService;
   @Input('mapState') mapStateSvc: MapStateService;
   @Input('controls') controls: IMapControls;
+  @Input('viewOptions') viewOptions: olViewOptions;
 
   map: Map;
   subs: Subscription[] = [];
@@ -96,7 +98,7 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   ngOnInit() {
     /** Subscribe to mapStateSvc before map is created */
     this.subscribeToMapState();
-    this.initMap();
+    this.initMap(this.viewOptions);
     /** subscribe to layers oninit so they get pulled after view init */
     this.subscribeToLayers();
     // TODO: refactor to signals
@@ -585,8 +587,8 @@ export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, 
   }
 
 
-  private initMap() {
-    const olMapView = this.mapSvc.createMap();
+  private initMap(viewOptions?: olViewOptions) {
+    const olMapView = this.mapSvc.createMap(undefined, viewOptions);
     this.map = olMapView.map; //
     const oldInteractions = this.map.getInteractions();
     const interactions = defaultInteractions();

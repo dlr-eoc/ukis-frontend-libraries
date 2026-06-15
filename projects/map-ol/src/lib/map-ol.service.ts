@@ -154,7 +154,7 @@ export class MapOlService {
    * if this is used in an angular component then set the target after the view is created
    * e.g. this.map.setTarget(this.mapDivView.nativeElement) in ngAfterViewInit()
    */
-  public createMap(target?: HTMLElement) {
+  public createMap(target?: HTMLElement, options?: olViewOptions) {
     const zoom = 0;
     const center = {
       lat: 0,
@@ -255,6 +255,10 @@ export class MapOlService {
 
     if (this.view['zoomFactor']) {
       this.viewOptions.zoomFactor = this.view['zoomFactor'];
+    }
+
+    if (options) {
+      this.viewOptions = Object.assign(this.viewOptions, options);
     }
     const tempview = new olView(this.viewOptions);
 
