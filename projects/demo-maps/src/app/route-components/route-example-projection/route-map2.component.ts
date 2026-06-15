@@ -2,6 +2,7 @@ import { Component, OnInit, HostBinding } from '@angular/core';
 import { LayersService, RasterLayer, TGeoExtent, VectorLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def, EPSG_3035_Def, adjustBBoxAxisToEnu } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
+import { ViewOptions as olViewOptions } from 'ol/View';
 import { OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 
 import { ClarityIcons, layersIcon, mapIcon, compassIcon } from '@clr/angular/icon';
@@ -22,6 +23,7 @@ ClarityIcons.addIcons(...[layersIcon, mapIcon, compassIcon]);
 export class RouteMap2Component implements OnInit {
   @HostBinding('class') class = 'content-container';
   controls: IMapControls;
+  viewOptions: olViewOptions;
   projections: IProjDef[];
 
   projectionSet = false;
@@ -35,6 +37,10 @@ export class RouteMap2Component implements OnInit {
       attribution: true,
       scaleLine: true
     };
+
+    this.viewOptions = {
+      showFullExtent: true
+    }
 
     const SwissCH1903: IProjDef = {
       code: `EPSG:21781`,
