@@ -21,6 +21,9 @@
  - Transform extent in `setLayerExtentAfterProjection` if nativeBbox.epsg is not new epsg or try to use old extent.
  - Fix use `l.continuousWorld` for `wrapX` in wmts options.
 
+ * **@dlr-eoc/map-maplibre:**
+ - Allow the usage of different coordinate reference systems in WMTS requests
+
 
 # [16.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v16.0.0) (2026-05-29) (update dependencies, new library ngx-ukis-ui-clarity and ngx-ukis-utilities, replace core-ui)
 
