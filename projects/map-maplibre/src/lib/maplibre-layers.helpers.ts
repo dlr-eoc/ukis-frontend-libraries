@@ -4,7 +4,7 @@ import {
     MapGeoJSONFeature
 } from "maplibre-gl";
 import {
-    RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer, WmtsLayer as ukisWtmsLayer,
+    RasterLayer as ukisRasterLayer, WmsLayer as ukisWmsLayer,
     WmtsLayer as ukisWmtsLayer, VectorLayer as ukisVectorLayer, CustomLayer as ukisCustomLayer, Layer as ukisLayer, StackedLayer, XyzLayertype, WmsLayertype, WmtsLayertype, TmsLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype, StackedLayertype, TFiltertypes
 } from '@dlr-eoc/services-layers';
 import { LayerSourceSpecification, SourceIdSpecification, UKIS_METADATA, getAllLayers, getOpacityPaintProperty, getLayerbeforeId, addUkisLayerMetadata } from "./maplibre.helpers";
@@ -36,16 +36,20 @@ export function createGetMapUrl(l: ukisWmsLayer) {
     return url;
 }
 
-export function createGetTileUrl(l: ukisWtmsLayer) {
+export function createGetTileUrl(l: ukisWmtsLayer) {
     const baseurl = l.url;
     const properties = l.params;
-    const matrix = 'EPSG:3857:{z}';
+    let matrix = 'EPSG:3857'; //default epsg for maplibre
+
+    if(properties.matrixSetOptions && properties.matrixSetOptions.matrixSet){
+       matrix = properties.matrixSetOptions.matrixSet;
+    }
 
     // https://github1s.com/openlayers/openlayers/blob/HEAD/src/ol/source/WMTS.js#L70-L71
 
     // https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Abasemap&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11
     // bbox={bbox-epsg-3857}&ratio={ratio}&quadkey={quadkey}&z={z}&x={x}&y={y}
-    let url = `${baseurl}?layer=${properties?.layer}&style=${properties.style}&tilematrixset=${properties.matrixSetOptions?.matrixSet}&service=WTMS&version=${properties?.version || '1.0.0'}&request=GetTile&TileMatrix=${matrix}&TileCol={x}&TileRow={y}&format=${properties?.format || 'image/png'}`;
+    let url = `${baseurl}?layer=${properties?.layer}&style=${properties.style}&tilematrixset=${matrix}&service=WMTS&version=${properties?.version || '1.0.0'}&request=GetTile&TileMatrix=${matrix}:{z}&TileCol={x}&TileRow={y}&format=${properties?.format || 'image/png'}`;
     if(properties.time){
         url += `&time=${properties.time}`
     }
@@ -165,7 +169,7 @@ export function createXyzLayer(l: ukisRasterLayer) {
     return returnSourcesAndLayers(l, source, [layer]);
 }
 
-export function createWmtsLayer(l: ukisWtmsLayer) {
+export function createWmtsLayer(l: ukisWmtsLayer) {
     const { source, layer } = createBaseLayer<RasterSourceSpecification>(l);
     source.tiles = [createGetTileUrl(l)];
     return returnSourcesAndLayers(l, source, [layer]);
