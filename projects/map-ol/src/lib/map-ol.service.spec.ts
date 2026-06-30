@@ -45,6 +45,7 @@ import olMapBrowserEvent from 'ol/MapBrowserEvent';
 import { Fill as olFill, Stroke as olStroke, Style as olStyle } from 'ol/style';
 import { CommonModule } from '@angular/common';
 import { EPSG_3031_Def, EPSG_4326_Def, WebMercator, WGS84 } from '@dlr-eoc/services-map-state';
+import { toSize } from 'ol/size';
 
 
 let mapTarget: { size: number[], container: HTMLDivElement };
@@ -829,7 +830,7 @@ describe('MapOlService TileGrid', () => {
     const tileSize = [DEFAULT_TILE_SIZE, DEFAULT_TILE_SIZE];
     let tileGrid: olTileGrid = null;
     tileGrid = service.getTileGrid<olTileGrid>('default');
-    expect(tileGrid.getTileSize(0)).toEqual(tileSize);
+    expect(toSize(tileGrid.getTileSize(0))).toEqual(tileSize);
     /** default resolutions for tile size 256 and projection EPSG:3857 */
     expect(tileGrid.getExtent()).toEqual(service.getProjection().getExtent());
     expect(tileGrid.getResolutions().length).toBe(DEFAULT_MAX_ZOOM + 1);
@@ -857,7 +858,7 @@ describe('MapOlService TileGrid', () => {
 
     tileGrid = service.getTileGrid<olWMTSTileGrid>('wmts', null, tileSize[0], null, resolutions);
     expect(tileGrid.getResolutions()).toEqual(resolutions);
-    expect(tileGrid.getTileSize(2)).toEqual(tileSize);
+    expect(toSize(tileGrid.getTileSize(2))).toEqual(tileSize);
   });
 
   it('should create a WMTS Tile Grid from resolutionLevels', () => {
