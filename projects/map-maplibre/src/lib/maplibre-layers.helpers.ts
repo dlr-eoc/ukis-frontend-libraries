@@ -40,17 +40,22 @@ export function createGetTileUrl(l: ukisWmtsLayer) {
     const baseurl = l.url;
     const properties = l.params;
     let matrix = 'EPSG:3857'; //default epsg for maplibre
+    let tileMatrixPrefix = matrix;
 
-    if(properties.matrixSetOptions && properties.matrixSetOptions.matrixSet){
-       matrix = properties.matrixSetOptions.matrixSet;
+    if (properties.matrixSetOptions) {
+        matrix = properties.matrixSetOptions.matrixSet;
+
+        if ('tileMatrixPrefix' in properties.matrixSetOptions && properties.matrixSetOptions.tileMatrixPrefix) {
+            tileMatrixPrefix = properties.matrixSetOptions.tileMatrixPrefix;
+        }
     }
 
     // https://github1s.com/openlayers/openlayers/blob/HEAD/src/ol/source/WMTS.js#L70-L71
 
     // https://tiles.geoservice.dlr.de/service/wmts?layer=eoc%3Abasemap&style=_empty&tilematrixset=EPSG%3A3857&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image%2Fpng&TileMatrix=EPSG%3A3857%3A5&TileCol=18&TileRow=11
     // bbox={bbox-epsg-3857}&ratio={ratio}&quadkey={quadkey}&z={z}&x={x}&y={y}
-    let url = `${baseurl}?layer=${properties?.layer}&style=${properties.style}&tilematrixset=${matrix}&service=WMTS&version=${properties?.version || '1.0.0'}&request=GetTile&TileMatrix=${matrix}:{z}&TileCol={x}&TileRow={y}&format=${properties?.format || 'image/png'}`;
-    if(properties.time){
+    let url = `${baseurl}?layer=${properties?.layer}&style=${properties.style}&tilematrixset=${matrix}&service=WMTS&version=${properties?.version || '1.0.0'}&request=GetTile&TileMatrix=${tileMatrixPrefix}:{z}&TileCol={x}&TileRow={y}&format=${properties?.format || 'image/png'}`;
+    if (properties.time) {
         url += `&time=${properties.time}`
     }
     return url;

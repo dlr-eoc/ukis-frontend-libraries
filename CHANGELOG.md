@@ -22,7 +22,7 @@
  - Fix use `l.continuousWorld` for `wrapX` in wmts options.
 
  * **@dlr-eoc/map-maplibre:**
- - Allow the usage of different coordinate reference systems in WMTS requests
+ - Allow the usage of different coordinate reference systems in WMTS requests. Use `WmtsLayer.params.matrixSetOptions.matrixSet`. and `WmtsLayer.params.matrixSetOptions.tileMatrixPrefix`
 
 
 # [16.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v16.0.0) (2026-05-29) (update dependencies, new library ngx-ukis-ui-clarity and ngx-ukis-utilities, replace core-ui)
