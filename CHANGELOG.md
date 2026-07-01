@@ -8,6 +8,7 @@
  - Use `projjson` or `proj4js` to create projection if defined on `IProjDef`.
  - Use all `IListMatrixSet` options in `getTileGrid` to create `WMTSTileGrid`.
  - Allow to pass `olViewOptions` to map-ol component.
+ - Use `IProjFitOptions.viewSetExtent` in `mapSvc.setProjection`.
 
 * **@dlr-eoc/services-layers:**
  - More options to create `WMTSTileGrid` on `IListMatrixSet`. The new optional options are `extent?: TGeoExtent`, `origin?: number[]`, `origins?: [number, number][]`, `tileSizes?: number[]` and `sizes?: [number, number][];`.
