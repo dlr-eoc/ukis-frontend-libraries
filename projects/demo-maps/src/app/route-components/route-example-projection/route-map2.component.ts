@@ -24,6 +24,11 @@ export class RouteMap2Component implements OnInit {
   @HostBinding('class') class = 'content-container';
   controls: IMapControls;
   viewOptions: olViewOptions;
+  public projectionSwitchOptions = {
+    fitViewToNewExtent: true,
+    setViewExtent: false // true -> nothing outside of the projection extent can be visible on the map.
+  }
+
   projections: IProjDef[];
 
   projectionSet = false;
@@ -39,7 +44,7 @@ export class RouteMap2Component implements OnInit {
     };
 
     this.viewOptions = {
-      showFullExtent: true
+      showFullExtent: false
     }
 
     const SwissCH1903: IProjDef = {
@@ -322,7 +327,7 @@ export class RouteMap2Component implements OnInit {
     const proJ = this.projections.find(p => p.title === 'Antarctic Polar Stereographic');
     if (proJ) {
       this.mapStateSvc.registerProjection(proJ);
-      this.mapStateSvc.setProjection(proJ.code, 'user', { fitToNativeBbox: nativeBbox });
+      this.mapStateSvc.setProjection(proJ.code, 'user', { fitToNativeBbox: nativeBbox, viewSetExtent: false });
     }
   }
 
