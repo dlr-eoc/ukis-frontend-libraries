@@ -22,6 +22,7 @@ export class ProjectionSwitchComponent implements OnInit {
   @Input('mapState') mapState: MapStateService;
   @Input('projectionList') projList: IProjDef[];
   @Input('fitViewToNewExtent') fitViewToNewExtent? = false;
+  @Input('setViewExtent') setViewExtent? = true;
   subscription: Subscription;
   selectedProj: IProjDef;
   constructor() { }
@@ -36,7 +37,7 @@ export class ProjectionSwitchComponent implements OnInit {
   setNewProjection(projection: IProjDef) {
     const currentEpsg = this.mapSvc.getProjection().getCode();
     if (currentEpsg !== projection.code) {
-      this.mapState.setProjection(projection, 'user', { fitToProjectionExtent: this.fitViewToNewExtent });
+      this.mapState.setProjection(projection, 'user', { fitToProjectionExtent: this.fitViewToNewExtent, viewSetExtent: this.setViewExtent });
     }
     this.selectedProj = projection;
   }

@@ -8,9 +8,16 @@
  - Use `projjson` or `proj4js` to create projection if defined on `IProjDef`.
  - Use all `IListMatrixSet` options in `getTileGrid` to create `WMTSTileGrid`.
  - Allow to pass `olViewOptions` to map-ol component.
+ - Use `IProjFitOptions.viewSetExtent` in `mapSvc.setProjection`.
 
 * **@dlr-eoc/services-layers:**
  - More options to create `WMTSTileGrid` on `IListMatrixSet`. The new optional options are `extent?: TGeoExtent`, `origin?: number[]`, `origins?: [number, number][]`, `tileSizes?: number[]` and `sizes?: [number, number][];`.
+
+**@dlr-eoc/ngx-ukis-ui-clarity:**
+ - Input `setViewExtent` on `<ukis-projection-switch>` to configure if the `view.extent` is set on `mapSvc.setProjection` - Default `true` like before.
+
+* **@dlr-eoc/services-map-state:**
+ - Add `IProjFitOptions.viewSetExtent` to configure if the `view.extent` is set on `mapSvc.setProjection`.
 
  
 ### Bug Fixes

@@ -16,6 +16,7 @@ export interface IProjFitOptions {
   fitToProjectionExtent?: boolean
   fitToBbox?: TGeoExtent
   fitToNativeBbox?: TGeoExtent
+  viewSetExtent?: boolean // default true
 }
 
 export interface IMapState {

@@ -2615,14 +2615,19 @@ export class MapOlService {
       const oldProj = oldView.getProjection();
       const oldEPSG = oldProj.getCode() as TepsgCode;
       const oldExtent = oldView.calculateExtent();
+      const viewSetExtent = (options?.viewSetExtent !== undefined) ? options.viewSetExtent : true;
 
       // Test is not same projection
       if (projIsReg.code !== oldProj.getCode()) {
         const newProjection = this.getOlProjection(projIsReg);
         if (newProjection) {
+          const fitExtent = newProjection.getExtent();
           viewOptions.projection = newProjection;
-          viewOptions.extent = newProjection.getExtent();
-          viewOptions.center = (viewOptions.extent) ? olExtGetCenter(viewOptions.extent) : viewOptions.center;
+          // nothing outside of this extent can be visible on the map. Can be problematic with showFullExtent=false
+          if (viewSetExtent) {
+            viewOptions.extent = fitExtent
+          }
+          viewOptions.center = (fitExtent) ? olExtGetCenter(fitExtent) : viewOptions.center;
 
           // https://openlayers.org/en/latest/examples/reprojection-by-code.html
           const view = new olView(viewOptions);
@@ -2631,7 +2636,7 @@ export class MapOlService {
           this.view = this.map.getView();
 
           if (options?.fitToProjectionExtent) {
-            this.view.fit(viewOptions.extent);
+            this.view.fit(fitExtent);
           } else {
             let newExtent: olExtent;
             if (options?.fitToBbox) {
@@ -2645,10 +2650,10 @@ export class MapOlService {
               newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
             }
 
-            if (containsExtent(viewOptions.extent, newExtent)) {
+            if (containsExtent(fitExtent, newExtent)) {
               this.view.fit(newExtent);
             } else {
-              this.view.fit(viewOptions.extent);
+              this.view.fit(fitExtent);
             }
           }
 
