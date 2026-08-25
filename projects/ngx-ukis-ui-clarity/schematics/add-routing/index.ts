@@ -28,7 +28,7 @@ export function addRouting(options: UkisNgAddRoutingSchema): Rule {
  * - app
  * - app/route-components
  *
- *  TODO: update app.component.ts not override
+ *  TODO: update app.ts not override
  */
 function ruleAddFiles(options: UkisNgAddRoutingSchema): Rule {
   return async (tree: Tree, context: SchematicContext) => {
@@ -47,7 +47,7 @@ function ruleAddFiles(options: UkisNgAddRoutingSchema): Rule {
         const appTemplateSource = apply(url('./files/src/app'), [
           applyTemplates({ ...templateVariabels }),
           filter((path: Path) => {
-            const removeFiles = ['app.component.html', 'app.component.ts', 'app-routing.module.ts', 'app.config.ts', 'app.routes.ts'];
+            const removeFiles = ['app.html', 'app.ts', 'app-routing.module.ts', 'app.config.ts', 'app.routes.ts'];
             /**
              * check for existing files and remove them so the are allowed to overwrite!
              */
@@ -143,7 +143,7 @@ function ruleAddImportsInAppModule(optionsProject: UkisNgAddRoutingSchema['proje
  * TODO
  */
 /* function ruleAddImportsInAppComponent(_options: UkisNgAddRoutingSchema): Rule {
-    const appCompPath = '/src/app/app.component.ts';
+    const appCompPath = '/src/app/app.ts';
     const rules: Rule[] = [];
     const imports: ImoduleImport[] = [
         { classifiedName: 'Router', path: '@angular/router' }
