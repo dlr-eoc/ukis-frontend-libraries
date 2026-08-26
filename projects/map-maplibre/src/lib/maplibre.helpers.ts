@@ -8,6 +8,11 @@ export type LayerSourceSpecification = { sources: SourceIdSpecification, layers:
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
+interface IlayerChange {
+    layerId: string;
+    beforeId: string | null;
+}
+
 export interface IukisMetadata {
     'ukis:layerID': ukisLayer['id'];
     'ukis:filtertype': ukisLayer['filtertype'];
@@ -20,7 +25,7 @@ export const UKIS_METADATA = {
     filtertype: 'ukis:filtertype',
     ignoreOpacity: 'ukis:ignore-opacity',
     ignoreVisibility: 'ukis:ignore-visibility',
-};
+} as const;
 
 export function addUkisLayerMetadata(l: ukisLayer) {
     const metadata: IukisMetadata = {
@@ -41,7 +46,8 @@ export function getUkisLayerMetadata(ml: StyleLayer) {
 
 export function setUkisLayerMetadata(ml: StyleLayer, meta: Partial<IukisMetadata>) {
     Object.keys(meta).forEach(k => {
-        (ml?.metadata as any)[k] = meta[k];
+        const mk = k as keyof IukisMetadata;
+        (ml?.metadata as any)[mk] = meta[mk];
     });
 }
 
@@ -197,7 +203,11 @@ export function getLayerbeforeId(map: glMap, layerOrId: string | StyleLayer) {
         mllayer = layerOrId;
     }
 
-    const filtertype = getUkisLayerMetadata(mllayer)['ukis:filtertype'];
+    if (!mllayer) {
+        return undefined;
+    }
+
+    const filtertype = getUkisLayerMetadata(mllayer)[UKIS_METADATA.filtertype];
     const layers = getAllLayers(map, filtertype);
     const index = layers.findIndex((item) => item.id === mllayer.id);
 
@@ -327,10 +337,7 @@ export function removeLayerAndSource(map: glMap, ukisLayerID: string | string[])
  * Detect changes in layer order
  */
 export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) {
-    let orderChanges: {
-        layerId: string,
-        beforeId: string
-    }[] = [];
+    let orderChanges: IlayerChange[] = [];
 
     let layersLength = mapLayerIds.length;
     let index = layersLength;
@@ -339,7 +346,7 @@ export function getLayerChangeOrder(layers: ukisLayer[], mapLayerIds: string[]) 
         const layer = layers[index];
 
         if (mapLayer !== layer.id) {
-            const orderChange = {
+            const orderChange: IlayerChange = {
                 layerId: layer.id,
                 beforeId: null as any
             };
@@ -390,8 +397,8 @@ export function changeOrderOfLayers(map: glMap, layers: ukisLayer[], mapLayerIds
     }
 }
 
-export function changeOrderOfLayer(map: glMap, layerChange: { layerId: string, beforeId: string }) {
-    if (layerChange) {
+export function changeOrderOfLayer(map: glMap, layerChange: IlayerChange) {
+    if (layerChange && layerChange.beforeId) {
         const layerMapLayers = getLayersAndSources(map, layerChange.layerId).layers;
         const beforeMapLayers = getLayersAndSources(map, layerChange.beforeId).layers;
         /* const layerMapLayers = getFirstAndLastLayer(map, layerChange.layerId);

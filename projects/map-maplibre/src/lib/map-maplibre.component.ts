@@ -10,14 +10,23 @@ import { Subject, Subscription } from 'rxjs';
 import { combineLatestWith, delay } from 'rxjs/operators';
 import { MapMaplibreService } from './map-maplibre.service';
 import toGeoJson from '@mapbox/togeojson';
+import type { IukisMetadata } from './maplibre.helpers';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
+interface ISourceTypes {
+  kml: boolean;
+}
+
+interface IprojMapping {
+  globe: typeof WGS84;
+  mercator: typeof WebMercator
+}
 /**
  * This has to be global, because maplibre does this the same way
  * https://github1s.com/maplibre/maplibre-gl-js/blob/main/src/source/source.ts#L18-L19
  */
-const hasSourceType = {};
+const hasSourceType = {} as ISourceTypes;
 
 @Component({
     selector: 'ukis-map-maplibre',
@@ -241,7 +250,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     const viewAngle = this.map.getPitch();
     const rotation = getRotation(this.map);
     // https://maplibre.org/maplibre-style-spec/projection/
-    const projectionSpecType = this.map.getProjection()?.type;
+    const projectionSpecType = this.map.getProjection()?.type as keyof IprojMapping;
     const projMapping = { globe: WGS84, mercator: WebMercator };
     let epsg = projMapping.mercator as TepsgCode;
     if (Array.isArray(projectionSpecType)) {
@@ -351,7 +360,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
   private addUpdateBaseLayers(layers: ukisLayer[]) {
     const filtertype = 'baselayers';
     // this is like map change style but we only like to update nor recreat alle style
-    // map.setStyle(): https://maplibre.org/maplibre-gl-js/docs/API/classes/maplibregl.Map/#setstyle
+    // map.setStyle(): https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/
     // Changes in sprites and glyphs cannot be diffed.
     const visiblelayers = layers.filter(i => i.visible);
 
@@ -405,13 +414,14 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
 
     for (const layer of layers) {
       const mllayers = getAllLayers(this.map).filter(l => {
-        const ukismetadata = getUkisLayerMetadata(l as StyleLayer)
-        return ukismetadata[UKIS_METADATA.layerID] === layer.id;
+        const ukismetadata = getUkisLayerMetadata(l as StyleLayer);
+        const ukisID = UKIS_METADATA.layerID as keyof IukisMetadata;
+        return ukismetadata[ukisID] === layer.id;
       }).map(l => this.map.getLayer(l.id)).filter(l => l);
 
       mllayers.forEach(l => {
         this.mapSvc.updateMlLayer(l as any, layer, this.map);
-      })
+      });
     }
   }
 }
