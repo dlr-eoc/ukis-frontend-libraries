@@ -605,16 +605,16 @@ export function createLayer(newLayer: ukisLayer) {
 
 
 export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
-    /* if (oldSource.type === 'geojson' && oldSource instanceof GeoJSONSource) {
-        if (layer.type === 'geojson' && layer instanceof ukisVectorLayer) {
-            if (typeof layer.cluster === 'object') {
-                oldSource.setClusterOptions(layer.cluster)
-            }
-            
-            oldSource.setData(layer.data);
-            return;
-        }
-    } */
+    /**
+     * why we do not use oldSource -> from map.getSource(mllayer.source); and try to update it? -> currently does not emit updates of single layers
+     * we would have to do all things manually e.g. map.getSource(...).setTiles(), ... setUrl(), unloadTile()... and also events??
+     * 
+     * e.g. to update url of tiles 
+     * const source = map.getSource(...);
+     *  source.setTiles([
+     *     'https://example.com/tiles/{z}/{x}/{y}.pbf?param=value'
+     *  ]);
+     */
 
     // layer.id is used here because we use this on creation of the layers 
     // for custom layers we have the problem that this could be different, then we try to use oldSourceId
@@ -660,7 +660,7 @@ export function updateStyleLayerProperties(map: glMap, mllayer: StyleLayer, laye
     // metadata -> TODO
 
     const newLS = createLayer(layer);
-    const newStyleLayer = newLS.layers.find(l => l.id === mllayer.id);
+    const newStyleLayer = (newLS) ? newLS.layers.find(l => l.id === mllayer.id) : undefined;
 
     if (newStyleLayer) {
 
