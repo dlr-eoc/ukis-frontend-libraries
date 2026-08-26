@@ -166,11 +166,20 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
         this._preSetData(data);
       }
 
-      setData(data: GeoJSON.GeoJSON | string, waitForCompletion: true): Promise<void>;
+      setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: true): Promise<void>;
       setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: false): this;
-      setData(data: GeoJSON.GeoJSON | string): this | Promise<void> {
+      setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: boolean): this | Promise<void> {
         this._preSetData(data);
-        return super.setData(this._data.url || this._data.geojson);
+        const newData = this._data.url || this._data.geojson;
+        if (newData) {
+          if (!waitForCompletion) {
+            return super.setData(newData);
+          } else {
+            return super.setData(newData, waitForCompletion);
+          }
+        } else {
+          return this;
+        }
       }
 
       /** kml string or url */
