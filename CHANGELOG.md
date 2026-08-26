@@ -33,6 +33,7 @@
  - Add more types and fix type errors
  - Fix KMLSource `setData` add `waitForCompletion`
  - Update `custom` source in `updateLayerParamsAndSource` to also update custom layers
+ - Fix use `oldSource.id` in `updateSource()` if new `layer.id` not found in sources
 
 
 # [16.0.0](https://github.com/dlr-eoc/ukis-frontend-libraries/tree/v16.0.0) (2026-05-29) (update dependencies, new library ngx-ukis-ui-clarity and ngx-ukis-utilities, replace core-ui)

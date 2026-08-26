@@ -616,34 +616,35 @@ export function updateSource(map: glMap, layer: ukisLayer, oldSource: Source) {
         }
     } */
 
-    /* if(oldSource.type === 'image'){
-        oldSource.updateImage()
-    } */
-
-    const oldSourceSpec = map.getStyle().sources[layer.id];
+    // layer.id is used here because we use this on creation of the layers 
+    // for custom layers we have the problem that this could be different, then we try to use oldSourceId
+    const hasSourceLayerId = map.getStyle().sources[layer.id];
+    const oldSourceId = (hasSourceLayerId) ? layer.id : oldSource.id;
+    const oldSourceSpec = map.getStyle().sources[oldSourceId];
     if (oldSourceSpec) {
         const allLayers = getAllLayers(map);
         const layersWhitSource = allLayers.filter(l => {
             if (l.type !== 'background') {
-                return l.source === layer.id;
+                return l.source === oldSourceId; //layer.id;
             }
         });
         const newLS = createLayer(layer);
-        const newSourceSpec = newLS.sources[layer.id];
+        if (newLS) {
+            const newSourceSpec = newLS.sources[oldSourceId]; // layer.id
 
-        const diff = !propsEqual(newSourceSpec, oldSourceSpec);
-        if (diff) {
-            layersWhitSource.forEach(l => {
-                map.removeLayer(l.id);
-            });
-            map.removeSource(layer.id);
-
-            console.log('update source', layer.id, newSourceSpec);
-            map.addSource(layer.id, newSourceSpec);
-            layersWhitSource.forEach(l => {
-                map.addLayer(l);
-                // console.log('update layer for source', l.id);
-            });
+            const diff = !propsEqual(newSourceSpec, oldSourceSpec);
+            if (diff) {
+                layersWhitSource.forEach(l => {
+                    map.removeLayer(l.id);
+                });
+                map.removeSource(oldSourceId); // layer.id
+                // console.log('update source', oldSourceId, layer, newSourceSpec);
+                map.addSource(oldSourceId, newSourceSpec); // layer.id
+                layersWhitSource.forEach(l => {
+                    map.addLayer(l);
+                    // console.log('update layer for source', l.id);
+                });
+            }
         }
     }
 }
