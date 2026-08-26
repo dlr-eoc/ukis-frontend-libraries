@@ -274,17 +274,19 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
       opacity: 0.5
     });
 
+    const waterwaySourceId = 'waterway-planet_eoc';
     const waterway = new CustomLayer<StyleSpecification>({
-      id: 'waterway-planet_eoc',
+      id: 'waterway_planet_eoc_ID',
       name: 'waterway',
+      type: 'custom',
       visible: true,
       removable: true,
       custom_layer: {
         version: 8,
         // Use a different source for layers, to improve render quality
         sources: {
-           // The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109
-          'waterway-planet_eoc': // 'planet_eoc':
+          // The url to the tilejson is not public available so we use the tiles array to skip the request, to make use of the tms service. See https://github.com/openlayers/ol-mapbox-style/blob/v8.2.1/src/util.js#L109
+          [waterwaySourceId]: // 'planet_eoc':
           {
             "type": "vector",
             "url": "",
@@ -300,7 +302,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
           {
             "id": "water",
             "type": "fill",
-            "source": "waterway-planet_eoc", // 'planet_eoc',
+            "source": waterwaySourceId, // 'planet_eoc',
             "source-layer": "water",
             "filter": [
               "all",
@@ -326,7 +328,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
           {
             "id": "waterway",
             "type": "line",
-            "source": "waterway-planet_eoc", // 'planet_eoc',
+            "source": waterwaySourceId, // 'planet_eoc',
             "source-layer": "waterway",
             "filter": [
               "==",
@@ -348,7 +350,7 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
           {
             "id": "water_name",
             "type": "symbol",
-            "source": "waterway-planet_eoc", // 'planet_eoc',
+            "source": waterwaySourceId, // 'planet_eoc',
             "source-layer": "water_name",
             "filter": [
               "==",
@@ -722,13 +724,16 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
         }
       ]
     };
+    layer.bbox = [11.771870735772268, 47.44101685032831, 11.85227430395085, 47.49013323424285];
     this.layerSvc.updateLayer(layer);
   }
 
   updateStyleLayer() {
-    const water = this.layerSvc.getLayerOrGroupById('waterway-planet_eoc') as CustomLayer<StyleSpecification>;
+    const water = this.layerSvc.getLayerOrGroupById('waterway_planet_eoc_ID') as CustomLayer<StyleSpecification>;
     const layer0 = water.custom_layer.layers[0];
-    layer0.paint['fill-color'] = 'hsl(30, 14%, 53%)';
+    if (layer0.paint && layer0.type === 'fill') {
+      layer0.paint['fill-color'] = 'hsl(30, 14%, 53%)';
+    }
     // layer0.maxzoom = 12;
 
     if (layer0.type !== 'background') {
@@ -744,6 +749,22 @@ export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {
     }
 
     this.layerSvc.updateLayer(water);
+  }
+
+  updateLayerSource() {
+    const sourceId = 'waterway-planet_eoc';
+    const water = this.layerSvc.getLayerOrGroupById('waterway_planet_eoc_ID') as CustomLayer<StyleSpecification>;
+    const sources = water.custom_layer.sources;
+    const source = sources[sourceId];
+    if (source.type === 'vector' && source.tiles) {
+      source.tiles = [source.tiles[0]];
+    }
+    this.layerSvc.updateLayer(water);
+
+    console.log('sourceOnLayerSvc', sources[sourceId]);
+
+    const sourceOnMap = this.mapSvc.map.value?.getSource(sourceId);
+    console.log('sourceOnMap', sourceOnMap);
   }
 
   setViewAngle() {
