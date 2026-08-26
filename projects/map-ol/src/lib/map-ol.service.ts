@@ -2611,6 +2611,7 @@ export class MapOlService {
         viewOptions.resolution = undefined;
         viewOptions.resolutions = undefined;
       }
+      // TODO: what about listeners on old view oldView.getListeners(event:string) -> ViewObjectEventTypes | EventTypes
       const oldView = this.map.getView();
       const oldProj = oldView.getProjection();
       const oldEPSG = oldProj.getCode() as TepsgCode;
