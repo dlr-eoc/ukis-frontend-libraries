@@ -47,8 +47,8 @@ describe('add-routing standalone', () => {
 
   it('should add/update app files', async () => {
     const testFiles = [
-      '/src/app/app.component.html',
-      '/src/app/app.component.ts',
+      '/src/app/app.html',
+      '/src/app/app.ts',
       '/src/app/app.routes.ts',
       '/src/app/app.config.ts',
       '/src/app/route-components/README.md',
@@ -148,7 +148,7 @@ describe('add-routing standalone App', () => {
     ];
     const routingOptions = Object.assign({}, ngAddOptions, { routing: true });
     const tree = await schematicRunner.runSchematic('ng-add', routingOptions, appTree);
-    const appComponentSource = tree.readContent('/src/app/app.component.ts').split('@Component');
+    const appComponentSource = tree.readContent('/src/app/app.ts').split('@Component');
     const appComponent = appComponentSource[0];
 
     testImports.map(i => {

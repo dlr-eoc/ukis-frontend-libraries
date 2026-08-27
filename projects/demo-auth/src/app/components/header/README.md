@@ -8,7 +8,7 @@
 
 For examples [see demo maps](../demo-maps/README.md)
 
-#### in the app.component.html 
+#### in the app.html 
 ```
 <clr-main-container>
   ...

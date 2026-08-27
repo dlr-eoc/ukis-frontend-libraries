@@ -22,10 +22,10 @@ interface IUi {
 @Component({
   selector: '<%= appPrefix %>-root',
   imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, ExampleViewComponent],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  templateUrl: './app.html',
+  styleUrl: './app.scss'
 })
-export class AppComponent implements OnDestroy {
+export class App implements OnDestroy {
   title = '';
   shortTitle = '';
 

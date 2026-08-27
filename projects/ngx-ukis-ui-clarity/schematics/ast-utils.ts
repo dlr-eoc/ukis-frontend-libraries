@@ -55,7 +55,7 @@ function applyChanges(changes: Change[], tree: Tree, modulePath: string) {
 
 export interface AddInjectionContext {
   componentPath: string;
-  // e. g. /src/app/app.component.ts
+  // e. g. /src/app/app.ts
   servicePath: string;
   // e. g. ./core/side-menu/side-menu.service
   serviceClassName: string;

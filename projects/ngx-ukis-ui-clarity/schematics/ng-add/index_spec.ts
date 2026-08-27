@@ -116,9 +116,9 @@ describe('ng-add Module or standalone', () => {
 
   it('should add app files', async () => {
     const testFiles = [
-      '/src/app/app.component.html',
-      '/src/app/app.component.scss',
-      '/src/app/app.component.ts',
+      '/src/app/app.html',
+      '/src/app/app.scss',
+      '/src/app/app.ts',
       '/src/app/components/README.md',
 
       '/src/app/components/header/header.component.html',
@@ -276,7 +276,7 @@ describe('ng-add Module App', () => {
       'ExampleViewComponent'
     ];
     const tree = await schematicRunner.runSchematic('ng-add', ngAddOptions, appTree);
-    const appModule = tree.readContent('/src/app/app.component.ts');
+    const appModule = tree.readContent('/src/app/app.ts');
     testImports.map(i => {
       expect(appModule).toContain(i);
     });
@@ -351,9 +351,9 @@ describe('ng-add standalone App', () => {
 
   it('should add app files', async () => {
     const testFiles = [
-      '/src/app/app.component.html',
-      '/src/app/app.component.scss',
-      '/src/app/app.component.ts',
+      '/src/app/app.html',
+      '/src/app/app.scss',
+      '/src/app/app.ts',
 
       'src/app/components/global-alert/alert.service.spec.ts',
       'src/app/components/global-alert/alert.service.ts',

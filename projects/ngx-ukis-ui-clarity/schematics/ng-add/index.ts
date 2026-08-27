@@ -132,13 +132,12 @@ function removeViewsAfterRouting(optionsProject: UkisNgAddSchema['project']): Ru
  */
 function ruleAddFiles(options: UkisNgAddSchema): Rule {
   /**
-   * app.component.html
+   * app.html
    * add default template from files
    * <clr-main-container>
    * ...
    * </clr-main-container>
    *
-   *  TODO: check for style files and replace them e.g. app.component.styl ...
    */
   return async (tree: Tree, context: SchematicContext) => {
     const workspace = await getWorkspace(tree);
@@ -204,15 +203,15 @@ function ruleAddFiles(options: UkisNgAddSchema): Rule {
         const appTemplateSource = apply(url('./files/src/app'), [
           applyTemplates({ ...templateVariabels }),
           filter((path: Path) => {
-            const testFiles = ['app.component.html', 'app.component.ts', 'app.component.css', 'app.component.scss'];
+            const testFiles = ['app.html', 'app.ts', 'app.css', 'app.scss'];
             /**
              * check for existing files the are allowed to overwrite!
              */
             const destPath = join(appPath, path);
             if (tree.exists(destPath)) {
               for (const f of testFiles) {
-                /** delete app.component.css file it is replaced with scss */
-                if (f === 'app.component.css') {
+                /** delete app.css file it is replaced with scss */
+                if (f === 'app.css') {
                   const styleExtTest = join(appPath, f);
                   if (tree.exists(styleExtTest)) {
                     tree.delete(styleExtTest);
@@ -438,7 +437,7 @@ function ruleUpdateIndexHtml(options: UkisNgAddSchema): Rule {
 // TODO: maybe update this files instead of replacing them
 
 /**
- * app.component.ts
+ * app.ts
  * add imports for
  * - icons
  * - services
