@@ -3,8 +3,8 @@ import { readFile, writeFile, existsSync, readFileSync } from 'fs';
 import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 import { join } from 'path';
 
-import * as depcheck from 'depcheck';
-import * as toposort from 'toposort';
+import depcheck from 'depcheck';
+import toposort from 'toposort';
 
 const CWD = process.cwd();
 
@@ -80,16 +80,18 @@ export interface IcheckDepsOutput {
 
 type RecursiveMap = Map<string, RecursiveMap | null>;
 
+type TdepsKey = 'dependencies' | 'devDependencies' | 'peerDependencies' | 'bundledDependencies' | 'optionalDependencies';
+
 /**
  * replaces all dependency versions in your workspaces with the versions set in main package.json dependencies and devDependencies.
  * Workspace paths are a replacement for the default paths from your package workspaces, and another dependency object in the main package can be used using depsKey
  */
-export function setDependencyVersionsInWorkspaces(MAINPACKAGE: IPackageJSON, packageScope: string, workspacesPaths?: string[], depsKey?: string) {
+export function setDependencyVersionsInWorkspaces(MAINPACKAGE: IPackageJSON, packageScope: string, workspacesPaths?: string[], depsKey?: TdepsKey) {
   const workspaces = workspacesPaths || MAINPACKAGE?.workspaces?.map(p => join(CWD, p.replace(/\\/g, '/'), 'package.json'));
   if (workspaces) {
     let mainDependencies = Object.assign(MAINPACKAGE.devDependencies || {}, MAINPACKAGE.dependencies);
 
-    if (depsKey) {
+    if (depsKey && MAINPACKAGE[depsKey] && !Array.isArray(MAINPACKAGE[depsKey])) {
       mainDependencies = MAINPACKAGE[depsKey];
     }
 
@@ -114,7 +116,7 @@ async function updateWorkspace(path: string, obj: IDependencyMap, mainVersion: s
     if (json.name !== 'ukis-libraries-scripts') {
       json.version = mainVersion;
     }
-    const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'];
+    const depsList = ['dependencies', 'devDependencies', 'peerDependencies', 'bundledDependencies', 'optionalDependencies'] as const;
     depsList.forEach(async d => {
       updateDependencies(json, d, obj, mainVersion, packageScope);
     });
@@ -123,21 +125,22 @@ async function updateWorkspace(path: string, obj: IDependencyMap, mainVersion: s
   });
 }
 
-function updateDependencies(pkgJson: IPackageJSON, depKey: string, mainPackageDependencies: IDependencyMap, mainVersion: string, packageScope: string) {
-  if (pkgJson[depKey]) {
+function updateDependencies(pkgJson: IPackageJSON, depKey: TdepsKey, mainPackageDependencies: IDependencyMap, mainVersion: string, packageScope: string) {
+  const pkgJsonDep = pkgJson[depKey];
+  if (pkgJsonDep && !Array.isArray(pkgJsonDep)) {
     Object.keys(mainPackageDependencies).forEach(dep => {
-      const hasDep = pkgJson[depKey]?.[dep];
+      const hasDep = pkgJsonDep?.[dep];
       if (hasDep) {
         const main = mainPackageDependencies[dep];
-        pkgJson[depKey][dep] = main;
+        pkgJsonDep[dep] = main;
       }
     });
 
     // replace workspace versions
-    Object.keys(pkgJson[depKey]).forEach(dep => {
+    Object.keys(pkgJsonDep).forEach(dep => {
       const workspaceDep = dep.includes(packageScope);
       if (workspaceDep) {
-        pkgJson[depKey][dep] = mainVersion;
+        pkgJsonDep[dep] = mainVersion;
       }
     });
   }

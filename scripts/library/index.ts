@@ -69,7 +69,7 @@ function getSortedDeps(options: ISortedDepsOptions) {
   return getSortedProjects(filteredProjects, PACKAGE_SCOPE!, filterProjects);
 }
 
-function runTests(offset = 0, projects, headless = false) {
+function runTests(offset = 0, projects: string[], headless = false) {
   const project = projects[offset];
   const cliArgs = ['test', project, '--watch=false'];
   if (headless) {
@@ -109,7 +109,7 @@ function testAll(options: ItestOptions) {
   runTests(0, flattdepsAndProjects, options.headless);
 }
 
-function runBuilds(offset = 0, projects) {
+function runBuilds(offset = 0, projects: string[]) {
   const project = projects[offset];
   const cliArgs = ['build', '--configuration=production', '--watch=false', project];
   if (project) {
@@ -220,7 +220,7 @@ function updateBuildPackages(registry?: string) {
         // GitHub Packages now requires publishConfig.registry in new npm cli
         if (registry && registry.includes('npm.pkg.github.com')) {
           const scopeReg = `${PACKAGE_SCOPE}:registry`;
-          const publishConfig = {};
+          const publishConfig: Record<string, string> = {};
           publishConfig[scopeReg] = registry;
           json.publishConfig = publishConfig;
         }
