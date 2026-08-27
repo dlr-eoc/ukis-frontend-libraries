@@ -12,9 +12,9 @@
   "main": "index.js",
   "private": true,
   "peerDependencies": {
-    "@angular/cli": "^21.2.13",
-    "@schematics/angular": "^21.2.13",
-    "typescript": "^5.8.3"
+    "@angular/cli": "^22.1.6",
+    "@schematics/angular": "^22.1.4",
+    "typescript": "6.0.3"
   },
   "dependencies": {
     "commander": "^14.0.0",
@@ -29,7 +29,9 @@
   "devDependencies": {
     "@types/jasmine": "^5.1.8",
     "@types/node": "^22.15.21",
+    "@types/resolve": "^1.20.6",
     "@types/toposort": "^2.0.3",
+    "patch-package": "^8.0.1",
     "tslib": "^2.6.3"
   }
 }

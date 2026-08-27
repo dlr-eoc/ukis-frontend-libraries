@@ -16,7 +16,7 @@
     "tslib": "^2.6.3"
   },
   "devDependencies": {
-    "@angular/platform-browser-dynamic": "^21.2.14",
-    "@angular/core": "^21.2.14"
+    "@angular/platform-browser-dynamic": "^22.1.4",
+    "@angular/core": "^22.1.4"
   }
 }

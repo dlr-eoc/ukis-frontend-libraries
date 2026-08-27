@@ -1,3 +1,6 @@
+### Breaking Changes
+ - Update angular from `^21.2.13` to `^22.1.4`
+
 ### Features
 * **@dlr-eoc/services-map-state**
  - Allow to use `projjson` in `IProjDef`.

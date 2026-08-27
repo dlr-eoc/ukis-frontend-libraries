@@ -2,7 +2,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -14,10 +13,12 @@
     "target": "ES2022",
     "module": "es2020",
     "skipLibCheck": true,
+    "strictNullChecks": false,
+    "exactOptionalPropertyTypes": false,
     "paths": {
       "@dlr-eoc/*": [
-        "dist/*",
-        "projects/*"
+        "./dist/*",
+        "./projects/*"
       ]
     },
     "allowJs": true,
