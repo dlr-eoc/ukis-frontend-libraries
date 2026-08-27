@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -20,7 +20,7 @@ import { HttpErrorInterceptor } from './auth/http-error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes, withHashLocation()),
+    provideBrowserGlobalErrorListeners(), provideRouter(routes, withHashLocation()),
     importProvidersFrom(BrowserModule, ClarityModule, FormsModule, ReactiveFormsModule),
     provideAnimations(),
     AlertService, ProgressService,

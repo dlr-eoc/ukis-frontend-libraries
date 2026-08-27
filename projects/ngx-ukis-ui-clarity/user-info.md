@@ -15,7 +15,7 @@ This service (e.g. basic-auth.service) includes your business logic for authenti
 #### create an AuthGuardService
 This service protects your routes and is registered in the AppConfig or App Component
 
-#### add the following to the app.component.ts
+#### add the following to the app.ts
 ```
 import { LoginComponent, RegisterComponent, UserDetailsComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 import { BasicAuthService } from './auth/basic-auth.service';

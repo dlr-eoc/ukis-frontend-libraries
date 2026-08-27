@@ -1,7 +1,7 @@
 import { enableProdMode } from '@angular/core';
 import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
+import { App } from './app/app';
 import { appConfig } from './app/app.config';
 
 if (environment.production) {
@@ -10,7 +10,7 @@ if (environment.production) {
 
 (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
 
-bootstrapApplication(AppComponent, appConfig)
+bootstrapApplication(App, appConfig)
 .catch((err) => console.error(err));
   
  

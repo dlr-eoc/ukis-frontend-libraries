@@ -24,22 +24,31 @@ or locally installed `@angular/cli` with `npx`
 npx @angular/cli@<version> new project-tutorial-map --style=scss --standalone=true --routing=false
 ```
 
-- We do not need angular routing, so decline the prompt with `N`
+- We do not need angular routing, SSR and SSG, so decline the prompt with `N`
 
 ### 2. Move into the directory
 ```
 cd project-tutorial-map
 ```
 ### 3. Add Clarity Angular
-- At the moment Clarity does not support angular schematics ([github ng add issue](https://github.com/vmware-clarity/ng-clarity/issues/120)). Therefore Clarity has to be installed manually. For the versions also see ukis-frontend-libraries [package.json](package.json)
-- Run 
+- First, install `@angular/cdk` in the version which matches our Angular version (as it is a peer dependency of `@clr/angular`)." For the versions see ukis-frontend-libraries [package.json](package.json).
+```
+npm install @angular/cdk@<version>
+```
+
+- Also install [`@angular/animations`](https://www.npmjs.com/package/@angular/animations), which is deprecated but [needed](https://github.com/vmware-clarity/ng-clarity/issues/2460) by Clarity UI.
+```
+npm install @angular/animations --force 
+```
+
+- then install the Clarity packages
 ```
 npm install @clr/angular@<version> @clr/ui@<version>
 ```
 
 - Add Clarity Styles: This is done later by adding the UKIS Theme
 
-- Add the Clarity module and others to app.config.ts:
+- Add the Clarity module and providers to app.config.ts:
 ```
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 ...
@@ -56,31 +65,14 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-- Add Clarity icons to any component that uses them.
-
-e.g. in AppComponent
-```
-import { coreCollectionIcons, essentialCollectionIcons, ClarityIcons } from '@clr/angular/icon';
-import { ClrIcon } from '@clr/angular';
-
-@Component({
-    imports: [ClrIcon,...]
-})
-
-ClarityIcons.addIcons(...coreCollectionIcons);
-ClarityIcons.addIcons(...essentialCollectionIcons);
-
-```
-
-
 
 - Set Clarity Theme (index.html)
 ```
 <body cds-theme="light">
 ```
 For more information see 
-- [Getting Started with Clarity Design System](https://clarity.design/documentation/get-started#seedProjectAngular)
-- [Adding Clarity to an Existing Angular Application](https://clarity.design/pages/developing#adding-clarity-to-an-existing-angular-application)
+- [Getting Started with Clarity Design System](https://next.clarity.design/pages/introduction)
+- [Adding Clarity to an Existing Angular Application](https://next.clarity.design/pages/developing#adding-clarity-to-an-existing-angular-application)
 
 
 ### 4. Run the ng add command for the ngx-ukis-ui-clarity
@@ -103,6 +95,45 @@ If this does not work due to incorrect versions of peer dependencies, you can fi
 npm install @dlr-eoc/ngx-ukis-ui-clarity@<version> --force
 ng generate @dlr-eoc/ngx-ukis-ui-clarity:ng-add --project=project-tutorial-map
 ``` 
+
+
+If components use Clarity icons, them import and add them.
+
+e.g. in example-view.component.ts or app.ts
+```
+import { coreCollectionIcons, essentialCollectionIcons, ClarityIcons } from '@clr/angular/icon';
+import { ClrIcon } from '@clr/angular';
+
+ClarityIcons.addIcons(...coreCollectionIcons);
+ClarityIcons.addIcons(...essentialCollectionIcons);
+
+@Component({
+    imports: [ClrIcon,...]
+})
+
+
+```
+
+or import only the icons you need -> smaller bundle
+
+```
+import { ClarityIcons, linkIcon } from '@clr/angular/icon';
+import { ClrIcon } from '@clr/angular';
+
+ClarityIcons.addIcons(linkIcon);
+
+@Component({
+    imports: [ClrIcon,...]
+})
+
+```
+
+```
+// example-view.component.html
+...
+<clr-icon shape="link"></clr-icon>
+...
+```
 
 ### 5. Start and view the application
 - Run `npm start`

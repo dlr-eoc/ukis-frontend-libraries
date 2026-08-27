@@ -10,7 +10,7 @@ For a example [see demo auth](../demo-auth/README.md)
 #### add the following dependencies to the package.json
 - "@dlr-eoc/cookie-alert"
 
-#### add the following to app.component.ts
+#### add the following to app.ts
 ```
   import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
   ...
@@ -20,7 +20,7 @@ For a example [see demo auth](../demo-auth/README.md)
   ]
 ```
 
-#### add the following to the app.component.html
+#### add the following to the app.html
 ```
 <ukis-cookie-alert [alert-text]="'my alert text'" [privacy-link]="'link to privacy'"></ukis-cookie-alert>
 ```
