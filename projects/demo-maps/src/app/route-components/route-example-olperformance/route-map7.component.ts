@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService, EPSG_4326_Def } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
@@ -19,6 +19,7 @@ ClarityIcons.addIcons(...[layersIcon, layersIcon, clockIcon]);
   templateUrl: './route-map7.component.html',
   styleUrls: ['./route-map7.component.scss'],
   providers: [LayersService, MapStateService, MapOlService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, PerformanceComponent, LayerControlComponent]
 })
 export class RouteMap7Component implements OnInit, AfterViewInit {

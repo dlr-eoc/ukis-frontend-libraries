@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 
 import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
@@ -15,6 +15,7 @@ import { ReversePipe, ItemsFilterPipe } from '@dlr-eoc/ngx-ukis-utilities';
     selector: 'ukis-layer-control',
     templateUrl: './layer-control.component.html',
     styleUrls: ['./layer-control.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CdkDropList, CdkDrag, LayerentryGroupComponent, CdkDragHandle, LayerentryComponent, ItemsFilterPipe, ReversePipe]
 })
 export class LayerControlComponent implements OnInit, OnDestroy {

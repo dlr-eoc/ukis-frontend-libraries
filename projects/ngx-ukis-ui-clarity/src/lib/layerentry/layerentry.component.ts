@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import { IDynamicComponent, DynamicComponent } from '@dlr-eoc/ngx-ukis-utilities';
 
 // imports only for typings...
@@ -24,6 +24,7 @@ type TactiveTabs = keyof typeof EactiveTabs;
   selector: 'ukis-layerentry',
   templateUrl: './layerentry.component.html',
   styleUrls: ['./layerentry.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [NgClass, ClrIcon, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponent]
 })
 export class LayerentryComponent implements OnInit {

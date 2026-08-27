@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import { LayersService, RasterLayer, TGeoExtent, VectorLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { EPSG_3031_Def, EPSG_3995_Def, IProjDef, MapStateService, EPSG_3857_Def, EPSG_4326_Def, EPSG_3035_Def, adjustBBoxAxisToEnu } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls, MapOlComponent } from '@dlr-eoc/map-ol';
@@ -18,6 +18,7 @@ ClarityIcons.addIcons(...[layersIcon, mapIcon, compassIcon]);
   styleUrls: ['./route-map2.component.scss'],
   /** use differnt instances of the services only for testing with diffenr routs  */
   providers: [LayersService, MapStateService, MapOlService],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, ProjectionSwitchComponent, MousePositionComponent, MapNavigatorComponent, ExtentHelperComponent]
 })
 export class RouteMap2Component implements OnInit {

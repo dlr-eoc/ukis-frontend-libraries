@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, StyleLayer, GeoJSONSource, Evented, addSourceType } from 'maplibre-gl';
 import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, changeOrderOfLayers, setRotation, setPitch, getRotation, getUkisLayerMetadata, UKIS_METADATA } from './maplibre.helpers';
 
@@ -32,6 +32,7 @@ const hasSourceType = {} as ISourceTypes;
     selector: 'ukis-map-maplibre',
     templateUrl: './map-maplibre.component.html',
     styleUrls: ['./map-maplibre.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None
 })
 export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {

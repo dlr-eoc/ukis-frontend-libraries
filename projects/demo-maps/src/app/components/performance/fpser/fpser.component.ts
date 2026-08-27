@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { round, meanFps } from './helpers';
 import { ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule } from '@clr/angular';
 
@@ -15,6 +15,7 @@ import { ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpost
     selector: 'ukis-fpser',
     templateUrl: './fpser.component.html',
     styleUrls: ['./fpser.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule]
 })
 export class FpserComponent {

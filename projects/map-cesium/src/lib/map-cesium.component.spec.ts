@@ -5,7 +5,7 @@ import { CustomLayer, LayerGroup, LayersService, RasterLayer, VectorLayer } from
 import { MapCesiumService } from './map-cesium.service';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { Viewer } from '@cesium/widgets';
-import { Component, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Injectable, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { of, timeout } from 'rxjs';
 import { OsmTileLayer, EocBasemapTile } from '@dlr-eoc/base-layers-raster';
 import { CommonModule } from '@angular/common';
@@ -42,6 +42,7 @@ let instrumentedMockupCompId = 0;
 @Component({
     selector: 'app-mock-popup',
     template: `<div>{{ data | json }}</div>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CommonModule]
 })
 class InstrumentedMockPopupComponent implements OnInit, OnDestroy {

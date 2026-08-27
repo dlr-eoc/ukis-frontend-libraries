@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { IMapControls, MapOlService } from '@dlr-eoc/map-ol';
 import { LayerGroup, LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
@@ -19,6 +19,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, exportIcon ]);
     styleUrls: ['./route-example-owc-layers.component.scss'],
     /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleOwcLayersComponent implements OnInit {

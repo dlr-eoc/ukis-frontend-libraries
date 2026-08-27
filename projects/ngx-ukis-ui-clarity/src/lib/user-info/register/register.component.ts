@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, Validators, FormControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UserService, IRegisterUser, IUser } from '../user.service';
@@ -15,6 +15,7 @@ interface IusrInfoForm {
     selector: 'ukis-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule]
 })
 export class RegisterComponent implements OnDestroy {

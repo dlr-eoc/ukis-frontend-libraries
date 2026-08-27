@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { ClarityIcons} from '@clr/angular/icon';
 import { ukisIcon, dlrIcon } from '../icons/ukis';
@@ -11,6 +11,7 @@ ClarityIcons.addIcons(ukisIcon, dlrIcon);
     selector: 'ukis-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClrNavigationModule, NgClass, ClrIcon, RouterLink, RouterLinkActive, ClrStandaloneCdkTrapFocus]
 })
 export class HeaderComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { CustomLayer, Layer, LayerGroup, LayersService, RasterLayer, StackedLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapMaplibreService, MapMaplibreComponent } from '@dlr-eoc/map-maplibre';
@@ -22,6 +22,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon]);
     // https://medium.com/@rishanthakumar/angular-lazy-load-common-styles-specific-to-a-feature-module-c3f81c40daf1
     encapsulation: ViewEncapsulation.None,
     providers: [LayersService, MapStateService, MapMaplibreService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MapMaplibreComponent, ClrVerticalNavModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleMaplibreComponent implements OnInit, OnDestroy {

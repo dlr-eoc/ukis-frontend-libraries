@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService, IUserinfo, IUser } from '../user.service';
 import { Subscription } from 'rxjs';
@@ -13,6 +13,7 @@ interface IusrInfoForm {
     selector: 'ukis-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule, ClrCheckboxModule]
 })
 export class LoginComponent implements OnDestroy {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { IMapStateOptions, MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription, Subject } from 'rxjs';
@@ -39,6 +39,7 @@ declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
     selector: 'ukis-map-cesium',
     templateUrl: './map-cesium.component.html',
     styleUrls: ['./map-cesium.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None
 })
 export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {

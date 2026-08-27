@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import { LayersService, RasterLayer, VectorLayer, LayerGroup, Layer, WmtsLayer, StackedLayer, IPopupParams } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { OsmTileLayer, EocLitemapTile, OpenSeaMap, EocBasemapTile, EocBaseoverlayTile, EocLiteoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from '@dlr-eoc/base-layers-raster';
@@ -31,6 +31,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, cogIcon, downloadCloudIcon, syn
     styleUrls: ['./route-map.component.scss'],
     /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService, WmsService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMapComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { OsmTileLayer, HillshadeTile } from '@dlr-eoc/base-layers-raster';
 import { MapStateService } from '@dlr-eoc/services-map-state';
@@ -19,6 +19,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon]);
     templateUrl: './route-map.component.html',
     styleUrls: ['./route-map.component.scss'],
     providers: [MapOlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMapComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { WmsClient, WmsVersion } from '../wms.service';
@@ -14,7 +14,7 @@ describe('WmsService test-suite', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
     imports: [],
-    providers: [HttpClient, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    providers: [HttpClient, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
 });
   });
 

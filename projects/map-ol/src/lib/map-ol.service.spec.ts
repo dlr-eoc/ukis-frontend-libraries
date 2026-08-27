@@ -38,7 +38,7 @@ import olFeature from 'ol/Feature';
 import { Options as olProjectionOptions } from 'ol/proj/Projection';
 import olPoint from 'ol/geom/Point';
 import { Subject } from 'rxjs';
-import { ApplicationRef, Component, Input } from '@angular/core';
+import { ApplicationRef, Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { getCenter as olGetCenter } from 'ol/extent';
 import olMapBrowserEvent from 'ol/MapBrowserEvent';
 
@@ -114,6 +114,7 @@ const createMapTarget = (size: number[]) => {
 @Component({
   selector: 'app-mock-popup',
   template: `<div>{{ data | json }}</div>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule]
 })
 class MockPopupComponent {

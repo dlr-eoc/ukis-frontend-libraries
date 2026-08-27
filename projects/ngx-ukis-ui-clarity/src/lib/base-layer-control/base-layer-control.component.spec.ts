@@ -6,7 +6,7 @@ import { LayersService } from '@dlr-eoc/services-layers';
 
 
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { Component, Input, Injectable } from '@angular/core';
+import { Component, Input, Injectable, ChangeDetectionStrategy } from '@angular/core';
 import { of } from 'rxjs';
 import { RasterLayer } from '@dlr-eoc/services-layers';
 import { LayerGroup } from '@dlr-eoc/services-layers';
@@ -104,6 +104,7 @@ describe('BaseLayerControlComponent', () => {
  */
 @Component({
     selector: 'ukis-layerentry',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ''
 })
 class MockLayerentryComponent {
@@ -124,6 +125,7 @@ class MockLayerentryComponent {
  */
 @Component({
     selector: 'ukis-layerentry-group',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ''
 })
 class MockLayerentryGroupComponent {

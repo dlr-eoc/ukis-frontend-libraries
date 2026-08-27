@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { LayerGroup, LayersService, ILayerGroupOptions } from '@dlr-eoc/services-layers';
 
 
@@ -6,6 +6,7 @@ import { LayerGroup, LayersService, ILayerGroupOptions } from '@dlr-eoc/services
     selector: 'app-example-group-action',
     templateUrl: './example-group-action.component.html',
     styleUrls: ['./example-group-action.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: []
 })
 export class ExampleGroupActionComponent implements OnInit {

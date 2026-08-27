@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostBinding, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { LayersService, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
@@ -18,6 +18,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon]);
     styleUrls: ['./route-map6.component.scss'],
     /** use differnt instances of the services only for testing with diffenr routs  */
     providers: [LayersService, MapStateService, MapOlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteMap6Component implements OnInit, OnDestroy {

@@ -1,6 +1,7 @@
 import {
   Component, OnInit, ViewChild, ComponentRef, OnDestroy, Input, SimpleChanges, OnChanges,
-  EventEmitter, Directive, ViewContainerRef, Type, Output
+  EventEmitter, Directive, ViewContainerRef, Type, Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -20,6 +21,7 @@ export class ViewRefDirective {
 @Component({
   selector: 'ngx-ukis-dynamic-component',
   template: `<ng-template ukisAddHost></ng-template>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ViewRefDirective]
 })
 export class DynamicComponent implements OnInit, OnDestroy, OnChanges {

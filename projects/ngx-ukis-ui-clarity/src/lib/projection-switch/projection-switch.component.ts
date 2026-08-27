@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MapOlService } from '@dlr-eoc/map-ol';
 
@@ -13,6 +13,7 @@ ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
   selector: 'ukis-projection-switch',
   templateUrl: './projection-switch.component.html',
   styles: [],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ClrIcon
   ]

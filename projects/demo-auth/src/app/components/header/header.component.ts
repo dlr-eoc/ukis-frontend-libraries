@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { ClarityIcons, timesIcon } from '@clr/angular/icon';
 import { ukisIcon, dlrIcon } from '../icons/ukis';
@@ -10,6 +10,7 @@ ClarityIcons.addIcons(ukisIcon, dlrIcon, timesIcon);
     selector: 'ukis-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClrNavigationModule, NgClass, ClrIcon, ClrStandaloneCdkTrapFocus]
 })
 export class HeaderComponent implements OnInit {

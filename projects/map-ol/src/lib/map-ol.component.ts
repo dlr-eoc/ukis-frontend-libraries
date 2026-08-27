@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecked, AfterViewInit, ViewChild, ElementRef, NgZone, effect, signal } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewChecked, AfterViewInit, ViewChild, ElementRef, NgZone, effect, signal, ChangeDetectionStrategy } from '@angular/core';
 
 
 
@@ -72,6 +72,7 @@ const ID_KEY = 'id';
     templateUrl: './map-ol.component.html',
     styleUrls: ['./map-ol.component.scss'],
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: []
 })
 export class MapOlComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {

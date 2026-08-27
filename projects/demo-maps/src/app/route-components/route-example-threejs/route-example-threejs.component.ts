@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { LayersService, CustomLayer } from '@dlr-eoc/services-layers';
 import { MapStateService, EPSG_4326_Def } from '@dlr-eoc/services-map-state';
@@ -23,6 +23,7 @@ ClarityIcons.addIcons(...[layersIcon, infoStandardIcon]);
     styleUrls: ['./route-example-threejs.component.scss'],
     providers: [LayersService, MapOlService] // <-- Don't provide MapStateSvc here! If we do, state is no longer synced between the two maps.
     ,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MapOlComponent, MapThreeComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, ClrAlertModule, LayerControlComponent]
 })
 export class RouteMap8Component implements OnInit, AfterViewInit {

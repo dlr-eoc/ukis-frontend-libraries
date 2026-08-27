@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 
 import { MapStateService, MapState } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,7 @@ import { ClrCommonFormsModule, ClrNumberInputModule } from '@clr/angular';
     selector: 'ukis-map-navigator',
     templateUrl: './map-navigator.component.html',
     styleUrls: ['./map-navigator.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule, ClrCommonFormsModule, ClrNumberInputModule]
 })
 export class MapNavigatorComponent implements OnInit, OnDestroy {

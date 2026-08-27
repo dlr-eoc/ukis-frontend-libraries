@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorRamp } from '@dlr-eoc/utils-maps';
 import { ClrCommonFormsModule, ClrInputModule, ClrCheckboxModule } from '@clr/angular';
@@ -12,6 +12,7 @@ interface IinterpolationForm {
     selector: 'app-interpolation-settings',
     templateUrl: './interpolation-settings.component.html',
     styleUrls: ['./interpolation-settings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [FormsModule, ClrCommonFormsModule, ReactiveFormsModule, ClrInputModule, ClrCheckboxModule]
 })
 export class InterpolationSettingsComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { MapThreeService } from './map-three.service';
 import { Mesh, BufferGeometry } from 'three';
@@ -16,6 +16,7 @@ import { HostListener } from '@angular/core';
 @Component({
     selector: 'ukis-map-three',
     templateUrl: './map-three.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./map-three.component.scss']
 })
 export class MapThreeComponent implements OnInit, AfterViewInit {

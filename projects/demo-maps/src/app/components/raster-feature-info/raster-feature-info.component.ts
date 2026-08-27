@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Input } from '@angular/core';
+import { Input, ChangeDetectionStrategy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MapBrowserEvent } from 'ol';
 import { Layer } from 'ol/layer';
@@ -12,6 +12,7 @@ import { ClrSpinnerModule } from '@clr/angular';
     selector: 'app-raster-feature-info',
     templateUrl: './raster-feature-info.component.html',
     styleUrls: ['./raster-feature-info.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClrSpinnerModule, AsyncPipe, KeyValuePipe]
 })
 export class RasterFeatureInfoComponent implements OnInit {

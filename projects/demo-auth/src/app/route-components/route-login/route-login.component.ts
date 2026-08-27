@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LoginComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 
@@ -6,6 +6,7 @@ import { LoginComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
     selector: 'app-route-login',
     templateUrl: './route-login.component.html',
     styleUrls: ['./route-login.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [LoginComponent]
 })
 export class RouteLoginComponent implements OnInit {

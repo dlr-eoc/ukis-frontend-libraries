@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { IAlert } from './alert.service';
 
 import { ClarityIcons, infoCircleIcon, windowCloseIcon} from '@clr/angular/icon';
@@ -10,6 +10,7 @@ ClarityIcons.addIcons(...[infoCircleIcon, windowCloseIcon]);
     selector: 'ukis-global-alert',
     templateUrl: './global-alert.component.html',
     styleUrls: ['./global-alert.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [NgClass, ClrIcon, ClrAlertModule]
 })
 export class GlobalAlertComponent {

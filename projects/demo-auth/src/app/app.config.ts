@@ -8,7 +8,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { AlertService } from './components/global-alert/alert.service';
 import { ProgressService } from './components/global-progress/progress.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -35,6 +35,6 @@ export const appConfig: ApplicationConfig = {
         multi: true
     },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
   ]
 };

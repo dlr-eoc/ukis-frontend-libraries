@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 
 
 // imports only for typings...
@@ -26,6 +26,7 @@ type TactiveTabs = keyof typeof EactiveTabs;
   selector: 'ukis-layerentry-group',
   templateUrl: './layerentry-group.component.html',
   styleUrls: ['./layerentry-group.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ClrIcon, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponent]
 })
 export class LayerentryGroupComponent implements OnInit {

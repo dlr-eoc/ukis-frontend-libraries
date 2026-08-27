@@ -1,14 +1,14 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { WmtsClientService } from './wmtsclient.service';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 
 
 describe('WmtsClientService: reading data from server', () => {
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [], providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()] });
+    TestBed.configureTestingModule({ imports: [], providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()] });
   });
 
   afterEach(() => {

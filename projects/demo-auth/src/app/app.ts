@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { AlertService, IAlert } from './components/global-alert/alert.service';
 import { ProgressService, IProgress } from './components/global-progress/progress.service';
@@ -24,6 +24,7 @@ interface IUi {
     selector: 'app-root',
     imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, RouterOutlet, CookieAlertComponent],
     templateUrl: './app.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './app.scss'
 })
 export class App implements OnDestroy, OnInit {

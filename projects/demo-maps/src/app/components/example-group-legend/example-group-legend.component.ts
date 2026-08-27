@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LayerGroup } from '@dlr-eoc/services-layers';
 
 @Component({
     selector: 'app-example-group-legend',
     templateUrl: './example-group-legend.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./example-group-legend.component.scss']
 })
 export class ExampleGroupLegendComponent implements OnInit {

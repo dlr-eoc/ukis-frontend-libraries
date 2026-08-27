@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -53,6 +53,7 @@ interface License {
     selector: 'app-route-licenses',
     templateUrl: './route-licenses.component.html',
     styleUrls: ['./route-licenses.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule, ClrDatagridModule, AsyncPipe]
 })
 export class RouteLicensesComponent implements OnInit {

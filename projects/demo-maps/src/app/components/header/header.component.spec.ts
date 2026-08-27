@@ -2,12 +2,13 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
 import { ClarityModule, ClrMainContainer } from '@clr/angular';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 
 @Component({
     selector: 'ukis-nested-component',
     template: `<clr-main-container><ukis-header></ukis-header></clr-main-container>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClarityModule]
 })
 class NestedTestComponent { }

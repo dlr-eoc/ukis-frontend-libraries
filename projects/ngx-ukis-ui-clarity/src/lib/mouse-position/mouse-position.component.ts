@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { transform as olTransform, get as olGetProjection, Projection as olProjection } from 'ol/proj';
 import { distinctUntilChanged, Subscription } from 'rxjs';
@@ -16,6 +16,7 @@ interface ISelectProjection {
   selector: 'ukis-mouse-position',
   templateUrl: './mouse-position.component.html',
   styleUrls: ['./mouse-position.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ClrSelectModule, ClrCommonFormsModule, FormsModule, ClrNumberInputModule]
 })
 export class MousePositionComponent implements OnInit, OnDestroy {

@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ClrRangeModule, ClrCommonFormsModule } from '@clr/angular';
 
 @Component({
     selector: 'app-example-layer-action',
     templateUrl: './example-layer-action.component.html',
     styleUrls: ['./example-layer-action.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClrRangeModule, ClrCommonFormsModule]
 })
 export class ExampleLayerActionComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostBinding, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { ClrNavigationModule, ClrVerticalNavModule, } from '@clr/angular';
 
 import { ClarityIcons, linkIcon } from '@clr/angular/icon';
@@ -10,6 +10,7 @@ ClarityIcons.addIcons(linkIcon);
     selector: 'app-example-view',
     templateUrl: './example-view.component.html',
     imports: [ClrNavigationModule, ClrVerticalNavModule, ClrIcon],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./example-view.component.scss']
 })
 export class ExampleViewComponent implements OnInit, OnDestroy {

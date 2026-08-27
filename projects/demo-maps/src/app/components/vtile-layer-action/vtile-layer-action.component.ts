@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LayersService } from '@dlr-eoc/services-layers';
 import { ClrCheckboxModule, ClrCommonFormsModule } from '@clr/angular';
 
@@ -6,6 +6,7 @@ import { ClrCheckboxModule, ClrCommonFormsModule } from '@clr/angular';
     selector: 'app-vtile-layer-action',
     templateUrl: './vtile-layer-action.component.html',
     styleUrls: ['./vtile-layer-action.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClrCheckboxModule, ClrCommonFormsModule]
 })
 export class VtileLayerActionComponent implements OnInit {

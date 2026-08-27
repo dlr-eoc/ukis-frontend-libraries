@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MapStateService, MapState } from '@dlr-eoc/services-map-state';
 import { Subscription } from 'rxjs';
 import { JsonPipe } from '@angular/common';
@@ -7,6 +7,7 @@ import { JsonPipe } from '@angular/common';
   selector: 'app-extent-helper',
   templateUrl: './extent-helper.component.html',
   styleUrls: ['./extent-helper.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [JsonPipe]
 })
 export class ExtentHelperComponent implements OnInit, OnDestroy {

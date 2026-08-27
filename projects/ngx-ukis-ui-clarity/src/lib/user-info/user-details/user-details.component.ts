@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserService } from '../user.service';
 
@@ -7,6 +7,7 @@ import { UserService } from '../user.service';
     selector: 'ukis-user-details',
     templateUrl: './user-details.component.html',
     styleUrls: ['./user-details.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: []
 })
 export class UserDetailsComponent implements OnDestroy {

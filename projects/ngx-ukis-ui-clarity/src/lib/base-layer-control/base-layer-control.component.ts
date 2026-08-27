@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 
 import { LayersService } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
@@ -13,6 +13,7 @@ import { ReversePipe } from '@dlr-eoc/ngx-ukis-utilities';
     selector: 'ukis-base-layer-control',
     templateUrl: './base-layer-control.component.html',
     styleUrls: ['./base-layer-control.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [LayerentryGroupComponent, LayerentryComponent, ReversePipe]
 })
 export class BaseLayerControlComponent implements OnInit, OnDestroy {

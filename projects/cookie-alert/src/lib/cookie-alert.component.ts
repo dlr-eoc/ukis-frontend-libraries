@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UtilStoreService } from '@dlr-eoc/services-util-store';
 import { NgClass } from '@angular/common';
 
@@ -6,6 +6,7 @@ import { NgClass } from '@angular/common';
     selector: 'ukis-cookie-alert',
     templateUrl: './cookie-alert.component.html',
     styleUrls: ['./cookie-alert.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [NgClass]
 })
 export class CookieAlertComponent implements OnInit {

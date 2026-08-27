@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, OnDestroy, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, HostBinding, OnDestroy, Inject, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { LayersService, Layer, WmtsLayer, RasterLayer, CustomLayer, WmsLayer, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService, IMapState } from '@dlr-eoc/services-map-state';
 
@@ -34,6 +34,7 @@ ClarityIcons.addIcons(...[layersIcon, worldIcon, blockIcon, cogIcon, mapIcon]);
             provide: 'threeDlayerSvc', useClass: LayersService
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MapOlComponent, MapCesiumComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, BaseLayerControlComponent]
 })
 export class RouteExampleCesiumComponent implements OnInit, OnDestroy {

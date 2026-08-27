@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, HostBinding, OnDestroy, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { LayersService, CustomLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/services-layers';
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
@@ -36,6 +36,7 @@ ClarityIcons.addIcons(...[layersIcon, cogIcon, compassIcon, downloadIcon]);
     styleUrls: ['./route-map3.component.scss'],
     /** use different instances of the services only for testing with different routes  */
     providers: [LayersService, MapStateService, MapOlService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [MapOlComponent, ClrVerticalNavModule, ClrStandaloneCdkTrapFocus, ClrNavigationModule, ClrIcon, LayerControlComponent, MousePositionComponent]
 })
 export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {

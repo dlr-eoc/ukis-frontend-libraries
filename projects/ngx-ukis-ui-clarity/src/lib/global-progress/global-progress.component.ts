@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { IProgress } from './progress.service';
 import { NgClass } from '@angular/common';
 
@@ -6,6 +6,7 @@ import { NgClass } from '@angular/common';
   selector: 'ngx-ukis-global-progress',
   imports: [NgClass],
   templateUrl: './global-progress.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './global-progress.component.scss'
 })
 export class GlobalProgressComponent {

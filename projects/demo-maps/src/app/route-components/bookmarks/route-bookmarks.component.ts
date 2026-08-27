@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, Routes, RouterLink } from '@angular/router';
 
 
@@ -13,6 +13,7 @@ interface BookmarkEntry {
     selector: 'app-bookmarks',
     templateUrl: './route-bookmarks.component.html',
     styleUrls: ['./route-bookmarks.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [RouterLink]
 })
 export class BookmarksComponent implements OnInit {

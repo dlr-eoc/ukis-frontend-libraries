@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, OnInit, AfterContentChecked, ChangeDetectionStrategy } from '@angular/core';
 import { ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule } from '@clr/angular';
 
 
@@ -14,6 +14,7 @@ import { ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpost
     selector: 'ukis-blinker',
     templateUrl: './blinker.component.html',
     styleUrls: ['./blinker.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClrStopEscapePropagationDirective, ClrPopoverHostDirective, ClrSignpostModule, ClrConditionalModule]
 })
 export class BlinkerComponent implements AfterContentChecked {

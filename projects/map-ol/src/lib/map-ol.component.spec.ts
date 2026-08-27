@@ -7,7 +7,7 @@ import { LayerGroup, CustomLayer } from '@dlr-eoc/services-layers';
 import { EocBasemapTile, OsmTileLayer } from '@dlr-eoc/base-layers-raster';
 import { of } from 'rxjs';
 import { MapStateService } from '@dlr-eoc/services-map-state';
-import { Component, Injectable, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Injectable, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import testFeatureData from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
 import olVectorLayer from 'ol/layer/Vector';
 import olTileLayer from 'ol/layer/Tile';
@@ -53,6 +53,7 @@ let instrumentedMockupCompId = 0;
 @Component({
     selector: 'app-mock-popup',
     template: `<div>{{ data | json }}</div>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CommonModule]
 })
 class InstrumentedMockPopupComponent implements OnInit, OnDestroy {
