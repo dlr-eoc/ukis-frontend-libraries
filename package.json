@@ -86,6 +86,7 @@
     "@types/jasminewd2": "^2.0.10",
     "@types/node": "^22.15.21",
     "@types/offscreencanvas": "^2019.7.0",
+    "istanbul-lib-instrument": "^6.0.3",
     "jasmine": "^5.7.1",
     "jasmine-core": "^5.7.1",
     "jasmine-spec-reporter": "^7.0.0",
