@@ -192,6 +192,9 @@ export class MapMaplibreService {
     return layers;
   }
 
+  /**
+   * TODO: If layersSvc supports retrieving changes from single layers, only the changed elements should be updated. 
+   */
   public updateMlLayer(mllayer: StyleLayer, layer: ukisLayer, map: glMap) {
     /**
      * update ml layer
@@ -209,9 +212,11 @@ export class MapMaplibreService {
   }
 
   private updateLayerParamsAndSource(map: glMap, mllayer: StyleLayer, layer: ukisLayer) {
-    if (layer.type === 'wms' || layer.type === 'wmts' || layer.type === 'tms' || layer.type === 'wfs' || layer.type === 'geojson') {
+    if (['wms', 'wmts', 'tms', 'wfs', 'geojson', 'custom'].includes(layer.type)) {
       const oldSource = map.getSource(mllayer.source);
-      updateSource(map, layer, oldSource);
+      if (oldSource) {
+        updateSource(map, layer, oldSource);
+      }
     }
   }
 
