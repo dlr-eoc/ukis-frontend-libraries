@@ -13,6 +13,7 @@ import { WorkspaceSchema, WorkspaceProject } from '@schematics/angular/utility/w
 import {
   getProjects, dependencyGraph, Iproject,
   checkDeps, consoleLogColors, getSortedProjects, formatCheckDepsOutput, formatProjectsDepsOutput, updatePackageJson, createNpmrc, setDependencyVersionsInWorkspaces, ICustomWorkspaceProject,
+  sortRecursiveMap,
 } from './utils';
 import { IPackageJSON } from './npm-package.interface';
 
@@ -37,7 +38,7 @@ function showDependencyGraph(options: IgraphOptions) {
   const filterProjects = options?.projects?.split(',') || false;
   const projects = getProjects(ANGULARJSON);
   const graph = dependencyGraph(projects, PACKAGE_SCOPE!, filterProjects);
-  console.log(graph.nodesmapGraph);
+  console.log(sortRecursiveMap(graph.nodesmapGraph));
 }
 
 async function runCheckDeps() {

@@ -291,6 +291,53 @@ export function dependencyGraph(projects: ICustomWorkspaceProject[], packageScop
 
 }
 
+function childCount(entry: [string, RecursiveMap | null]): number {
+  const [, value] = entry;
+  return value instanceof Map ? value.size : 0;
+}
+
+/**
+ * @param source          The map you want to sort.
+ * @param descending      `true` → biggest child‑count first
+ *                        `false` → smallest first.
+ * @param secondaryKeyFn  Optional tie‑breaker (e.g. alphabetical).
+ *
+ * @returns a **new** map whose iteration order respects the chosen sort.
+ */
+export function sortRecursiveMap(
+  source: RecursiveMap,
+  descending = true,
+  secondaryKeyFn?: (a: string, b: string) => number
+): RecursiveMap {
+  // Turn the map into an array we can sort.
+  const entries = Array.from(source.entries());
+
+  // Primary sort – by number of direct children.
+  entries.sort((a, b) => {
+    const diff = childCount(b) - childCount(a); // b‑a → descending
+    if (diff !== 0) return descending ? diff : -diff;
+
+    // Optional secondary sort (alphabetical by key) to make the order deterministic.
+    if (secondaryKeyFn) return secondaryKeyFn(a[0], b[0]);
+
+    // Fallback: simple lexical order.
+    return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0;
+  });
+
+  // Build a **new** map with the sorted order,
+  // recursing into nested maps so the whole tree is sorted.
+  const sorted = new Map<string, RecursiveMap | null>();
+  for (const [key, value] of entries) {
+    if (value instanceof Map) {
+      // Recursively sort the child map before inserting it.
+      sorted.set(key, sortRecursiveMap(value, descending, secondaryKeyFn));
+    } else {
+      sorted.set(key, value);
+    }
+  }
+  return sorted;
+}
+
 
 function edgesFromGraph(parent: string | string[], map: RecursiveMap) {
   const edges: [string, string | undefined][] = [];
