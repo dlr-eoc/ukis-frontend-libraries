@@ -123,8 +123,8 @@ export class MapOlService {
   private viewOptions: olViewOptions;
   public EPSG: TepsgCode;
   private hitTolerance = 0;
-  private hitLayerCurr = null;
-  private hitLayerPrev = null;
+  private hitLayerCurr: string | null = null;
+  private hitLayerPrev: string | null = null;
   /** 'olProjection' */
   public projectionChange = new Subject<olProjection>();
   public registeredProjections: Map<IProjDef['code'], IProjDef> = new Map();
