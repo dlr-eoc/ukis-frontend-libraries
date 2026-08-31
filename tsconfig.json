@@ -15,6 +15,7 @@
     "skipLibCheck": true,
     "strictNullChecks": false,
     "exactOptionalPropertyTypes": false,
+    "noImplicitAny": true,
     "paths": {
       "@dlr-eoc/*": [
         "./dist/*",
@@ -26,7 +27,6 @@
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
