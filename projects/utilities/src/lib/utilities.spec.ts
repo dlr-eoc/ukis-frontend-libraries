@@ -128,28 +128,28 @@ describe('Object Utils', () => {
         };
 
         const se_aa = propsEqual(a, a);
-        expect(se_aa).toBeTrue();
+        expect(se_aa).toBeTruthy();
 
         const se_aa2 = propsEqual(a, a2);
-        expect(se_aa2).toBeTrue();
+        expect(se_aa2).toBeTruthy();
 
         const ac = clone(a);
         const se_aac = propsEqual(a, ac);
-        expect(se_aac).toBeTrue();
+        expect(se_aac).toBeTruthy();
 
         const acm = clone(a);
         acm.name = 'acm';
         const se_aacm = propsEqual(a, acm);
-        expect(se_aacm).toBeFalse();
+        expect(se_aacm).toBeFalsy();
 
         const se_ab = propsEqual(a, b);
-        expect(se_ab).toBeFalse();
+        expect(se_ab).toBeFalsy();
 
 
         const d = clone(a);
         d.child.name = 'd';
         const se_ad = propsEqual(a, d);
-        expect(se_ad).toBeFalse();
+        expect(se_ad).toBeFalsy();
     });
 });
 
@@ -161,5 +161,31 @@ describe('Array Utils test suide', () => {
         arrayMove(a, 0, 2);
 
         expect(a).toEqual([{ name: 'b' }, { name: 'c' }, { name: 'a' }, { name: 'd' }])
+    });
+
+
+    it('should flatten a nested array with childrens', () => {
+        const data = [
+            {
+                id: 1
+            },
+            {
+                layers: [
+                    { id: 3 },
+                    { id: 4 },
+                ]
+            },
+            { id: 2 }
+        ];
+
+        const result = flattenDeepArray(data, 'layers');
+        const expected = [
+            { id: 1 },
+            { id: 3 },
+            { id: 4 },
+            { id: 2 }
+        ];
+
+        expect(result).toEqual(expected);
     });
 });

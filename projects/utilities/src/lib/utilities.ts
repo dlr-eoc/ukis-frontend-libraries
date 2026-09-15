@@ -151,7 +151,7 @@ export function pick<T>(object: any, property: string) { // property access defi
  * clone Object by JSON stringify and parse
  */
 export function clone(o: any) {
-    function replacer(key: string, value: any) {
+    function replacer(this: any, key: string, value: any) {
         if (this[key] instanceof Date) {
             return `new Date:${value.valueOf()}`;
         } else if (this[key] instanceof Boolean) {
@@ -197,5 +197,5 @@ export function arrayMove(array: Array<any>, fromIndex: number, toIndex: number)
  * flatten array with objects
  */
 export function flattenDeepArray<T>(arr: Array<any>, children: string): T[] {
-    return arr.reduce((acc, val) => (Array.isArray(val[children])) ? acc.concat(this.flattenDeepArray(val[children])) : acc.concat(val), []);
+    return arr.reduce((acc, val) => (Array.isArray(val[children])) ? acc.concat(flattenDeepArray(val[children], children)) : acc.concat(val), []);
 }

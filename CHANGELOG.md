@@ -27,6 +27,9 @@
 
  
 ### Bug Fixes
+* **@dlr-eoc/utilities:**
+ - Fix incorrect recursive function `flattenDeepArray`.
+
 * **@dlr-eoc/ngx-ukis-ui-clarity:**
  - Can zoom to `nativeBbox` for `LayerentryComponent` and `LayerentryGroupComponent`.
 
