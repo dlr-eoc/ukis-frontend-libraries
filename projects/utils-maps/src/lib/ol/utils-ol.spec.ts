@@ -20,7 +20,7 @@ let tileLayerOSM: TileLayer<OSM>;
 let group1: LayerGroup;
 let group2: LayerGroup;
 
-const createMapTarget = (size) => {
+const createMapTarget = (size: number[]) => {
     const container = document.createElement('div');
     container.id = 'map';
     container.style.width = `${size[0]}px`;
@@ -31,7 +31,7 @@ const createMapTarget = (size) => {
         container
     };
 };
-let mapTarget: HTMLElement = null;
+let mapTarget: HTMLElement;
 const IDKey = 'id';
 
 const beforeEachFn = () => {
@@ -91,7 +91,6 @@ const beforeEachInitLayers = () => {
 describe('flattenLayers test suite', () => {
     beforeEach(beforeEachFn);
     it('flattenLayers should work with nested groups', () => {
-        group1
         const map = new Map({
             layers: [
                 tileLayerOSM,
@@ -112,7 +111,7 @@ describe('flattenLayers test suite', () => {
 
 describe('mapToCanvas test suite', () => {
     beforeEach(beforeEachFn);
-    it('simpleMapToCanvas should create an image in a canvas', (done) => {
+    it('simpleMapToCanvas should create an image in a canvas', () => new Promise(done => {
         const map = new Map({
             layers: [
                 tileLayerOSM
@@ -128,14 +127,15 @@ describe('mapToCanvas test suite', () => {
         /** Experimental: This is an experimental technology Check the Browser compatibility table carefully before using this in production. */
         const imageTargetCanvas = new OffscreenCanvas(300, 400);
 
-        simpleMapToCanvas(map, imageTargetCanvas, 600, 800, (updatedCanvas: OffscreenCanvas) => {
-            const image = updatedCanvas.transferToImageBitmap();
-            expect(image.width).toBeTruthy();
-            expect(image.height).toBeTruthy();
-            done();
+        simpleMapToCanvas(map, imageTargetCanvas, 600, 800, (updatedCanvas) => {
+            if (updatedCanvas instanceof OffscreenCanvas) {
+                const image = updatedCanvas.transferToImageBitmap();
+                expect(image.width).toBeTruthy();
+                expect(image.height).toBeTruthy();
+            }
+            done(true);
         });
-
-    });
+    }));
 });
 
 describe('ol-renderer test suite', () => {
@@ -160,10 +160,14 @@ describe('ol utils test suite', () => {
     beforeEach(beforeEachFn);
     it('should get a collection item', () => {
         const vector2Index = getCollectionItem(vector2.get(IDKey), group2.getLayers(), IDKey);
+        expect(vector2Index).toBeDefined();
+        if (!vector2Index) return;
         expect(vector2Index.layer).toBe(vector2);
         expect(vector2Index.index).toBe(1);
 
         const group1Index = getCollectionItem(group1.get(IDKey), group2.getLayers(), IDKey);
+        expect(group1Index).toBeDefined();
+        if (!group1Index) return;
         expect(group1Index.layer).toBe(group1);
         expect(group1Index.index).toBe(0);
     });

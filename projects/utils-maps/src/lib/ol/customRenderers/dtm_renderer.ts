@@ -1,7 +1,7 @@
 import ImageLayer from 'ol/layer/Image';
 import ImageSource from 'ol/source/Image';
 import { FrameState } from 'ol/Map';
-import { transformExtent } from 'ol/proj';
+import { transformExtent, ProjectionLike } from 'ol/proj';
 import Static from 'ol/source/ImageStatic';
 import { Shader, Program, Uniform, Texture, Attribute } from '../../webgl/engine.core';
 import { createTextCanvas } from '../../webgl/engine.helpers';
@@ -13,13 +13,13 @@ import CanvasImageLayerRenderer from 'ol/renderer/canvas/ImageLayer';
 
 
 export class DtmLayer extends ImageLayer<ImageSource> {
-    private renderer: DtmImageRenderer;
+    private renderer!: DtmImageRenderer;
 
-    constructor(options) {
+    constructor(options?: any) {
         super(options);
     }
 
-    createRenderer(): DtmImageRenderer {
+    override createRenderer(): DtmImageRenderer {
         this.renderer = new DtmImageRenderer(this);
         return this.renderer;
     }
@@ -45,9 +45,9 @@ export class DtmLayer extends ImageLayer<ImageSource> {
  */
 export class DtmImageRenderer extends CanvasImageLayerRenderer {
 
-    readonly canvas: HTMLCanvasElement;
-    readonly gl: WebGLRenderingContext;
-    readonly shader: Shader;
+    readonly canvas!: HTMLCanvasElement;
+    readonly gl!: WebGLRenderingContext;
+    readonly shader!: Shader;
     readonly projection;
     private state: 'loading' | 'ready' = 'loading';
 
@@ -62,10 +62,19 @@ export class DtmImageRenderer extends CanvasImageLayerRenderer {
 
         // Step 2: setting up webgl
         const gl = canvas.getContext('webgl');
+        if(!gl){
+            console.error('no WebGLRenderingContext ');
+            return;
+        }
 
         // Step 3: setting up variables for program
         const source = layer.getSource() as Static;
         const currentProjection = source.getProjection();
+        if(!currentProjection){
+            console.error('no projection from source', source);
+            return;
+        }
+
         const bbox = source.getImageExtent();
         const rectangleInWorldPosition = this.bboxOntoRectangle(2, 2, bbox);
         const image = createTextCanvas('test', 2048, 2048, 'red');
@@ -144,7 +153,7 @@ export class DtmImageRenderer extends CanvasImageLayerRenderer {
         const imageWrapper = source.getImage(bbox, 0.02197265625, 2.440000295639038, currentProjection);
         imageWrapper.load();
 
-        imageWrapper.addEventListener('change', (evt: Event) => {
+        imageWrapper.addEventListener('change', () => {
             const newImage = imageWrapper.getImage() as ImageBitmap;
             this.shader.updateTextureData(this.gl, 'u_srtm', newImage);
             this.shader.bind(this.gl);
@@ -160,7 +169,7 @@ export class DtmImageRenderer extends CanvasImageLayerRenderer {
     }
 
 
-    prepareFrame(frameState: FrameState): boolean {
+    override prepareFrame(frameState: FrameState): boolean {
         if (this.state === 'ready') {
             const c2pT = frameState.coordinateToPixelTransform;
             const worldToPixelTransform = [
@@ -180,7 +189,7 @@ export class DtmImageRenderer extends CanvasImageLayerRenderer {
     }
 
 
-    renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
+    override renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         if (this.state === 'ready') {
             this.shader.render(this.gl);
             this.transformCanvas(frameState);
@@ -210,9 +219,13 @@ export class DtmImageRenderer extends CanvasImageLayerRenderer {
         return rect;
     }
 
-    private reprojectImage(targetProjection): void {
+    private reprojectImage(targetProjection: ProjectionLike): void {
         const source = super.getLayer().getSource() as Static;
         const sourceProjection = source.getProjection();
+        if(!sourceProjection){
+            console.error('no projection from source', source);
+            return;
+        }
         const bbox = source.getImageExtent();
         const bboxInTargetProj = transformExtent(bbox, sourceProjection, targetProjection);
         const newRectangleInWorldPosition = this.bboxOntoRectangle(2, 2, bboxInTargetProj);

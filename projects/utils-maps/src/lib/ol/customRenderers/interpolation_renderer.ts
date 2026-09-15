@@ -11,6 +11,7 @@ import { rectangleA, rectangleE } from '../../webgl/engine.shapes';
 import { nextPowerOf, flattenRecursive, createNDimArray } from '../../webgl/utils';
 import { FrameState } from 'ol/Map';
 import { FeatureLike } from 'ol/Feature';
+import { Coordinate } from 'ol/coordinate';
 
 
 
@@ -43,14 +44,14 @@ export interface InterpolationRendererSettings {
 
 export class InterpolationLayer extends VectorLayer<VectorSource<FeatureLike>> {
 
-    readonly options: InterpolationLayerOptions;
+    readonly options!: InterpolationLayerOptions;
 
-    constructor(options: InterpolationLayerOptions) {
+    constructor(options?: InterpolationLayerOptions) {
         super(options);
-        this.options = options;
+        if(options) this.options = options;
     }
 
-    createRenderer(): InterpolationRenderer {
+    override createRenderer(): InterpolationRenderer {
         return new InterpolationRenderer(this, this.options.renderSettings);
     }
 
@@ -87,19 +88,19 @@ export class InterpolationLayer extends VectorLayer<VectorSource<FeatureLike>> {
  */
 export class InterpolationRenderer extends CanvasVectorLayerRenderer {
 
-    public container: HTMLDivElement;
-    private pointRenderer: CanvasVectorLayerRenderer;
+    public override container: HTMLDivElement;
+    private pointRenderer!: CanvasVectorLayerRenderer;
     private webGlCanvas: HTMLCanvasElement;
-    private gl: WebGLRenderingContext;
-    private interpolationShader: Shader;
-    private valueFb: Framebuffer;
-    private colorizationShader: Shader;
-    private colorFb: Framebuffer;
-    private arrangementShader: Shader;
+    private gl!: WebGLRenderingContext;
+    private interpolationShader!: Shader;
+    private valueFb!: Framebuffer;
+    private colorizationShader!: Shader;
+    private colorFb!: Framebuffer;
+    private arrangementShader!: Shader;
     private interpolatedValues!: Float32Array<ArrayBuffer> | Uint16Array<ArrayBuffer> | Uint8Array<ArrayBuffer>;
 
-    private projection: Projection;
-    private bbox: number[];
+    private projection!: Projection;
+    private bbox!: number[];
 
     constructor(layer: VectorLayer<VectorSource<FeatureLike>>, private settings: InterpolationRendererSettings) {
         super(layer);
@@ -119,7 +120,12 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
         this.webGlCanvas.style.setProperty('height', '100%');
         this.webGlCanvas.width = 1000;  // <-- make smaller for better performance
         this.webGlCanvas.height = 1000;  // <-- make smaller for better performance
-        this.gl = this.webGlCanvas.getContext('webgl');
+        const gl = this.webGlCanvas.getContext('webgl');
+        if(!gl){
+            console.error('no WebGLRenderingContext ');
+            return;
+        }
+        this.gl = gl;
         this.container.appendChild(this.webGlCanvas);
 
         // setting up point-renderer
@@ -127,8 +133,17 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
 
         // preparing data
         const source = layer.getSource();
-        this.projection = source.getProjection();
-        const { coords, values, bboxDelta, maxVal } = this.parseData(source, this.settings.valueProperty, this.settings.maxEdgeLength);
+        if(!source){
+            console.error('no source', source);
+            return;
+        }
+        const projection = source.getProjection();
+        if(!projection){
+            console.error('no projection from source', source);
+            return;
+        }
+        this.projection = projection;
+        const { coords, values, bboxDelta, maxVal } = this.parseData(source as never, this.settings.valueProperty, this.settings.maxEdgeLength);
         const { observationsBbox, maxEdgeLengthBbox } = this.parseDataBbox(bboxDelta, coords, values, maxVal, this.settings.maxEdgeLength);
         this.bbox = bboxDelta;
 
@@ -145,13 +160,13 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
         this.runColorizationShader(this.colorFb.fbo);
     }
 
-    prepareFrame(frameState: FrameState): boolean {
+    override prepareFrame(frameState: FrameState): boolean {
         const layerState = frameState.layerStatesArray[frameState.layerIndex];
         this.webGlCanvas.style.opacity = `${layerState.opacity}`;
 
         if (frameState.viewState.projection !== this.projection) {
             this.projection = frameState.viewState.projection;
-            const source = super.getLayer().getSource();
+            const source = super.getLayer().getSource() as VectorSource;
             const { coords, values, bboxDelta, maxVal } = this.parseData(source, this.settings.valueProperty, this.settings.maxEdgeLength);
             const { observationsBbox, maxEdgeLengthBbox } = this.parseDataBbox(bboxDelta, coords, values, maxVal, this.settings.maxEdgeLength);
             this.updateInterpolationShader(this.settings.power, observationsBbox, maxEdgeLengthBbox);
@@ -167,7 +182,7 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
         return true;
     }
 
-    renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
+    override renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         this.runArrangementShader();  // @todo: arrangement shader could be replaced with a simple css-transformation-matrix.
         if (this.settings.showLabels) {
             const pointCanvas = this.pointRenderer.renderFrame(frameState, this.container);
@@ -178,7 +193,7 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
         return this.container;
     }
 
-    renderDeclutter(frameState: FrameState) {
+    override renderDeclutter(frameState: FrameState) {
     }
 
     public updateSettings(newSettings: InterpolationRendererSettings) {
@@ -264,15 +279,15 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
         this.colorizationShader.render(this.gl, [0, 0, 0, 0], target);
     }
 
-    private parseData(source, valueProperty: string, maxEdgeLength: number) {
+    private parseData(source: VectorSource, valueProperty: string, maxEdgeLength: number) {
         let features: Feature<Point>[] = source.getFeatures() as Feature<Point>[];
         if (source instanceof olCluster) {
-            features = source.getSource().getFeatures() as Feature<Point>[];
+            features = source.getSource()?.getFeatures() as Feature<Point>[];
         } else {
             features = source.getFeatures() as Feature<Point>[];
         }
 
-        const coords = features.map(f => f.getGeometry().getCoordinates());
+        const coords = features.map(f => f.getGeometry()?.getCoordinates()).filter(i => i) as Coordinate[];
         const values = features.map(f => parseFloat(f.getProperties()[valueProperty]));
 
         const bbox = getBbox(coords);
@@ -299,7 +314,7 @@ export class InterpolationRenderer extends CanvasVectorLayerRenderer {
         };
     }
 
-    private parseDataBbox(bbox, coords, values, maxVal, maxEdgeLength) {
+    private parseDataBbox(bbox: number[], coords: Coordinate[], values: number[], maxVal: number, maxEdgeLength: number) {
         const observationsBbox = zip(coords, values).map(o => {
             const coordsBbox = worldCoords2clipBbox([o[0], o[1]], bbox);
             return [
@@ -563,6 +578,7 @@ const zip = (arr0: any[], arr1: any[]): any[] => {
 
 const createDistanceMatrix = (coords: number[][]): number[][] => {
     const matrix = createNDimArray([coords.length, coords.length]);
+    if(!matrix) return [];
     for (let i = 0; i < coords.length; i++) {
         for (let j = i + 1; j < coords.length; j++) {
             const d = pointDistance(coords[i], coords[j]);
@@ -576,6 +592,7 @@ const createDistanceMatrix = (coords: number[][]): number[][] => {
 const create7NearestNeighborsTextureData = (distanceMatrix: number[][], coords: number[][], values: number[]): number[][][] => {
     const rows = nextPowerOf(values.length, 2);
     const data = createNDimArray([rows, 8, 4]);
+    if(!data) return [];
     for (let r = 0; r < values.length; r++) {
         data[r][0] = [coords[r][0], coords[r][1], values[r], 255];
         const neighborIndices = getNIndicesSmallest(7, distanceMatrix[r]);

@@ -6,7 +6,7 @@ import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 
 
 export class CustomWebGlVectorLayer extends VectorLayer<VectorSource> {
-    createRenderer(): MinimalWebGlRenderer {
+    override createRenderer(): MinimalWebGlRenderer {
         return new MinimalWebGlRenderer(this, {});
     }
 }
@@ -20,7 +20,7 @@ export class CustomWebGlVectorLayer extends VectorLayer<VectorSource> {
 export class MinimalWebGlRenderer extends CanvasVectorLayerRenderer  {
 
     private canvas: HTMLCanvasElement;
-    private gl: WebGLRenderingContext;
+    private gl!: WebGLRenderingContext;
 
     constructor(layer: VectorLayer<VectorSource>, options: Object) {
         super(layer);
@@ -31,7 +31,10 @@ export class MinimalWebGlRenderer extends CanvasVectorLayerRenderer  {
         this.canvas.style.position = 'absolute';
 
         const gl = this.canvas.getContext('webgl');
-
+        if(!gl){
+            console.error('no WebGLRenderingContext ');
+            return;
+        }
         const vertexShader = `
             void main() {
                 gl_Position = vec4(0, 0, 0, 1);
@@ -56,7 +59,7 @@ export class MinimalWebGlRenderer extends CanvasVectorLayerRenderer  {
      * This is rather important, so that re-render happens only at the *end* of a zoom/pan.
      * @return {boolean} Layer is ready to be rendered.
      */
-    prepareFrame(frameState: FrameState): boolean {
+    override prepareFrame(frameState: FrameState): boolean {
         return true;
     }
 
@@ -66,7 +69,7 @@ export class MinimalWebGlRenderer extends CanvasVectorLayerRenderer  {
      * @param {HTMLElement} target Target that may be used to render content to.
      * @return {HTMLElement} The rendered element.
      */
-    renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
+    override renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         const gl = this.gl;
 
         clearBackground(gl, [0, 0, 0, 0]);
@@ -75,7 +78,7 @@ export class MinimalWebGlRenderer extends CanvasVectorLayerRenderer  {
         return this.canvas;
     }
 
-    renderDeclutter(frameState: FrameState) {
+    override renderDeclutter(frameState: FrameState) {
     }
 
 

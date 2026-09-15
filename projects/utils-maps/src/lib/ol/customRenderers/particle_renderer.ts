@@ -8,14 +8,15 @@ import { rectangleA } from '../../webgl/engine.shapes';
 import { flattenRecursive } from '../../webgl/utils';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import { FrameState } from 'ol/Map';
+import { Coordinate } from 'ol/coordinate';
 
 
 export class WindFieldLayer extends VectorLayer<VectorSource> {
-    constructor(options) {
+    constructor(options:any) {
         super(options);
     }
 
-    createRenderer(): ParticleRenderer {
+    override createRenderer(): ParticleRenderer {
         return new ParticleRenderer(this);
     }
 
@@ -42,14 +43,14 @@ export class WindFieldLayer extends VectorLayer<VectorSource> {
 export class ParticleRenderer extends CanvasVectorLayerRenderer {
 
 
-    readonly canvas: HTMLCanvasElement;
-    readonly gl: WebGLRenderingContext;
-    readonly interpolationShader: Shader;
-    readonly particleShader: Shader;
-    readonly textureMixShader: Shader;
-    readonly interpolFb: Framebuffer;
-    readonly particleFb1: Framebuffer;
-    readonly particleFb2: Framebuffer;
+    readonly canvas!: HTMLCanvasElement;
+    readonly gl!: WebGLRenderingContext;
+    readonly interpolationShader!: Shader;
+    readonly particleShader!: Shader;
+    readonly textureMixShader!: Shader;
+    readonly interpolFb!: Framebuffer;
+    readonly particleFb1!: Framebuffer;
+    readonly particleFb2!: Framebuffer;
     private fps = 30;
 
     constructor(layer: VectorLayer<VectorSource>) {
@@ -64,6 +65,10 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
 
         // preparing data
         const source = layer.getSource();
+        if (!source) {
+            console.error('no source', source);
+            return;
+        }
         const features = source.getFeatures() as Feature<Point>[];
         const aObservation = this.pointsToObservations(features);
 
@@ -73,6 +78,10 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
 
 
         // --------- Step 1: interpolating field between data points. ------------------------------------------
+        if (!gl) {
+            console.error('no WebGLRenderingContext ');
+            return;
+        }
 
         const interpolProgram = new Program(gl, `
             attribute vec4 a_observation;
@@ -185,7 +194,10 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
 
 
         // ------------------ Step 3: Mixing background-field and particles ------------------------------------
-
+        if (!gl) {
+            console.error('no WebGLRenderingContext ');
+            return;
+        }
         const textureMixProgram = new Program(gl, `
             attribute vec3 a_vertex;
             attribute vec2 a_textureCoord;
@@ -262,7 +274,7 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
             this.particleShader.textures[1].texture = fbIn.fbo.texture;
             this.particleShader.updateUniformData(this.gl, 'u_deltaT', [deltaT]);
             this.particleShader.bind(this.gl);
-            this.particleShader.render(this.gl, null, fbOut.fbo);
+            this.particleShader.render(this.gl, [], fbOut.fbo);
 
             // texture to output
             this.textureMixShader.textures[1].texture = fbOut.fbo.texture;
@@ -276,7 +288,7 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
     }
 
 
-    prepareFrame(frameState: FrameState): boolean {
+    override prepareFrame(frameState: FrameState): boolean {
         const layerState = frameState.layerStatesArray[frameState.layerIndex];
         const size = frameState.size;
         const opacity = layerState.opacity;
@@ -311,24 +323,24 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
     }
 
 
-    renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
+    override renderFrame(frameState: FrameState, target: HTMLElement): HTMLElement {
         return this.canvas;
     }
 
 
-    renderDeclutter(frameState: FrameState) {
+    override renderDeclutter(frameState: FrameState) {
     }
 
 
     private pointsToObservations(features: Feature<Point>[]): number[][] {
 
         const pointToObservation = (feature: Feature<Point>): number[] => {
-            const coords = feature.getGeometry().getCoordinates();
+            const coords = feature.getGeometry()?.getCoordinates().filter(i => i) as number[];
             const props = feature.getProperties();
-            return [coords[0], coords[1], props.wind[0], props.wind[1]];
+            return [coords[0], coords[1], props['wind'][0], props['wind'][1]];
         };
 
-        const coordinates = features.map(f => f.getGeometry().getCoordinates());
+        const coordinates = features.map(f => f.getGeometry()?.getCoordinates()).filter(i => i) as Coordinate[];
         const delauney = Delaunator.from(coordinates);
         const indices = delauney.triangles;
         const aObservations = [];

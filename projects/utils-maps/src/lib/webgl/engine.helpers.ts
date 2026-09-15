@@ -93,6 +93,7 @@ export const arrayToCanvas = (data: number[][][]) => {
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
+    if(!ctx) return;
     canvas.width = cols;
     canvas.height = rows;
     const imageDataContainer = ctx.createImageData(cols, rows);

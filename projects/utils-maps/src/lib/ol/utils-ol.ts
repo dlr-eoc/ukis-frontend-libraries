@@ -65,7 +65,7 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
     }
 
 
-    const mapSize = map.getSize();
+    const mapSize = map.getSize() || [500, 500];
     targetCanvas.width = mapSize[0];
     targetCanvas.height = mapSize[1];
 
@@ -78,6 +78,8 @@ export function mapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
             // in `renderFrame` - so heatmaps won't be copied here!
             const key = layer.on('postrender', (event: RenderEvent) => {
                 const sourceContext = event.context;
+                if(!sourceContext) return;
+
                 const sourceCanvas = sourceContext.canvas as HTMLCanvasElement;
                 // Step 3: copy source bitmap to target-canvas.
                 if (targetContext instanceof CanvasRenderingContext2D) {
@@ -140,14 +142,14 @@ export function scaledMapToSingleCanvas(map: Map, targetCanvas: HTMLCanvasElemen
      */
 
     // Step 1: adjust map-size to match targetCanvas.
-    const initialMapSize = map.getSize();
-    const initialMapResolution = map.getView().getResolution();
+    const initialMapSize = map.getSize() || [500, 500];
+    const initialMapResolution = map.getView().getResolution() || 1;
     map.setSize([targetCanvas.width, targetCanvas.height]);
     const scale = Math.min(targetCanvas.width / initialMapSize[0], targetCanvas.height / initialMapSize[1]);
     map.getView().setResolution(initialMapResolution / scale);
 
     // Step 2: get image of scaled map
-    mapToSingleCanvas(map, targetCanvas, (updatedTargetCanvas: HTMLCanvasElement) => {
+    mapToSingleCanvas(map, targetCanvas, (updatedTargetCanvas) => {
         // Step 3: set map-size back to initial values.
         map.setSize(initialMapSize);
         map.getView().setResolution(initialMapResolution);
@@ -210,7 +212,7 @@ export function simpleMapToCanvas(map: Map, targetCanvas: HTMLCanvasElement | Of
  * Get a item from ol/Collection by ID
  * @returns ol/Collection item and the index in the collection array
  */
-export function getCollectionItem(id: string, collection: Collection<BaseLayer | LayerGroup>, idKey = 'id') {
+export function getCollectionItem(id: string, collection: Collection<BaseLayer | LayerGroup>, idKey = 'id'): null | { index: number, layer: BaseLayer | LayerGroup } {
     let item: null | { index: number, layer: BaseLayer | LayerGroup } = null;
     collection.getArray().find((l, index) => {
         const lID = l.get(idKey);
@@ -220,6 +222,8 @@ export function getCollectionItem(id: string, collection: Collection<BaseLayer |
                 layer: l
             };
             return true;
+        }else{
+            return false;
         }
     });
     return item;
@@ -269,7 +273,7 @@ export function layerOrGroupSetOpacity(lg: LayerGroup | BaseLayer, opacity: numb
  * 
  * appendToZIndex - appends this number to the index so you can change the zIndex
  */
-export function layerOrGroupSetZIndex(lg: BaseLayer | LayerGroup, index: number, appendToZIndex?: number) {
+export function layerOrGroupSetZIndex(lg: BaseLayer | LayerGroup, index: number, appendToZIndex: number = 0) {
     const newZIndex = (appendToZIndex > 0) ? index + appendToZIndex : index;
     lg.setZIndex(newZIndex);
 
