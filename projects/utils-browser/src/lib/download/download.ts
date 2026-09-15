@@ -1,4 +1,8 @@
-
+export function json2Blob(data: object) {
+    const jsonData = JSON.stringify(data);
+    const blob = new Blob([jsonData], { type: 'text/json;charset=utf-8;' });
+    return blob;
+}
 
 export function downloadJson(data: object, fileName: string) {
     const jsonData = JSON.stringify(data);

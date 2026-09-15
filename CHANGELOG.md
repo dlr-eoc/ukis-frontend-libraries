@@ -2,6 +2,9 @@
  - Update angular from `^21.2.13` to `^22.1.4`
 
 ### Features
+* **@dlr-eoc/utils-browser**
+ - Export function `json2Blob(data: object): Blob`.
+
 * **@dlr-eoc/services-map-state**
  - Allow to use `projjson` in `IProjDef`.
  - Export `EPSG_3035_Def`
