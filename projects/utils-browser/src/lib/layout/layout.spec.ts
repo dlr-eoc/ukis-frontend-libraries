@@ -1,8 +1,7 @@
 import { Paper } from "./layout";
 
-
 describe('Paper test suide', () => {
-    it('Paper should properly calculate pixel sizes', () => {
+    it('should properly calculate Paper pixel sizes', () => {
 
         const paper = new Paper('A3', 72, 'landscape');
 
