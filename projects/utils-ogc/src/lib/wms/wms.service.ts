@@ -53,7 +53,7 @@ export class WmsClient {
       } else {
         if (rootLayer.Layer && Array.isArray(rootLayer.Layer)) {
           // find layer from array... recursive
-          return rootLayer.Layer.find(item => {
+          return rootLayer.Layer.find((item:any) => {
             return this.getLayerFromCapabilitiesLayer(name, item);
           });
         } else if (rootLayer.Layer && rootLayer.Layer.Name && rootLayer.Layer.Name === name) {
@@ -72,7 +72,7 @@ export class WmsClient {
    * @returns 
    */
   public getTimeDimensionFromLayer(layer: any) {
-    return layer.Dimension?.find(d => d.name === 'time');
+    return layer.Dimension?.find((d:any) => d.name === 'time');
   }
   
 }

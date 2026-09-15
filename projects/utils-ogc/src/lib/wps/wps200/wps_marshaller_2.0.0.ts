@@ -187,7 +187,7 @@ export class WpsMarshaller200 implements WpsMarshaller {
 
       if (data.encoding === 'base64') {
         if (typeof module !== 'undefined' && module.exports) { // node
-          data.content.map(c => Buffer.from(c, 'base64').toString('ascii'));
+          data.content.map((c: any) => Buffer.from(c, 'base64').toString('ascii'));
         } else { // browser
           data.content.map((c: any) => atob(c));
         }
@@ -260,30 +260,33 @@ export class WpsMarshaller200 implements WpsMarshaller {
   }
 
   private marshalInputs(inputs: WpsData[]): DataInputType[] {
-
-    return inputs.map(i => {
+    const dataInputs = inputs.map(i => {
       if (i.description.reference) {
-        return {
+        const dt:DataInputType = {
           id: i.description.id,
           reference: {
             href: i.value,
-            mimeType: i.description.format,
+            mimeType: i.description.format || '',
             schema: i.description.schema,
             encoding: i.description.encoding || "UTF-8"
           }
         };
+        return dt;
       } else {
-        return {
+        const dt:DataInputType = {
           id: i.description.id,
           data: {
             content: this.marshalInput(i),
-            mimeType: i.description.format,
+            mimeType: i.description.format || '',
             // schema: i.description.schema,
             // encoding: i.description.encoding || "UTF-8"
           }
         };
+        return dt;
       }
     });
+
+    return dataInputs;
   }
 
   private marshalInput(i: WpsData): any {
@@ -295,13 +298,15 @@ export class WpsMarshaller200 implements WpsMarshaller {
   }
 
   private marshalOutputs(outputs: WpsDataDescription[]): OutputDefinitionType[] {
-    return outputs.map(o => {
-      return {
+    const dataOutputs = outputs.map(o => {
+      const od: OutputDefinitionType = {
         id: o.id,
-        mimeType: o.format,
+        mimeType: o.format || '',
         transmission: o.reference ? 'reference' : 'value'  // @TODO: maybe just comment out this line?
       };
+      return od;
     });
+    return dataOutputs;
   }
 
   marshallGetStatusBody(serverUrl: string, processId: string, statusId: string) {

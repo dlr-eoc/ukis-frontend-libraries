@@ -4,51 +4,51 @@ import { TestBed } from '@angular/core/testing';
 import { WmsClient, WmsVersion } from '../wms.service';
 import { FakeWmsServer } from './fake_wms_server';
 
+const parseCapsTest = (fakeWmsServer: FakeWmsServer, version: WmsVersion) => new Promise(done => {
+  const fakeHttpClient = TestBed.inject(HttpClient);
+  const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
+  const wmsClient = new WmsClient(fakeHttpClient);
+
+  const capabilities$ = wmsClient.getCapabilities('testServer.com', version);
+  capabilities$.subscribe(capabilities => {
+    expect(capabilities).toBeTruthy();
+
+    const layer0 = wmsClient.getLayerFromCapabilities('nexrad-n0r-wmst', capabilities);
+    expect(layer0.MetadataURL[0].OnlineResource).toEqual('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?request=GetMetadata&layer=nexrad-n0r-wmst');
+
+    // this property differs between WMS Versions!
+    // this property differs between WMS Versions!
+    if (version === '1.3.0') {
+      expect(layer0.BoundingBox[0].extent).toEqual([24, -126, 50, -66]);
+    } else {
+      expect(layer0.BoundingBox[0].extent).toEqual([-126, 24, -66, 50]);
+    }
 
 
+    const time = wmsClient.getTimeDimensionFromLayer(layer0);
+    expect(time.name).toEqual('time');
+    expect(time.units).toEqual('ISO8601');
+
+    done(true);
+  });
+
+  const request = httpMockServer.expectOne(`testServer.com?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=${version}`);
+  request.flush(fakeWmsServer.getCapabilities(version));
+});
 
 describe('WmsService test-suite', () => {
   const fakeWmsServer = new FakeWmsServer();
-  const versions: WmsVersion[] = ['1.1.0', '1.1.1', '1.3.0'];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [HttpClient, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [HttpClient, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
   });
 
-  for (const version of versions) {
-    it(`Should properly parse GetCapabilities response for version ${version}`, (done) => {
-      const fakeHttpClient = TestBed.inject(HttpClient);
-      const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
-      const wmsClient = new WmsClient(fakeHttpClient);
+  it(`Should properly parse GetCapabilities response for version 1.1.0`, () => parseCapsTest(fakeWmsServer, '1.1.0'));
 
-      const capabilities$ = wmsClient.getCapabilities('testServer.com', version);
-      capabilities$.subscribe(capabilities => {
-        expect(capabilities).toBeTruthy();
+  it(`Should properly parse GetCapabilities response for version 1.1.1`, () => parseCapsTest(fakeWmsServer, '1.1.1'));
 
-        const layer0 = wmsClient.getLayerFromCapabilities('nexrad-n0r-wmst', capabilities);
-        expect(layer0.MetadataURL[0].OnlineResource).toEqual('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi?request=GetMetadata&layer=nexrad-n0r-wmst');
-
-        // this property differs between WMS Versions!
-        if (version === '1.3.0') {
-          expect(layer0.BoundingBox[0].extent).toEqual([24, -126, 50, -66]);
-        } else {
-          expect(layer0.BoundingBox[0].extent).toEqual([-126, 24, -66, 50]);
-        }
-
-        const time = wmsClient.getTimeDimensionFromLayer(layer0);
-        expect(time.name).toEqual('time');
-        expect(time.units).toEqual('ISO8601');
-
-        done();
-      });
-
-      const request = httpMockServer.expectOne(`testServer.com?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=${version}`);
-      request.flush(fakeWmsServer.getCapabilities(version));
-    });
-  }
-
-
+  it(`Should properly parse GetCapabilities response for version 1.3.0`, () => parseCapsTest(fakeWmsServer, '1.3.0'));
 });

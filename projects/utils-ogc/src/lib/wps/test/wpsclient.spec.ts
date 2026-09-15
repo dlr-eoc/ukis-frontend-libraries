@@ -55,7 +55,7 @@ describe(`Testing wps-client version 1.0.0 functionality`, () => {
   });
 
 
-  it('get-capabilities should work', (done) => {
+  it('get-capabilities should work', () => new Promise(done => {
     const fakeHttpClient = TestBed.inject(HttpClient);
     const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
 
@@ -63,49 +63,49 @@ describe(`Testing wps-client version 1.0.0 functionality`, () => {
     const capas$ = cl.getCapabilities('testServer.com');
     capas$.subscribe(result => {
       expect(result).toBeTruthy();
-      done();
+      done(true);
     });
 
     const request = httpMockServer.expectOne(`testServer.com?service=WPS&request=GetCapabilities&version=1.0.0`);
     request.flush(fakeWpsServer.createGetCapabilitiesResponse('1.0.0'));
-  });
+  }));
 
 
-  it('execute should work', (done) => {
+  it('execute should work', () => new Promise(done => {
     const fakeHttpClient = TestBed.inject(HttpClient);
     const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
 
-    const inputs = [];
+    const inputs:WpsInput[] = [];
 
-    const outputDescriptions = [];
+    const outputDescriptions:WpsOutputDescription[] = [];
 
     const c = new WpsClient('1.0.0', fakeHttpClient);
     const exec$ = c.execute('testServer.com', 'testProcess', inputs, outputDescriptions);
 
     exec$.subscribe(results => {
       results.map(r => expect(r.value).toBeTruthy());
-      done();
+      done(true);
     });
 
     const request = httpMockServer.expectOne(`testServer.com?service=WPS&request=Execute&version=1.0.0&identifier=testProcess`);
     request.flush(fakeWpsServer.createExecuteResponse('1.0.0'));
-  });
+  }));
 
 
-  it('execute-async should work', (done) => {
+  it('execute-async should work', () => new Promise(done => {
     const fakeHttpClient = TestBed.inject(HttpClient);
     const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
 
-    const inputs = [];
+    const inputs:WpsInput[] = [];
 
-    const outputDescriptions = [];
+    const outputDescriptions:WpsOutputDescription[] = [];
 
     const c = new WpsClient('1.0.0', fakeHttpClient);
 
     const exec$ = c.executeAsync('testServer.com', 'testProcess', inputs, outputDescriptions);
     exec$.subscribe(results => {
       results.map(r => expect(r.value).toBeTruthy());
-      done();
+      done(true);
     });
 
     const request = httpMockServer.expectOne(`testServer.com?service=WPS&request=Execute&version=1.0.0&identifier=testProcess`);
@@ -113,9 +113,9 @@ describe(`Testing wps-client version 1.0.0 functionality`, () => {
 
     const request2 = httpMockServer.expectOne(`http://rz-vm140.gfz-potsdam.de:80/wps/RetrieveResultServlet?id=7593c54d-8284-4074-be9d-31449487cbb6`);
     request2.flush(fakeWpsServer.creaExecuteAsyncResultResponse('1.0.0'));
-  });
+  }));
 
-  it('describeProcess should work as expected', (done) => {
+  it('describeProcess should work as expected', () => new Promise(done => {
     const mockHttpClient = TestBed.inject(HttpClient);
     const wpsClient: WpsClient = new WpsClient('1.0.0', mockHttpClient);
     const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
@@ -128,12 +128,12 @@ describe(`Testing wps-client version 1.0.0 functionality`, () => {
     request$.subscribe(results => {
       expect(results).toBeTruthy();
       expect(results.inputs[0].description.id).toBeTruthy();
-      done();
+      done(true);
     });
 
     const testRequest = httpMockServer.expectOne(`${url}?service=WPS&request=DescribeProcess&version=1.0.0&Identifier=${processId}`);
     testRequest.flush(fakeWpsServer.createDescribeProcessResponse('1.0.0'));
-  });
+  }));
 });
 
 
@@ -179,7 +179,7 @@ describe(`Testing wps-client version 2.0.0 functionality`, () => {
     expect(cl).toBeTruthy();
   });
 
-  it('execute should work', (done) => {
+  it('execute should work', () => new Promise(done => {
     const fakeHttpClient = TestBed.inject(HttpClient);
     const httpMockServer: HttpTestingController = TestBed.inject(HttpTestingController);
 
@@ -207,14 +207,14 @@ describe(`Testing wps-client version 2.0.0 functionality`, () => {
 
     exec$.subscribe(results => {
       results.map(r => expect(r.value).toBeTruthy());
-      done();
+      done(true);
     });
 
     const request = httpMockServer.expectOne(`testServer.com`);
     expect(request.request.method).toEqual('POST');
     expect(request.request.body).toEqual(`<wps:Execute xmlns:wps="http://www.opengis.net/wps/2.0" service="WPS" version="2.0.0" mode="sync" response="document"><p0:Identifier xmlns:p0="http://www.opengis.net/ows/2.0">testProcess</p0:Identifier><wps:Input id="country"><wps:Data mimeType="text/plain">ecuador</wps:Data></wps:Input><wps:Output id="shakemap-output" transmission="reference" mimeType="application/WMS"/></wps:Execute>`);
     request.flush(fakeWpsServer.createExecuteResponse('2.0.0'));
-  });
+  }));
 
 });
 
