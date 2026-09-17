@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BaseLayerControlComponent } from './base-layer-control.component';
 import { ReversePipe } from '@dlr-eoc/ngx-ukis-utilities';
-import { LayersService } from '@dlr-eoc/services-layers';
+import { Layer, LayersService } from '@dlr-eoc/services-layers';
 
 
 import { MapStateService } from '@dlr-eoc/services-map-state';
@@ -18,7 +18,7 @@ import { LayerGroup } from '@dlr-eoc/services-layers';
 @Injectable()
 class MockLayersService extends LayersService {
 
-  getLayerGroups() {
+  override getLayerGroups() {
     const l = new RasterLayer(
       {
         url: 'blabl',
@@ -46,19 +46,17 @@ describe('BaseLayerControlComponent', () => {
   let layersSvc: LayersService;
   let mapStateSvc: MapStateService;
 
-  beforeEach(waitForAsync(() => {
-
-
-    TestBed.configureTestingModule({
-    imports: [BaseLayerControlComponent, ReversePipe, MockLayerentryGroupComponent, MockLayerentryComponent],
-    providers: [
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BaseLayerControlComponent, ReversePipe, MockLayerentryGroupComponent, MockLayerentryComponent],
+      providers: [
         { provide: LayersService, useClass: MockLayersService },
         MapStateService
-    ]
-}).compileComponents();
-  }));
+      ]
+    }).compileComponents();
+  });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(BaseLayerControlComponent);
     component = fixture.componentInstance;
     layersSvc = new MockLayersService(); // TestBed.inject(MockLayersService);
@@ -67,7 +65,7 @@ describe('BaseLayerControlComponent', () => {
     // as we use directive @Input and do not inject the service, we need to instantiate a service here.
     component.layersSvc = layersSvc;
     component.mapStateSvc = mapStateSvc;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
@@ -84,7 +82,7 @@ describe('BaseLayerControlComponent', () => {
 
   it('should have 1 children of ukis-layerentry-group', () => {
     fixture.detectChanges();
-    const element = fixture.debugElement.nativeElement.querySelectorAll('ukis-layerentry-group');
+    const element = fixture.debugElement.nativeElement.querySelectorAll('ngx-ukis-layerentry-group');
     expect(element.length).toEqual(1);
 
   });
@@ -92,7 +90,7 @@ describe('BaseLayerControlComponent', () => {
   it('should have 0 children of ukis-layerentry', () => {
     fixture.detectChanges();
 
-    const element = fixture.debugElement.nativeElement.querySelectorAll('ukis-layerentry');
+    const element = fixture.debugElement.nativeElement.querySelectorAll('ngx-ukis-layerentry');
     expect(element.length).toEqual(0);
 
   });
@@ -103,17 +101,17 @@ describe('BaseLayerControlComponent', () => {
  * and give its selector
  */
 @Component({
-    selector: 'ukis-layerentry',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    template: ''
+  selector: 'ukis-layerentry',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  template: ''
 })
 class MockLayerentryComponent {
-  @Input('layersSvc') layersSvc: LayersService;
+  @Input('layersSvc') layersSvc!: LayersService;
   @Input('mapState') mapState?: MapStateService;
-  @Input('layer') layer;
+  @Input('layer') layer!: Layer;
 
-  @Input('group') group?;
-  @Input('layerGroups') layerGroups?;
+  @Input('group') group?: LayerGroup;
+  @Input('layerGroups') layerGroups?: LayerGroup[];
   @Input('expanded') openProperties = false;
   @Input('expandable') expandable = true;
 }
@@ -124,14 +122,14 @@ class MockLayerentryComponent {
  * and give its selector
  */
 @Component({
-    selector: 'ukis-layerentry-group',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    template: ''
+  selector: 'ukis-layerentry-group',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  template: ''
 })
 class MockLayerentryGroupComponent {
 
-  @Input('layersSvc') layersSvc: LayersService;
+  @Input('layersSvc') layersSvc!: LayersService;
   @Input('mapState') mapState?: MapStateService;
-  @Input('group') group;
-  @Input('layerGroups') layerGroups;
+  @Input('group') group!: LayerGroup;
+  @Input('layerGroups') layerGroups!: LayerGroup[];
 }

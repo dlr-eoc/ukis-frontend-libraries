@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LayerentryGroupComponent } from './layerentry-group.component';
 import { LayerentryComponent } from '../layerentry/layerentry.component';
@@ -17,14 +17,14 @@ describe('LayerentryGroupComponent', () => {
   let layersSvc: LayersService;
   let mapStateSvc: MapStateService;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [ClarityModule, FormsModule, DragDropModule, LayerentryGroupComponent, LayerentryComponent, ReversePipe, ItemsFilterPipe],
-    providers: [LayersService, MapStateService]
-}).compileComponents();
-  }));
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ClarityModule, FormsModule, DragDropModule, LayerentryGroupComponent, LayerentryComponent, ReversePipe, ItemsFilterPipe],
+      providers: [LayersService, MapStateService]
+    }).compileComponents();
+  });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(LayerentryGroupComponent);
     component = fixture.componentInstance;
     layersSvc = TestBed.inject(LayersService);
@@ -48,6 +48,7 @@ describe('LayerentryGroupComponent', () => {
     component.mapState = mapStateSvc;
     component.layerGroups = [component.group];
     fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
@@ -68,6 +69,6 @@ describe('LayerentryGroupComponent', () => {
 
   it('should get openAllLayersProperties from the expanded Layers', () => {
     /** test_layer is expanded */
-    expect(component.openAllLayersProperties).toBeTrue();
+    expect(component.openAllLayersProperties).toBe(true);
   });
 });

@@ -13,20 +13,20 @@ import { ReversePipe, ItemsFilterPipe } from '@dlr-eoc/ngx-ukis-utilities';
 
 @Component({
   selector: 'ngx-ukis-layer-control',
-    templateUrl: './layer-control.component.html',
-    styleUrls: ['./layer-control.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [CdkDropList, CdkDrag, LayerentryGroupComponent, CdkDragHandle, LayerentryComponent, ItemsFilterPipe, ReversePipe]
+  styleUrl: './layer-control.component.scss',
+  templateUrl: './layer-control.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [CdkDropList, CdkDrag, LayerentryGroupComponent, CdkDragHandle, LayerentryComponent, ItemsFilterPipe, ReversePipe]
 })
 export class LayerControlComponent implements OnInit, OnDestroy {
-  @Input('layersSvc') layersSvc: LayersService;
+  @Input('layersSvc') layersSvc!: LayersService;
   @Input('mapStateSvc') mapStateSvc?: MapStateService;
   @Input('layerfilter') layerfilter: Layer['filtertype'] = 'Layers';
   @Input('layersSort') layersSort?: boolean = true;
   @Input('groupLayersSort') groupLayersSort?: boolean = true;
 
-  layerGroupsSubscription: Subscription;
-  layersSubscription: Subscription;
+  layerGroupsSubscription!: Subscription;
+  layersSubscription!: Subscription;
   layergroups: Array<Layer | LayerGroup>;
 
 

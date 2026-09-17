@@ -5,10 +5,10 @@ import { UserService } from '../user.service';
 
 @Component({
   selector: 'ngx-ukis-user-details',
-    templateUrl: './user-details.component.html',
-    styleUrls: ['./user-details.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: []
+  templateUrl: './user-details.component.html',
+  styleUrl: './user-details.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: []
 })
 export class UserDetailsComponent implements OnDestroy {
 

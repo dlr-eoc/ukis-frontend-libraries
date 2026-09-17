@@ -10,11 +10,12 @@ describe('UserService', () => {
   let service: UserService;
   let httpMock: HttpTestingController;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-    imports: [],
-    providers: [UserService, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: [UserService, provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
+
     service = TestBed.inject(UserService);
     httpMock = TestBed.inject(HttpTestingController);
   });

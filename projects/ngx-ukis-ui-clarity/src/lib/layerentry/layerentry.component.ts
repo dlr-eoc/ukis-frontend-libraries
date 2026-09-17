@@ -20,10 +20,18 @@ enum EactiveTabs {
 }
 type TactiveTabs = keyof typeof EactiveTabs;
 
+// Omit<Layer, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent }
+type DynamicComponentLayer = Layer & {
+  legendImg?: IDynamicComponent;
+  action?: IDynamicComponent;
+  description?: IDynamicComponent;
+}
+
+
 @Component({
   selector: 'ngx-ukis-layerentry',
   templateUrl: './layerentry.component.html',
-  styleUrls: ['./layerentry.component.scss'],
+  styleUrl: './layerentry.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [NgClass, ClrIcon, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponent]
 })
@@ -31,9 +39,9 @@ export class LayerentryComponent implements OnInit {
   @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }
   @HostBinding('class') get cssClass() { return this.layer.cssClass; }
 
-  @Input('layersSvc') layersSvc: LayersService;
+  @Input('layersSvc') layersSvc!: LayersService;
   @Input('mapState') mapState?: MapStateService;
-  @Input('layer') layer: Layer;
+  @Input('layer') layer!: Layer;
 
   @Input('group') group?: LayerGroup;
   @Input('layerGroups') layerGroups?: Array<Layer | LayerGroup>;;
@@ -73,9 +81,9 @@ export class LayerentryComponent implements OnInit {
   public hasTabsbody = true;
 
   public dynamicComponents: {
-    legendImg: IDynamicComponent
-    action: IDynamicComponent
-    description: IDynamicComponent;
+    legendImg: IDynamicComponent | null
+    action: IDynamicComponent | null
+    description: IDynamicComponent | null
   } = { legendImg: null, action: null, description: null };
 
   constructor() {
@@ -87,7 +95,7 @@ export class LayerentryComponent implements OnInit {
    *
    * Check if the compProp on the layer is a dynamic Component, if yes pass it to `<ukis-dynamic-component>` so the component from the layer can be inserted here.
    */
-  checkIsComponentItem(layer: Layer, compProp: string): layer is Omit<Layer, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent } {
+  checkIsComponentItem(layer: Layer, compProp: keyof Pick<Layer, 'legendImg' | 'action' | 'description'>): layer is DynamicComponentLayer {
     /**
      * TODO: This function is executed quite often!!! even if a user moves on tha map. Try to minimize work here or prevent calling it so often.
      *
@@ -96,7 +104,7 @@ export class LayerentryComponent implements OnInit {
      **/
 
     // https://stackoverflow.com/a/65347533/10850021
-    const obj: IDynamicComponent = layer[compProp];
+    const obj = layer[compProp];
     let isComp = false;
     if (obj && typeof obj === 'object') {
       if ('component' in obj) {
@@ -108,7 +116,7 @@ export class LayerentryComponent implements OnInit {
             inputs: { layer: layer }
           }
 
-        } else if (obj.inputs && !obj.inputs.layer) {
+        } else if (obj.inputs && !obj.inputs['layer']) {
           this.dynamicComponents[compProp] = {
             component: obj.component,
             // create a shallow copy of inputs so they are not changed on the original layer
@@ -117,7 +125,7 @@ export class LayerentryComponent implements OnInit {
             inputs: Object.assign({}, obj.inputs, { layer: layer })
           };
 
-        } else if (obj.inputs && obj.inputs.layer) {
+        } else if (obj.inputs && obj.inputs['layer']) {
           this.dynamicComponents[compProp] = {
             component: obj.component,
             // create a shallow copy of inputs so they are not changed on the original layer
@@ -127,7 +135,7 @@ export class LayerentryComponent implements OnInit {
           };
         }
 
-        if (obj.outputs) {
+        if (obj.outputs && this.dynamicComponents[compProp]) {
           // create a shallow copy of outputs so they are not changed on the original layer
           // keep in mind changing some deeper properties will reflect to the original layer!
           // https://2ality.com/2014/01/object-assign.html#2.3
@@ -157,7 +165,8 @@ export class LayerentryComponent implements OnInit {
         this.switchTab(this.layer.expanded.tab as TactiveTabs);
         /** let the user reset the default open tab */
         if (this.layer.expanded.expanded === false) {
-          this.activeTabs[this.layer.expanded.tab] = false;
+          const tabKey = this.layer.expanded.tab as TactiveTabs
+          this.activeTabs[tabKey] = false;
         }
       } else {
         this.setDefaultActiveTabs();
@@ -169,7 +178,7 @@ export class LayerentryComponent implements OnInit {
 
     this.checkCanZoomToLayer()
 
-    if (this.layer.filtertype === 'Baselayers' && !this.layer.legendImg && !this.layer.description && !this.layer.action && !this.layer.actions && !this.layer.styles && !(this.layer.styles?.length > 1)) {
+    if (this.layer.filtertype === 'Baselayers' && !this.layer.legendImg && !this.layer.description && !this.layer.action && !this.layer.actions && !this.layer.styles) {
       this.hasTabsbody = false;
     }
   }
@@ -199,12 +208,13 @@ export class LayerentryComponent implements OnInit {
     if (!group) {
       if (selectedLayer.filtertype === 'Baselayers') {
         selectedLayer.visible = !selectedLayer.visible;
-        const filterdlayers = this.layerGroups.filter((l) => l.filtertype === 'Baselayers');
-        // console.log(filterdlayers);
-        for (const layer of filterdlayers) {
-          if (layer instanceof Layer && layer.id !== selectedLayer.id) {
-            layer.visible = !selectedLayer.visible;
-            this.layersSvc.updateLayer(layer, layer.filtertype || 'Baselayers');
+        const filterdlayers = this.layerGroups?.filter((l) => l.filtertype === 'Baselayers');
+        if (filterdlayers) {
+          for (const layer of filterdlayers) {
+            if (layer instanceof Layer && layer.id !== selectedLayer.id) {
+              layer.visible = !selectedLayer.visible;
+              this.layersSvc.updateLayer(layer, layer.filtertype || 'Baselayers');
+            }
           }
         }
       } else {
@@ -243,7 +253,7 @@ export class LayerentryComponent implements OnInit {
   /**
    * setLayerIndex
    */
-  setLayerIndex(layer: Layer, dir, group?: LayerGroup) {
+  setLayerIndex(layer: Layer, dir: 'up' | 'down', group?: LayerGroup) {
     // console.log('is First', this.isFirst(layer));
     // console.log('is Last', this.isLast(layer));
     // console.log(layer, group);
@@ -315,7 +325,7 @@ export class LayerentryComponent implements OnInit {
   }
 
   switchTab(tabName: TactiveTabs, toggle = true) {
-    for (const key of Object.keys(this.activeTabs)) {
+    for (const key of Object.keys(this.activeTabs) as TactiveTabs[]) {
       const isTabName = tabName === key;
       if (this.activeTabs[key] && toggle) {
         this.activeTabs[key] = false;
@@ -342,33 +352,34 @@ export class LayerentryComponent implements OnInit {
 
   executeChangeStyle(evt: Event) {
     const newStyleName = (evt.target as HTMLInputElement).value;
-    if (this.layer.styles) {
-      const newStyle = (this.layer as RasterLayer).styles.find(s => s.name === newStyleName);
+    const layer = this.layer as RasterLayer;
+    if (layer.styles) {
+      const newStyle = layer.styles.find(s => s.name === newStyleName);
       if (newStyle) {
-        this.layer.legendImg = newStyle.legendURL;
-        if (this.layer instanceof WmsLayer) {
-          this.layer.params.STYLES = newStyle.name;
-        } else if (this.layer instanceof WmtsLayer) {
-          this.layer.params.style = newStyle.name;
+        layer.legendImg = newStyle.legendURL;
+        if (layer instanceof WmsLayer) {
+          layer.params.STYLES = newStyle.name;
+        } else if (layer instanceof WmtsLayer) {
+          layer.params.style = newStyle.name;
         }
-        this.layersSvc.updateLayer(this.layer, this.layer.filtertype);
+        this.layersSvc.updateLayer(layer, layer.filtertype);
       }
     }
   }
 
-  isFirst(layer) {
+  isFirst(layer: Layer) {
     if (this.group) {
       return this.layersSvc.isGroupFirst(layer, this.group.layers);
     } else {
-      return this.layersSvc.isGroupFirst(layer, null, layer.filtertype);
+      return this.layersSvc.isGroupFirst(layer, undefined, layer.filtertype);
     }
   }
 
-  isLast(layer) {
+  isLast(layer: Layer) {
     if (this.group) {
       return this.layersSvc.isGroupLast(layer, this.group.layers);
     } else {
-      return this.layersSvc.isGroupLast(layer, null, layer.filtertype);
+      return this.layersSvc.isGroupLast(layer, undefined, layer.filtertype);
     }
   }
 

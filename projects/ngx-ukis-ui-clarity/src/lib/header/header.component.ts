@@ -10,8 +10,8 @@ ClarityIcons.addIcons(ukisIcon, dlrIcon, timesIcon);
   selector: 'ngx-ukis-header',
   imports: [ClrNavigationModule, NgClass, ClrIcon, ClrStandaloneCdkTrapFocus],
   templateUrl: './header.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager
 })
 export class HeaderComponent {
   @Input('ukis-title') title: string = '';

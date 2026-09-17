@@ -12,20 +12,20 @@ ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
 @Component({
   selector: 'ngx-ukis-projection-switch',
   templateUrl: './projection-switch.component.html',
-  styles: [],
+  styleUrl: './projection-switch.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ClrIcon
   ]
 })
 export class ProjectionSwitchComponent implements OnInit {
-  @Input('mapSvc') mapSvc: MapOlService;
-  @Input('mapState') mapState: MapStateService;
-  @Input('projectionList') projList: IProjDef[];
+  @Input('mapSvc') mapSvc!: MapOlService;
+  @Input('mapState') mapState!: MapStateService;
+  @Input('projectionList') projList!: IProjDef[];
   @Input('fitViewToNewExtent') fitViewToNewExtent? = false;
   @Input('setViewExtent') setViewExtent? = true;
-  subscription: Subscription;
-  selectedProj: IProjDef;
+  subscription!: Subscription;
+  selectedProj!: IProjDef;
   constructor() { }
 
   ngOnInit() {

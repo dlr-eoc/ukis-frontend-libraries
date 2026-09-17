@@ -12,8 +12,7 @@ describe('GlobalAlertComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ClarityModule, GlobalAlertComponent],
       providers: [AlertService]
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GlobalAlertComponent);
     component = fixture.componentInstance;
@@ -22,7 +21,8 @@ describe('GlobalAlertComponent', () => {
       text: 'test Alert',
       closeable: true
     } as IAlert;
-    fixture.detectChanges();
+
+    await fixture.whenStable();
   });
 
   it('should create', () => {

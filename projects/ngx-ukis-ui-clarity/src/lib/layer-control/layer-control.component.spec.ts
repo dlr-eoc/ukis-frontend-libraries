@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LayerControlComponent } from '../layer-control/layer-control.component';
 
@@ -18,14 +18,14 @@ describe('LayerControlComponent', () => {
   let layersSvc: LayersService;
   let mapStateSvc: MapStateService;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [ClarityModule, FormsModule, DragDropModule, LayerControlComponent, LayerentryGroupComponent, LayerentryComponent, ObjTypePipe, ReversePipe, ItemsFilterPipe],
-    providers: [LayersService, MapStateService]
-}).compileComponents();
-  }));
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ClarityModule, FormsModule, DragDropModule, LayerControlComponent, LayerentryGroupComponent, LayerentryComponent, ObjTypePipe, ReversePipe, ItemsFilterPipe],
+      providers: [LayersService, MapStateService]
+    }).compileComponents();
+  });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(LayerControlComponent);
     component = fixture.componentInstance;
     layersSvc = TestBed.inject(LayersService);
@@ -33,7 +33,7 @@ describe('LayerControlComponent', () => {
 
     component.layersSvc = layersSvc;
     component.mapStateSvc = mapStateSvc;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

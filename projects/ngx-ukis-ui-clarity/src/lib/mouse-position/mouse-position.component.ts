@@ -6,6 +6,8 @@ import { ClrSelectModule, ClrCommonFormsModule, ClrNumberInputModule } from '@cl
 
 import { FormsModule } from '@angular/forms';
 import { MapStateService, TepsgCode } from '@dlr-eoc/services-map-state';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import MapEvent from 'ol/MapEvent';
 
 interface ISelectProjection {
   title: string;
@@ -15,29 +17,29 @@ interface ISelectProjection {
 @Component({
   selector: 'ngx-ukis-mouse-position',
   templateUrl: './mouse-position.component.html',
-  styleUrls: ['./mouse-position.component.scss'],
+  styleUrl: './mouse-position.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ClrSelectModule, ClrCommonFormsModule, FormsModule, ClrNumberInputModule]
 })
 export class MousePositionComponent implements OnInit, OnDestroy {
-  @Input('mapSvc') mapSvc: MapOlService;
-  @Input('mapState') mapState: MapStateService;
+  @Input('mapSvc') mapSvc!: MapOlService;
+  @Input('mapState') mapState!: MapStateService;
   public mapCoordinates: [number, number] | number[] = [0, 0];
   public zoom = 0;
-  public projections: ISelectProjection[];
-  mapProjection: olProjection;
-  public selectedProjection: string;
+  public projections!: ISelectProjection[];
+  mapProjection!: olProjection;
+  public selectedProjection!: string;
   public precision = 2;
   x = 'Lon';
   y = 'Lat';
-  mapSub: Subscription;
+  mapSub!: Subscription;
   constructor() {
   }
 
   ngOnInit() {
     this.mapSub = this.mapState.getProjection().pipe(distinctUntilChanged()).subscribe(item => {
       if (item.epsg) {
-        this.mapProjection = olGetProjection(item.epsg);
+        this.mapProjection = olGetProjection(item.epsg) as olProjection;
         this.setProjection(item.epsg);
       }
     });
@@ -73,15 +75,15 @@ export class MousePositionComponent implements OnInit, OnDestroy {
     this.mapSub.unsubscribe();
   }
 
-  mapMoveSubscription = (evt) => {
+  mapMoveSubscription = (evt: MapBrowserEvent<KeyboardEvent | PointerEvent | WheelEvent>) => {
     if (evt.coordinate) {
-      this.mapCoordinates = olTransform(evt.coordinate, this.mapProjection, olGetProjection(this.selectedProjection));
+      this.mapCoordinates = olTransform(evt.coordinate, this.mapProjection, olGetProjection(this.selectedProjection) as olProjection);
     }
   }
 
-  mapOnMoveend = (evt) => {
+  mapOnMoveend = (evt: MapEvent) => {
     const newZoom = evt.map.getView().getZoom();
-    if (this.zoom !== newZoom) {
+    if (newZoom !== undefined && this.zoom !== newZoom) {
       // console.log('zoom end, new zoom: ' + newZoom);
       this.zoom = newZoom;
     }
@@ -98,7 +100,7 @@ export class MousePositionComponent implements OnInit, OnDestroy {
     }
     const oldSelection = this.selectedProjection;
     this.selectedProjection = epsgcode;
-    this.mapCoordinates = olTransform(this.mapCoordinates, olGetProjection(oldSelection), olGetProjection(this.selectedProjection));
+    this.mapCoordinates = olTransform(this.mapCoordinates, olGetProjection(oldSelection) as olProjection, olGetProjection(this.selectedProjection) as olProjection);
   }
 
   public toPrecision(input: number, value: number) {

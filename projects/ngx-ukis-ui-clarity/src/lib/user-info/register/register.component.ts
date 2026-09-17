@@ -1,30 +1,30 @@
 import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, Validators, FormControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, Validators, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UserService, IRegisterUser, IUser } from '../user.service';
 import { ClrInputModule, ClrCommonFormsModule, ClrPasswordModule } from '@clr/angular';
 
 interface IusrInfoForm {
-  usrName: FormControl<string>;
-  usrPass: FormControl<string>;
-  firstName: FormControl<string>;
-  lastName: FormControl<string>;
-  email: FormControl<string>;
+  usrName: FormControl<string | null>;
+  usrPass: FormControl<string | null>;
+  firstName: FormControl<string | null>;
+  lastName: FormControl<string | null>;
+  email: FormControl<string | null>;
 }
 @Component({
   selector: 'ngx-ukis-register',
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule]
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule]
 })
 export class RegisterComponent implements OnDestroy {
   usrInfoFormOptions: IusrInfoForm;
   usrInfoForm: FormGroup<IusrInfoForm>;
 
   usrSubsription: Subscription;
-  user: IUser;
-  submitted: false;
+  user!: IUser;
+  submitted!: false;
 
   constructor(private usrSvc: UserService) {
     this.usrInfoFormOptions = {
@@ -43,14 +43,14 @@ export class RegisterComponent implements OnDestroy {
     });
   }
 
-  getFormError(key) {
+  getFormError(key: keyof IusrInfoForm) {
     let error = '';
-    const controlErrors: ValidationErrors = this.usrInfoForm.get(key).errors;
+    const controlErrors = this.usrInfoForm.get(key)?.errors;
     if (controlErrors != null) {
       Object.keys(controlErrors).forEach((keyError, index) => {
         let newError = keyError;
         if (keyError !== 'required') {
-          newError = JSON.stringify(this.usrInfoForm.get(key).errors[keyError]);
+          newError = JSON.stringify(controlErrors[keyError]);
         }
         if (index === 0) {
           error += `${newError}`;
@@ -64,11 +64,11 @@ export class RegisterComponent implements OnDestroy {
 
   register() {
     const user: IRegisterUser = {
-      userName: this.usrInfoForm.get('usrName').value,
-      password: this.usrInfoForm.get('usrPass').value,
-      email: this.usrInfoForm.get('email').value,
-      firstName: this.usrInfoForm.get('firstName').value,
-      lastName: this.usrInfoForm.get('lastName').value
+      userName: this.usrInfoForm.get('usrName')?.value,
+      password: this.usrInfoForm.get('usrPass')?.value,
+      email: this.usrInfoForm.get('email')?.value,
+      firstName: this.usrInfoForm.get('firstName')?.value,
+      lastName: this.usrInfoForm.get('lastName')?.value
     };
     this.usrSvc.register(user);
   }

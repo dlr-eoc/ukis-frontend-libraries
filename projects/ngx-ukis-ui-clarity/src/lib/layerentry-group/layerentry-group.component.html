@@ -96,7 +96,7 @@
       <!-- show Description -->
       @if (group.description && activeTabs.description) {
         <div class="tabsbody description">
-          @if (checkIsComponentItem(group,'description')) {
+          @if (checkIsComponentItem(group,'description') && dynamicComponents.description) {
             <ngx-ukis-dynamic-component
               [(dynamicComponent)]="dynamicComponents.description"></ngx-ukis-dynamic-component>
           } @else {
@@ -116,7 +116,7 @@
       <!-- show Legend -->
       @if (group.legendImg && activeTabs.legend) {
         <div class="tabsbody legend">
-          @if (checkIsComponentItem(group,'legendImg')) {
+          @if (checkIsComponentItem(group,'legendImg') && dynamicComponents.legendImg) {
             <ngx-ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.legendImg"></ngx-ukis-dynamic-component>
           } @else {
             <a [href]="group.legendImg" target="_blank" title="Show full Image"><img [src]="group.legendImg" /></a>

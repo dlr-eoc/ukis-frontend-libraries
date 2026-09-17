@@ -22,10 +22,17 @@ enum EactiveTabs {
 }
 type TactiveTabs = keyof typeof EactiveTabs;
 
+// Omit<Layer, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent }
+type DynamicComponentLayerGroup = LayerGroup & {
+  legendImg?: IDynamicComponent;
+  action?: IDynamicComponent;
+  description?: IDynamicComponent;
+}
+
 @Component({
   selector: 'ngx-ukis-layerentry-group',
   templateUrl: './layerentry-group.component.html',
-  styleUrls: ['./layerentry-group.component.scss'],
+  styleUrl: './layerentry-group.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ClrIcon, NgClass, ClrCommonFormsModule, CdkDropList, CdkDrag, LayerentryComponent, CdkDragHandle, ItemsFilterPipe, ReversePipe, DynamicComponent]
 })
@@ -33,10 +40,10 @@ export class LayerentryGroupComponent implements OnInit {
   @HostBinding('class.group-visible') get visible() { return this.group.visible; }
   @HostBinding('class') get cssClass() { return this.group.cssClass; }
 
-  @Input('layersSvc') layersSvc: LayersService;
+  @Input('layersSvc') layersSvc!: LayersService;
   @Input('mapState') mapState?: MapStateService;
-  @Input('group') group: LayerGroup;
-  @Input('layerGroups') layerGroups: Array<Layer | LayerGroup>;
+  @Input('group') group!: LayerGroup;
+  @Input('layerGroups') layerGroups!: Array<Layer | LayerGroup>;
   @Input('groupSort') groupSort?: boolean = true;
   @Input('groupLayersSort') groupLayersSort?: boolean = true;
 
@@ -62,9 +69,9 @@ export class LayerentryGroupComponent implements OnInit {
   };
 
   public dynamicComponents: {
-    legendImg: IDynamicComponent
-    action: IDynamicComponent
-    description: IDynamicComponent;
+    legendImg: IDynamicComponent | null
+    action: IDynamicComponent | null
+    description: IDynamicComponent | null
   } = { legendImg: null, action: null, description: null };
 
   constructor() { }
@@ -77,7 +84,8 @@ export class LayerentryGroupComponent implements OnInit {
         this.switchTab(this.group.expanded.tab as TactiveTabs);
         /** let the user reset the default open tab */
         if (this.group.expanded.expanded === false) {
-          this.activeTabs[this.group.expanded.tab] = false;
+          const tabKey = this.group.expanded.tab as TactiveTabs
+          this.activeTabs[tabKey] = false;
         }
       } else {
         this.setDefaultActiveTabs();
@@ -106,7 +114,7 @@ export class LayerentryGroupComponent implements OnInit {
   /**
    * obj: {any| IDynamicComponent}
    */
-  checkIsComponentItem(group: LayerGroup, compProp: string): group is Omit<LayerGroup, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent } {
+  checkIsComponentItem(group: LayerGroup, compProp:  keyof Pick<LayerGroup, 'legendImg' | 'action' | 'description'>): group is DynamicComponentLayerGroup {
     /**
      * TODO: This function is executed quite often!!! even if a user moves on tha map. Try to minimize work here or prevent calling it so often.
      *
@@ -115,7 +123,7 @@ export class LayerentryGroupComponent implements OnInit {
      **/
 
     // https://stackoverflow.com/a/65347533/10850021
-    const obj: IDynamicComponent = group[compProp];
+    const obj = group[compProp];
     let isComp = false;
     if (obj && typeof obj === 'object') {
       if ('component' in obj) {
@@ -127,7 +135,7 @@ export class LayerentryGroupComponent implements OnInit {
             inputs: { group: group }
           }
 
-        } else if (obj.inputs && !obj.inputs.group) {
+        } else if (obj.inputs && !obj.inputs['group']) {
           this.dynamicComponents[compProp] = {
             component: obj.component,
             // create a shallow copy of inputs so they are not changed on the original group
@@ -136,7 +144,7 @@ export class LayerentryGroupComponent implements OnInit {
             inputs: Object.assign({}, obj.inputs, { group: group })
           };
 
-        } else if (obj.inputs && obj.inputs.group) {
+        } else if (obj.inputs && obj.inputs['group']) {
           this.dynamicComponents[compProp] = {
             component: obj.component,
             // create a shallow copy of inputs so they are not changed on the original group
@@ -146,7 +154,7 @@ export class LayerentryGroupComponent implements OnInit {
           };
         }
 
-        if (obj.outputs) {
+        if (obj.outputs && this.dynamicComponents[compProp]) {
           // create a shallow copy of outputs so they are not changed on the original group
           // keep in mind changing some deeper properties will reflect to the original group!
           // https://2ality.com/2014/01/object-assign.html#2.3
@@ -179,7 +187,7 @@ export class LayerentryGroupComponent implements OnInit {
     }
   }
 
-  setLayerGroupIndex(group: LayerGroup, dir) {
+  setLayerGroupIndex(group: LayerGroup, dir: number | 'up' | 'down') {
     this.layersSvc.setGroupLayerIndex(group, dir);
   }
 
@@ -204,8 +212,8 @@ export class LayerentryGroupComponent implements OnInit {
     }
   }
 
-  layerUpdate(event, group: LayerGroup) {
-    const layer = event.layer as Layer;
+  layerUpdate(event:{layer : Layer}, group: LayerGroup) {
+    const layer = event.layer;
     /** update event layer in the group... this is done by object reference!! */
     /* const updateLayerIndex = group.layers.findIndex(l => l.id === layer.id);
     if (updateLayerIndex !== -1) {
@@ -221,7 +229,7 @@ export class LayerentryGroupComponent implements OnInit {
   }
 
   switchTab(tabName: TactiveTabs, toggle = true) {
-    for (const key of Object.keys(this.activeTabs)) {
+    for (const key of Object.keys(this.activeTabs) as TactiveTabs[]) {
       const isTabName = tabName === key;
       if (this.activeTabs[key] && toggle) {
         this.activeTabs[key] = false;
@@ -234,7 +242,7 @@ export class LayerentryGroupComponent implements OnInit {
   showHideAllDetails() {
     if (this.openAllLayersProperties) {
       this.openAllLayersProperties = false;
-      for (const key of Object.keys(this.activeTabs)) {
+      for (const key of Object.keys(this.activeTabs) as TactiveTabs[]) {
         this.activeTabs[key] = false;
       }
 
@@ -251,11 +259,11 @@ export class LayerentryGroupComponent implements OnInit {
     }
   }
 
-  isFirst(group) {
+  isFirst(group: LayerGroup) {
     return this.layersSvc.isGroupFirst(group, this.layerGroups, group.filtertype);
   }
 
-  isLast(group) {
+  isLast(group: LayerGroup) {
     return this.layersSvc.isGroupLast(group, this.layerGroups, group.filtertype);
   }
 

@@ -11,17 +11,17 @@ import { ReversePipe } from '@dlr-eoc/ngx-ukis-utilities';
 
 @Component({
   selector: 'ngx-ukis-base-layer-control',
-    templateUrl: './base-layer-control.component.html',
-    styleUrls: ['./base-layer-control.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [LayerentryGroupComponent, LayerentryComponent, ReversePipe]
+  styleUrl: './base-layer-control.component.scss',
+  templateUrl: './base-layer-control.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [LayerentryGroupComponent, LayerentryComponent, ReversePipe]
 })
 export class BaseLayerControlComponent implements OnInit, OnDestroy {
-  @Input('layersSvc') layersSvc: LayersService;
+  @Input('layersSvc') layersSvc!: LayersService;
   @Input('mapStateSvc') mapStateSvc?: MapStateService;
 
-  layerGroupsSubscription: Subscription;
-  layersSubscription: Subscription;
+  layerGroupsSubscription!: Subscription;
+  layersSubscription!: Subscription;
   layergroups: Array<Layer | LayerGroup>;
 
 

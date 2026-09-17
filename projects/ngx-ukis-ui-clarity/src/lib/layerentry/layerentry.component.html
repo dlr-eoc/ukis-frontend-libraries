@@ -126,7 +126,7 @@
                 </select>
               }
               <!-- show layer action -->
-              @if (checkIsComponentItem(layer, 'action');) {
+              @if (checkIsComponentItem(layer, 'action') && dynamicComponents.action) {
                 <ngx-ukis-dynamic-component [(dynamicComponent)]="dynamicComponents.action">
                 </ngx-ukis-dynamic-component>
               }
@@ -135,7 +135,7 @@
           <!-- show Legend -->
           @if (activeTabs.legend && layer.legendImg) {
             <div class="legend">
-              @if (checkIsComponentItem(layer,'legendImg')) {
+              @if (checkIsComponentItem(layer,'legendImg') && dynamicComponents.legendImg) {
                 <ngx-ukis-dynamic-component
                   [(dynamicComponent)]="dynamicComponents.legendImg"></ngx-ukis-dynamic-component>
               } @else {
@@ -146,7 +146,7 @@
           <!-- show Description -->
           @if (activeTabs.description && layer.description) {
             <div class="description">
-              @if (checkIsComponentItem(layer,'description')) {
+              @if (checkIsComponentItem(layer,'description') && dynamicComponents.description) {
                 <ngx-ukis-dynamic-component
                   [(dynamicComponent)]="dynamicComponents.description"></ngx-ukis-dynamic-component>
               } @else {

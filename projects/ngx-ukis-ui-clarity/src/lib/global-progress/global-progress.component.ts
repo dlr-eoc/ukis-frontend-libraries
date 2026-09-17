@@ -6,8 +6,8 @@ import { NgClass } from '@angular/common';
   selector: 'ngx-ukis-global-progress',
   imports: [NgClass],
   templateUrl: './global-progress.component.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './global-progress.component.scss'
+  styleUrl: './global-progress.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager
 })
 export class GlobalProgressComponent {
   @Input() progress!: null | IProgress;

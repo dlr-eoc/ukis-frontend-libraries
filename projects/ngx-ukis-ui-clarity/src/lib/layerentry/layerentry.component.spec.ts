@@ -1,5 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LayerentryComponent } from './layerentry.component';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
@@ -13,14 +12,14 @@ describe('LayerentryComponent', () => {
   let layersSvc: LayersService;
   let mapStateSvc: MapStateService;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [ClarityModule, FormsModule, LayerentryComponent],
-    providers: [LayersService, MapStateService]
-}).compileComponents();
-  }));
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ClarityModule, FormsModule, LayerentryComponent],
+      providers: [LayersService, MapStateService]
+    }).compileComponents();
+  });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(LayerentryComponent);
     component = fixture.componentInstance;
     layersSvc = TestBed.inject(LayersService);
@@ -45,6 +44,7 @@ describe('LayerentryComponent', () => {
     fixture.componentRef.setInput('layersSvc', layersSvc);
     fixture.componentRef.setInput('mapState', mapStateSvc);
     fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

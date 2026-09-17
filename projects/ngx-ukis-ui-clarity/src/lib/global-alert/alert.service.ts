@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { Subject } from 'rxjs';
 
 export interface IAlert {
@@ -8,9 +8,7 @@ export interface IAlert {
   actions?: { title: string, callback: () => void }[];
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class AlertService {
   private alertSource = new Subject<IAlert>();
   alert$ = this.alertSource.asObservable();

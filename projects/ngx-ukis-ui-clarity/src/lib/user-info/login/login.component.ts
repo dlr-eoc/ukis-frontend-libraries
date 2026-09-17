@@ -1,28 +1,28 @@
 import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormControl, Validators, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserService, IUserinfo, IUser } from '../user.service';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserService, IUser } from '../user.service';
 import { Subscription } from 'rxjs';
 import { ClrInputModule, ClrCommonFormsModule, ClrPasswordModule, ClrCheckboxModule } from '@clr/angular';
 
 interface IusrInfoForm {
-  usrName: FormControl<string>;
-  usrPass: FormControl<string>;
-  remember: FormControl<boolean>;
+  usrName: FormControl<string | null>;
+  usrPass: FormControl<string | null>;
+  remember: FormControl<boolean | null>;
 }
 @Component({
   selector: 'ngx-ukis-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule, ClrCheckboxModule]
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [FormsModule, ReactiveFormsModule, ClrInputModule, ClrCommonFormsModule, ClrPasswordModule, ClrCheckboxModule]
 })
 export class LoginComponent implements OnDestroy {
   public usrInfoFormOptions: IusrInfoForm;
   public usrInfoForm: FormGroup<IusrInfoForm>;
 
   usrSubsription: Subscription;
-  user: IUser;
-  submitted: boolean;
+  user!: IUser;
+  submitted!: boolean;
 
   constructor(public usrSvc: UserService) {
     this.usrInfoFormOptions = {
@@ -41,21 +41,21 @@ export class LoginComponent implements OnDestroy {
 
   login() {
     const user: IUser = {
-      userName: this.usrInfoForm.get('usrName').value,
-      password: this.usrInfoForm.get('usrPass').value,
-      remember: this.usrInfoForm.get('remember').value
+      userName: this.usrInfoForm.get('usrName')?.value || '',
+      password: this.usrInfoForm.get('usrPass')?.value || '',
+      remember: this.usrInfoForm.get('remember')?.value || false
     };
     this.usrSvc.login(user);
   }
 
-  getFormError(key) {
+  getFormError(key: keyof IusrInfoForm) {
     let error = '';
-    const controlErrors: ValidationErrors = this.usrInfoForm.get(key).errors;
+    const controlErrors = this.usrInfoForm.get(key)?.errors;
     if (controlErrors != null) {
       Object.keys(controlErrors).forEach((keyError, index) => {
         let newError = keyError;
         if (keyError !== 'required') {
-          newError = JSON.stringify(this.usrInfoForm.get(key).errors[keyError]);
+          newError = JSON.stringify(controlErrors[keyError]);
         }
         if (index === 0) {
           error += `${newError}`;

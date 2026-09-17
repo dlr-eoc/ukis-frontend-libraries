@@ -7,21 +7,21 @@ import { ClrCommonFormsModule, ClrNumberInputModule } from '@clr/angular';
 
 @Component({
   selector: 'ngx-ukis-navigator',
-    templateUrl: './map-navigator.component.html',
-    styleUrls: ['./map-navigator.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [FormsModule, ClrCommonFormsModule, ClrNumberInputModule]
+  templateUrl: './map-navigator.component.html',
+  styleUrl: './map-navigator.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [FormsModule, ClrCommonFormsModule, ClrNumberInputModule]
 })
 export class MapNavigatorComponent implements OnInit, OnDestroy {
-  @Input('mapState') mapState?: MapStateService;
-  mapstate: MapState;
-  subscription: Subscription;
+  @Input('mapStateSvc') mapStateSvc!: MapStateService;
+  mapstate!: MapState;
+  subscription!: Subscription;
   public inputStep = 0.01;
   public precision = 2;
   constructor() { }
 
   ngOnInit() {
-    this.subscription = this.mapState.getMapState().subscribe(mapstate => { this.mapstate = mapstate; });
+    this.subscription = this.mapStateSvc.getMapState().subscribe(mapstate => { this.mapstate = mapstate; });
   }
 
   ngOnDestroy() {
@@ -38,11 +38,13 @@ export class MapNavigatorComponent implements OnInit, OnDestroy {
   }
 
   setNewState(newstate: MapState) {
-    newstate.options.notifier = 'user';
-    this.mapState.setMapState(newstate);
+    if (this) {
+      newstate.options.notifier = 'user';
+      this.mapStateSvc.setMapState(newstate);
+    }
   }
 
-  stateChange(evt) {
+  stateChange() {
     this.setNewState(this.mapstate);
   }
 

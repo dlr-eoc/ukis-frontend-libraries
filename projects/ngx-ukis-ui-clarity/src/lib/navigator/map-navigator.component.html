@@ -5,17 +5,17 @@
         <clr-number-input-container>
           <label>Lon</label>
           <input clrNumberInput type="number" [(ngModel)]="mapstate.center.lon" name="lon" [step]="inputStep"
-            (ngModelChange)="stateChange($event)" />
+            (ngModelChange)="stateChange()" />
         </clr-number-input-container>
         <clr-number-input-container>
           <label>Lat</label>
           <input clrNumberInput type="number" [(ngModel)]="mapstate.center.lat" name="lat" [step]="inputStep"
-            (ngModelChange)="stateChange($event)" />
+            (ngModelChange)="stateChange()" />
         </clr-number-input-container>
         <clr-number-input-container>
           <label>Zoom</label>
           <input clrNumberInput type="number" [(ngModel)]="mapstate.zoom" name="zoom" [step]="inputStep"
-            (ngModelChange)="stateChange($event)" />
+            (ngModelChange)="stateChange()" />
         </clr-number-input-container>
       </form>
     </div>

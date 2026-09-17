@@ -1,5 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserDetailsComponent } from './user-details.component';
 import { UserService, IAuthService, ExampleAuthService } from '../user.service';
 import { ClarityModule } from '@clr/angular';
@@ -12,23 +11,21 @@ describe('UserDetailsComponent', () => {
   let usrSvc: UserService;
   let authService: IAuthService;
 
-
-  beforeEach(waitForAsync(() => {
+  beforeEach(async () => {
     authService = new ExampleAuthService();
     usrSvc = new UserService();
     usrSvc.setAuthService(authService);
 
-    TestBed.configureTestingModule({
-    imports: [ClarityModule, FormsModule, ReactiveFormsModule, UserDetailsComponent],
-    providers: [{ provide: UserService, useValue: usrSvc }]
-})
-      .compileComponents();
-  }));
+    await TestBed.configureTestingModule({
+      imports: [ClarityModule, FormsModule, ReactiveFormsModule, UserDetailsComponent],
+      providers: [{ provide: UserService, useValue: usrSvc }]
+    }).compileComponents();
+  });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(UserDetailsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

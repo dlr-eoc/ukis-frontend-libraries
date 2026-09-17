@@ -1,5 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MousePositionComponent } from './mouse-position.component';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
@@ -12,21 +11,21 @@ describe('MousePositionComponent', () => {
   let mapStateSvc: MapStateService;
   let mapOlSvc: MapOlService;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [FormsModule, ClarityModule, MousePositionComponent]
     })
       .compileComponents();
-  }));
+  });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(MousePositionComponent);
     component = fixture.componentInstance;
     mapStateSvc = TestBed.inject(MapStateService);
     mapOlSvc = TestBed.inject(MapOlService);
     component.mapState = mapStateSvc;
     component.mapSvc = mapOlSvc;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

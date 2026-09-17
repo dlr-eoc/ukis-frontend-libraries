@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 export interface IUrls {
@@ -8,11 +8,11 @@ export interface IUrls {
 }
 
 export interface IRegisterUser {
-  userName: string;
-  password: string;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
+  userName: string | null | undefined;
+  password: string | null | undefined
+  email?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
 }
 
 export interface IUserDetails {
@@ -52,7 +52,7 @@ export interface IAuthService {
   /** confirming the user is logged in and valid  */
   isloggedIn(): boolean;
   /** check if the user has access rights/privilege */
-  checkSession?();
+  checkSession?: () => boolean;
   checkAuthorization?(permissions: string[], user?: IUser): Observable<boolean>;
   // register?(user: IRegisterUser): Observable<IUserinfo>;
 }
@@ -70,7 +70,7 @@ export class ExampleAuthService implements IAuthService {
     }
   };
 
-  loginmethode: 'oauth_pass';
+  loginmethode: IAuthService['loginmethode'] = 'oauth_pass';
   login = (user: IUser) => of<IUserinfo>(this.exampleUserInfo);
   logout = (user?: IUser) => of<IUserinfo>(this.exampleUserInfo);
   getUserInfo = (user?: IUser) => of<IUserinfo>(this.exampleUserInfo);
@@ -79,12 +79,10 @@ export class ExampleAuthService implements IAuthService {
 
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class UserService implements IAuthService {
-  private authService: IAuthService;
-  loginmethode: 'oauth_pass' | 'oauth_code' | 'ukis_cas';
+  private authService!: IAuthService;
+  loginmethode!: IAuthService['loginmethode']
   constructor() { }
 
   getUserInfo(user?: IUser) {
@@ -108,7 +106,7 @@ export class UserService implements IAuthService {
     // this.mockLoginService(username, password, email, firstName, lastName);
   }
 
-  setAuthService(authService) {
+  setAuthService(authService: IAuthService) {
     this.authService = authService;
   }
 

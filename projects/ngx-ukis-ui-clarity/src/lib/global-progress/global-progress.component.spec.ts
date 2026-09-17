@@ -12,15 +12,16 @@ describe('GlobalProgressComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ClarityModule, GlobalProgressComponent],
       providers: [ProgressService]
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GlobalProgressComponent);
     component = fixture.componentInstance;
+
     component.progress = {
       indeterminate: true
     } as IProgress;
-    fixture.detectChanges();
+
+    await fixture.whenStable();
   });
 
   it('should create', () => {

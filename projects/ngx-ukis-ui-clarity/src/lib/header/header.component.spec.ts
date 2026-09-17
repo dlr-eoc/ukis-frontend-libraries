@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HeaderComponent } from './header.component';
 import { ClarityModule, ClrMainContainer } from '@clr/angular';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
@@ -25,7 +24,7 @@ describe('HeaderComponent', () => {
 
     fixture = TestBed.createComponent(NestedTestComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
