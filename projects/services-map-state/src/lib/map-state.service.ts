@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Service , signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MapState, IMapStateOptions, IMapState, IProjFitOptions, IMapStateProjection } from './types/map-state';
 import { TGeoExtent } from '@dlr-eoc/services-layers';
@@ -6,13 +6,12 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 import { IProjDef } from './types/projections';
 
 const initialState = new MapState(0, { lat: 0, lon: 0 });
-@Injectable({
-  providedIn: 'root'
-})
+
+@Service()
 export class MapStateService {
   // TODO: more refactoring to signals
   private mapState = new BehaviorSubject(initialState)
-  private lastAction = new BehaviorSubject<'setExtent' | 'setNativeExtent' | 'setState' | 'setRotation' | 'setAngle' | 'setTime' | 'setProjection'>(null);
+  private lastAction = new BehaviorSubject<'setExtent' | 'setNativeExtent' | 'setState' | 'setRotation' | 'setAngle' | 'setTime' | 'setProjection'>(null as never);
 
   private _registeredProjections = signal<IProjDef[]>([]);
   constructor() {
@@ -42,7 +41,7 @@ export class MapStateService {
     return this.mapState.pipe(map((state) => state.extent));
   }
 
-  public setExtent(extent: TGeoExtent, notifier: IMapState['options']['notifier'] = 'user') {
+  public setExtent(extent: TGeoExtent, notifier: IMapStateOptions['notifier'] = 'user') {
     if (!Array.isArray(extent)) {
       return;
     }
@@ -57,7 +56,7 @@ export class MapStateService {
     return this.mapState.pipe(map((state) => state.nativeExtent));
   }
 
-  public setNativeExtent(nativeExtent: TGeoExtent, notifier: IMapState['options']['notifier'] = 'user') {
+  public setNativeExtent(nativeExtent: TGeoExtent, notifier: IMapStateOptions['notifier'] = 'user') {
     if (!Array.isArray(nativeExtent)) {
       return;
     }
@@ -68,7 +67,7 @@ export class MapStateService {
     this.mapState.next(newState);
   }
 
-  public setTime(time: Date | string, notifier: IMapState['options']['notifier'] = 'user') {
+  public setTime(time: Date | string, notifier: IMapStateOptions['notifier'] = 'user') {
     this.lastAction.next('setTime');
     const state = this.getMapState().getValue();
     state.options.notifier = notifier;
@@ -89,7 +88,7 @@ export class MapStateService {
    * 
    * For Cesium values greater than 90, is like looking from the ground up to the sky. Values greater than 180 also rotate the globe.
    */
-  public setViewAngle(angle: number, notifier: IMapState['options']['notifier'] = 'user') {
+  public setViewAngle(angle: number, notifier: IMapStateOptions['notifier'] = 'user') {
     if (isNaN(angle)) {
       return;
     }
@@ -100,7 +99,7 @@ export class MapStateService {
     this.mapState.next(newState);
   }
 
-  public setRotation(rotation: number, notifier: IMapState['options']['notifier'] = 'user') {
+  public setRotation(rotation: number, notifier: IMapStateOptions['notifier'] = 'user') {
     if (isNaN(rotation)) {
       return;
     }
@@ -117,7 +116,7 @@ export class MapStateService {
    * If you use setProjection only with epsg code sting - registerProjection have to be called first!
    * See https://epsg.io/
    */
-  public setProjection(projection: IProjDef | IProjDef['code'], notifier: IMapState['options']['notifier'] = 'user', fitOptions?: IProjFitOptions) {
+  public setProjection(projection: IProjDef | IProjDef['code'], notifier: IMapStateOptions['notifier']= 'user', fitOptions?: IProjFitOptions) {
     let projIsReg = this._registeredProjections().find(p => (typeof projection === 'string') ? p.code === projection : p.code === projection.code);
 
     // IProjDef is used and it is not registered, register it and use it.

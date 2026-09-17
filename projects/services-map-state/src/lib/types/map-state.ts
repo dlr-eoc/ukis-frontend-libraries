@@ -110,7 +110,7 @@ export class MapState implements IMapState {
     return isSame;
   }
 
-  public sameNotifier(notifier: IMapState['options']['notifier']) {
+  public sameNotifier(notifier: IMapStateOptions['notifier']) {
     if (this.options.notifier === notifier) {
       return true;
     } else {
