@@ -54,7 +54,10 @@ export const baseWMSOffering: IOwsOffering = {
 export const baseWMSLayer: IOwsResource = {
   type: 'Feature',
   id: 'baseWMSLayer',
-  geometry: null,
+  geometry: {
+    type: 'Polygon',
+    coordinates: []
+  },
   properties: {
     title: 'WMS Offering',
     updated: '2021-11-09T09:02:20Z',
@@ -112,7 +115,10 @@ export const baseWMTSOffering: IOwsOffering = {
 export const baseWMTSLayer: IOwsResource = {
   type: 'Feature',
   id: 'baseWMTSLayer',
-  geometry: null,
+  geometry: {
+    type: 'Polygon',
+    coordinates: []
+  },
   properties: {
     title: 'WMTS Offering',
     updated: '2021-11-09T09:43:37Z',
@@ -151,7 +157,10 @@ export const baseWFSOffering: IOwsOffering = {
 export const baseWFSLayer: IOwsResource = {
   type: 'Feature',
   id: 'baseWFSLayer',
-  geometry: null,
+  geometry: {
+    type: 'Polygon',
+    coordinates: []
+  },
   properties: {
     title: 'WFS Offering',
     updated: '2021-11-09T09:34:51Z',
@@ -181,7 +190,10 @@ export const baseKMLOffering: IOwsOffering = {
 export const baseKMLLayer: IOwsResource = {
   type: 'Feature',
   id: 'baseKMLLayer',
-  geometry: null,
+  geometry: {
+    type: 'Polygon',
+    coordinates: []
+  },
   properties: {
     title: 'KML Offering - url',
     updated: '2021-11-09T12:00:00',
