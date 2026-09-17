@@ -1,5 +1,5 @@
 import { WpsClient as WCBasic, WpsVersion, Cache } from '@dlr-eoc/utils-ogc';
-import { Injectable, Inject } from '@angular/core';
+import { Service, inject, InjectionToken } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 
@@ -10,19 +10,19 @@ import { HttpClient } from '@angular/common/http';
  */
 
 
-export { Cache, FakeCache } from '@dlr-eoc/utils-ogc';
-export { WpsDataDescription, WpsInputDescription, WpsOutputDescription, WpsData, WpsInput, WpsResult,
+export type { Cache, FakeCache } from '@dlr-eoc/utils-ogc';
+export type { WpsDataDescription, WpsInputDescription, WpsOutputDescription, WpsData, WpsInput, WpsResult,
     WpsBboxDescription, WpsBboxValue, WpsBboxData, WpsVersion, WpsDataFormat,
     WpsState, WpsCapability, WpsProcessDescription, WpsServerDescription, WpsMarshaller } from '@dlr-eoc/utils-ogc';
 
 
-@Injectable()
+@Service()
 export class WpsClient extends WCBasic {
-    constructor(
-        @Inject('WPS_VERSION') version: WpsVersion = '1.0.0',
-        private webClient: HttpClient,
-        @Inject('WPS_CACHE') cache?: Cache
-    ) {
-        super(version, webClient, cache);
+    constructor() {
+        const WPS_VERSION = new InjectionToken<WpsVersion>('WPS_VERSION',{
+            factory: () => '1.0.0'
+        });
+        const WPS_CACHE   = new InjectionToken<Cache>('WPS_CACHE');
+        super(inject(WPS_VERSION), inject(HttpClient), inject(WPS_CACHE,{optional:true}) as never);
     }
 }

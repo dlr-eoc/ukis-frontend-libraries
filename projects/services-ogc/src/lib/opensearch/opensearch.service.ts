@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
-import { discover, OpenSearchService, OpenSearchUrl, OpenSearchDescription, SearchResult } from 'opensearch-browser';
+import { Service } from '@angular/core';
+import { discover } from 'opensearch-browser';
+import type { OpenSearchService, OpenSearchUrl, OpenSearchDescription, SearchResult } from 'opensearch-browser';
 import { OpenSearchUrl as OSUO } from 'opensearch-browser/dist/url';
 import { search } from 'opensearch-browser/dist/search';
 import { Observable, from } from 'rxjs';
 
 
-@Injectable({
-    providedIn: 'root'
-})
+@Service()
 export class OpensearchWrapperService {
 
     /**

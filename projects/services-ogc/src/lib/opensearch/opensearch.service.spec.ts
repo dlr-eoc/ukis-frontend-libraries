@@ -1,5 +1,5 @@
 import { OpensearchWrapperService } from "./opensearch.service";
-import { OpenSearchService, OpenSearchUrl, OpenSearchResult } from 'opensearch-browser';
+import type { OpenSearchService, OpenSearchUrl, OpenSearchResult } from 'opensearch-browser';
 import { switchMap, map } from 'rxjs/operators';
 
 /**
@@ -21,7 +21,7 @@ describe('opensearch API', () => {
     const osServerUrl = 'https://catalog.dehub.dlr.de/opensearch/description.xml';
 
     if (runWithLifeBackend) {
-        it('search should work as expected', (done) => {
+        it('search should work as expected', () => new Promise((resolve, reject) => {
             const osw = new OpensearchWrapperService();
             // step 1: parse description.xml for searchable urls
             osw.discover(osServerUrl).pipe(
@@ -42,9 +42,9 @@ describe('opensearch API', () => {
             ).subscribe((results: OpenSearchResult | Response) => {
                 expect(results).toBeTruthy();
                 expect(results.records[0].properties.summary).toBeTruthy();
-                done();
+                resolve(true);
             });
-        }, 3000);
+        }));
     }
 
 

@@ -8,11 +8,12 @@ import * as CSW_2_0_2_Factory from 'ogc-schemas/lib/CSW_2_0_2'; const CSW_2_0_2 
 // import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0'; const OWS_1_1_0 = OWS_1_1_0_Factory.OWS_1_1_0;
 // import * as CSW_2_0_2_Factory_Full from 'ogc-schemas/lib/CSW_2_0_2_Full'; const CSW_2_0_2_Full = CSW_2_0_2_Factory_Full.CSW_2_0_2;
 // import * as CSW_2_0_2_Factory_OWS from 'ogc-schemas/lib/CSW_2_0_2_OWS_1_0_0'; const CSW_2_0_2_OWS = CSW_2_0_2_Factory_OWS.CSW_2_0_2;
-import { Injectable } from '@angular/core';
-import { Jsonix } from 'jsonix';
+import { inject, Service } from '@angular/core';
+import * as JsonixFactory from 'jsonix'; const Jsonix = JsonixFactory.Jsonix;
 import { CswVersion, Element, CswCapabilitiesElement, CswDescribeRecordElement,
     CswDescribeRecordResponseElement, CswGetRecordByIdResponseElement, CswGetRecordByIdElement,
-    CswGetRecordsElement, CswResultType, ExceptionReportType, CswGetRecordsResponseElement, CswElementAttributes, CswGetDomainElement, CswGetDomainResponseElement, CswElementSetName } from './cswdatatypes';
+    CswGetRecordsElement, CswResultType, ExceptionReportType, CswGetRecordsResponseElement, CswElementAttributes, CswGetDomainElement, CswGetDomainResponseElement, CswElementSetName
+} from './cswdatatypes';
 import { Observable } from 'rxjs';
 import { delayedRetry } from '@dlr-eoc/utils-ogc';
 import { share, map, tap } from 'rxjs/operators';
@@ -25,16 +26,14 @@ DC_1_1.eis.push({
 });
 
 
-@Injectable()
+@Service()
 export class CswClient {
 
     private version: CswVersion;
     private xmlMarshaller: any;
     private xmlUnmarshaller: any;
-
-    constructor(
-        private webClient: HttpClient
-    ) {
+    private webClient = inject(HttpClient);
+    constructor() {
         this.version = '2.0.2';
         const context = new Jsonix.Context([XHTML_1_0_Strict, XLink_1_0, DCT, DC_1_1, OWS_1_0_0, CSW_2_0_2]);
         this.xmlUnmarshaller = context.createUnmarshaller();
@@ -83,8 +82,8 @@ export class CswClient {
     }
 
 
-    getRecords( url: string, startPos: number = 1, count: number = 10,
-                elementSetName: CswElementSetName = 'full', cqlString?: string): Observable<CswGetRecordsResponseElement> {
+    getRecords(url: string, startPos: number = 1, count: number = 10,
+        elementSetName: CswElementSetName = 'full', cqlString?: string): Observable<CswGetRecordsResponseElement> {
 
         const body: CswGetRecordsElement = {
             name: new CswElementAttributes('GetRecords'),

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Jsonix } from 'jsonix';
 import { map } from 'rxjs/operators';
+import * as JsonixFactory from 'jsonix'; const Jsonix = JsonixFactory.Jsonix;
 import * as XLink_1_0_Factory from 'w3c-schemas/lib/XLink_1_0';
 const XLink_1_0 = XLink_1_0_Factory.XLink_1_0;
 import * as OWS_1_1_0_Factory from 'ogc-schemas/lib/OWS_1_1_0';
@@ -18,15 +18,13 @@ const WMTS_1_0 = WMTS_1_0_Factory.WMTS_1_0;
 
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class WmtsClientService {
 
   private xmlmarshaller;
   private xmlunmarshaller;
-
-  constructor(private http: HttpClient) {
+  private http = inject(HttpClient);
+  constructor() {
     const context = new Jsonix.Context([SMIL_2_0, SMIL_2_0_Language, GML_3_1_1, XLink_1_0, OWS_1_1_0, WMTS_1_0]);
     this.xmlunmarshaller = context.createUnmarshaller();
     this.xmlmarshaller = context.createMarshaller();
@@ -47,3 +45,4 @@ export class WmtsClientService {
   }
 
 }
+

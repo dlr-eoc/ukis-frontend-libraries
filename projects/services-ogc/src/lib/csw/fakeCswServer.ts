@@ -1,5 +1,5 @@
 export class FakeDataGovCswServer {
-    public getCapabilities(body): string {
+    public getCapabilities(): string {
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <!-- pycsw 2.4.0 -->
         <csw:Capabilities xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:inspire_common="http://inspire.ec.europa.eu/schemas/common/1.0" xmlns:inspire_ds="http://inspire.ec.europa.eu/schemas/inspire_ds/1.0" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" updateSequence="1597677695" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
@@ -394,7 +394,7 @@ export class FakeDataGovCswServer {
         </csw:Capabilities>`;
     }
 
-    public describeRecord(body): string {
+    public describeRecord(): string {
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <!-- pycsw 2.4.0 -->
         <csw:DescribeRecordResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
@@ -506,7 +506,7 @@ export class FakeDataGovCswServer {
         </csw:DescribeRecordResponse>`;
     }
 
-    public getRecordById(body): string {
+    public getRecordById(): string {
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <!-- pycsw 2.4.0 -->
         <csw:GetRecordByIdResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
@@ -565,7 +565,7 @@ export class FakeDataGovCswServer {
     }
 
     // https://catalog.data.gov/csw-all?service=CSW&version=2.0.2&request=GetRecords&ElementSetName=brief&typeNames=csw:Record&resultType=results&startPosition=1&maxRecords=10
-    public getRecordsBrief(body): string {
+    public getRecordsBrief(): string {
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <!--  pycsw 2.4.0  -->
         <csw:GetRecordsResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
@@ -627,7 +627,7 @@ export class FakeDataGovCswServer {
     }
 
     // https://catalog.data.gov/csw-all?service=CSW&version=2.0.2&request=GetRecords&ElementSetName=summary&typeNames=csw:Record&resultType=results&startPosition=1&maxRecords=10
-    public getRecordsSummary(body): string {
+    public getRecordsSummary(): string {
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <!--  pycsw 2.4.0  -->
         <csw:GetRecordsResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
@@ -728,126 +728,126 @@ export class FakeDataGovCswServer {
     }
 
     // https://catalog.data.gov/csw-all?service=CSW&version=2.0.2&request=GetRecords&ElementSetName=full&typeNames=csw:Record&resultType=results&startPosition=1&maxRecords=10
-    public getRecordsFull(body): string {
+    public getRecordsFull(): string {
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <!--  pycsw 2.4.0  -->
 <csw:GetRecordsResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
 <csw:SearchStatus timestamp="2020-08-18T13:00:00Z"/>
 <csw:SearchResults nextRecord="11" numberOfRecordsMatched="207381" numberOfRecordsReturned="10" recordSchema="http://www.opengis.net/cat/csw/2.0.2" elementSet="full">
-<csw:Record>
-<dc:identifier>https://www.sec.gov/node/112391</dc:identifier>
-<dc:title>Financial Statement and Notes Data Sets</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>XBRL filings</dc:subject>
-<dct:modified>2017-07-20T18:10:06Z</dct:modified>
-<dct:abstract>The data sets provide the text and detailed numeric information in all financial statements and their notes extracted from exhibits to corporate financial reports filed with the Commission using eXtensible Business Reporting Language (XBRL).</dct:abstract>
-<dc:date>2017-07-20T18:10:06Z</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Economic and Risk Analysis'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://www.sec.gov/node/87721</dc:identifier>
-<dc:title>Closed-End Fund Information</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>Data Sets</dc:subject>
-<dc:subject>foiafreqdocs</dc:subject>
-<dct:modified>2020-07-13T15:46:25Z</dct:modified>
-<dct:abstract>This report provides basic identification information for all entities with an "active" filing status that are organized as closed-end investment companies (closed-end funds or CEFs).</dct:abstract>
-<dc:date>2020-07-13T15:46:25Z</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Investment Management'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://www.sec.gov/node/86016</dc:identifier>
-<dc:title>Information About Registered Investment Advisers and Exempt Reporting Advisers</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>foia-freq-doc</dc:subject>
-<dct:modified>2019-06-03T09:48:09Z</dct:modified>
-<dct:abstract>The Investment Adviser Information Reports' data is collected from electronic submissions of Form ADV by investment adviser firms to the Investment Adviser Registration Depository (IARD) system.</dct:abstract>
-<dc:date>2019-06-03T09:48:09Z</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Investment Management'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://www.sec.gov/node/87756</dc:identifier>
-<dc:title>Public Company Bankruptcy Cases Opened and Monitored</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>Bankruptcy</dc:subject>
-<dct:modified>2017-05-05T07:30:36Z</dct:modified>
-<dct:abstract>This file contains a list of the bankruptcy cases for public companies filed under Chapter 11 of the Bankruptcy Code opened and monitored since the fiscal year 2009.</dct:abstract>
-<dc:date>2017-05-05T07:30:36Z</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Public Affairs'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://www.sec.gov/node/92646</dc:identifier>
-<dc:title>Spreads and Depth by Individual Security</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>Data Sets</dc:subject>
-<dct:modified>2017-05-05T09:15:27Z</dct:modified>
-<dct:abstract>These datasets provide spreads and depth partitioned by individual ticker symbol and date for each day in 2013.</dct:abstract>
-<dc:date>2017-05-05T09:15:27Z</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Trading and Markets'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://data.medicare.gov/api/views/ct36-nrcq</dc:identifier>
-<dc:title>Supplier Directory Data</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>directory</dc:subject>
-<dc:subject>medical equipment</dc:subject>
-<dc:subject>supplier</dc:subject>
-<dc:subject>supplies</dc:subject>
-<dct:modified>2020-08-07</dct:modified>
-<dct:abstract>A list of Suppliers that indicates the supplies carried at that location and the supplier's Medicare participation status.</dct:abstract>
-<dc:date>2020-08-07</dc:date>
-<dc:publisher>{u'@type': u'org:Organization', u'name': u'Centers for Medicare & Medicaid Services'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://www.sec.gov/node/86011</dc:identifier>
-<dc:title>Fails-to-Deliver Data</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>foia-freq-doc</dc:subject>
-<dct:modified>2018-07-02T12:12:50Z</dct:modified>
-<dct:abstract>This text file contains the date, CUSIP numbers, ticker symbols, issuer name, price, and total number of fails-to-deliver (i.e., the balance level outstanding) recorded in the National Securities Clearing Corporation's ("NSCC") Continuous Net Settlement (CNS) system aggregated over all NSCC members.</dct:abstract>
-<dc:date>2018-07-02T12:12:50Z</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Agency-Wide'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://www.sec.gov/node/115361</dc:identifier>
-<dc:title>Mutual Fund Prospectus Risk/Return Summary Data Sets</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>Data Sets</dc:subject>
-<dct:modified>2019-04-04T07:21:06Z</dct:modified>
-<dct:abstract>The Mutual Fund Prospectus Risk/Return Summary Data Sets provides text and numeric information extracted from the risk/return summary section of mutual fund prospectuses.</dct:abstract>
-<dc:date>2019-04-04T07:21:06Z</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Economic and Risk Analysis'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://www.sec.gov/node/87761</dc:identifier>
-<dc:title>Investment Company Series and Class Information</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>market structure</dc:subject>
-<dc:subject>foiafreqdocs</dc:subject>
-<dct:modified>2017-09-15T17:31:58Z</dct:modified>
-<dct:abstract>The Series and Class Report provides basic identification information for all active registered investment company series and classes have been issued IDs by the Commission.</dct:abstract>
-<dc:date>2017-09-15T17:31:58Z</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Investment Management'}</dc:publisher>
-</csw:Record>
-<csw:Record>
-<dc:identifier>https://doi.org/10.23719/1519181</dc:identifier>
-<dc:title>Where have all the nutrients gone? Long-term Decoupling of Inputs and Outputs in the Willamette River Watershed, Oregon, USA</dc:title>
-<dc:type>dataset</dc:type>
-<dc:subject>phosphorus</dc:subject>
-<dc:subject>nutrients</dc:subject>
-<dc:subject>watersheds</dc:subject>
-<dc:subject>balance</dc:subject>
-<dc:subject>nitrogen</dc:subject>
-<dct:modified>2020-08-06</dct:modified>
-<dct:abstract>The following 4 tables accompany the peer-reviewed journal article GS Metson, J Lin, JE Compton, JA Harrison. Where have all the nutrients gone? Long-term Decoupling of Inputs and Outputs in the Willamette River Watershed, Oregon, USA. JGR Biogeoscience Values refer to the Willamette River Watershed, which was defined as the area draining to USGS gauge 14211720 (which is 29 018 km2 when delimiting using HydroSHEDs 15 arc-second flow direction maps (Lehner et al 2006)). These datasets were created May 2017. Authors and Affiliations: Genevieve S. Metson1,2†,3†,4†, Jiajia Lin2†,3†,5, John A. Harrison4 and Jana E. Compton3 1 Department of Physics, Chemistry, and Biology. Linköping University, Linköping, Sweden. 2 National Research Council, National Academies of Science, Washington, DC, USA 3 Pacific Ecological Systems Division, US Environmental Protection Agency, Corvallis, OR, USA 4 School of the Environment, Washington State University, Vancouver, WA, USA 5Oak Ridge Institute for Science and Education, Corvallis, OR, USA Corresponding author: Genevieve Metson (genevieve.metson@liu.se) † Affiliation at time of main research activities</dct:abstract>
-<dc:date>2020-08-06</dc:date>
-<dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Environmental Protection Agency'}, u'name': u'U.S. EPA Office of Research and Development (ORD)'}</dc:publisher>
-</csw:Record>
+  <csw:Record>
+  <dc:identifier>https://www.sec.gov/node/112391</dc:identifier>
+  <dc:title>Financial Statement and Notes Data Sets</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>XBRL filings</dc:subject>
+  <dct:modified>2017-07-20T18:10:06Z</dct:modified>
+  <dct:abstract>The data sets provide the text and detailed numeric information in all financial statements and their notes extracted from exhibits to corporate financial reports filed with the Commission using eXtensible Business Reporting Language (XBRL).</dct:abstract>
+  <dc:date>2017-07-20T18:10:06Z</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Economic and Risk Analysis'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://www.sec.gov/node/87721</dc:identifier>
+  <dc:title>Closed-End Fund Information</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>Data Sets</dc:subject>
+  <dc:subject>foiafreqdocs</dc:subject>
+  <dct:modified>2020-07-13T15:46:25Z</dct:modified>
+  <dct:abstract>This report provides basic identification information for all entities with an "active" filing status that are organized as closed-end investment companies (closed-end funds or CEFs).</dct:abstract>
+  <dc:date>2020-07-13T15:46:25Z</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Investment Management'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://www.sec.gov/node/86016</dc:identifier>
+  <dc:title>Information About Registered Investment Advisers and Exempt Reporting Advisers</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>foia-freq-doc</dc:subject>
+  <dct:modified>2019-06-03T09:48:09Z</dct:modified>
+  <dct:abstract>The Investment Adviser Information Reports' data is collected from electronic submissions of Form ADV by investment adviser firms to the Investment Adviser Registration Depository (IARD) system.</dct:abstract>
+  <dc:date>2019-06-03T09:48:09Z</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Investment Management'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://www.sec.gov/node/87756</dc:identifier>
+  <dc:title>Public Company Bankruptcy Cases Opened and Monitored</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>Bankruptcy</dc:subject>
+  <dct:modified>2017-05-05T07:30:36Z</dct:modified>
+  <dct:abstract>This file contains a list of the bankruptcy cases for public companies filed under Chapter 11 of the Bankruptcy Code opened and monitored since the fiscal year 2009.</dct:abstract>
+  <dc:date>2017-05-05T07:30:36Z</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Public Affairs'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://www.sec.gov/node/92646</dc:identifier>
+  <dc:title>Spreads and Depth by Individual Security</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>Data Sets</dc:subject>
+  <dct:modified>2017-05-05T09:15:27Z</dct:modified>
+  <dct:abstract>These datasets provide spreads and depth partitioned by individual ticker symbol and date for each day in 2013.</dct:abstract>
+  <dc:date>2017-05-05T09:15:27Z</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Trading and Markets'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://data.medicare.gov/api/views/ct36-nrcq</dc:identifier>
+  <dc:title>Supplier Directory Data</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>directory</dc:subject>
+  <dc:subject>medical equipment</dc:subject>
+  <dc:subject>supplier</dc:subject>
+  <dc:subject>supplies</dc:subject>
+  <dct:modified>2020-08-07</dct:modified>
+  <dct:abstract>A list of Suppliers that indicates the supplies carried at that location and the supplier's Medicare participation status.</dct:abstract>
+  <dc:date>2020-08-07</dc:date>
+  <dc:publisher>{u'@type': u'org:Organization', u'name': u'Centers for Medicare and Medicaid Services'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://www.sec.gov/node/86011</dc:identifier>
+  <dc:title>Fails-to-Deliver Data</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>foia-freq-doc</dc:subject>
+  <dct:modified>2018-07-02T12:12:50Z</dct:modified>
+  <dct:abstract>This text file contains the date, CUSIP numbers, ticker symbols, issuer name, price, and total number of fails-to-deliver (i.e., the balance level outstanding) recorded in the National Securities Clearing Corporation's ("NSCC") Continuous Net Settlement (CNS) system aggregated over all NSCC members.</dct:abstract>
+  <dc:date>2018-07-02T12:12:50Z</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Agency-Wide'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://www.sec.gov/node/115361</dc:identifier>
+  <dc:title>Mutual Fund Prospectus Risk/Return Summary Data Sets</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>Data Sets</dc:subject>
+  <dct:modified>2019-04-04T07:21:06Z</dct:modified>
+  <dct:abstract>The Mutual Fund Prospectus Risk/Return Summary Data Sets provides text and numeric information extracted from the risk/return summary section of mutual fund prospectuses.</dct:abstract>
+  <dc:date>2019-04-04T07:21:06Z</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Economic and Risk Analysis'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://www.sec.gov/node/87761</dc:identifier>
+  <dc:title>Investment Company Series and Class Information</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>market structure</dc:subject>
+  <dc:subject>foiafreqdocs</dc:subject>
+  <dct:modified>2017-09-15T17:31:58Z</dct:modified>
+  <dct:abstract>The Series and Class Report provides basic identification information for all active registered investment company series and classes have been issued IDs by the Commission.</dct:abstract>
+  <dc:date>2017-09-15T17:31:58Z</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Securities and Exchange Commission'}, u'name': u'Investment Management'}</dc:publisher>
+  </csw:Record>
+  <csw:Record>
+  <dc:identifier>https://doi.org/10.23719/1519181</dc:identifier>
+  <dc:title>Where have all the nutrients gone? Long-term Decoupling of Inputs and Outputs in the Willamette River Watershed, Oregon, USA</dc:title>
+  <dc:type>dataset</dc:type>
+  <dc:subject>phosphorus</dc:subject>
+  <dc:subject>nutrients</dc:subject>
+  <dc:subject>watersheds</dc:subject>
+  <dc:subject>balance</dc:subject>
+  <dc:subject>nitrogen</dc:subject>
+  <dct:modified>2020-08-06</dct:modified>
+  <dct:abstract>The following 4 tables accompany the peer-reviewed journal article GS Metson, J Lin, JE Compton, JA Harrison. Where have all the nutrients gone? Long-term Decoupling of Inputs and Outputs in the Willamette River Watershed, Oregon, USA. JGR Biogeoscience Values refer to the Willamette River Watershed, which was defined as the area draining to USGS gauge 14211720 (which is 29 018 km2 when delimiting using HydroSHEDs 15 arc-second flow direction maps (Lehner et al 2006)). These datasets were created May 2017. Authors and Affiliations: Genevieve S. Metson1,2†,3†,4†, Jiajia Lin2†,3†,5, John A. Harrison4 and Jana E. Compton3 1 Department of Physics, Chemistry, and Biology. Linköping University, Linköping, Sweden. 2 National Research Council, National Academies of Science, Washington, DC, USA 3 Pacific Ecological Systems Division, US Environmental Protection Agency, Corvallis, OR, USA 4 School of the Environment, Washington State University, Vancouver, WA, USA 5Oak Ridge Institute for Science and Education, Corvallis, OR, USA Corresponding author: Genevieve Metson (genevieve.metson@liu.se) † Affiliation at time of main research activities</dct:abstract>
+  <dc:date>2020-08-06</dc:date>
+  <dc:publisher>{u'subOrganizationOf': {u'subOrganizationOf': {u'name': u'U.S. Government'}, u'name': u'U.S. Environmental Protection Agency'}, u'name': u'U.S. EPA Office of Research and Development (ORD)'}</dc:publisher>
+  </csw:Record>
 </csw:SearchResults>
 </csw:GetRecordsResponse>`;
     }
 
-    public getDomain(body): string {
+    public getDomain(): string {
         return `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <!-- pycsw 2.4.0 -->
         <csw:GetDomainResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
@@ -860,7 +860,7 @@ export class FakeDataGovCswServer {
 
 
 export class FakeGeotestCswServer {
-    public getCapabilities(body): string {
+    public getCapabilities(): string {
         return `<?xml version="1.0" encoding="UTF-8"?>
         <csw:Capabilities xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:inspire_ds="http://inspire.ec.europa.eu/schemas/inspire_ds/1.0" xmlns:inspire_com="http://inspire.ec.europa.eu/schemas/common/1.0" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd http://inspire.ec.europa.eu/schemas/inspire_ds/1.0 http://inspire.ec.europa.eu/schemas/inspire_ds/1.0/inspire_ds.xsd">
           <ows:ServiceIdentification>
@@ -1245,7 +1245,7 @@ export class FakeGeotestCswServer {
     }
 
     // view-source:https://geotest.eoc.dlr.de/catalogue/srv/eng/csw?service=CSW&request=DescribeRecord&version=2.0.2
-    public describeRecord(body): string {
+    public describeRecord(): string {
         return `<?xml version="1.0" encoding="UTF-8"?>
         <csw:DescribeRecordResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
           <csw:SchemaComponent targetNamespace="http://www.opengis.net/cat/csw/2.0.2" schemaLanguage="http://www.w3.org/XML/Schema">
@@ -1697,7 +1697,7 @@ export class FakeGeotestCswServer {
     }
 
     // view-source:https://geotest.eoc.dlr.de/catalogue/srv/eng/csw?service=CSW&request=GetRecordById&version=2.0.2&id=49bbfedf-a826-46e7-9142-766a4a599206
-    public getRecordById(body): string {
+    public getRecordById(): string {
         return `<?xml version="1.0" encoding="UTF-8"?>
         <csw:GetRecordByIdResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2">
           <csw:SummaryRecord xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:geonet="http://www.fao.org/geonetwork" xmlns:dct="http://purl.org/dc/terms/">
@@ -1723,7 +1723,7 @@ export class FakeGeotestCswServer {
     }
 
     // view-source:https://geotest.eoc.dlr.de/catalogue/srv/eng/csw?service=CSW&request=GetRecords&version=2.0.2&ElementSetName=brief&typenames=csw:Record&outputFormat=application/xml&outputSchema=http://www.opengis.net/cat/csw/2.0.2&namespace=csw:http://www.opengis.org/cat/csw&resultType=results&maxRecords=5&CONSTRAINTLANGUAGE=CQL_TEXT&constraint=%22title%20like%20%27%hysical%%27%22
-    public getRecordsBrief(body): string {
+    public getRecordsBrief(): string {
         return `
         <?xml version="1.0" encoding="UTF-8"?>
         <csw:GetRecordsResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
@@ -1781,7 +1781,7 @@ export class FakeGeotestCswServer {
     }
 
     // view-source:https://geotest.eoc.dlr.de/catalogue/srv/eng/csw?service=CSW&request=GetRecords&version=2.0.2&ElementSetName=summary&typenames=csw:Record&outputFormat=application/xml&outputSchema=http://www.opengis.net/cat/csw/2.0.2&namespace=csw:http://www.opengis.org/cat/csw&resultType=results&maxRecords=5&CONSTRAINTLANGUAGE=CQL_TEXT&constraint=%22title%20like%20%27%hysical%%27%22
-    public getRecordsSummary(body): string {
+    public getRecordsSummary(): string {
         return `
         <?xml version="1.0" encoding="UTF-8"?>
         <csw:GetRecordsResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
@@ -1885,7 +1885,7 @@ export class FakeGeotestCswServer {
     }
 
     // view-source:https://geotest.eoc.dlr.de/catalogue/srv/eng/csw?service=CSW&request=GetRecords&version=2.0.2&ElementSetName=full&typenames=csw:Record&outputFormat=application/xml&outputSchema=http://www.opengis.net/cat/csw/2.0.2&namespace=csw:http://www.opengis.org/cat/csw&resultType=results&maxRecords=5&CONSTRAINTLANGUAGE=CQL_TEXT&constraint=%22title%20like%20%27%hysical%%27%22
-    public getRecordsFull(body): string {
+    public getRecordsFull(): string {
         return `<?xml version="1.0" encoding="UTF-8"?>
         <csw:GetRecordsResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd">
           <csw:SearchStatus timestamp="2020-08-18T15:06:29" />
@@ -2088,9 +2088,9 @@ export class FakeGeotestCswServer {
         `;
     }
 
-    public getDomain(body): string {
+    public getDomain(): string {
         console.warn('FakeGeotestCswServer.getDomain: This method is currently not yet implemented. Falling back to FakeDataGovCswServer.');
         const fdg = new FakeDataGovCswServer();
-        return fdg.getDomain(body);
+        return fdg.getDomain();
     }
 }

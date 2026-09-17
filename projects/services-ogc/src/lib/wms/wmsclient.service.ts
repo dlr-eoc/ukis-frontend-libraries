@@ -1,5 +1,5 @@
+import { inject, Service } from '@angular/core';
 import { WmsClient } from '@dlr-eoc/utils-ogc';
-import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 
@@ -10,14 +10,13 @@ import { HttpClient } from '@angular/common/http';
  */
 
 
-export { WmsVersion } from '@dlr-eoc/utils-ogc';
+export type { WmsVersion } from '@dlr-eoc/utils-ogc';
 
 
-@Injectable()
+@Service()
 export class WmsService extends WmsClient {
     constructor(
-        webClient: HttpClient,
     ) {
-        super(webClient);
+        super(inject(HttpClient));
     }
 }

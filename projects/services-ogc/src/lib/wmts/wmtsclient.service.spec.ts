@@ -1,30 +1,26 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { WmtsClientService } from './wmtsclient.service';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 
 
 describe('WmtsClientService: reading data from server', () => {
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [], providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()] });
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [], providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()] });
   });
 
-  afterEach(() => {
-  });
-
-  it('#WmtsClientService: GetCapabilities should work', (done) => {
+  it('#WmtsClientService: GetCapabilities should work', async () => {
     const http: HttpTestingController = TestBed.inject(HttpTestingController);
     const service: WmtsClientService = TestBed.inject(WmtsClientService);
-    const url = 'https://theserver.com';
+    const url = 'https://tiles.geoservice.dlr.de/service/wmts';
 
-    service.getCapabilities(url).subscribe((capabilities: object) => {
-      expect(capabilities).toBeTruthy();
-      done();
-    });
+    // 1. Trigger the request
+    const promise = firstValueFrom(service.getCapabilities(url));
 
-    const request = http.expectOne('https://theserver.com?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0');
+    const request = http.expectOne('https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0');
     request.flush(`
     <Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd" version="1.0.0">
       <ows:ServiceIdentification>
@@ -2638,7 +2634,12 @@ describe('WmtsClientService: reading data from server', () => {
     </Capabilities>
     `);
 
-  }, 3000);
+    const capabilities = await promise as any;
+
+    expect(capabilities).toBeTruthy();
+    expect(capabilities.name.namespaceURI).toBe('http://www.opengis.net/wmts/1.0');
+  });
 
 
 });
+
