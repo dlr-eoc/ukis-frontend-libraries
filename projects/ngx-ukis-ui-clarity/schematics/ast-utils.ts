@@ -10,13 +10,12 @@ import { addRootProvider } from '@schematics/angular/utility';
 
 
 /**
- * https://github.com/angular/angular-cli/blob/fb14945c02a3f150d6965e77324416b1ec7cc575/packages/schematics/angular/utility/ast-utils.ts#L9
- * angular schematics is using it's own typescript so we have to import the same and not -> import * as ts from 'typescript';
+ * https://github.com/angular/angular-cli/blob/22.0.x/packages/schematics/angular/utility/ast-utils.ts
  */
-import * as ts from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
+import ts from 'typescript';
 import { tags } from '@angular-devkit/core';
 import { checkProjectSourceRoot, getProjectName, hasArchitectBuildOptionsMain } from './workspace-utils';
-import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
+import { ProjectDefinition } from '@angular-devkit/core/src/workspace/definitions';
 
 export interface ImoduleImport {
   classifiedName: string;

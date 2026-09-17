@@ -1,12 +1,17 @@
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
-import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
-import { Schema as ApplicationOptions, Style } from '@schematics/angular/application/schema';
+import { PackageManager } from '@schematics/angular/workspace/schema';
+import type { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
+import type { Schema as ApplicationOptions } from '@schematics/angular/application/schema';
+import { Style } from '@schematics/angular/application/schema';
 import { UkisNgAddSchema } from './schema';
 import * as path from 'path';
 import { TsconfigJSON } from '../schema.tsconfig';
 
-
-const collectionPath = require.resolve(path.join(__dirname, '../collection.json'));
+// import { fileURLToPath } from 'url';
+// const collectionPath = fileURLToPath(new URL('../collection.json',import.meta.url));
+// const collectionPath = require.resolve(path.join(__dirname, '../collection.json'));
+// https://github.com/angular/angular-cli/issues/22786 -> we need to build the schematics befor and us them here in vitest
+const collectionPath = require.resolve(path.join(__dirname, '../../../../', 'dist/ngx-ukis-ui-clarity/schematics/collection.json'));
 
 
 describe('ng-add Module or standalone', () => {
@@ -27,7 +32,8 @@ describe('ng-add Module or standalone', () => {
   const workspaceOptions: WorkspaceOptions = {
     name: 'workspace',
     newProjectRoot: 'projects',
-    version: '9.0.0'
+    version: '14.0.0',
+    packageManager: PackageManager.Npm
   };
 
   const appOptions: ApplicationOptions = {
@@ -75,7 +81,7 @@ describe('ng-add Module or standalone', () => {
       if (styles) {
         styles.forEach(path => {
           if (path.includes('styles.')) {
-            expect(path.includes('.scss')).toBeTrue();
+            expect(path.includes('.scss')).toBeTruthy()
           }
         });
       }

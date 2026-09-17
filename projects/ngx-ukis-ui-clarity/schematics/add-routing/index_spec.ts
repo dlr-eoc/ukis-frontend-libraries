@@ -1,11 +1,14 @@
 import { SchematicTestRunner, UnitTestTree } from '@angular-devkit/schematics/testing';
-import { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
-import { Schema as ApplicationOptions, Style } from '@schematics/angular/application/schema';
+import type { Schema as WorkspaceOptions } from '@schematics/angular/workspace/schema';
+import type { Schema as ApplicationOptions } from '@schematics/angular/application/schema';
+import { Style } from '@schematics/angular/application/schema';
 import { UkisNgAddRoutingSchema } from './schema';
 import * as path from 'path';
 
 
-const collectionPath = require.resolve(path.join(__dirname, '../collection.json'));
+// const collectionPath = require.resolve(path.join(__dirname, '../collection.json'));
+// https://github.com/angular/angular-cli/issues/22786 -> we need to build the schematics befor and us them here in vitest
+const collectionPath = require.resolve(path.join(__dirname, '../../../../', 'dist/ngx-ukis-ui-clarity/schematics/collection.json'));
 
 describe('add-routing standalone', () => {
   const schematicRunner = new SchematicTestRunner('@dlr-eoc/schematics', collectionPath);
