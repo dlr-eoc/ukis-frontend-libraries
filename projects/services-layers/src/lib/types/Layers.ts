@@ -107,27 +107,6 @@ export type TFiltertypes = keyof typeof Filtertypes;
 export type TFiltertypesUncap = Uncapitalize<TFiltertypes>;
 
 
-/**
- * @deprecated The method should not be used because it can be false positive
- *
- * CustomLayertype and TmsLayertype can be raster and vector.
- * You have to double check by yourself later!
- */
-export function isVectorLayertype(inpt: string): inpt is TVectorLayertype {
-  return [GeojsonLayertype, WfsLayertype, CustomLayertype, KmlLayertype, TmsLayertype].includes(inpt);
-}
-
-
-/**
- * @deprecated The method should not be used because it can be false positive
- *
- * CustomLayertype and TmsLayertype can be raster and vector.
- * You have to double check by yourself later!
- */
-export function isRasterLayertype(inpt: string): inpt is TRasterLayertype {
-  return [WmsLayertype, WmtsLayertype, XyzLayertype, CustomLayertype, TmsLayertype].includes(inpt);
-}
-
 export function isLayertype(type: string): type is TLayertype {
   return [TmsLayertype, WmsLayertype, WmtsLayertype, XyzLayertype, GeojsonLayertype, KmlLayertype, WfsLayertype, CustomLayertype].includes(type);
 }

@@ -1,5 +1,6 @@
 ### Breaking Changes
  - Update angular from `^21.2.13` to `^22.1.4`
+ - Remove deprecated functions `isVectorLayer`, `isRasterLayer` `isVectorLayertype`, `isRasterLayertype` from `@dlr-eoc/services-layers`.
 
 ### Features
 * **@dlr-eoc/utils-browser**
