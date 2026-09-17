@@ -1,9 +1,9 @@
 <clr-main-container>
-  @if (ui.alert) {
-    <ukis-global-alert [(alert)]="ui.alert"></ukis-global-alert>
+  @if (ui.alert()) {
+    <ngx-ukis-global-alert [(alert)]="ui.alert"></ngx-ukis-global-alert>
   }
-  @if (ui.progress) {
-    <ukis-global-progress [(progress)]="ui.progress"></ukis-global-progress>
+  @if (ui.progress()) {
+    <ngx-ukis-global-progress [(progress)]="ui.progress"></ngx-ukis-global-progress>
   }
   <ukis-cookie-alert [alert-text]="'my alert text'" [privacy-link]="'link to privacy'"></ukis-cookie-alert>
 

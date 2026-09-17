@@ -2,10 +2,10 @@
  * Public API Surface of ngx-ukis-ui-clarity
  */
 
-export * from './lib/global-progress/global-progress.component';
-export * from './lib/global-progress/progress.service';
-export * from './lib/global-alert/global-alert.component';
-export * from './lib/global-alert/alert.service';
+export * from './lib/global-progress/global-progress';
+export * from './lib/global-progress/global-progress-svc';
+export * from './lib/global-alert/global-alert';
+export * from './lib/global-alert/global-alert-svc';
 export * from './lib/header/header.component';
 export * from './lib/icons/ukis';
 

@@ -3,7 +3,7 @@ import { LayersService, CustomLayer, TGeoExtent, VectorLayer } from '@dlr-eoc/se
 import { MapStateService } from '@dlr-eoc/services-map-state';
 import { MapOlService, IMapControls } from '@dlr-eoc/map-ol';
 import { EocLitemap, OsmTileLayer } from '@dlr-eoc/base-layers-raster';
-import { ProgressService } from '../../components/global-progress/progress.service';
+import { ProgressService } from '../../components/global-progress/global-progress-svc';
 
 import olImageLayer from 'ol/layer/Image';
 import olImageWMS from 'ol/source/ImageWMS';
@@ -22,7 +22,7 @@ import olTileLayer from 'ol/layer/Tile';
 import olTileWMS from 'ol/source/TileWMS';
 import { getRenderPixel } from 'ol/render';
 import olLayerGroup from 'ol/layer/Group';
-import { AlertService } from '../../components/global-alert/alert.service';
+import { AlertService } from '../../components/global-alert/global-alert-svc';
 
 import { ClarityIcons, layersIcon, cogIcon, compassIcon, downloadIcon } from '@clr/angular/icon';
 import { MapOlComponent } from '@dlr-eoc/map-ol';
@@ -96,14 +96,14 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
     });
 
     source.on('imageloadstart', () => {
-      this.progressService.progress({ indeterminate: true });
+      this.progressService.progress.set({ indeterminate: true });
     });
 
     source.on('imageloadend', () => {
-      this.progressService.progress(null);
+      this.progressService.progress.set(null);
     });
     source.on('imageloaderror', () => {
-      this.progressService.progress(null);
+      this.progressService.progress.set(null);
     });
 
     const eventLayer = new CustomLayer({
@@ -158,6 +158,19 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
 
     const layers = [eocLitemapLayer, osmLayer, eventLayer, updatableFeatureLayer, gridLayer];
     layers.forEach(layer => this.layersSvc.addLayer(layer, 'Layers'));
+  }
+
+  toggleAlert() {
+    const alert = this.alertSvc.alert();
+    if (!alert) {
+      this.alertSvc.alert.set({
+        type: 'info',
+        text: 'nfjdsnfksd',
+        closeable: true
+      });
+    }else{
+      this.alertSvc.alert.set(null);
+    }
   }
 
   removeLayer() {
@@ -243,8 +256,8 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
         ]
       }
     });
-    onTileLoadStart.subscribe(e => this.progressService.progress({ indeterminate: true }));
-    onTileLoadEnd.pipe(debounceTime(200)).subscribe(e => this.progressService.progress(null));
+    onTileLoadStart.subscribe(e => this.progressService.progress.set({ indeterminate: true }));
+    onTileLoadEnd.pipe(debounceTime(200)).subscribe(e => this.progressService.progress.set(null));
     this.layersSvc.addLayer(eventLayer2, 'Layers');
   }
 
@@ -318,7 +331,7 @@ export class RouteMap3Component implements OnInit, AfterViewInit, OnDestroy {
             const vLayer = layer as VectorLayer;
             // if length > 1 features already loaded
             if (vLayer.data.features.length <= 1) {
-              this.alertSvc.alert({
+              this.alertSvc.alert.set({
                 type: 'info',
                 text: `Click the layer setting down arrow icon to load new features.`,
                 closeable: true

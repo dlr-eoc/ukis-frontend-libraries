@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { UserService, IUser } from '@dlr-eoc/ngx-ukis-ui-clarity';
-import { AlertService } from '../components/global-alert/alert.service';
+import { AlertService } from '../components/global-alert/global-alert-svc';
 import { Observable } from 'rxjs';
 import { BasicAuthService } from './basic-auth.service';
 import { map } from 'rxjs/operators';
@@ -28,7 +28,7 @@ export class AuthGuardService  {
       const canEnterRoute = this.authService.checkAuthorization(route.data.hasPermissions).pipe(
         map(value => {
           if (!value) {
-            this.alertService.alert({
+            this.alertService.alert.set({
               type: 'info',
               text: `<strong>You dont have the Permission to enter ${this.removeCamel(route.routeConfig.component.name)}!</strong>`,
               closeable: true
@@ -38,7 +38,7 @@ export class AuthGuardService  {
         }));
       return canEnterRoute;
     } else {
-      this.alertService.alert({
+      this.alertService.alert.set({
         type: 'info',
         text: `<strong>Login first to enter ${this.removeCamel(route.routeConfig.component.name)}!</strong>`,
         closeable: true

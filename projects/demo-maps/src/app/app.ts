@@ -1,20 +1,20 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, inject, WritableSignal, signal } from '@angular/core';
 
-import { AlertService, IAlert } from './components/global-alert/alert.service';
-import { ProgressService, IProgress } from './components/global-progress/progress.service';
+import { AlertService, IAlert } from './components/global-alert/global-alert-svc';
+import { ProgressService, IProgress } from './components/global-progress/global-progress-svc';
 import { NavigationEnd, NavigationStart, Router, Routes, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { appVersion } from '../environments/version';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
 
-import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
-import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
+import { GlobalAlertComponent } from './components/global-alert/global-alert';
+import { GlobalProgressComponent } from './components/global-progress/global-progress';
 import { HeaderComponent } from './components/header/header.component';
 
 interface IUi {
-  alert: null | IAlert;
-  progress: null | IProgress;
+  alert: WritableSignal<null | IAlert>;
+  progress: WritableSignal<null | IProgress>;
 }
 
 @Component({
@@ -30,8 +30,8 @@ export class App implements OnInit, OnDestroy {
   version = (appVersion) ? appVersion : null;
 
   ui: IUi = {
-    alert: null,
-    progress: null
+    alert: signal<IAlert | null>(null),
+    progress: signal<IProgress | null>(null)
   };
 
   subs: Subscription[] = [];
@@ -39,13 +39,14 @@ export class App implements OnInit, OnDestroy {
   routes: Routes;
   currentRoute: string;
 
-  constructor(
-    private alertService: AlertService,
-    private progressService: ProgressService,
-    public router: Router
-  ) {
+  private alertService = inject(AlertService);
+  private progressService = inject(ProgressService);
+  public router = inject(Router);
+  constructor() {
     this.init();
     this.routes = this.router.config.filter(r => r.data);
+    this.ui.alert = this.alertService.alert;
+    this.ui.progress = this.progressService.progress;
   }
 
   ngOnInit(): void {
@@ -76,22 +77,6 @@ export class App implements OnInit, OnDestroy {
     if (this['SHORT-TITLE']) {
       this.shortTitle = this['SHORT-TITLE'];
     }
-
-    this.alertService.alert$.subscribe((ev) => {
-      this.setAlert(ev);
-    });
-
-    this.progressService.progress$.subscribe((ev) => {
-      this.showProgress(ev);
-    });
-  }
-
-  showProgress = (progress: IProgress) => {
-    this.ui.progress = progress;
-  }
-
-  setAlert = (alert: IAlert) => {
-    this.ui.alert = alert;
   }
 
   getHtmlMeta(names: string[]) {

@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, WritableSignal, signal, inject } from '@angular/core';
 
-import { AlertService, IAlert } from './components/global-alert/alert.service';
-import { ProgressService, IProgress } from './components/global-progress/progress.service';
+import { AlertService, IAlert } from './components/global-alert/global-alert-svc';
+import { ProgressService, IProgress } from './components/global-progress/global-progress-svc';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 /** for User */
@@ -11,13 +11,13 @@ import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
 import { BasicAuthService } from './auth/basic-auth.service';
 import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
 
-import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
-import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
+import { GlobalAlertComponent } from './components/global-alert/global-alert';
+import { GlobalProgressComponent } from './components/global-progress/global-progress';
 import { HeaderComponent } from './components/header/header.component';
 
 interface IUi {
-  alert: null | IAlert;
-  progress: null | IProgress;
+  alert: WritableSignal<null | IAlert>;
+  progress: WritableSignal<null | IProgress>;
 }
 
 @Component({
@@ -32,25 +32,26 @@ export class App implements OnDestroy, OnInit {
   shortTitle = '';
 
   ui: IUi = {
-    alert: null,
-    progress: null
+    alert: signal<IAlert | null>(null),
+    progress: signal<IProgress | null>(null)
   };
 
   usrSubsription!: Subscription;
   user!: IUser;
 
-  constructor(
-    public alertService: AlertService,
-    public  progressService: ProgressService,
-    public router: Router,
-    public userService: UserService,
-    public  authService: BasicAuthService
-  ) {
+  public alertService = inject(AlertService);
+  public progressService = inject(ProgressService);
+  public router = inject(Router);
+  public userService = inject(UserService);
+  public authService = inject(BasicAuthService);
+  constructor() {
     this.init();
+    this.ui.alert = this.alertService.alert;
+    this.ui.progress = this.progressService.progress;
   }
 
   init() {
-    this.userService.setAuthService(this.authService);
+    this.userService.setAuthService(this.authService as never);
     this.authService.checkSession();
 
     this.getHtmlMeta(['title', 'version', 'description', 'short-title']);
@@ -62,22 +63,6 @@ export class App implements OnDestroy, OnInit {
     if (this['SHORT-TITLE']) {
       this.shortTitle = this['SHORT-TITLE'];
     }
-
-    this.alertService.alert$.subscribe((ev) => {
-      this.setAlert(ev);
-    });
-
-    this.progressService.progress$.subscribe((ev) => {
-      this.showProgress(ev);
-    });
-  }
-
-  showProgress = (progress: IProgress) => {
-    this.ui.progress = progress;
-  }
-
-  setAlert = (alert: IAlert) => {
-    this.ui.alert = alert;
   }
 
   getHtmlMeta(names: string[]) {
