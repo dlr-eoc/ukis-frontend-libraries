@@ -17,12 +17,15 @@ export interface IWmtsOptions extends IRasterLayerOptions {
 
 
 export class WmtsLayer extends RasterLayer implements IWmtsOptions {
-  type: 'wmts';
-  params: IWmtsParams;
+  override type: 'wmts';
+  override params: IWmtsParams;
   /** check if the service supports this tilesize */
-  tileSize?: number;
+  override tileSize?: number;
   constructor(options: IWmtsOptions) {
     super(options);
+    this.type = options.type;
+    this.params = options.params;
+    this.tileSize = options.tileSize;
   }
 }
 
@@ -82,12 +85,15 @@ export interface IWmsOptions extends IRasterLayerOptions {
 }
 
 export class WmsLayer extends RasterLayer implements IWmsOptions {
-  type: 'wms';
-  params: IWmsParams;
+  override type: 'wms';
+  override params: IWmsParams;
   /** check if the service supports this tilesize */
-  tileSize?: number;
+  override tileSize?: number;
   constructor(options: IWmsOptions) {
     super(options);
+    this.type = options.type;
+    this.params = options.params;
+    this.tileSize = options.tileSize;
   }
 }
 

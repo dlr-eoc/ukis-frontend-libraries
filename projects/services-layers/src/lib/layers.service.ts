@@ -1,11 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Layer, RasterLayer, TFiltertypes } from './types/Layers';
 import { LayerGroup } from './types/LayerGroup';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class LayersService {
   private store = new BehaviorSubject(Array<Layer | LayerGroup>());
 
@@ -14,10 +12,6 @@ export class LayersService {
   private overlays = new BehaviorSubject(Array<Layer>());
 
   private layers = new BehaviorSubject(Array<Layer>());
-
-  constructor() {
-
-  }
 
 
   // ----------------------------------------------------------------------------------------------------------------
@@ -30,7 +24,6 @@ export class LayersService {
    */
   public addLayer(layer: Layer, filtertype?: TFiltertypes, toGroup?: boolean) {
     if (!this.isInLayergroups(layer)) {
-
       if (!filtertype) {
         filtertype = layer.filtertype;
       } else {
@@ -39,6 +32,9 @@ export class LayersService {
       }
 
       const storeItems = this.store.getValue();
+      if(!filtertype){
+        return;
+      }
 
       if (toGroup) {
         this.filterFiltertype(filtertype);
@@ -362,7 +358,7 @@ export class LayersService {
       groupsCount = this.getNumOfGroups(group.filtertype);
     }
 
-    if (groupsCount > 1) {
+    if (groupsCount && groupsCount > 1) {
       const storeItems = this.store.getValue();
 
       const groupIndex = storeItems.indexOf(group);
@@ -497,13 +493,16 @@ export class LayersService {
       return items[0];
     } else if (items.length > 1) {
       console.log('there is a duplicate ID in the Layer Groups!');
+      return null;
+    }else{
+      return null;
     }
   }
   /**
    * Get a Layer by ID from the Layerservice Store (or the provided Array)
    */
   public getLayerById(id: string, layers?: Array<Layer>) {
-    let value: Layer;
+    let value: Layer | undefined;
     let flatlayers = this.flattenDeepArray(this.store.getValue());
     if (layers) {
       flatlayers = layers;
@@ -674,7 +673,7 @@ export class LayersService {
    * flatten array with Layers and LayerGroups.layers (so you can get the zIndex)
    */
   public flattenDeepArray(arr: Array<Layer | LayerGroup>): Layer[] {
-    return arr.reduce((acc, val) => (val instanceof LayerGroup && Array.isArray(val.layers)) ? acc.concat(this.flattenDeepArray(val.layers)) : acc.concat(val), []);
+    return arr.reduce((acc, val) => (val instanceof LayerGroup && Array.isArray(val.layers)) ? acc.concat(this.flattenDeepArray(val.layers)) : acc.concat(val as Layer), [] as Layer[]);
   }
 
   /*

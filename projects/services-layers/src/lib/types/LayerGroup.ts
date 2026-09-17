@@ -18,7 +18,7 @@ export interface ILayerGroupOptions {
   bbox?: TGeoExtent;
   nativeBbox?: {
     /** the EPSG code for the bbox  */
-    epsg:string,
+    epsg: string,
     /** native coordinates for projected layers - this can be helpful when zooming to the extent of a projected layer */
     bbox: TGeoExtent
   };
@@ -26,7 +26,7 @@ export interface ILayerGroupOptions {
   description?: string | IDynamicComponent;
   /** legend for the group as image or a angular component */
   legendImg?: string | IDynamicComponent;
-  actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
+  actions?: [{ title: string, icon: string, action: (LayerGroup: LayerGroup) => void }];
   /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
   action?: IDynamicComponent;
   /** UI is expanded */
@@ -47,31 +47,47 @@ export class LayerGroup implements ILayerGroupOptions {
   name: string;
   layers: Layer[];
 
-  protected protVisible?: boolean;
+  protected protVisible!: boolean;
   displayName?: string;
-  filtertype?: TFiltertypes = 'Layers';
-  removable = true;
-  layerRemovable = true;
+  filtertype: TFiltertypes;
+  removable: boolean;
+  layerRemovable: boolean;
   bbox?: TGeoExtent;
   nativeBbox?: {
-    epsg:string,
+    epsg: string,
     bbox: TGeoExtent
   };
   description?: string | IDynamicComponent;
   legendImg?: string | IDynamicComponent;
-  actions?: [{ title: string, icon: string, action: (LayerGroup) => void }];
+  actions?: [{ title: string, icon: string, action: (LayerGroup: LayerGroup) => void }];
   action?: IDynamicComponent;
-  expanded: boolean | ILayerExpanded = false;
+  expanded: boolean | ILayerExpanded;
   cssClass?: string;
 
   constructor(options: ILayerGroupOptions) {
-    if (options && options.visible !== undefined && options.layers && options.layers.length) {
+    this.id = options.id || '';
+    this.name = options.name || '';
+    this.layers = options.layers;
+    this.displayName = options.displayName;
+    this.filtertype = options.filtertype || 'Layers';
+    this.removable = options.removable || true;
+    this.layerRemovable = options.layerRemovable || true;
+    this.bbox = options.bbox;
+    this.nativeBbox = options.nativeBbox;
+    this.description = options.description;
+    this.legendImg = options.legendImg;
+    this.actions = options.actions;
+    this.action = options.action;
+    this.expanded = options.expanded || false;
+    this.cssClass = options.cssClass;
+
+    const visible = options.visible;
+    if (options && visible !== undefined && options.layers && options.layers.length) {
       options.layers = options.layers.map(l => {
-        l.visible = options.visible;
+        l.visible = visible;
         return l;
       });
     }
-    Object.assign(this, options);
   }
 
   get visible() {

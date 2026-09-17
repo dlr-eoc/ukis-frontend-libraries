@@ -134,7 +134,7 @@ export interface ILayerExpanded {
  * When using dynamic components for layers you should keep in mind to handle the state (with a service or object binding) if needed,
  * because `legendImg` or `action` are placed inside `@if` directives in the template and are destroyed when they are hidden.
  */
-export interface ILayerOptions<T = any > {
+export interface ILayerOptions<T = any> {
   name: string;
   id: string;
   // id: string
@@ -160,7 +160,7 @@ export interface ILayerOptions<T = any > {
   bbox?: TGeoExtent;
   nativeBbox?: {
     /** the EPSG code for the bbox  */
-    epsg:string,
+    epsg: string,
     /** native coordinates for projected layers - this can be helpful when zooming to the extent of a projected layer */
     bbox: TGeoExtent
   };
@@ -176,7 +176,7 @@ export interface ILayerOptions<T = any > {
     /** e.g. https://openlayers.org/en/latest/apidoc/module-ol_source_Source.html Tile | Image | Raster | Vector */
     source?: ILayerEvent[];
   };
-  actions?: [{ title: string, icon: string, action: (Layer) => void }];
+  actions?: [{ title: string, icon: string, action: (Layer: Layer) => void }];
   /** optional angular component that can be used e.g. to change the layer style, filter the data or request new data */
   action?: IDynamicComponent;
   /** a layer might have more than one style; eg. true color and false color for the same dataset */
@@ -280,21 +280,21 @@ export interface IStackedLayerOptions extends Omit<ILayerOptions, 'type'> {
 /**
  * Classes for layer construction
  */
-export class Layer<T = any> implements ILayerOptions<T>{
-  name = '';
-  id = '';
+export class Layer<T = any> implements ILayerOptions<T> {
+  name: string;
+  id: string;
   type: TLayertype;
-  opacity = 1;
-  visible = true;
-  removable = false;
+  opacity: number;
+  visible: boolean;
+  removable: boolean;;
 
-  filtertype?: TFiltertypes = 'Layers';
-  continuousWorld = false;
+  filtertype: TFiltertypes;
+  continuousWorld: boolean;
   attribution?: string;
   displayName?: string;
   description?: string | IDynamicComponent;
-  properties?: T = {} as T;
-  protected protTime?: string;
+  properties?: T;
+  protected protTime: string | undefined;
   minResolution?: number;
   maxResolution?: number;
   minZoom?: number;
@@ -303,14 +303,14 @@ export class Layer<T = any> implements ILayerOptions<T>{
 
   bbox?: TGeoExtent;
   nativeBbox?: {
-    epsg:string,
+    epsg: string,
     bbox: TGeoExtent
   };
   dimensions?: ILayerDimensions;
 
   popup?: ILayerOptions['popup'];
   events?: ILayerOptions['events'];
-  actions?: [{ title: string, icon: string, action: (Layer) => void }];
+  actions?: [{ title: string, icon: string, action: (Layer: Layer) => void }];
 
   action?: IDynamicComponent;
 
@@ -320,10 +320,43 @@ export class Layer<T = any> implements ILayerOptions<T>{
   cssClass?: string;
 
   constructor(options: ILayerOptions<T>) {
-    Object.assign(this, options);
+    this.name = options.name || '';
+    this.id = options.id || '';
+    this.type = options.type;
+    this.opacity = options.opacity || 1;
+    this.visible = (options.visible !== undefined) ? options.visible : true;
+    this.removable = options.removable || false;
+
+    this.filtertype = options.filtertype || 'Layers';
+    this.continuousWorld = options.continuousWorld || false;
+    this.attribution = options.attribution;
+    this.displayName = options.displayName;
+    this.description = options.description;
+    this.properties = options.properties || {} as T;
+
+    this.minResolution = options.minResolution;
+    this.maxResolution = options.maxResolution;
+    this.minZoom = options.minZoom;
+    this.maxZoom = options.maxZoom;
+    this.legendImg = options.legendImg;
+
+    this.bbox = options.bbox;
+    this.nativeBbox = options.nativeBbox;
+    this.dimensions = options.dimensions;
+
+    this.popup = options.popup;
+    this.events = options.events;
+    this.actions = options.actions;
+
+    this.action = options.action;
+
+    this.styles = options.styles;
+    this.crossOrigin = options.crossOrigin;
+    this.expanded = options.expanded || this.expanded;
+    this.cssClass = options.cssClass;
   }
 
-  get time() {
+  get time(): string | undefined {
     return this.protTime;
   }
   set time(time: string) {
@@ -346,7 +379,7 @@ export interface IRasterLayerParams extends IAnyObject {
 }
 
 export class RasterLayer extends Layer implements IRasterLayerOptions {
-  type: TRasterLayertype;
+  override type: TRasterLayertype;
   url: string;
   subdomains?: Array<string>;
   params?: IRasterLayerParams;
@@ -355,6 +388,12 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
 
   constructor(options: IRasterLayerOptions) {
     super(options);
+    this.type = options.type;
+    this.url = options.url;
+
+    if (options.subdomains !== undefined) this.subdomains = options.subdomains;
+    if (options.params !== undefined) this.params = options.params;
+    if (options.tileSize !== undefined) this.tileSize = options.tileSize;
 
     // if styles are given, set params and legendImg accordingly.
     if (this.styles && this.styles.length > 0) {
@@ -369,26 +408,26 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
         if (this.type === WmsLayertype) {
           this.params.STYLES = defaultStyle.name;
         } else if (this.type === WmtsLayertype) {
-          this.params.style = defaultStyle.name;
+          this.params['style'] = defaultStyle.name;
         }
         this.params.STYLES = defaultStyle.name;
       } else if (this.type === WmtsLayertype) {
         if (!this.params) {
           this.params = {};
         }
-        this.params.style = defaultStyle.name;
+        this.params['style'] = defaultStyle.name;
       }
     }
   }
 
-  set time(time: string) {
+  override set time(time: string) {
     if (this.params) {
       this.params.TIME = time;
     }
     this.protTime = time;
   }
 
-  get time() {
+  override get time(): string | undefined {
     return this.protTime;
   }
 }
@@ -402,7 +441,7 @@ export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
 
 
 export class VectorLayer extends Layer implements IVectorLayerOptions {
-  type: TVectorLayertype;
+  override type: TVectorLayertype;
   /** data: geojson data */
   data?: any;
   url?: string;
@@ -426,20 +465,26 @@ export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
 };
 
 export class CustomLayer<T = any> extends Layer implements ICustomLayerOptions<T> {
-  type = CustomLayertype;
+  override type = CustomLayertype;
   // tslint:disable-next-line: variable-name
   custom_layer: T = {} as T;
   constructor(options: ICustomLayerOptions<T>) {
     super(options as ILayerOptions);
-    Object.assign(this, options);
+    if (options.type !== CustomLayertype) {
+      console.warn(`CustomLayer ${this.id} can only have type: ${CustomLayertype} not ${options.type}`);
+    }
+    this.custom_layer = options.custom_layer;
   }
 }
 
 export class StackedLayer extends Layer implements IStackedLayerOptions {
-  type = StackedLayertype;
+  override type = StackedLayertype;
   layers: Layer[] = [];
   constructor(options: IStackedLayerOptions) {
     super(options as ILayerOptions);
-    Object.assign(this, options);
+    if (options.type !== StackedLayertype) {
+      console.warn(`StackedLayer ${this.id} can only have type: ${StackedLayertype} not ${options.type}`);
+    }
+    this.layers = options.layers;
   }
 }

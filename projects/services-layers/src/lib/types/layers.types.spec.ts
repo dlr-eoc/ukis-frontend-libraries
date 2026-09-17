@@ -1,21 +1,20 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RasterLayer, Layer, VectorLayer, CustomLayer, TGeoExtent, StackedLayer, StackedLayertype } from './Layers';
 import { LayerGroup } from './LayerGroup';
 
 
-let rasterlayer: RasterLayer;
-let vectorlayer: VectorLayer;
-let customlayer: CustomLayer;
-
-
 describe('Layer Types', () => {
-  beforeEach(waitForAsync(() => {
+  let rasterlayer: RasterLayer;
+  let vectorlayer: VectorLayer;
+  let customlayer: CustomLayer;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({});
     rasterlayer = new RasterLayer({
       id: 'ID-raster',
       name: 'raster',
       type: 'wms',
-      properties: {unit: 'm'},
+      properties: { unit: 'm' },
       url: '//geoservice.dlr.de/eoc/basemap/wms',
       removable: true,
       visible: true,
@@ -28,7 +27,7 @@ describe('Layer Types', () => {
       id: 'ID-vector',
       name: 'vector',
       type: 'geojson',
-      properties: {unit: 'm²'},
+      properties: { unit: 'm²' },
       data: {},
       visible: false
     });
@@ -37,10 +36,10 @@ describe('Layer Types', () => {
       id: 'ID-custom',
       type: 'custom',
       name: 'custom',
-      properties: {unit: 'm³'},
+      properties: { unit: 'm³' },
       custom_layer: {}
     });
-  }));
+  });
 
   it('should created a default Layer with options merged', () => {
     const id = 'ID-layer',
@@ -49,7 +48,7 @@ describe('Layer Types', () => {
       minZoom = 3,
       maxZoom = 25,
       opacity = 0.5,
-      properties = {unit: 'm'},
+      properties = { unit: 'm' },
       bbox: TGeoExtent = [-180, -90, 180, 90];
 
     const layer = new Layer({
@@ -210,7 +209,7 @@ describe('Layer Types', () => {
     expect(newVectorLayer.crossOrigin).toBe(undefined);
 
     /** vector specific */
-    expect(newVectorLayer.data).toBe(data);
+    expect(newVectorLayer.data).toEqual(data);
     expect(newVectorLayer.url).toBe(undefined);
     expect(newVectorLayer.subdomains).toBe(undefined);
     expect(newVectorLayer.options).toBe(options);
