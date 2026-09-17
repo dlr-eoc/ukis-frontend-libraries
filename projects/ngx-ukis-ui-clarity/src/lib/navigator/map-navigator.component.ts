@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ClrCommonFormsModule, ClrNumberInputModule } from '@clr/angular';
 
 @Component({
-  selector: 'ngx-ukis-navigator',
+  selector: 'ngx-ukis-map-navigator',
   templateUrl: './map-navigator.component.html',
   styleUrl: './map-navigator.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
