@@ -1,4 +1,4 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { OwcJsonService, shardsExpand } from './owc-json.service';
 import {
   barebonesContext, baseWMTSLayer, baseWMSLayer, baseWFSLayer, basicOgcOwsContext, eocOwsContext,
@@ -8,10 +8,10 @@ import {
   eocXyzOffering, eocVectortileLayer, eocVectortileOffering, eocTMSOffering, folderMixedContext, eocWMTSOffering
 } from '@dlr-eoc/shared-assets';
 import { Fill, Stroke, Style } from 'ol/style.js';
-import { LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayertype, WfsLayertype, WmtsLayertype, KmlLayertype, XyzLayertype, ILayerIntervalAndPeriod, WmsLayer, WmtsLayer, Filtertypes } from '@dlr-eoc/services-layers';
+import { LayersService, RasterLayer, LayerGroup, TmsLayertype, Layer, WmsLayertype, WfsLayertype, WmtsLayertype, KmlLayertype, XyzLayertype, ILayerIntervalAndPeriod, WmsLayer, WmtsLayer, Filtertypes, IWmtsParams } from '@dlr-eoc/services-layers';
 import { VectorLayer, GeojsonLayertype } from '@dlr-eoc/services-layers';
 import { Feature, Polygon, FeatureCollection } from 'geojson';
-import { IOwsOffering, IOwsResource, kmlOffering, wfsOffering, wmsOffering, wmtsOffering } from './types/owc-json';
+import { IOwsOffering, IOwsResource, kmlOffering, wfsOffering, wmsOffering, wmtsOffering, IOwsOperation } from './types/owc-json';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EocLitemap } from '@dlr-eoc/base-layers-raster';
 import { GetFeatureOperationCode, GetMapOperationCode, GetTileOperationCode, RESTOperationCode } from './types/owc-json.utils';
@@ -19,9 +19,9 @@ import { GeoJsonOffering, IEocOwsOffering, IEocOwsResource, tmsOffering, xyzOffe
 
 import { DateTime } from 'luxon';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 describe('OwcJsonService utils', () => {
-  beforeEach(() => { });
 
   it('it should create a shards array from a string', () => {
     const shards = 'a-d';
@@ -32,54 +32,51 @@ describe('OwcJsonService utils', () => {
 
 
 describe('OwcJsonService: reading basic data from owc', () => {
+  let service: OwcJsonService;
   const allTestContexts = [barebonesContext, basicOgcOwsContext, eocOwsContext, eocProjContext, zoomedContext];
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
-  }));
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
+
+    service = TestBed.inject(OwcJsonService);
+  });
 
 
 
   it('should check if the json is a ows context', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allTestContexts.forEach(c => {
-      expect(service.checkContext(c)).toBeTrue();
+      expect(service.checkContext(c)).toBeTruthy();
     });
   });
 
   it('should get the ows context title', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allTestContexts.forEach(c => {
       expect(service.getContextTitle(c)).toBe(c.properties.title);
     });
   });
 
   it('should get the ows context Publisher', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allTestContexts.forEach(c => {
       expect(service.getContextPublisher(c)).toBe(c.properties?.publisher || null);
     });
   });
 
   it('should get the ows context Extent', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allTestContexts.forEach(c => {
       expect(service.getContextExtent(c)).toBe(c?.bbox || null);
     });
   });
 
   it('should get the ows context Resources', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allTestContexts.forEach(c => {
       expect(service.getResources(c).length).toBe(c.features.length);
     });
   });
 
   it('should get the ows context Resource Title', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allTestContexts.forEach(c => {
       const resources = service.getResources(c);
 
@@ -94,35 +91,35 @@ describe('OwcJsonService: reading basic data from owc', () => {
 });
 
 describe('OwcJsonService: reading basic data from owc Resource', () => {
-  let allResources: IOwsResource[] = [];
+  let service: OwcJsonService;
+  let allResources: (IOwsResource | IEocOwsResource)[] = [];
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
 
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    service = TestBed.inject(OwcJsonService);
+
+
     allResources = service.getResources(basicOgcOwsContext);
-  }));
+  });
 
 
   it('should get the ows context Resource Title', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       expect(service.getResourceTitle(r)).toBe(r.properties.title);
     });
   });
 
   it('should get the ows context Resource Folder for Layer Grouping', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       expect(service.getResourceFolder(r)).toBe(r.properties.folder);
     });
   });
 
   it('should get FilterType from Folder for Layer Grouping Solt', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       const filterType = service.getFilterType(r);
       if (filterType) {
@@ -135,13 +132,12 @@ describe('OwcJsonService: reading basic data from owc Resource', () => {
 
 
   it('should get groupName from Folder - private function', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
 
       const groupName = service['getLayerGroupFromFolder'](r);
       if (groupName) {
         const filterType = service.getFilterType(r);
-        if (filterType) {
+        if (filterType && r.properties.folder) {
           const folderParts = r.properties.folder.split('/');
           expect(folderParts[0]).toBe(filterType);
           expect(folderParts[1]).toBe(groupName);
@@ -157,36 +153,32 @@ describe('OwcJsonService: reading basic data from owc Resource', () => {
   });
 
   it('should get the ows context Resource Updated', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       expect(service.getResourceUpdated(r)).toBe(r.properties.updated);
     });
   });
 
   it('should get the ows context Resource Date', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       const rDate = service.getResourceDate(r);
       if (rDate) {
-        expect(DateTime.fromISO(rDate).isValid).toBeTrue();
+        expect(DateTime.fromISO(rDate).isValid).toBeTruthy();
       }
     });
   });
 
   it('should get the ows context Resource Active', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       if (r.properties.active) {
         expect(service.isActive(r)).toBe(r.properties.active);
       } else {
         // set default to true
-        expect(service.isActive(r)).toBeTrue();
+        expect(service.isActive(r)).toBeTruthy();
       }
     });
   });
 
   it('should get the ows context Resource Description', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       const description = service.getResourceDescription(r);
       if (r.properties.abstract) {
@@ -199,30 +191,30 @@ describe('OwcJsonService: reading basic data from owc Resource', () => {
   });
 
   it('should get the ows context Resource Offerings', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       const offerings = service.getResourceOfferings(r);
-      expect(offerings.length).toBe(r.properties.offerings.length);
+      expect(offerings?.length).toBe(r.properties.offerings?.length);
     });
   });
 });
 
 
 describe('OwcJsonService: reading data from IEocOwsResource', () => {
+  let service: OwcJsonService;
   let allResources: IEocOwsResource[] = [];
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
 
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    service = TestBed.inject(OwcJsonService);
+
     allResources = service.getResources(eocOwsContext);
-  }));
+  });
 
   it('should get the Resource Opacity', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       if (r.properties.opacity) {
         expect(service.getResourceOpacity(r)).toBe(r.properties.opacity);
@@ -233,7 +225,6 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
   });
 
   it('should get the Resource Attribution or Rights', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       if (r.properties.attribution || r.properties.rights) {
         expect(service.getResourceAttribution(r)).toBe(r.properties.attribution || r.properties.rights);
@@ -245,14 +236,12 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
   });
 
   it('should get the Resource Shards for RasterLayer urls', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       expect(service.getResourceShards(r)).toBe(r.properties.shards);
     });
   });
 
   it('should get the Resource Dimensions', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       const dimensions = service.getResourceDimensions(r);
       if (dimensions?.time) {
@@ -267,10 +256,9 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
 
 
   it('it should get Time steps from Dimensions values', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const dimensionsSteps = service.getTimeValueFromDimensions(eocTimeDimensionsSteps.values);
     const stepArray = eocTimeDimensionsSteps.values.split(',');
-    expect(Array.isArray(dimensionsSteps)).toBeTrue();
+    expect(Array.isArray(dimensionsSteps)).toBeTruthy();
     if (Array.isArray(dimensionsSteps)) {
       expect(typeof dimensionsSteps[0]).toEqual('string');
       expect((dimensionsSteps as string[]).length).toBe(stepArray.length);
@@ -279,16 +267,14 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
   });
 
   it('it should get Interval from Dimensions values and period from display', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const dimensionsInterval = service.getTimeValueFromDimensions(eocTimeDimensionsInterval.values, eocTimeDimensionsInterval?.display?.period);
     expect(typeof dimensionsInterval).toBe('object');
     expect((dimensionsInterval as ILayerIntervalAndPeriod).interval).toBe(eocTimeDimensionsInterval.values);
-    expect((dimensionsInterval as ILayerIntervalAndPeriod).periodicity).toBe(eocTimeDimensionsInterval.display.period);
+    expect((dimensionsInterval as ILayerIntervalAndPeriod).periodicity).toBe(eocTimeDimensionsInterval.display?.period);
   });
 
 
   it('it should get Interval and Period from Dimensions values', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const dimensionsIntervalPeriod = service.getTimeValueFromDimensions(eocTimeDimensionsIntervalPeriod.values);
     const intervalPeriodArray = eocTimeDimensionsIntervalPeriod.values.split('/');
     expect(typeof dimensionsIntervalPeriod).toBe('object');
@@ -297,24 +283,25 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
   });
 
   it('it should get multiple Interval and Period from Dimensions values', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const dimensionsIntervalPeriodSteps = service.getTimeValueFromDimensions(eocTimeDimensionsIntervalPeriodSteps.values);
     const periodStepsArray = eocTimeDimensionsIntervalPeriodSteps.values.split(',');
-    expect(Array.isArray(dimensionsIntervalPeriodSteps)).toBeTrue();
-    expect((dimensionsIntervalPeriodSteps as ILayerIntervalAndPeriod[]).length).toBe(periodStepsArray.length);
-    expect(typeof dimensionsIntervalPeriodSteps[0]).toBe('object');
+    expect(Array.isArray(dimensionsIntervalPeriodSteps)).toBeTruthy();
+
+    const dimensionsIntervalPeriodStepsArray = dimensionsIntervalPeriodSteps as ILayerIntervalAndPeriod[];
+    expect(dimensionsIntervalPeriodStepsArray.length).toBe(periodStepsArray.length);
+    expect(typeof dimensionsIntervalPeriodStepsArray[0]).toBe('object');
+    const dimensionsIntervalPeriodItem = dimensionsIntervalPeriodStepsArray[0];
     const intervalPeriodArray0 = periodStepsArray[0].split('/');
-    expect(dimensionsIntervalPeriodSteps[0].interval).toBe(`${intervalPeriodArray0[0]}/${intervalPeriodArray0[1]}`);
-    expect(dimensionsIntervalPeriodSteps[0].periodicity).toBe(intervalPeriodArray0[2]);
+
+    expect(dimensionsIntervalPeriodItem.interval).toBe(`${intervalPeriodArray0[0]}/${intervalPeriodArray0[1]}`);
+    expect(dimensionsIntervalPeriodItem.periodicity).toBe(intervalPeriodArray0[2]);
   });
 
 
   it('it should get Interval and Period and single steps from Dimensions values', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-
     const dimensionsIntervalPeriodStepsAndSteps = service.getTimeValueFromDimensions(eocTimeDimensionsIntervalPeriodStepsAndSteps.values);
     const intervalPeriodStepsArray = eocTimeDimensionsIntervalPeriodStepsAndSteps.values.split(',');
-    expect(Array.isArray(dimensionsIntervalPeriodStepsAndSteps)).toBeTrue();
+    expect(Array.isArray(dimensionsIntervalPeriodStepsAndSteps)).toBeTruthy();
     if (Array.isArray(dimensionsIntervalPeriodStepsAndSteps)) {
       expect((dimensionsIntervalPeriodStepsAndSteps as any[]).length).toBe(intervalPeriodStepsArray.length);
       expect(typeof dimensionsIntervalPeriodStepsAndSteps[0]).toBe('object');
@@ -337,7 +324,6 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
 
 
   it('should get the Resource min/max Zoom', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allResources.forEach(r => {
       const zooms = service.getResourceMinMaxZoom(r);
       if (zooms.maxZoom) {
@@ -352,46 +338,46 @@ describe('OwcJsonService: reading data from IEocOwsResource', () => {
 
 // TODO:
 describe('OwcJsonService: reading basic data from owc Offering', () => {
-  let allResources: IOwsResource[] = [];
+  let service: OwcJsonService;
+  let allResources: (IOwsResource | IEocOwsResource)[] = [];
   const allOfferings: IOwsOffering[] = [];
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
 
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    service = TestBed.inject(OwcJsonService);
+
     allResources = service.getResources(basicOgcOwsContext);
     allResources.forEach(r => {
       const offerings = service.getResourceOfferings(r);
-      allOfferings.push(...offerings);
+      if (offerings) {
+        allOfferings.push(...offerings);
+      }
     });
-  }));
+  });
 
 
   it('should get the ows Offering Code', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const layerTypes = [WmsLayertype, WmtsLayertype, WfsLayertype, KmlLayertype];
     allOfferings.forEach(o => {
-      expect(layerTypes.includes(service.getLayertypeFromOfferingCode(o))).toBeTrue();
+      expect(layerTypes.includes(service.getLayertypeFromOfferingCode(o))).toBeTruthy();
     });
   });
 
   it('should check the ows Offering is a ServiceOffering', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     expect(service.checkIfServiceOffering(baseKMLOffering)).toBe(false);
     expect(service.checkIfServiceOffering(baseWFSOffering)).toBe(true);
   });
 
   it('should check the ows Offering is a DataOffering', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     expect(service.checkIfDataOffering(baseKMLOffering)).toBe(true);
     expect(service.checkIfDataOffering(baseWFSOffering)).toBe(false);
   });
 
   it('should get LegendUrl from the ows Offering', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     allOfferings.forEach(o => {
       expect(typeof service.getLegendUrl(o)).toBe('string');
     });
@@ -401,53 +387,58 @@ describe('OwcJsonService: reading basic data from owc Offering', () => {
 
 
 describe('OwcJsonService: reading data from IEocOwsOffering', () => {
+  let service: OwcJsonService;
   let allResources: IEocOwsResource[] = [];
   const allOfferings: IEocOwsOffering[] = [];
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
 
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    service = TestBed.inject(OwcJsonService);
+
     allResources = service.getResources(basicOgcOwsContext);
     allResources.forEach(r => {
       const offerings = service.getResourceOfferings(r);
-      allOfferings.push(...offerings);
-    });
-  }));
-
-  it('should get the ows Offering Code', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    const layerTypes = [WmsLayertype, WmtsLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, XyzLayertype, TmsLayertype];
-    allOfferings.forEach(o => {
-      expect(layerTypes.includes(service.getLayertypeFromOfferingCode(o))).toBeTrue();
+      if (offerings) {
+        allOfferings.push(...offerings);
+      }
     });
   });
 
-  it('should get the ows Offering matrixSets - private function', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service['getMatrixSetForWMTS'](eocWMTSOffering, eocWMTSOffering.matrixSets[0].srs).subscribe(ms => {
-      expect(ms).toEqual(eocWMTSOffering.matrixSets[0]);
+  it('should get the ows Offering Code', () => {
+    const layerTypes = [WmsLayertype, WmtsLayertype, WfsLayertype, KmlLayertype, GeojsonLayertype, XyzLayertype, TmsLayertype];
+    allOfferings.forEach(o => {
+      expect(layerTypes.includes(service.getLayertypeFromOfferingCode(o))).toBeTruthy();
     });
-  }));
+  });
+
+  it('should get the ows Offering matrixSets - private function', async () => {
+    const matrixSet0 = eocWMTSOffering.matrixSets?.[0];
+    if (matrixSet0) {
+      const ms = await firstValueFrom(service['getMatrixSetForWMTS'](eocWMTSOffering, matrixSet0.srs));
+      expect(ms).toEqual(matrixSet0);
+    }
+  });
 });
 
 
 describe('OwcJsonService: reading layer data from owc', () => {
+  let service: OwcJsonService;
   const targetProjection = 'EPSG:4326';
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
 
-  }));
+    service = TestBed.inject(OwcJsonService);
+  });
 
   it('should get all layers fom the base OWS context', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     service.getLayers(basicOgcOwsContext, targetProjection).subscribe(contextLayers => {
 
       const layerGroupIDs = service.getGroupResources(basicOgcOwsContext)
@@ -463,7 +454,6 @@ describe('OwcJsonService: reading layer data from owc', () => {
 
 
   it('should get all layers fom the EOC-OWS context', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     service.getLayers(eocOwsContext, targetProjection).subscribe(eocOwsContextLayers => {
       const layerGroupIDs = service.getGroupResources(eocOwsContext)
         .map(f => service['getLayerGroupFromFolder'](f)) // get ids
@@ -478,7 +468,6 @@ describe('OwcJsonService: reading layer data from owc', () => {
 
 
   it('should get all layers fom mixed context with folders', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     service.getLayers(folderMixedContext, targetProjection).subscribe(contextLayers => {
       const layerGroupIDs = service.getGroupResources(folderMixedContext)
         .map(f => service['getLayerGroupFromFolder'](f)) // get ids
@@ -492,7 +481,6 @@ describe('OwcJsonService: reading layer data from owc', () => {
   });
 
   it('should get all layers in correct order', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     service.getLayers(folderMixedContext, targetProjection).subscribe(createdLayers => {
 
       /**
@@ -504,13 +492,13 @@ describe('OwcJsonService: reading layer data from owc', () => {
        * - F1.2  - L3
        * - F2    - F2
        */
-      const contextFeaturesIds = [];
-      folderMixedContext.features.forEach((f) => {
+      const contextFeaturesIds: string[] = [];
+      folderMixedContext.features.forEach((f: any) => {
         if (f.properties?.folder) {
           /** private function getLayerGroupFromFolder */
           const groupName = service['getLayerGroupFromFolder'](f);
-          const groupResources = folderMixedContext.features.filter(r => service['getLayerGroupFromFolder'](r) === groupName);
-          groupResources.forEach(r => {
+          const groupResources = folderMixedContext.features.filter((r: any) => service['getLayerGroupFromFolder'](r) === groupName);
+          groupResources.forEach((r: any) => {
             let index = `${r.properties?.folder}/${r.properties.title}`;
 
             /** for features with folder: Layers/<folderName> */
@@ -557,127 +545,154 @@ describe('OwcJsonService: reading layer data from owc', () => {
     });
   });
 
+  it('should create layer from wms Offering', async () => {
+    const wmsResource = baseWMSLayer;
+    const layer = await firstValueFrom(service.createLayerFromDefaultOffering(wmsResource, barebonesContext, targetProjection));
+    expect(layer instanceof WmsLayer).toBeTruthy();
+  });
+
+  it('should create layer from wfs Offering', async () => {
+    const wfsResource = baseWFSLayer;
+    const layer = await firstValueFrom(service.createLayerFromDefaultOffering(wfsResource, barebonesContext, targetProjection));
+    expect(layer instanceof VectorLayer).toBeTruthy();
+  });
+
+  it('should create layer from wmts Offering', async () => {
+    const wmtsResource = baseWMTSLayer;
+    const layer = await firstValueFrom(service.createLayerFromDefaultOffering(wmtsResource, barebonesContext, targetProjection));
+    expect(layer instanceof WmtsLayer).toBeTruthy();
+  });
+
+  it('should create layer from kml Offering', async () => {
+    const kmlResource = baseKMLLayer;
+    const layer = await firstValueFrom(service.createLayerFromDefaultOffering(kmlResource, barebonesContext, targetProjection));
+    expect(layer instanceof VectorLayer).toBeTruthy();
+  });
+
 
   // this is also testing service.createLayerGroup()
-  it('should create LayerGroups for Resources with properties.folder', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.getLayers(basicOgcOwsContext, targetProjection).subscribe(owsContextLayers => {
-      const layerGroupNames = service.getGroupResources(basicOgcOwsContext)
-        .map(f => service['getLayerGroupFromFolder'](f)) // get Names
-        .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
+  it('should create LayerGroups for Resources with properties.folder', async () => {
+    const layersObs = service.getLayers(basicOgcOwsContext, targetProjection);
+    const owsContextLayers = await firstValueFrom(layersObs);
+    expect(owsContextLayers.length > 0).toBeTruthy();
 
-      const findLayerGroups = owsContextLayers.filter(l => layerGroupNames.includes(l.name));
-      findLayerGroups.forEach(lg => {
-        expect(lg instanceof LayerGroup).toBeTrue();
-      });
-      expect(findLayerGroups.length).toBe(layerGroupNames.length);
+    const layerGroupNames = service.getGroupResources(basicOgcOwsContext)
+      .map(f => service['getLayerGroupFromFolder'](f)) // get Names
+      .filter((item, index, array) => array.indexOf(item) === index); // Remove Duplicates
+
+    const findLayerGroups = owsContextLayers.filter(l => layerGroupNames.includes(l.name));
+
+    findLayerGroups.forEach(lg => {
+      expect(lg instanceof LayerGroup).toBeTruthy();
     });
-  }));
+    expect(findLayerGroups.length).toBe(layerGroupNames.length);
+  });
 
 
-  it('should create Layers for non Group Resources', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromDefaultOffering(eocTMSLayer, eocOwsContext, targetProjection).subscribe(layer => {
-      expect(layer instanceof Layer).toBeTrue();
-    });
-  }));
+  it('should create Layers for non Group Resources', async () => {
+    const layer = await firstValueFrom(service.createLayerFromDefaultOffering(eocTMSLayer, eocOwsContext, targetProjection));
+    expect(layer instanceof Layer).toBeTruthy();
+  });
 
 
   // this is also testing service.createWmsLayerFromOffering()
-  it('should create a WMS Layer', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromOffering(baseWMSOffering, baseWMSLayer, basicOgcOwsContext, targetProjection).subscribe((layer: WmsLayer) => {
-      expect(layer instanceof WmsLayer).toBeTrue();
+  it('should create a WMS Layer', async () => {
+    const layer = await firstValueFrom(service.createLayerFromOffering(baseWMSOffering, baseWMSLayer, basicOgcOwsContext, targetProjection));
+    expect(layer instanceof WmsLayer).toBeTruthy();
 
-      baseWMSGetMapParams.forEach((v, k) => {
-        // this should use uppercase keys!!!
-        if (layer.params[k]) {
-          expect(layer.params[k]).toBe(v);
-        }
-      });
+    baseWMSGetMapParams.forEach((v, k) => {
+      // this should use uppercase keys!!!
+      if (layer instanceof WmsLayer && layer.params[k]) {
+        expect(layer.params[k]).toBe(v);
+      }
     });
-  }));
+  });
 
   // this is also testing service.createWmtsLayerFromOffering() and service.getWmtsOptions()
-  it('should create a WMTS Layer', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromOffering(baseWMTSOffering, baseWMTSLayer, basicOgcOwsContext, targetProjection).subscribe((layer: WmtsLayer) => {
-      expect(layer instanceof WmtsLayer).toBeTrue();
+  it('should create a WMTS Layer', async () => {
+    const layer = await firstValueFrom(service.createLayerFromOffering(baseWMTSOffering, baseWMTSLayer, basicOgcOwsContext, targetProjection));
+    expect(layer instanceof WmtsLayer).toBeTruthy();
 
-      baseWMTSGetTileParams.forEach((v, k) => {
-        // for WMTS LowerCase was used!!!
-        const key = k.toLocaleLowerCase();
-        if (layer.params[key]) {
-          expect(layer.params[key]).toBe(v);
-        }
-      });
+    baseWMTSGetTileParams.forEach((v, k) => {
+      // for WMTS LowerCase was used!!!
+      const key = k.toLocaleLowerCase() as keyof IWmtsParams;
+      if (layer instanceof WmtsLayer && layer.params[key]) {
+        expect(layer.params[key]).toBe(v);
+      }
     });
-  }));
+  });
 
 
-  it('should create a WFS Layer', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromOffering(baseWFSOffering, baseWFSLayer, basicOgcOwsContext, targetProjection).subscribe((layer: VectorLayer) => {
-      expect(layer instanceof VectorLayer).toBeTrue();
+  it('should create a WFS Layer', async () => {
+    const layer = await firstValueFrom(service.createLayerFromOffering(baseWFSOffering, baseWFSLayer, basicOgcOwsContext, targetProjection));
+    expect(layer instanceof VectorLayer).toBeTruthy();
 
-      // Make all Params UpperCase like
-      const { searchParams } = service['getJsonFromUri'](baseWFSOffering.operations.find(o => o.code === GetFeatureOperationCode).href);
+    // Make all Params UpperCase like
+    const href = baseWFSOffering.operations?.find(o => o.code === GetFeatureOperationCode)?.href;
+    if (href) {
+      const { searchParams } = service['getJsonFromUri'](href);
+      if (layer instanceof VectorLayer) {
+        expect(layer.url?.split('?')[1]).toBe(searchParams.toString());
+      }
+    }
+  });
 
-      expect(layer.url.split('?')[1]).toBe(searchParams.toString());
-    });
-  }));
 
-
-  it('should create a KML Layer - link Offering', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromOffering(baseKMLOffering, baseKMLLayer, basicOgcOwsContext, targetProjection).subscribe((layer: VectorLayer) => {
-      expect(layer instanceof VectorLayer).toBeTrue();
+  it('should create a KML Layer - link Offering', async () => {
+    const layer = await firstValueFrom(service.createLayerFromOffering(baseKMLOffering, baseKMLLayer, basicOgcOwsContext, targetProjection));
+    expect(layer instanceof VectorLayer).toBeTruthy();
+    const href = baseKMLOffering.contents?.[0].href
+    if (layer instanceof VectorLayer && href) {
       expect(typeof layer.url).toBe('string');
-      expect(layer.url).toBe(baseKMLOffering.contents[0].href);
-    });
-  }));
+      expect(layer.url).toBe(href);
+    }
+  });
 
   /** ------------------ IEocOwsContext Layers ----------------------------------- */
 
-  it('should create a Geojson Layer - inline Offering', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromOffering(eocGeojsonOffering, eocGeojsonLayer, eocOwsContext, targetProjection).subscribe((layer: VectorLayer) => {
-      expect(layer instanceof VectorLayer).toBeTrue();
+  it('should create a Geojson Layer - inline Offering', async () => {
+    const layer = await firstValueFrom(service.createLayerFromOffering(eocGeojsonOffering, eocGeojsonLayer, eocOwsContext, targetProjection));
+    expect(layer instanceof VectorLayer).toBeTruthy();
+    const eocGeojsonOffering0 = eocGeojsonOffering?.contents?.[0];
+    if (layer instanceof VectorLayer && eocGeojsonOffering0 && eocGeojsonOffering0.content) {
       expect(layer.data).toBeTruthy();
-      expect(layer.data).toEqual(JSON.parse(eocGeojsonOffering.contents[0].content));
-    });
-  }));
+      expect(layer.data).toEqual(JSON.parse(eocGeojsonOffering0.content));
+    }
+  });
 
-  it('should create a Xyz Layer', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromOffering(eocXyzOffering, eocXyzLayer, eocOwsContext, targetProjection).subscribe((layer: RasterLayer) => {
-      expect(layer instanceof RasterLayer).toBeTrue();
-      expect(layer.url).toBe(eocXyzOffering.operations[0].href);
-      const subdomains = shardsExpand(eocXyzLayer.properties.shards);
+  it('should create a Xyz Layer', async () => {
+    const layer = await firstValueFrom(service.createLayerFromOffering(eocXyzOffering, eocXyzLayer, eocOwsContext, targetProjection));
+    expect(layer instanceof RasterLayer).toBeTruthy();
+    const href = eocXyzOffering.operations?.[0].href;
+    const shards = eocXyzLayer.properties.shards;
+    if (layer instanceof RasterLayer && href && shards) {
+      expect(layer.url).toBe(href);
+      const subdomains = shardsExpand(shards);
       expect(layer.subdomains).toEqual(subdomains);
-    });
-  }));
+    }
+  });
 
-  it('should create a Vectortile Layer', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromOffering(eocVectortileOffering, eocVectortileLayer, eocOwsContext, targetProjection).subscribe((layer: VectorLayer) => {
+  it('should create a Vectortile Layer', async () => {
+    const layer = await firstValueFrom(service.createLayerFromOffering(eocVectortileOffering, eocVectortileLayer, eocOwsContext, targetProjection));
+    expect(layer instanceof VectorLayer).toBeTruthy();
+    const href = eocVectortileOffering.operations?.[0].href
+    if (layer instanceof VectorLayer && href) {
       expect(typeof layer.url).toBe('string');
-      expect(layer.url).toBe(eocVectortileOffering.operations[0].href);
-      expect(layer instanceof VectorLayer).toBeTrue();
-    });
-  }));
+      expect(layer.url).toBe(href);
+    }
+  });
 
-  it('should create a Raster TMS Layer', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-    service.createLayerFromOffering(eocTMSOffering, eocTMSLayer, eocOwsContext, targetProjection).subscribe((layer: RasterLayer) => {
-      expect(layer instanceof RasterLayer).toBeTrue();
+  it('should create a Raster TMS Layer', async () => {
+    const layer = await firstValueFrom(service.createLayerFromOffering(eocTMSOffering, eocTMSLayer, eocOwsContext, targetProjection));
+    expect(layer instanceof RasterLayer).toBeTruthy();
+    const href = eocTMSOffering.operations?.[0].href
+    if (layer instanceof RasterLayer && href) {
       expect(typeof layer.url).toBe('string');
-      expect(layer.url).toBe(eocTMSOffering.operations[0].href);
-    });
-  }));
+      expect(layer.url).toBe(href);
+    }
+  });
 
-  it('getLayers should not stop working even if an unknown offering-code has been given', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+  it('getLayers should not stop working even if an unknown offering-code has been given', async () => {
     const testOffering: IEocOwsOffering = {
       code: 'https://some.unknown/protocol'
     };
@@ -693,10 +708,9 @@ describe('OwcJsonService: reading layer data from owc', () => {
       geometry: null,
       type: 'Feature'
     };
-    service.createLayerFromOffering(testOffering, testResource, barebonesContext, targetProjection).subscribe((layer: RasterLayer) => {
-      expect(layer).toBe(null);
-    });
-  }));
+    const layer = await firstValueFrom(service.createLayerFromOffering(testOffering, testResource, barebonesContext, targetProjection));
+    expect(layer).toBe(null);
+  });
 
 });
 
@@ -704,6 +718,7 @@ describe('OwcJsonService: reading layer data from owc', () => {
 /** ------------------------------------------------------------------------------------------------------------------------- */
 
 describe('OwcJsonService: writing data into owc', () => {
+  let service: OwcJsonService;
   const targetProjection = 'EPSG:4326';
   let ukisWmsLayer: WmsLayer;
   let ukisWMTSLayer: WmtsLayer;
@@ -713,11 +728,13 @@ describe('OwcJsonService: writing data into owc', () => {
   let ukisTMSVectorLayer: VectorLayer;
   let ukisXyzLayer: RasterLayer;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    imports: [],
-    providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+      providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
+
+    service = TestBed.inject(OwcJsonService);
 
     // baseWMSLayer - assets/exampleContext.ts
     ukisWmsLayer = new WmsLayer({
@@ -844,11 +861,10 @@ describe('OwcJsonService: writing data into owc', () => {
     });
 
 
-  }));
+  });
 
 
   it('should generate a Resource from a layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const resource = service.generateResourceFromLayer(ukisWmsLayer);
     expect(resource.id).toBe(ukisWmsLayer.id);
     expect(resource.bbox).toEqual(ukisWmsLayer.bbox);
@@ -859,99 +875,97 @@ describe('OwcJsonService: writing data into owc', () => {
     expect(resource.properties.minZoom).toBe(ukisWmsLayer.minZoom);
     expect(resource.properties.opacity).toBe(ukisWmsLayer.opacity);
     expect(resource.properties.title).toBe(ukisWmsLayer.name);
-    expect(resource.properties.offerings.length).toBe(1);
+    expect(resource.properties.offerings?.length).toBe(1);
   });
 
   /** Offerings Types ----------------------------------  */
   it('should generate WMS Offerings from a layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const offering = service.generateOfferingFromLayer(ukisWmsLayer);
     expect(offering.code).toBe(wmsOffering);
-    expect(offering.operations.length).toBeTruthy();
-    expect(offering.operations.find(o => o.code === GetMapOperationCode).code).toBe(GetMapOperationCode);
+    expect(offering.operations?.length).toBeTruthy();
+    const operations = offering.operations as IOwsOperation[];
+    expect(operations.find(o => o.code === GetMapOperationCode)?.code).toBe(GetMapOperationCode);
   });
 
   it('should generate WMTS Offerings from a layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const offering = service.generateOfferingFromLayer(ukisWMTSLayer);
     expect(offering.code).toBe(wmtsOffering);
-    expect(offering.operations.length).toBeTruthy();
-    expect(offering.operations.find(o => o.code === GetTileOperationCode).code).toBe(GetTileOperationCode);
+    expect(offering.operations?.length).toBeTruthy();
+    const operations = offering.operations as IOwsOperation[];
+    expect(operations.find(o => o.code === GetTileOperationCode)?.code).toBe(GetTileOperationCode);
   });
 
   it('should generate WFS Offerings from a layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const offering = service.generateOfferingFromLayer(ukisWFSLayer);
     expect(offering.code).toBe(wfsOffering);
-    expect(offering.operations.length).toBeTruthy();
-    expect(offering.operations.find(o => o.code === GetFeatureOperationCode).href).toBeTruthy();
+    expect(offering.operations?.length).toBeTruthy();
+    const operations = offering.operations as IOwsOperation[];
+    expect(operations.find(o => o.code === GetFeatureOperationCode)?.href).toBeTruthy();
   });
 
   it('should generate Data (GeoJson) Offering from a layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const offering = service.generateOfferingFromLayer(ukisDataLayer);
     expect(offering.code).toBe(GeoJsonOffering || kmlOffering);
-    expect(offering.contents.length).toBeTruthy();
-    expect(offering.contents.find(c => c.type === 'application/geo+json').content).toBeTruthy();
+    expect(offering.contents?.length).toBeTruthy();
+    const contents = offering.contents;
+    if (contents) {
+      expect(contents.find(c => c.type === 'application/geo+json')?.['content']).toBeTruthy();
+    }
   });
 
   it('should generate TMS Raster Offerings from a layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const offering = service.generateOfferingFromLayer(ukisTMSRasterLayer);
     expect(offering.code).toBe(tmsOffering);
-    expect(offering.operations.length).toBeTruthy();
-    expect(offering.operations.find(o => o.code === RESTOperationCode).href).toBe(ukisTMSRasterLayer.url);
+    expect(offering.operations?.length).toBeTruthy();
+    const operations = offering.operations as IOwsOperation[];
+    expect(operations.find(o => o.code === RESTOperationCode)?.href).toBe(ukisTMSRasterLayer.url);
   });
 
   it('should generate TMS Vector Offerings from a layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const offering = service.generateOfferingFromLayer(ukisTMSVectorLayer);
     expect(offering.code).toBe(tmsOffering);
-    expect(offering.operations.length).toBeTruthy();
-    expect(offering.operations.find(o => o.code === RESTOperationCode).href).toBe(ukisTMSVectorLayer.url);
+    expect(offering.operations?.length).toBeTruthy();
+    const operations = offering.operations as IOwsOperation[];
+    expect(operations.find(o => o.code === RESTOperationCode)?.href).toBe(ukisTMSVectorLayer.url);
     // TODO: get Style for VectorTileLayer
     // expect(offering.styles.find(s => s.content && s.content.type === 'OpenMapStyle')).toBe(ukisTMSVectorLayer.url);
   });
 
   it('should generate XYZ Offerings from a layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const offering = service.generateOfferingFromLayer(ukisXyzLayer);
     expect(offering.code).toBe(xyzOffering);
-    expect(offering.operations.length).toBeTruthy();
-    expect(offering.operations.find(o => o.code === RESTOperationCode).href).toBe(ukisXyzLayer.url);
+    expect(offering.operations?.length).toBeTruthy();
+    const operations = offering.operations as IOwsOperation[];
+    expect(operations.find(o => o.code === RESTOperationCode)?.href).toBe(ukisXyzLayer.url);
   });
 
 
   /** Resource  Types ----------------------------------  */
   it('should generate a Resource from a YXZ layer', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
     const resource = service.generateResourceFromLayer(ukisXyzLayer);
-    const subdomains = shardsExpand(resource.properties.shards);
+    const shards = resource.properties.shards as string;
+    const subdomains = shardsExpand(shards);
     expect(subdomains).toEqual(ukisXyzLayer.subdomains);
   });
 
 
   /** general ------------------------------------------  */
-  it('should properly restore a selection of layers from owc format created with #generateOwsContextFrom', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+  it('should properly restore a selection of layers from owc format created with #generateOwsContextFrom', async () => {
     const layersService: LayersService = TestBed.inject(LayersService);
     const osmLayer = new EocLitemap({
       visible: true,
-      legendImg: null
+      legendImg: undefined
     });
     layersService.addLayer(osmLayer, 'Baselayers');
-    layersService.getBaseLayers().subscribe(baselayers => {
-      const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);
-      service.getLayers(owc, targetProjection).subscribe((layers) => {
-        expect(layers.length).toBe(baselayers.length);
-        expect(layers.find(l => l.id === osmLayer.id).id).toBe(osmLayer.id);
-      });
-    });
-  }));
+    const baselayers = await firstValueFrom(layersService.getBaseLayers());
+    const owc = service.generateOwsContextFrom('someid', baselayers, [-190, -90, 190, 90]);
 
-  it('#generateOwcContextFrom should properly store and restore a geojson-layer', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+    const layers = await firstValueFrom(service.getLayers(owc, targetProjection));
+    expect(layers.length).toBe(baselayers.length);
+    expect(layers?.find(l => l.id === osmLayer.id)?.id).toBe(osmLayer.id);
+  });
 
+  it('#generateOwcContextFrom should properly store and restore a geojson-layer', async () => {
     // creating test-layer
     interface Props {
       'name': string;
@@ -998,30 +1012,27 @@ describe('OwcJsonService: writing data into owc', () => {
     // encoding and decoding
     const context = service.generateOwsContextFrom('testcontext', [geojsonLayer], [-190, -90, 190, 90]);
 
-    service.getLayers(context, targetProjection).subscribe(recoveredLayers => {
-      const recoveredLayer = recoveredLayers[0] as VectorLayer;
-      // testing
-      expect(recoveredLayer.id).toEqual(geojsonLayer.id);
-      expect(recoveredLayer.data).toEqual(geojsonLayer.data);
-      // expect(recoveredLayer.options).toEqual(geojsonLayer.options); // we dont encode style.
-    });
-  }));
+    const recoveredLayers = await firstValueFrom(service.getLayers(context, targetProjection));
+    const recoveredLayer = recoveredLayers[0] as VectorLayer;
+    // testing
+    expect(recoveredLayer.id).toEqual(geojsonLayer.id);
+    expect(recoveredLayer.data).toEqual(geojsonLayer.data);
+    // expect(recoveredLayer.options).toEqual(geojsonLayer.options); // we dont encode style.
 
-  it('#generateOwcContextFrom should work with all layers in test-contexts', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+  });
+
+  it('#generateOwcContextFrom should work with all layers in test-contexts', async () => {
     const allTestContexts = [barebonesContext, basicOgcOwsContext, eocOwsContext];
 
     for (const context of allTestContexts) {
-      service.getLayers(context, 'EPSG:4326').subscribe((layers) => {
-        const regeneratedContext = service.generateOwsContextFrom(context.id.toString(), layers);
-        expect(regeneratedContext.features.length).toBe(context.features.length);
-      });
+      const layers = await firstValueFrom(service.getLayers(context, 'EPSG:4326'));
+      const regeneratedContext = service.generateOwsContextFrom(context.id.toString(), layers);
+      expect(regeneratedContext.features.length).toBe(context.features.length);
     }
-  }));
+  });
 
 
-  it('should regenerated layers in same order', waitForAsync(() => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
+  it('should regenerated layers in same order', async () => {
     const allTestContexts = [basicOgcOwsContext, eocOwsContext];
 
     /** This is not possible!!! because groups are sorted together for the generation and we can not where the features have been in the original array*/
@@ -1038,50 +1049,48 @@ describe('OwcJsonService: writing data into owc', () => {
 
     /** we can only check if the order is like the created layers  */
     for (const context of allTestContexts) {
-      service.getLayers(context, 'EPSG:4326').subscribe((createdLayers) => {
+      const createdLayers = await firstValueFrom(service.getLayers(context, 'EPSG:4326'));
 
-        /**
-         * Create flat array from layers and groups
-         */
-        const createdLayerIds = createdLayers.reduce((p: string[], lg) => {
-          if (lg instanceof LayerGroup) {
-            return p.concat(lg.layers.map(l => `${lg.name}/${l.name}`));
-          } else {
-            return p.concat(`null/${lg.name}`);
-          }
-        }, []);
+      /**
+       * Create flat array from layers and groups
+       */
+      const createdLayerIds = createdLayers.reduce((p: string[], lg) => {
+        if (lg instanceof LayerGroup) {
+          return p.concat(lg.layers.map(l => `${lg.name}/${l.name}`));
+        } else {
+          return p.concat(`null/${lg.name}`);
+        }
+      }, []);
 
 
 
-        const regeneratedContext = service.generateOwsContextFrom(context.id.toString(), createdLayers);
-        /**
-         * Create array from features with groupName
-         */
-        const regeneratedLayerIds = regeneratedContext.features.reduce((p: string[], r) => {
-          const groupName = service['getLayerGroupFromFolder'](r);
-          if (groupName) {
-            return p.concat(`${groupName}/${r.properties.title}`);
-          } else {
-            return p.concat(`null/${r.properties.title}`);
-          }
-        }, []);
+      const regeneratedContext = service.generateOwsContextFrom(context.id.toString(), createdLayers);
+      /**
+       * Create array from features with groupName
+       */
+      const regeneratedLayerIds = regeneratedContext.features.reduce((p: string[], r) => {
+        const groupName = service['getLayerGroupFromFolder'](r);
+        if (groupName) {
+          return p.concat(`${groupName}/${r.properties.title}`);
+        } else {
+          return p.concat(`null/${r.properties.title}`);
+        }
+      }, []);
 
-        /**
-         * Because context drawing order is from top to bottom
-         * and layers in the Layerservice are added from bottom to top reverse ids
-         */
-        const len = createdLayerIds.length - 1;
-        regeneratedLayerIds.forEach((id, index) => {
-          const id2 = createdLayerIds[len - index];
-          expect(id).toBe(id2);
-        })
-      });
+      /**
+       * Because context drawing order is from top to bottom
+       * and layers in the Layerservice are added from bottom to top reverse ids
+       */
+      const len = createdLayerIds.length - 1;
+      regeneratedLayerIds.forEach((id, index) => {
+        const id2 = createdLayerIds[len - index];
+        expect(id).toBe(id2);
+      })
+
     }
-  }));
+  });
 
   it('#generateOwcContextFrom should honor (nested) layer-groups', () => {
-    const service: OwcJsonService = TestBed.inject(OwcJsonService);
-
     const group = new LayerGroup({
       id: 'parent',
       name: 'parent',

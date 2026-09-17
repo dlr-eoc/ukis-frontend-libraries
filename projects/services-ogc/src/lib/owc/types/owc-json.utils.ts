@@ -1,6 +1,6 @@
 /** This file contains functions (Type Guards) to test for types in owc-json.ts */
 
-import { Xyz_Offering, GeoJson_Offering, TMS_Offering, GeoJsonOffering, tmsOffering, xyzOffering } from './eoc-owc-json';
+import { Xyz_Offering, GeoJson_Offering, TMS_Offering, GeoJsonOffering, tmsOffering, xyzOffering, IEocOwsContext } from './eoc-owc-json';
 import { cswOffering, CSW_Offering, GeoTIFFOffering, GeoTIFF_Offering, GMLCOVOffering, GMLCOV_Offering, GMLJP2Offering, GMLJP2_Offering, gmlOffering, GML_Offering, IOwsAuthor, IOwsCategory, IOwsContent, IOwsContext, IOwsGenerator, IOwsCreatorDisplay, IOwsLinks, IOwsOffering, IOwsOperation, IOwsResource, IOwsResourceProperties, IOwsStyleSet, kmlOffering, KML_Offering, wcsOffering, WCS_Offering, wfsOffering, WFS_Offering, wmsOffering, WMS_Offering, wmtsOffering, WMTS_Offering } from './owc-json';
 
 
@@ -34,10 +34,10 @@ function trueForAll(list: any[], predicate: (o: any) => boolean): boolean {
   return true;
 }
 
-export function isIOwsContext(object: IOwsContext): object is IOwsContext {
+export function isIOwsContext(object: IOwsContext | IEocOwsContext): object is IOwsContext | IEocOwsContext {
   let ISCONTEXT_1_0;
   if (object?.properties?.links) {
-    ISCONTEXT_1_0 = object.properties.links.profiles.find(item => item.href === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
+    ISCONTEXT_1_0 = object.properties.links.profiles.find((item: any) => item.href === 'http://www.opengis.net/spec/owc-geojson/1.0/req/core');
   }
 
   if (!ISCONTEXT_1_0) {

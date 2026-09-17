@@ -76,14 +76,14 @@ export interface IOwsContext extends GeoJSON.FeatureCollection<GeoJSON.GeometryO
  * or a custom offering type defined in a profile or by an organisation.
  * http://www.owscontext.org/owc_user_guide/C0_userGuide.html#truethe-ows-context-document-structure
  */
-export interface IOwsResource extends GeoJSON.Feature {
+export interface IOwsResource extends Omit<GeoJSON.Feature, 'id' | 'properties'> {
   /**
    * Unambiguous reference to the identification of the Context resource (IRI)
    * String type that SHALL contain a URI value
    */
   id: string | number;
   properties: IOwsResourceProperties;
-  [k: string]: any;
+  [k: string]: unknown;
 }
 export interface IOwsResourceProperties {
   /** Title given to the Context resource */

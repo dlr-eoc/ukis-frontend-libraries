@@ -1,3 +1,4 @@
+import type { BBox, Geometry } from 'geojson';
 import {
   IOwsContext, IOwsResource, IOwsOffering, WFS_Offering, WCS_Offering, WPS_Offering,
   CSW_Offering, WMTS_Offering, GML_Offering, KML_Offering, GeoTIFF_Offering, GMLJP2_Offering,
@@ -6,14 +7,17 @@ import {
 
 
 import * as GeoJSON from 'geojson';
-export interface IEocOwsContext extends IOwsContext {
+export interface IEocOwsContext extends Omit<IOwsContext, 'features'> {
   features: IEocOwsResource[];
   /** @deprecated we do not use this currently */
   projections?: IEocOwsProjection[];
 }
 
-export interface IEocOwsResource extends IOwsResource {
+export interface IEocOwsResource extends Omit<IOwsResource, 'geometry' | 'id' | 'bbox'> {
   properties: IEocOwsResourceProperties;
+  geometry: Geometry | null;
+  id: string | number;
+  bbox?: BBox | undefined;
 }
 
 export interface IEocOwsResourceProperties extends IOwsResourceProperties {
@@ -43,6 +47,15 @@ export interface IEocOwsResourceProperties extends IOwsResourceProperties {
 type isoInterval = `${string}/${string}`;
 type intervalPeriod = `${isoInterval}/P${string}`;
 
+export interface IEocOwsTimeDimensionDisplay {
+  /** format how to display the values e.g. YYYY-MM-DD */
+  format?: string;
+  /** in case the app should display data at a different period than what is available on the server */
+  period?: string;
+  /** The value which should be shown/used as default */
+  default?: string;
+}
+
 export interface IEocOwsTimeDimension {
   name: 'time';
   /**
@@ -61,14 +74,7 @@ export interface IEocOwsTimeDimension {
    * time information.
    */
   units: 'ISO8601' | string;
-  display?: {
-    /** format how to display the values e.g. YYYY-MM-DD */
-    format?: string;
-    /** in case the app should display data at a different period than what is available on the server */
-    period?: string;
-    /** The value which should be shown/used as default */
-    default?: string;
-  };
+  display?: IEocOwsTimeDimensionDisplay;
 }
 
 /** 12-111r1_Best_Practices_for_WMS_with_Time_or_Elevation_dependent_data.pdf - https://portal.ogc.org/files/?artifact_id=56394 */
