@@ -432,14 +432,6 @@ export class RasterLayer extends Layer implements IRasterLayerOptions {
   }
 }
 
-/**
- * @deprecated The method should not be used because it can be false positive
- */
-export const isRasterLayer = (layer: Layer): layer is RasterLayer => {
-  return isRasterLayertype(layer.type);
-};
-
-
 export class VectorLayer extends Layer implements IVectorLayerOptions {
   override type: TVectorLayertype;
   /** data: geojson data */
@@ -454,15 +446,14 @@ export class VectorLayer extends Layer implements IVectorLayerOptions {
   cluster?: IVectorLayerOptions['cluster'];
   constructor(options: IVectorLayerOptions) {
     super(options);
+    this.type = options.type;
+    if (options.data !== undefined) this.data = options.data;
+    if (options.url !== undefined) this.url = options.url;
+    if (options.subdomains !== undefined) this.subdomains = options.subdomains;
+    if (options.options !== undefined) this.options = options.options;
+    if (options.cluster !== undefined) this.cluster = options.cluster;
   }
 }
-
-/**
- * @deprecated The method should not be used because it can be false positive
- */
-export const isVectorLayer = (layer: Layer): layer is VectorLayer => {
-  return isVectorLayertype(layer.type);
-};
 
 export class CustomLayer<T = any> extends Layer implements ICustomLayerOptions<T> {
   override type = CustomLayertype;
