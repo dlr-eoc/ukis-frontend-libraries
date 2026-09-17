@@ -23,7 +23,7 @@ enum EactiveTabs {
 type TactiveTabs = keyof typeof EactiveTabs;
 
 @Component({
-  selector: 'ukis-layerentry-group',
+  selector: 'ngx-ukis-layerentry-group',
   templateUrl: './layerentry-group.component.html',
   styleUrls: ['./layerentry-group.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,

@@ -10,7 +10,7 @@ import { LayerentryComponent } from '../layerentry/layerentry.component';
 import { ReversePipe } from '@dlr-eoc/ngx-ukis-utilities';
 
 @Component({
-    selector: 'ukis-base-layer-control',
+  selector: 'ngx-ukis-base-layer-control',
     templateUrl: './base-layer-control.component.html',
     styleUrls: ['./base-layer-control.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,

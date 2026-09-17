@@ -4,7 +4,7 @@ import { UserService } from '../user.service';
 
 
 @Component({
-    selector: 'ukis-user-details',
+  selector: 'ngx-ukis-user-details',
     templateUrl: './user-details.component.html',
     styleUrls: ['./user-details.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,

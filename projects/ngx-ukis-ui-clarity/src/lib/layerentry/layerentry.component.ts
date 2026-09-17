@@ -21,7 +21,7 @@ enum EactiveTabs {
 type TactiveTabs = keyof typeof EactiveTabs;
 
 @Component({
-  selector: 'ukis-layerentry',
+  selector: 'ngx-ukis-layerentry',
   templateUrl: './layerentry.component.html',
   styleUrls: ['./layerentry.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,

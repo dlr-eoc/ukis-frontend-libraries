@@ -128,12 +128,12 @@
         [cdkDropListData]="group.layers | itemsfilter: checkClassHide | reverse">
         @for (layer of group.layers | itemsfilter: checkClassHide | reverse; track layer) {
           <div class="sublayers" cdkDragLockAxis="y" cdkDrag [cdkDragData]="{id:layer.id}">
-            <ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
+            <ngx-ukis-layerentry [expanded]="openAllLayersProperties" [layersSvc]="layersSvc" [mapState]="mapState"
               [layer]="layer" [group]="group" (update)="layerUpdate($event, group)" [sorting]="groupLayersSort">
               <span class="move-item" cdkDragHandle>
                 {{layer.displayName || layer.name}}
               </span>
-            </ukis-layerentry>
+            </ngx-ukis-layerentry>
           </div>
         }
       </div>

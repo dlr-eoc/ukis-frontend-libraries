@@ -12,7 +12,7 @@ import { LayerentryComponent } from '../layerentry/layerentry.component';
 import { ReversePipe, ItemsFilterPipe } from '@dlr-eoc/ngx-ukis-utilities';
 
 @Component({
-    selector: 'ukis-layer-control',
+  selector: 'ngx-ukis-layer-control',
     templateUrl: './layer-control.component.html',
     styleUrls: ['./layer-control.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,

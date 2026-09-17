@@ -10,7 +10,7 @@ import { ClrIcon } from '@clr/angular';
 ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
 
 @Component({
-  selector: 'ukis-projection-switch',
+  selector: 'ngx-ukis-projection-switch',
   templateUrl: './projection-switch.component.html',
   styles: [],
   changeDetection: ChangeDetectionStrategy.Eager,

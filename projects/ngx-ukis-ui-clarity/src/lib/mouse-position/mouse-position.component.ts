@@ -13,7 +13,7 @@ interface ISelectProjection {
 }
 
 @Component({
-  selector: 'ukis-mouse-position',
+  selector: 'ngx-ukis-mouse-position',
   templateUrl: './mouse-position.component.html',
   styleUrls: ['./mouse-position.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,

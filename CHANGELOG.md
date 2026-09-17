@@ -1,5 +1,6 @@
 ### Breaking Changes
  - Update angular from `^21.2.13` to `^22.1.4`
+ - Rename all prefix of angular components with `ngx-ukis` instead of `ukis` in the project: `@dlr-eoc/ngx-ukis-ui-clarity`
  - Remove deprecated functions `isVectorLayer`, `isRasterLayer` `isVectorLayertype`, `isRasterLayertype` from `@dlr-eoc/services-layers`.
 
 ### Features

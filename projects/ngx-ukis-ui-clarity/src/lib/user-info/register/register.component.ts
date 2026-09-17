@@ -12,7 +12,7 @@ interface IusrInfoForm {
   email: FormControl<string>;
 }
 @Component({
-    selector: 'ukis-register',
+  selector: 'ngx-ukis-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,

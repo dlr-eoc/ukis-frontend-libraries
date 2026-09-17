@@ -10,7 +10,7 @@ interface IusrInfoForm {
   remember: FormControl<boolean>;
 }
 @Component({
-    selector: 'ukis-login',
+  selector: 'ngx-ukis-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
