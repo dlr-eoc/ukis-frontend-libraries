@@ -14,6 +14,7 @@ import { HostListener } from '@angular/core';
  */
 @Component({
   imports: [],
+  selector: 'ngx-ukis-map-three',
   templateUrl: './map-three.component.html',
   styleUrl: './map-three.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -21,6 +22,7 @@ import { HostListener } from '@angular/core';
 export class MapThreeComponent implements OnInit, AfterViewInit {
 
   @Input('mapOlSvc') mapOlSvc!: MapOlService;
+  // use port http://localhost:9876/ for cors of 2358_Phobos_1_1000.glb
   @Input('modelFilePath') modelFilePath = 'https://solarsystem.nasa.gov/system/resources/gltf_files/2358_Phobos_1_1000.glb'; // '@dlr-eoc/shared-assets/image/Phobos_1_1000.glb';
   @Input('modelName') modelName = 'phobos';
   @ViewChild('threeCanvas') private threeCanvas!: ElementRef;

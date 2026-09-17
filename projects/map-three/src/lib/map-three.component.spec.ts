@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MapThreeComponent } from './map-three.component';
+import { MapOlService } from '@dlr-eoc/map-ol';
 
 describe('MapThree', () => {
   let component: MapThreeComponent;
   let fixture: ComponentFixture<MapThreeComponent>;
+  let mapOlSvc: MapOlService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -11,7 +13,10 @@ describe('MapThree', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(MapThreeComponent);
+    mapOlSvc = TestBed.inject(MapOlService);
     component = fixture.componentInstance;
+
+    component.mapOlSvc = mapOlSvc;
     await fixture.whenStable();
   });
 
