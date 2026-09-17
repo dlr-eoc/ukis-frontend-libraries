@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'reverse',
-    pure: false
+  name: 'reverse',
+  pure: false
 })
-export class ReversePipe implements PipeTransform {
-  transform(input: any): any {
+export class ReversePipe<T> implements PipeTransform {
+  transform(input: string | T[]): T[] | string {
     if (typeof input === 'string') {
       return input
         .split('')

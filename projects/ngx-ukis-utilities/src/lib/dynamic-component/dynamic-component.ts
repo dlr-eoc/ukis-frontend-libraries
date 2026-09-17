@@ -89,7 +89,7 @@ export class DynamicComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.dynamicComponent) {
+    if (changes['dynamicComponent']) {
       if (Array.isArray(this.subs)) {
         this.subs.map(s => s.unsubscribe());
       }

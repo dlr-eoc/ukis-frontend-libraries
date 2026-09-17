@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DynamicComponent } from './dynamic-component';
 
 describe('DynamicComponent', () => {
@@ -8,13 +7,12 @@ describe('DynamicComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DynamicComponent]
-    })
-    .compileComponents();
+      imports: [DynamicComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DynamicComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
