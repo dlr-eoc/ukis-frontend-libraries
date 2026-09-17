@@ -1,9 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import md5 from 'md5';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class UtilStoreService {
   private runtimeStore: any;
 
@@ -11,8 +9,10 @@ export class UtilStoreService {
     this.runtimeStore = {};
   }
 
-  private _store(type: 'localStorage' | 'sessionStorage', key: string, value?: any) {
-    let lsSupport = false, data, storrage;
+  private _store(type: 'localStorage' | 'sessionStorage', key: string, value?: string | null | boolean | object) {
+    let lsSupport = false;
+    let data: null | string;
+    let storrage: Storage;
 
     /* if (!value) {
       console.log(type, key);
@@ -38,15 +38,19 @@ export class UtilStoreService {
     // If value is detected, set new or modify store
     if (typeof value !== 'undefined' && value !== null) {
       // Convert object values to JSON
-      if (typeof value === 'object') {
+      if (typeof value === 'object' || typeof value === 'boolean') {
         value = JSON.stringify(value);
       }
+      
       // Set the store
-      if (lsSupport) { // Native support
-        localStorage.setItem(key, value);
-      } else { // Use Cookie
-        this.createCookie(key, value, 30);
+      if (typeof value === 'string') {
+        if (lsSupport) { // Native support
+          localStorage.setItem(key, value);
+        } else { // Use Cookie
+          this.createCookie(key, value, 30);
+        }
       }
+      return value;
     }
 
     // No value supplied, return value
@@ -60,13 +64,14 @@ export class UtilStoreService {
 
       // Try to parse JSON...
       try {
-        data = JSON.parse(data);
+        if (data) {
+          data = JSON.parse(data);
+        }
       } catch (e) {
         data = data;
       }
       // console.log(key, data);
-      return data;
-
+      return data as never as Record<string, any>;
     }
 
     // Null specified, remove store
@@ -76,14 +81,17 @@ export class UtilStoreService {
       } else { // Use cookie
         this.createCookie(key, '', -1);
       }
+      return null;
+    } else {
+      return null;
     }
   }
 
-  public local(key: string, value?: any) {
+  public local(key: string, value?: string | null | boolean | object) {
     return this._store('localStorage', key, value);
   }
 
-  public session(key: string, value?: any) {
+  public session(key: string, value?: string | null | boolean | object) {
     return this._store('sessionStorage', key, value);
   }
 
@@ -180,7 +188,7 @@ export class UtilStoreService {
    * @param  value     Contents of the store
    * @param  exp       Expiration - creation defaults to 30 days
    */
-  public createCookie(key, value, exp = 30) {
+  public createCookie(key: string, value: string | null, exp = 30) {
     const date = new Date();
     date.setTime(date.getTime() + (exp * 24 * 60 * 60 * 1000));
     const expires = '; expires=' + date.toUTCString();
@@ -191,7 +199,7 @@ export class UtilStoreService {
   }
 
 
-  public removeCookie(key) {
+  public removeCookie(key: string) {
     this.createCookie(key, null, -1);
   }
 
@@ -199,7 +207,7 @@ export class UtilStoreService {
    * Returns contents of cookie
    * @param  key       The key or identifier for the store
    */
-  public readCookie(key) {
+  public readCookie(key: string) {
     const nameEQ = key + '=';
     const ca = document.cookie.split(';');
     for (let i = 0, max = ca.length; i < max; i++) {

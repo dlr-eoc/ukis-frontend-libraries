@@ -9,8 +9,11 @@ describe('UtilStoreService', () => {
   let service: UtilStoreService;
   beforeEach(() => {
     TestBed.configureTestingModule({});
+    service = TestBed.inject(UtilStoreService);
+  });
 
-    service = TestBed.inject(UtilStoreService); // new UtilStoreService();
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
   it('should have a runtime store', () => {
@@ -19,6 +22,12 @@ describe('UtilStoreService', () => {
 
   it('should have a localStorage store', () => {
     expect(service.local).toBeTruthy();
+  });
+
+  it('shouldset/get key, value in localStorage', () => {
+    const value = { name: 'Sepp' };
+    service.local('person', value);
+    expect(service.local('person')).toEqual(value);
   });
 
   it('should have a sessionStorage store', () => {
