@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MapOlService } from '@dlr-eoc/map-ol';
 import { MapThreeService } from './map-three.service';
-import { Mesh, BufferGeometry } from 'three';
+import { Mesh } from 'three';
 import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { HostListener } from '@angular/core';
 
@@ -12,23 +12,21 @@ import { HostListener } from '@angular/core';
  * That map is required, because this map forms the texture of the displayed model.
  * If you only want to show the threejs-map, create the ol-map anyway and set its visibility to `hidden`.
  */
-
 @Component({
-    selector: 'ukis-map-three',
-    templateUrl: './map-three.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    styleUrls: ['./map-three.component.scss']
+  imports: [],
+  templateUrl: './map-three.component.html',
+  styleUrl: './map-three.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class MapThreeComponent implements OnInit, AfterViewInit {
 
-  @Input('mapOlSvc') mapOlSvc: MapOlService;
+  @Input('mapOlSvc') mapOlSvc!: MapOlService;
   @Input('modelFilePath') modelFilePath = 'https://solarsystem.nasa.gov/system/resources/gltf_files/2358_Phobos_1_1000.glb'; // '@dlr-eoc/shared-assets/image/Phobos_1_1000.glb';
   @Input('modelName') modelName = 'phobos';
-  @ViewChild('threeCanvas') private threeCanvas: ElementRef;
+  @ViewChild('threeCanvas') private threeCanvas!: ElementRef;
 
-  constructor(
-    private mapThreeSvc: MapThreeService
-  ) { }
+  private mapThreeSvc = inject(MapThreeService);
+  constructor() { }
 
   ngOnInit(): void {}
 
@@ -51,7 +49,7 @@ export class MapThreeComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(event: Event) {
     this.mapThreeSvc.onResize(event);
   }
 }

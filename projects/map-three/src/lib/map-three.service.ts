@@ -1,4 +1,4 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Service, NgZone, OnDestroy, inject } from '@angular/core';
 import { Scene, PerspectiveCamera, WebGLRenderer, Mesh, CubeTextureLoader } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { mapToSingleCanvas, renderLoop } from '@dlr-eoc/utils-maps';
@@ -8,20 +8,17 @@ import { Subscription } from 'rxjs';
 import { Map } from 'ol';
 import RenderEvent from 'ol/render/Event';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class MapThreeService implements OnDestroy {
 
   private subs: Subscription[] = [];
   private needsResize = false;
   /** This default only works if your Folder Structure contains the following path */
   public skyTexturePath = 'assets/image/zpos.png';
-
-  constructor(
-    private mapStateSvc: MapStateService,
-    private zone: NgZone
-  ) { }
+  
+  private mapStateSvc = inject(MapStateService);
+  private zone = inject(NgZone);
+  constructor() { }
 
   public initScene(
     threeCanvas: HTMLCanvasElement,
@@ -82,14 +79,15 @@ export class MapThreeService implements OnDestroy {
      */
     map.on('postrender', (evt: RenderEvent) => {
       const extent = map.getView().calculateExtent(map.getSize());
-      const [lon, lat] = map.getView().getCenter();
+      const [lon, lat] = map.getView().getCenter() || [];
       const zoom = map.getView().getZoom();
 
       model.perspectiveChanged(extent as [number, number, number, number]);
-
-      const [x, y, z] = converter.lonLatZoom2XYZ(lon, lat, zoom);
-      camera.position.set(x, y, z);
-      camera.lookAt(0, 0, 0);
+      if(lon && lat && zoom){
+        const [x, y, z] = converter.lonLatZoom2XYZ(lon, lat, zoom);
+        camera.position.set(x, y, z);
+        camera.lookAt(0, 0, 0);
+      }
     });
 
 
