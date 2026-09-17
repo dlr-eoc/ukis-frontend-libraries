@@ -1,9 +1,9 @@
 <main class="content-area map-view">
     <div style="height: 49.5%; width: 100%;">
-        <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
+        <ngx-ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ngx-ukis-map-ol>
     </div>
     <div style="height: 50%; width: 100%;">
-        <ukis-map-three [mapOlSvc]="mapOlSvc" id="threeMap"></ukis-map-three>
+        <ngx-ukis-map-three [mapOlSvc]="mapOlSvc" id="threeMap"></ngx-ukis-map-three>
     </div>
 </main>
 
@@ -41,7 +41,7 @@
                     The controls of map and 3d-object are synced. Use the mouse to pan around in either and watch both displays change.
                 </span>
             </div>
-            <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
+            <ngx-ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-layer-control>
         </clr-vertical-nav-group-children>
     </clr-vertical-nav-group>
 </clr-vertical-nav>

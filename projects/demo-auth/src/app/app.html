@@ -7,7 +7,7 @@
   }
   <ukis-cookie-alert [alert-text]="'my alert text'" [privacy-link]="'link to privacy'"></ukis-cookie-alert>
 
-  <ukis-header [ukis-title]="title">
+  <ngx-ukis-header [ukis-title]="title">
     @if (!userService.isloggedIn()) {
       <a routerLink="/login" routerLinkActive="active"
       class="nav-link nav-text header-nav-el">Login</a>
@@ -18,6 +18,6 @@
     }
     <a routerLink="/map" routerLinkActive="active" class="nav-link nav-text header-nav-el">Map</a>
 
-  </ukis-header>
+  </ngx-ukis-header>
   <router-outlet></router-outlet>
 </clr-main-container>

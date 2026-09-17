@@ -1,7 +1,7 @@
 <!-- for map  -->
 <main class="content-area map-view">
   @if (is2dMap) {
-    <ukis-map-ol [layersSvc]="twoDlayerSvc" [mapState]="mapStateSvc"></ukis-map-ol>
+    <ngx-ukis-map-ol [layersSvc]="twoDlayerSvc" [mapState]="mapStateSvc"></ngx-ukis-map-ol>
   }
   @if (!is2dMap) {
     <ukis-map-cesium [twoDlayersSvc]="twoDlayerSvc" [threeDlayersSvc]="threeDlayerSvc" [mapState]="mapStateSvc"
@@ -17,7 +17,7 @@
       <cds-icon shape="block" clrVerticalNavIcon title="tilelayers"></cds-icon>
       3D Tilelayers
       <clr-vertical-nav-group-children class="padding title-ellipsis">
-        <ukis-layer-control [layersSvc]="threeDlayerSvc" [layersSort]="false" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
+        <ngx-ukis-layer-control [layersSvc]="threeDlayerSvc" [layersSort]="false" [mapStateSvc]="mapStateSvc"></ngx-ukis-layer-control>
       </clr-vertical-nav-group-children>
     </clr-vertical-nav-group>
   }
@@ -27,7 +27,7 @@
       <cds-icon shape="world" title="terain" clrVerticalNavIcon></cds-icon>
       3D Terrain
       <clr-vertical-nav-group-children class="padding title-ellipsis">
-        <ukis-base-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
+        <ngx-ukis-base-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-base-layer-control>
       </clr-vertical-nav-group-children>
     </clr-vertical-nav-group>
   }
@@ -36,8 +36,8 @@
     <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
     Overlays
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc" [layersSort]="false" [layerfilter]="'Overlays'">
-      </ukis-layer-control>
+      <ngx-ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc" [layersSort]="false" [layerfilter]="'Overlays'">
+      </ngx-ukis-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 
@@ -45,7 +45,7 @@
     <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
     Layers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
+      <ngx-ukis-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 
@@ -53,7 +53,7 @@
     <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
     Baselayers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-base-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
+      <ngx-ukis-base-layer-control [layersSvc]="twoDlayerSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-base-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 
