@@ -455,11 +455,11 @@ describe('MaplibreHelpers', () => {
         map.addLayer(waterLayer);
 
         const mapLayer = map.getLayer(waterLayer.id);
-        expect(mapLayer.visibility).toBe('visible');
+        expect(mapLayer?.visibility).toBe('visible');
         setVisibility(map, waterLayer.id, false);
 
         const newMapLayer = map.getLayer(waterLayer.id);
-        expect(newMapLayer.visibility).toBe('none');
+        expect(newMapLayer?.visibility).toBe('none');
     });
 
 
@@ -579,3 +579,4 @@ describe('MaplibreHelpers', () => {
     });
 
 });
+

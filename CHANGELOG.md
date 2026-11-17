@@ -14,6 +14,9 @@
 
 * **@dlr-eoc/map-cesium**
  - Selector change to 'ngx-ukis-map-cesium'
+
+* **@dlr-eoc/map-maplibre**
+ - Selector change to 'ngx-ukis-map-maplibre'
 ### Features
 * **@dlr-eoc/utils-ogc**
  - Add `WmtsClient` based on `ol/format/WMTSCapabilities`.

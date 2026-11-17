@@ -4,10 +4,10 @@ import {
     createGetMapUrl, createGetTileUrl, createBaseLayer, updateStyleLayerProperties
 } from './maplibre-layers.helpers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
-import { RasterSourceSpecification, StyleSpecification, StyleLayer, Map as glMap } from 'maplibre-gl';
-import { UKIS_METADATA, getOpacityPaintProperty, addUkisLayerMetadata } from './maplibre.helpers';
+import { RasterSourceSpecification, StyleSpecification, StyleLayer, Map as glMap, GeoJSONFeature } from 'maplibre-gl';
+import { UKIS_METADATA, getOpacityPaintProperty, addUkisLayerMetadata, IukisMetadata } from './maplibre.helpers';
 import { TestBed } from '@angular/core/testing';
-import { MapMaplibreService } from './map-maplibre.service';
+import { MapMaplibreService } from './map-maplibre-svc';
 
 const createMapTarget = (size: number[]) => {
     const container = document.createElement('div');
@@ -190,7 +190,7 @@ const createLayers = () => {
         name: 'GeoJSON Vector Layer',
         attribution: `© DLR GeoJSON`,
         type: 'geojson',
-        data: testFeatureCollection,
+        data: testFeatureCollection as never,
         visible: false
     });
 }
@@ -255,7 +255,8 @@ describe('MaplibreLayerHelpers', () => {
         // There is only one layer for each geometry type of the geo features. If Polygon are in the feature also a layer for lins is created
         const ls = createGeojsonLayer(ukisGeoJson);
 
-        const geomTypes = ukisGeoJson.data.features.map(i => i.geometry.type);
+        const features = ukisGeoJson.data.features as any[];
+        const geomTypes = features.map(i => i.geometry.type);
         const uniqueGeomTypes = geomTypes.filter((t, i) => geomTypes.findIndex(t2 => t2 === t) === i);
 
         const geoJsonLayers = ls.layers.map(l => l.id);
@@ -287,8 +288,9 @@ describe('MaplibreLayerHelpers', () => {
         const layers = styleSpec.layers;
         layers.forEach(ls => {
             const metadata = addUkisLayerMetadata(ukisCustom);
-            expect(ls.metadata[UKIS_METADATA.filtertype]).toBe(metadata[UKIS_METADATA.filtertype]);
-            expect(ls.metadata[UKIS_METADATA.layerID]).toBe(metadata[UKIS_METADATA.layerID]);
+            const lsMetadata = ls.metadata as IukisMetadata;
+            expect(lsMetadata[UKIS_METADATA.filtertype]).toBe(metadata[UKIS_METADATA.filtertype]);
+            expect(lsMetadata[UKIS_METADATA.layerID]).toBe(metadata[UKIS_METADATA.layerID]);
             // id is created by `styleLayer.id:ukisLayer.id`
             const partID = ls.id.split(':');
             const partIDUkisLayer = partID[1];
@@ -299,7 +301,7 @@ describe('MaplibreLayerHelpers', () => {
             const layerFromOriginalObjet = ukisCustom.custom_layer.layers[layerIndexOriginalObjet];
             expect(ls.id).not.toBe(layerFromOriginalObjet.id);
 
-            expect(ls.layout.visibility).toBe((ukisCustom.visible) ? 'visible' : 'none');
+            expect(ls.layout?.visibility).toBe((ukisCustom.visible) ? 'visible' : 'none');
 
 
             const opacityPaintProperty = getOpacityPaintProperty(ls.type);
@@ -320,17 +322,17 @@ describe('MaplibreLayerHelpers', () => {
         const styleSpec = createCustomLayer(ukisCustom);
 
         const layer_1 = styleSpec.layers[1];
-        expect(layer_1.metadata[UKIS_METADATA.ignoreVisibility]).toBe(true);
-        expect(layer_1.layout.visibility).toBe(customLayer_1.layout.visibility);
+        expect((layer_1.metadata as any)[UKIS_METADATA.ignoreVisibility]).toBe(true);
+        expect(layer_1.layout?.visibility).toBe(customLayer_1.layout?.visibility);
 
         const opacityPaintProperty = getOpacityPaintProperty(layer_1.type);
         if (opacityPaintProperty) {
-            expect(layer_1.paint[opacityPaintProperty]).toBe(customLayer_1.paint[opacityPaintProperty]);
+            expect((layer_1.paint as any)[opacityPaintProperty]).toBe((customLayer_1.paint as any)[opacityPaintProperty]);
         }
 
         // remove ignore-visibility
-        delete customLayer_1.metadata[UKIS_METADATA.ignoreVisibility];
-        delete customLayer_1.metadata[UKIS_METADATA.ignoreOpacity];
+        delete (customLayer_1.metadata as any)[UKIS_METADATA.ignoreVisibility];
+        delete (customLayer_1.metadata as any)[UKIS_METADATA.ignoreOpacity];
     });
 
 
@@ -376,22 +378,26 @@ describe('MaplibreLayerHelpers - use mapservice', () => {
         const waterId = 'water';
         const waterIdStyledObj = `${waterId}:${ukisCustom.id}`;
         service.setUkisLayers([ukisCustom], filtertype, map);
-        const layerBeforUpdate = service.getLayersForId(ukisCustom.id, filtertype, map).styleLayers
-        const waterLayerBefor = layerBeforUpdate.find(l => l.id === waterIdStyledObj);
+        const layerBeforUpdate = service.getLayersForId(ukisCustom.id, filtertype, map)?.styleLayers
+        const waterLayerBefor = layerBeforUpdate?.find(l => l.id === waterIdStyledObj);
 
         ukisCustom.visible = true;
         const paintProp = 'fill-color'
         const newColor = 'hsl(200, 100%, 30%)';
         // TODO: service.setUkisLayers changes the id on the original object????
         const waterLayer = ukisCustom.custom_layer.layers.find(l => l.id === waterId);
-        waterLayer.paint[paintProp] = newColor;
-        updateStyleLayerProperties(map, waterLayerBefor as StyleLayer, ukisCustom)
+        expect(waterLayer?.paint).toBeTruthy()
+        if(waterLayer?.paint){
+          (waterLayer.paint as any)[paintProp] = newColor;
+          updateStyleLayerProperties(map, waterLayerBefor as StyleLayer, ukisCustom)
+        }
+        
 
-        const layerAfterUpdate = service.getLayersForId(ukisCustom.id, filtertype, map).styleLayers;
-        const waterLayerAfter = layerAfterUpdate.find(l => l.id === waterIdStyledObj);
+        const layerAfterUpdate = service.getLayersForId(ukisCustom.id, filtertype, map)?.styleLayers;
+        const waterLayerAfter = layerAfterUpdate?.find(l => l.id === waterIdStyledObj);
 
-        expect(waterLayerAfter.visibility).toBe("visible");
-        expect(waterLayerAfter.getPaintProperty(paintProp)).toBe(newColor);
+        expect(waterLayerAfter?.visibility).toBe("visible");
+        expect(waterLayerAfter?.getPaintProperty(paintProp)).toBe(newColor);
     });
 
 });

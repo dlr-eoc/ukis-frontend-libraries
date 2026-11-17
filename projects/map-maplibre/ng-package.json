@@ -5,7 +5,6 @@
     "entryFile": "src/public-api.ts"
   },
   "allowedNonPeerDependencies": [
-    "tslib",
     "maplibre-gl",
     "@mapbox/togeojson",
     "@dlr-eoc/services-layers",

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MapMaplibreService } from './map-maplibre.service';
+import { MapMaplibreService } from './map-maplibre-svc';
 import { StyleSpecification, Map as glMap } from 'maplibre-gl';
 import { CustomLayer, RasterLayer, VectorLayer, WmsLayer, Layer as ukisLayer } from '@dlr-eoc/services-layers';
 import testFeatureCollection from '@dlr-eoc/shared-assets/geojson/testFeatureCollection.json';
@@ -206,7 +206,7 @@ describe('MapMaplibreService', () => {
     const filtertype = 'Layers';
     service.setUkisLayers(layers, 'Layers', map);
     const mapStyle = map.getStyle();
-    expect(mapStyle.metadata[`ukis:${filtertype}IDs`]).toEqual(layers.map(b => b.id));
+    expect((mapStyle.metadata as any)[`ukis:${filtertype}IDs`]).toEqual(layers.map(b => b.id));
   });
 
   it('should get all layers from a Type', () => {
@@ -229,7 +229,7 @@ describe('MapMaplibreService', () => {
     service.setUkisLayers(layers, 'Layers', map);
 
     const addedLayers = service.getLayersForId(ukisCustom.id, filtertype, map);
-    expect(addedLayers.styleLayers.length).toEqual(ukisCustom.custom_layer.layers.length);
+    expect(addedLayers?.styleLayers.length).toEqual(ukisCustom.custom_layer.layers.length);
   });
 
 
@@ -238,15 +238,15 @@ describe('MapMaplibreService', () => {
     const filtertype = 'Layers';
     service.setUkisLayers(layers, filtertype, map);
 
-    const layerBeforUpdate = service.getLayersForId(ukisGeoJson.id, filtertype, map).styleLayers;
+    const layerBeforUpdate = service.getLayersForId(ukisGeoJson.id, filtertype, map)?.styleLayers;
 
     ukisGeoJson.visible = true;
-    layerBeforUpdate.forEach(l => {
+    layerBeforUpdate?.forEach(l => {
       service.updateMlLayer(l as any, ukisGeoJson, map);
     });
 
-    const layerAfterUpdate = service.getLayersForId(ukisGeoJson.id, filtertype, map).styleLayers;
-    layerAfterUpdate.forEach(l => {
+    const layerAfterUpdate = service.getLayersForId(ukisGeoJson.id, filtertype, map)?.styleLayers;
+    layerAfterUpdate?.forEach(l => {
       expect(l.visibility).toBe("visible");
     });
   });
@@ -256,15 +256,15 @@ describe('MapMaplibreService', () => {
     const filtertype = 'Layers';
     service.setUkisLayers(layers, filtertype, map);
 
-    const layerBeforUpdate = service.getLayersForId(ukisGeoJson.id, filtertype, map).styleLayers;
-    layerBeforUpdate.forEach(l => {
+    const layerBeforUpdate = service.getLayersForId(ukisGeoJson.id, filtertype, map)?.styleLayers;
+    layerBeforUpdate?.forEach(l => {
       expect(l.visibility).toBe("none");
     });
 
     ukisGeoJson.visible = true;
     service.setUkisLayers(layers, 'Layers', map);
-    const layerAfterUpdate = service.getLayersForId(ukisGeoJson.id, filtertype, map).styleLayers;
-    layerAfterUpdate.forEach(l => {
+    const layerAfterUpdate = service.getLayersForId(ukisGeoJson.id, filtertype, map)?.styleLayers;
+    layerAfterUpdate?.forEach(l => {
       expect(l.visibility).toBe("visible");
     });
   });

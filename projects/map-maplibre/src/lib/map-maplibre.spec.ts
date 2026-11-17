@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MapMaplibreComponent } from './map-maplibre.component';
-import { MapMaplibreService } from './map-maplibre.service';
-import { MapStateService } from '@dlr-eoc/services-map-state';
-import { LayersService } from '@dlr-eoc/services-layers';
-import { Map } from 'maplibre-gl';
-import { EocBasemapTile, OsmTileLayer, EocBaseoverlayTile } from '@dlr-eoc/base-layers-raster';
-import { getRotation } from './maplibre.helpers';
+import { MapMaplibreComponent } from "./map-maplibre";
+import { MapMaplibreService } from "./map-maplibre-svc";
+import { MapStateService } from "@dlr-eoc/services-map-state";
+import { LayersService } from "@dlr-eoc/services-layers";
+import { Map } from "maplibre-gl";
+import { EocBasemapTile, OsmTileLayer, EocBaseoverlayTile } from "@dlr-eoc/base-layers-raster";
+import { getRotation } from "./maplibre.helpers";
 
 
 function addSomeLayers(component: MapMaplibreComponent, mapSvc: MapMaplibreService) {
@@ -29,12 +29,23 @@ function addSomeLayers(component: MapMaplibreComponent, mapSvc: MapMaplibreServi
   };
 }
 
+function waitForMapLoad(map: Map): Promise<void> {
+  if (map.loaded()) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve, reject) => {
+    map.once("load", () => resolve());
+    map.once("error", event => reject(event.error ?? event));
+  });
+}
+
 /**
  *  Unfortunately running tests in watch with edit does not work
  *
  * -> Async function did not complete within 5000ms
  */
-describe('MapMaplibreComponent', () => {
+describe("MapMaplibreComponent", () => {
   let component: MapMaplibreComponent;
   let fixture: ComponentFixture<MapMaplibreComponent>;
   let mapSvc: MapMaplibreService;
@@ -42,59 +53,65 @@ describe('MapMaplibreComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [MapMaplibreComponent],
-    providers: [
+      imports: [MapMaplibreComponent],
+      providers: [
         MapMaplibreService,
         { provide: LayersService, useClass: LayersService },
-        { provide: MapStateService, useClass: MapStateService }
-    ]
-}).compileComponents();
+        { provide: MapStateService, useClass: MapStateService },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MapMaplibreComponent);
     component = fixture.componentInstance;
     component.layersSvc = new LayersService();
     component.mapStateSvc = new MapStateService();
     mapSvc = TestBed.inject(MapMaplibreService);
+
+    // Use it to trigger lifecycle hooks and update the template. The first call typically runs ngOnInit() and renders the component.
     fixture.detectChanges();
+
     component.map._container.style.height = `${mapSize[1]}px`;
     component.map._container.style.width = `${mapSize[0]}px`;
     component.map.resize();
     fixture.detectChanges();
 
     // https://github.com/maplibre/maplibre-gl-js/discussions/2193
-    await new Promise((resolve, reject) => {
-      // idle
-      component.map.once('load', (evt) => {
-        resolve(evt);
-      });
-    });
+    await waitForMapLoad(component.map);
+
+    // Use it when the component has asynchronous work that Angular tracks—such as certain promises, timers, or scheduled tasks—and you need to wait for that work to settle.
+    await fixture.whenStable();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a map and the map should be the same as from the mapSvc', () => {
+  it("should have a map and the map should be the same as from the mapSvc", () => {
     expect(component.map instanceof Map).toBeTruthy();
-    expect(mapSvc.map.getValue()._mapId).toBe(component.map._mapId);
+    expect(mapSvc.map.getValue()?._mapId).toBe(component.map._mapId);
   });
 
-  it('should set mapstate rotation', () => {
+  it("should set mapstate rotation", () => {
     //set rotation to 90°
     component.mapStateSvc.setRotation(90);
     expect(getRotation(component.map)).toEqual(90);
   });
 
-  it('should set mapstate view angle', () => {
+  it("should set mapstate view angle", () => {
     //set view angle to 45°
     component.mapStateSvc.setViewAngle(45);
     expect(component.map.getPitch()).toEqual(45);
   });
 
-  it('should add/update Layers to the style', () => {
+  it("should add/update Layers to the style", () => {
     const { layers } = addSomeLayers(component, mapSvc);
     const mapStyle = component.map.getStyle();
+
+    fixture.detectChanges();
+
     expect(mapStyle.layers.length).toBe(layers.length);
-    expect(mapStyle.metadata[`ukis:LayersIDs`]).toEqual(layers.map(l => l.id));
+    expect((mapStyle.metadata as any)[`ukis:LayersIDs`]).toEqual(
+      layers.map((l) => l.id),
+    );
   });
 });

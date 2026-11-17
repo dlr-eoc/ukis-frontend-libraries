@@ -192,6 +192,8 @@ export function getOpacity(map: glMap, layerOrId: string | StyleLayer) {
     }
     if (mllayer) {
         return styleLayerGetOpacity(mllayer);
+    }else{
+        return undefined;
     }
 }
 

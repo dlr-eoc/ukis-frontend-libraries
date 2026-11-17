@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import {
   Layer as ukisLayer, TFiltertypesUncap, TFiltertypes,
 } from '@dlr-eoc/services-layers';
@@ -10,9 +10,7 @@ import { WebMercator, WGS84 } from '@dlr-eoc/services-map-state';
 
 type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class MapMaplibreService {
 
   readonly FILTER_TYPE_KEY = 'filtertype' as const;
@@ -95,7 +93,7 @@ export class MapMaplibreService {
       const newTempLayer: { filtertype: Tgroupfiltertype, layers: (LayerSourceSpecification | StyleSpecification)[] } = {
         filtertype: lowerType, layers: tempLayers
       };
-      map.style.stylesheet.metadata[`ukis:${filtertype}IDs`] = layers.map(l => l.id);
+      (map.style.stylesheet.metadata as any)[`ukis:${filtertype}IDs`] = layers.map(l => l.id);
       return newTempLayer;
     } else {
       return null;
@@ -112,7 +110,7 @@ export class MapMaplibreService {
    */
   public getLayers(filtertype: Tgroupfiltertype, map: glMap) {
     const style = map.getStyle();
-    const layerSpecifications = style.layers.filter(l => l.metadata[UKIS_METADATA.filtertype] === filtertype);
+    const layerSpecifications = style.layers.filter(l => (l.metadata as any)[UKIS_METADATA.filtertype] === filtertype);
     const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id)) as StyleLayer[]; //Temp fix of : Property ... of exported class expression may not be private or protected
 
     return {
@@ -131,7 +129,7 @@ export class MapMaplibreService {
    */
   public getLayersForId(id: string, filtertype: Tgroupfiltertype, map: glMap) {
     const alllayers = this.getLayers(filtertype, map);
-    const layerSpecifications = alllayers.layerSpecifications.filter(l => l.metadata[UKIS_METADATA.layerID] === id);
+    const layerSpecifications = alllayers.layerSpecifications.filter(l => (l.metadata as any)[UKIS_METADATA.layerID] === id);
     if (layerSpecifications.length) {
       const styleLayers = layerSpecifications.map(ls => map.getLayer(ls.id)) as StyleLayer[]; //Temp fix of : Property ... of exported class expression may not be private or protected
       return {

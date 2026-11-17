@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, StyleLayer, GeoJSONSource, Evented, addSourceType } from 'maplibre-gl';
 import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, changeOrderOfLayers, setRotation, setPitch, getRotation, getUkisLayerMetadata, UKIS_METADATA } from './maplibre.helpers';
 
@@ -8,7 +8,7 @@ import { LayersService, TFiltertypes, TFiltertypesUncap, Layer as ukisLayer } fr
 
 import { Subject, Subscription } from 'rxjs';
 import { combineLatestWith, delay } from 'rxjs/operators';
-import { MapMaplibreService } from './map-maplibre.service';
+import { MapMaplibreService } from './map-maplibre-svc';
 import toGeoJson from '@mapbox/togeojson';
 import type { IukisMetadata } from './maplibre.helpers';
 
@@ -28,12 +28,14 @@ interface IprojMapping {
  */
 const hasSourceType = {} as ISourceTypes;
 
+
 @Component({
-    selector: 'ukis-map-maplibre',
-    templateUrl: './map-maplibre.component.html',
-    styleUrls: ['./map-maplibre.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    encapsulation: ViewEncapsulation.None
+  imports: [],
+  selector: 'ngx-ukis-map-maplibre',
+  styleUrl: './map-maplibre.scss',
+  templateUrl: './map-maplibre.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  encapsulation: ViewEncapsulation.None
 })
 export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
   @Input('layersSvc') layersSvc!: LayersService;
@@ -49,7 +51,9 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
   public mapSize = [0, 0];
   private initialMapStateSet = false;
   private initialMapState: MapState | null = null;
-  constructor(private ngZone: NgZone, private mapSvc: MapMaplibreService) { }
+  private mapSvc = inject(MapMaplibreService);
+  private ngZone = inject(NgZone);
+  constructor() { }
 
   ngOnInit(): void {
     if (!this.layersSvc) {
@@ -167,9 +171,9 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
         this._preSetData(data);
       }
 
-      setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: true): Promise<void>;
-      setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: false): this;
-      setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: boolean): this | Promise<void> {
+      override setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: true): Promise<void>;
+      override setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: false): this;
+      override setData(data: GeoJSON.GeoJSON | string, waitForCompletion?: boolean): this | Promise<void> {
         this._preSetData(data);
         const newData = this._data.url || this._data.geojson;
         if (newData) {
@@ -435,6 +439,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     }
   }
 }
+
 
 
 
