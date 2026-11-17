@@ -22,4 +22,3 @@ export class ItemsFilterPipe<T> implements PipeTransform {
     return items.filter(callbackfn);
   }
 }
-
