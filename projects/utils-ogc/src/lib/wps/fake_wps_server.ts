@@ -1,4 +1,4 @@
-import { WpsVersion } from '../wps_datatypes';
+import { WpsVersion } from './wps_datatypes';
 
 export class FakeWpsServer {
 

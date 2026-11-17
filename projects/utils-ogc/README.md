@@ -31,3 +31,6 @@ A simple client to parse WMTS-GetCapabilities documents into json.
 That json-information might be used to create an ol- or ukis-layer, but that step is to be done by another library.
 
 
+===
+
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.0.

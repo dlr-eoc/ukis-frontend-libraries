@@ -17,8 +17,12 @@ export class WmsClient {
     this.parser = new WMSCapabilities();
   }
 
+  public getCapabilitiesUrl(url: string, version: WmsVersion = '1.1.0') {
+    return `${url}?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=${version}`;
+  }
+
   public getCapabilities(url: string, version: WmsVersion = '1.1.0'): Observable<any> {
-    const getCapabilitiesUrl = `${url}?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=${version}`;
+    const getCapabilitiesUrl = this.getCapabilitiesUrl(url,version);
     return this.http.get(getCapabilitiesUrl, { headers: {
       'Content-Type': 'text/xml',
       'Accept': 'text/xml, application/xml'
@@ -76,3 +80,4 @@ export class WmsClient {
   }
   
 }
+

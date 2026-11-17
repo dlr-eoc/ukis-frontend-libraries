@@ -1,4 +1,4 @@
-import { WmsVersion } from "../wms.service";
+import { WmsVersion } from "./wms";
 
 
 
