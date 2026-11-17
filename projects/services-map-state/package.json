@@ -15,8 +15,8 @@
     "time"
   ],
   "peerDependencies": {
-    "@angular/common": "^22.1.4",
-    "@angular/core": "^22.1.4",
+    "@angular/common": "^22.2.4",
+    "@angular/core": "^22.2.4",
     "rxjs": "~7.8.2",
     "proj4": "^2.20.8"
   },
@@ -24,8 +24,6 @@
     "@dlr-eoc/services-layers": "16.0.1-next.3",
     "tslib": "^2.6.3"
   },
-  "devDependencies": {
-    "zone.js": "~0.15.1",
-    "@angular/platform-browser-dynamic": "^22.1.4"
-  }
+  "devDependencies": {},
+  "sideEffects": false
 }

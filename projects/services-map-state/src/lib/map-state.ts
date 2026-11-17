@@ -182,3 +182,4 @@ export class MapStateService {
     return this.lastAction;
   }
 }
+

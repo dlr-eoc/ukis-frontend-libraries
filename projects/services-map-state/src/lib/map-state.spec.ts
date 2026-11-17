@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { MapStateService } from './map-state.service';
+import { MapStateService } from './map-state';
 import { MapState, IMapState } from './types/map-state';
 import { EPSG_4326_Def, WebMercator } from './types/projections';
 import { TGeoExtent } from '@dlr-eoc/services-layers';
@@ -8,8 +8,8 @@ import { firstValueFrom } from 'rxjs';
 describe('MapStateService', () => {
   let service: MapStateService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({});
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
     service = TestBed.inject(MapStateService);
   });
 
@@ -105,17 +105,16 @@ describe('MapStateService', () => {
 
 
   it('should have a initial MapState epsg for WebMercator', async () => {
-    const service = TestBed.inject(MapStateService);
     const state = await firstValueFrom(service.getMapState());
     expect(state.proj.epsg).toEqual(WebMercator);
   });
 
   it('should set/get the current Projection (epsg)', async () => {
-    const service = TestBed.inject(MapStateService);
     service.setProjection(EPSG_4326_Def);
     const proj = await firstValueFrom(service.getProjection());
     expect(proj.epsg).toEqual(EPSG_4326_Def.code);
   });
 
 });
+
 
