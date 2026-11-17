@@ -6,7 +6,5 @@
   "author": "Team UKIS",
   "description": "Shared assets which can be used for tests in the projects. This package will not be published.",
   "private": true,
-  "devDependencies": {
-    "@dlr-eoc/services-ogc": "16.0.1-next.3"
-  }
+  "devDependencies": {}
 }
