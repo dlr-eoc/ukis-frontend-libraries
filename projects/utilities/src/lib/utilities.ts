@@ -199,3 +199,4 @@ export function arrayMove(array: Array<any>, fromIndex: number, toIndex: number)
 export function flattenDeepArray<T>(arr: Array<any>, children: string): T[] {
     return arr.reduce((acc, val) => (Array.isArray(val[children])) ? acc.concat(flattenDeepArray(val[children], children)) : acc.concat(val), []);
 }
+
