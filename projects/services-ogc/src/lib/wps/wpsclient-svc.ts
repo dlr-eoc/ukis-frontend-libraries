@@ -1,5 +1,5 @@
 import { WpsClient as WCBasic, WpsVersion, Cache } from '@dlr-eoc/utils-ogc';
-import { Service, inject, InjectionToken } from '@angular/core';
+import { Service, Inject, inject, HostAttributeToken, InjectionToken } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 

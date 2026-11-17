@@ -37,14 +37,13 @@ import {
   IStackedLayerOptions,
   TGeoExtent
 } from '@dlr-eoc/services-layers';
-import { WmtsClientService } from '../wmts/wmtsclient.service';
-import { of, Observable, forkJoin, concat, defaultIfEmpty } from 'rxjs';
+import { WmtsClientService } from '../wmts/wmtsclient-svc';
+import { of, Observable, forkJoin, concat, OperatorFunction, defaultIfEmpty } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { HttpClient } from '@angular/common/http';
 import { DateTime, Interval, Duration } from 'luxon';
 import { get as getProjection } from 'ol/proj';
-
 
 export function shardsExpand(v: string) {
   if (!v) { return; }
@@ -826,7 +825,7 @@ export class OwcJsonService {
         if (offering.styles && offering.styles[0]?.content?.type === 'OpenMapStyle') {
           const content = offering.styles[0].content;
 
-          // we need the sourceKey to apply t5he style later
+          // we need the sourceKey to apply the style later
           if (content?.['styleSource']) {
             if (!layerOptions.options) {
               layerOptions.options = {
@@ -854,7 +853,7 @@ export class OwcJsonService {
 
             if (styleObj$) {
               return styleObj$.pipe(map((obj) => {
-                if (layerOptions.options?.style) {
+                if (layerOptions.options?.style !== undefined) {
                   layerOptions.options.style = obj;
                 }
                 const newLayer = new VectorLayer(layerOptions);
@@ -1166,24 +1165,24 @@ export class OwcJsonService {
       const url = this.parseOperationUrl(offering, 'GetCapabilities').url;
       const matrixSet = this.wmtsClient.getCapabilities(url).pipe(
         map((capabilities: any) => {
-          const matrixSets = capabilities.value.contents.tileMatrixSet;
-          let matrixSet = matrixSets.find((ms: any) => ms.identifier.value === targetProjection);
+          const matrixSets = capabilities.Contents.TileMatrixSet;
+          let matrixSet = matrixSets.find((ms: any) => ms.Identifier === targetProjection);
 
           if (!matrixSet && targetProjection === 'EPSG:3857') {
             const altTargetProjection = 'EPSG:900913';
-            matrixSet = matrixSets.find((ms: any) => ms.identifier.value === altTargetProjection);
+            matrixSet = matrixSets.find((ms: any) => ms.Identifier === altTargetProjection);
           }
 
           const owsMatrixSet: IEocOwsWmtsMatrixSet = {
             srs: targetProjection,
-            matrixSet: matrixSet['identifier']['value'],
-            matrixIds: matrixSet['tileMatrix'].map((tm: any) => tm['identifier']['value']),
-            resolutions: matrixSet['tileMatrix'].map((tm: any) => tm['scaleDenominator']),
+            matrixSet: matrixSet['Identifier'],
+            matrixIds: matrixSet['TileMatrix'].map((tm: any) => tm['Identifier']),
+            resolutions: matrixSet['TileMatrix'].map((tm: any) => tm['ScaleDenominator']),
             origin: {
-              x: matrixSet['tileMatrix'][0]['topLeftCorner'][1],
-              y: matrixSet['tileMatrix'][0]['topLeftCorner'][0]
+              x: matrixSet['TileMatrix'][0]['TopLeftCorner'][1],
+              y: matrixSet['TileMatrix'][0]['TopLeftCorner'][0]
             },
-            tilesize: matrixSet['tileMatrix'][0]['tileHeight']
+            tilesize: matrixSet['TileMatrix'][0]['TileHeight']
           };
           return owsMatrixSet;
         })

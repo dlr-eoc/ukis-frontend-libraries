@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { OwcJsonService, shardsExpand } from './owc-json.service';
+import { OwcJsonService, shardsExpand } from './owc-json-svc';
 import {
   barebonesContext, baseWMTSLayer, baseWMSLayer, baseWFSLayer, basicOgcOwsContext, eocOwsContext,
   eocProjContext, zoomedContext, baseKMLLayer, eocTMSLayer, eocTimeDimensionsSteps, eocTimeDimensionsInterval,
@@ -574,7 +574,7 @@ describe('OwcJsonService: reading layer data from owc', () => {
   it('should create LayerGroups for Resources with properties.folder', async () => {
     const layersObs = service.getLayers(basicOgcOwsContext, targetProjection);
     const owsContextLayers = await firstValueFrom(layersObs);
-    expect(owsContextLayers.length > 0).toBeTruthy();
+    expect(owsContextLayers.length).greaterThan(0);
 
     const layerGroupNames = service.getGroupResources(basicOgcOwsContext)
       .map(f => service['getLayerGroupFromFolder'](f)) // get Names

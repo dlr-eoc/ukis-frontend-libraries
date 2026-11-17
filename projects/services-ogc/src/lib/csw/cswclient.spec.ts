@@ -1,4 +1,5 @@
 import { CswClient } from './cswclient';
+import { CswCapabilitiesElement, CswDescribeRecordResponseElement, CswGetRecordByIdResponseElement, CswGetDomainResponseElement } from './cswdatatypes';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { FakeDataGovCswServer, FakeGeotestCswServer } from './fakeCswServer';

@@ -1,4 +1,4 @@
-import { OpensearchWrapperService } from "./opensearch.service";
+import { OpensearchWrapperService } from "./opensearch-svc";
 import type { OpenSearchService, OpenSearchUrl, OpenSearchResult } from 'opensearch-browser';
 import { switchMap, map } from 'rxjs/operators';
 

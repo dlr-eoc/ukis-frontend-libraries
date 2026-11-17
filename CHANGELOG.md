@@ -17,6 +17,9 @@
 
 * **@dlr-eoc/map-maplibre**
  - Selector change to 'ngx-ukis-map-maplibre'
+* **@dlr-eoc/services-ogc**
+ - Use `WmtsClient` from `@dlr-eoc/utils-ogc` and parse with `ol` not `jsonix`. `WmtsClientService.getCapabilities` now returns an OpenLayers-parsed capabilities object (capitalized keys, e.g. `Contents.TileMatrixSet`) instead of the old `jsonix` lowercase shape (e.g. `contents.tileMatrixSet`), and the default `version` changed from `'1.1.0'` to `'1.0.0'`.
+
 ### Features
 * **@dlr-eoc/utils-ogc**
  - Add `WmtsClient` based on `ol/format/WMTSCapabilities`.

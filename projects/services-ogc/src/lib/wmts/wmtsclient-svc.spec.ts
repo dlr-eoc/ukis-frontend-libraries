@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { WmtsClientService } from './wmtsclient.service';
+import { WmtsClientService } from './wmtsclient-svc';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -7,20 +7,23 @@ import { firstValueFrom } from 'rxjs';
 
 
 describe('WmtsClientService: reading data from server', () => {
+  let http: HttpTestingController;
+  let service: WmtsClientService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({ imports: [], providers: [provideHttpClient(withXhr(), withInterceptorsFromDi()), provideHttpClientTesting()] });
+    http = TestBed.inject(HttpTestingController);
+    service = TestBed.inject(WmtsClientService);
   });
 
   it('#WmtsClientService: GetCapabilities should work', async () => {
-    const http: HttpTestingController = TestBed.inject(HttpTestingController);
-    const service: WmtsClientService = TestBed.inject(WmtsClientService);
     const url = 'https://tiles.geoservice.dlr.de/service/wmts';
 
     // 1. Trigger the request
+    const capsUrl = service.getCapabilitiesUrl(url);
     const promise = firstValueFrom(service.getCapabilities(url));
 
-    const request = http.expectOne('https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities&VERSION=1.1.0');
+    const request = http.expectOne(capsUrl);
     request.flush(`
     <Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd" version="1.0.0">
       <ows:ServiceIdentification>
@@ -2637,7 +2640,9 @@ describe('WmtsClientService: reading data from server', () => {
     const capabilities = await promise as any;
 
     expect(capabilities).toBeTruthy();
-    expect(capabilities.name.namespaceURI).toBe('http://www.opengis.net/wmts/1.0');
+    expect(capabilities.version).toBe('1.0.0')
+    expect(capabilities.ServiceIdentification).toBeTruthy();
+    expect(capabilities.ServiceIdentification.ServiceType).toContain('WMTS');
   });
 
 

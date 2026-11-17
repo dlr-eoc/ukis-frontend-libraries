@@ -10,7 +10,8 @@ import * as CSW_2_0_2_Factory from 'ogc-schemas/lib/CSW_2_0_2'; const CSW_2_0_2 
 // import * as CSW_2_0_2_Factory_OWS from 'ogc-schemas/lib/CSW_2_0_2_OWS_1_0_0'; const CSW_2_0_2_OWS = CSW_2_0_2_Factory_OWS.CSW_2_0_2;
 import { inject, Service } from '@angular/core';
 import * as JsonixFactory from 'jsonix'; const Jsonix = JsonixFactory.Jsonix;
-import { CswVersion, Element, CswCapabilitiesElement, CswDescribeRecordElement,
+import {
+    CswVersion, Element, CswCapabilitiesElement, CswDescribeRecordElement,
     CswDescribeRecordResponseElement, CswGetRecordByIdResponseElement, CswGetRecordByIdElement,
     CswGetRecordsElement, CswResultType, ExceptionReportType, CswGetRecordsResponseElement, CswElementAttributes, CswGetDomainElement, CswGetDomainResponseElement, CswElementSetName
 } from './cswdatatypes';
