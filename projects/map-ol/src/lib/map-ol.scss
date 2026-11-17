@@ -1,0 +1,148 @@
+/**
+ * depends on 'ol/ol.css';
+ */
+
+:root {
+  --ukis-crosshair-color: #ff0004;
+  --ukis-popup-bg-color: rgb(238, 238, 238);
+  --ukis-drop-shadow: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  --ukis-ol-bbox-bg-color: rgba(255, 255, 255, 0.4);
+  --ukis-ol-bbox-border-color: rgba(87, 87, 87, 0.4);
+  --ukis-ol-overviewmap-left: 0.5em;
+  --ukis-ol-overviewmap-bottom: 3.0em;
+  --ukis-ol-control-bg-color: rgba(87, 87, 87, 0.6);
+  --ukis-ol-control-border-color: rgba(87, 87, 87, 0.4);
+}
+
+.map {
+  width: 100%;
+  height: 100%; //calc(100% - 56px); //header 50 + 2
+  position: relative;
+}
+
+//extension --------------------------------------------------------------------
+
+.ol-popup {
+  position: absolute;
+  background-color: var(--ukis-popup-bg-color);
+  -webkit-filter: var(--ukis-drop-shadow);
+  filter: var(--ukis-drop-shadow);
+  padding: 15px;
+  border-radius: 2px;
+  //border: 1px solid rgba(255, 255, 255, 0.9);
+  bottom: 12px;
+  left: -50px;
+  min-width: 280px;
+  display: none;
+  z-index: 1000000;
+
+  .ol-popup-closer {
+    text-decoration: none;
+    position: absolute;
+    top: 0px;
+    right: 8px;
+    cursor: pointer;
+  }
+
+  .ol-popup-closer:after {
+    content: "✖";
+  }
+
+  &:after,
+  &:before {
+    //color: rgb(255, 255, 255);
+    //border-top-color: rgba(255, 255, 255, 0.8);
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    border-top-color: var(--ukis-popup-bg-color);
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+  }
+
+  &:before {
+    //border-top-color: rgb(255, 255, 255);
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+  }
+
+  &.hidden {
+    visibility: hidden;
+  }
+}
+
+.crosshair {
+  top: 50%;
+  left: 50%;
+  font-size: large;
+  color: var(--ukis-crosshair-color);
+  z-index: 1;
+  position: absolute;
+  cursor: default;
+}
+
+//restyle Controlls
+.ol-control {
+  padding: 1px;
+  --ol-subtle-background-color: #fff6;
+
+  button {
+    --ol-subtle-foreground-color: #fff;
+    --ol-foreground-color: #fff;
+    cursor: pointer;
+    background-color: var(--ukis-ol-control-bg-color);
+
+    &:focus {
+      background-color: var(--ukis-ol-control-bg-color);
+    }
+
+    &:hover {
+      background-color: var(--ukis-ol-control-border-color);
+    }
+  }
+}
+
+.ol-scale-line {
+  background: rgba(255, 255, 255, 0.4);
+  line-height: 1.375em;
+  padding: 1px;
+
+  .ol-scale-line-inner {
+    background: var(--ukis-ol-control-bg-color);
+    border-color: var(--ukis-ol-control-bg-color);
+    --ol-foreground-color: #fff;
+  }
+}
+
+.ol-attribution {
+  &:not(.ol-collapsed) {
+    padding: 0 2px;
+  }
+
+  ul {
+    font-size: 0.5rem;
+  }
+}
+
+.ol-box {
+  background-color: var(--ukis-ol-bbox-bg-color);
+  border-color: var(--ukis-ol-bbox-border-color) !important;
+
+  &.ol-drag-select {
+    border-color: var(--cds-alias-status-info, var(--fallback-color-no-clr)) !important;
+  }
+}
+
+.ol-overviewmap {
+  left: var(--ukis-ol-overviewmap-left) !important;
+  bottom: var(--ukis-ol-overviewmap-bottom) !important;
+}

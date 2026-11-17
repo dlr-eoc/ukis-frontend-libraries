@@ -1,0 +1,2884 @@
+import { Service, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector, inject, signal, isSignal } from '@angular/core';
+
+
+import {
+  Layer, VectorLayer, CustomLayer, RasterLayer, popup, WmtsLayer, WmsLayer, TGeoExtent,
+  ILayerOptions, StackedLayer, StackedLayertype, CustomLayertype, WfsLayertype, KmlLayertype,
+  GeojsonLayertype, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IPopupParams,
+  IAnyObject, TFiltertypesUncap, TFiltertypes, IPopupEvent
+} from '@dlr-eoc/services-layers';
+
+import olMap from 'ol/Map';
+import olView, { FitOptions as olFitOptions } from 'ol/View';
+import { ViewOptions as olViewOptions } from 'ol/View';
+
+import olBaseLayer from 'ol/layer/Base';
+import olSource from 'ol/source/Source';
+import olPoint from 'ol/geom/Point';
+import olGeometry from 'ol/geom/Geometry';
+import olLayer from 'ol/layer/Layer';
+import { Options as olLayerOptions } from 'ol/layer/Layer';
+import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
+import CanvasTileLayerRenderer from 'ol/renderer/canvas/TileLayer';
+import CanvasImageLayerRenderer from 'ol/renderer/canvas/ImageLayer';
+import olLayerGroup from 'ol/layer/Group';
+import LayerGroup, { Options as olLayerGroupOptions } from 'ol/layer/Group';
+import olOverlay from 'ol/Overlay';
+import { Options as olOverlayOptions } from 'ol/Overlay';
+
+import olBaseTileLayer from 'ol/layer/BaseTile';
+import { Options as olBaseTileLayerOptions } from 'ol/layer/BaseTile';
+import olBaseVectorLayer from 'ol/layer/BaseVector';
+import { Options as olBaseVectorLayerOptions } from 'ol/layer/BaseVector';
+import olBaseImageLayer from 'ol/layer/BaseImage';
+import { Options as olBaseImageLayerOptions } from 'ol/layer/BaseImage';
+
+import olImageLayer from 'ol/layer/Image';
+
+import olTileLayer from 'ol/layer/Tile';
+import olVectorLayer from 'ol/layer/Vector';
+import olVectorTile from 'ol/source/VectorTile';
+
+import olVectorTileLayer from 'ol/layer/VectorTile';
+import { Options as olVectorTileLayerOptions } from 'ol/layer/VectorTile';
+import olVectorTileSource from 'ol/source/VectorTile';
+import { applyBackground, applyStyle } from 'ol-mapbox-style';
+import { createXYZ } from 'ol/tilegrid';
+import olMVT from 'ol/format/MVT';
+
+import olXYZ from 'ol/source/XYZ';
+import olTileSource from 'ol/source/Tile';
+
+import { Options as olXYZOptions } from 'ol/source/XYZ';
+import olTileWMS from 'ol/source/TileWMS';
+import { Options as olTileWMSOptions } from 'ol/source/TileWMS';
+import olImageWMS from 'ol/source/ImageWMS';
+import { Options as olImageWMSOptions } from 'ol/source/ImageWMS';
+import olTileImageSource from 'ol/source/TileImage';
+import olImageSource from 'ol/source/Image';
+import olWMTS from 'ol/source/WMTS';
+import { Options as olWMTSOptions } from 'ol/source/WMTS';
+import olWMTSTileGrid from 'ol/tilegrid/WMTS';
+import olTileGrid from 'ol/tilegrid/TileGrid';
+import olVectorSource from 'ol/source/Vector';
+import olRasterSource from 'ol/source/Raster';
+import olCluster from 'ol/source/Cluster';
+import { Options as olClusterOptions } from 'ol/source/Cluster';
+import olFeature, { FeatureLike } from 'ol/Feature';
+
+import olCollection from 'ol/Collection';
+import olGeoJSON from 'ol/format/GeoJSON';
+import olKML from 'ol/format/KML';
+import olProjection from 'ol/proj/Projection';
+import { Options as olProjectionOptions } from 'ol/proj/Projection';
+import { transformExtent, get as getProjection, transform } from 'ol/proj';
+import { register as olRegister } from 'ol/proj/proj4';
+import proj4 from 'proj4';
+import { extend as olExtend, getWidth as olGetWidth, getHeight as olGetHeight, getTopLeft as olGetTopLeft, containsCoordinate as olContainsCoordinate, getCenter as olExtGetCenter, containsExtent, Extent as olExtent } from 'ol/extent';
+import { DEFAULT_MAX_ZOOM, DEFAULT_TILE_SIZE } from 'ol/tilegrid/common';
+import { easeOut } from 'ol/easing.js';
+
+import olStyle from 'ol/style/Style';
+import olText from 'ol/style/Text';
+import olFill from 'ol/style/Fill';
+import olCircleStyle from 'ol/style/Circle';
+import olStroke from 'ol/style/Stroke';
+
+import { DragBox } from 'ol/interaction';
+import olMapBrowserEvent from 'ol/MapBrowserEvent';
+import olRenderFeature from 'ol/render/Feature';
+import olEvent from 'ol/events/Event';
+import { Options as DragBoxOptions } from 'ol/interaction/DragBox';
+import { getUid as olGetUid } from 'ol/util';
+import { Subject } from 'rxjs';
+import { flattenLayers, layerOrGroupSetZIndex } from '@dlr-eoc/utils-maps';
+import LayerRenderer from 'ol/renderer/Layer';
+import VectorSource from 'ol/source/Vector';
+import { WebMercator, WGS84, EPSG_3857_Def, IProjDef, IProjFitOptions, TepsgCode, adjustBBoxAxisToEnu } from '@dlr-eoc/services-map-state';
+import { Pixel } from 'ol/pixel';
+
+
+declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
+const OVERLAY_TYPE_KEY = 'type';
+const FILTER_TYPE_KEY = 'filtertype';
+const ID_KEY = 'id';
+const OL_GROUP_KEY = 'groupID';
+const OL_GROUP_NAME = 'groupName';
+const TITLE_KEY = 'title';
+const POPUP_KEY = 'popup';
+// Perhaps a function could be created that sets the stops for the transformation based on the EPSG.
+const transformExtentStops = 8;
+
+
+type tmsReturnType<T> = T extends RasterLayer ? olTileLayer<olTileSource> :
+  T extends VectorLayer ? olVectorTileLayer : never;
+
+type LayerOptionsSources = olTileSource | olVectorTileSource | olImageSource | olSource;
+
+@Service()
+export class MapOlService {
+  public map: olMap; // ol.Map;
+  public view: olView;
+  private viewOptions!: olViewOptions;
+  public EPSG: TepsgCode;
+  private hitTolerance = 0;
+  private hitLayerCurr: string | null = null;
+  private hitLayerPrev: string | null = null;
+  /** 'olProjection' */
+  public projectionChange = new Subject<olProjection>();
+  public registeredProjections: Map<IProjDef['code'], IProjDef> = new Map();
+
+  /**
+   * This object keeps track of currently bound angular-components that are being used as popups.
+   * We keep a reference to them here so that we can remove them again after they are no longer displayed.
+   */
+  private dynamicPopupComponents: Map<string, ComponentRef<any>> = new Map();
+  public popupEvents = new Subject<IPopupEvent>();
+
+  private app = inject(ApplicationRef);
+  private envInjector = inject(EnvironmentInjector);
+  constructor() {
+    this.map = new olMap({ controls: [] });
+    this.view = new olView({
+      center: [0, 0],
+      zoom: 0,
+      projection: WebMercator
+    });
+    this.map.setView(this.view);
+    this.EPSG = WebMercator;
+  }
+
+  /**
+   * if this is used in an angular component then set the target after the view is created
+   * e.g. this.map.setTarget(this.mapDivView.nativeElement) in ngAfterViewInit()
+   */
+  public createMap(target?: HTMLElement, options?: olViewOptions) {
+    const zoom = 0;
+    const center = {
+      lat: 0,
+      lon: 0
+    };
+
+    const baselayerGroup = new olLayerGroup({
+      layers: []
+    });
+    baselayerGroup.set(FILTER_TYPE_KEY, 'baselayers');
+    baselayerGroup.set(TITLE_KEY, 'Base maps');
+    baselayerGroup.set(ID_KEY, 'ID_filtertype_baselayers');
+
+
+    const layersGroup = new olLayerGroup({
+      layers: []
+    });
+    layersGroup.set(FILTER_TYPE_KEY, 'layers');
+    layersGroup.set(TITLE_KEY, 'Layers');
+    layersGroup.set(ID_KEY, 'ID_filtertype_layers');
+
+    // ---------------------------------------------------------------------------------------------------
+    const overlayGroup = new olLayerGroup({
+      layers: []
+    });
+    overlayGroup.set(FILTER_TYPE_KEY, 'overlays');
+    overlayGroup.set(TITLE_KEY, 'Overlays');
+    overlayGroup.set(ID_KEY, 'ID_filtertype_overlays');
+
+    /**
+     * set default viewOptions
+     */
+    this.viewOptions = {
+      center: transform([center.lon, center.lat], WGS84, this.EPSG),
+      zoom,
+      projection: getProjection(this.EPSG) as olProjection
+    };
+
+    this.view.getConstraints()
+    const constrainRotation = (this.view as never)['constrainRotation'];
+    if (constrainRotation) {
+      this.viewOptions.constrainRotation = constrainRotation;
+    }
+
+    const enableRotation = (this.view as never)['enableRotation'];
+    if (enableRotation) {
+      this.viewOptions.enableRotation = enableRotation;
+    }
+
+    const extent = (this.view as never)['extent'];
+    if (extent) {
+      this.viewOptions.extent = extent;
+    }
+
+    const constrainOnlyCenter = (this.view as never)['constrainOnlyCenter'];
+    if (constrainOnlyCenter) {
+      this.viewOptions.constrainOnlyCenter = constrainOnlyCenter;
+    }
+
+    const smoothExtentConstraint = (this.view as never)['smoothExtentConstraint'];
+    if (smoothExtentConstraint) {
+      this.viewOptions.smoothExtentConstraint = smoothExtentConstraint;
+    }
+
+    if (this.view.getMaxResolution()) {
+      this.viewOptions.maxResolution = this.view.getMaxResolution();
+    }
+
+    if (this.view.getMinResolution()) {
+      this.viewOptions.minResolution = this.view.getMinResolution();
+    }
+
+    if (this.view.getMaxZoom()) {
+      this.viewOptions.maxZoom = this.view.getMaxZoom();
+    }
+
+    if (this.view.getMinZoom()) {
+      this.viewOptions.minZoom = this.view.getMinZoom();
+    }
+
+    const multiWorld = (this.view as never)['multiWorld'];
+    if (multiWorld) {
+      this.viewOptions.multiWorld = multiWorld;
+    }
+
+    const constrainResolution = (this.view as never)['constrainResolution'];
+    if (constrainResolution) {
+      this.viewOptions.constrainResolution = constrainResolution;
+    }
+
+    const smoothResolutionConstraint = (this.view as never)['smoothResolutionConstraint'];
+    if (smoothResolutionConstraint) {
+      this.viewOptions.smoothResolutionConstraint = smoothResolutionConstraint;
+    }
+
+    if (this.view.getResolution()) {
+      this.viewOptions.resolution = this.view.getResolution();
+    }
+
+    if (this.view.getResolutions()) {
+      this.viewOptions.resolutions = this.view.getResolutions();
+    }
+
+    if (this.view.getRotation()) {
+      this.viewOptions.rotation = this.view.getRotation();
+    }
+
+    const zoomFactor = (this.view as never)['zoomFactor'];
+    if (zoomFactor) {
+      this.viewOptions.zoomFactor = zoomFactor;
+    }
+
+    if (options) {
+      this.viewOptions = Object.assign(this.viewOptions, options);
+    }
+    const tempview = new olView(this.viewOptions);
+
+    /** define map in constructor so it is created before to use it in projects onInit Method  */
+    /** if the map has already been created remove all layers before adding the layer groups  */
+    this.map.getLayerGroup().getLayers().clear();
+
+    [baselayerGroup, layersGroup, overlayGroup].map(layer => this.map.addLayer(layer));
+    this.map.setView(tempview);
+    // this.map.getControls().clear();
+    this.view = this.map.getView();
+    // Register projection at startup if it is not identical
+    if (this.view.getProjection().getCode() !== this.EPSG) {
+      this.registerProjection(EPSG_3857_Def);
+      this.setProjection(this.EPSG);
+    }
+    if (target) {
+      this.map.setTarget(target);
+    }
+    return {
+      map: this.map,
+      view: this.view
+    };
+  }
+
+  public setHitTolerance(tolerance: number) {
+    this.hitTolerance = tolerance;
+  }
+
+  public getHitTolerance() {
+    return this.hitTolerance;
+  }
+
+  /**
+   * See this example:
+   * https://openlayers.org/en/latest/examples/box-selection.html
+   */
+  public addBboxSelection(conditionForDrawing: (evt: any) => boolean, onBoxStart?: (evt: olEvent) => void, onBoxEnd?: (ext: olExtent, evt: olEvent) => void, dragBoxOptions?: DragBoxOptions) {
+    const options = {
+      className: 'ol-drag-select',
+      condition: conditionForDrawing,
+    };
+    Object.assign(options, dragBoxOptions);
+    const dragBox = new DragBox(dragBoxOptions);
+    if (onBoxStart) {
+      dragBox.on('boxstart', (evt) => {
+        onBoxStart(evt);
+      });
+    }
+
+    if (onBoxEnd) {
+      dragBox.on('boxend', (evt) => {
+        const extent = dragBox.getGeometry().getExtent();
+        onBoxEnd(extent, evt);
+      });
+    }
+
+    this.map.addInteraction(dragBox);
+    return dragBox;
+  }
+
+  /**
+   * get an array of olLayers from a group type
+   */
+  public getLayers(filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
+    let layers: olBaseLayer[] = [];
+    this.map.getLayers().getArray().forEach((layerGroup) => {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType && layerGroup instanceof LayerGroup) {
+        layers = layerGroup.getLayers().getArray();
+      }
+    });
+    return layers;
+  }
+
+  private getLayersFromGroup(group: olLayerGroup, filtertype?: string, recursive = false) {
+    const layers = group.getLayers().getArray();
+    let tempLayers = layers;
+    if (recursive) {
+      let groups: olBaseLayer[] = [...layers];
+      layers.forEach(l => {
+        if (l instanceof olLayerGroup) {
+          groups = groups.concat(this.getLayersFromGroup(l, filtertype, true));
+        }
+      });
+      tempLayers = groups;
+    }
+
+    if (filtertype) {
+      return tempLayers.filter(l => l.get(FILTER_TYPE_KEY) && l.get(FILTER_TYPE_KEY).toLowerCase() === filtertype.toLowerCase());
+    } else {
+      return tempLayers;
+    }
+  }
+
+  public getLayerByKey(key: { key: string, value: string }, filtertype?: Tgroupfiltertype) {
+    const layers = this.getLayersFromGroup(this.map.getLayerGroup(), filtertype);
+    const flattenedLayers = flattenLayers(layers);
+    const keyLayers: (olBaseLayer | olLayerGroup)[] = [];
+    flattenedLayers.forEach((item) => {
+      if (item.get(key.key) && item.get(key.key) === key.value) {
+        if (keyLayers.indexOf(item) === -1) {
+          keyLayers.push(item);
+        }
+      }
+    });
+    /** if the layer is not in flattenedLayers it could be a olLayerGroup */
+    if (!keyLayers.length) {
+      const subLayers = this.getLayersFromGroup(this.map.getLayerGroup(), filtertype, true); // (map.getLayerGroup(), filtertype, filtertypeKey, true);
+      if (subLayers.length) {
+        subLayers.forEach((item) => {
+          if (item.get(key.key) && item.get(key.key) === key.value) {
+            if (keyLayers.indexOf(item) === -1) {
+              keyLayers.push(item);
+            }
+          }
+        });
+      }
+    }
+
+    // there could maybe more the one layers with the same key!!!!
+    if (keyLayers.length === 1) {
+      return keyLayers[0];
+    } else {
+      return null;
+    }
+  }
+
+
+  /**
+   * set a FilterType to a Layer or Group recursively
+   *
+   * @param key [key='filtertype']
+   */
+  private setRecursiveKey(layer: olBaseLayer, value: string, key = FILTER_TYPE_KEY) {
+    layer.set(key, value);
+    if (layer instanceof olLayerGroup) {
+      layer.getLayers().forEach(l => {
+        this.setRecursiveKey(l, value, key);
+      });
+    }
+  }
+
+  /**
+   * add a olLayer to a group if it is not there
+   */
+  public addLayer(layer: olBaseLayer, filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
+    let layers;
+    this.map.getLayers().getArray().forEach((layerGroup) => {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType && layerGroup instanceof LayerGroup) {
+        if (!this.isLayerInGroup(layer, layerGroup)) {
+          layers = layerGroup.getLayers().getArray();
+          this.setRecursiveKey(layer, lowerType, FILTER_TYPE_KEY);
+          layers.push(layer);
+          layerGroup.setLayers(new olCollection(layers));
+        }
+      }
+    });
+    return layers;
+  }
+
+  private isLayerInGroup(layer: olBaseLayer, layerGroup: olLayerGroup) {
+    const layers = layerGroup.getLayers().getArray();
+    const haseLayer = layers.filter(l => l.get(ID_KEY) === layer.get(ID_KEY));
+    if (haseLayer.length) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+  /**
+    * Get all direkt Layer Groups added to the map
+    *
+    * @param filtertypeKey [filtertypeKey='filtertype']
+    */
+  public getLayerGroups(filtertype?: string) {
+    const layerGroups: olLayerGroup[] = [];
+    this.map.getLayers().forEach((lg: olLayerGroup | olBaseLayer) => {
+      if (lg instanceof olLayerGroup) {
+        if (filtertype) {
+          if (lg.get(FILTER_TYPE_KEY) && lg.get(FILTER_TYPE_KEY).toLowerCase() === filtertype.toLowerCase()) {
+            layerGroups.push(lg);
+          }
+        } else {
+          layerGroups.push(lg);
+        }
+      }
+    });
+    return layerGroups;
+  }
+
+
+  /**
+   * add a array of olLayers to a group if they are not there
+   */
+  public addLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
+    let newLayers: olBaseLayer[] = [];
+    const layerGroups = this.getLayerGroups(lowerType);
+    layerGroups.forEach(lg => {
+      const groupLayers = lg.getLayers();
+      if (groupLayers.getLength() > 0) {
+        // I think doing it like this should be more performant like as using the addLayer in a loop
+        newLayers = lg.getLayers().getArray();
+        layers.map(layer => {
+          if (!this.isLayerInGroup(layer, lg)) {
+            newLayers.push(layer);
+          }
+        });
+      } else {
+        newLayers = layers;
+      }
+      newLayers.forEach(l => {
+        if (l instanceof olLayerGroup) {
+          this.setRecursiveKey(l, lowerType, FILTER_TYPE_KEY);
+        }
+      });
+      lg.setLayers(new olCollection(newLayers));
+    });
+    return newLayers;
+  }
+
+  /**
+   * reset a group with an array of olLayers
+   */
+  public setLayers(layers: olBaseLayer[], filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
+    const layerGroups = this.getLayerGroups(lowerType);
+    layers.forEach(l => {
+      if (l instanceof olLayerGroup) {
+        this.setRecursiveKey(l, filtertype.toLocaleLowerCase(), FILTER_TYPE_KEY);
+      }
+    });
+    layerGroups.forEach(l => {
+      this.cleanUpEventListeners(l, layers);
+      l.setLayers(new olCollection(layers));
+    });
+    return layers;
+  }
+
+  /**
+   * Clean up event listeners from layers and sources
+   *
+   * TODO: is this needed? when layers or sources are removed, then there is no Target anymore which listens for events?
+   * there are also other functions like removeLayerByKey(), removeAllLayers()
+   */
+  private cleanUpEventListeners(layerGroup: olLayerGroup, newLayers: olBaseLayer[]) {
+    /** get Difference of old layers and new layers */
+    const layersToRemove = layerGroup.getLayers().getArray().filter(x => !newLayers.map(l => l.get(ID_KEY)).includes(x.get(ID_KEY)));
+    this.removeListenersFromOldLayers(layersToRemove);
+
+    // TODO: is this done by setLayers??
+    layersToRemove.forEach(l => layerGroup.getLayers().remove(l));
+  }
+
+  /**
+   * on() and un() are functions of olObservable which extends EventTarget
+   *
+   * https://github.com/openlayers/openlayers/blob/v6.5.0/src/ol/events/Target.js#L145
+   * https://github.com/openlayers/openlayers/blob/v6.5.0/src/ol/events/Target.js#L134
+   */
+  private addEventsToLayer(ukisLayer: Layer, olLayer: olLayer<any>, olSource: olSource) {
+    if (ukisLayer.events) {
+      if (ukisLayer.events.layer) {
+        ukisLayer.events.layer.forEach(e => {
+          const listeners = olLayer.getListeners(e.event);
+          /** only add listener if it was not registered on the olLayer object (for CustomLayer) */
+          if (!listeners) {
+            /** TODO: check Types on the next ol update - we only define a string so the user has to check if the right event is used */
+            olLayer.on(e.event as any, e.listener);
+          }
+        });
+      }
+
+      if (ukisLayer.events.source) {
+        ukisLayer.events.source.forEach(e => {
+          const listeners = olSource.getListeners(e.event);
+          /** only add listener if it was not registered on the olSource object (for CustomLayer) */
+          if (!listeners) {
+            /** TODO: check Types on the next ol update - we only define a string so the user has to check if the right event is used */
+            olSource.on(e.event as any, e.listener);
+          }
+        });
+      }
+    }
+  }
+
+  /** TODO: try to remove/replace this function - Property 'disposeInternal' is protected ol function */
+  private removeListenersFromOldLayers(layers: Array<olBaseLayer | olLayerGroup>) {
+    const disposeLayerInternal = (layer: olBaseLayer) => {
+      if (typeof (layer as any).getSource === 'function') {
+        const source = (layer as any).getSource() as olSource;
+        if (source) {
+          // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+          if (source instanceof olRasterSource) {
+            source.dispose();
+          }
+          if (source.hasListener()) {
+            (source as any).disposeInternal();
+          }
+        }
+      }
+      if (layer.hasListener()) {
+        (layer as any).disposeInternal();
+      }
+    };
+
+    layers.forEach(l => {
+      if (l instanceof olLayerGroup) {
+        l.getLayers().forEach(subL => {
+          disposeLayerInternal(subL);
+        });
+      } else if (l instanceof olBaseLayer) {
+        disposeLayerInternal(l);
+      }
+    });
+  }
+
+  /**
+   * get corresponding Layer Group on which the layer is added
+   */
+  private getLayerGroupForLayer(layer: olBaseLayer) {
+    const subLayers = this.getLayersFromGroup(this.map.getLayerGroup(), undefined, true);
+    subLayers.push(this.map.getLayerGroup());
+    let lyerGroup: { group: olLayerGroup, layer: olBaseLayer } | null = null;
+    subLayers.forEach((l) => {
+      if (l instanceof olLayerGroup) {
+        const groupLayers = this.getLayersFromGroup(l);
+        const hasLayer = groupLayers.find(i => i === layer);
+        if (hasLayer) {
+          lyerGroup = {
+            group: l,
+            layer: hasLayer
+          };
+        }
+      }
+    });
+    return lyerGroup as { group: olLayerGroup, layer: olBaseLayer } | null;
+  }
+
+
+  public removeLayerByKey(key: { key: string, value: string }, filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
+    const layer = this.getLayerByKey(key, lowerType);
+    if (layer) {
+      const gropObj = this.getLayerGroupForLayer(layer);
+      if (gropObj?.group) {
+        const filterdLayers = this.getLayersFromGroup(gropObj.group).filter(i => i !== layer);
+        gropObj.group.setLayers(new olCollection(filterdLayers));
+      }
+    }
+  }
+
+  public updateLayerByKey(key: { key: string, value: string }, newLayer: olBaseLayer, filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLocaleLowerCase() as Tgroupfiltertype;
+    this.map.getLayers().forEach((layerGroup) => {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType && layerGroup instanceof LayerGroup) {
+        const groupLayers = layerGroup.getLayers();
+        groupLayers.forEach((oldLayer, index) => {
+          if (oldLayer.get(key.key) && oldLayer.get(key.key) === key.value) {
+
+            const newProperties = newLayer.getProperties();
+            const newExtent = newLayer.getExtent();
+
+            const newMaxZoom = newLayer.getMaxZoom();
+            const newMinZoom = newLayer.getMinZoom();
+
+            const newOpacity = newLayer.getOpacity();
+            const newVisible = newLayer.getVisible();
+
+            const newZIndex = newLayer.getZIndex();
+
+            if (oldLayer instanceof olLayer && newLayer instanceof olLayer) {
+              const newSource = newLayer.getSource();
+              oldLayer.setSource(newSource);
+            }
+            if (newProperties) {
+              oldLayer.setProperties(newProperties);
+            }
+            if (newExtent) {
+              oldLayer.setExtent(newExtent);
+            }
+            if (newMaxZoom) {
+              oldLayer.setMaxZoom(newMaxZoom);
+            }
+            if (newMinZoom) {
+              oldLayer.setMinZoom(newMinZoom);
+            }
+            if (newOpacity) {
+              oldLayer.setOpacity(newOpacity);
+            }
+            if (newVisible) {
+              oldLayer.setVisible(newVisible);
+            }
+            if (newZIndex) {
+              layerOrGroupSetZIndex(oldLayer, newZIndex);
+            }
+            oldLayer.changed();
+            groupLayers.setAt(index, oldLayer);
+          }
+        });
+        layerGroup.setLayers(groupLayers);
+      }
+    });
+  }
+
+  public removeAllLayers(filtertype: Tgroupfiltertype) {
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
+    let layers;
+    this.map.getLayers().getArray().forEach((layerGroup) => {
+      if (layerGroup.get(FILTER_TYPE_KEY) === lowerType && layerGroup instanceof LayerGroup) {
+        layers = layerGroup.getLayers();
+        layers.clear();
+      }
+    });
+
+  }
+
+  /**
+   * This function resets/adds all olLayers of a type with the new UKIS-Layers
+   *
+   * if only one group of them map is used and setLayers is called then the map flickers!
+   * this is because all layers are newly created and each get new ol_uid's
+   */
+  public setUkisLayers(layers: Array<Layer>, filtertype: Tgroupfiltertype, appendToZIndex?: number) {
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
+    const tempLayers: olBaseLayer[] = [];
+
+    if (layers.length < 1 && lowerType !== 'baselayers') {
+      this.removeAllLayers(lowerType);
+    } else {
+      layers.forEach((newLayer, index) => {
+        const layer = this.create_layers(newLayer);
+        // check if layer is undefined
+        if (layer) {
+          layerOrGroupSetZIndex(layer, index, appendToZIndex);
+          tempLayers.push(layer);
+        }
+      });
+    }
+
+    if (tempLayers.length > 0) {
+      this.setLayers(tempLayers, lowerType);
+      // TODO: checkt to replace type with filtertype -> but breaking Change!!
+      const newTempLayers: { type: Tgroupfiltertype, layers: olBaseLayer[] } = {
+        type: lowerType, layers: tempLayers
+      };
+      return newTempLayers;
+    } else {
+      return undefined;
+    }
+  }
+
+  /** This function resets/adds a olLayer of a type with the new UKIS-Layer */
+  public setUkisLayer(newLayer: Layer, filtertype?: Tgroupfiltertype): void {
+    if (!filtertype) {
+      filtertype = newLayer.filtertype;
+    }
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
+    const oldLayers = this.getLayers(lowerType);
+    const oldLayer = oldLayers.find(l => l.get(ID_KEY) === newLayer.id);
+    const newOlLayer = this.create_layers(newLayer);
+    if (oldLayer) {
+      this.removeLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, filtertype);
+      this.addLayer(newOlLayer, filtertype);
+    } else {
+      this.addLayer(newOlLayer, filtertype);
+    }
+  }
+
+  public updateUkisLayer(newLayer: Layer, filtertype?: Tgroupfiltertype): void {
+    if (!filtertype) {
+      filtertype = newLayer.filtertype;
+    }
+    const lowerType = filtertype.toLowerCase() as Tgroupfiltertype;
+    const oldLayers = this.getLayers(lowerType);
+    const oldLayer = oldLayers.find(l => l.get(ID_KEY) === newLayer.id);
+    const newOlLayer = this.create_layers(newLayer);
+    if (newOlLayer && oldLayer) {
+      this.updateLayerByKey({ key: ID_KEY, value: oldLayer.get(ID_KEY) }, newOlLayer, filtertype);
+    }
+  }
+
+
+  private create_layers(newLayer: Layer) {
+    let newOlLayer!: olTileLayer<olTileSource> | olVectorLayer<VectorSource> | olBaseLayer;
+    switch (newLayer.type) {
+      case XyzLayertype:
+        newOlLayer = this.create_xyz_layer(newLayer as RasterLayer);
+        break;
+      case WmsLayertype:
+        newOlLayer = this.create_wms_layer(newLayer as WmsLayer);
+        break;
+      case WmtsLayertype:
+        newOlLayer = this.create_wmts_layer(newLayer as WmtsLayer) as never;
+        break;
+      case TmsLayertype:
+        newOlLayer = this.create_tms_layer(newLayer as VectorLayer | RasterLayer) as never;
+        break;
+      case GeojsonLayertype:
+        newOlLayer = this.create_geojson_layer(newLayer as VectorLayer);
+        break;
+      case KmlLayertype:
+        newOlLayer = this.create_kml_layer(newLayer as VectorLayer);
+        break;
+      case WfsLayertype:
+        newOlLayer = this.create_wfs_layer(newLayer as VectorLayer);
+        break;
+      case CustomLayertype:
+        newOlLayer = this.create_custom_layer(newLayer as CustomLayer) as never;
+        break;
+      case StackedLayertype:
+        newOlLayer = this.create_stacked_layer(newLayer as StackedLayer) as never;
+        break;
+    }
+    return newOlLayer;
+  }
+
+  /**
+   * create layeroptions olLayerOptions<OptionSources> & ILayerOptions
+   * - id
+   * - name
+   * - filtertype
+   * - type
+   * - legendImg
+   * - visible
+   * - zIndex
+   * - opacity
+   * - attribution
+   * - continuousWorld
+   * - set crossOrigin for popup layers
+   * - set source on layeroptions
+   * - popup
+   * - maxResolution/minResolution
+   * - maxZoom/minZoom
+   * - bbox
+   */
+  private createOlLayerOptions(l: Layer, type: Layer['type'], source?: olSource) {
+    if (source) {
+      if (l.attribution) {
+        source.setAttributions([l.attribution]);
+      }
+
+      if (l.continuousWorld) {
+        /**
+         * set wrapX after source creation is not possible so we have to use the private property
+         * https://github.com/openlayers/openlayers/blob/v6.13.0/src/ol/source/Source.js#L48
+         */
+        // tslint:disable-next-line: no-string-literal
+        source['wrapX_'] = l.continuousWorld;
+      }
+
+      /** set crossOrigin for popup layers  */
+      if (l.popup && !l.crossOrigin) {
+        this.sourceSetCross(source);
+      }
+      if (l.crossOrigin) {
+        this.sourceSetCross(source);
+      }
+    }
+
+    // ------------------------------------------
+    const currentProjection = this.getProjection().getCode();
+    const layeroptions: olLayerOptions<LayerOptionsSources> & ILayerOptions = {
+      // className - if
+      opacity: l.opacity || 1,
+      visible: l.visible,
+      // extent - if
+      zIndex: 1,
+      // minResolution - if
+      // maxResolution - if
+      // minZoom - if
+      // maxZoom - if
+      // source - if
+      // map - not set
+      // render - not set
+      // properties - not set
+      id: l.id,
+      name: l.name,
+      filtertype: l.filtertype,
+      type,
+      legendImg: l.legendImg
+    };
+
+    if (source) {
+      layeroptions.source = source;
+    }
+
+    if (l.popup) {
+      layeroptions.popup = l.popup;
+      /**
+       * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+       * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+       */
+      layeroptions.className = l.id;
+    }
+
+    if (l.maxResolution) {
+      layeroptions.maxResolution = l.maxResolution;
+    }
+    if (l.minResolution) {
+      layeroptions.minResolution = l.minResolution;
+    }
+
+    if (l.maxZoom) {
+      layeroptions.maxZoom = l.maxZoom;
+    }
+    if (l.minZoom) {
+      layeroptions.minZoom = l.minZoom;
+    }
+
+    if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+      layeroptions.extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
+      layeroptions.bbox = l.bbox;
+    } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+      layeroptions.extent = [...l.nativeBbox.bbox];
+      layeroptions.nativeBbox = l.nativeBbox;
+    }
+
+    return layeroptions;
+  }
+
+  /**
+   * define layer types
+   */
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Tile-TileLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_XYZ-XYZ.html
+   */
+  private create_xyz_layer(l: RasterLayer): olTileLayer<olTileSource> {
+    const xyzOptions: olXYZOptions = {
+      wrapX: false
+    };
+
+    if (l.crossOrigin !== undefined) {
+      xyzOptions.crossOrigin = l.crossOrigin;
+    }
+
+    const olsource = new olXYZ(xyzOptions);
+
+    const layeroptions = this.createOlLayerOptions(l, 'xyz', olsource);
+
+    const baseTileLayerOptions: olBaseTileLayerOptions<olTileSource> = {
+      preload: 0,
+      useInterimTilesOnError: true
+    };
+    const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+    this.setLayerBboxes(l, newlayer);
+    this.setSubdomains(l, newlayer);
+    this.setCrossOrigin(l, newlayer);
+    this.addEventsToLayer(l, newlayer, olsource);
+    return newlayer;
+  }
+
+
+  /**
+   * create_xyz_layer for Raster
+   *
+   * or
+   *
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_VectorTile-VectorTileLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_VectorTile-VectorTile.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_format_MVT-MVT.html
+   */
+  private create_tms_layer<T extends RasterLayer | VectorLayer>(l: T) {
+    let newlayer: olTileLayer<olTileSource> | olVectorTileLayer;
+    if (l instanceof RasterLayer) {
+      newlayer = this.create_xyz_layer(l);
+      newlayer.set('type', 'tms');
+      return newlayer as tmsReturnType<T>;
+
+    } else if (l instanceof VectorLayer) {
+      const olsource = new olVectorTileSource({
+        format: new olMVT(),
+        tileGrid: createXYZ({ minZoom: l.minZoom || undefined, maxZoom: l.maxZoom || undefined }),
+        url: l.url,
+        wrapX: false
+      });
+
+      const layeroptions = this.createOlLayerOptions(l, 'tms', olsource);
+
+      const vectorTileLayerOptions: olVectorTileLayerOptions = {
+        declutter: true,
+        renderMode: 'hybrid'
+      };
+
+      newlayer = new olVectorTileLayer(Object.assign(layeroptions, vectorTileLayerOptions));
+      this.setLayerBboxes(l, newlayer);
+      this.setCrossOrigin(l, newlayer);
+      this.addEventsToLayer(l, newlayer, olsource);
+
+      const style = l?.options?.style;
+      const mapboxSourceKey = l?.options?.styleSource;
+      if (style && mapboxSourceKey) {
+        applyBackground(newlayer, style);
+        /**
+         * The urls from olsource are not used if sources.<source>.url are set in the open map style
+         * if tms service is used or no correct TileJSON is available we have to override the urls
+         */
+        applyStyle(newlayer, style, mapboxSourceKey).then(res => {
+          this.setSubdomains(l, newlayer);
+        });
+      }
+
+      return newlayer as tmsReturnType<T>;
+    } else {
+      return null;
+    }
+  }
+
+  private create_wms_layer(l: WmsLayer) {
+    let newlayer!: olTileLayer<olTileSource> | olImageLayer<olImageSource>;
+    if (l.params?.TILED === 'true' || l.params?.TILED === undefined || l.params?.TILED === null) {
+      newlayer = this.create_tiled_wms_layer(l);
+    } else if (l.params?.TILED === 'false') {
+      newlayer = this.create_image_wms_layer(l);
+    }
+    return newlayer;
+  }
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Tile-TileLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_TileWMS-TileWMS.html
+   */
+  private create_tiled_wms_layer(l: WmsLayer): olTileLayer<olTileSource> {
+    const tileOptions: olTileWMSOptions = {
+      /** use assign here otherwise params is passed by object reference to the openlayers layer! */
+      params: Object.assign({}, this.keysToUppercase(l.params)), // params: {} = { ...l.params } ~ same as assign destructuring
+      wrapX: false
+    };
+
+    if (l.tileSize) {
+      tileOptions['tileGrid'] = this.getTileGrid<olTileGrid>('default', undefined, l.tileSize);
+      delete tileOptions.params['tileSize'];
+    }
+
+    if (l.crossOrigin !== undefined) {
+      tileOptions.crossOrigin = l.crossOrigin;
+    }
+    const olsource = new olTileWMS(tileOptions);
+    const baseTileLayerOptions: olBaseTileLayerOptions<olTileSource> = {
+      preload: 0,
+      useInterimTilesOnError: true
+    };
+
+    const layeroptions = this.createOlLayerOptions(l, 'wms', olsource);
+    const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+    this.setLayerBboxes(l, newlayer);
+    this.setSubdomains(l, newlayer);
+    this.addEventsToLayer(l, newlayer, olsource);
+    return newlayer;
+  }
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Image-ImageLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_ImageWMS-ImageWMS.html
+   */
+  private create_image_wms_layer(l: WmsLayer): olImageLayer<olImageSource> {
+    const options: olImageWMSOptions = {
+      /**
+       * use assign here otherwise params is passed by object reference to the openlayers layer!
+       * https://thecodebarbarian.com/object-assign-vs-object-spread.html
+       */
+      params: Object.assign({}, this.keysToUppercase(l.params)), // params: {} = { ...l.params } ~ same as assign destructuring
+      url: l.url
+    };
+    const olsource = new olImageWMS(options);
+    const layeroptions = this.createOlLayerOptions(l, 'wms', olsource);
+    const baseImageLayerOptions: olBaseImageLayerOptions<olImageSource> = {
+
+    };
+    const newlayer = new olImageLayer(Object.assign(layeroptions, baseImageLayerOptions));
+    this.setLayerBboxes(l, newlayer);
+    this.addEventsToLayer(l, newlayer, olsource);
+    return newlayer;
+  }
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Tile-TileLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_WMTS-WMTS.html
+   */
+  private create_wmts_layer(l: WmtsLayer) {
+    if (l instanceof WmtsLayer) {
+
+      let tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts');
+      let matrixSet = this.EPSG as string;
+      if (l.params.matrixSetOptions) {
+        matrixSet = l.params.matrixSetOptions.matrixSet;
+        if ('resolutions' in l.params.matrixSetOptions) {
+          const resolutions: Array<string | number> = l.params.matrixSetOptions.resolutions;
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', undefined, l.tileSize, undefined, resolutions);
+        } else if ('resolutionLevels' in l.params.matrixSetOptions || 'tileMatrixPrefix' in l.params.matrixSetOptions) { /** ISimpleMatrixSet */
+          const resolutionLevels = l.params.matrixSetOptions.resolutionLevels;
+          const tileMatrixPrefix = l.params.matrixSetOptions.tileMatrixPrefix;
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', resolutionLevels, l.tileSize, tileMatrixPrefix, undefined);
+        }
+        if ('matrixIds' in l.params.matrixSetOptions) {
+          const matrixIds = l.params.matrixSetOptions.matrixIds;
+          const resolutions = l.params.matrixSetOptions.resolutions;
+          const tileSize = l.params.matrixSetOptions.tileSizes || l.tileSize;
+          const origin = l.params.matrixSetOptions.origin;
+          const origins = l.params.matrixSetOptions.origins;
+          const extent = l.params.matrixSetOptions.extent;
+          const sizes = l.params.matrixSetOptions.sizes;
+          tileGrid = this.getTileGrid<olWMTSTileGrid>('wmts', undefined, tileSize, undefined, resolutions, matrixIds, origin, origins, extent, sizes);
+        }
+      }
+
+      let wmtsOptions: olWMTSOptions = {
+        url: l.url,
+        tileGrid,
+        matrixSet,
+        wrapX: l.continuousWorld || false,
+        layer: l.params.layer,
+        style: l.params.style
+      };
+      wmtsOptions = Object.assign({}, wmtsOptions, l.params);
+
+
+      if (l.crossOrigin !== undefined) {
+        wmtsOptions.crossOrigin = l.crossOrigin;
+      }
+
+      const olsource = new olWMTS(wmtsOptions);
+      const layeroptions = this.createOlLayerOptions(l, 'wmts', olsource);
+      const baseTileLayerOptions: olBaseTileLayerOptions<olTileSource> = {};
+
+      const newlayer = new olTileLayer(Object.assign(layeroptions, baseTileLayerOptions));
+      this.setLayerBboxes(l, newlayer);
+      this.setSubdomains(l, newlayer);
+      this.setCrossOrigin(l, newlayer);
+      this.addEventsToLayer(l, newlayer, olsource);
+      return newlayer;
+    } else {
+      const layer = l as Layer;
+      console.error(`layer with id: ${layer.id} and type ${layer.type} is no instanceof WmtsLayer!`);
+      return undefined;
+    }
+  }
+
+  /**
+   * check projects/demo-maps/src/app/route-components/route-example-olperformance/services/largelayers.service.ts
+   * for WFS examples.
+   *
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
+   */
+  private create_wfs_layer(l: VectorLayer): olVectorLayer<olVectorSource> {
+    let url = undefined;
+    if (l.url) {
+      if (l.url.indexOf('http://') === 0 || l.url.indexOf('https://') === 0) {
+        url = new URL(l.url);
+      } else {
+        url = new URL(l.url, window.location.origin);
+      }
+
+      // making sure that srsname is set to current projection
+      url.searchParams.set('srsname', this.EPSG);
+      // note that we don't need to adjust the bbox. contrary to wms'es, in a wfs,
+      // a bbox may use another projection than the srsname.
+    }
+
+
+    const olsource = new olVectorSource({
+      format: new olGeoJSON()
+    });
+    if (url) {
+      olsource.setUrl(url.toString())
+    }
+
+    const layeroptions = this.createOlLayerOptions(l, 'wfs', olsource);
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<FeatureLike, olVectorSource> = {};
+
+    if (l.options) {
+      // here Object.assign modifies the target object - style... is included
+      Object.assign(baseVectorLayerOptions, l.options);
+    }
+
+    const newlayer = new olVectorLayer<olVectorSource>(Object.assign(layeroptions, baseVectorLayerOptions));
+    if (l.cluster) {
+      this.setCluster(l, newlayer, olsource as olVectorSource, {});
+    }
+    this.setLayerBboxes(l, newlayer);
+    this.setSubdomains(l, newlayer);
+    this.setCrossOrigin(l, newlayer);
+    this.addEventsToLayer(l, newlayer, olsource);
+    return newlayer;
+  }
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_format_GeoJSON-GeoJSON.html
+   */
+  private create_geojson_layer(l: VectorLayer) {
+    let olsource!: olVectorSource;
+    if (l.data) {
+      olsource = new olVectorSource({
+        features: this.geoJsonToFeatures(l.data),
+        format: new olGeoJSON(),
+        wrapX: false
+      });
+    } else if (l.url) {
+      olsource = new olVectorSource({
+        url: l.url,
+        format: new olGeoJSON({
+          dataProjection: WGS84,
+          featureProjection: this.EPSG
+        }),
+        wrapX: false
+      });
+    }
+
+    const layeroptions = this.createOlLayerOptions(l, 'geojson', olsource);
+
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<FeatureLike, olVectorSource> = {};
+    if (l.options) {
+      // here Object.assign modifies the target object - style... is included
+      Object.assign(baseVectorLayerOptions, l.options);
+    }
+
+    const newlayer = new olVectorLayer(Object.assign(layeroptions, baseVectorLayerOptions));
+    if (l.cluster) {
+      this.setCluster(l, newlayer, olsource, {});
+    }
+    this.setLayerBboxes(l, newlayer);
+    this.setCrossOrigin(l, newlayer);
+    this.addEventsToLayer(l, newlayer, olsource);
+    return newlayer;
+  }
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Vector-VectorLayer.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_source_Vector-VectorSource.html
+   * https://openlayers.org/en/latest/apidoc/module-ol_format_KML-KML.html
+   */
+  private create_kml_layer(l: VectorLayer) {
+    let olsource!: olVectorSource;
+    if (l.data) {
+      olsource = new olVectorSource({
+        features: new olKML({ extractStyles: true }).readFeatures(l.data, {
+          dataProjection: WGS84,
+          featureProjection: this.EPSG
+        }),
+        format: new olKML(),
+        wrapX: false
+      });
+    } else if (l.url) {
+      olsource = new olVectorSource({
+        url: l.url,
+        format: new olKML({
+          extractStyles: true,
+          crossOrigin: (l.crossOrigin !== undefined) ? l.crossOrigin : 'anonymous',
+        }),
+        wrapX: false
+      });
+    }
+
+    const layeroptions = this.createOlLayerOptions(l, 'kml', olsource);
+
+    const baseVectorLayerOptions: olBaseVectorLayerOptions<FeatureLike, olVectorSource> = {};
+    if (l.options) {
+      // here Object.assign modifies the target object - style... is included
+      Object.assign(baseVectorLayerOptions, l.options);
+    }
+
+    const newlayer = new olVectorLayer(Object.assign(layeroptions, baseVectorLayerOptions));
+    if (l.cluster) {
+      this.setCluster(l, newlayer, olsource, {});
+    }
+    this.setLayerBboxes(l, newlayer);
+    this.setCrossOrigin(l, newlayer);
+    if (layeroptions.source) {
+      this.addEventsToLayer(l, newlayer, layeroptions.source);
+    }
+    return newlayer;
+  }
+
+  /** bug fix: https://github.com/openlayers/openlayers/issues/10099 */
+  private setCrossOrigin(l: Layer, layer: olLayer<olSource>): void {
+    if (layer instanceof olLayer) {
+      const olsource = layer.getSource() as olSource;
+      /** set crossOrigin for popup layers  */
+      if (l.popup && !l.crossOrigin) {
+        this.sourceSetCross(olsource);
+      }
+
+      if (l.crossOrigin) {
+        this.sourceSetCross(olsource);
+      }
+    }
+  }
+
+  /**
+   * set cluster source and style for point layers
+   */
+  private setCluster(l: VectorLayer, layer: olVectorLayer<olVectorSource>, source: olVectorSource, styleCache: { [key: string]: any }): void {
+    if (l.cluster) {
+      const clusteroptions: olClusterOptions<FeatureLike> = {};
+      if (typeof l.cluster === 'object') {
+        // here Object.assign modifies the target object
+        Object.assign(clusteroptions, l.cluster);
+      }
+      clusteroptions.source = source;
+      const clusterSource = new olCluster(clusteroptions);
+      // layeroptions.source = clusterSource;
+      layer.setSource(clusterSource);
+      layer.setStyle((feature) => {
+        const size = feature.get('features').length;
+        let style = styleCache[size];
+        if (!style) {
+          style = new olStyle({
+            image: new olCircleStyle({
+              radius: 10,
+              stroke: new olStroke({
+                color: '#fff'
+              }),
+              fill: new olFill({
+                color: '#3399CC'
+              })
+            }),
+            text: new olText({
+              text: size.toString(),
+              fill: new olFill({
+                color: '#fff'
+              })
+            })
+          });
+          styleCache[size] = style;
+        }
+        return style;
+      });
+    }
+  }
+
+  /** 
+   * add bbox and nativeBbox to olLayer to use layer.setExtent later after reproject
+  */
+  private setLayerBboxes(l: Layer, layer: olLayer<olSource>): void {
+    if (l.nativeBbox) {
+      layer.set('nativeBbox', l.nativeBbox);
+    }
+    if (l.bbox) {
+      layer.set('bbox', l.bbox);
+    }
+  }
+
+  /** use subdomains to setUrl/s on source */
+  private setSubdomains(l: Layer, layer: olLayer<olSource>): void {
+    if (l instanceof VectorLayer || l instanceof RasterLayer) {
+      const source = layer.getSource() as olXYZ | olVectorTile | olTileWMS | olWMTS | olVectorSource<FeatureLike>;
+      const url = l.url;
+      if (url) {
+        if (l.subdomains) {
+          if (l.type === 'wfs' && (source instanceof olVectorSource)) {
+            l.url = url.replace('{s}', `${l.subdomains[0]}-${l.subdomains[l.subdomains.length - 1]}`);
+            source.setUrl(l.url);
+          } else if (!(source instanceof olVectorSource)) {
+            const urls = l.subdomains.map((item) => url.replace('{s}', `${item}`));
+            source.setUrls(urls);
+          }
+        } else {
+          source.setUrl(url);
+        }
+      }
+
+    }
+  }
+
+  private sourceSetCross(source: olSource): void {
+    /**
+     * https://github.com/search?q=crossOrigin+repo%3Aopenlayers%2Fopenlayers+path%3Asrc%2Fol%2Fsource%2F&type=Code&ref=advsearch&l=&l=
+     */
+    if (source instanceof olImageSource || source instanceof olTileImageSource || source instanceof olTileSource) {
+      (source as any)['crossOrigin'] = 'anonymous';
+      (source as any)['crossOrigin_'] = 'anonymous';
+    }
+  }
+
+  /**
+   * Use this Layer to add a not supported OpenLayers layer
+   *
+   * custom_layer: olBaseLayer
+   */
+  private create_custom_layer(l: CustomLayer<olBaseLayer>) {
+    if (l.custom_layer) {
+      const layer = l.custom_layer;
+      const currentProjection = this.getProjection().getCode();
+
+      if (layer instanceof olLayer) {
+        const olsource = layer.getSource() as olSource;
+        if (l.attribution) {
+          olsource.setAttributions([l.attribution]);
+        }
+
+        if (l.continuousWorld) {
+          /**
+           * set wrapX after source creation is not possible so we have to use the private property
+           * It works based on a test in codesandbox.io
+           * https://github.com/openlayers/openlayers/blob/v6.13.0/src/ol/source/Source.js#L48
+           */
+          // tslint:disable-next-line: no-string-literal
+          olsource['wrapX_'] = l.continuousWorld;
+        } else {
+          // tslint:disable-next-line: no-string-literal
+          olsource['wrapX_'] = false;
+        }
+        this.setLayerBboxes(l, layer);
+        this.setCrossOrigin(l, layer);
+        this.addEventsToLayer(l, layer, olsource);
+
+        // https://github.com/dlr-eoc/ukis-frontend-libraries/issues/100
+        if (olsource instanceof olRasterSource) {
+          layer.on('change:source', (evt) => {
+            evt.oldValue.dispose();
+          });
+        }
+      } else if (layer instanceof olLayerGroup) {
+        layer.getLayers().forEach(gl => {
+          /** add groupID to check if a layer was in an olLayerGroup */
+          gl.set(OL_GROUP_KEY, l.id);
+          gl.set(OL_GROUP_NAME, l.name);
+
+          const layerId = `${l.id}_${olGetUid(gl)}`;
+          if (!gl.get(ID_KEY)) {
+            gl.set(ID_KEY, layerId);
+          }
+          if (gl instanceof olLayer) {
+            this.setLayerBboxes(l, gl);
+            this.setCrossOrigin(l, gl);
+            this.addEventsToLayer(l, gl, gl.getSource());
+          }
+          /**
+           * groups are flattened in map.getAllLayers so add popup to each layer
+           * will show the popup for top layer in the Group if there is a pixel color or feature
+           */
+          if (l.popup && !gl.get(POPUP_KEY)) {
+            gl.set(POPUP_KEY, l.popup);
+            /** set className if not default ol-layer */
+            if (gl.getClassName() === 'ol-layer') {
+              gl['className_'] = layerId;
+            }
+          }
+
+          /** fix set bbox for layers in olLayerGroup not only for the group */
+          if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+            const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
+            gl.setExtent(extent);
+          } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+            gl.setExtent([...l.nativeBbox.bbox]);
+          }
+        });
+      } else {
+        console.error(`The custom_layer of ${l.id} in not a openlayers Layer`);
+      }
+
+      if (l.maxResolution) {
+        layer.setMaxResolution(l.maxResolution);
+      }
+      if (l.minResolution) {
+        layer.setMinResolution(l.minResolution);
+      }
+
+      if (l.maxZoom) {
+        layer.setMaxZoom(l.maxZoom);
+      }
+      if (l.minZoom) {
+        layer.setMinZoom(l.minZoom);
+      }
+
+      const layeroptions: ILayerOptions & olLayerOptions<LayerOptionsSources> = {
+        type: 'custom',
+        name: l.name,
+        id: l.id,
+        visible: l.visible,
+        legendImg: l.legendImg,
+        opacity: l.opacity || 1,
+        zIndex: 1,
+      };
+
+      if (l.popup && !(layer instanceof olLayerGroup)) {
+        layeroptions.popup = l.popup;
+        /**
+         * ol 6.x problem if popup (map.forEachLayerAtPixel) use className
+         * needs the class Name to detect if it is a different layer at the pixel value
+         * https://github.com/openlayers/openlayers/releases/tag/v6.0.0
+         */
+        // tslint:disable-next-line: no-string-literal
+        layer['className_'] = l.id;
+      }
+
+      if (l.bbox && l?.nativeBbox?.epsg !== currentProjection) {
+        const extent = transformExtent(l.bbox.slice(0, 4) as [number, number, number, number], WGS84, currentProjection, transformExtentStops);
+        layer.setExtent(extent);
+      } else if (l.nativeBbox && l.nativeBbox.epsg === currentProjection) {
+        layer.setExtent([...l.nativeBbox.bbox]);
+      }
+
+      layer.setProperties(layeroptions);
+      // don't delete the custom Layer, it is used to newly create all layers from layerservice after map all layers removed!
+      // delete l.custom_layer;
+      return layer;
+
+    } else {
+      console.log('attribute custom_layer not set on layer type custom!', l);
+      return undefined;
+    }
+  }
+
+  /**
+   * Use this Layer to stack multiple ukis layers in one.
+   * creates a olLayerGroup from create_layers
+   */
+  private create_stacked_layer(l: StackedLayer) {
+    if (l instanceof StackedLayer) {
+      const layers = l.layers.map(ml => {
+        // Set visibility and opacity from the StackedLayer as start for all the layers
+        // they will be updated later by layerOrGroupSetVisible and layerOrGroupSetOpacity in map-ol component
+        ml.visible = l.visible;
+        ml.opacity = l.opacity;
+        /** popups are get from the olLayer later so add them */
+        if (l.popup) {
+          ml.popup = l.popup;
+        }
+        /** events are get from the olLayer later so add them */
+        if (l.events) {
+          ml.events = l.events;
+        }
+        return this.create_layers(ml);
+      });
+
+      const baseLayerOptions = this.createOlLayerOptions(l, 'custom');
+
+      /** add groupID to check if a layer was in an olLayerGroup */
+      layers.forEach(oll => {
+        oll.set(OL_GROUP_KEY, l.id);
+        oll.set(OL_GROUP_NAME, l.name);
+      });
+
+      const groupOptions: olLayerGroupOptions = {
+        layers
+      };
+
+      const layerGroup = new olLayerGroup(Object.assign(baseLayerOptions, groupOptions));
+      return layerGroup;
+    } else {
+      console.log('layer is not of type StackedLayer!', l);
+      return undefined;
+    }
+  }
+
+  private resolutionsFromExtent(extent: olExtent, optMaxZoom: number, tileSize: number) {
+    const maxZoom = optMaxZoom;
+
+    const height = olGetHeight(extent);
+    const width = olGetWidth(extent);
+
+    const maxResolution = Math.max(width / tileSize, height / tileSize);
+
+    const length = maxZoom + 1;
+    const resolutions = new Array(length);
+    for (let z = 0; z < length; ++z) {
+      resolutions[z] = maxResolution / Math.pow(2, z);
+    }
+    return resolutions;
+  }
+
+  private matrixIdsFromResolutions(resolutionLevels: number, matrixIdPrefix?: string) {
+    return Array.from(Array(resolutionLevels).keys()).map(l => {
+      if (matrixIdPrefix) {
+        return `${matrixIdPrefix}:${l}`;
+      } else {
+        return l;
+      }
+    });
+  }
+
+  public getTileGrid<T>(type: 'wmts' | 'default' = 'default', resolutionLevels?: number, tileSize?: number | number[], matrixIdPrefix?: string, resolutions?: Array<string | number>, matrixIds?: Array<string | number>, origin?: Array<string | number>, origins?: Array<Array<string | number>>, extent?: TGeoExtent, sizes?: Array<Array<string | number>>): T {
+    const newResolutionLevels = resolutionLevels || DEFAULT_MAX_ZOOM;
+    const newTileSize = (!Array.isArray(tileSize)) ? [tileSize || DEFAULT_TILE_SIZE] : tileSize;
+    const newMatrixIdPrefix = matrixIdPrefix || '';
+
+    const projectionExtent = this.getProjection().getExtent();
+    const defaultResolutions = this.resolutionsFromExtent(projectionExtent, newResolutionLevels, newTileSize[0]);
+    const defaultMatrixIds = this.matrixIdsFromResolutions(defaultResolutions.length, newMatrixIdPrefix);
+    /** how to generate matrix ids is not in the wms GetCapabilities ?? */
+
+    const tileGridOptions: any = {
+      extent: extent || projectionExtent,
+      origin: origin || olGetTopLeft(projectionExtent),
+      resolutions: resolutions || defaultResolutions,
+      tileSize: newTileSize[0]
+    };
+
+    if (origins) {
+      tileGridOptions.origins = origins;
+      delete tileGridOptions.origin;
+    }
+
+    if (sizes) {
+      tileGridOptions.sizes = sizes;
+    }
+
+    if (Array.isArray(tileSize)) {
+      tileGridOptions.tileSizes = newTileSize
+      delete tileGridOptions.tileSize;
+    }
+
+    if (type === 'wmts') {
+      tileGridOptions.matrixIds = matrixIds || defaultMatrixIds;
+      const grid = new olWMTSTileGrid(tileGridOptions);
+      return grid as unknown as T;
+    } else if (type === 'default') {
+      const grid = new olTileGrid(tileGridOptions);
+      return grid as unknown as T;
+    } else {
+      return createXYZ() as T;
+    }
+  }
+
+  private isPopupObj(layerpopup: Layer['popup'] | string): layerpopup is popup {
+    return (layerpopup !== undefined && typeof layerpopup === 'object') && !Array.isArray(layerpopup);
+  }
+
+  private isPopupObjMove(layerpopup: Layer['popup']): layerpopup is popup {
+    return (this.isPopupObj(layerpopup) && layerpopup.event === 'move');
+  }
+
+  private isPopupObjClick(layerpopup: Layer['popup']): layerpopup is popup {
+    return (this.isPopupObj(layerpopup) && layerpopup.event === 'click');
+  }
+
+  private isPopupObjArray(layerpopup: Layer['popup']): layerpopup is popup[] {
+    return Array.isArray(layerpopup) && layerpopup.length > 0 && this.isPopupObj(layerpopup[0]);
+  }
+
+  private isPopupStringArray(layerpopup: Layer['popup']): layerpopup is string[] {
+    return Array.isArray(layerpopup) && layerpopup.length > 0 && typeof layerpopup[0] === 'string';
+  }
+
+  private eventIsBrowserEvent(popupEvt: popup['event'], evt: olMapBrowserEvent<PointerEvent>) {
+    if (popupEvt === 'move' && evt.type === 'pointermove') {
+      return true;
+    } else if (popupEvt === 'click' && evt.type === 'click') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+
+  /** USED in map-ol.component */
+  /**
+   *
+   * - map.getFeaturesAtPixel: Detect features that intersect a pixel on the viewport
+   *   Vector Layers
+   *
+   * - layer.getData: Detect layers that have a color value at a pixel on the viewport
+   *   Raster Layers
+   *   Data for an image can only be retrieved if the source's crossOrigin property is set.
+   */
+
+  /**
+   *  1. on a Map event iterate through map.getAllLayers if:
+   *  - layer visible
+   *  - opacity > 0
+   *  - check for popup.asObservable and create map
+   *  - pixel coordinate in layer extent
+   *  - layer has popup
+   *
+   *  - filterLayerNoPopup
+   *  - layer has pixel data
+   *  - pixel data alpha value > 0
+   *  - layer is raster
+   *
+   *  - filterLayerNoPopup
+   *  - pixel coordinate in layer extent
+   *  - layer is vector
+   *  - layer has features at pixel
+   *
+   * returns top visible layer - so no popups are shown for layers beneath if layer.opacity > 0 https://github.com/dlr-eoc/ukis-frontend-libraries/issues/94#issuecomment-916759628
+   *  2. check top layer event (click or move)
+   *  3. set cursor for Layers with a color value or feature
+   *     if no layer has been hit and the map popup.asObservable has items, then publish a null event for them
+   *  4. differentiate between raster and vector
+   *
+   *  5. limit properties if popup property is: Array<string> | popup | popup[] -> popup?.filterkeys
+   *  6. overwrite properties if popup property is: popup | popup[]
+   *  7. check for popupFunction, asyncPopup, dynamicPopup and asObservable
+   *  8. use addPopup() or addPopupObj()
+   *
+   *  9. check popup event and if move popup exists => reuse old popup
+   *  10. remove move popups if different event or !popup.event
+   *  11. create new popup if not 9. or 10.
+   *  12. prepare ol overlayoptions
+   *  13. remove DynamicPopup if exists
+   *  14. createPopupContainer
+   *  15. set ol overlay addEvent and type = popup
+   *  16. get coordinate from geometry or map.event
+   *  17. set Position and map.addOverlay(overlay) if popup not exists
+   */
+  public layersOnMapEvent(evt: olMapBrowserEvent<PointerEvent>) {
+    let layerHit = false;
+    const allMapLayers = this.map.getAllLayers();
+    let layersLength = allMapLayers.length;
+    const layerPopupsAsObservable = new Map<string, olLayer<olSource, LayerRenderer<any>>>();
+
+    /** iterate in reverse order (from top to bottom) if a layer has data/feature at the pixel, if a layer is found break out to only use top layer  */
+    let item: { layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView, feature?: olFeature | olRenderFeature } | null = null;
+    while (layersLength--) {
+      const layer = allMapLayers[layersLength];
+      let layerVisible = layer.getVisible();
+      let layerOpacity = layer.getOpacity();
+      const hasGroup = layer.get(OL_GROUP_KEY);
+      if (hasGroup) {
+        const group = this.getLayerByKey({ key: ID_KEY, value: hasGroup });
+        if (group) {
+          layerVisible = group.getVisible();
+          layerOpacity = group.getOpacity();
+        }
+      }
+
+      const layerPopup: Layer['popup'] = layer.get(POPUP_KEY);
+      this.checkForPopupAsObservable(layer, layerVisible, layerOpacity, layerPopup, layerPopupsAsObservable);
+      // check for visible layers with no popup above others
+      if (layerVisible && layerOpacity !== 0 && this.filterLayerExtent(layer, evt.pixel) && !layerPopup) {
+        break;
+      } else if (this.filterLayerNoPopup(layer) && layer.getData && layer.getData(evt.pixel) && this.checkIsRaster(layer)) {
+        // rgba Data
+        const pixelData = layer.getData(evt.pixel);
+        let a;
+        if (pixelData instanceof Uint8ClampedArray || pixelData instanceof Uint8Array || pixelData instanceof Float32Array) {
+          a = pixelData[3];
+        }
+
+        if (a || pixelData instanceof DataView) {
+          item = {
+            layer,
+            color: pixelData || undefined
+          };
+          break;
+        }
+
+      } else if (this.filterLayerNoPopup(layer) && this.filterLayerExtent(layer, evt.pixel) && this.checkIsVector(layer)) {
+        // fixes: https://github.com/dlr-eoc/ukis-frontend-libraries/issues/120
+        const features = this.map.getFeaturesAtPixel(evt.pixel, {
+          layerFilter: (l) => {
+            return layer.get(ID_KEY) === l.get(ID_KEY)
+          }
+        });
+        if (features.length) {
+          item = {
+            layer,
+            feature: features[0]
+          };
+          break;
+        }
+      }
+    }
+
+    if (item) {
+      const popup: Layer['popup'] = (item.layer.get(POPUP_KEY));
+
+      /** check if cursor was set (we need this only on move?) */
+      this.hitLayerCurr = item.layer.get(ID_KEY);
+      if (!this.hitLayerPrev) {
+        this.hitLayerPrev = this.hitLayerCurr;
+      }
+
+      /** set cursor for Layers with a color value */
+      if (item.color || item.feature) {
+        layerHit = true;
+      }
+
+      /** remove cursor and move-popups on layer change */
+      if (this.hitLayerPrev && this.hitLayerPrev !== this.hitLayerCurr) {
+        layerHit = false;
+        this.hitLayerPrev = this.hitLayerCurr;
+      }
+      const useEvent = this.checkTopLayerEvent(evt, popup);
+      if (useEvent) {
+        this.layerOnEvent(evt, item.layer, item.color, item.feature);
+      }
+
+    }
+
+    const targetElement = this.map.getTargetElement();
+    if (targetElement) {
+      if (layerHit) {
+        targetElement.style.cursor = 'pointer';
+      } else {
+        this.publishNullPropertiesAsObservable(layerPopupsAsObservable, evt);
+        this.removeAllPopups((item) => {
+          return item.get('addEvent') === 'pointermove';
+        });
+        targetElement.style.cursor = '';
+      }
+    }
+
+  }
+
+  /**
+   * Check for popup.asObservable to publish null properties if layer is not hit.
+   */
+  private checkForPopupAsObservable(layer: olLayer<olSource, LayerRenderer<any>>, layerVisible: boolean, layerOpacity: number, layerPopup: Layer['popup'], layerPopupsAsObservable: Map<string, olLayer<olSource, LayerRenderer<any>>>) {
+    if (layerVisible && layerOpacity !== 0 && layerPopup) {
+      if (this.isPopupObj(layerPopup) && layerPopup.asObservable) {
+        layerPopupsAsObservable.set(layer.get(ID_KEY), layer);
+      } else if (this.isPopupObjArray(layerPopup)) {
+        layerPopup.forEach(p => {
+          if (p.asObservable) {
+            layerPopupsAsObservable.set(layer.get(ID_KEY), layer);
+          }
+        });
+      }
+    }
+  }
+
+  /**
+   * Publish null properties for popup.asObservable if layer is not hit.
+   */
+  private publishNullPropertiesAsObservable(layerPopupsAsObservable: Map<string, olLayer<olSource, LayerRenderer<any>>>, event: olMapBrowserEvent<PointerEvent>) {
+    if (layerPopupsAsObservable.size) {
+
+      layerPopupsAsObservable.forEach(item => {
+        const popup: Layer['popup'] = item.get(POPUP_KEY);
+        const popups: popup[] = []
+        if (this.isPopupObj(popup) && popup.asObservable) {
+          popups.push(popup);
+        } else if (this.isPopupObjArray(popup)) {
+          popup.forEach(p => {
+            if (p.asObservable) {
+              popups.push(p);
+            }
+          });
+        }
+
+        popups.forEach(p => {
+          const sameEvent = this.eventIsBrowserEvent(p.event || 'click', event);
+          if (sameEvent) {
+            this.popupEvents.next({
+              popupObj: p,
+              popupParams: {
+                layerId: item.get(ID_KEY),
+                layerName: item.get('name'),
+                mapEvent: event,
+                layer: item,
+                properties: undefined,
+              }
+            });
+          }
+        });
+      });
+    }
+  }
+
+  /**
+   * To filtered out layers with no popup or show the popup beneath e.g. text overlays
+   * in map.forEachLayerAtPixel for raster and map.forEachFeatureAtPixel for vector
+   */
+  private filterLayerNoPopup = (l: olLayer<olSource>) => {
+    const popup: Layer['popup'] = (l.get(POPUP_KEY));
+    let shouldNotFilterLayer = true;
+    if (!popup) {
+      shouldNotFilterLayer = false;
+    }
+    if (popup && this.isPopupObj(popup)) {
+      if (popup.filterLayer === true) {
+        shouldNotFilterLayer = false;
+      }
+    }
+    return shouldNotFilterLayer;
+  }
+
+  private checkTopLayerEvent(evt: olMapBrowserEvent<PointerEvent>, popup: Layer['popup']) {
+    let useEvent: 'click' | 'move' | null = null;
+    const clickOrMove = (evt: olMapBrowserEvent<PointerEvent>, popup: popup) => {
+      if (popup.event) {
+        if (this.eventIsBrowserEvent(popup.event, evt) && this.isPopupObjClick(popup)) {
+          useEvent = 'click';
+        } else if (this.eventIsBrowserEvent(popup.event, evt) && this.isPopupObjMove(popup)) {
+          useEvent = 'move';
+        }
+      } else {
+        /** only show popups without an event for browser click  */
+        if (evt.type === 'click') {
+          useEvent = 'click';
+        }
+      }
+    }
+    // check event is browser event
+    if (typeof popup === 'boolean') {
+      if (popup === true) {
+        /** only show popups without an event for browser click  */
+        if (evt.type === 'click') {
+          useEvent = 'click';
+        }
+      }
+    } else if (this.isPopupStringArray(popup)) {
+      /** only show popups without an event for browser click  */
+      if (evt.type === 'click') {
+        useEvent = 'click';
+      }
+    } else {
+      /** popup is  popup | popup[] */
+      if (popup) {
+        if (this.isPopupObjArray(popup)) {
+          popup.map(p => {
+            clickOrMove(evt, p);
+          });
+        } else {
+          clickOrMove(evt, popup);
+        }
+      }
+    }
+
+    return useEvent;
+  }
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html#Subclasses
+   */
+  private checkIsRaster(layer: olLayer<any>): layer is olBaseImageLayer<olImageSource, CanvasImageLayerRenderer> | olBaseTileLayer<olTileSource, CanvasTileLayerRenderer> {
+    if (layer instanceof olBaseImageLayer || layer instanceof olBaseTileLayer) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * https://openlayers.org/en/latest/apidoc/module-ol_layer_Layer-Layer.html#Subclasses
+   */
+  private checkIsVector(layer: olLayer<any>): layer is olBaseVectorLayer<FeatureLike, olVectorSource, CanvasVectorLayerRenderer> {
+    if (layer instanceof olBaseVectorLayer && !this.checkIsRaster(layer)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public layerOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView, feature?: olFeature | olRenderFeature) {
+    if (this.checkIsRaster(layer)) {
+      this.rasterOnEvent(evt, layer, color);
+    } else if (this.checkIsVector(layer)) {
+      this.vectorOnEvent(evt, layer, feature);
+    }
+  }
+
+  private filterLayerExtent(layer: olLayer, pixel: Pixel) {
+    let shouldNotFilterLayer = true;
+    /** fix for https://github.com/openlayers/openlayers/issues/12886 */
+    const layerExtent = layer.getExtent();
+    if (layerExtent) {
+      const pixelCoordinate = this.map.getCoordinateFromPixel(pixel);
+      if (!olContainsCoordinate(layerExtent, pixelCoordinate)) {
+        shouldNotFilterLayer = false;
+      }
+    }
+
+    return shouldNotFilterLayer;
+  }
+
+  public vectorOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, feature?: olFeature | olRenderFeature) {
+    if (layer && feature) {
+      const popup: Layer['popup'] = layer.get(POPUP_KEY);
+      /**
+       * properties of olFeature.
+       */
+      let properties: any = {};
+      const featureProperties = feature.getProperties();
+
+      const childFeatures = featureProperties['features'];
+      if (childFeatures && childFeatures.length === 1) {
+        const childFeature = childFeatures[0];
+        properties = childFeature.getProperties();
+      } else if (childFeatures && childFeatures.length > 1) {
+        /**
+         * zoom to cluster on click
+         * or check for layerpopup.event !== move
+         */
+        if (evt.type === 'click') {
+          const extent = this.getFeaturesExtent(childFeatures);
+          this.setExtent(extent);
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        // type no cluster
+        properties = feature.getProperties();
+      }
+      this.prepareAddPopup(layer, evt, popup, feature, properties);
+      return false; // Is this return correct?
+    } else {
+      return true; // Is this return correct?
+    }
+  }
+
+  public rasterOnEvent(evt: olMapBrowserEvent<PointerEvent>, layer: olLayer<any>, color?: Uint8ClampedArray | Uint8Array | Float32Array | DataView) {
+    const popup: Layer['popup'] = layer.get(POPUP_KEY);
+    if (popup) {
+      this.prepareAddPopup(layer, evt, popup, undefined, null, color);
+    }
+  }
+
+  /**
+   * @param featurProperties: properties of olFeature
+   */
+  private prepareAddPopup(layer: olLayer<any>, evt: olMapBrowserEvent<PointerEvent>, layerpopup: Layer['popup'], feature?: olFeature<any> | olRenderFeature, featurProperties?: any, color?: IPopupParams['color']) {
+    const layerProperties = layer.getProperties();
+
+    const popupParams: IPopupParams = {
+      layerId: layerProperties['id'],
+      layerName: layerProperties['name'] || layerProperties[OL_GROUP_NAME] || null,
+      mapEvent: evt,
+      layer: layer,
+      properties: (featurProperties) ? Object.assign({}, featurProperties) : {}
+    }
+
+    if (popupParams.properties?.['geometry']) {
+      delete popupParams.properties['geometry'];
+    }
+
+    if (feature) {
+      popupParams.feature = feature;
+    }
+
+    if (color) {
+      popupParams.color = color;
+    }
+
+    const limitPopupObjProperties = (popupObj: popup) => {
+      const filterkeys = popupObj.filterkeys;
+      const properties = popupParams.properties;
+      if (popupObj && filterkeys && properties) {
+        popupParams.properties = Object.keys(properties)
+          .filter(key => filterkeys.includes(key))
+          .reduce((obj, key) => {
+            (obj as any)[key] = properties[key];
+            return obj;
+          }, {});
+      }
+    }
+
+    /** Popup is array - limit properties */
+    if (this.isPopupStringArray(layerpopup)) {
+      const properties = popupParams.properties;
+      if (properties) {
+        popupParams.properties = Object.keys(properties)
+          .filter(key => layerpopup.includes(key))
+          .reduce((obj, key) => {
+            (obj as any)[key] = properties[key];
+            return obj;
+          }, {});
+      }
+
+    }
+    /** Popup is array of popupObj - limit properties */
+    else if (this.isPopupObjArray(layerpopup)) {
+      // is the first popupObj in the array with the same event as evt.type
+      const popupObj = layerpopup.find(p => this.eventIsBrowserEvent(p.event, evt));
+      if (popupObj) {
+        limitPopupObjProperties(popupObj);
+      }
+    }
+    /** Popup is object - limit properties */
+    else if (this.isPopupObj(layerpopup)) {
+      limitPopupObjProperties(layerpopup);
+    }
+
+
+    const overwritePopup = (popupObj: popup) => {
+      /** overwrite the keys of the layer properties */
+      const properties = popupObj.properties;
+      const parmsProperties = popupParams.properties;
+      if (properties && parmsProperties) {
+        const usedProperties = Object.keys(properties);
+        if (Array.isArray(usedProperties)) {
+          popupParams.properties = Object.keys(parmsProperties)
+            /* .filter(key => usedProperties.includes(key)) */
+            .reduce((obj, key) => {
+              const newKey = properties[key];
+              if (newKey) {
+                (obj as any)[newKey] = parmsProperties[key];
+              } else {
+                (obj as any)[key] = parmsProperties[key];
+              }
+              return obj;
+            }, {});
+        }
+
+
+      }
+    }
+
+    /** overwrite and us popupFunction or dynamicPopup */
+    if (this.isPopupObjArray(layerpopup)) {
+      layerpopup.forEach(p => {
+        if (this.eventIsBrowserEvent(p.event, evt)) {
+          overwritePopup(p);
+        }
+      })
+    } else if (this.isPopupObj(layerpopup)) {
+      overwritePopup(layerpopup);
+    }
+
+    const addPopupObj = (popupObj: popup) => {
+      /** async function where you can paste a an Object or html string to the callback */
+      if ('asyncPopup' in popupObj && popupObj.asyncPopup) {
+        popupObj.asyncPopup(popupParams, (asyncData) => {
+          if (popupObj.asObservable) {
+            this.publishPopupEvent(popupObj, popupParams, asyncData);
+          } else {
+            this.addPopup(popupParams, popupObj, asyncData, popupObj.event, popupObj.single);
+          }
+        });
+        /** add event if popup object */
+      } else {
+        if (popupObj.asObservable) {
+          this.publishPopupEvent(popupObj, popupParams);
+        } else {
+          this.addPopup(popupParams, popupObj, undefined, popupObj.event, popupObj.single);
+        }
+      }
+    }
+
+    /** popup is boolean or string array */
+    if (typeof layerpopup === 'boolean' || this.isPopupStringArray(layerpopup)) {
+      this.addPopup(popupParams);
+    }
+    /** popup array of popupObj */
+    else if (this.isPopupObjArray(layerpopup)) {
+      layerpopup.forEach(p => {
+        // filter that browser event and popup event are the same
+        if (this.eventIsBrowserEvent(p.event, evt)) {
+          addPopupObj(p);
+        }
+      });
+    }
+    /** popup is a popupObj */
+    else if (layerpopup) {
+      addPopupObj(layerpopup);
+    }
+  }
+
+  private publishPopupEvent(popupObj: popup, popupParams: IPopupParams, asyncData?: any) {
+    if (asyncData) {
+      popupParams.properties = Object.assign(popupParams.properties || {}, asyncData);
+    }
+
+    const pEvent: IPopupEvent = {
+      popupObj,
+      popupParams
+    }
+    this.popupEvents.next(pEvent);
+  }
+
+
+  public addPopup(popupParams: IPopupParams, popupObj?: popup, popupContent?: string | IAnyObject | false, event?: 'click' | 'move', removePopups?: boolean) {
+    const layerpopup: Layer['popup'] = popupParams.layer.get(POPUP_KEY);
+    // check if popup is already there and event is move
+    const layerID = popupParams.layer.get(ID_KEY);
+    const moveID = `popup_move_ID`;
+    const moveKeyLayerFeature = 'move_ID_L_F';
+    const movePopup = this.getPopups().find(item => item.getId() === moveID);
+    const browserEvent = popupParams.mapEvent;
+
+    let moveIDlf = undefined;
+    if (event === 'move') {
+      /** only on raster color is added - see rasterOnEvent()*/
+      if (popupParams.color) {
+        moveIDlf = `${layerID}:${popupParams.color.toString()}`;
+      } else {
+        if (popupParams.feature) {
+          moveIDlf = `${layerID}:${olGetUid(popupParams.feature)}`;
+        } else if (popupParams.layer) {
+          moveIDlf = `${layerID}:${olGetUid(popupParams.layer)}`;
+        }
+      }
+    }
+
+    /**
+     * If event move and the map already has a Overlay for move
+     * then only create new html container and set the position
+     */
+    if (event === 'move' && browserEvent.type === 'pointermove' && movePopup) {
+      let coordinate;
+      // When a point is clicked, its coordinate is used for the popup position.
+      const feature: olFeature<olPoint> = popupParams.feature;
+      if (feature && feature.getGeometry()?.getType() === 'Point') {
+        coordinate = feature.getGeometry()?.getCoordinates();
+      } else {
+        coordinate = browserEvent.coordinate;
+      }
+
+      /** check if layer or feature changes, then only create new container */
+      if (moveIDlf !== movePopup.get(moveKeyLayerFeature)) {
+        const container = this.createPopupContainer(movePopup, popupParams, popupObj, popupContent, event);
+        movePopup.setElement(container);
+      }
+
+      movePopup.setPosition(coordinate);
+      /** update movePopup to be rendered over the previous added popup */
+      const movePopupElement = movePopup.getElement();
+      if (movePopupElement && movePopupElement.parentElement) {
+        movePopupElement.parentElement.style.zIndex = '1';
+      }
+    } else if (browserEvent.type === 'pointermove' && !event) {
+      /** remove move popup if move on a click layer */
+      if (movePopup) {
+        this.removeAllPopups((item) => {
+          return item.get('addEvent') === 'pointermove';
+        });
+      }
+    } else if (browserEvent.type === 'pointermove' && event === 'click') {
+      if (movePopup) {
+        this.removeAllPopups((item) => {
+          return item.get('addEvent') === 'pointermove';
+        });
+      }
+    } else {
+      let popupID = undefined;
+      if (event === 'move') {
+        popupID = moveID;
+      } else {
+        if (popupParams.feature) {
+          popupID = `${layerID}:${olGetUid(popupParams.feature)}`;
+        } else if (popupParams.layer) {
+          popupID = `${layerID}:${olGetUid(popupParams.layer)}`;
+        } else {
+          popupID = `${layerID}:popup_${new Date().getTime()}`;
+        }
+      }
+
+      const defaultOptions: olOverlayOptions = {
+        // element: container,
+        id: popupID,
+        autoPan: {
+          animation: {
+            duration: 250
+          }
+        },
+        positioning: 'bottom-center',
+        stopEvent: true,
+        insertFirst: false,
+      };
+
+      let overlayoptions = defaultOptions;
+
+      /**
+       * Check if popup is an array of popup obj's or a popup obj
+       * then merge the popup?.options with the default ol/overlay options
+       */
+      if (this.isPopupObjArray(layerpopup)) {
+        const objForEvent = layerpopup.find(p => this.eventIsBrowserEvent(p.event, browserEvent));
+        if (objForEvent && objForEvent.options) {
+          overlayoptions = Object.assign(defaultOptions, objForEvent.options);
+        }
+      } else if (this.isPopupObj(layerpopup) && layerpopup.options) {
+        overlayoptions = Object.assign(defaultOptions, layerpopup.options);
+      }
+
+      const overlay = new olOverlay(overlayoptions);
+      if (moveIDlf) {
+        overlay.set(moveKeyLayerFeature, moveIDlf);
+      }
+
+      if (removePopups) {
+        this.removeAllPopups((item) => {
+          // only remove the popups from the current layer
+          const elementID = item.getId();
+          const layer = elementID?.toString().split(':')[0];
+          if (layer) {
+            return layerID === layer;
+          } else {
+            return true;
+          }
+        });
+      }
+
+      const hasPopup = this.getPopups().find(item => (item.getId() === overlay.getId() && overlay.getId() !== moveID));
+      if (hasPopup) {
+        // removes ol-part of popup
+        this.map.removeOverlay(hasPopup);
+        // removes angular-part of popup
+        const hasId = hasPopup.getId();
+        if (hasPopup && hasId) {
+          this.destroyDynamicPopupComponent(hasId.toString());
+        }
+      }
+
+      const container = this.createPopupContainer(overlay, popupParams, popupObj, popupContent, event);
+      /** edge case when moving and clicking sometimes the browser event is not like the popup event */
+      if (container) {
+        if (overlay.getId() === moveID) {
+          overlay.set('addEvent', 'pointermove');
+        } else {
+          overlay.set('addEvent', browserEvent.type);
+        }
+        overlay.set(OVERLAY_TYPE_KEY, POPUP_KEY);
+        overlay.setElement(container);
+      }
+
+
+      let coordinate;
+      // When a point is clicked, its coordinate is used for the popup position.
+      const feature: olFeature<olPoint> = popupParams.feature;
+      if (feature && feature.getGeometry()?.getType() === 'Point') {
+        coordinate = feature.getGeometry()?.getCoordinates();
+      } else {
+        coordinate = browserEvent.coordinate;
+      }
+
+      if (container) {
+        overlay.setPosition(coordinate);
+      } else {
+        this.map.removeOverlay(overlay);
+      }
+
+      /**
+       * edge case prevent add multiple movePopup's
+       * only add a new popup if it's not a movePopup or there isn't a already existing movePopup
+       */
+      if (!(movePopup && event === 'move')) {
+        this.map.addOverlay(overlay);
+      }
+    }
+  }
+
+  private createPopupContainer(overlay: olOverlay, popupParams: IPopupParams, popupObj?: popup, popupContent?: string | IAnyObject | false, event?: 'click' | 'move') {
+    const content = document.createElement('div');
+    content.className = 'ol-popup-content';
+    let popupHtml = '';
+    let hasContent = true;
+    if (popupObj?.popupFunction) {
+      const content = popupObj.popupFunction(popupParams);
+      if (typeof content === 'string') {
+        popupHtml = content;
+      } else if (content === false) {
+        hasContent = false;
+      } else {
+        popupHtml = this.createPopupHtml(content);
+      }
+    } else if (popupContent) {
+      if (typeof popupContent === 'string') {
+        popupHtml = popupContent;
+      } else {
+        popupHtml = this.createPopupHtml(popupContent);
+      }
+    } else if (popupContent === false) {
+      hasContent = false;
+    } else if (popupParams.properties && Object.keys(popupParams.properties).length) {
+      popupHtml = this.createPopupHtml(popupParams.properties);
+    } else {
+      hasContent = false;
+    }
+
+    content.innerHTML = popupHtml;
+    if (popupObj?.dynamicPopup) {
+      // To prevent memory leak:
+      // if this very popup already has been created (for example `popup_move_ID`),
+      // then destroy it before creating a new one.
+      const id = overlay.getId()?.toString();
+      if (id) {
+        this.destroyDynamicPopupComponent(id);
+        // Only now create a new one.
+        this.createDynamicPopupComponent(id, content, popupParams, popupObj);
+      }
+    }
+
+    if (!hasContent) {
+      // this sets the Overlay.setElement(undefined);
+      return undefined;
+    } else {
+      const container = document.createElement('div');
+      container.className = 'ol-popup';
+      const id = overlay.getId()?.toString();
+      if (id) {
+        container.id = id;
+      }
+      container.style.display = 'block';
+
+      if (!event || event !== 'move') {
+        const closer = document.createElement('a');
+        closer.className = 'ol-popup-closer';
+        container.appendChild(closer);
+
+        const closeFunction = () => {
+          closer.removeEventListener('click', closeFunction, false);
+          // removes ol-part of popup
+          this.map.removeOverlay(overlay);
+          // removes angular-part of popup
+          if (id) {
+            this.destroyDynamicPopupComponent(id);
+          }
+        };
+        closer.addEventListener('click', closeFunction, false);
+      }
+      container.appendChild(content);
+      return container;
+    }
+  }
+
+  /** USED in map-ol.component */
+  public removeAllPopups(filter?: (item: olOverlay) => boolean) {
+    let popups = this.getPopups();
+    if (filter) {
+      popups = this.getPopups().filter(filter);
+    }
+    popups.forEach((overlay) => {
+      const id = overlay.getId()?.toString();
+      if (overlay.get(OVERLAY_TYPE_KEY) === POPUP_KEY && id) {
+        // removes ol-part of popup
+        this.map.removeOverlay(overlay);
+        // removes angular-part of popup
+        this.destroyDynamicPopupComponent(id);
+      }
+    });
+  }
+
+  public hideAllPopups(hide: boolean, filter?: (item: olOverlay) => boolean) {
+    let popups = this.getPopups();
+    if (filter) {
+      popups = this.getPopups().filter(filter);
+    }
+    popups.forEach((overlay) => {
+      if (overlay.get(OVERLAY_TYPE_KEY) === POPUP_KEY) {
+        const element = overlay.getElement();
+        if (element) {
+          if (hide) {
+            element.classList.add('hidden');
+          } else {
+            element.classList.remove('hidden');
+          }
+        }
+      }
+    });
+  }
+
+  public createPopupHtml(obj: any) {
+    let htmlStr = '<table>';
+    for (const o in obj) {
+      if (obj.hasOwnProperty(o)) {
+        htmlStr += '<tr><td style="vertical-align: top; padding-right: 7px;"><b>' + o + ': </b></td><td>' + obj[o] +
+          '</td></tr>';
+      }
+    }
+    htmlStr = htmlStr + '</table>';
+    return htmlStr;
+  }
+
+  public getPopups(): olOverlay[] {
+    const popups: olOverlay[] = [];
+    this.map.getOverlays().getArray().slice(0).forEach((overlay) => {
+      if (overlay.get(OVERLAY_TYPE_KEY) === POPUP_KEY) {
+        popups.push(overlay);
+      }
+    });
+    return popups;
+  }
+
+  /**
+   * Destroys a popup-component.
+   *  - kills the component (with `.destroy()`)
+   *  - detaches it from angular-application (with `.destroy()`)
+   *  - removes the entry from `this.dynamicPopupComponents`
+   * @param id : The string under which the popup-component has been stored in `this.dynamicPopupComponents`
+   */
+  private destroyDynamicPopupComponent(id: string): void {
+    const hasId = this.dynamicPopupComponents.get(id);
+    if (hasId) {
+      hasId.destroy();
+      this.dynamicPopupComponents.delete(id);
+    }
+  }
+
+  /**
+   * Creates an angular component to be used as popup-body.
+   *  - creates component
+   *  - attaches component-view to angular-application
+   *  - keeps reference to component in `this.dynamicPopupComponents` for later removal.
+   *
+   * @param id : The container-id. Also the id under which the component will be stored in `this.dynamicPopupComponents`.
+   * @param anchorElement : The html-element to which the popup-component shall be attached
+   * @param args : Must contain `dynamicPopup`
+   */
+  private createDynamicPopupComponent(id: string, anchorElement: HTMLElement, popupParams: IPopupParams, popupObj: popup): void {
+    if (popupObj.dynamicPopup) {
+      const popupBody = createComponent(popupObj.dynamicPopup.component, {
+        environmentInjector: this.envInjector,
+        hostElement: anchorElement
+      });
+
+      if (popupObj.dynamicPopup.getAttributes) {
+        const attributes = popupObj.dynamicPopup.getAttributes(popupParams);
+        for (const key in attributes) {
+          const attributesKeyVal = (attributes as any)[key]
+          if (attributesKeyVal !== 'undefined') {
+            /**
+             * if the input is done by input() insteadof @Input() it is a function so return a signal
+             */
+            const isSignalInput = isSignal(popupBody.instance[key]);
+            if (isSignalInput) {
+              popupBody.instance[key] = signal(attributesKeyVal);
+            } else {
+              popupBody.instance[key] = attributesKeyVal;
+            }
+          }
+        }
+      }
+      this.app.attachView(popupBody.hostView);
+      this.dynamicPopupComponents.set(id, popupBody);
+    }
+  }
+
+  /**
+   *
+   * @param extent: [minX, minY, maxX, maxY] - can also be a nativeExtent where the axis order differs
+   * @param geographic: boolean
+   * @param fitOptions: olFitOptions
+   * @returns olExtend: [minX, minY, maxX, maxY]
+   */
+  public setExtent(extent: TGeoExtent, geographic?: boolean, fitOptions?: olFitOptions): TGeoExtent {
+    const extentProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
+    const destinationProjectionCode = this.getProjection().getCode();
+    const destinationProjection = getProjection(destinationProjectionCode);
+    const transfomExtent = transformExtent(extent.slice(0, 4), extentProjection || this.EPSG, destinationProjection || destinationProjectionCode, transformExtentStops);
+    const newFitOptions: olFitOptions = {
+      size: this.map.getSize(),
+      // padding: [100, 200, 100, 100] // Padding (in pixels) to be cleared inside the view. Values in the array are top, right, bottom and left padding. Default is [0, 0, 0, 0].
+    };
+    if (fitOptions) {
+      Object.assign(newFitOptions, fitOptions);
+    }
+    this.map.getView().fit(transfomExtent, fitOptions);
+    return (transfomExtent as TGeoExtent);
+  }
+
+  /** 
+   * USED in map-ol.component
+   * ol.Coordinate xy
+   * 
+   * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L1707 
+   */
+  public setCenter(center: number[], geographic?: boolean): number[] {
+    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
+    const transfomCenter = transform(center, projection!, this.getProjection().getCode());
+    // console.log('set center in svc', transfomCenter)
+    // console.log(this.map.getView().getCenter())
+    this.map.getView().setCenter(transfomCenter);
+    return transfomCenter;
+  }
+
+  /** USED in map-ol.component */
+  public getCenter(geographic?: boolean) {
+    const dstProjection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
+    const srcProjection = getProjection(this.getProjection().getCode());
+    const transfomCenter = transform(this.map.getView().getCenter()!, srcProjection!, dstProjection!);
+    return transfomCenter;
+  }
+  /**
+   *
+   * @param features: olFeature[]
+   * @param geographic: boolean
+   * @returns olExtend: [minX, minY, maxX, maxY]
+   */
+  public getFeaturesExtent(features: FeatureLike[], geographic?: boolean): TGeoExtent {
+    const extent: any = features[0].getGeometry()?.getExtent().slice(0);
+    features.forEach((feature) => {
+      olExtend(extent, feature.getGeometry()?.getExtent() || []);
+    });
+    if (geographic) {
+      const projection = getProjection(WGS84);
+      const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection!, transformExtentStops);
+      return (transfomExtent as TGeoExtent);
+    } else {
+      return extent;
+    }
+  }
+
+  /** USED in map-ol.component */
+  /**
+   * @param geographic: boolean
+   * @returns olExtend: [minX, minY, maxX, maxY]
+   */
+  public getCurrentExtent(geographic?: boolean): TGeoExtent {
+    const projection = (geographic) ? getProjection(WGS84) : getProjection(this.EPSG);
+    const extent = this.map.getView().calculateExtent();
+    const transfomExtent = transformExtent(extent, this.getProjection().getCode(), projection!, transformExtentStops);
+    return (transfomExtent as TGeoExtent);
+  }
+
+  /** 
+   * USED in map-ol.component
+   * 
+   * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L291
+   * https://github.com/openlayers/openlayers/blob/0b6305ac8a7665312ba30a89d87e08af7c69ddd4/src/ol/View.js#L1707
+   */
+  public setRotation(rotation: number) {
+    const view = this.map.getView();
+    // convert rotation vom deg to rad
+    rotation = rotation * (Math.PI / 180);
+    view.setRotation(rotation);
+  }
+
+  /** USED in map-ol.component */
+  public getRotation(): number {
+    // convert rotation vom rad to deg
+    return this.map.getView().getRotation() * (180 / Math.PI);
+  }
+
+  /** USED in map-ol.component */
+  public setZoom(zoom: number) {
+    const view = this.map.getView();
+    view.setZoom(zoom);
+  }
+
+  /** USED in map-ol.component */
+  public getZoom() {
+    return this.map.getView().getZoom();
+  }
+
+  public zoomInOut(value: '-' | '+', animateOptions?: { callback?: (complete: any) => void, duration?: number, easing?: (arg: number) => number, zoomStep?: number }) {
+    const view = this.map.getView();
+    if (!view) {
+      // the map does not have a view, so we can't act
+      // upon it
+      return;
+    }
+
+    const zoomStep = animateOptions?.zoomStep || 1;
+    const delta = value === '+' ? zoomStep : -1 * zoomStep;
+    const currentZoom = view.getZoom();
+    if (currentZoom !== undefined) {
+      const newZoom = view.getConstrainedZoom(currentZoom + delta);
+      if (view.getAnimating()) {
+        view.cancelAnimations();
+      }
+      view.animate({
+        zoom: newZoom,
+        duration: animateOptions?.duration || 250,
+        easing: animateOptions?.easing || easeOut
+      }, (complete) => {
+        if (animateOptions && animateOptions.callback) {
+          animateOptions.callback(complete);
+        }
+      });
+    }
+  }
+
+  public geoJsonToFeature(geojson: any): olFeature<olGeometry> | olFeature<olGeometry>[] {
+    const GEOJSON = new olGeoJSON({
+      dataProjection: WGS84,
+      featureProjection: this.EPSG
+    });
+    GEOJSON.readFeature
+    return GEOJSON.readFeature(geojson);
+  }
+
+  public geoJsonToFeatures(geojson: any): olFeature<olGeometry>[] {
+    const GEOJSON = new olGeoJSON({
+      dataProjection: WGS84,
+      featureProjection: this.EPSG
+    });
+    return GEOJSON.readFeatures(geojson);
+  }
+
+  /**
+   * @returns 'olProjection'
+   */
+  public getProjection() {
+    return this.map.getView().getProjection();
+  }
+
+  /**
+   * function to reproject vector features
+   * @param source:  olVectorSource
+   * @param srcProj: string (e.g. 'EPSG:4326')
+   * @param dstProj: string (e.g. 'EPSG:3857')
+   */
+  public reprojectFeatures(source: olVectorSource<any>, srcProj: string, dstProj: string) {
+    source.getFeatures().forEach(feature => {
+      feature.getGeometry().transform(srcProj, dstProj);
+    });
+  }
+
+  /**
+   * If possible use @dlr-eoc/services-map-state to setProjection - this should only be used internally!
+   * 
+   * vector layers will be reprojected automatically
+   * wms layers will be updated with corresponding proj def in the requests.
+   * for other raster layers and for those wms layers which backend does not support target projection, please
+   * define initial(default) layer projection, so openlayers will reproject on the client side
+   * see: https://openlayers.org/en/latest/apidoc/module-ol_source_Source.html#projection
+   * projection is proj~ProjectionLike
+   */
+  public setProjection(projection: IProjDef | IProjDef['code'], options?: IProjFitOptions) {
+    let projIsReg = this.registeredProjections.get((typeof projection === 'string') ? projection : projection.code);
+
+    // IProjDef is used and it is not registered, register it and use it.
+    if (typeof projection !== 'string' && !projIsReg) {
+      this.registerProjection(projection);
+      projIsReg = this.registeredProjections.get(projection.code);
+    }
+
+    if (projIsReg) {
+      let viewOptions: olViewOptions = {};
+      if (this.viewOptions) {
+        viewOptions = this.viewOptions;
+        viewOptions.minResolution = undefined;
+        viewOptions.maxResolution = undefined;
+        viewOptions.resolution = undefined;
+        viewOptions.resolutions = undefined;
+      }
+      // TODO: what about listeners on old view oldView.getListeners(event:string) -> ViewObjectEventTypes | EventTypes
+      const oldView = this.map.getView();
+      const oldProj = oldView.getProjection();
+      const oldEPSG = oldProj.getCode() as TepsgCode;
+      const oldExtent = oldView.calculateExtent();
+      const viewSetExtent = (options?.viewSetExtent !== undefined) ? options.viewSetExtent : true;
+
+      // Test is not same projection
+      if (projIsReg.code !== oldProj.getCode()) {
+        const newProjection = this.getOlProjection(projIsReg);
+        if (newProjection) {
+          const fitExtent = newProjection.getExtent();
+          viewOptions.projection = newProjection;
+          // nothing outside of this extent can be visible on the map. Can be problematic with showFullExtent=false
+          if (viewSetExtent) {
+            viewOptions.extent = fitExtent
+          }
+          viewOptions.center = (fitExtent) ? olExtGetCenter(fitExtent) : viewOptions.center;
+
+          // https://openlayers.org/en/latest/examples/reprojection-by-code.html
+          const view = new olView(viewOptions);
+          this.EPSG = view.getProjection().getCode() as TepsgCode;
+          this.map.setView(view);
+          this.view = this.map.getView();
+
+          if (options?.fitToProjectionExtent) {
+            this.view.fit(fitExtent);
+          } else {
+            let newExtent: olExtent;
+            if (options?.fitToBbox) {
+              // Try zooming to a bbox provided in set projection.
+              newExtent = transformExtent(options.fitToBbox, WGS84, newProjection, 8);
+            } else if (options?.fitToNativeBbox) {
+              // the bbox is in the newProjection;
+              newExtent = options.fitToNativeBbox;
+            } else {
+              // Try zooming to the old bbox if that works in the new projection.
+              newExtent = transformExtent(oldExtent, oldProj, newProjection, 8);
+            }
+
+            if (containsExtent(fitExtent, newExtent)) {
+              this.view.fit(newExtent);
+            } else {
+              this.view.fit(fitExtent);
+            }
+          }
+
+          this.adjustLayersAfterProjection(oldEPSG, projIsReg);
+          this.projectionChange.next(this.getProjection());
+        } else {
+          console.log(`projection ${projection} is invalid or not registered!`);
+        }
+      }
+    } else {
+      console.log('projection code is undefined or not registered', projection, this.registeredProjections);
+    }
+  }
+
+  /**
+   * reproject vector layers and set extent for all
+   */
+  private reprojectVectorLayers(layer: olLayer, oldEpsg: TepsgCode, newEpsg: TepsgCode) {
+    let source = layer.getSource();
+    // check for nested sources, e.g. cluster or cluster of clusters etc
+    const nestSourc = (source as any)['source'] as olSource;
+    if (nestSourc) {
+      while (nestSourc) {
+        source = nestSourc;
+      }
+    }
+    if (source instanceof olVectorSource) {
+      this.reprojectFeatures(source, oldEpsg, newEpsg);
+    }
+  }
+
+  /**
+   * set or calculate the new layer extent after reprojectFeatures
+   */
+  private setLayerExtentAfterProjection(layer: olLayer, oldEpsg: TepsgCode, newEpsg: TepsgCode) {
+    const bbox = layer.get('bbox') as number[] | undefined;
+    const nativeBbox = layer.get('nativeBbox') as | { epsg: TepsgCode; bbox: TGeoExtent } | undefined;
+    const currentExtent = layer.getExtent() as olExtent | undefined;
+    // nativeBbox exists and matches newEpsg -> use nativeBbox
+    if (nativeBbox && nativeBbox.epsg === newEpsg) {
+      layer.setExtent(nativeBbox.bbox);
+      return;
+    } else if (nativeBbox && nativeBbox.epsg !== newEpsg && !bbox) {
+      const hasbboxProReg = this.registeredProjections.has(nativeBbox.epsg);
+      // if nativeBbox exists but newEpsg is different then nativeBbox -> use transformExtent
+      if (hasbboxProReg) {
+        const ext = transformExtent(nativeBbox.bbox, nativeBbox.epsg, newEpsg, transformExtentStops);
+        layer.setExtent(ext);
+      } else {
+        // if nativeBbox epsg not registered -> try to transform old extent or clear extent
+        if (currentExtent) {
+          const ext = transformExtent(currentExtent, oldEpsg, newEpsg, transformExtentStops);
+          layer.setExtent(ext);
+        } else {
+          layer.setExtent(undefined);
+        }
+      }
+      return;
+    }
+
+    // bbox exists and nativeBbox is missing OR has different epsg -> use bbox
+    if (bbox && (!nativeBbox || nativeBbox.epsg !== newEpsg)) {
+      if (bbox.length >= 4) {
+        const ext = transformExtent(bbox.slice(0, 4), WGS84, newEpsg, transformExtentStops);
+        if (ext.includes(NaN)) {
+          layer.setExtent(undefined);
+        } else {
+          layer.setExtent(ext);
+        }
+
+      }
+      return;
+    }
+
+    // no bbox and no nativeBbox -> clear any old defined extent
+    if (!bbox && !nativeBbox && currentExtent) {
+      layer.setExtent(undefined);
+    }
+  }
+
+  /**
+   * reprojecting vector layers and set extent
+   */
+  private adjustLayersAfterProjection(oldEpsg: TepsgCode, projection: IProjDef) {
+    this.map.getLayers().getArray().forEach((layerGroup) => {
+      if (layerGroup instanceof LayerGroup) {
+        layerGroup.getLayers().getArray().forEach(layer => {
+          if (layer instanceof olLayer) {
+            const newEpsg = projection?.code;
+            this.reprojectVectorLayers(layer, oldEpsg, newEpsg);
+            this.setLayerExtentAfterProjection(layer, oldEpsg, newEpsg);
+          } else {
+            console.log(layer, 'no olLayer');
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * If possible use @dlr-eoc/services-map-state to registerProjection - this should only be used internally!
+   * 
+   * @param projDef.code - e.g.: "EPSG:4326"
+   * @param projDef.proj4js - e.g.: "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees"
+   */
+  public registerProjection(projDef: IProjDef) {
+    const hasProj = this.registeredProjections.has(projDef.code);
+    if (!hasProj) {
+      proj4.defs(projDef.code, ('projjson' in projDef) ? projDef.projjson : projDef.proj4js);
+      olRegister(proj4);
+      this.registeredProjections.set(projDef.code, projDef);
+    }
+  }
+
+  /**
+   * Returns a OpenLayers Projection froma Definition
+   */
+  public getOlProjection(projDef: IProjDef | olProjectionOptions): olProjection {
+    const proj = getProjection(projDef.code);
+    const extent = proj?.getExtent();
+    const worldExtent = proj?.getWorldExtent();
+    const global = proj?.isGlobal() || false;
+    const units = proj?.getUnits();
+    const axisOrientation = proj?.getAxisOrientation();
+    const metersPerUnit = proj?.getMetersPerUnit();
+    const getPointResolution = proj?.getPointResolutionFunc();
+
+    return new olProjection({
+      code: projDef.code,
+      extent: projDef.extent ? projDef.extent : extent,
+      worldExtent: projDef.worldExtent ? projDef.worldExtent : worldExtent,
+      global: projDef.global !== undefined ? projDef.global : global,
+      units: projDef.units ? projDef.units : units,
+      axisOrientation: ('axisOrientation' in projDef && projDef.axisOrientation) ? projDef.axisOrientation : axisOrientation,
+      metersPerUnit: ('metersPerUnit' in projDef && projDef.metersPerUnit) ? projDef.metersPerUnit : metersPerUnit,
+      getPointResolution: ('getPointResolution' in projDef && projDef.getPointResolution) ? projDef.getPointResolution : getPointResolution,
+    });
+  }
+
+  private keysToUppercase<T>(obj: { [k: string]: any }) {
+    Object.keys(obj).forEach((key) => {
+      const k = key.toUpperCase();
+      if (k !== key) {
+        obj[k] = obj[key];
+        delete obj[key];
+      }
+    });
+    return obj as T;
+  }
+}
+

@@ -8,6 +8,9 @@
  - Inputs renamed `alert-text` to `text` and `privacy-link` to `link` and are now signals (`input()`). Property `alert` is now an Angular `signal<boolean>()`.
  - Selector change to 'ngx-ukis-cookie-alert'
 
+* **@dlr-eoc/map-ol**
+ - ViewChild `mapDivView` is now signal.
+ - Selector change to 'ngx-ukis-map-ol'
 ### Features
 * **@dlr-eoc/utils-ogc**
  - Add `WmtsClient` based on `ol/format/WMTSCapabilities`.
