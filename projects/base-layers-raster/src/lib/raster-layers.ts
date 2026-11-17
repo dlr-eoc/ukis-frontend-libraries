@@ -296,7 +296,3 @@ export class HillshadeTile extends WmtsLayer {
     super(defaultOptions);
   }
 }
-
-
-
-

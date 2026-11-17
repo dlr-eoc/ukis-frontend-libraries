@@ -1,16 +1,9 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
 
-import { RasterLayer, WmtsLayer, WmsLayer } from '@dlr-eoc/services-layers';
-
+import { RasterLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 import { OsmTileLayer, OpenSeaMap, EocLitemap, EocLitemapTile, EocLiteoverlayTile, EocBasemapTile, EocBaseoverlayTile, BlueMarbleTile, WorldReliefBwTile, HillshadeTile } from './raster-layers';
 
-describe('BaseLayersRasterComponent', () => {
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({})
-      .compileComponents();
-  }));
 
-  beforeEach(() => { });
+describe('BaseLayersRasterComponent', () => {
 
   it('osm should be instanceof of a UKIS RasterLayer', () => {
     const testLayer = new OsmTileLayer();
