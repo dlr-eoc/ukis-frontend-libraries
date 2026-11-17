@@ -5,12 +5,9 @@
     "entryFile": "src/public-api.ts"
   },
   "allowedNonPeerDependencies": [
-    "tslib",
     "proj4",
     "@dlr-eoc/services-layers",
     "@dlr-eoc/services-map-state",
-    "@dlr-eoc/services-map-state",
-    "@dlr-eoc/services-layers",
     "@dlr-eoc/map-ol",
     "@dlr-eoc/utils-maps",
     "three"

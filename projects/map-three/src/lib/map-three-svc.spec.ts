@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { MapThreeService } from './map-three.service';
+import { MapThreeService } from './map-three-svc';
 
 describe('MapThreeService', () => {
   let service: MapThreeService;
@@ -13,3 +13,4 @@ describe('MapThreeService', () => {
     expect(service).toBeTruthy();
   });
 });
+

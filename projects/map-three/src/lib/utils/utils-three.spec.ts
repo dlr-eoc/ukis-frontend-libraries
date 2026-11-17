@@ -83,3 +83,4 @@ describe('Map2SphereConverter', () => {
         expect(z4).toBeCloseTo(0);
     });
 });
+

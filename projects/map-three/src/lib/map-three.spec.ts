@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MapThreeComponent } from './map-three.component';
+import { MapThreeComponent } from './map-three';
 import { MapOlService } from '@dlr-eoc/map-ol';
 
 describe('MapThree', () => {

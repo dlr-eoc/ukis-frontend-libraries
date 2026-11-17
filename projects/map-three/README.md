@@ -1,6 +1,6 @@
 # @dlr-eoc/map-three
 
-This module exposes a component `ukis-map-three` analogous to `ukis-map-ol`.
+This module exposes a component `ngx-ukis-map-three` analogous to `ngx-ukis-map-ol`.
 
 ## Motivation and approach
 There are a few objects that are very big, but still irregularly shaped.
@@ -12,16 +12,16 @@ This mesh makes use of a custom shader, that uses a canvas of a map in EPSG:4326
 The texture-canvas is being kept in sync with the map. As such, when new tiles are loaded on the map, they are immediately visible on the mesh.
 
 ## Design
-We have attempted to create a design as similar as possible to the existing `ukis-map-ol`.
+We have attempted to create a design as similar as possible to the existing `ngx-ukis-map-ol`.
 There is a component `MapThreeComponent` that accepts all relevant parameters as `@Input`.
 There is a service `MapThreeService` that handles the actual setup of a threejs-scene and all other interaction with the threejs-API.
 We also sync the scene with `MapStateService` so that all maps in the app show the same information.
 
-Contrary to `ukis-map-ol`, however, no `LayerService` or `controls` are expected. Instead, the component expects an `MapOlService` as inputs.
+Contrary to `ngx-ukis-map-ol`, however, no `LayerService` or `controls` are expected. Instead, the component expects an `MapOlService` as inputs.
 The reason for this difference is that this component does in fact depend on openlayers: the map that is wrapped around our mesh must have been generated somewhere.
 
 ### What if I only want to show the 3d-scene?
-Create a `ukis-map-ol` anyway, but hide it *behind* `ukis-map-three`. This way, openlayers can still handle all the WMTS loading logic and other complicated map-functionality, while this component continues to focus on 3d-specific problems.
+Create a `ngx-ukis-map-ol` anyway, but hide it *behind* `ngx-ukis-map-three`. This way, openlayers can still handle all the WMTS loading logic and other complicated map-functionality, while this component continues to focus on 3d-specific problems.
 
 ## TODOs
  - avoid those gray areas where no texture is present. Either:
@@ -31,3 +31,7 @@ Create a `ukis-map-ol` anyway, but hide it *behind* `ukis-map-three`. This way, 
  - implement a raycaster to handle click-events on the mesh (also returning geographic coordinate of click)
  - handle multi-center objects like 67P/Churyumov–Gerasimenko
  - use brower-cache so gltf models don't need to be reloaded
+
+===
+
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.0.
