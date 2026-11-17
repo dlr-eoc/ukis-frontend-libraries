@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { RasterLayer, Layer, CustomLayer, TGeoExtent, VectorLayer } from './types/Layers';
 import { WmsLayer, WmtsLayer } from './types/RasterLayers';
 import { LayerGroup } from './types/LayerGroup';
-import { LayersService } from './layers.service';
+import { LayersService } from './layers';
 import { first } from 'rxjs/operators';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import testData1 from '@dlr-eoc/shared-assets/geojson/testData1.json';

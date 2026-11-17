@@ -461,7 +461,7 @@ export class CustomLayer<T = any> extends Layer implements ICustomLayerOptions<T
   custom_layer: T = {} as T;
   constructor(options: ICustomLayerOptions<T>) {
     super(options as ILayerOptions);
-    if (options.type !== CustomLayertype) {
+    if (options.type && options.type !== CustomLayertype) {
       console.warn(`CustomLayer ${this.id} can only have type: ${CustomLayertype} not ${options.type}`);
     }
     this.custom_layer = options.custom_layer;

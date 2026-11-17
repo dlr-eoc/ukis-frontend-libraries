@@ -13,7 +13,7 @@ export class LayersService {
 
   private layers = new BehaviorSubject(Array<Layer>());
 
-
+ 
   // ----------------------------------------------------------------------------------------------------------------
   /**
    * Adds a ukis Layer to the Layerservice Store
@@ -745,3 +745,4 @@ export class LayersService {
     return layerGroup;
   }
 }
+
