@@ -1,21 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 
 import { HeaderComponent } from './components/header/header.component';
 
-import { GlobalAlertComponent } from './components/global-alert/global-alert.component';
-import { AlertService, IAlert } from './components/global-alert/alert.service';
+import { AlertService, IAlert } from './components/global-alert/global-alert-svc';
+import { GlobalAlertComponent } from './components/global-alert/global-alert';
 
-import { GlobalProgressComponent } from './components/global-progress/global-progress.component';
-import { ProgressService, IProgress } from './components/global-progress/progress.service';
+import { GlobalProgressComponent } from './components/global-progress/global-progress';
+import { ProgressService, IProgress } from './components/global-progress/global-progress-svc';
 
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
 
 interface IUi {
-  alert: null | IAlert;
-  progress: null | IProgress;
-  subs: Subscription[];
+  alert: WritableSignal<null | IAlert>;
+  progress: WritableSignal<null | IProgress>;
 }
 
 @Component({
@@ -29,16 +27,14 @@ export class App {
   shortTitle = '';
 
   ui: IUi = {
-    alert: null,
-    progress: null,
-    subs: []
+    alert: signal<IAlert | null>(null),
+    progress: signal<IProgress | null>(null),
   };
 
-  constructor(
-    private alertService: AlertService,
-    private progressService: ProgressService,
-    public router: Router
-  ) {
+  private alertService = inject(AlertService);
+  private progressService = inject(ProgressService);
+  public router = inject(Router);
+  constructor() {
     const meta = this.getHtmlMeta(['title', 'version', 'description', 'short-title']);
     if (meta['title']) {
       this.title = meta['title'];
@@ -46,7 +42,8 @@ export class App {
     if (meta['short-title']) {
       this.shortTitle = meta['short-title'];
     }
-    this.ui.subs = this.sub2AlertAndProgress();
+    this.ui.alert = this.alertService.alert;
+    this.ui.progress = this.progressService.progress;
   }
 
   /**
@@ -66,21 +63,5 @@ export class App {
       }
     }
     return obj;
-  }
-
-  sub2AlertAndProgress() {
-    const subs: Subscription[] = [
-      this.alertService.alert$.subscribe((alert) => {
-        this.ui.alert = alert;
-      }),
-      this.progressService.progress$.subscribe((progress) => {
-        this.ui.progress = progress;
-      })
-    ];
-    return subs;
-  }
-
-  ngOnDestroy() {
-    this.ui.subs.map(s => s.unsubscribe());
   }
 }

@@ -25,7 +25,7 @@ import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
 #### add the following to a route-view.component.html
 ```
 <main class="content-area">
-  <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
+  <ngx-ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ngx-ukis-map-ol>
 </main>
 
 
@@ -35,8 +35,8 @@ import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
     <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
     Overlays
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'">
-      </ukis-layer-control>
+      <ngx-ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'">
+      </ngx-ukis-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 
@@ -44,7 +44,7 @@ import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
     <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
     Layers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
+      <ngx-ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 
@@ -52,7 +52,7 @@ import { LayerControlComponent } from '@dlr-eoc/ngx-ukis-ui-clarity';
     <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
     Baselayers
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-base-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
+      <ngx-ukis-base-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-base-layer-control>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 

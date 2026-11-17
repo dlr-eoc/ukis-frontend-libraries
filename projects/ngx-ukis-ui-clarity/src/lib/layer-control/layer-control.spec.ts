@@ -1,0 +1,60 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { LayerControlComponent } from '../layer-control/layer-control';
+
+import { LayerentryGroupComponent } from '../layerentry-group/layerentry-group';
+import { LayerentryComponent } from '../layerentry/layerentry';
+
+import { ClarityModule } from '@clr/angular';
+import { FormsModule } from '@angular/forms';
+import { LayersService } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { ReversePipe, ObjTypePipe, ItemsFilterPipe } from '@dlr-eoc/ngx-ukis-utilities';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
+describe('LayerControlComponent', () => {
+  let component: LayerControlComponent;
+  let fixture: ComponentFixture<LayerControlComponent>;
+  let layersSvc: LayersService;
+  let mapStateSvc: MapStateService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ClarityModule, FormsModule, DragDropModule, LayerControlComponent, LayerentryGroupComponent, LayerentryComponent, ObjTypePipe, ReversePipe, ItemsFilterPipe],
+      providers: [LayersService, MapStateService]
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(LayerControlComponent);
+    component = fixture.componentInstance;
+    layersSvc = TestBed.inject(LayersService);
+    mapStateSvc = TestBed.inject(MapStateService);
+
+    component.layersSvc = layersSvc;
+    component.mapStateSvc = mapStateSvc;
+    fixture.detectChanges();
+    
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should have input layersSvc', () => {
+    expect(component.layersSvc instanceof LayersService).toBeTruthy();
+  });
+
+  it('should have input mapStateSvc', () => {
+    expect(component.mapStateSvc instanceof MapStateService).toBeTruthy();
+  });
+
+  it('should have input layerfilter', () => {
+    component.layerfilter = 'Layers';
+    fixture.detectChanges();
+    expect(component.layerfilter).toBe('Layers');
+  });
+
+});
+

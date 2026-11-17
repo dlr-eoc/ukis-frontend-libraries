@@ -6,19 +6,19 @@ export * from './lib/global-progress/global-progress';
 export * from './lib/global-progress/global-progress-svc';
 export * from './lib/global-alert/global-alert';
 export * from './lib/global-alert/global-alert-svc';
-export * from './lib/header/header.component';
+export * from './lib/header/header';
 export * from './lib/icons/ukis';
 
-export * from './lib/layer-control/layer-control.component';
-export * from './lib/base-layer-control/base-layer-control.component';
-export * from './lib/layerentry/layerentry.component';
-export * from './lib/layerentry-group/layerentry-group.component';
+export * from './lib/layer-control/layer-control';
+export * from './lib/base-layer-control/base-layer-control';
+export * from './lib/layerentry/layerentry';
+export * from './lib/layerentry-group/layerentry-group';
 
-export * from './lib/mouse-position/mouse-position.component';
-export * from './lib/navigator/map-navigator.component';
-export * from './lib/projection-switch/projection-switch.component';
+export * from './lib/mouse-position/mouse-position';
+export * from './lib/navigator/navigator';
+export * from './lib/projection-switch/projection-switch';
 
-export * from './lib/user-info/user.service';
-export * from './lib/user-info/login/login.component';
-export * from './lib/user-info/register/register.component';
-export * from './lib/user-info/user-details/user-details.component';
+export * from './lib/user-info/user-svc';
+export * from './lib/user-info/login/login';
+export * from './lib/user-info/register/register';
+export * from './lib/user-info/user-details/user-details';

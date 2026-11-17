@@ -1,0 +1,391 @@
+import { Component, OnInit, Input, Output, EventEmitter, HostBinding, ChangeDetectionStrategy } from '@angular/core';
+import { IDynamicComponent, DynamicComponent } from '@dlr-eoc/ngx-ukis-utilities';
+
+// imports only for typings...
+import {
+  LayerGroup, Layer, RasterLayer, LayersService, WmsLayer, WmtsLayer
+} from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+
+import { ClarityIcons, angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon } from '@clr/angular/icon';
+import { NgClass, NgStyle } from '@angular/common';
+import { ClrIcon, ClrCommonFormsModule, ClrRangeModule, ClrSelectModule } from '@clr/angular';
+import { FormsModule } from '@angular/forms';
+ClarityIcons.addIcons(...[angleIcon, arrowIcon, circleIcon, dotCircleIcon, eyeIcon, eyeHideIcon, cogIcon, imageIcon, infoStandardIcon, zoomInIcon, trashIcon]);
+
+enum EactiveTabs {
+  settings = 'settings',
+  legend = 'legend',
+  description = 'description',
+}
+type TactiveTabs = keyof typeof EactiveTabs;
+
+// Omit<Layer, 'legendImg' | 'action' | 'description'> & { legendImg: IDynamicComponent, action: IDynamicComponent, description: IDynamicComponent }
+type DynamicComponentLayer = Layer & {
+  legendImg?: IDynamicComponent;
+  action?: IDynamicComponent;
+  description?: IDynamicComponent;
+}
+
+
+@Component({
+  selector: 'ngx-ukis-layerentry',
+  styleUrl: './layerentry.scss',
+  templateUrl: './layerentry.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [NgClass, ClrIcon, NgStyle, ClrCommonFormsModule, ClrRangeModule, FormsModule, ClrSelectModule, DynamicComponent]
+})
+export class LayerentryComponent implements OnInit {
+  @HostBinding('class.layer-visible') get visible() { return this.layer.visible; }
+  @HostBinding('class') get cssClass() { return this.layer.cssClass; }
+
+  @Input('layersSvc') layersSvc!: LayersService;
+  @Input('mapState') mapState?: MapStateService;
+  @Input('layer') layer!: Layer;
+
+  @Input('group') group?: LayerGroup;
+  @Input('layerGroups') layerGroups?: Array<Layer | LayerGroup>;;
+  @Input('expanded') set expanded(value: boolean) {
+    if (this.layer) {
+      this.layer.expanded = value;
+    }
+  }
+  get expanded() {
+    if (this.layer) {
+      const layerExpanded = this.layer.expanded;
+      // can change after projection was set for nativeBbox
+      this.checkCanZoomToLayer();
+      if (typeof layerExpanded === 'boolean') {
+        return layerExpanded;
+      } else {
+        return layerExpanded.expanded || false;
+      }
+    } else {
+      return false;
+    }
+  }
+  @Input('expandable') expandable = true;
+  @Input('sorting') sorting?: boolean = true;
+
+
+  @Output() update = new EventEmitter<{ layer: Layer }>();
+
+  public canZoomToLayer = false;
+
+  public activeTabs = {
+    settings: false,
+    legend: true,
+    description: false
+  };
+
+  public hasTabsbody = true;
+
+  public dynamicComponents: {
+    legendImg: IDynamicComponent | null
+    action: IDynamicComponent | null
+    description: IDynamicComponent | null
+  } = { legendImg: null, action: null, description: null };
+
+  constructor() {
+
+  }
+
+  /**
+   * obj: {any| IDynamicComponent}
+   *
+   * Check if the compProp on the layer is a dynamic Component, if yes pass it to `<ukis-dynamic-component>` so the component from the layer can be inserted here.
+   */
+  checkIsComponentItem(layer: Layer, compProp: keyof Pick<Layer, 'legendImg' | 'action' | 'description'>): layer is DynamicComponentLayer {
+    /**
+     * TODO: This function is executed quite often!!! even if a user moves on tha map. Try to minimize work here or prevent calling it so often.
+     *
+     * creating new objects is needed to pass and change Inputs from the layers DynamicComponent to the dynamically created component bound on the layer.
+     * There is a new object created to hold the component, inputs and outputs so the layer can be passed to the inputs without adding it recursively to itself.
+     **/
+
+    // https://stackoverflow.com/a/65347533/10850021
+    const obj = layer[compProp];
+    let isComp = false;
+    if (obj && typeof obj === 'object') {
+      if ('component' in obj) {
+        const component = obj.component;
+
+        if (!obj.inputs) {
+          this.dynamicComponents[compProp] = {
+            component: component,
+            inputs: { layer: layer }
+          }
+
+        } else if (obj.inputs && !obj.inputs['layer']) {
+          this.dynamicComponents[compProp] = {
+            component: obj.component,
+            // create a shallow copy of inputs so they are not changed on the original layer
+            // keep in mind changing some deeper properties will reflect to the original layer!
+            // https://2ality.com/2014/01/object-assign.html#2.3
+            inputs: Object.assign({}, obj.inputs, { layer: layer })
+          };
+
+        } else if (obj.inputs && obj.inputs['layer']) {
+          this.dynamicComponents[compProp] = {
+            component: obj.component,
+            // create a shallow copy of inputs so they are not changed on the original layer
+            // keep in mind changing some deeper properties will reflect to the original layer!
+            // https://2ality.com/2014/01/object-assign.html#2.3
+            inputs: Object.assign({}, obj.inputs)
+          };
+        }
+
+        if (obj.outputs && this.dynamicComponents[compProp]) {
+          // create a shallow copy of outputs so they are not changed on the original layer
+          // keep in mind changing some deeper properties will reflect to the original layer!
+          // https://2ality.com/2014/01/object-assign.html#2.3
+          this.dynamicComponents[compProp].outputs = Object.assign({}, obj.outputs);
+        }
+        isComp = true;
+      }
+    }
+    return isComp;
+  }
+
+  getLayerName(layer: Layer) {
+    if (layer.displayName) {
+      return layer.displayName;
+    } else {
+      return layer.name;
+    }
+  }
+
+  ngOnInit() {
+    if (!this.layersSvc) {
+      console.error('you need to provide a layersService!');
+    }
+
+    if (typeof this.layer?.expanded === 'object') {
+      if (Object.keys(EactiveTabs).includes(this.layer.expanded.tab)) {
+        this.switchTab(this.layer.expanded.tab as TactiveTabs);
+        /** let the user reset the default open tab */
+        if (this.layer.expanded.expanded === false) {
+          const tabKey = this.layer.expanded.tab as TactiveTabs
+          this.activeTabs[tabKey] = false;
+        }
+      } else {
+        this.setDefaultActiveTabs();
+      }
+
+    } else {
+      this.setDefaultActiveTabs();
+    }
+
+    this.checkCanZoomToLayer()
+
+    if (this.layer.filtertype === 'Baselayers' && !this.layer.legendImg && !this.layer.description && !this.layer.action && !this.layer.actions && !this.layer.styles) {
+      this.hasTabsbody = false;
+    }
+  }
+
+  private setDefaultActiveTabs() {
+    if (!this.layer.legendImg) {
+      this.switchTab('description');
+    }
+
+    if (!this.layer.legendImg && !this.layer.description) {
+      this.switchTab('settings');
+    }
+  }
+
+  checkCanZoomToLayer() {
+    if ((this.layer.bbox && this.layer.bbox.length >= 4) || (this.layer.nativeBbox && this.mapState?.getMapState().value.proj.epsg === this.layer.nativeBbox.epsg && this.layer.nativeBbox.bbox.length >= 4)) {
+      this.canZoomToLayer = true;
+    } else {
+      this.canZoomToLayer = false;
+    }
+  }
+
+  /**
+   * show or hide the layer
+   */
+  setLayerVisibility(selectedLayer: Layer, group?: LayerGroup) {
+    if (!group) {
+      if (selectedLayer.filtertype === 'Baselayers') {
+        selectedLayer.visible = !selectedLayer.visible;
+        const filterdlayers = this.layerGroups?.filter((l) => l.filtertype === 'Baselayers');
+        if (filterdlayers) {
+          for (const layer of filterdlayers) {
+            if (layer instanceof Layer && layer.id !== selectedLayer.id) {
+              layer.visible = !selectedLayer.visible;
+              this.layersSvc.updateLayer(layer, layer.filtertype || 'Baselayers');
+            }
+          }
+        }
+      } else {
+        selectedLayer.visible = !selectedLayer.visible;
+        this.layersSvc.updateLayer(selectedLayer, selectedLayer.filtertype || 'Layers'); // TODO check for baselayers!!!!!!
+      }
+    } else {
+      if (group.layers.length > 0) {
+        /** "radio" for Baselayers */
+        if (group.filtertype === 'Baselayers') {
+          for (const layer of group.layers) {
+            layer.visible = layer === selectedLayer;
+          }
+          this.update.emit({
+            layer: this.layer
+          });
+          /** "checkbox" for all other layers */
+        } else {
+          const tempGroupVisible = group.visible;
+          /** change visibility of the selected layer */
+          selectedLayer.visible = !selectedLayer.visible;
+
+          /** check if group visibility has changed */
+          if (tempGroupVisible !== group.visible) {
+            this.update.emit({
+              layer: this.layer
+            });
+          } else {
+            /** If the visibility of the group don't changes update only the layer  */
+            this.layersSvc.updateLayer(selectedLayer, selectedLayer.filtertype || 'Layers');
+          }
+        }
+      }
+    }
+  }
+  /**
+   * setLayerIndex
+   */
+  setLayerIndex(layer: Layer, dir: 'up' | 'down', group?: LayerGroup) {
+    // console.log('is First', this.isFirst(layer));
+    // console.log('is Last', this.isLast(layer));
+    // console.log(layer, group);
+    if (group) {
+      this.layersSvc.setLayerIndexInGroup(layer, dir, group);
+    } else {
+      this.layersSvc.setGroupLayerIndex(layer, dir);
+    }
+  }
+
+  /**
+   * remove the Layer if possible
+   */
+  removeLayer(selectedLayer: Layer, group?: LayerGroup) {
+    // console.log("delete ", group, selectedLayer)
+    if (group) {
+      // console.log("delete layer from group")
+      this.layersSvc.removeLayerFromGroup(selectedLayer, group);
+    } else {
+      // console.log('delete single layer');
+      this.layersSvc.removeLayer(selectedLayer, selectedLayer.filtertype);
+    }
+  }
+
+  zoomTo(layer: Layer) {
+    if (this.mapState) {
+      const state = this.mapState.getMapState().value;
+      if (layer.bbox && layer?.nativeBbox?.epsg !== state?.proj?.epsg) {
+        this.mapState.setExtent(layer.bbox);
+      } else if (layer.nativeBbox && layer.nativeBbox.epsg === state?.proj?.epsg) {
+        this.mapState.setNativeExtent(layer.nativeBbox.bbox);
+      }
+    }
+  }
+
+  setLayerOpacity(layer: Layer) {
+    if (!this.group) {
+      this.layersSvc.updateLayer(layer, layer.filtertype || 'Layers'); // TODO check for baselayers!!!!!!
+    } else {
+      this.update.emit({
+        layer
+      });
+    }
+  }
+
+  checkBaselayer(layer: Layer, group?: LayerGroup) {
+    if (layer.filtertype === 'Baselayers' || group && group.filtertype === 'Baselayers') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * is expandable if layer has legend, description or opacity can be changed
+   */
+  is_expandable() {
+    if (this.group) {
+      return !this.layer.legendImg && this.group.filtertype === 'Baselayers';
+    } else {
+      return !this.hasTabsbody;
+    }
+  }
+
+  showProperties() {
+    if (!this.is_expandable()) {
+      this.expanded = !this.expanded;
+    }
+  }
+
+  switchTab(tabName: TactiveTabs, toggle = true) {
+    for (const key of Object.keys(this.activeTabs) as TactiveTabs[]) {
+      const isTabName = tabName === key;
+      if (this.activeTabs[key] && toggle) {
+        this.activeTabs[key] = false;
+      } else {
+        this.activeTabs[key] = isTabName;
+      }
+    }
+  }
+
+  hasActiveTabs() {
+    return Object.values(this.activeTabs).filter(v => v).length > 0;
+  }
+
+  isSelectedStyle(styleName: string): boolean {
+    if (this.layer instanceof WmsLayer) {
+      return this.layer.params.STYLES === styleName;
+    } else if (this.layer instanceof WmtsLayer) {
+      return this.layer.params.style === styleName;
+    } else {
+      // TODO: how to compare styles for vector layers and custom layers?
+      return false;
+    }
+  }
+
+  executeChangeStyle(evt: Event) {
+    const newStyleName = (evt.target as HTMLInputElement).value;
+    const layer = this.layer as RasterLayer;
+    if (layer.styles) {
+      const newStyle = layer.styles.find(s => s.name === newStyleName);
+      if (newStyle) {
+        layer.legendImg = newStyle.legendURL;
+        if (layer instanceof WmsLayer) {
+          layer.params.STYLES = newStyle.name;
+        } else if (layer instanceof WmtsLayer) {
+          layer.params.style = newStyle.name;
+        }
+        this.layersSvc.updateLayer(layer, layer.filtertype);
+      }
+    }
+  }
+
+  isFirst(layer: Layer) {
+    if (this.group) {
+      return this.layersSvc.isGroupFirst(layer, this.group.layers);
+    } else {
+      return this.layersSvc.isGroupFirst(layer, undefined, layer.filtertype);
+    }
+  }
+
+  isLast(layer: Layer) {
+    if (this.group) {
+      return this.layersSvc.isGroupLast(layer, this.group.layers);
+    } else {
+      return this.layersSvc.isGroupLast(layer, undefined, layer.filtertype);
+    }
+  }
+
+  getExpandShape() {
+    // return this.openProperties ? 'down' : 'right';
+    return this.expanded ? { transform: 'rotate(180deg)' } : { transform: 'rotate(90deg)' };
+  }
+
+}

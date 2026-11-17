@@ -1,0 +1,110 @@
+import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
+import { MapOlService } from '@dlr-eoc/map-ol';
+import { transform as olTransform, get as olGetProjection, Projection as olProjection } from 'ol/proj';
+import { distinctUntilChanged, Subscription } from 'rxjs';
+import { ClrSelectModule, ClrCommonFormsModule, ClrNumberInputModule } from '@clr/angular';
+
+import { FormsModule } from '@angular/forms';
+import { MapStateService, TepsgCode } from '@dlr-eoc/services-map-state';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
+import MapEvent from 'ol/MapEvent';
+
+interface ISelectProjection {
+  title: string;
+  value: string;
+}
+
+@Component({
+  selector: 'ngx-ukis-mouse-position',
+  styleUrl: './mouse-position.scss',
+  templateUrl: './mouse-position.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [ClrSelectModule, ClrCommonFormsModule, FormsModule, ClrNumberInputModule]
+})
+export class MousePositionComponent implements OnInit, OnDestroy {
+  @Input('mapSvc') mapSvc!: MapOlService;
+  @Input('mapState') mapState!: MapStateService;
+  public mapCoordinates: [number, number] | number[] = [0, 0];
+  public zoom = 0;
+  public projections!: ISelectProjection[];
+  mapProjection!: olProjection;
+  public selectedProjection!: string;
+  public precision = 2;
+  x = 'Lon';
+  y = 'Lat';
+  mapSub!: Subscription;
+  constructor() {
+  }
+
+  ngOnInit() {
+    this.mapSub = this.mapState.getProjection().pipe(distinctUntilChanged()).subscribe(item => {
+      if (item.epsg) {
+        this.mapProjection = olGetProjection(item.epsg) as olProjection;
+        this.setProjection(item.epsg);
+      }
+    });
+
+    this.mapProjection = this.mapSvc.getProjection();
+    this.setProjection(this.mapProjection.getCode() as TepsgCode);
+
+    // TODO: remove listeneres on destry
+    const onMove = this.mapSvc.map.on('pointermove', this.mapMoveSubscription);
+    const onMoveEnd = this.mapSvc.map.on('moveend', this.mapOnMoveend);
+  }
+
+  /**
+   * projLike: 'olProjection'
+   */
+  setProjection(epsg: TepsgCode) {
+    if (epsg === 'EPSG:4326') {
+      this.projections = [
+        { title: epsg, value: epsg }
+      ];
+    } else {
+      this.projections = [
+        { title: 'EPSG:4326', value: 'EPSG:4326' },
+        { title: epsg, value: epsg }
+      ];
+    }
+    this.selectedProjection = this.projections[0].value;
+  }
+
+  ngOnDestroy() {
+    this.mapSvc.map.un('pointermove', this.mapMoveSubscription);
+    this.mapSvc.map.un('moveend', this.mapOnMoveend);
+    this.mapSub.unsubscribe();
+  }
+
+  mapMoveSubscription = (evt: MapBrowserEvent<KeyboardEvent | PointerEvent | WheelEvent>) => {
+    if (evt.coordinate) {
+      this.mapCoordinates = olTransform(evt.coordinate, this.mapProjection, olGetProjection(this.selectedProjection) as olProjection);
+    }
+  }
+
+  mapOnMoveend = (evt: MapEvent) => {
+    const newZoom = evt.map.getView().getZoom();
+    if (newZoom !== undefined && this.zoom !== newZoom) {
+      // console.log('zoom end, new zoom: ' + newZoom);
+      this.zoom = newZoom;
+    }
+  }
+
+  public onChangeProj(evt: Event) {
+    const epsgcode = (evt.target as HTMLInputElement).value;
+    if (epsgcode === 'EPSG:4326') {
+      this.x = 'Lon';
+      this.y = 'Lat';
+    } else {
+      this.x = 'X';
+      this.y = 'Y';
+    }
+    const oldSelection = this.selectedProjection;
+    this.selectedProjection = epsgcode;
+    this.mapCoordinates = olTransform(this.mapCoordinates, olGetProjection(oldSelection) as olProjection, olGetProjection(this.selectedProjection) as olProjection);
+  }
+
+  public toPrecision(input: number, value: number) {
+    return input.toFixed(value);
+  }
+}
+

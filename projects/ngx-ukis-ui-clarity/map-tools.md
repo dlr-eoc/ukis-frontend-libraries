@@ -5,11 +5,11 @@
 This repository contains 3 ui components:
 
 1. mouse-position: shows projected coordinates of mouse pointer <br />
- ```<ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc"></ukis-mouse-position>```
+ ```<ngx-ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc"></ngx-ukis-mouse-position>```
 2. navigator: allows to insert coordinates in order to navigate the map to desired position <br />
- ```<ukis-projection-switch [mapSvc]="mapSvc" [mapState]="mapStateSvc" [projectionList]="projections"></ukis-projection-switch>```
+ ```<ngx-ukis-projection-switch [mapSvc]="mapSvc" [mapState]="mapStateSvc" [projectionList]="projections"></ngx-ukis-projection-switch>```
 3. projection-switch: ui element for interactive projection switch <br />
- ```<ukis-map-navigator [mapState]="mapStateSvc"></ukis-map-navigator>```
+ ```<ngx-ukis-map-navigator [mapState]="mapStateSvc"></ngx-ukis-map-navigator>```
 
 For examples [see demo maps route-example-events](../demo-maps/README.md)
 
@@ -35,7 +35,7 @@ import { ProjectionSwitchComponent, MapNavigatorComponent, MousePositionComponen
 #### add the following to a route-view.component.html
 ```
 <main class="content-area">
-  <ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ukis-map-ol>
+  <ngx-ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ngx-ukis-map-ol>
 </main>
 ```
 
@@ -87,7 +87,7 @@ addBaselayers() {
     <cds-icon shape="compass" clrVerticalNavIcon></cds-icon>
     Coordinates
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc"></ukis-mouse-position>
+      <ngx-ukis-mouse-position [mapSvc]="mapSvc" [mapState]="mapStateSvc"></ngx-ukis-mouse-position>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 </clr-vertical-nav>
@@ -100,7 +100,7 @@ addBaselayers() {
     <cds-icon shape="map" clrVerticalNavIcon></cds-icon>
     Projection
     <clr-vertical-nav-group-children class="padding title-ellipsis">
-      <ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections" [fitViewToNewExtent]="true" [mapStateSvc]="mapStateSvc"></ukis-projection-switch>
+      <ngx-ukis-projection-switch [mapSvc]="mapSvc" [projectionList]="projections" [fitViewToNewExtent]="true" [mapStateSvc]="mapStateSvc"></ngx-ukis-projection-switch>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
 ```

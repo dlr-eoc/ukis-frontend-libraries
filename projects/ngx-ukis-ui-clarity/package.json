@@ -16,30 +16,30 @@
     "schematics:build": "tsc -p tsconfig.schematics.json",
     "postbuild": "npm run schematics:build",
     "preschematics:test": "npm run --prefix ../../ ui-clarity:build",
-    "schematics:test": "npx jasmine ../../dist/ngx-ukis-ui-clarity/schematics/**/*_spec.js"
+    "schematics:test": "npm run test:afterBuild",
+    "test:afterBuild": "npx vitest --config vitest.schematics.config.ts"
   },
   "dependencies": {
-    "@angular-devkit/core": "^22.1.6",
-    "@angular-devkit/schematics": "^22.1.6",
-    "@schematics/angular": "^22.1.4",
+    "@angular-devkit/core": "^22.2.6",
+    "@angular-devkit/schematics": "^22.2.6",
+    "@schematics/angular": "^22.2.6",
     "parse5-html-rewriting-stream": "^7.1.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
-    "typescript": "6.0.3",
-    "jasmine": "^5.7.1",
-    "zone.js": "~0.15.1",
-    "@angular/platform-browser-dynamic": "^22.1.4",
-    "@angular-devkit/architect": "^0.2201.6"
+    "typescript": "~6.0.3",
+    "@angular-devkit/architect": "^0.2202.6",
+    "vitest": "^4.0.8"
   },
   "peerDependencies": {
-    "@angular/common": "^22.1.4",
-    "@angular/core": "^22.1.4",
-    "@angular/forms": "^22.1.4",
-    "@angular/cdk": "^22.1.4",
-    "@angular/router": "^22.1.4",
-    "@clr/angular": "^18.2.0",
-    "@clr/ui": "^18.2.0",
+    "@angular/common": "^22.2.4",
+    "@angular/core": "^22.2.4",
+    "@angular/forms": "^22.2.4",
+    "@angular/cdk": "^22.2.4",
+    "@angular/router": "^22.2.4",
+    "@clr/angular": "^18.5.0",
+    "@angular/animations": "^22.2.4",
+    "@clr/ui": "^18.5.0",
     "rxjs": "~7.8.2",
     "jsonc-parser": "^3.3.1",
     "ol": "^v10.9.0",

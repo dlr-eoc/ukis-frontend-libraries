@@ -1,0 +1,47 @@
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { MapOlService } from '@dlr-eoc/map-ol';
+
+import { IProjDef, MapStateService } from '@dlr-eoc/services-map-state';
+
+import { ClarityIcons, eyeIcon, eyeHideIcon } from '@clr/angular/icon';
+
+import { ClrIcon } from '@clr/angular';
+ClarityIcons.addIcons(...[eyeIcon, eyeHideIcon]);
+
+@Component({
+  selector: 'ngx-ukis-projection-switch',
+  styleUrl: './projection-switch.scss',
+  templateUrl: './projection-switch.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    ClrIcon
+  ]
+})
+export class ProjectionSwitchComponent implements OnInit {
+  @Input('mapSvc') mapSvc!: MapOlService;
+  @Input('mapState') mapState!: MapStateService;
+  @Input('projectionList') projList!: IProjDef[];
+  @Input('fitViewToNewExtent') fitViewToNewExtent? = false;
+  @Input('setViewExtent') setViewExtent? = true;
+  subscription!: Subscription;
+  selectedProj!: IProjDef;
+  constructor() { }
+
+  ngOnInit() {
+    if (this.projList[0]) {
+      this.setNewProjection(this.projList[0]);
+    }
+  }
+
+  /** if you setProjection is used only with epsg code sting - register Projection have to be called first! */
+  setNewProjection(projection: IProjDef) {
+    const currentEpsg = this.mapSvc.getProjection().getCode();
+    if (currentEpsg !== projection.code) {
+      this.mapState.setProjection(projection, 'user', { fitToProjectionExtent: this.fitViewToNewExtent, viewSetExtent: this.setViewExtent });
+    }
+    this.selectedProj = projection;
+  }
+}
+
+

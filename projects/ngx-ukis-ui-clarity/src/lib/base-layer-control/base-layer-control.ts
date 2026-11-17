@@ -1,0 +1,52 @@
+import { Component, OnInit, Input, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+
+import { LayersService } from '@dlr-eoc/services-layers';
+import { MapStateService } from '@dlr-eoc/services-map-state';
+import { LayerGroup, Layer } from '@dlr-eoc/services-layers';
+import { Subscription } from 'rxjs';
+
+import { LayerentryGroupComponent } from '../layerentry-group/layerentry-group';
+import { LayerentryComponent } from '../layerentry/layerentry';
+import { ReversePipe } from '@dlr-eoc/ngx-ukis-utilities';
+
+@Component({
+  selector: 'ngx-ukis-base-layer-control',
+  styleUrl: './base-layer-control.scss',
+  templateUrl: './base-layer-control.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [LayerentryGroupComponent, LayerentryComponent, ReversePipe]
+})
+export class BaseLayerControlComponent implements OnInit, OnDestroy {
+  @Input('layersSvc') layersSvc!: LayersService;
+  @Input('mapStateSvc') mapStateSvc?: MapStateService;
+
+  layerGroupsSubscription!: Subscription;
+  layersSubscription!: Subscription;
+  layergroups: Array<Layer | LayerGroup>;
+
+
+  constructor() {
+    this.layergroups = [];
+  }
+
+  ngOnInit() {
+    this.layerGroupsSubscription = this.layersSvc.getLayerGroups().subscribe(layergroups => {
+      this.layergroups = layergroups.filter((group) => group.filtertype === 'Baselayers');
+      // console.log(this.layergroups)
+    });
+  }
+
+  isLayerGroup(group: Layer | LayerGroup) {
+    if (group instanceof LayerGroup) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  ngOnDestroy() {
+    this.layerGroupsSubscription.unsubscribe();
+  }
+
+}
+
