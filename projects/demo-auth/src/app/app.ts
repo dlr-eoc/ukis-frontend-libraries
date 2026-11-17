@@ -1,19 +1,17 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, WritableSignal, signal, inject } from '@angular/core';
-
+import { Component, DestroyRef, effect, inject, signal, WritableSignal } from '@angular/core';
+import { NavigationEnd, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { IProgress, ProgressService } from './components/global-progress/global-progress-svc';
 import { AlertService, IAlert } from './components/global-alert/global-alert-svc';
-import { ProgressService, IProgress } from './components/global-progress/global-progress-svc';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-
-/** for User */
-import { Subscription } from 'rxjs';
-import { UserService, IUser } from '@dlr-eoc/ngx-ukis-ui-clarity';
-import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
-import { BasicAuthService } from './auth/basic-auth.service';
+import { appVersion } from '../environments/version';
+import { filter, Subscription } from 'rxjs';
+import { routes } from './app.routes';
+import { IUser, UserService } from '@dlr-eoc/ngx-ukis-ui-clarity';
+import { BasicAuthSvc } from './auth/basic-auth-svc';
 import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
-
 import { GlobalAlertComponent } from './components/global-alert/global-alert';
 import { GlobalProgressComponent } from './components/global-progress/global-progress';
-import { HeaderComponent } from './components/header/header.component';
+import { HeaderComponent } from './components/header/header';
+import { CookieAlertComponent } from '@dlr-eoc/cookie-alert';
 
 interface IUi {
   alert: WritableSignal<null | IAlert>;
@@ -21,47 +19,84 @@ interface IUi {
 }
 
 @Component({
-    selector: 'app-root',
-    imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, RouterOutlet, CookieAlertComponent],
-    templateUrl: './app.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    styleUrl: './app.scss'
+  imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, RouterOutlet, CookieAlertComponent],
+  selector: 'app-root',
+  styleUrl: './app.scss',
+  templateUrl: './app.html',
 })
-export class App implements OnDestroy, OnInit {
-  title = '';
-  shortTitle = '';
+export class App {
+  title = signal('');
+  shortTitle = signal('');
+  version = (appVersion) ? appVersion : '';
 
   ui: IUi = {
     alert: signal<IAlert | null>(null),
     progress: signal<IProgress | null>(null)
   };
 
-  usrSubsription!: Subscription;
-  user!: IUser;
+  subs: Subscription[] = [];
+  user = signal<IUser | null>(null);
 
-  public alertService = inject(AlertService);
-  public progressService = inject(ProgressService);
+  protected readonly routes = routes;
+
+  currentRoute = signal<string | null>(null);
+
+  private alertService = inject(AlertService);
+  private progressService = inject(ProgressService);
   public router = inject(Router);
   public userService = inject(UserService);
-  public authService = inject(BasicAuthService);
+  public authService = inject(BasicAuthSvc);
+  private destroyRef = inject(DestroyRef);
   constructor() {
     this.init();
     this.ui.alert = this.alertService.alert;
     this.ui.progress = this.progressService.progress;
+
+    // old ngOnInit()
+    const effectRef = effect(() => {
+      const routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
+        .subscribe((event: NavigationEnd | NavigationStart) => {
+          const url = new URL(event.url, `${window.location.origin}${window.location.pathname}`);
+          if (url.pathname !== '/examples') {
+            this.currentRoute.set(url.pathname.slice(1));
+          } else {
+            this.currentRoute.set(null);
+          }
+        });
+      this.subs.push(routerSub);
+
+
+      this.userService.setAuthService(this.authService as never);
+      this.authService.checkSession();
+
+      const usrSubsription = this.userService.getUserInfo().subscribe(userinfo => {
+        console.log('userinfo in app component', userinfo);
+        this.user.set(userinfo.current_user);
+        if (userinfo.current_user && userinfo.current_user.loggedIn) {
+          this.router.navigate(['map']);
+        } else {
+          this.router.navigate(['login']);
+        }
+      });
+      this.subs.push(usrSubsription);
+
+
+      effectRef.destroy();
+    });
+
+    this.destroyRef.onDestroy(() => {
+      this.subs.forEach(s => s.unsubscribe())
+    });
   }
 
   init() {
-    this.userService.setAuthService(this.authService as never);
-    this.authService.checkSession();
-
     this.getHtmlMeta(['title', 'version', 'description', 'short-title']);
 
-    if (this['TITLE']) {
-      this.title = this['TITLE'];
+    if ((this as never)['TITLE']) {
+      this.title.set((this as never)['TITLE']);
     }
-
-    if (this['SHORT-TITLE']) {
-      this.shortTitle = this['SHORT-TITLE'];
+    if ((this as never)['SHORT-TITLE']) {
+      this.shortTitle.set((this as never)['SHORT-TITLE']);
     }
   }
 
@@ -70,27 +105,9 @@ export class App implements OnDestroy, OnInit {
     for (let i = 0, len = ref.length; i < len; i++) {
       const meta = ref[i];
       const name = meta.getAttribute('name');
-      if (names.includes(name)) {
-        this[name.toUpperCase()] = meta.getAttribute('content') || meta.getAttribute('value');
+      if (name && names.includes(name)) {
+        (this as any)[name.toUpperCase()] = meta.getAttribute('content') || meta.getAttribute('value');
       }
     }
-  }
-
-  ngOnInit() {
-    this.usrSubsription = this.userService.getUserInfo().subscribe(userinfo => {
-      console.log('userinfo in app component', userinfo);
-      this.user = userinfo.current_user;
-      if (userinfo.current_user && userinfo.current_user.loggedIn) {
-        // router.navigate not working with routerLinkActive - css
-        document.location.hash = '/map';
-      } else {
-        document.location.hash = '/login';
-        // window.localStorage.removeItem('GetFeature');
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.usrSubsription.unsubscribe();
   }
 }

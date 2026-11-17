@@ -5,9 +5,9 @@
   @if (ui.progress()) {
     <ngx-ukis-global-progress [(progress)]="ui.progress"></ngx-ukis-global-progress>
   }
-  <ukis-cookie-alert [alert-text]="'my alert text'" [privacy-link]="'link to privacy'"></ukis-cookie-alert>
+  <ngx-ukis-cookie-alert [text]="'my alert text'" [link]="'link to privacy'"></ngx-ukis-cookie-alert>
 
-  <ngx-ukis-header [ukis-title]="title">
+  <ngx-ukis-header [ukis-title]="title()" [ukis-short-title]="shortTitle()" [ukis-version]="version">
     @if (!userService.isloggedIn()) {
       <a routerLink="/login" routerLinkActive="active"
       class="nav-link nav-text header-nav-el">Login</a>
