@@ -1,6 +1,6 @@
 ### Breaking Changes
- - Update angular from `^21.2.13` to `^22.1.4`
- - Rename all prefix of angular components with `ngx-ukis` instead of `ukis` in the project: `@dlr-eoc/ngx-ukis-ui-clarity`
+ - Update angular from `^21.2.13` to `^22.2.4`
+ - Replace Karma with Vitest
  - Remove deprecated functions `isVectorLayer`, `isRasterLayer` `isVectorLayertype`, `isRasterLayertype` from `@dlr-eoc/services-layers`.
  - Use of `signal` instead of rxjs `Subject` in `ProgressService` and `AlertService` from `@dlr-eoc/ngx-ukis-ui-clarity`. See demp-maps "route-example-events".
 
