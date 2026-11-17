@@ -13,15 +13,17 @@
     "object"
   ],
   "peerDependencies": {
-    "@angular/common": "^22.1.4",
-    "@angular/core": "^22.1.4"
+    "@angular/common": "^22.2.4",
+    "@angular/core": "^22.2.4"
   },
   "dependencies": {
     "md5": "^2.3.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
-    "zone.js": "~0.15.1",
-    "@angular/platform-browser-dynamic": "^22.1.4"
-  }
+    "@types/md5": "^2.3.6",
+    "vitest": "^4.0.8",
+    "@dlr-eoc/shared-assets": "16.0.1-next.3"
+  },
+  "sideEffects": false
 }

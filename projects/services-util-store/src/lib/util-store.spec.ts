@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { UtilStoreService } from './util-store.service';
+import { vi } from 'vitest';
+import { UtilStoreService } from './util-store';
+import { MockLocalStorage } from '@dlr-eoc/shared-assets/testing';
 
 
-describe('UtilStoreService', () => {
+vi.stubGlobal('localStorage', new MockLocalStorage()); // to use localStorage in window
+// vi.stubGlobal('Storage', () => {}); // to test for typeof Storage in window
 
-
-
+describe('UtilStore', () => {
   let service: UtilStoreService;
+
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(UtilStoreService);
@@ -47,4 +50,3 @@ describe('UtilStoreService', () => {
     expect(service.runtime('person')).toBeFalsy();
   });
 });
-
