@@ -1,0 +1,48 @@
+<section class="content-area map-view">
+  <ngx-ukis-map-maplibre [mapState]="mapStateSvc" [layersSvc]="layerSvc"></ngx-ukis-map-maplibre>
+</section>
+
+<clr-vertical-nav class="right" [clrVerticalNavCollapsible]="true">
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
+    Overlays
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ngx-ukis-layer-control [layersSvc]="layerSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'">
+      </ngx-ukis-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
+    Layers
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ngx-ukis-layer-control [layersSvc]="layerSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
+    Baselayers
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ngx-ukis-base-layer-control [layersSvc]="layerSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-base-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="cog" title="Actions" clrVerticalNavIcon></cds-icon>
+    Actions
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+
+      <button class="btn btn-primary" (click)="updateLayer()">update Geojson Layer</button>
+      <button class="btn btn-primary" (click)="updateStyleLayer()">update Layer water to landuse</button>
+      <button class="btn btn-primary" (click)="updateLayerSource()">update Layer water source</button>
+      <button class="btn btn-primary" (click)="setViewAngle()">set ViewAngle</button>
+      <button class="btn btn-primary" (click)="resetViewAngle()">reset ViewAngle</button>
+      <button class="btn btn-primary" (click)="setRotation()">set Rotation</button>
+      <button class="btn btn-primary" (click)="resetRotation()">reset Rotation</button>
+
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+</clr-vertical-nav>

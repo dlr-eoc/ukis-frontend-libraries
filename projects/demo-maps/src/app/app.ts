@@ -1,16 +1,15 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, inject, WritableSignal, signal } from '@angular/core';
-
+import { Component, effect, inject, signal, WritableSignal } from '@angular/core';
+import { NavigationEnd, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { routes } from './app.routes';
+import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
+import { GlobalAlertComponent } from './components/global-alert/global-alert';
+import { GlobalProgressComponent } from './components/global-progress/global-progress';
+import { HeaderComponent } from './components/header/header';
 import { AlertService, IAlert } from './components/global-alert/global-alert-svc';
-import { ProgressService, IProgress } from './components/global-progress/global-progress-svc';
-import { NavigationEnd, NavigationStart, Router, Routes, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { IProgress, ProgressService } from './components/global-progress/global-progress-svc';
 import { appVersion } from '../environments/version';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ClrMainContainerModule, ClrNavigationModule } from '@clr/angular';
-
-import { GlobalAlertComponent } from './components/global-alert/global-alert';
-import { GlobalProgressComponent } from './components/global-progress/global-progress';
-import { HeaderComponent } from './components/header/header.component';
 
 interface IUi {
   alert: WritableSignal<null | IAlert>;
@@ -18,16 +17,15 @@ interface IUi {
 }
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.html',
-    styleUrl: './app.scss',
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, RouterOutlet]
+  imports: [ClrMainContainerModule, ClrNavigationModule, GlobalAlertComponent, GlobalProgressComponent, HeaderComponent, RouterLink, RouterLinkActive, RouterOutlet],
+  selector: 'app-root',
+  styleUrl: './app.scss',
+  templateUrl: './app.html',
 })
-export class App implements OnInit, OnDestroy {
-  title = '';
-  shortTitle = '';
-  version = (appVersion) ? appVersion : null;
+export class App {
+  title = signal('');
+  shortTitle = signal('');
+  version = (appVersion) ? appVersion : '';
 
   ui: IUi = {
     alert: signal<IAlert | null>(null),
@@ -36,46 +34,42 @@ export class App implements OnInit, OnDestroy {
 
   subs: Subscription[] = [];
 
-  routes: Routes;
-  currentRoute: string;
+  protected readonly routes = routes;
+
+  currentRoute!: string | null;
 
   private alertService = inject(AlertService);
   private progressService = inject(ProgressService);
   public router = inject(Router);
   constructor() {
     this.init();
-    this.routes = this.router.config.filter(r => r.data);
     this.ui.alert = this.alertService.alert;
     this.ui.progress = this.progressService.progress;
-  }
 
-  ngOnInit(): void {
-    /** get current route to show in header */
-    //
-    const routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
-      .subscribe((event: NavigationEnd | NavigationStart) => {
-        const url = new URL(event.url, `${window.location.origin}${window.location.pathname}`);
-        if (url.pathname !== '/examples') {
-          this.currentRoute = url.pathname.slice(1);
-        } else {
-          this.currentRoute = null;
-        }
-      });
-    this.subs.push(routerSub);
-  }
-
-  ngOnDestroy(): void {
-    this.subs.map(s => s.unsubscribe());
+    // old ngOnInit()
+    const effectRef = effect(() => {
+      const routerSub = this.router.events.pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationStart))
+        .subscribe((event: NavigationEnd | NavigationStart) => {
+          const url = new URL(event.url, `${window.location.origin}${window.location.pathname}`);
+          if (url.pathname !== '/examples') {
+            this.currentRoute = url.pathname.slice(1);
+          } else {
+            this.currentRoute = null;
+          }
+        });
+      this.subs.push(routerSub);
+      effectRef.destroy();
+    }, { manualCleanup: true });
   }
 
   init() {
     this.getHtmlMeta(['title', 'version', 'description', 'short-title']);
 
-    if (this['TITLE']) {
-      this.title = this['TITLE'];
+    if ((this as never)['TITLE']) {
+      this.title.set((this as never)['TITLE']);
     }
-    if (this['SHORT-TITLE']) {
-      this.shortTitle = this['SHORT-TITLE'];
+    if ((this as never)['SHORT-TITLE']) {
+      this.shortTitle.set((this as never)['SHORT-TITLE']);
     }
   }
 
@@ -84,8 +78,8 @@ export class App implements OnInit, OnDestroy {
     for (let i = 0, len = ref.length; i < len; i++) {
       const meta = ref[i];
       const name = meta.getAttribute('name');
-      if (names.includes(name)) {
-        this[name.toUpperCase()] = meta.getAttribute('content') || meta.getAttribute('value');
+      if (name && names.includes(name)) {
+        (this as any)[name.toUpperCase()] = meta.getAttribute('content') || meta.getAttribute('value');
       }
     }
   }

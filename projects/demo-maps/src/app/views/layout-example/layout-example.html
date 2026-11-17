@@ -1,0 +1,93 @@
+<!-- workaround for footer inside a route: [ngStyle]="{'height': '95%'}"  -->
+<main class="content-area map-view" [style]="{'height': '95%'}">
+  <ngx-ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ngx-ukis-map-ol>
+</main>
+
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" class="right" [clr-nav-level]="2" [style]="{'height': '95%'}">
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="world" title="Overlays" clrVerticalNavIcon></cds-icon>
+    Overlays
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ngx-ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc" [layerfilter]="'Overlays'">
+      </ngx-ukis-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
+    Layers
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ngx-ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="world" title="Baselayers" clrVerticalNavIcon></cds-icon>
+    Baselayers
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ngx-ukis-base-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-base-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+
+</clr-vertical-nav>
+
+
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" [style]="{'height': '95%'}">
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="showTable()">
+    <cds-icon shape="table" title="Overlays" clrVerticalNavIcon></cds-icon>
+    Table
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      @if (showTable()) {
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="left">Title</th>
+              <th>Foo</th>
+              <th>Bar</th>
+              <th>Baz</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of geojsonData()?.features; track item) {
+              <tr>
+                <td class="left">{{item.properties?.['title']}}</td>
+                <td>{{item.properties?.['foo']}}</td>
+                <td>{{item.properties?.['bar']}}</td>
+                <td>{{item.properties?.['baz']}}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
+      @if (popupData().features.length) {
+        @let popupData = this.popupData();
+        <table class="table">
+          <thead>
+            <tr>
+              @for (item of popupData.headers; track item; let i = $index) {
+                <th [class]="{'left': i === 0}">{{item}}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of popupData.features; track item; let i = $index) {
+              <tr>
+                <td class="left">{{item.properties?.[popupData.headers[0]]}}</td>
+                <td>{{item.properties?.[popupData.headers[1]]}}</td>
+                <td>{{item.properties?.[popupData.headers[2]]}}</td>
+                <td>{{item.properties?.[popupData.headers[3]]}}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+</clr-vertical-nav>
+
+<div class="footer ukis-footer" [style]="{'height': '5%'}">
+  <p>this is the footer</p>
+</div>

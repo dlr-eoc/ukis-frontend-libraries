@@ -1,0 +1,3871 @@
+{
+    "@acemir/cssom@0.9.31": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@acemir\\cssom"
+    },
+    "@ampproject/remapping@2.3.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/ampproject/remapping",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@ampproject\\remapping"
+    },
+    "@angular-devkit/architect@0.2201.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular-cli",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity\\node_modules\\@angular-devkit\\architect"
+    },
+    "@angular-devkit/architect@0.2202.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular-cli",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular-devkit\\architect"
+    },
+    "@angular-devkit/core@22.1.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular-cli",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity\\node_modules\\@angular-devkit\\core"
+    },
+    "@angular-devkit/core@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular-cli",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular-devkit\\core"
+    },
+    "@angular-devkit/schematics@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular-cli",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular-devkit\\schematics"
+    },
+    "@angular/animations@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\animations"
+    },
+    "@angular/build@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular-cli",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\build"
+    },
+    "@angular/cdk@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/components",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\cdk"
+    },
+    "@angular/cli@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular-cli",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\cli"
+    },
+    "@angular/common@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\common"
+    },
+    "@angular/compiler-cli@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\compiler-cli"
+    },
+    "@angular/compiler@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\compiler"
+    },
+    "@angular/core@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\core"
+    },
+    "@angular/forms@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\forms"
+    },
+    "@angular/platform-browser-dynamic@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\platform-browser-dynamic"
+    },
+    "@angular/platform-browser@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\platform-browser"
+    },
+    "@angular/router@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\router"
+    },
+    "@asamuzakjp/css-color@5.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/asamuzaK/cssColor",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@asamuzakjp\\css-color"
+    },
+    "@asamuzakjp/dom-selector@6.8.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/asamuzaK/domSelector",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@asamuzakjp\\dom-selector"
+    },
+    "@asamuzakjp/generational-cache@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/asamuzaK/generationalCache",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@asamuzakjp\\generational-cache"
+    },
+    "@asamuzakjp/nwsapi@2.3.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/dperini/nwsapi",
+        "publisher": "Diego Perini",
+        "email": "diego.perini@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@asamuzakjp\\nwsapi"
+    },
+    "@babel/code-frame@7.29.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\@babel\\code-frame"
+    },
+    "@babel/code-frame@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\code-frame"
+    },
+    "@babel/compat-data@8.0.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\compat-data"
+    },
+    "@babel/core@8.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\compiler-cli\\node_modules\\@babel\\core"
+    },
+    "@babel/core@8.0.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\core"
+    },
+    "@babel/generator@7.29.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\@babel\\generator"
+    },
+    "@babel/generator@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\generator"
+    },
+    "@babel/helper-compilation-targets@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\helper-compilation-targets"
+    },
+    "@babel/helper-globals@7.29.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\@babel\\helper-globals"
+    },
+    "@babel/helper-globals@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\helper-globals"
+    },
+    "@babel/helper-string-parser@7.29.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-core\\node_modules\\@babel\\helper-string-parser"
+    },
+    "@babel/helper-string-parser@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\helper-string-parser"
+    },
+    "@babel/helper-validator-identifier@7.29.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-core\\node_modules\\@babel\\helper-validator-identifier"
+    },
+    "@babel/helper-validator-identifier@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\helper-validator-identifier"
+    },
+    "@babel/helper-validator-option@8.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\helper-validator-option"
+    },
+    "@babel/helpers@8.0.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\helpers"
+    },
+    "@babel/parser@7.29.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-core\\node_modules\\@babel\\parser"
+    },
+    "@babel/parser@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\parser"
+    },
+    "@babel/template@7.29.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\@babel\\template"
+    },
+    "@babel/template@8.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\template"
+    },
+    "@babel/traverse@7.29.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\@babel\\traverse"
+    },
+    "@babel/traverse@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\traverse"
+    },
+    "@babel/types@7.29.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-core\\node_modules\\@babel\\types"
+    },
+    "@babel/types@8.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/babel/babel",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\types"
+    },
+    "@blazediff/core@1.9.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@blazediff\\core"
+    },
+    "@bramus/specificity@2.4.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/bramus/specificity",
+        "publisher": "Bramus Van Damme",
+        "email": "bramus@bram.us",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@bramus\\specificity"
+    },
+    "@bufbuild/protobuf@2.16.0": {
+        "licenses": "(Apache-2.0 AND BSD-3-Clause)",
+        "repository": "https://github.com/bufbuild/protobuf-es",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@bufbuild\\protobuf"
+    },
+    "@cesium/core@0.1.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/CesiumGS/cesium",
+        "publisher": "Cesium GS, Inc.",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@cesium\\core"
+    },
+    "@cesium/engine@26.4.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/CesiumGS/cesium",
+        "publisher": "Cesium GS, Inc.",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@cesium\\engine"
+    },
+    "@cesium/wasm-splats@0.1.0-alpha.2": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/CesiumGS/cesium-wasm-utils",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@cesium\\wasm-splats"
+    },
+    "@cesium/widgets@16.3.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/CesiumGS/cesium",
+        "publisher": "Cesium GS, Inc.",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@cesium\\widgets"
+    },
+    "@clr/angular@18.5.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vmware-clarity/ng-clarity",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@clr\\angular"
+    },
+    "@clr/ui@18.5.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vmware-clarity/ng-clarity",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@clr\\ui"
+    },
+    "@csstools/color-helpers@6.1.2": {
+        "licenses": "MIT-0",
+        "repository": "https://github.com/csstools/postcss-plugins",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@csstools\\color-helpers"
+    },
+    "@csstools/css-calc@3.4.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/csstools/postcss-plugins",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@csstools\\css-calc"
+    },
+    "@csstools/css-color-parser@4.2.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/csstools/postcss-plugins",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@csstools\\css-color-parser"
+    },
+    "@csstools/css-parser-algorithms@4.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/csstools/postcss-plugins",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@csstools\\css-parser-algorithms"
+    },
+    "@csstools/css-syntax-patches-for-csstree@1.1.15": {
+        "licenses": "MIT-0",
+        "repository": "https://github.com/csstools/postcss-plugins",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@csstools\\css-syntax-patches-for-csstree"
+    },
+    "@csstools/css-tokenizer@4.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/csstools/postcss-plugins",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@csstools\\css-tokenizer"
+    },
+    "@dimforge/rapier3d-compat@0.12.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/dimforge/rapier.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dimforge\\rapier3d-compat"
+    },
+    "@dlr-eoc/base-layers-raster@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\base-layers-raster"
+    },
+    "@dlr-eoc/cookie-alert@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\cookie-alert"
+    },
+    "@dlr-eoc/map-cesium@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\map-cesium"
+    },
+    "@dlr-eoc/map-maplibre@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\map-maplibre"
+    },
+    "@dlr-eoc/map-ol@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\map-ol"
+    },
+    "@dlr-eoc/map-three@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\map-three"
+    },
+    "@dlr-eoc/ngx-ukis-ui-clarity@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity"
+    },
+    "@dlr-eoc/ngx-ukis-utilities@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-utilities"
+    },
+    "@dlr-eoc/services-layers@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\services-layers"
+    },
+    "@dlr-eoc/services-map-state@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\services-map-state"
+    },
+    "@dlr-eoc/services-ogc@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\services-ogc"
+    },
+    "@dlr-eoc/services-util-store@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\services-util-store"
+    },
+    "@dlr-eoc/shared-assets@16.0.1-next.3": {
+        "licenses": "UNLICENSED",
+        "private": true,
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\shared-assets"
+    },
+    "@dlr-eoc/utilities@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\utilities"
+    },
+    "@dlr-eoc/utils-browser@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\utils-browser"
+    },
+    "@dlr-eoc/utils-maps@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\utils-maps"
+    },
+    "@dlr-eoc/utils-ogc@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\utils-ogc"
+    },
+    "@esbuild/win32-x64@0.28.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/evanw/esbuild",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@esbuild\\win32-x64"
+    },
+    "@exodus/bytes@1.16.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ExodusOSS/bytes",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@exodus\\bytes"
+    },
+    "@fontsource/metropolis@5.3.0": {
+        "licenses": "Unlicense",
+        "repository": "https://github.com/fontsource/font-files",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@fontsource\\metropolis"
+    },
+    "@fontsource/noto-sans@5.3.0": {
+        "licenses": "OFL-1.1",
+        "repository": "https://github.com/fontsource/font-files",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@fontsource\\noto-sans"
+    },
+    "@harperfast/extended-iterable@1.0.3": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/harperdb/extended-iterable",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@harperfast\\extended-iterable"
+    },
+    "@inquirer/ansi@2.0.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\ansi"
+    },
+    "@inquirer/checkbox@5.2.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\checkbox"
+    },
+    "@inquirer/confirm@6.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\confirm"
+    },
+    "@inquirer/core@12.0.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\core"
+    },
+    "@inquirer/editor@5.3.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\editor"
+    },
+    "@inquirer/expand@5.1.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\expand"
+    },
+    "@inquirer/external-editor@3.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\external-editor"
+    },
+    "@inquirer/figures@2.0.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\figures"
+    },
+    "@inquirer/input@5.1.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\input"
+    },
+    "@inquirer/number@4.2.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\number"
+    },
+    "@inquirer/password@5.2.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\password"
+    },
+    "@inquirer/prompts@8.7.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\prompts"
+    },
+    "@inquirer/rawlist@5.3.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\rawlist"
+    },
+    "@inquirer/search@4.3.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\search"
+    },
+    "@inquirer/select@5.2.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\select"
+    },
+    "@inquirer/type@4.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\type"
+    },
+    "@inquirer/type@4.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SBoudrias/Inquirer.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@inquirer\\checkbox\\node_modules\\@inquirer\\type"
+    },
+    "@jridgewell/gen-mapping@0.3.13": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jridgewell/sourcemaps",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@jridgewell\\gen-mapping"
+    },
+    "@jridgewell/gen-mapping@0.4.0-beta.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jridgewell/sourcemaps",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@babel\\generator\\node_modules\\@jridgewell\\gen-mapping"
+    },
+    "@jridgewell/resolve-uri@3.1.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@jridgewell\\resolve-uri"
+    },
+    "@jridgewell/source-map@0.3.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jridgewell/sourcemaps",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@jridgewell\\source-map"
+    },
+    "@jridgewell/sourcemap-codec@1.6.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jridgewell/sourcemaps",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@jridgewell\\sourcemap-codec"
+    },
+    "@jridgewell/trace-mapping@0.3.31": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jridgewell/sourcemaps",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@jridgewell\\trace-mapping"
+    },
+    "@listr2/prompt-adapter-inquirer@4.2.7": {
+        "licenses": "MIT",
+        "publisher": "Cenk Kilic",
+        "email": "cenk@kilic.dev",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@listr2\\prompt-adapter-inquirer"
+    },
+    "@lmdb/lmdb-win32-x64@3.5.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/kriszyp/lmdb-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@lmdb\\lmdb-win32-x64"
+    },
+    "@mapbox/jsonlint-lines-primitives@2.0.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mapbox/jsonlint",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@mapbox\\jsonlint-lines-primitives"
+    },
+    "@mapbox/point-geometry@1.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/mapbox/point-geometry",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@mapbox\\point-geometry"
+    },
+    "@mapbox/tiny-sdf@2.2.0": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/mapbox/tiny-sdf",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@mapbox\\tiny-sdf"
+    },
+    "@mapbox/togeojson@0.16.2": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/mapbox/togeojson",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@mapbox\\togeojson"
+    },
+    "@mapbox/unitbezier@0.0.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/mapbox/unitbezier",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@mapbox\\unitbezier"
+    },
+    "@mapbox/unitbezier@1.0.0": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/mapbox/unitbezier",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@maplibre\\maplibre-gl-style-spec\\node_modules\\@mapbox\\unitbezier"
+    },
+    "@mapbox/vector-tile@2.0.5": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/mapbox/vector-tile-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@mapbox\\vector-tile"
+    },
+    "@mapbox/whoots-js@3.1.0": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@mapbox\\whoots-js"
+    },
+    "@maplibre/geojson-vt@6.1.2": {
+        "licenses": "ISC",
+        "repository": "https://github.com/maplibre/geojson-vt",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@maplibre\\geojson-vt"
+    },
+    "@maplibre/maplibre-gl-style-spec@24.10.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/maplibre/maplibre-style-spec",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@maplibre\\maplibre-gl-style-spec"
+    },
+    "@maplibre/maplibre-gl-style-spec@26.4.4": {
+        "licenses": "ISC",
+        "repository": "https://github.com/maplibre/maplibre-style-spec",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ol-mapbox-style\\node_modules\\@maplibre\\maplibre-gl-style-spec"
+    },
+    "@maplibre/mlt@1.3.0": {
+        "licenses": "(MIT OR Apache-2.0)",
+        "repository": "https://github.com/maplibre/maplibre-tile-spec",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@maplibre\\mlt"
+    },
+    "@maplibre/vt-pbf@4.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/maplibre/vt-pbf",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@maplibre\\vt-pbf"
+    },
+    "@modelcontextprotocol/core@2.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/modelcontextprotocol/typescript-sdk",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@modelcontextprotocol\\core"
+    },
+    "@modelcontextprotocol/server@2.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/modelcontextprotocol/typescript-sdk",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@modelcontextprotocol\\server"
+    },
+    "@msgpackr-extract/msgpackr-extract-win32-x64@3.0.4": {
+        "licenses": "MIT",
+        "repository": "http://github.com/kriszyp/msgpackr-extract",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@msgpackr-extract\\msgpackr-extract-win32-x64"
+    },
+    "@napi-rs/nice-win32-x64-msvc@1.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Brooooooklyn/nice",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@napi-rs\\nice-win32-x64-msvc"
+    },
+    "@napi-rs/nice@1.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Brooooooklyn/nice",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@napi-rs\\nice"
+    },
+    "@oxc-parser/binding-win32-x64-msvc@0.150.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/oxc-project/oxc",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@oxc-parser\\binding-win32-x64-msvc"
+    },
+    "@oxc-project/types@0.149.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/oxc-project/oxc",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\rolldown\\node_modules\\@oxc-project\\types"
+    },
+    "@oxc-project/types@0.150.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/oxc-project/oxc",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@oxc-project\\types"
+    },
+    "@parcel/watcher-win32-x64@2.6.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/parcel-bundler/watcher",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@parcel\\watcher-win32-x64"
+    },
+    "@parcel/watcher@2.6.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/parcel-bundler/watcher",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@parcel\\watcher"
+    },
+    "@petamoriken/float16@3.9.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/petamoriken/float16",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@petamoriken\\float16"
+    },
+    "@polka/url@1.0.0-next.29": {
+        "licenses": "MIT",
+        "publisher": "Luke Edwards",
+        "email": "luke@lukeed.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@polka\\url"
+    },
+    "@rolldown/binding-win32-x64-msvc@1.2.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/rolldown/rolldown",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@rolldown\\binding-win32-x64-msvc"
+    },
+    "@rolldown/pluginutils@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/rolldown/plugins",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@rolldown\\pluginutils"
+    },
+    "@schematics/angular@22.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular-cli",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@schematics\\angular"
+    },
+    "@spz-loader/core@0.3.1": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/drumath2237/spz-loader",
+        "publisher": "drumath2237",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@spz-loader\\core"
+    },
+    "@standard-schema/spec@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/standard-schema/standard-schema",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@standard-schema\\spec"
+    },
+    "@tweenjs/tween.js@23.1.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tweenjs/tween.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\three\\node_modules\\@tweenjs\\tween.js"
+    },
+    "@tweenjs/tween.js@25.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tweenjs/tween.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@tweenjs\\tween.js"
+    },
+    "@types/chai@5.2.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\chai"
+    },
+    "@types/deep-eql@4.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\deep-eql"
+    },
+    "@types/estree@1.0.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\estree"
+    },
+    "@types/gensync@1.0.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\gensync"
+    },
+    "@types/geojson@7946.0.16": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\geojson"
+    },
+    "@types/jasmine@5.1.15": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\jasmine"
+    },
+    "@types/jsesc@2.5.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\jsesc"
+    },
+    "@types/luxon@3.7.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\luxon"
+    },
+    "@types/md5@2.3.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\md5"
+    },
+    "@types/minimatch@3.0.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\minimatch"
+    },
+    "@types/node@22.20.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\node"
+    },
+    "@types/offscreencanvas@2019.7.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\offscreencanvas"
+    },
+    "@types/parse-json@4.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\parse-json"
+    },
+    "@types/q@0.0.32": {
+        "licenses": "MIT",
+        "repository": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\q"
+    },
+    "@types/rbush@4.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\rbush"
+    },
+    "@types/resolve@1.20.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\resolve"
+    },
+    "@types/selenium-webdriver@3.0.26": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\selenium-webdriver"
+    },
+    "@types/stats.js@0.17.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\stats.js"
+    },
+    "@types/three@0.176.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\three"
+    },
+    "@types/toposort@2.0.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\toposort"
+    },
+    "@types/trusted-types@2.0.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\trusted-types"
+    },
+    "@types/webxr@0.5.24": {
+        "licenses": "MIT",
+        "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\webxr"
+    },
+    "@vitejs/plugin-basic-ssl@2.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitejs/vite-plugin-basic-ssl",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitejs\\plugin-basic-ssl"
+    },
+    "@vitest/browser-playwright@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\browser-playwright"
+    },
+    "@vitest/browser@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\browser"
+    },
+    "@vitest/expect@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\expect"
+    },
+    "@vitest/mocker@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\mocker"
+    },
+    "@vitest/pretty-format@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\pretty-format"
+    },
+    "@vitest/runner@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\runner"
+    },
+    "@vitest/snapshot@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\snapshot"
+    },
+    "@vitest/spy@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\spy"
+    },
+    "@vitest/utils@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\utils"
+    },
+    "@vue/compiler-core@3.5.43": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vuejs/core",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-core"
+    },
+    "@vue/compiler-dom@3.5.43": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vuejs/core",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-dom"
+    },
+    "@vue/compiler-sfc@3.5.43": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vuejs/core",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-sfc"
+    },
+    "@vue/compiler-ssr@3.5.43": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vuejs/core",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-ssr"
+    },
+    "@vue/shared@3.5.43": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vuejs/core",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\shared"
+    },
+    "@webcomponents/webcomponentsjs@2.8.0": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/webcomponents/polyfills",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@webcomponents\\webcomponentsjs"
+    },
+    "@webgpu/types@0.1.74": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/gpuweb/types",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@webgpu\\types"
+    },
+    "@xmldom/xmldom@0.8.15": {
+        "licenses": "MIT",
+        "repository": "https://github.com/xmldom/xmldom",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@xmldom\\xmldom"
+    },
+    "@yarnpkg/lockfile@1.1.0": {
+        "licenses": "BSD-2-Clause",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@yarnpkg\\lockfile"
+    },
+    "@yuku-codegen/binding-win32-x64@0.10.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yuku-toolchain/yuku",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@yuku-codegen\\binding-win32-x64"
+    },
+    "@yuku-parser/binding-win32-x64@0.10.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yuku-toolchain/yuku",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@yuku-parser\\binding-win32-x64"
+    },
+    "@yuku-toolchain/types@0.10.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yuku-toolchain/yuku",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@yuku-toolchain\\types"
+    },
+    "@zarrita/storage@0.2.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@zarrita\\storage"
+    },
+    "@zip.js/zip.js@2.23.0": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/gildas-lormeau/zip.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@zip.js\\zip.js"
+    },
+    "acorn@8.18.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/acornjs/acorn",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\acorn"
+    },
+    "adm-zip@0.5.18": {
+        "licenses": "MIT",
+        "repository": "https://github.com/cthackers/adm-zip",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\adm-zip"
+    },
+    "agent-base@4.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/node-agent-base",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\browserstack\\node_modules\\agent-base"
+    },
+    "agent-base@7.1.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/proxy-agents",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\http-proxy-agent\\node_modules\\agent-base"
+    },
+    "agent-base@9.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/proxy-agents",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\agent-base"
+    },
+    "ajv-formats@3.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ajv-validator/ajv-formats",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ajv-formats"
+    },
+    "ajv@6.15.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ajv-validator/ajv",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\har-validator\\node_modules\\ajv"
+    },
+    "ajv@8.20.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ajv"
+    },
+    "amdefine@0.1.1": {
+        "licenses": "BSD-3-Clause AND MIT",
+        "repository": "https://github.com/jrburke/amdefine",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\amdefine"
+    },
+    "ansi-escapes@7.3.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ansi-escapes"
+    },
+    "ansi-regex@2.1.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\has-ansi\\node_modules\\ansi-regex"
+    },
+    "ansi-regex@5.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\ansi-regex"
+    },
+    "ansi-regex@6.4.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ansi-regex"
+    },
+    "ansi-styles@2.2.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\ansi-styles"
+    },
+    "ansi-styles@4.3.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\ansi-styles"
+    },
+    "ansi-styles@6.2.3": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ansi-styles"
+    },
+    "argparse@1.0.10": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\argparse"
+    },
+    "array-differ@3.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\array-differ"
+    },
+    "array-union@1.0.2": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\globby\\node_modules\\array-union"
+    },
+    "array-union@2.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\array-union"
+    },
+    "array-uniq@1.0.3": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\array-uniq"
+    },
+    "arrify@1.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\globby\\node_modules\\arrify"
+    },
+    "arrify@2.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\arrify"
+    },
+    "asn1@0.2.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/joyent/node-asn1",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\asn1"
+    },
+    "assert-plus@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mcavage/node-assert-plus",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\assert-plus"
+    },
+    "assertion-error@2.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/chaijs/assertion-error",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\assertion-error"
+    },
+    "asynckit@0.4.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/alexindigo/asynckit",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\asynckit"
+    },
+    "autolinker@4.1.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/gregjacobs/Autolinker.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\autolinker"
+    },
+    "aws-sign2@0.7.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/mikeal/aws-sign",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\aws-sign2"
+    },
+    "aws4@1.13.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\aws4"
+    },
+    "balanced-match@1.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/juliangruber/balanced-match",
+        "publisher": "Julian Gruber",
+        "email": "mail@juliangruber.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\balanced-match"
+    },
+    "baseline-browser-mapping@2.11.27": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/web-platform-dx/baseline-browser-mapping",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\baseline-browser-mapping"
+    },
+    "bcrypt-pbkdf@1.0.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/joyent/node-bcrypt-pbkdf",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\bcrypt-pbkdf"
+    },
+    "beasties@0.5.4": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/danielroe/beasties",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\beasties"
+    },
+    "bidi-js@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/lojjic/bidi-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\bidi-js"
+    },
+    "bitmap-sdf@1.0.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/dfcreative/bitmap-sdf",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\bitmap-sdf"
+    },
+    "blocking-proxy@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/jasminewd",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\blocking-proxy"
+    },
+    "boolbase@2.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/fb55/boolbase",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\boolbase"
+    },
+    "brace-expansion@1.1.21": {
+        "licenses": "MIT",
+        "repository": "https://github.com/juliangruber/brace-expansion",
+        "publisher": "Julian Gruber",
+        "email": "mail@juliangruber.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\glob\\node_modules\\brace-expansion"
+    },
+    "brace-expansion@2.1.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/juliangruber/brace-expansion",
+        "publisher": "Julian Gruber",
+        "email": "mail@juliangruber.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\brace-expansion"
+    },
+    "braces@3.0.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\braces"
+    },
+    "browserslist@4.29.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\browserslist"
+    },
+    "browserstack@1.6.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/scottgonzalez/node-browserstack",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\browserstack"
+    },
+    "buffer-from@1.1.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\buffer-from"
+    },
+    "call-bind-apply-helpers@1.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/call-bind-apply-helpers",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\call-bind-apply-helpers"
+    },
+    "call-bind@1.0.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/call-bind",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\call-bind"
+    },
+    "call-bound@1.0.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/call-bound",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\call-bound"
+    },
+    "callsite@1.0.0": {
+        "licenses": "MIT*",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\callsite"
+    },
+    "callsites@3.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\callsites"
+    },
+    "camelcase@5.3.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\camelcase"
+    },
+    "camelcase@6.3.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\camelcase"
+    },
+    "caniuse-lite@1.0.30001814": {
+        "licenses": "CC-BY-4.0",
+        "publisher": "Ben Briggs",
+        "email": "beneb.info@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\caniuse-lite"
+    },
+    "caseless@0.12.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/mikeal/caseless",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\caseless"
+    },
+    "chai@6.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/chaijs/chai",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\chai"
+    },
+    "chalk@1.1.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\chalk"
+    },
+    "chalk@4.1.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\patch-package\\node_modules\\chalk"
+    },
+    "chalk@5.6.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\chalk"
+    },
+    "chardet@2.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/runk/node-chardet",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\chardet"
+    },
+    "charenc@0.0.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/pvorb/node-charenc",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\charenc"
+    },
+    "chokidar@5.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/paulmillr/chokidar",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\chokidar"
+    },
+    "ci-info@3.9.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ci-info"
+    },
+    "cli-cursor@5.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cli-cursor"
+    },
+    "cli-spinners@3.4.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cli-spinners"
+    },
+    "cli-truncate@6.1.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cli-truncate"
+    },
+    "cli-width@4.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/knownasilya/cli-width",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cli-width"
+    },
+    "cliui@6.0.0": {
+        "licenses": "ISC",
+        "repository": "http://github.com/yargs/cliui",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\cliui"
+    },
+    "cliui@7.0.4": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\cliui"
+    },
+    "cliui@9.0.1": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cliui"
+    },
+    "color-convert@2.0.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\color-convert"
+    },
+    "color-name@1.1.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/colorjs/color-name",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\color-name"
+    },
+    "colorjs.io@0.7.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/color-js/color.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\colorjs.io"
+    },
+    "combined-stream@1.0.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/felixge/node-combined-stream",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\combined-stream"
+    },
+    "commander@14.0.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tj/commander.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ukis-libraries-scripts\\node_modules\\commander"
+    },
+    "commander@15.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tj/commander.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\commander"
+    },
+    "commander@2.20.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tj/commander.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\terser\\node_modules\\commander"
+    },
+    "common-path-prefix@3.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/novemberborn/common-path-prefix",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\common-path-prefix"
+    },
+    "concat-map@0.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/substack/node-concat-map",
+        "publisher": "James Halliday",
+        "email": "mail@substack.net",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\concat-map"
+    },
+    "concat-stream@2.0.0": {
+        "licenses": "MIT",
+        "repository": "http://github.com/maxogden/concat-stream",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\concat-stream"
+    },
+    "convert-source-map@1.9.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/thlorenz/convert-source-map",
+        "publisher": "Thorsten Lorenz",
+        "email": "thlorenz@gmx.de",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\convert-source-map"
+    },
+    "convert-source-map@2.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/thlorenz/convert-source-map",
+        "publisher": "Thorsten Lorenz",
+        "email": "thlorenz@gmx.de",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@angular\\compiler-cli\\node_modules\\@babel\\core\\node_modules\\convert-source-map"
+    },
+    "copy-anything@3.0.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mesqueeb/copy-anything",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\copy-anything"
+    },
+    "core-util-is@1.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/isaacs/core-util-is",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\core-util-is"
+    },
+    "cosmiconfig@7.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/davidtheclark/cosmiconfig",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cosmiconfig"
+    },
+    "cross-spawn@7.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/moxystudio/node-cross-spawn",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cross-spawn"
+    },
+    "crypt@0.0.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/pvorb/node-crypt",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\crypt"
+    },
+    "css-select@7.0.0": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/css-select",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\css-select"
+    },
+    "css-tree@3.2.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\css-tree"
+    },
+    "css-what@8.0.0": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/css-what",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\css-what"
+    },
+    "cssstyle@6.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jsdom/cssstyle",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cssstyle"
+    },
+    "d@1.0.2": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\d"
+    },
+    "dashdash@1.14.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/trentm/node-dashdash",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\dashdash"
+    },
+    "data-urls@7.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jsdom/data-urls",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\data-urls"
+    },
+    "debug@2.6.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/visionmedia/debug",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\stream-parser\\node_modules\\debug"
+    },
+    "debug@3.2.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/visionmedia/debug",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\browserstack\\node_modules\\debug"
+    },
+    "debug@4.4.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/debug-js/debug",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\debug"
+    },
+    "decamelize@1.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\decamelize"
+    },
+    "decimal.js@10.6.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/MikeMcl/decimal.js",
+        "publisher": "Michael Mclaughlin",
+        "email": "M8ch88l@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\decimal.js"
+    },
+    "define-data-property@1.1.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/define-data-property",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\define-data-property"
+    },
+    "del@2.2.2": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\del"
+    },
+    "delaunator@5.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/mapbox/delaunator",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\delaunator"
+    },
+    "delayed-stream@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/felixge/node-delayed-stream",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\delayed-stream"
+    },
+    "demo-auth@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\demo-auth"
+    },
+    "demo-maps@16.0.1-next.3": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\demo-maps"
+    },
+    "depcheck@1.4.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/depcheck/depcheck",
+        "publisher": "Djordje Lukic",
+        "email": "lukic.djordje@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck"
+    },
+    "dependency-graph@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jriecken/dependency-graph",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\dependency-graph"
+    },
+    "deps-regex@0.2.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\deps-regex"
+    },
+    "detect-file@1.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\detect-file"
+    },
+    "detect-libc@2.1.2": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/lovell/detect-libc",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\detect-libc"
+    },
+    "dom-serializer@3.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/cheeriojs/dom-serializer",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\dom-serializer"
+    },
+    "domelementtype@3.0.0": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/domelementtype",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\domelementtype"
+    },
+    "domhandler@6.0.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/domhandler",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\domhandler"
+    },
+    "dompurify@3.4.16": {
+        "licenses": "(MPL-2.0 OR Apache-2.0)",
+        "repository": "https://github.com/cure53/DOMPurify",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\dompurify"
+    },
+    "domutils@4.0.2": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/domutils",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\domutils"
+    },
+    "draco3d@1.5.7": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/google/draco",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\draco3d"
+    },
+    "dts-resolver@3.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sxzz/dts-resolver",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\dts-resolver"
+    },
+    "dunder-proto@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/es-shims/dunder-proto",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\dunder-proto"
+    },
+    "earcut@3.0.2": {
+        "licenses": "ISC",
+        "repository": "https://github.com/mapbox/earcut",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@cesium\\engine\\node_modules\\earcut"
+    },
+    "earcut@3.2.4": {
+        "licenses": "ISC",
+        "repository": "https://github.com/mapbox/earcut",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\earcut"
+    },
+    "ecc-jsbn@0.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/quartzjer/ecc-jsbn",
+        "publisher": "Jeremie Miller",
+        "email": "jeremie@jabber.org",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ecc-jsbn"
+    },
+    "electron-to-chromium@1.5.444": {
+        "licenses": "ISC",
+        "repository": "https://github.com/Kilian/electron-to-chromium",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\electron-to-chromium"
+    },
+    "emoji-regex@10.6.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mathiasbynens/emoji-regex",
+        "publisher": "Mathias Bynens",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\emoji-regex"
+    },
+    "emoji-regex@8.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mathiasbynens/emoji-regex",
+        "publisher": "Mathias Bynens",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\emoji-regex"
+    },
+    "empathic@2.1.0": {
+        "licenses": "MIT",
+        "publisher": "Luke Edwards",
+        "email": "luke.edwards05@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\empathic"
+    },
+    "entities@6.0.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/entities",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity\\node_modules\\entities"
+    },
+    "entities@7.0.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/entities",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-core\\node_modules\\entities"
+    },
+    "entities@8.1.0": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/entities",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\entities"
+    },
+    "environment@1.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\environment"
+    },
+    "errno@0.1.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/rvagg/node-errno",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\errno"
+    },
+    "error-ex@1.3.4": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\error-ex"
+    },
+    "es-define-property@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/es-define-property",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es-define-property"
+    },
+    "es-errors@1.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/es-errors",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es-errors"
+    },
+    "es-module-lexer@2.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/guybedford/es-module-lexer",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es-module-lexer"
+    },
+    "es-object-atoms@1.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/es-object-atoms",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es-object-atoms"
+    },
+    "es5-ext@0.10.64": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es5-ext"
+    },
+    "es6-iterator@2.0.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/medikoo/es6-iterator",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es6-iterator"
+    },
+    "es6-promise@4.2.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/stefanpenner/es6-promise",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es6-promise"
+    },
+    "es6-promisify@5.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/digitaldesignlabs/es6-promisify",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es6-promisify"
+    },
+    "es6-symbol@3.1.4": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\es6-symbol"
+    },
+    "esbuild@0.28.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/evanw/esbuild",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\esbuild"
+    },
+    "escalade@3.2.0": {
+        "licenses": "MIT",
+        "publisher": "Luke Edwards",
+        "email": "luke.edwards05@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\escalade"
+    },
+    "escape-string-regexp@1.0.5": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\escape-string-regexp"
+    },
+    "esniff@2.0.1": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\esniff"
+    },
+    "esprima@4.0.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/jquery/esprima",
+        "publisher": "Ariya Hidayat",
+        "email": "ariya.hidayat@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\esprima"
+    },
+    "estree-walker@2.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Rich-Harris/estree-walker",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vue\\compiler-core\\node_modules\\estree-walker"
+    },
+    "estree-walker@3.0.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Rich-Harris/estree-walker",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\estree-walker"
+    },
+    "event-emitter@0.3.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/medikoo/event-emitter",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\event-emitter"
+    },
+    "exit@0.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/cowboy/node-exit",
+        "publisher": "\"Cowboy\" Ben Alman",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\exit"
+    },
+    "expand-tilde@2.0.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\expand-tilde"
+    },
+    "expect-type@1.4.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/mmkal/expect-type",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\expect-type"
+    },
+    "ext@1.7.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/medikoo/es5-ext#ext",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ext"
+    },
+    "extend@3.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/justmoon/node-extend",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\extend"
+    },
+    "extsprintf@1.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/davepacheco/node-extsprintf",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\extsprintf"
+    },
+    "fast-deep-equal@3.1.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/epoberezkin/fast-deep-equal",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fast-deep-equal"
+    },
+    "fast-json-stable-stringify@2.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/epoberezkin/fast-json-stable-stringify",
+        "publisher": "James Halliday",
+        "email": "mail@substack.net",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fast-json-stable-stringify"
+    },
+    "fast-string-truncated-width@3.0.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fast-string-truncated-width"
+    },
+    "fast-string-width@3.0.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fast-string-width"
+    },
+    "fast-uri@3.1.8": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/fastify/fast-uri",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fast-uri"
+    },
+    "fast-wrap-ansi@0.2.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/43081j/fast-wrap-ansi",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fast-wrap-ansi"
+    },
+    "fdir@6.5.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/thecodrr/fdir",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fdir"
+    },
+    "fflate@0.8.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fflate"
+    },
+    "fill-range@7.1.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fill-range"
+    },
+    "find-cache-directory@6.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\find-cache-directory"
+    },
+    "find-up-simple@1.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\find-up-simple"
+    },
+    "find-up@4.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\find-up"
+    },
+    "find-yarn-workspace-root@2.0.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/square/find-yarn-workspace-root",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\find-yarn-workspace-root"
+    },
+    "findup-sync@5.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\findup-sync"
+    },
+    "flru@1.0.2": {
+        "licenses": "MIT",
+        "publisher": "Luke Edwards",
+        "email": "luke.edwards05@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\flru"
+    },
+    "forever-agent@0.6.1": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/mikeal/forever-agent",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\forever-agent"
+    },
+    "form-data@2.3.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/form-data/form-data",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\form-data"
+    },
+    "fs-extra@10.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jprichardson/node-fs-extra",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fs-extra"
+    },
+    "fs.realpath@1.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/fs.realpath",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\fs.realpath"
+    },
+    "function-bind@1.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Raynos/function-bind",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\function-bind"
+    },
+    "gensync@1.0.0-beta.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/loganfsmyth/gensync",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\gensync"
+    },
+    "geotiff@3.1.0-beta.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/geotiffjs/geotiff.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\geotiff"
+    },
+    "get-caller-file@2.0.5": {
+        "licenses": "ISC",
+        "repository": "https://github.com/stefanpenner/get-caller-file",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\get-caller-file"
+    },
+    "get-east-asian-width@1.7.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\get-east-asian-width"
+    },
+    "get-intrinsic@1.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/get-intrinsic",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\get-intrinsic"
+    },
+    "get-proto@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/get-proto",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\get-proto"
+    },
+    "get-tsconfig@5.0.0-beta.6": {
+        "licenses": "MIT",
+        "publisher": "Hiroki Osame",
+        "email": "hiroki.osame@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\get-tsconfig"
+    },
+    "getpass@0.1.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/arekinath/node-getpass",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\getpass"
+    },
+    "gl-matrix@3.4.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/toji/gl-matrix",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\gl-matrix"
+    },
+    "glob@7.2.3": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/node-glob",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\glob"
+    },
+    "global-modules@1.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\global-modules"
+    },
+    "global-prefix@1.0.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\global-prefix"
+    },
+    "globby@5.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\globby"
+    },
+    "gopd@1.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/gopd",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\gopd"
+    },
+    "graceful-fs@4.2.11": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/node-graceful-fs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\graceful-fs"
+    },
+    "grapheme-splitter@1.0.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/orling/grapheme-splitter",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\grapheme-splitter"
+    },
+    "har-schema@2.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/ahmadnassri/har-schema",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\har-schema"
+    },
+    "har-validator@5.1.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ahmadnassri/node-har-validator",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\har-validator"
+    },
+    "has-ansi@2.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\has-ansi"
+    },
+    "has-flag@4.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\has-flag"
+    },
+    "has-property-descriptors@1.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inspect-js/has-property-descriptors",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\has-property-descriptors"
+    },
+    "has-symbols@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inspect-js/has-symbols",
+        "publisher": "Jordan Harband",
+        "email": "ljharb@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\has-symbols"
+    },
+    "hasown@2.0.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inspect-js/hasOwn",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\hasown"
+    },
+    "homedir-polyfill@1.0.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\homedir-polyfill"
+    },
+    "hosted-git-info@10.1.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/hosted-git-info",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\hosted-git-info"
+    },
+    "html-encoding-sniffer@6.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jsdom/html-encoding-sniffer",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\html-encoding-sniffer"
+    },
+    "htmlparser2@12.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/fb55/htmlparser2",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\htmlparser2"
+    },
+    "http-proxy-agent@7.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/proxy-agents",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\http-proxy-agent"
+    },
+    "http-signature@1.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/joyent/node-http-signature",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\http-signature"
+    },
+    "https-proxy-agent@2.2.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/node-https-proxy-agent",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\browserstack\\node_modules\\https-proxy-agent"
+    },
+    "https-proxy-agent@7.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/proxy-agents",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsdom\\node_modules\\https-proxy-agent"
+    },
+    "https-proxy-agent@9.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/proxy-agents",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\https-proxy-agent"
+    },
+    "iconv-lite@0.4.24": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ashtuchkin/iconv-lite",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\probe-image-size\\node_modules\\iconv-lite"
+    },
+    "iconv-lite@0.6.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ashtuchkin/iconv-lite",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\needle\\node_modules\\iconv-lite"
+    },
+    "iconv-lite@0.7.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/pillarjs/iconv-lite",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\iconv-lite"
+    },
+    "ignore@5.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/kaelzhang/node-ignore",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ignore"
+    },
+    "immediate@3.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/calvinmetcalf/immediate",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\immediate"
+    },
+    "immutable@5.1.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/immutable-js/immutable-js",
+        "publisher": "Lee Byron",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\immutable"
+    },
+    "import-fresh@3.3.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\import-fresh"
+    },
+    "import-meta-resolve@4.2.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\import-meta-resolve"
+    },
+    "inflight@1.0.6": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/inflight",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\inflight"
+    },
+    "inherits@2.0.4": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\inherits"
+    },
+    "ini@1.3.8": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/ini",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ini"
+    },
+    "injection-js@2.6.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mgechev/injection-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\injection-js"
+    },
+    "is-arrayish@0.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/qix-/node-is-arrayish",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-arrayish"
+    },
+    "is-buffer@1.1.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/feross/is-buffer",
+        "publisher": "Feross Aboukhadijeh",
+        "email": "feross@feross.org",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-buffer"
+    },
+    "is-core-module@2.17.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inspect-js/is-core-module",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-core-module"
+    },
+    "is-docker@2.2.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-docker"
+    },
+    "is-extglob@2.1.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-extglob"
+    },
+    "is-fullwidth-code-point@3.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\is-fullwidth-code-point"
+    },
+    "is-fullwidth-code-point@5.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-fullwidth-code-point"
+    },
+    "is-glob@4.0.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-glob"
+    },
+    "is-interactive@2.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-interactive"
+    },
+    "is-number@7.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-number"
+    },
+    "is-path-cwd@1.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-path-cwd"
+    },
+    "is-path-in-cwd@1.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-path-in-cwd"
+    },
+    "is-path-inside@1.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-path-inside"
+    },
+    "is-potential-custom-element-name@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mathiasbynens/is-potential-custom-element-name",
+        "publisher": "Mathias Bynens",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-potential-custom-element-name"
+    },
+    "is-typedarray@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/hughsk/is-typedarray",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-typedarray"
+    },
+    "is-unicode-supported@2.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-unicode-supported"
+    },
+    "is-what@4.1.16": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mesqueeb/is-what",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-what"
+    },
+    "is-windows@1.0.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-windows"
+    },
+    "is-wsl@2.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\is-wsl"
+    },
+    "isarray@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/juliangruber/isarray",
+        "publisher": "Julian Gruber",
+        "email": "mail@juliangruber.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jszip\\node_modules\\isarray"
+    },
+    "isarray@2.0.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/juliangruber/isarray",
+        "publisher": "Julian Gruber",
+        "email": "mail@juliangruber.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\isarray"
+    },
+    "isexe@2.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/isexe",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\isexe"
+    },
+    "isomorphic-fetch@3.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/matthew-andrews/isomorphic-fetch",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\isomorphic-fetch"
+    },
+    "isstream@0.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/rvagg/isstream",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\isstream"
+    },
+    "jasmine-core@2.8.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jasmine/jasmine",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jasmine-core"
+    },
+    "jasmine@2.8.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jasmine/jasmine-npm",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jasmine"
+    },
+    "jasminewd2@2.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/jasminewd",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jasminewd2"
+    },
+    "js-tokens@10.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\js-tokens"
+    },
+    "js-tokens@4.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\js-tokens"
+    },
+    "js-yaml@3.15.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\js-yaml"
+    },
+    "jsbn@0.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/andyperlitch/jsbn",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsbn"
+    },
+    "jsdom@28.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jsdom/jsdom",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsdom"
+    },
+    "jsep@1.4.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/EricSmekens/jsep",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsep"
+    },
+    "jsesc@3.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mathiasbynens/jsesc",
+        "publisher": "Mathias Bynens",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsesc"
+    },
+    "json-parse-even-better-errors@2.3.1": {
+        "licenses": "MIT",
+        "publisher": "Kat Marchán",
+        "email": "kzm@zkat.tech",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\json-parse-even-better-errors"
+    },
+    "json-schema-traverse@0.4.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/epoberezkin/json-schema-traverse",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\har-validator\\node_modules\\json-schema-traverse"
+    },
+    "json-schema-traverse@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/epoberezkin/json-schema-traverse",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\json-schema-traverse"
+    },
+    "json-schema@0.4.0": {
+        "licenses": "(AFL-2.1 OR BSD-3-Clause)",
+        "repository": "http://github.com/kriszyp/json-schema",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\json-schema"
+    },
+    "json-stable-stringify@1.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/json-stable-stringify",
+        "publisher": "James Halliday",
+        "email": "mail@substack.net",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\json-stable-stringify"
+    },
+    "json-stringify-pretty-compact@4.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\json-stringify-pretty-compact"
+    },
+    "json-stringify-safe@5.0.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/json-stringify-safe",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\json-stringify-safe"
+    },
+    "json5@2.2.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/json5/json5",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\json5"
+    },
+    "jsonc-parser@3.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/microsoft/node-jsonc-parser",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsonc-parser"
+    },
+    "jsonfile@6.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jprichardson/node-jsonfile",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsonfile"
+    },
+    "jsonify@0.0.1": {
+        "licenses": "Public Domain",
+        "repository": "https://github.com/ljharb/jsonify",
+        "publisher": "Douglas Crockford",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsonify"
+    },
+    "jsonix@3.0.0": {
+        "licenses": "BSD-3-Clause",
+        "repository": "http://github.com/highsource/jsonix",
+        "publisher": "Alexey Valikov",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsonix"
+    },
+    "jsprim@1.4.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/joyent/node-jsprim",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jsprim"
+    },
+    "jszip@3.10.2": {
+        "licenses": "(MIT OR GPL-3.0-or-later)",
+        "repository": "https://github.com/Stuk/jszip",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jszip"
+    },
+    "kdbush@4.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/mourner/kdbush",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\kdbush"
+    },
+    "klaw-sync@6.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/manidlou/node-klaw-sync",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\klaw-sync"
+    },
+    "ktx-parse@2.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ktx-parse"
+    },
+    "lerc@2.0.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/Esri/lerc",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@cesium\\engine\\node_modules\\lerc"
+    },
+    "lerc@3.0.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/Esri/lerc",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lerc"
+    },
+    "less@4.9.1": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/less/less.js",
+        "publisher": "Alexis Sellier",
+        "email": "self@cloudhead.net",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\less"
+    },
+    "lie@3.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/calvinmetcalf/lie",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lie"
+    },
+    "lightningcss-win32-x64-msvc@1.33.0": {
+        "licenses": "MPL-2.0",
+        "repository": "https://github.com/parcel-bundler/lightningcss",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lightningcss-win32-x64-msvc"
+    },
+    "lightningcss@1.33.0": {
+        "licenses": "MPL-2.0",
+        "repository": "https://github.com/parcel-bundler/lightningcss",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lightningcss"
+    },
+    "lines-and-columns@1.2.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/eventualbuddha/lines-and-columns",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lines-and-columns"
+    },
+    "listr2@11.1.0": {
+        "licenses": "MIT",
+        "publisher": "Cenk Kilic",
+        "email": "cenk@kilic.dev",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\listr2"
+    },
+    "lmdb@3.5.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/kriszyp/lmdb-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lmdb"
+    },
+    "locate-path@5.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\locate-path"
+    },
+    "lodash.merge@4.6.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lodash.merge"
+    },
+    "lodash@4.18.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lodash"
+    },
+    "log-symbols@7.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\log-symbols"
+    },
+    "log-update@8.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\log-update"
+    },
+    "long@5.3.2": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/dcodeIO/long.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\long"
+    },
+    "lru-cache@11.5.3": {
+        "licenses": "BlueOak-1.0.0",
+        "repository": "https://github.com/isaacs/node-lru-cache",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lru-cache"
+    },
+    "luxon@3.7.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\luxon"
+    },
+    "magic-string@0.30.21": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Rich-Harris/magic-string",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@vitest\\browser\\node_modules\\magic-string"
+    },
+    "magic-string@1.4.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Rich-Harris/magic-string",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\magic-string"
+    },
+    "make-dir@5.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\make-dir"
+    },
+    "mapbox-to-css-font@3.2.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/openlayers/mapbox-to-css-font",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mapbox-to-css-font"
+    },
+    "maplibre-gl@5.24.0": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/maplibre/maplibre-gl-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\maplibre-gl"
+    },
+    "math-intrinsics@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/es-shims/math-intrinsics",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\math-intrinsics"
+    },
+    "md5@2.3.0": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/pvorb/node-md5",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\md5"
+    },
+    "mdn-data@2.27.1": {
+        "licenses": "CC0-1.0",
+        "repository": "https://github.com/mdn/data",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mdn-data"
+    },
+    "mersenne-twister@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/boo1ean/mersenne-twister",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mersenne-twister"
+    },
+    "meshoptimizer@0.18.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/zeux/meshoptimizer",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@types\\three\\node_modules\\meshoptimizer"
+    },
+    "meshoptimizer@1.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/zeux/meshoptimizer",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\meshoptimizer"
+    },
+    "mgrs@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/proj4js/mgrs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mgrs"
+    },
+    "micromatch@4.0.8": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\micromatch"
+    },
+    "mime-db@1.52.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mime-db"
+    },
+    "mime-types@2.1.35": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mime-types"
+    },
+    "mime@1.6.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/broofa/node-mime",
+        "publisher": "Robert Kieffer",
+        "email": "robert@broofa.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mime"
+    },
+    "mimic-function@5.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mimic-function"
+    },
+    "minimatch@3.1.5": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/minimatch",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\glob\\node_modules\\minimatch"
+    },
+    "minimatch@7.4.9": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/minimatch",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\minimatch"
+    },
+    "minimist@1.2.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/minimistjs/minimist",
+        "publisher": "James Halliday",
+        "email": "mail@substack.net",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\minimist"
+    },
+    "mrmime@2.0.1": {
+        "licenses": "MIT",
+        "publisher": "Luke Edwards",
+        "email": "luke.edwards05@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mrmime"
+    },
+    "ms@2.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\stream-parser\\node_modules\\ms"
+    },
+    "ms@2.1.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ms"
+    },
+    "msgpackr-extract@3.0.4": {
+        "licenses": "MIT",
+        "repository": "http://github.com/kriszyp/msgpackr-extract",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\msgpackr-extract"
+    },
+    "msgpackr@1.12.1": {
+        "licenses": "MIT",
+        "repository": "http://github.com/kriszyp/msgpackr",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\msgpackr"
+    },
+    "multimatch@5.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\multimatch"
+    },
+    "murmurhash-js@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mikolalysenko/murmurhash-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\murmurhash-js"
+    },
+    "mute-stream@3.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/mute-stream",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\mute-stream"
+    },
+    "nanoid@3.3.20": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\nanoid"
+    },
+    "needle@2.9.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tomas/needle",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\probe-image-size\\node_modules\\needle"
+    },
+    "needle@3.5.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tomas/needle",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\needle"
+    },
+    "next-tick@1.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/medikoo/next-tick",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\next-tick"
+    },
+    "ng-packagr@22.2.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ng-packagr/ng-packagr",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ng-packagr"
+    },
+    "node-addon-api@6.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/node-addon-api",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\lmdb\\node_modules\\node-addon-api"
+    },
+    "node-addon-api@7.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/node-addon-api",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\node-addon-api"
+    },
+    "node-fetch@2.7.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/bitinn/node-fetch",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\node-fetch"
+    },
+    "node-gyp-build-optional-packages@5.2.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/prebuild/node-gyp-build",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\node-gyp-build-optional-packages"
+    },
+    "node-releases@2.0.57": {
+        "licenses": "MIT",
+        "repository": "https://github.com/chicoxyzzy/node-releases",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\node-releases"
+    },
+    "nosleep.js@0.12.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/richtr/NoSleep.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\nosleep.js"
+    },
+    "npm-package-arg@14.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/npm-package-arg",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\npm-package-arg"
+    },
+    "nth-check@3.0.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/fb55/nth-check",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\nth-check"
+    },
+    "numcodecs@0.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/manzt/numcodecs.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\numcodecs"
+    },
+    "oauth-sign@0.9.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/mikeal/oauth-sign",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\oauth-sign"
+    },
+    "object-assign@4.1.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\object-assign"
+    },
+    "object-keys@1.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/object-keys",
+        "publisher": "Jordan Harband",
+        "email": "ljharb@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\object-keys"
+    },
+    "obug@2.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sxzz/obug",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\obug"
+    },
+    "obug@3.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sxzz/obug",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\rolldown-plugin-dts\\node_modules\\obug"
+    },
+    "ogc-schemas@2.6.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/highsource/ogc-schemas",
+        "publisher": "Alexey Valikov",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ogc-schemas"
+    },
+    "ol-mapbox-style@13.5.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/openlayers/ol-mapbox-style",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ol-mapbox-style"
+    },
+    "ol@10.11.0": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/openlayers/openlayers",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ol"
+    },
+    "once@1.4.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/once",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\once"
+    },
+    "onetime@7.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\onetime"
+    },
+    "open@7.4.2": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\open"
+    },
+    "opensearch-browser@2.0.0-alpha.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/eoxc/opensearch",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\opensearch-browser"
+    },
+    "ora@9.4.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ora"
+    },
+    "ordered-binary@1.6.2": {
+        "licenses": "MIT",
+        "repository": "http://github.com/kriszyp/ordered-binary",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ordered-binary"
+    },
+    "os-tmpdir@1.0.2": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\os-tmpdir"
+    },
+    "oxc-parser@0.150.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/oxc-project/oxc",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\oxc-parser"
+    },
+    "p-limit@2.3.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\p-limit"
+    },
+    "p-locate@4.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\p-locate"
+    },
+    "p-try@2.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\p-try"
+    },
+    "pako@1.0.11": {
+        "licenses": "(MIT AND Zlib)",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jszip\\node_modules\\pako"
+    },
+    "pako@2.2.0": {
+        "licenses": "(MIT AND Zlib)",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\pako"
+    },
+    "pako@3.0.2": {
+        "licenses": "(MIT AND Zlib)",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@cesium\\engine\\node_modules\\pako"
+    },
+    "parent-module@1.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\parent-module"
+    },
+    "parse-headers@2.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/kesla/parse-headers",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\parse-headers"
+    },
+    "parse-json@5.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\parse-json"
+    },
+    "parse-node-version@1.0.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\parse-node-version"
+    },
+    "parse-passwd@1.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\parse-passwd"
+    },
+    "parse5-html-rewriting-stream@7.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inikulin/parse5",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity\\node_modules\\parse5-html-rewriting-stream"
+    },
+    "parse5-html-rewriting-stream@8.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inikulin/parse5",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\parse5-html-rewriting-stream"
+    },
+    "parse5-sax-parser@7.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inikulin/parse5",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity\\node_modules\\parse5-sax-parser"
+    },
+    "parse5-sax-parser@8.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inikulin/parse5",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\parse5-sax-parser"
+    },
+    "parse5@7.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inikulin/parse5",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity\\node_modules\\parse5"
+    },
+    "parse5@8.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inikulin/parse5",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\parse5"
+    },
+    "patch-package@8.0.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\patch-package"
+    },
+    "path-exists@4.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\path-exists"
+    },
+    "path-is-absolute@1.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\path-is-absolute"
+    },
+    "path-is-inside@1.0.2": {
+        "licenses": "(WTFPL OR MIT)",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\path-is-inside"
+    },
+    "path-key@3.1.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\path-key"
+    },
+    "path-parse@1.0.7": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jbgutierrez/path-parse",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\path-parse"
+    },
+    "path-type@4.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\path-type"
+    },
+    "pathe@2.0.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\pathe"
+    },
+    "pbf@4.0.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/mapbox/pbf",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@mapbox\\vector-tile\\node_modules\\pbf"
+    },
+    "pbf@5.1.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/mapbox/pbf",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\pbf"
+    },
+    "performance-now@2.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/braveg1rl/performance-now",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\performance-now"
+    },
+    "picocolors@1.1.1": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\picocolors"
+    },
+    "picomatch@2.3.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\picomatch"
+    },
+    "picomatch@4.0.5": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity\\node_modules\\picomatch"
+    },
+    "picomatch@4.0.7": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\picomatch"
+    },
+    "pify@2.3.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\pify"
+    },
+    "pinkie-promise@2.0.1": {
+        "licenses": "MIT",
+        "publisher": "Vsevolod Strukchinsky",
+        "email": "floatdrop@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\pinkie-promise"
+    },
+    "pinkie@2.0.4": {
+        "licenses": "MIT",
+        "publisher": "Vsevolod Strukchinsky",
+        "email": "floatdrop@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\pinkie"
+    },
+    "piscina@5.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/piscinajs/piscina",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\piscina"
+    },
+    "pkg-dir@8.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\pkg-dir"
+    },
+    "playwright-core@1.63.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/microsoft/playwright",
+        "publisher": "Microsoft Corporation",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\playwright-core"
+    },
+    "playwright@1.63.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/microsoft/playwright",
+        "publisher": "Microsoft Corporation",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\playwright"
+    },
+    "please-upgrade-node@3.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/typicode/please-upgrade-node",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\please-upgrade-node"
+    },
+    "pngjs@7.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/pngjs/pngjs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\pngjs"
+    },
+    "postcss-media-query-parser@0.2.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/dryoma/postcss-media-query-parser",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\postcss-media-query-parser"
+    },
+    "postcss-safe-parser@7.1.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\postcss-safe-parser"
+    },
+    "postcss@8.5.29": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\postcss"
+    },
+    "potpack@2.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/mapbox/potpack",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\potpack"
+    },
+    "prettier@3.9.9": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\prettier"
+    },
+    "probe-image-size@7.4.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\probe-image-size"
+    },
+    "proc-log@7.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/proc-log",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\proc-log"
+    },
+    "process-nextick-args@2.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/calvinmetcalf/process-nextick-args",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\process-nextick-args"
+    },
+    "proj4@2.22.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/proj4js/proj4js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\proj4"
+    },
+    "protobufjs@8.8.0": {
+        "licenses": "BSD-3-Clause",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protobufjs"
+    },
+    "protocol-buffers-schema@3.6.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mafintosh/protocol-buffers-schema",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protocol-buffers-schema"
+    },
+    "protractor@7.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/protractor",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor"
+    },
+    "proxy-agent-negotiate@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/proxy-agents",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\proxy-agent-negotiate"
+    },
+    "prr@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/rvagg/prr",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\prr"
+    },
+    "psl@1.15.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/lupomontero/psl",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\psl"
+    },
+    "punycode@2.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mathiasbynens/punycode.js",
+        "publisher": "Mathias Bynens",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\punycode"
+    },
+    "q@1.4.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/kriskowal/q",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\q"
+    },
+    "qs@6.5.5": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/ljharb/qs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\qs"
+    },
+    "querystringify@2.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/unshiftio/querystringify",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\querystringify"
+    },
+    "quick-lru@6.1.2": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\quick-lru"
+    },
+    "quickselect@3.0.0": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\quickselect"
+    },
+    "rbush@4.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mourner/rbush",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\rbush"
+    },
+    "readable-stream@2.3.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/readable-stream",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jszip\\node_modules\\readable-stream"
+    },
+    "readable-stream@3.6.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/readable-stream",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\readable-stream"
+    },
+    "readdirp@3.6.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/paulmillr/readdirp",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\readdirp"
+    },
+    "readdirp@5.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/paulmillr/readdirp",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\readdirp"
+    },
+    "reference-spec-reader@0.2.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\reference-spec-reader"
+    },
+    "reflect-metadata@0.2.2": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/rbuckton/reflect-metadata",
+        "publisher": "Ron Buckton",
+        "email": "ron.buckton@microsoft.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\reflect-metadata"
+    },
+    "request@2.88.2": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/request/request",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\request"
+    },
+    "require-directory@2.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/troygoode/node-require-directory",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\require-directory"
+    },
+    "require-from-string@2.0.2": {
+        "licenses": "MIT",
+        "publisher": "Vsevolod Strukchinsky",
+        "email": "floatdrop@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\require-from-string"
+    },
+    "require-main-filename@2.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/yargs/require-main-filename",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\require-main-filename"
+    },
+    "require-package-name@2.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mattdesl/require-package-name",
+        "publisher": "Matt DesLauriers",
+        "email": "dave.des@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\require-package-name"
+    },
+    "requires-port@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/unshiftio/requires-port",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\requires-port"
+    },
+    "resolve-dir@1.0.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\resolve-dir"
+    },
+    "resolve-from@4.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\import-fresh\\node_modules\\resolve-from"
+    },
+    "resolve-from@5.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\resolve-from"
+    },
+    "resolve-pkg-maps@1.0.0": {
+        "licenses": "MIT",
+        "publisher": "Hiroki Osame",
+        "email": "hiroki.osame@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\resolve-pkg-maps"
+    },
+    "resolve-protobuf-schema@2.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mafintosh/resolve-protobuf-schema",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\resolve-protobuf-schema"
+    },
+    "resolve@1.22.12": {
+        "licenses": "MIT",
+        "repository": "ssh://github.com/browserify/resolve",
+        "publisher": "James Halliday",
+        "email": "mail@substack.net",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\resolve"
+    },
+    "restore-cursor@5.1.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\restore-cursor"
+    },
+    "rimraf@2.7.1": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\rimraf"
+    },
+    "robust-predicates@3.0.3": {
+        "licenses": "Unlicense",
+        "repository": "https://github.com/mourner/robust-predicates",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\robust-predicates"
+    },
+    "rolldown-plugin-dts@0.28.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sxzz/rolldown-plugin-dts",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\rolldown-plugin-dts"
+    },
+    "rolldown@1.2.8": {
+        "licenses": "MIT",
+        "repository": "https://github.com/rolldown/rolldown",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\rolldown"
+    },
+    "rxjs@7.8.2": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/reactivex/rxjs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\rxjs"
+    },
+    "safe-buffer@5.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/feross/safe-buffer",
+        "publisher": "Feross Aboukhadijeh",
+        "email": "feross@feross.org",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jszip\\node_modules\\safe-buffer"
+    },
+    "safe-buffer@5.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/feross/safe-buffer",
+        "publisher": "Feross Aboukhadijeh",
+        "email": "feross@feross.org",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\safe-buffer"
+    },
+    "safer-buffer@2.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ChALkeR/safer-buffer",
+        "publisher": "Nikita Skovoroda",
+        "email": "chalkerx@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\safer-buffer"
+    },
+    "sass-embedded-win32-x64@1.104.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sass-embedded-win32-x64"
+    },
+    "sass-embedded@1.104.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sass-embedded"
+    },
+    "sass@1.104.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sass/dart-sass",
+        "publisher": "Natalie Weizenbaum",
+        "email": "nweiz@google.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sass"
+    },
+    "saucelabs@1.5.0": {
+        "licenses": "MIT*",
+        "repository": "https://github.com/holidayextras/node-saucelabs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\saucelabs"
+    },
+    "sax@1.6.1": {
+        "licenses": "BlueOak-1.0.0",
+        "repository": "https://github.com/isaacs/sax-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sax"
+    },
+    "saxes@6.0.0": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\saxes"
+    },
+    "selenium-webdriver@3.6.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/SeleniumHQ/selenium",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\selenium-webdriver"
+    },
+    "semver-compare@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/substack/semver-compare",
+        "publisher": "James Halliday",
+        "email": "mail@substack.net",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\semver-compare"
+    },
+    "semver@5.7.2": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/node-semver",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\webdriver-manager\\node_modules\\semver"
+    },
+    "semver@7.8.5": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/node-semver",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\semver"
+    },
+    "set-blocking@2.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/yargs/set-blocking",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\set-blocking"
+    },
+    "set-function-length@1.2.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ljharb/set-function-length",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\set-function-length"
+    },
+    "setimmediate@1.0.5": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\setimmediate"
+    },
+    "shebang-command@2.0.0": {
+        "licenses": "MIT",
+        "publisher": "Kevin Mårtensson",
+        "email": "kevinmartensson@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\shebang-command"
+    },
+    "shebang-regex@3.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\shebang-regex"
+    },
+    "siginfo@2.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/emilbayes/siginfo",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\siginfo"
+    },
+    "signal-exit@4.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/tapjs/signal-exit",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\signal-exit"
+    },
+    "sirv@3.0.2": {
+        "licenses": "MIT",
+        "publisher": "Luke Edwards",
+        "email": "luke@lukeed.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sirv"
+    },
+    "slash@2.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\slash"
+    },
+    "slice-ansi@9.0.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\slice-ansi"
+    },
+    "source-map-js@1.2.2": {
+        "licenses": "BSD-3-Clause",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\source-map-js"
+    },
+    "source-map-support@0.4.18": {
+        "licenses": "MIT",
+        "repository": "https://github.com/evanw/node-source-map-support",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\source-map-support"
+    },
+    "source-map-support@0.5.21": {
+        "licenses": "MIT",
+        "repository": "https://github.com/evanw/node-source-map-support",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\source-map-support"
+    },
+    "source-map@0.5.7": {
+        "licenses": "BSD-3-Clause",
+        "repository": "http://github.com/mozilla/source-map",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\source-map"
+    },
+    "source-map@0.6.1": {
+        "licenses": "BSD-3-Clause",
+        "repository": "http://github.com/mozilla/source-map",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\less\\node_modules\\source-map"
+    },
+    "source-map@0.7.6": {
+        "licenses": "BSD-3-Clause",
+        "repository": "http://github.com/mozilla/source-map",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\@dlr-eoc\\ngx-ukis-ui-clarity\\node_modules\\source-map"
+    },
+    "source-map@0.8.0": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/mozilla/source-map",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\source-map"
+    },
+    "sprintf-js@1.0.3": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/alexei/sprintf.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sprintf-js"
+    },
+    "sshpk@1.18.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/joyent/node-sshpk",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sshpk"
+    },
+    "stackback@0.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/shtylman/node-stackback",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\stackback"
+    },
+    "std-env@4.3.0": {
+        "licenses": "MIT",
+        "repository": "unjs/std-env",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\std-env"
+    },
+    "stdin-discarder@0.3.2": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\stdin-discarder"
+    },
+    "stream-parser@0.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/node-stream-parser",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\stream-parser"
+    },
+    "string-width@4.2.3": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\string-width"
+    },
+    "string-width@7.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cliui\\node_modules\\string-width"
+    },
+    "string-width@8.3.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\string-width"
+    },
+    "string_decoder@1.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/string_decoder",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\jszip\\node_modules\\string_decoder"
+    },
+    "string_decoder@1.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/string_decoder",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\string_decoder"
+    },
+    "strip-ansi@3.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\strip-ansi"
+    },
+    "strip-ansi@6.0.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\strip-ansi"
+    },
+    "strip-ansi@7.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\strip-ansi"
+    },
+    "supports-color@2.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\supports-color"
+    },
+    "supports-color@7.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\patch-package\\node_modules\\supports-color"
+    },
+    "supports-color@8.1.1": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\supports-color"
+    },
+    "supports-preserve-symlinks-flag@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/inspect-js/node-supports-preserve-symlinks-flag",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\supports-preserve-symlinks-flag"
+    },
+    "symbol-tree@3.2.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jsdom/js-symbol-tree",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\symbol-tree"
+    },
+    "sync-child-process@1.0.2": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sync-child-process"
+    },
+    "sync-message-port@1.2.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\sync-message-port"
+    },
+    "terser@5.51.2": {
+        "licenses": "BSD-2-Clause",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\terser"
+    },
+    "three@0.176.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mrdoob/three.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\three"
+    },
+    "tinybench@2.9.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tinybench"
+    },
+    "tinyexec@1.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tinylibs/tinyexec",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tinyexec"
+    },
+    "tinyglobby@0.2.17": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SuperchupuDev/tinyglobby",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tinyglobby"
+    },
+    "tinyqueue@3.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/mourner/tinyqueue",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tinyqueue"
+    },
+    "tinyrainbow@3.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tinylibs/tinyrainbow",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tinyrainbow"
+    },
+    "tldts-core@7.4.16": {
+        "licenses": "MIT",
+        "repository": "https://github.com/remusao/tldts",
+        "publisher": "Rémi Berson",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tldts-core"
+    },
+    "tldts@7.4.16": {
+        "licenses": "MIT",
+        "repository": "https://github.com/remusao/tldts",
+        "publisher": "Rémi Berson",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tldts"
+    },
+    "tmp@0.0.30": {
+        "licenses": "MIT",
+        "repository": "https://github.com/raszi/node-tmp",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\selenium-webdriver\\node_modules\\tmp"
+    },
+    "tmp@0.2.7": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tmp"
+    },
+    "to-regex-range@5.0.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\to-regex-range"
+    },
+    "topojson-client@3.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/topojson/topojson-client",
+        "publisher": "Mike Bostock",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\topojson-client"
+    },
+    "toposort@2.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/marcelklehr/toposort",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\toposort"
+    },
+    "totalist@3.0.1": {
+        "licenses": "MIT",
+        "publisher": "Luke Edwards",
+        "email": "luke.edwards05@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\totalist"
+    },
+    "tough-cookie@2.5.0": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/salesforce/tough-cookie",
+        "publisher": "Jeremy Stashewsky",
+        "email": "jstash@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\request\\node_modules\\tough-cookie"
+    },
+    "tough-cookie@6.0.2": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/salesforce/tough-cookie",
+        "publisher": "Jeremy Stashewsky",
+        "email": "jstash@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tough-cookie"
+    },
+    "tr46@0.0.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Sebmaster/tr46.js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\node-fetch\\node_modules\\tr46"
+    },
+    "tr46@6.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jsdom/tr46",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tr46"
+    },
+    "tslib@2.8.1": {
+        "licenses": "0BSD",
+        "repository": "https://github.com/Microsoft/tslib",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tslib"
+    },
+    "tunnel-agent@0.6.0": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/mikeal/tunnel-agent",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tunnel-agent"
+    },
+    "tweetnacl@0.14.5": {
+        "licenses": "Unlicense",
+        "repository": "https://github.com/dchest/tweetnacl-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\tweetnacl"
+    },
+    "type@2.7.3": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\type"
+    },
+    "typedarray@0.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/substack/typedarray",
+        "publisher": "James Halliday",
+        "email": "mail@substack.net",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\typedarray"
+    },
+    "typescript@6.0.3": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/microsoft/TypeScript",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\typescript"
+    },
+    "ukis-frontend-libraries@16.0.1-next.3": {
+        "licenses": "UNLICENSED",
+        "private": true,
+        "repository": "https://github.com/dlr-eoc/ukis-frontend-libraries",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries"
+    },
+    "ukis-libraries-scripts@3.0.7": {
+        "licenses": "UNLICENSED",
+        "private": true,
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ukis-libraries-scripts"
+    },
+    "undici-types@6.21.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/undici",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\undici-types"
+    },
+    "undici@7.30.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/undici",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\undici"
+    },
+    "universalify@2.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/RyanZim/universalify",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\universalify"
+    },
+    "unzipit@2.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/greggman/unzipit",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\unzipit"
+    },
+    "update-browserslist-db@1.3.3": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\update-browserslist-db"
+    },
+    "uri-js@4.4.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "http://github.com/garycourt/uri-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\uri-js"
+    },
+    "urijs@1.19.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/medialize/URI.js",
+        "publisher": "Rodney Rehm",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\urijs"
+    },
+    "url-parse@1.5.10": {
+        "licenses": "MIT",
+        "repository": "https://github.com/unshiftio/url-parse",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\url-parse"
+    },
+    "util-deprecate@1.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/TooTallNate/util-deprecate",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\util-deprecate"
+    },
+    "uuid@3.4.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/uuidjs/uuid",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\uuid"
+    },
+    "validate-npm-package-name@8.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/validate-npm-package-name",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\validate-npm-package-name"
+    },
+    "varint@6.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/chrisdickinson/varint",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\varint"
+    },
+    "verkit@0.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sxzz/verkit",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\verkit"
+    },
+    "verror@1.10.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/davepacheco/node-verror",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\verror"
+    },
+    "vite@8.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitejs/vite",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\vite"
+    },
+    "vitest@4.1.11": {
+        "licenses": "MIT",
+        "repository": "https://github.com/vitest-dev/vitest",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\vitest"
+    },
+    "w3c-schemas@1.4.0": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/highsource/w3c-schemas",
+        "publisher": "Alexey Valikov",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\w3c-schemas"
+    },
+    "w3c-xmlserializer@5.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\w3c-xmlserializer"
+    },
+    "weak-lru-cache@1.2.2": {
+        "licenses": "MIT",
+        "repository": "http://github.com/kriszyp/weak-lru-cache",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\weak-lru-cache"
+    },
+    "web-worker@1.5.0": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\web-worker"
+    },
+    "webdriver-js-extender@2.1.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\webdriver-js-extender"
+    },
+    "webdriver-manager@12.1.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/webdriver-manager",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\webdriver-manager"
+    },
+    "webidl-conversions@3.0.1": {
+        "licenses": "BSD-2-Clause",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\node-fetch\\node_modules\\webidl-conversions"
+    },
+    "webidl-conversions@8.0.1": {
+        "licenses": "BSD-2-Clause",
+        "repository": "https://github.com/jsdom/webidl-conversions",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\webidl-conversions"
+    },
+    "whatwg-fetch@3.6.20": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\whatwg-fetch"
+    },
+    "whatwg-mimetype@5.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\whatwg-mimetype"
+    },
+    "whatwg-url@16.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jsdom/whatwg-url",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\whatwg-url"
+    },
+    "whatwg-url@5.0.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\node-fetch\\node_modules\\whatwg-url"
+    },
+    "which-module@2.0.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/nexdrew/which-module",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\which-module"
+    },
+    "which@1.3.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/node-which",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\global-prefix\\node_modules\\which"
+    },
+    "which@2.0.2": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/node-which",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\which"
+    },
+    "why-is-node-running@2.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/mafintosh/why-is-node-running",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\why-is-node-running"
+    },
+    "wkt-parser@1.5.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/proj4js/wkt-parser",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\wkt-parser"
+    },
+    "wrap-ansi@10.0.2": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\wrap-ansi"
+    },
+    "wrap-ansi@6.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\wrap-ansi"
+    },
+    "wrap-ansi@7.0.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\wrap-ansi"
+    },
+    "wrap-ansi@9.0.2": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cliui\\node_modules\\wrap-ansi"
+    },
+    "wrappy@1.0.2": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/wrappy",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\wrappy"
+    },
+    "ws@8.22.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/websockets/ws",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\ws"
+    },
+    "xml-name-validator@5.0.0": {
+        "licenses": "Apache-2.0",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xml-name-validator"
+    },
+    "xml-utils@1.10.2": {
+        "licenses": "CC0-1.0",
+        "repository": "https://github.com/DanielJDufour/xml-utils",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xml-utils"
+    },
+    "xml2js@0.4.23": {
+        "licenses": "MIT",
+        "repository": "https://github.com/Leonidas-from-XIV/node-xml2js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xml2js"
+    },
+    "xmlbuilder@11.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/oozcitak/xmlbuilder-js",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xmlbuilder"
+    },
+    "xmlchars@2.2.0": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xmlchars"
+    },
+    "xmldom@0.6.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/xmldom/xmldom",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xmldom"
+    },
+    "xmlhttprequest@1.8.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/driverdan/node-XMLHttpRequest",
+        "publisher": "Dan DeFelippi",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xmlhttprequest"
+    },
+    "xmlserializer@0.6.1": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xmlserializer"
+    },
+    "xxhash-wasm@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jungomi/xxhash-wasm",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\xxhash-wasm"
+    },
+    "y18n@4.0.3": {
+        "licenses": "ISC",
+        "repository": "https://github.com/yargs/y18n",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\y18n"
+    },
+    "y18n@5.0.8": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\y18n"
+    },
+    "yaml@1.10.3": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\cosmiconfig\\node_modules\\yaml"
+    },
+    "yaml@2.9.1": {
+        "licenses": "ISC",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\yaml"
+    },
+    "yargs-parser@18.1.3": {
+        "licenses": "ISC",
+        "repository": "https://github.com/yargs/yargs-parser",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\yargs-parser"
+    },
+    "yargs-parser@20.2.9": {
+        "licenses": "ISC",
+        "repository": "https://github.com/yargs/yargs-parser",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\yargs-parser"
+    },
+    "yargs-parser@22.0.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/yargs/yargs-parser",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\yargs-parser"
+    },
+    "yargs@15.4.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yargs/yargs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\protractor\\node_modules\\yargs"
+    },
+    "yargs@16.2.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yargs/yargs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\depcheck\\node_modules\\yargs"
+    },
+    "yargs@18.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yargs/yargs",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\yargs"
+    },
+    "yoctocolors@2.2.0": {
+        "licenses": "MIT",
+        "publisher": "Sindre Sorhus",
+        "email": "sindresorhus@gmail.com",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\yoctocolors"
+    },
+    "yuku-ast@0.10.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yuku-toolchain/yuku",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\yuku-ast"
+    },
+    "yuku-codegen@0.10.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yuku-toolchain/yuku",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\yuku-codegen"
+    },
+    "yuku-parser@0.10.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/yuku-toolchain/yuku",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\yuku-parser"
+    },
+    "zarrita@0.7.5": {
+        "licenses": "MIT",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\zarrita"
+    },
+    "zod@4.6.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/colinhacks/zod",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\zod"
+    },
+    "zone.js@0.15.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/angular/angular",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\zone.js"
+    },
+    "zstddec@0.2.0": {
+        "licenses": "MIT AND BSD-3-Clause",
+        "path": "C:\\Users\\boec_mt\\devWorkspace\\new-libs-test\\ukis-frontend-libraries\\node_modules\\zstddec"
+    }
+}

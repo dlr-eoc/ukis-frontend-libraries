@@ -1,0 +1,19 @@
+<table class="table">
+  <caption>
+    Demo for a basic Clarity table.
+  </caption>
+  <thead>
+    <tr>
+      @for (kv of data() | keyvalue; track kv) {
+        <th>{{ kv.key }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      @for (kv of data() | keyvalue; track kv) {
+        <td>{{ kv.value }}</td>
+      }
+    </tr>
+  </tbody>
+</table>

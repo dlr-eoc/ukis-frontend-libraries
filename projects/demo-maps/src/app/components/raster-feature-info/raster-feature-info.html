@@ -1,0 +1,17 @@
+<table class="table table-vertical">
+    <caption>
+        Feature properties
+    </caption>
+    @if (data()) {
+        <tbody>
+            @for (item of data() | keyvalue; track item) {
+                <tr>
+                    <th>{{ item.key }}</th>
+                    <td>{{ item.value }}</td>
+                </tr>
+            }
+        </tbody>
+    }@else{
+        <clr-spinner [clrInline]="true">Loading ...</clr-spinner>
+    }
+</table>

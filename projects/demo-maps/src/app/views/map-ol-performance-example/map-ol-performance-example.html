@@ -1,0 +1,25 @@
+<main class="content-area map-view">
+    <ngx-ukis-map-ol [layersSvc]="layersSvc" [mapState]="mapStateSvc" [controls]="controls" id="olMap"></ngx-ukis-map-ol>
+</main>
+
+
+
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" class="right" [clr-nav-level]="2">
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+        <cds-icon shape="clock" title="Performance" clrVerticalNavIcon></cds-icon>
+        Performance
+        <clr-vertical-nav-group-children class="padding title-ellipsis">
+            <app-performance></app-performance>
+        </clr-vertical-nav-group-children>
+
+    </clr-vertical-nav-group>
+
+  <clr-vertical-nav-group [clrVerticalNavGroupExpanded]="true" class="layers">
+    <cds-icon shape="layers" clrVerticalNavIcon title="layers"></cds-icon>
+    Layers
+    <clr-vertical-nav-group-children class="padding title-ellipsis">
+      <ngx-ukis-layer-control [layersSvc]="layersSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-layer-control>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+</clr-vertical-nav>

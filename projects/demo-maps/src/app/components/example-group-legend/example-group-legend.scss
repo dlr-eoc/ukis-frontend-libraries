@@ -1,0 +1,8 @@
+.wrapper {
+  position: relative;
+
+  .stacked {
+    position: absolute;
+    pointer-events: none;
+  }
+}

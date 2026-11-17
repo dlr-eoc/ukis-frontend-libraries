@@ -6,7 +6,7 @@
     <ngx-ukis-global-progress [(progress)]="ui.progress"></ngx-ukis-global-progress>
   }
 
-  <ngx-ukis-header [ukis-title]="title" [ukis-short-title]="shortTitle" [ukis-version]="version">
+  <ngx-ukis-header [ukis-title]="title()" [ukis-short-title]="shortTitle()" [ukis-version]="version">
 
     <a routerLink="/examples" routerLinkActive="active"
     class="nav-link nav-text header-nav-el">Examples</a>
@@ -15,7 +15,7 @@
       <ng-container class="nav-link nav-text header-nav-el">
         @if (currentRoute === route.path) {
           <a routerLink="/{{route.path}}" routerLinkActive="active"
-          class="nav-link nav-text header-nav-el">{{route.data.title}}</a>
+          class="nav-link nav-text header-nav-el">{{route.data?.['title']}}</a>
         }
       </ng-container>
     }
