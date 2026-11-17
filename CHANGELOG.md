@@ -6,6 +6,9 @@
  - Use of `signal` instead of rxjs `Subject` in `ProgressService` and `AlertService` from `@dlr-eoc/ngx-ukis-ui-clarity`. See demp-maps "route-example-events".
 
 ### Features
+* **@dlr-eoc/utils-ogc**
+ - Add `WmtsClient` based on `ol/format/WMTSCapabilities`.
+
 * **@dlr-eoc/utils-browser**
  - Export function `json2Blob(data: object): Blob`.
 
