@@ -1,16 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import { Layer, VectorLayer, CustomLayer, RasterLayer, WmtsLayer, WmsLayer, TGeoExtent, TmsLayertype, WmtsLayertype, WmsLayertype, XyzLayertype, IListMatrixSet, TFiltertypesUncap, TFiltertypes } from '@dlr-eoc/services-layers';
 
-import { ICesiumControls } from './map-cesium.component';
-import { Cartesian3, Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Color, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, JulianDate, KmlDataSource, Rectangle, TileMapServiceImageryProvider, TimeIntervalCollection, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, Math as CesiumMath, BillboardGraphics } from '@cesium/engine';
+import { ICesiumControls } from './map-cesium';
+import { Cesium3DTileStyle, Cesium3DTileset, CesiumTerrainProvider, Credit, DataSource, EllipsoidTerrainProvider, GeoJsonDataSource, I3SDataProvider, ImageryLayer, Ion, KmlDataSource, TileMapServiceImageryProvider, UrlTemplateImageryProvider, WebMapServiceImageryProvider, WebMapTileServiceImageryProvider, WebMercatorTilingScheme, BillboardGraphics } from '@cesium/engine';
+import { JulianDate, Rectangle, Cartesian3, Color, TimeIntervalCollection, Math as CesiumMath } from '@cesium/core';
 import { Viewer } from '@cesium/widgets';
 import { IMapCenter, WebMercator, TepsgCode } from '@dlr-eoc/services-map-state';
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class MapCesiumService {
   public viewer!: Viewer;
 
@@ -119,9 +118,12 @@ export class MapCesiumService {
     const scene = this.viewer.scene;
     scene.fog.enabled = false;
     scene.globe.showGroundAtmosphere = false;
-    scene.sun.show = false;
-    scene.moon.show = false;
-
+    if(scene.sun){
+        scene.sun.show = false;
+    }
+    if(scene.moon){
+        scene.moon.show = false;
+    }
     //reduce light effect on tilesets
     scene.globe.enableLighting = false;
     scene.highDynamicRange = false;
@@ -301,7 +303,7 @@ export class MapCesiumService {
     this.viewer.camera.flyTo(flyToOptions);
   }
   // subtract rotation degree from 360° to get the same behavior as in openlayers
-  public getRotation():number{
+  public getRotation(): number {
     return 360 - CesiumMath.toDegrees(this.viewer.camera.heading);
   }
 
@@ -1303,3 +1305,4 @@ export class MapCesiumService {
   }
 
 }
+

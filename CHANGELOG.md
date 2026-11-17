@@ -11,6 +11,9 @@
 * **@dlr-eoc/map-ol**
  - ViewChild `mapDivView` is now signal.
  - Selector change to 'ngx-ukis-map-ol'
+
+* **@dlr-eoc/map-cesium**
+ - Selector change to 'ngx-ukis-map-cesium'
 ### Features
 * **@dlr-eoc/utils-ogc**
  - Add `WmtsClient` based on `ol/format/WMTSCapabilities`.

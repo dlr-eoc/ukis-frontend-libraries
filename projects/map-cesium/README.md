@@ -83,7 +83,7 @@ controls!: ICesiumControls;
 
 #### Switch the map component in example-view.component.html to map-cesium:
 ```
-<ukis-map-cesium [twoDlayersSvc]="layerSvc" [mapState]="mapStateSvc" [controls]="controls"></ukis-map-cesium>
+<ngx-ukis-map-cesium [twoDlayersSvc]="layerSvc" [mapState]="mapStateSvc" [controls]="controls"></ngx-ukis-map-cesium>
 ```
 Note: The controls object is not the same as in map-ol! The map state and layers service can be used in both map components.
 
@@ -275,7 +275,7 @@ To be able to interact with the layers in the viewer, additional layer controls 
         <cds-icon shape="block" clrVerticalNavIcon title="tilelayers"></cds-icon>
         3D Tilelayers
         <clr-vertical-nav-group-children class="padding title-ellipsis">
-          <ukis-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-layer-control>
+          <ngx-ukis-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-layer-control>
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>
 
@@ -283,7 +283,7 @@ To be able to interact with the layers in the viewer, additional layer controls 
         <cds-icon shape="world" title="terain" clrVerticalNavIcon></cds-icon>
         3D Terrain
         <clr-vertical-nav-group-children class="padding title-ellipsis">
-          <ukis-base-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ukis-base-layer-control>
+          <ngx-ukis-base-layer-control [layersSvc]="threeDlayerSvc" [mapStateSvc]="mapStateSvc"></ngx-ukis-base-layer-control>
         </clr-vertical-nav-group-children>
       </clr-vertical-nav-group>
 ```
@@ -336,25 +336,4 @@ new VectorLayer({
 
 ===
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.0.
-
-## Code scaffolding
-
-Run `ng generate component component-name --project map-cesium` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project map-cesium`.
-> Note: Don't forget to add `--project map-cesium` or else it will be added to the default project in your `angular.json` file. 
-
-## Build
-
-Run `ng build map-cesium` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build map-cesium`, go to the dist folder `cd dist/map-cesium` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test map-cesium` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.0.

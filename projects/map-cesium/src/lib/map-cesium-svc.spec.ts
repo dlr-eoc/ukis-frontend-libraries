@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { MapCesiumService } from './map-cesium-svc';
 
-import { MapCesiumService } from './map-cesium.service';
 import { Viewer } from '@cesium/widgets';
-import { ICesiumControls } from './map-cesium.component';
+import { ICesiumControls } from './map-cesium';
 import { ImageryLayer, Scene } from '@cesium/engine';
 import { CustomLayer, ILayerOptions, IRasterLayerOptions, Layer, RasterLayer, VectorLayer, WmsLayer, WmtsLayer } from '@dlr-eoc/services-layers';
 
@@ -152,23 +152,34 @@ function createTestLayer() {
   });
 }
 
+const beforeEachFn = (service: MapCesiumService) => {
+  mapTarget = createMapTarget([1024, 768]);
+  (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
+
+  const controls: ICesiumControls = {
+    enablePopups: true
+  }
+  service.setControls(controls);
+};
+
+const afterEachFn = (service: MapCesiumService) => {
+  if (service.viewer) { service.viewer.destroy(); }
+};
+
+
+
+
 describe('MapCesiumService Core Functions', () => {
-  let service: MapCesiumService;
+  let service: MapCesiumService;;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    mapTarget = createMapTarget([1024, 768]);
-    (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
-    service = TestBed.inject(MapCesiumService);
-
-    const controls: ICesiumControls = {
-      enablePopups: true
-    }
-    service.setControls(controls);
+    service = TestBed.inject(MapCesiumService)
+    beforeEachFn(service);
   });
 
   afterEach(() => {
-    if (service.viewer) { service.viewer.destroy(); }
+    afterEachFn(service);
   });
 
   it('should be created', () => {
@@ -188,6 +199,7 @@ describe('MapCesiumService Core Functions', () => {
     expect(service.viewer.scene.highDynamicRange).toBeDefined();
     expect(service.viewer.scene.primitives).toBeDefined();
   });
+
 });
 
 describe('MapCesiumService State', () => {
@@ -195,19 +207,14 @@ describe('MapCesiumService State', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    mapTarget = createMapTarget([1024, 768]);
-    (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
     service = TestBed.inject(MapCesiumService);
-
-    const controls: ICesiumControls = {
-      enablePopups: true
-    }
-    service.setControls(controls);
+    beforeEachFn(service)
   });
 
   afterEach(() => {
-    if (service.viewer) { service.viewer.destroy(); }
+    afterEachFn(service);
   });
+
 
   it('should set/get zoom, center', () => {
     service.createMap(mapTarget.container);
@@ -227,7 +234,7 @@ describe('MapCesiumService State', () => {
     const oldZoom = service.getZoom();
     // The default zoom varies slightly depending on the size of the map and the state of the rendering process.
     // there are values from 0.5 to 3.024
-    expect(0 <= oldZoom && oldZoom < 4).toBeTrue();
+    expect(0 <= oldZoom && oldZoom < 4).toBeTruthy();
   });
 
   it('should set/get extent', () => {
@@ -236,7 +243,7 @@ describe('MapCesiumService State', () => {
     const extent = [-14, 33, 40, 57] as any;
 
     service.setExtent(extent);
-    expect(service.getCurrentExtent() !== oldExtent).toBeTrue();
+    expect(service.getCurrentExtent() !== oldExtent).toBeTruthy();
   });
 
   it('should set/get rotation', async () => {
@@ -265,19 +272,12 @@ describe('MapCesiumService Layer Functions', () => {
   let service: MapCesiumService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    mapTarget = createMapTarget([1024, 768]);
-    (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
     service = TestBed.inject(MapCesiumService);
-
-    const controls: ICesiumControls = {
-      enablePopups: true
-    }
-    service.setControls(controls);
+    beforeEachFn(service)
   });
 
   afterEach(() => {
-    if (service.viewer) { service.viewer.destroy(); }
+    afterEachFn(service);
   });
 
   it('should getAll2DLayersSize', () => {
@@ -352,19 +352,13 @@ describe('MapCesiumService ukisLayers', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    mapTarget = createMapTarget([1024, 768]);
-    (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
     service = TestBed.inject(MapCesiumService);
-
-    const controls: ICesiumControls = {
-      enablePopups: true
-    }
-    service.setControls(controls);
+    beforeEachFn(service);
     createTestLayer();
   });
 
   afterEach(() => {
-    if (service.viewer) { service.viewer.destroy(); }
+    afterEachFn(service);
   });
 
   /** Test if ukis-layers are added to the map ----------------------------------------------------------------------- */
@@ -383,44 +377,53 @@ describe('MapCesiumService ukisLayers', () => {
 
   it('should update one ukisLayer from type Layer', () => {
     service.createMap(mapTarget.container);
+    ukisWmsLayer.visible = false;
     const layers = [ukisWmsLayer];
     service.set2DUkisLayers(layers, 'Layers');
 
     const layerBeforUpdate = service.getLayerById('ID-ukis-wms', 'layers');
-    expect(layerBeforUpdate.show).toBeFalsy();
+    expect(layerBeforUpdate).toBeTruthy();
+    expect(layerBeforUpdate && layerBeforUpdate.show).toBeFalsy();
 
     ukisWmsLayer.visible = true;
     service.set2DUkisLayers(layers, 'Layers');
     const layerAfterUpdate = service.getLayerById('ID-ukis-wms', 'layers');
-    expect(layerAfterUpdate.show).toBeTruthy();
+    expect(layerAfterUpdate).toBeTruthy();
+    expect(layerAfterUpdate && layerAfterUpdate.show).toBeTruthy();
   });
 
   it('should update one ukisLayer from type Overlay', () => {
     service.createMap(mapTarget.container);
+    ukisWmsLayer.visible = false;
     const layers = [ukisWmsLayer];
     service.set2DUkisLayers(layers, 'Overlays');
 
     const layerBeforUpdate = service.getLayerById('ID-ukis-wms', 'Overlays');
-    expect(layerBeforUpdate.show).toBeFalsy();
+    expect(layerBeforUpdate).toBeTruthy();
+    expect(layerBeforUpdate && layerBeforUpdate.show).toBeFalsy();
 
     ukisWmsLayer.visible = true;
     service.set2DUkisLayers(layers, 'Overlays');
     const layerAfterUpdate = service.getLayerById('ID-ukis-wms', 'Overlays');
-    expect(layerAfterUpdate.show).toBeTruthy();
+    expect(layerAfterUpdate).toBeTruthy();
+    expect(layerAfterUpdate && layerAfterUpdate.show).toBeTruthy();
   });
 
   it('should update one ukisLayer from type Baselayer', () => {
     service.createMap(mapTarget.container);
+    ukisWmsLayer.visible = false;
     const layers = [ukisWmsLayer];
     service.set2DUkisLayers(layers, 'Baselayers');
 
     const layerBeforUpdate = service.getLayerById('ID-ukis-wms', 'Baselayers');
-    expect(layerBeforUpdate.show).toBeFalsy();
+    expect(layerBeforUpdate).toBeTruthy();
+    expect(layerBeforUpdate && layerBeforUpdate.show).toBeFalsy();
 
     ukisWmsLayer.visible = true;
     service.set2DUkisLayers(layers, 'Baselayers');
     const layerAfterUpdate = service.getLayerById('ID-ukis-wms', 'Baselayers');
-    expect(layerAfterUpdate.show).toBeTruthy();
+    expect(layerAfterUpdate).toBeTruthy();
+    expect(layerAfterUpdate && layerAfterUpdate.show).toBeTruthy();
   });
 
   it('should remove all layers from a type if array has no layers (not for type Baselayers)', () => {
@@ -455,7 +458,7 @@ describe('MapCesiumService ukisLayers', () => {
       minZoom: 5,
       bbox: [-180, -90, 180, 90]
     };
-    const ukisBaseLayer = new Layer(layerOptions);
+    const ukisBaseLayer = new RasterLayer(layerOptions);
     const layers = [ukisBaseLayer];
     service.set2DUkisLayers(layers, 'Layers');
 
@@ -473,20 +476,13 @@ describe('MapCesiumService DataSources', () => {
   let service: MapCesiumService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    mapTarget = createMapTarget([1024, 768]);
-    (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
     service = TestBed.inject(MapCesiumService);
-
-    const controls: ICesiumControls = {
-      enablePopups: true
-    }
-    service.setControls(controls);
+    beforeEachFn(service);
     createTestLayer();
   });
 
   afterEach(() => {
-    if (service.viewer) { service.viewer.destroy(); }
+    afterEachFn(service);
   });
 
   /** Test if all DataSources are added to the map ----------------------------------------------------------------------- */
@@ -531,4 +527,3 @@ describe('MapCesiumService DataSources', () => {
   });
 
 });
-

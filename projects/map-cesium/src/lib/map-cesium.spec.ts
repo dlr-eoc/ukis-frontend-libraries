@@ -1,23 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ICesiumControls, MapCesiumComponent } from './map-cesium.component';
-import { CustomLayer, LayerGroup, LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
-import { MapCesiumService } from './map-cesium.service';
-import { MapStateService } from '@dlr-eoc/services-map-state';
+import { Service } from '@angular/core';
+import { LayerGroup, LayersService, RasterLayer, VectorLayer } from '@dlr-eoc/services-layers';
+import { of } from 'rxjs';
+import { MapCesiumService } from './map-cesium-svc';
+import { MapCesiumComponent, ICesiumControls } from './map-cesium';
+import { IMapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { Viewer } from '@cesium/widgets';
-import { Component, Injectable, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { of, timeout } from 'rxjs';
 import { OsmTileLayer, EocBasemapTile } from '@dlr-eoc/base-layers-raster';
-import { CommonModule } from '@angular/common';
 
-/**
- * this service extends the LayersService to mimic its behavior. The getLayerGroups function is overwritten to
- * get test data for following tests.
- */
-@Injectable()
+
+import { Math as CesiumMath } from '@cesium/engine';
+
+@Service()
 class MockLayersService extends LayersService {
 
-  getLayerGroups() {
+  override getLayerGroups() {
     const l = new RasterLayer(
       {
         url: 'blabl',
@@ -38,33 +35,7 @@ class MockLayersService extends LayersService {
 }
 
 
-let instrumentedMockupCompId = 0;
-@Component({
-    selector: 'app-mock-popup',
-    template: `<div>{{ data | json }}</div>`,
-    changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [CommonModule]
-})
-class InstrumentedMockPopupComponent implements OnInit, OnDestroy {
-  @Input() initCallback: (id: number) => void;
-  @Input() destroyCallback: (id: number) => void;
-  private id: number;
-
-  constructor() {
-    this.id = instrumentedMockupCompId;
-    instrumentedMockupCompId++;
-  }
-
-  ngOnInit(): void {
-    this.initCallback(this.id);
-  }
-
-  ngOnDestroy(): void {
-    this.destroyCallback(this.id);
-  }
-}
-
-function addSomeLayers(component: MapCesiumComponent, mapSvc: MapCesiumService) {
+function addSomeLayers(component: MapCesiumComponent) {
   const osmLayer = new OsmTileLayer();
   const EocBasemap = new EocBasemapTile();
   const baseLayers = [osmLayer, EocBasemap];
@@ -152,34 +123,54 @@ describe('MapCesiumComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [MapCesiumComponent],
-    providers: [
+      imports: [MapCesiumComponent],
+      providers: [
         MapCesiumService,
-        { provide: LayersService, useClass: MockLayersService },
-        { provide: MapStateService, useClass: MapStateService }
-    ]
-})
-      .compileComponents();
-
-    const controls: ICesiumControls = {
-      infoBox: true,
-      selectionIndicator: true
-    }
-
+        // { provide: LayersService, useClass: MockLayersService }, thers are set as input no need to provide
+        // { provide: MapStateService, useClass: MapStateService }
+      ]
+    }).compileComponents();
     fixture = TestBed.createComponent(MapCesiumComponent);
     component = fixture.componentInstance;
+
+    mapSvc = TestBed.inject(MapCesiumService);
+
     component.twoDlayersSvc = new LayersService();
     component.mapStateSvc = new MapStateService();
-    mapSvc = TestBed.inject(MapCesiumService);
+
+    const controls: ICesiumControls = {
+      globeColor: '#00FF00'
+    }
+
     component.controls = controls;
     (window as Record<string, any>)['CESIUM_BASE_URL'] = 'assets/cesium/';
-    fixture.detectChanges();
-  });
 
+
+    const startState: IMapState = {
+      zoom: 3,
+      center: {
+        lat: 40,
+        lon: 13
+      },
+      rotation: 0,
+      viewAngle: 0
+    };
+    component.mapStateSvc.setMapState(startState);
+
+
+    await fixture.whenStable();
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have inputs set', () => {
+    expect(component.mapStateSvc).toBeTruthy();
+    expect(component.twoDlayersSvc).toBeTruthy();
+    expect(component.mapSvc).toBeTruthy();
+  });
+
 
   it('should have a viewer and the viewer should be the same as from the mapSvc', () => {
     expect(component.viewer instanceof Viewer).toBeTruthy();
@@ -188,8 +179,8 @@ describe('MapCesiumComponent', () => {
 
   it('should set mapstate rotation', async () => {
     //set rotation to 90°
-    component.mapStateSvc.setRotation(90);
-    // we have to wait for the flyTo to finish
+    component.mapStateSvc.setRotation(90); // here we would need to pass flyToOptions.complete cb 
+    // we have to wait for the flyTo to finish -> mapStateSvc.setRotation -> mapSvc.setRotation
     await new Promise(resolve => setTimeout(resolve, 2000));
     // some radians to degree conversions are made, so there are some rounding errors to be expected
     expect(mapSvc.getRotation()).toBeCloseTo(90);
@@ -205,7 +196,7 @@ describe('MapCesiumComponent', () => {
   });
 
   it('should add Imagery layers', () => {
-    let { osmLayer, EocBasemap} = addSomeLayers(component, mapSvc);
+    let { osmLayer, EocBasemap } = addSomeLayers(component);
     const baseLayers = [osmLayer, EocBasemap];
 
     expect(component.viewer.imageryLayers.length).toEqual(2);
@@ -213,12 +204,11 @@ describe('MapCesiumComponent', () => {
   });
 
   it('should add DataSource layers', () => {
-    let {testVector, ukisGeoJsonLayer} = addSomeLayers(component, mapSvc);
+    let { testVector, ukisGeoJsonLayer } = addSomeLayers(component);
     const layers = [testVector, ukisGeoJsonLayer];
 
     //expect(component.viewer.dataSources.length).toEqual(2);
     expect(mapSvc.getAll2DLayersSize('Layers')).toEqual(layers.length);
   });
-
-
 });
+

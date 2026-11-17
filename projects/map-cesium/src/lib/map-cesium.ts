@@ -1,13 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, Input, OnDestroy, AfterViewInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
-
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { IMapStateOptions, MapState, MapStateService } from '@dlr-eoc/services-map-state';
 import { Subscription, Subject } from 'rxjs';
 import { skip } from 'rxjs/operators';
-import { MapCesiumService } from './map-cesium.service';
+import { MapCesiumService } from './map-cesium-svc';
 import { LayersService, Layer, TFiltertypes, TFiltertypesUncap } from '@dlr-eoc/services-layers';
 import { Viewer } from '@cesium/widgets';
 import { ScreenSpaceEventHandler, ScreenSpaceEventType, GeoJsonDataSource } from '@cesium/engine';
-
 
 export interface ICesiumControls {
   //See: https://cesium.com/learn/cesiumjs/ref-doc/Viewer.html#.ConstructorOptions
@@ -34,13 +32,12 @@ export interface ICesiumControls {
 
 declare type Tgroupfiltertype = TFiltertypesUncap | TFiltertypes;
 
-
 @Component({
-    selector: 'ukis-map-cesium',
-    templateUrl: './map-cesium.component.html',
-    styleUrls: ['./map-cesium.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    encapsulation: ViewEncapsulation.None
+  selector: 'ngx-ukis-map-cesium',
+  styleUrl: './map-cesium.scss',
+  templateUrl: './map-cesium.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  encapsulation: ViewEncapsulation.None
 })
 export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -58,14 +55,15 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
   mapCreated = new Subject<boolean>();
   initState = true;
 
-  constructor(private mapSvc: MapCesiumService) { }
+  public mapSvc = inject(MapCesiumService);
+  constructor() { }
 
   ngOnInit(): void {
     if (!this.twoDlayersSvc) {
-      console.error(`provide a LayersService as Input to ukis-map-cesium`);
+      console.error(`provide a LayersService as Input to ngx-ukis-map-cesium`);
     }
     if (!this.mapStateSvc) {
-      console.error(`provide a MapStateService as Input to ukis-map-cesium`);
+      console.error(`provide a MapStateService as Input to ngx-ukis-map-cesium`);
     }
     this.mapSvc.removeAll2DLayers();
 
@@ -111,7 +109,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  private initMap() {
+  public initMap() {
     if (this.mapDivView.nativeElement) {
       if (this.timeInterval) {
         this.mapSvc.setTimeInterval(this.timeInterval);
@@ -177,7 +175,7 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private calcMapStateFromCamera(notifier: IMapStateOptions['notifier']){
+  private calcMapStateFromCamera(notifier: IMapStateOptions['notifier']) {
     const time = this.mapStateSvc.getMapState().getValue().time;
     const zoom = this.mapSvc.getZoom();
     const newCenter = this.mapSvc.getCenter();
@@ -195,61 +193,63 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mapStateSvc.setMapState(ms);
     });
 
-    if(this.controls.infoBox){
+    if (this.controls.infoBox) {
       //Changing entitiy parameters for the display in he infoBox window
-    this.viewer.selectedEntityChanged.addEventListener(() => {
-      const entity = this.viewer.selectedEntity;
-      //change infoBox title
-      const titleDiv = this.viewer.infoBox.container.getElementsByClassName('cesium-infoBox-title')[0];
-      titleDiv.innerHTML = 'Layer Attributes';
-      if (entity) {
-        if(entity.entityCollection?.owner instanceof GeoJsonDataSource){
-          titleDiv.innerHTML = entity.entityCollection.owner.name;
-          entity.name = entity.entityCollection.owner.name;
-        }else{
-          entity.name = 'Layer Attributes';
-        }
-        if (entity.description) {
-          const description = entity.description.getValue(this.mapSvc.cesiumCurrentTime);
-          const contentDiv = this.viewer.infoBox.container.getElementsByClassName('cesium-infoBox-content')[0];
-          contentDiv.innerHTML = description;
-          entity.name = 'Layer Attributes';
+      this.viewer.selectedEntityChanged.addEventListener(() => {
+        const entity = this.viewer.selectedEntity;
+        //change infoBox title
+        const titleDiv = this.viewer.infoBox.container.getElementsByClassName('cesium-infoBox-title')[0];
+        titleDiv.innerHTML = 'Layer Attributes';
+        if (entity) {
+          if (entity.entityCollection?.owner instanceof GeoJsonDataSource) {
+            titleDiv.innerHTML = entity.entityCollection.owner.name;
+            entity.name = entity.entityCollection.owner.name;
+          } else {
+            entity.name = 'Layer Attributes';
+          }
+          if (entity.description) {
+            // @ts-expect-error - https://github.com/CesiumGS/cesium/pull/13885
+            const description = entity.description.getValue(this.mapSvc.cesiumCurrentTime);
+            const contentDiv = this.viewer.infoBox.container.getElementsByClassName('cesium-infoBox-content')[0];
+            contentDiv.innerHTML = description;
+            entity.name = 'Layer Attributes';
 
-          //TODO: Fetch layer info for formatting the getFeatureInfo data, like specific units or value rounding.
+            //TODO: Fetch layer info for formatting the getFeatureInfo data, like specific units or value rounding.
+          }
         }
-      }
-    });
+      });
     }
 
     //Show the popup on click
-    if(this.controls.enablePopups){
+    if (this.controls.enablePopups) {
       const cesiumEventHandler = new ScreenSpaceEventHandler(this.viewer.scene.canvas);
-      cesiumEventHandler.setInputAction((e:any) => {
+      cesiumEventHandler.setInputAction((e: any) => {
         //get camera ray at picked position and get layer features at picked location
         const ray = this.viewer.camera.getPickRay(e.position)!;
         const entity = this.viewer.scene.imageryLayers.pickImageryLayerFeatures(ray, this.viewer.scene);
-        if(entity){
-        const popupContent = document.getElementById("map_cesium_popup_content")!;
-        const popupDiv = popupContent.parentElement;
-        const entity_x = e.position.x;
-        const entity_y = e.position.y
+        if (entity) {
+          const popupContent = document.getElementById("map_cesium_popup_content")!;
+          const popupDiv = popupContent.parentElement;
+          if (popupDiv) {
+            const entity_x = e.position.x;
+            const entity_y = e.position.y
 
-        //hide popup while waiting for the content to load
-        popupDiv.style.display = 'none';
+            //hide popup while waiting for the content to load
+            popupDiv.style.display = 'none';
 
-        entity?.then(e =>{
-          //write description text to popup
-          popupContent.innerHTML = e[0].description!;
-          popupDiv.style.left = (entity_x-58) + 'px';
-          popupDiv.style.top = (entity_y-78) + 'px';
-          popupDiv.style.display = 'block';
-        }
-        );
+            entity?.then(e => {
+              //write description text to popup
+              popupContent.innerHTML = e[0].description!;
+              popupDiv.style.left = (entity_x - 58) + 'px';
+              popupDiv.style.top = (entity_y - 78) + 'px';
+              popupDiv.style.display = 'block';
+            });
+          }
         }
       }, ScreenSpaceEventType.LEFT_CLICK);
 
       //Hide the popup
-      cesiumEventHandler.setInputAction((e:any) => {
+      cesiumEventHandler.setInputAction((e: any) => {
         const popup = document.getElementById("cesium_popup_div")!;
         popup.style.display = 'none';
       }, ScreenSpaceEventType.RIGHT_DOWN);
@@ -358,9 +358,10 @@ export class MapCesiumComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mapSvc.update3DLayerOpacity(layers, filtertype);
   }
 
-  closeCesiumPopup(){
+  closeCesiumPopup() {
     const popup = document.getElementById("cesium_popup_div")!;
     popup.style.display = 'none';
   }
 
 }
+
