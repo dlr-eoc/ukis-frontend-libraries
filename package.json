@@ -31,7 +31,7 @@
     "lint": "ng lint",
     "compodoc": "compodoc -p tsconfig.doc.json -a projects/ngx-ukis-ui-clarity/schematics/ng-add/files/src/assets  -n \"UKIS Frontend libraries\"",
     "compodoc-serve": "compodoc -r 8081 -s",
-    "build:license": "npx license-checker --json --out ./projects/demo-maps/src/assets/licenses.json",
+    "build:license": "npx license-checker-evergreen --json --out ./projects/demo-maps/public/licenses.json",
     "postinstall": "patch-package"
   },
   "private": true,

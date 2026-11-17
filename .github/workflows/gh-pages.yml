@@ -22,6 +22,7 @@ jobs:
         run: |
           npm ci
           npx ng build demo-maps --configuration=production --base-href=/ukis-frontend-libraries/
+          npx license-checker-evergreen --json --out ./dist/demo-maps/browser/licenses.json
           find dist/demo-maps/ -maxdepth 1 -type f -exec mv {} dist/demo-maps/browser/ \;
 
       - name: Upload artifact
