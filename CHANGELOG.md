@@ -1,8 +1,14 @@
 ### Breaking Changes
  - Update angular from `^21.2.13` to `^22.2.4`
  - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^22.3.0` to `^26.0.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^14.3.0` to `^16.0.0` and use new [@cesium/core](https://github.com/CesiumGS/cesium/tree/main/packages/core)  `0.1.0`. See cesium changelog for all changes (cesium from [1.138](https://github.com/CesiumGS/cesium/releases/tag/1.138) to [1.146](https://github.com/CesiumGS/cesium/releases/tag/1.146)).
+
  - Replace Karma with Vitest
+ - Migrate from Karma to Vitest with new Angular file style
+ 
  - Remove deprecated functions `isVectorLayer`, `isRasterLayer` `isVectorLayertype`, `isRasterLayertype` from `@dlr-eoc/services-layers`.
+
+ - Use of `@Service()` instead of `@Injectable({providedIn:'root'})`.
+
 * **@dlr-eoc/cookie-alert**
  - Removed not used `CookieAlertService`.
  - Inputs renamed `alert-text` to `text` and `privacy-link` to `link` and are now signals (`input()`). Property `alert` is now an Angular `signal<boolean>()`.
@@ -63,6 +69,7 @@
 * **@dlr-eoc/map-ol:**
  - Transform extent in `setLayerExtentAfterProjection` if nativeBbox.epsg is not new epsg or try to use old extent.
  - Fix use `l.continuousWorld` for `wrapX` in wmts options.
+ - Handle signal `input()` in `dynamicPopup` and convert the input of `getAttributes` to a signal.
 
  * **@dlr-eoc/map-maplibre:**
  - Allow the usage of different coordinate reference systems in WMTS requests. Use `WmtsLayer.params.matrixSetOptions.matrixSet`. and `WmtsLayer.params.matrixSetOptions.tileMatrixPrefix`

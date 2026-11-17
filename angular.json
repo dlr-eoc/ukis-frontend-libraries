@@ -7,26 +7,24 @@
       "projectType": "library",
       "root": "projects/base-layers-raster",
       "sourceRoot": "projects/base-layers-raster/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/base-layers-raster/tsconfig.lib.json",
-            "project": "projects/base-layers-raster/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/base-layers-raster/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/base-layers-raster/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/base-layers-raster/src/test.ts",
-            "tsConfig": "projects/base-layers-raster/tsconfig.spec.json",
-            "karmaConfig": "projects/base-layers-raster/karma.conf.js"
+            "tsConfig": "projects/base-layers-raster/tsconfig.spec.json"
           }
         }
       }
@@ -35,26 +33,24 @@
       "projectType": "library",
       "root": "projects/cookie-alert",
       "sourceRoot": "projects/cookie-alert/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/cookie-alert/tsconfig.lib.json",
-            "project": "projects/cookie-alert/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/cookie-alert/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/cookie-alert/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/cookie-alert/src/test.ts",
-            "tsConfig": "projects/cookie-alert/tsconfig.spec.json",
-            "karmaConfig": "projects/cookie-alert/karma.conf.js"
+            "tsConfig": "projects/cookie-alert/tsconfig.spec.json"
           }
         }
       }
@@ -63,26 +59,48 @@
       "projectType": "library",
       "root": "projects/map-ol",
       "sourceRoot": "projects/map-ol/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/map-ol/tsconfig.lib.json",
-            "project": "projects/map-ol/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/map-ol/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/map-ol/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "testBuild": {
+          "builder": "@angular/build:application",
+          "options": {
+            "tsConfig": "projects/map-ol/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "./projects/shared-assets/",
+                "output": "./assets"
+              }
+            ],
+            "styles": ["projects/map-ol/src/lib/map-ol.scss"]
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/map-ol/src/test.ts",
             "tsConfig": "projects/map-ol/tsconfig.spec.json",
-            "karmaConfig": "projects/map-ol/karma.conf.js"
+            "browsers": ["chromium"],
+            "buildTarget": "map-ol:testBuild:development"
           }
         }
       }
@@ -91,26 +109,24 @@
       "projectType": "library",
       "root": "projects/services-layers",
       "sourceRoot": "projects/services-layers/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/services-layers/tsconfig.lib.json",
-            "project": "projects/services-layers/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/services-layers/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/services-layers/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/services-layers/src/test.ts",
-            "tsConfig": "projects/services-layers/tsconfig.spec.json",
-            "karmaConfig": "projects/services-layers/karma.conf.js"
+            "tsConfig": "projects/services-layers/tsconfig.spec.json"
           }
         }
       }
@@ -119,26 +135,24 @@
       "projectType": "library",
       "root": "projects/services-map-state",
       "sourceRoot": "projects/services-map-state/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/services-map-state/tsconfig.lib.json",
-            "project": "projects/services-map-state/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/services-map-state/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/services-map-state/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/services-map-state/src/test.ts",
-            "tsConfig": "projects/services-map-state/tsconfig.spec.json",
-            "karmaConfig": "projects/services-map-state/karma.conf.js"
+            "tsConfig": "projects/services-map-state/tsconfig.spec.json"
           }
         }
       }
@@ -147,26 +161,24 @@
       "projectType": "library",
       "root": "projects/services-ogc",
       "sourceRoot": "projects/services-ogc/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/services-ogc/tsconfig.lib.json",
-            "project": "projects/services-ogc/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/services-ogc/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/services-ogc/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/services-ogc/src/test.ts",
-            "tsConfig": "projects/services-ogc/tsconfig.spec.json",
-            "karmaConfig": "projects/services-ogc/karma.conf.js"
+            "tsConfig": "projects/services-ogc/tsconfig.spec.json"
           }
         }
       }
@@ -175,26 +187,24 @@
       "projectType": "library",
       "root": "projects/services-util-store",
       "sourceRoot": "projects/services-util-store/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/services-util-store/tsconfig.lib.json",
-            "project": "projects/services-util-store/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/services-util-store/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/services-util-store/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/services-util-store/src/test.ts",
-            "tsConfig": "projects/services-util-store/tsconfig.spec.json",
-            "karmaConfig": "projects/services-util-store/karma.conf.js"
+            "tsConfig": "projects/services-util-store/tsconfig.spec.json"
           }
         }
       }
@@ -211,27 +221,19 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": {
-              "base": "dist/demo-maps"
-            },
-            "index": "projects/demo-maps/src/index.html",
-            "polyfills": [
-              "projects/demo-maps/src/polyfills.ts"
-            ],
+            "browser": "projects/demo-maps/src/main.ts",
             "tsConfig": "projects/demo-maps/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/demo-maps/src/favicon.ico",
-              "projects/demo-maps/src/assets",
               {
                 "glob": "**/*",
-                "input": "./projects/shared-assets/",
-                "output": "./assets"
+                "input": "projects/demo-maps/public"
               },
               {
                 "glob": "**/*",
-                "input": "./projects/ngx-ukis-ui-clarity/schematics/ng-add/files/src/assets",
+                "input": "./projects/shared-assets/",
                 "output": "./assets"
               },
               {
@@ -255,99 +257,48 @@
                 "output": "./assets/cesium/ThirdParty"
               }
             ],
-            "styles": [
-              "node_modules/@fontsource/metropolis/index.css",
-              "node_modules/@fontsource/noto-sans/index.css",
-              "projects/demo-maps/src/styles.scss"
-            ],
-            "extractLicenses": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true,
-            "browser": "projects/demo-maps/src/main.ts"
+            "styles": ["projects/demo-maps/src/styles.scss"]
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/demo-maps/src/environments/environment.ts",
-                  "with": "projects/demo-maps/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": {
-                "scripts": true,
-                "styles": {
-                  "minify": true,
-                  "inlineCritical": false
-                },
-                "fonts": true
-              },
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "aot": true,
-              "deleteOutputPath": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "3MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "25kb",
-                  "maximumError": "100kb"
+                  "maximumWarning": "70kB",
+                  "maximumError": "100kB"
                 }
-              ]
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "buildTarget": "demo-maps:build"
-          },
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "demo-maps:build:production"
+            },
+            "development": {
+              "buildTarget": "demo-maps:build:development"
             }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "demo-maps:build"
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/demo-maps/src/test.ts",
-            "polyfills": "projects/demo-maps/src/polyfills.ts",
-            "tsConfig": "projects/demo-maps/tsconfig.spec.json",
-            "karmaConfig": "projects/demo-maps/karma.conf.js",
-            "assets": [
-              "projects/demo-maps/src/favicon.ico",
-              "projects/demo-maps/src/assets"
-            ],
-            "styles": [
-              "projects/demo-maps/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/demo-maps/e2e/protractor.conf.js",
-            "devServerTarget": "demo-maps:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "demo-maps:serve:production"
-            }
+            "browsers": ["chromiumHeadless"]
           }
         }
       }
@@ -364,113 +315,62 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": {
-              "base": "dist/demo-auth"
-            },
-            "index": "projects/demo-auth/src/index.html",
-            "polyfills": [
-              "projects/demo-auth/src/polyfills.ts"
-            ],
+            "browser": "projects/demo-auth/src/main.ts",
             "tsConfig": "projects/demo-auth/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
-              "projects/demo-auth/src/favicon.ico",
-              "projects/demo-auth/src/assets",
+              {
+                "glob": "**/*",
+                "input": "projects/demo-auth/public"
+              },
               {
                 "glob": "**/*",
                 "input": "./projects/shared-assets/",
                 "output": "./assets"
-              },
-              {
-                "glob": "**/*",
-                "input": "./projects/ngx-ukis-ui-clarity/schematics/ng-add/files/src/assets",
-                "output": "./assets"
               }
             ],
-            "styles": [
-              "projects/demo-auth/src/styles.scss"
-            ],
-            "extractLicenses": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true,
-            "browser": "projects/demo-auth/src/main.ts"
+            "styles": ["projects/demo-auth/src/styles.scss"]
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/demo-auth/src/environments/environment.ts",
-                  "with": "projects/demo-auth/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "3MB",
+                  "maximumError": "4MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
-              ]
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "buildTarget": "demo-auth:build"
-          },
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "demo-auth:build:production"
+            },
+            "development": {
+              "buildTarget": "demo-auth:build:development"
             }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "demo-auth:build"
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/demo-auth/src/test.ts",
-            "polyfills": "projects/demo-auth/src/polyfills.ts",
-            "tsConfig": "projects/demo-auth/tsconfig.spec.json",
-            "karmaConfig": "projects/demo-auth/karma.conf.js",
-            "assets": [
-              "projects/demo-auth/src/favicon.ico",
-              "projects/demo-auth/src/assets"
-            ],
-            "styles": [
-              "projects/demo-auth/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/demo-auth/e2e/protractor.conf.js",
-            "devServerTarget": "demo-auth:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "demo-auth:serve:production"
-            }
-          }
+          "builder": "@angular/build:unit-test"
         }
       }
     },
@@ -478,26 +378,25 @@
       "projectType": "library",
       "root": "projects/utils-maps",
       "sourceRoot": "projects/utils-maps/src",
-      "prefix": "dlr-eoc",
+      "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/utils-maps/tsconfig.lib.json",
-            "project": "projects/utils-maps/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/utils-maps/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/utils-maps/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/utils-maps/src/test.ts",
             "tsConfig": "projects/utils-maps/tsconfig.spec.json",
-            "karmaConfig": "projects/utils-maps/karma.conf.js"
+            "browsers": ["chromiumHeadless"]
           }
         }
       }
@@ -506,26 +405,24 @@
       "projectType": "library",
       "root": "projects/utils-browser",
       "sourceRoot": "projects/utils-browser/src",
-      "prefix": "dlr-eoc",
+      "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/utils-browser/tsconfig.lib.json",
-            "project": "projects/utils-browser/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/utils-browser/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/utils-browser/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/utils-browser/src/test.ts",
-            "tsConfig": "projects/utils-browser/tsconfig.spec.json",
-            "karmaConfig": "projects/utils-browser/karma.conf.js"
+            "tsConfig": "projects/utils-browser/tsconfig.spec.json"
           }
         }
       }
@@ -534,26 +431,25 @@
       "projectType": "library",
       "root": "projects/map-three",
       "sourceRoot": "projects/map-three/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/map-three/tsconfig.lib.json",
-            "project": "projects/map-three/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/map-three/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/map-three/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/map-three/src/test.ts",
             "tsConfig": "projects/map-three/tsconfig.spec.json",
-            "karmaConfig": "projects/map-three/karma.conf.js"
+            "browsers": ["chromium"]
           }
         }
       }
@@ -565,23 +461,21 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/utils-ogc/tsconfig.lib.json",
-            "project": "projects/utils-ogc/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/utils-ogc/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/utils-ogc/tsconfig.lib.json"
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/utils-ogc/src/test.ts",
-            "tsConfig": "projects/utils-ogc/tsconfig.spec.json",
-            "karmaConfig": "projects/utils-ogc/karma.conf.js"
+            "tsConfig": "projects/utils-ogc/tsconfig.spec.json"
           }
         }
       }
@@ -590,13 +484,10 @@
       "projectType": "library",
       "root": "projects/map-cesium",
       "sourceRoot": "projects/map-cesium/src",
-      "prefix": "ukis1",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/map-cesium/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/map-cesium/tsconfig.lib.prod.json"
@@ -607,12 +498,53 @@
           },
           "defaultConfiguration": "production"
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+        "testBuild": {
+          "builder": "@angular/build:application",
           "options": {
-            "main": "projects/map-cesium/src/test.ts",
             "tsConfig": "projects/map-cesium/tsconfig.spec.json",
-            "karmaConfig": "projects/map-cesium/karma.conf.js"
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "./projects/shared-assets/",
+                "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Source/Assets",
+                "output": "./assets/cesium/Assets"
+              },
+              {
+                "glob": "**/*.css",
+                "input": "node_modules/@cesium/widgets/Source/",
+                "output": "./assets/cesium/Widgets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Build/Workers",
+                "output": "./assets/cesium/Workers"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@cesium/engine/Source/ThirdParty",
+                "output": "./assets/cesium/ThirdParty"
+              }
+            ]
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/map-cesium/tsconfig.spec.json",
+            "browsers": ["chromiumHeadless"],
+            "buildTarget": "map-cesium:testBuild:development"
           }
         }
       }
@@ -621,13 +553,10 @@
       "projectType": "library",
       "root": "projects/map-maplibre",
       "sourceRoot": "projects/map-maplibre/src",
-      "prefix": "ukis",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/map-maplibre/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/map-maplibre/tsconfig.lib.prod.json"
@@ -639,11 +568,10 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/map-maplibre/src/test.ts",
             "tsConfig": "projects/map-maplibre/tsconfig.spec.json",
-            "karmaConfig": "projects/map-maplibre/karma.conf.js"
+            "browsers": ["chromium"]
           }
         }
       }
@@ -655,10 +583,7 @@
       "prefix": "ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/utilities/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/utilities/tsconfig.lib.prod.json"
@@ -670,11 +595,9 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/utilities/src/test.ts",
-            "tsConfig": "projects/utilities/tsconfig.spec.json",
-            "karmaConfig": "projects/utilities/karma.conf.js"
+            "tsConfig": "projects/utilities/tsconfig.spec.json"
           }
         }
       }
@@ -683,13 +606,10 @@
       "projectType": "library",
       "root": "projects/ngx-ukis-utilities",
       "sourceRoot": "projects/ngx-ukis-utilities/src",
-      "prefix": "ngx",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/ngx-ukis-utilities/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/ngx-ukis-utilities/tsconfig.lib.prod.json"
@@ -701,11 +621,9 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/ngx-ukis-utilities/src/test.ts",
-            "tsConfig": "projects/ngx-ukis-utilities/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-ukis-utilities/karma.conf.js"
+            "tsConfig": "projects/ngx-ukis-utilities/tsconfig.spec.json"
           }
         }
       }
@@ -714,13 +632,10 @@
       "projectType": "library",
       "root": "projects/ngx-ukis-ui-clarity",
       "sourceRoot": "projects/ngx-ukis-ui-clarity/src",
-      "prefix": "ngx",
+      "prefix": "ngx-ukis",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/ngx-ukis-ui-clarity/ng-package.json"
-          },
+          "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
               "tsConfig": "projects/ngx-ukis-ui-clarity/tsconfig.lib.prod.json"
@@ -732,41 +647,12 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "projects/ngx-ukis-ui-clarity/src/test.ts",
-            "tsConfig": "projects/ngx-ukis-ui-clarity/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-ukis-ui-clarity/karma.conf.js"
+            "tsConfig": "projects/ngx-ukis-ui-clarity/tsconfig.spec.json"
           }
         }
       }
-    }
-  },
-  "schematics": {
-    "@schematics/angular:component": {
-      "style": "scss",
-      "type": "component"
-    },
-    "@schematics/angular:directive": {
-      "type": "directive"
-    },
-    "@schematics/angular:service": {
-      "type": "service"
-    },
-    "@schematics/angular:guard": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:interceptor": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:module": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:pipe": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:resolver": {
-      "typeSeparator": "."
     }
   },
   "cli": {

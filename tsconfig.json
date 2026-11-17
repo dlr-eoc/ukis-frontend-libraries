@@ -1,34 +1,162 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "esModuleInterop": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "rootDir": ".",
+    "isolatedModules": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "es2020",
+    "module": "preserve",
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "exactOptionalPropertyTypes": false,
-    "noImplicitAny": true,
     "paths": {
-      "@dlr-eoc/*": [
-        "./dist/*",
-        "./projects/*"
-      ]
-    },
-    "allowJs": true,
-    "useDefineForClassFields": false
+      "@dlr-eoc/*": ["./dist/*", "./projects/*"],
+      "ngx-ukis-utilities": ["./dist/ngx-ukis-utilities"],
+      "base-layers-raster": ["./dist/base-layers-raster"],
+      "cookie-alert": ["./dist/cookie-alert"],
+      "demo-maps": ["./dist/demo-maps"],
+      "map-cesium": ["./dist/map-cesium"],
+      "map-maplibre": ["./dist/map-maplibre"],
+      "map-ol": ["./dist/map-ol"],
+      "map-three": ["./dist/map-three"],
+      "ngx-ukis-ui-clarity": ["./dist/ngx-ukis-ui-clarity"],
+      "services-layers": ["./dist/services-layers"],
+      "services-util-store": ["./dist/services-util-store"],
+      "services-map-state": ["./dist/services-map-state"],
+      "services-ogc": ["./dist/services-ogc"],
+      "utilities": ["./dist/utilities"],
+      "utils-browser": ["./dist/utils-browser"],
+      "utils-maps": ["./dist/utils-maps"],
+      "utils-ogc": ["./dist/utils-ogc"],
+      "xmlserializer": ["./types/xmlserializer.d.ts"],
+      "ogc-schemas/*": ["./types//ogc-schemas.d.ts"],
+      "w3c-schemas/*": ["./types/w3c-schemas.d.ts"],
+      "jsonix": ["./types/jsonix.d.ts"],
+      "opensearch-browser": ["./types/opensearch-browser.d.ts"],
+      "opensearch-browser/*": ["./types/opensearch-browser.d.ts"],
+      "@mapbox/togeojson": ["./types/mapbox-togeojson.d.ts"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
+    "strictInputAccessModifiers": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/ngx-ukis-utilities/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngx-ukis-utilities/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/utilities/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/utilities/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/utils-ogc/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/utils-ogc/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/utils-browser/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/utils-browser/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/utils-maps/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/utils-maps/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-util-store/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-util-store/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-layers/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-layers/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/cookie-alert/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/cookie-alert/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-map-state/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-map-state/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/base-layers-raster/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/base-layers-raster/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map-cesium/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-cesium/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo-maps/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo-maps/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map-ol/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-ol/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/ngx-ukis-ui-clarity/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngx-ukis-ui-clarity/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map-three/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-three/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/map-maplibre/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/map-maplibre/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/services-ogc/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/services-ogc/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/demo-auth/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/demo-auth/tsconfig.spec.json"
+    },
+  ]
 }
