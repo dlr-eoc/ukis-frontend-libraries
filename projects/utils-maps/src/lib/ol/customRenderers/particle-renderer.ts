@@ -113,9 +113,9 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
                 [0., 0., 1.]
             ])),
             new Uniform(gl, interpolProgram, 'u_pix2canv', 'mat3', flattenRecursive([
-                [1. /  (canvas.width / 2),  0.,                        0. ],
-                [0,                        -1. / (canvas.height / 2),  0. ],
-                [-1.,                      1.,                         1. ]
+                [1. / (canvas.width / 2), 0., 0.],
+                [0, -1. / (canvas.height / 2), 0.],
+                [-1., 1., 1.]
             ]))
         ], []);
 
@@ -301,17 +301,17 @@ export class ParticleRenderer extends CanvasVectorLayerRenderer {
         // update world2pix
         const c2pT = frameState.coordinateToPixelTransform;
         const worldToPixelTransform = [
-            [c2pT[0],   c2pT[1],    0. ],
-            [c2pT[2],   c2pT[3],    0. ],
-            [c2pT[4],   c2pT[5],    1. ]
+            [c2pT[0], c2pT[1], 0.],
+            [c2pT[2], c2pT[3], 0.],
+            [c2pT[4], c2pT[5], 1.]
         ];
         this.interpolationShader.updateUniformData(this.gl, 'u_world2pix', flattenRecursive(worldToPixelTransform));
 
         // update pix2canvas
         const pix2canv = [
-            [1. /  (this.canvas.width / 2),  0.,                              0. ],
-            [0,                              -1. / (this.canvas.height / 2),  0. ],
-            [-1.,                            1.,                              1. ]
+            [1. / (this.canvas.width / 2), 0., 0.],
+            [0, -1. / (this.canvas.height / 2), 0.],
+            [-1., 1., 1.]
         ];
         this.interpolationShader.updateUniformData(this.gl, 'u_pix2canv', flattenRecursive(pix2canv));
 

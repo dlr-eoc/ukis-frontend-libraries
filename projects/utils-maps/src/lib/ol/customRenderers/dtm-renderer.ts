@@ -1,7 +1,7 @@
 import ImageLayer from 'ol/layer/Image';
 import ImageSource from 'ol/source/Image';
 import { FrameState } from 'ol/Map';
-import { transformExtent, ProjectionLike } from 'ol/proj';
+import { transformExtent, get, ProjectionLike } from 'ol/proj';
 import Static from 'ol/source/ImageStatic';
 import { Shader, Program, Uniform, Texture, Attribute } from '../../webgl/engine.core';
 import { createTextCanvas } from '../../webgl/engine.helpers';
@@ -151,21 +151,23 @@ export class DtmImageRenderer extends CanvasImageLayerRenderer {
 
         // step 5: loading actual image
         const imageWrapper = source.getImage(bbox, 0.02197265625, 2.440000295639038, currentProjection);
-        imageWrapper.load();
+        if (imageWrapper) {
+            imageWrapper.load();
 
-        imageWrapper.addEventListener('change', () => {
-            const newImage = imageWrapper.getImage() as ImageBitmap;
-            this.shader.updateTextureData(this.gl, 'u_srtm', newImage);
-            this.shader.bind(this.gl);
-            this.state = 'ready';
-            layer.changed();
-            const map = layer.get('map');
-            // @TODO: Maybe there is another way to trigger the rendering of the layer so that it appears on the map, otherwise it needs some interaction to appear.
-            requestAnimationFrame(() => {
-                map.render();
+            imageWrapper.addEventListener('change', () => {
+                const newImage = imageWrapper.getImage() as ImageBitmap;
+                this.shader.updateTextureData(this.gl, 'u_srtm', newImage);
+                this.shader.bind(this.gl);
+                this.state = 'ready';
+                layer.changed();
+                const map = layer.get('map');
+                // @TODO: Maybe there is another way to trigger the rendering of the layer so that it appears on the map, otherwise it needs some interaction to appear.
+                requestAnimationFrame(() => {
+                    map.render();
+                });
+
             });
-
-        });
+        }
     }
 
 
@@ -254,3 +256,4 @@ export class DtmImageRenderer extends CanvasImageLayerRenderer {
         // this.interpolationShader.bind(this.gl); <-- not required: already happens in `prepareFrame`
     }
 }
+

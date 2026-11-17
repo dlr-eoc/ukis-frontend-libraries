@@ -1,4 +1,3 @@
-
 ## dlr-eoc/utils-maps
 
 This library contains a collection of utilities that do not themselves depend on angular.
@@ -52,3 +51,7 @@ We intend to obtain this goal by:
  - **Unopinionated**: These utilities are intended to be used in any framework. As such, we try to avoid any Angular- or UKIS-specific idioms that might not fit in with another users idea of how a certain tool is best used.
  - **Gradual transition**: As UKIS matures, we will move more and more functionality out of angular-components and into utility-libraries.
  - **Keeping up with web-standards**: One core motivation for the creation of the utils-libraries was our objective of using some functionality of Ukis within other applications (like static site generators, django, CMS etc) as web components. As a consequence, we intend to design the utilities with modern web-standards and -api's in mind.
+
+===
+
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.0.

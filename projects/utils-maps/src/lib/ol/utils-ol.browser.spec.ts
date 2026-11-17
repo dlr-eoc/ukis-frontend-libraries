@@ -7,9 +7,16 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { flattenLayers, getCollectionItem, layerOrGroupSetOpacity, layerOrGroupSetVisible, layerOrGroupSetZIndex, simpleMapToCanvas, collectionItemSetIndex } from './utils-ol';
 import { MinimalWebGlRenderer } from './customRenderers/minimal_renderer';
-import { InterpolationRenderer } from './customRenderers/interpolation_renderer';
-import { ParticleRenderer } from './customRenderers/particle_renderer';
-import { DtmImageRenderer } from './customRenderers/dtm_renderer';
+import { InterpolationRenderer } from './customRenderers/interpolation-renderer';
+import { ParticleRenderer } from './customRenderers/particle-renderer';
+import { DtmImageRenderer } from './customRenderers/dtm-renderer';
+import { ResizeObserverMock, OffscreenCanvasMock, MockCanvasRenderingContext2D } from './utils';
+
+/* import { vi } from 'vitest';
+vi.stubGlobal('ResizeObserver', ResizeObserverMock);
+vi.stubGlobal('OffscreenCanvas', OffscreenCanvasMock);
+vi.stubGlobal('CanvasRenderingContext2D', MockCanvasRenderingContext2D); */
+
 
 
 let vector1: VectorLayer<VectorSource>;
@@ -309,3 +316,4 @@ describe('ol utils test suite', () => {
         expect(flattenedLayers[3]).toBe(tileLayerOSM);
     });
 });
+

@@ -2,7 +2,7 @@ import { Feature } from 'ol';
 import CanvasVectorLayerRenderer from 'ol/renderer/canvas/VectorLayer';
 import VectorLayer from 'ol/layer/Vector';
 import Point from 'ol/geom/Point';
-import { Vector as VectorSource, Cluster as olCluster } from 'ol/source';
+import { Vector as VectorSource, Cluster as olCluster, Source } from 'ol/source';
 import { replaceChildren } from 'ol/dom';
 import { Projection } from 'ol/proj';
 import { Shader, Framebuffer, Program, Uniform, Index, Texture, Attribute, DataTexture } from '../../webgl/engine.core';

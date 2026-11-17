@@ -49,7 +49,6 @@ export class MinimalWebGlRenderer extends CanvasVectorLayerRenderer  {
         `;
         const program = createShaderProgram(gl, vertexShader, fragmentShader);
         bindProgram(gl, program);
-
         this.gl = gl;
     }
 
