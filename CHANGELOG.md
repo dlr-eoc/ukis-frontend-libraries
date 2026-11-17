@@ -22,6 +22,7 @@
  - Selector change to 'ngx-ukis-map-cesium'
 
 * **@dlr-eoc/map-maplibre**
+ - ViewChild `mapDivView` is now signal.
  - Selector change to 'ngx-ukis-map-maplibre'
 
 * **@dlr-eoc/ngx-ukis-ui-clarity**

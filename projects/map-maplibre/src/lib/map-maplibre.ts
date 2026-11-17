@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, ViewEncapsulation, ChangeDetectionStrategy, inject, viewChild, afterEveryRender, effect, afterNextRender, DestroyRef } from '@angular/core';
 import { Map as glMap, MapLibreEvent, NavigationControl, ScaleControl, StyleSpecification, StyleLayer, GeoJSONSource, Evented, addSourceType } from 'maplibre-gl';
 import { setExtent, setCenter, setZoom, getExtent, getAllLayers, getUkisLayerIDs, removeLayerAndSource, changeOrderOfLayers, setRotation, setPitch, getRotation, getUkisLayerMetadata, UKIS_METADATA } from './maplibre.helpers';
 
@@ -37,11 +37,11 @@ const hasSourceType = {} as ISourceTypes;
   changeDetection: ChangeDetectionStrategy.Eager,
   encapsulation: ViewEncapsulation.None
 })
-export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+export class MapMaplibreComponent {
   @Input('layersSvc') layersSvc!: LayersService;
   @Input('mapState') mapStateSvc!: MapStateService;
 
-  @ViewChild('mapDiv') mapDivView!: ElementRef;
+  mapDivView = viewChild.required<ElementRef>('mapDiv');
   map!: glMap
   subs: Subscription[] = [];
 
@@ -53,49 +53,61 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
   private initialMapState: MapState | null = null;
   private mapSvc = inject(MapMaplibreService);
   private ngZone = inject(NgZone);
-  constructor() { }
+  private destroyRef = inject(DestroyRef);
+  constructor() {
 
-  ngOnInit(): void {
-    if (!this.layersSvc) {
-      console.error(`provide a LayersService as Input to ukis-map-leaflet`);
-    }
-    if (!this.mapStateSvc) {
-      console.error(`provide a MapStateService as Input to ukis-map-leaflet`);
-    }
+    // old ngOnInit()
+    const effectRef = effect(() => {
+      if (!this.layersSvc) {
+        console.error(`provide a LayersService as Input to ukis-map-leaflet`);
+      }
+      
+      if (!this.mapStateSvc) {
+        console.error(`provide a MapStateService as Input to ukis-map-leaflet`);
+      }
 
-    /** Subscribe to mapStateSvc before map is created */
-    this.subscribeToMapState();
+      /** Subscribe to mapStateSvc before map is created */
+      this.subscribeToMapState();
 
-    /** subscribe to layers oninit so they get pulled after view init */
-    this.subscribeToLayers();
-  }
+      /** subscribe to layers oninit so they get pulled after view init */
+      this.subscribeToLayers();
+      effectRef.destroy();
+    }, { manualCleanup: true });
 
-  ngAfterViewInit(): void {
-    this.initMap();
-
-    /** Subscribe to map events when the map is completely created  */
-    this.subscribeToMapEvents();
-    // this.map.getTargetElement().addEventListener('mouseleave', this.removePopupsOnMouseLeave);
-  }
-
-  ngAfterViewChecked() {
     /**
+     * old ngAfterViewInit()
+     * - set target of ol map after angular has rendered the element
+     * - then subscribe to map events
+     */
+    afterNextRender(() => {
+      this.initMap();
+
+      /** Subscribe to map events when the map is completely created  */
+      this.subscribeToMapEvents();
+      // this.map.getTargetElement().addEventListener('mouseleave', this.removePopupsOnMouseLeave);
+    });
+
+    /**
+     * old ngAfterViewChecked()
+     * 
      * compare map and container size to update Map Size on container resize
      */
-    this.updateMapSize();
-  }
+    afterEveryRender(() => {
+      this.updateMapSize();
+    });
 
-  ngOnDestroy(): void {
-    const lastMapState = this.mapStateSvc.getMapState().value;
-    lastMapState.options.notifier = 'user';
-    this.mapStateSvc.setMapState(lastMapState);
-    /** clean up all events on destroy */
-    this.subs.forEach(s => s.unsubscribe());
-    if (this.map) {
-      this.map.off('moveend', this.mapOnMoveend);
-      // this.mapDivView.nativeElement.removeEventListener('mouseleave', this.removePopupsOnMouseLeave);
-    }
-  }
+    this.destroyRef.onDestroy(() => {
+      const lastMapState = this.mapStateSvc.getMapState().value;
+      lastMapState.options.notifier = 'user';
+      this.mapStateSvc.setMapState(lastMapState);
+      /** clean up all events on destroy */
+      this.subs.forEach(s => s.unsubscribe());
+      if (this.map) {
+        this.map.off('moveend', this.mapOnMoveend);
+        // this.mapDivView.nativeElement.removeEventListener('mouseleave', this.removePopupsOnMouseLeave);
+      }
+    });
+   }
 
   /**
    * https://maplibre.org/maplibre-gl-js-docs/api/
@@ -122,7 +134,7 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
     };
 
     this.map = new glMap({
-      container: this.mapDivView.nativeElement,
+      container: this.mapDivView().nativeElement,
       style: baseStyle as StyleSpecification
     });
 
@@ -327,10 +339,10 @@ export class MapMaplibreComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   private getMapDiv() {
-    if (this.mapDivView && this.mapDivView.nativeElement) {
+    if (this.mapDivView() && this.mapDivView().nativeElement) {
       return {
-        width: this.mapDivView.nativeElement.offsetWidth,
-        height: this.mapDivView.nativeElement.offsetHeight
+        width: this.mapDivView().nativeElement.offsetWidth,
+        height: this.mapDivView().nativeElement.offsetHeight
       }
     } else {
       return null;
