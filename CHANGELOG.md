@@ -3,7 +3,8 @@
  - Update [@cesium/engine](https://github.com/CesiumGS/cesium/tree/main/packages/engine) from `^22.3.0` to `^26.0.0` and [@cesium/widgets](https://github.com/CesiumGS/cesium/tree/main/packages/widgets) from `^14.3.0` to `^16.0.0` and use new [@cesium/core](https://github.com/CesiumGS/cesium/tree/main/packages/core)  `0.1.0`. See cesium changelog for all changes (cesium from [1.138](https://github.com/CesiumGS/cesium/releases/tag/1.138) to [1.146](https://github.com/CesiumGS/cesium/releases/tag/1.146)).
  - Replace Karma with Vitest
  - Remove deprecated functions `isVectorLayer`, `isRasterLayer` `isVectorLayertype`, `isRasterLayertype` from `@dlr-eoc/services-layers`.
- - Use of `signal` instead of rxjs `Subject` in `ProgressService` and `AlertService` from `@dlr-eoc/ngx-ukis-ui-clarity`. See demp-maps "route-example-events".
+* **@dlr-eoc/cookie-alert**
+ - Removed not used `CookieAlertService`.
 
 ### Features
 * **@dlr-eoc/utils-ogc**
