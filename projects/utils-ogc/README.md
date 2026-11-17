@@ -24,3 +24,10 @@ Parts of this library depend on [jsonix](https://github.com/highsource/jsonix). 
 ## WMS
 A simple client to parse WMS-GetCapabilities documents into json.
 That json-information might be used to create an ol- or ukis-layer, but that step is to be done by another library.
+
+
+## WMTS
+A simple client to parse WMTS-GetCapabilities documents into json.
+That json-information might be used to create an ol- or ukis-layer, but that step is to be done by another library.
+
+
