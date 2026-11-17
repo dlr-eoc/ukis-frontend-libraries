@@ -6,7 +6,7 @@
 * **@dlr-eoc/cookie-alert**
  - Removed not used `CookieAlertService`.
  - Inputs renamed `alert-text` to `text` and `privacy-link` to `link` and are now signals (`input()`). Property `alert` is now an Angular `signal<boolean>()`.
- - selector change to 'ngx-ukis-cookie-alert'
+ - Selector change to 'ngx-ukis-cookie-alert'
 
 ### Features
 * **@dlr-eoc/utils-ogc**
